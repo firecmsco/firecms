@@ -24,7 +24,7 @@ test.describe('Test Entities CRUD Operations', () => {
         // 1. Fill basic string fields
         await page.locator('#form_field_string_plain').locator('input, textarea').first().fill(randomText);
         await page.locator('label').filter({ hasText: /Multiline string/i }).locator('..').locator('input, textarea').first().fill('Multiline\nContent');
-        await page.locator('#form_field_string_url').locator('input, textarea').first().fill('https://firecms.co');
+        await page.locator('#form_field_string_url').locator('input, textarea').first().fill('https://rebase.pro');
 
         // 2. Select enum string
         await page.locator('#form_field_string_enum').getByRole('combobox').first().click();

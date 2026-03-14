@@ -3,17 +3,17 @@ slug: "docs/api/functions/singular"
 title: "singular"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / singular
+[@rebasepro/core](../README) / singular
 
 # Function: singular()
 
 > **singular**(`word`, `amount?`): `string`
 
-Defined in: [util/plurals.ts:98](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/plurals.ts)
+Defined in: [util/plurals.ts:98](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/plurals.ts)
 
 Returns the singular of an English word.
 

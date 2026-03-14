@@ -1,6 +1,6 @@
-import { ErrorView, prettifyIdentifier, useCollectionRegistryController } from "@firecms/core";
+import { ErrorView, prettifyIdentifier, useCollectionRegistryController } from "@rebasepro/core";
 import { useCollectionEditorController } from "../useCollectionEditorController";
-import { Button } from "@firecms/ui";
+import { Button } from "@rebasepro/ui";
 
 export function MissingReferenceWidget({ path: pathProp }: {
     path: string

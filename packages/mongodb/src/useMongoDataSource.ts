@@ -16,7 +16,7 @@ import {
     PropertyConfig,
     SaveEntityProps,
     WhereFilterOp
-} from "@firecms/core";
+} from "@rebasepro/core";
 import { addValueAtIndex, getEntityIndex, removeValueAtIndex, replaceValueAtIndex, updateValueAtIndex } from "./utils";
 
 type ChangeEvent = any;
@@ -31,7 +31,7 @@ export interface UseMongoDataSourceProps {
     propertyConfigs?: Record<string, PropertyConfig>;
 }
 
-const firecmsToMongoDB: Record<WhereFilterOp, string> = {
+const rebaseToMongoDB: Record<WhereFilterOp, string> = {
     "<": "$lt",
     "<=": "$lte",
     "==": "$eq",
@@ -67,7 +67,7 @@ export function useMongoDataSource({
         if (filter) {
             Object.entries(filter).forEach(([key, filterParameter]) => {
                 const [op, value] = filterParameter as [WhereFilterOp, any];
-                const opMongo = firecmsToMongoDB[op];
+                const opMongo = rebaseToMongoDB[op];
                 queryParams[key] = { [opMongo]: value };
             });
         }

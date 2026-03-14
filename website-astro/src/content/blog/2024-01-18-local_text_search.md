@@ -15,11 +15,11 @@ Can you imagine using a database manager and not being able to search through yo
 
 Now, if you are familiar with our tech stack, particularly Firebase and Firestore, you would know that it’s not such an
 easy task. In the past versions of
-FireCMS, [we recommended using Algolia](https://firecms.co/docs/collections/text_search) as an external plugin. Or any
+Rebase, [we recommended using Algolia](https://rebase.pro/docs/collections/text_search) as an external plugin. Or any
 other compatible solutions, since you are in charge of everything, as in any open source product.
 
 But what happens when you need it in a SaaS formulation. Recently, we
-launched [FireCMS Cloud](https://app.firecms.co/p/hey-hoy-letsgo-cm3hx). We still allow customers to host their own
+launched [Rebase Cloud](https://app.rebase.pro/p/hey-hoy-letsgo-cm3hx). We still allow customers to host their own
 Google Cloud project resources, but the app used for managing the data is on our side. So, we are in charge of the CMS,
 you don’t need to worry about that. Okay, great. We help you manage the app, rolling updates, support, and everything
 else.
@@ -42,7 +42,7 @@ So we decided to implement in-browser search. Storing a local cache in the brows
 market, it’s probably a little slow for big collections. But it’s something that works right away. And solves the search
 for most of our customers.
 
-And what’s the best thing? You can activate it right away in your FireCMS Cloud project. We just rolled it out for
+And what’s the best thing? You can activate it right away in your Rebase Cloud project. We just rolled it out for
 everyone.
 
 ![text_search_dialog.png](/img/blog/text_search_dialog.png)
@@ -60,4 +60,4 @@ So, when your team is small, sometimes it's helpful to build and release fast. T
 development effort may satisfy a problem your customers are having.
 
 Anyway, if you need a hand setting up a project, you have any issue, or you need help building a feature, reach us out
-at hello@firecms.co.[2023-09-19-openai_code_migration.md](2023-09-19-openai_code_migration.md)
+at hello@rebase.pro.[2023-09-19-openai_code_migration.md](2023-09-19-openai_code_migration.md)

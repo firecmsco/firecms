@@ -6,24 +6,24 @@ import "@fontsource/playfair-display";
 import "@fontsource/jetbrains-mono";
 
 export const metadata: Metadata = {
-    title: "FireCMS E-commerce",
-    description: "This is a demo for using FireCMS as an e-commerce backend",
+    title: "Rebase E-commerce",
+    description: "This is a demo for using Rebase as an e-commerce backend",
 };
 
 
 export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+    children,
+}: Readonly<{
     children: React.ReactNode;
 }>) {
 
     return (
         <html lang="en">
-        <body>
+            <body>
 
-        {children}
+                {children}
 
-        </body>
+            </body>
         </html>
     );
 }

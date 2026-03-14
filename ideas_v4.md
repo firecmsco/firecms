@@ -1,37 +1,37 @@
-That's exciting! Based on my experience just now integrating the historias_chinampera collection and working with the FireCMS ecosystem, here are some ideas that could make developers' lives easier:
+That's exciting! Based on my experience just now integrating the historias_chinampera collection and working with the Rebase ecosystem, here are some ideas that could make developers' lives easier:
 
 🚀 Developer Experience Improvements
 1. Schema Export/Import CLI
    What I just created manually could be automated:
 
-firecms schema export --collection historias_chinampera -o ./schemas/
-firecms schema import ./schemas/historias_chinampera.json
+rebase schema export --collection historias_chinampera -o ./schemas/
+rebase schema import ./schemas/historias_chinampera.json
 Benefit: Version-controlled schemas, CI/CD integration, team collaboration.
 
 2. TypeScript Type Generation
    Automatically generate TypeScript types from collection schemas:
 
-firecms types generate --output ./src/types/firecms.d.ts
+rebase types generate --output ./src/types/rebase.d.ts
 This would output types matching the Firestore structure, eliminating the manual work I saw in
 
 historias.ts
 .
 
 3. Framework Starter Templates
-   Pre-built integrations for popular frameworks with FireCMS:
+   Pre-built integrations for popular frameworks with Rebase:
 
 Framework	Template
-Astro	npx create-firecms-astro
-Next.js	npx create-firecms-next
-Nuxt	npx create-firecms-nuxt
-SvelteKit	npx create-firecms-sveltekit
+Astro	npx create-rebase-astro
+Next.js	npx create-rebase-next
+Nuxt	npx create-rebase-nuxt
+SvelteKit	npx create-rebase-sveltekit
 Each includes: data fetching helpers, image URL resolution, and SSR/ISR patterns already configured.
 
 4. Content SDK / Data Fetcher Library
    A lightweight SDK that handles the boilerplate:
 
-import { createFireCMSClient } from '@firecms/client';
-const client = createFireCMSClient({ projectId: 'my-project' });
+import { createRebaseClient } from '@rebasepro/client';
+const client = createRebaseClient({ projectId: 'my-project' });
 // Auto-resolves storage URLs, handles timestamps, pagination
 const posts = await client.collection('blog').published().orderBy('publish_date', 'desc').get();
 This would eliminate the ~100 lines of boilerplate I saw in
@@ -52,15 +52,15 @@ on_publish → Trigger rebuild (Vercel, Netlify)
 on_image_upload → Image optimization pipeline
 on_content_change → Invalidate CDN cache
 7. AI Content Assistance
-   Since you're already working with FireCMS Cloud:
+   Since you're already working with Rebase Cloud:
 
 AI-powered alt text generation for uploaded images
 Content suggestions based on collection context
 Translation assistance for multilingual content
 8. Local Development Mode
-   A way to run FireCMS locally with emulators for faster iteration:
+   A way to run Rebase locally with emulators for faster iteration:
 
-firecms dev --emulators
+rebase dev --emulators
 🔧 Quick Wins
 Idea	Effort	Impact
 Schema versioning + git sync	Medium	High

@@ -1,4 +1,4 @@
-const { resolveCollectionRelations } = require('@firecms/common');
+const { resolveCollectionRelations } = require('@rebasepro/common');
 
 // Mock your exact collections configuration
 const tagsCollection = {

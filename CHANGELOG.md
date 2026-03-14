@@ -117,7 +117,7 @@
 
 ## [3.0.0-rc.2] - 2025-10-16
 
-- **User Management in FireCMS Core**: Added user management capabilities directly to FireCMS Core, expanding self-hosted options.
+- **User Management in Rebase Core**: Added user management capabilities directly to Rebase Core, expanding self-hosted options.
 - **User Fields as String Values**: Fully implemented support for user fields as string values, improving flexibility in user data handling.
 - **TipTap V3 Migration**: Migrated markdown editor to TipTap V3 for improved performance and features.
 - **Tailwind 4 Retrofit**: Multiple adaptations to support Tailwind 4 retrofit, modernizing the styling infrastructure.
@@ -248,7 +248,7 @@
 - **JSON View Toggle**: Added toggle in collections editor view for accessing raw JSON data.
 - **UI Consistency**: Improved UI consistency for select and multiselect components.
 - **Form Improvements**: Enhanced popup form field resizing and boundary handling.
-- **Entity History Plugin**: Added history tracking functionality to FireCMS Cloud and FireCMS PRO.
+- **Entity History Plugin**: Added history tracking functionality to Rebase Cloud and Rebase PRO.
 - **Fixes**:
   - Fixed text overflow in entity titles
   - Fixed errors displayed incorrectly in array of maps
@@ -313,9 +313,9 @@ field bindings.
 
 ## [3.0.0-beta.11] - 2024-12-13
 
-- New Next.js template for FireCMS PRO. You can now create a new project with the PRO template using the CLI.
+- New Next.js template for Rebase PRO. You can now create a new project with the PRO template using the CLI.
 - [BREAKING] Removed `userRoles` from AuthController. You can now access the `roles` prop in the user object directly
-- [BREAKING] Many FireCMS UI sizes have been adjusted for better consistency. This will affect you only if you are using
+- [BREAKING] Many Rebase UI sizes have been adjusted for better consistency. This will affect you only if you are using
   custom components.
     - `smallest` or `tiny` have been renamed to `small`.
     - `small` has been renamed to `medium`.
@@ -428,8 +428,8 @@ const userManagement = useBuildUserManagement({
 - Improving error when opening a non accessible entity in the side view.
 - Select component tweaks and removed `multiple` prop.
 - New `MultiSelect` component with a much improved UX.
-- Introduced AppCheck directly in FireCMS Cloud.
-- Added MongoDB support for FireCMS PRO.
+- Introduced AppCheck directly in Rebase Cloud.
+- Added MongoDB support for Rebase PRO.
 - Multiple fixes in the user management plugin for PRO projects.
 - Updated react-router dependencies.
 - Improved customization, you can now define the styles for each typography entry, including font size, typography...
@@ -513,7 +513,7 @@ const userManagement = useBuildUserManagement({
 
 ## [3.0.0-beta.6] - 2024-04-23
 
-- Added AppCheck to every FireCMS variant.
+- Added AppCheck to every Rebase variant.
 - Various fixes for datasource delegate.
 - Fix in saving cleaned data.
 - Cloud new user roles creation issue fixed.
@@ -531,17 +531,17 @@ const userManagement = useBuildUserManagement({
 
 ## [3.0.0-beta.5] - 2024-04-01
 
-- [BREAKING] The main component for FireCMS Cloud has been renamed from `FireCMSApp` to `FireCMSCloudApp`. Please update
+- [BREAKING] The main component for Rebase Cloud has been renamed from `RebaseApp` to `RebaseCloudApp`. Please update
   your imports accordingly.
-- Fixes related to the CLI. You can now install the CLI globally with `npm install -g @firecms/cli`.
+- Fixes related to the CLI. You can now install the CLI globally with `npm install -g @rebasepro/cli`.
 
 ## [3.0.0-beta.4] - 2024-03-27
 
-- [BREAKING] The package name for FireCMS Cloud has changed from `firecms` to `@firecms/cloud`. This is done
-  to avoid conflicts with the main FireCMS package. If you are using FireCMS Cloud, you will need to update your
+- [BREAKING] The package name for Rebase Cloud has changed from `rebase` to `@rebasepro/cloud`. This is done
+  to avoid conflicts with the main Rebase package. If you are using Rebase Cloud, you will need to update your
   imports.
 - [BREAKING] If you are importing the tailwind configuration, you can now find the import at:
-  `import fireCMSConfig from "@firecms/ui/tailwind.config.js";`
+  `import rebaseConfig from "@rebasepro/ui/tailwind.config.js";`
 - [BREAKING] In that case, you also need to add `@tailwindcss/typography` to your dev dependencies.
 - [BREAKING] You need to update your `vite.config.js` and replace the package name in the federated configuration:
     ```javascript
@@ -562,7 +562,7 @@ const userManagement = useBuildUserManagement({
                 exposes: {
                     "./config": "./src/index"
                 },
-                shared: ["react", "react-dom", "@firecms/cloud", "@firecms/core", "@firecms/firebase", "@firecms/ui"]
+                shared: ["react", "react-dom", "@rebasepro/cloud", "@rebasepro/core", "@rebasepro/firebase", "@rebasepro/ui"]
             })
         ],
         build: {
@@ -632,7 +632,7 @@ const userManagement = useBuildUserManagement({
 
 ## [3.0.0-beta.1] - 2024-02-01
 
-The first beta release of FireCMS v3.0.0.
+The first beta release of Rebase v3.0.0.
 Check all the new features and improvements in the [documentation](./what_is_new_v3)
 and the [migration guide](./cloud/migrating_from_v2).
 
@@ -653,7 +653,7 @@ and the [migration guide](./cloud/migrating_from_v2).
 - [BREAKING] The prop `filterCombinations` has been removed from the `EntityCollection` component.
   This is now handled by the data source. If you need to allow multiple filters, you can use the
   new `FireStoreIndexesBuilder` callback. Check
-  the [documentation](https://firecms.co/docs/collections/multiple_filters)
+  the [documentation](https://rebase.pro/docs/collections/multiple_filters)
   for more information.
 - You can now use nested `spreadChildren` in map properties, allowing to show arbitrary
   nested structures as single columns in the collection view.
@@ -787,13 +787,13 @@ and the [migration guide](./cloud/migrating_from_v2).
 
 ## [2.0.0-beta.1] - 2023-01-18
 
-This is the first beta release of FireCMS v2.0.0.
+This is the first beta release of Rebase v2.0.0.
 While still in beta, we consider this version stable enough to be used in
 production.
 
 > All changes related to V2 alpha are currently bundled in these documents:
-> - [What's new in version 2.0.0](https://firecms.co/docs/new_in_v2)
-> - [Migration guide from version 1.x to 2.0.0](https://firecms.co/docs/migrating_from_v1)
+> - [What's new in version 2.0.0](https://rebase.pro/docs/new_in_v2)
+> - [Migration guide from version 1.x to 2.0.0](https://rebase.pro/docs/migrating_from_v1)
 
 > The changelog for 1.0.0 versions and previous versions can be
-> found [here](https://firecms.co/docs/1.0.0/changelog)
+> found [here](https://rebase.pro/docs/1.0.0/changelog)

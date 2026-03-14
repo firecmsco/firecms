@@ -1,16 +1,16 @@
 {
-    "name": "@firecms/backend",
+    "name": "@rebasepro/backend",
     "type": "module",
     "version": "4.0.0",
-    "description": "PostgreSQL and Drizzle ORM backend for FireCMS",
+    "description": "PostgreSQL and Drizzle ORM backend for Rebase",
     "funding": {
-        "url": "https://github.com/sponsors/firecmsco"
+        "url": "https://github.com/sponsors/rebaseco"
     },
-    "author": "FireCMS",
+    "author": "Rebase",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/firecmsco/firecms.git",
+        "url": "https://github.com/rebaseco/rebase.git",
         "directory": "packages/backend"
     },
     "main": "./dist/index.umd.js",
@@ -29,7 +29,7 @@
         "drizzle",
         "backend",
         "database",
-        "firecms"
+        "rebase"
     ],
     "scripts": {
         "watch": "vite build --watch",
@@ -51,8 +51,8 @@
     "dependencies": {
         "@aws-sdk/client-s3": "^3.654.0",
         "@aws-sdk/s3-request-presigner": "^3.654.0",
-        "@firecms/common": "4.0.0",
-        "@firecms/types": "4.0.0",
+        "@rebasepro/common": "4.0.0",
+        "@rebasepro/types": "4.0.0",
         "cors": "^2.8.5",
         "drizzle-orm": "^0.44.4",
         "express": "^5.1.0",
@@ -69,8 +69,8 @@
         "zod": "^3.22.4"
     },
     "devDependencies": {
-        "@firecms/common": "4.0.0",
-        "@firecms/types": "4.0.0",
+        "@rebasepro/common": "4.0.0",
+        "@rebasepro/types": "4.0.0",
         "@types/cors": "^2.8.17",
         "@types/express": "^5.0.0",
         "@types/express-rate-limit": "6.0.2",

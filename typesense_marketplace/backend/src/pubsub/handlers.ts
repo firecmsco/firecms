@@ -26,7 +26,7 @@ import { planToMachineType, planToDiskSize } from "../procurement/entitlements";
 
 // The Pub/Sub topic is provided by Google during onboarding
 const MARKETPLACE_PUBSUB_TOPIC = process.env.GCP_MARKETPLACE_PUBSUB_TOPIC || "cloud-commerce-procurement";
-const PROVIDER_ID = process.env.GCP_MARKETPLACE_PROVIDER_ID || "firecms";
+const PROVIDER_ID = process.env.GCP_MARKETPLACE_PROVIDER_ID || "rebase";
 
 /**
  * Firestore collections

@@ -1,5 +1,5 @@
 import React, { useMemo, createContext, useContext, PropsWithChildren } from "react";
-import { FireCMSPlugin, CMSView } from "@firecms/core";
+import { RebasePlugin, CMSView } from "@rebasepro/core";
 import { MediaManagerConfig } from "./types";
 import { MediaManagerProvider } from "./MediaManagerProvider";
 import { useMediaManagerController } from "./useMediaManagerController";
@@ -65,7 +65,7 @@ function buildMediaView(): CMSView {
 const MEDIA_VIEW = buildMediaView();
 
 /**
- * Hook to create the Media Manager plugin for FireCMS.
+ * Hook to create the Media Manager plugin for Rebase.
  *
  * The plugin automatically registers the Media Library view in the navigation.
  *
@@ -82,7 +82,7 @@ const MEDIA_VIEW = buildMediaView();
  * const plugins = [mediaManagerPlugin, ...otherPlugins];
  * ```
  */
-export function useMediaManagerPlugin(props: MediaManagerPluginProps): FireCMSPlugin {
+export function useMediaManagerPlugin(props: MediaManagerPluginProps): RebasePlugin {
     return useMemo(() => ({
         key: "media_manager",
         views: [MEDIA_VIEW],
@@ -93,5 +93,5 @@ export function useMediaManagerPlugin(props: MediaManagerPluginProps): FireCMSPl
                 </MediaManagerConfigContext.Provider>
             )
         }
-    } satisfies FireCMSPlugin), []);
+    } satisfies RebasePlugin), []);
 }

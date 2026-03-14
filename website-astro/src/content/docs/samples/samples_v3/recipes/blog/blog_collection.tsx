@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty } from "@firecms/core";
+import { buildCollection, buildProperty } from "@rebasepro/core";
 import { BlogEntryPreview } from "./BlogEntryPreview";
 import { BlogEntry } from "./types";
 

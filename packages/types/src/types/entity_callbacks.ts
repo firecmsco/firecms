@@ -1,7 +1,7 @@
 import { EntityCollection } from "./collections";
 import { Entity, EntityStatus, EntityValues, } from "./entities";
 import { User } from "../users";
-import { FireCMSCallContext } from "../firecms_context";
+import { RebaseCallContext } from "../rebase_context";
 
 /**
  * This interface defines all the callbacks that can be used when an entity
@@ -86,7 +86,7 @@ export interface EntityAfterReadProps<M extends Record<string, any> = any, USER 
     /**
      * Context of the app status
      */
-    context: FireCMSCallContext<USER>;
+    context: RebaseCallContext<USER>;
 }
 
 /**
@@ -148,7 +148,7 @@ export interface EntityAfterSaveProps<M extends Record<string, any> = any, USER 
     /**
      * Context of the app status
      */
-    context: FireCMSCallContext<USER>;
+    context: RebaseCallContext<USER>;
 }
 
 /**
@@ -180,7 +180,7 @@ export interface EntityBeforeDeleteProps<M extends Record<string, any> = any, US
     /**
      * Context of the app status
      */
-    context: FireCMSCallContext<USER>;
+    context: RebaseCallContext<USER>;
 }
 
 /**
@@ -212,6 +212,6 @@ export interface EntityAfterDeleteProps<M extends Record<string, any> = any, USE
     /**
      * Context of the app status
      */
-    context: FireCMSCallContext<USER>;
+    context: RebaseCallContext<USER>;
 }
 

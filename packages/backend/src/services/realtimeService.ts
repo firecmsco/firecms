@@ -3,7 +3,7 @@ import { EventEmitter } from "events";
 import { EntityService } from "../db/entityService";
 
 import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "../types";
-import { Entity, ListenCollectionProps, ListenEntityProps, DataSource } from "@firecms/types";
+import { Entity, ListenCollectionProps, ListenEntityProps, DataSource } from "@rebasepro/types";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { RealtimeProvider, CollectionSubscriptionConfig, EntitySubscriptionConfig } from "../db/interfaces";
 import { collectionRegistry } from "../collections/registry";

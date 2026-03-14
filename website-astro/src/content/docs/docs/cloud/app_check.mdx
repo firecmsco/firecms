@@ -8,13 +8,13 @@ You can integrate Firebase App Check with your app to protect your backend resou
 or phishing. Firebase App Check works alongside other Firebase services, such as Firebase Authentication,
 to help secure your backend resources.
 
-FireCMS provides a simple way to integrate Firebase App Check with your app.
+Rebase provides a simple way to integrate Firebase App Check with your app.
 
 :::important
-Remember to add the domain `app.firecms.co` to the list of allowed domains in AppCheck provider configuration.
+Remember to add the domain `app.rebase.pro` to the list of allowed domains in AppCheck provider configuration.
 :::
 
-You can enable Firebase App Check in your app directly in the **project settings** in the FireCMS Cloud console,
+You can enable Firebase App Check in your app directly in the **project settings** in the Rebase Cloud console,
 or by providing the `appCheck` prop in your app configuration.
 
 By implementing it in code, you can have more control over the configuration and the provider you want to use,
@@ -38,14 +38,14 @@ In order to set up the ReCaptchaEnterpriseProvider, you need to create a new reC
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
 
 :::important
-Make sure you have added the domain `app.firecms.co` to the list of allowed domains in the reCAPTCHA Enterprise console.
+Make sure you have added the domain `app.rebase.pro` to the list of allowed domains in the reCAPTCHA Enterprise console.
 :::
 
 ```tsx
-import {FireCMSAppConfig} from "@firecms/cloud";
+import {RebaseAppConfig} from "@rebasepro/cloud";
 import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
 
-const appConfig: FireCMSAppConfig = {
+const appConfig: RebaseAppConfig = {
 
     version: "1",
 
@@ -63,10 +63,10 @@ In order to set up the ReCaptchaV3Provider, you need to create a new reCAPTCHA v
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-provider).
 
 ```tsx
-import {FireCMSAppConfig} from "@firecms/cloud";
+import {RebaseAppConfig} from "@rebasepro/cloud";
 import {ReCaptchaV3Provider} from "@firebase/app-check";
 
-const appConfig: FireCMSAppConfig = {
+const appConfig: RebaseAppConfig = {
 
     version: "1",
 
@@ -85,8 +85,8 @@ You can also create a custom provider by implementing the `AppCheckProvider` int
 
 ## Check your configuration
 
-FireCMS Cloud can share dependencies with your uploaded app. It is important than your app and FireCMS Cloud use the same version of Firebase App Check.
-In order to do so, make sure, in your `vite.config.ts`, you are using the shared dependency provided by FireCMS.
+Rebase Cloud can share dependencies with your uploaded app. It is important than your app and Rebase Cloud use the same version of Firebase App Check.
+In order to do so, make sure, in your `vite.config.ts`, you are using the shared dependency provided by Rebase.
 You need to have the dependency `@firebase/app-check` in your `vite.config.ts`. Federation plugin `shared` configuration.
 
 This is a sample configuration:
@@ -112,10 +112,10 @@ export default defineConfig({
             shared: [
                 "react",
                 "react-dom",
-                "@firecms/cloud",
-                "@firecms/core",
-                "@firecms/firebase",
-                "@firecms/ui",
+                "@rebasepro/cloud",
+                "@rebasepro/core",
+                "@rebasepro/firebase",
+                "@rebasepro/ui",
                 "@firebase/firestore",
                 "@firebase/app",
                 "@firebase/functions",

@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/EntityLinkBuilder"
 title: "EntityLinkBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityLinkBuilder
+[@rebasepro/core](../README) / EntityLinkBuilder
 
 # Type Alias: EntityLinkBuilder()\<M\>
 
 > **EntityLinkBuilder**\<`M`\> = (`{ entity }`) => `string`
 
-Defined in: [types/entity\_link\_builder.ts:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_link_builder.ts)
+Defined in: [types/entity\_link\_builder.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_link_builder.ts)
 
 ## Type Parameters
 

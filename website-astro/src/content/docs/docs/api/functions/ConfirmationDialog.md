@@ -3,17 +3,17 @@ slug: "docs/api/functions/ConfirmationDialog"
 title: "ConfirmationDialog"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ConfirmationDialog
+[@rebasepro/core](../README) / ConfirmationDialog
 
 # Function: ConfirmationDialog()
 
 > **ConfirmationDialog**(`__namedParameters`): `Element`
 
-Defined in: [components/ConfirmationDialog.tsx:5](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ConfirmationDialog.tsx)
+Defined in: [components/ConfirmationDialog.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ConfirmationDialog.tsx)
 
 ## Parameters
 

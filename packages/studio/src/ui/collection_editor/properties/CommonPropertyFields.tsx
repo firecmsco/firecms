@@ -1,8 +1,8 @@
-import { Field, getIn, useFormex } from "@firecms/formex";
-import { DebouncedTextField } from "@firecms/ui";
+import { Field, getIn, useFormex } from "@rebasepro/formex";
+import { DebouncedTextField } from "@rebasepro/ui";
 import { PropertyWithId } from "../PropertyEditView";
 import React from "react";
-import { FieldCaption, prettifyIdentifier, toSnakeCase } from "@firecms/core";
+import { FieldCaption, prettifyIdentifier, toSnakeCase } from "@rebasepro/core";
 
 type CommonPropertyFieldsProps = {
     showErrors: boolean,

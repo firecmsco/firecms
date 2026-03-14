@@ -2,14 +2,14 @@
 slug: docs/hooks/use_mode_controller
 title: useModeController
 sidebar_label: useModeController
-description: Control the FireCMS theme mode (light, dark, or system) with the useModeController hook.
+description: Control the Rebase theme mode (light, dark, or system) with the useModeController hook.
 ---
 
 Use this hook to retrieve and control the current theme mode (`light`, `dark`, or `system`).
 
 :::note
 Please note that in order to use this hook you **must** be in
-a component that is a child of the `FireCMS` component.
+a component that is a child of the `Rebase` component.
 :::
 
 ### Props
@@ -25,8 +25,8 @@ a component that is a child of the `FireCMS` component.
 
 ```tsx
 import React from "react";
-import { useModeController } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { useModeController } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 export function ThemeToggle() {
     const modeController = useModeController();

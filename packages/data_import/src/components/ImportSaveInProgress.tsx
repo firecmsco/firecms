@@ -1,21 +1,21 @@
-import { DataSource, Entity, EntityCollection, useDataSource } from "@firecms/core";
-import { Button, CenteredView, CircularProgress, Typography, } from "@firecms/ui";
+import { DataSource, Entity, EntityCollection, useDataSource } from "@rebasepro/core";
+import { Button, CenteredView, CircularProgress, Typography, } from "@rebasepro/ui";
 import { useEffect, useRef, useState } from "react";
 import { ImportConfig } from "../types";
 
 export function ImportSaveInProgress<C extends EntityCollection>
-({
-     path,
-     importConfig,
-     collection,
-     onImportSuccess
- }:
- {
-     path: string,
-     importConfig: ImportConfig,
-     collection: C,
-     onImportSuccess: (collection: C) => void
- }) {
+    ({
+        path,
+        importConfig,
+        collection,
+        onImportSuccess
+    }:
+        {
+            path: string,
+            importConfig: ImportConfig,
+            collection: C,
+            onImportSuccess: (collection: C) => void
+        }) {
 
     const [errorSaving, setErrorSaving] = useState<Error | undefined>(undefined);
     const dataSource = useDataSource();
@@ -64,7 +64,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
                 </Typography>
                 <Button
                     onClick={save}
-                    >
+                >
                     Retry
                 </Button>
             </CenteredView>
@@ -73,7 +73,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
 
     return (
         <div className={"flex flex-col gap-4 items-center"}>
-            <CircularProgress/>
+            <CircularProgress />
 
             <Typography variant={"h6"}>
                 Saving data
@@ -93,12 +93,12 @@ export function ImportSaveInProgress<C extends EntityCollection>
 }
 
 function saveDataBatch(dataSource: DataSource,
-                       collection: EntityCollection,
-                       path: string,
-                       data: Partial<Entity<any>>[],
-                       offset = 0,
-                       batchSize = 25,
-                       onProgressUpdate: (progress: number) => void): Promise<void> {
+    collection: EntityCollection,
+    path: string,
+    data: Partial<Entity<any>>[],
+    offset = 0,
+    batchSize = 25,
+    onProgressUpdate: (progress: number) => void): Promise<void> {
 
     console.debug("Saving imported data", offset, batchSize);
 

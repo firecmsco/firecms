@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MultiSelect, MultiSelectItem } from "@firecms/ui";
+import { MultiSelect, MultiSelectItem } from "@rebasepro/ui";
 
 export default function MultiSelectCustomRenderDemo() {
     const [selectedValues, setSelectedValues] = React.useState<string[]>([]);

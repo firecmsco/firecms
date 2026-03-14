@@ -3,17 +3,17 @@ slug: "docs/api/functions/traverseValuesProperties"
 title: "traverseValuesProperties"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / traverseValuesProperties
+[@rebasepro/core](../README) / traverseValuesProperties
 
 # Function: traverseValuesProperties()
 
 > **traverseValuesProperties**\<`M`\>(`inputValues`, `properties`, `operation`): `M` \| `undefined`
 
-Defined in: [util/entities.ts:148](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/entities.ts)
+Defined in: [util/entities.ts:148](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
 
 ## Type Parameters
 

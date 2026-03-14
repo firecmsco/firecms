@@ -1,5 +1,5 @@
 {
-    "name": "@firecms/data_import_export",
+    "name": "@rebasepro/data_import_export",
     "type": "module",
     "version": "4.0.0",
     "access": "public",
@@ -8,10 +8,10 @@
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "dependencies": {
-        "@firecms/core": "4.0.0",
-        "@firecms/types": "4.0.0",
-        "@firecms/data_export": "4.0.0",
-        "@firecms/data_import": "4.0.0"
+        "@rebasepro/core": "4.0.0",
+        "@rebasepro/types": "4.0.0",
+        "@rebasepro/data_export": "4.0.0",
+        "@rebasepro/data_import": "4.0.0"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

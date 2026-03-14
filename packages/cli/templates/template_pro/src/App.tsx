@@ -7,7 +7,7 @@ import {
     CircularProgressCenter,
     CMSView,
     Drawer,
-    FireCMS,
+    Rebase,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -17,7 +17,7 @@ import {
     useBuildModeController,
     useBuildNavigationController,
     useValidateAuthenticator
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     FirebaseAuthController,
     FirebaseLoginView,
@@ -26,18 +26,18 @@ import {
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase
-} from "@firecms/firebase";
+} from "@rebasepro/firebase";
 
 import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
-import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import { useEntityHistoryPlugin } from "@firecms/entity_history";
-import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
-import { useImportPlugin } from "@firecms/data_import";
-import { useExportPlugin } from "@firecms/data_export";
+import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
+import { useEntityHistoryPlugin } from "@rebasepro/entity_history";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@rebasepro/user_management";
+import { useImportPlugin } from "@rebasepro/data_import";
+import { useExportPlugin } from "@rebasepro/data_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
-import { useLocalCollectionsConfigController } from "@firecms/collection_editor";
-import { useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useLocalCollectionsConfigController } from "@rebasepro/collection_editor";
+import { useCollectionEditorPlugin } from "@rebasepro/collection_editor";
 
 export function App() {
 
@@ -210,8 +210,8 @@ export function App() {
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
 
-                <FireCMS
-                    apiKey={import.meta.env.VITE_FIRECMS_API_KEY}
+                <Rebase
+                    apiKey={import.meta.env.VITE_REBASE_API_KEY}
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
@@ -252,7 +252,7 @@ export function App() {
 
                         return component;
                     }}
-                </FireCMS>
+                </Rebase>
             </ModeControllerProvider>
         </SnackbarProvider>
     );

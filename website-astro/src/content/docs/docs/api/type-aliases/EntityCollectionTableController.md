@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/EntityCollectionTableController"
 title: "EntityCollectionTableController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionTableController
+[@rebasepro/core](../README) / EntityCollectionTableController
 
 # Type Alias: EntityCollectionTableController\<M\>
 
 > **EntityCollectionTableController**\<`M`\> = `object`
 
-Defined in: [components/common/types.tsx:3](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [components/common/types.tsx:3](https://github.com/firecmsco/firecms
 
 > `optional` **onValueChange**: (`params`) => `void`
 
-Defined in: [components/common/types.tsx:23](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 Callback used when the value of a cell has changed.
 
@@ -47,7 +47,7 @@ Callback used when the value of a cell has changed.
 
 > **select**: (`cell?`) => `void`
 
-Defined in: [components/common/types.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 Select a table cell
 
@@ -67,7 +67,7 @@ Select a table cell
 
 > `optional` **selectedCell**: [`SelectedCellProps`](SelectedCellProps)\<`any`\>
 
-Defined in: [components/common/types.tsx:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 This cell is displayed as selected
 
@@ -77,7 +77,7 @@ This cell is displayed as selected
 
 > `optional` **setPopupCell**: (`cell?`) => `void`
 
-Defined in: [components/common/types.tsx:18](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 The cell that is displayed as a popup view.
 
@@ -97,6 +97,6 @@ The cell that is displayed as a popup view.
 
 > **size**: [`CollectionSize`](CollectionSize)
 
-Defined in: [components/common/types.tsx:27](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:27](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 Size of the elements in the collection

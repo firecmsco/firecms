@@ -3,17 +3,17 @@ slug: "docs/api/functions/BlockFieldBinding"
 title: "BlockFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / BlockFieldBinding
+[@rebasepro/core](../README) / BlockFieldBinding
 
 # Function: BlockFieldBinding()
 
 > **BlockFieldBinding**\<`T`\>(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/BlockFieldBinding.tsx:23](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/BlockFieldBinding.tsx)
+Defined in: [form/field\_bindings/BlockFieldBinding.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/BlockFieldBinding.tsx)
 
 If the `oneOf` property is specified, this fields render each array entry as
 a `type` select and the corresponding field widget to the selected `type.

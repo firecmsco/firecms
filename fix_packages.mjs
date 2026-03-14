@@ -15,15 +15,15 @@ function fixFile(filePath) {
             if (json.version) {
                  json.version = "4.0.0";
             }
-            if (json.peerDependencies && json.peerDependencies["@firecms/core"]) {
-                 json.peerDependencies["@firecms/core"] = "4.0.0";
+            if (json.peerDependencies && json.peerDependencies["@rebasepro/core"]) {
+                 json.peerDependencies["@rebasepro/core"] = "4.0.0";
             }
             
             const dirs = ['dependencies', 'devDependencies', 'peerDependencies'];
             for (const dir of dirs) {
                 if (json[dir]) {
                     for (const dep of Object.keys(json[dir])) {
-                        if (dep.startsWith('@firecms/') && dep !== '@firecms/firebase_setup') {
+                        if (dep.startsWith('@rebasepro/') && dep !== '@rebasepro/firebase_setup') {
                             json[dir][dep] = "4.0.0";
                         }
                     }
@@ -56,10 +56,10 @@ const filesToFix = [
     "packages/datatalk/package.json",
     "packages/editor/package.json",
     "packages/entity_history/package.json",
-    "packages/firebase_firecms/package.json",
-    "packages/firecms/package.json",
-    "packages/firecms_cloud/package.json",
-    "packages/firecms_core/package.json",
+    "packages/firebase/package.json",
+    "packages/rebase/package.json",
+    "packages/rebase_cloud/package.json",
+    "packages/core/package.json",
     "packages/formex/package.json",
     "packages/media_manager/package.json",
     "packages/mongodb/package.json",

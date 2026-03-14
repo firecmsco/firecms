@@ -5,27 +5,27 @@ title: Collection Editor UI
 
 ![collection_editor.png](/img/collection_editor.png)
 
-This document describes how to use the **Collection Editor UI Plugin** with **FireCMS** to manage and configure your
+This document describes how to use the **Collection Editor UI Plugin** with **Rebase** to manage and configure your
 Firestore collections. The Collection Editor UI Plugin provides an interface for creating, editing, and organizing
 collections, with support for customizable permissions and configuration options.
 
-Typically, collections in FireCMS are defined in code, and passed as a prop to the `NavigationController` on
+Typically, collections in Rebase are defined in code, and passed as a prop to the `NavigationController` on
 initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing 
 a more user-friendly and flexible way to organize and configure your Firestore collections.
 
-In this document, we will cover how to set up and use this plugin in your FireCMS application.
+In this document, we will cover how to set up and use this plugin in your Rebase application.
 
 ## Installation
 
 First, ensure you have installed the necessary dependencies. To use the Collection Editor UI Plugin, you need to have
-FireCMS and Firebase set up in your project.
+Rebase and Firebase set up in your project.
 
 ```sh
-yarn add @firecms/collection_editor
+yarn add @rebasepro/collection_editor
 ```
 or
 ```sh
-npm install @firecms/collection_editor
+npm install @rebasepro/collection_editor
 ```
 
 ## Configuration
@@ -45,12 +45,12 @@ example of security rules that permit authenticated users to access the collecti
 
 ```txt
 match /{document=**} {
-  allow read: if isFireCMSUser();
-  allow write: if isFireCMSUser();
+  allow read: if isRebaseUser();
+  allow write: if isRebaseUser();
 }
 
-function isFireCMSUser(){
-  return exists(/databases/$(database)/documents/__FIRECMS/config/collections/$(request.auth.uid));
+function isRebaseUser(){
+  return exists(/databases/$(database)/documents/__REBASE/config/collections/$(request.auth.uid));
 }
 ```
 
@@ -58,7 +58,7 @@ function isFireCMSUser(){
 
 The Collection Editor UI Plugin allows you to include a UI for editing collection configurations. You can choose where
 the configuration is stored and pass the configuration to the plugin. The plugin includes a controller that saves the
-configuration in your Firestore database. The default path is `__FIRECMS/config/collections`.
+configuration in your Firestore database. The default path is `__REBASE/config/collections`.
 
 The controller includes methods you can use in your components to manage the collection configuration.
 
@@ -73,7 +73,7 @@ UI of collections defined in code. You can then merge the collections defined in
 
 ```jsx
 import { useCallback } from "react";
-import { mergeCollections } from "@firecms/collection_editor";
+import { mergeCollections } from "@rebasepro/collection_editor";
 import { productsCollection } from "./collections/products_collection";
 
 // The collection builder is passed to the navigation controller
@@ -88,7 +88,7 @@ const collectionsBuilder = useCallback(() => {
 }, [collectionConfigController.collections]);
 ```
 
-To add the Collection Editor UI Plugin, include it in the list of plugins passed to the `FireCMS` component.
+To add the Collection Editor UI Plugin, include it in the list of plugins passed to the `Rebase` component.
 
 ```jsx
 const collectionEditorPlugin = useCollectionEditorPlugin({
@@ -103,7 +103,7 @@ This will add an icon in each collection card that allows you to edit the collec
 The main hook to utilize the plugin's functionality is `useCollectionEditorPlugin`. Here's an example of how to use it:
 
 ```jsx
-import { useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useCollectionEditorPlugin } from "@rebasepro/collection_editor";
 
 const collectionEditorPlugin = useCollectionEditorPlugin({
     collectionConfigController,
@@ -126,23 +126,23 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
 
 ## Setting up the Plugin
 
-To integrate the Collection Editor UI Plugin into FireCMS, use the `useCollectionEditorPlugin` hook and pass the
-resulting plugin into the FireCMS configuration. This is typically done in your main App component.
+To integrate the Collection Editor UI Plugin into Rebase, use the `useCollectionEditorPlugin` hook and pass the
+resulting plugin into the Rebase configuration. This is typically done in your main App component.
 
 ### Example Configuration
 
 ```jsx
 import React, { useCallback } from "react";
-import { FireCMS, useBuildNavigationController } from "@firecms/core";
-import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
-import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { Rebase, useBuildNavigationController } from "@rebasepro/core";
+import { mergeCollections, useCollectionEditorPlugin } from "@rebasepro/collection_editor";
+import { useFirestoreCollectionsConfigController } from "@rebasepro/collection_editor_firebase";
 import {
     useFirebaseAuthController,
     useFirestoreDataSource,
     useInitialiseFirebase,
     useValidateAuthenticator
-} from "@firecms/firebase";
-import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
+} from "@rebasepro/firebase";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@rebasepro/user_management";
 import { productsCollection } from "./collections/products_collection";
 import { customPermissionsBuilder } from "./config/permissions";
 import { CustomCollectionView } from "./views/CustomCollectionView";
@@ -233,7 +233,7 @@ function App() {
     }
 
     return (
-        <FireCMS
+        <Rebase
             navigationController={navigationController}
             authController={authController}
             dataSource={firestoreDelegate}
@@ -250,7 +250,7 @@ function App() {
                 }
                 return <MainAppLayout/>;
             }}
-        </FireCMS>
+        </Rebase>
     );
 }
 
@@ -259,13 +259,13 @@ export default App;
 
 ## Adding the Collection Editor Views
 
-The Collection Editor UI Plugin provides custom views that need to be added to your FireCMS project. These views are
-integrated into the FireCMS navigation and allow users to manage collections.
+The Collection Editor UI Plugin provides custom views that need to be added to your Rebase project. These views are
+integrated into the Rebase navigation and allow users to manage collections.
 
 ### Example Integration
 
 ```jsx
-import { useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useCollectionEditorPlugin } from "@rebasepro/collection_editor";
 
 const collectionEditorPlugin = useCollectionEditorPlugin({
     collectionConfigController,
@@ -277,15 +277,15 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
     }
 });
 
-// Include the plugin in your FireCMS configuration
-<FireCMS
+// Include the plugin in your Rebase configuration
+<Rebase
     navigationController={navigationController}
     authController={authController}
     dataSource={firestoreDelegate}
     plugins={[userManagementPlugin, collectionEditorPlugin]}
 >
     {/* Your application components */}
-</FireCMS>
+</Rebase>
 ```
 
 ## Authenticating Users
@@ -297,7 +297,7 @@ levels.
 ### Example Usage
 
 ```jsx
-import { useValidateAuthenticator } from "@firecms/core";
+import { useValidateAuthenticator } from "@rebasepro/core";
 
 const {
     authLoading,
@@ -326,7 +326,7 @@ if (!canAccessMainView) {
 
 The Collection Editor UI Plugin includes a `collectionPermissions` function that determines what operations a user can
 perform based on their roles and the collection configuration. This function ensures that users have appropriate access
-rights throughout your FireCMS project.
+rights throughout your Rebase project.
 
 ### Example Integration
 
@@ -381,7 +381,7 @@ The `collectionEditor` object returned by the `useCollectionEditorPlugin` hook i
   configurations.
 - **`createCollection`**: Function to initiate the creation of a new collection.
 - **`reservedGroups`**: Array of group names that are reserved and cannot be used in collection names.
-- **`extraView`**: Custom view added to the FireCMS navigation for collection management.
+- **`extraView`**: Custom view added to the Rebase navigation for collection management.
 - **`defineRolesFor`**: Function to define roles for a given user, typically integrated into your auth controller.
 - **`authenticator`**: Optional. Authenticator callback built from the current configuration of the collection editor.
   It will only allow access to users with the required roles.
@@ -389,7 +389,7 @@ The `collectionEditor` object returned by the `useCollectionEditorPlugin` hook i
 ### Example Access
 
 ```jsx
-import { useCollectionEditorPlugin } from "@firecms/collection_editor";
+import { useCollectionEditorPlugin } from "@rebasepro/collection_editor";
 
 const collectionEditor = useCollectionEditorPlugin({
     collectionConfigController,
@@ -446,7 +446,7 @@ const customPermissionsBuilder = ({ user }) => ({
 
 ## Example Usage
 
-Below is an example of how to integrate the Collection Editor UI Plugin into a FireCMS application.
+Below is an example of how to integrate the Collection Editor UI Plugin into a Rebase application.
 
 ### Plugin Setup
 
@@ -460,7 +460,7 @@ import {
   CircularProgressCenter,
   CMSView,
   Drawer,
-  FireCMS,
+  Rebase,
   ModeControllerProvider,
   NavigationRoutes,
   Scaffold,
@@ -470,7 +470,7 @@ import {
   useBuildModeController,
   useBuildNavigationController,
   useValidateAuthenticator
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
   FirebaseAuthController,
   FirebaseLoginView,
@@ -479,9 +479,9 @@ import {
   useFirebaseStorageSource,
   useFirestoreDataSource,
   useInitialiseFirebase
-} from "@firecms/firebase";
-import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
-import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+} from "@rebasepro/firebase";
+import { useFirestoreCollectionsConfigController } from "@rebasepro/collection_editor_firebase";
+import { mergeCollections, useCollectionEditorPlugin } from "@rebasepro/collection_editor";
 
 import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
@@ -585,8 +585,8 @@ export function App() {
           <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
 
-              <FireCMS
-                      apiKey={import.meta.env.VITE_FIRECMS_API_KEY}
+              <Rebase
+                      apiKey={import.meta.env.VITE_REBASE_API_KEY}
                       navigationController={navigationController}
                       authController={authController}
                       userConfigPersistence={userConfigPersistence}
@@ -630,7 +630,7 @@ export function App() {
 
                   return component;
                 }}
-              </FireCMS>
+              </Rebase>
             </ModeControllerProvider>
           </SnackbarProvider>
   );

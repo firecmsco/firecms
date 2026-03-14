@@ -1,4 +1,4 @@
-import { EntityCollection, EntityReference } from "@firecms/types";
+import { EntityCollection, EntityReference } from "@rebasepro/types";
 import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
 import { getSubcollections } from "./resolutions";
 

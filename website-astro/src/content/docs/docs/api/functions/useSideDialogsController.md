@@ -3,17 +3,17 @@ slug: "docs/api/functions/useSideDialogsController"
 title: "useSideDialogsController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useSideDialogsController
+[@rebasepro/core](../README) / useSideDialogsController
 
 # Function: useSideDialogsController()
 
 > **useSideDialogsController**(): [`SideDialogsController`](../interfaces/SideDialogsController)
 
-Defined in: [hooks/useSideDialogsController.tsx:21](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useSideDialogsController.tsx)
+Defined in: [hooks/useSideDialogsController.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSideDialogsController.tsx)
 
 Hook to retrieve the side dialogs' controller.
 
@@ -26,7 +26,7 @@ hook.
 If you want to select a reference, you can use the [useReferenceDialog](useReferenceDialog)
 
 Consider that in order to use this hook you need to have a parent
-`FireCMS`
+`Rebase`
 
 ## Returns
 

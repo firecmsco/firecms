@@ -5,7 +5,7 @@ import {
     getArrayValuesCount,
     getValueInPath, Properties,
     Property,
-} from "@firecms/core";
+} from "@rebasepro/core";
 
 interface Header {
     key: string;

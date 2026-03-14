@@ -3,17 +3,17 @@ slug: "docs/api/functions/resolveStoragePathString"
 title: "resolveStoragePathString"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / resolveStoragePathString
+[@rebasepro/core](../README) / resolveStoragePathString
 
 # Function: resolveStoragePathString()
 
 > **resolveStoragePathString**\<`M`\>(`__namedParameters`): `string`
 
-Defined in: [util/storage.ts:76](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/storage.ts)
+Defined in: [util/storage.ts:76](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/storage.ts)
 
 ## Type Parameters
 

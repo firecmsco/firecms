@@ -1,5 +1,5 @@
 import React from "react";
-import { AddIcon, LoadingButton } from "@firecms/ui";
+import { AddIcon, LoadingButton } from "@rebasepro/ui";
 
 export default function LoadingButtonWithIconDemo() {
     const [loading, setLoading] = React.useState(false);
@@ -13,7 +13,7 @@ export default function LoadingButtonWithIconDemo() {
 
     return (
         <LoadingButton
-            startIcon={<AddIcon size={"small"}/>}
+            startIcon={<AddIcon size={"small"} />}
             loading={loading}
             onClick={onClick}>
             Click Me

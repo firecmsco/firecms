@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/EntityCollectionViewActionsProps"
 title: "EntityCollectionViewActionsProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionViewActionsProps
+[@rebasepro/core](../README) / EntityCollectionViewActionsProps
 
 # Type Alias: EntityCollectionViewActionsProps\<M\>
 
 > **EntityCollectionViewActionsProps**\<`M`\> = `object`
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:10](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:10]
 
 > **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:11]
 
 > **collectionEntitiesCount**: `number`
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:20](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:20]
 
 > **onMultipleDeleteClick**: () => `void`
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 #### Returns
 
@@ -55,7 +55,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:17]
 
 > **onNewClick**: () => `void`
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:16](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 #### Returns
 
@@ -67,7 +67,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:16]
 
 > **parentCollectionIds**: `string`[]
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:14]
 
 > **path**: `string`
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:12](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -83,7 +83,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:12]
 
 > **relativePath**: `string`
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -91,7 +91,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:13]
 
 > **selectionController**: [`SelectionController`](SelectionController)\<`M`\>
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:18](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -99,7 +99,7 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:18]
 
 > **selectionEnabled**: `boolean`
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -107,4 +107,4 @@ Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:15]
 
 > **tableController**: [`EntityTableController`](EntityTableController)\<`M`\>
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)

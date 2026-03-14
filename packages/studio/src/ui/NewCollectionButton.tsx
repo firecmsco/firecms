@@ -1,6 +1,6 @@
-import { AddIcon, Button } from "@firecms/ui";
+import { AddIcon, Button } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
-import { useAdminModeController } from "@firecms/core";
+import { useAdminModeController } from "@rebasepro/core";
 
 export function NewCollectionButton() {
     const adminModeController = useAdminModeController();

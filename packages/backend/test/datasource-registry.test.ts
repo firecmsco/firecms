@@ -3,7 +3,7 @@ import {
     DefaultDatasourceRegistry,
     DEFAULT_DATASOURCE_ID
 } from "../src/services/datasource-registry";
-import { DataSource } from "@firecms/types";
+import { DataSource } from "@rebasepro/types";
 
 /**
  * Mock DataSource for testing

@@ -1,5 +1,5 @@
 import React from "react";
-import { BooleanSwitch } from "@firecms/ui";
+import { BooleanSwitch } from "@rebasepro/ui";
 
 export default function BooleanSwitchDisabledDemo() {
     return (

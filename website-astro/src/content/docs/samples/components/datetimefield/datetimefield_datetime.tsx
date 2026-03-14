@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DateTimeField } from "@firecms/ui";
+import { DateTimeField } from "@rebasepro/ui";
 
 export default function DateTimeFieldDateTimeDemo() {
     const [selectedDateTime, setSelectedDateTime] = useState<Date | undefined>(new Date());

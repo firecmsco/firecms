@@ -1,6 +1,6 @@
-## FireCMS Data enhancement plugin
+## Rebase Data enhancement plugin
 
-This plugin allows you to enhance data in your [FireCMS](https://firecms.co)
+This plugin allows you to enhance data in your [Rebase](https://rebase.pro)
 project, using ChatGPT.
 
 The ChatGPT plugin allows you to use the OpenAI API to generate content using
@@ -8,13 +8,13 @@ the latest GPT models. This plugin is able to understand the structure of your
 data and generate content that fits your schema.
 
 <p align="center">
-    <img src="https://firecms.co/img/data_enhancement.png" width="800px" alt="Data enhancement UI" />
+    <img src="https://rebase.pro/img/data_enhancement.png" width="800px" alt="Data enhancement UI" />
 </p>
 
 In order to be able to use this plugin you need to have a valid subscription.
 
 You can get a subscription in
-the [FireCMS dashboard](https://app.firecms.co/subscriptions).
+the [Rebase dashboard](https://app.rebase.pro/subscriptions).
 
 You need to specify the Firebase project id you would like to use the plugin
 with,
@@ -24,11 +24,11 @@ No need to add any subscription key or anything like that.
 
 ```tsx
 import React from "react";
-import { FireCMS } from "@firecms/core";
+import { Rebase } from "@rebasepro/core";
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 
-import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
+import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
 
 // TODO: Replace with your Firebase config
 const firebaseConfig = {
@@ -58,7 +58,7 @@ export default function App() {
         plugins
     }); 
     
-    return <FireCMS
+    return <Rebase
         name={"My Online Shop"}
         plugins={[dataEnhancementPlugin]}
         authentication={myAuthenticator}

@@ -3,17 +3,17 @@ slug: "docs/api/functions/getEntityTitlePropertyKey"
 title: "getEntityTitlePropertyKey"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getEntityTitlePropertyKey
+[@rebasepro/core](../README) / getEntityTitlePropertyKey
 
 # Function: getEntityTitlePropertyKey()
 
 > **getEntityTitlePropertyKey**\<`M`\>(`collection`, `propertyConfigs`): `string` \| `undefined`
 
-Defined in: [util/references.ts:28](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/references.ts)
+Defined in: [util/references.ts:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/references.ts)
 
 ## Type Parameters
 

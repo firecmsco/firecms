@@ -1,7 +1,7 @@
 # Rebase Architecture Spec
 
 ## The Vision: A Supabase Alternative
-Rebase is the evolution of FireCMS into a full Backend-as-a-Service (BaaS), designed as a completely open-source, Docker-ready, Node/TypeScript alternative to Supabase.
+Rebase is the evolution of Rebase into a full Backend-as-a-Service (BaaS), designed as a completely open-source, Docker-ready, Node/TypeScript alternative to Supabase.
 
 While Supabase stitched together many tools (GoTrue, PostgREST, Realtime), Rebase is fully integrated, tightly coupled, and written natively in TypeScript powered by Drizzle ORM.
 
@@ -14,7 +14,7 @@ While Supabase stitched together many tools (GoTrue, PostgREST, Realtime), Rebas
 ## The Core Problem: Where is the Source of Truth?
 Supabase uses **PostgreSQL itself** as the single source of truth for the schema. When you click "Add Column" in their dashboard, it runs `ALTER TABLE`.
 * **Problem:** Postgres doesn't know what "UI" metadata is. If a user sets a field as `multiline`, or an `enum`, or assigns a custom Markdown preview callback, a Postgres `VARCHAR` column loses all of that rich UI configuration context.
-* **FireCMS Advantage:** FireCMS currently stores everything as rich TypeScript configuration objects, allowing deep configuration, callbacks (e.g., `target: () => ...` for relations), and powerful validation. 
+* **Rebase Advantage:** Rebase currently stores everything as rich TypeScript configuration objects, allowing deep configuration, callbacks (e.g., `target: () => ...` for relations), and powerful validation. 
 
 How do we build a visual "No-Code" Database Studio for non-developers, without destroying the powerful TypeScript configuration that developers love?
 

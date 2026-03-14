@@ -3,17 +3,17 @@ slug: "docs/api/functions/resolvePermissions"
 title: "resolvePermissions"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / resolvePermissions
+[@rebasepro/core](../README) / resolvePermissions
 
 # Function: resolvePermissions()
 
 > **resolvePermissions**\<`M`, `USER`\>(`collection`, `authController`, `path`, `entity`): [`Permissions`](../interfaces/Permissions) \| `undefined`
 
-Defined in: [util/permissions.ts:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/permissions.ts)
+Defined in: [util/permissions.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/permissions.ts)
 
 ## Type Parameters
 

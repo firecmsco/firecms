@@ -1,4 +1,4 @@
-import { SearchIconsView } from "@firecms/core";
+import { SearchIconsView } from "@rebasepro/core";
 
 export default SearchIconsView;
 

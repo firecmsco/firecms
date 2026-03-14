@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar } from "@firecms/ui";
+import { Avatar } from "@rebasepro/ui";
 
 export default function CustomStyleAvatarDemo() {
     return (

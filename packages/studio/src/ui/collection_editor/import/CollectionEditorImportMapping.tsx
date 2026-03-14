@@ -3,29 +3,29 @@ import {
     getInferenceType,
     ImportConfig,
     ImportNewPropertyFieldPreview
-} from "@firecms/data_import";
-import { getIn, useFormex } from "@firecms/formex";
+} from "@rebasepro/data_import";
+import { getIn, useFormex } from "@rebasepro/formex";
 
-import { getFieldConfig, getFieldId, Properties, Property, PropertyConfig, PropertyConfigBadge, } from "@firecms/core";
-import { cls, Container, Select, SelectItem, Tooltip, Typography } from "@firecms/ui";
+import { getFieldConfig, getFieldId, Properties, Property, PropertyConfig, PropertyConfigBadge, } from "@rebasepro/core";
+import { cls, Container, Select, SelectItem, Tooltip, Typography } from "@rebasepro/ui";
 import React, { useState } from "react";
 import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../PropertyEditView";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
 import { PersistedCollection } from "../../../types/persisted_collection";
 import { updatePropertyFromWidget } from "../utils/update_property_for_widget";
 import { supportedFields } from "../utils/supported_fields";
-import { buildPropertyFromData } from "@firecms/schema_inference";
+import { buildPropertyFromData } from "@rebasepro/schema_inference";
 
 export function CollectionEditorImportMapping({
-                                                  importConfig,
-                                                  propertyConfigs,
-                                                  collectionEditable
-                                              }:
-                                                  {
-                                                      importConfig: ImportConfig,
-                                                      propertyConfigs: Record<string, PropertyConfig>,
-                                                      collectionEditable: boolean
-                                                  }) {
+    importConfig,
+    propertyConfigs,
+    collectionEditable
+}:
+    {
+        importConfig: ImportConfig,
+        propertyConfigs: Record<string, PropertyConfig>,
+        collectionEditable: boolean
+    }) {
 
     // const {
     //     values,
@@ -50,11 +50,11 @@ export function CollectionEditorImportMapping({
     const property = selectedProperty || undefined;
 
     const onPropertyChanged = ({
-                                   id,
-                                   property,
-                                   previousId,
-                                   namespace
-                               }: OnPropertyChangedParams) => {
+        id,
+        property,
+        previousId,
+        namespace
+    }: OnPropertyChangedParams) => {
 
         const fullId = id ? getFullId(id, namespace) : undefined;
         const propertyPath = fullId ? idToPropertiesPath(fullId) : undefined;
@@ -109,11 +109,11 @@ export function CollectionEditorImportMapping({
         }
     };
     const onPropertyTypeChanged = async ({
-                                             id,
-                                             importKey,
-                                             property,
-                                             namespace
-                                         }: OnPropertyChangedParams & {
+        id,
+        importKey,
+        property,
+        namespace
+    }: OnPropertyChangedParams & {
         importKey: string
     }) => {
 
@@ -144,38 +144,38 @@ export function CollectionEditorImportMapping({
                 <Typography variant="h6" className={"my-4 ml-3.5"}>Data property mapping</Typography>
 
                 <DataNewPropertiesMapping importConfig={importConfig}
-                                          destinationProperties={values.properties as Properties}
-                                          buildPropertyView={({
-                                                                  property,
-                                                                  propertyKey,
-                                                                  importKey,
-                                                                  isIdColumn
-                                                              }) => {
-                                              if (isIdColumn) {
-                                                  return <Typography> This column will be used as ID</Typography>
-                                              }
+                    destinationProperties={values.properties as Properties}
+                    buildPropertyView={({
+                        property,
+                        propertyKey,
+                        importKey,
+                        isIdColumn
+                    }) => {
+                        if (isIdColumn) {
+                            return <Typography> This column will be used as ID</Typography>
+                        }
 
-                                              return <ImportNewPropertyFieldPreview
-                                                  property={property}
-                                                  propertyKey={propertyKey}
-                                                  onPropertyNameChanged={(propertyKey: string, value: string) => setFieldValue(`properties.${propertyKey}.name`, value, false)}
-                                                  onEditClick={() => {
-                                                      if (!propertyKey || !property) return;
-                                                      setSelectedProperty({
-                                                          ...property,
-                                                          id: propertyKey,
-                                                      });
-                                                  }}
-                                                  propertyTypeView={<PropertySelect property={property}
-                                                                                    disabled={false}
-                                                                                    onPropertyChanged={(props) => onPropertyTypeChanged({
-                                                                                        ...props,
-                                                                                        importKey
-                                                                                    })}
-                                                                                    propertyKey={propertyKey}
-                                                                                    propertyConfigs={propertyConfigs}/>}
-                                              />;
-                                          }}/>
+                        return <ImportNewPropertyFieldPreview
+                            property={property}
+                            propertyKey={propertyKey}
+                            onPropertyNameChanged={(propertyKey: string, value: string) => setFieldValue(`properties.${propertyKey}.name`, value, false)}
+                            onEditClick={() => {
+                                if (!propertyKey || !property) return;
+                                setSelectedProperty({
+                                    ...property,
+                                    id: propertyKey,
+                                });
+                            }}
+                            propertyTypeView={<PropertySelect property={property}
+                                disabled={false}
+                                onPropertyChanged={(props) => onPropertyTypeChanged({
+                                    ...props,
+                                    importKey
+                                })}
+                                propertyKey={propertyKey}
+                                propertyConfigs={propertyConfigs} />}
+                        />;
+                    }} />
             </Container>
 
             <PropertyFormDialog
@@ -195,29 +195,29 @@ export function CollectionEditorImportMapping({
                 }}
                 autoOpenTypeSelect={false}
                 existingProperty={false}
-                propertyConfigs={propertyConfigs}/>
+                propertyConfigs={propertyConfigs} />
 
-            <div style={{ height: "52px" }}/>
+            <div style={{ height: "52px" }} />
         </div>
     );
 
 }
 
 function PropertySelect({
-                            property,
-                            onPropertyChanged,
-                            propertyKey,
-                            propertyConfigs,
-                            disabled
-                        }: {
+    property,
+    onPropertyChanged,
+    propertyKey,
+    propertyConfigs,
+    disabled
+}: {
     property: Property | null,
     propertyKey: string | null,
     onPropertyChanged: ({
-                            id,
-                            property,
-                            previousId,
-                            namespace
-                        }: OnPropertyChangedParams) => void,
+        id,
+        property,
+        previousId,
+        namespace
+    }: OnPropertyChangedParams) => void,
     propertyConfigs: Record<string, PropertyConfig>,
     disabled?: boolean
 }) {
@@ -228,7 +228,7 @@ function PropertySelect({
     const [selectOpen, setSelectOpen] = useState(false);
 
     return <Tooltip title={property && widget ? `${widget?.name} - ${property.type}` : undefined}
-                    open={selectOpen ? false : undefined}>
+        open={selectOpen ? false : undefined}>
         <Select
             open={selectOpen}
             onOpenChange={setSelectOpen}
@@ -243,7 +243,7 @@ function PropertySelect({
             position={"item-aligned"}
             renderValue={(value) => {
                 if (!widget) return null;
-                return <PropertyConfigBadge propertyConfig={widget}/>
+                return <PropertyConfigBadge propertyConfig={widget} />
             }}
             onValueChange={(newSelectedWidgetId) => {
                 const newProperty = updatePropertyFromWidget(property, newSelectedWidgetId, propertyConfigs)
@@ -261,7 +261,7 @@ function PropertySelect({
                     value={key}
                     optionDisabled={false}
                     propertyConfig={widget}
-                    existing={false}/>;
+                    existing={false} />;
             })
             }
         </Select>
@@ -277,20 +277,20 @@ export interface PropertySelectItemProps {
 
 export function PropertySelectItem({ value, optionDisabled, propertyConfig, existing }: PropertySelectItemProps) {
     return <SelectItem value={value}
-                       disabled={optionDisabled}
-                       className={"flex flex-row items-center"}>
+        disabled={optionDisabled}
+        className={"flex flex-row items-center"}>
         <div
             className={cls(
                 "flex flex-row items-center text-base min-h-[48px]",
                 optionDisabled ? "w-full" : "")}>
             <div className={"mr-8"}>
-                <PropertyConfigBadge propertyConfig={propertyConfig}/>
+                <PropertyConfigBadge propertyConfig={propertyConfig} />
             </div>
             <div>
                 <div>{propertyConfig.name}</div>
                 <Typography variant={"caption"}
-                            color={"disabled"}
-                            className={"max-w-sm"}>
+                    color={"disabled"}
+                    className={"max-w-sm"}>
                     {existing && optionDisabled ? "You can only switch to widgets that use the same data type" : propertyConfig.description}
                 </Typography>
             </div>

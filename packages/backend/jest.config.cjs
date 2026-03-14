@@ -10,6 +10,6 @@ module.exports = {
     ],
     // This helps Jest resolve monorepo packages
     moduleNameMapper: {
-        "^@firecms/(.*)$": "<rootDir>/../$1/src"
+        "^@rebase/(.*)$": "<rootDir>/../$1/src"
     }
 };

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextareaAutosize } from "@firecms/ui";
+import { TextareaAutosize } from "@rebasepro/ui";
 
 export default function TextareaAutosizeControlledDemo() {
     const [value, setValue] = useState("Controlled textarea");
@@ -9,7 +9,7 @@ export default function TextareaAutosizeControlledDemo() {
     };
 
     return (
-        <TextareaAutosize 
+        <TextareaAutosize
             value={value}
             onChange={handleChange}
             placeholder="Type your text here..."

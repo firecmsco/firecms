@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/EnumValues"
 title: "EnumValues"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EnumValues
+[@rebasepro/core](../README) / EnumValues
 
 # Type Alias: EnumValues
 
 > **EnumValues** = [`EnumValueConfig`](EnumValueConfig)[] \| `Record`\<`string` \| `number`, `string` \| [`EnumValueConfig`](EnumValueConfig)\>
 
-Defined in: [types/properties.ts:210](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:210](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 We use this type to define mapping between string or number values in
 the data source to a label (such in a select dropdown).

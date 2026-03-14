@@ -2,10 +2,10 @@
 slug: docs/self/main_components
 title: Main Components
 sidebar_label: Main Components
-description: FireCMS provides a set of stylable components that scaffold the CMS interface. These components are designed to be easily customizable and can be extended to fit your needs.
+description: Rebase provides a set of stylable components that scaffold the CMS interface. These components are designed to be easily customizable and can be extended to fit your needs.
 ---
 
-FireCMS provides a set of stylable components that scaffold the CMS interface.
+Rebase provides a set of stylable components that scaffold the CMS interface.
 These components are designed to be easily customizable and can be extended to fit your needs. The main components are:
 
 ### Scaffold
@@ -28,7 +28,7 @@ You can also apply classes to the `Scaffold` to style it according to your needs
 #### Example:
 
 ```jsx
-import { Scaffold, AppBar, Drawer, NavigationRoutes, SideDialogs } from "@firecms/core";
+import { Scaffold, AppBar, Drawer, NavigationRoutes, SideDialogs } from "@rebasepro/core";
 import logo from "./images/logo.png";
 //...
 return <Scaffold
@@ -62,8 +62,8 @@ The default appbar includes an avatar tied to the logged-user.
 #### Example:
 
 ```tsx
-import { AppBar } from "@firecms/core";
-import { Button, ForumIcon, LogoutIcon, MenuItem, PaymentIcon, Tooltip } from "@firecms/ui";
+import { AppBar } from "@rebasepro/core";
+import { Button, ForumIcon, LogoutIcon, MenuItem, PaymentIcon, Tooltip } from "@rebasepro/ui";
 //...
 return <AppBar title={title}
                endAdornment={<>
@@ -95,7 +95,7 @@ return <AppBar title={title}
 You can replace the default AppBar by wrapping your custom component with the `AppBar`:
 
 ```tsx
-import { AppBar, Scaffold } from "@firecms/core";
+import { AppBar, Scaffold } from "@rebasepro/core";
 //...
 return <Scaffold>
     <AppBar>
@@ -128,7 +128,7 @@ You can replace the default Drawer by wrapping your custom component with the `D
 Note that the burger icon will be displayed automatically if you define a custom Drawer.
 
 ```tsx
-import { Drawer, Scaffold } from "@firecms/core";
+import { Drawer, Scaffold } from "@rebasepro/core";
 //...
 return <Scaffold>
     <Drawer>
@@ -143,7 +143,7 @@ return <Scaffold>
 The `NavigationRoutes` component defines a `Routes` component (`react-router-dom`) that contains the routes to your
 home page, collections, custom views and admin views.
 
-It picks up all the configuration automatically from the `FireCMS` configuration.
+It picks up all the configuration automatically from the `Rebase` configuration.
 Note that you can also define your own routes if you need to.
 
 #### Props:
@@ -154,7 +154,7 @@ Note that you can also define your own routes if you need to.
 #### Example:
 
 ```tsx
-import { NavigationRoutes } from "@firecms/core";
+import { NavigationRoutes } from "@rebasepro/core";
 //...
 return <NavigationRoutes homePage={<>My custom home page</>}>
     {/* Define your custom routes here, using react-router */}

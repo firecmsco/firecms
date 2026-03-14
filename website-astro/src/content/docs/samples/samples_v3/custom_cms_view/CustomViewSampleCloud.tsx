@@ -1,6 +1,6 @@
-import { buildCollection, CMSView } from "@firecms/core";
+import { buildCollection, CMSView } from "@rebasepro/core";
 import { ExampleCMSView } from "./ExampleCMSView";
-import { FireCMSAppConfig, FireCMSCloudApp } from "@firecms/cloud";
+import { RebaseAppConfig, RebaseCloudApp } from "@rebasepro/cloud";
 
 const projectId = "YOUR_PROJECT_ID";
 
@@ -9,7 +9,7 @@ const customViews: CMSView[] = [{
     name: "Additional view",
     description: "This is an example of an additional view that is defined by the user",
     // This can be any React component
-    view: <ExampleCMSView/>
+    view: <ExampleCMSView />
 }];
 
 const productCollection = buildCollection<any>({
@@ -25,7 +25,7 @@ const productCollection = buildCollection<any>({
     }
 });
 
-const appConfig: FireCMSAppConfig = {
+const appConfig: RebaseAppConfig = {
     version: "1",
     collections: ({ user }) => [
         productCollection
@@ -35,7 +35,7 @@ const appConfig: FireCMSAppConfig = {
 
 export default function App() {
 
-    return <FireCMSCloudApp
+    return <RebaseCloudApp
         projectId={projectId}
         appConfig={appConfig}
     />;

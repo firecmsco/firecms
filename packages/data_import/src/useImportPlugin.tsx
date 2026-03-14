@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { FireCMSPlugin } from "@firecms/core";
+import { RebasePlugin } from "@rebasepro/core";
 import { ImportCollectionAction } from "./import";
 
 /**
  *
  */
-export function useImportPlugin(props?: ImportPluginProps): FireCMSPlugin<any, any, any, ImportPluginProps> {
+export function useImportPlugin(props?: ImportPluginProps): RebasePlugin<any, any, any, ImportPluginProps> {
 
     return useMemo(() => ({
         key: "import",

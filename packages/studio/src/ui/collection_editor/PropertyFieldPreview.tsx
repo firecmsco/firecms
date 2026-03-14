@@ -5,7 +5,7 @@ import {
     Property,
     PropertyConfigBadge,
     useCustomizationController,
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     cardClickableMixin,
     cardMixin,
@@ -15,7 +15,7 @@ import {
     FunctionsIcon,
     Paper,
     Typography,
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
 import { editableProperty } from "../../utils/entities";
 

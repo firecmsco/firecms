@@ -8,7 +8,7 @@ import {
     toSnakeCase,
     useAuthController,
     useCustomizationController
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     BooleanSwitchWithLabel,
     Chip,
@@ -25,8 +25,8 @@ import {
     TextField,
     Tooltip,
     Typography
-} from "@firecms/ui";
-import { Field, getIn, useFormex } from "@firecms/formex";
+} from "@rebasepro/ui";
+import { Field, getIn, useFormex } from "@rebasepro/formex";
 import { useCollectionsConfigController } from "../../useCollectionsConfigController";
 
 export function GeneralSettingsForm({

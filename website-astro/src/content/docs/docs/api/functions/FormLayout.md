@@ -3,17 +3,17 @@ slug: "docs/api/functions/FormLayout"
 title: "FormLayout"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / FormLayout
+[@rebasepro/core](../README) / FormLayout
 
 # Function: FormLayout()
 
 > **FormLayout**(`__namedParameters`): `Element`
 
-Defined in: [form/components/FormLayout.tsx:4](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/components/FormLayout.tsx)
+Defined in: [form/components/FormLayout.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/components/FormLayout.tsx)
 
 ## Parameters
 

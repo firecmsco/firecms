@@ -1,19 +1,19 @@
-# FireCMS v4 — AI & Dataki Integration Notes
+# Rebase v4 — AI & Dataki Integration Notes
 
 > Consolidated findings from the Feb 2025 exploration of AI integration strategy, Dataki dashboard blending, and self-hosted backend architecture.
 
 ---
 
-## 1. Existing AI Features in FireCMS
+## 1. Existing AI Features in Rebase
 
 | Package | What It Does | API Pattern |
 |---------|-------------|-------------|
-| `@firecms/data_enhancement` | Streaming form field suggestions via LLM | `POST /data/enhance_stream/` → SSE |
-| `@firecms/datatalk` | NL chat interface for querying data | `POST /datatalk/command` → SSE |
-| `@firecms/collection_editor` | AI-generated collection schemas from prompts | `POST /collections/generate` → JSON |
-| `@firecms/schema_inference` | Infer schemas from existing data | Local inference |
+| `@rebasepro/data_enhancement` | Streaming form field suggestions via LLM | `POST /data/enhance_stream/` → SSE |
+| `@rebasepro/datatalk` | NL chat interface for querying data | `POST /datatalk/command` → SSE |
+| `@rebasepro/collection_editor` | AI-generated collection schemas from prompts | `POST /collections/generate` → JSON |
+| `@rebasepro/schema_inference` | Infer schemas from existing data | Local inference |
 
-All AI calls currently go to `https://api.firecms.co` — a hard dependency on the hosted backend.
+All AI calls currently go to `https://api.rebase.pro` — a hard dependency on the hosted backend.
 
 ---
 
@@ -25,7 +25,7 @@ All AI calls currently go to `https://api.firecms.co` — a hard dependency on t
 - **Notion**: AI Agents (autonomous workflows), Custom Autofill Properties
 - **Emerging**: MCP (Model Context Protocol) — open standard for AI ↔ tools interaction. No admin panel competitor has shipped an MCP server yet.
 
-**FireCMS's moat**: Full SQL schema awareness (tables, FKs, indexes, constraints via Drizzle). Every competitor doing generic LLM integration can't match schema-aware accuracy.
+**Rebase's moat**: Full SQL schema awareness (tables, FKs, indexes, constraints via Drizzle). Every competitor doing generic LLM integration can't match schema-aware accuracy.
 
 ---
 
@@ -35,7 +35,7 @@ All AI calls currently go to `https://api.firecms.co` — a hard dependency on t
 1. **NL → SQL Query Builder** — Evolve DataTalk for Postgres, schema-aware SQL generation
 2. **AI Data Entry Assistant** — Evolve `data_enhancement` with batch mode, cross-reference fill
 3. **AI Schema Designer** — Generate DDL + Drizzle schema + migrations from prompts
-4. **MCP Server** — Expose FireCMS as an AI-accessible data layer
+4. **MCP Server** — Expose Rebase as an AI-accessible data layer
 
 ### Phase 2 — Enterprise Appeal
 5. AI Dashboard / Analytics Agent
@@ -74,30 +74,30 @@ type: "collection" | "view" | "admin" | "dashboard"
 
 Dataki widgets = SQL query + Vega spec. Drill-down works by:
 1. **Vega signals** capture click events (data point behind clicked bar/slice)
-2. **SQL `FROM` clause** → maps to FireCMS collection via `collection.path`/`dbPath`
-3. **Clicked dimension values** → converted to FireCMS `FilterValues`
+2. **SQL `FROM` clause** → maps to Rebase collection via `collection.path`/`dbPath`
+3. **Clicked dimension values** → converted to Rebase `FilterValues`
 4. Navigate to collection pre-filtered
 
 Start with automatic resolution (parse SQL → find collection → navigate). Add explicit config for complex cases later.
 
 ### Files to Modify
 - `packages/types/src/controllers/navigation.ts` — extend `NavigationEntry`, add `DashboardEntry`
-- `packages/firecms_core/src/components/HomePage/NavigationCardBinding.tsx` — dashboard card variant
-- `packages/firecms_core/src/components/HomePage/DefaultHomePage.tsx` — updated search, dashboard support
-- `packages/firecms_core/src/core/DefaultDrawer.tsx` — dashboard items + AI assistant entry
-- `packages/firecms_core/src/core/NavigationRoutes.tsx` — dashboard routes
+- `packages/core/src/components/HomePage/NavigationCardBinding.tsx` — dashboard card variant
+- `packages/core/src/components/HomePage/DefaultHomePage.tsx` — updated search, dashboard support
+- `packages/core/src/core/DefaultDrawer.tsx` — dashboard items + AI assistant entry
+- `packages/core/src/core/NavigationRoutes.tsx` — dashboard routes
 
 ---
 
 ## 5. Self-Hosted AI Backend Architecture
 
 ### The Problem
-Enterprise customers run FireCMS v4 via Docker. AI calls to `api.firecms.co` are a non-starter for data sovereignty, network isolation, compliance (GDPR/HIPAA/SOC2), and cost control.
+Enterprise customers run Rebase v4 via Docker. AI calls to `api.rebase.pro` are a non-starter for data sovereignty, network isolation, compliance (GDPR/HIPAA/SOC2), and cost control.
 
 ### Recommended: Hybrid (Model 3), Then Self-Hosted (Model 2)
 
 **Model 3 (Hybrid)** — Ship first:
-- Backend proxies AI calls to `api.firecms.co` (sends only schema + prompt, never data)
+- Backend proxies AI calls to `api.rebase.pro` (sends only schema + prompt, never data)
 - SQL execution happens locally against customer's Postgres
 - Actual data never leaves customer infrastructure
 
@@ -108,10 +108,10 @@ Enterprise customers run FireCMS v4 via Docker. AI calls to `api.firecms.co` are
 
 ### Technical Design
 
-AI becomes the fourth optional module in `initializeFireCMSBackend` (alongside auth, storage, datasources):
+AI becomes the fourth optional module in `initializeRebaseBackend` (alongside auth, storage, datasources):
 
 ```typescript
-await initializeFireCMSBackend({
+await initializeRebaseBackend({
     collections, server, app,
     datasource: { connection: db, schema: { tables, enums, relations } },
     auth: { jwtSecret: "..." },
@@ -127,7 +127,7 @@ await initializeFireCMSBackend({
 
 **LLM Provider abstraction**: Supports OpenAI, Azure OpenAI, AWS Bedrock, Anthropic, Ollama, and custom endpoints.
 
-**Frontend change**: Replace hardcoded `api.firecms.co` with configurable endpoint defaulting to local backend (`/api/ai`).
+**Frontend change**: Replace hardcoded `api.rebase.pro` with configurable endpoint defaulting to local backend (`/api/ai`).
 
 ### Components to Build
 

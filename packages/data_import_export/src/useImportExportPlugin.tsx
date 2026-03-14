@@ -1,14 +1,14 @@
 import React, { useMemo } from "react";
-import { EntityCollection, FireCMSPlugin } from "@firecms/core";
-import { ImportCollectionAction } from "@firecms/data_import";
-import { ExportCollectionAction } from "@firecms/data_export";
+import { EntityCollection, RebasePlugin } from "@rebasepro/core";
+import { ImportCollectionAction } from "@rebasepro/data_import";
+import { ExportCollectionAction } from "@rebasepro/data_export";
 
 /**
  * useImportExportPlugin is deprecated.
  * Please use useImportPlugin and useExportPlugin separately
  * @deprecated
  */
-export function useImportExportPlugin(props?: ImportExportPluginProps): FireCMSPlugin<any, any, any, ImportExportPluginProps> {
+export function useImportExportPlugin(props?: ImportExportPluginProps): RebasePlugin<any, any, any, ImportExportPluginProps> {
 
     console.warn("useImportExportPlugin is deprecated. Please use useImportPlugin and useExportPlugin separately");
 

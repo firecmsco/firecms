@@ -49,7 +49,7 @@ export type PropertyConfig = {
     /**
      * Optional icon to be used in the field selector.
      * Use a 24x24 component, in order not to break the layout.
-     * Any FireCMS icon can be used.
+     * Any Rebase icon can be used.
      */
     Icon?: React.ComponentType;
 

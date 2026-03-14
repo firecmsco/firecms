@@ -3,17 +3,17 @@ slug: "docs/api/functions/MapPropertyPreview"
 title: "MapPropertyPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / MapPropertyPreview
+[@rebasepro/core](../README) / MapPropertyPreview
 
 # Function: MapPropertyPreview()
 
 > **MapPropertyPreview**\<`T`\>(`__namedParameters`): `Element` \| `null`
 
-Defined in: [preview/property\_previews/MapPropertyPreview.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/property_previews/MapPropertyPreview.tsx)
+Defined in: [preview/property\_previews/MapPropertyPreview.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/MapPropertyPreview.tsx)
 
 ## Type Parameters
 

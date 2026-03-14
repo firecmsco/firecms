@@ -3,17 +3,17 @@ slug: "docs/api/functions/getEntityImagePreviewPropertyKey"
 title: "getEntityImagePreviewPropertyKey"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getEntityImagePreviewPropertyKey
+[@rebasepro/core](../README) / getEntityImagePreviewPropertyKey
 
 # Function: getEntityImagePreviewPropertyKey()
 
 > **getEntityImagePreviewPropertyKey**\<`M`\>(`collection`): `string` \| `undefined`
 
-Defined in: [util/references.ts:45](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/references.ts)
+Defined in: [util/references.ts:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/references.ts)
 
 ## Type Parameters
 

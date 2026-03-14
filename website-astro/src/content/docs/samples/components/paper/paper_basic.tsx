@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper } from "@firecms/ui";
+import { Paper } from "@rebasepro/ui";
 
 export default function PaperBasicDemo() {
     return (

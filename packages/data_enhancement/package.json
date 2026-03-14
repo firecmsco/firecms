@@ -1,5 +1,5 @@
 {
-    "name": "@firecms/data_enhancement",
+    "name": "@rebasepro/data_enhancement",
     "type": "module",
     "version": "4.0.0",
     "main": "./dist/index.umd.js",
@@ -16,10 +16,10 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
-        "@firecms/core": "4.0.0",
-        "@firecms/ui": "4.0.0",
-        "@firecms/types": "4.0.0",
-        "@firecms/editor": "4.0.0"
+        "@rebasepro/core": "4.0.0",
+        "@rebasepro/ui": "4.0.0",
+        "@rebasepro/types": "4.0.0",
+        "@rebasepro/editor": "4.0.0"
     },
     "peerDependencies": {
         "firebase": "^10.12.2 || ^11.0.0 || ^12.0.0",

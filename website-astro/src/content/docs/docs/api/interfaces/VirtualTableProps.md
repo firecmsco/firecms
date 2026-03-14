@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/VirtualTableProps"
 title: "VirtualTableProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / VirtualTableProps
+[@rebasepro/core](../README) / VirtualTableProps
 
 # Interface: VirtualTableProps\<T\>
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ## See
 
@@ -29,7 +29,7 @@ Table
 
 > `optional` **AddColumnComponent**: `ComponentType`\<\{ \}\>
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:158](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:158](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 If adding this callback, a button to add a new column is displayed.
 
@@ -41,7 +41,7 @@ If adding this callback, a button to add a new column is displayed.
 
 > **cellRenderer**: `ComponentType`\<[`CellRendererParams`](../type-aliases/CellRendererParams)\<`T`\>\>
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:32](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Custom cell renderer
 The renderer receives props `{ cellData, columns, column, columnIndex, rowData, rowIndex, container, isScrolling }`
@@ -52,7 +52,7 @@ The renderer receives props `{ cellData, columns, column, columnIndex, rowData, 
 
 > `optional` **checkFilterCombination**: (`filterValues`, `sortBy?`) => `boolean`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:40](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Set this callback if you want to support some combinations
 of filter combinations only.
@@ -77,7 +77,7 @@ of filter combinations only.
 
 > `optional` **className**: `string`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:142](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:142](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Class name applied to the table
 
@@ -87,7 +87,7 @@ Class name applied to the table
 
 > **columns**: [`VirtualTableColumn`](VirtualTableColumn)\<`any`\>[]
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:26](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Properties displayed in this collection. If this property is not set
 every property is displayed, you can filter
@@ -98,7 +98,7 @@ every property is displayed, you can filter
 
 > `optional` **createFilterField**: (`props`) => `ReactNode`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:137](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:137](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Callback to create a filter field, displayed in the header as a dropdown
 
@@ -118,7 +118,7 @@ Callback to create a filter field, displayed in the header as a dropdown
 
 > `optional` **data**: `T`[]
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:20](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Array of arbitrary data
 
@@ -128,7 +128,7 @@ Array of arbitrary data
 
 > `optional` **emptyComponent**: `ReactNode`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:115](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:115](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Message displayed when there is no data
 
@@ -138,7 +138,7 @@ Message displayed when there is no data
 
 > `optional` **endAdornment**: `ReactNode`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:152](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:152](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Component rendered at the end of the table, after scroll
 
@@ -148,7 +148,7 @@ Component rendered at the end of the table, after scroll
 
 > `optional` **endOffset**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:51](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:51](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Offset in pixels where the onEndReached callback is triggered
 
@@ -158,7 +158,7 @@ Offset in pixels where the onEndReached callback is triggered
 
 > `optional` **error**: `Error`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:110](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:110](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 If there is an error loading data you can pass it here, so it gets
 displayed instead of the content
@@ -169,7 +169,7 @@ displayed instead of the content
 
 > `optional` **filter**: `Partial`\<`Record`\<`any`, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:77](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:77](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 In case this table should have some filters set by default
 
@@ -179,7 +179,7 @@ In case this table should have some filters set by default
 
 > `optional` **hoverRow**: `boolean`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:125](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:125](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Should apply a different style when hovering
 
@@ -189,7 +189,7 @@ Should apply a different style when hovering
 
 > `optional` **initialScroll**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:163](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:163](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Initial scroll position
 
@@ -199,7 +199,7 @@ Initial scroll position
 
 > `optional` **loading**: `boolean`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:120](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:120](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Is the table in a loading state
 
@@ -209,7 +209,7 @@ Is the table in a loading state
 
 > `optional` **onColumnResize**: (`params`) => `void`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:67](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:67](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Callback when a column is resized
 
@@ -229,7 +229,7 @@ Callback when a column is resized
 
 > `optional` **onEndReached**: () => `void`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:46](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 A callback function when scrolling the table to near the end
 
@@ -243,7 +243,7 @@ A callback function when scrolling the table to near the end
 
 > `optional` **onFilterUpdate**: (`filter?`) => `void`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:83](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:83](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Callback used when filters are updated
 
@@ -263,7 +263,7 @@ Callback used when filters are updated
 
 > `optional` **onResetPagination**: () => `void`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:57](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:57](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 When the pagination should be reset. E.g. the filters or sorting
 has been reset.
@@ -278,7 +278,7 @@ has been reset.
 
 > `optional` **onRowClick**: (`props`) => `void`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:62](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:62](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Callback when a row is clicked
 
@@ -298,7 +298,7 @@ Callback when a row is clicked
 
 > `optional` **onScroll**: (`props`) => `void`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:89](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:89](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Callback when the table is scrolled
 
@@ -328,7 +328,7 @@ Callback when the table is scrolled
 
 > `optional` **onSortByUpdate**: (`sortBy?`) => `void`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:104](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:104](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Callback used when sorting is updated
 
@@ -348,7 +348,7 @@ Callback used when sorting is updated
 
 > `optional` **rowClassName**: (`rowData`) => `string` \| `undefined`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:131](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:131](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Apply a custom class name to the row
 
@@ -368,7 +368,7 @@ Apply a custom class name to the row
 
 > `optional` **rowHeight**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:72](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:72](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Size of the table
 
@@ -378,7 +378,7 @@ Size of the table
 
 > `optional` **sortBy**: \[`string`, `"desc"` \| `"asc"`\]
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:98](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:98](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Default sort applied to this collection
 
@@ -388,6 +388,6 @@ Default sort applied to this collection
 
 > `optional` **style**: `CSSProperties`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:147](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:147](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Style applied to the table

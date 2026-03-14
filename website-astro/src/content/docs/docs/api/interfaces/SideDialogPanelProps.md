@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/SideDialogPanelProps"
 title: "SideDialogPanelProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SideDialogPanelProps
+[@rebasepro/core](../README) / SideDialogPanelProps
 
 # Interface: SideDialogPanelProps
 
-Defined in: [types/side\_dialogs\_controller.tsx:43](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 Props used to open a side dialog
 
@@ -21,7 +21,7 @@ Props used to open a side dialog
 
 > `optional` **additional**: `any`
 
-Defined in: [types/side\_dialogs\_controller.tsx:81](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:81](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 Use this prop to store additional data in the panel
 
@@ -31,7 +31,7 @@ Use this prop to store additional data in the panel
 
 > **component**: `ReactNode`
 
-Defined in: [types/side\_dialogs\_controller.tsx:53](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 The component type that will be rendered
 
@@ -41,7 +41,7 @@ The component type that will be rendered
 
 > **key**: `string`
 
-Defined in: [types/side\_dialogs\_controller.tsx:48](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 A key that identifies this panel
 
@@ -51,7 +51,7 @@ A key that identifies this panel
 
 > `optional` **onClose**: () => `void`
 
-Defined in: [types/side\_dialogs\_controller.tsx:76](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:76](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 Callback when the panel is closed
 
@@ -65,7 +65,7 @@ Callback when the panel is closed
 
 > `optional` **parentUrlPath**: `string`
 
-Defined in: [types/side\_dialogs\_controller.tsx:71](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:71](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 If the navigation stack is empty (you landed in the `urlPath` url), what
 url path to change to when the panel gets closed.
@@ -76,7 +76,7 @@ url path to change to when the panel gets closed.
 
 > `optional` **urlPath**: `string`
 
-Defined in: [types/side\_dialogs\_controller.tsx:65](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:65](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 When open, change the URL to this path.
 Note that if you want to restore state from a URL you need to add the
@@ -88,6 +88,6 @@ logic yourself by listening to URL updates, and probably call `open`.
 
 > `optional` **width**: `string`
 
-Defined in: [types/side\_dialogs\_controller.tsx:58](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 Optional width of the panel

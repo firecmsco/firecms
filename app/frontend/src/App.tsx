@@ -4,10 +4,10 @@ import "@fontsource/jetbrains-mono";
 import "typeface-rubik";
 
 import {
-    FireCMSLoginView,
+    RebaseLoginView,
     useBackendUserManagement,
-    useFireCMSAuthController
-} from "@firecms/auth";
+    useRebaseAuthController
+} from "@rebasepro/auth";
 import {
     AdminModeControllerProvider,
     AdminModeSyncer,
@@ -17,8 +17,8 @@ import {
     ContentHomePage,
     StudioHomePage,
     Drawer,
-    FireCMS,
-    FireCMSRoute,
+    Rebase,
+    RebaseRoute,
     ModeControllerProvider,
     NotFoundPage,
     RolesView,
@@ -34,12 +34,12 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationStateController
-} from "@firecms/core";
-import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import { usePostgresClientDataSource } from "@firecms/postgresql";
-import { CollectionsStudioView, RLSEditor, SQLEditor, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@firecms/studio";
-import { CMSView } from "@firecms/types";
-import { collections } from "virtual:firecms-collections";
+} from "@rebasepro/core";
+import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
+import { usePostgresClientDataSource } from "@rebasepro/postgresql";
+import { CollectionsStudioView, RLSEditor, SQLEditor, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
+import { CMSView } from "@rebasepro/types";
+import { collections } from "virtual:rebase-collections";
 import { Route, Routes, Outlet } from "react-router-dom";
 
 // Configuration from environment
@@ -51,7 +51,7 @@ export function App() {
     const adminModeController = useBuildAdminModeController();
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    const authController = useFireCMSAuthController({
+    const authController = useRebaseAuthController({
         apiUrl: API_URL,
         googleClientId: GOOGLE_CLIENT_ID
     });
@@ -135,7 +135,7 @@ export function App() {
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
                 <AdminModeControllerProvider value={adminModeController}>
-                    <FireCMS
+                    <Rebase
                         collectionRegistryController={collectionRegistryController}
                         cmsUrlController={cmsUrlController}
                         navigationStateController={navigationStateController}
@@ -151,7 +151,7 @@ export function App() {
 
                             if (!authController.user) {
                                 return (
-                                    <FireCMSLoginView
+                                    <RebaseLoginView
                                         authController={authController}
                                         googleEnabled={!!GOOGLE_CLIENT_ID}
                                         googleClientId={GOOGLE_CLIENT_ID}
@@ -165,9 +165,9 @@ export function App() {
                                         <Scaffold autoOpenDrawer={false}>
                                             <AdminModeSyncer devViews={devViews} />
                                             <AppBar />
-                                            <Drawer 
-                                                title={"Rebase"} 
-                                                logoDestination={adminModeController.mode === "studio" ? "/s" : "/"} 
+                                            <Drawer
+                                                title={"Rebase"}
+                                                logoDestination={adminModeController.mode === "studio" ? "/s" : "/"}
                                             />
                                             <Outlet />
                                             <SideDialogs />
@@ -176,10 +176,10 @@ export function App() {
                                         <Route path={"/"} element={<ContentHomePage />} />
                                         <Route path={"/s"} element={<StudioHomePage />} />
 
-                                        <Route path={"/c/*"} element={<FireCMSRoute />} />
+                                        <Route path={"/c/*"} element={<RebaseRoute />} />
                                         <Route path={"/settings"} element={<UserSettingsView />} />
-                                        <Route path={"/roles"} element={<RolesView userManagement={userManagement}/>} />
-                                        <Route path={"/users"} element={<UsersView userManagement={userManagement}/>} />
+                                        <Route path={"/roles"} element={<RolesView userManagement={userManagement} />} />
+                                        <Route path={"/users"} element={<UsersView userManagement={userManagement} />} />
 
                                         {devViews.flatMap(view =>
                                             (Array.isArray(view.slug) ? view.slug : [view.slug]).map(path => (
@@ -192,7 +192,7 @@ export function App() {
                                 </Routes>
                             );
                         }}
-                    </FireCMS>
+                    </Rebase>
                 </AdminModeControllerProvider>
             </ModeControllerProvider>
         </SnackbarProvider>

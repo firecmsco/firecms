@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/UploadedFileContext"
 title: "UploadedFileContext"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / UploadedFileContext
+[@rebasepro/core](../README) / UploadedFileContext
 
 # Interface: UploadedFileContext
 
-Defined in: [types/properties.ts:859](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:859](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/properties.ts:859](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **entityId**: `string`
 
-Defined in: [types/properties.ts:878](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:878](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Entity ID
 
@@ -29,7 +29,7 @@ Entity ID
 
 > **file**: `File`
 
-Defined in: [types/properties.ts:863](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:863](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Uploaded file
 
@@ -39,7 +39,7 @@ Uploaded file
 
 > `optional` **path**: `string`
 
-Defined in: [types/properties.ts:883](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:883](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Entity path. E.g. `products/PID/locales`
 
@@ -49,7 +49,7 @@ Entity path. E.g. `products/PID/locales`
 
 > **property**: [`ResolvedStringProperty`](../type-aliases/ResolvedStringProperty) \| [`ResolvedArrayProperty`](../type-aliases/ResolvedArrayProperty)\<`T`, `ArrayT`\>
 
-Defined in: [types/properties.ts:873](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:873](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Property related to this upload
 
@@ -59,7 +59,7 @@ Property related to this upload
 
 > **propertyKey**: `string`
 
-Defined in: [types/properties.ts:868](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:868](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Property field name
 
@@ -69,7 +69,7 @@ Property field name
 
 > **storage**: [`StorageConfig`](../type-aliases/StorageConfig)
 
-Defined in: [types/properties.ts:893](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:893](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Storage meta specified by the developer
 
@@ -79,6 +79,6 @@ Storage meta specified by the developer
 
 > **values**: `any`
 
-Defined in: [types/properties.ts:888](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:888](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Values of the current entity

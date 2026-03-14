@@ -1,43 +1,43 @@
 <p align="center">
-    <img src="https://firecms.co/img/dark_mode.webp" alt="Intro video" style="max-width: 100%;"/>
+    <img src="https://rebase.pro/img/dark_mode.webp" alt="Intro video" style="max-width: 100%;"/>
 </p>
 
 <p align="center">
-  <a href="https://firecms.co">
-    <img src="https://firecms.co/img/logo_small.png" width="240px" alt="FireCMS logo" />
+  <a href="https://rebase.pro">
+    <img src="https://rebase.pro/img/logo_small.png" width="240px" alt="Rebase logo" />
   </a>
 </p>
 
-<h1 align="center">FireCMS</h1>
+<h1 align="center">Rebase</h1>
 <h3 align="center">Awesome Firebase/MongoDB-based headless CMS</h3>
-<p align="center"><a href="https://demo.firecms.co">Live demo</a></p>
+<p align="center"><a href="https://demo.rebase.pro">Live demo</a></p>
 
 <br />
 
 
-[![NPM](https://img.shields.io/npm/v/firecms.svg)](https://www.npmjs.com/package/firecms) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/rebase.svg)](https://www.npmjs.com/package/rebase) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-Designed by developers for developers, FireCMS is a headless CMS and admin panel
+Designed by developers for developers, Rebase is a headless CMS and admin panel
 that seamlessly integrates with **Firebase and Firestore** by default, but is
 also
 compatible with any backend.
 
-Effortlessly generate **CRUD views** based on your configuration. FireCMS is
+Effortlessly generate **CRUD views** based on your configuration. Rebase is
 simple
 to set up for standard cases and easy to extend and customize for more specific
 needs.
 
 Built to produce collection and form views that naturally align with the
-collection/document model, FireCMS covers a wide range of basic and advanced use
+collection/document model, Rebase covers a wide range of basic and advanced use
 cases. With extensibility in mind, it's easy to create your own views or modify
 existing ones.
 
-FireCMS does **not impose any data structure** restrictions, ensuring a smooth,
+Rebase does **not impose any data structure** restrictions, ensuring a smooth,
 out-of-the-box experience for any project.
 
 ### Core technologies
 
-FireCMS is based on this great technologies:
+Rebase is based on this great technologies:
 
 - Typescript
 - Tailwind CSS
@@ -49,23 +49,23 @@ FireCMS is based on this great technologies:
 The easiest way to get going is to check our quickstart guide! You will just
 need to follow some quick steps:
 
-https://firecms.co/docs
+https://rebase.pro/docs
 
 ### Demo
 
 Check the demo with all the core functionalities.
 
-https://demo.firecms.co
+https://demo.rebase.pro
 
 > You can modify the data, but it gets periodically restored.
 
 ### Changelog
 
-https://firecms.co/docs/changelog
+https://rebase.pro/docs/changelog
 
 ## Features
 
-FireCMS has been meticulously crafted to make it incredibly easy for developers
+Rebase has been meticulously crafted to make it incredibly easy for developers
 to build a CMS/admin tool while offering an excellent data editing experience
 and a user-friendly interface for marketers and content managers.
 
@@ -75,21 +75,21 @@ We've developed a highly efficient windowed **spreadsheet view** for
 collections, allowing inline editing for most common fields, as well as popup
 views for other cases and your custom field implementations.
 
-Featuring **real-time** support, FireCMS is perfect for apps that require
+Featuring **real-time** support, Rebase is perfect for apps that require
 constant updates. It also supports **text search** (through an external provider
 like Algolia, if using Firestore), **filtering and sorting**, and **exporting**
 data.
 
 ### ✨ Robust Forms
 
-![fields](https://firecms.co/img/form_editing.webp)
+![fields](https://rebase.pro/img/form_editing.webp)
 
-When editing an entity, FireCMS offers a nested system of side dialogs for
+When editing an entity, Rebase offers a nested system of side dialogs for
 navigating through **subcollections** and accessing custom views (such as custom
 forms or blog previews). This functionality can also be accessed
 programmatically using the `useSideEntityController` hook.
 
-FireCMS includes **over 20 built-in fields** with numerous customization and
+Rebase includes **over 20 built-in fields** with numerous customization and
 validation options. The components have been carefully designed for an
 outstanding user experience, including advanced features like **references** to
 other collections, **markdown**, and **array reordering**.
@@ -97,7 +97,7 @@ other collections, **markdown**, and **array reordering**.
 For unsupported use cases, create your own **custom field** as a React
 component.
 
-FireCMS also supports **conditional fields** in forms, allowing you to define
+Rebase also supports **conditional fields** in forms, allowing you to define
 rules for active fields based on your logic.
 
 ### 👮 Authentication, Permissions, and Role System
@@ -106,7 +106,7 @@ Define which navigation views users can see and the operations (create, edit,
 delete) they can perform based on your role system. You can even configure this
 on a per-entity or collection level.
 
-By default, FireCMS supports all Firebase authorization mechanisms, but you can
+By default, Rebase supports all Firebase authorization mechanisms, but you can
 implement your own.
 
 ### 🏹 Relational Support
@@ -129,7 +129,7 @@ entity, modifying some values, and requiring real-time updates.
 
 ### 🗂️ File Storage
 
-FireCMS supports uploading files to Firebase Storage out of the box and provides
+Rebase supports uploading files to Firebase Storage out of the box and provides
 specific fields for handling single and multiple file uploads, as well as
 reordering.
 
@@ -138,7 +138,7 @@ You can replace the Firebase Storage implementation with your own.
 ## Included example
 
 You can access the code for the demo project under
-[`example`](https://github.com/FireCMSco/firecms/tree/master/example). It includes
+[`example`](https://github.com/Rebaseco/rebase/tree/master/example). It includes
 every feature provided by this CMS.
 
 Keep in mind you need to update the dependencies in that project if you want to
@@ -151,7 +151,7 @@ If you need general support, you can open a GitHub issue.
 
 Do you need consulting setting up your Firestore-based CMS in no time? We are
 happy to help!
-`hello@firecms.co`
+`hello@rebase.pro`
 
 ## Development
 
@@ -171,4 +171,4 @@ Then simply run `yarn` and `yarn dev`
 
 ## License
 
-MIT © [FireCMS](https://github.com/FireCMSco)
+MIT © [Rebase](https://github.com/Rebaseco)

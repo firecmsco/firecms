@@ -1,4 +1,4 @@
-import { EntityReference } from "@firecms/cloud";
+import { EntityReference } from "@rebasepro/cloud";
 
 export type Product = {
     name: string;

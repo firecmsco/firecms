@@ -1,10 +1,10 @@
-import { PropertyValidationSchema } from "@firecms/types";
+import { PropertyValidationSchema } from "@rebasepro/types";
 import { InferencePropertyBuilderProps } from "../types";
 
 export function buildValidation({
-                                    totalDocsCount,
-                                    valuesResult
-                                }: InferencePropertyBuilderProps): PropertyValidationSchema | undefined {
+    totalDocsCount,
+    valuesResult
+}: InferencePropertyBuilderProps): PropertyValidationSchema | undefined {
 
     if (valuesResult) {
         const totalEntriesCount = valuesResult.values.length;

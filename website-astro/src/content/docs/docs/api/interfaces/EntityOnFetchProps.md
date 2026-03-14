@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/EntityAfterReadProps"
 title: "EntityAfterReadProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityAfterReadProps
+[@rebasepro/core](../README) / EntityAfterReadProps
 
 # Interface: EntityAfterReadProps\<M, USER\>
 
-Defined in: [types/entity\_callbacks.ts:76](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:76](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Parameters passed to hooks when an entity is fetched
 
@@ -31,7 +31,7 @@ Parameters passed to hooks when an entity is fetched
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`, `USER`\>
 
-Defined in: [types/entity\_callbacks.ts:81](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:81](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Collection of the entity
 
@@ -39,9 +39,9 @@ Collection of the entity
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
-Defined in: [types/entity\_callbacks.ts:97](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:97](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Context of the app status
 
@@ -51,7 +51,7 @@ Context of the app status
 
 > **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [types/entity\_callbacks.ts:92](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:92](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Fetched entity
 
@@ -61,7 +61,7 @@ Fetched entity
 
 > **path**: `string`
 
-Defined in: [types/entity\_callbacks.ts:87](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:87](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Full path of the CMS where this collection is being fetched.
 Might contain unresolved aliases.

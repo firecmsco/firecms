@@ -1,5 +1,5 @@
 import React from "react";
-import { Chip, Select, SelectItem } from "@firecms/ui";
+import { Chip, Select, SelectItem } from "@rebasepro/ui";
 
 const beverages = {
     coffee: "Coffee",

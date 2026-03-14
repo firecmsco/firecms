@@ -1,14 +1,14 @@
-import { EntityTableController, getDefaultPropertiesOrder, useAuthController } from "@firecms/core";
-import { AddIcon, Tooltip } from "@firecms/ui";
+import { EntityTableController, getDefaultPropertiesOrder, useAuthController } from "@rebasepro/core";
+import { AddIcon, Tooltip } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { PersistedCollection } from "../types/persisted_collection";
 
 export function PropertyAddColumnComponent({
-                                               path,
-                                               parentCollectionIds,
-                                               collection,
-                                               tableController
-                                           }: {
+    path,
+    parentCollectionIds,
+    collection,
+    tableController
+}: {
     path: string,
     parentCollectionIds: string[],
     collection: PersistedCollection;
@@ -40,7 +40,7 @@ export function PropertyAddColumnComponent({
                         existingEntities: tableController.data
                     });
                 }}>
-                <AddIcon color={"inherit"}/>
+                <AddIcon color={"inherit"} />
             </div>
         </Tooltip>
     )

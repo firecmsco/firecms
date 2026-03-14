@@ -6,7 +6,7 @@ import {
     Relation,
     RelationProperty,
     StringProperty
-} from "@firecms/types";
+} from "@rebasepro/types";
 import { deepEqual } from "fast-equals";
 
 import { enumToObjectEntries, getSubcollections, removeFunctions, resolveCollectionRelations } from "../util";

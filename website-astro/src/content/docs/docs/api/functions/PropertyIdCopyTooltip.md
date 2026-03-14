@@ -3,17 +3,17 @@ slug: "docs/api/functions/PropertyIdCopyTooltip"
 title: "PropertyIdCopyTooltip"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PropertyIdCopyTooltip
+[@rebasepro/core](../README) / PropertyIdCopyTooltip
 
 # Function: PropertyIdCopyTooltip()
 
 > **PropertyIdCopyTooltip**(`__namedParameters`): `Element`
 
-Defined in: [components/PropertyIdCopyTooltip.tsx:4](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/PropertyIdCopyTooltip.tsx)
+Defined in: [components/PropertyIdCopyTooltip.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/PropertyIdCopyTooltip.tsx)
 
 ## Parameters
 

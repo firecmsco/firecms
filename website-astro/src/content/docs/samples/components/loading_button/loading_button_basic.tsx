@@ -1,5 +1,5 @@
 import React from "react";
-import { LoadingButton } from "@firecms/ui";
+import { LoadingButton } from "@rebasepro/ui";
 
 export default function LoadingButtonBasicDemo() {
     const [loading, setLoading] = React.useState(false);
@@ -15,7 +15,7 @@ export default function LoadingButtonBasicDemo() {
         <LoadingButton
             loading={loading}
             onClick={onClick}>
-                Click Me
+            Click Me
         </LoadingButton>
     );
 }

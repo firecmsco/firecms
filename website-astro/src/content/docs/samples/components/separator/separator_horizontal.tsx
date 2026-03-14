@@ -1,5 +1,5 @@
 import React from "react";
-import { Separator } from "@firecms/ui";
+import { Separator } from "@rebasepro/ui";
 
 export default function SeparatorHorizontalDemo() {
     return <Separator orientation="horizontal" />;

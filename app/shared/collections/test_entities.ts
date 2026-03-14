@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 import tagsCollection from "./tags";
 
 const testEntitiesCollection: EntityCollection = {

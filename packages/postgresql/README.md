@@ -1,13 +1,13 @@
-# @firecms/postgresql
+# @rebasepro/postgresql
 
-PostgreSQL data source client for FireCMS with real-time WebSocket connectivity.
+PostgreSQL data source client for Rebase with real-time WebSocket connectivity.
 
-This package provides a complete client-side implementation for connecting FireCMS applications to PostgreSQL backends, featuring real-time synchronization via WebSockets.
+This package provides a complete client-side implementation for connecting Rebase applications to PostgreSQL backends, featuring real-time synchronization via WebSockets.
 
 ## Installation
 
 ```bash
-npm install @firecms/postgresql @firecms/core
+npm install @rebasepro/postgresql @rebasepro/core
 ```
 
 ## Usage
@@ -15,8 +15,8 @@ npm install @firecms/postgresql @firecms/core
 ### Basic Setup with React Hook
 
 ```typescript
-import { usePostgresDataSource } from "@firecms/postgresql";
-import { FireCMS } from "@firecms/core";
+import { usePostgresDataSource } from "@rebasepro/postgresql";
+import { Rebase } from "@rebasepro/core";
 
 function App() {
     const dataSource = usePostgresDataSource({
@@ -28,7 +28,7 @@ function App() {
     });
 
     return (
-        <FireCMS
+        <Rebase
             dataSource={dataSource}
             collections={collections}
             // ... other props
@@ -40,7 +40,7 @@ function App() {
 ### Creating Data Source Directly
 
 ```typescript
-import { createPostgresDataSource } from "@firecms/postgresql";
+import { createPostgresDataSource } from "@rebasepro/postgresql";
 
 const dataSource = createPostgresDataSource({
     baseUrl: "http://localhost:3001",
@@ -52,7 +52,7 @@ const dataSource = createPostgresDataSource({
 
 - **Real-time Synchronization**: WebSocket-based real-time updates for collections and entities
 - **Automatic Reconnection**: Built-in reconnection logic with exponential backoff
-- **Type Safety**: Full TypeScript support with FireCMS core types
+- **Type Safety**: Full TypeScript support with Rebase core types
 - **Error Handling**: Comprehensive error handling with custom error types
 - **Connection Management**: Connection status monitoring and queue management
 
@@ -70,7 +70,7 @@ interface PostgresDataSourceConfig {
 
 ### Methods
 
-The PostgreSQL data source implements all FireCMS `DataSource` methods:
+The PostgreSQL data source implements all Rebase `DataSource` methods:
 
 - `fetchCollection<M>(props): Promise<Entity<M>[]>`
 - `fetchEntity<M>(props): Promise<Entity<M> | undefined>`
@@ -99,7 +99,7 @@ This client expects a WebSocket-enabled backend that handles the following messa
 
 ## Development
 
-This package is part of the FireCMS monorepo. For development instructions, see the main repository README.
+This package is part of the Rebase monorepo. For development instructions, see the main repository README.
 
 ## License
 

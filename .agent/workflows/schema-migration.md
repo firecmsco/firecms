@@ -2,15 +2,15 @@
 description: How to add new properties or make schema changes with database migrations
 ---
 
-# FireCMS Schema Migration Workflow
+# Rebase Schema Migration Workflow
 
 This guide explains how to modify your data model (add properties, change collections, etc.) and apply those changes to your PostgreSQL database.
 
 ## Overview
 
-FireCMS uses a **two-step schema generation process**:
+Rebase uses a **two-step schema generation process**:
 
-1. **FireCMS Collections → Drizzle Schema**: The `generate:schema` script reads your FireCMS collection definitions and generates a Drizzle ORM schema file.
+1. **Rebase Collections → Drizzle Schema**: The `generate:schema` script reads your Rebase collection definitions and generates a Drizzle ORM schema file.
 2. **Drizzle Schema → Database**: Either apply directly with `db:push` (development) or generate migration files with `db:generate` (production).
 
 ```mermaid
@@ -139,7 +139,7 @@ pnpm run generate:schema && pnpm run db:generate && pnpm run db:migrate
 
 ### Tables Not in Schema Are Ignored
 
-The `drizzle.config.ts` is configured to **only manage tables defined in your schema**. Other tables in the database (like `firecms_users`, `firecms_roles`, or any custom tables) are completely ignored and will not be affected by migrations.
+The `drizzle.config.ts` is configured to **only manage tables defined in your schema**. Other tables in the database (like `rebase_users`, `rebase_roles`, or any custom tables) are completely ignored and will not be affected by migrations.
 
 ### Never Use `db:pull` Then `db:migrate`
 
@@ -157,7 +157,7 @@ Instead, after `db:pull`:
 Make sure your `.env` file exists in the `app/` folder and contains:
 
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/firecms
+DATABASE_URL=postgresql://user:password@localhost:5432/rebase
 ```
 
 ### Migration Already Applied

@@ -5,7 +5,7 @@ import {
     EntityCollection,
     resolveEntityAction,
     useCustomizationController
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     AddIcon,
     Alert,
@@ -20,9 +20,9 @@ import {
     TableRow,
     Tooltip,
     Typography,
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { PersistedCollection } from "../../types/persisted_collection";
-import { useFormex } from "@firecms/formex";
+import { useFormex } from "@rebasepro/formex";
 import { EntityActionsSelectDialog } from "./EntityActionsSelectDialog";
 
 export function EntityActionsEditTab({
@@ -59,7 +59,7 @@ export function EntityActionsEditTab({
                 {totalEntityActions === 0 &&
                     <Alert action={<Button variant="text"
                         size={"small"}
-                        href={"https://firecms.co/docs/custom_actions"}
+                        href={"https://rebase.pro/docs/custom_actions"}
                         component={"a"}
                         rel="noopener noreferrer"
                         target="_blank">More info</Button>}>

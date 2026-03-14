@@ -1,7 +1,7 @@
 import React from "react";
 import { deepEqual as equal } from "fast-equals"
 
-import { AdditionalFieldDelegate, isPropertyBuilder, Properties, Property, AIModifiedIndicator } from "@firecms/core";
+import { AdditionalFieldDelegate, isPropertyBuilder, Properties, Property, AIModifiedIndicator } from "@rebasepro/core";
 import {
     FindInPageIcon,
     defaultBorderMixin,
@@ -13,7 +13,7 @@ import {
     Tooltip,
     VerticalAlignBottomIcon,
     VerticalAlignTopIcon
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { NonEditablePropertyPreview, PropertyFieldPreview } from "./PropertyFieldPreview";
 import {
     closestCenter,

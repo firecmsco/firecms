@@ -15,7 +15,7 @@ export async function deploy(projectId: string, env: "prod" | "dev", debug: bool
     const currentUser = await getCurrentUser(env, debug);
     if (!currentUser) {
         console.log("⚠️ You are not logged in");
-        console.log(`Run ${chalk.red.bold("firecms login")} to log in`);
+        console.log(`Run ${chalk.red.bold("rebase login")} to log in`);
         return;
     }
     console.log("Starting deploy");
@@ -37,7 +37,7 @@ export async function deploy(projectId: string, env: "prod" | "dev", debug: bool
 export async function createZipFromBuild(): Promise<string> {
     return new Promise((resolve, reject) => {
         const tmpdir = os.tmpdir();
-        const destFile = path.join(tmpdir, `firecms_build.zip`);
+        const destFile = path.join(tmpdir, `rebase_build.zip`);
         // const destFile = path.join(tmpdir, `${crypto.randomUUID()}.zip`);
         zipFolder("./dist/assets", destFile, function (err) {
             if (err) {
@@ -73,7 +73,7 @@ const SOURCE_ZIP_EXCLUDES = new Set([
  */
 export async function createSourceZip(): Promise<string | null> {
     const projectRoot = process.cwd();
-    const destFile = path.join(os.tmpdir(), "firecms_source.zip");
+    const destFile = path.join(os.tmpdir(), "rebase_source.zip");
 
     // Use dynamic import for the zip-folder's underlying archiver
     // We'll build a zip manually using Node streams + the 'archiver' pattern
@@ -165,7 +165,7 @@ export async function uploadZip(projectId: string, zipFilePath: string, sourceZi
         if (response.status === 200) {
             spinner.succeed();
             console.log("🔥 Successfully uploaded new build");
-            const baseUrl = env === "prod" ? "https://app.firecms.co/" : "https://staging.app.firecms.co/";
+            const baseUrl = env === "prod" ? "https://app.rebase.pro/" : "https://staging.app.rebase.pro/";
             console.log("\nCheck it out at", baseUrl + `p/${projectId}`);
         } else {
             console.error("There was an error uploading the build");

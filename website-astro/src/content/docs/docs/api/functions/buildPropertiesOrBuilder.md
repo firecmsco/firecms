@@ -3,17 +3,17 @@ slug: "docs/api/functions/buildPropertiesOrBuilder"
 title: "buildPropertiesOrBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / buildPropertiesOrBuilder
+[@rebasepro/core](../README) / buildPropertiesOrBuilder
 
 # Function: buildPropertiesOrBuilder()
 
 > **buildPropertiesOrBuilder**\<`M`\>(`propertiesOrBuilder`): [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
 
-Defined in: [util/builders.ts:77](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/builders.ts)
+Defined in: [util/builders.ts:77](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/builders.ts)
 
 Identity function we use to defeat the type system of Typescript and preserve
 the properties keys.

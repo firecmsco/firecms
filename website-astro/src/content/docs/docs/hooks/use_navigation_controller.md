@@ -2,7 +2,7 @@
 slug: docs/hooks/use_navigation_controller
 title: useNavigationController
 sidebar_label: useNavigationController
-description: Access the FireCMS navigation controller to get collections, resolve paths, and perform navigation.
+description: Access the Rebase navigation controller to get collections, resolve paths, and perform navigation.
 ---
 
 Use this hook to access the navigation controller of the app. This controller serves as the central point for:
@@ -14,8 +14,8 @@ Use this hook to access the navigation controller of the app. This controller se
 
 ```tsx
 import React from "react";
-import { useNavigationController } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { useNavigationController } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 export function NavigationExample() {
     const navigationController = useNavigationController();

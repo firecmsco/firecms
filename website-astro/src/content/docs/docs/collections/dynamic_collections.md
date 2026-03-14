@@ -2,10 +2,10 @@
 slug: docs/collections/dynamic_collections
 title: Dynamic collections
 sidebar_label: Dynamic collections
-description: Unlock personalized content management with Dynamic Collections in FireCMS, where collections can adapt to the logged-in user's profile using asynchronous callbacks. Tailor your CMS with custom properties built on-the-fly, ensuring a highly responsive and secure environment that aligns with user roles and permissions. Through strategic utilization of `EntityCollectionsBuilder` and `AuthController`, dynamically generate data schemas suitable for each user, enhancing their CMS experience with intelligent, role-specific interfaces.
+description: Unlock personalized content management with Dynamic Collections in Rebase, where collections can adapt to the logged-in user's profile using asynchronous callbacks. Tailor your CMS with custom properties built on-the-fly, ensuring a highly responsive and secure environment that aligns with user roles and permissions. Through strategic utilization of `EntityCollectionsBuilder` and `AuthController`, dynamically generate data schemas suitable for each user, enhancing their CMS experience with intelligent, role-specific interfaces.
 ---
 
-FireCMS offers the possibility to define collections dynamically. This means
+Rebase offers the possibility to define collections dynamically. This means
 that collections can be built asynchronously, based on the logged-in user,
 based on the data of other collections, or based on any other arbitrary
 condition.
@@ -14,7 +14,7 @@ Instead of defining your collections as an array, use a `EntityCollectionsBuilde
 a function that returns a promise of an object containing the collections.
 
 ```tsx
-import { EntityCollectionsBuilder } from "@firecms/core";
+import { EntityCollectionsBuilder } from "@rebasepro/core";
 
 // ...
 
@@ -52,7 +52,7 @@ collection.
 
 ```tsx
 import { useCallback } from "react";
-import { buildCollection, EntityCollectionsBuilder } from "@firecms/core";
+import { buildCollection, EntityCollectionsBuilder } from "@rebasepro/core";
 
 const collectionsBuilder: EntityCollectionsBuilder = async ({
                                                                 user,
@@ -154,7 +154,7 @@ const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
 
 ### Where to use the `collectionsBuilder`
 
-In the **Cloud version** of FireCMS, simply add the `collectionsBuilder` to the `collections` prop of your main app
+In the **Cloud version** of Rebase, simply add the `collectionsBuilder` to the `collections` prop of your main app
 config.
 
 ```tsx
@@ -169,13 +169,13 @@ const collectionsBuilder: EntityCollectionsBuilder = async ({
     };
 };
 
-export const appConfig: FireCMSAppConfig = {
+export const appConfig: RebaseAppConfig = {
     version: "1",
     collections: collectionsBuilder
 };
 ```
 
-In the **PRO version** of FireCMS, you can use the `collectionsBuilder` in the `useBuildNavigationController` hook.
+In the **PRO version** of Rebase, you can use the `collectionsBuilder` in the `useBuildNavigationController` hook.
 
 ```tsx
 const navigationController = useBuildNavigationController({

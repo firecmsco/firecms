@@ -1,4 +1,4 @@
-import { CollectionRegistry } from "@firecms/common";
+import { CollectionRegistry } from "@rebasepro/common";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { Relations } from "drizzle-orm";
 import { CollectionRegistryInterface } from "../db/interfaces";

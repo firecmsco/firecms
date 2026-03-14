@@ -1,22 +1,22 @@
 import React from "react";
 
-import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
-import { FieldCaption, serializeRegExp } from "@firecms/core";
-import { DebouncedTextField, } from "@firecms/ui";
+import { Field, FormexFieldProps, getIn, useFormex } from "@rebasepro/formex";
+import { FieldCaption, serializeRegExp } from "@rebasepro/core";
+import { DebouncedTextField, } from "@rebasepro/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 import { SwitchControl } from "../../SwitchControl";
 
 export function StringPropertyValidation({
-                                             length,
-                                             lowercase,
-                                             matches,
-                                             max,
-                                             min,
-                                             trim,
-                                             uppercase,
-                                             disabled,
-                                             showErrors
-                                         }: {
+    length,
+    lowercase,
+    matches,
+    max,
+    min,
+    trim,
+    uppercase,
+    disabled,
+    showErrors
+}: {
     length?: boolean;
     min?: boolean;
     max?: boolean;
@@ -49,45 +49,45 @@ export function StringPropertyValidation({
     return (
         <div className={"grid grid-cols-12 gap-2"}>
 
-            <GeneralPropertyValidation disabled={disabled}/>
+            <GeneralPropertyValidation disabled={disabled} />
 
             <div className={"grid grid-cols-12 gap-2 col-span-12"}>
 
                 {lowercase && <div className={"col-span-4"}>
                     <Field name={validationLowercase}
-                           type="checkbox">
+                        type="checkbox">
                         {({ field, form }: FormexFieldProps) => {
                             return <SwitchControl
                                 label={"Lowercase"}
                                 disabled={disabled}
                                 form={form}
-                                field={field}/>
+                                field={field} />
                         }}
                     </Field>
                 </div>}
 
                 {uppercase && <div className={"col-span-4"}>
                     <Field name={validationUppercase}
-                           type="checkbox">
+                        type="checkbox">
                         {({ field, form }: FormexFieldProps) => {
                             return <SwitchControl
                                 label={"Uppercase"}
                                 disabled={disabled}
                                 form={form}
-                                field={field}/>
+                                field={field} />
                         }}
                     </Field>
                 </div>}
 
                 {trim && <div className={"col-span-4"}>
                     <Field name={validationTrim}
-                           type="checkbox">
+                        type="checkbox">
                         {({ field, form }: FormexFieldProps) => {
                             return <SwitchControl
                                 label={"Trim"}
                                 disabled={disabled}
                                 form={form}
-                                field={field}/>
+                                field={field} />
                         }}
                     </Field>
                 </div>}
@@ -104,41 +104,41 @@ export function StringPropertyValidation({
                         size="small"
 
                         disabled={disabled}
-                        onChange={handleChange}/>
+                        onChange={handleChange} />
                 </div>}
 
                 {min && <div className={"col-span-4"}>
                     <DebouncedTextField value={getIn(values, validationMin)}
-                                        label={"Min length"}
-                                        name={validationMin}
-                                        type="number"
-                                        size="small"
+                        label={"Min length"}
+                        name={validationMin}
+                        type="number"
+                        size="small"
 
-                                        disabled={disabled}
-                                        onChange={handleChange}/>
+                        disabled={disabled}
+                        onChange={handleChange} />
                 </div>}
 
                 {max && <div className={"col-span-4"}>
                     <DebouncedTextField value={getIn(values, validationMax)}
-                                        label={"Max length"}
-                                        name={validationMax}
-                                        type="number"
-                                        size="small"
+                        label={"Max length"}
+                        name={validationMax}
+                        type="number"
+                        size="small"
 
-                                        disabled={disabled}
-                                        onChange={handleChange}/>
+                        disabled={disabled}
+                        onChange={handleChange} />
                 </div>}
 
             </div>
 
             {matches && <div className={"col-span-12"}>
                 <Field name={validationMatches}
-                       as={DebouncedTextField}
-                       label={"Matches regex"}
-                       size="small"
-                       disabled={disabled}
-                       value={matchesStringValue}
-                       error={Boolean(matchesError)}/>
+                    as={DebouncedTextField}
+                    label={"Matches regex"}
+                    size="small"
+                    disabled={disabled}
+                    value={matchesStringValue}
+                    error={Boolean(matchesError)} />
                 <FieldCaption error={Boolean(matchesError)}>
                     {matchesError ? "Not a valid regexp" : "e.g. /^\\d+$/ for digits only"}
                 </FieldCaption>

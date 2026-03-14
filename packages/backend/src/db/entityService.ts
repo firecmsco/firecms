@@ -1,5 +1,5 @@
 // import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Entity, FilterValues } from "@firecms/types";
+import { Entity, FilterValues } from "@rebasepro/types";
 import { EntityFetchService, EntityPersistService, RelationService } from "./services";
 import { EntityRepository, FetchCollectionOptions, SearchOptions, CountOptions, DrizzleClient } from "./interfaces";
 

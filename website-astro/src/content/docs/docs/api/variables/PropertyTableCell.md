@@ -3,14 +3,14 @@ slug: "docs/api/variables/PropertyTableCell"
 title: "PropertyTableCell"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PropertyTableCell
+[@rebasepro/core](../README) / PropertyTableCell
 
 # Variable: PropertyTableCell
 
 > `const` **PropertyTableCell**: `FunctionComponent`\<[`PropertyTableCellProps`](../interfaces/PropertyTableCellProps)\<`any`\>\>
 
-Defined in: [components/EntityCollectionTable/PropertyTableCell.tsx:70](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [components/EntityCollectionTable/PropertyTableCell.tsx:70](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)

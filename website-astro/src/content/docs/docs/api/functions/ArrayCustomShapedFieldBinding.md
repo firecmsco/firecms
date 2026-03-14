@@ -3,17 +3,17 @@ slug: "docs/api/functions/ArrayCustomShapedFieldBinding"
 title: "ArrayCustomShapedFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ArrayCustomShapedFieldBinding
+[@rebasepro/core](../README) / ArrayCustomShapedFieldBinding
 
 # Function: ArrayCustomShapedFieldBinding()
 
 > **ArrayCustomShapedFieldBinding**\<`T`\>(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/ArrayCustomShapedFieldBinding.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/ArrayCustomShapedFieldBinding.tsx)
+Defined in: [form/field\_bindings/ArrayCustomShapedFieldBinding.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/ArrayCustomShapedFieldBinding.tsx)
 
 Array field used for custom
 

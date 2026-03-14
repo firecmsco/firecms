@@ -1,4 +1,4 @@
-import { DataSource, EntityCollection } from "@firecms/types";
+import { DataSource, EntityCollection } from "@rebasepro/types";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "./collections/registry";
 import { getTableName, isTable, Relations } from "drizzle-orm";
@@ -9,7 +9,7 @@ import { DatasourceRegistry, DEFAULT_DATASOURCE_ID, DefaultDatasourceRegistry } 
 import { DatabasePoolManager } from "./services/databasePoolManager";
 import { Server } from "http";
 import { createPostgresWebSocket } from "./websocket";
-import { ApiConfig, FireCMSApiServer } from "./api";
+import { ApiConfig, RebaseApiServer } from "./api";
 import { Express } from "express";
 import * as fs from "fs";
 import * as path from "path";
@@ -36,7 +36,7 @@ import {
 } from "./storage";
 
 /**
- * Authentication configuration for FireCMS backend
+ * Authentication configuration for Rebase backend
  */
 export interface AuthConfig {
     /** JWT secret key - required for auth */
@@ -77,7 +77,7 @@ export interface PostgresDatasourceConfig {
     };
     /** Explicit cluster connection string to enable cross-database queries 
         and administrative pool generation. */
-    adminConnectionString?: string; 
+    adminConnectionString?: string;
 }
 
 /**
@@ -96,7 +96,7 @@ export interface PostgresDatasourceConfig {
  */
 export type DatasourceConfig = DataSource | PostgresDatasourceConfig;
 
-export interface FireCMSBackendConfig {
+export interface RebaseBackendConfig {
     collections?: EntityCollection[];
     collectionsDir?: string;
     server: Server;
@@ -165,7 +165,7 @@ export interface FireCMSBackendConfig {
     storage?: StorageConfig | Record<string, StorageConfig>;
 }
 
-export interface FireCMSBackendInstance {
+export interface RebaseBackendInstance {
     /**
      * Registry for accessing multiple datasources by ID.
      * Use `datasourceRegistry.getOrDefault(databaseId)` to get a datasource.
@@ -206,11 +206,11 @@ export interface FireCMSBackendInstance {
     storageController?: StorageController;
 }
 
-export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<FireCMSBackendInstance> {
+export async function initializeRebaseBackend(config: RebaseBackendConfig): Promise<RebaseBackendInstance> {
     try {
-        return await _initializeFireCMSBackend(config);
+        return await _initializeRebaseBackend(config);
     } catch (error: any) {
-        console.error("❌ Critical error during FireCMS Backend initialization:", error);
+        console.error("❌ Critical error during Rebase Backend initialization:", error);
 
         const basePath = config.basePath || "/api";
         config.app.use(basePath, (req, res, next) => {
@@ -229,11 +229,11 @@ export async function initializeFireCMSBackend(config: FireCMSBackendConfig): Pr
             dataSource: {} as any,
             realtimeServices: {},
             realtimeService: {} as any,
-        } as unknown as FireCMSBackendInstance;
+        } as unknown as RebaseBackendInstance;
     }
 }
 
-async function _initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<FireCMSBackendInstance> {
+async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<RebaseBackendInstance> {
     // Configure logging level automatically
     if (config.logging?.level) {
         configureLogLevel(config.logging.level);
@@ -242,7 +242,7 @@ async function _initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<
         configureLogLevel();
     }
 
-    console.log("🔥 Initializing FireCMS Backend");
+    console.log("🔥 Initializing Rebase Backend");
 
     // ============ Load collections dynamically if needed ============
     let activeCollections = config.collections || [];
@@ -454,7 +454,7 @@ async function _initializeFireCMSBackend(config: FireCMSBackendConfig): Promise<
         config.auth
     );
 
-    console.log("✅ FireCMS Backend Initialized");
+    console.log("✅ Rebase Backend Initialized");
 
     return {
         datasourceRegistry,
@@ -556,19 +556,19 @@ function isStorageConfig(obj: unknown): obj is StorageConfig {
  * Initialize optional REST/GraphQL API endpoints on an Express app.
  * 
  * NOTE: Auth, admin, and storage routes are automatically mounted by
- * initializeFireCMSBackend(). This function is only needed if you want
+ * initializeRebaseBackend(). This function is only needed if you want
  * to expose REST/GraphQL APIs for external integrations.
  * 
  * @param app Express application instance
- * @param backend FireCMS backend instance from initializeFireCMSBackend
+ * @param backend Rebase backend instance from initializeRebaseBackend
  * @param config API configuration options
  * @returns API server instance
  */
-export async function initializeFireCMSAPI(
+export async function initializeRebaseAPI(
     app: Express,
-    backend: FireCMSBackendInstance,
+    backend: RebaseBackendInstance,
     config: Partial<ApiConfig> = {}
-): Promise<FireCMSApiServer> {
+): Promise<RebaseApiServer> {
     if ((backend as any).__failed) {
         console.warn("⚠️ Skipping REST/GraphQL API initialization because backend initialization failed.");
         // Return a dummy api server
@@ -576,12 +576,12 @@ export async function initializeFireCMSAPI(
         return { getRouter: () => express.Router() } as any;
     }
 
-    console.log("🚀 Initializing FireCMS REST/GraphQL API (optional for external integrations)");
+    console.log("🚀 Initializing Rebase REST/GraphQL API (optional for external integrations)");
 
     // Get collections from the registry using the correct method
     const collections = collectionRegistry.getCollections();
 
-    const apiServer = await FireCMSApiServer.create({
+    const apiServer = await RebaseApiServer.create({
         collections,
         collectionsDir: config.collectionsDir,
         dataSource: backend.dataSource,
@@ -611,7 +611,7 @@ async function loadCollectionsFromDirectory(directory: string): Promise<EntityCo
     const collections: EntityCollection[] = [];
     try {
         if (!fs.existsSync(directory)) {
-            console.warn(`[initializeFireCMSBackend] Collections directory not found: ${directory}`);
+            console.warn(`[initializeRebaseBackend] Collections directory not found: ${directory}`);
             return collections;
         }
 
@@ -634,15 +634,15 @@ async function loadCollectionsFromDirectory(directory: string): Promise<EntityCo
                     if (module && module.default) {
                         collections.push(module.default);
                     } else {
-                        console.warn(`[initializeFireCMSBackend] File ${file} does not have a default export. Skipping.`);
+                        console.warn(`[initializeRebaseBackend] File ${file} does not have a default export. Skipping.`);
                     }
                 } catch (err: any) {
-                    console.error(`[initializeFireCMSBackend] Failed to load collection from ${file}: ${err.message}`);
+                    console.error(`[initializeRebaseBackend] Failed to load collection from ${file}: ${err.message}`);
                 }
             }
         }
     } catch (err) {
-        console.error(`[initializeFireCMSBackend] Error reading collections directory: ${err}`);
+        console.error(`[initializeRebaseBackend] Error reading collections directory: ${err}`);
     }
     return collections;
 }

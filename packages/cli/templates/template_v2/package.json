@@ -1,5 +1,5 @@
 {
-    "name": "firecms-starter",
+    "name": "rebase-starter",
     "private": true,
     "version": "0.0.0",
     "scripts": {
@@ -12,13 +12,13 @@
     "dependencies": {
         "@emotion/react": "^11.11.0",
         "@emotion/styled": "^11.11.0",
-        "@firecms/data_enhancement": "^1.2.1",
+        "@rebasepro/data_enhancement": "^1.2.1",
         "@mui/icons-material": "^5",
         "@mui/lab": "^5.0.0-alpha.132",
         "@mui/material": "^5.13.3",
         "@mui/x-date-pickers": "^5.0.20",
         "firebase": "^9",
-        "firecms": "^2.2.1",
+        "rebase": "^2.2.1",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-router": "^6",

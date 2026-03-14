@@ -77,7 +77,7 @@ const styles = {
 export function getPasswordResetTemplate(
     resetUrl: string,
     user: TemplateUser,
-    appName: string = "FireCMS"
+    appName: string = "Rebase"
 ): { subject: string; html: string; text: string } {
     const greeting = getGreeting(user);
 
@@ -157,7 +157,7 @@ Your password will remain unchanged.
 export function getEmailVerificationTemplate(
     verifyUrl: string,
     user: TemplateUser,
-    appName: string = "FireCMS"
+    appName: string = "Rebase"
 ): { subject: string; html: string; text: string } {
     const greeting = getGreeting(user);
 

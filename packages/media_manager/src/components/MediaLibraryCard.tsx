@@ -5,7 +5,7 @@ import {
     Typography,
     cls,
     ImageIcon
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
 export interface MediaLibraryCardProps {
     group?: string;

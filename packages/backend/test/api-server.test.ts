@@ -1,5 +1,5 @@
 import express, { Express, Router } from "express";
-import { FireCMSApiServer } from "../src/api/server";
+import { RebaseApiServer } from "../src/api/server";
 import { PostgresDataSource } from "../src/services/dataSource";
 
 // Mock dependencies
@@ -14,7 +14,7 @@ jest.mock("../src/auth/middleware", () => ({
     extractUserFromToken: jest.fn()
 }));
 import request from "supertest";
-describe("FireCMSApiServer", () => {
+describe("RebaseApiServer", () => {
     let mockDataSource: jest.Mocked<PostgresDataSource>;
     let mockCollections: any[];
 
@@ -57,7 +57,7 @@ describe("FireCMSApiServer", () => {
 
     describe("constructor", () => {
         it("should initialize with required configuration", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -68,7 +68,7 @@ describe("FireCMSApiServer", () => {
         });
 
         it("should accept optional CORS configuration", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections,
                 cors: {
@@ -83,7 +83,7 @@ describe("FireCMSApiServer", () => {
 
     describe("getRouter", () => {
         it("should return an Express router", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -96,7 +96,7 @@ describe("FireCMSApiServer", () => {
 
     describe("getApp", () => {
         it("should return an Express app", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -109,7 +109,7 @@ describe("FireCMSApiServer", () => {
 
     describe("generateOpenApiSpec", () => {
         it("should generate OpenAPI specification", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -123,7 +123,7 @@ describe("FireCMSApiServer", () => {
         });
 
         it("should include paths for each collection", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -136,7 +136,7 @@ describe("FireCMSApiServer", () => {
         });
 
         it("should include CRUD operations", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -154,7 +154,7 @@ describe("FireCMSApiServer", () => {
         });
 
         it("should use default title and version", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -162,16 +162,16 @@ describe("FireCMSApiServer", () => {
             const spec = server.generateOpenApiSpec();
 
             // The implementation uses hardcoded values
-            expect(spec.info.title).toBe("FireCMS Auto-Generated API");
+            expect(spec.info.title).toBe("Rebase Auto-Generated API");
             expect(spec.info.version).toBe("1.0.0");
         });
     });
 
     describe("REST API Routes", () => {
-        let server: FireCMSApiServer;
+        let server: RebaseApiServer;
 
         beforeEach(async () => {
-            server = await FireCMSApiServer.create({
+            server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -252,7 +252,7 @@ describe("FireCMSApiServer", () => {
 
     describe("GraphQL Endpoint", () => {
         it("should setup GraphQL handler", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -271,7 +271,7 @@ describe("FireCMSApiServer", () => {
         it("should apply CORS middleware when configured", async () => {
             const cors = require("cors");
 
-            await FireCMSApiServer.create({
+            await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections,
                 cors: { origin: "*" }
@@ -281,7 +281,7 @@ describe("FireCMSApiServer", () => {
         });
 
         it("should apply JSON parsing middleware", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });
@@ -296,7 +296,7 @@ describe("FireCMSApiServer", () => {
                 roles: ["admin"]
             });
 
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections,
                 auth: {
@@ -305,11 +305,11 @@ describe("FireCMSApiServer", () => {
             });
 
             const app = server.getApp();
-            
+
             const response = await request(app)
                 .get("/api/products")
                 .set("Authorization", "Bearer mock-token");
-                
+
             expect(response.status).not.toBe(401);
             expect(extractUserFromToken).toHaveBeenCalledWith("mock-token");
         });
@@ -317,7 +317,7 @@ describe("FireCMSApiServer", () => {
         it("should reject requests when requireAuth is true and token is invalid or missing", async () => {
             (extractUserFromToken as jest.Mock).mockReturnValue(null); // Invalid token
 
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections,
                 auth: {
@@ -327,11 +327,11 @@ describe("FireCMSApiServer", () => {
             });
 
             const app = server.getApp();
-            
+
             // Missing token
             const response1 = await request(app).get("/api/products");
             expect(response1.status).toBe(401);
-            
+
             // Invalid token
             const response2 = await request(app)
                 .get("/api/products")
@@ -342,8 +342,8 @@ describe("FireCMSApiServer", () => {
 
         it("should use custom validator if provided instead of default extraction", async () => {
             const customValidator = jest.fn().mockResolvedValue({ uid: "custom-user" });
-            
-            const server = await FireCMSApiServer.create({
+
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections,
                 auth: {
@@ -353,9 +353,9 @@ describe("FireCMSApiServer", () => {
             });
 
             const app = server.getApp();
-            
+
             await request(app).get("/api/products");
-            
+
             expect(customValidator).toHaveBeenCalled();
             expect(extractUserFromToken).not.toHaveBeenCalled();
         });
@@ -363,7 +363,7 @@ describe("FireCMSApiServer", () => {
 
     describe("listen", () => {
         it("should have listen method for standalone mode", async () => {
-            const server = await FireCMSApiServer.create({
+            const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections
             });

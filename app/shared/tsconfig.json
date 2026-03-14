@@ -16,8 +16,8 @@
     "resolveJsonModule": true,
     "baseUrl": "../../",
     "paths": {
-      "@firecms/types": ["packages/types/src/index.ts"],
-      "@firecms/types/*": ["packages/types/src/*"]
+      "@rebasepro/types": ["packages/types/src/index.ts"],
+      "@rebasepro/types/*": ["packages/types/src/*"]
     }
   },
   "include": [

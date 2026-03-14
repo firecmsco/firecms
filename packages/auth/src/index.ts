@@ -1,26 +1,26 @@
 /**
- * @firecms/auth
+ * @rebasepro/auth
  * 
- * Custom JWT authentication package for FireCMS with PostgreSQL backend
+ * Custom JWT authentication package for Rebase with PostgreSQL backend
  */
 
 // Types
 export type {
-    FireCMSAuthController,
-    FireCMSAuthControllerProps,
+    RebaseAuthController,
+    RebaseAuthControllerProps,
     AuthTokens,
     UserInfo,
     AuthResponse,
     RefreshResponse
 } from "./types";
 
-export { useFireCMSAuthController } from "./hooks/useFireCMSAuthController";
+export { useRebaseAuthController } from "./hooks/useRebaseAuthController";
 export { useBackendUserManagement } from "./hooks/useBackendUserManagement";
 export type { BackendUserManagementConfig, UserManagement } from "./hooks/useBackendUserManagement";
 
 // Components
-export { FireCMSLoginView } from "./components/FireCMSLoginView";
-export type { FireCMSLoginViewProps } from "./components/FireCMSLoginView";
+export { RebaseLoginView } from "./components/RebaseLoginView";
+export type { RebaseLoginViewProps } from "./components/RebaseLoginView";
 export { createUserManagementAdminViews, UsersView, RolesView } from "./components/AdminViews";
 
 // API utilities

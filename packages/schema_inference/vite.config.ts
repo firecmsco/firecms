@@ -12,7 +12,7 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS schema inference",
+            name: "Rebase schema inference",
             fileName: (format) => {
                 if (format === "es") return "index.es.js";
                 if (format === "umd") return "index.umd.cjs";
@@ -28,7 +28,7 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            "@firecms/types": path.resolve(__dirname, "../types/src")
+            "@rebasepro/types": path.resolve(__dirname, "../types/src")
         }
     },
 }));

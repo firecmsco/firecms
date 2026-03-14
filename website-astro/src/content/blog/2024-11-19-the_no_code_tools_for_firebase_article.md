@@ -53,17 +53,17 @@ What are you going to build with these tools?
 
 For some low-complexity products, these tools can be a great help. If you need to hack something quickly, these tools can be a great help. But for a developer, the best option is probably using custom code. Most of the founders I know prefer to build a React App for a landing page rather than using tools like Webflow. It may be faster, but it's going to be more flexible. And let's be honest, developers often struggle with the feature and customization options of these tools.
 
-### Inside FireCMS
+### Inside Rebase
 
-Is [FireCMS](https://app.firecms.co) a No Code tool? Yes, we built FireCMS Cloud for that: a fully managed SaaS.
+Is [Rebase](https://app.rebase.pro) a No Code tool? Yes, we built Rebase Cloud for that: a fully managed SaaS.
 
-But allow us to share a secret. We had the SaaS, a full No Code tool ready to launch, but we stopped. Why? Because we are developers. We wanted our customers to have the freedom to build anything they could with the previous code-based version. We didn't want to limit them. It didn't make any sense for us to release a new product with fewer features. So we stopped and built that. Using module federation, we allow FireCMS Cloud customers to upload custom code and change whatever they want. Give us the code, and we will handle it for you. From `npm run deploy` or `yarn deploy` to [app.firecms.co](https://app.firecms.co).
+But allow us to share a secret. We had the SaaS, a full No Code tool ready to launch, but we stopped. Why? Because we are developers. We wanted our customers to have the freedom to build anything they could with the previous code-based version. We didn't want to limit them. It didn't make any sense for us to release a new product with fewer features. So we stopped and built that. Using module federation, we allow Rebase Cloud customers to upload custom code and change whatever they want. Give us the code, and we will handle it for you. From `npm run deploy` or `yarn deploy` to [app.rebase.pro](https://app.rebase.pro).
 
-You could say that FireCMS is a No Code, Low Code, or even Full Code tool. It depends on how you want to use it.
+You could say that Rebase is a No Code, Low Code, or even Full Code tool. It depends on how you want to use it.
 
 ### Firebase in Our Tech Stacks
 
-As many of you may know, FireCMS was born as an internal tool. We built it. Then we used it again, and again, and again. And ended up releasing it as a product.
+As many of you may know, Rebase was born as an internal tool. We built it. Then we used it again, and again, and again. And ended up releasing it as a product.
 
 What kind of projects? Startups. We helped build software-based startups. Among them: medicalmotion.de, theplanetapp.com, oikosbrain.com. Everything from simple landing pages to business intelligence dashboards and ETL pipelines.
 
@@ -73,8 +73,8 @@ In most of these projects, we used Firebase as a Backend. And we always missed a
 
 So, why won't you find a lot of No Code tools for Firebase? Because you probably don’t need them. Because maybe Firebase is not the best tool for your product.
 
-If you need a UI on top of your Firebase data, go for software that allows you to customize anything. We will be happy to help you if you decide to use FireCMS. If not, custom code it is.
+If you need a UI on top of your Firebase data, go for software that allows you to customize anything. We will be happy to help you if you decide to use Rebase. If not, custom code it is.
 
 ### What Are You Going to Build?
 
-We want to hear about it :) Find us on [Discord](https://discord.gg/fxy7xsQm3m), [LinkedIn](https://www.linkedin.com/company/firecms/?originalSubdomain=es), or ping us at [hello@firecms.co](mailto:hello@firecms.co).
+We want to hear about it :) Find us on [Discord](https://discord.gg/fxy7xsQm3m), [LinkedIn](https://www.linkedin.com/company/rebase/?originalSubdomain=es), or ping us at [hello@rebase.pro](mailto:hello@rebase.pro).

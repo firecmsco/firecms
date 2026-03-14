@@ -2,10 +2,10 @@
 slug: docs/collections/view_modes
 title: Collection View Modes
 sidebar_label: View Modes
-description: Display your collections as Tables, Cards, or Kanban boards in FireCMS. Choose the view that matches your data.
+description: Display your collections as Tables, Cards, or Kanban boards in Rebase. Choose the view that matches your data.
 ---
 
-FireCMS offers three different ways to visualize your collections. Each view mode is optimized for different types of data and workflows.
+Rebase offers three different ways to visualize your collections. Each view mode is optimized for different types of data and workflows.
 
 ![Collection View Modes](/img/blog/kanban_settings.png)
 
@@ -171,13 +171,13 @@ When using Kanban view with Firestore, you'll need a composite index on your col
 
 ---
 
-## Configuration in FireCMS Cloud
+## Configuration in Rebase Cloud
 
-If you're using FireCMS Cloud, you can configure view modes through the UI without writing code:
+If you're using Rebase Cloud, you can configure view modes through the UI without writing code:
 
 1. Open your collection settings
 2. Go to the **Display** tab
 3. Select your **Default collection view** (Table, Cards, or Kanban)
 4. For Kanban, choose the **Kanban Column Property** and optionally an **Order Property**
 
-![Kanban Settings in FireCMS Cloud](/img/blog/kanban_settings.png)
+![Kanban Settings in Rebase Cloud](/img/blog/kanban_settings.png)

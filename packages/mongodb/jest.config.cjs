@@ -8,7 +8,7 @@ module.exports = {
         "**/test/**/*.test.ts"
     ],
     moduleNameMapper: {
-        "^@firecms/(.*)$": "<rootDir>/../$1/src"
+        "^@rebase/(.*)$": "<rootDir>/../$1/src"
     },
     // mongodb-memory-server needs more time to start
     testTimeout: 30000

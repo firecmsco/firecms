@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/UploadFileProps"
 title: "UploadFileProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / UploadFileProps
+[@rebasepro/core](../README) / UploadFileProps
 
 # Interface: UploadFileProps
 
-Defined in: [types/storage.ts:4](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/storage.ts:4](https://github.com/firecmsco/firecms/blob/main/
 
 > `optional` **bucket**: `string`
 
-Defined in: [types/storage.ts:9](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/storage.ts:9](https://github.com/firecmsco/firecms/blob/main/
 
 > **file**: `File`
 
-Defined in: [types/storage.ts:5](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/storage.ts:5](https://github.com/firecmsco/firecms/blob/main/
 
 > `optional` **fileName**: `string`
 
-Defined in: [types/storage.ts:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/storage.ts:6](https://github.com/firecmsco/firecms/blob/main/
 
 > `optional` **metadata**: `any`
 
-Defined in: [types/storage.ts:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 ***
 
@@ -51,4 +51,4 @@ Defined in: [types/storage.ts:8](https://github.com/firecmsco/firecms/blob/main/
 
 > `optional` **path**: `string`
 
-Defined in: [types/storage.ts:7](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { eq } from "drizzle-orm";
 import { integer, pgTable, primaryKey, serial, varchar } from "drizzle-orm/pg-core";
-import { Relation } from "@firecms/types";
+import { Relation } from "@rebasepro/types";
 import { BackendCollectionRegistry } from "../src/collections/BackendCollectionRegistry";
 import { DrizzleConditionBuilder } from "../src/utils/drizzle-conditions";
 

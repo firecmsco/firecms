@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/ResolvedNavigationEntity"
 title: "ResolvedNavigationEntity"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ResolvedNavigationEntity
+[@rebasepro/core](../README) / ResolvedNavigationEntity
 
 # Interface: ResolvedNavigationEntity\<M\>
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ## See
 
@@ -29,7 +29,7 @@ resolveNavigationFrom
 
 > **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:21](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [hooks/useResolvedNavigationFrom.tsx:21](https://github.com/firecmsc
 
 > **entityId**: `string`
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:22](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [hooks/useResolvedNavigationFrom.tsx:22](https://github.com/firecmsc
 
 > **parentCollection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:24](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [hooks/useResolvedNavigationFrom.tsx:24](https://github.com/firecmsc
 
 > **path**: `string`
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:23](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -61,4 +61,4 @@ Defined in: [hooks/useResolvedNavigationFrom.tsx:23](https://github.com/firecmsc
 
 > **type**: `"entity"`
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:20](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)

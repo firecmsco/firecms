@@ -3,17 +3,17 @@ slug: "docs/api/functions/canDeleteEntity"
 title: "canDeleteEntity"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / canDeleteEntity
+[@rebasepro/core](../README) / canDeleteEntity
 
 # Function: canDeleteEntity()
 
 > **canDeleteEntity**\<`M`, `USER`\>(`collection`, `authController`, `path`, `entity`): `boolean`
 
-Defined in: [util/permissions.ts:56](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/permissions.ts)
+Defined in: [util/permissions.ts:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/permissions.ts)
 
 ## Type Parameters
 

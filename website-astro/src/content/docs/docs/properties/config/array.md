@@ -2,7 +2,7 @@
 slug: docs/properties/config/array
 title: Array
 sidebar_label: Array
-description: Configuration for array properties in FireCMS, including typed arrays, tuples, blocks (oneOf), and validation.
+description: Configuration for array properties in Rebase, including typed arrays, tuples, blocks (oneOf), and validation.
 ---
 
 ###  `of`
@@ -16,7 +16,7 @@ provide a `oneOf` field otherwise an error will be thrown.
 
 Example `of` array property:
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const productReferences = buildProperty({
   name: "Products",
@@ -33,7 +33,7 @@ const productReferences = buildProperty({
 
 You can also specify an array of properties to define a tuple:
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const tupleDates = buildProperty({
   name: "Date Range (Start to End)",
@@ -69,7 +69,7 @@ images and text blocks using markdown.
 
 Example of `oneOf` field:
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const contentProperty = buildProperty({
   name: "Content",
@@ -102,7 +102,7 @@ This property has no effect if `disabled` is set to `true`.
 
 Example:
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const tagsProperty = buildProperty({
   name: "Tags",
@@ -122,7 +122,7 @@ This property has no effect if `disabled` is set to `true`.
 
 Example:
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const readOnlyTagsProperty = buildProperty({
   name: "Tags",

@@ -3,17 +3,17 @@ slug: "docs/api/functions/useSideDialogContext"
 title: "useSideDialogContext"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useSideDialogContext
+[@rebasepro/core](../README) / useSideDialogContext
 
 # Function: useSideDialogContext()
 
 > **useSideDialogContext**(): [`SideDialogController`](../type-aliases/SideDialogController)
 
-Defined in: [core/SideDialogs.tsx:39](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/core/SideDialogs.tsx)
+Defined in: [core/SideDialogs.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
 
 This hook is used to access the properties of a particular side dialog,
 in contrast with [useSideDialogsController](useSideDialogsController) which handles the

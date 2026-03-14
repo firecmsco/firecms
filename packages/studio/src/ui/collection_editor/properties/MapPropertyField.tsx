@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { FieldCaption, MapProperty, Property, PropertyConfig, } from "@firecms/core";
-import { AddIcon, BooleanSwitchWithLabel, Button, Paper, Typography } from "@firecms/ui";
+import { FieldCaption, MapProperty, Property, PropertyConfig, } from "@rebasepro/core";
+import { AddIcon, BooleanSwitchWithLabel, Button, Paper, Typography } from "@rebasepro/ui";
 import { PropertyFormDialog } from "../PropertyEditView";
-import { getIn, useFormex } from "@firecms/formex";
+import { getIn, useFormex } from "@rebasepro/formex";
 import { PropertyTree } from "../PropertyTree";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath, namespaceToPropertiesPath } from "../util";
 
@@ -25,9 +25,9 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
 
     const propertiesOrder = values.propertiesOrder ?? Object.keys(values.properties ?? {});
     const onPropertyCreated = ({
-                                   id,
-                                   property
-                               }: { id?: string, property: Property }) => {
+        id,
+        property
+    }: { id?: string, property: Property }) => {
         if (!id)
             throw Error();
         setFieldValue("properties", {
@@ -76,7 +76,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
                     <Typography variant={"subtitle2"}>Properties in this group</Typography>
                     <Button
                         onClick={() => setPropertyDialogOpen(true)}
-                        startIcon={<AddIcon/>}
+                        startIcon={<AddIcon />}
                     >
                         Add property to {values.name ?? "this group"}
                     </Button>
@@ -92,11 +92,11 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
                             setSelectedPropertyNamespace(namespace);
                             setPropertyDialogOpen(true);
                         }}
-                        onPropertyMove={onPropertyMove}/>
+                        onPropertyMove={onPropertyMove} />
 
                     {empty &&
                         <Typography variant={"label"}
-                                    className="h-full flex items-center justify-center p-4">
+                            className="h-full flex items-center justify-center p-4">
                             Add the first property to this group
                         </Typography>}
                 </Paper>

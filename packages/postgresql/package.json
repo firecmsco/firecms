@@ -1,16 +1,16 @@
 {
-    "name": "@firecms/postgresql",
+    "name": "@rebasepro/postgresql",
     "type": "module",
     "version": "4.0.0",
-    "description": "PostgreSQL data source client for FireCMS",
+    "description": "PostgreSQL data source client for Rebase",
     "funding": {
-        "url": "https://github.com/sponsors/firecmsco"
+        "url": "https://github.com/sponsors/rebaseco"
     },
-    "author": "FireCMS",
+    "author": "Rebase",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/firecmsco/firecms.git",
+        "url": "https://github.com/rebaseco/rebase.git",
         "directory": "packages/postgresql"
     },
     "main": "./dist/index.umd.js",
@@ -27,7 +27,7 @@
         "admin panel",
         "postgresql",
         "database",
-        "firecms",
+        "rebase",
         "client"
     ],
     "scripts": {
@@ -52,9 +52,9 @@
             "node"
         ],
         "moduleNameMapper": {
-            "^@firecms/core$": "<rootDir>/../firecms_core/src/index.ts",
-            "^@firecms/common$": "<rootDir>/../common/src/index.ts",
-            "^@firecms/types$": "<rootDir>/../types/src/index.ts"
+            "^@rebasepro/core$": "<rootDir>/../core/src/index.ts",
+            "^@rebasepro/common$": "<rootDir>/../common/src/index.ts",
+            "^@rebasepro/types$": "<rootDir>/../types/src/index.ts"
         }
     },
     "exports": {
@@ -67,8 +67,8 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
-        "@firecms/types": "4.0.0",
-        "@firecms/core": "4.0.0"
+        "@rebasepro/types": "4.0.0",
+        "@rebasepro/core": "4.0.0"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

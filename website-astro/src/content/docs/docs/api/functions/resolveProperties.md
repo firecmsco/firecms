@@ -3,17 +3,17 @@ slug: "docs/api/functions/resolveProperties"
 title: "resolveProperties"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / resolveProperties
+[@rebasepro/core](../README) / resolveProperties
 
 # Function: resolveProperties()
 
 > **resolveProperties**\<`M`\>(`properties`): [`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
 
-Defined in: [util/resolutions.ts:366](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/resolutions.ts)
+Defined in: [util/resolutions.ts:366](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/resolutions.ts)
 
 Resolve enums and arrays for properties
 

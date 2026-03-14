@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@firecms/ui";
+import { Button } from "@rebasepro/ui";
 
 export default function DisabledButtonDemo() {
     return (

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { Role, User } from "@firecms/core";
+import { Role, User } from "@rebasepro/core";
 
 /**
- * UserManagement interface - compatible with @firecms/user_management
+ * UserManagement interface - compatible with @rebasepro/user_management
  * Defined inline to avoid dependency on that package
  */
 export interface UserManagement<USER extends User = User> {
@@ -62,7 +62,7 @@ interface ApiRole {
 }
 
 /**
- * Convert API user to FireCMS User
+ * Convert API user to Rebase User
  * @param apiUser - The API user object
  * @param availableRoles - Optional array of available roles to look up names
  */
@@ -79,7 +79,7 @@ function convertUser(apiUser: ApiUser): User {
 }
 
 /**
- * Convert API role to FireCMS Role
+ * Convert API role to Rebase Role
  */
 function convertRole(apiRole: ApiRole): Role {
     return {
@@ -92,7 +92,7 @@ function convertRole(apiRole: ApiRole): Role {
 
 /**
  * Hook to manage users and roles via backend API
- * Compatible with FireCMS UserManagement interface
+ * Compatible with Rebase UserManagement interface
  */
 export function useBackendUserManagement(config: BackendUserManagementConfig): UserManagement {
     const { apiUrl, getAuthToken, currentUser } = config;

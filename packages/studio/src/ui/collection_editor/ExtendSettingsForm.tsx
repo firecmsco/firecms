@@ -2,16 +2,16 @@ import React from "react";
 import {
     EntityCollection,
     User
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     Button,
     cls,
     Container,
     defaultBorderMixin,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
-import { useFormex } from "@firecms/formex";
+import { useFormex } from "@rebasepro/formex";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionInference } from "../../types/collection_inference";
 import { SubcollectionsEditTab } from "./SubcollectionsEditTab";

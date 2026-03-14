@@ -5,17 +5,17 @@ import {
     Property,
     PropertyConfigBadge,
     useCustomizationController
-} from "@firecms/core";
-import { EditIcon, IconButton, TextField, } from "@firecms/ui";
+} from "@rebasepro/core";
+import { EditIcon, IconButton, TextField, } from "@rebasepro/ui";
 
 export function ImportNewPropertyFieldPreview({
-                                                  propertyKey,
-                                                  property,
-                                                  onEditClick,
-                                                  includeName = true,
-                                                  onPropertyNameChanged,
-                                                  propertyTypeView
-                                              }: {
+    propertyKey,
+    property,
+    onEditClick,
+    includeName = true,
+    onPropertyNameChanged,
+    propertyTypeView
+}: {
     propertyKey: string | null,
     property: Property | null
     includeName?: boolean,
@@ -32,7 +32,7 @@ export function ImportNewPropertyFieldPreview({
             className="flex flex-row w-full items-center">
 
             <div className={"mx-4"}>
-                {propertyTypeView ?? <PropertyConfigBadge propertyConfig={widget ?? undefined}/>}
+                {propertyTypeView ?? <PropertyConfigBadge propertyConfig={widget ?? undefined} />}
             </div>
 
             <div className="w-full flex flex-col grow">
@@ -46,10 +46,10 @@ export function ImportNewPropertyFieldPreview({
                             onChange={(e) => {
                                 if (onPropertyNameChanged && propertyKey)
                                     onPropertyNameChanged(propertyKey, e.target.value);
-                            }}/>}
+                            }} />}
 
                     <IconButton onClick={onEditClick} size={"small"}>
-                        <EditIcon size={"small"}/>
+                        <EditIcon size={"small"} />
                     </IconButton>
                 </div>
 

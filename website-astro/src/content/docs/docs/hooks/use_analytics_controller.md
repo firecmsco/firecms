@@ -12,7 +12,7 @@ You can use this to integrate with 3rd party analytics providers like Google Ana
 ### Usage
 
 ```tsx
-import { useAnalyticsController } from "@firecms/core";
+import { useAnalyticsController } from "@rebasepro/core";
 import { useEffect } from "react";
 
 export function MyAnalyticsComponent() {

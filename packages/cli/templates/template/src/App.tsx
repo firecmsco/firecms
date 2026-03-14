@@ -5,7 +5,7 @@ import {
     Authenticator,
     CircularProgressCenter,
     Drawer,
-    FireCMS,
+    Rebase,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -15,7 +15,7 @@ import {
     useBuildModeController,
     useBuildNavigationController,
     useValidateAuthenticator
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     FirebaseAuthController,
     FirebaseLoginView,
@@ -25,8 +25,8 @@ import {
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase,
-} from "@firecms/firebase";
-import { CenteredView } from "@firecms/ui";
+} from "@rebasepro/firebase";
+import { CenteredView } from "@rebasepro/ui";
 import { demoCollection } from "./collections/demo";
 
 import { firebaseConfig } from "./firebase_config";
@@ -35,9 +35,9 @@ function App() {
 
     // Use your own authentication logic here
     const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
-                                                                                       user,
-                                                                                       authController
-                                                                                   }) => {
+        user,
+        authController
+    }) => {
 
         if (user?.email?.includes("flanders")) {
             // You can throw an error to prevent access
@@ -45,7 +45,7 @@ function App() {
         }
 
         const idTokenResult = await user?.firebaseUser?.getIdTokenResult();
-        const userIsAdmin = idTokenResult?.claims.admin || user?.email?.endsWith("@firecms.co");
+        const userIsAdmin = idTokenResult?.claims.admin || user?.email?.endsWith("@rebase.pro");
 
         console.log("Allowing access to", user);
 
@@ -109,7 +109,7 @@ function App() {
 
     if (firebaseConfigLoading || !firebaseApp) {
         return <>
-            <CircularProgressCenter/>
+            <CircularProgressCenter />
         </>;
     }
 
@@ -120,7 +120,7 @@ function App() {
     return (
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
-                <FireCMS
+                <Rebase
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
@@ -128,30 +128,30 @@ function App() {
                     storageSource={storageSource}
                 >
                     {({
-                          context,
-                          loading
-                      }) => {
+                        context,
+                        loading
+                    }) => {
 
                         if (loading || authLoading) {
-                            return <CircularProgressCenter size={"large"}/>;
+                            return <CircularProgressCenter size={"large"} />;
                         }
 
                         if (!canAccessMainView) {
                             return <FirebaseLoginView authController={authController}
-                                                      firebaseApp={firebaseApp}
-                                                      signInOptions={signInOptions}
-                                                      notAllowedError={notAllowedError}/>;
+                                firebaseApp={firebaseApp}
+                                signInOptions={signInOptions}
+                                notAllowedError={notAllowedError} />;
                         }
 
                         return <Scaffold
                             autoOpenDrawer={false}>
-                            <AppBar title={"My demo app"}/>
-                            <Drawer/>
-                            <NavigationRoutes/>
-                            <SideDialogs/>
+                            <AppBar title={"My demo app"} />
+                            <Drawer />
+                            <NavigationRoutes />
+                            <SideDialogs />
                         </Scaffold>;
                     }}
-                </FireCMS>
+                </Rebase>
             </ModeControllerProvider>
         </SnackbarProvider>
     );

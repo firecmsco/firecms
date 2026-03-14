@@ -25,7 +25,7 @@ We can distinguish some categories straight away:
 > We will be updating it regularly, so make sure to check back often.
 >
 > One of the motivations for this guide is to help users understand the
-> differences between CMSs. Despite creating FireCMS, we are not trying to
+> differences between CMSs. Despite creating Rebase, we are not trying to
 > promote it as the best solution for everyone. We are just trying to help
 > people understand the trade-offs of different solutions.
 > This is the same thing we say to our users when they ask us for advice on
@@ -65,7 +65,7 @@ General purpose CMSs can be used to manage any type of content. Think of things
 like the menu of a restaurant or a delivery app. Or the exercises and videos of
 a fitness app. Or the podcasts in a podcast app.
 If you are working on a mobile app or a web app where you need to manage any
-content related to your business, [FireCMS](https://firecms.co) is a great
+content related to your business, [Rebase](https://rebase.pro) is a great
 option. It has all the advantages of other general purpose CMSs, but it uses
 Firebase as a backend, so you have access to all the robustness, extensibility
 and features of Google Cloud.
@@ -96,7 +96,7 @@ or [Agility CMS](https://agilitycms.com/).
 Examples of headless and general purpose CMSs are [Strapi](https://strapi.io/),
 [GraphCMS](https://graphcms.com/) or [Sanity](https://www.sanity.io/)
 
-[FireCMS](https://firecms.co) is a **headless** and general purpose CMS.
+[Rebase](https://rebase.pro) is a **headless** and general purpose CMS.
 It is a general purpose CMS that can be used to manage content
 for any kind of project, including websites, web apps, mobile apps, desktop
 apps, etc.
@@ -112,7 +112,7 @@ Some CMSs provide **SDKs** to make it easier to use their APIs. SDKs are
 usually available for the most common languages, like JavaScript, Java, Python,
 PHP, etc.
 
-FireCMS uses Firestore as a backend, so it benefits from all the native SDKs
+Rebase uses Firestore as a backend, so it benefits from all the native SDKs
 provided by Google. This is a big advantage, because it means that you can
 use the same SDKs to access the CMS and to access the Firestore database.
 At the same time, having Firebase as a backend means that you can use all the
@@ -150,7 +150,7 @@ while others are proprietary.
 
 Check the comparison table below to see which APIs are provided by each CMS.
 
-|              NAME              | FireCMS | Agility CMS | ButterCMS | Contentful | Ghost | GraphCMS | Keystone JS | Prismic | Sanity | Storyblok | Strapi | Wordpress - unite cms |
+|              NAME              | Rebase | Agility CMS | ButterCMS | Contentful | Ghost | GraphCMS | Keystone JS | Prismic | Sanity | Storyblok | Strapi | Wordpress - unite cms |
 |:------------------------------:|:-------:|:-----------:|:---------:|:----------:|:-----:|:--------:|:-----------:|:-------:|:------:|:---------:|:------:|:---------------------:|
 |        **Installation**        |         |             |           |            |       |          |             |         |        |           |        |                       |
 |          Open Source           |    ✅    |      ❌      |     ❌     |     ❌      |   ✅   |    ❌     |      ✅      |    ❌    |   ✅    |     ❌     |   ✅    |           ✅           |

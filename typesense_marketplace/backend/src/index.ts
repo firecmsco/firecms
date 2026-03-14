@@ -1,5 +1,5 @@
 /**
- * FireCMS Typesense Marketplace - Main Entry Point
+ * Rebase Typesense Marketplace - Main Entry Point
  * 
  * Google Cloud Marketplace SaaS integration with:
  * - Partner Procurement API for customer/entitlement management

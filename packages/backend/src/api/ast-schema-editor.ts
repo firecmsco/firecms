@@ -209,7 +209,7 @@ export class AstSchemaEditor {
         if (!file || !collectionObj) {
             // Create a new file
             const newFilePath = path.join(this.collectionsDir, `${collectionId}.ts`);
-            file = this.project.createSourceFile(newFilePath, `import { EntityCollection } from "@firecms/types";\n\nconst ${collectionId}Collection: EntityCollection = ${this.convertJsonToAstString(collectionData)};\n\nexport default ${collectionId}Collection;\n`, { overwrite: true });
+            file = this.project.createSourceFile(newFilePath, `import { EntityCollection } from "@rebasepro/types";\n\nconst ${collectionId}Collection: EntityCollection = ${this.convertJsonToAstString(collectionData)};\n\nexport default ${collectionId}Collection;\n`, { overwrite: true });
         } else {
             // Update root level properties gracefully
             for (const key of Object.keys(collectionData)) {

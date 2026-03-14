@@ -15,7 +15,7 @@ import {
     User,
     useSelectionController,
     useSnackbarController
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     Button,
     cls,
@@ -30,8 +30,8 @@ import {
     Tooltip,
     Typography,
     UploadIcon,
-} from "@firecms/ui";
-import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
+} from "@rebasepro/ui";
+import { buildEntityPropertiesFromData } from "@rebasepro/schema_inference";
 import { useImportConfig } from "../hooks";
 import { convertDataToEntity, getInferenceType } from "../utils";
 import { DataNewPropertiesMapping, ImportFileUpload, ImportSaveInProgress } from "../components";

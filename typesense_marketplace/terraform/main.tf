@@ -1,4 +1,4 @@
-# Terraform Configuration for FireCMS Typesense Search
+# Terraform Configuration for Rebase Typesense Search
 # 
 # This sets up the GCP infrastructure required for the Marketplace solution
 

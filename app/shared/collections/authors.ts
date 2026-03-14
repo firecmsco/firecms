@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 import profilesCollection from "./profiles";
 import postsCollection from "./posts";
 
@@ -65,6 +65,7 @@ const authorsCollection: EntityCollection = {
             description: " <a> </a>",
             relation: {
                 relationName: "profile",
+                target: () => profilesCollection,
                 cardinality: "one",
                 direction: "inverse",
                 inverseRelationName: "author"

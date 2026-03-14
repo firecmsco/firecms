@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/NavigationController"
 title: "NavigationController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / NavigationController
+[@rebasepro/core](../README) / NavigationController
 
 # Type Alias: NavigationController\<EC\>
 
 > **NavigationController**\<`EC`\> = `object`
 
-Defined in: [types/navigation.ts:12](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Controller that includes the resolved navigation and utility methods and
 attributes.
@@ -31,7 +31,7 @@ This controller holds the state of the navigation including the collections.
 
 > `optional` **adminViews**: [`CMSView`](../interfaces/CMSView)[]
 
-Defined in: [types/navigation.ts:32](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Custom additional views created by the developer, added to the admin
 navigation
@@ -42,7 +42,7 @@ navigation
 
 > **baseCollectionPath**: `string`
 
-Defined in: [types/navigation.ts:88](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:88](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Default path under the collection routes of the CMS will be created.
 It defaults to '/c'
@@ -53,7 +53,7 @@ It defaults to '/c'
 
 > **basePath**: `string`
 
-Defined in: [types/navigation.ts:82](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Default path under the navigation routes of the CMS will be created.
 Defaults to '/'. You may want to change this `basepath` to 'admin' for example.
@@ -64,7 +64,7 @@ Defaults to '/'. You may want to change this `basepath` to 'admin' for example.
 
 > **buildUrlCollectionPath**: (`path`) => `string`
 
-Defined in: [types/navigation.ts:116](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:116](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Build a URL collection path from a data path
 `products` => `/c/products`
@@ -86,7 +86,7 @@ Build a URL collection path from a data path
 
 > `optional` **collections**: [`EntityCollection`](../interfaces/EntityCollection)[]
 
-Defined in: [types/navigation.ts:20](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 List of the mapped collections in the CMS.
 Each entry relates to a collection in the root database.
@@ -99,7 +99,7 @@ generates an entry in the main menu.
 
 > **convertIdsToPaths**: (`ids`) => `string`[]
 
-Defined in: [types/navigation.ts:146](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:146](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Resolve paths from a list of ids
 
@@ -119,7 +119,7 @@ Resolve paths from a list of ids
 
 > **getCollection**: (`pathOrId`, `includeUserOverride?`) => `EC` \| `undefined`
 
-Defined in: [types/navigation.ts:61](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:61](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Get the collection configuration for a given path.
 The collection is resolved from the given path or alias.
@@ -144,7 +144,7 @@ The collection is resolved from the given path or alias.
 
 > **getCollectionById**: (`id`) => `EC` \| `undefined`
 
-Defined in: [types/navigation.ts:66](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:66](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Get the top level collection configuration for a given id
 
@@ -164,7 +164,7 @@ Get the top level collection configuration for a given id
 
 > **getCollectionFromIds**: (`ids`) => `EC` \| `undefined`
 
-Defined in: [types/navigation.ts:71](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:71](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Get the collection configuration from its parent ids.
 
@@ -184,7 +184,7 @@ Get the collection configuration from its parent ids.
 
 > **getCollectionFromPaths**: (`pathSegments`) => `EC` \| `undefined`
 
-Defined in: [types/navigation.ts:76](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:76](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Get the collection configuration from its parent path segments.
 
@@ -204,7 +204,7 @@ Get the collection configuration from its parent path segments.
 
 > **getParentCollectionIds**: (`path`) => `string`[]
 
-Defined in: [types/navigation.ts:140](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:140](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Retrieve all the related parent collection ids for a given path
 
@@ -224,7 +224,7 @@ Retrieve all the related parent collection ids for a given path
 
 > **getParentReferencesFromPath**: (`path`) => [`EntityReference`](../classes/EntityReference)[]
 
-Defined in: [types/navigation.ts:134](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:134](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Retrieve all the related parent references for a given path
 
@@ -244,7 +244,7 @@ Retrieve all the related parent references for a given path
 
 > **homeUrl**: `string`
 
-Defined in: [types/navigation.ts:102](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:102](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Base url path for the home screen
 
@@ -254,7 +254,7 @@ Base url path for the home screen
 
 > **initialised**: `boolean`
 
-Defined in: [types/navigation.ts:55](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:55](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Is the registry ready to be used
 
@@ -264,7 +264,7 @@ Is the registry ready to be used
 
 > **isUrlCollectionPath**: (`urlPath`) => `boolean`
 
-Defined in: [types/navigation.ts:108](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:108](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Check if a url path belongs to a collection
 
@@ -284,7 +284,7 @@ Check if a url path belongs to a collection
 
 > **loading**: `boolean`
 
-Defined in: [types/navigation.ts:45](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Is the navigation loading (the configuration persistence has not
 loaded yet, or a specified navigation builder has not completed)
@@ -295,7 +295,7 @@ loaded yet, or a specified navigation builder has not completed)
 
 > **navigate**: (`to`, `options?`) => `void`
 
-Defined in: [types/navigation.ts:154](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:154](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 A function to navigate to a specified route or URL.
 
@@ -323,7 +323,7 @@ Optional configuration settings for navigation, such as replace behavior or stat
 
 > `optional` **navigationLoadingError**: `any`
 
-Defined in: [types/navigation.ts:50](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:50](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Was there an error while loading the navigation data
 
@@ -331,9 +331,9 @@ Was there an error while loading the navigation data
 
 ### plugins?
 
-> `optional` **plugins**: [`FireCMSPlugin`](FireCMSPlugin)\<`any`, `any`, `any`\>[]
+> `optional` **plugins**: [`RebasePlugin`](RebasePlugin)\<`any`, `any`, `any`\>[]
 
-Defined in: [types/navigation.ts:159](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:159](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Plugin system allowing to extend the CMS functionality.
 
@@ -343,7 +343,7 @@ Plugin system allowing to extend the CMS functionality.
 
 > **refreshNavigation**: () => `void`
 
-Defined in: [types/navigation.ts:128](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:128](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Call this method to recalculate the navigation
 
@@ -357,7 +357,7 @@ Call this method to recalculate the navigation
 
 > **resolveIdsFrom**: (`pathWithAliases`) => `string`
 
-Defined in: [types/navigation.ts:123](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:123](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Turn a path with collection ids into a resolved path.
 The ids (typically used in urls) will be replaced with relative paths (typically used in database paths)
@@ -378,7 +378,7 @@ The ids (typically used in urls) will be replaced with relative paths (typically
 
 > `optional` **topLevelNavigation**: [`NavigationResult`](NavigationResult)
 
-Defined in: [types/navigation.ts:39](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Configuration for the views that should be displayed at the top
 level of the navigation (e.g. in the home page or the navigation
@@ -390,7 +390,7 @@ drawer)
 
 > **urlPathToDataPath**: (`cmsPath`) => `string`
 
-Defined in: [types/navigation.ts:97](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:97](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Convert a URL path to a collection or entity path
 `/c/products` => `products`
@@ -413,7 +413,7 @@ Convert a URL path to a collection or entity path
 
 > `optional` **views**: [`CMSView`](../interfaces/CMSView)[]
 
-Defined in: [types/navigation.ts:26](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 Custom additional views created by the developer, added to the main
 navigation

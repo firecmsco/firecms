@@ -1,5 +1,5 @@
 import React from "react";
-import { EntityAction, EntityCustomView, EntityLinkBuilder, FireCMSPlugin, Locale, PropertyConfig } from "../types";
+import { EntityAction, EntityCustomView, EntityLinkBuilder, RebasePlugin, Locale, PropertyConfig } from "../types";
 
 export type CustomizationController = {
 
@@ -11,7 +11,7 @@ export type CustomizationController = {
     /**
      * Use plugins to modify the behaviour of the CMS.
      */
-    plugins?: FireCMSPlugin<any, any, any>[];
+    plugins?: RebasePlugin<any, any, any>[];
 
     /**
      * List of additional custom views for entities.

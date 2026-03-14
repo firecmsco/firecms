@@ -1,5 +1,5 @@
 import React from "react";
-import { FireCMSPlugin, useAuthController, useCollectionRegistryController, useNavigationStateController, User } from "@firecms/core";
+import { RebasePlugin, useAuthController, useCollectionRegistryController, useNavigationStateController, User } from "@rebasepro/core";
 import { ConfigControllerProvider } from "./ConfigControllerProvider";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { EditorCollectionAction } from "./ui/EditorCollectionAction";
@@ -11,7 +11,7 @@ import { CollectionGenerationCallback } from "./api/generateCollectionApi";
 import { CollectionViewHeaderAction } from "./ui/CollectionViewHeaderAction";
 import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent";
 import { NewCollectionButton } from "./ui/NewCollectionButton";
-import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
+import { AddIcon, Button, Paper, Typography } from "@rebasepro/ui";
 import { useCollectionEditorController } from "./useCollectionEditorController";
 import { EditorCollectionActionStart } from "./ui/EditorCollectionActionStart";
 import { NewCollectionCard } from "./ui/NewCollectionCard";
@@ -89,7 +89,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         includeIntroView = true,
         pathSuggestions,
         generateCollection
-    }: CollectionConfigControllerProps<EC, USER>): FireCMSPlugin<any, any, PersistedCollection> {
+    }: CollectionConfigControllerProps<EC, USER>): RebasePlugin<any, any, PersistedCollection> {
 
     return React.useMemo(() => ({
         key: "collection_editor",
@@ -153,7 +153,7 @@ export function IntroWidget() {
     const collectionRegistry = useCollectionRegistryController();
 
     if (!navigationState.topLevelNavigation)
-        throw Error("Navigation not ready in FireCMSHomePage");
+        throw Error("Navigation not ready in RebaseHomePage");
 
     const authController = useAuthController();
 
@@ -173,7 +173,7 @@ export function IntroWidget() {
             className={"my-4 px-4 py-6 flex flex-col  bg-white dark:bg-surface-accent-800 gap-2"}>
             <Typography variant={"subtitle2"} className={"uppercase"}>No collections found</Typography>
             <Typography>
-                Start building collections in FireCMS easily. Map them to your existing
+                Start building collections in Rebase easily. Map them to your existing
                 database data, import from files, or use our templates.
             </Typography>
             {canCreateCollections && <Button

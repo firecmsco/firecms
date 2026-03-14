@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Menu, MenuItem } from "@firecms/ui";
+import { Button, Menu, MenuItem } from "@rebasepro/ui";
 
 export default function MenuCustomTriggerDemo() {
 

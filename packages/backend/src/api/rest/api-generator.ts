@@ -1,10 +1,10 @@
 import { Router, Response, NextFunction } from "express";
-import { DataSource, EntityCollection } from "@firecms/types";
-import { ApiResponse, QueryOptions, FireCMSRequest } from "../types";
-import { buildPropertyCallbacks } from "@firecms/common";
+import { DataSource, EntityCollection } from "@rebasepro/types";
+import { ApiResponse, QueryOptions, RebaseRequest } from "../types";
+import { buildPropertyCallbacks } from "@rebasepro/common";
 
 /**
- * Lightweight REST API generator that leverages existing FireCMS DataSource
+ * Lightweight REST API generator that leverages existing Rebase DataSource
  */
 export class RestApiGenerator {
     private collections: EntityCollection[];
@@ -28,7 +28,7 @@ export class RestApiGenerator {
     }
 
     /**
-     * Create REST routes for a collection using existing FireCMS patterns
+     * Create REST routes for a collection using existing Rebase patterns
      */
     private createCollectionRoutes(collection: EntityCollection): void {
         const basePath = `/${collection.slug}`;
@@ -37,7 +37,7 @@ export class RestApiGenerator {
         const resolvedCollection = collection;
 
         // GET /collection - List entities (fetch raw data without Entity wrapper)
-        this.router.get(basePath, async (req: FireCMSRequest, res: Response, next: NextFunction): Promise<void> => {
+        this.router.get(basePath, async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
             try {
                 const queryOptions = this.parseQueryOptions(req.query);
 
@@ -66,7 +66,7 @@ export class RestApiGenerator {
         });
 
         // GET /collection/:id - Get single entity (fetch raw data without Entity wrapper)
-        this.router.get(`${basePath}/:id`, async (req: FireCMSRequest, res: Response, next: NextFunction): Promise<void> => {
+        this.router.get(`${basePath}/:id`, async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
             try {
                 const { id } = req.params;
 
@@ -88,7 +88,7 @@ export class RestApiGenerator {
         });
 
         // POST /collection - Create entity (uses existing saveEntity)
-        this.router.post(basePath, async (req: FireCMSRequest, res: Response, next: NextFunction): Promise<void> => {
+        this.router.post(basePath, async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
             try {
                 // Get data source from request (injected by Auth middleware) or fallback to instance default
                 const dataSource = req.dataSource || this.dataSource;
@@ -112,7 +112,7 @@ export class RestApiGenerator {
         });
 
         // PUT /collection/:id - Update entity (uses existing saveEntity)
-        this.router.put(`${basePath}/:id`, async (req: FireCMSRequest, res: Response, next: NextFunction): Promise<void> => {
+        this.router.put(`${basePath}/:id`, async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
             try {
                 const { id } = req.params;
 
@@ -149,7 +149,7 @@ export class RestApiGenerator {
         });
 
         // DELETE /collection/:id - Delete entity (uses existing deleteEntity)
-        this.router.delete(`${basePath}/:id`, async (req: FireCMSRequest, res: Response, next: NextFunction): Promise<void> => {
+        this.router.delete(`${basePath}/:id`, async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
             try {
                 const { id } = req.params;
 
@@ -184,7 +184,7 @@ export class RestApiGenerator {
 
 
     /**
-     * Map PostgREST-style operators to FireCMS WhereFilterOp
+     * Map PostgREST-style operators to Rebase WhereFilterOp
      */
     private mapOperator(op: string): string | null {
         switch (op) {
@@ -244,9 +244,9 @@ export class RestApiGenerator {
                 if (parts.length >= 2) {
                     const op = parts[0];
                     const val = parts.slice(1).join(".");
-                    const firecmsOp = this.mapOperator(op);
+                    const rebaseOp = this.mapOperator(op);
 
-                    if (firecmsOp) {
+                    if (rebaseOp) {
                         let parsedVal: any = val;
                         // Attempt to parse primitive types or arrays
                         if (val === "true") parsedVal = true;
@@ -266,7 +266,7 @@ export class RestApiGenerator {
                             });
                         }
 
-                        options.where[key] = [firecmsOp, parsedVal];
+                        options.where[key] = [rebaseOp, parsedVal];
                     } else {
                         // Fallback: assume implicit eq if the dot wasn't an operator (e.g. email or float)
                         let parsedVal: any = value;
@@ -346,14 +346,14 @@ export class RestApiGenerator {
     }
 
     /**
-     * Flatten FireCMS entity structure to traditional REST format
+     * Flatten Rebase entity structure to traditional REST format
      */
     private flattenEntity(entity: any): any {
         if (!entity || typeof entity !== "object") {
             return entity;
         }
 
-        // If it's a FireCMS entity with values, extract and flatten
+        // If it's a Rebase entity with values, extract and flatten
         if ("values" in entity && typeof entity.values === "object") {
             return {
                 id: entity.id,

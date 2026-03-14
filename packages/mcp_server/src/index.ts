@@ -1,2 +1,2 @@
-export { createFireCMSMcpServer } from "./server.js";
-export { FireCMSApiClient } from "./api-client.js";
+export { createRebaseMcpServer } from "./server.js";
+export { RebaseApiClient } from "./api-client.js";

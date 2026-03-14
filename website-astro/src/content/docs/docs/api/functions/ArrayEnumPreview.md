@@ -3,17 +3,17 @@ slug: "docs/api/functions/ArrayEnumPreview"
 title: "ArrayEnumPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ArrayEnumPreview
+[@rebasepro/core](../README) / ArrayEnumPreview
 
 # Function: ArrayEnumPreview()
 
 > **ArrayEnumPreview**(`__namedParameters`): `Element`
 
-Defined in: [preview/components/ArrayEnumPreview.tsx:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/ArrayEnumPreview.tsx)
+Defined in: [preview/components/ArrayEnumPreview.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ArrayEnumPreview.tsx)
 
 ## Parameters
 

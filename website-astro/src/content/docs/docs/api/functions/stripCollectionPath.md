@@ -3,17 +3,17 @@ slug: "docs/api/functions/stripCollectionPath"
 title: "stripCollectionPath"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / stripCollectionPath
+[@rebasepro/core](../README) / stripCollectionPath
 
 # Function: stripCollectionPath()
 
 > **stripCollectionPath**(`path`): `string`
 
-Defined in: [util/paths.ts:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/paths.ts)
+Defined in: [util/paths.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/paths.ts)
 
 Remove the entity ids from a given path
 `products/B44RG6APH/locales` => `products::locales`

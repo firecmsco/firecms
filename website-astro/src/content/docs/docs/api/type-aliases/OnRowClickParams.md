@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/OnRowClickParams"
 title: "OnRowClickParams"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / OnRowClickParams
+[@rebasepro/core](../README) / OnRowClickParams
 
 # Type Alias: OnRowClickParams\<T\>
 
 > **OnRowClickParams**\<`T`\> = `object`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:5](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:5](https://github.com
 
 > **event**: `React.SyntheticEvent`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:8](https://github.com
 
 > **rowData**: `T`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -43,4 +43,4 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:6](https://github.com
 
 > **rowIndex**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:7](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)

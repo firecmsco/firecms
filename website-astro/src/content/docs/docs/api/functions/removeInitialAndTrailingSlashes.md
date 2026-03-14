@@ -3,17 +3,17 @@ slug: "docs/api/functions/removeInitialAndTrailingSlashes"
 title: "removeInitialAndTrailingSlashes"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / removeInitialAndTrailingSlashes
+[@rebasepro/core](../README) / removeInitialAndTrailingSlashes
 
 # Function: removeInitialAndTrailingSlashes()
 
 > **removeInitialAndTrailingSlashes**(`s`): `string`
 
-Defined in: [util/navigation\_utils.ts:3](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/navigation_utils.ts)
+Defined in: [util/navigation\_utils.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/navigation_utils.ts)
 
 ## Parameters
 

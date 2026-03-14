@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDataTalk } from "../DataTalkProvider";
-import { AddIcon, Button, cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Typography } from "@firecms/ui";
+import { AddIcon, Button, cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Typography } from "@rebasepro/ui";
 import { Session } from "../types";
 
 interface DataTalkSessionsPanelProps {

@@ -2,11 +2,11 @@
  * Database Abstraction Interfaces
  * 
  * These interfaces define the contracts that any database backend must implement
- * to be used with FireCMS. This allows for pluggable database backends like
+ * to be used with Rebase. This allows for pluggable database backends like
  * PostgreSQL, MongoDB, MySQL, etc.
  */
 
-import { Entity, EntityCollection, FilterValues, WhereFilterOp } from "@firecms/types";
+import { Entity, EntityCollection, FilterValues, WhereFilterOp } from "@rebasepro/types";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { PgTransaction } from "drizzle-orm/pg-core";
 
@@ -88,7 +88,7 @@ export interface CountOptions<M extends Record<string, any> = any> {
 
 /**
  * Abstract condition builder interface.
- * Implementations translate FireCMS filter conditions to database-specific queries.
+ * Implementations translate Rebase filter conditions to database-specific queries.
  * 
  * Note: This interface can be implemented as instance methods or as a class with static methods.
  * For static implementations (like DrizzleConditionBuilder), use the ConditionBuilderStatic type.
@@ -97,7 +97,7 @@ export interface CountOptions<M extends Record<string, any> = any> {
  */
 export interface ConditionBuilder<T = any> {
     /**
-     * Build filter conditions from FireCMS FilterValues
+     * Build filter conditions from Rebase FilterValues
      */
     buildFilterConditions<M extends Record<string, any>>(
         filter: FilterValues<Extract<keyof M, string>>,

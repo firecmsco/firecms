@@ -7,9 +7,9 @@ import {
     defaultBorderMixin,
     Menu,
     MenuItem
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { TableInfo } from "./SQLEditor";
-import { ErrorView } from "@firecms/core";
+import { ErrorView } from "@rebasepro/core";
 
 export const SchemaBrowser = ({
     onTableClick,

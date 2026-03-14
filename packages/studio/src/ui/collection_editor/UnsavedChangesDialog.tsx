@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@rebasepro/ui";
 
 export interface UnsavedChangesDialogProps {
     open: boolean;

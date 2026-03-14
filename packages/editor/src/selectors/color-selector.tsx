@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { EditorBubbleItem, useEditor } from "../components";
-import { Button, CheckIcon, KeyboardArrowDownIcon, Popover } from "@firecms/ui";
+import { Button, CheckIcon, KeyboardArrowDownIcon, Popover } from "@rebasepro/ui";
 
 export interface BubbleColorMenuItem {
     name: string;
@@ -96,9 +96,9 @@ interface ColorSelectorProps {
 }
 
 export const ColorSelector = ({
-                                  open,
-                                  onOpenChange
-                              }:{
+    open,
+    onOpenChange
+}: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }) => {
@@ -120,16 +120,16 @@ export const ColorSelector = ({
             className="my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded-xs border p-1 shadow-2xs"
             trigger={
                 <Button className="gap-2 rounded-none" variant="text" color={"text"}>
-                      <span
-                          className="rounded-xs px-1"
-                          style={{
-                              color: activeColorItem?.color,
-                              backgroundColor: activeHighlightItem?.color,
-                          }}
-                      >
+                    <span
+                        className="rounded-xs px-1"
+                        style={{
+                            color: activeColorItem?.color,
+                            backgroundColor: activeHighlightItem?.color,
+                        }}
+                    >
                         A
-                      </span>
-                    <KeyboardArrowDownIcon size={"small"}/>
+                    </span>
+                    <KeyboardArrowDownIcon size={"small"} />
                 </Button>}
             modal={true} open={open} onOpenChange={onOpenChange}>
 
@@ -139,19 +139,19 @@ export const ColorSelector = ({
                     Color
                 </div>
                 {TEXT_COLORS.map(({
-                                      name,
-                                      color
-                                  }, index) => (
+                    name,
+                    color
+                }, index) => (
                     <EditorBubbleItem
                         key={index}
                         onSelect={() => {
                             editor.commands.unsetColor();
                             name !== "Default" &&
-                            editor
-                                .chain()
-                                .focus()
-                                .setColor(color || "")
-                                .run();
+                                editor
+                                    .chain()
+                                    .focus()
+                                    .setColor(color || "")
+                                    .run();
                         }}
                         className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-surface-100 hover:dark:bg-surface-700"
                     >
@@ -172,9 +172,9 @@ export const ColorSelector = ({
                     Background
                 </div>
                 {HIGHLIGHT_COLORS.map(({
-                                           name,
-                                           color
-                                       }, index) => (
+                    name,
+                    color
+                }, index) => (
                     <EditorBubbleItem
                         key={index}
                         onSelect={() => {
@@ -193,7 +193,7 @@ export const ColorSelector = ({
                             <span>{name}</span>
                         </div>
                         {editor.isActive("highlight", { color }) && (
-                            <CheckIcon className="h-4 w-4"/>
+                            <CheckIcon className="h-4 w-4" />
                         )}
                     </EditorBubbleItem>
                 ))}

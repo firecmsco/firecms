@@ -10,13 +10,13 @@ import yaml from '@rollup/plugin-yaml';
 
 // https://astro.build/config
 export default defineConfig({
-    site: "https://firecms.co",
+    site: "https://rebase.pro",
     integrations: [
         react({
             experimentalReactChildren: true
         }),
         starlight({
-            title: "FireCMS Docs",
+            title: "Rebase Docs",
             customCss: [
                 "./src/styles/global.css",
                 "./src/styles/starlight.css"
@@ -25,7 +25,7 @@ export default defineConfig({
                 {
                     icon: "github",
                     label: "GitHub",
-                    href: "https://github.com/firecmsco/firecms"
+                    href: "https://github.com/rebaseco/rebase"
                 }
             ],
             expressiveCode: {
@@ -49,7 +49,7 @@ export default defineConfig({
                     slug: "docs/index"
                 },
                 {
-                    label: "☁️ FireCMS Cloud",
+                    label: "☁️ Rebase Cloud",
                     collapsed: false,
                     items: [
                         {
@@ -131,8 +131,8 @@ export default defineConfig({
                             slug: "docs/self/auth_self_hosted"
                         },
                         {
-                            label: "Styling FireCMS",
-                            slug: "docs/self/styling_firecms"
+                            label: "Styling Rebase",
+                            slug: "docs/self/styling_rebase"
                         },
                         {
                             label: "Deployment",
@@ -413,8 +413,8 @@ export default defineConfig({
                             slug: "docs/hooks/use_reference_dialog"
                         },
                         {
-                            label: "useFireCMSContext",
-                            slug: "docs/hooks/use_firecms_context"
+                            label: "useRebaseContext",
+                            slug: "docs/hooks/use_rebase_context"
                         },
                         {
                             label: "useDataSource",
@@ -648,8 +648,8 @@ export default defineConfig({
         ],
         resolve: {
             alias: {
-                "@firecms/ui": path.resolve(new URL(".", import.meta.url).pathname, "../packages/ui/src"),
-                "@firecms/editor": path.resolve(new URL(".", import.meta.url).pathname, "../packages/editor/src"),
+                "@rebasepro/ui": path.resolve(new URL(".", import.meta.url).pathname, "../packages/ui/src"),
+                "@rebasepro/editor": path.resolve(new URL(".", import.meta.url).pathname, "../packages/editor/src"),
             }
         },
         server: {

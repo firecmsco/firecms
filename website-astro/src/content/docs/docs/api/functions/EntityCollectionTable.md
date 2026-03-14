@@ -3,17 +3,17 @@ slug: "docs/api/functions/EntityCollectionTable"
 title: "EntityCollectionTable"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionTable
+[@rebasepro/core](../README) / EntityCollectionTable
 
 # Function: EntityCollectionTable()
 
 > **EntityCollectionTable**\<`M`, `USER`\>(`__namedParameters`): `Element`
 
-Defined in: [components/EntityCollectionTable/EntityCollectionTable.tsx:44](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionTable.tsx)
+Defined in: [components/EntityCollectionTable/EntityCollectionTable.tsx:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTable.tsx)
 
 This component is in charge of rendering a collection table with a high
 degree of customization.

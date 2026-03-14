@@ -3,17 +3,17 @@ slug: "docs/api/functions/resolveCollection"
 title: "resolveCollection"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / resolveCollection
+[@rebasepro/core](../README) / resolveCollection
 
 # Function: resolveCollection()
 
 > **resolveCollection**\<`M`\>(`__namedParameters`): [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
 
-Defined in: [util/resolutions.ts:34](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/resolutions.ts)
+Defined in: [util/resolutions.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/resolutions.ts)
 
 ## Type Parameters
 

@@ -2,16 +2,16 @@
 slug: docs/recipes/data_type_adapter
 title: Adapter for custom data types
 sidebar_label: Adapter for custom data types
-description: How to create a custom adapter for a data type in FireCMS
+description: How to create a custom adapter for a data type in Rebase
 ---
 
 :::info
-In order to use this feature, you need to initialize a FireCMS repository. You can do this by following the
+In order to use this feature, you need to initialize a Rebase repository. You can do this by following the
 [Customization quickstart](../cloud/quickstart) guide.
 :::
 
-FireCMS allows you to customize the way data is displayed and edited in the CMS. By default, the views created by
-FireCMS are based on the data type defined in your collection properties:
+Rebase allows you to customize the way data is displayed and edited in the CMS. By default, the views created by
+Rebase are based on the data type defined in your collection properties:
 
 ```json5
 {
@@ -45,7 +45,7 @@ You can use the `onFetch` callback to convert the data type when reading from th
 a Unix timestamp to a date:
 
 ```typescript
-import {EntityCallbacks, EntityOnFetchProps} from "@firecms/core";
+import {EntityCallbacks, EntityOnFetchProps} from "@rebasepro/core";
 
 const exerciseCallbacks: EntityCallbacks = {
     onFetch({
@@ -69,7 +69,7 @@ You can use the `onPreSave` callback to convert the data type when saving to the
 you can convert a date to a Unix timestamp:
 
 ```typescript
-import {EntityCallbacks} from "@firecms/core";
+import {EntityCallbacks} from "@rebasepro/core";
 
 const exerciseCallbacks: EntityCallbacks = {
     onPreSave: ({
@@ -93,7 +93,7 @@ const exerciseCallbacks: EntityCallbacks = {
 You can use the `exerciseCallbacks` in your collection definition:
 
 ```typescript
-import {buildCollection, EntityCallbacks, EntityCollection, EntityOnFetchProps} from "@firecms/core";
+import {buildCollection, EntityCallbacks, EntityCollection, EntityOnFetchProps} from "@rebasepro/core";
 
 const exerciseCallbacks: EntityCallbacks = {
     onFetch({

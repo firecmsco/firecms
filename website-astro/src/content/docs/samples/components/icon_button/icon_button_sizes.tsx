@@ -1,5 +1,5 @@
 import React from "react";
-import { AddIcon, IconButton } from "@firecms/ui";
+import { AddIcon, IconButton } from "@rebasepro/ui";
 
 export default function IconButtonSizeDemo() {
     return (
@@ -8,19 +8,19 @@ export default function IconButtonSizeDemo() {
                 variant="filled"
                 size="small"
                 onClick={() => console.log("Small Clicked!")}>
-                <AddIcon size={"small"}/>
+                <AddIcon size={"small"} />
             </IconButton>
             <IconButton
                 variant="filled"
                 size="medium"
                 onClick={() => console.log("Medium Clicked!")}>
-                <AddIcon/>
+                <AddIcon />
             </IconButton>
             <IconButton
                 variant="filled"
                 size="large"
                 onClick={() => console.log("Large Clicked!")}>
-                <AddIcon size={"large"}/>
+                <AddIcon size={"large"} />
             </IconButton>
         </>
     );

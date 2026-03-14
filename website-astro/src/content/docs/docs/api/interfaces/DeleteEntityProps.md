@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/DeleteEntityProps"
 title: "DeleteEntityProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / DeleteEntityProps
+[@rebasepro/core](../README) / DeleteEntityProps
 
 # Interface: DeleteEntityProps\<M\>
 
-Defined in: [types/datasource.ts:65](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:65](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [types/datasource.ts:65](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
 
-Defined in: [types/datasource.ts:67](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:67](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [types/datasource.ts:67](https://github.com/firecmsco/firecms/blob/m
 
 > **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [types/datasource.ts:66](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:66](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)

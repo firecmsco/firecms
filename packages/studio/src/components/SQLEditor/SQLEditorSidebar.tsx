@@ -5,7 +5,7 @@ import {
     defaultBorderMixin,
     Tabs,
     Tab
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { SchemaBrowser } from "./SchemaBrowser";
 import { TableInfo } from "./SQLEditor";
 

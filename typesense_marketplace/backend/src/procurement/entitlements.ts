@@ -17,7 +17,7 @@ import {
     Entitlement,
 } from "./client";
 
-const PROVIDER_ID = process.env.GCP_MARKETPLACE_PROVIDER_ID || "firecms";
+const PROVIDER_ID = process.env.GCP_MARKETPLACE_PROVIDER_ID || "rebase";
 
 /**
  * Firestore collection for storing entitlement data

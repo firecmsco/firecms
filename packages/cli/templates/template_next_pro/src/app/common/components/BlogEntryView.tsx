@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 
-import { CircularProgress, cls, Container, Markdown, Typography, } from "@firecms/ui";
-import { BlogEntryWithId, ProductWithId } from "@firecms/types";
+import { CircularProgress, cls, Container, Markdown, Typography, } from "@rebasepro/ui";
+import { BlogEntryWithId, ProductWithId } from "@rebasepro/types";
 import ProductPreviewCard from "@/app/common/components/ProductPreviewCard";
 
 /**
@@ -32,7 +32,7 @@ export function BlogEntryView({ blogEntry }: { blogEntry: BlogEntryWithId }) {
                     </Typography>}
                     {blogEntry?.tags && <div className={"mx-4 md:mx-12"}>
                         {blogEntry?.tags.map((tag, index) => <span key={`tag_${index}`}
-                                                                   className="text-sm bg-secondary text-white px-3 py-1.5 rounded-lg mr-2">
+                            className="text-sm bg-secondary text-white px-3 py-1.5 rounded-lg mr-2">
                             {tag}
                         </span>)}
                     </div>}
@@ -44,17 +44,17 @@ export function BlogEntryView({ blogEntry }: { blogEntry: BlogEntryWithId }) {
                         (entry: any, index: number) => {
                             if (entry.type === "text")
                                 return <Text key={`preview_text_${index}`}
-                                             markdownText={entry.value}/>;
+                                    markdownText={entry.value} />;
                             if (entry.type === "quote")
                                 return <Quote key={`preview_text_${index}`}
-                                              quoteText={entry.value}/>;
+                                    quoteText={entry.value} />;
                             if (entry.type === "images")
                                 return <Images key={`preview_images_${index}`}
-                                               images={entry.value}/>;
+                                    images={entry.value} />;
                             if (entry.type === "products")
                                 return <ProductGroupPreview
                                     key={`preview_products_${index}`}
-                                    products={entry.value}/>;
+                                    products={entry.value} />;
                             return <div key={`preview_images_${index}`}>Unexpected value in blog entry</div>;
                         }
                     )}
@@ -74,8 +74,8 @@ export function Images({ images }: {
     return <div className="flex justify-center my-1 sm:my-3 md:my-6">
         {images.map((url, index) =>
             <div key={`images_${index}`}
-                 className=" w-full h-[350px]">
-                <img src={url} className={"w-full h-full object-cover"}/>
+                className=" w-full h-[350px]">
+                <img src={url} className={"w-full h-full object-cover"} />
             </div>
         )}
     </div>;
@@ -90,7 +90,7 @@ function Text({ markdownText }: {
 
     return <Container maxWidth={"5xl"}>
         <div className="mt-12 mb-12 mx-4 md:mx-12">
-            <Markdown source={markdownText}/>
+            <Markdown source={markdownText} />
         </div>
     </Container>;
 }
@@ -99,7 +99,7 @@ function ProductGroupPreview({ products }: {
     products: ProductWithId[]
 }) {
 
-    if (!products) return <CircularProgress/>;
+    if (!products) return <CircularProgress />;
 
     const manyProducts = products.length > 3;
 
@@ -111,7 +111,7 @@ function ProductGroupPreview({ products }: {
                 "grow": !manyProducts,
             })}
             key={`products_${index}`}
-            product={p}/>)}
+            product={p} />)}
     </div>;
 }
 

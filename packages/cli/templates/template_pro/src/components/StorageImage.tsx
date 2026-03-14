@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useStorageSource } from "@firecms/core";
-import { cls } from "@firecms/ui";
+import { useStorageSource } from "@rebasepro/core";
+import { cls } from "@rebasepro/ui";
 
 /**
  * This is a simple component that renders an image from a Firebase Storage path.
  */
 export function StorageImage({
-                                 storagePath,
-                                 style,
-                                 className,
-                                 alt
-                             }: {
+    storagePath,
+    style,
+    className,
+    alt
+}: {
     alt?: string,
     storagePath: string,
     style?: React.CSSProperties,
@@ -35,6 +35,6 @@ export function StorageImage({
             className={cls("object-contain", className)}
             style={{
                 ...style
-            }} src={url}/>
+            }} src={url} />
     );
 }

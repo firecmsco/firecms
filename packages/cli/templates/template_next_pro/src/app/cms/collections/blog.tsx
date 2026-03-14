@@ -1,4 +1,4 @@
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@rebasepro/core";
 import { BlogEntry } from "@/app/common/types";
 import { CMSBlogPreview } from "@/app/cms/collections/components/CMSBlogPreview";
 
@@ -17,7 +17,7 @@ export const blogCollection = buildCollection<BlogEntry>({
             name: "Blog preview",
             Builder: ({ modifiedValues, entity }) => <CMSBlogPreview
                 id={entity?.id ?? "temp"}
-                blogEntry={modifiedValues}/>
+                blogEntry={modifiedValues} />
         }
     ],
     properties: {

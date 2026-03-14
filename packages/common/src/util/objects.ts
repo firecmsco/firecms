@@ -1,5 +1,5 @@
 import hash from "object-hash";
-import { GeoPoint } from "@firecms/types";
+import { GeoPoint } from "@rebasepro/types";
 
 /** @private is the value an empty array? */
 export const isEmptyArray = (value?: any) =>

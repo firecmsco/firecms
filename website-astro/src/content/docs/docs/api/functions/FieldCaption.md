@@ -3,17 +3,17 @@ slug: "docs/api/functions/FieldCaption"
 title: "FieldCaption"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / FieldCaption
+[@rebasepro/core](../README) / FieldCaption
 
 # Function: FieldCaption()
 
 > **FieldCaption**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [components/FieldCaption.tsx:4](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/FieldCaption.tsx)
+Defined in: [components/FieldCaption.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/FieldCaption.tsx)
 
 ## Parameters
 

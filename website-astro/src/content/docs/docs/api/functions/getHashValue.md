@@ -3,17 +3,17 @@ slug: "docs/api/functions/getHashValue"
 title: "getHashValue"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getHashValue
+[@rebasepro/core](../README) / getHashValue
 
 # Function: getHashValue()
 
 > **getHashValue**\<`T`\>(`v`): `any`
 
-Defined in: [util/objects.ts:130](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/objects.ts)
+Defined in: [util/objects.ts:130](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
 
 ## Type Parameters
 

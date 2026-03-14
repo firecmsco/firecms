@@ -7,14 +7,14 @@ import {
 } from "../auth.js";
 
 /**
- * Register login/logout tools — same flow as `firecms login` CLI.
+ * Register login/logout tools — same flow as `rebase login` CLI.
  */
 export function registerAuthTools(server: McpServer) {
 
     server.registerTool(
-        "firecms_login",
+        "rebase_login",
         {
-            description: "Sign in to FireCMS Cloud. Opens a browser window for Google OAuth authentication. Required before using any other tools.",
+            description: "Sign in to Rebase Cloud. Opens a browser window for Google OAuth authentication. Required before using any other tools.",
         },
         async () => {
             const existingEmail = getCurrentUserEmail();
@@ -22,7 +22,7 @@ export function registerAuthTools(server: McpServer) {
                 return {
                     content: [{
                         type: "text" as const,
-                        text: `Already logged in as ${existingEmail}. Use firecms_logout to sign out first.`,
+                        text: `Already logged in as ${existingEmail}. Use rebase_logout to sign out first.`,
                     }],
                 };
             }
@@ -49,9 +49,9 @@ export function registerAuthTools(server: McpServer) {
     );
 
     server.registerTool(
-        "firecms_logout",
+        "rebase_logout",
         {
-            description: "Sign out of FireCMS Cloud. Revokes the current session.",
+            description: "Sign out of Rebase Cloud. Revokes the current session.",
         },
         async () => {
             if (!isLoggedIn()) {
@@ -85,9 +85,9 @@ export function registerAuthTools(server: McpServer) {
     );
 
     server.registerTool(
-        "firecms_get_current_user",
+        "rebase_get_current_user",
         {
-            description: "Get the currently authenticated FireCMS user",
+            description: "Get the currently authenticated Rebase user",
         },
         async () => {
             const email = getCurrentUserEmail();
@@ -95,7 +95,7 @@ export function registerAuthTools(server: McpServer) {
                 return {
                     content: [{
                         type: "text" as const,
-                        text: "Not logged in. Use firecms_login to sign in.",
+                        text: "Not logged in. Use rebase_login to sign in.",
                     }],
                 };
             }

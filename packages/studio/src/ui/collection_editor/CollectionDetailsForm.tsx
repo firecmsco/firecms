@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { EntityCollection, FieldCaption, getFieldConfig, IconForView, Property, PropertyConfigBadge, SearchIconsView, singular, toSnakeCase, unslugify, useAuthController, useCustomizationController } from "@firecms/core";
+import { EntityCollection, FieldCaption, getFieldConfig, IconForView, Property, PropertyConfigBadge, SearchIconsView, singular, toSnakeCase, unslugify, useAuthController, useCustomizationController } from "@rebasepro/core";
 import {
     BooleanSwitchWithLabel,
     Chip,
@@ -16,9 +16,9 @@ import {
     Tooltip,
     Typography,
     useAutoComplete
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
-import { Field, getIn, useFormex } from "@firecms/formex";
+import { Field, getIn, useFormex } from "@rebasepro/formex";
 import { useCollectionEditorController } from "../../useCollectionEditorController";
 import { LayoutModeSwitch } from "./LayoutModeSwitch";
 import { ViewModeSwitch } from "./ViewModeSwitch";

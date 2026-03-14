@@ -1,28 +1,28 @@
-# FireCMS Data Import Plugin
+# Rebase Data Import Plugin
 
-This plugin enables importing data into Firestore collections directly from your FireCMS interface. It adds an import button to collection views, providing a simple way to bulk add or update data from CSV or JSON files.
+This plugin enables importing data into Firestore collections directly from your Rebase interface. It adds an import button to collection views, providing a simple way to bulk add or update data from CSV or JSON files.
 
 ## Installation
 
 ```bash
-npm install @firecms/data_import
+npm install @rebasepro/data_import
 # or
-yarn add @firecms/data_import
+yarn add @rebasepro/data_import
 ```
 
 ## Features
 
 - Import data from CSV or JSON formats into Firestore collections
 - Validate data before importing to ensure integrity
-- Integration with FireCMS analytics events
+- Integration with Rebase analytics events
 - Support for bulk data creation and updates
 
 ## Basic Usage
 
 ```tsx
 import React from "react";
-import { FireCMS } from "@firecms/core";
-import { useImportPlugin } from "@firecms/data_import";
+import { Rebase } from "@rebasepro/core";
+import { useImportPlugin } from "@rebasepro/data_import";
 
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
     // Basic setup with default options
     const importPlugin = useImportPlugin();
 
-    return <FireCMS
+    return <Rebase
         name={"My Online Shop"}
         plugins={[importPlugin]}
         authentication={myAuthenticator}
@@ -65,21 +65,21 @@ const importPlugin = useImportPlugin({
 For a complete data management solution, use both import and export plugins together:
 
 ```tsx
-import { useImportPlugin } from "@firecms/data_import";
-import { useExportPlugin } from "@firecms/data_export";
+import { useImportPlugin } from "@rebasepro/data_import";
+import { useExportPlugin } from "@rebasepro/data_export";
 
 // Set up both plugins
 const importPlugin = useImportPlugin();
 const exportPlugin = useExportPlugin();
 
-// Add both to your FireCMS app
+// Add both to your Rebase app
 return (
-    <FireCMS
+    <Rebase
         // ...other props
         plugins={[importPlugin, exportPlugin]}
     >
         {/* ... */}
-    </FireCMS>
+    </Rebase>
 );
 ```
 

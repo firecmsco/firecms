@@ -1,12 +1,12 @@
 ---
 slug: docs/pro/data_export
 title: Data Export
-description: Export your Firestore collections to JSON or CSV with the FireCMS Data Export plugin. Ideal for backups, migrations, and data analysis.
+description: Export your Firestore collections to JSON or CSV with the Rebase Data Export plugin. Ideal for backups, migrations, and data analysis.
 ---
 
 ![data_export.png](/img/data_export.png)
 
-Export your **Firestore** data directly from your **admin panel**. The Data Export Plugin adds one-click JSON and CSV export to any FireCMS collection.
+Export your **Firestore** data directly from your **admin panel**. The Data Export Plugin adds one-click JSON and CSV export to any Rebase collection.
 
 :::tip Common use cases
 - **Backups**: Create regular snapshots of your data
@@ -17,22 +17,22 @@ Export your **Firestore** data directly from your **admin panel**. The Data Expo
 
 ## Installation
 
-First, ensure you have installed the necessary dependencies. To use the plugin, you need to have FireCMS set up in your
+First, ensure you have installed the necessary dependencies. To use the plugin, you need to have Rebase set up in your
 project.
 
 ```sh
-yarn add @firecms/data_export
+yarn add @rebasepro/data_export
 ```
 
 or
 
 ```sh
-npm install @firecms/data_export
+npm install @rebasepro/data_export
 ```
 
 ## Configuration
 
-The plugin requires minimal configuration and can be easily integrated into your FireCMS setup. You can customize the
+The plugin requires minimal configuration and can be easily integrated into your Rebase setup. You can customize the
 export behavior using the `ExportPluginProps`.
 
 ### ExportPluginProps Parameters
@@ -55,7 +55,7 @@ The `ExportAllowedParams` type provides context for the `exportAllowed` function
 
 - **`collectionEntitiesCount`**: The number of entities in the collection.
     - **Type**: `number`
-- **`path`**: The path of the collection in FireCMS.
+- **`path`**: The path of the collection in Rebase.
     - **Type**: `string`
 - **`collection`**: The collection entity.
     - **Type**: `EntityCollection`
@@ -66,8 +66,8 @@ The main hook to utilize the plugin's functionality is `useExportPlugin`. Here's
 
 ```jsx
 import React from "react";
-import { FireCMS } from "@firecms/core";
-import { useExportPlugin } from "@firecms/data_export";
+import { Rebase } from "@rebasepro/core";
+import { useExportPlugin } from "@rebasepro/data_export";
 
 function App() {
     
@@ -94,14 +94,14 @@ function App() {
     });
     
     return (
-            <FireCMS
+            <Rebase
                 navigationController={navigationController}
                 /*... rest of your configuration */
             >
               {({ context, loading }) => {
                   // ... your components
               }}
-            </FireCMS>
+            </Rebase>
     );
 }
 
@@ -110,8 +110,8 @@ export default App;
 
 ## Setting up the Plugin
 
-To integrate the Data Export Plugin into FireCMS, use the `useExportPlugin` hook and pass the resulting plugin into the
-FireCMS configuration. You will typically want to do this in your main App component.
+To integrate the Data Export Plugin into Rebase, use the `useExportPlugin` hook and pass the resulting plugin into the
+Rebase configuration. You will typically want to do this in your main App component.
 
 ## Using the Export Functionality
 
@@ -120,7 +120,7 @@ adds export actions to your collection views, allowing users to export data as J
 
 ### Example: Exporting a Collection
 
-1. Navigate to the desired collection in your FireCMS application.
+1. Navigate to the desired collection in your Rebase application.
 2. Click on the **Export** action in the collection actions toolbar.
 3. Choose the desired export format (JSON or CSV).
 4. The exported file will be downloaded to your device.

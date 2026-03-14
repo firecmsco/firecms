@@ -3,17 +3,17 @@ slug: "docs/api/functions/ArrayOfMapsPreview"
 title: "ArrayOfMapsPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ArrayOfMapsPreview
+[@rebasepro/core](../README) / ArrayOfMapsPreview
 
 # Function: ArrayOfMapsPreview()
 
 > **ArrayOfMapsPreview**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [preview/property\_previews/ArrayOfMapsPreview.tsx:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/property_previews/ArrayOfMapsPreview.tsx)
+Defined in: [preview/property\_previews/ArrayOfMapsPreview.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOfMapsPreview.tsx)
 
 ## Parameters
 

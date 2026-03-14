@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/DataSource"
 title: "DataSource"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / DataSource
+[@rebasepro/core](../README) / DataSource
 
 # Interface: DataSource
 
-Defined in: [types/datasource.ts:252](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:252](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/datasource.ts:252](https://github.com/firecmsco/firecms/blob/
 
 > **cmsToDelegateModel**: (`data`) => `any`
 
-Defined in: [types/datasource.ts:396](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:396](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ Defined in: [types/datasource.ts:396](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **currentTime**: () => `any`
 
-Defined in: [types/datasource.ts:392](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:392](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Get the object to generate the current time in the datasource
 
@@ -51,7 +51,7 @@ Get the object to generate the current time in the datasource
 
 > **delegateToCMSModel**: (`data`) => `any`
 
-Defined in: [types/datasource.ts:394](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:394](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 #### Parameters
 
@@ -69,7 +69,7 @@ Defined in: [types/datasource.ts:394](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **initialised**: `boolean`
 
-Defined in: [types/datasource.ts:262](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:262](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 If the data source has been initialised
 
@@ -79,7 +79,7 @@ If the data source has been initialised
 
 > `optional` **initTextSearch**: (`props`) => `Promise`\<`boolean`\>
 
-Defined in: [types/datasource.ts:400](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:400](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 #### Parameters
 
@@ -91,7 +91,7 @@ Defined in: [types/datasource.ts:400](https://github.com/firecmsco/firecms/blob/
 
 ###### context
 
-[`FireCMSContext`](../type-aliases/FireCMSContext)
+[`RebaseContext`](../type-aliases/RebaseContext)
 
 ###### databaseId?
 
@@ -115,7 +115,7 @@ Defined in: [types/datasource.ts:400](https://github.com/firecmsco/firecms/blob/
 
 > **key**: `string`
 
-Defined in: [types/datasource.ts:257](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:257](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Key that identifies this data source delegate
 
@@ -138,7 +138,7 @@ Key that identifies this data source delegate
 
 > **checkUniqueField**(`path`, `name`, `value`, `entityId?`, `collection?`): `Promise`\<`boolean`\>
 
-Defined in: [types/datasource.ts:369](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:369](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Check if the given property is unique in the given collection
 
@@ -180,7 +180,7 @@ of the property
 
 > `optional` **countEntities**\<`M`\>(`props`): `Promise`\<`number`\>
 
-Defined in: [types/datasource.ts:379](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:379](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Count the number of entities in a collection
 
@@ -206,7 +206,7 @@ Count the number of entities in a collection
 
 > **deleteEntity**\<`M`\>(`entity`): `Promise`\<`void`\>
 
-Defined in: [types/datasource.ts:358](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:358](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Delete an entity
 
@@ -234,7 +234,7 @@ was the whole deletion flow successful
 
 > **fetchCollection**\<`M`\>(`path`): `Promise`\<[`Entity`](Entity)\<`M`\>[]\>
 
-Defined in: [types/datasource.ts:276](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:276](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Fetch data from a collection
 
@@ -266,7 +266,7 @@ useCollectionFetch if you need this functionality implemented as a hook
 
 > **fetchEntity**\<`M`\>(`path`): `Promise`\<[`Entity`](Entity)\<`M`\> \| `undefined`\>
 
-Defined in: [types/datasource.ts:318](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:318](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Retrieve an entity given a path and a collection
 
@@ -292,7 +292,7 @@ Retrieve an entity given a path and a collection
 
 > **generateEntityId**(`path`, `collection?`): `string`
 
-Defined in: [types/datasource.ts:374](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:374](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Generate an id for a new entity
 
@@ -316,7 +316,7 @@ Generate an id for a new entity
 
 > `optional` **isFilterCombinationValid**(`props`): `boolean`
 
-Defined in: [types/datasource.ts:385](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:385](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Check if the given filter combination is valid
 
@@ -336,7 +336,7 @@ Check if the given filter combination is valid
 
 > `optional` **listenCollection**\<`M`\>(`path`): () => `void`
 
-Defined in: [types/datasource.ts:301](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:301](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Listen to a collection in a given path. If you don't implement this method
 `fetchCollection` will be used instead, with no real time updates.
@@ -373,7 +373,7 @@ useCollectionFetch if you need this functionality implemented as a hook
 
 > `optional` **listenEntity**\<`M`\>(`path`): () => `void`
 
-Defined in: [types/datasource.ts:332](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:332](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Get realtime updates on one entity.
 
@@ -405,7 +405,7 @@ Function to cancel subscription
 
 > **saveEntity**\<`M`\>(`path`): `Promise`\<[`Entity`](Entity)\<`M`\>\>
 
-Defined in: [types/datasource.ts:346](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:346](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 Save entity to the specified path
 

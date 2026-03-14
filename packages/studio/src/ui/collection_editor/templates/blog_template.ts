@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/core";
+import { EntityCollection } from "@rebasepro/core";
 
 export const blogCollectionTemplate: EntityCollection = {
     slug: "blog",

@@ -1,4 +1,4 @@
-import { buildCollection, slugify } from "@firecms/core";
+import { buildCollection, slugify } from "@rebasepro/core";
 
 export type Page = {
     title: string;
@@ -11,8 +11,8 @@ export const pagesCollection = buildCollection<Page>({
     dbPath: "pages",
     callbacks: {
         beforeSave: ({
-                        values,
-                    }) => {
+            values,
+        }) => {
             const updatedSlug = slugify(values.title);
             values.slug = updatedSlug;
             return values;

@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/PluginHomePageAdditionalCardsProps"
 title: "PluginHomePageAdditionalCardsProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PluginHomePageAdditionalCardsProps
+[@rebasepro/core](../README) / PluginHomePageAdditionalCardsProps
 
 # Interface: PluginHomePageAdditionalCardsProps\<USER\>
 
-Defined in: [types/plugins.tsx:258](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:258](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
 
 ## Type Parameters
 
@@ -23,9 +23,9 @@ Defined in: [types/plugins.tsx:258](https://github.com/firecmsco/firecms/blob/ma
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
-Defined in: [types/plugins.tsx:260](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:260](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [types/plugins.tsx:260](https://github.com/firecmsco/firecms/blob/ma
 
 > `optional` **group**: `string`
 
-Defined in: [types/plugins.tsx:259](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:259](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)

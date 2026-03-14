@@ -1,7 +1,7 @@
 {
-  "name": "firecms-app-backend",
+  "name": "rebase-app-backend",
   "version": "1.0.0",
-  "description": "Custom PostgreSQL backend for FireCMS with real-time sync",
+  "description": "Custom PostgreSQL backend for Rebase with real-time sync",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
@@ -16,9 +16,9 @@
     "db:studio": "DOTENV_CONFIG_PATH=../.env drizzle-kit studio"
   },
   "dependencies": {
-    "firecms-app-shared": "workspace:*",
-    "@firecms/backend": "4.0.0",
-    "@firecms/mongodb": "4.0.0",
+    "rebase-app-shared": "workspace:*",
+    "@rebasepro/backend": "4.0.0",
+    "@rebasepro/mongodb": "4.0.0",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.44.4",
     "express": "^5.1.0",

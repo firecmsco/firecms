@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/SaveEntityProps"
 title: "SaveEntityProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SaveEntityProps
+[@rebasepro/core](../README) / SaveEntityProps
 
 # Interface: SaveEntityProps\<M\>
 
-Defined in: [types/datasource.ts:53](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [types/datasource.ts:53](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
 
-Defined in: [types/datasource.ts:58](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [types/datasource.ts:58](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **entityId**: `string`
 
-Defined in: [types/datasource.ts:56](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [types/datasource.ts:56](https://github.com/firecmsco/firecms/blob/m
 
 > **path**: `string`
 
-Defined in: [types/datasource.ts:54](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:54](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [types/datasource.ts:54](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **previousValues**: `Partial`\<`M`\>
 
-Defined in: [types/datasource.ts:57](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:57](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [types/datasource.ts:57](https://github.com/firecmsco/firecms/blob/m
 
 > **status**: [`EntityStatus`](../type-aliases/EntityStatus)
 
-Defined in: [types/datasource.ts:59](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:59](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -65,4 +65,4 @@ Defined in: [types/datasource.ts:59](https://github.com/firecmsco/firecms/blob/m
 
 > **values**: `Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
 
-Defined in: [types/datasource.ts:55](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:55](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)

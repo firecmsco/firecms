@@ -30,13 +30,13 @@
         ],
         "baseUrl": ".",
         "paths": {
-            "@firecms/core": [
-                "../firecms_core/src"
+            "@rebasepro/core": [
+                "../core/src"
             ],
-            "@firecms/ui": [
+            "@rebasepro/ui": [
                 "../ui/src"
             ],
-            "@firecms/formex": [
+            "@rebasepro/formex": [
                 "../formex/src"
             ]
         }

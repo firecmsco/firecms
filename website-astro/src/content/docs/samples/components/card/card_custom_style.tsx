@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "@firecms/ui";
+import { Card } from "@rebasepro/ui";
 
 export default function CardCustomStyleDemo() {
     const styles = {

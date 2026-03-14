@@ -3,17 +3,17 @@ slug: "docs/api/functions/isHidden"
 title: "isHidden"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / isHidden
+[@rebasepro/core](../README) / isHidden
 
 # Function: isHidden()
 
 > **isHidden**(`property`): `boolean`
 
-Defined in: [util/entities.ts:31](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/entities.ts)
+Defined in: [util/entities.ts:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
 
 ## Parameters
 

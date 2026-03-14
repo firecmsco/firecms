@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/ResolvedEntityCollection"
 title: "ResolvedEntityCollection"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ResolvedEntityCollection
+[@rebasepro/core](../README) / ResolvedEntityCollection
 
 # Type Alias: ResolvedEntityCollection\<M\>
 
 > **ResolvedEntityCollection**\<`M`\> = `Omit`\<[`EntityCollection`](../interfaces/EntityCollection)\<`M`\>, `"properties"`\> & `object`
 
-Defined in: [types/resolved\_entities.ts:21](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
+Defined in: [types/resolved\_entities.ts:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/resolved_entities.ts)
 
 This is the same entity collection you define, only all the property builders
 are resolved to regular `Property` objects.

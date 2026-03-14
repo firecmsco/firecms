@@ -3,17 +3,17 @@ slug: "docs/api/variables/iconSynonyms"
 title: "iconSynonyms"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / iconSynonyms
+[@rebasepro/core](../README) / iconSynonyms
 
 # Variable: iconSynonyms
 
 > `const` **iconSynonyms**: `object`
 
-Defined in: [util/icon\_synonyms.ts:1](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/icon_synonyms.ts)
+Defined in: [util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icon_synonyms.ts)
 
 ## Type Declaration
 

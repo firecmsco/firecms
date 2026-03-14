@@ -3,17 +3,17 @@ slug: "docs/api/functions/resolveCollectionPathIds"
 title: "resolveCollectionPathIds"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / resolveCollectionPathIds
+[@rebasepro/core](../README) / resolveCollectionPathIds
 
 # Function: resolveCollectionPathIds()
 
 > **resolveCollectionPathIds**(`path`, `allCollections`): `string`
 
-Defined in: [util/navigation\_utils.ts:34](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/navigation_utils.ts)
+Defined in: [util/navigation\_utils.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/navigation_utils.ts)
 
 ## Parameters
 

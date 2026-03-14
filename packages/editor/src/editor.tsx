@@ -1,7 +1,7 @@
 "use client";
 import React, { useDeferredValue, useEffect, useMemo, useState } from "react";
 
-import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
+import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@rebasepro/ui";
 
 import { Editor, EditorProvider, Extensions } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
@@ -45,7 +45,7 @@ import { HighlightDecorationExtension } from "./extensions/HighlightDecorationEx
 
 import { SlashCommand, suggestion } from "./extensions/slashCommand";
 
-export type FireCMSEditorTextSize = "sm" | "base" | "lg";
+export type RebaseEditorTextSize = "sm" | "base" | "lg";
 
 /**
  * Configuration options for the markdown editor.
@@ -63,14 +63,14 @@ export interface MarkdownEditorConfig {
   transformPastedText?: boolean;
 }
 
-export type FireCMSEditorProps = {
+export type RebaseEditorProps = {
   content?: JSONContent | string,
   onMarkdownContentChange?: (content: string) => void,
   onJsonContentChange?: (content: JSONContent | null) => void,
   onHtmlContentChange?: (content: string) => void,
   handleImageUpload: (file: File) => Promise<string>,
   version?: number,
-  textSize?: FireCMSEditorTextSize,
+  textSize?: RebaseEditorTextSize,
   highlight?: { from: number, to: number },
   aiController?: EditorAIController,
   customComponents?: CustomEditorComponent[];
@@ -98,7 +98,7 @@ const canUseDOM = Boolean(
   window.document && window.document.createElement
 );
 
-export const FireCMSEditor = ({
+export const RebaseEditor = ({
   content,
   onJsonContentChange,
   onHtmlContentChange,
@@ -110,7 +110,7 @@ export const FireCMSEditor = ({
   aiController,
   disabled,
   markdownConfig
-}: FireCMSEditorProps) => {
+}: RebaseEditorProps) => {
 
   const ref = React.useRef<HTMLDivElement | null>(null);
   const editorRef = React.useRef<Editor | null>(null);

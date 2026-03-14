@@ -1,6 +1,6 @@
-## FireCMS PRO starter template
+## Rebase PRO starter template
 
-Welcome to FireCMS!
+Welcome to Rebase!
 
 This is a starter template for your next project. It includes the basic
 configuration to get you started.
@@ -54,12 +54,12 @@ yarn build
 
 This project reads and writes data to Firestore.
 
-The FireCMS PRO plugins store some configuration in `__FIRECMS`. FireCMS users and
+The Rebase PRO plugins store some configuration in `__REBASE`. Rebase users and
 roles are stored under this path. You probably want to grant access initially
 to your user to this path:
 
 ```
-match /__FIRECMS/{document=**} {
+match /__REBASE/{document=**} {
     allow read: if true;
     allow write: if true;
 }
@@ -69,12 +69,12 @@ After that, you can restrict your rules so only registered users can access:
 
 ```
 match /{document=**} {
-    allow read: if isFireCMSUser();
-    allow write: if isFireCMSUser();
+    allow read: if isRebaseUser();
+    allow write: if isRebaseUser();
 }
 
-function isFireCMSUser(){
-    return exists(/databases/$(database)/documents/__FIRECMS/config/users/$(request.auth.token.email));
+function isRebaseUser(){
+    return exists(/databases/$(database)/documents/__REBASE/config/users/$(request.auth.token.email));
 }
 ```
 
@@ -83,13 +83,13 @@ function isFireCMSUser(){
 You can develop your project locally without a license, but you will need to purchase one to deploy it. There is a grace
 period after the first deployment to allow you to test it in production.
 
-You can create one in the [FireCMS subscriptions](https://app.firecms.co/subscriptions).
+You can create one in the [Rebase subscriptions](https://app.rebase.pro/subscriptions).
 When you get your API key, you can set it in the `.env` file.
 
 When creating your license, you need to specify the project IDs that will be using the license. You can find your
 project ID in the Firebase console.
 
-You will receive an API key that you need to pass to your FireCMS component. If you are using the starter template, you
+You will receive an API key that you need to pass to your Rebase component. If you are using the starter template, you
 can set it in the .env file.
 
 

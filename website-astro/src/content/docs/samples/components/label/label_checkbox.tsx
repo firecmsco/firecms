@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox, Label } from "@firecms/ui";
+import { Checkbox, Label } from "@rebasepro/ui";
 
 export default function LabelCheckboxDemo() {
 
@@ -12,9 +12,9 @@ export default function LabelCheckboxDemo() {
             htmlFor="my-filter"
         >
             <Checkbox id="my-filter"
-                      checked={checked}
-                      size={"small"}
-                      onCheckedChange={setChecked}/>
+                checked={checked}
+                size={"small"}
+                onCheckedChange={setChecked} />
             Filter for null values
         </Label>
     );

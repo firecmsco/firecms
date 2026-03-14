@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/core";
+import { EntityCollection } from "@rebasepro/core";
 
 export type CollectionEditorPermissionsBuilder<USER = any, EC extends EntityCollection = EntityCollection> = (params: { user: USER | null, collection?: EC }) => CollectionEditorPermissions;
 

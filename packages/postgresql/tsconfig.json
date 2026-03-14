@@ -26,8 +26,8 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@firecms/core": ["../firecms_core/src"],
-      "@firecms/types": [
+      "@rebasepro/core": ["../core/src"],
+      "@rebasepro/types": [
         "../types/src"
       ]
     }

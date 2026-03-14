@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/UseTableSearchHelperParams"
 title: "UseTableSearchHelperParams"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / UseTableSearchHelperParams
+[@rebasepro/core](../README) / UseTableSearchHelperParams
 
 # Interface: UseTableSearchHelperParams\<M\>
 
-Defined in: [components/common/useTableSearchHelper.ts:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useTableSearchHelper.ts)
+Defined in: [components/common/useTableSearchHelper.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [components/common/useTableSearchHelper.ts:6](https://github.com/fir
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [components/common/useTableSearchHelper.ts:7](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useTableSearchHelper.ts)
+Defined in: [components/common/useTableSearchHelper.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [components/common/useTableSearchHelper.ts:7](https://github.com/fir
 
 > **fullPath**: `string`
 
-Defined in: [components/common/useTableSearchHelper.ts:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useTableSearchHelper.ts)
+Defined in: [components/common/useTableSearchHelper.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
 
 ***
 
@@ -41,4 +41,4 @@ Defined in: [components/common/useTableSearchHelper.ts:8](https://github.com/fir
 
 > `optional` **parentCollectionIds**: `string`[]
 
-Defined in: [components/common/useTableSearchHelper.ts:9](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useTableSearchHelper.ts)
+Defined in: [components/common/useTableSearchHelper.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)

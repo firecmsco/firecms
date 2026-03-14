@@ -8,22 +8,22 @@ import {
     InputLabel,
     TextareaAutosize,
     TextField
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
 export type InputType<T> = T extends string ? "text" : "number";
 
 export function AdvancedTextField({
-                                                                 value,
-                                                                 setValue,
-                                                                 label,
-                                                                 inputType,
-                                                                 multiline = false,
-                                                                 highlight,
-                                                                 disabled,
-                                                                 error,
-                                                                 size = "large",
-                                                                 className
-                                                             }: {
+    value,
+    setValue,
+    label,
+    inputType,
+    multiline = false,
+    highlight,
+    disabled,
+    error,
+    size = "large",
+    className
+}: {
     inputType: InputType<string | number>,
     value: string | number,
     setValue: (value: string | number | null) => void,
@@ -94,8 +94,8 @@ export function AdvancedTextField({
 
     if (disabled) {
         return <TextField label={label}
-                          disabled={true}
-                          value={internalValue}/>
+            disabled={true}
+            value={internalValue} />
     }
 
     const additional: any = {
@@ -137,18 +137,18 @@ export function AdvancedTextField({
             )}
 
             <div ref={ref}
-                 className={cls("inset-0 whitespace-pre-wrap overflow-x-auto select-none pb-2 px-3",
-                     {
-                         "pt-8": size === "large",
-                         "pt-4": size === "medium" || size === "small",
-                     })}>
+                className={cls("inset-0 whitespace-pre-wrap overflow-x-auto select-none pb-2 px-3",
+                    {
+                        "pt-8": size === "large",
+                        "pt-4": size === "medium" || size === "small",
+                    })}>
 
                 {addLineBreaks(originalValue, !endsWithHighlight && multiline)}
 
                 {endsWithHighlight &&
                     <span className="dark:bg-surface-700 bg-surface-300 p-px -m-px rounded-xs">
-                    {addLineBreaks(highlight, multiline)}
-                </span>}
+                        {addLineBreaks(highlight, multiline)}
+                    </span>}
 
             </div>
 
@@ -174,7 +174,7 @@ export function AdvancedTextField({
                 sizeRef={ref}
                 onChange={onChange}
                 onScroll={onScroll}
-                {...additional}/>
+                {...additional} />
 
         </div>
     );
@@ -195,6 +195,6 @@ function addLineBreaks(value?: string | number, addLastBreak = false) {
     return lines.map((p, i) => <React.Fragment key={i}>
         <span className="break-words"
         >{p ?? " "}</span>
-        {(lines.length - 1 !== i || addLastBreak) && <br/>}
+        {(lines.length - 1 !== i || addLastBreak) && <br />}
     </React.Fragment>);
 }

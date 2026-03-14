@@ -1,4 +1,4 @@
-import { convertDataToEntity, ImportConfig } from "@firecms/data_import";
+import { convertDataToEntity, ImportConfig } from "@rebasepro/data_import";
 import {
     CircularProgressCenter,
     EntityCollectionTable,
@@ -6,9 +6,9 @@ import {
     useAuthController,
     useCollectionRegistryController,
     useSelectionController
-} from "@firecms/core";
+} from "@rebasepro/core";
 import { useEffect, useState } from "react";
-import { Typography } from "@firecms/ui";
+import { Typography } from "@rebasepro/ui";
 
 export function CollectionEditorImportDataPreview({
     importConfig,

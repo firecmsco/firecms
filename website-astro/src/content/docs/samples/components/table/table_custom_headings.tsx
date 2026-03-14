@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, TableBody, TableHeader, TableRow, TableCell } from "@firecms/ui";
+import { Table, TableBody, TableHeader, TableRow, TableCell } from "@rebasepro/ui";
 
 export default function TableCustomHeadingDemo() {
     return (

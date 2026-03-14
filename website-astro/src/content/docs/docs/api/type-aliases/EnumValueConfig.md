@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/EnumValueConfig"
 title: "EnumValueConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EnumValueConfig
+[@rebasepro/core](../README) / EnumValueConfig
 
 # Type Alias: EnumValueConfig
 
 > **EnumValueConfig** = `object`
 
-Defined in: [types/properties.ts:217](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:217](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Configuration for a particular entry in an `EnumValues`
 
@@ -23,7 +23,7 @@ Configuration for a particular entry in an `EnumValues`
 
 > `optional` **color**: `ChipColorKey` \| `ChipColorScheme`
 
-Defined in: [types/properties.ts:234](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:234](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 You can pick from a list of predefined color combinations or define
 your own ChipColorScheme
@@ -34,7 +34,7 @@ your own ChipColorScheme
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [types/properties.ts:229](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:229](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 This value will not be selectable
 
@@ -44,7 +44,7 @@ This value will not be selectable
 
 > **id**: `string` \| `number`
 
-Defined in: [types/properties.ts:221](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:221](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Value stored in the data source.
 
@@ -54,6 +54,6 @@ Value stored in the data source.
 
 > **label**: `string`
 
-Defined in: [types/properties.ts:225](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:225](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Displayed label

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Field, FormexFieldProps } from "@firecms/formex";
+import { Field, FormexFieldProps } from "@rebasepro/formex";
 import { SwitchControl } from "../../SwitchControl";
 
 export function AdvancedPropertyValidation({ disabled }: {
@@ -23,14 +23,14 @@ export function AdvancedPropertyValidation({ disabled }: {
                             disabled={disabled}
                             form={form}
                             tooltip={"Hide this field from the collection view. It will still be visible in the form view"}
-                            field={field}/>
+                            field={field} />
                     }}
                 </Field>
             </div>
 
             <div className={"col-span-12"}>
                 <Field name={readOnly}
-                       type="checkbox">
+                    type="checkbox">
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
                             label={"Read only"}
@@ -38,7 +38,7 @@ export function AdvancedPropertyValidation({ disabled }: {
                             disabled={disabled}
                             tooltip={"Is this a read only field. Display only as a preview"}
                             form={form}
-                            field={field}/>
+                            field={field} />
                     }}
                 </Field>
             </div>

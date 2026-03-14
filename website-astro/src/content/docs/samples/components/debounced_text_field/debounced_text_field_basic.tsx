@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DebouncedTextField } from "@firecms/ui";
+import { DebouncedTextField } from "@rebasepro/ui";
 
 export default function DebouncedTextFieldBasicDemo() {
     const [value, setValue] = useState("");

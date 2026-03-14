@@ -1,7 +1,7 @@
 {
-    "name": "@firecms/editor",
+    "name": "@rebasepro/editor",
     "version": "4.0.0",
-    "description": "Notion-style WYSIWYG editor for FireCMS",
+    "description": "Notion-style WYSIWYG editor for Rebase",
     "type": "module",
     "main": "dist/index.cjs",
     "module": "dist/index.js",
@@ -30,7 +30,7 @@
         "react-dom": ">=19.0.0"
     },
     "dependencies": {
-        "@firecms/ui": "4.0.0",
+        "@rebasepro/ui": "4.0.0",
         "@floating-ui/dom": "^1.7.4",
         "@radix-ui/react-slot": "^1.2.4",
         "@tiptap/core": "3.19.0",

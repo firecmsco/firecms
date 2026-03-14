@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/ResolvedStringProperty"
 title: "ResolvedStringProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ResolvedStringProperty
+[@rebasepro/core](../README) / ResolvedStringProperty
 
 # Type Alias: ResolvedStringProperty
 
 > **ResolvedStringProperty** = `Omit`\<[`StringProperty`](../interfaces/StringProperty), `"enumValues"` \| `"type"`\> & `object`
 
-Defined in: [types/resolved\_entities.ts:53](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
+Defined in: [types/resolved\_entities.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/resolved_entities.ts)
 
 ## Type Declaration
 

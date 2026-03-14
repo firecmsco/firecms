@@ -1,15 +1,15 @@
 ---
 slug: docs/recipes/building_a_blog
-title: Building a blog in FireCMS Cloud
+title: Building a blog in Rebase Cloud
 sidebar_label: Building a blog
-description: Build a headless blog with FireCMS and Firebase. Learn to create dynamic content blocks, image galleries, and live previews using React and Firestore.
+description: Build a headless blog with Rebase and Firebase. Learn to create dynamic content blocks, image galleries, and live previews using React and Firestore.
 image: /img/blog_example.webp
 ---
 
 ![blog_example](/img/blog_example.webp)
 
 :::note
-In this tutorial we assume you have set up a Firebase project and a FireCMS instance with custom code.
+In this tutorial we assume you have set up a Firebase project and a Rebase instance with custom code.
 If you don't, check the [Quickstart](../cloud/quickstart) section.
 :::
 
@@ -34,12 +34,12 @@ We are already providing many of the React components you could need in
 your frontend app, so you can focus on the business logic.
 :::
 
-## Let's build a blog with FireCMS
+## Let's build a blog with Rebase
 
 We will be building a collection that hosts blog posts. Each of the blog
 posts will include a **dynamic array of elements**.
 
-FireCMS has a built-in feature that allows you to build dynamic arrays. The
+Rebase has a built-in feature that allows you to build dynamic arrays. The
 array property can be configured with the prop `oneOf`, to contain objects
 that hold a specific type of value. This is perfect for building our blog entry
 data structure!
@@ -78,7 +78,7 @@ type BlogEntryProducts = {
 ### Create the collection
 
 :::tip
-You can create this same collection using a template in the FireCMS dashboard.
+You can create this same collection using a template in the Rebase dashboard.
 
 :::
 
@@ -273,9 +273,9 @@ This array configuration will create objects in the datasource with the format:
 
 ### Creating a preview view
 
-Let's make use of another feature of FireCMS: **custom views for entities**!
+Let's make use of another feature of Rebase: **custom views for entities**!
 
-FireCMS allows you to add additional views to your entity views, that are
+Rebase allows you to add additional views to your entity views, that are
 defined as React components. The props you receive for building this
 component are the entity collection, the original entity and the modified values.
 
@@ -287,7 +287,7 @@ You could also have more complex setup that sends your data to your SSR app
 through an API and render the result.
 
 You can find the code for `BlogEntryPreview` in
-[BlogEntryPreview](https://github.com/firecmsco/firecms/blob/main/website/samples/samples_v3/recipes/blog/BlogEntryPreview.tsx).
+[BlogEntryPreview](https://github.com/rebaseco/rebase/blob/main/website/samples/samples_v3/recipes/blog/BlogEntryPreview.tsx).
 
 When you have created your component, there are 2 ways you can add it to your component:
 
@@ -296,11 +296,11 @@ When you have created your component, there are 2 ways you can add it to your co
 The preferred way is to register it in the CMS, so that it is available in the view selector of
 the collection.
 
-In order to do so, you need to add it to the `entityViews` prop of the FireCMS main app config export:
+In order to do so, you need to add it to the `entityViews` prop of the Rebase main app config export:
 
 ```tsx
-import { FireCMSAppConfig } from "@firecms/cloud";
-const appConfig: FireCMSAppConfig = {
+import { RebaseAppConfig } from "@rebasepro/cloud";
+const appConfig: RebaseAppConfig = {
     version: "1",
     collections: [],
     entityViews: [
@@ -321,7 +321,7 @@ in the collection itself:
 
 
 ```tsx
-import {buildCollection} from "@firecms/core";
+import {buildCollection} from "@rebasepro/core";
 export const blogCollection = buildCollection<BlogEntry>({
     name: "Blog entry",
     path: "blog",

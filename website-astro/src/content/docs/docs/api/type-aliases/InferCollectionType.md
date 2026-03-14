@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/InferCollectionType"
 title: "InferCollectionType"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / InferCollectionType
+[@rebasepro/core](../README) / InferCollectionType
 
 # Type Alias: InferCollectionType\<S\>
 
 > **InferCollectionType**\<`S`\> = `S` *extends* [`EntityCollection`](../interfaces/EntityCollection)\<infer M\> ? `M` : `never`
 
-Defined in: [types/collections.ts:608](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:608](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 ## Type Parameters
 

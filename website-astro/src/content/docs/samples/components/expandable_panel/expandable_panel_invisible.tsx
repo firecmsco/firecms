@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ExpandablePanel } from "@firecms/ui";
+import { ExpandablePanel } from "@rebasepro/ui";
 
 export default function ExpandablePanelInvisibleDemo() {
     const [expanded, setExpanded] = useState(false);

@@ -1,6 +1,6 @@
 import { CollectionEditorPermissionsBuilder } from "./config_permissions";
 import { CollectionsConfigController } from "./config_controller";
-import { Entity, Property } from "@firecms/core";
+import { Entity, Property } from "@rebasepro/core";
 import { PersistedCollection } from "./persisted_collection";
 
 /**

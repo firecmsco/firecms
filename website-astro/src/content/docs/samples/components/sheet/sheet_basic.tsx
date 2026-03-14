@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Sheet } from "@firecms/ui";
+import { Button, Sheet } from "@rebasepro/ui";
 
 export default function SheetBasicDemo() {
     const [open, setOpen] = useState(false);

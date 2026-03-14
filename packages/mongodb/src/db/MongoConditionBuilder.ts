@@ -1,16 +1,16 @@
 /**
  * MongoDB Condition Builder
  *
- * Translates FireCMS filter conditions to MongoDB query operators.
+ * Translates Rebase filter conditions to MongoDB query operators.
  */
 
-import { FilterValues, WhereFilterOp } from "@firecms/types";
+import { FilterValues, WhereFilterOp } from "@rebasepro/types";
 import { Filter, Document } from "mongodb";
 
 /**
- * Mapping from FireCMS filter operators to MongoDB query operators
+ * Mapping from Rebase filter operators to MongoDB query operators
  */
-const FIRECMS_TO_MONGO_OP: Record<WhereFilterOp, string> = {
+const REBASE_TO_MONGO_OP: Record<WhereFilterOp, string> = {
     "<": "$lt",
     "<=": "$lte",
     "==": "$eq",
@@ -26,14 +26,14 @@ const FIRECMS_TO_MONGO_OP: Record<WhereFilterOp, string> = {
 /**
  * MongoDB Condition Builder
  *
- * Provides static methods to translate FireCMS filter conditions
+ * Provides static methods to translate Rebase filter conditions
  * to MongoDB query filters.
  */
 export class MongoConditionBuilder {
     /**
-     * Build MongoDB filter conditions from FireCMS FilterValues
+     * Build MongoDB filter conditions from Rebase FilterValues
      *
-     * @param filter - FireCMS filter values
+     * @param filter - Rebase filter values
      * @returns Array of MongoDB filter objects
      */
     static buildFilterConditions<M extends Record<string, any>>(
@@ -47,7 +47,7 @@ export class MongoConditionBuilder {
             if (!filterParam) continue;
 
             const [op, value] = filterParam as [WhereFilterOp, any];
-            const mongoOp = FIRECMS_TO_MONGO_OP[op];
+            const mongoOp = REBASE_TO_MONGO_OP[op];
 
             if (!mongoOp) {
                 console.warn(`Unsupported filter operator: ${op}`);
@@ -128,9 +128,9 @@ export class MongoConditionBuilder {
     }
 
     /**
-     * Build a complete MongoDB query from FireCMS options
+     * Build a complete MongoDB query from Rebase options
      *
-     * @param options - FireCMS fetch options
+     * @param options - Rebase fetch options
      * @returns MongoDB filter object
      */
     static buildQuery<M extends Record<string, any>>(options: {
@@ -165,7 +165,7 @@ export class MongoConditionBuilder {
     }
 
     /**
-     * Build MongoDB sort options from FireCMS options
+     * Build MongoDB sort options from Rebase options
      *
      * @param orderBy - Field to order by
      * @param order - Sort direction

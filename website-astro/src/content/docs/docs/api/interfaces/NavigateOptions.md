@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/NavigateOptions"
 title: "NavigateOptions"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / NavigateOptions
+[@rebasepro/core](../README) / NavigateOptions
 
 # Interface: NavigateOptions
 
-Defined in: [types/navigation.ts:163](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:163](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/navigation.ts:163](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **flushSync**: `boolean`
 
-Defined in: [types/navigation.ts:168](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/navigation.ts:168](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **preventScrollReset**: `boolean`
 
-Defined in: [types/navigation.ts:166](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:166](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/navigation.ts:166](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **relative**: `"path"` \| `"route"`
 
-Defined in: [types/navigation.ts:167](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:167](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/navigation.ts:167](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **replace**: `boolean`
 
-Defined in: [types/navigation.ts:164](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:164](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/navigation.ts:164](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **state**: `any`
 
-Defined in: [types/navigation.ts:165](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:165](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -59,4 +59,4 @@ Defined in: [types/navigation.ts:165](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **viewTransition**: `boolean`
 
-Defined in: [types/navigation.ts:169](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:169](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)

@@ -3,17 +3,17 @@ slug: "docs/api/functions/useSelectionController"
 title: "useSelectionController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useSelectionController
+[@rebasepro/core](../README) / useSelectionController
 
 # Function: useSelectionController()
 
 > **useSelectionController**\<`M`\>(`onSelectionChange?`): [`SelectionController`](../type-aliases/SelectionController)\<`M`\>
 
-Defined in: [components/EntityCollectionView/useSelectionController.tsx:4](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/useSelectionController.tsx)
+Defined in: [components/EntityCollectionView/useSelectionController.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/useSelectionController.tsx)
 
 ## Type Parameters
 

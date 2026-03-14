@@ -3,17 +3,17 @@ slug: "docs/api/functions/removePropsIfExisting"
 title: "removePropsIfExisting"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / removePropsIfExisting
+[@rebasepro/core](../README) / removePropsIfExisting
 
 # Function: removePropsIfExisting()
 
 > **removePropsIfExisting**(`source`, `comparison`): `any`
 
-Defined in: [util/objects.ts:194](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/objects.ts)
+Defined in: [util/objects.ts:194](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
 
 ## Parameters
 

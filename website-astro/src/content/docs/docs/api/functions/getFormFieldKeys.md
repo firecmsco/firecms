@@ -3,17 +3,17 @@ slug: "docs/api/functions/getFormFieldKeys"
 title: "getFormFieldKeys"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getFormFieldKeys
+[@rebasepro/core](../README) / getFormFieldKeys
 
 # Function: getFormFieldKeys()
 
 > **getFormFieldKeys**(`collection`): `string`[]
 
-Defined in: [components/common/useColumnsIds.tsx:103](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useColumnsIds.tsx)
+Defined in: [components/common/useColumnsIds.tsx:103](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useColumnsIds.tsx)
 
 ## Parameters
 

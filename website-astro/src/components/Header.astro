@@ -9,8 +9,8 @@ const navLinks = [
         label: "Features"
     },
     {
-        href: "/why-firecms",
-        label: "Why FireCMS",
+        href: "/why-rebase",
+        label: "Why Rebase",
         dropdown: [
             [
                 {
@@ -62,9 +62,9 @@ const navLinks = [
     <nav class="mx-auto flex max-w-7xl items-center justify-between py-2 px-4 lg:px-8" aria-label="Global">
         <div class="flex items-center">
             <a href="/" class="flex items-center -m-1.5 p-1.5 relative z-50 mr-6" transition:name="site-logo">
-                <img src="/img/firecms_logo.svg" class="h-8 w-8 mr-4" alt="FireCMS Logo" transition:name="logo-image"/>
+                <img src="/img/rebase_logo.svg" class="h-8 w-8 mr-4" alt="Rebase Logo" transition:name="logo-image"/>
                 <span class="self-center text-lg font-semibold whitespace-nowrap text-white"
-                      transition:name="logo-text">FireCMS</span>
+                      transition:name="logo-text">Rebase</span>
             </a>
             <!-- Desktop Navigation -->
             <div class="hidden lg:flex items-center gap-2 text-sm font-semibold">
@@ -105,7 +105,7 @@ const navLinks = [
         </div>
         <div class="flex flex-1 justify-end items-center gap-4">
             <a
-                    href="https://app.firecms.co"
+                    href="https://app.rebase.pro"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="hidden sm:inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow"
@@ -194,7 +194,7 @@ const navLinks = [
                     )
                 ))}
                 <a
-                        href="https://app.firecms.co"
+                        href="https://app.rebase.pro"
                         target="_blank"
                         rel="noopener noreferrer"
                         class="mt-8 w-full inline-flex items-center justify-center gap-x-2 rounded-lg bg-primary px-6 py-4 text-xl font-semibold text-white shadow-lg hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow"
@@ -266,7 +266,7 @@ const navLinks = [
                 link.addEventListener('click', function(e) {
                     const href = link.getAttribute('href');
                     const linkText = link.textContent?.trim() || '';
-                    const isAppLink = href?.includes('app.firecms.co');
+                    const isAppLink = href?.includes('app.rebase.pro');
 
                     // Send analytics event
                     if (typeof window.gtag === 'function') {
@@ -293,7 +293,7 @@ const navLinks = [
         desktopLinks.forEach(link => trackHeaderLinkClick(link, 'desktop_nav', false));
 
         // Track desktop CTA button
-        const desktopCTA = document.querySelector('header nav a[href*="app.firecms.co"].hidden.sm\\:inline-flex');
+        const desktopCTA = document.querySelector('header nav a[href*="app.rebase.pro"].hidden.sm\\:inline-flex');
         if (desktopCTA) trackHeaderLinkClick(desktopCTA, 'desktop_cta', false);
 
         // Track logo link

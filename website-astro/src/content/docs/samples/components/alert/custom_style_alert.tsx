@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert } from "@firecms/ui";
+import { Alert } from "@rebasepro/ui";
 
 export default function CustomStyleAlertDemo() {
     return (

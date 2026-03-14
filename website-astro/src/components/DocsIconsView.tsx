@@ -1,5 +1,5 @@
 import React from "react";
-import { keyToIconComponent } from "@firecms/ui";
+import { keyToIconComponent } from "@rebasepro/ui";
 import DefaultSearchIconsView from "./DefaultSearchIconsView";
 import CodeBlock from "./CodeBlock";
 
@@ -16,7 +16,7 @@ export function DocsIconsView() {
                 If you need to specify your icon as a key, you can use the following value:
             </div>
             <b><code>{selectedIcon ?? "None"}</code></b>
-            {componentName && <CodeBlock language={"tsx"} code={`import { ${componentName} } from "@firecms/ui";\n<${componentName}/>`} />}
+            {componentName && <CodeBlock language={"tsx"} code={`import { ${componentName} } from "@rebasepro/ui";\n<${componentName}/>`} />}
         </div>}
     </div>;
 }

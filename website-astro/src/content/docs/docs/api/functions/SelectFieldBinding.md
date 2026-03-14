@@ -3,17 +3,17 @@ slug: "docs/api/functions/SelectFieldBinding"
 title: "SelectFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SelectFieldBinding
+[@rebasepro/core](../README) / SelectFieldBinding
 
 # Function: SelectFieldBinding()
 
 > **SelectFieldBinding**\<`T`\>(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/SelectFieldBinding.tsx:21](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/SelectFieldBinding.tsx)
+Defined in: [form/field\_bindings/SelectFieldBinding.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/SelectFieldBinding.tsx)
 
 If `enumValues` are set in the string config, this field renders a select
 where each option is a colored chip.

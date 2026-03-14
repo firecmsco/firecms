@@ -24,7 +24,7 @@ import {
     useCMSUrlController,
     User,
     useSnackbarController
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     ArrowBackIcon,
     Button,
@@ -41,7 +41,7 @@ import {
     Tab,
     Tabs,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { YupSchema } from "./CollectionYupValidation";
 import { GeneralSettingsForm } from "./GeneralSettingsForm";
 import { DisplaySettingsForm } from "./DisplaySettingsForm";
@@ -51,13 +51,13 @@ import { ExtendSettingsForm } from "./ExtendSettingsForm";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView";
 import { CollectionInference } from "../../types/collection_inference";
-import { getInferenceType, ImportSaveInProgress, useImportConfig } from "@firecms/data_import";
-import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
+import { getInferenceType, ImportSaveInProgress, useImportConfig } from "@rebasepro/data_import";
+import { buildEntityPropertiesFromData } from "@rebasepro/schema_inference";
 import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMapping";
 import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview";
 import { cleanPropertiesFromImport } from "./import/clean_import_data";
 import { PersistedCollection } from "../../types/persisted_collection";
-import { Formex, FormexController, useCreateFormex } from "@firecms/formex";
+import { Formex, FormexController, useCreateFormex } from "@rebasepro/formex";
 import { getFullIdPath } from "./util";
 import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
 import { AIModifiedPathsProvider, useAIModifiedPaths } from "./AIModifiedPathsContext";

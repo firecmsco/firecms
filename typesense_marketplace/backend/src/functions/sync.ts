@@ -16,8 +16,8 @@ const functionsLocation = process.env.FUNCTIONS_LOCATION || "us-central1";
 const vmZone = process.env.VM_ZONE || "us-central1-a";
 const collectionsToIndex = (process.env.COLLECTIONS_TO_INDEX || "*").split(",").map(s => s.trim());
 
-const INSTANCE_NAME = "firecms-typesense";
-const SECRET_ID = "firecms-search-api-key";
+const INSTANCE_NAME = "rebase-typesense";
+const SECRET_ID = "rebase-search-api-key";
 const TYPESENSE_PORT = 8108;
 
 setGlobalOptions({ region: functionsLocation });

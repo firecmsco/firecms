@@ -3,17 +3,17 @@ slug: "docs/api/functions/getFieldConfig"
 title: "getFieldConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getFieldConfig
+[@rebasepro/core](../README) / getFieldConfig
 
 # Function: getFieldConfig()
 
 > **getFieldConfig**(`property`, `propertyConfigs`): [`PropertyConfig`](../type-aliases/PropertyConfig) \| `undefined`
 
-Defined in: [core/field\_configs.tsx:349](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/core/field_configs.tsx)
+Defined in: [core/field\_configs.tsx:349](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/field_configs.tsx)
 
 ## Parameters
 

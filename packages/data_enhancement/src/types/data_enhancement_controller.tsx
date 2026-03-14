@@ -1,5 +1,5 @@
-import { EntityValues } from "@firecms/types";
-import { EditorAIController } from "@firecms/editor";
+import { EntityValues } from "@rebasepro/types";
+import { EditorAIController } from "@rebasepro/editor";
 
 export type EnhanceParams<M extends object> = {
     entityId?: string | number;

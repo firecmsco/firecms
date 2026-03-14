@@ -1,8 +1,8 @@
-import { EntityReference } from "@firecms/core";
+import { EntityReference } from "@rebasepro/core";
 
 export type Product = {
     name: string;
-    category:string;
+    category: string;
     available: boolean;
     price: number;
     currency: string;

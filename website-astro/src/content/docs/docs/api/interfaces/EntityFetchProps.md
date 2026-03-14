@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/EntityFetchProps"
 title: "EntityFetchProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityFetchProps
+[@rebasepro/core](../README) / EntityFetchProps
 
 # Interface: EntityFetchProps\<M, USER\>
 
-Defined in: [hooks/data/useEntityFetch.tsx:10](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [hooks/data/useEntityFetch.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ## Type Parameters
 
@@ -29,7 +29,7 @@ Defined in: [hooks/data/useEntityFetch.tsx:10](https://github.com/firecmsco/fire
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`, `USER`\>
 
-Defined in: [hooks/data/useEntityFetch.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [hooks/data/useEntityFetch.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [hooks/data/useEntityFetch.tsx:14](https://github.com/firecmsco/fire
 
 > `optional` **databaseId**: `string`
 
-Defined in: [hooks/data/useEntityFetch.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [hooks/data/useEntityFetch.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [hooks/data/useEntityFetch.tsx:13](https://github.com/firecmsco/fire
 
 > `optional` **entityId**: `string`
 
-Defined in: [hooks/data/useEntityFetch.tsx:12](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [hooks/data/useEntityFetch.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [hooks/data/useEntityFetch.tsx:12](https://github.com/firecmsco/fire
 
 > **path**: `string`
 
-Defined in: [hooks/data/useEntityFetch.tsx:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [hooks/data/useEntityFetch.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ***
 
@@ -61,4 +61,4 @@ Defined in: [hooks/data/useEntityFetch.tsx:11](https://github.com/firecmsco/fire
 
 > `optional` **useCache**: `boolean`
 
-Defined in: [hooks/data/useEntityFetch.tsx:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [hooks/data/useEntityFetch.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)

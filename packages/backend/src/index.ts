@@ -1,8 +1,8 @@
 /**
- * @firecms/backend
+ * @rebasepro/backend
  *
- * PostgreSQL and Drizzle ORM backend implementation for FireCMS
- * This package provides a complete backend solution for FireCMS applications
+ * PostgreSQL and Drizzle ORM backend implementation for Rebase
+ * This package provides a complete backend solution for Rebase applications
  * using PostgreSQL as the database and Drizzle ORM for type-safe database operations.
  *
  * The package also exports abstract interfaces (EntityRepository, RealtimeProvider,

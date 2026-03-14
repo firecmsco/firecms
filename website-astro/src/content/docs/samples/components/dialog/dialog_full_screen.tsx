@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, CenteredView, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
+import { Button, CenteredView, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@rebasepro/ui";
 
 export default function DialogFullScreenDemo() {
     const [open, setOpen] = useState(false);

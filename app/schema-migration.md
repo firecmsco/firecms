@@ -2,15 +2,15 @@
 description: How to add new properties or make schema changes with database migrations
 ---
 
-# FireCMS Schema Migration Workflow
+# Rebase Schema Migration Workflow
 
 This guide explains how to modify your data model (add properties, change collections, etc.) and apply those changes to your PostgreSQL database.
 
 ## Overview
 
-FireCMS uses a **two-step schema generation process**:
+Rebase uses a **two-step schema generation process**:
 
-1. **FireCMS Collections → Drizzle Schema**: The `generate:schema` script reads your FireCMS collection definitions and generates a Drizzle ORM schema file.
+1. **Rebase Collections → Drizzle Schema**: The `generate:schema` script reads your Rebase collection definitions and generates a Drizzle ORM schema file.
 2. **Drizzle Schema → SQL Migrations**: The `db:generate` command compares the generated schema with your current database and creates SQL migration files.
 
 ```mermaid
@@ -93,7 +93,7 @@ This executes the pending migrations against your PostgreSQL database.
 
 | Command | Description |
 |---------|-------------|
-| `pnpm run generate:schema` | Converts FireCMS collections → Drizzle schema |
+| `pnpm run generate:schema` | Converts Rebase collections → Drizzle schema |
 | `pnpm run db:generate` | Creates SQL migration files from schema changes |
 | `pnpm run db:migrate` | Applies pending migrations to database |
 | `pnpm run db:studio` | Opens Drizzle Studio to inspect your database |
@@ -136,7 +136,7 @@ This executes the pending migrations against your PostgreSQL database.
 Make sure your `.env` file contains the `DATABASE_URL`:
 
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/firecms
+DATABASE_URL=postgresql://user:password@localhost:5432/rebase
 ```
 
 ### Recovering from Failed Migrations (`DrizzleQueryError`)

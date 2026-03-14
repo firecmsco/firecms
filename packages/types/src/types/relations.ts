@@ -6,7 +6,7 @@ import { EntityCollection } from "./collections";
 export type OnAction = "cascade" | "restrict" | "no action" | "set null" | "set default";
 
 /**
- * Extended relation that combines base relation with FireCMS UI config
+ * Extended relation that combines base relation with Rebase UI config
  * @group Models
  */
 export interface Relation {
@@ -284,7 +284,7 @@ export interface Relation {
 
     overrides?: Partial<EntityCollection>;
 
-    validation?:{
+    validation?: {
         required?: boolean;
     }
 }

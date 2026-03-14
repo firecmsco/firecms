@@ -1,7 +1,7 @@
 ---
 slug: docs/collections/text_search
 title: Text search
-description: Add full-text search to FireCMS with Typesense or Algolia. Use our Firebase Extension for typo-tolerant search at ~$7/month, or integrate with Algolia for enterprise needs.
+description: Add full-text search to Rebase with Typesense or Algolia. Use our Firebase Extension for typo-tolerant search at ~$7/month, or integrate with Algolia for enterprise needs.
 ---
 
 :::note[The solution described here is specific for Firestore]
@@ -25,7 +25,7 @@ will see a search bar on top of the collection view.
 
 ## Using Typesense (Recommended)
 
-The **FireCMS Typesense Extension** deploys a Typesense search server on a Compute Engine VM and automatically syncs your Firestore data. Features:
+The **Rebase Typesense Extension** deploys a Typesense search server on a Compute Engine VM and automatically syncs your Firestore data. Features:
 
 - 🔍 **Typo-tolerant search** - "headphnes" matches "headphones"
 - ⚡ **Sub-millisecond responses**
@@ -42,7 +42,7 @@ The **FireCMS Typesense Extension** deploys a Typesense search server on a Compu
 **Step 1: Install the extension**
 
 ```bash
-firebase ext:install https://github.com/firecmsco/typesense-extension --project=YOUR_PROJECT_ID
+firebase ext:install https://github.com/rebaseco/typesense-extension --project=YOUR_PROJECT_ID
 ```
 
 **Step 2: Grant permissions**
@@ -84,7 +84,7 @@ gcloud functions add-iam-policy-binding ext-${EXT_INSTANCE_ID}-api \
   --project=${PROJECT_ID}
 ```
 
-### Using Typesense in FireCMS Cloud
+### Using Typesense in Rebase Cloud
 
 Navigate to **Project Settings** and configure:
 
@@ -93,14 +93,14 @@ Navigate to **Project Settings** and configure:
 | **Region** | Your extension's region (e.g., `us-central1`) |
 | **Extension Instance ID** | Default: `typesense-search` |
 
-That's it! FireCMS Cloud automatically connects to your Typesense instance.
+That's it! Rebase Cloud automatically connects to your Typesense instance.
 
-### Using Typesense in Self-Hosted FireCMS
+### Using Typesense in Self-Hosted Rebase
 
 ```typescript
-import { buildFireCMSSearchController, useFirestoreDataSource } from "@firecms/firebase";
+import { buildRebaseSearchController, useFirestoreDataSource } from "@rebasepro/firebase";
 
-const textSearchControllerBuilder = buildFireCMSSearchController({
+const textSearchControllerBuilder = buildRebaseSearchController({
   region: "us-central1",  // Your extension's region
   extensionInstanceId: "typesense-search"  // Default name
 });
@@ -114,7 +114,7 @@ export function App() {
 }
 ```
 
-### Using Typesense Directly (Without FireCMS)
+### Using Typesense Directly (Without Rebase)
 
 Search via the API proxy endpoint:
 
@@ -145,7 +145,7 @@ You need to define a `FirestoreTextSearchControllerBuilder` and add it to your c
 Set up an Algolia account and sync documents using their [Firebase extension](https://extensions.dev/extensions/algolia/firestore-algolia-search).
 
 
-### Using Algolia in FireCMS Cloud
+### Using Algolia in Rebase Cloud
 
 
 We provide a utility method for performing searches in Algolia `performAlgoliaTextSearch`.
@@ -165,10 +165,10 @@ import {
     buildExternalSearchController,
     FirestoreTextSearchController,
     buildCollection,
-    FireCMSCloudApp,
+    RebaseCloudApp,
     EntityCollectionsBuilder,
-    FireCMSAppConfig
-} from "@firecms/cloud";
+    RebaseAppConfig
+} from "@rebasepro/cloud";
 
 const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
 
@@ -186,21 +186,21 @@ const algoliaSearchController = buildExternalSearchController({
 });
 
 
-const appConfig: FireCMSAppConfig = {
+const appConfig: RebaseAppConfig = {
     version: "1",
     textSearchControllerBuilder: algoliaSearchController,
     // ...
 }
 ```
 
-### Using Algolia in self-hosted FireCMS
+### Using Algolia in self-hosted Rebase
 
-For self-hosted FireCMS, you need to define a `FirestoreTextSearchControllerBuilder`.
+For self-hosted Rebase, you need to define a `FirestoreTextSearchControllerBuilder`.
 
 ```tsx
 import { algoliasearch, SearchClient } from "algoliasearch";
 
-import { buildExternalSearchController, performAlgoliaTextSearch } from "@firecms/firebase";
+import { buildExternalSearchController, performAlgoliaTextSearch } from "@rebasepro/firebase";
 
 const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
 
@@ -232,16 +232,16 @@ export function App() {
 
 ### Local text search
 
-Since FireCMS v3 we provide a local text search implementation. This is useful
+Since Rebase v3 we provide a local text search implementation. This is useful
 for small collections or when you want to provide a quick way to search through
 your data.
 
 However, for larger collections, you will want to use an **external search**
 provider, such as Algolia. This is the recommended approach.
 
-You can use local text search in FireCMS Cloud, or in self-hosted versions.
+You can use local text search in Rebase Cloud, or in self-hosted versions.
 
-For FireCMS Cloud, you just need to enable it in the UI.
+For Rebase Cloud, you just need to enable it in the UI.
 
 For self-hosted versions, you can enable it by setting the `localTextSearchEnabled` in `useFirestoreDataSource`.
 Then you need to mark each collection with `textSearchEnabled: true`.

@@ -3,17 +3,17 @@ slug: "docs/api/functions/MultiSelectFieldBinding"
 title: "MultiSelectFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / MultiSelectFieldBinding
+[@rebasepro/core](../README) / MultiSelectFieldBinding
 
 # Function: MultiSelectFieldBinding()
 
 > **MultiSelectFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/MultiSelectFieldBinding.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/MultiSelectFieldBinding.tsx)
+Defined in: [form/field\_bindings/MultiSelectFieldBinding.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/MultiSelectFieldBinding.tsx)
 
 This fields renders a dropdown with multiple selection.
 

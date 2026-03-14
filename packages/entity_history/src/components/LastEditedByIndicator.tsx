@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Entity, useDataSource, User } from "@firecms/core";
+import { Entity, useDataSource, User } from "@rebasepro/core";
 import { useHistoryController } from "../HistoryControllerProvider";
 
 function getRelativeTimeString(date: Date): string {

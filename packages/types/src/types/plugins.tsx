@@ -4,17 +4,17 @@ import { CollectionActionsProps, EntityCollection, EntityTableController } from 
 import { FieldProps, FormContext } from "./fields";
 import { Property } from "./properties";
 import { EntityStatus } from "./entities";
-import { FireCMSContext } from "../firecms_context";
+import { RebaseContext } from "../rebase_context";
 import { NavigationGroupMapping, CMSView } from "../controllers";
 import { User } from "../users";
 import { UserManagementDelegate } from "./user_management_delegate";
 
 /**
- * Interface used to define plugins for FireCMS.
+ * Interface used to define plugins for Rebase.
  * NOTE: This is a work in progress and the API is not stable yet.
  * @group Core
  */
-export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection, COL_ACTIONS_PROPS = any, COL_ACTIONS_START__PROPS = any> = {
+export type RebasePlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection, COL_ACTIONS_PROPS = any, COL_ACTIONS_START__PROPS = any> = {
 
     /**
      * Key of the plugin. This is used to identify the plugin in the CMS.
@@ -32,13 +32,13 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
      * The components will be added to the root of the CMS, so any component
      * rendered underneath by this plugin will have access to the context
      * provided by this HOC.
-     * Anyhow, this is rendered below the {@link FireCMSContext} provider, so
+     * Anyhow, this is rendered below the {@link RebaseContext} provider, so
      * you can use the hooks provided by the CMS.
      * @param props
      */
     provider?: {
         Component: React.ComponentType<PropsWithChildren<PROPS & {
-            context: FireCMSContext
+            context: RebaseContext
         }>>;
         props?: PROPS;
     };
@@ -135,21 +135,21 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
         collectionActionsStartProps?: COL_ACTIONS_START__PROPS;
 
         blockSearch?: (props: {
-            context: FireCMSContext,
+            context: RebaseContext,
             path: string,
             collection: EC,
             parentCollectionIds?: string[]
         }) => boolean;
 
         showTextSearchBar?: (props: {
-            context: FireCMSContext,
+            context: RebaseContext,
             path: string,
             collection: EC,
             parentCollectionIds?: string[]
         }) => boolean;
 
         onTextSearchClick?: (props: {
-            context: FireCMSContext,
+            context: RebaseContext,
             path: string,
             collection: EC,
             parentCollectionIds?: string[]
@@ -270,7 +270,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
 }
 
 /**
- * Props passed to the {@link FireCMSPlugin.homePage.CollectionActions} method.
+ * Props passed to the {@link RebasePlugin.homePage.CollectionActions} method.
  * You can use it to add custom actions to the navigation card of each collection.
  *
  * @group Models
@@ -290,7 +290,7 @@ export interface PluginHomePageActionsProps<EP extends object = object, M extend
     /**
      * Context of the app status
      */
-    context: FireCMSContext<USER>;
+    context: RebaseContext<USER>;
 
     extraProps?: EP;
 
@@ -304,7 +304,7 @@ export interface PluginFormActionProps<USER extends User = User, EC extends Enti
     collection: EC;
     disabled: boolean;
     formContext?: FormContext<any>;
-    context: FireCMSContext<USER>;
+    context: RebaseContext<USER>;
     openEntityMode: "side_panel" | "full_screen";
 }
 
@@ -313,16 +313,16 @@ export type PluginFieldBuilderParams<M extends Record<string, any> = any, EC ext
     propertyKey: string;
     property: Property;
     Field: React.ComponentType<FieldProps<any, any, M>>;
-    plugin: FireCMSPlugin;
+    plugin: RebasePlugin;
     path?: string;
     collection?: EC;
 };
 
 export interface PluginGenericProps<USER extends User = User> {
-    context: FireCMSContext<USER>;
+    context: RebaseContext<USER>;
 }
 
 export interface PluginHomePageAdditionalCardsProps<USER extends User = User> {
     group?: string;
-    context: FireCMSContext<USER>;
+    context: RebaseContext<USER>;
 }

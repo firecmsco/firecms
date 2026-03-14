@@ -3,19 +3,19 @@ slug: "docs/api/functions/AppBar"
 title: "AppBar"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / AppBar
+[@rebasepro/core](../README) / AppBar
 
 # Function: AppBar()
 
 > **AppBar**(`__namedParameters`): `Element`
 
-Defined in: [app/AppBar.tsx:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/app/AppBar.tsx)
+Defined in: [app/AppBar.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/AppBar.tsx)
 
-This component renders the main app bar of FireCMS.
+This component renders the main app bar of Rebase.
 
 ## Parameters
 

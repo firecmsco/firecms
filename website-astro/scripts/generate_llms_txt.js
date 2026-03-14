@@ -238,8 +238,8 @@ async function buildSlugMap(directoryPath, slugMap) {
 
         result = result.replaceAll("# ", "## "); // Convert H1 to H2 and so on
         result = intro + result; // Add the intro to the beginning
-        result = result.replaceAll("](./", "](https://firecms.co/docs/"); // Replace relative links with absolute links
-        result = result.replaceAll("](../", "](https://firecms.co/docs/"); // Replace relative links with absolute links
+        result = result.replaceAll("](./", "](https://rebase.pro/docs/"); // Replace relative links with absolute links
+        result = result.replaceAll("](../", "](https://rebase.pro/docs/"); // Replace relative links with absolute links
 
         await fs.promises.appendFile(outputFilePath, result, "utf-8");
 
@@ -249,11 +249,11 @@ async function buildSlugMap(directoryPath, slugMap) {
     }
 })();
 
-const intro = `# FireCMS Documentation
+const intro = `# Rebase Documentation
 
-> This is the documentation for FireCMS, a headless CMS for Firebase/MongoDB. It is a powerful tool to manage your data,
+> This is the documentation for Rebase, a headless CMS for Firebase/MongoDB. It is a powerful tool to manage your data,
 > with a focus on developer experience and extensibility.
-> Easy to get started, easy to customize and easy to extend.FireCMS is great both for existing projects, since it will 
+> Easy to get started, easy to customize and easy to extend.Rebase is great both for existing projects, since it will 
 > adapt to any database structure you have, as well as for new ones.
 
 `;

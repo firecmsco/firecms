@@ -9,8 +9,8 @@ import {
     useSelectionController,
     useSideEntityController,
     useSnackbarController
-} from "@firecms/core";
-import { Button, GitHubIcon, IconButton, Paper, Tooltip, Typography, } from "@firecms/ui";
+} from "@rebasepro/core";
+import { Button, GitHubIcon, IconButton, Paper, Tooltip, Typography, } from "@rebasepro/ui";
 
 const usersCollection = buildCollection({
     dbPath: "users",
@@ -128,12 +128,12 @@ export function ExampleCMSView() {
             asChild={true}
             title="Get the source code of this example view">
             <IconButton
-                href={"https://github.com/firecmsco/firecms/blob/main/examples/example_cloud/src/views/ExampleCMSView.tsx"}
+                href={"https://github.com/rebaseco/rebase/blob/main/examples/example_cloud/src/views/ExampleCMSView.tsx"}
                 rel="noopener noreferrer"
                 target="_blank"
                 component={"a"}
                 size="large">
-                <GitHubIcon/>
+                <GitHubIcon />
             </IconButton>
         </Tooltip>
     );
@@ -208,8 +208,8 @@ export function ExampleCMSView() {
                         <Paper
                             className={"h-[400px]"}>
                             <EntityCollectionView {...usersCollection}
-                                                  path={"users"}
-                                                  selectionController={selectionController}/>
+                                path={"users"}
+                                selectionController={selectionController} />
                         </Paper>
                     </div>
 

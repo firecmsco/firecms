@@ -1,4 +1,4 @@
-import { Entity, EntityCollection, EntityStatus, FilterValues } from "@firecms/types";
+import { Entity, EntityCollection, EntityStatus, FilterValues } from "@rebasepro/types";
 
 export interface FetchCollectionProps<M extends Record<string, any> = any> {
   path: string;

@@ -14,7 +14,7 @@ import {
     Relation,
     RelationProperty,
     StringProperty
-} from "@firecms/types";
+} from "@rebasepro/types";
 import { isDefaultFieldConfigId } from "./fields";
 import { isPropertyBuilder } from "./entities";
 import { getIn, mergeDeep } from "./objects";

@@ -31,7 +31,7 @@ import {
     Tab,
     Tabs,
     Tooltip
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
 export default function ClientUIComponentsTeaser() {
 
@@ -65,7 +65,7 @@ export default function ClientUIComponentsTeaser() {
                 <div className={cardClasses}>
                     <FileUpload accept={{ "image/*": [] }} title="Click or drop your image" onFilesAdded={() => {
                         console.log("Files added");
-                    }}/>
+                    }} />
                 </div>
 
                 <div className={cardClasses}>
@@ -96,14 +96,14 @@ export default function ClientUIComponentsTeaser() {
                 </div>
 
                 <div className={cardClasses}>
-                    <SearchBar innerClassName="w-full"/>
+                    <SearchBar innerClassName="w-full" />
                 </div>
 
                 <div className={cardClasses + " flex-row"}>
                     <Button variant="outlined" size="small" onClick={() => setDialogOpen(true)}>Open Dialog</Button>
                     <Button variant="outlined" size="small" onClick={() => setSheetOpen(true)}>Open side
                         sheet
-                        <KeyboardTabIcon size={"small"}/>
+                        <KeyboardTabIcon size={"small"} />
                     </Button>
                     <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
 
@@ -132,19 +132,19 @@ export default function ClientUIComponentsTeaser() {
                 <div className={cardClasses + " flex-row items-center"}>
                     <Tooltip title={"Small button"}>
                         <IconButton variant="filled" size="small" onClick={() => console.log("Small Clicked!")}>
-                            <SettingsIcon size="small"/>
+                            <SettingsIcon size="small" />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title={"Ghost button"}>
                         <IconButton variant="ghost" onClick={() => console.log("Clicked!")}>
-                            <MusicNoteIcon/>
+                            <MusicNoteIcon />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title={"Filled button"}>
                         <IconButton
                             variant="filled"
                             onClick={() => console.log("Square Clicked!")}>
-                            <AddIcon/>
+                            <AddIcon />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title={"Square filled button"}>
@@ -152,21 +152,21 @@ export default function ClientUIComponentsTeaser() {
                             variant="filled"
                             shape="square"
                             onClick={() => console.log("Square Clicked!")}>
-                            <CreditCardIcon/>
+                            <CreditCardIcon />
                         </IconButton>
                     </Tooltip>
                 </div>
 
                 <div className={cardClasses}>
                     <DateTimeField value={selectedDate}
-                                   onChange={setSelectedDate}
-                                   label="Select a date"
-                                   mode="date"/>
+                        onChange={setSelectedDate}
+                        label="Select a date"
+                        mode="date" />
                 </div>
 
                 <div className={cardClasses + " flex-row items-center"}>
-                    <Checkbox checked={checked} onCheckedChange={() => setChecked(!checked)} size="medium"/>
-                    <BooleanSwitch size="small" value={checked} onValueChange={() => setChecked(!checked)}/>
+                    <Checkbox checked={checked} onCheckedChange={() => setChecked(!checked)} size="medium" />
+                    <BooleanSwitch size="small" value={checked} onValueChange={() => setChecked(!checked)} />
                 </div>
 
                 <div className={cardClasses}>
@@ -176,21 +176,21 @@ export default function ClientUIComponentsTeaser() {
                         onValueChange={setMultiSelectedValue}
                         placeholder={<i>Multi select</i>}
                     >
-                        <MultiSelectItem value="mother"><Person2Icon/>Mother</MultiSelectItem>
-                        <MultiSelectItem value="father"><PersonIcon/>Father</MultiSelectItem>
-                        <MultiSelectItem value="kid"><Person4Icon/>Kid</MultiSelectItem>
-                        <MultiSelectItem value="baby"><ChildFriendlyIcon/>Baby</MultiSelectItem>
+                        <MultiSelectItem value="mother"><Person2Icon />Mother</MultiSelectItem>
+                        <MultiSelectItem value="father"><PersonIcon />Father</MultiSelectItem>
+                        <MultiSelectItem value="kid"><Person4Icon />Kid</MultiSelectItem>
+                        <MultiSelectItem value="baby"><ChildFriendlyIcon />Baby</MultiSelectItem>
                     </MultiSelect>
                 </div>
 
                 <div className={cardClasses}>
-                    <Skeleton width={180} height={20}/>
-                    <Skeleton width={2000} height={16}/>
-                    <Skeleton width={120} height={16}/>
+                    <Skeleton width={180} height={20} />
+                    <Skeleton width={2000} height={16} />
+                    <Skeleton width={120} height={16} />
                 </div>
 
                 <div className={cardClasses}>
-                    <Chip colorScheme={"yellowLight"}><FaceIcon size={"small"}/>John Peterson</Chip>
+                    <Chip colorScheme={"yellowLight"}><FaceIcon size={"small"} />John Peterson</Chip>
                 </div>
 
             </div>

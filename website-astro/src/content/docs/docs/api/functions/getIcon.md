@@ -3,17 +3,17 @@ slug: "docs/api/functions/getIcon"
 title: "getIcon"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getIcon
+[@rebasepro/core](../README) / getIcon
 
 # Function: getIcon()
 
 > **getIcon**(`iconKey?`, `className?`, `color?`, `size?`): `ReactElement`\<`any`, `string` \| `JSXElementConstructor`\<`any`\>\> \| `undefined`
 
-Defined in: [util/icons.tsx:7](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/icons.tsx)
+Defined in: [util/icons.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ## Parameters
 

@@ -8,8 +8,8 @@ import {
     Button,
     AddIcon,
     StorageIcon,
-} from "@firecms/ui";
-import { useCMSUrlController, useNavigationStateController } from "@firecms/core";
+} from "@rebasepro/ui";
+import { useCMSUrlController, useNavigationStateController } from "@rebasepro/core";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionStudioView } from "./CollectionStudioView";
 
@@ -31,7 +31,7 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
 
     const [sidebarSize, setSidebarSize] = useState(() => {
         try {
-            const saved = localStorage.getItem("firecms_collections_editor_sidebar_size");
+            const saved = localStorage.getItem("rebase_collections_editor_sidebar_size");
             return saved !== null ? parseFloat(saved) : 25;
         } catch (e) {
             return 25;
@@ -40,7 +40,7 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
 
     useEffect(() => {
         try {
-            localStorage.setItem("firecms_collections_editor_sidebar_size", sidebarSize.toString());
+            localStorage.setItem("rebase_collections_editor_sidebar_size", sidebarSize.toString());
         } catch (e) { }
     }, [sidebarSize]);
 
@@ -62,7 +62,7 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                                     Schema Editor
                                 </Typography>
                                 <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark mt-1 block">
-                                    FireCMS Collections
+                                    Rebase Collections
                                 </Typography>
                             </div>
                             <Button

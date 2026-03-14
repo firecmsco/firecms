@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Collapse, Container, Paper } from "@firecms/ui";
+import { Button, Collapse, Container, Paper } from "@rebasepro/ui";
 
 export default function CollapseCustomDurationDemo() {
     const [isOpen, setIsOpen] = useState(false);

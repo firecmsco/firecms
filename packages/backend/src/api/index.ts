@@ -1,5 +1,5 @@
 /**
- * API generation infrastructure for FireCMS
+ * API generation infrastructure for Rebase
  * Automatically generates GraphQL and REST APIs from EntityCollection definitions
  */
 

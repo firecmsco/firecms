@@ -1,6 +1,6 @@
 import { EntityService } from "../src/db/entityService";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 import { collectionRegistry } from "../src/collections/registry";
 
 describe("EntityService - Error Handling & Edge Cases", () => {

@@ -1,6 +1,6 @@
-# @firecms/mcp-server
+# @rebasepro/mcp-server
 
-MCP server for [FireCMS Cloud](https://firecms.co). Lets AI assistants manage your CMS — browse data, create/update/delete documents, manage users, and generate collection schemas with AI.
+MCP server for [Rebase Cloud](https://rebase.pro). Lets AI assistants manage your CMS — browse data, create/update/delete documents, manage users, and generate collection schemas with AI.
 
 ## Setup
 
@@ -15,7 +15,7 @@ Add to `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "firecms": {
+    "rebase": {
       "command": "node",
       "args": ["/path/to/packages/mcp_server/dist/cli.js"]
     }
@@ -23,21 +23,21 @@ Add to `claude_desktop_config.json`:
 }
 ```
 
-Use `firecms_login` to sign in when prompted. Tokens shared with FireCMS CLI (`~/.firecms/tokens.json`).
+Use `rebase_login` to sign in when prompted. Tokens shared with Rebase CLI (`~/.rebase/tokens.json`).
 
 ## Tools
 
 ### Auth
 | Tool | Description |
 |------|-------------|
-| `firecms_login` | Sign in via browser (Google OAuth) |
-| `firecms_logout` | Sign out |
-| `firecms_get_current_user` | Show current user |
+| `rebase_login` | Sign in via browser (Google OAuth) |
+| `rebase_logout` | Sign out |
+| `rebase_get_current_user` | Show current user |
 
 ### Projects & Users
 | Tool | Description |
 |------|-------------|
-| `list_projects` | List FireCMS Cloud projects |
+| `list_projects` | List Rebase Cloud projects |
 | `get_root_collections` | List Firestore root collections |
 | `list_users` | List project users and roles |
 | `add_user` | Invite a user |
@@ -65,5 +65,5 @@ Use `firecms_login` to sign in when prompted. Tokens shared with FireCMS CLI (`~
 
 | URI | Description |
 |-----|-------------|
-| `firecms://projects/{id}/collections` | Project's Firestore collections |
-| `firecms://projects/{id}/users` | Project users |
+| `rebase://projects/{id}/collections` | Project's Firestore collections |
+| `rebase://projects/{id}/users` | Project users |

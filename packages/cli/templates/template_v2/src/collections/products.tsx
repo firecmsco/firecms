@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty, EntityReference } from "firecms";
+import { buildCollection, buildProperty, EntityReference } from "rebase";
 import { localeCollection } from "./locales.tsx";
 
 export type Product = {

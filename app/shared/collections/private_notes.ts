@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 
 const privateNotesCollection: EntityCollection = {
     name: "Private Notes",

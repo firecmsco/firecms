@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/CollectionActionsProps"
 title: "CollectionActionsProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / CollectionActionsProps
+[@rebasepro/core](../README) / CollectionActionsProps
 
 # Interface: CollectionActionsProps\<M, USER, EC\>
 
-Defined in: [types/collections.ts:376](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:376](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Parameter passed to the `Actions` prop in the collection configuration.
 The component will receive this prop when it is rendered in the collection
@@ -37,7 +37,7 @@ toolbar.
 
 > **collection**: `EC`
 
-Defined in: [types/collections.ts:396](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:396](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 The collection configuration
 
@@ -47,7 +47,7 @@ The collection configuration
 
 > **collectionEntitiesCount**: `number`
 
-Defined in: [types/collections.ts:418](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:418](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Count of the entities in this collection
 
@@ -55,9 +55,9 @@ Count of the entities in this collection
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
-Defined in: [types/collections.ts:413](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:413](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Context of the app status
 
@@ -67,7 +67,7 @@ Context of the app status
 
 > **parentCollectionIds**: `string`[]
 
-Defined in: [types/collections.ts:391](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:391](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Array of the parent path segments like `['users']`
 
@@ -77,7 +77,7 @@ Array of the parent path segments like `['users']`
 
 > **path**: `string`
 
-Defined in: [types/collections.ts:381](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:381](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Full collection path of this entity. This is the full path, like
 `users/1234/addresses`
@@ -88,7 +88,7 @@ Full collection path of this entity. This is the full path, like
 
 > **relativePath**: `string`
 
-Defined in: [types/collections.ts:386](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:386](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Path of the last collection, like `addresses`
 
@@ -98,7 +98,7 @@ Path of the last collection, like `addresses`
 
 > **selectionController**: [`SelectionController`](../type-aliases/SelectionController)\<`M`\>
 
-Defined in: [types/collections.ts:402](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:402](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Use this controller to get the selected entities and to update the
 selected entities state.
@@ -109,7 +109,7 @@ selected entities state.
 
 > **tableController**: [`EntityTableController`](../type-aliases/EntityTableController)\<`M`\>
 
-Defined in: [types/collections.ts:408](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:408](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Use this controller to get the table controller and to update the
 table controller state.

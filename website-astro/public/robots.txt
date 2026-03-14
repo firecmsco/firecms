@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://firecms.co/sitemap-index.xml
+Sitemap: https://rebase.pro/sitemap-index.xml

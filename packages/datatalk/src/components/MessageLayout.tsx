@@ -1,8 +1,8 @@
-import { AutoFixHighIcon, Avatar, Menu, MenuItem, PersonIcon } from "@firecms/ui";
+import { AutoFixHighIcon, Avatar, Menu, MenuItem, PersonIcon } from "@rebasepro/ui";
 import React, { useEffect, useRef, useState } from "react";
 import { ChatMessage, FeedbackSlug } from "../types";
 import { SystemMessage } from "./SystemMessage";
-import { EntityCollection } from "@firecms/core";
+import { EntityCollection } from "@rebasepro/core";
 
 export function MessageLayout({
     message,

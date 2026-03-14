@@ -1,4 +1,4 @@
-import { getPropertyInPath, Properties, Property } from "@firecms/core";
+import { getPropertyInPath, Properties, Property } from "@rebasepro/core";
 import {
     BooleanSwitchWithLabel,
     ChevronRightIcon,
@@ -13,8 +13,8 @@ import {
     TableRow,
     TextField,
     Typography
-} from "@firecms/ui";
-import { getIn, setIn } from "@firecms/formex";
+} from "@rebasepro/ui";
+import { getIn, setIn } from "@rebasepro/formex";
 import { ImportConfig } from "../types";
 
 export interface DataPropertyMappingProps {
@@ -29,10 +29,10 @@ export interface DataPropertyMappingProps {
 }
 
 export function DataNewPropertiesMapping({
-                                             importConfig,
-                                             destinationProperties,
-                                             buildPropertyView
-                                         }: DataPropertyMappingProps) {
+    importConfig,
+    destinationProperties,
+    buildPropertyView
+}: DataPropertyMappingProps) {
 
     const headersMapping = importConfig.headersMapping;
     const headingsOrder = importConfig.headingsOrder;
@@ -43,10 +43,10 @@ export function DataNewPropertiesMapping({
         <>
 
             <IdSelectField idColumn={idColumn}
-                           headersMapping={headersMapping}
-                           onChange={(value) => importConfig.setIdColumn(value ?? undefined)}/>
+                headersMapping={headersMapping}
+                onChange={(value) => importConfig.setIdColumn(value ?? undefined)} />
 
-            <div className={"h-4"}/>
+            <div className={"h-4"} />
 
             <Table style={{
                 tableLayout: "fixed"
@@ -64,38 +64,38 @@ export function DataNewPropertiesMapping({
                 <TableBody>
                     {destinationProperties &&
                         headingsOrder.map((importKey) => {
-                                const mappedKey = headersMapping[importKey];
-                                const propertyKey = headersMapping[importKey];
-                                const property = mappedKey ? getPropertyInPath(destinationProperties, mappedKey) as Property : null;
+                            const mappedKey = headersMapping[importKey];
+                            const propertyKey = headersMapping[importKey];
+                            const property = mappedKey ? getPropertyInPath(destinationProperties, mappedKey) as Property : null;
 
-                                const originProperty = getPropertyInPath(originProperties, importKey) as Property | undefined;
-                                const origintype = originProperty
-                                    ? (originProperty.type === "array" && typeof originProperty.of === "object"
-                                        ? `${originProperty.type} - ${(originProperty.of as Property).type}`
-                                        : originProperty.type)
-                                    : undefined;
-                                return <TableRow key={importKey} style={{ height: "90px" }}>
-                                    <TableCell style={{ width: "20%" }}>
-                                        <Typography variant={"body2"}>{importKey}</Typography>
-                                        {originProperty && <Typography
-                                            variant={"caption"}
-                                            color={"secondary"}
-                                        >{origintype}</Typography>}
-                                    </TableCell>
-                                    <TableCell>
-                                        <ChevronRightIcon/>
-                                    </TableCell>
-                                    <TableCell className={importKey === idColumn ? "text-center" : undefined}
-                                               style={{ width: "75%" }}>
-                                        {buildPropertyView?.({
-                                            isIdColumn: importKey === idColumn,
-                                            property,
-                                            propertyKey,
-                                            importKey
-                                        })}
-                                    </TableCell>
-                                </TableRow>;
-                            }
+                            const originProperty = getPropertyInPath(originProperties, importKey) as Property | undefined;
+                            const origintype = originProperty
+                                ? (originProperty.type === "array" && typeof originProperty.of === "object"
+                                    ? `${originProperty.type} - ${(originProperty.of as Property).type}`
+                                    : originProperty.type)
+                                : undefined;
+                            return <TableRow key={importKey} style={{ height: "90px" }}>
+                                <TableCell style={{ width: "20%" }}>
+                                    <Typography variant={"body2"}>{importKey}</Typography>
+                                    {originProperty && <Typography
+                                        variant={"caption"}
+                                        color={"secondary"}
+                                    >{origintype}</Typography>}
+                                </TableCell>
+                                <TableCell>
+                                    <ChevronRightIcon />
+                                </TableCell>
+                                <TableCell className={importKey === idColumn ? "text-center" : undefined}
+                                    style={{ width: "75%" }}>
+                                    {buildPropertyView?.({
+                                        isIdColumn: importKey === idColumn,
+                                        property,
+                                        propertyKey,
+                                        importKey
+                                    })}
+                                </TableCell>
+                            </TableRow>;
+                        }
                         )}
                 </TableBody>
             </Table>
@@ -121,31 +121,31 @@ export function DataNewPropertiesMapping({
                     <TableBody>
                         {destinationProperties &&
                             getAllPropertyKeys(destinationProperties).map((key) => {
-                                    const property = getPropertyInPath(destinationProperties, key);
-                                    if (typeof property !== "object" || property === null) {
-                                        return null;
-                                    }
-                                    if (!["number", "string", "boolean", "map"].includes(property.type)) {
-                                        return null;
-                                    }
-                                    return <TableRow key={key} style={{ height: "70px" }}>
-                                        <TableCell style={{ width: "20%" }}>
-                                            <Typography variant={"body2"}>{key}</Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <ChevronRightIcon/>
-                                        </TableCell>
-                                        <TableCell className={key === idColumn ? "text-center" : undefined}
-                                                   style={{ width: "75%" }}>
-                                            <DefaultValuesField property={property}
-                                                                defaultValue={getIn(importConfig.defaultValues, key)}
-                                                                onValueChange={(value) => {
-                                                                    const newValues = setIn(importConfig.defaultValues, key, value);
-                                                                    importConfig.setDefaultValues(newValues);
-                                                                }}/>
-                                        </TableCell>
-                                    </TableRow>;
+                                const property = getPropertyInPath(destinationProperties, key);
+                                if (typeof property !== "object" || property === null) {
+                                    return null;
                                 }
+                                if (!["number", "string", "boolean", "map"].includes(property.type)) {
+                                    return null;
+                                }
+                                return <TableRow key={key} style={{ height: "70px" }}>
+                                    <TableCell style={{ width: "20%" }}>
+                                        <Typography variant={"body2"}>{key}</Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <ChevronRightIcon />
+                                    </TableCell>
+                                    <TableCell className={key === idColumn ? "text-center" : undefined}
+                                        style={{ width: "75%" }}>
+                                        <DefaultValuesField property={property}
+                                            defaultValue={getIn(importConfig.defaultValues, key)}
+                                            onValueChange={(value) => {
+                                                const newValues = setIn(importConfig.defaultValues, key, value);
+                                                importConfig.setDefaultValues(newValues);
+                                            }} />
+                                    </TableCell>
+                                </TableRow>;
+                            }
                             )}
                     </TableBody>
                 </Table>
@@ -166,10 +166,10 @@ function getAllPropertyKeys(properties: Properties, currentKey?: string): string
 }
 
 function IdSelectField({
-                           idColumn,
-                           headersMapping,
-                           onChange
-                       }: {
+    idColumn,
+    headersMapping,
+    onChange
+}: {
     idColumn?: string,
     headersMapping: Record<string, string | null>;
     onChange: (value: string | null) => void
@@ -199,21 +199,21 @@ function IdSelectField({
 }
 
 function DefaultValuesField({
-                                property,
-                                onValueChange,
-                                defaultValue
-                            }: { property: Property, onValueChange: (value: any) => void, defaultValue?: any }) {
+    property,
+    onValueChange,
+    defaultValue
+}: { property: Property, onValueChange: (value: any) => void, defaultValue?: any }) {
     if (property.type === "string") {
         return <TextField size={"medium"}
-                          placeholder={"Default value"}
-                          value={defaultValue ?? ""}
-                          onChange={(event) => onValueChange(event.target.value)}/>;
+            placeholder={"Default value"}
+            value={defaultValue ?? ""}
+            onChange={(event) => onValueChange(event.target.value)} />;
     } else if (property.type === "number") {
         return <TextField size={"medium"}
-                          type={"number"}
-                          value={defaultValue ?? ""}
-                          placeholder={"Default value"}
-                          onChange={(event) => onValueChange(event.target.value)}/>;
+            type={"number"}
+            value={defaultValue ?? ""}
+            placeholder={"Default value"}
+            onChange={(event) => onValueChange(event.target.value)} />;
     } else if (property.type === "boolean") {
         return <BooleanSwitchWithLabel
             value={defaultValue ?? null}

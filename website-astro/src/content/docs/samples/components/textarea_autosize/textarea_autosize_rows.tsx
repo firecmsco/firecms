@@ -1,9 +1,9 @@
 import React from "react";
-import { TextareaAutosize } from "@firecms/ui";
+import { TextareaAutosize } from "@rebasepro/ui";
 
 export default function TextareaAutosizeRowsDemo() {
     return (
-        <TextareaAutosize 
+        <TextareaAutosize
             placeholder="Type your text here..."
             minRows={3}
             maxRows={6}

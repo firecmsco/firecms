@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { StringPropertyValidation } from "./validation/StringPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
-import { Field, getIn, useFormex } from "@firecms/formex";
+import { Field, getIn, useFormex } from "@rebasepro/formex";
 
 import {
     BooleanSwitchWithLabel,
@@ -11,7 +11,7 @@ import {
     SettingsIcon,
     TextField,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
 export function MarkdownPropertyField({
     disabled,

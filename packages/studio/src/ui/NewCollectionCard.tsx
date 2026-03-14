@@ -1,5 +1,5 @@
-import { PluginHomePageAdditionalCardsProps, useAuthController } from "@firecms/core";
-import { AddIcon, Card, cls, Typography } from "@firecms/ui";
+import { PluginHomePageAdditionalCardsProps, useAuthController } from "@rebasepro/core";
+import { AddIcon, Card, cls, Typography } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 
 export function NewCollectionCard({
@@ -8,7 +8,7 @@ export function NewCollectionCard({
 }: PluginHomePageAdditionalCardsProps) {
 
     if (!context.navigation?.topLevelNavigation)
-        throw Error("Navigation not ready in FireCMSHomePage");
+        throw Error("Navigation not ready in RebaseHomePage");
 
     const authController = useAuthController();
 

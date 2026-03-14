@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/UploadFileResult"
 title: "UploadFileResult"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / UploadFileResult
+[@rebasepro/core](../README) / UploadFileResult
 
 # Interface: UploadFileResult
 
-Defined in: [types/storage.ts:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/storage.ts:15](https://github.com/firecmsco/firecms/blob/main
 
 > **bucket**: `string`
 
-Defined in: [types/storage.ts:23](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 Bucket where the file was uploaded
 
@@ -29,6 +29,6 @@ Bucket where the file was uploaded
 
 > **path**: `string`
 
-Defined in: [types/storage.ts:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 Storage path including the file name where the file was uploaded.

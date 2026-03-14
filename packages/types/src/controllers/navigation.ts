@@ -1,5 +1,5 @@
 import React from "react";
-import { EntityCollection, EntityReference, FireCMSPlugin } from "../types";
+import { EntityCollection, EntityReference, RebasePlugin } from "../types";
 
 /**
  * Controller that handles URL path building and resolution.
@@ -112,7 +112,7 @@ export type NavigationStateController = {
     /**
      * Plugin system allowing to extend the CMS functionality.
      */
-    plugins?: FireCMSPlugin<any, any, any>[];
+    plugins?: RebasePlugin<any, any, any>[];
 };
 
 /**
@@ -189,7 +189,7 @@ export interface NavigateOptions {
     viewTransition?: boolean;
 }
 
-// currently not used, in favor of a single blocker in `FireCMSRoute`
+// currently not used, in favor of a single blocker in `RebaseRoute`
 export type NavigationBlocker = {
     updateBlockListener: (path: string, block: boolean, basePath?: string) => () => void;
     isBlocked: (path: string) => boolean;
@@ -224,7 +224,7 @@ export interface CMSView {
      * You can use any of the icons in the Material specs:
      * https://fonts.google.com/icons
      * e.g. 'account_tree' or 'person'
-     * Find all the icons in https://firecms.co/docs/icons
+     * Find all the icons in https://rebase.pro/docs/icons
      */
     icon?: string | React.ReactNode;
 

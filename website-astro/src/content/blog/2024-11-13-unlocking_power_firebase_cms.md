@@ -11,7 +11,7 @@ authors: marian
 
 In the rapidly evolving landscape of content management systems (CMS), choosing the right backend is more critical than
 ever. Developers are faced with a plethora of options, from traditional setups like WordPress to modern headless CMSs
-like Strapi, Contentful, and Sanity. At [FireCMS](https://firecms.co), we've embraced Firebase as the backbone of our
+like Strapi, Contentful, and Sanity. At [Rebase](https://rebase.pro), we've embraced Firebase as the backbone of our
 CMS, and in this article, we'll delve into the benefits of using Firebase over other CMS backends. We'll also provide
 direct comparisons to alternative CMSs to help you make an informed decision.
 
@@ -26,10 +26,10 @@ Firebase, a platform developed by Google, offers a comprehensive suite of tools 
 - **Hosting**: Fast and secure web hosting for your web app, static and dynamic content.
 - **Realtime Database**: A real-time, low-latency database for mobile, web, and server development.
 
-By leveraging Firebase, FireCMS offers a CMS that is not only powerful but aso scalable, secure, and cost-effective.
+By leveraging Firebase, Rebase offers a CMS that is not only powerful but aso scalable, secure, and cost-effective.
 
-![FireCMS Dashboard](/img/blog/firecms-dashboard.png)
-*The sleek and intuitive FireCMS dashboard powered by Firebase.*
+![Rebase Dashboard](/img/blog/rebase-dashboard.png)
+*The sleek and intuitive Rebase dashboard powered by Firebase.*
 
 <!-- truncate -->
 
@@ -69,7 +69,7 @@ Firebase Authentication provides a robust security layer without the need for ad
 **Compared to Strapi and KeystoneJS**:
 
 - **Strapi** and **KeystoneJS** offer authentication but often require additional setup and maintenance.
-- Firebase provides a secure, out-of-the-box solution that integrates seamlessly with FireCMS.
+- Firebase provides a secure, out-of-the-box solution that integrates seamlessly with Rebase.
 
 ### Serverless Architecture
 
@@ -98,7 +98,7 @@ To better understand Firebase's advantages, let's compare it directly with other
 
 **WordPress** is a long-standing CMS known for powering blogs and websites.
 
-- **Architecture**: WordPress is monolithic, coupling the frontend and backend. Firebase, used with FireCMS, promotes a
+- **Architecture**: WordPress is monolithic, coupling the frontend and backend. Firebase, used with Rebase, promotes a
   headless architecture, offering more flexibility.
 - **Scalability**: Scaling WordPress can be complex and costly. Firebase scales automatically.
 - **Security**: WordPress sites can be vulnerable if not properly maintained. Firebase provides robust security out of
@@ -132,48 +132,48 @@ To better understand Firebase's advantages, let's compare it directly with other
 - **Ecosystem**: Firebase integrates seamlessly with other Google Cloud services, offering more tools and services.
 - **Scalability**: Both offer scalability, but Firebase's infrastructure is arguably more robust given Google's backing.
 
-## FireCMS: Harnessing Firebase's Potential
+## Rebase: Harnessing Firebase's Potential
 
-With [FireCMS](https://firecms.co), you get a CMS explicitly designed to leverage Firebase's strengths.
+With [Rebase](https://rebase.pro), you get a CMS explicitly designed to leverage Firebase's strengths.
 
-- **Easy Setup**: Configure your CMS with minimal code using FireCMS's intuitive schema definitions.
+- **Easy Setup**: Configure your CMS with minimal code using Rebase's intuitive schema definitions.
 - **Real-time Admin Panel**: Experience instant updates in your admin panel, streamlining content management.
 - **Customizable UI**: Tailor the admin interface to your brand and workflow needs.
 - **Extensibility**: Use Firebase Cloud Functions to extend functionality without managing additional servers.
 
-![Configuring FireCMS](/img/blog/firecms_configuration.png)
-*Easily configure your FireCMS with straightforward schemas.*
+![Configuring Rebase](/img/blog/rebase_configuration.png)
+*Easily configure your Rebase with straightforward schemas.*
 
 ## Addressing Common Concerns
 
 ### Learning Curve
 
-Adopting new technology can be daunting. However, Firebase and FireCMS offer extensive documentation and community
+Adopting new technology can be daunting. However, Firebase and Rebase offer extensive documentation and community
 support.
 
 - **Resources**: Access tutorials, guides, and a vibrant community on [Discord](https://discord.gg/fxy7xsQm3m).
-- **Support**: FireCMS provides commercial support to assist with your project's needs.
+- **Support**: Rebase provides commercial support to assist with your project's needs.
 
 ### Data Modeling with NoSQL
 
 Firebase uses NoSQL, which differs from traditional relational databases.
 
 - **Flexibility**: NoSQL allows for more flexible data models.
-- **Guidance**: FireCMS's schema system helps structure your data effectively.
+- **Guidance**: Rebase's schema system helps structure your data effectively.
 
 ### Vendor Lock-in
 
 Relying on a platform can raise concerns about dependency.
 
-- **Open Source**: FireCMS is open-source, giving you control over the CMS codebase.
+- **Open Source**: Rebase is open-source, giving you control over the CMS codebase.
 - **Data Control**: With Firebase, your data is stored in standard formats, and exporting is straightforward.
 
-## Get Started with FireCMS and Firebase
+## Get Started with Rebase and Firebase
 
-Transitioning to Firebase with FireCMS empowers you to build scalable, secure, and high-performance applications.
+Transitioning to Firebase with Rebase empowers you to build scalable, secure, and high-performance applications.
 
-1. **Explore FireCMS**: Visit [firecms.co](https://firecms.co) to learn more about features and capabilities.
-2. **Try the Demo**: Experience FireCMS firsthand with our [live demo](https://demo.firecms.co/).
+1. **Explore Rebase**: Visit [rebase.pro](https://rebase.pro) to learn more about features and capabilities.
+2. **Try the Demo**: Experience Rebase firsthand with our [live demo](https://demo.rebase.pro/).
 3. **Join the Community**: Connect with other developers on our [Discord server](https://discord.gg/fxy7xsQm3m).
 
 ---
@@ -181,7 +181,7 @@ Transitioning to Firebase with FireCMS empowers you to build scalable, secure, a
 ### Final Thoughts
 
 Choosing the right backend for your CMS is a pivotal decision that impacts scalability, security, and development speed.
-Firebase, paired with FireCMS, offers a compelling solution that outshines traditional CMS backends like WordPress,
+Firebase, paired with Rebase, offers a compelling solution that outshines traditional CMS backends like WordPress,
 Strapi, Contentful, and Sanity.
 
 ---
@@ -189,12 +189,12 @@ Strapi, Contentful, and Sanity.
 ### What's Next for Your Project?
 
 We'd love to hear about what you're building. Whether you're updating an existing project or starting something new,
-FireCMS and Firebase can help you achieve your goals faster and more efficiently.
+Rebase and Firebase can help you achieve your goals faster and more efficiently.
 
 **Get in Touch**:
 
 - **Discord**: Join our community on [Discord](https://discord.gg/fxy7xsQm3m).
-- **LinkedIn**: Connect with us on [LinkedIn](https://www.linkedin.com/company/firecms/).
-- **Email**: Reach out at [hello@firecms.co](mailto:hello@firecms.co).
+- **LinkedIn**: Connect with us on [LinkedIn](https://www.linkedin.com/company/rebase/).
+- **Email**: Reach out at [hello@rebase.pro](mailto:hello@rebase.pro).
 
 Let's build something amazing together!

@@ -1,18 +1,18 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { FireCMSApiClient } from "../api-client.js";
+import { RebaseApiClient } from "../api-client.js";
 
 /**
  * Register collection schema tools.
  */
-export function registerCollectionTools(server: McpServer, api: FireCMSApiClient) {
+export function registerCollectionTools(server: McpServer, api: RebaseApiClient) {
 
     server.registerTool(
         "generate_collection",
         {
-            description: `Generate a new FireCMS collection schema using AI. Provide a natural language description 
+            description: `Generate a new Rebase collection schema using AI. Provide a natural language description 
 of the collection you want (e.g., "A blog with posts that have title, body, author, tags, 
-and a featured image"). Returns a complete FireCMS collection configuration.`,
+and a featured image"). Returns a complete Rebase collection configuration.`,
             inputSchema: {
                 prompt: z.string().describe("Natural language description of the collection to generate"),
                 existingCollections: z.array(z.any()).optional().describe("Optional existing collection schemas for context"),
@@ -31,7 +31,7 @@ and a featured image"). Returns a complete FireCMS collection configuration.`,
     server.registerTool(
         "modify_collection",
         {
-            description: `Modify an existing FireCMS collection schema using AI. Describe the changes you want 
+            description: `Modify an existing Rebase collection schema using AI. Describe the changes you want 
 (e.g., "Add a priority enum with low/medium/high" or "Make title required with max 100 chars").
 Returns the updated schema and a list of operations performed.`,
             inputSchema: {

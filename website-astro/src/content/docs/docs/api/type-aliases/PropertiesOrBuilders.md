@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/PropertiesOrBuilders"
 title: "PropertiesOrBuilders"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PropertiesOrBuilders
+[@rebasepro/core](../README) / PropertiesOrBuilders
 
 # Type Alias: PropertiesOrBuilders\<M\>
 
 > **PropertiesOrBuilders**\<`M`\> = `{ [k in keyof M]: PropertyOrBuilder<M[k], M> }`
 
-Defined in: [types/properties.ts:308](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:308](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 ## Type Parameters
 

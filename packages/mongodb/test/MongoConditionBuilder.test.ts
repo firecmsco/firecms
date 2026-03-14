@@ -1,11 +1,11 @@
 /**
  * MongoConditionBuilder Tests
  * 
- * Tests for the condition builder that translates FireCMS filters to MongoDB queries.
+ * Tests for the condition builder that translates Rebase filters to MongoDB queries.
  */
 
 import { MongoConditionBuilder } from "../src/db/MongoConditionBuilder";
-import { FilterValues } from "@firecms/types";
+import { FilterValues } from "@rebasepro/types";
 
 describe("MongoConditionBuilder", () => {
     describe("buildFilterConditions", () => {

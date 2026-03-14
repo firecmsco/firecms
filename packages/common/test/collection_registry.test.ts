@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 import { CollectionRegistry } from "../src/collections/CollectionRegistry";
 
 describe("CollectionRegistry Dual-Layer Store", () => {
@@ -49,7 +49,7 @@ describe("CollectionRegistry Dual-Layer Store", () => {
         const authorPostsField = normalizedAuthors!.properties.author_posts as any;
         expect(authorPostsField.relation).toBeDefined();
         expect(authorPostsField.relation.collection.name).toBe("Posts");
-        
+
         const nestedField = normalizedAuthors!.properties.map_field as any;
         expect(nestedField.properties.nested_relation.relation).toBeDefined();
 
@@ -58,7 +58,7 @@ describe("CollectionRegistry Dual-Layer Store", () => {
         expect(pristineAuthors).toBeDefined();
         const pristinePostsField = pristineAuthors!.properties.author_posts as any;
         expect(pristinePostsField.relation).toBeUndefined(); // It should strictly be a string map lookup
-        
+
         const pristineNestedField = pristineAuthors!.properties.map_field as any;
         expect(pristineNestedField.properties.nested_relation.relation).toBeUndefined();
 

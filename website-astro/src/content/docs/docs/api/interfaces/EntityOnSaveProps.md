@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/EntityAfterSaveProps"
 title: "EntityAfterSaveProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityAfterSaveProps
+[@rebasepro/core](../README) / EntityAfterSaveProps
 
 # Interface: EntityAfterSaveProps\<M, USER\>
 
-Defined in: [types/entity\_callbacks.ts:123](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:123](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Parameters passed to hooks when an entity is saved
 
@@ -31,7 +31,7 @@ Parameters passed to hooks when an entity is saved
 
 > **collection**: [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
 
-Defined in: [types/entity\_callbacks.ts:128](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:128](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Resolved collection of the entity
 
@@ -39,9 +39,9 @@ Resolved collection of the entity
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
-Defined in: [types/entity\_callbacks.ts:164](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:164](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Context of the app status
 
@@ -51,7 +51,7 @@ Context of the app status
 
 > **entityId**: `string`
 
-Defined in: [types/entity\_callbacks.ts:144](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:144](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 ID of the entity
 
@@ -61,7 +61,7 @@ ID of the entity
 
 > **path**: `string`
 
-Defined in: [types/entity\_callbacks.ts:134](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:134](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Full path of the CMS where this entity is being saved.
 Might contain unresolved aliases.
@@ -72,7 +72,7 @@ Might contain unresolved aliases.
 
 > `optional` **previousValues**: `Partial`\<`M`\>
 
-Defined in: [types/entity\_callbacks.ts:154](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:154](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Previous values
 
@@ -82,7 +82,7 @@ Previous values
 
 > **resolvedPath**: `string`
 
-Defined in: [types/entity\_callbacks.ts:139](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:139](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Full path where this entity is being saved, with alias resolved
 
@@ -92,7 +92,7 @@ Full path where this entity is being saved, with alias resolved
 
 > **status**: [`EntityStatus`](../type-aliases/EntityStatus)
 
-Defined in: [types/entity\_callbacks.ts:159](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:159](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 New or existing entity
 
@@ -102,6 +102,6 @@ New or existing entity
 
 > **values**: `Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
 
-Defined in: [types/entity\_callbacks.ts:149](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:149](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Values being saved

@@ -17,7 +17,7 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS Types",
+            name: "Rebase Types",
             fileName: (format) => `index.${format}.js`
         },
         target: "ESNEXT",

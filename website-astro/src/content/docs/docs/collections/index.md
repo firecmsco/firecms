@@ -2,10 +2,10 @@
 slug: docs/collections/index
 title: Collections
 sidebar_label: Collections
-description: Define your Firestore data schema with FireCMS collections. Build type-safe admin panels for Firebase with React and TypeScript.
+description: Define your Firestore data schema with Rebase collections. Build type-safe admin panels for Firebase with React and TypeScript.
 ---
 
-**Collections** are the core building blocks of your FireCMS **admin panel**. They define how your **Firestore data** is displayed, edited, and managed in the CMS interface.
+**Collections** are the core building blocks of your Rebase **admin panel**. They define how your **Firestore data** is displayed, edited, and managed in the CMS interface.
 
 If you're building a **headless CMS** or **back-office** for your **Firebase** project, collections are where you define:
 - **What data** users can manage (products, users, articles, orders, etc.)
@@ -13,8 +13,8 @@ If you're building a **headless CMS** or **back-office** for your **Firebase** p
 - **Who can do what** (create, read, update, delete permissions)
 - **Custom logic** (callbacks on save, computed fields, side effects)
 
-:::tip Why use FireCMS collections?
-Unlike traditional CMSs that impose a rigid data model, FireCMS collections map directly to your existing **Firestore** structure. This means you can add a powerful **React-based admin UI** to any Firebase project without migrating your data or changing your schema.
+:::tip Why use Rebase collections?
+Unlike traditional CMSs that impose a rigid data model, Rebase collections map directly to your existing **Firestore** structure. This means you can add a powerful **React-based admin UI** to any Firebase project without migrating your data or changing your schema.
 :::
 
 Collections appear at the **top level** of the navigation (home page and drawer), or as **subcollections** nested under parent entities.
@@ -40,7 +40,7 @@ can define an enum string property and the values will be merged from both defin
 ### Sample collection defined in code
 
 :::note
-FireCMS provides around 20 different fields (such as text fields, selects, and complex ones like reference or
+Rebase provides around 20 different fields (such as text fields, selects, and complex ones like reference or
 sortable array fields). If your use case is not covered by one of the provided fields, you can create your
 own [custom field](../properties/custom_fields.mdx).
 :::
@@ -51,7 +51,7 @@ functions that will help you detect type and configuration errors
 :::
 
 ```tsx
-import { buildCollection, buildProperty, EntityReference } from "@firecms/core";
+import { buildCollection, buildProperty, EntityReference } from "@rebasepro/core";
 
 type Product = {
   name: string;
@@ -150,23 +150,23 @@ const productsCollection = buildCollection<Product>({
 });
 ```
 
-In FireCMS Cloud, this collection can then be used by including it in the `collections` prop of your main export,
-a `FireCMSAppConfig`
+In Rebase Cloud, this collection can then be used by including it in the `collections` prop of your main export,
+a `RebaseAppConfig`
 object.
 
-In FireCMS PRO, `collections` are passed directly to the `useBuildNavigationController` hook.
+In Rebase PRO, `collections` are passed directly to the `useBuildNavigationController` hook.
 
 ### Modifying a collection defined in the UI
 
 If you just need to add some code to a collection defined in the UI, you can use the `modifyCollection` function in
-your `FireCMSAppConfig` object.
+your `RebaseAppConfig` object.
 
-This applies to **FireCMS Cloud** only.
+This applies to **Rebase Cloud** only.
 
 ```tsx
-import { FireCMSAppConfig } from "@firecms/core";
+import { RebaseAppConfig } from "@rebasepro/core";
 
-const appConfig: FireCMSAppConfig = {
+const appConfig: RebaseAppConfig = {
     version: "1",
     collections: async (props) => {
         return ([
@@ -222,7 +222,7 @@ If you need to enable filtering/sorting by more than one property at a time, you
 enabled in your Firestore configuration. In order to do so, just pass the indexes configuration to your collection:
 
 ```tsx
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@rebasepro/core";
 
 const productsCollection = buildCollection<Product>({
     id: "products",
@@ -253,7 +253,7 @@ to `false` in the collection configuration.
 - **`name`**: The plural name of the collection. E.g., 'Products'.
 - **`singularName`**: The singular name of an entry in the collection. E.g., 'Product'.
 - **`path`**: Relative Firestore path of this view to its parent. If this view is in the root, the path is equal to the
-  absolute one. This path also determines the URL in FireCMS.
+  absolute one. This path also determines the URL in Rebase.
 - **`properties`**: Object defining the properties for the entity schema. More information
   in [Properties](../properties/properties_intro).
 - **`propertiesOrder`**: Order in which the properties are displayed.
@@ -280,7 +280,7 @@ to `false` in the collection configuration.
   value in reference properties too.
 - **`icon`**: Icon key to use in this collection. You can use any of the icons in the Material
   specs: [Material Icons](https://fonts.google.com/icons). e.g., 'account_tree' or 'person'.
-  Find all the icons in [Icons](https://firecms.co/docs/icons).
+  Find all the icons in [Icons](https://rebase.pro/docs/icons).
   You can also pass your own icon component (`React.ReactNode`).
 - **`customId`**: If this prop is not set, the ID of the document will be created by the datasource. You can set the
   value to 'true' to force the users to choose the ID.
@@ -292,7 +292,7 @@ to `false` in the collection configuration.
 - **`description`**: Optional description of this view. You can use Markdown.
 - **`entityActions`**: You can define additional actions that can be performed on the entities in this collection. These
   actions can be displayed in the collection view or in the entity view. You can use the `onClick` method to implement
-  your own logic. In the `context` prop, you can access all the controllers of FireCMS.
+  your own logic. In the `context` prop, you can access all the controllers of Rebase.
   You can also define entity actions globally. See [Entity Actions](./entity_actions) for more details.
 
 ```tsx

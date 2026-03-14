@@ -6,7 +6,7 @@ import {
     JsonLogicRule,
     PropertyConditions,
     Property
-} from "@firecms/types";
+} from "@rebasepro/types";
 
 /**
  * Access a nested property from an object via dot notation.
@@ -19,7 +19,7 @@ function getIn(obj: any, path: string): any {
 let operationsRegistered = false;
 
 /**
- * Register custom JSON Logic operations for FireCMS.
+ * Register custom JSON Logic operations for Rebase.
  * Call this once at app initialization.
  */
 export function registerConditionOperations(): void {

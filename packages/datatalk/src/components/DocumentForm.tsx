@@ -11,8 +11,8 @@
 //     PluginFormActionProps,
 //     PropertyFieldBindingProps,
 //     EntityCollection
-// } from "@firecms/types";
-// import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@firecms/formex";
+// } from "@rebasepro/types";
+// import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@rebasepro/formex";
 // import { PropertyFieldBinding } from "./PropertyFieldBinding";
 // import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 // import {deepEqual as equal } from "fast-equals"
@@ -31,12 +31,12 @@
 //     useAuthController,
 //     useCustomizationController,
 //     useDataSource,
-//     useFireCMSContext,
+//     useRebaseContext,
 //     useSideEntityController
 // } from "../hooks";
 // import { ErrorFocus } from "./components/ErrorFocus";
 // import { CustomIdField } from "./components/CustomIdField";
-// import { Alert, Button, cn, DialogActions, IconButton, Tooltip, Typography } from "@firecms/ui";
+// import { Alert, Button, cn, DialogActions, IconButton, Tooltip, Typography } from "@rebasepro/ui";
 // import { ErrorBoundary } from "../components";
 // import { useAnalyticsController } from "../hooks/useAnalyticsController";
 // import { ValidationError } from "yup";
@@ -175,7 +175,7 @@
 //
 //     const customizationController = useCustomizationController();
 //
-//     const context = useFireCMSContext();
+//     const context = useRebaseContext();
 //     const dataSource = useDataSource(inputCollection);
 //     const plugins = customizationController.plugins;
 //
@@ -504,7 +504,7 @@
 //         entityActions,
 //     } = props;
 //
-//     const context = useFireCMSContext();
+//     const context = useRebaseContext();
 //     const formActions = entityActions.filter(a => a.includeInForm === undefined || a.includeInForm);
 //     const sideEntityController = useSideEntityController();
 //

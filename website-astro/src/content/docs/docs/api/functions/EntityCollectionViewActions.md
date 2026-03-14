@@ -3,17 +3,17 @@ slug: "docs/api/functions/EntityCollectionViewActions"
 title: "EntityCollectionViewActions"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionViewActions
+[@rebasepro/core](../README) / EntityCollectionViewActions
 
 # Function: EntityCollectionViewActions()
 
 > **EntityCollectionViewActions**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:23](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionViewActions.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ## Type Parameters
 

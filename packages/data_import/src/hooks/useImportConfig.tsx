@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Entity, Property } from "@firecms/core";
+import { Entity, Property } from "@rebasepro/core";
 import { ImportConfig } from "../types";
 
 export const useImportConfig = (): ImportConfig => {

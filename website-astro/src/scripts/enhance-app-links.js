@@ -1,10 +1,10 @@
-// Automatically enhance all app.firecms.co links with tracking parameters
-// This script runs on every page to add tracking params to all app.firecms.co links
+// Automatically enhance all app.rebase.pro links with tracking parameters
+// This script runs on every page to add tracking params to all app.rebase.pro links
 
 import { getCurrentTrackingParams, appendTrackingParamsToUrl } from '../utils/gclid.js';
 
 function enhanceAppLinks() {
-  const links = document.querySelectorAll('a[href*="app.firecms.co"]');
+  const links = document.querySelectorAll('a[href*="app.rebase.pro"]');
 
   links.forEach(link => {
     const href = link.getAttribute('href');
@@ -64,10 +64,10 @@ if (typeof MutationObserver !== 'undefined') {
     mutations.forEach((mutation) => {
       mutation.addedNodes.forEach((node) => {
         if (node.nodeType === 1) { // Element node
-          if (node.tagName === 'A' && node.getAttribute('href')?.includes('app.firecms.co')) {
+          if (node.tagName === 'A' && node.getAttribute('href')?.includes('app.rebase.pro')) {
             hasNewLinks = true;
           } else if (node.querySelectorAll) {
-            const links = node.querySelectorAll('a[href*="app.firecms.co"]');
+            const links = node.querySelectorAll('a[href*="app.rebase.pro"]');
             if (links.length > 0) hasNewLinks = true;
           }
         }

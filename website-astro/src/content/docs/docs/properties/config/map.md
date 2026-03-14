@@ -2,14 +2,14 @@
 slug: docs/properties/config/map
 title: Map
 sidebar_label: Map
-description: Configuration for map properties (nested objects) in FireCMS, including child properties, previews, and key-value mode.
+description: Configuration for map properties (nested objects) in Rebase, including child properties, previews, and key-value mode.
 ---
 
 In a map property you define child properties in the same way you define them
 at the entity schema level:
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const ctaProperty = buildProperty({
     dataType: "map",

@@ -1,19 +1,19 @@
 {
-    "name": "@firecms/auth",
+    "name": "@rebasepro/auth",
     "type": "module",
     "version": "4.0.0",
     "publishConfig": {
         "access": "public"
     },
-    "description": "Custom JWT authentication for FireCMS with PostgreSQL backend",
+    "description": "Custom JWT authentication for Rebase with PostgreSQL backend",
     "main": "./dist/index.umd.js",
     "module": "./dist/index.es.js",
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "dependencies": {
-        "@firecms/core": "4.0.0",
-        "@firecms/types": "4.0.0",
-        "@firecms/ui": "4.0.0"
+        "@rebasepro/core": "4.0.0",
+        "@rebasepro/types": "4.0.0",
+        "@rebasepro/ui": "4.0.0"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

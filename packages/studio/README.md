@@ -1,22 +1,22 @@
-# FireCMS Collection Editor Plugin
+# Rebase Collection Editor Plugin
 
-This plugin enables creating and managing Firestore collections directly from your FireCMS interface. It adds a visual
+This plugin enables creating and managing Firestore collections directly from your Rebase interface. It adds a visual
 collection editor that allows you to create, edit, and delete collections without writing code.
 
 ## Installation
 
 ```bash
-npm install @firecms/collection_editor
+npm install @rebasepro/collection_editor
 # or
-yarn add @firecms/collection_editor
+yarn add @rebasepro/collection_editor
 ```
 
 For Firebase integration, also install:
 
 ```bash
-npm install @firecms/collection_editor_firebase
+npm install @rebasepro/collection_editor_firebase
 # or
-yarn add @firecms/collection_editor_firebase
+yarn add @rebasepro/collection_editor_firebase
 ```
 
 ## Features
@@ -32,9 +32,9 @@ yarn add @firecms/collection_editor_firebase
 
 ```tsx
 import React from "react";
-import { FireCMS } from "@firecms/core";
-import { useCollectionEditorPlugin } from "@firecms/collection_editor";
-import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
+import { Rebase } from "@rebasepro/core";
+import { useCollectionEditorPlugin } from "@rebasepro/collection_editor";
+import { useFirestoreCollectionsConfigController } from "@rebasepro/collection_editor_firebase";
 
 export default function App() {
     // Controller to save collection configs in Firestore
@@ -52,7 +52,7 @@ export default function App() {
         plugins: [collectionEditorPlugin]
     });
     
-    return <FireCMS
+    return <Rebase
         name={"My CMS"}
         navigationController={navigationController}
         authentication={myAuthenticator}
@@ -110,7 +110,7 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
 You can combine collections defined in code with those created in the UI:
 
 ```tsx
-import { mergeCollections } from "@firecms/collection_editor";
+import { mergeCollections } from "@rebasepro/collection_editor";
 
 const collectionsBuilder = useCallback(() => {
     // Collections defined in code
@@ -134,7 +134,7 @@ To persist collections in Firestore:
 const collectionConfigController = useFirestoreCollectionsConfigController({
     firebaseApp,
     
-    // Optional: specify where to save configs (default: "__FIRECMS/config/collections")
+    // Optional: specify where to save configs (default: "__REBASE/config/collections")
     configPath: "custom/config/path",
     
     // Optional: define permissions for collections
@@ -157,7 +157,7 @@ const collectionConfigController = useFirestoreCollectionsConfigController({
 
 ## Related Plugins
 
-FireCMS offers several complementary plugins:
+Rebase offers several complementary plugins:
 
 - Data Import: Import data from CSV or JSON into Firestore collections
 - Data Export: Export collection data to CSV or JSON formats

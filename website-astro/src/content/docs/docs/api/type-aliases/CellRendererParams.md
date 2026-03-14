@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/CellRendererParams"
 title: "CellRendererParams"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / CellRendererParams
+[@rebasepro/core](../README) / CellRendererParams
 
 # Type Alias: CellRendererParams\<T\>
 
 > **CellRendererParams**\<`T`\> = `object`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:167](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:167](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:167](https://github.c
 
 > **column**: [`VirtualTableColumn`](../interfaces/VirtualTableColumn)
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:168](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:168](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:168](https://github.c
 
 > **columnIndex**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:170](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:170](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:170](https://github.c
 
 > **columns**: [`VirtualTableColumn`](../interfaces/VirtualTableColumn)[]
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:169](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:169](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:169](https://github.c
 
 > `optional` **isScrolling**: `boolean`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:174](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:174](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:174](https://github.c
 
 > `optional` **rowData**: `T`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:171](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:171](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:171](https://github.c
 
 > **rowIndex**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:172](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:172](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -75,4 +75,4 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:172](https://github.c
 
 > **width**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:173](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:173](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)

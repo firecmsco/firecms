@@ -29,7 +29,7 @@ export async function login(env: "prod" | "dev", debug: boolean) {
     const currentUser = await getCurrentUser(env, debug);
     if (currentUser) {
         console.log("You are already logged in as", currentUser["email"]);
-        console.log(`Run ${chalk.bold("firecms logout")} to sign out`);
+        console.log(`Run ${chalk.bold("rebase logout")} to sign out`);
         return;
     }
 
@@ -90,9 +90,9 @@ export async function login(env: "prod" | "dev", debug: boolean) {
     });
 }
 
-// save this token to a file in .firecms or program data
+// save this token to a file in .rebase or program data
 function saveTokens(tokens: object, env: "prod" | "dev") {
-    const dirPath = path.join(os.homedir(), ".firecms");
+    const dirPath = path.join(os.homedir(), ".rebase");
 
     if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath);
@@ -111,20 +111,20 @@ export async function logout(env: "prod" | "dev", debug: boolean) {
     const userCredential = await getTokens(env, debug);
     if (!userCredential) {
         console.log("⚠️ You are not logged in");
-        console.log(`Run ${chalk.red.bold("firecms login")} to log in`);
+        console.log(`Run ${chalk.red.bold("rebase login")} to log in`);
         return;
     }
 
     revokeToken(userCredential["access_token"], env);
 
-    const dirPath = path.join(os.homedir(), ".firecms");
+    const dirPath = path.join(os.homedir(), ".rebase");
     const filePath = path.join(dirPath, (env === "dev" ? "staging." : "") + "tokens.json");
     fs.unlinkSync(filePath);
     console.log("You have successfully logged out.")
 }
 
 export async function getTokens(env: "prod" | "dev", debug: boolean): Promise<object | null> {
-    const dirPath = path.join(os.homedir(), ".firecms");
+    const dirPath = path.join(os.homedir(), ".rebase");
     const filePath = path.join(dirPath, (env === "dev" ? "staging." : "") + "tokens.json");
 
     if (!fs.existsSync(filePath)) {
@@ -236,7 +236,7 @@ export async function refreshCredentials(env: "dev" | "prod", credentials?: obje
         if (onErr) onErr(error);
         await logout(env, false);
         console.error("\nError refreshing credentials", error.response?.status, error.response?.data?.message);
-        console.log(`⚠️ Run ${chalk.red.bold("firecms login")} to log in again`);
+        console.log(`⚠️ Run ${chalk.red.bold("rebase login")} to log in again`);
         return null;
     }
 }

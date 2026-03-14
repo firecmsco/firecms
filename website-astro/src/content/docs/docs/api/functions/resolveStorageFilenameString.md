@@ -3,17 +3,17 @@ slug: "docs/api/functions/resolveStorageFilenameString"
 title: "resolveStorageFilenameString"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / resolveStorageFilenameString
+[@rebasepro/core](../README) / resolveStorageFilenameString
 
 # Function: resolveStorageFilenameString()
 
 > **resolveStorageFilenameString**\<`M`\>(`__namedParameters`): `Promise`\<`string`\>
 
-Defined in: [util/storage.ts:24](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/storage.ts)
+Defined in: [util/storage.ts:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/storage.ts)
 
 ## Type Parameters
 

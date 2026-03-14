@@ -3,17 +3,17 @@ slug: "docs/api/functions/hydrateRegExp"
 title: "hydrateRegExp"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / hydrateRegExp
+[@rebasepro/core](../README) / hydrateRegExp
 
 # Function: hydrateRegExp()
 
 > **hydrateRegExp**(`input?`): `RegExp` \| `undefined`
 
-Defined in: [util/regexp.ts:16](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/regexp.ts)
+Defined in: [util/regexp.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/regexp.ts)
 
 Get a RegExp out of a serialized string
 

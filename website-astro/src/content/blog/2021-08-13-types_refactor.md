@@ -1,7 +1,7 @@
 ---
 slug: types_refactor
 title: Big types refactor
-description: A major update in version 0.49.0 affecting the main types used in FireCMS.
+description: A major update in version 0.49.0 affecting the main types used in Rebase.
 pubDate: 2021-08-13
 authors: francesco
 image: /img/blog/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg
@@ -15,7 +15,7 @@ CMS.
 The signature of `EntitySchema<Key extends string = string>` has changed to
 `EntitySchema<M>` where `M` is your model type like:
 ```tsx
-import { buildSchema } from "@camberi/firecms";
+import { buildSchema } from "@camberi/rebase";
 
 type Product = {
     name: string;
@@ -100,7 +100,7 @@ For example, if you had a callback including `EntityValues`, you would know the
 property keys you had defined, but not the types.
 
 ```tsx
-import { buildSchema } from "@camberi/firecms";
+import { buildSchema } from "@camberi/rebase";
 
 type Product = {
     name: string;
@@ -144,7 +144,7 @@ There is a way to get the same type validation without indicating the type
 explicitly. You can wrap each property with `buildProperty` to get the same result
 
 ```tsx
-import { buildSchema, buildProperty } from "@camberi/firecms";
+import { buildSchema, buildProperty } from "@camberi/rebase";
 
 export const productSchema = buildSchema({
     name: "Product",

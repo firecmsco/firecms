@@ -3,17 +3,17 @@ slug: "docs/api/functions/getIconForWidget"
 title: "getIconForWidget"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getIconForWidget
+[@rebasepro/core](../README) / getIconForWidget
 
 # Function: getIconForWidget()
 
 > **getIconForWidget**(`widget`, `size`): `Element`
 
-Defined in: [util/property\_utils.tsx:42](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/property_utils.tsx)
+Defined in: [util/property\_utils.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
 
 ## Parameters
 

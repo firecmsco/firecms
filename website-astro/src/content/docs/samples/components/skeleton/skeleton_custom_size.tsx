@@ -1,5 +1,5 @@
 import React from "react";
-import { Skeleton } from "@firecms/ui";
+import { Skeleton } from "@rebasepro/ui";
 
 export default function SkeletonCustomSizeDemo() {
     return (

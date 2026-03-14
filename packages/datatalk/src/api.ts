@@ -1,7 +1,7 @@
 import { ChatMessage } from "./types";
 import { SchemaContext } from "./utils/schemaContext";
 
-const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
+const DEFAULT_API_ENDPOINT = "https://api.rebase.pro";
 
 export async function streamDataTalkCommand(firebaseAccessToken: string,
     command: string,

@@ -3,17 +3,17 @@ slug: "docs/api/functions/getRandomId"
 title: "getRandomId"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getRandomId
+[@rebasepro/core](../README) / getRandomId
 
 # Function: getRandomId()
 
 > **getRandomId**(): `number`
 
-Defined in: [components/ArrayContainer.tsx:550](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:550](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ## Returns
 

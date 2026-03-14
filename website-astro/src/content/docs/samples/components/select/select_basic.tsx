@@ -1,5 +1,5 @@
 import React from "react";
-import { Select, SelectItem } from "@firecms/ui";
+import { Select, SelectItem } from "@rebasepro/ui";
 
 export default function SelectBasicDemo() {
     const [selected, setSelected] = React.useState<string>();

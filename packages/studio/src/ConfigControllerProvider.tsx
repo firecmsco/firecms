@@ -9,7 +9,7 @@ import {
     useCMSUrlController,
     User,
     useSnackbarController
-} from "@firecms/core";
+} from "@rebasepro/core";
 import { CollectionEditorDialog } from "./ui/collection_editor/CollectionEditorDialog";
 import { useNavigate } from "react-router";
 import { CollectionEditorController } from "./types/collection_editor_controller";

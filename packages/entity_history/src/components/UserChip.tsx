@@ -1,5 +1,5 @@
-import { User } from "@firecms/core";
-import { Chip, Tooltip } from "@firecms/ui";
+import { User } from "@rebasepro/core";
+import { Chip, Tooltip } from "@rebasepro/ui";
 
 export function UserChip({ user }: { user: User }) {
     return (
@@ -7,7 +7,7 @@ export function UserChip({ user }: { user: User }) {
             <Chip size={"small"} className={"flex items-center"}>
                 {user.photoURL && <img
                     className={"rounded-full w-6 h-6 mr-2"}
-                    src={user.photoURL} alt={user.displayName ?? "User picture"}/>}
+                    src={user.photoURL} alt={user.displayName ?? "User picture"} />}
                 <span>{user.displayName ?? user.email ?? user.uid}</span>
             </Chip>
         </Tooltip>

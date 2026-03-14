@@ -54,9 +54,9 @@ export const provisionSearchNode = functions.onRequest(
                 }
             }
 
-            const instanceName = accountId ? `typesense-${accountId.substring(0, 20)}` : "firecms-typesense";
+            const instanceName = accountId ? `typesense-${accountId.substring(0, 20)}` : "rebase-typesense";
             const diskName = `${instanceName}-data`;
-            const secretId = accountId ? `typesense-api-key-${accountId.substring(0, 20)}` : "firecms-search-api-key";
+            const secretId = accountId ? `typesense-api-key-${accountId.substring(0, 20)}` : "rebase-search-api-key";
 
             const typesenseUrl = await runSetup({
                 instanceName,
@@ -428,10 +428,10 @@ export async function getTypesenseHostAndKey(accountId?: string): Promise<{ host
     // Fallback to default
     const secretClient = new SecretManagerServiceClient();
     const [version] = await secretClient.accessSecretVersion({
-        name: `projects/${projectId}/secrets/firecms-search-api-key/versions/latest`,
+        name: `projects/${projectId}/secrets/rebase-search-api-key/versions/latest`,
     });
 
-    const host = await getVMExternalIP("firecms-typesense", defaultVmZone);
+    const host = await getVMExternalIP("rebase-typesense", defaultVmZone);
 
     return { host, port: TYPESENSE_PORT, protocol: "http", apiKey: version.payload?.data?.toString() || "" };
 }

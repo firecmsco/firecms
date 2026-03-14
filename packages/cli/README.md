@@ -1,39 +1,39 @@
-## FireCMS CLI
+## Rebase CLI
 
-This CLI tool allows you to create new FireCMS projects and to deploy them to FireCMS Cloud.
-**IMPORTANT**: You should not be using this tool directly, but `firecms` instead.
+This CLI tool allows you to create new Rebase projects and to deploy them to Rebase Cloud.
+**IMPORTANT**: You should not be using this tool directly, but `rebase` instead.
 
 ### CLI
 
 You can use the following commands:
 
 ```bash
-firecms login
+rebase login
 ```
 
 ```bash
-firecms init
+rebase init
 ```
 
 ```bash
-firecms deploy
+rebase deploy
 ```
 
 ### Using different templates
 
 You can initialize a new project using different templates. Please not that these templates can't
-be deployed to FireCMS Cloud. For example:
+be deployed to Rebase Cloud. For example:
 
-For FireCMS Cloud
+For Rebase Cloud
 
 ```bash
-firecms init
+rebase init
 ```
 
-For FireCMS PRO:
+For Rebase PRO:
 
 ```bash
-firecms init --pro
+rebase init --pro
 ```
 
 #### To run locally
@@ -41,14 +41,14 @@ firecms init --pro
 For development purposes, you can link the package locally.
 
 ```bash
-npm link firecms
+npm link rebase
 ```
 
 ### Development only
 
-You can change the environment when deploying to FireCMS Cloud by defining the --env variable.
+You can change the environment when deploying to Rebase Cloud by defining the --env variable.
 Possible values are `prod` (default) and `dev`.
 
 ```bash
-firecms deploy --env dev
+rebase deploy --env dev
 ```

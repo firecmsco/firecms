@@ -44,7 +44,7 @@ handle modules and is natively supported in modern browsers and Node.js (12+).
 
 ```javascript
 // Named exports
-export const name = "FireCMS";
+export const name = "Rebase";
 export function getData() { /* ... */ }
 
 // Default export
@@ -95,12 +95,12 @@ module.exports = function myFunction() { /* ... */ };
 
 // Multiple exports
 module.exports = {
-  name: "FireCMS",
+  name: "Rebase",
   getData: function() { /* ... */ }
 };
 
 // Individual exports
-exports.name = "FireCMS";
+exports.name = "Rebase";
 exports.getData = function() { /* ... */ };
 ```
 

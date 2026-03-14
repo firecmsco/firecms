@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useCreateFormex } from "@firecms/formex";
+import { useCreateFormex } from "@rebasepro/formex";
 import {
     Button,
     Typography,
@@ -14,8 +14,8 @@ import {
     Dialog,
     DialogActions,
     DialogContent
-} from "@firecms/ui";
-import { useSnackbarController, useStorageSource } from "@firecms/core";
+} from "@rebasepro/ui";
+import { useSnackbarController, useStorageSource } from "@rebasepro/core";
 import { MediaAsset } from "../types";
 
 export interface MediaAssetDetailsProps {

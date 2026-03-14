@@ -3,17 +3,17 @@ slug: "docs/api/variables/VirtualTable"
 title: "VirtualTable"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / VirtualTable
+[@rebasepro/core](../README) / VirtualTable
 
 # Variable: VirtualTable
 
 > `const` **VirtualTable**: `NamedExoticComponent`\<[`VirtualTableProps`](../interfaces/VirtualTableProps)\<`any`\>\>
 
-Defined in: [components/VirtualTable/VirtualTable.tsx:90](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTable.tsx)
+Defined in: [components/VirtualTable/VirtualTable.tsx:90](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTable.tsx)
 
 This is a Table component that allows displaying arbitrary data, not
 necessarily related to entities or properties. It is the component

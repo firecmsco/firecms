@@ -1,4 +1,4 @@
-import { buildCollection, EnumValues } from "@firecms/core";
+import { buildCollection, EnumValues } from "@rebasepro/core";
 import { localeCollection } from "./locales";
 import { Product } from "@/app/common/types";
 import { CMSProductPreview } from "./components/CMSProductPreview";
@@ -63,7 +63,7 @@ export const productsCollection = buildCollection<Product>({
             name: "Product preview",
             Builder: ({ modifiedValues, entity }) => <CMSProductPreview
                 id={entity?.id ?? "temp"}
-                product={modifiedValues}/>
+                product={modifiedValues} />
         }
     ],
     properties: {

@@ -12,7 +12,7 @@ import {
     SendIcon,
     Separator,
     TextareaAutosize
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import {
     AIIcon,
     EntityStatus,
@@ -22,7 +22,7 @@ import {
     Property,
     stripCollectionPath,
     useLargeLayout,
-} from "@firecms/core";
+} from "@rebasepro/core";
 import { useDataEnhancementController } from "./DataEnhancementControllerProvider";
 import { SamplePrompt } from "../types/data_enhancement_controller";
 

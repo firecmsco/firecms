@@ -1,5 +1,5 @@
 import { TiptapImage } from "./index";
-import { cls, defaultBorderMixin } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@rebasepro/ui";
 import { Decoration, DecorationSet, EditorView } from "@tiptap/pm/view";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 

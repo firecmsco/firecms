@@ -3,17 +3,17 @@ slug: "docs/api/functions/getDefaultFieldConfig"
 title: "getDefaultFieldConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getDefaultFieldConfig
+[@rebasepro/core](../README) / getDefaultFieldConfig
 
 # Function: getDefaultFieldConfig()
 
 > **getDefaultFieldConfig**(`property`): [`PropertyConfig`](../type-aliases/PropertyConfig) \| `undefined`
 
-Defined in: [core/field\_configs.tsx:340](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/core/field_configs.tsx)
+Defined in: [core/field\_configs.tsx:340](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/field_configs.tsx)
 
 ## Parameters
 

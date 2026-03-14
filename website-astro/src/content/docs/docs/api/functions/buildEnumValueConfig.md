@@ -3,17 +3,17 @@ slug: "docs/api/functions/buildEnumValueConfig"
 title: "buildEnumValueConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / buildEnumValueConfig
+[@rebasepro/core](../README) / buildEnumValueConfig
 
 # Function: buildEnumValueConfig()
 
 > **buildEnumValueConfig**(`enumValueConfig`): [`EnumValueConfig`](../type-aliases/EnumValueConfig)
 
-Defined in: [util/builders.ts:101](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/builders.ts)
+Defined in: [util/builders.ts:101](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/builders.ts)
 
 Identity function we use to defeat the type system of Typescript and preserve
 the properties keys.

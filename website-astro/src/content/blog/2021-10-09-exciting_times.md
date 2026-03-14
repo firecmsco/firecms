@@ -1,7 +1,7 @@
 ---
 slug: exciting_times_1_0_0
-title: FireCMS enters the beta period
-description: Exciting times for our project! After more than 60 releases, FireCMS is entering its beta period.
+title: Rebase enters the beta period
+description: Exciting times for our project! After more than 60 releases, Rebase is entering its beta period.
 pubDate: 2021-10-09
 authors: francesco
 image: /img/blog/lautaro-andreani-UYsBCu9RP3Y-unsplash.jpg
@@ -23,7 +23,7 @@ facing APIs.
 
 ## A bit of background
 
-We started building FireCMS out of necessity. We were working on several
+We started building Rebase out of necessity. We were working on several
 projects based on Firebase and in most of them we needed to develop some kind of
 backend admin panel/CMS. We took some of those tools we had built, and merged
 them into a single generic project that would support any database structure and
@@ -32,7 +32,7 @@ many aspects of each implementation based on the necessity.
 
 <!-- truncate -->
 
-The outcome was a very good starting point to what would become FireCMS after
+The outcome was a very good starting point to what would become Rebase after
 many iterations and feature updates. One of the consequences of this approach
 was that the code was tightly coupled to Firebase, and you could find imports to
 Firebase code in most layers of the code.
@@ -45,7 +45,7 @@ documents and collections and subcollections mimics the Firestore data
 structure. What seemed like a limitation has turned out to be an
 opportunity to think of a **great UI**.
 
-At FireCMS we have a special passion for **user experience** and believe that
+At Rebase we have a special passion for **user experience** and believe that
 internal admin tools don't always receive the love they deserve.
 
 In this time, we have developed some high quality components such as the
@@ -54,7 +54,7 @@ subcollections.
 
 ## Where we are going
 
-In the last year, we have seen developers integrate FireCMS in ways we had never
+In the last year, we have seen developers integrate Rebase in ways we had never
 imagined! We have tweaked the APIs to try to accommodate those requirements, but
 we have come to the conclusion that a bigger change was needed.
 
@@ -64,7 +64,7 @@ re-usability and customisation.
 We have also added a lot of minor performance tweaks as well as design tweaks
 and improvements, including a very awesome new **dark mode**!
 
-If you are using `FirebaseCMSApp` (previously `CMSApp`), so FireCMS as a
+If you are using `FirebaseCMSApp` (previously `CMSApp`), so Rebase as a
 standalone app, you will need to update some APIs.
 
 But, but, but...
@@ -74,7 +74,7 @@ have control of the MUI theme (adapted to V5), the CMS routes (adapted to React
 Router 6), or how you display the different parts, such as the side dialogs, or
 add your own.
 
-You are now free to integrate the new `FireCMS` component and reuse all the
+You are now free to integrate the new `Rebase` component and reuse all the
 internal components, combine them with your own, build your own custom themes
 or custom backend implementations.
 
@@ -97,13 +97,13 @@ We have three new types that abstract away the services provided by Firebase:
 We provide implementation for using Firebase Auth, Firestore and Firebase Storage,
 assigned by default if you use `FirebaseCMSApp`.
 
-This means that you are now able to use FireCMS with any backend, auth or storage
+This means that you are now able to use Rebase with any backend, auth or storage
 solution. If you want to go this way, you can check an example implementation
-of FireCMS that uses the internal components instead of `FirebaseCMSApp`
+of Rebase that uses the internal components instead of `FirebaseCMSApp`
 
 :::note How did it go?
-If you have been using FireCMS with a custom backend, we would love to hear your feedback
-either in our Discord channel or directly at hello@firecms.co 😊
+If you have been using Rebase with a custom backend, we would love to hear your feedback
+either in our Discord channel or directly at hello@rebase.pro 😊
 :::
 
 ## Code quality
@@ -111,10 +111,10 @@ either in our Discord channel or directly at hello@firecms.co 😊
 We have done a huge internal refactor that affects pretty much every part of the
 CMS. We have now a much better separation of the internal packages. There is
 also a package named `firebase_app` which encapsulates an implementation of
-`FireCMS` that uses the Firebase services as backend.
+`Rebase` that uses the Firebase services as backend.
 
 All the code referring to Firebase can be found only in this internal package,
-and nowhere else. This means the core of FireCMS has been completely isolated
+and nowhere else. This means the core of Rebase has been completely isolated
 from Firebase and is now much more maintainable and extendable.
 
 We have got a lot of PRs and support from out users and would love to foster

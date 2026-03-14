@@ -2,11 +2,11 @@
 slug: docs/recipes/recipes_index
 title: Recipes
 sidebar_label: Recipes
-description: Advanced FireCMS tutorials and recipes covering blogs, localizations, entity copying, and dynamic navigation.
+description: Advanced Rebase tutorials and recipes covering blogs, localizations, entity copying, and dynamic navigation.
 ---
 
 In this section we will demonstrate some advanced use cases that can be solved
-with the multiple features provided by FireCMS.
+with the multiple features provided by Rebase.
 
 For example, we can build the data structure for a **blog** that you can
 then render using SSR (server side rendering) with a tool like

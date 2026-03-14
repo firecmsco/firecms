@@ -3,17 +3,17 @@ slug: "docs/api/functions/getLocalChangesBackup"
 title: "getLocalChangesBackup"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getLocalChangesBackup
+[@rebasepro/core](../README) / getLocalChangesBackup
 
 # Function: getLocalChangesBackup()
 
 > **getLocalChangesBackup**(`collection`): `"manual_apply"` \| `"auto_apply"`
 
-Defined in: [util/collections.ts:74](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/collections.ts)
+Defined in: [util/collections.ts:74](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/collections.ts)
 
 ## Parameters
 

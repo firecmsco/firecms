@@ -3,17 +3,17 @@ slug: "docs/api/functions/getEntityPreviewKeys"
 title: "getEntityPreviewKeys"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getEntityPreviewKeys
+[@rebasepro/core](../README) / getEntityPreviewKeys
 
 # Function: getEntityPreviewKeys()
 
 > **getEntityPreviewKeys**(`authController`, `targetCollection`, `fields`, `previewProperties?`, `limit?`): `string`[]
 
-Defined in: [util/references.ts:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/references.ts)
+Defined in: [util/references.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/references.ts)
 
 ## Parameters
 

@@ -1,14 +1,14 @@
 import React from "react";
 import { StringPropertyValidation } from "./validation/StringPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
-import { getIn, useFormex } from "@firecms/formex";
+import { getIn, useFormex } from "@rebasepro/formex";
 
-import { Select, SelectItem, TextField } from "@firecms/ui";
+import { Select, SelectItem, TextField } from "@rebasepro/ui";
 
 export function UrlPropertyField({
-                                     disabled,
-                                     showErrors
-                                 }: {
+    disabled,
+    showErrors
+}: {
     disabled: boolean;
     showErrors: boolean;
 }) {
@@ -65,10 +65,10 @@ export function UrlPropertyField({
                 <ValidationPanel>
 
                     <StringPropertyValidation disabled={disabled}
-                                              max={true}
-                                              min={true}
-                                              trim={true}
-                                              showErrors={showErrors}/>
+                        max={true}
+                        min={true}
+                        trim={true}
+                        showErrors={showErrors} />
 
                 </ValidationPanel>
 
@@ -77,12 +77,12 @@ export function UrlPropertyField({
             <div className={"col-span-12"}>
 
                 <TextField name={"defaultValue"}
-                           disabled={disabled}
-                           onChange={(e: any) => {
-                               setFieldValue("defaultValue", e.target.value === "" ? undefined : e.target.value);
-                           }}
-                           label={"Default value"}
-                           value={getIn(values, "defaultValue") ?? ""}/>
+                    disabled={disabled}
+                    onChange={(e: any) => {
+                        setFieldValue("defaultValue", e.target.value === "" ? undefined : e.target.value);
+                    }}
+                    label={"Default value"}
+                    value={getIn(values, "defaultValue") ?? ""} />
 
             </div>
         </>

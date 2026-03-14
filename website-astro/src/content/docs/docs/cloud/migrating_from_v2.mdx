@@ -1,21 +1,21 @@
 ---
 slug: docs/cloud/migrating_from_v2
-title: Migrating from FireCMS 2.0 to FireCMS Cloud
-sidebar_label: Migrating from FireCMS 2.0 to FireCMS Cloud
-description: Upgrade to the modern **React-based Firebase CMS**. Migrate your admin panel to FireCMS Cloud for better performance and features.
+title: Migrating from Rebase 2.0 to Rebase Cloud
+sidebar_label: Migrating from Rebase 2.0 to Rebase Cloud
+description: Upgrade to the modern **React-based Firebase CMS**. Migrate your admin panel to Rebase Cloud for better performance and features.
 ---
 
 :::important
-This migration guide applies for migrating from FireCMS 2.0 to FireCMS Cloud
+This migration guide applies for migrating from Rebase 2.0 to Rebase Cloud
 :::
 
-FireCMS 3.0 is a major release that introduces a lot of changes. This page
-describes the main changes and how to migrate from FireCMS 2.0.
+Rebase 3.0 is a major release that introduces a lot of changes. This page
+describes the main changes and how to migrate from Rebase 2.0.
 
 
-## Create a project in app.firecms.co
+## Create a project in app.rebase.pro
 
-FireCMS Cloud requires the creation of a project in [app.firecms.co](https://app.firecms.co).
+Rebase Cloud requires the creation of a project in [app.rebase.pro](https://app.rebase.pro).
 
 The new version relies on a backend that allows you to manage your
 collections and schemas. The final users are now able to modify collections,
@@ -25,14 +25,14 @@ By doing this you will **not need to specify your Firebase project credentials**
 since the service will be able to access your project directly. You will only need
 to specify the **project id**.
 
-## Initialize a FireCMS Cloud project in a new folder
+## Initialize a Rebase Cloud project in a new folder
 
 It is advisable to create a new project from scratch and then migrate your collections and views to
 the new folder.
 
 In order to do so, run
 ```
-npx create-firecms-app
+npx create-rebase-app
 ```
 and create a new project in a new folder.
 
@@ -42,8 +42,8 @@ ready so you don't need to worry about it.
 
 ## Migrating collections to the new format
 
-Despite the new format, FireCMS aims allow users to migrate existing apps with minimal
-changes. The collections can be now stored both in the FireCMS backend or defined in
+Despite the new format, Rebase aims allow users to migrate existing apps with minimal
+changes. The collections can be now stored both in the Rebase backend or defined in
 code like until now.
 
 Also, you can have collections defined in both places, and decide if the code defined collections
@@ -54,11 +54,11 @@ explicitly mark them as `editable: true`.
 
 ## package.json
 
-For reference, the `package.json` file of a new FireCMS Cloud project looks like this:
+For reference, the `package.json` file of a new Rebase Cloud project looks like this:
 
 ```json
 {
-  "name": "my-firecms-project",
+  "name": "my-rebase-project",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -66,10 +66,10 @@ For reference, the `package.json` file of a new FireCMS Cloud project looks like
     "dev": "vite --port 5001",
     "build": "vite build",
     "serve": "vite preview --port 5001",
-    "deploy": "run-s build && firecms deploy --project=your-project-id"
+    "deploy": "run-s build && rebase deploy --project=your-project-id"
   },
   "dependencies": {
-    "@firecms/cloud": "^3.0.0",
+    "@rebasepro/cloud": "^3.0.0",
     "firebase": "^12.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -92,14 +92,14 @@ For reference, the `package.json` file of a new FireCMS Cloud project looks like
 
 ## New format
 
-Since it is now possible to deploy FireCMS in our hosted service, the output
+Since it is now possible to deploy Rebase in our hosted service, the output
 of your project needs to be in a specific format.
 
-The `index.ts` file should export a `FireCMSAppConfig` object, which is defined as follows:
+The `index.ts` file should export a `RebaseAppConfig` object, which is defined as follows:
 
 ```typescript
 import {CMSView, CMSViewsBuilder, EntityCollection, EntityCollectionsBuilder, EntityCustomView, PropertyConfig} from "./index.ts";
-export type FireCMSAppConfig = {
+export type RebaseAppConfig = {
 
     /**
      * Customization schema version.
@@ -155,8 +155,8 @@ easy to adapt your collections to the new format.
 To migrate your collections, simply export them in your `index.ts` file:
 
 ```typescript
-import { FireCMSAppConfig } from "@firecms/cloud";
-const appConfig: FireCMSAppConfig = {
+import { RebaseAppConfig } from "@rebasepro/cloud";
+const appConfig: RebaseAppConfig = {
     version: "1",
     collections: async (props) => {
         return ([
@@ -180,12 +180,12 @@ const appConfig: FireCMSAppConfig = {
 
 ## Migrating custom components (MUI)
 
-FireCMS 3.0 is based on `tailwindcss` instead of `mui`.
+Rebase 3.0 is based on `tailwindcss` instead of `mui`.
 
-Mui was great for the initial versions of FireCMS, but it was being a big performance bottleneck
+Mui was great for the initial versions of Rebase, but it was being a big performance bottleneck
 and it was hard to customize.
 
-The new version of FireCMS has built in almost 50 new components implemented with tailwindcss, that
+The new version of Rebase has built in almost 50 new components implemented with tailwindcss, that
 mimic in a good way the material-ui components. You are encouraged to migrate your custom components
 to the new format.
 
@@ -228,7 +228,7 @@ Tip: ChatGPT is great at converting Box components to div with tailwind classes.
 
 ### Deployment
 
-FireCMS 3.0 is now deployed in our own service, and reachable through [app.firecms.co](https://app.firecms.co).
+Rebase 3.0 is now deployed in our own service, and reachable through [app.rebase.pro](https://app.rebase.pro).
 
 You can still deploy it in your own Firebase project. The same build you generate for running the
 CMS locally can be deployed to Firebase hosting, or any other hosting service.

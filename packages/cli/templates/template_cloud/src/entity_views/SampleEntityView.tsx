@@ -1,11 +1,11 @@
 import React from "react";
-import { Button, Entity, EntityValues, useSnackbarController } from "@firecms/cloud";
-import { Product } from "@firecms/types";
+import { Button, Entity, EntityValues, useSnackbarController } from "@rebasepro/cloud";
+import { Product } from "@rebasepro/types";
 
 export function SampleEntityView({
-                                       entity,
-                                       modifiedValues
-                                   }: {
+    entity,
+    modifiedValues
+}: {
     entity?: Entity<Product>;
     modifiedValues?: EntityValues<Product>;
 }) {

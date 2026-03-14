@@ -1,5 +1,5 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { FireCMSApiClient } from "./api-client.js";
+import { RebaseApiClient } from "./api-client.js";
 import { registerAuthTools } from "./tools/auth.js";
 import { registerProjectTools } from "./tools/projects.js";
 import { registerUserTools } from "./tools/users.js";
@@ -9,15 +9,15 @@ import { registerExportTools } from "./tools/export.js";
 import { registerProjectResources } from "./resources/project.js";
 
 /**
- * Create and configure the FireCMS MCP server with all tools and resources.
+ * Create and configure the Rebase MCP server with all tools and resources.
  */
-export function createFireCMSMcpServer(): McpServer {
+export function createRebaseMcpServer(): McpServer {
     const server = new McpServer({
-        name: "FireCMS Cloud",
+        name: "Rebase Cloud",
         version: "0.1.0",
     });
 
-    const api = new FireCMSApiClient();
+    const api = new RebaseApiClient();
 
     // Auth tools (login/logout)
     registerAuthTools(server);

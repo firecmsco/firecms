@@ -1,4 +1,4 @@
-import { EntityCollection, EntityCustomView } from "@firecms/types";
+import { EntityCollection, EntityCustomView } from "@rebasepro/types";
 import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
 import { getSubcollections } from "./resolutions";
 
@@ -36,7 +36,7 @@ export function getNavigationEntriesFromPath(props: {
     collections: EntityCollection[] | undefined,
     currentFullPath?: string,
     contextEntityViews?: EntityCustomView<any>[]
-}): NavigationViewInternal [] {
+}): NavigationViewInternal[] {
 
     const {
         path,

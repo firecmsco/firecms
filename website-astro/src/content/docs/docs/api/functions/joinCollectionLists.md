@@ -3,17 +3,17 @@ slug: "docs/api/functions/joinCollectionLists"
 title: "joinCollectionLists"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / joinCollectionLists
+[@rebasepro/core](../README) / joinCollectionLists
 
 # Function: joinCollectionLists()
 
 > **joinCollectionLists**(`targetCollections`, `sourceCollections`, `parentPaths`, `modifyCollection?`): [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>[]
 
-Defined in: [util/join\_collections.ts:36](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/join_collections.ts)
+Defined in: [util/join\_collections.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/join_collections.ts)
 
 ## Parameters
 

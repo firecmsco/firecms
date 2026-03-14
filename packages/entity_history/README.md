@@ -1,6 +1,6 @@
-# FireCMS Entity History Plugin
+# Rebase Entity History Plugin
 
-This plugin adds a history view to your entities in FireCMS. It allows you to track changes made to entities over time,
+This plugin adds a history view to your entities in Rebase. It allows you to track changes made to entities over time,
 showing who made the change and when.
 
 The document history will be stored in a subcollection called `__history` within the entity's document.
@@ -9,9 +9,9 @@ Each change will be recorded as a new document in this subcollection.
 ## Installation
 
 ```bash
-npm install @firecms/entity_history
+npm install @rebasepro/entity_history
 # or
-yarn add @firecms/entity_history
+yarn add @rebasepro/entity_history
 ```
 
 ## Features
@@ -27,8 +27,8 @@ To use the plugin, import `useEntityHistoryPlugin` and add it to your `FirebaseC
 
 ```tsx
 import React from "react";
-import { FireCMS } from "@firecms/core";
-import { useEntityHistoryPlugin } from "@firecms/entity_history";
+import { Rebase } from "@rebasepro/core";
+import { useEntityHistoryPlugin } from "@rebasepro/entity_history";
 
 
 export default function App() {
@@ -36,7 +36,7 @@ export default function App() {
     // Basic setup with default options
     const entityHistoryPlugin = useEntityHistoryPlugin();
 
-    return <FireCMS
+    return <Rebase
         name={"My Online Shop"}
         plugins={[entityHistoryPlugin]}
         authentication={myAuthenticator}
@@ -50,7 +50,7 @@ By default, the history feature is not enabled for any collection. You need to e
 configuration:
 
 ```tsx
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@rebasepro/core";
 
 const productsCollection = buildCollection({
     name: "Products",
@@ -73,8 +73,8 @@ If you are using the user management plugin, you can provide a function to resol
 You can also pass your own custom `getUser` function to fetch user details.
 
 ```tsx
-import { useEntityHistoryPlugin } from "@firecms/entity_history";
-import { User } from "@firecms/core";
+import { useEntityHistoryPlugin } from "@rebasepro/entity_history";
+import { User } from "@rebasepro/core";
 
 export function App() {
 

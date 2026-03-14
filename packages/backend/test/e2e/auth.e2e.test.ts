@@ -1,6 +1,6 @@
 import request from "supertest";
-import { FireCMSApiServer } from "../../src/api/server";
-import { User } from "@firecms/types";
+import { RebaseApiServer } from "../../src/api/server";
+import { User } from "@rebasepro/types";
 
 // Mock dependencies
 jest.mock("graphql-http/lib/use/express", () => ({
@@ -22,7 +22,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
     let mockScopedDataSource: any;
     let mockCollections: any[];
     let mockWithAuth: jest.Mock;
-    let server: FireCMSApiServer;
+    let server: RebaseApiServer;
     let app: any;
 
     beforeEach(async () => {
@@ -56,7 +56,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
     it("REST API: should route requests explicitly to the authenticated datasource if auth yields a User", async () => {
         const mockUser: User = { uid: "user-abc" };
 
-        server = await FireCMSApiServer.create({
+        server = await RebaseApiServer.create({
             dataSource: mockDefaultDataSource as any,
             collections: mockCollections,
             enableREST: true,
@@ -79,7 +79,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
     });
 
     it("REST API: should fallback to global datasource if auth is completely disabled", async () => {
-        server = await FireCMSApiServer.create({
+        server = await RebaseApiServer.create({
             dataSource: mockDefaultDataSource as any,
             collections: mockCollections,
             enableREST: true,
@@ -100,7 +100,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
     it("GraphQL API: should construct the execution context using the scoped data source", async () => {
         const mockUser: User = { uid: "graphql-user" };
 
-        server = await FireCMSApiServer.create({
+        server = await RebaseApiServer.create({
             dataSource: mockDefaultDataSource as any,
             collections: mockCollections,
             enableGraphQL: true,

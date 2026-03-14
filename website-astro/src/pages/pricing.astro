@@ -4,14 +4,14 @@ import Layout from "../layouts/Layout.astro";
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
 
 const breadcrumbs = [
-    { name: "Home", url: "https://firecms.co" },
-    { name: "Pricing", url: "https://firecms.co/pricing" }
+    { name: "Home", url: "https://rebase.pro" },
+    { name: "Pricing", url: "https://rebase.pro/pricing" }
 ];
 ---
 
 <Layout
-        title="FireCMS Pricing - Cloud Trial & Self-Hosted Options"
-        description="Explore FireCMS plans: Start with our free Community version (self-hosted), try Cloud free for a month, or unlock PRO features."
+        title="Rebase Pricing - Cloud Trial & Self-Hosted Options"
+        description="Explore Rebase plans: Start with our free Community version (self-hosted), try Cloud free for a month, or unlock PRO features."
         breadcrumbs={breadcrumbs}
 >
     <main>
@@ -128,7 +128,7 @@ const breadcrumbs = [
                         <div class="mt-8 flex-grow flex flex-col justify-end"> {/* Use flex-grow and justify-end */}
                             <p class="text-sm text-surface-400 mb-2">Get started:</p>
                             <div class="bg-surface-900 rounded-lg p-3 font-mono text-sm text-surface-300 ring-1 ring-surface-700/50 mb-4">
-                                npx create-firecms-app
+                                npx create-rebase-app
                             </div>
                             <a href="/developers" aria-describedby="tier-community"
                                class="block rounded-md border border-surface-700 bg-transparent px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-surface-800 focus-visible:outline-surface-700 transition-colors duration-200">
@@ -218,7 +218,7 @@ const breadcrumbs = [
                             </li>
                             {/* Add other Cloud Plus features */}
                         </ul>
-                        <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer"
+                        <a href="https://app.rebase.pro" target="_blank" rel="noopener noreferrer"
                            aria-describedby="tier-plus"
                             class="mt-8 block rounded-md bg-primary px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-primary transition-colors duration-200 btn-glow flex-grow flex flex-col justify-end"
                             data-track
@@ -363,9 +363,9 @@ const breadcrumbs = [
                     </figure>
                 </div>
                 <div class="mt-16 text-center">
-                    <a href="/why-firecms"
+                    <a href="/why-rebase"
                        class="text-base font-semibold leading-6 text-primary-light hover:text-primary transition-colors">
-                        Why choose FireCMS? <span aria-hidden="true">→</span>
+                        Why choose Rebase? <span aria-hidden="true">→</span>
                     </a>
                 </div>
             </div>
@@ -449,7 +449,7 @@ const breadcrumbs = [
                                 <p><strong>PRO</strong> is a paid license for self-hosted instances that unlocks
                                     additional productivity features like the visual Schema Editor UI, advanced data
                                     import/export tools, pre-built User/Role Management UI, advanced PRO field
-                                    components, and provides priority support directly from the FireCMS team.</p>
+                                    components, and provides priority support directly from the Rebase team.</p>
                             </div>
                         </details>
                         <details class="py-8 group">
@@ -462,7 +462,7 @@ const breadcrumbs = [
                 </span>
                             </summary>
                             <div class="mt-4 leading-7 text-surface-300 prose prose-invert max-w-none prose-p:my-2">
-                                <p>FireCMS Cloud offers a <strong>1-month free trial</strong> for the Plus plan. After
+                                <p>Rebase Cloud offers a <strong>1-month free trial</strong> for the Plus plan. After
                                     the trial, it's a paid subscription per user per month. The <strong>Self-Hosted
                                         Community</strong> version is completely free (MIT licensed).</p>
                             </div>
@@ -479,7 +479,7 @@ const breadcrumbs = [
                             </summary>
                             <div class="mt-4 leading-7 text-surface-300 prose prose-invert max-w-none prose-p:my-2">
                                 <p>Yes. Your core schema configurations are compatible. Migrating from Cloud to
-                                    Self-Hosted involves setting up the FireCMS framework in your environment and
+                                    Self-Hosted involves setting up the Rebase framework in your environment and
                                     pointing it to your existing database. Migrating from Self-Hosted to Cloud generally
                                     requires ensuring your configuration is compatible with the Cloud environment
                                     (especially regarding custom code).</p>

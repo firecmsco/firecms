@@ -3,17 +3,17 @@ slug: "docs/api/functions/useDataSourceTableController"
 title: "useDataSourceTableController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useDataSourceTableController
+[@rebasepro/core](../README) / useDataSourceTableController
 
 # Function: useDataSourceTableController()
 
 > **useDataSourceTableController**\<`M`, `USER`\>(`fullPath`): [`EntityTableController`](../type-aliases/EntityTableController)\<`M`\>
 
-Defined in: [components/common/useDataSourceTableController.tsx:67](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useDataSourceTableController.tsx)
+Defined in: [components/common/useDataSourceTableController.tsx:67](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useDataSourceTableController.tsx)
 
 Use this hook to build a controller for the [EntityCollectionTable](EntityCollectionTable).
 This controller is bound to data in a path in your specified datasource.

@@ -1,6 +1,6 @@
 import React from "react";
-import { cls, ExpandMoreIcon, Typography } from "@firecms/ui";
-import { NavigationEntry } from "@firecms/types";
+import { cls, ExpandMoreIcon, Typography } from "@rebase/ui";
+import { NavigationEntry } from "@rebase/types";
 import { IconForView } from "../util";
 import { DrawerNavigationItem } from "./DrawerNavigationItem";
 
@@ -44,7 +44,7 @@ export interface DrawerNavigationGroupProps {
 }
 
 /**
- * Shared drawer navigation group component used by both DefaultDrawer and FireCMSCloudDrawer.
+ * Shared drawer navigation group component used by both DefaultDrawer and RebaseCloudDrawer.
  * Renders a collapsible group with header and navigation items.
  */
 export function DrawerNavigationGroup({
@@ -66,8 +66,8 @@ export function DrawerNavigationGroup({
             {/* Group Header */}
             <div
                 className={cls("pl-4 pr-2 py-1 flex flex-row items-center transition-colors",
-                        drawerOpen ? "cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700/50 rounded-t-lg bg-surface-50 dark:bg-surface-800/30" : "opacity-0 invisible pointer-events-none"
-                    )}
+                    drawerOpen ? "cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700/50 rounded-t-lg bg-surface-50 dark:bg-surface-800/30" : "opacity-0 invisible pointer-events-none"
+                )}
                 onClick={drawerOpen ? onToggleCollapsed : undefined}
             >
                 <ExpandMoreIcon

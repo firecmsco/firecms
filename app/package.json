@@ -1,7 +1,7 @@
 {
-  "name": "@firecms/app-example",
+  "name": "@rebasepro/app-example",
   "version": "1.0.0",
-  "description": "Complete FireCMS application example with PostgreSQL backend",
+  "description": "Complete Rebase application example with PostgreSQL backend",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -26,7 +26,7 @@
     "generate:schema": "cd backend && pnpm run generate:schema"
   },
   "devDependencies": {
-    "@firecms/types": "*",
+    "@rebasepro/types": "*",
     "concurrently": "^8.2.2",
     "typescript": "^5.0.0"
   },

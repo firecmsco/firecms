@@ -3,17 +3,17 @@ slug: "docs/api/functions/useCollectionFetch"
 title: "useCollectionFetch"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useCollectionFetch
+[@rebasepro/core](../README) / useCollectionFetch
 
 # Function: useCollectionFetch()
 
 > **useCollectionFetch**\<`M`, `USER`\>(`path`): [`CollectionFetchResult`](../interfaces/CollectionFetchResult)\<`M`\>
 
-Defined in: [hooks/data/useCollectionFetch.tsx:63](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [hooks/data/useCollectionFetch.tsx:63](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 This hook is used to fetch collections using a given collection
 

@@ -8,7 +8,7 @@ import { AuthController } from "../controllers";
 import { Relation } from "./relations";
 import { EntityAfterReadProps, EntityBeforeSaveProps } from "./entity_callbacks";
 import { User } from "../users";
-import { FireCMSContext } from "../firecms_context";
+import { RebaseContext } from "../rebase_context";
 
 /**
  * Callbacks/Hooks for individual property fields

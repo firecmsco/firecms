@@ -1,4 +1,4 @@
-import { cls, SquareIcon, ToggleButtonGroup, Typography, VerticalSplitIcon } from "@firecms/ui";
+import { cls, SquareIcon, ToggleButtonGroup, Typography, VerticalSplitIcon } from "@rebasepro/ui";
 
 export function LayoutModeSwitch({
     value,

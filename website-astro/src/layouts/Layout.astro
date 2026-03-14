@@ -17,12 +17,12 @@ import Footer from "../components/Footer.astro";
 import CookieBanner from "../components/CookieBanner.astro";
 
 const {
-    title = "FireCMS - The Headless CMS for Firebase and MongoDB",
-    description = "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB with AI-powered features, visual schema builder, and beautiful data management interface.",
+    title = "Rebase - The Postgres Admin Panel Built for Developers",
+    description = "Build powerful back-office applications in minutes with Rebase. An open-source, React-based admin framework for PostgreSQL featuring an AI-powered UI, visual schema builder, and beautiful data management.",
     breadcrumbs
 } = Astro.props;
 
-const canonicalBase = "https://firecms.co";
+const canonicalBase = "https://rebase.pro";
 const path = Astro.url.pathname;
 const canonical = path === "/" ? canonicalBase : `${canonicalBase}${path}`;
 
@@ -48,7 +48,7 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <link rel="canonical" href={canonical}>
     <meta name="description" content={description}>
     <meta name="keywords"
-          content="headless CMS, Firebase CMS, Firestore CMS, React admin panel, no-code backend, AI-powered CMS, visual schema builder, data management, back-office application, content management system, Firestore admin, Firestore admin, Firebase back office, database UI">
+          content="Postgres admin panel, React admin panel, internal tools builder, no-code backend, AI-powered admin, visual schema builder, data management, back-office application, database UI">
     <meta name="robots" content="index, follow">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="sitemap" href="/sitemap-index.xml"/>
@@ -60,17 +60,17 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <meta property="og:description" content={description}>
     <meta property="og:type" content="website">
     <meta property="og:url" content={canonical}>
-    <meta property="og:image" content="https://firecms.co/img/teaser.png">
+    <meta property="og:image" content="https://rebase.pro/img/teaser.png">
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@firecmsco">
+    <meta name="twitter:site" content="@rebasepro">
     <meta name="twitter:title" content={title}>
     <meta name="twitter:description" content={description}>
     <meta name="twitter:image:type" content="image/png">
     <meta name="twitter:image:width" content="1200">
     <meta name="twitter:image:height" content="630">
-    <meta name="twitter:image" content="https://firecms.co/img/twitter_teaser.png">
+    <meta name="twitter:image" content="https://rebase.pro/img/twitter_teaser.png">
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
@@ -79,38 +79,38 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
             "@graph": [
                 {
                     "@type": "WebSite",
-                    "name": "FireCMS",
-                    "url": "https://firecms.co",
-                    "description": "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB.",
+                    "name": "Rebase",
+                    "url": "https://rebase.pro",
+                    "description": "Build powerful back-office applications in minutes with Rebase. A modern React admin framework for PostgreSQL.",
                     "publisher": {
-                        "@id": "https://firecms.co/#organization"
+                        "@id": "https://rebase.pro/#organization"
                     }
                 },
                 {
                     "@type": "Organization",
-                    "@id": "https://firecms.co/#organization",
-                    "name": "FireCMS",
-                    "url": "https://firecms.co",
+                    "@id": "https://rebase.pro/#organization",
+                    "name": "Rebase",
+                    "url": "https://rebase.pro",
                     "logo": {
                         "@type": "ImageObject",
-                        "url": "https://firecms.co/img/logo_small.png",
+                        "url": "https://rebase.pro/img/logo_small.png",
                         "width": 512,
                         "height": 512
                     },
                     "sameAs": [
-                        "https://x.com/firecmsco",
-                        "https://github.com/firecmsco/firecms",
-                        "https://www.linkedin.com/company/firecms"
+                        "https://x.com/rebaseco",
+                        "https://github.com/rebaseco/rebase",
+                        "https://www.linkedin.com/company/rebase"
                     ]
                 },
                 {
                     "@type": "SoftwareApplication",
-                    "name": "FireCMS",
+                    "name": "Rebase",
                     "applicationCategory": "DeveloperApplication",
                     "operatingSystem": "Web",
-                    "description": "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB with AI-powered features, visual schema builder, and beautiful data management interface.",
-                    "url": "https://firecms.co",
-                    "screenshot": "https://firecms.co/img/teaser.png",
+                    "description": "Build powerful back-office applications in minutes with Rebase. An open-source, React-based admin framework for PostgreSQL featuring an AI-powered UI, visual schema builder, and beautiful data management.",
+                    "url": "https://rebase.pro",
+                    "screenshot": "https://rebase.pro/img/teaser.png",
                     "offers": {
                         "@type": "Offer",
                         "price": "0",
@@ -119,9 +119,9 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
                     },
                     "softwareVersion": "3.1",
                     "applicationSubCategory": "Content Management System",
-                    "keywords": "headless CMS, Firebase CMS, MongoDB CMS, React admin panel, no-code backend, AI-powered CMS",
+                    "keywords": "PostgreSQL admin panel, React admin panel, internal tools builder, no-code backend, AI-powered admin",
                     "publisher": {
-                        "@id": "https://firecms.co/#organization"
+                        "@id": "https://rebase.pro/#organization"
                     }
                 }
             ]
@@ -171,10 +171,10 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
         // Set timestamp - only once
         window.gtag("js", new Date());
 
-        // Initialize GA4 with cross-domain tracking to app.firecms.co
+        // Initialize GA4 with cross-domain tracking to app.rebase.pro
         window.gtag("config", "G-NL75PPNYXD", {
             linker: {
-                domains: ["app.firecms.co"]
+                domains: ["app.rebase.pro"]
             }
         });
 

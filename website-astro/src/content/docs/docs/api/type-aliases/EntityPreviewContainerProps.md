@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/EntityPreviewContainerProps"
 title: "EntityPreviewContainerProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityPreviewContainerProps
+[@rebasepro/core](../README) / EntityPreviewContainerProps
 
 # Type Alias: EntityPreviewContainerProps
 
 > **EntityPreviewContainerProps** = `object`
 
-Defined in: [components/EntityPreview.tsx:193](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
+Defined in: [components/EntityPreview.tsx:193](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [components/EntityPreview.tsx:193](https://github.com/firecmsco/fire
 
 > **children**: `React.ReactNode`
 
-Defined in: [components/EntityPreview.tsx:194](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
+Defined in: [components/EntityPreview.tsx:194](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [components/EntityPreview.tsx:194](https://github.com/firecmsco/fire
 
 > `optional` **className**: `string`
 
-Defined in: [components/EntityPreview.tsx:198](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
+Defined in: [components/EntityPreview.tsx:198](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [components/EntityPreview.tsx:198](https://github.com/firecmsco/fire
 
 > `optional` **fullwidth**: `boolean`
 
-Defined in: [components/EntityPreview.tsx:196](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
+Defined in: [components/EntityPreview.tsx:196](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [components/EntityPreview.tsx:196](https://github.com/firecmsco/fire
 
 > `optional` **hover**: `boolean`
 
-Defined in: [components/EntityPreview.tsx:195](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
+Defined in: [components/EntityPreview.tsx:195](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [components/EntityPreview.tsx:195](https://github.com/firecmsco/fire
 
 > `optional` **onClick**: (`e`) => `void`
 
-Defined in: [components/EntityPreview.tsx:200](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
+Defined in: [components/EntityPreview.tsx:200](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 #### Parameters
 
@@ -71,7 +71,7 @@ Defined in: [components/EntityPreview.tsx:200](https://github.com/firecmsco/fire
 
 > `optional` **size**: [`PreviewSize`](PreviewSize)
 
-Defined in: [components/EntityPreview.tsx:197](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
+Defined in: [components/EntityPreview.tsx:197](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -79,4 +79,4 @@ Defined in: [components/EntityPreview.tsx:197](https://github.com/firecmsco/fire
 
 > `optional` **style**: `React.CSSProperties`
 
-Defined in: [components/EntityPreview.tsx:199](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityPreview.tsx)
+Defined in: [components/EntityPreview.tsx:199](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)

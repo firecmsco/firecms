@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/FetchCollectionProps"
 title: "FetchCollectionProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / FetchCollectionProps
+[@rebasepro/core](../README) / FetchCollectionProps
 
 # Interface: FetchCollectionProps\<M\>
 
-Defined in: [types/datasource.ts:29](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [types/datasource.ts:29](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
 
-Defined in: [types/datasource.ts:31](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [types/datasource.ts:31](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **filter**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
 
-Defined in: [types/datasource.ts:32](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [types/datasource.ts:32](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **limit**: `number`
 
-Defined in: [types/datasource.ts:33](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [types/datasource.ts:33](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **order**: `"desc"` \| `"asc"`
 
-Defined in: [types/datasource.ts:37](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [types/datasource.ts:37](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **orderBy**: `string`
 
-Defined in: [types/datasource.ts:35](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -65,7 +65,7 @@ Defined in: [types/datasource.ts:35](https://github.com/firecmsco/firecms/blob/m
 
 > **path**: `string`
 
-Defined in: [types/datasource.ts:30](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -73,7 +73,7 @@ Defined in: [types/datasource.ts:30](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **searchString**: `string`
 
-Defined in: [types/datasource.ts:36](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -81,4 +81,4 @@ Defined in: [types/datasource.ts:36](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **startAfter**: `any`
 
-Defined in: [types/datasource.ts:34](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)

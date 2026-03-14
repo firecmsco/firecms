@@ -9,10 +9,10 @@ import {
     useAuthController,
     useCustomizationController,
     useDataSource,
-    useFireCMSContext,
+    useRebaseContext,
     useCMSUrlController,
     User
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     Alert,
     BooleanSwitchWithLabel,
@@ -26,7 +26,7 @@ import {
     DownloadIcon,
     IconButton,
     Tooltip
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { downloadEntitiesExport } from "./export";
 
 const DOCS_LIMIT = 500;
@@ -53,7 +53,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const [exportType, setExportType] = React.useState<"csv" | "json">("csv");
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
 
-    const context = useFireCMSContext<USER>();
+    const context = useRebaseContext<USER>();
     const dataSource = useDataSource();
     const cmsUrlController = useCMSUrlController();
 

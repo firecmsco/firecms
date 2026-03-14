@@ -25,7 +25,7 @@ import {
     DownloadMetadata,
     StorageListResult,
     StorageReference
-} from '@firecms/types';
+} from '@rebasepro/types';
 
 /**
  * S3-compatible storage implementation

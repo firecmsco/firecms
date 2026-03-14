@@ -3,17 +3,17 @@ slug: "docs/api/functions/buildCollection"
 title: "buildCollection"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / buildCollection
+[@rebasepro/core](../README) / buildCollection
 
 # Function: buildCollection()
 
 > **buildCollection**\<`M`, `USER`\>(`collection`): [`EntityCollection`](../interfaces/EntityCollection)\<`M`, `USER`\>
 
-Defined in: [util/builders.ts:29](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/builders.ts)
+Defined in: [util/builders.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/builders.ts)
 
 Identity function we use to defeat the type system of Typescript and build
 collection views with all its properties

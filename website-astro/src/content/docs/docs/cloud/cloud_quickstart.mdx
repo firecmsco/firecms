@@ -10,34 +10,34 @@ description: "Learn how to build a custom back-office and admin panel for Fireba
 import { DocsCloudCTA } from "../../../../components/DocsCloudCTA.tsx";
 
 :::note
-Start here if you want to customize FireCMS Cloud.
-You can run a FireCMS project without writing a single line of code
-from [FireCMS Cloud](https://app.firecms.co).
-This guide is for developers who want to add custom code to their FireCMS project.
+Start here if you want to customize Rebase Cloud.
+You can run a Rebase project without writing a single line of code
+from [Rebase Cloud](https://app.rebase.pro).
+This guide is for developers who want to add custom code to their Rebase project.
 :::
 
-In order to add custom code to your FireCMS Cloud project, you need:
+In order to add custom code to your Rebase Cloud project, you need:
 - A **Firebase** project
-- A **FireCMS Cloud** project
+- A **Rebase Cloud** project
 
-You can create both projects from FireCMS Cloud, or connect an existing Firebase
-project to a new FireCMS Cloud project.
+You can create both projects from Rebase Cloud, or connect an existing Firebase
+project to a new Rebase Cloud project.
 
 <DocsCloudCTA/>
 
 Once you have both projects created you can initialize your codebase by running:
 
 ```bash
-npx create-firecms-app
+npx create-rebase-app
 ```
 
 or
 
 ```bash
-yarn create firecms-app
+yarn create rebase-app
 ```
 
-Make sure to select the option FireCMS Cloud, and follow the instructions in the CLI.
+Make sure to select the option Rebase Cloud, and follow the instructions in the CLI.
 
 This will create a new folder with all the code you need to get started.
 In the code you will be able to add custom collections, custom pages, custom
@@ -59,14 +59,14 @@ or
 yarn dev
 ```
 
-This will execute a version of your project that uses FireCMS backend to
+This will execute a version of your project that uses Rebase backend to
 store config data but runs locally.
 
-You should be able to see your FireCMS instance in your browser, including all the configuration you
+You should be able to see your Rebase instance in your browser, including all the configuration you
 have already created in the Cloud version... Awesome!
 
-If you want to deploy to FireCMS Cloud your module must export a
-`FireCMSAppConfig` object. You can find more information about this object
+If you want to deploy to Rebase Cloud your module must export a
+`RebaseAppConfig` object. You can find more information about this object
 in the [App config section](./app_config) reference.
 
 :::important
@@ -81,19 +81,19 @@ Alternatively, you can use the url `http://localhost:5173`.
 
 ## How does code upload work?
 
-We use module federation to upload your code to FireCMS Cloud.
-This means that you can upload your code to FireCMS Cloud without
+We use module federation to upload your code to Rebase Cloud.
+This means that you can upload your code to Rebase Cloud without
 having to worry about the infrastructure.
 When you run the command `npm run deploy` or `yarn deploy`, your code
 When you run the command `yarn deploy` or `npm run deploy`, your code
-will be uploaded to FireCMS Cloud and will be available in the
-FireCMS Cloud instance.
+will be uploaded to Rebase Cloud and will be available in the
+Rebase Cloud instance.
 
 Only your code will be uploaded, and it will be integrated into the core
-FireCMS Cloud. This means that you can use the same authentication
+Rebase Cloud. This means that you can use the same authentication
 system, the same collections, the same pages, etc.
 
 This approach allows you to have a CMS that is fully customizable
 while still benefiting of the continuous improvements and updates
-that we provide in FireCMS Cloud.
+that we provide in Rebase Cloud.
 

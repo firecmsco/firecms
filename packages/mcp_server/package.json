@@ -1,15 +1,15 @@
 {
-  "name": "@firecms/mcp-server",
+  "name": "@rebasepro/mcp-server",
   "version": "3.1.0",
   "publishConfig": {
     "access": "public"
   },
-  "description": "MCP server for FireCMS Cloud — manage projects, collections, users, and AI features via the Model Context Protocol",
+  "description": "MCP server for Rebase Cloud — manage projects, collections, users, and AI features via the Model Context Protocol",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "firecms-mcp": "./dist/cli.js"
+    "rebase-mcp": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -18,7 +18,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@firecms/cli": "^3.1.0",
+    "@rebasepro/cli": "^3.1.0",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "axios": "^1.7.0",
     "zod": "^3.24.0"
@@ -31,7 +31,7 @@
     "node": ">=18"
   },
   "keywords": [
-    "firecms",
+    "rebase",
     "mcp",
     "model-context-protocol",
     "firebase",
@@ -42,6 +42,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FireCMSco/firecms"
+    "url": "https://github.com/Rebaseco/rebase"
   }
 }

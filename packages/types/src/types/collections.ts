@@ -8,7 +8,7 @@ import { EntityAction } from "./entity_actions";
 import { ExportConfig } from "./export_import";
 import { EntityOverrides } from "./entity_overrides";
 import { User } from "../users";
-import { FireCMSContext } from "../firecms_context";
+import { RebaseContext } from "../rebase_context";
 import { Relation } from "./relations";
 
 /**
@@ -150,7 +150,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * You can use any of the icons in the Material specs:
      * https://fonts.google.com/icons
      * e.g. 'account_tree' or 'person'.
-     * Find all the icons in https://firecms.co/docs/icons
+     * Find all the icons in https://rebase.pro/docs/icons
      * You can also pass a React node if you want to render a custom icon.
      * If not specified, a default icon will be used.
      */
@@ -255,7 +255,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * view or in the entity view.
      *
      * You can use the `onClick` method to implement your own logic.
-     * In the `context` prop you can access all the controllers of FireCMS.
+     * In the `context` prop you can access all the controllers of Rebase.
      *
      * ```
      * const archiveEntityAction: EntityAction = {
@@ -519,7 +519,7 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, USE
     /**
      * Context of the app status
      */
-    context: FireCMSContext<USER>;
+    context: RebaseContext<USER>;
 
     /**
      * Count of the entities in this collection.
@@ -584,7 +584,7 @@ export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
 export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, USER extends User = User> = {
     entity: Entity<M>,
-    context: FireCMSContext<USER>
+    context: RebaseContext<USER>
 };
 
 /**
@@ -634,7 +634,7 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
      */
     value?: (props: {
         entity: Entity<M>,
-        context: FireCMSContext<any>
+        context: RebaseContext<any>
     }) => string | number | Promise<string | number> | undefined;
 }
 
@@ -892,7 +892,7 @@ export interface SecurityRule {
      * application-level roles.
      *
      * **Important:** These are NOT native PostgreSQL database roles. They are
-     * application roles managed by FireCMS, stored in the `firecms_user_roles`
+     * application roles managed by Rebase, stored in the `rebase_user_roles`
      * table, and injected into each transaction via `auth.roles()`.
      *
      * Generates a condition like:

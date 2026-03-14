@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 
 export function getEntityImagePreviewPropertyKey<M extends object>(collection: EntityCollection<M>): string | undefined {
 

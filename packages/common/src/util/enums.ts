@@ -1,4 +1,4 @@
-import { EnumValueConfig, EnumValues } from "@firecms/types";
+import { EnumValueConfig, EnumValues } from "@rebasepro/types";
 
 export function enumToObjectEntries(enumValues: EnumValues): EnumValueConfig[] {
     if (Array.isArray(enumValues)) {

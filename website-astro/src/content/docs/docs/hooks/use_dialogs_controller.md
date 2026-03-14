@@ -2,21 +2,21 @@
 slug: docs/hooks/use_dialogs_controller
 title: useDialogsController
 sidebar_label: useDialogsController
-description: Hook to open dialogs imperatively in FireCMS.
+description: Hook to open dialogs imperatively in Rebase.
 ---
 
 Use this hook to open dialogs imperatively. This is useful when you need to show a confirmation dialog or a custom modal from a callback or an event handler, where you can't easily render a component.
 
 :::note
-You need to be a child of the `FireCMS` component to use this hook.
+You need to be a child of the `Rebase` component to use this hook.
 :::
 
 ### Usage
 
 ```tsx
 import React from "react";
-import { useDialogsController } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { useDialogsController } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 export function MyComponent() {
     const dialogsController = useDialogsController();

@@ -21,8 +21,8 @@ You need to define a component that receives `CollectionActionsProps` as props.
 
 ```tsx
 import React from "react";
-import { CollectionActionsProps, useSnackbarController } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { CollectionActionsProps, useSnackbarController } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 
@@ -51,7 +51,7 @@ export function SampleCollectionActions({ selectionController }: CollectionActio
 then just add it to your collection configuration:
 
 ```tsx
-import { buildCollection, EntitySchema } from "@firecms/core";
+import { buildCollection, EntitySchema } from "@rebasepro/core";
 import { SampleCollectionActions } from "./SampleCollectionActions";
 
 export const productCollection: EntitySchema = buildCollection({
@@ -68,8 +68,8 @@ This is an example of how you can modify the filters in the collection bar:
 
 ```tsx
 import React from "react";
-import { CollectionActionsProps } from "@firecms/core";
-import { CloseIcon, IconButton, Select, SelectItem } from "@firecms/ui";
+import { CollectionActionsProps } from "@rebasepro/core";
+import { CloseIcon, IconButton, Select, SelectItem } from "@rebasepro/ui";
 
 export function CustomFiltersActions({
                                          tableController
@@ -113,7 +113,7 @@ export function CustomFiltersActions({
 then just add it to your collection configuration:
 
 ```tsx
-import { buildCollection, EntitySchema } from "@firecms/core";
+import { buildCollection, EntitySchema } from "@rebasepro/core";
 import { CustomFiltersActions } from "./SampleCollectionActions";
 
 export const productCollection: EntitySchema = buildCollection({

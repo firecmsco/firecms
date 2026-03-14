@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { DataSource, StorageSource } from "@firecms/core";
+import { DataSource, StorageSource } from "@rebasepro/core";
 import { MediaAsset, MediaManagerController, ThumbnailSize } from "./types";
 import Compressor from "compressorjs";
 
@@ -363,7 +363,7 @@ function getImageDimensions(file: File): Promise<{ width: number; height: number
 
 /**
  * Generate a thumbnail from an image file using compressorjs.
- * Uses the same library as the core FireCMS image resize implementation.
+ * Uses the same library as the core Rebase image resize implementation.
  * Maintains aspect ratio while fitting within maxWidth x maxHeight.
  */
 async function generateThumbnail(

@@ -7,7 +7,7 @@ sidebar_label: useSnackbarController
 :::note
 Please note that in order to use these hooks you **must** be in
 a component (you can't use them directly from a callback function).
-Anyhow, callbacks usually include a `FireCMSContext`, which includes all
+Anyhow, callbacks usually include a `RebaseContext`, which includes all
 the controllers.
 :::
 
@@ -26,8 +26,8 @@ Example:
 
 ```tsx
 import React from "react";
-import { useSnackbarController } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { useSnackbarController } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 export function ExampleCMSView() {
 

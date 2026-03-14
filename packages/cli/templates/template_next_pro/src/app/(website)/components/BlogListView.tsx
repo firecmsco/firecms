@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { getBlogEntries } from "@/app/common/database";
-import { CircularProgress } from "@firecms/ui";
+import { CircularProgress } from "@rebasepro/ui";
 import { BlogEntryWithId } from "@/app/common/types";
 import BlogEntryPreviewCard from "@/app/common/components/BlogEntryPreviewCard";
 
 export function BlogListView({
-                                     initialEntries,
-                                 }: {
+    initialEntries,
+}: {
     initialEntries: BlogEntryWithId[],
 }) {
 
@@ -55,12 +55,12 @@ export function BlogListView({
 
                 <div className="grid grid-cols-1 gap-x-4 gap-y-6">
                     {blogEntries.map((entry) => (
-                        <BlogEntryPreviewCard key={entry.id} blogEntry={entry}/>
+                        <BlogEntryPreviewCard key={entry.id} blogEntry={entry} />
                     ))}
                 </div>
 
                 {loading && <div className="text-center my-32 min-h-full">
-                    <CircularProgress size={"large"}/>
+                    <CircularProgress size={"large"} />
                 </div>}
 
             </div>

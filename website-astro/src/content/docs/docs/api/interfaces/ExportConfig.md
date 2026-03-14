@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/ExportConfig"
 title: "ExportConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ExportConfig
+[@rebasepro/core](../README) / ExportConfig
 
 # Interface: ExportConfig\<USER\>
 
-Defined in: [types/export\_import.ts:10](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/export_import.ts)
+Defined in: [types/export\_import.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/export_import.ts)
 
 You can use this configuration to add additional fields to the data
 exports
@@ -28,4 +28,4 @@ exports
 
 > **additionalFields**: [`ExportMappingFunction`](ExportMappingFunction)\<`USER`\>[]
 
-Defined in: [types/export\_import.ts:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/export_import.ts)
+Defined in: [types/export\_import.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/export_import.ts)

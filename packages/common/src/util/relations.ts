@@ -1,4 +1,4 @@
-import { EntityCollection, Property, Relation } from "@firecms/types";
+import { EntityCollection, Property, Relation } from "@rebasepro/types";
 import { toSnakeCase } from "./strings";
 import { generateForeignKeyName } from "./names";
 
@@ -172,10 +172,10 @@ export function resolveCollectionRelations(
 }
 
 export function resolvePropertyRelation({
-                                            propertyKey,
-                                            property,
-                                            sourceCollection
-                                        }: {
+    propertyKey,
+    property,
+    sourceCollection
+}: {
     propertyKey: string;
     property: Property;
     sourceCollection: EntityCollection;

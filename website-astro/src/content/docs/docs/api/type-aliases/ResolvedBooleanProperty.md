@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/ResolvedBooleanProperty"
 title: "ResolvedBooleanProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ResolvedBooleanProperty
+[@rebasepro/core](../README) / ResolvedBooleanProperty
 
 # Type Alias: ResolvedBooleanProperty
 
 > **ResolvedBooleanProperty** = `Omit`\<[`BooleanProperty`](../interfaces/BooleanProperty), `"type"`\> & `object`
 
-Defined in: [types/resolved\_entities.ts:77](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
+Defined in: [types/resolved\_entities.ts:77](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/resolved_entities.ts)
 
 ## Type Declaration
 

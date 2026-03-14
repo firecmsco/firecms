@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { Entity, Properties } from "@firecms/core";
+import { Entity, Properties } from "@rebasepro/core";
 import {
     BooleanSwitchWithLabel,
     Button,
@@ -12,7 +12,7 @@ import {
     DownloadIcon,
     IconButton,
     Tooltip
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { downloadEntitiesExport } from "./export";
 
 export type BasicExportActionProps = {
@@ -22,10 +22,10 @@ export type BasicExportActionProps = {
 }
 
 export function BasicExportAction({
-                                      data,
-                                      properties,
-                                      propertiesOrder
-                                  }: BasicExportActionProps) {
+    data,
+    properties,
+    propertiesOrder
+}: BasicExportActionProps) {
 
     const dateRef = React.useRef<Date>(new Date());
     const [flattenArrays, setFlattenArrays] = React.useState<boolean>(true);
@@ -60,12 +60,12 @@ export function BasicExportAction({
     return <>
 
         <Tooltip title={"Export"}
-                 asChild={true}>
+            asChild={true}>
             <IconButton
                 size={"small"}
                 color={"primary"} onClick={handleClickOpen}>
                 <DownloadIcon
-                    size={"small"}/>
+                    size={"small"} />
             </IconButton>
         </Tooltip>
 
@@ -84,40 +84,40 @@ export function BasicExportAction({
                     <div className={"p-4 flex flex-col"}>
                         <div className="flex items-center">
                             <input id="radio-csv" type="radio" value="csv" name="exportType"
-                                   checked={exportType === "csv"}
-                                   onChange={() => setExportType("csv")}
-                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
+                                checked={exportType === "csv"}
+                                onChange={() => setExportType("csv")}
+                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-csv"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">CSV</label>
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">CSV</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-json" type="radio" value="json" name="exportType"
-                                   checked={exportType === "json"}
-                                   onChange={() => setExportType("json")}
-                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
+                                checked={exportType === "json"}
+                                onChange={() => setExportType("json")}
+                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-json"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">JSON</label>
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">JSON</label>
                         </div>
                     </div>
 
                     <div className={"p-4 flex flex-col"}>
                         <div className="flex items-center">
                             <input id="radio-timestamp" type="radio" value="timestamp" name="dateExportType"
-                                   checked={dateExportType === "timestamp"}
-                                   onChange={() => setDateExportType("timestamp")}
-                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
+                                checked={dateExportType === "timestamp"}
+                                onChange={() => setDateExportType("timestamp")}
+                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-timestamp"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
                                 as
                                 timestamps ({dateRef.current.getTime()})</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-string" type="radio" value="string" name="dateExportType"
-                                   checked={dateExportType === "string"}
-                                   onChange={() => setDateExportType("string")}
-                                   className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
+                                checked={dateExportType === "string"}
+                                onChange={() => setDateExportType("string")}
+                                className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-string"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
                                 as
                                 strings ({dateRef.current.toISOString()})</label>
                         </div>
@@ -129,14 +129,14 @@ export function BasicExportAction({
                     disabled={exportType !== "csv"}
                     value={flattenArrays}
                     onValueChange={setFlattenArrays}
-                    label={"Flatten arrays"}/>
+                    label={"Flatten arrays"} />
 
             </DialogContent>
 
             <DialogActions>
 
                 <Button onClick={handleClose}
-                        variant={"text"}>
+                    variant={"text"}>
                     Cancel
                 </Button>
 

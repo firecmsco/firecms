@@ -1,4 +1,4 @@
-import { DefaultFieldConfig } from "@firecms/types";
+import { DefaultFieldConfig } from "@rebasepro/types";
 
 export function isDefaultFieldConfigId(id: string): id is DefaultFieldConfig {
     return ["text_field",

@@ -3,17 +3,17 @@ slug: "docs/api/functions/StorageUploadFieldBinding"
 title: "StorageUploadFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / StorageUploadFieldBinding
+[@rebasepro/core](../README) / StorageUploadFieldBinding
 
 # Function: StorageUploadFieldBinding()
 
 > **StorageUploadFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/StorageUploadFieldBinding.tsx:54](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/StorageUploadFieldBinding.tsx)
+Defined in: [form/field\_bindings/StorageUploadFieldBinding.tsx:54](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/StorageUploadFieldBinding.tsx)
 
 ## Parameters
 

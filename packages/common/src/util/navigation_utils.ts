@@ -1,4 +1,4 @@
-import { EntityCollection, CMSUrlController, SideEntityController } from "@firecms/types";
+import { EntityCollection, CMSUrlController, SideEntityController } from "@rebasepro/types";
 import { getSubcollections } from "./resolutions";
 
 export function removeInitialAndTrailingSlashes(s: string): string {

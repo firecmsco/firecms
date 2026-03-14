@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/FetchCollectionProps"
 title: "FetchCollectionProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / FetchCollectionProps
+[@rebasepro/core](../README) / FetchCollectionProps
 
 # Type Alias: FetchCollectionProps\<M\>
 
 > **FetchCollectionProps**\<`M`\> = [`FetchCollectionProps`](../interfaces/FetchCollectionProps)\<`M`\>
 
-Defined in: [types/datasource.ts:248](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:248](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ## Type Parameters
 

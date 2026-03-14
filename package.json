@@ -1,18 +1,18 @@
 {
-  "name": "firecms-parent",
+  "name": "rebase-parent",
   "private": true,
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
-  "author": "FireCMS",
+  "author": "Rebase",
   "repository": {
     "type": "git",
-    "url": "https://github.com/firecmsco/firecms.git"
+    "url": "https://github.com/rebaseco/rebase.git"
   },
-  "homepage": "https://firecms.co",
+  "homepage": "https://rebase.pro",
   "workspaces": [
     "packages/auth",
-    "packages/firecms",
-    "packages/firecms_cloud",
-    "packages/firecms_core",
+    "packages/rebase",
+    "packages/rebase_cloud",
+    "packages/core",
     "packages/common",
     "packages/types",
     "packages/backend",
@@ -21,9 +21,9 @@
     "packages/util",
     "packages/ui",
     "packages/datatalk",
-    "packages/create_firecms_app",
+    "packages/create_rebase_app",
     "packages/mongodb",
-    "packages/firebase_firecms",
+    "packages/firebase",
     "packages/collection_editor",
     "packages/user_management",
     "packages/data_import",

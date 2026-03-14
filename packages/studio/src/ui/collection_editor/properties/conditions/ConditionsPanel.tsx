@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 
-import { ExpandablePanel, SettingsIcon, Typography } from "@firecms/ui";
+import { ExpandablePanel, SettingsIcon, Typography } from "@rebasepro/ui";
 
 export function ConditionsPanel({
     children

@@ -1,5 +1,5 @@
 import React from "react";
-import { Select, SelectItem, SelectGroup } from "@firecms/ui";
+import { Select, SelectItem, SelectGroup } from "@rebasepro/ui";
 
 export default function SelectGroupDemo() {
     const [selected, setSelected] = React.useState("");

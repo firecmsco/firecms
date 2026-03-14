@@ -1,42 +1,42 @@
 <p align="center">
-  <a href="https://firecms.co">
-    <img src="https://firecms.co/img/logo_small.png" width="240px" alt="FireCMS logo" />
+  <a href="https://rebase.pro">
+    <img src="https://rebase.pro/img/logo_small.png" width="240px" alt="Rebase logo" />
   </a>
 </p>
 
-<h1 align="center">FireCMS</h1>
+<h1 align="center">Rebase</h1>
 <h3 align="center">The Headless CMS & Admin Panel Framework for Firebase</h3>
 <p align="center">
   Build powerful back-office apps in minutes.<br/>
-  Go live instantly with <a href="https://app.firecms.co">FireCMS Cloud</a>, or self-host for full control.
+  Go live instantly with <a href="https://app.rebase.pro">Rebase Cloud</a>, or self-host for full control.
 </p>
 
 <p align="center">
-  <a href="https://demo.firecms.co">Live Demo</a> •
-  <a href="https://firecms.co/docs">Documentation</a> •
-  <a href="https://firecms.co/features">Features</a> •
-  <a href="https://firecms.co/pricing">Pricing</a> •
+  <a href="https://demo.rebase.pro">Live Demo</a> •
+  <a href="https://rebase.pro/docs">Documentation</a> •
+  <a href="https://rebase.pro/features">Features</a> •
+  <a href="https://rebase.pro/pricing">Pricing</a> •
   <a href="https://discord.gg/fxy7xsQm3m">Discord</a>
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@firecms/core"><img src="https://img.shields.io/npm/v/@firecms/core.svg?style=flat-square&color=orange" alt="NPM Version" /></a>
+  <a href="https://www.npmjs.com/package/@rebasepro/core"><img src="https://img.shields.io/npm/v/@rebasepro/core.svg?style=flat-square&color=orange" alt="NPM Version" /></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-purple.svg?style=flat-square" alt="License: MIT" /></a>
-  <a href="https://www.npmjs.com/package/@firecms/core"><img src="https://img.shields.io/npm/dw/@firecms/core?style=flat-square&color=blue" alt="NPM Downloads" /></a>
+  <a href="https://www.npmjs.com/package/@rebasepro/core"><img src="https://img.shields.io/npm/dw/@rebasepro/core?style=flat-square&color=blue" alt="NPM Downloads" /></a>
   <a href="https://discord.gg/fxy7xsQm3m"><img src="https://img.shields.io/discord/1013768502458470442?style=flat-square&logo=discord&logoColor=white&label=Discord" alt="Discord" /></a>
 </p>
 
 <br/>
 
 <p align="center">
-  <img src="https://firecms.co/img/demo_products.png" width="800px" alt="FireCMS " />
+  <img src="https://rebase.pro/img/demo_products.png" width="800px" alt="Rebase " />
 </p>
 
 ---
 
-## What is FireCMS?
+## What is Rebase?
 
-FireCMS is a **developer-first**, open-source headless CMS and admin panel framework built with **React** and **TypeScript**. It connects natively to **Firebase & Firestore** (with MongoDB support too) and generates powerful CRUD views, forms, and data management tools from your schema configuration.
+Rebase is a **developer-first**, open-source headless CMS and admin panel framework built with **React** and **TypeScript**. It connects natively to **Firebase & Firestore** (with MongoDB support too) and generates powerful CRUD views, forms, and data management tools from your schema configuration.
 
 It's designed for developers who want full control and extensibility, while providing an exceptional editing experience for non-technical users.
 
@@ -47,18 +47,18 @@ It's designed for developers who want full control and extensibility, while prov
 - 🎨 **Visual schema editor** — build and modify data models from the UI, with automatic schema inference from existing data
 - ✍️ **Notion-style rich text editor** — block-based content editing with slash commands and AI autocomplete
 - ⚡ **Blazing fast** — built on Tailwind CSS (v4) for maximum performance, replacing the old MUI/emotion stack
-- 🧩 **Radical extensibility** — if you can build it in React, you can build it in FireCMS
+- 🧩 **Radical extensibility** — if you can build it in React, you can build it in Rebase
 
 ---
 
 ## Quick Start
 
-### FireCMS Cloud (Fastest)
+### Rebase Cloud (Fastest)
 
 Get a fully managed CMS connected to your Firebase project — no deployment, no maintenance:
 
 ```
-👉 https://app.firecms.co
+👉 https://app.rebase.pro
 ```
 
 ### Self-Hosted
@@ -66,14 +66,14 @@ Get a fully managed CMS connected to your Firebase project — no deployment, no
 Scaffold a new project in seconds:
 
 ```bash
-npx create-firecms-app
+npx create-rebase-app
 ```
 
 Or with yarn / pnpm:
 
 ```bash
-yarn create firecms-app
-pnpm create firecms-app
+yarn create rebase-app
+pnpm create rebase-app
 ```
 
 ---
@@ -92,7 +92,7 @@ An incredibly fast, windowed spreadsheet view with inline editing, real-time upd
 
 ### 🎨 Visual Schema Editor & Data Inference
 
-Design your data models visually with **20+ field types** and advanced validation rules. Or, connect to an existing Firestore/MongoDB database and let FireCMS **automatically infer your schema** — go from zero to admin panel in minutes.
+Design your data models visually with **20+ field types** and advanced validation rules. Or, connect to an existing Firestore/MongoDB database and let Rebase **automatically infer your schema** — go from zero to admin panel in minutes.
 
 ### ✍️ Notion-Style Rich Text Editor
 
@@ -128,14 +128,14 @@ Seamless integration with Firebase Storage for images, videos, and documents. Su
 
 ### 🧩 Custom Views & React Extensibility
 
-Build entirely custom views (dashboards, previews, analytics) as React components and add them to the main navigation or as entity-level tabs. Use built-in hooks like `useSideEntityController`, `useSnackbarController`, and `useAuthController` to interact with FireCMS.
+Build entirely custom views (dashboards, previews, analytics) as React components and add them to the main navigation or as entity-level tabs. Use built-in hooks like `useSideEntityController`, `useSnackbarController`, and `useAuthController` to interact with Rebase.
 
-### 🎨 Component Library (`@firecms/ui`)
+### 🎨 Component Library (`@rebasepro/ui`)
 
-A standalone, production-ready component library built on **Tailwind CSS** and **Radix UI**. Fully typed, accessible, and customizable. Use it in FireCMS or in any React project:
+A standalone, production-ready component library built on **Tailwind CSS** and **Radix UI**. Fully typed, accessible, and customizable. Use it in Rebase or in any React project:
 
 ```bash
-npm install @firecms/ui
+npm install @rebasepro/ui
 ```
 
 ### 🏠 Customizable Home Page
@@ -144,10 +144,10 @@ Organize collections into groups with drag-and-drop, favorites, and search. Supp
 
 ### 🖥️ CLI
 
-Deploy custom code to FireCMS Cloud with a single command:
+Deploy custom code to Rebase Cloud with a single command:
 
 ```bash
-firecms deploy
+rebase deploy
 ```
 
 ---
@@ -182,7 +182,7 @@ firecms deploy
 | MongoDB support | ❌ | ✅ | ❌ |
 | Custom branding | ✅ | ✅ | ✅ |
 
-→ [See full pricing & comparison](https://firecms.co/pricing)
+→ [See full pricing & comparison](https://rebase.pro/pricing)
 
 ---
 
@@ -190,41 +190,41 @@ firecms deploy
 
 Explore the live demo with all core features — you can modify data, it gets periodically restored:
 
-**👉 [demo.firecms.co](https://demo.firecms.co)**
+**👉 [demo.rebase.pro](https://demo.rebase.pro)**
 
 ---
 
 ## Packages
 
-FireCMS is organized as a modular monorepo:
+Rebase is organized as a modular monorepo:
 
 | Package | Description |
 |---|---|
-| `@firecms/core` | Core CMS framework, types, hooks, and components |
-| `@firecms/ui` | Standalone component library (Tailwind + Radix) |
-| `@firecms/firebase` | Firebase/Firestore data source delegate |
-| `@firecms/editor` | Notion-style rich text editor |
-| `@firecms/cli` | CLI for project scaffolding and deployment |
-| `@firecms/collection_editor` | Visual schema/collection editor |
-| `@firecms/data_import` | Data import plugin (CSV, JSON, Excel) |
-| `@firecms/data_export` | Data export plugin (CSV, JSON) |
-| `@firecms/entity_history` | Entity history & audit trail plugin |
-| `@firecms/user_management` | User & role management plugin |
-| `@firecms/datatalk` | Natural language data queries (AI) |
-| `@firecms/data_enhancement` | AI-powered field autofill |
-| `@firecms/schema_inference` | Automatic schema inference from data |
-| `@firecms/formex` | Lightweight form management library |
-| `@firecms/mongodb` | MongoDB data source delegate |
+| `@rebasepro/core` | Core CMS framework, types, hooks, and components |
+| `@rebasepro/ui` | Standalone component library (Tailwind + Radix) |
+| `@rebasepro/firebase` | Firebase/Firestore data source delegate |
+| `@rebasepro/editor` | Notion-style rich text editor |
+| `@rebasepro/cli` | CLI for project scaffolding and deployment |
+| `@rebasepro/collection_editor` | Visual schema/collection editor |
+| `@rebasepro/data_import` | Data import plugin (CSV, JSON, Excel) |
+| `@rebasepro/data_export` | Data export plugin (CSV, JSON) |
+| `@rebasepro/entity_history` | Entity history & audit trail plugin |
+| `@rebasepro/user_management` | User & role management plugin |
+| `@rebasepro/datatalk` | Natural language data queries (AI) |
+| `@rebasepro/data_enhancement` | AI-powered field autofill |
+| `@rebasepro/schema_inference` | Automatic schema inference from data |
+| `@rebasepro/formex` | Lightweight form management library |
+| `@rebasepro/mongodb` | MongoDB data source delegate |
 
 ---
 
 ## Support & Community
 
-- 📖 [Documentation](https://firecms.co/docs)
+- 📖 [Documentation](https://rebase.pro/docs)
 - 💬 [Discord Community](https://discord.gg/fxy7xsQm3m)
-- 🐛 [GitHub Issues](https://github.com/firecmsco/firecms/issues)
-- 📝 [Changelog](https://firecms.co/docs/changelog)
-- 📧 Contact: `hello@firecms.co`
+- 🐛 [GitHub Issues](https://github.com/rebaseco/rebase/issues)
+- 📝 [Changelog](https://rebase.pro/docs/changelog)
+- 📧 Contact: `hello@rebase.pro`
 
 ---
 
@@ -236,6 +236,6 @@ Developers at **Google**, **Microsoft**, **IKEA**, and thousands of companies wo
 
 ## License
 
-The core of FireCMS is licensed under the **MIT License**.
-Some packages used in FireCMS PRO and Cloud are licensed under the **Business Source License 1.1 (BSL)**.
-See the full [License](https://github.com/firecmsco/firecms?tab=License-1-ov-file#readme) for details.
+The core of Rebase is licensed under the **MIT License**.
+Some packages used in Rebase PRO and Cloud are licensed under the **Business Source License 1.1 (BSL)**.
+See the full [License](https://github.com/rebaseco/rebase?tab=License-1-ov-file#readme) for details.

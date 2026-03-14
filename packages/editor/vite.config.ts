@@ -9,7 +9,7 @@ const ReactCompilerConfig = {
 };
 
 const isExternal = (id: string) => {
-    if(id.startsWith("@tiptap")) {
+    if (id.startsWith("@tiptap")) {
         return true;
     }
     return !id.startsWith(".") && !path.isAbsolute(id);
@@ -22,7 +22,7 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS Editor",
+            name: "Rebase Editor",
             fileName: (format) => `index.${format}.js`
         },
         target: "ESNEXT",
@@ -34,8 +34,8 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            "@firecms/ui": path.resolve(__dirname, "../ui/src"),
-            "@firecms/types": path.resolve(__dirname, "../types/src"),
+            "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
+            "@rebasepro/types": path.resolve(__dirname, "../types/src"),
         }
     },
     plugins: [

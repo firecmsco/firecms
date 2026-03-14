@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { AddIcon, Button, Paper, Typography } from "@firecms/ui";
-import { getIn, useFormex } from "@firecms/formex";
+import { AddIcon, Button, Paper, Typography } from "@rebasepro/ui";
+import { getIn, useFormex } from "@rebasepro/formex";
 import { OnPropertyChangedParams, PropertyFormDialog } from "../PropertyEditView";
 import {
     getFullId,
@@ -10,15 +10,15 @@ import {
     namespaceToPropertiesPath
 } from "../util";
 import { PropertyTree } from "../PropertyTree";
-import { ArrayProperty, PropertyConfig } from "@firecms/core";
+import { ArrayProperty, PropertyConfig } from "@rebasepro/core";
 
 export function BlockPropertyField({
-                                       disabled,
-                                       getData,
-                                       allowDataInference,
-                                       propertyConfigs,
-                                       collectionEditable
-                                   }: {
+    disabled,
+    getData,
+    allowDataInference,
+    propertyConfigs,
+    collectionEditable
+}: {
     disabled: boolean;
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
@@ -36,10 +36,10 @@ export function BlockPropertyField({
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
 
     const onPropertyChanged = ({
-                                   id,
-                                   namespace,
-                                   property
-                               }: OnPropertyChangedParams) => {
+        id,
+        namespace,
+        property
+    }: OnPropertyChangedParams) => {
         if (!id)
             throw Error();
 
@@ -72,7 +72,7 @@ export function BlockPropertyField({
     const addChildButton = <Button
         autoFocus
         onClick={() => setPropertyDialogOpen(true)}
-        startIcon={<AddIcon/>}
+        startIcon={<AddIcon />}
     >
         Add property to {values.name ?? "this block"}
     </Button>;
@@ -106,9 +106,9 @@ export function BlockPropertyField({
                             }}
                         onPropertyMove={disabled
                             ? undefined
-                            : onPropertyMove}/>
+                            : onPropertyMove} />
 
-                    {!disabled && (values.oneOf?.propertiesOrder?.length === 0)&&
+                    {!disabled && (values.oneOf?.propertiesOrder?.length === 0) &&
                         <div className="h-full flex items-center justify-center p-4">
                             Add the first property to this block
                         </div>}
@@ -142,7 +142,7 @@ export function BlockPropertyField({
                 autoOpenTypeSelect={!selectedPropertyKey}
                 onPropertyChanged={onPropertyChanged}
                 existingPropertyKeys={selectedPropertyKey ? undefined : values.oneOf?.propertiesOrder}
-                propertyConfigs={propertyConfigs}/>}
+                propertyConfigs={propertyConfigs} />}
 
         </>);
 }

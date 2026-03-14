@@ -2,12 +2,12 @@
 slug: docs/hooks/use_storage_source
 title: useStorageSource
 sidebar_label: useStorageSource
-description: Access the FireCMS storage source for uploading files and retrieving download URLs. Works with Firebase Storage or any custom storage implementation.
+description: Access the Rebase storage source for uploading files and retrieving download URLs. Works with Firebase Storage or any custom storage implementation.
 ---
 
-Use this hook to access the storage source being used in your FireCMS application.
+Use this hook to access the storage source being used in your Rebase application.
 
-Each file uploaded in FireCMS is referenced by a string in the form
+Each file uploaded in Rebase is referenced by a string in the form
 `${path}/${fileName}`, which is then referenced in the datasource as a string
 value in properties that have a storage configuration.
 
@@ -28,8 +28,8 @@ a component (you can't use it directly from a callback function).
 
 ```tsx
 import React from "react";
-import { useStorageSource } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { useStorageSource } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 export function FileUploader() {
     const storageSource = useStorageSource();

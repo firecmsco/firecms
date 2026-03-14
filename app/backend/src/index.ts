@@ -3,8 +3,8 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
-import { createPostgresDatabaseConnection, initializeFireCMSAPI, initializeFireCMSBackend, serveSPA } from "@firecms/backend";
-import { createMongoDBConnection, createMongoDelegate } from "@firecms/mongodb";
+import { createPostgresDatabaseConnection, initializeRebaseAPI, initializeRebaseBackend, serveSPA } from "@rebasepro/backend";
+import { createMongoDBConnection, createMongoDelegate } from "@rebasepro/mongodb";
 
 import { enums, relations, tables } from "./schema.generated";
 
@@ -72,9 +72,9 @@ async function startServer() {
         console.log("ℹ️ MongoDB not configured (set MONGODB_URL and MONGODB_DATABASE to enable)");
     }
 
-    // Initialize FireCMS Backend with auth (now async)
+    // Initialize Rebase Backend with auth (now async)
     // Auth, admin, and storage routes are automatically mounted
-    const backend = await initializeFireCMSBackend({
+    const backend = await initializeRebaseBackend({
         collectionsDir: path.resolve(__dirname, "../../shared/collections"),
         server,
         app, // Express app for mounting auth/storage routes
@@ -91,8 +91,8 @@ async function startServer() {
             allowRegistration: process.env.ALLOW_REGISTRATION === "true",
             // Email configuration for password reset and email verification
             email: process.env.SMTP_HOST ? {
-                from: process.env.SMTP_FROM || "noreply@firecms.co",
-                appName: process.env.APP_NAME || "FireCMS",
+                from: process.env.SMTP_FROM || "noreply@rebase.pro",
+                appName: process.env.APP_NAME || "Rebase",
                 resetPasswordUrl: process.env.FRONTEND_URL || "http://localhost:5173",
                 verifyEmailUrl: process.env.FRONTEND_URL || "http://localhost:5173",
                 smtp: {
@@ -114,7 +114,7 @@ async function startServer() {
     });
 
     // OPTIONAL: Initialize REST/GraphQL API for external integrations
-    await initializeFireCMSAPI(app, backend, {
+    await initializeRebaseAPI(app, backend, {
         basePath: "/api",
         collectionsDir: path.resolve(__dirname, "../../shared/collections"),
         enableGraphQL: true,

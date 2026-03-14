@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 
 export const callbacksTestCollection: EntityCollection<any> = {
     name: "Callback Tests",

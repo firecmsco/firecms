@@ -4,7 +4,7 @@ import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import svgr from "vite-plugin-svgr";
 import tailwindcss from "@tailwindcss/vite";
-import { firecmsCollectionsPlugin } from "@firecms/core/vitePlugin";
+import { rebaseCollectionsPlugin } from "@rebasepro/core/vitePlugin";
 
 export default defineConfig({
     server: {
@@ -26,7 +26,7 @@ export default defineConfig({
         svgr(),
         react({}),
         tailwindcss(),
-        firecmsCollectionsPlugin({ collectionsDir: "../shared/collections" })
+        rebaseCollectionsPlugin({ collectionsDir: "../shared/collections" })
     ],
     css: {
         preprocessorOptions: {
@@ -37,25 +37,25 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
-            "@firecms/types": path.resolve(__dirname, "../../packages/types/src"),
-            "@firecms/common": path.resolve(__dirname, "../../packages/common/src"),
-            "@firecms/ui": path.resolve(__dirname, "../../packages/ui/src"),
-            "@firecms/ui/index.css": path.resolve(__dirname, "../../packages/ui/index.css"),
-            "@firecms/formex": path.resolve(__dirname, "../../packages/formex/src"),
-            "@firecms/editor": path.resolve(__dirname, "../../packages/editor/src"),
-            "@firecms/datatalk": path.resolve(__dirname, "../../packages/datatalk/src"),
-            "@firecms/mongodb": path.resolve(__dirname, "../../packages/mongodb/src"),
-            "@firecms/postgresql": path.resolve(__dirname, "../../packages/postgresql/src"),
-            "@firecms/firebase": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
-            "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
-            "@firecms/data_import": path.resolve(__dirname, "../../packages/data_import/src"),
-            "@firecms/entity_history": path.resolve(__dirname, "../../packages/entity_history/src"),
-            "@firecms/data_export": path.resolve(__dirname, "../../packages/data_export/src"),
-            "@firecms/schema_inference": path.resolve(__dirname, "../../packages/schema_inference/src"),
-            "@firecms/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src"),
-            "@firecms/user_management": path.resolve(__dirname, "../../packages/user_management/src"),
-            "@firecms/auth": path.resolve(__dirname, "../../packages/auth/src"),
+            "@rebasepro/core": path.resolve(__dirname, "../../packages/core/src"),
+            "@rebasepro/types": path.resolve(__dirname, "../../packages/types/src"),
+            "@rebasepro/common": path.resolve(__dirname, "../../packages/common/src"),
+            "@rebasepro/ui": path.resolve(__dirname, "../../packages/ui/src"),
+            "@rebasepro/ui/index.css": path.resolve(__dirname, "../../packages/ui/index.css"),
+            "@rebasepro/formex": path.resolve(__dirname, "../../packages/formex/src"),
+            "@rebasepro/editor": path.resolve(__dirname, "../../packages/editor/src"),
+            "@rebasepro/datatalk": path.resolve(__dirname, "../../packages/datatalk/src"),
+            "@rebasepro/mongodb": path.resolve(__dirname, "../../packages/mongodb/src"),
+            "@rebasepro/postgresql": path.resolve(__dirname, "../../packages/postgresql/src"),
+            "@rebasepro/firebase": path.resolve(__dirname, "../../packages/firebase/src"),
+            "@rebasepro/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
+            "@rebasepro/data_import": path.resolve(__dirname, "../../packages/data_import/src"),
+            "@rebasepro/entity_history": path.resolve(__dirname, "../../packages/entity_history/src"),
+            "@rebasepro/data_export": path.resolve(__dirname, "../../packages/data_export/src"),
+            "@rebasepro/schema_inference": path.resolve(__dirname, "../../packages/schema_inference/src"),
+            "@rebasepro/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src"),
+            "@rebasepro/user_management": path.resolve(__dirname, "../../packages/user_management/src"),
+            "@rebasepro/auth": path.resolve(__dirname, "../../packages/auth/src"),
             "shared": path.resolve(__dirname, "../shared")
         }
     }

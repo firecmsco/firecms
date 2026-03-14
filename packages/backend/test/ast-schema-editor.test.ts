@@ -18,7 +18,7 @@ describe("AstSchemaEditor", () => {
 
     it("should merge properties while preserving existing functions when saving a collection", async () => {
         // Setup initial file
-        const fileContent = `import { EntityCollection } from "@firecms/types";
+        const fileContent = `import { EntityCollection } from "@rebasepro/types";
 
 const productsCollection: EntityCollection = {
     name: "Products",

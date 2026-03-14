@@ -1,12 +1,12 @@
 @import "tailwindcss";
-@import "@firecms/ui/index.css";
+@import "@rebasepro/ui/index.css";
 @import "@material-design-icons/font/filled.css";
 
 @plugin "@tailwindcss/typography";
 
 @source "../**/*.{astro,html,js,jsx,ts,tsx,md,mdx}";
 @source "../pages/**/*.{astro,md,mdx,ts,tsx}";
-@source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
+@source "../../../node_modules/@rebasepro/**/src/**/*.{js,ts,jsx,tsx}";
 
 @custom-variant dark (&:is([data-theme=dark], [data-theme=dark] *));
 

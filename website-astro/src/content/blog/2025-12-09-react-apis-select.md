@@ -1,7 +1,7 @@
 ---
 slug: react_apis_select_children
 title: Building a smarter React Select that reads its value from its children
-description: How we designed a Select component in @firecms/ui that derives its label from its children instead of duplicating value/label data.
+description: How we designed a Select component in @rebasepro/ui that derives its label from its children instead of duplicating value/label data.
 pubDate: 2025-12-09
 authors: francesco
 image: /img/multi_select.png
@@ -16,7 +16,7 @@ When you build a select input in React, you almost always end up doing some vers
 
 It works, but it’s easy to duplicate yourself and get out of sync.
 
-In FireCMS, we wanted something slightly different for our `Select` component in `@firecms/ui`:
+In Rebase, we wanted something slightly different for our `Select` component in `@rebasepro/ui`:
 
 > Let the **children** (`<SelectItem>` elements) be the single source of truth for how each option looks, and let the parent `Select` derive the current label from those children automatically.
 
@@ -155,14 +155,14 @@ This has a few drawbacks:
 
 We wanted to lean into React’s strengths instead: **children as the source of truth**.
 
-## The FireCMS `Select`: children as the source of truth
+## The Rebase `Select`: children as the source of truth
 
-In `@firecms/ui`, the `Select` component wraps Radix Select and adds FireCMS‑specific behavior.
+In `@rebasepro/ui`, the `Select` component wraps Radix Select and adds Rebase‑specific behavior.
 
 The API we want in userland is something like:
 
 ```tsx
-import { Select, SelectItem } from "@firecms/ui";
+import { Select, SelectItem } from "@rebasepro/ui";
 
 type Role = "admin" | "editor" | "viewer";
 
@@ -363,7 +363,7 @@ const onValueChangeInternal = useCallback((newValue: string) => {
 }, [onChange, onValueChange, name, dataType]);
 ```
 
-This matters because headless primitives like Radix Select work with **string values** internally, but in a CMS like FireCMS you often want:
+This matters because headless primitives like Radix Select work with **string values** internally, but in a CMS like Rebase you often want:
 
 - Numbers stored as numbers.
 - Booleans stored as booleans.
@@ -464,10 +464,10 @@ The parent `Select` doesn’t care what the label looks like—it just reuses th
 
 ## Example: how it feels to use
 
-Here’s a minimal example that is close to what we use in FireCMS:
+Here’s a minimal example that is close to what we use in Rebase:
 
 ```tsx
-import { Select, SelectItem } from "@firecms/ui";
+import { Select, SelectItem } from "@rebasepro/ui";
 
 type Role = "admin" | "editor" | "viewer";
 
@@ -505,7 +505,7 @@ You just define your items once, and the component does the rest.
 
 ## Where else to use this pattern
 
-In FireCMS, this `Select` component shows up all over the place:
+In Rebase, this `Select` component shows up all over the place:
 
 - Enum fields in forms.
 - Filters in tables.
@@ -534,4 +534,4 @@ By leaning on React’s own primitives instead of building complex configuration
 - Less repetitive.
 - Easier to evolve.
 
-And in a CMS like FireCMS, where you have many selects with complex labels, that small “smart” behavior pays off quickly.
+And in a CMS like Rebase, where you have many selects with complex labels, that small “smart” behavior pays off quickly.

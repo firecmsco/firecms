@@ -3,17 +3,17 @@ slug: "docs/api/functions/resolveDefaultSelectedView"
 title: "resolveDefaultSelectedView"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / resolveDefaultSelectedView
+[@rebasepro/core](../README) / resolveDefaultSelectedView
 
 # Function: resolveDefaultSelectedView()
 
 > **resolveDefaultSelectedView**(`defaultSelectedView`, `params`): `string` \| `undefined`
 
-Defined in: [util/collections.ts:41](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/collections.ts)
+Defined in: [util/collections.ts:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/collections.ts)
 
 ## Parameters
 

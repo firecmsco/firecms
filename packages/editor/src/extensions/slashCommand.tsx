@@ -20,7 +20,7 @@ import {
     LooksOneIcon,
     LooksTwoIcon,
     TextFieldsIcon
-} from "@firecms/ui"
+} from "@rebasepro/ui"
 import { onFileRead, UploadFn } from "./Image";
 import { EditorAIController } from "../types";
 

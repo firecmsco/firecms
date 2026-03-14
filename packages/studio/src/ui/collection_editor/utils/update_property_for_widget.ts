@@ -8,11 +8,11 @@ import {
     Property,
     PropertyConfig,
     StringProperty
-} from "@firecms/core";
+} from "@rebasepro/core";
 
 export function updatePropertyFromWidget(propertyData: any,
-                                         selectedWidgetId: string | undefined,
-                                         propertyConfigs: Record<string, PropertyConfig>): Property {
+    selectedWidgetId: string | undefined,
+    propertyConfigs: Record<string, PropertyConfig>): Property {
 
     let updatedProperty;
     if (selectedWidgetId === "text_field") {

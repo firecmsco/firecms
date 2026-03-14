@@ -3,17 +3,17 @@ slug: "docs/api/functions/fullPathToCollectionSegments"
 title: "fullPathToCollectionSegments"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / fullPathToCollectionSegments
+[@rebasepro/core](../README) / fullPathToCollectionSegments
 
 # Function: fullPathToCollectionSegments()
 
 > **fullPathToCollectionSegments**(`path`): `string`[]
 
-Defined in: [util/paths.ts:23](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/paths.ts)
+Defined in: [util/paths.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/paths.ts)
 
 Extract the collection path routes
 `products/B44RG6APH/locales` => [`products`, `locales`]

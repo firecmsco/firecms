@@ -1,7 +1,7 @@
 /**
  * Storage Registry
  *
- * Manages multiple storage controllers for FireCMS backend.
+ * Manages multiple storage controllers for Rebase backend.
  * Allows different storage backends for different use cases.
  *
  * Usage:

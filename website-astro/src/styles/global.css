@@ -1,7 +1,7 @@
 @layer base, starlight, theme, components, utilities;
 
 @import "tailwindcss";
-@import "@firecms/ui/index.css" layer(base);
+@import "@rebasepro/ui/index.css" layer(base);
 
 @import "@material-design-icons/font/filled.css";
 
@@ -21,7 +21,7 @@
 /* Content sources (scan paths) - paths are relative to this file (src/styles/global.css) */
 @source "../**/*.{astro,html,js,jsx,ts,tsx,md,mdx}";
 @source "../pages/**/*.{astro,md,mdx,ts,tsx}";
-@source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
+@source "../../../node_modules/@rebasepro/**/src/**/*.{js,ts,jsx,tsx}";
 
 
 .material-icons {
@@ -292,12 +292,12 @@ h6 {
     */
     display: inline-block;
 
-    /* The gradient for the shimmer (orange -> white -> orange) */
+    /* The gradient for the shimmer */
     background-image: linear-gradient(
             90deg,
-            #f97316, /* Tailwind orange-500 */
+            var(--color-primary),
             #ffffff, /* White glint */
-            #f97316  /* Tailwind orange-500 */
+            var(--color-primary)
     );
 
     /* Make the gradient 2x width so it can slide across */
@@ -347,10 +347,10 @@ h6 {
     }
 
     /* End state: Hold this frame.
-      We explicitly set the color to solid orange.
+      We explicitly set the color to solid primary.
     */
     100% {
-        color: #f97316; /* text-orange-500 */
+        color: var(--color-primary);
         background-position: 200% center;
     }
 }

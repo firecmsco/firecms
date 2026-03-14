@@ -10,7 +10,7 @@ import {
     PropertyIdCopyTooltip,
     StringProperty,
     useClearRestoreValue
-} from "@firecms/core";
+} from "@rebasepro/core";
 import { AdvancedTextField } from "./AdvancedTextField";
 
 /**
@@ -20,18 +20,18 @@ import { AdvancedTextField } from "./AdvancedTextField";
  * @group Form fields
  */
 export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBinding({
-                                                                                       propertyKey,
-                                                                                       value,
-                                                                                       setValue,
-                                                                                       error,
-                                                                                       showError,
-                                                                                       disabled,
-                                                                                       autoFocus,
-                                                                                       property,
-                                                                                       includeDescription,
-                                                                                       highlight,
-                                                                                       size
-                                                                                   }: FieldProps<StringProperty | NumberProperty> & {
+    propertyKey,
+    value,
+    setValue,
+    error,
+    showError,
+    disabled,
+    autoFocus,
+    property,
+    includeDescription,
+    highlight,
+    size
+}: FieldProps<StringProperty | NumberProperty> & {
     highlight?: string
 }) {
 
@@ -69,10 +69,10 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
 
             </PropertyIdCopyTooltip>
             <FieldHelperText includeDescription={includeDescription}
-                             showError={showError}
-                             error={error}
-                             disabled={disabled}
-                             property={property}/>
+                showError={showError}
+                error={error}
+                disabled={disabled}
+                property={property} />
         </>
     );
 

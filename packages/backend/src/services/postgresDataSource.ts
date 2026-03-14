@@ -3,9 +3,9 @@ import { EntityService } from "../db/entityService";
 import { RealtimeService } from "./realtimeService";
 import { DatabasePoolManager } from "./databasePoolManager";
 import { DrizzleClient } from "../db/interfaces";
-import { User } from "@firecms/types";
+import { User } from "@rebasepro/types";
 import { sql as drizzleSql } from "drizzle-orm";
-import { buildPropertyCallbacks, mergeDeep } from "@firecms/common";
+import { buildPropertyCallbacks, mergeDeep } from "@rebasepro/common";
 import { collectionRegistry } from "../collections/registry";
 import {
     DataSource,
@@ -17,7 +17,7 @@ import {
     ListenCollectionProps,
     ListenEntityProps,
     SaveEntityProps
-} from "@firecms/types";
+} from "@rebasepro/types";
 
 export class PostgresDataSource implements DataSource {
     key = "postgres";

@@ -3,7 +3,7 @@
  * 
  * Handles customer account lifecycle for GCP Marketplace:
  * - Create accounts when customers sign up
- * - Link GCP accounts to FireCMS accounts
+ * - Link GCP accounts to Rebase accounts
  * - Handle account status changes
  */
 
@@ -15,7 +15,7 @@ import {
     Account,
 } from "./client";
 
-const PROVIDER_ID = process.env.GCP_MARKETPLACE_PROVIDER_ID || "firecms";
+const PROVIDER_ID = process.env.GCP_MARKETPLACE_PROVIDER_ID || "rebase";
 
 /**
  * Firestore collection for storing account data

@@ -1,5 +1,5 @@
-import { buildCollection } from "@firecms/core";
-import { FireCMSAppConfig } from "@firecms/cloud";
+import { buildCollection } from "@rebasepro/core";
+import { RebaseAppConfig } from "@rebasepro/cloud";
 
 type Unit = {
     name: string;
@@ -39,7 +39,7 @@ const unitsCollection = buildCollection<Unit>({
 
 
 
-const appConfig: FireCMSAppConfig = {
+const appConfig: RebaseAppConfig = {
     version: "1",
     collections: async ({ dataSource }) => {
         const units = await dataSource.fetchCollection<Unit>({

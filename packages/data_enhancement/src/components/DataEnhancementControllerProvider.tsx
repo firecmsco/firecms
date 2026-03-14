@@ -16,7 +16,7 @@ import {
     useDataSource,
     useCMSUrlController,
     useSnackbarController
-} from "@firecms/core";
+} from "@rebasepro/core";
 
 import { enhanceDataAPIStream, fetchEntityPromptSuggestion } from "../api";
 import { getAppendableSuggestion } from "../utils/suggestions";

@@ -1,5 +1,5 @@
 {
-    "name": "my-firecms-project",
+    "name": "my-rebase-project",
     "private": true,
     "version": "1.0.0",
     "type": "module",
@@ -7,12 +7,12 @@
         "dev": "vite --port 5001",
         "build": "vite build",
         "serve": "vite preview --port 5001",
-        "deploy": "run-s build && firecms deploy --project=[REPLACE_WITH_PROJECT_ID]",
-        "login": "firecms login",
-        "logout": "firecms logout"
+        "deploy": "run-s build && rebase deploy --project=[REPLACE_WITH_PROJECT_ID]",
+        "login": "rebase login",
+        "logout": "rebase logout"
     },
     "dependencies": {
-        "@firecms/cloud": "^3.0.0",
+        "@rebasepro/cloud": "^3.0.0",
         "firebase": "^12.9.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"

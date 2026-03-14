@@ -83,7 +83,7 @@ export const getSearchConfig = functions.onCall(
                 // Get shared API key
                 const secretClient = new SecretManagerServiceClient();
                 const [version] = await secretClient.accessSecretVersion({
-                    name: `projects/${projectId}/secrets/firecms-search-api-key/versions/latest`,
+                    name: `projects/${projectId}/secrets/rebase-search-api-key/versions/latest`,
                 });
                 apiKey = version.payload?.data?.toString() || "";
             }

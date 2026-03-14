@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CircularProgress, Container, Markdown, Typography } from "@firecms/ui";
+import { Card, CircularProgress, Container, Markdown, Typography } from "@rebasepro/ui";
 import {
     Entity,
     EntityCustomViewParams,
@@ -8,7 +8,7 @@ import {
     ErrorView,
     useDataSource,
     useStorageSource
-} from "@firecms/core";
+} from "@rebasepro/core";
 import { productsCollection } from "./products_collection";
 import { BlogEntry, Product } from "./types";
 
@@ -55,19 +55,19 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
                         (entry: any, index: number) => {
                             if (entry.type === "text")
                                 return <Text key={`preview_text_${index}`}
-                                             markdownText={entry.value}/>;
+                                    markdownText={entry.value} />;
                             if (entry.type === "quote")
                                 return <Quote key={`preview_text_${index}`}
-                                              quoteText={entry.value}/>;
+                                    quoteText={entry.value} />;
                             if (entry.type === "images")
                                 return <Images key={`preview_images_${index}`}
-                                               storagePaths={entry.value}/>;
+                                    storagePaths={entry.value} />;
                             if (entry.type === "products")
                                 return <ProductGroupPreview
                                     key={`preview_products_${index}`}
-                                    references={entry.value}/>;
+                                    references={entry.value} />;
                             return <ErrorView key={`preview_images_${index}`}
-                                              error={"Unexpected value in blog entry"}/>
+                                error={"Unexpected value in blog entry"} />
                         }
                     )}
 
@@ -86,8 +86,8 @@ export function Images({ storagePaths }: {
     return <div className="flex justify-center">
         {storagePaths.map((path, index) =>
             <div key={`images_${index}`}
-                 className="m-4 p-8 w-[350px] h-[350px]">
-                <StorageImage storagePath={path}/>
+                className="m-4 p-8 w-[350px] h-[350px]">
+                <StorageImage storagePath={path} />
             </div>
         )}
     </div>;
@@ -115,7 +115,7 @@ export function StorageImage({ storagePath }: {
             objectFit: "contain",
             width: "100%",
             height: "100%"
-        }} src={url}/>);
+        }} src={url} />);
 }
 
 function Text({ markdownText }: {
@@ -127,7 +127,7 @@ function Text({ markdownText }: {
 
     return <Container maxWidth={"3xl"}>
         <div className="mt-12 mb-12 px-12">
-            <Markdown source={markdownText}/>
+            <Markdown source={markdownText} />
         </div>
     </Container>;
 }
@@ -158,12 +158,12 @@ function ProductGroupPreview({ references }: {
     if (!references)
         return <></>;
 
-    if (!products) return <CircularProgress/>;
+    if (!products) return <CircularProgress />;
 
     return <div className={"flex gap-2 flex-wrap items-center justify-center"}>
         {products.map((p, index) => <ProductPreview
             key={`products_${index}`}
-            productValues={p.values as EntityValues<Product>}/>)}
+            productValues={p.values as EntityValues<Product>} />)}
     </div>;
 }
 
@@ -177,20 +177,20 @@ export function ProductPreview({ productValues }: {
     return (
         <Card className={"m-4 max-w-[340px] p-8 border"}>
             <div className={"grow flex-shrink-1 flex-basis-[296px] p-8 max-h-[296px]"}>
-                <StorageImage storagePath={productValues.main_image}/>
+                <StorageImage storagePath={productValues.main_image} />
             </div>
             <Typography gutterBottom
-                        variant="h6"
-                        noWrap
-                        style={{
-                            marginTop: "16px"
-                        }}>
+                variant="h6"
+                noWrap
+                style={{
+                    marginTop: "16px"
+                }}>
                 {productValues.name}
             </Typography>
 
             <Typography variant="body2"
-                        color="secondary"
-                        component="div">
+                color="secondary"
+                component="div">
                 {productValues.price} Euros
             </Typography>
         </Card>

@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { EntityCollection, FireCMSPlugin, PluginFieldBuilderParams, useAuthController, User } from "@firecms/core";
+import { EntityCollection, RebasePlugin, PluginFieldBuilderParams, useAuthController, User } from "@rebasepro/core";
 import { DataEnhancementControllerProvider } from "./components/DataEnhancementControllerProvider";
 import { fieldBuilder } from "./components/field_builder";
 import { FormEnhanceAction } from "./components/FormEnhanceAction";
@@ -39,7 +39,7 @@ export interface DataEnhancementPluginProps {
  * This is likely the only hook you will need to use.
  * @param props
  */
-export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): FireCMSPlugin {
+export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): RebasePlugin {
 
     const apiKey = props?.apiKey ?? DEFAULT_API_KEY;
     const getConfigForPath = props?.getConfigForPath;

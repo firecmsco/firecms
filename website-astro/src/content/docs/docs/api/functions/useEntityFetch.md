@@ -3,17 +3,17 @@ slug: "docs/api/functions/useEntityFetch"
 title: "useEntityFetch"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useEntityFetch
+[@rebasepro/core](../README) / useEntityFetch
 
 # Function: useEntityFetch()
 
 > **useEntityFetch**\<`M`, `USER`\>(`path`): [`EntityFetchResult`](../interfaces/EntityFetchResult)\<`M`\>
 
-Defined in: [hooks/data/useEntityFetch.tsx:39](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [hooks/data/useEntityFetch.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 This hook is used to fetch an entity.
 It gives real time updates if the datasource supports it.

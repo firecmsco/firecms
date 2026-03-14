@@ -1,8 +1,8 @@
 import { and, eq, inArray, sql, SQL } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Entity, EntityCollection, FilterValues, Relation } from "@firecms/types";
-import { getTableName, resolveCollectionRelations } from "@firecms/common";
+import { Entity, EntityCollection, FilterValues, Relation } from "@rebasepro/types";
+import { getTableName, resolveCollectionRelations } from "@rebasepro/common";
 import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
 import {
     getCollectionByPath,

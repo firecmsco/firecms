@@ -1,4 +1,4 @@
-import { isPropertyBuilder, Properties, Property } from "@firecms/core";
+import { isPropertyBuilder, Properties, Property } from "@rebasepro/core";
 
 export function editableProperty(property: Property): boolean {
     if (isPropertyBuilder(property))

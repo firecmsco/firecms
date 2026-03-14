@@ -3,15 +3,15 @@ slug: "docs/api/classes/EntityReference"
 title: "EntityReference"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityReference
+[@rebasepro/core](../README) / EntityReference
 
 # Class: EntityReference
 
-Defined in: [types/entities.ts:42](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 Class used to create a reference to an entity in a different path
 
@@ -21,7 +21,7 @@ Class used to create a reference to an entity in a different path
 
 > **new EntityReference**(`id`, `path`, `databaseId?`): `EntityReference`
 
-Defined in: [types/entities.ts:58](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 #### Parameters
 
@@ -47,7 +47,7 @@ Defined in: [types/entities.ts:58](https://github.com/firecmsco/firecms/blob/mai
 
 > `readonly` `optional` **databaseId**: `string`
 
-Defined in: [types/entities.ts:56](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 Optional database ID where the entity is stored (if multiple databases are used)
 
@@ -57,7 +57,7 @@ Optional database ID where the entity is stored (if multiple databases are used)
 
 > `readonly` **id**: `string`
 
-Defined in: [types/entities.ts:46](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 ID of the entity
 
@@ -67,7 +67,7 @@ ID of the entity
 
 > `readonly` **path**: `string`
 
-Defined in: [types/entities.ts:51](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:51](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 A string representing the path of the referenced document (relative
 to the root of the database).
@@ -80,7 +80,7 @@ to the root of the database).
 
 > **get** **pathWithId**(): `string`
 
-Defined in: [types/entities.ts:64](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:64](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 ##### Returns
 
@@ -92,7 +92,7 @@ Defined in: [types/entities.ts:64](https://github.com/firecmsco/firecms/blob/mai
 
 > **isEntityReference**(): `boolean`
 
-Defined in: [types/entities.ts:68](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:68](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 #### Returns
 

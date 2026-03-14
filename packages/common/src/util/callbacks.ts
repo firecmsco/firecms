@@ -1,4 +1,4 @@
-import { EntityCallbacks, Properties } from "@firecms/types";
+import { EntityCallbacks, Properties } from "@rebasepro/types";
 import { mergeDeep } from "./objects";
 
 /**

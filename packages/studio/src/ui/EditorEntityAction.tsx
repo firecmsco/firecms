@@ -1,5 +1,5 @@
-import { PluginFormActionProps, useAuthController, useCollectionRegistryController } from "@firecms/core";
-import { IconButton, SettingsIcon, Tooltip, } from "@firecms/ui";
+import { PluginFormActionProps, useAuthController, useCollectionRegistryController } from "@rebasepro/core";
+import { IconButton, SettingsIcon, Tooltip, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { PersistedCollection } from "../types/persisted_collection";

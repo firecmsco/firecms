@@ -27,7 +27,7 @@ async function main() {
     entry(["", "", "init"]);
     // entry(["", "", "init", "--pro"]);
 
-    // createFireCMSApp(["", "", "--pro"]);
+    // createRebaseApp(["", "", "--pro"]);
     // const tokens = await refreshCredentials(await getTokens());
     // getTokens().then((tokens) => {
     //     console.log("current", tokens);

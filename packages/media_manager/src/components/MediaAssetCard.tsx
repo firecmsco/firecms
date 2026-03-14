@@ -9,7 +9,7 @@ import {
     AudiotrackIcon,
     CheckIcon,
     defaultBorderMixin
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { MediaAsset } from "../types";
 
 export interface MediaAssetCardProps {

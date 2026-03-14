@@ -9,7 +9,7 @@ image: /img/search_extension.jpeg
 
 If you've worked with Firebase and Firestore, you've probably hit this wall: **you can't do full-text search**.
 
-> **TL;DR**: Firestore doesn't support full-text search. We built a [Firebase Extension](https://github.com/firecmsco/typesense-extension) that deploys Typesense on a Compute Engine VM (~$7/month) and auto-syncs your Firestore data. Install, grant permissions, run one curl command, and you have typo-tolerant search.
+> **TL;DR**: Firestore doesn't support full-text search. We built a [Firebase Extension](https://github.com/rebaseco/typesense-extension) that deploys Typesense on a Compute Engine VM (~$7/month) and auto-syncs your Firestore data. Install, grant permissions, run one curl command, and you have typo-tolerant search.
 
 You have a products collection with 10,000 items. A user types "blue wireless headphones" in a search box. In a SQL database, you'd write `WHERE name LIKE '%blue%' OR description LIKE '%wireless%'`. Simple.
 
@@ -42,7 +42,7 @@ For a large enterprise, this makes sense. For most projects? It's overkill.
 
 ### 2. Client-side Search
 
-At FireCMS, we initially built [in-browser text search](/blog/local_text_search). It loads documents into memory and searches locally. Works great for small collections, but try it with 50,000 products and watch the browser tab crash.
+At Rebase, we initially built [in-browser text search](/blog/local_text_search). It loads documents into memory and searches locally. Works great for small collections, but try it with 50,000 products and watch the browser tab crash.
 
 ### 3. Cloud Functions + Manual Indexing
 
@@ -84,7 +84,7 @@ Compare that to Algolia at $1+ per 1,000 search operations.
 
 ```bash
 # Install
-firebase ext:install https://github.com/firecmsco/typesense-extension
+firebase ext:install https://github.com/rebaseco/typesense-extension
 
 # Provision (after granting roles)
 curl "https://REGION-PROJECT.cloudfunctions.net/ext-typesense-search-provisionSearchNode"
@@ -114,20 +114,20 @@ const response = await fetch(
 );
 ```
 
-## Using with FireCMS
+## Using with Rebase
 
-If you're using [FireCMS](https://firecms.co), integration is one line:
+If you're using [Rebase](https://rebase.pro), integration is one line:
 
 ```typescript
-import { buildFireCMSSearchController } from "@firecms/firebase";
+import { buildRebaseSearchController } from "@rebasepro/firebase";
 
-const textSearchControllerBuilder = buildFireCMSSearchController({
+const textSearchControllerBuilder = buildRebaseSearchController({
   region: "europe-west3",
   extensionInstanceId: "typesense-search"
 });
 ```
 
-Now your FireCMS collections have full-text search powered by Typesense.
+Now your Rebase collections have full-text search powered by Typesense.
 
 ## When to Use This Extension
 
@@ -146,11 +146,11 @@ Now your FireCMS collections have full-text search powered by Typesense.
 
 The extension is open source and available now:
 
-- **GitHub**: [github.com/firecmsco/typesense-extension](https://github.com/firecmsco/typesense-extension)
+- **GitHub**: [github.com/rebaseco/typesense-extension](https://github.com/rebaseco/typesense-extension)
 - **Documentation**: See PREINSTALL.md and POSTINSTALL.md in the repo
 
-Have questions? Join our [Discord community](https://discord.gg/fxy7xsQm3m) or reach out at hello@firecms.co.
+Have questions? Join our [Discord community](https://discord.gg/fxy7xsQm3m) or reach out at hello@rebase.pro.
 
 ---
 
-[FireCMS](https://firecms.co) | [Documentation](https://firecms.co/docs) | [GitHub](https://github.com/FireCMSco/firecms) | [Discord](https://discord.gg/fxy7xsQm3m)
+[Rebase](https://rebase.pro) | [Documentation](https://rebase.pro/docs) | [GitHub](https://github.com/Rebaseco/rebase) | [Discord](https://discord.gg/fxy7xsQm3m)

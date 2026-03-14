@@ -3,17 +3,17 @@ slug: "docs/api/variables/PropertyFieldBinding"
 title: "PropertyFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PropertyFieldBinding
+[@rebasepro/core](../README) / PropertyFieldBinding
 
 # Variable: PropertyFieldBinding()
 
 > `const` **PropertyFieldBinding**: \<`T`, `M`\>(`propertyKey`) => `ReactElement`\<[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`T`, `M`\>\>
 
-Defined in: [form/PropertyFieldBinding.tsx:50](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/PropertyFieldBinding.tsx)
+Defined in: [form/PropertyFieldBinding.tsx:50](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/PropertyFieldBinding.tsx)
 
 This component renders a form field creating the corresponding configuration
 from a property. For example if bound to a string property, it will generate

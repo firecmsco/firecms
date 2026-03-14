@@ -1,5 +1,5 @@
 import React from "react";
-import { AddIcon, IconButton } from "@firecms/ui";
+import { AddIcon, IconButton } from "@rebasepro/ui";
 
 export default function IconButtonShapeDemo() {
     return (
@@ -8,13 +8,13 @@ export default function IconButtonShapeDemo() {
                 variant="filled"
                 shape="circular"
                 onClick={() => console.log("Circular Clicked!")}>
-                <AddIcon/>
+                <AddIcon />
             </IconButton>
             <IconButton
                 variant="filled"
                 shape="square"
                 onClick={() => console.log("Square Clicked!")}>
-                <AddIcon/>
+                <AddIcon />
             </IconButton>
         </>
     );

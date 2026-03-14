@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/EntityAction"
 title: "EntityAction"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityAction
+[@rebasepro/core](../README) / EntityAction
 
 # Type Alias: EntityAction\<M, USER\>
 
 > **EntityAction**\<`M`, `USER`\> = `object`
 
-Defined in: [types/entity\_actions.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
+Defined in: [types/entity\_actions.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_actions.tsx)
 
 An entity action is a custom action that can be performed on an entity.
 They are displayed in the entity view and in the collection view.
@@ -34,7 +34,7 @@ They are displayed in the entity view and in the collection view.
 
 > `optional` **collapsed**: `boolean`
 
-Defined in: [types/entity\_actions.tsx:54](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
+Defined in: [types/entity\_actions.tsx:54](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_actions.tsx)
 
 Show this action collapsed in the menu of the collection view.
 Defaults to true
@@ -46,7 +46,7 @@ If false, the action will be shown in the menu
 
 > `optional` **icon**: `React.ReactElement`
 
-Defined in: [types/entity\_actions.tsx:35](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
+Defined in: [types/entity\_actions.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_actions.tsx)
 
 Icon of the action
 
@@ -56,7 +56,7 @@ Icon of the action
 
 > `optional` **includeInForm**: `boolean`
 
-Defined in: [types/entity\_actions.tsx:59](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
+Defined in: [types/entity\_actions.tsx:59](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_actions.tsx)
 
 Show this action in the form, defaults to true
 
@@ -66,7 +66,7 @@ Show this action in the form, defaults to true
 
 > `optional` **isEnabled**: (`props`) => `boolean`
 
-Defined in: [types/entity\_actions.tsx:47](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
+Defined in: [types/entity\_actions.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_actions.tsx)
 
 Optional callback in case you want to disable the action
 
@@ -86,7 +86,7 @@ Optional callback in case you want to disable the action
 
 > `optional` **key**: `string`
 
-Defined in: [types/entity\_actions.tsx:30](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
+Defined in: [types/entity\_actions.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_actions.tsx)
 
 Key of the action. You only need to provide this if you want to
 override the default actions, or if you are not passing the action
@@ -104,7 +104,7 @@ The default actions are:
 
 > **name**: `string`
 
-Defined in: [types/entity\_actions.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
+Defined in: [types/entity\_actions.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_actions.tsx)
 
 Title of the action
 
@@ -114,7 +114,7 @@ Title of the action
 
 > **onClick**: (`props`) => `Promise`\<`void`\> \| `void`
 
-Defined in: [types/entity\_actions.tsx:41](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_actions.tsx)
+Defined in: [types/entity\_actions.tsx:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_actions.tsx)
 
 Callback when the action is clicked
 

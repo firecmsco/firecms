@@ -12,7 +12,7 @@ import {
     Tooltip,
     AppsIcon,
     Icon
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { useMediaManager } from "../MediaManagerProvider";
 import { MediaAssetCard } from "./MediaAssetCard";
 import { MediaAssetDetails } from "./MediaAssetDetails";
@@ -28,9 +28,9 @@ export interface MediaLibraryViewProps {
  * Displays a grid of assets with search, upload, and management capabilities.
  */
 export function MediaLibraryView({
-                                     maxFileSize,
-                                     acceptedMimeTypes
-                                 }: MediaLibraryViewProps) {
+    maxFileSize,
+    acceptedMimeTypes
+}: MediaLibraryViewProps) {
     const controller = useMediaManager();
     const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -92,7 +92,7 @@ export function MediaLibraryView({
                                             viewMode === "grid" && "bg-surface-accent-100 dark:bg-surface-accent-800"
                                         )}
                                     >
-                                        <AppsIcon size="small"/>
+                                        <AppsIcon size="small" />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title="List view">
@@ -102,14 +102,14 @@ export function MediaLibraryView({
                                             viewMode === "list" && "bg-surface-accent-100 dark:bg-surface-accent-800"
                                         )}
                                     >
-                                        <Icon iconKey="list" size="small"/>
+                                        <Icon iconKey="list" size="small" />
                                     </IconButton>
                                 </Tooltip>
                             </div>
 
                             <Tooltip title="Refresh">
                                 <IconButton onClick={handleRefresh} disabled={controller.loading}>
-                                    <RefreshIcon size="small"/>
+                                    <RefreshIcon size="small" />
                                 </IconButton>
                             </Tooltip>
 
@@ -117,7 +117,7 @@ export function MediaLibraryView({
                                 variant="filled"
                                 onClick={handleUploadClick}
                             >
-                                <AddIcon size="small"/>
+                                <AddIcon size="small" />
                                 Upload
                             </Button>
                         </div>
@@ -130,7 +130,7 @@ export function MediaLibraryView({
                 <Container maxWidth="6xl" className="py-6">
                     {controller.loading && controller.assets.length === 0 ? (
                         <div className="flex items-center justify-center h-64">
-                            <CircularProgress/>
+                            <CircularProgress />
                         </div>
                     ) : controller.error ? (
                         <div className="flex flex-col items-center justify-center h-64 gap-4">
@@ -147,7 +147,7 @@ export function MediaLibraryView({
                                 No media assets yet
                             </Typography>
                             <Button onClick={handleUploadClick}>
-                                <AddIcon size="small"/>
+                                <AddIcon size="small" />
                                 Upload your first file
                             </Button>
                         </div>

@@ -2,13 +2,13 @@ import { BlogEntry, BlogEntryWithId } from "@/app/common/types";
 import { convertBlogEntry } from "@/app/common/database";
 import React, { useEffect } from "react";
 import { BlogEntryView } from "@/app/common/components/BlogEntryView";
-import { Button, CircularProgress, OpenInNewIcon } from "@firecms/ui";
+import { Button, CircularProgress, OpenInNewIcon } from "@rebasepro/ui";
 import Link from "next/link";
 
 export function CMSBlogPreview({
-                                   blogEntry,
-                                   id
-                               }: {
+    blogEntry,
+    id
+}: {
     blogEntry?: BlogEntry,
     id: string
 }) {
@@ -20,19 +20,19 @@ export function CMSBlogPreview({
     }, [blogEntry, id]);
 
     if (!convertedBlogEntry) {
-        return <CircularProgress/>;
+        return <CircularProgress />;
     }
 
     return <div className={"relative"}>
         <div className={"absolute top-4 right-4 flex w-full justify-end p-4"}>
             <Link href={"/blog/" + id}
-                  target={"_blank"}>
+                target={"_blank"}>
                 <Button variant={"text"} color="text" size={"small"}>
-                    <OpenInNewIcon/> See blog entry in website
+                    <OpenInNewIcon /> See blog entry in website
                 </Button>
             </Link>
         </div>
-        <BlogEntryView blogEntry={convertedBlogEntry}/>
+        <BlogEntryView blogEntry={convertedBlogEntry} />
     </div>;
 
 }

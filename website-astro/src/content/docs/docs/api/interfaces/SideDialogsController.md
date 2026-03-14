@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/SideDialogsController"
 title: "SideDialogsController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SideDialogsController
+[@rebasepro/core](../README) / SideDialogsController
 
 # Interface: SideDialogsController
 
-Defined in: [types/side\_dialogs\_controller.tsx:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 Controller to open the side dialog
 
@@ -21,7 +21,7 @@ Controller to open the side dialog
 
 > **close**: () => `void`
 
-Defined in: [types/side\_dialogs\_controller.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 Close the last panel
 
@@ -35,7 +35,7 @@ Close the last panel
 
 > **open**: (`panelProps`) => `void`
 
-Defined in: [types/side\_dialogs\_controller.tsx:30](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 Open one or multiple side panels
 
@@ -55,7 +55,7 @@ Open one or multiple side panels
 
 > **replace**: (`panelProps`) => `void`
 
-Defined in: [types/side\_dialogs\_controller.tsx:36](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 Replace the last open panel with the given one
 
@@ -75,7 +75,7 @@ Replace the last open panel with the given one
 
 > **setSidePanels**: (`panels`) => `void`
 
-Defined in: [types/side\_dialogs\_controller.tsx:24](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 Override the current side panels
 
@@ -95,6 +95,6 @@ Override the current side panels
 
 > **sidePanels**: [`SideDialogPanelProps`](SideDialogPanelProps)[]
 
-Defined in: [types/side\_dialogs\_controller.tsx:18](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_dialogs_controller.tsx)
+Defined in: [types/side\_dialogs\_controller.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_dialogs_controller.tsx)
 
 List of side panels currently open

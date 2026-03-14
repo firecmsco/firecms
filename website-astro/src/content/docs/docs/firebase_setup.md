@@ -2,10 +2,10 @@
 slug: docs/firebase_setup
 title: Firebase setup
 sidebar_label: Firebase setup
-description: Step-by-step guide to setting up Firebase for FireCMS, including Firestore, Authentication, Storage, and security rules.
+description: Step-by-step guide to setting up Firebase for Rebase, including Firestore, Authentication, Storage, and security rules.
 ---
 
-FireCMS connects directly to your **Firebase** project to provide a powerful **admin panel** for your **Firestore database**. Before you can use FireCMS as a **headless CMS** or **back-office** for your app, you need to configure your Firebase project.
+Rebase connects directly to your **Firebase** project to provide a powerful **admin panel** for your **Firestore database**. Before you can use Rebase as a **headless CMS** or **back-office** for your app, you need to configure your Firebase project.
 
 This guide covers the essential setup steps:
 1. **Firestore** - Your primary database

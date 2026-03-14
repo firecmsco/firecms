@@ -3,8 +3,8 @@ import { createHandler } from "graphql-http/lib/use/express";
 import cors from "cors";
 import { GraphQLSchemaGenerator } from "./graphql/graphql-schema-generator";
 import { RestApiGenerator } from "./rest/api-generator";
-import { DataSource, User, EntityCollection } from "@firecms/types";
-import { ApiConfig, FireCMSRequest } from "./types";
+import { DataSource, User, EntityCollection } from "@rebasepro/types";
+import { ApiConfig, RebaseRequest } from "./types";
 import * as fs from "fs";
 import * as path from "path";
 import { createSchemaEditorRoutes } from "./schema-editor-routes";
@@ -12,10 +12,10 @@ import { createCallbacksTestRouter } from "./test_callbacks_route";
 import { PostgresDataSource } from "../services/postgresDataSource";
 import { extractUserFromToken, requireAuth, requireAdmin } from "../auth/middleware";
 /**
- * Simplified API server that leverages existing FireCMS infrastructure
+ * Simplified API server that leverages existing Rebase infrastructure
  * Can be used standalone or mounted on existing Express app
  */
-export class FireCMSApiServer {
+export class RebaseApiServer {
     private app: Express;
     private router: Router;
     private config: ApiConfig;
@@ -44,15 +44,15 @@ export class FireCMSApiServer {
     /**
      * Factory method to create an asynchronously initialized ApiServer instance
      */
-    public static async create(config: ApiConfig & { dataSource: DataSource }): Promise<FireCMSApiServer> {
+    public static async create(config: ApiConfig & { dataSource: DataSource }): Promise<RebaseApiServer> {
         // Auto-discover collections if a directory is provided and collections aren't explicitly passed
         if (config.collectionsDir && (!config.collections || config.collections.length === 0)) {
-            config.collections = await FireCMSApiServer.loadCollectionsFromDirectory(config.collectionsDir);
+            config.collections = await RebaseApiServer.loadCollectionsFromDirectory(config.collectionsDir);
         } else if (!config.collections) {
             config.collections = [];
         }
 
-        const server = new FireCMSApiServer(config);
+        const server = new RebaseApiServer(config);
         server.setupRoutes();
         server.app.use(server.router);
         return server;
@@ -65,7 +65,7 @@ export class FireCMSApiServer {
         const collections: EntityCollection[] = [];
         try {
             if (!fs.existsSync(directory)) {
-                console.warn(`[FireCMSApiServer] Collections directory not found: ${directory}`);
+                console.warn(`[RebaseApiServer] Collections directory not found: ${directory}`);
                 return collections;
             }
 
@@ -89,15 +89,15 @@ export class FireCMSApiServer {
                         if (module && module.default) {
                             collections.push(module.default);
                         } else {
-                            console.warn(`[FireCMSApiServer] File ${file} does not have a default export. Skipping.`);
+                            console.warn(`[RebaseApiServer] File ${file} does not have a default export. Skipping.`);
                         }
                     } catch (err: any) {
-                        console.error(`[FireCMSApiServer] Failed to load collection from ${file}: ${err.message}`);
+                        console.error(`[RebaseApiServer] Failed to load collection from ${file}: ${err.message}`);
                     }
                 }
             }
         } catch (err) {
-            console.error(`[FireCMSApiServer] Error reading collections directory: ${err}`);
+            console.error(`[RebaseApiServer] Error reading collections directory: ${err}`);
         }
         return collections;
     }
@@ -117,7 +117,7 @@ export class FireCMSApiServer {
 
         // Auth middleware - only for our routes
         if (this.config.auth?.enabled) {
-            this.router.use(async (req: FireCMSRequest, res: Response, next): Promise<void> => {
+            this.router.use(async (req: RebaseRequest, res: Response, next): Promise<void> => {
                 if (this.config.auth?.validator) {
                     try {
                         const authResult = await this.config.auth.validator(req);
@@ -148,7 +148,7 @@ export class FireCMSApiServer {
                         if (authHeader && authHeader.startsWith("Bearer ")) {
                             const token = authHeader.substring(7);
                             const payload = extractUserFromToken(token);
-                            
+
                             if (payload) {
                                 const user = { uid: payload.userId, roles: payload.roles } as unknown as User;
                                 req.user = user;
@@ -225,8 +225,8 @@ export class FireCMSApiServer {
             const graphQLHandler = createHandler({
                 schema,
                 context: (req: unknown) => ({
-                    user: (req as FireCMSRequest).user,
-                    dataSource: (req as FireCMSRequest).dataSource || this.dataSource
+                    user: (req as RebaseRequest).user,
+                    dataSource: (req as RebaseRequest).dataSource || this.dataSource
                 })
             }) as unknown as RequestHandler;
 
@@ -239,7 +239,7 @@ export class FireCMSApiServer {
 <html>
 <head>
   <meta charset=utf-8/>
-  <title>FireCMS GraphiQL</title>
+  <title>Rebase GraphiQL</title>
   <link rel="stylesheet" href="https://unpkg.com/graphiql/graphiql.min.css" />
   <style>body,html,#graphiql{height:100%;margin:0;width:100%;}</style>
 </head>
@@ -289,7 +289,7 @@ export class FireCMSApiServer {
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>FireCMS API Documentation</title>
+                    <title>Rebase API Documentation</title>
                     <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui.css" />
                 </head>
                 <body>
@@ -310,7 +310,7 @@ export class FireCMSApiServer {
 
         // Global Error Handling Middleware for API Routes
         this.router.use((err: Error & { statusCode?: number, code?: string, details?: unknown }, req: Request, res: Response, next: NextFunction) => {
-            console.error("FireCMS API Error:", err);
+            console.error("Rebase API Error:", err);
 
             const statusCode = err.statusCode ||
                 (err.message && err.message.includes("not found") ? 404 : 500);
@@ -332,9 +332,9 @@ export class FireCMSApiServer {
         const spec = {
             openapi: "3.0.0",
             info: {
-                title: "FireCMS Auto-Generated API",
+                title: "Rebase Auto-Generated API",
                 version: "1.0.0",
-                description: "Automatically generated REST API from FireCMS collections"
+                description: "Automatically generated REST API from Rebase collections"
             },
             servers: [
                 {

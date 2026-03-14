@@ -1,11 +1,11 @@
 /**
- * @firecms/mongodb
+ * @rebasepro/mongodb
  *
- * MongoDB backend implementation for FireCMS
- * This package provides a complete backend solution for FireCMS applications
+ * MongoDB backend implementation for Rebase
+ * This package provides a complete backend solution for Rebase applications
  * using MongoDB as the database.
  *
- * The package implements the abstract interfaces from @firecms/backend
+ * The package implements the abstract interfaces from @rebasepro/backend
  * (EntityRepository, RealtimeProvider, CollectionRegistryInterface, etc.)
  */
 

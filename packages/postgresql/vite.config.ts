@@ -17,7 +17,7 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS PostgreSQL",
+            name: "Rebase PostgreSQL",
             fileName: (format) => `index.${format}.js`
         },
         target: "ESNEXT",
@@ -29,11 +29,11 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            "@firecms/ui": path.resolve(__dirname, "../ui/src"),
-            "@firecms/editor": path.resolve(__dirname, "../editor/src"),
-            "@firecms/formex": path.resolve(__dirname, "../formex/src"),
-            "@firecms/core": path.resolve(__dirname, "../firecms_core/src"),
-            "@firecms/types": path.resolve(__dirname, "../types/src")
+            "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
+            "@rebasepro/editor": path.resolve(__dirname, "../editor/src"),
+            "@rebasepro/formex": path.resolve(__dirname, "../formex/src"),
+            "@rebasepro/core": path.resolve(__dirname, "../core/src"),
+            "@rebasepro/types": path.resolve(__dirname, "../types/src")
         }
     },
     plugins: [

@@ -12,7 +12,7 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS CLI",
+            name: "Rebase CLI",
             fileName: (format) => {
                 if (format === "es")
                     return `index.${format}.js`;
@@ -30,15 +30,15 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            "@firecms/core": path.resolve(__dirname, "../firecms_core/src"),
-            "@firecms/types": path.resolve(__dirname, "../types/src"),
-            "@firecms/ui": path.resolve(__dirname, "../ui/src"),
-            "@firecms/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
-            "@firecms/studio": path.resolve(__dirname, "../studio/src"),
-            "@firecms/data_enhancement": path.resolve(__dirname, "../data_enhancement/src"),
-            "@firecms/data_import": path.resolve(__dirname, "../data_import/src"),
-            "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),
-            "@firecms/data_import_export": path.resolve(__dirname, "../data_import_export/src"),
+            "@rebasepro/core": path.resolve(__dirname, "../core/src"),
+            "@rebasepro/types": path.resolve(__dirname, "../types/src"),
+            "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
+            "@rebasepro/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
+            "@rebasepro/studio": path.resolve(__dirname, "../studio/src"),
+            "@rebasepro/data_enhancement": path.resolve(__dirname, "../data_enhancement/src"),
+            "@rebasepro/data_import": path.resolve(__dirname, "../data_import/src"),
+            "@rebasepro/data_export": path.resolve(__dirname, "../data_export/src"),
+            "@rebasepro/data_import_export": path.resolve(__dirname, "../data_import_export/src"),
         }
     },
     plugins: [

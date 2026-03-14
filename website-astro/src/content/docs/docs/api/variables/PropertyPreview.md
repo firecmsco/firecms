@@ -3,14 +3,14 @@ slug: "docs/api/variables/PropertyPreview"
 title: "PropertyPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PropertyPreview
+[@rebasepro/core](../README) / PropertyPreview
 
 # Variable: PropertyPreview
 
 > `const` **PropertyPreview**: `MemoExoticComponent`\<\<`T`\>(`props`) => `any`\>
 
-Defined in: [preview/PropertyPreview.tsx:39](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/PropertyPreview.tsx)
+Defined in: [preview/PropertyPreview.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/PropertyPreview.tsx)

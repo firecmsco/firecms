@@ -29,10 +29,10 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@firecms/ui": [
+      "@rebasepro/ui": [
         "../ui/src"
       ],
-      "@firecms/types": [
+      "@rebasepro/types": [
         "../types/src"
       ]
     }

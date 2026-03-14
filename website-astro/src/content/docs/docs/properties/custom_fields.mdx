@@ -2,7 +2,7 @@
 slug: docs/properties/custom_fields
 title: Custom fields
 sidebar_label: Custom fields
-description: "Learn how to build powerful FireCMS custom fields: component contract, passing custom props, accessing entity context, composing other properties, handling arrays, validation, performance, and advanced examples."
+description: "Learn how to build powerful Rebase custom fields: component contract, passing custom props, accessing entity context, composing other properties, handling arrays, validation, performance, and advanced examples."
 ---
 
 Custom fields let you fully control how a property's value is edited and displayed in a form. Instead of the built‑in renderer for a `dataType`, you supply a React component. That component receives a rich set of props (`FieldProps`) so it can:
@@ -39,8 +39,8 @@ A custom text field with a background color supplied via `customProps` (scroll b
 
 ```tsx
 import React from "react";
-import { FieldHelperText, FieldProps, useModeController } from "@firecms/core";
-import { TextField } from "@firecms/ui";
+import { FieldHelperText, FieldProps, useModeController } from "@rebasepro/core";
+import { TextField } from "@rebasepro/ui";
 
 interface CustomColorTextFieldProps {
     color: string;
@@ -134,7 +134,7 @@ If your custom field wants to include the UI of another property, use `PropertyF
 This keeps validation and consistency:
 
 ```tsx
-import { PropertyFieldBinding } from "@firecms/core";
+import { PropertyFieldBinding } from "@rebasepro/core";
 
 <PropertyFieldBinding
   propertyKey="subtitle"
@@ -229,4 +229,4 @@ function GeoPointField({ context }: FieldProps<any>) {
 - Reuse logic across many properties: create a shared field component and pass different `customProps`.
 - Open source friendly? Consider contributing a reusable field to the community.
 
-By leveraging custom fields you can create rich authoring experiences closely aligned with your product's domain while keeping validation, state and persistence centralized in FireCMS.
+By leveraging custom fields you can create rich authoring experiences closely aligned with your product's domain while keeping validation, state and persistence centralized in Rebase.

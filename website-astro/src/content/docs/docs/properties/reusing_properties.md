@@ -8,7 +8,7 @@ When you define a property config, you will be able to select it in
 the collection editor
 :::
 
-FireCMS 3 introduced a new way of defining properties that allows you to reuse
+Rebase 3 introduced a new way of defining properties that allows you to reuse
 them across different entities and collections.
 
 You can define a `propertyConfigs` object that
@@ -41,7 +41,7 @@ export type PropertyConfig<T = any> = {
     /**
      * Optional icon to be used in the field selector.
      * Use a 24x24 component, in order not to break the layout.
-     * Any FireCMS icon can be used.
+     * Any Rebase icon can be used.
      */
     Icon?: React.ComponentType;
 
@@ -63,13 +63,13 @@ Note that you can use any of the existing builders or properties as a base for
 your custom property. What you define in your property will be used as a base
 for the resulting property (the user is still able to customize it).
 
-### FireCMS Cloud
+### Rebase Cloud
 
 Let's define a custom property that consists of a translations map object with different string values:
 
 ```typescript
 
-export const appConfig: FireCMSAppConfig = {
+export const appConfig: RebaseAppConfig = {
     version: "1",
     collections: [
         // ...
@@ -96,12 +96,12 @@ export const appConfig: FireCMSAppConfig = {
 };
 ```
 
-### FireCMS PRO
+### Rebase PRO
 
-In FireCMS PRO, you can define the `propertyConfigs` in the `FireCMS` component:
+In Rebase PRO, you can define the `propertyConfigs` in the `Rebase` component:
 
 ```tsx
-<FireCMS
+<Rebase
     //...
     propertyConfigs={[
         {

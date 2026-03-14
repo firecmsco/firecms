@@ -2,12 +2,12 @@
 slug: docs/hooks/use_side_dialogs_controller
 title: useSideDialogsController
 sidebar_label: useSideDialogsController
-description: Hook to manage side dialogs/panels in FireCMS.
+description: Hook to manage side dialogs/panels in Rebase.
 ---
 
 Hook to retrieve the side dialogs' controller. This hook allows you to open and close side panels programmatically. 
 
-This is the low-level mechanism used by FireCMS to open:
+This is the low-level mechanism used by Rebase to open:
 *   Entity forms (Side Entity Controller)
 *   Reference selection dialogs
 
@@ -21,8 +21,8 @@ If you just want to open an entity form form, use **[`useSideEntityController`](
 
 ```tsx
 import React from "react";
-import { useSideDialogsController } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { useSideDialogsController } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 export function CustomSidePanelExample() {
     const sideDialogsController = useSideDialogsController();

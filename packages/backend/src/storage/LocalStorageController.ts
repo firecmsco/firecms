@@ -17,7 +17,7 @@ import {
     DownloadMetadata,
     StorageListResult,
     StorageReference
-} from '@firecms/types';
+} from '@rebasepro/types';
 
 const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);

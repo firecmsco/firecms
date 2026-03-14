@@ -3,17 +3,17 @@ slug: "docs/api/functions/NotFoundPage"
 title: "NotFoundPage"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / NotFoundPage
+[@rebasepro/core](../README) / NotFoundPage
 
 # Function: NotFoundPage()
 
 > **NotFoundPage**(): `Element`
 
-Defined in: [components/NotFoundPage.tsx:5](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/NotFoundPage.tsx)
+Defined in: [components/NotFoundPage.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/NotFoundPage.tsx)
 
 ## Returns
 

@@ -1,18 +1,18 @@
-import { EntityTableController, Property } from "@firecms/core";
-import { IconButton, SettingsIcon, Tooltip } from "@firecms/ui";
+import { EntityTableController, Property } from "@rebasepro/core";
+import { IconButton, SettingsIcon, Tooltip } from "@rebasepro/ui";
 import React from "react";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { PersistedCollection } from "../types/persisted_collection";
 
 export function CollectionViewHeaderAction({
-                                               propertyKey,
-                                               onHover,
-                                               property,
-                                               path,
-                                               parentCollectionIds,
-                                               collection,
-                                               tableController
-                                           }: {
+    propertyKey,
+    onHover,
+    property,
+    path,
+    parentCollectionIds,
+    collection,
+    tableController
+}: {
     property: Property,
     propertyKey: string,
     onHover: boolean,
@@ -41,7 +41,7 @@ export function CollectionViewHeaderAction({
                     });
                 }}
                 size={"small"}>
-                <SettingsIcon size={"small"}/>
+                <SettingsIcon size={"small"} />
             </IconButton>
         </Tooltip>
     )

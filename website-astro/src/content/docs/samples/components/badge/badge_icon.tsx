@@ -1,12 +1,12 @@
 import React from "react";
-import { AnchorIcon, Badge, Button, IconButton } from "@firecms/ui";
+import { AnchorIcon, Badge, Button, IconButton } from "@rebasepro/ui";
 
 export default function BadgeIconDemo() {
     return (
         <>
             <Badge color="error">
                 <IconButton>
-                    <AnchorIcon/>
+                    <AnchorIcon />
                 </IconButton>
             </Badge>
 

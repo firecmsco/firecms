@@ -3,17 +3,17 @@ slug: "docs/api/functions/saveEntityWithCallbacks"
 title: "saveEntityWithCallbacks"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / saveEntityWithCallbacks
+[@rebasepro/core](../README) / saveEntityWithCallbacks
 
 # Function: saveEntityWithCallbacks()
 
 > **saveEntityWithCallbacks**\<`M`, `USER`\>(`collection`): `Promise`\<`void`\>
 
-Defined in: [hooks/data/save.ts:43](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/save.ts)
+Defined in: [hooks/data/save.ts:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/save.ts)
 
 This function is in charge of saving an entity to the datasource.
 It will run all the save callbacks specified in the collection.

@@ -19,17 +19,17 @@ When defining a global entity action, you must provide a unique `key` property.
 The actions will be shown in the menu of the collection view by default
 and in the form view if `includeInForm` is set to true.
 
-You can access all the controllers of FireCMS in the `context`. That is useful for accessing the data source,
+You can access all the controllers of Rebase in the `context`. That is useful for accessing the data source,
 modifying data, accessing storage, opening dialogs, etc.
 
 In the `icon` prop, you can pass a React element to show an icon next to the action name.
-We recommend using any of the [FireCMS icons](/docs/icons), which are available in the `@firecms/ui` package.
+We recommend using any of the [Rebase icons](/docs/icons), which are available in the `@rebasepro/ui` package.
 
 ### Defining actions at the collection level
 
 ```tsx
-import { buildCollection } from "@firecms/core";
-import { ArchiveIcon } from "@firecms/ui";
+import { buildCollection } from "@rebasepro/core";
+import { ArchiveIcon } from "@rebasepro/ui";
 
 export const productsCollection = buildCollection<Product>({
     id: "products",
@@ -62,14 +62,14 @@ export const productsCollection = buildCollection<Product>({
 
 ### Defining actions globally
 
-You can define entity actions globally by passing them to the `FireCMS` component if you are self-hosting,
-or in the `FireCMSAppConfig` if you are using FireCMS Cloud.
+You can define entity actions globally by passing them to the `Rebase` component if you are self-hosting,
+or in the `RebaseAppConfig` if you are using Rebase Cloud.
 
 ```tsx
-import { ShareIcon } from "@firecms/ui";
+import { ShareIcon } from "@rebasepro/ui";
 
 // Self-hosted
-<FireCMS
+<Rebase
     entityActions={[{
         key: "share",
         name: "Share",
@@ -83,10 +83,10 @@ import { ShareIcon } from "@firecms/ui";
 ```
 
 ```tsx
-import { ShareIcon } from "@firecms/ui";
+import { ShareIcon } from "@rebasepro/ui";
 
-// FireCMS Cloud
-const appConfig: FireCMSAppConfig = {
+// Rebase Cloud
+const appConfig: RebaseAppConfig = {
     entityActions: [{
         key: "share",
         name: "Share",
@@ -119,7 +119,7 @@ const appConfig: FireCMSAppConfig = {
 #### EntityActionClickProps
 
 * `entity`: Entity being edited
-* `context`: FireCMSContext, used for accessing all the controllers
+* `context`: RebaseContext, used for accessing all the controllers
 * `path`?: string
 * `collection`?: EntityCollection
 * `formContext`?: FormContext, present if the action is being called from a form.
@@ -142,8 +142,8 @@ When the action is clicked, we will call a Google Cloud Function that will run s
 You can use the standard `fetch` API to call any HTTP endpoint, including a Google Cloud Function. This is a general-purpose method that works with any backend.
 
 ```tsx
-import { buildCollection, Product } from "@firecms/core";
-import { ArchiveIcon } from "@firecms/ui";
+import { buildCollection, Product } from "@rebasepro/core";
+import { ArchiveIcon } from "@rebasepro/ui";
 
 export const productsCollection = buildCollection<Product>({
     id: "products",
@@ -194,8 +194,8 @@ Then, you can define your action like this:
 
 ```tsx
 import { getFunctions, httpsCallable } from "firebase/functions";
-import { ArchiveIcon } from "@firecms/ui";
-import { buildCollection, Product } from "@firecms/core";
+import { ArchiveIcon } from "@rebasepro/ui";
+import { buildCollection, Product } from "@rebasepro/core";
 
 // Initialize Firebase Functions
 // Make sure you have initialized Firebase elsewhere in your app

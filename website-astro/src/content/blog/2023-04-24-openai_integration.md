@@ -120,21 +120,21 @@ enhancing content management and user experiences will only grow.
 
 ![CMSs](/img/blog/1_UGhkCea0dDrBHJgjjUZNPA.webp)
 
-## FireCMS: Extracting Structured Data from ChatGPT Outputs
+## Rebase: Extracting Structured Data from ChatGPT Outputs
 
 As impressive as ChatGPT’s capabilities are, it’s essential to ensure that its
-outputs can be effectively integrated into a CMS platform. FireCMS, an
+outputs can be effectively integrated into a CMS platform. Rebase, an
 open-source CMS, demonstrates a successful approach to extracting structured
 data from ChatGPT outputs and adapting it to any given data entity structures.
 
-FireCMS can be configured to communicate with ChatGPT, sending input queries and
+Rebase can be configured to communicate with ChatGPT, sending input queries and
 receiving generated content. By implementing custom parsers and data processing
-tools, FireCMS can extract the relevant information from ChatGPT’s outputs and
-adapt it to the required data structure. This process allows FireCMS to
+tools, Rebase can extract the relevant information from ChatGPT’s outputs and
+adapt it to the required data structure. This process allows Rebase to
 seamlessly integrate ChatGPT-generated content into its existing content
 management workflow.
 
-The integration of FireCMS with OpenAI is completely free to try in your own
+The integration of Rebase with OpenAI is completely free to try in your own
 project, no subscriptions required!
 
 https://youtube.com/shorts/WIfHyvDRam0
@@ -146,7 +146,7 @@ autofilling fields, completing missing data, providing translations, and
 generating content, ChatGPT can streamline content creation and management
 processes while offering a higher degree of automation.
 
-FireCMS showcases a successful approach to integrating ChatGPT into a CMS
+Rebase showcases a successful approach to integrating ChatGPT into a CMS
 platform, setting the stage for other CMS systems to follow suit. As AI
 technology continues to advance, the potential for further improvements and
 innovations in content management is limitless.

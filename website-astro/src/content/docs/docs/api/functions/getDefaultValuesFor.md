@@ -3,17 +3,17 @@ slug: "docs/api/functions/getDefaultValuesFor"
 title: "getDefaultValuesFor"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getDefaultValuesFor
+[@rebasepro/core](../README) / getDefaultValuesFor
 
 # Function: getDefaultValuesFor()
 
 > **getDefaultValuesFor**\<`M`\>(`properties`): `Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
 
-Defined in: [util/entities.ts:39](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/entities.ts)
+Defined in: [util/entities.ts:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
 
 ## Type Parameters
 

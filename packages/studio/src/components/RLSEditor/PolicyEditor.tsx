@@ -10,7 +10,7 @@ import {
     MultiSelectItem,
     cls,
     defaultBorderMixin
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { MonacoEditor } from "../SQLEditor/MonacoEditor";
 import { PostgresPolicy } from "./RLSEditor";
 

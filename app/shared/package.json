@@ -1,7 +1,7 @@
 {
-  "name": "firecms-app-shared",
+  "name": "rebase-app-shared",
   "version": "1.0.0",
-  "description": "Shared collections and config for FireCMS app",
+  "description": "Shared collections and config for Rebase app",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -12,7 +12,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@firecms/types": "4.0.0"
+    "@rebasepro/types": "4.0.0"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

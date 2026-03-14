@@ -9,6 +9,6 @@
     "dist",
     "src/test",
     "../ui/src",
-    "../firecms_core/src"
+    "../core/src"
   ]
 }

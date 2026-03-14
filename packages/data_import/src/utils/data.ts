@@ -8,11 +8,11 @@ import {
     CollectionRegistryController,
     Properties,
     Property,
-} from "@firecms/core";
+} from "@rebasepro/core";
 import { unflattenObject } from "./file_to_json";
-import { getIn } from "@firecms/formex";
-import { inferTypeFromValue } from "@firecms/schema_inference";
-import { mergeDeep } from "@firecms/common";
+import { getIn } from "@rebasepro/formex";
+import { inferTypeFromValue } from "@rebasepro/schema_inference";
+import { mergeDeep } from "@rebasepro/common";
 
 export function convertDataToEntity(authController: AuthController,
     navigation: CollectionRegistryController,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField } from "@firecms/ui";
+import { TextField } from "@rebasepro/ui";
 
 export default function TextFieldMultilineDemo() {
     const [value, setValue] = useState("");

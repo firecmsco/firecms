@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
-import { CellRendererParams, VirtualTable, VirtualTableColumn } from "@firecms/core";
-import { getIn } from "@firecms/formex";
+import { CellRendererParams, VirtualTable, VirtualTableColumn } from "@rebasepro/core";
+import { getIn } from "@rebasepro/formex";
 import { DataTableCell } from "./DataTableCell";
-import { FileDownloadIcon, IconButton, Paper, Typography } from "@firecms/ui";
-import { downloadDataAsCsv } from "@firecms/data_export";
+import { FileDownloadIcon, IconButton, Paper, Typography } from "@rebasepro/ui";
+import { downloadDataAsCsv } from "@rebasepro/data_export";
 
 export type type = "string" | "number" | "date" | "object" | "array";
 
@@ -23,23 +23,23 @@ export type DataTableProps = {
 }
 
 export function DataTable({
-                              data,
-                              onColumnResize,
-                              maxWidth,
-                              onEndReached,
-                              loading
-                          }: DataTableProps) {
+    data,
+    onColumnResize,
+    maxWidth,
+    onEndReached,
+    loading
+}: DataTableProps) {
 
     const columns = useMemo(() => extractColumns(data ?? []), [data]);
 
     function cellRenderer({
-                              columns,
-                              column,
-                              columnIndex,
-                              rowData,
-                              rowIndex,
-                              isScrolling
-                          }: CellRendererParams) {
+        columns,
+        column,
+        columnIndex,
+        rowData,
+        rowIndex,
+        isScrolling
+    }: CellRendererParams) {
 
         const entry = getIn(rowData, column.key);
         const string = entry ? entry.toString() : "";
@@ -67,13 +67,13 @@ export function DataTable({
                 <IconButton
                     disabled={!data}
                     onClick={() => data && downloadDataAsCsv(data, "export")}>
-                    <FileDownloadIcon/>
+                    <FileDownloadIcon />
                 </IconButton>
             </div>
             <div className="flex h-[360px] w-full flex-col bg-surface dark:bg-surface-dark"
-                 style={{
-                     maxWidth
-                 }}>
+                style={{
+                    maxWidth
+                }}>
 
                 <VirtualTable
                     loading={loading}

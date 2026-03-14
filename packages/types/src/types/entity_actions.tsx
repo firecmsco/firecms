@@ -3,7 +3,7 @@ import { Entity } from "./entities";
 import { EntityCollection, SelectionController } from "./collections";
 import { FormContext } from "./fields";
 import { User } from "../users";
-import { FireCMSContext } from "../firecms_context";
+import { RebaseContext } from "../rebase_context";
 import { SideEntityController } from "../controllers";
 
 /**
@@ -62,7 +62,7 @@ export type EntityAction<M extends object = any, USER extends User = User> = {
 
 export type EntityActionClickProps<M extends object, USER extends User = User> = {
     entity?: Entity<M>;
-    context: FireCMSContext<USER>;
+    context: RebaseContext<USER>;
 
     path?: string;
     collection?: EntityCollection<M>;

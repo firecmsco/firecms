@@ -1,5 +1,5 @@
-// import { type, getPropertyInPath, Properties, Property } from "@firecms/core";
-// import { typeMapping } from "@firecms/types";
+// import { type, getPropertyInPath, Properties, Property } from "@rebasepro/core";
+// import { typeMapping } from "@rebasepro/types";
 //
 // export function getPropertiesMapping(originProperties: Properties,
 //                                      newProperties: Properties,

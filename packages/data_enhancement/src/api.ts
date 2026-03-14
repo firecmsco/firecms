@@ -5,12 +5,12 @@ import {
     InputProperty,
     SamplePromptsResult
 } from "./types/data_enhancement_controller";
-import { DataSource, EntityValues } from "@firecms/core";
+import { DataSource, EntityValues } from "@rebasepro/core";
 import { flatMapEntityValues } from "./utils/values";
 
-// const DEFAULT_SERVER = "http://localhost:5001/firecms-dev-2da42/europe-west3/api"; // Local
+// const DEFAULT_SERVER = "http://localhost:5001/rebase-dev-2da42/europe-west3/api"; // Local
 
-const DEFAULT_SERVER = "https://api.firecms.co";
+const DEFAULT_SERVER = "https://api.rebase.pro";
 
 export async function enhanceDataAPIStream<M extends object>(props: {
     apiKey: string,
@@ -102,7 +102,7 @@ export async function enhanceDataAPIStream<M extends object>(props: {
 
 function readChunks(reader: ReadableStreamDefaultReader) {
     return {
-        async * [Symbol.asyncIterator]() {
+        async *[Symbol.asyncIterator]() {
             let readResult = await reader.read();
             while (!readResult.done) {
                 yield readResult.value;

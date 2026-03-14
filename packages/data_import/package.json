@@ -1,5 +1,5 @@
 {
-    "name": "@firecms/data_import",
+    "name": "@rebasepro/data_import",
     "type": "module",
     "version": "4.0.0",
     "access": "public",
@@ -8,12 +8,12 @@
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "dependencies": {
-        "@firecms/core": "4.0.0",
-        "@firecms/common": "4.0.0",
-        "@firecms/types": "4.0.0",
-        "@firecms/formex": "4.0.0",
-        "@firecms/schema_inference": "4.0.0",
-        "@firecms/ui": "4.0.0",
+        "@rebasepro/core": "4.0.0",
+        "@rebasepro/common": "4.0.0",
+        "@rebasepro/types": "4.0.0",
+        "@rebasepro/formex": "4.0.0",
+        "@rebasepro/schema_inference": "4.0.0",
+        "@rebasepro/ui": "4.0.0",
         "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
     },
     "peerDependencies": {

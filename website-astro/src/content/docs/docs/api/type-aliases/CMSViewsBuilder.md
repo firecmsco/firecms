@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/CMSViewsBuilder"
 title: "CMSViewsBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / CMSViewsBuilder
+[@rebasepro/core](../README) / CMSViewsBuilder
 
 # Type Alias: CMSViewsBuilder()
 
 > **CMSViewsBuilder** = (`params`) => [`CMSView`](../interfaces/CMSView)[] \| `Promise`\<[`CMSView`](../interfaces/CMSView)[]\>
 
-Defined in: [types/firecms.tsx:43](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
+Defined in: [types/rebase.tsx:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
 
 Use this callback to build custom views dynamically.
 You can use the user to decide which views to show.

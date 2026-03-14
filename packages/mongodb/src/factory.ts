@@ -6,7 +6,7 @@
  */
 
 import { Db, MongoClient } from "mongodb";
-import { DataSource, EntityCollection } from "@firecms/types";
+import { DataSource, EntityCollection } from "@rebasepro/types";
 
 import { MongoEntityService, EntityRepository } from "./db/MongoEntityService";
 import { MongoRealtimeService, RealtimeProvider } from "./services/MongoRealtimeService";
@@ -18,7 +18,7 @@ import { MongoDBConnection, DatabaseConnection } from "./connection";
 // =============================================================================
 
 /**
- * Backend instance interface (from @firecms/backend).
+ * Backend instance interface (from @rebasepro/backend).
  */
 export interface BackendInstance {
     entityRepository: EntityRepository;
@@ -28,7 +28,7 @@ export interface BackendInstance {
 }
 
 /**
- * Backend config interface (from @firecms/backend).
+ * Backend config interface (from @rebasepro/backend).
  */
 export interface BackendConfig {
     type: string;
@@ -37,7 +37,7 @@ export interface BackendConfig {
 }
 
 /**
- * Collection registry interface (from @firecms/backend).
+ * Collection registry interface (from @rebasepro/backend).
  */
 export interface CollectionRegistryInterface {
     register(collection: EntityCollection): void;
@@ -66,7 +66,7 @@ export interface MongoBackendInstance extends BackendInstance {
     db: Db;
     /** The MongoDB client */
     client: MongoClient;
-    /** MongoDB DataSource for use with FireCMS */
+    /** MongoDB DataSource for use with Rebase */
     dataSource: DataSource;
     /** Entity service for direct database operations */
     entityService: MongoEntityService;
@@ -118,11 +118,11 @@ export class MongoCollectionRegistry implements CollectionRegistryInterface {
  * - MongoEntityService (implements EntityRepository)
  * - MongoRealtimeService (implements RealtimeProvider)
  * - MongoCollectionRegistry (implements CollectionRegistryInterface)
- * - MongoDataSource (for FireCMS integration)
+ * - MongoDataSource (for Rebase integration)
  *
  * @example
  * ```typescript
- * import { createMongoBackend } from "@firecms/mongodb";
+ * import { createMongoBackend } from "@rebasepro/mongodb";
  *
  * const client = new MongoClient("mongodb://localhost:27017");
  * await client.connect();
@@ -180,7 +180,7 @@ export function createMongoBackend(config: MongoBackendConfig): MongoBackendInst
  *
  * @example
  * ```typescript
- * import { createMongoDelegate } from "@firecms/mongodb";
+ * import { createMongoDelegate } from "@rebasepro/mongodb";
  *
  * const delegate = createMongoDelegate(db);
  * ```
@@ -198,7 +198,7 @@ export function createMongoDelegate(
  *
  * @example
  * ```typescript
- * import { createMongoRealtimeService } from "@firecms/mongodb";
+ * import { createMongoRealtimeService } from "@rebasepro/mongodb";
  *
  * const realtimeService = createMongoRealtimeService(db);
  * ```
@@ -212,7 +212,7 @@ export function createMongoRealtimeService(db: Db): MongoRealtimeService {
  *
  * @example
  * ```typescript
- * import { createMongoEntityRepository } from "@firecms/mongodb";
+ * import { createMongoEntityRepository } from "@rebasepro/mongodb";
  *
  * const repository = createMongoEntityRepository(db);
  * const users = await repository.fetchCollection("users", {});

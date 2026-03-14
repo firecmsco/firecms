@@ -15,7 +15,7 @@ import {
     LooksTwoIcon,
     Popover,
     TextFieldsIcon
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
 export type SelectorItem = {
     name: string;
@@ -100,10 +100,10 @@ interface NodeSelectorProps {
 }
 
 export const NodeSelector = ({
-                                 open,
-                                 onOpenChange,
-                                 portalContainer
-                             }: NodeSelectorProps) => {
+    open,
+    onOpenChange,
+    portalContainer
+}: NodeSelectorProps) => {
     const { editor } = useEditor();
     if (!editor) return null;
     const activeItem = items.filter((item) => item.isActive(editor)).pop() ?? {
@@ -118,10 +118,10 @@ export const NodeSelector = ({
             portalContainer={portalContainer}
             className="w-48 p-1"
             trigger={<Button variant="text"
-                             className="gap-2 rounded-none"
-                             color="text">
+                className="gap-2 rounded-none"
+                color="text">
                 <span className="whitespace-nowrap text-sm">{activeItem.name}</span>
-                <KeyboardArrowDownIcon size={"small"}/>
+                <KeyboardArrowDownIcon size={"small"} />
             </Button>}
             modal={true}
             open={open}
@@ -136,10 +136,10 @@ export const NodeSelector = ({
                     className="flex cursor-pointer items-center justify-between rounded-xs px-2 py-1 text-sm hover:bg-blue-50 dark:hover:bg-surface-700 text-surface-900 dark:text-white"
                 >
                     <div className="flex items-center space-x-2">
-                        <item.icon size="smallest"/>
+                        <item.icon size="smallest" />
                         <span>{item.name}</span>
                     </div>
-                    {activeItem.name === item.name && <CheckIcon size="smallest"/>}
+                    {activeItem.name === item.name && <CheckIcon size="smallest" />}
                 </EditorBubbleItem>
             ))}
 

@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/FormContext"
 title: "FormContext"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / FormContext
+[@rebasepro/core](../README) / FormContext
 
 # Interface: FormContext\<M\>
 
-Defined in: [types/fields.tsx:130](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:130](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 Context passed to custom fields
 
@@ -27,7 +27,7 @@ Context passed to custom fields
 
 > `optional` **collection**: [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
 
-Defined in: [types/fields.tsx:153](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:153](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 Collection of the entity being modified
 
@@ -37,7 +37,7 @@ Collection of the entity being modified
 
 > **disabled**: `boolean`
 
-Defined in: [types/fields.tsx:180](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:180](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [types/fields.tsx:180](https://github.com/firecmsco/firecms/blob/mai
 
 > `optional` **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [types/fields.tsx:167](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:167](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [types/fields.tsx:167](https://github.com/firecmsco/firecms/blob/mai
 
 > **entityId**: `string`
 
-Defined in: [types/fields.tsx:158](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:158](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 Entity id, it can be null if it's a new entity
 
@@ -63,7 +63,7 @@ Entity id, it can be null if it's a new entity
 
 > **formex**: `FormexController`\<`M`\>
 
-Defined in: [types/fields.tsx:178](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:178](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 This is the underlying formex controller that powers the form.
 If you are in a red only mode, the formex controller is there, but you can't
@@ -75,7 +75,7 @@ operate with it
 
 > **openEntityMode**: `"side_panel"` \| `"full_screen"`
 
-Defined in: [types/fields.tsx:171](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:171](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 ***
 
@@ -83,7 +83,7 @@ Defined in: [types/fields.tsx:171](https://github.com/firecmsco/firecms/blob/mai
 
 > `optional` **path**: `string`
 
-Defined in: [types/fields.tsx:163](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:163](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 Path this entity is located at
 
@@ -93,7 +93,7 @@ Path this entity is located at
 
 > **save**: (`values`) => `void`
 
-Defined in: [types/fields.tsx:148](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:148](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 Save the entity.
 
@@ -113,7 +113,7 @@ Save the entity.
 
 > `optional` **savingError**: `Error`
 
-Defined in: [types/fields.tsx:169](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:169](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 ***
 
@@ -121,7 +121,7 @@ Defined in: [types/fields.tsx:169](https://github.com/firecmsco/firecms/blob/mai
 
 > **setFieldValue**: (`key`, `value`, `shouldValidate?`) => `void`
 
-Defined in: [types/fields.tsx:143](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:143](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 Update the value of a field
 
@@ -149,7 +149,7 @@ Update the value of a field
 
 > **status**: `"copy"` \| `"new"` \| `"existing"`
 
-Defined in: [types/fields.tsx:165](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:165](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 ***
 
@@ -157,6 +157,6 @@ Defined in: [types/fields.tsx:165](https://github.com/firecmsco/firecms/blob/mai
 
 > **values**: `M`
 
-Defined in: [types/fields.tsx:135](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/fields.tsx)
+Defined in: [types/fields.tsx:135](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
 
 Current values of the entity

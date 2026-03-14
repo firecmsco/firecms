@@ -10,7 +10,7 @@ import {
     ListenCollectionProps,
     ListenEntityProps,
     SaveEntityProps
-} from "@firecms/types";
+} from "@rebasepro/types";
 import { PostgresDataSourceClient, PostgresDataSourceConfig } from "./postgres_client";
 
 export interface PostgresDataSource extends DataSource {
@@ -204,8 +204,8 @@ export function usePostgresClientDataSource(config: PostgresDataSourceConfig): P
                             values: delegateToCMSModel(entity.values)
                         });
                     } else {
-                        // Handle null case - some FireCMS listeners expect only non-null entities
-                        // We'll skip the update for null entities to match FireCMS expectations
+                        // Handle null case - some Rebase listeners expect only non-null entities
+                        // We'll skip the update for null entities to match Rebase expectations
                     }
                 },
                 props.onError

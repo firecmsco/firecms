@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/ListenCollectionProps"
 title: "ListenCollectionProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ListenCollectionProps
+[@rebasepro/core](../README) / ListenCollectionProps
 
 # Type Alias: ListenCollectionProps\<M\>
 
 > **ListenCollectionProps**\<`M`\> = [`FetchCollectionProps`](../interfaces/FetchCollectionProps)\<`M`\> & `object`
 
-Defined in: [types/datasource.ts:43](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ## Type Declaration
 

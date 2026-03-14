@@ -4,7 +4,7 @@ title: Collections Groups
 sidebar_label: Collections Groups
 ---
 
-You can now use Firestore collection groups in FireCMS. This allows you to
+You can now use Firestore collection groups in Rebase. This allows you to
 query across multiple collections with the same name. For example, you could
 have a collection group called `products` that contains all the products
 from different `stores`.
@@ -12,9 +12,9 @@ from different `stores`.
 In our demo project, we have a collection group called `locales` that
 contains all the locales for the different `products`.
 
-See the demo project [here](https://demo.firecms.co/c/locales).
+See the demo project [here](https://demo.rebase.pro/c/locales).
 
-FireCMS will generate an additional column in the collection view to
+Rebase will generate an additional column in the collection view to
 with references to all the parent collections that are part of the
 configuration.
 

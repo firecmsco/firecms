@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/PermissionsBuilderProps"
 title: "PermissionsBuilderProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PermissionsBuilderProps
+[@rebasepro/core](../README) / PermissionsBuilderProps
 
 # Interface: PermissionsBuilderProps\<EC, USER, M\>
 
-Defined in: [types/permissions.ts:35](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/permissions.ts)
+Defined in: [types/permissions.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/permissions.ts)
 
 Props passed to a [PermissionsBuilder](../type-aliases/PermissionsBuilder)
 
@@ -35,7 +35,7 @@ Props passed to a [PermissionsBuilder](../type-aliases/PermissionsBuilder)
 
 > **authController**: [`AuthController`](../type-aliases/AuthController)\<`USER`\>
 
-Defined in: [types/permissions.ts:67](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/permissions.ts)
+Defined in: [types/permissions.ts:67](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/permissions.ts)
 
 Auth controller
 
@@ -45,7 +45,7 @@ Auth controller
 
 > **collection**: `EC`
 
-Defined in: [types/permissions.ts:62](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/permissions.ts)
+Defined in: [types/permissions.ts:62](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/permissions.ts)
 
 Collection these permissions apply to
 
@@ -55,7 +55,7 @@ Collection these permissions apply to
 
 > **entity**: [`Entity`](Entity)\<`M`\> \| `null`
 
-Defined in: [types/permissions.ts:42](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/permissions.ts)
+Defined in: [types/permissions.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/permissions.ts)
 
 Entity being edited, might be null in some cases, when the operation
 refers to the collection.
@@ -68,7 +68,7 @@ in a collection, the entity will be null.
 
 > **path**: `string`
 
-Defined in: [types/permissions.ts:47](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/permissions.ts)
+Defined in: [types/permissions.ts:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/permissions.ts)
 
 Path of the collection e.g. 'products/12345/locales'
 
@@ -78,7 +78,7 @@ Path of the collection e.g. 'products/12345/locales'
 
 > **pathSegments**: `string`[]
 
-Defined in: [types/permissions.ts:52](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/permissions.ts)
+Defined in: [types/permissions.ts:52](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/permissions.ts)
 
 Path segments of the collection e.g. ['products', 'locales']
 
@@ -88,6 +88,6 @@ Path segments of the collection e.g. ['products', 'locales']
 
 > **user**: `USER` \| `null`
 
-Defined in: [types/permissions.ts:57](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/permissions.ts)
+Defined in: [types/permissions.ts:57](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/permissions.ts)
 
 Logged in user

@@ -3,17 +3,17 @@ slug: "docs/api/functions/useDebouncedData"
 title: "useDebouncedData"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useDebouncedData
+[@rebasepro/core](../README) / useDebouncedData
 
 # Function: useDebouncedData()
 
 > **useDebouncedData**\<`T`\>(`data`, `deps`, `timeoutMs`): `T`[]
 
-Defined in: [components/common/useDebouncedData.ts:12](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useDebouncedData.ts)
+Defined in: [components/common/useDebouncedData.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useDebouncedData.ts)
 
 Hack to prevent data updates for incomplete callbacks from Firestore
 triggers.

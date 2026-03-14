@@ -1,6 +1,6 @@
-## FireCMS starter template
+## Rebase starter template
 
-Welcome to FireCMS!
+Welcome to Rebase!
 
 This is a starter template for your next project. It includes the basic
 configuration to get you started.

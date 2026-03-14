@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 
-import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
+import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
 
 import { User as FirebaseUser } from "firebase/auth";
-import { Authenticator, FirebaseCMSApp } from "firecms";
+import { Authenticator, FirebaseCMSApp } from "rebase";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
@@ -15,9 +15,9 @@ export default function App() {
 
 
     const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
-                                                                                user,
-                                                                                authController
-                                                                            }) => {
+        user,
+        authController
+    }) => {
 
         if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");

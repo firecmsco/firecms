@@ -1,11 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { FireCMSApiClient } from "../api-client.js";
+import { RebaseApiClient } from "../api-client.js";
 
 /**
  * Register data export tool.
  */
-export function registerExportTools(server: McpServer, api: FireCMSApiClient) {
+export function registerExportTools(server: McpServer, api: RebaseApiClient) {
 
     server.registerTool(
         "export_collection",

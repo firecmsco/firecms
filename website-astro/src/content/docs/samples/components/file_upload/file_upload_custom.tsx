@@ -1,5 +1,5 @@
 import React from "react";
-import { FileUpload } from "@firecms/ui";
+import { FileUpload } from "@rebasepro/ui";
 
 export default function FileUploadCustomDemo() {
     const onFilesAdded = (files: File[]) => {

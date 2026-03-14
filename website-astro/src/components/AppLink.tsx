@@ -7,16 +7,16 @@ interface AppLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 export function AppLink({
-                            href,
-                            children,
-                            ...props
-                        }: AppLinkProps) {
+    href,
+    children,
+    ...props
+}: AppLinkProps) {
     const [finalHref, setFinalHref] = useState(href);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-            // Only append tracking params for app.firecms.co links
-            if (href.includes("app.firecms.co")) {
+            // Only append tracking params for app.rebase.pro links
+            if (href.includes("app.rebase.pro")) {
                 const trackingParams = getCurrentTrackingParams();
                 setFinalHref(appendTrackingParamsToUrl(href, trackingParams));
             }
@@ -24,8 +24,8 @@ export function AppLink({
     }, [href]);
 
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        // Send Google Analytics event for app.firecms.co links
-        if (href.includes("app.firecms.co") && typeof window !== "undefined" && typeof (window as any).gtag === "function") {
+        // Send Google Analytics event for app.rebase.pro links
+        if (href.includes("app.rebase.pro") && typeof window !== "undefined" && typeof (window as any).gtag === "function") {
             (window as any).gtag('event', 'go_to_app', {
                 event_category: 'navigation',
                 event_label: finalHref,

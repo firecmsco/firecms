@@ -9,9 +9,9 @@ import {
     Select,
     SelectItem,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
-import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
+import { Field, FormexFieldProps, getIn, useFormex } from "@rebasepro/formex";
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
 import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";

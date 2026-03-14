@@ -7,7 +7,7 @@ Use reference fields when you need to establish relations between collections.
 For example, you may have a product that is related to one category, or one 
 that has multiple purchases.
 
-When you set up a FireCMS app, you define collections under paths (or path
+When you set up a Rebase app, you define collections under paths (or path
 aliases), and those are the paths that you use to configure reference 
 properties.
 
@@ -16,7 +16,7 @@ properties.
 ![Field](/img/fields/Reference.png)
 
 ```typescript jsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 buildProperty({
     dataType: "reference",
@@ -36,7 +36,7 @@ is [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding).
 ![Field](/img/fields/Multi_reference.png)
 
 ```typescript jsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 buildProperty({
     dataType: "array",

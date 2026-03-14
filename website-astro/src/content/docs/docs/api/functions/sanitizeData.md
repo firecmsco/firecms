@@ -3,17 +3,17 @@ slug: "docs/api/functions/sanitizeData"
 title: "sanitizeData"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / sanitizeData
+[@rebasepro/core](../README) / sanitizeData
 
 # Function: sanitizeData()
 
 > **sanitizeData**\<`M`\>(`values`, `properties`): `any`
 
-Defined in: [util/entities.ts:130](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/entities.ts)
+Defined in: [util/entities.ts:130](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
 
 Add missing required fields, expected in the collection, to the values of an entity
 

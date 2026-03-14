@@ -1,6 +1,6 @@
 import { findCommonInitialStringInPath } from "../strings";
 import { extractEnumFromValues } from "../util";
-import { FileType, Property, StringProperty } from "@firecms/types";
+import { FileType, Property, StringProperty } from "@rebasepro/types";
 import { InferencePropertyBuilderProps, ValuesCountEntry } from "../types";
 
 const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"];

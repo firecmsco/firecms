@@ -105,11 +105,11 @@ and React:
 
 1. **Set Up Your React App**: Begin with a fresh React installation.
    ```bash
-   npx create-firecms-app --pro
+   npx create-rebase-app --pro
    ```
    or
    ```bash
-   yarn create firecms-app --pro
+   yarn create rebase-app --pro
    ```
 2. **Connect Firebase**: Integrate Firebase for backend functionality.
 
@@ -124,11 +124,11 @@ and React:
 
 ## Final Reflection
 
-Incorporating a React-based headless CMS such as FireCMS enables both developers and content creators to unlock new
+Incorporating a React-based headless CMS such as Rebase enables both developers and content creators to unlock new
 levels of adaptability, performance, and collaboration. Combining React's flexibility with Firebase’s real-time data
-capabilities, FireCMS delivers a robust toolkit for managing and deploying content effectively.
+capabilities, Rebase delivers a robust toolkit for managing and deploying content effectively.
 
 It’s more than an investment in technology; it's a commitment to crafting responsive, reliable, and engaging digital
 experiences. As both the CMS ecosystem and React libraries continue to evolve, the potential to leverage these to
-improve and streamline your workflow grows exponentially. Explore FireCMS today to harness React's full power in your
+improve and streamline your workflow grows exponentially. Explore Rebase today to harness React's full power in your
 projects.

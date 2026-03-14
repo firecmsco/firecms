@@ -3,17 +3,17 @@ slug: "docs/api/functions/unslugify"
 title: "unslugify"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / unslugify
+[@rebasepro/core](../README) / unslugify
 
 # Function: unslugify()
 
 > **unslugify**(`slug?`): `string`
 
-Defined in: [util/strings.ts:53](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/strings.ts)
+Defined in: [util/strings.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/strings.ts)
 
 ## Parameters
 

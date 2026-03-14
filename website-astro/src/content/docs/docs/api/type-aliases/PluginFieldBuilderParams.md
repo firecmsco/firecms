@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/PluginFieldBuilderParams"
 title: "PluginFieldBuilderParams"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PluginFieldBuilderParams
+[@rebasepro/core](../README) / PluginFieldBuilderParams
 
 # Type Alias: PluginFieldBuilderParams\<T, M, EC\>
 
 > **PluginFieldBuilderParams**\<`T`, `M`, `EC`\> = `object`
 
-Defined in: [types/plugins.tsx:244](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:244](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
 
 ## Type Parameters
 
@@ -35,7 +35,7 @@ Defined in: [types/plugins.tsx:244](https://github.com/firecmsco/firecms/blob/ma
 
 > `optional` **collection**: `EC`
 
-Defined in: [types/plugins.tsx:251](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:251](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/plugins.tsx:251](https://github.com/firecmsco/firecms/blob/ma
 
 > **Field**: `React.ComponentType`\<[`FieldProps`](../interfaces/FieldProps)\<`T`, `any`, `M`\>\>
 
-Defined in: [types/plugins.tsx:248](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:248](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/plugins.tsx:248](https://github.com/firecmsco/firecms/blob/ma
 
 > **fieldConfigId**: `string`
 
-Defined in: [types/plugins.tsx:245](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:245](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
 
 ***
 
@@ -59,15 +59,15 @@ Defined in: [types/plugins.tsx:245](https://github.com/firecmsco/firecms/blob/ma
 
 > `optional` **path**: `string`
 
-Defined in: [types/plugins.tsx:250](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:250](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
 
 ***
 
 ### plugin
 
-> **plugin**: [`FireCMSPlugin`](FireCMSPlugin)
+> **plugin**: [`RebasePlugin`](RebasePlugin)
 
-Defined in: [types/plugins.tsx:249](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:249](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [types/plugins.tsx:249](https://github.com/firecmsco/firecms/blob/ma
 
 > **property**: [`Property`](Property)\<`T`\> \| [`ResolvedProperty`](ResolvedProperty)\<`T`\>
 
-Defined in: [types/plugins.tsx:247](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:247](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
 
 ***
 
@@ -83,4 +83,4 @@ Defined in: [types/plugins.tsx:247](https://github.com/firecmsco/firecms/blob/ma
 
 > **propertyKey**: `string`
 
-Defined in: [types/plugins.tsx:246](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:246](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)

@@ -1,0 +1,10 @@
+src/core/DrawerNavigationGroup.tsx(3,33): error TS2307: Cannot find module '../types' or its corresponding type declarations.
+src/form/EntityForm.tsx(835,37): error TS2322: Type 'FormexController<M>' is not assignable to type 'FormexController<object>'.
+  Types of property 'setValues' are incompatible.
+    Type '(values: M) => void' is not assignable to type '(values: object) => void'.
+      Types of parameters 'values' and 'values' are incompatible.
+        Type 'object' is not assignable to type 'M'.
+          'object' is assignable to the constraint of type 'M', but 'M' could be instantiated with a different subtype of constraint 'Record<string, any>'.
+src/index.ts(11,1): error TS2308: Module "@rebase/common" has already exported a member named 'getEntityImagePreviewPropertyKey'. Consider explicitly re-exporting to resolve the ambiguity.
+src/internal/useBuildDataSource.ts(229,35): error TS2536: Type 'keyof M' cannot be used to index type 'Properties'.
+src/preview/components/StorageThumbnail.tsx(80,46): error TS2554: Expected 1 arguments, but got 2.

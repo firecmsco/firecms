@@ -7,7 +7,7 @@
     "node_modules",
     "dist",
     "src/test",
-    "../firecms_core/src",
+    "../core/src",
     "../schema_inference/src",
     "../ui/src",
   ]

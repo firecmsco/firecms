@@ -4,24 +4,24 @@ title: Migrating from v3.0 to v3.1
 sidebar_label: Migrating from v3.0 to v3.1
 ---
 
-This migration guide applies to **self-hosted versions** of FireCMS, including both **Community** and **PRO** editions.
-FireCMS v3.1 introduces important updates that require configuration changes and offers exciting new features.
+This migration guide applies to **self-hosted versions** of Rebase, including both **Community** and **PRO** editions.
+Rebase v3.1 introduces important updates that require configuration changes and offers exciting new features.
 
 ## Before You Start
 
-- Ensure you are currently on **FireCMS v3.0.x**
+- Ensure you are currently on **Rebase v3.0.x**
 - Back up your project or commit your current state to version control
 - Ensure you are using **Node.js 18+**
 
-## Update FireCMS Packages
+## Update Rebase Packages
 
-Update all `@firecms/*` packages to version **3.1**:
+Update all `@rebasepro/*` packages to version **3.1**:
 
 ```bash
-npm i @firecms/core@3.1.0 @firecms/ui@3.1.0 @firecms/firebase@3.1.0 @firecms/collection_editor@3.1.0 @firecms/collection_editor_firebase@3.1.0 @firecms/data_enhancement@3.1.0 @firecms/data_export@3.1.0 @firecms/data_import@3.1.0 @firecms/schema_inference@3.1.0 @firecms/user_management@3.1.0
+npm i @rebasepro/core@3.1.0 @rebasepro/ui@3.1.0 @rebasepro/firebase@3.1.0 @rebasepro/collection_editor@3.1.0 @rebasepro/collection_editor_firebase@3.1.0 @rebasepro/data_enhancement@3.1.0 @rebasepro/data_export@3.1.0 @rebasepro/data_import@3.1.0 @rebasepro/schema_inference@3.1.0 @rebasepro/user_management@3.1.0
 ```
 
-Make sure to include **all** `@firecms/*` packages listed in your `package.json`. Mixing v3.0 and v3.1 packages will cause issues.
+Make sure to include **all** `@rebasepro/*` packages listed in your `package.json`. Mixing v3.0 and v3.1 packages will cause issues.
 
 ---
 
@@ -92,7 +92,7 @@ Update your `index.css` file to reflect these changes:
 ```
 
 :::warning
-If you skip this step, your custom theme colors will **not be applied** and FireCMS will fall back to its default palette.
+If you skip this step, your custom theme colors will **not be applied** and Rebase will fall back to its default palette.
 The `--fcms-primary-dark` and `--fcms-primary-bg` variables are no longer needed — they are computed automatically from `--color-primary`.
 :::
 
@@ -102,11 +102,11 @@ Your `index.css` file should now look like this:
 
 ```css
 @import "tailwindcss";
-@import "@firecms/ui/index.css";
+@import "@rebasepro/ui/index.css";
 
 @source "../index.html";
 @source "./**/*.{js,ts,jsx,tsx}";
-@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@rebasepro/**/*.{js,ts,jsx,tsx}";
 
 @custom-variant dark (:is(.dark &));
 
@@ -140,7 +140,7 @@ The build should complete without errors. If you see CSS-related warnings, doubl
 
 ## New Collection View Modes
 
-FireCMS v3.1 introduces new ways to visualize your collection data beyond the traditional table view.
+Rebase v3.1 introduces new ways to visualize your collection data beyond the traditional table view.
 
 ### Cards View
 
@@ -166,7 +166,7 @@ Both views can be enabled in your collection configuration or switched at runtim
 
 ## Bug Fixes and Improvements
 
-FireCMS v3.1 includes numerous bug fixes and improvements:
+Rebase v3.1 includes numerous bug fixes and improvements:
 
 ### Editor & UI
 - Improved escape key behavior in editor slash command
@@ -209,7 +209,7 @@ FireCMS v3.1 includes numerous bug fixes and improvements:
 
 ## AI Features for Self-Hosted (PRO)
 
-FireCMS v3.1 brings AI-powered features to self-hosted PRO users that were previously only available in FireCMS Cloud.
+Rebase v3.1 brings AI-powered features to self-hosted PRO users that were previously only available in Rebase Cloud.
 
 ### AI Collection Generation
 
@@ -221,8 +221,8 @@ Enable it by passing a `generateCollection` callback to the collection editor pl
 import {
     useCollectionEditorPlugin,
     buildCollectionGenerationCallback
-} from "@firecms/collection_editor";
-import { useFirebaseAuthController } from "@firecms/firebase";
+} from "@rebasepro/collection_editor";
+import { useFirebaseAuthController } from "@rebasepro/firebase";
 
 const authController = useFirebaseAuthController({ firebaseApp });
 
@@ -236,7 +236,7 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
 });
 ```
 
-The `buildCollectionGenerationCallback` helper uses the default FireCMS API endpoint. You can optionally provide a custom endpoint:
+The `buildCollectionGenerationCallback` helper uses the default Rebase API endpoint. You can optionally provide a custom endpoint:
 
 ```typescript
 generateCollection: buildCollectionGenerationCallback({
@@ -256,7 +256,7 @@ import {
     useBuildDataTalkConfig,
     DataTalkProvider,
     DataTalkRoutes
-} from "@firecms/datatalk";
+} from "@rebasepro/datatalk";
 
 
 // Configure DataTalk - only enable when user is logged in
@@ -264,10 +264,10 @@ const userEmail = authController.user?.email;
 const dataTalkConfig = useBuildDataTalkConfig({
     enabled: Boolean(userEmail),
     firebaseApp,
-    userSessionsPath: userEmail ? `__FIRECMS/config/users/${userEmail}/datatalk_sessions` : undefined,
+    userSessionsPath: userEmail ? `__REBASE/config/users/${userEmail}/datatalk_sessions` : undefined,
     getAuthToken: authController.getAuthToken,
     loadSamplePrompts: true
-    // apiEndpoint defaults to https://api.firecms.co
+    // apiEndpoint defaults to https://api.rebase.pro
 });
 
 // Add DataTalk as a view in your navigation
@@ -290,9 +290,9 @@ const navigationController = useBuildNavigationController({
 // Wrap your app with the DataTalkProvider
 return (
     <DataTalkProvider config={dataTalkConfig}>
-        <FireCMS navigationController={navigationController} /* ... */ >
+        <Rebase navigationController={navigationController} /* ... */ >
             {/* your app */}
-        </FireCMS>
+        </Rebase>
     </DataTalkProvider>
 );
 ```
@@ -300,7 +300,7 @@ return (
 DataTalk automatically reads your collection schema from the navigation controller to understand your data structure and provide more accurate responses.
 
 :::note
-AI features require a valid FireCMS PRO license. The API endpoints authenticate using your Firebase auth token.
+AI features require a valid Rebase PRO license. The API endpoints authenticate using your Firebase auth token.
 :::
 
 ---
@@ -311,9 +311,9 @@ AI features require a valid FireCMS PRO license. The API endpoints authenticate 
 If you see TypeScript errors like `error TS2503: Cannot find namespace 'JSX'`, update your return type annotations from `JSX.Element` to `React.ReactElement` or simply remove the explicit return type and let TypeScript infer it.
 
 ### Styles not applying after migration
-- Verify your `index.css` includes the `@source` directives for your project files and `node_modules/@firecms`
+- Verify your `index.css` includes the `@source` directives for your project files and `node_modules/@rebase`
 - Ensure you removed the old `tailwind.config.js` and `postcss.config.js`
 - Clear your `node_modules` folder and reinstall: `rm -rf node_modules && npm install`
 
 ### Build errors after updating packages
-Ensure **all** `@firecms/*` packages are on the same version. Mixing v3.0 and v3.1 packages will cause type mismatches and runtime errors.
+Ensure **all** `@rebasepro/*` packages are on the same version. Mixing v3.0 and v3.1 packages will cause type mismatches and runtime errors.

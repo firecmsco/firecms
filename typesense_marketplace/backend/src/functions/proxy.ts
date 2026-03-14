@@ -35,7 +35,7 @@ export const api = functions.onRequest(
 
         // Determine which Typesense instance to proxy to
         // Check for account-specific instance first
-        const accountId = req.headers["x-firecms-account-id"] as string;
+        const accountId = req.headers["x-rebase-account-id"] as string;
         let vmIp: string;
 
         try {
@@ -53,7 +53,7 @@ export const api = functions.onRequest(
                 }
             } else {
                 // Default instance
-                vmIp = await getVMExternalIP("firecms-typesense", vmZone);
+                vmIp = await getVMExternalIP("rebase-typesense", vmZone);
             }
             console.log(`Resolved VM IP: ${vmIp}`);
         } catch (error) {

@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/ArrayEntryBuilder"
 title: "ArrayEntryBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ArrayEntryBuilder
+[@rebasepro/core](../README) / ArrayEntryBuilder
 
 # Type Alias: ArrayEntryBuilder()
 
 > **ArrayEntryBuilder** = (`params`) => `React.ReactNode`
 
-Defined in: [components/ArrayContainer.tsx:40](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ## Parameters
 

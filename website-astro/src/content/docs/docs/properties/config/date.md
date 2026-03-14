@@ -2,11 +2,11 @@
 slug: docs/properties/config/date
 title: Date/Time
 sidebar_label: Date/Time
-description: Configuration for date and time properties in FireCMS, including auto-values, date modes, and validation.
+description: Configuration for date and time properties in Rebase, including auto-values, date modes, and validation.
 ---
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const publicationProperty = buildProperty({
     name: "Publication date",

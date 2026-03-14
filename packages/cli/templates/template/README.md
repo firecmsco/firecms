@@ -1,8 +1,8 @@
-## FireCMS starter template
+## Rebase starter template
 
-Welcome to FireCMS!
+Welcome to Rebase!
 
-Remember to drop a ⭐ in our [Github page](https://github.com/firecmsco/firecms),
+Remember to drop a ⭐ in our [Github page](https://github.com/rebaseco/rebase),
 and join our [Discord community](https://discord.gg/fxy7xsQm3m) to get help and
 share your projects.
 

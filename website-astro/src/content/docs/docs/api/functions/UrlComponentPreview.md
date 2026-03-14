@@ -3,17 +3,17 @@ slug: "docs/api/functions/UrlComponentPreview"
 title: "UrlComponentPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / UrlComponentPreview
+[@rebasepro/core](../README) / UrlComponentPreview
 
 # Function: UrlComponentPreview()
 
 > **UrlComponentPreview**(`__namedParameters`): `ReactElement`
 
-Defined in: [preview/components/UrlComponentPreview.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/UrlComponentPreview.tsx)
+Defined in: [preview/components/UrlComponentPreview.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/UrlComponentPreview.tsx)
 
 ## Parameters
 

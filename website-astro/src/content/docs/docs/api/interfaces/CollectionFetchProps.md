@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/CollectionFetchProps"
 title: "CollectionFetchProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / CollectionFetchProps
+[@rebasepro/core](../README) / CollectionFetchProps
 
 # Interface: CollectionFetchProps\<M\>
 
-Defined in: [hooks/data/useCollectionFetch.tsx:10](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [hooks/data/useCollectionFetch.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [hooks/data/useCollectionFetch.tsx:10](https://github.com/firecmsco/
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [hooks/data/useCollectionFetch.tsx:20](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [hooks/data/useCollectionFetch.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 collection of the entity displayed by this collection
 
@@ -35,7 +35,7 @@ collection of the entity displayed by this collection
 
 > `optional` **filterValues**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
 
-Defined in: [hooks/data/useCollectionFetch.tsx:30](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [hooks/data/useCollectionFetch.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 Filter the fetched data by the property
 
@@ -45,7 +45,7 @@ Filter the fetched data by the property
 
 > `optional` **itemCount**: `number`
 
-Defined in: [hooks/data/useCollectionFetch.tsx:25](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [hooks/data/useCollectionFetch.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 Number of entities to fetch
 
@@ -55,7 +55,7 @@ Number of entities to fetch
 
 > **path**: `string`
 
-Defined in: [hooks/data/useCollectionFetch.tsx:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [hooks/data/useCollectionFetch.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 Absolute collection path
 
@@ -65,7 +65,7 @@ Absolute collection path
 
 > `optional` **searchString**: `string`
 
-Defined in: [hooks/data/useCollectionFetch.tsx:40](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [hooks/data/useCollectionFetch.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 Search string
 
@@ -75,6 +75,6 @@ Search string
 
 > `optional` **sortBy**: \[`Extract`\<keyof `M`, `string`\>, `"desc"` \| `"asc"`\]
 
-Defined in: [hooks/data/useCollectionFetch.tsx:35](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [hooks/data/useCollectionFetch.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 Sort the results by

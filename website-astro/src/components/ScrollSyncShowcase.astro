@@ -2,42 +2,9 @@
 // ScrollSyncShowcase.astro
 // A two-column scroll-sync section with a sticky index on the left
 // Uses Tailwind classes available in the site. Pure placeholders.
-import { DataTalkDemo } from "./DataTalkDemo";
+import { ProductsDemoTable } from "./DataTalkDemo";
 
-const dataTalkExchanges = [
-    {
-        query: "Show me all products with price greater than 100",
-        responseText: "Here are the products filtered by price:",
-        showProductsTable: true,
-    },
-    {
-        query: "Update all out of stock items to mark them as unavailable",
-        responseText: "I'll help you update those items:",
-        code: `export default async () => {
-  const firestore = getFirestore();
-  const productsRef = collection(firestore, "products");
-  const q = query(productsRef, where("stock", "==", 0));
-  const productsToUpdate = await getDocs(q);
-  const batch = writeBatch(firestore);
-  productsToUpdate.forEach((doc) => {
-    batch.update(doc.ref, { available: false });
-  });
-  return await batch.commit();
-}`
-    },
-    {
-        query: "Find users who signed up in the last 30 days",
-        responseText: "Here's how to find recent users:",
-        code: `const thirtyDaysAgo = new Date();
-thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-collection("users")
-  .where("createdAt", ">", thirtyDaysAgo)
-  .get()`,
-        showUsersTable: true,
-
-    },
-];
 ---
 
 <section id="scroll-sync-showcase" class="relative isolate bg-black py-24 sm:py-32">
@@ -45,8 +12,8 @@ collection("users")
         <!-- Section Title - independent but aligned with left menu -->
         <div class="w-full lg:w-[400px] mb-36 mt-16">
             <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Everything You Need to Manage Your
-                Firestore Data</h2>
-            <p class="mt-6 text-lg leading-8 text-surface-400">Key features for a fast, flexible Firebase CMS experience</p>
+                Postgres Data</h2>
+            <p class="mt-6 text-lg leading-8 text-surface-400">Key features for a fast, flexible headless CMS experience</p>
         </div>
 
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-16">
@@ -61,8 +28,8 @@ collection("users")
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                     <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        Manage your Firestore collections with an intuitive spreadsheet-like interface. Edit entries
-                                        inline, sort and filter data in real-time, use collection groups, and create beautiful
+                                        Manage your Postgres tables with an intuitive spreadsheet-like interface. Edit entries
+                                        inline, sort and filter data in real-time, use relational links, and create beautiful
                                         structured content with our powerful Notion-style editor. Built for speed and
                                         ease of use.</p>
                                 </div>
@@ -71,14 +38,12 @@ collection("users")
                         <li>
                             <a href="#screen-2" data-index-item class="group block" data-active="false">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">DataTalk: AI Search</span>
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Code as Truth</span>
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
-                                    <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        <b>Search and talk</b> to your data using <b>ChatGPT-style</b> natural language.
-                                        Instantly filter collections, generate complex queries, or perform batch updates
-                                        with simple commands. FireCMS understands your schema and
-                                        turns conversational queries into powerful data operations.</p>
+                                     <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
+                                        Define your data models in simple TypeScript using Rebase collections. Rebase automatically maps this to Postgres and instantly generates a fully-featured, beautifully designed administrative interface. One definition, everywhere.
+                                    </p>
                                 </div>
                             </a>
                         </li>
@@ -89,8 +54,8 @@ collection("users")
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                     <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        Design your data models visually with our powerful schema editor, or let FireCMS
-                                        automatically infer schemas from your existing Firestore data. Choose from 20+ field types
+                                        Design your data models visually with our powerful schema editor, or let Rebase
+                                        automatically infer schemas from your existing Postgres database. Choose from 20+ field types
                                         with advanced validation rules and customize everything to match your needs.</p>
                                 </div>
                             </a>
@@ -102,10 +67,9 @@ collection("users")
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                     <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        Get started in minutes with FireCMS Cloud's managed platform, or self-host our
-                                        open-source framework with full TypeScript support. Simple NPM install,
+                                        Self-host our open-source framework with full TypeScript support. Simple NPM install,
                                         comprehensive documentation, and seamless integration with your existing
-                                        Firebase setup.</p>
+                                        Postgres setup.</p>
                                 </div>
                             </a>
                         </li>
@@ -137,15 +101,86 @@ collection("users")
                         </section>
                     </div>
 
-                    <!-- Screen 2: DataTalk -->
+                    <!-- Screen 2: Code as Truth -->
                     <div id="screen-2" class="scroll-mt-32">
-                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">DataTalk</h3>
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Code as Truth</h3>
                         <section data-screen class="w-full will-change-transform">
-                            <div class="relative rounded-2xl">
-                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800">
-                                    <DataTalkDemo
-                                            height={600}
-                                            exchanges={dataTalkExchanges} client:load/>
+                            <div class="relative rounded-2xl p-[1px]">
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950 flex flex-col min-h-[600px] p-6 lg:p-8 gap-6 z-0">
+                                    <div class="absolute -top-40 -left-60 h-[400px] w-[600px] rounded-full bg-primary/10 blur-[100px] -z-10"></div>
+                                    <div class="absolute -bottom-40 -right-40 h-[400px] w-[500px] rounded-full bg-blue-600/5 blur-[100px] -z-10"></div>
+                                    
+                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full h-auto">
+                                        <!-- 1. Code Definition -->
+                                        <div class="w-full relative z-10 flex flex-col shadow-2xl shadow-black/80 rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300">
+                                            <div class="flex items-center justify-between px-4 py-3 bg-surface-900 border-b border-surface-800">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="flex gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-surface-600"></div><div class="w-2.5 h-2.5 rounded-full bg-surface-600"></div><div class="w-2.5 h-2.5 rounded-full bg-surface-600"></div></div>
+                                                    <div class="text-[11px] text-surface-400 font-mono tracking-wider uppercase font-semibold ml-2">App Code</div>
+                                                </div>
+                                                <div class="text-[11px] text-surface-500 font-mono">products.tsx</div>
+                                            </div>
+                                            <div tabindex="0" class="whitespace-pre bg-surface-950 p-5 font-mono text-[13px] leading-relaxed text-surface-300 overflow-hidden focus:overflow-auto outline-none ring-1 ring-inset ring-surface-800 h-[220px]"><span class="text-primary-light">import</span> &#123; buildCollection &#125; <span class="text-primary-light">from</span> <span class="text-green-400">"@rebasepro/core"</span>;
+
+<span class="text-primary-light">export const</span> <span class="text-white">products</span> = buildCollection(&#123;
+&nbsp;&nbsp;<span class="text-blue-300">name</span>: <span class="text-green-400">"Products"</span>,
+&nbsp;&nbsp;<span class="text-blue-300">properties</span>: &#123;
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">name</span>: &#123; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">name</span>: <span class="text-green-400">"Name"</span>, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span>,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">validation</span>: &#123; <span class="text-blue-300">required</span>: <span class="text-primary-light">true</span> &#125;
+&nbsp;&nbsp;&nbsp;&nbsp;&#125;,
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">category</span>: &#123; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span>,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">name</span>: <span class="text-green-400">"Category"</span>, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">enum</span>: &#123; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">home</span>: <span class="text-green-400">"Home storage"</span>, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">sunglasses</span>: <span class="text-green-400">"Sunglasses"</span>,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">toys</span>: <span class="text-green-400">"Toys and games"</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#125; 
+&nbsp;&nbsp;&nbsp;&nbsp;&#125;,
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">price</span>: &#123; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">name</span>: <span class="text-green-400">"Price"</span>, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">type</span>: <span class="text-green-400">"number"</span> 
+&nbsp;&nbsp;&nbsp;&nbsp;&#125;,
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">currency</span>: &#123; 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">name</span>: <span class="text-green-400">"Currency"</span>, 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span> 
+&nbsp;&nbsp;&nbsp;&nbsp;&#125;
+&nbsp;&nbsp;&#125;
+&#125;);
+                                            </div>
+                                        </div>
+
+                                        <!-- 2. Postgres Database -->
+                                        <div class="w-full relative z-10 flex flex-col shadow-2xl shadow-black/80 rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300">
+                                            <div class="flex items-center justify-between px-4 py-3 bg-surface-900 border-b border-surface-800">
+                                                <div class="text-[11px] text-surface-400 font-mono tracking-wider uppercase font-semibold">Postgres DB Structure</div>
+                                                <img src="https://www.postgresql.org/media/img/about/press/elephant.png" class="h-3.5 opacity-60 grayscale filter brightness-200" alt="postgres"/>
+                                            </div>
+                                            <div tabindex="0" class="whitespace-pre bg-surface-950 p-5 font-mono text-[13px] leading-relaxed text-surface-400 overflow-hidden focus:overflow-auto outline-none ring-1 ring-inset ring-surface-800 h-[220px]"><span class="text-surface-500 italic">-- Automatically inferred mappings</span><br/>
+<span class="text-primary-light">CREATE TABLE</span> <span class="text-white">"products"</span> (
+&nbsp;&nbsp;<span class="text-blue-300">"id"</span> <span class="text-white">uuid PRIMARY KEY NOT NULL</span>,
+&nbsp;&nbsp;<span class="text-blue-300">"name"</span> <span class="text-white">text NOT NULL</span>,
+&nbsp;&nbsp;<span class="text-blue-300">"category"</span> <span class="text-white">text</span>,
+&nbsp;&nbsp;<span class="text-blue-300">"price"</span> <span class="text-white">numeric</span>,
+&nbsp;&nbsp;<span class="text-blue-300">"currency"</span> <span class="text-white">text</span>
+);
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-12 w-full mt-2 relative z-10 flex flex-col shadow-2xl shadow-black/80 rounded-xl overflow-hidden border border-surface-800 bg-surface-950 hover:scale-[1.01] transition-transform duration-300">
+                                        <div class="flex items-center gap-2 px-4 py-3 border-b border-surface-800">
+                                            <h3 class="text-[11px] font-semibold text-white/50 tracking-wider uppercase">Instantly Generated UI</h3>
+                                        </div>
+                                        <div class="w-full h-[250px] relative pointer-events-none overflow-hidden bg-surface-950">
+                                            <div class="absolute inset-0">
+                                                <ProductsDemoTable client:idle />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </section>
@@ -157,7 +192,6 @@ collection("users")
                         <section data-screen class="w-full will-change-transform">
                             <div class="relative rounded-2xl p-[1px]">
                                 <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950">
-                                    <!--<div class="absolute -top-28 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>-->
                                     <video
                                             class="w-full h-auto"
                                             style="pointer-events: none;"
@@ -193,32 +227,30 @@ collection("users")
                                                     <div class="text-lg font-semibold text-white mb-2">Simple NPM
                                                         Install
                                                     </div>
-                                                    <p class="text-surface-400 text-sm mb-3">Add FireCMS to your project
+                                                    <p class="text-surface-400 text-sm mb-3">Add Rebase to your project
                                                         with a single command</p>
                                                     <div class="bg-surface-900/50 rounded-lg p-4 font-mono text-sm text-surface-300 ring-1 ring-surface-700/50">
-                                                        npx create-firecms-app
+                                                        npx create-rebase-app
                                                     </div>
                                                 </div>
                                             </div>
-                                            {/* --- FireCMS Cloud --- */}
+                                            {/* --- Self Hosted --- */}
                                             <div class="flex items-start gap-6">
                                                 <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
-                                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
+                                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/server.svg"
                                                          alt="" class="h-5 w-5 filter invert"/>
                                                 </div>
                                                 <div>
-                                                    <div class="text-lg font-semibold text-white mb-2">Or Use FireCMS
-                                                        Cloud
+                                                    <div class="text-lg font-semibold text-white mb-2">Self-host Rebase
                                                     </div>
-                                                    <p class="text-surface-400 text-sm mb-4">No setup required. Connect
-                                                        your
-                                                        Firebase project and start managing your data instantly with our
-                                                        managed platform.</p>
-                                                    <a href="https://app.firecms.co"
-                                                       class="inline-flex items-center gap-x-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200">
-                                                        Get Started
-                                                        <span class="material-icons text-lg">arrow_forward</span>
-                                                    </a>
+                                                    <p class="text-surface-400 text-sm mb-4">Deploy Rebase on your own
+                                                        infrastructure. Full control over your data, your deployment,
+                                                        and your performance.</p>
+                                                    <div class="flex items-center gap-4">
+                                                        <a href="/docs"
+                                                           class="text-sm font-semibold text-white hover:text-primary transition-colors">Read
+                                                            Docs <span aria-hidden="true">&rarr;</span></a>
+                                                    </div>
                                                 </div>
                                             </div>
                                             {/* --- TypeScript Support --- */}

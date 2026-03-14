@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import useMeasure from "react-use-measure";
 
-import { cls, RemoveCircleIcon, Tooltip } from "@firecms/ui";
-import { ErrorBoundary } from "@firecms/core";
+import { cls, RemoveCircleIcon, Tooltip } from "@rebasepro/ui";
+import { ErrorBoundary } from "@rebasepro/core";
 
 interface DataTableCellProps {
     children: React.ReactNode;
@@ -34,28 +34,28 @@ type TableCellInnerProps = {
 }
 
 const TableCellInner = ({
-                            justifyContent,
-                            scrollable,
-                            faded,
-                            fullHeight,
-                            children
-                        }: TableCellInnerProps) => {
+    justifyContent,
+    scrollable,
+    faded,
+    fullHeight,
+    children
+}: TableCellInnerProps) => {
     return (
         <div className={cls("flex flex-col max-h-full w-full",
             {
                 "items-start": faded || scrollable
             })}
-             style={{
-                 justifyContent,
-                 height: fullHeight ? "100%" : undefined,
-                 overflow: scrollable ? "auto" : undefined,
-                 WebkitMaskImage: faded
-                     ? "linear-gradient(to bottom, black 60%, transparent 100%)"
-                     : undefined,
-                 maskImage: faded
-                     ? "linear-gradient(to bottom, black 60%, transparent 100%)"
-                     : undefined
-             }}
+            style={{
+                justifyContent,
+                height: fullHeight ? "100%" : undefined,
+                overflow: scrollable ? "auto" : undefined,
+                WebkitMaskImage: faded
+                    ? "linear-gradient(to bottom, black 60%, transparent 100%)"
+                    : undefined,
+                maskImage: faded
+                    ? "linear-gradient(to bottom, black 60%, transparent 100%)"
+                    : undefined
+            }}
         >
             {children}
         </div>
@@ -64,20 +64,20 @@ const TableCellInner = ({
 
 export const DataTableCell = React.memo<DataTableCellProps>(
     function DataTableCell({
-                                 children,
-                                 actions,
-                                 selected,
-                                 disabled,
-                                 disabledTooltip,
-                                 saved,
-                                 error,
-                                 align = "left",
-                                 allowScroll,
-                                 fullHeight,
-                                 onSelect,
-                                 width,
-                                 hideOverflow = true,
-                             }: DataTableCellProps) {
+        children,
+        actions,
+        selected,
+        disabled,
+        disabledTooltip,
+        saved,
+        error,
+        align = "left",
+        allowScroll,
+        fullHeight,
+        onSelect,
+        width,
+        hideOverflow = true,
+    }: DataTableCellProps) {
 
         const [measureRef, bounds] = useMeasure();
         const ref = useRef<HTMLDivElement>(null);
@@ -198,12 +198,12 @@ export const DataTableCell = React.memo<DataTableCellProps>(
                         faded={faded}>
 
                         {!fullHeight && <div ref={measureRef}
-                                             style={{
-                                                 display: "flex",
-                                                 width: "100%",
-                                                 justifyContent,
-                                                 height: fullHeight ? "100%" : undefined
-                                             }}>
+                            style={{
+                                display: "flex",
+                                width: "100%",
+                                justifyContent,
+                                height: fullHeight ? "100%" : undefined
+                            }}>
                             {children}
                         </div>}
 
@@ -215,7 +215,7 @@ export const DataTableCell = React.memo<DataTableCellProps>(
                 {disabled && onHover && disabledTooltip &&
                     <div className="absolute top-1 right-1 text-xs">
                         <Tooltip title={disabledTooltip}>
-                            <RemoveCircleIcon size={"smallest"} color={"disabled"} className={"text-text-disabled"}/>
+                            <RemoveCircleIcon size={"smallest"} color={"disabled"} className={"text-text-disabled"} />
                         </Tooltip>
                     </div>}
 

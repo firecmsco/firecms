@@ -1,6 +1,6 @@
 import React from "react";
-import { EntityCollection } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { EntityCollection } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 
 /**

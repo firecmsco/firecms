@@ -22,8 +22,8 @@ import {
     Menu,
     MenuItem,
     ResizablePanels
-} from "@firecms/ui";
-import { useDataSource, useSnackbarController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView } from "@firecms/core";
+} from "@rebasepro/ui";
+import { useDataSource, useSnackbarController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView } from "@rebasepro/core";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
 import { parseFirst } from "pgsql-ast-parser";
@@ -67,8 +67,8 @@ const QueryLoadingView = () => {
     );
 };
 
-const STORAGE_KEY_TABS = "firecms_sql_tabs";
-const STORAGE_KEY_ACTIVE_TAB = "firecms_sql_active_tab";
+const STORAGE_KEY_TABS = "rebase_sql_tabs";
+const STORAGE_KEY_ACTIVE_TAB = "rebase_sql_active_tab";
 
 export const SQLEditor = () => {
     const dataSource = useDataSource();
@@ -81,10 +81,10 @@ export const SQLEditor = () => {
 
     // Connection state
     const [selectedDatabase, setSelectedDatabase] = useState<string | undefined>(() => {
-        return localStorage.getItem("firecms_sql_selected_db") || undefined;
+        return localStorage.getItem("rebase_sql_selected_db") || undefined;
     });
     const [selectedRole, setSelectedRole] = useState<string | undefined>(() => {
-        return localStorage.getItem("firecms_sql_selected_role") || undefined;
+        return localStorage.getItem("rebase_sql_selected_role") || undefined;
     });
 
     const [availableDatabases, setAvailableDatabases] = useState<string[]>([]);
@@ -113,20 +113,20 @@ export const SQLEditor = () => {
                     setAvailableRoles(roles);
 
                     // Set default database if not selected, preferring current DB -> postgres -> first available
-                    if (!localStorage.getItem("firecms_sql_selected_db") && dbs.length > 0) {
+                    if (!localStorage.getItem("rebase_sql_selected_db") && dbs.length > 0) {
                         let defaultDb = currentDbFromApi;
                         if (!defaultDb || !dbs.includes(defaultDb)) {
                             defaultDb = dbs.includes("postgres") ? "postgres" : dbs[0];
                         }
                         setSelectedDatabase(defaultDb);
-                        localStorage.setItem("firecms_sql_selected_db", defaultDb);
+                        localStorage.setItem("rebase_sql_selected_db", defaultDb);
                     }
 
                     // Set default role if not selected, preferring 'postgres'
-                    if (!localStorage.getItem("firecms_sql_selected_role") && roles.length > 0) {
+                    if (!localStorage.getItem("rebase_sql_selected_role") && roles.length > 0) {
                         const defaultRole = roles.includes("postgres") ? "postgres" : roles[0];
                         setSelectedRole(defaultRole);
-                        localStorage.setItem("firecms_sql_selected_role", defaultRole);
+                        localStorage.setItem("rebase_sql_selected_role", defaultRole);
                     }
                 }
             } catch (err: any) {
@@ -148,12 +148,12 @@ export const SQLEditor = () => {
 
     const handleDatabaseChange = (db: string) => {
         setSelectedDatabase(db);
-        localStorage.setItem("firecms_sql_selected_db", db);
+        localStorage.setItem("rebase_sql_selected_db", db);
     };
 
     const handleRoleChange = (role: string) => {
         setSelectedRole(role);
-        localStorage.setItem("firecms_sql_selected_role", role);
+        localStorage.setItem("rebase_sql_selected_role", role);
     };
 
     const fetchSchema = useCallback(async () => {
@@ -375,7 +375,7 @@ export const SQLEditor = () => {
     }, [editingCell, schemas, activeTab.lastExecutedSql, activeTab.results, dataSource, updateActiveTab, snackbarController, selectedDatabase, selectedRole]);
 
     const [columnWidths, setColumnWidths] = useState<Record<string, Record<string, number>>>(() => {
-        const saved = localStorage.getItem("firecms_sql_column_widths");
+        const saved = localStorage.getItem("rebase_sql_column_widths");
         return saved ? JSON.parse(saved) : {};
     });
     const [snippets, setSnippets] = useState<Snippet[]>([]);
@@ -385,10 +385,10 @@ export const SQLEditor = () => {
 
     // Load from local storage
     useEffect(() => {
-        const savedSnippets = localStorage.getItem("firecms_sql_snippets");
+        const savedSnippets = localStorage.getItem("rebase_sql_snippets");
         if (savedSnippets) setSnippets(JSON.parse(savedSnippets));
 
-        const savedHistory = localStorage.getItem("firecms_sql_history");
+        const savedHistory = localStorage.getItem("rebase_sql_history");
         if (savedHistory) setHistory(JSON.parse(savedHistory));
     }, []);
 
@@ -408,12 +408,12 @@ export const SQLEditor = () => {
 
     const saveSnippets = (newSnippets: Snippet[]) => {
         setSnippets(newSnippets);
-        localStorage.setItem("firecms_sql_snippets", JSON.stringify(newSnippets));
+        localStorage.setItem("rebase_sql_snippets", JSON.stringify(newSnippets));
     };
 
     const saveHistory = (newHistory: string[]) => {
         setHistory(newHistory);
-        localStorage.setItem("firecms_sql_history", JSON.stringify(newHistory.slice(-50)));
+        localStorage.setItem("rebase_sql_history", JSON.stringify(newHistory.slice(-50)));
     };
 
     const handleDeleteSnippet = (id: string) => {
@@ -472,7 +472,7 @@ export const SQLEditor = () => {
                     [key]: width
                 }
             };
-            localStorage.setItem("firecms_sql_column_widths", JSON.stringify(newWidths));
+            localStorage.setItem("rebase_sql_column_widths", JSON.stringify(newWidths));
             return newWidths;
         });
     }, [activeTab.sql]);
@@ -815,7 +815,7 @@ export const SQLEditor = () => {
 
     const [sidebarSize, setSidebarSize] = useState(() => {
         try {
-            const saved = localStorage.getItem("firecms_sql_editor_sidebar_size");
+            const saved = localStorage.getItem("rebase_sql_editor_sidebar_size");
             return saved !== null ? parseFloat(saved) : 20;
         } catch (e) {
             return 20;
@@ -823,7 +823,7 @@ export const SQLEditor = () => {
     });
     const [editorHeight, setEditorHeight] = useState(() => {
         try {
-            const saved = localStorage.getItem("firecms_sql_editor_height");
+            const saved = localStorage.getItem("rebase_sql_editor_height");
             return saved !== null ? parseFloat(saved) : 50;
         } catch (e) {
             return 50;
@@ -832,13 +832,13 @@ export const SQLEditor = () => {
 
     useEffect(() => {
         try {
-            localStorage.setItem("firecms_sql_editor_sidebar_size", sidebarSize.toString());
+            localStorage.setItem("rebase_sql_editor_sidebar_size", sidebarSize.toString());
         } catch (e) { }
     }, [sidebarSize]);
 
     useEffect(() => {
         try {
-            localStorage.setItem("firecms_sql_editor_height", editorHeight.toString());
+            localStorage.setItem("rebase_sql_editor_height", editorHeight.toString());
         } catch (e) { }
     }, [editorHeight]);
 

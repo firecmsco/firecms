@@ -1,7 +1,7 @@
 
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import { FireCMSApiServer } from '../src/api/server';
-import { DataSource, User } from '@firecms/types';
+import { RebaseApiServer } from '../src/api/server';
+import { DataSource, User } from '@rebasepro/types';
 import { ApiConfig } from '../src/api/types';
 import http from 'http';
 import { AddressInfo } from 'net';
@@ -30,8 +30,8 @@ const mockScopedDataSource = {
 
 mockWithAuth.mockResolvedValue(mockScopedDataSource);
 
-describe('FireCMSApiServer RLS Integration', () => {
-    let server: FireCMSApiServer;
+describe('RebaseApiServer RLS Integration', () => {
+    let server: RebaseApiServer;
     let config: ApiConfig;
     let httpServer: http.Server;
     let baseUrl: string;
@@ -52,7 +52,7 @@ describe('FireCMSApiServer RLS Integration', () => {
             },
             enableREST: true
         };
-        server = await FireCMSApiServer.create({ ...config, dataSource: mockDataSource });
+        server = await RebaseApiServer.create({ ...config, dataSource: mockDataSource });
     });
 
     afterEach(async () => {

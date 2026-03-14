@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/SnackbarController"
 title: "SnackbarController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SnackbarController
+[@rebasepro/core](../README) / SnackbarController
 
 # Interface: SnackbarController
 
-Defined in: [hooks/useSnackbarController.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useSnackbarController.tsx)
+Defined in: [hooks/useSnackbarController.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSnackbarController.tsx)
 
 Controller to display snackbars
 
@@ -21,7 +21,7 @@ Controller to display snackbars
 
 > **close**: () => `void`
 
-Defined in: [hooks/useSnackbarController.tsx:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useSnackbarController.tsx)
+Defined in: [hooks/useSnackbarController.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSnackbarController.tsx)
 
 Close the currently open snackbar
 
@@ -35,7 +35,7 @@ Close the currently open snackbar
 
 > **open**: (`props`) => `void`
 
-Defined in: [hooks/useSnackbarController.tsx:25](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useSnackbarController.tsx)
+Defined in: [hooks/useSnackbarController.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSnackbarController.tsx)
 
 Display a new snackbar. You need to specify the type and message.
 You can optionally specify a title

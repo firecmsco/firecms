@@ -1,5 +1,5 @@
 import React from "react";
-import { Slider } from "@firecms/ui";
+import { Slider } from "@rebasepro/ui";
 
 export default function SliderDisabledDemo() {
     return (

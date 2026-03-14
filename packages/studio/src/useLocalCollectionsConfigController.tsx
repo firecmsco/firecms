@@ -1,5 +1,5 @@
 import { CollectionsConfigController } from "./types/config_controller";
-import { EntityCollection, Properties, getSubcollections } from "@firecms/core";
+import { EntityCollection, Properties, getSubcollections } from "@rebasepro/core";
 import { PersistedCollection } from "./types/persisted_collection";
 
 

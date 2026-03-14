@@ -3,17 +3,17 @@ slug: "docs/api/functions/ReferenceWidget"
 title: "ReferenceWidget"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ReferenceWidget
+[@rebasepro/core](../README) / ReferenceWidget
 
 # Function: ReferenceWidget()
 
 > **ReferenceWidget**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [components/ReferenceWidget.tsx:37](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ReferenceWidget.tsx)
+Defined in: [components/ReferenceWidget.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 This field allows selecting reference/s.
 

@@ -8,7 +8,7 @@ import {
     unslugify,
     useAuthController,
     useCustomizationController
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     BooleanSwitchWithLabel,
     CloseIcon,
@@ -18,9 +18,9 @@ import {
     SelectItem,
     TextField,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
-import { useFormex } from "@firecms/formex";
+import { useFormex } from "@rebasepro/formex";
 import { LayoutModeSwitch } from "./LayoutModeSwitch";
 import { ViewModeSwitch } from "./ViewModeSwitch";
 import { KanbanConfigSection } from "./KanbanConfigSection";

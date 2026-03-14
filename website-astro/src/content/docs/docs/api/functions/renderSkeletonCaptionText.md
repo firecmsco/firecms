@@ -3,17 +3,17 @@ slug: "docs/api/functions/renderSkeletonCaptionText"
 title: "renderSkeletonCaptionText"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / renderSkeletonCaptionText
+[@rebasepro/core](../README) / renderSkeletonCaptionText
 
 # Function: renderSkeletonCaptionText()
 
 > **renderSkeletonCaptionText**(`index?`): `Element`
 
-Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:276](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
+Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:276](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
 
 ## Parameters
 

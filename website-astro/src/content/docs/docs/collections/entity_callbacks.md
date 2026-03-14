@@ -24,7 +24,7 @@ containing a `string` and an error snackbar will be displayed.
 :::
 
 :::tip
-You can use the `context` object to access the FireCMS context.
+You can use the `context` object to access the Rebase context.
 The `context` object contains all the controllers and services available in the app,
 including the `authController`, `dataSource`, `storageSource`, `sideDialogsController`, etc.
 :::
@@ -38,7 +38,7 @@ import {
     EntityAfterReadProps,
     EntityIdUpdateProps,
     toSnakeCase
-} from "@firecms/core";
+} from "@rebasepro/core";
 
 type Product = {
     name: string;
@@ -141,7 +141,7 @@ const productCollection = buildCollection<Product>({
 
 * `status`: EntityStatus New or existing entity
 
-* `context`: FireCMSContext Context of the app status
+* `context`: RebaseContext Context of the app status
 
 #### EntityBeforeDeleteProps
 
@@ -153,7 +153,7 @@ const productCollection = buildCollection<Product>({
 
 * `entity`: Entity Deleted entity
 
-* `context`: FireCMSContext Context of the app status
+* `context`: RebaseContext Context of the app status
 
 #### EntityIdUpdateProps
 
@@ -165,4 +165,4 @@ const productCollection = buildCollection<Product>({
 
 * `values`: Entity values
 
-* `context`: FireCMSContext Context of the app status
+* `context`: RebaseContext Context of the app status

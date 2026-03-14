@@ -1,8 +1,8 @@
 import { eq, and } from "drizzle-orm";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 // import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Entity, EntityCollection, Properties, Relation } from "@firecms/types";
-import { getTableName, resolveCollectionRelations } from "@firecms/common";
+import { Entity, EntityCollection, Properties, Relation } from "@rebasepro/types";
+import { getTableName, resolveCollectionRelations } from "@rebasepro/common";
 import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
 import {
     getCollectionByPath,

@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PropertyBuilder"
 title: "PropertyBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PropertyBuilder
+[@rebasepro/core](../README) / PropertyBuilder
 
 # Type Alias: PropertyBuilder()\<T, M\>
 
@@ -21,7 +21,7 @@ title: "PropertyBuilder"
          authController
      }`) => [`Property`](Property)\<`T`\> \| `null`
 
-Defined in: [types/properties.ts:287](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:287](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 You can use this type to define a property dynamically, based
 on the current values of the entity, the previous values and the

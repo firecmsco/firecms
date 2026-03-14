@@ -1,3 +1,3 @@
 export * from "./useImportExportPlugin";
-export * from "@firecms/data_export";
-export * from "@firecms/data_import";
+export * from "@rebasepro/data_export";
+export * from "@rebasepro/data_import";

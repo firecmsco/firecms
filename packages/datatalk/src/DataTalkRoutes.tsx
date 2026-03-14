@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
-import { CircularProgressCenter, EntityCollection, useCollectionRegistryController } from "@firecms/core";
+import { CircularProgressCenter, EntityCollection, useCollectionRegistryController } from "@rebasepro/core";
 import { DataTalkConfig, useDataTalk } from "./DataTalkProvider";
 import { DataTalkSession } from "./DataTalkSession";
 import { Session } from "./types";
 import { DataTalkSessionsPanel } from "./components/DataTalkSessionsPanel";
 
-const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
+const DEFAULT_API_ENDPOINT = "https://api.rebase.pro";
 
 export function DataTalkRoutes({
     apiEndpoint = DEFAULT_API_ENDPOINT,

@@ -3,17 +3,17 @@ slug: "docs/api/functions/ArrayOfReferencesPreview"
 title: "ArrayOfReferencesPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ArrayOfReferencesPreview
+[@rebasepro/core](../README) / ArrayOfReferencesPreview
 
 # Function: ArrayOfReferencesPreview()
 
 > **ArrayOfReferencesPreview**(`__namedParameters`): `Element`
 
-Defined in: [preview/property\_previews/ArrayOfReferencesPreview.tsx:10](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/property_previews/ArrayOfReferencesPreview.tsx)
+Defined in: [preview/property\_previews/ArrayOfReferencesPreview.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOfReferencesPreview.tsx)
 
 ## Parameters
 

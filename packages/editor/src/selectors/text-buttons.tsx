@@ -8,7 +8,7 @@ import {
     FormatItalicIcon,
     FormatStrikethroughIcon,
     FormatUnderlinedIcon
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
 export const TextButtons = () => {
     const { editor } = useEditor();
@@ -55,11 +55,11 @@ export const TextButtons = () => {
                     }}
                 >
                     <Button size={"small"}
-                            color="text"
-                            className="gap-2 rounded-none h-full"
-                            variant="text">
+                        color="text"
+                        className="gap-2 rounded-none h-full"
+                        variant="text">
                         <item.icon
-                            className={cls( {
+                            className={cls({
                                 "text-inherit": !item.isActive(editor),
                                 "text-blue-500": item.isActive(editor),
                             })}

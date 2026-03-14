@@ -3,17 +3,17 @@ slug: "docs/api/functions/buildEnumLabel"
 title: "buildEnumLabel"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / buildEnumLabel
+[@rebasepro/core](../README) / buildEnumLabel
 
 # Function: buildEnumLabel()
 
 > **buildEnumLabel**(`labelOrConfig?`): `string` \| `undefined`
 
-Defined in: [util/enums.ts:46](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/enums.ts)
+Defined in: [util/enums.ts:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/enums.ts)
 
 ## Parameters
 

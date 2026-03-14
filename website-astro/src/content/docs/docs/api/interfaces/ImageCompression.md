@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/ImageCompression"
 title: "ImageCompression"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ImageCompression
+[@rebasepro/core](../README) / ImageCompression
 
 # Interface: ImageCompression
 
-Defined in: [types/properties.ts:916](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:916](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/properties.ts:916](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **maxHeight**: `number`
 
-Defined in: [types/properties.ts:920](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:920](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 New image max height (ratio is preserved)
 
@@ -29,7 +29,7 @@ New image max height (ratio is preserved)
 
 > `optional` **maxWidth**: `number`
 
-Defined in: [types/properties.ts:925](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:925](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 New image max width (ratio is preserved)
 
@@ -39,6 +39,6 @@ New image max width (ratio is preserved)
 
 > `optional` **quality**: `number`
 
-Defined in: [types/properties.ts:930](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:930](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 A number between 0 and 100. Used for the JPEG compression.(if no compress is needed, just set it to 100)

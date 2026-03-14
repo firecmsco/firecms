@@ -1,31 +1,31 @@
 {
-  "name": "create-firecms-app",
+  "name": "create-rebase-app",
   "version": "4.0.0",
-  "description": "A CLI to bootstrap FireCMS",
+  "description": "A CLI to bootstrap Rebase",
   "type": "commonjs",
-  "bin": "bin/create-firecms-app.js",
+  "bin": "bin/create-rebase-app.js",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "build": "echo \"create-firecms-app: no need to build\" && exit 0",
-    "clean": "echo \"create-firecms-app: no need to clean\" && exit 0"
+    "build": "echo \"create-rebase-app: no need to build\" && exit 0",
+    "clean": "echo \"create-rebase-app: no need to clean\" && exit 0"
   },
   "keywords": [
     "cli",
-    "create-firecms-app",
-    "firecms",
+    "create-rebase-app",
+    "rebase",
     "firebase",
     "firestore",
     "cms",
     "react",
     "typescript"
   ],
-  "author": "firecms.co",
+  "author": "rebase.pro",
   "license": "MIT",
   "dependencies": {
-    "@firecms/cli": "4.0.0"
+    "@rebasepro/cli": "4.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.17.14",

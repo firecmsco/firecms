@@ -1,9 +1,9 @@
 francesco:
   name: Francesco Gatti
-  title: Co-creator of FireCMS
+  title: Co-creator of Rebase
   url: https://github.com/fgatti675
   image_url: https://avatars.githubusercontent.com/u/5120271?v=4
-  email: francesco@firecms.co
+  email: francesco@rebase.pro
   socials:
     x: gatti675
     github: fgatti675
@@ -11,10 +11,10 @@ francesco:
 
 marian:
   name: Marian Moldovan
-  title: Co-creator of FireCMS
+  title: Co-creator of Rebase
   url: https://github.com/marianmoldovan
   image_url: https://avatars.githubusercontent.com/u/1479084?v=4
-  email: marian@firecms.co
+  email: marian@rebase.pro
   socials:
     x: marianmoldovan
     github: marianmoldovan

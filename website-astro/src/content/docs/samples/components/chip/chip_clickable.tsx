@@ -1,5 +1,5 @@
 import React from "react";
-import { Chip } from "@firecms/ui";
+import { Chip } from "@rebasepro/ui";
 
 export default function ChipClickableDemo() {
     const handleClick = () => {

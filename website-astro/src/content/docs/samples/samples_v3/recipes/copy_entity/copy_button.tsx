@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { Entity, EntityCollection, useDataSource, useReferenceDialog, useSnackbarController } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { Entity, EntityCollection, useDataSource, useReferenceDialog, useSnackbarController } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 export type CopyEntityButtonProps = {
     pathFrom: string;
@@ -10,11 +10,11 @@ export type CopyEntityButtonProps = {
 };
 
 export function CopyEntityButton({
-                                     pathFrom,
-                                     collectionFrom,
-                                     pathTo,
-                                     collectionTo
-                                 }: CopyEntityButtonProps) {
+    pathFrom,
+    collectionFrom,
+    pathTo,
+    collectionTo
+}: CopyEntityButtonProps) {
 
     // The datasource allows us to create new documents
     const dataSource = useDataSource();

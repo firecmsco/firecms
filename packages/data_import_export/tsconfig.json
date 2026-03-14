@@ -32,25 +32,25 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@firecms/data_import": [
+      "@rebasepro/data_import": [
         "../data_import/src"
       ],
-      "@firecms/data_export": [
+      "@rebasepro/data_export": [
         "../data_export/src"
       ],
-      "@firecms/core": [
-        "../firecms_core/src"
+      "@rebasepro/core": [
+        "../core/src"
       ],
-      "@firecms/types": [
+      "@rebasepro/types": [
         "../types/src"
       ],
-      "@firecms/schema_inference": [
+      "@rebasepro/schema_inference": [
         "../schema_inference/src"
       ],
-      "@firecms/ui": [
+      "@rebasepro/ui": [
         "../ui/src"
       ],
-      "@firecms/formex": [
+      "@rebasepro/formex": [
         "../formex/src"
       ]
     }

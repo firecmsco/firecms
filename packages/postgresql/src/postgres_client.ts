@@ -5,7 +5,7 @@ import {
     FetchCollectionProps,
     FetchEntityProps,
     SaveEntityProps
-} from "@firecms/types";
+} from "@rebasepro/types";
 
 export interface PostgresDataSourceConfig {
     websocketUrl: string;

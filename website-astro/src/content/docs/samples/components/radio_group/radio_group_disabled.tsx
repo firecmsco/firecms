@@ -1,5 +1,5 @@
 import React from "react";
-import { Label, RadioGroup, RadioGroupItem } from "@firecms/ui";
+import { Label, RadioGroup, RadioGroupItem } from "@rebasepro/ui";
 
 export default function RadioGroupDisabledDemo() {
     return (
@@ -8,21 +8,21 @@ export default function RadioGroupDisabledDemo() {
                 className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                 htmlFor="color-black"
             >
-                <RadioGroupItem id="color-black" value="black"/>
+                <RadioGroupItem id="color-black" value="black" />
                 Black
             </Label>
             <Label
                 className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                 htmlFor="color-white"
             >
-                <RadioGroupItem id="color-white" value="white" disabled/>
+                <RadioGroupItem id="color-white" value="white" disabled />
                 White
             </Label>
             <Label
                 className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                 htmlFor="color-blue"
             >
-                <RadioGroupItem id="color-blue" value="blue"/>
+                <RadioGroupItem id="color-blue" value="blue" />
                 Blue
             </Label>
         </RadioGroup>

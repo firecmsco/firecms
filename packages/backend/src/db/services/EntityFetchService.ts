@@ -1,8 +1,8 @@
 import { and, asc, count, desc, eq, gt, lt, or, SQL } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
 // import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Entity, EntityCollection, FilterValues } from "@firecms/types";
-import { resolveCollectionRelations } from "@firecms/common";
+import { Entity, EntityCollection, FilterValues } from "@rebasepro/types";
+import { resolveCollectionRelations } from "@rebasepro/common";
 import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
 import {
     getCollectionByPath,
@@ -237,7 +237,7 @@ export class EntityFetchService {
                 const startAfterId = options.startAfter.id ?? options.startAfter[idInfo.fieldName];
                 if (startAfterId !== undefined) {
                     const parsedStartAfterIdObj = parseIdValues(startAfterId, idInfoArray);
-        const parsedStartAfterId = parsedStartAfterIdObj[idInfo.fieldName];
+                    const parsedStartAfterId = parsedStartAfterIdObj[idInfo.fieldName];
                     startAfterConditions.push(lt(idField, parsedStartAfterId));
                 }
             }

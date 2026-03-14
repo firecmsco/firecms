@@ -1,5 +1,5 @@
 {
-  "extends": "../../packages/firecms_core/tsconfig.json",
+  "extends": "../../packages/core/tsconfig.json",
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,
@@ -22,52 +22,52 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@firecms/auth": [
+      "@rebasepro/auth": [
         "../../packages/auth/src"
       ],
-      "@firecms/core": [
-        "../../packages/firecms_core/src"
+      "@rebasepro/core": [
+        "../../packages/core/src"
       ],
-      "@firecms/firebase": [
-        "../../packages/firebase_firecms/src"
+      "@rebasepro/firebase": [
+        "../../packages/firebase/src"
       ],
-      "@firecms/postgresql": [
+      "@rebasepro/postgresql": [
         "../../packages/postgresql/src"
       ],
-      "@firecms/types": [
+      "@rebasepro/types": [
         "../../packages/types/src"
       ],
-      "@firecms/ui": [
+      "@rebasepro/ui": [
         "../../packages/ui/src"
       ],
-      "@firecms/editor": [
+      "@rebasepro/editor": [
         "../../packages/editor/src"
       ],
-      "@firecms/datatalk": [
+      "@rebasepro/datatalk": [
         "../../packages/datatalk/src"
       ],
-      "@firecms/mongodb": [
+      "@rebasepro/mongodb": [
         "../../packages/mongodb/src"
       ],
-      "@firecms/data_enhancement": [
+      "@rebasepro/data_enhancement": [
         "../../packages/data_enhancement/src"
       ],
-      "@firecms/collection_editor": [
+      "@rebasepro/collection_editor": [
         "../../packages/collection_editor/src"
       ],
-      "@firecms/collection_editor_firebase": [
+      "@rebasepro/collection_editor_firebase": [
         "../../packages/collection_editor_firebase/src"
       ],
-      "@firecms/entity_history": [
+      "@rebasepro/entity_history": [
         "../../packages/entity_history/src"
       ],
-      "@firecms/data_import": [
+      "@rebasepro/data_import": [
         "../../packages/data_import/src"
       ],
-      "@firecms/data_export": [
+      "@rebasepro/data_export": [
         "../../packages/data_export/src"
       ],
-      "@firecms/user_management": [
+      "@rebasepro/user_management": [
         "../../packages/user_management/src"
       ],
       "shared": [

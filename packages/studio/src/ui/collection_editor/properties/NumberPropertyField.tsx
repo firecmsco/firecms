@@ -1,8 +1,8 @@
 import React from "react";
 import { NumberPropertyValidation } from "./validation/NumberPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
-import { TextField } from "@firecms/ui";
-import { getIn, useFormex } from "@firecms/formex";
+import { TextField } from "@rebasepro/ui";
+import { getIn, useFormex } from "@rebasepro/formex";
 
 export function NumberPropertyField({ disabled }: {
     disabled: boolean;
@@ -16,7 +16,7 @@ export function NumberPropertyField({ disabled }: {
             <div className={"col-span-12"}>
 
                 <ValidationPanel>
-                    <NumberPropertyValidation disabled={disabled}/>
+                    <NumberPropertyValidation disabled={disabled} />
                 </ValidationPanel>
 
             </div>
@@ -24,13 +24,13 @@ export function NumberPropertyField({ disabled }: {
             <div className={"col-span-12"}>
 
                 <TextField name={"defaultValue"}
-                           disabled={disabled}
-                           type={"number"}
-                           onChange={(e: any) => {
-                               setFieldValue("defaultValue", e.target.value === "" ? undefined : parseFloat(e.target.value));
-                           }}
-                           label={"Default value"}
-                           value={getIn(values, "defaultValue") ?? ""}/>
+                    disabled={disabled}
+                    type={"number"}
+                    onChange={(e: any) => {
+                        setFieldValue("defaultValue", e.target.value === "" ? undefined : parseFloat(e.target.value));
+                    }}
+                    label={"Default value"}
+                    value={getIn(values, "defaultValue") ?? ""} />
 
             </div>
         </>

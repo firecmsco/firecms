@@ -1,8 +1,8 @@
-# FireCMS Typesense Search - Google Cloud Marketplace Solution
+# Rebase Typesense Search - Google Cloud Marketplace Solution
 
-name: firecms-typesense-search
+name: rebase-typesense-search
 version: 1.0.0
-providerName: firecms
+providerName: rebase
 
 description: |
   Full-text search for Firestore powered by Typesense. Automatically syncs your
@@ -11,7 +11,7 @@ description: |
 detailedDescription: |
   ## Overview
   
-  FireCMS Typesense Search automatically deploys a Typesense search server on
+  Rebase Typesense Search automatically deploys a Typesense search server on
   Google Compute Engine and keeps it synchronized with your Firestore database.
   
   ## Features
@@ -38,16 +38,16 @@ detailedDescription: |
   4. Your Typesense server is automatically provisioned
   5. Data syncs in real-time as you update Firestore
 
-productId: firecms-typesense-search
+productId: rebase-typesense-search
 productKind: SAAS
 
-signupUrl: https://us-central1-firecms-backend.cloudfunctions.net/handleSignup
-loginUrl: https://firecms.co/marketplace/login
+signupUrl: https://us-central1-rebase-backend.cloudfunctions.net/handleSignup
+loginUrl: https://rebase.pro/marketplace/login
 
 support:
-  email: support@firecms.co
-  url: https://firecms.co/support
-  documentation: https://firecms.co/docs/typesense
+  email: support@rebase.pro
+  url: https://rebase.pro/support
+  documentation: https://rebase.pro/docs/typesense
 
 billing:
   model: SUBSCRIPTION

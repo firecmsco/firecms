@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/InternalUserManagement"
 title: "InternalUserManagement"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / InternalUserManagement
+[@rebasepro/core](../README) / InternalUserManagement
 
 # Type Alias: InternalUserManagement\<USER\>
 
 > **InternalUserManagement**\<`USER`\> = `object`
 
-Defined in: [types/internal\_user\_management.ts:3](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/internal_user_management.ts)
+Defined in: [types/internal\_user\_management.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/internal_user_management.ts)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [types/internal\_user\_management.ts:3](https://github.com/firecmsco
 
 > **getUser**: (`uid`) => `USER` \| `null`
 
-Defined in: [types/internal\_user\_management.ts:22](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/internal_user_management.ts)
+Defined in: [types/internal\_user\_management.ts:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/internal_user_management.ts)
 
 Function to get a user by its uid. This is used to show
 user information when assigning ownership of an entity.
@@ -35,7 +35,7 @@ user information when assigning ownership of an entity.
 You can pass your own implementation if you want to show
 more information about the user.
 
-If you are using the FireCMS user management plugin, this
+If you are using the Rebase user management plugin, this
 function will be implemented automatically.
 
 #### Parameters
@@ -54,6 +54,6 @@ function will be implemented automatically.
 
 > **users**: `USER`[]
 
-Defined in: [types/internal\_user\_management.ts:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/internal_user_management.ts)
+Defined in: [types/internal\_user\_management.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/internal_user_management.ts)
 
 List of users to be managed by the CMS.

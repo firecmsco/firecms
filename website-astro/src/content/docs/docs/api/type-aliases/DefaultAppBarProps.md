@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/DefaultAppBarProps"
 title: "DefaultAppBarProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / DefaultAppBarProps
+[@rebasepro/core](../README) / DefaultAppBarProps
 
 # Type Alias: DefaultAppBarProps\<ADDITIONAL_PROPS\>
 
 > **DefaultAppBarProps**\<`ADDITIONAL_PROPS`\> = `object` & `ADDITIONAL_PROPS`
 
-Defined in: [core/DefaultAppBar.tsx:23](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/core/DefaultAppBar.tsx)
+Defined in: [core/DefaultAppBar.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/DefaultAppBar.tsx)
 
 ## Type Declaration
 

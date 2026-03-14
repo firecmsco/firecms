@@ -1,5 +1,5 @@
 import React from "react";
-import { DataType, Entity, Property } from "@firecms/core";
+import { DataType, Entity, Property } from "@rebasepro/core";
 
 export type ImportConfig = {
 

@@ -3,17 +3,17 @@ slug: "docs/api/functions/DateTimeFieldBinding"
 title: "DateTimeFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / DateTimeFieldBinding
+[@rebasepro/core](../README) / DateTimeFieldBinding
 
 # Function: DateTimeFieldBinding()
 
 > **DateTimeFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/DateTimeFieldBinding.tsx:21](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/DateTimeFieldBinding.tsx)
+Defined in: [form/field\_bindings/DateTimeFieldBinding.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/DateTimeFieldBinding.tsx)
 
 Field that allows selecting a date
 

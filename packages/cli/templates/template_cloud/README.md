@@ -1,9 +1,9 @@
-## FireCMS Cloud starter template
+## Rebase Cloud starter template
 
-Welcome to FireCMS Cloud!
+Welcome to Rebase Cloud!
 
-In order to run this project, you will need to create a FireCMS Cloud project
-in the [FireCMS Cloud](https://app.firecms.co).
+In order to run this project, you will need to create a Rebase Cloud project
+in the [Rebase Cloud](https://app.rebase.pro).
 
 Then simply run:
 
@@ -20,7 +20,7 @@ And run the project locally:
 yarn dev
 ```
 
-All your collections generated in the FireCMS Cloud will be available in your
+All your collections generated in the Rebase Cloud will be available in your
 local development environment.
 
 ### Deploying the project

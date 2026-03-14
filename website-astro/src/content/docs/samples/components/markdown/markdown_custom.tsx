@@ -1,5 +1,5 @@
 import React from "react";
-import { Markdown } from "@firecms/ui";
+import { Markdown } from "@rebasepro/ui";
 
 const markdownSource = `
 # Custom Styled Markdown

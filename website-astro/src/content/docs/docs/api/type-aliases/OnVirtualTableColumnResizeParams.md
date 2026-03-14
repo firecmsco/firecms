@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/OnVirtualTableColumnResizeParams"
 title: "OnVirtualTableColumnResizeParams"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / OnVirtualTableColumnResizeParams
+[@rebasepro/core](../README) / OnVirtualTableColumnResizeParams
 
 # Type Alias: OnVirtualTableColumnResizeParams
 
 > **OnVirtualTableColumnResizeParams** = `object`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:249](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:249](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ## See
 
@@ -25,7 +25,7 @@ Table
 
 > **column**: [`VirtualTableColumn`](../interfaces/VirtualTableColumn)
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:252](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:252](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:252](https://github.c
 
 > **key**: `string`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:251](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:251](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -41,4 +41,4 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:251](https://github.c
 
 > **width**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:250](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [components/VirtualTable/VirtualTableProps.tsx:250](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)

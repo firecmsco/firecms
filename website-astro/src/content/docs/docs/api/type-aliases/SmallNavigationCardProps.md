@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/SmallNavigationCardProps"
 title: "SmallNavigationCardProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SmallNavigationCardProps
+[@rebasepro/core](../README) / SmallNavigationCardProps
 
 # Type Alias: SmallNavigationCardProps
 
 > **SmallNavigationCardProps** = `object`
 
-Defined in: [components/HomePage/SmallNavigationCard.tsx:5](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/HomePage/SmallNavigationCard.tsx)
+Defined in: [components/HomePage/SmallNavigationCard.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/SmallNavigationCard.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [components/HomePage/SmallNavigationCard.tsx:5](https://github.com/f
 
 > **icon**: `React.ReactElement`
 
-Defined in: [components/HomePage/SmallNavigationCard.tsx:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/HomePage/SmallNavigationCard.tsx)
+Defined in: [components/HomePage/SmallNavigationCard.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/SmallNavigationCard.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [components/HomePage/SmallNavigationCard.tsx:8](https://github.com/f
 
 > **name**: `string`
 
-Defined in: [components/HomePage/SmallNavigationCard.tsx:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/HomePage/SmallNavigationCard.tsx)
+Defined in: [components/HomePage/SmallNavigationCard.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/SmallNavigationCard.tsx)
 
 ***
 
@@ -37,4 +37,4 @@ Defined in: [components/HomePage/SmallNavigationCard.tsx:6](https://github.com/f
 
 > **url**: `string`
 
-Defined in: [components/HomePage/SmallNavigationCard.tsx:7](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/HomePage/SmallNavigationCard.tsx)
+Defined in: [components/HomePage/SmallNavigationCard.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/SmallNavigationCard.tsx)

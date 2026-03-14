@@ -7,7 +7,7 @@ import {
     toSnakeCase,
     useAuthController,
     useCustomizationController
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     AddIcon,
     Button,
@@ -19,7 +19,7 @@ import {
     IconButton,
     TextField,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
 
 /**

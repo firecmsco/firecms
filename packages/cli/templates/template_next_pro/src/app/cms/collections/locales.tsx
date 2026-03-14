@@ -1,4 +1,4 @@
-import { buildCollection, buildEnumValues } from "@firecms/core";
+import { buildCollection, buildEnumValues } from "@rebasepro/core";
 import { Locale } from "@/app/common/types";
 
 const locales = buildEnumValues({

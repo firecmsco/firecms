@@ -1,7 +1,7 @@
 ---
 slug: version_1_is_out
 title: Release of version 1.0.0
-description: FireCMS 1.0 is ready to ship! Discover why Firebase makes for an amazing developer experience.
+description: Rebase 1.0 is ready to ship! Discover why Firebase makes for an amazing developer experience.
 pubDate: 2022-05-03
 image: /img/dark_mode.png
 authors: francesco
@@ -9,10 +9,10 @@ authors: francesco
 
 ![Dark mode](/img/dark_mode.png)
 
-> FireCMS 1.0 is ready to ship! 🙌 abd why Firebase makes for an amazing developer
+> Rebase 1.0 is ready to ship! 🙌 abd why Firebase makes for an amazing developer
 > experince
 
-A few months have passed since we entered the beta period of FireCMS, our
+A few months have passed since we entered the beta period of Rebase, our
 Firestore-based CMS built with developer experience in mind.
 
 We have collected your feedback to add new features and quality of life
@@ -21,7 +21,7 @@ improvements, fixed bugs, and merged your PRs (thank you!).
 After reaching more than 500 stars on GitHub, and 100 forks, it is a good time
 to finally end the beta and release-candidate phases and ship version 1.0.0
 
-## Why Firebase and FireCMS
+## Why Firebase and Rebase
 
 At [Camberi](https://camberi.com), we have been developing web apps and mobile apps for a long time. We have
 used Firebase and Firestore as a backend and database in multiple projects.
@@ -47,10 +47,10 @@ Also, you are not forced to connect your apps to Firestore and you can build
 have a REST API or use callable functions to have your backend logic.
 
 And, even if you don't want to use any of the Firebase services, because you
-already have your auth and APIs in place, you can set up a Firebase with FireCMS
+already have your auth and APIs in place, you can set up a Firebase with Rebase
 project just to manage your content.
 
-> We built FireCMS out of necessity.
+> We built Rebase out of necessity.
 
 
 If you are coming from a SQL background you will need to get used to de-normalising
@@ -63,7 +63,7 @@ For every Firebase project that we developed for a client we needed a way to
 manage their content, and provide a backend admin panel. So we built our own!
 
 After more than 2 years
-of development, FireCMS has gone from a simple app that would let us produce
+of development, Rebase has gone from a simple app that would let us produce
 some simple CRUD views over collections to a full-blown CMS that includes:
 
 - Detailed CRUD views for collections.
@@ -84,16 +84,16 @@ some simple CRUD views over collections to a full-blown CMS that includes:
 - Text search support.
 - Customisation the CMS based on the logged-in user.
 
-FireCMS offer more customization options than any other alternative, such as
+Rebase offer more customization options than any other alternative, such as
 Rowy or Flamelink. It even offers features that are not available in some well
 established CMS like WordPress or Strapi, like the inline editing.
 
 ## The future
 
 We keep on getting amazed on how you are finding innovative ways to use
-FireCMS and we want to make it easier for you to do so.
+Rebase and we want to make it easier for you to do so.
 
-We are already working on version 2 of FireCMS and are improving on almost every 
+We are already working on version 2 of Rebase and are improving on almost every 
 aspect of it:
 - Forms layouts and performance.
 - Internal and external APIS

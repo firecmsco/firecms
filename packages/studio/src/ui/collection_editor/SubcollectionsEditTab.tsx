@@ -6,7 +6,7 @@ import {
     resolveEntityView,
     useCustomizationController,
     User
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     AddIcon,
     Alert,
@@ -21,13 +21,13 @@ import {
     TableRow,
     Tooltip,
     Typography,
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { CollectionEditorDialog } from "./CollectionEditorDialog";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { CollectionInference } from "../../types/collection_inference";
 import { EntityCustomViewsSelectDialog } from "./EntityCustomViewsSelectDialog";
-import { useFormex } from "@firecms/formex";
+import { useFormex } from "@rebasepro/formex";
 
 export function SubcollectionsEditTab({
     collection,
@@ -136,7 +136,7 @@ export function SubcollectionsEditTab({
                         {totalEntityViews === 0 &&
                             <Alert action={<Button variant="text"
                                 size={"small"}
-                                href={"https://firecms.co/docs/cloud/quickstart"}
+                                href={"https://rebase.pro/docs/cloud/quickstart"}
                                 component={"a"}
                                 rel="noopener noreferrer"
                                 target="_blank">More info</Button>}>

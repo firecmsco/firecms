@@ -3,17 +3,17 @@ slug: "docs/api/functions/DrawerNavigationItem"
 title: "DrawerNavigationItem"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / DrawerNavigationItem
+[@rebasepro/core](../README) / DrawerNavigationItem
 
 # Function: DrawerNavigationItem()
 
 > **DrawerNavigationItem**(`__namedParameters`): `Element`
 
-Defined in: [core/DrawerNavigationItem.tsx:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/core/DrawerNavigationItem.tsx)
+Defined in: [core/DrawerNavigationItem.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/DrawerNavigationItem.tsx)
 
 ## Parameters
 

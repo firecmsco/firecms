@@ -1,16 +1,16 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { FireCMSApiClient } from "../api-client.js";
+import { RebaseApiClient } from "../api-client.js";
 
 /**
  * Register user management tools.
  */
-export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
+export function registerUserTools(server: McpServer, api: RebaseApiClient) {
 
     server.registerTool(
         "list_users",
         {
-            description: "List all users that have access to a FireCMS project, including their roles (admin, editor, viewer)",
+            description: "List all users that have access to a Rebase project, including their roles (admin, editor, viewer)",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
             },
@@ -28,7 +28,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "add_user",
         {
-            description: "Invite a new user to a FireCMS project. Sends an invitation email.",
+            description: "Invite a new user to a Rebase project. Sends an invitation email.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
                 email: z.string().email().describe("Email address of the user to invite"),
@@ -50,7 +50,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "update_user_roles",
         {
-            description: "Update the roles of an existing user in a FireCMS project",
+            description: "Update the roles of an existing user in a Rebase project",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
                 userId: z.string().describe("The user ID to update"),
@@ -72,7 +72,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "remove_user",
         {
-            description: "Remove a user from a FireCMS project, revoking their access",
+            description: "Remove a user from a Rebase project, revoking their access",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
                 userId: z.string().describe("The user ID to remove"),

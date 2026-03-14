@@ -46,7 +46,7 @@ The CI workflow (`.github/workflows/publish-canary.yml`) will:
 Install the latest canary with:
 
 ```bash
-npm install @firecms/core@canary
+npm install @rebasepro/core@canary
 ```
 
 > **Note:** If multiple pushes happen quickly to the same branch, earlier runs are automatically cancelled.
@@ -69,7 +69,7 @@ When the tag is pushed, the CI workflow (`.github/workflows/publish.yml`):
 Users can install pre-release versions using:
 
 ```bash
-npm install @firecms/core@pre
-npm install @firecms/core@next
-npm install @firecms/core@canary
+npm install @rebasepro/core@pre
+npm install @rebasepro/core@next
+npm install @rebasepro/core@canary
 ```

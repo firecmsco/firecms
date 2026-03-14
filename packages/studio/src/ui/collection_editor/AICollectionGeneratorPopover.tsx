@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { EntityCollection, useCollectionRegistryController, useSnackbarController, AIIcon } from "@firecms/core";
+import { EntityCollection, useCollectionRegistryController, useSnackbarController, AIIcon } from "@rebasepro/core";
 import {
     Button,
     CircularProgress,
@@ -9,7 +9,7 @@ import {
     TextField,
     Tooltip,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import {
     CollectionGenerationCallback,
     CollectionGenerationApiError,

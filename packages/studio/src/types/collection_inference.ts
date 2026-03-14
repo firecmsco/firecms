@@ -1,4 +1,4 @@
-import { EntityCollection, FilterValues } from "@firecms/core";
+import { EntityCollection, FilterValues } from "@rebasepro/core";
 
 /**
  * This function is used to infer the configuration of a collection given its path.

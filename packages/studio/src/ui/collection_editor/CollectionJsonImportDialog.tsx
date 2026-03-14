@@ -8,8 +8,8 @@ import {
     DialogContent,
     DialogTitle,
     Typography
-} from "@firecms/ui";
-import { EntityCollection } from "@firecms/core";
+} from "@rebasepro/ui";
+import { EntityCollection } from "@rebasepro/core";
 import { validateCollectionJson, CollectionValidationError } from "../../utils/validateCollectionJson";
 
 const EXAMPLE_JSON = `{

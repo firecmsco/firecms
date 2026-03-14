@@ -1,4 +1,4 @@
-import { EntityCollection, FireCMSContext, User } from "@firecms/core";
+import { EntityCollection, RebaseContext, User } from "@rebasepro/core";
 
 export type HistoryEntryMetadata<T> = {
     previous_values?: Partial<T>;
@@ -12,7 +12,7 @@ export type HistoryEntry<T> = Partial<T> & {
 };
 
 export interface NewHistoryEntryParams<T = any> {
-    context: FireCMSContext<User>;
+    context: RebaseContext<User>;
     previousValues?: Partial<T>;
     values: Partial<T>;
     path: string;

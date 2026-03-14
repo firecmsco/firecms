@@ -1,4 +1,4 @@
-import { buildCollection, buildEnumValues } from "@firecms/core";
+import { buildCollection, buildEnumValues } from "@rebasepro/core";
 
 const locales = buildEnumValues({
     "en-US": "English (United States)",

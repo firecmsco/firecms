@@ -3,17 +3,17 @@ slug: "docs/api/functions/plural"
 title: "plural"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / plural
+[@rebasepro/core](../README) / plural
 
 # Function: plural()
 
 > **plural**(`word`, `amount?`): `string`
 
-Defined in: [util/plurals.ts:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/plurals.ts)
+Defined in: [util/plurals.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/plurals.ts)
 
 Returns the plural of an English word.
 

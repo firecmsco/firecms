@@ -3,17 +3,17 @@ slug: "docs/api/functions/useBuildLocalConfigurationPersistence"
 title: "useBuildLocalConfigurationPersistence"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useBuildLocalConfigurationPersistence
+[@rebasepro/core](../README) / useBuildLocalConfigurationPersistence
 
 # Function: useBuildLocalConfigurationPersistence()
 
 > **useBuildLocalConfigurationPersistence**(): [`UserConfigurationPersistence`](../interfaces/UserConfigurationPersistence)
 
-Defined in: [hooks/useBuildLocalConfigurationPersistence.tsx:5](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildLocalConfigurationPersistence.tsx)
+Defined in: [hooks/useBuildLocalConfigurationPersistence.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useBuildLocalConfigurationPersistence.tsx)
 
 ## Returns
 

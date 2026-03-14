@@ -1,12 +1,12 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { FireCMSApiClient } from "../api-client.js";
+import { RebaseApiClient } from "../api-client.js";
 
 /**
  * Register Firestore document CRUD tools — the core CMS operations.
- * All operations go through the FireCMS backend (which has service account access to user projects).
+ * All operations go through the Rebase backend (which has service account access to user projects).
  */
-export function registerDocumentTools(server: McpServer, api: FireCMSApiClient) {
+export function registerDocumentTools(server: McpServer, api: RebaseApiClient) {
 
     // ─── 1. Read documents (list/query) ────────────────────
 

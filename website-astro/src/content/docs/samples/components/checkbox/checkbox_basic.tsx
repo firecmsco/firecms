@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Checkbox } from "@firecms/ui";
+import { Checkbox } from "@rebasepro/ui";
 
 export default function CheckboxBasicDemo() {
     const [checked, setChecked] = useState(true);

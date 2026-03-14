@@ -2,11 +2,11 @@
 slug: docs/properties/config/reference
 title: Reference
 sidebar_label: Reference
-description: Configuration for reference properties in FireCMS, linking entities to other collections with previews and filters.
+description: Configuration for reference properties in Rebase, linking entities to other collections with previews and filters.
 ---
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const productsReferenceProperty = buildProperty({
     name: "Product",
@@ -54,7 +54,7 @@ You can set the default value by defining an EntityReference:
 
 ```tsx
 
-import { buildProperty, EntityReference } from "@firecms/core";
+import { buildProperty, EntityReference } from "@rebasepro/core";
 
 const productsReferenceProperty = buildProperty({
     name: "Product",

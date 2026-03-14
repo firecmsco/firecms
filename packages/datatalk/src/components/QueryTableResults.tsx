@@ -17,12 +17,12 @@ import {
     useCustomizationController,
     useCollectionRegistryController,
     useSelectionController
-} from "@firecms/core";
-import { setIn } from "@firecms/formex";
-import { cmsToFirestoreModel, firestoreToCMSModel } from "@firecms/firebase";
-import { Typography } from "@firecms/ui";
-import { BasicExportAction } from "@firecms/data_export";
-import { buildPropertiesOrder, buildEntityPropertiesFromData, inferTypeFromValue } from "@firecms/schema_inference";
+} from "@rebasepro/core";
+import { setIn } from "@rebasepro/formex";
+import { cmsToFirestoreModel, firestoreToCMSModel } from "@rebasepro/firebase";
+import { Typography } from "@rebasepro/ui";
+import { BasicExportAction } from "@rebasepro/data_export";
+import { buildPropertiesOrder, buildEntityPropertiesFromData, inferTypeFromValue } from "@rebasepro/schema_inference";
 
 export function QueryTableResults({
     querySnapshot,

@@ -2,10 +2,10 @@
 slug: docs/properties/config/string
 title: String
 sidebar_label: String
-description: Configuration for string properties in FireCMS, including storage, markdown, enums, and validation options.
+description: Configuration for string properties in Rebase, including storage, markdown, enums, and validation options.
 ---
 
-The **string property** is the most versatile field type in FireCMS. Use it for everything from simple text inputs to file uploads, rich text editors, and dropdowns. When building an **admin panel** for your **Firebase** app, string properties let you create:
+The **string property** is the most versatile field type in Rebase. Use it for everything from simple text inputs to file uploads, rich text editors, and dropdowns. When building an **admin panel** for your **Firebase** app, string properties let you create:
 
 - **Text fields**: Names, titles, descriptions
 - **Select dropdowns**: Status fields, categories, options
@@ -14,7 +14,7 @@ The **string property** is the most versatile field type in FireCMS. Use it for 
 - **Email/URL fields**: Validated input types
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const nameProperty = buildProperty({
     name: "Name",
@@ -55,7 +55,7 @@ indicate that this string refers to a path in Google Cloud Storage.
   - `{entityId}` - ID of the entity
   - `{propertyKey}` - ID of this property
   - `{path}` - Path of this entity
-* `includeBucketUrl` When set to `true`, FireCMS will store a fully-qualified
+* `includeBucketUrl` When set to `true`, Rebase will store a fully-qualified
   storage URL instead of just the storage path.
   For Firebase Storage this is a `gs://...` URL, e.g.
   `gs://my-bucket/path/to/file.png`.
@@ -75,7 +75,7 @@ indicate that this string refers to a path in Google Cloud Storage.
 
 #### Images: resize/compress before upload
 
-FireCMS supports client-side image optimization before upload:
+Rebase supports client-side image optimization before upload:
 
 * `imageResize` (recommended) Advanced image resizing and cropping configuration.
   Only applied to images (`image/jpeg`, `image/png`, `image/webp`).
@@ -87,7 +87,7 @@ FireCMS supports client-side image optimization before upload:
 * `imageCompression` (deprecated) Legacy image resizing/compression.
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const imageProperty = buildProperty({
     dataType: "string",
@@ -119,7 +119,7 @@ to `true` to add a link, or one of the supported media types to render a
 preview.
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const amazonLinkProperty = buildProperty({
     dataType: "string",
@@ -131,7 +131,7 @@ const amazonLinkProperty = buildProperty({
 You can also define the preview type for the url: `image`, `video` or `audio`:
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const imageProperty = buildProperty({
     name: "Image",
@@ -147,7 +147,7 @@ rendered with an email-specific input. This is useful for contact forms,
 user profiles, or any field that should contain a valid email.
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const emailProperty = buildProperty({
     name: "Email",
@@ -165,7 +165,7 @@ You can also use a property builder to specify the user path dynamically
 based on other values of the entity.
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const assignedUserProperty = buildProperty({
     name: "Assigned User",
@@ -186,7 +186,7 @@ need to ensure the order of the elements, you can pass a `Map` instead of a
 plain object.
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const amazonLinkProperty = buildProperty({
     dataType: "string",
@@ -212,7 +212,7 @@ in a multiple line field. Defaults to false. If set to `true`, the number
 of lines adapts to the content.
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const property = buildProperty({
     name: "Description",
@@ -232,7 +232,7 @@ If `true`, the field is rendered as a text editors that supports markdown
 highlight syntax. It also includes a preview of the result.
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const property = buildProperty({
     dataType: "string",
@@ -246,7 +246,7 @@ const property = buildProperty({
 Should this string be rendered as a tag instead of just text.
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const property = buildProperty({
     name: "Tags",

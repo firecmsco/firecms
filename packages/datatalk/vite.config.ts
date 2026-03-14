@@ -14,7 +14,7 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS Editor",
+            name: "Rebase Editor",
             fileName: (format) => `index.${format}.js`
         },
         target: "ESNEXT",
@@ -43,15 +43,15 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            "@firecms/ui": path.resolve(__dirname, "../ui/src"),
-            "@firecms/core": path.resolve(__dirname, "../core/src"),
-            "@firecms/types": path.resolve(__dirname, "../types/src"),
-            "@firecms/firebase": path.resolve(__dirname, "../firebase_firecms/src"),
-            "@firecms/formex": path.resolve(__dirname, "../formex/src"),
-            "@firecms/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
-            "@firecms/data_import": path.resolve(__dirname, "../data_import/src"),
-            "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),
-            "@firecms/data_import_export": path.resolve(__dirname, "../data_import_export/src"),
+            "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
+            "@rebasepro/core": path.resolve(__dirname, "../core/src"),
+            "@rebasepro/types": path.resolve(__dirname, "../types/src"),
+            "@rebasepro/firebase": path.resolve(__dirname, "../firebase/src"),
+            "@rebasepro/formex": path.resolve(__dirname, "../formex/src"),
+            "@rebasepro/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
+            "@rebasepro/data_import": path.resolve(__dirname, "../data_import/src"),
+            "@rebasepro/data_export": path.resolve(__dirname, "../data_export/src"),
+            "@rebasepro/data_import_export": path.resolve(__dirname, "../data_import_export/src"),
         }
     },
     plugins: [

@@ -8,7 +8,7 @@ import {
     DialogContent,
     CloudUploadIcon,
     CircularProgress
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
 export interface MediaUploadDialogProps {
     open: boolean;

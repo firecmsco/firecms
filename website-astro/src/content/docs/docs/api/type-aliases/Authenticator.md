@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/Authenticator"
 title: "Authenticator"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / Authenticator
+[@rebasepro/core](../README) / Authenticator
 
 # Type Alias: Authenticator()\<USER\>
 
 > **Authenticator**\<`USER`\> = (`props`) => `boolean` \| `Promise`\<`boolean`\>
 
-Defined in: [types/auth.tsx:72](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/auth.tsx)
+Defined in: [types/auth.tsx:72](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
 
 Implement this function to allow access to specific users.
 

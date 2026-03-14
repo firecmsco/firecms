@@ -3,17 +3,17 @@ slug: "docs/api/functions/canEditEntity"
 title: "canEditEntity"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / canEditEntity
+[@rebasepro/core](../README) / canEditEntity
 
 # Function: canEditEntity()
 
 > **canEditEntity**\<`M`, `USER`\>(`collection`, `authController`, `path`, `entity`): `boolean`
 
-Defined in: [util/permissions.ts:37](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/permissions.ts)
+Defined in: [util/permissions.ts:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/permissions.ts)
 
 ## Type Parameters
 

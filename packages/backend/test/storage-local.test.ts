@@ -9,7 +9,7 @@ describe("LocalStorageController", () => {
 
     beforeEach(async () => {
         // Create a temporary directory for tests
-        tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "firecms-storage-test-"));
+        tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), "rebase-storage-test-"));
         controller = new LocalStorageController({
             basePath: tempDir
         });

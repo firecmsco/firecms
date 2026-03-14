@@ -3,17 +3,17 @@ slug: "docs/api/functions/canCreateEntity"
 title: "canCreateEntity"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / canCreateEntity
+[@rebasepro/core](../README) / canCreateEntity
 
 # Function: canCreateEntity()
 
 > **canCreateEntity**\<`M`, `USER`\>(`collection`, `authController`, `path`, `entity`): `boolean`
 
-Defined in: [util/permissions.ts:46](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/permissions.ts)
+Defined in: [util/permissions.ts:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/permissions.ts)
 
 ## Type Parameters
 

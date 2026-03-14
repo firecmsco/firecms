@@ -3,17 +3,17 @@ slug: "docs/api/functions/buildFieldConfig"
 title: "buildFieldConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / buildFieldConfig
+[@rebasepro/core](../README) / buildFieldConfig
 
 # Function: buildFieldConfig()
 
 > **buildFieldConfig**\<`T`\>(`propertyConfig`): [`PropertyConfig`](../type-aliases/PropertyConfig)\<`T`\>
 
-Defined in: [util/builders.ts:137](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/builders.ts)
+Defined in: [util/builders.ts:137](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/builders.ts)
 
 Identity function we use to defeat the type system of Typescript and build
 additional field delegates views with all its properties

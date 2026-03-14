@@ -1,8 +1,8 @@
 import { eq, SQL } from "drizzle-orm";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { EntityCollection, Properties, Property } from "@firecms/types";
-import { resolveCollectionRelations } from "@firecms/common";
+import { EntityCollection, Properties, Property } from "@rebasepro/types";
+import { resolveCollectionRelations } from "@rebasepro/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 import { DrizzleConditionBuilder } from "../utils/drizzle-conditions";
 import { getPrimaryKeys, buildCompositeId } from "./services/entity-helpers";

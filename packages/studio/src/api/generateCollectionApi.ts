@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/core";
+import { EntityCollection } from "@rebasepro/core";
 
 export interface GenerateCollectionRequest {
     /** User's natural language description of what they want */
@@ -48,7 +48,7 @@ export class CollectionGenerationApiError extends Error {
 /**
  * Default endpoint for AI collection generation
  */
-export const DEFAULT_COLLECTION_GENERATION_ENDPOINT = "https://api.firecms.co/collections/generate";
+export const DEFAULT_COLLECTION_GENERATION_ENDPOINT = "https://api.rebase.pro/collections/generate";
 
 /**
  * Props for building a collection generation callback
@@ -56,26 +56,26 @@ export const DEFAULT_COLLECTION_GENERATION_ENDPOINT = "https://api.firecms.co/co
 export interface BuildCollectionGenerationCallbackProps {
     /**
      * Function to get the auth token (e.g., from Firebase Auth)
-     * This is typically `authController.getAuthToken` from `@firecms/firebase`
+     * This is typically `authController.getAuthToken` from `@rebasepro/firebase`
      */
     getAuthToken: () => Promise<string>;
 
     /**
      * Optional custom API endpoint for collection generation.
-     * Defaults to the FireCMS SaaS API endpoint.
+     * Defaults to the Rebase SaaS API endpoint.
      */
     apiEndpoint?: string;
 }
 
 /**
  * Build a callback for AI collection generation.
- * This helper allows self-hosted FireCMS users to enable the AI collection
+ * This helper allows self-hosted Rebase users to enable the AI collection
  * generation feature.
  *
  * @example
  * ```typescript
- * import { useCollectionEditorPlugin, buildCollectionGenerationCallback } from "@firecms/collection_editor";
- * import { useFirebaseAuthController } from "@firecms/firebase";
+ * import { useCollectionEditorPlugin, buildCollectionGenerationCallback } from "@rebasepro/collection_editor";
+ * import { useFirebaseAuthController } from "@rebasepro/firebase";
  *
  * const authController = useFirebaseAuthController({ firebaseApp });
  *

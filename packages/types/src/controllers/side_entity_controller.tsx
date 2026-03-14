@@ -38,12 +38,12 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any> {
      * Collection representing the entities of this view.
      * If you leave it blank it will be induced by your navigation
      */
-    collection?: EntityCollection<M> ;
+    collection?: EntityCollection<M>;
 
     /**
      * Should update the URL when opening the dialog.
      * Consider that if the collection that you provide is not defined in the base
-     * config of your `FireCMS` component, you will not be able to recreate
+     * config of your `Rebase` component, you will not be able to recreate
      * the state if copying the URL to a different window.
      */
     updateUrl?: boolean;

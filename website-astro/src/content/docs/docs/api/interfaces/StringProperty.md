@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/StringProperty"
 title: "StringProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / StringProperty
+[@rebasepro/core](../README) / StringProperty
 
 # Interface: StringProperty
 
-Defined in: [types/properties.ts:355](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:355](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 ## Extends
 
@@ -23,7 +23,7 @@ Defined in: [types/properties.ts:355](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **clearable**: `boolean`
 
-Defined in: [types/properties.ts:425](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:425](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Add an icon to clear the value and set it to `null`. Defaults to `false`
 
@@ -33,7 +33,7 @@ Add an icon to clear the value and set it to `null`. Defaults to `false`
 
 > `optional` **columnWidth**: `number`
 
-Defined in: [types/properties.ts:101](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:101](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Width in pixels of this column in the collection view. If not set
 the width is inferred based on the other configurations
@@ -48,7 +48,7 @@ the width is inferred based on the other configurations
 
 > `optional` **customProps**: `any`
 
-Defined in: [types/properties.ts:148](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:148](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Additional props that are passed to the components defined in `field`
 or in `preview`.
@@ -63,7 +63,7 @@ or in `preview`.
 
 > **dataType**: `"string"`
 
-Defined in: [types/properties.ts:357](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:357](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Datatype of the property
 
@@ -77,7 +77,7 @@ Datatype of the property
 
 > `optional` **defaultValue**: `string` \| `null`
 
-Defined in: [types/properties.ts:153](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:153](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 This value will be set by default for new entities.
 
@@ -91,7 +91,7 @@ This value will be set by default for new entities.
 
 > `optional` **description**: `string`
 
-Defined in: [types/properties.ts:82](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Property description, always displayed under the field
 
@@ -105,7 +105,7 @@ Property description, always displayed under the field
 
 > `optional` **disabled**: `boolean` \| [`PropertyDisabledConfig`](PropertyDisabledConfig)
 
-Defined in: [types/properties.ts:121](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:121](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Is this field disabled.
 When set to true, it gets rendered as a
@@ -123,7 +123,7 @@ disabled or hide the field completely)
 
 > `optional` **editable**: `boolean`
 
-Defined in: [types/properties.ts:159](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:159](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Should this property be editable. If set to true, the user will be able to modify the property and
 save the new config. The saved config will then become the source of truth.
@@ -138,7 +138,7 @@ save the new config. The saved config will then become the source of truth.
 
 > `optional` **email**: `boolean`
 
-Defined in: [types/properties.ts:410](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:410](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Does this field include an email
 
@@ -148,7 +148,7 @@ Does this field include an email
 
 > `optional` **enumValues**: [`EnumValues`](../type-aliases/EnumValues)
 
-Defined in: [types/properties.ts:383](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:383](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 You can use the enum values providing a map of possible
 exclusive values the property can take, mapped to the label that it is
@@ -164,7 +164,7 @@ a `Map` instead of a plain object.
 
 > `optional` **Field**: `ComponentType`\<[`FieldProps`](FieldProps)\<`string`, `any`, `any`\>\>
 
-Defined in: [types/properties.ts:135](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:135](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 If you need to render a custom field, you can create a component that
 takes `FieldProps` as props. You receive the value, a function to
@@ -182,7 +182,7 @@ in the component.
 
 > `optional` **hideFromCollection**: `boolean`
 
-Defined in: [types/properties.ts:106](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:106](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Do not show this property in the collection view
 
@@ -196,7 +196,7 @@ Do not show this property in the collection view
 
 > `optional` **longDescription**: `string`
 
-Defined in: [types/properties.ts:95](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:95](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Longer description of a field, displayed under a popover
 
@@ -210,7 +210,7 @@ Longer description of a field, displayed under a popover
 
 > `optional` **markdown**: `boolean`
 
-Defined in: [types/properties.ts:371](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:371](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Should this string property be displayed as a markdown field. If true,
 the field is rendered as a text editors that supports markdown highlight
@@ -222,7 +222,7 @@ syntax. It also includes a preview of the result.
 
 > `optional` **multiline**: `boolean`
 
-Defined in: [types/properties.ts:364](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:364](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Is this string property long enough so it should be displayed in
 a multiple line field. Defaults to false. If set to true,
@@ -234,7 +234,7 @@ the number of lines adapts to the content
 
 > `optional` **name**: `string`
 
-Defined in: [types/properties.ts:77](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:77](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Property name (e.g. Product)
 
@@ -248,7 +248,7 @@ Property name (e.g. Product)
 
 > `optional` **Preview**: `ComponentType`\<[`PropertyPreviewProps`](PropertyPreviewProps)\<`string`, `any`\>\>
 
-Defined in: [types/properties.ts:142](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:142](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Configure how a property is displayed as a preview, e.g. in the collection
 view. You can customize it by passing custom props that are received
@@ -264,7 +264,7 @@ in the component.
 
 > `optional` **previewAsTag**: `boolean`
 
-Defined in: [types/properties.ts:415](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:415](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Should this string be rendered as a tag instead of just text.
 
@@ -274,7 +274,7 @@ Should this string be rendered as a tag instead of just text.
 
 > `optional` **propertyConfig**: `string`
 
-Defined in: [types/properties.ts:90](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:90](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 You can use this prop to reuse a property that has been defined
 in the top level of the CMS in the prop `fields`.
@@ -291,7 +291,7 @@ overwritten by the current property config.
 
 > `optional` **readOnly**: `boolean`
 
-Defined in: [types/properties.ts:112](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:112](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Is this a read only property. When set to true, it gets rendered as a
 preview.
@@ -306,7 +306,7 @@ preview.
 
 > `optional` **reference**: [`ReferenceProperty`](ReferenceProperty)
 
-Defined in: [types/properties.ts:433](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:433](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 You can use this property (a string) to behave as a reference to another
 collection. The stored value is the ID of the entity in the
@@ -319,7 +319,7 @@ define the collection this reference points to.
 
 > `optional` **storage**: [`StorageConfig`](../type-aliases/StorageConfig)
 
-Defined in: [types/properties.ts:389](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:389](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 You can specify a `Storage` configuration. It is used to
 indicate that this string refers to a path in your storage provider.
@@ -330,7 +330,7 @@ indicate that this string refers to a path in your storage provider.
 
 > `optional` **url**: `boolean` \| [`PreviewType`](../type-aliases/PreviewType)
 
-Defined in: [types/properties.ts:405](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:405](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 If the value of this property is a URL, you can set this flag to true
 to add a link, or one of the supported media types to render a preview
@@ -341,7 +341,7 @@ to add a link, or one of the supported media types to render a preview
 
 > `optional` **userSelect**: `boolean`
 
-Defined in: [types/properties.ts:399](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:399](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 This property is used to indicate that the string is a user ID, and
 it will be rendered as a user picker.
@@ -356,7 +356,7 @@ based on other values of the entity.
 
 > `optional` **validation**: [`StringPropertyValidationSchema`](StringPropertyValidationSchema)
 
-Defined in: [types/properties.ts:420](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:420](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Rules for validating this property
 
@@ -370,7 +370,7 @@ Rules for validating this property
 
 > `optional` **widthPercentage**: `number`
 
-Defined in: [types/properties.ts:165](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:165](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 A number between 0 and 100 that indicates the width of the field in the form view.
 It defaults to 100, but you can set it to 50 to have two fields in the same row.

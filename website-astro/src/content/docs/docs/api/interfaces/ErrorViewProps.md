@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/ErrorViewProps"
 title: "ErrorViewProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ErrorViewProps
+[@rebasepro/core](../README) / ErrorViewProps
 
 # Interface: ErrorViewProps
 
-Defined in: [components/ErrorView.tsx:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ErrorView.tsx)
+Defined in: [components/ErrorView.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [components/ErrorView.tsx:8](https://github.com/firecmsco/firecms/bl
 
 > **error**: `string` \| `ReactElement`\<`any`, `string` \| `JSXElementConstructor`\<`any`\>\> \| `Error`
 
-Defined in: [components/ErrorView.tsx:10](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ErrorView.tsx)
+Defined in: [components/ErrorView.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [components/ErrorView.tsx:10](https://github.com/firecmsco/firecms/b
 
 > `optional` **title**: `string`
 
-Defined in: [components/ErrorView.tsx:9](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ErrorView.tsx)
+Defined in: [components/ErrorView.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
 
 ***
 
@@ -35,4 +35,4 @@ Defined in: [components/ErrorView.tsx:9](https://github.com/firecmsco/firecms/bl
 
 > `optional` **tooltip**: `string`
 
-Defined in: [components/ErrorView.tsx:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ErrorView.tsx)
+Defined in: [components/ErrorView.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorView.tsx)

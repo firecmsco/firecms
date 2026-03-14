@@ -5,7 +5,7 @@
         "serve": "npm run build && firebase serve --only functions",
         "shell": "npm run build && firebase functions:shell",
         "start": "npm run shell",
-        "deploy": "tsc && firebase deploy --only functions --project=firecms-demo-27150",
+        "deploy": "tsc && firebase deploy --only functions --project=rebase-demo-27150",
         "logs": "firebase functions:log"
     },
     "engines": {

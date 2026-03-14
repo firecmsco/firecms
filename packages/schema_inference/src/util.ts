@@ -1,4 +1,4 @@
-import { EnumValueConfig, EnumValues } from "@firecms/types";
+import { EnumValueConfig, EnumValues } from "@rebasepro/types";
 
 export function extractEnumFromValues(values: unknown[]) {
     if (!Array.isArray(values)) {
@@ -60,12 +60,12 @@ export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefi
         return input as EnumValueConfig[];
     } else if (typeof input === "object" && input !== null) {
         return Object.entries(input).map(([id, value]) =>
-            (typeof value === "string"
-                ? {
-                    id,
-                    label: value
-                }
-                : value));
+        (typeof value === "string"
+            ? {
+                id,
+                label: value
+            }
+            : value));
     } else {
         return undefined;
     }

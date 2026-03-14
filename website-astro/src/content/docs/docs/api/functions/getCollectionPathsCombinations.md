@@ -3,17 +3,17 @@ slug: "docs/api/functions/getCollectionPathsCombinations"
 title: "getCollectionPathsCombinations"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getCollectionPathsCombinations
+[@rebasepro/core](../README) / getCollectionPathsCombinations
 
 # Function: getCollectionPathsCombinations()
 
 > **getCollectionPathsCombinations**(`subpaths`): `string`[]
 
-Defined in: [util/navigation\_utils.ts:162](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/navigation_utils.ts)
+Defined in: [util/navigation\_utils.ts:162](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/navigation_utils.ts)
 
 Get the subcollection combinations from a path:
 "sites/es/locales" => ["sites/es/locales", "sites"]

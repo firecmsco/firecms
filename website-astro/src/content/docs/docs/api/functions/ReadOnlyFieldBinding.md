@@ -3,17 +3,17 @@ slug: "docs/api/functions/ReadOnlyFieldBinding"
 title: "ReadOnlyFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ReadOnlyFieldBinding
+[@rebasepro/core](../README) / ReadOnlyFieldBinding
 
 # Function: ReadOnlyFieldBinding()
 
 > **ReadOnlyFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/ReadOnlyFieldBinding.tsx:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/ReadOnlyFieldBinding.tsx)
+Defined in: [form/field\_bindings/ReadOnlyFieldBinding.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/ReadOnlyFieldBinding.tsx)
 
 Simply render the non-editable preview of a field
 

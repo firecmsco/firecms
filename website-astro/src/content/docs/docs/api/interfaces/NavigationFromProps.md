@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/NavigationFromProps"
 title: "NavigationFromProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / NavigationFromProps
+[@rebasepro/core](../README) / NavigationFromProps
 
 # Interface: NavigationFromProps
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:110](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:110](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ## Properties
 
@@ -19,4 +19,4 @@ Defined in: [hooks/useResolvedNavigationFrom.tsx:110](https://github.com/firecms
 
 > **path**: `string`
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:111](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:111](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)

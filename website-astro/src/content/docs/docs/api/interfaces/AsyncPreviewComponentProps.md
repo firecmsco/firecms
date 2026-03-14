@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/AsyncPreviewComponentProps"
 title: "AsyncPreviewComponentProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / AsyncPreviewComponentProps
+[@rebasepro/core](../README) / AsyncPreviewComponentProps
 
 # Interface: AsyncPreviewComponentProps
 
-Defined in: [preview/components/AsyncPreviewComponent.tsx:5](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/AsyncPreviewComponent.tsx)
+Defined in: [preview/components/AsyncPreviewComponent.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/AsyncPreviewComponent.tsx)
 
 ## Properties
 
@@ -19,4 +19,4 @@ Defined in: [preview/components/AsyncPreviewComponent.tsx:5](https://github.com/
 
 > **builder**: `Promise`\<`ReactNode`\>
 
-Defined in: [preview/components/AsyncPreviewComponent.tsx:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/AsyncPreviewComponent.tsx)
+Defined in: [preview/components/AsyncPreviewComponent.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/AsyncPreviewComponent.tsx)

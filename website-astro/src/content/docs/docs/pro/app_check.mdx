@@ -1,14 +1,14 @@
 ---
 slug: docs/pro/app_check
 title: App Check
-description: Integrate Firebase App Check with FireCMS to protect your backend from abuse using reCAPTCHA providers.
+description: Integrate Firebase App Check with Rebase to protect your backend from abuse using reCAPTCHA providers.
 ---
 
 You can integrate Firebase App Check with your app to protect your backend resources from abuse, such as billing fraud
 or phishing. Firebase App Check works alongside other Firebase services, such as Firebase Authentication,
 to help secure your backend resources.
 
-FireCMS provides a simple way to integrate Firebase App Check with your app.
+Rebase provides a simple way to integrate Firebase App Check with your app.
 
 :::important
 Remember to add the domain where you will be deploying your app to the list of allowed domains in AppCheck provider
@@ -41,7 +41,7 @@ Returns an object that includes:
 ### Example
 
 ```tsx
-import {useAppCheck} from "@firecms/firebase";
+import {useAppCheck} from "@rebasepro/firebase";
 import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
 
 const {
@@ -68,11 +68,11 @@ In order to set up the ReCaptchaEnterpriseProvider, you need to create a new reC
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
 
 :::important
-Make sure you have added the domain `app.firecms.co` to the list of allowed domains in the reCAPTCHA Enterprise console.
+Make sure you have added the domain `app.rebase.pro` to the list of allowed domains in the reCAPTCHA Enterprise console.
 :::
 
 ```tsx
-import {useAppCheck} from "@firecms/firebase";
+import {useAppCheck} from "@rebasepro/firebase";
 import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
 
 const {
@@ -93,7 +93,7 @@ In order to set up the ReCaptchaV3Provider, you need to create a new reCAPTCHA v
 Follow the instructions in the [Firebase documentation](https://firebase.google.com/docs/app-check/web/recaptcha-provider).
 
 ```tsx
-import {useAppCheck} from "@firecms/firebase";
+import {useAppCheck} from "@rebasepro/firebase";
 import {ReCaptchaV3Provider} from "@firebase/app-check";
 
 const {

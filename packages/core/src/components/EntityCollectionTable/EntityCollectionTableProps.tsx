@@ -1,0 +1,180 @@
+import React from "react";
+import {
+    AdditionalFieldDelegate,
+    CollectionSize,
+    Entity,
+    EntityTableController,
+    FilterValues, Properties,
+    Property,
+    SelectionController,
+    User
+} from "@rebasepro/types";
+import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from "../common/types";
+import { VirtualTableColumn } from "../VirtualTable";
+
+/**
+ * @group Collection components
+ */
+export type EntityCollectionTableProps<M extends Record<string, any>,
+    USER extends User = User> = {
+
+        className?: string;
+
+        style?: React.CSSProperties;
+
+        /**
+         * Display these entities as selected
+         */
+        selectionController: SelectionController<M>;
+
+        /**
+         * List of entities that will be displayed as selected;
+         */
+        highlightedEntities?: Entity<M>[];
+
+        /**
+         * Override the title in the toolbar
+         */
+        title?: React.ReactNode;
+
+        /**
+         * Additional component that renders actions such as buttons in the
+         * collection toolbar, displayed on the left side
+         */
+        actionsStart?: React.ReactNode;
+
+        /**
+         * Callback when a cell value changes.
+         */
+        onValueChange?: OnCellValueChange<any, M>;
+
+        uniqueFieldValidator?: UniqueFieldValidator;
+
+        /**
+         * Builder for creating the buttons in each row
+         * @param entity
+         * @param size
+         */
+        tableRowActionsBuilder?: (params: {
+            entity: Entity<M>,
+            size: CollectionSize,
+            width: number,
+            frozen?: boolean
+        }) => React.ReactNode;
+
+        /**
+         * Callback when anywhere on the table is clicked
+         */
+        onEntityClick?(entity: Entity<M>): void;
+
+        /**
+         * Callback when a column is resized
+         */
+        onColumnResize?(params: OnColumnResizeParams): void;
+
+        /**
+         * Initial scroll position
+         */
+        initialScroll?: number;
+
+        /**
+         * Callback when the table is scrolled
+         * @param props
+         */
+        onScroll?: (props: {
+            scrollDirection: "forward" | "backward",
+            scrollOffset: number,
+            scrollUpdateWasRequested: boolean
+        }) => void;
+
+        /**
+         * Callback when the selected size of the table is changed
+         */
+        onSizeChanged?(size: CollectionSize): void;
+
+        /**
+         * Should apply a different style to a row when hovering
+         */
+        hoverRow?: boolean;
+
+        /**
+         * Additional component that renders actions such as buttons in the
+         * collection toolbar, displayed on the right side
+         */
+        actions?: React.ReactNode;
+
+        /**
+         * View mode toggle button, positioned left of the search bar.
+         */
+        viewModeToggle?: React.ReactNode;
+
+        /**
+         * Controller holding the logic for the table
+         * {@link useDataSourceTableController}
+         * {@link EntityTableController}
+         */
+        tableController: EntityTableController<M>;
+
+        displayedColumnIds?: PropertyColumnConfig[];
+
+        forceFilter?: FilterValues<Extract<keyof M, string>>;
+
+        inlineEditing?: boolean;
+
+        additionalFields?: AdditionalFieldDelegate<M, USER>[];
+
+        defaultSize?: CollectionSize;
+
+        properties: Properties;
+
+        getPropertyFor?: (props: GetPropertyForProps<M>) => Property | null;
+
+        filterable?: boolean;
+
+        sortable?: boolean;
+
+        endAdornment?: React.ReactNode;
+
+        AdditionalHeaderWidget?: React.ComponentType<{
+            property: Property,
+            propertyKey: string,
+            onHover: boolean,
+        }>;
+
+        AddColumnComponent?: React.ComponentType;
+
+        additionalIDHeaderWidget?: React.ReactNode;
+
+        emptyComponent?: React.ReactNode;
+
+        getIdColumnWidth?: () => number;
+
+        onTextSearchClick?: () => void;
+
+        textSearchLoading?: boolean;
+
+        enablePopupIcon: boolean;
+
+        openEntityMode?: "side_panel" | "full_screen";
+
+        /**
+         * Callback when columns are reordered via drag-and-drop
+         */
+        onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
+
+        /**
+         * If true, the internal toolbar will not be rendered.
+         * Used when the parent component renders its own toolbar.
+         */
+        hideToolbar?: boolean;
+    };
+
+export type GetPropertyForProps<M extends Record<string, any>> = {
+    propertyKey: string,
+    entity: Entity<M>
+};
+
+export type PropertyColumnConfig = {
+    key: string,
+    disabled?: boolean,
+};

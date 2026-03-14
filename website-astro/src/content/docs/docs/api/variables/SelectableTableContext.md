@@ -3,14 +3,14 @@ slug: "docs/api/variables/SelectableTableContext"
 title: "SelectableTableContext"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SelectableTableContext
+[@rebasepro/core](../README) / SelectableTableContext
 
 # Variable: SelectableTableContext
 
 > `const` **SelectableTableContext**: `Context`\<[`EntityCollectionTableController`](../type-aliases/EntityCollectionTableController)\<`any`\>\>
 
-Defined in: [components/SelectableTable/SelectableTableContext.tsx:4](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SelectableTable/SelectableTableContext.tsx)
+Defined in: [components/SelectableTable/SelectableTableContext.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SelectableTable/SelectableTableContext.tsx)

@@ -3,17 +3,17 @@ slug: "docs/api/functions/isReferenceProperty"
 title: "isReferenceProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / isReferenceProperty
+[@rebasepro/core](../README) / isReferenceProperty
 
 # Function: isReferenceProperty()
 
 > **isReferenceProperty**(`authController`, `propertyOrBuilder`, `fields`): `boolean` \| `null`
 
-Defined in: [util/property\_utils.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/property_utils.tsx)
+Defined in: [util/property\_utils.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
 
 ## Parameters
 

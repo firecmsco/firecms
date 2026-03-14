@@ -1,12 +1,12 @@
 ---
 slug: docs/pro/user_management
 title: User Management
-description: Add role-based access control to your Firebase admin panel with the FireCMS User Management plugin. Manage users, roles, and permissions in Firestore.
+description: Add role-based access control to your Firebase admin panel with the Rebase User Management plugin. Manage users, roles, and permissions in Firestore.
 ---
 
 ![user_management.png](/img/user_management.png)
 
-Control who can access your **Firebase admin panel** and what they can do. The User Management Plugin provides a complete **role-based access control (RBAC)** system for your FireCMS project.
+Control who can access your **Firebase admin panel** and what they can do. The User Management Plugin provides a complete **role-based access control (RBAC)** system for your Rebase project.
 
 :::tip Why use the User Management Plugin?
 Building authentication and permissions from scratch is time-consuming and error-prone. This plugin gives you:
@@ -20,10 +20,10 @@ Building authentication and permissions from scratch is time-consuming and error
 ## Installation
 
 First, ensure you have installed the necessary dependencies.
-To use the plugin, you need to have FireCMS and Firebase set up in your project.
+To use the plugin, you need to have Rebase and Firebase set up in your project.
 
 ```sh
-yarn add @firecms/user_management
+yarn add @rebasepro/user_management
 ```
 
 
@@ -31,7 +31,7 @@ yarn add @firecms/user_management
 
 The plugin requires several configurations, including paths for storing user and role data.
 
-The default config of the plugin will be saved to your database under the path `__FIRECMS/config`,
+The default config of the plugin will be saved to your database under the path `__REBASE/config`,
 but you can customize this path as needed.
 
 If you are using Firestore, make sure to set up the Firestore rules to allow the plugin to read and write to the specified paths.
@@ -39,12 +39,12 @@ We suggest adding these rules to your Firestore security rules, which will allow
 
 ```
 match /{document=**} {
-  allow read: if isFireCMSUser();
-  allow write: if isFireCMSUser();
+  allow read: if isRebaseUser();
+  allow write: if isRebaseUser();
 }
 
-function isFireCMSUser(){
-  return exists(/databases/$(database)/documents/__FIRECMS/config/users/$(request.auth.token.email));
+function isRebaseUser(){
+  return exists(/databases/$(database)/documents/__REBASE/config/users/$(request.auth.token.email));
 }
 ```
 
@@ -54,8 +54,8 @@ function isFireCMSUser(){
 Below are the parameters you can configure:
 
 - **firebaseApp**: The Firebase app to use for user management.
-- **usersPath**: Path in Firestore where user configurations are stored. Default is `__FIRECMS/config/users`.
-- **rolesPath**: Path in Firestore where role configurations are stored. Default is `__FIRECMS/config/roles`.
+- **usersPath**: Path in Firestore where user configurations are stored. Default is `__REBASE/config/users`.
+- **rolesPath**: Path in Firestore where role configurations are stored. Default is `__REBASE/config/roles`.
 - **allowDefaultRolesCreation**: If there are no roles in the database, show a button to create default roles. Default is `true`.
 
 ### Hook Usage
@@ -64,28 +64,28 @@ The main hook to initialize the plugin's functionality is `useBuildUserManagemen
 
 ```jsx
 
-import {useBuildUserManagement} from "@firecms/user_management";
+import {useBuildUserManagement} from "@rebasepro/user_management";
 
 const userManagement = useBuildUserManagement({
     dataSource: firestoreDelegate,
-    usersPath: "__FIRECMS/config/users",
-    rolesPath: "__FIRECMS/config/roles",
+    usersPath: "__REBASE/config/users",
+    rolesPath: "__REBASE/config/roles",
     allowDefaultRolesCreation: true,
 });
 ```
 
 ## Setting up the Plugin
 
-To integrate the user management into FireCMS, use the `useUserManagementPlugin` function and pass the
-resulting plugin into the FireCMS configuration. You will usually want to do this in your main App component.
+To integrate the user management into Rebase, use the `useUserManagementPlugin` function and pass the
+resulting plugin into the Rebase configuration. You will usually want to do this in your main App component.
 
 
 ### Example Configuration
 
 ```jsx
-import {FireCMS} from "@firecms/core";
+import {Rebase} from "@rebasepro/core";
 
-import {useBuildUserManagement, useUserManagementPlugin, userManagementAdminViews} from "@firecms/user_management";
+import {useBuildUserManagement, useUserManagementPlugin, userManagementAdminViews} from "@rebasepro/user_management";
 
 function App() {
 
@@ -95,8 +95,8 @@ function App() {
 
     const userManagement = useBuildUserManagement({
         dataSource: firestoreDelegate,
-        usersPath: "__FIRECMS/config/users",
-        rolesPath: "__FIRECMS/config/roles",
+        usersPath: "__REBASE/config/users",
+        rolesPath: "__REBASE/config/roles",
         allowDefaultRolesCreation: true,
         includeCollectionConfigPermissions: true,
     });
@@ -127,7 +127,7 @@ function App() {
 
   return (
       // ..components and providers
-    <FireCMS
+    <Rebase
         // ...other configurations
         navigationController={navigationController}
     />
@@ -139,12 +139,12 @@ export default App;
 
 ## Adding the user management views
 
-Besides the plugin, you will need to add the user management views to your FireCMS project.
-They are exported as an array from the `@firecms/user_management` package.
+Besides the plugin, you will need to add the user management views to your Rebase project.
+They are exported as an array from the `@rebasepro/user_management` package.
 You can add them to your `useBuildNavigationController` hook configuration, in the `adminViews` array.
 
 ```jsx
-import {userManagementAdminViews} from "@firecms/user_management";
+import {userManagementAdminViews} from "@rebasepro/user_management";
 
 const navigationController = useBuildNavigationController({
     collections,
@@ -187,7 +187,7 @@ user can perform based on their roles and the collection configuration.
 The permissions will be based on your users and roles configuration in Firestore.
 
 You can pass this function to the `useBuildNavigationController` hook to integrate collection
-permissions into your FireCMS project.
+permissions into your Rebase project.
 
 Note that if you apply permissions to a collection,they will override the permissions set in the collection configuration.
 

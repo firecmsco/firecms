@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/PluginGenericProps"
 title: "PluginGenericProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PluginGenericProps
+[@rebasepro/core](../README) / PluginGenericProps
 
 # Interface: PluginGenericProps\<USER\>
 
-Defined in: [types/plugins.tsx:254](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:254](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
 
 ## Type Parameters
 
@@ -23,6 +23,6 @@ Defined in: [types/plugins.tsx:254](https://github.com/firecmsco/firecms/blob/ma
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+> **context**: [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
-Defined in: [types/plugins.tsx:255](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/plugins.tsx)
+Defined in: [types/plugins.tsx:255](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)

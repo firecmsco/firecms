@@ -2,8 +2,8 @@ Business Source License 1.1
 
 Parameters
 
-Licensor:             Firecms S.L.
-Licensed Work:        Firecms CMS packages:
+Licensor:             Rebase S.L.
+Licensed Work:        Rebase CMS packages:
                       cli
                       collection_editor
                       collection_editor_firebase
@@ -11,11 +11,11 @@ Licensed Work:        Firecms CMS packages:
                       data_export
                       data_export
                       editor
-                      firecms_cloud
+                      rebase_cloud
                       schema_inference
                       user_management
 
-                      The Licensed Work is (c) 2024 Firecms S.L
+                      The Licensed Work is (c) 2024 Rebase S.L
 Additional Use Grant: You may make use of the Licensed Work, provided that
                       you may not use the Licensed Work for a CMS Data Enhancement
                       Service.
@@ -31,7 +31,7 @@ Change Date:         Four years from the date the Licensed Work is published.
 Change License:      MIT
 
 For information about alternative licensing arrangements for the Software,
-please visit: https://firecms.co
+please visit: https://rebase.pro
 
 Notice
 

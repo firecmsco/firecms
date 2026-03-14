@@ -13,7 +13,7 @@ To enable this widget, simply set the `dataType` to `map`, and the `keyValue` pr
 to `true`.
 
 ```typescript jsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 buildProperty({
     dataType: "map",

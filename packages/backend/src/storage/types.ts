@@ -1,8 +1,8 @@
 /**
- * Storage configuration and types for FireCMS backend
+ * Storage configuration and types for Rebase backend
  */
 
-import { StorageSource, UploadFileProps, UploadFileResult, DownloadConfig, StorageListResult, StorageReference } from "@firecms/types";
+import { StorageSource, UploadFileProps, UploadFileResult, DownloadConfig, StorageListResult, StorageReference } from "@rebasepro/types";
 
 /**
  * Local filesystem storage configuration

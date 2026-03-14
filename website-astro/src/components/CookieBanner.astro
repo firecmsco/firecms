@@ -99,9 +99,9 @@
 
         // Helper to set cookie on root domain
         function setConsentCookie(value) {
-            // Set cookie for 1 year on the root domain (.firecms.co)
+            // Set cookie for 1 year on the root domain (.rebase.pro)
             const maxAge = 365 * 24 * 60 * 60;
-            const domain = window.location.hostname.includes('firecms.co') ? '; domain=.firecms.co' : '';
+            const domain = window.location.hostname.includes('rebase.pro') ? '; domain=.rebase.pro' : '';
             document.cookie = `cookie-consent=${value}; path=/; max-age=${maxAge}${domain}; samesite=lax; secure`;
         }
 

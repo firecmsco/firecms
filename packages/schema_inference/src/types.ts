@@ -1,4 +1,4 @@
-import { DataType } from "@firecms/types";
+import { DataType } from "@rebasepro/types";
 
 export type TypesCount = {
     number?: number,

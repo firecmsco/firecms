@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty } from "@firecms/core";
+import { buildCollection, buildProperty } from "@rebasepro/core";
 
 // This is a demo collection with many of the available properties
 export const demoCollection = buildCollection({

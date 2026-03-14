@@ -17,7 +17,7 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS Backend",
+            name: "Rebase Backend",
             fileName: (format) => `index.${format}.js`
         },
         target: "ESNEXT",
@@ -29,8 +29,8 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            "@firecms/types": path.resolve(__dirname, "../types/src"),
-            "@firecms/common": path.resolve(__dirname, "../common/src")
+            "@rebasepro/types": path.resolve(__dirname, "../types/src"),
+            "@rebasepro/common": path.resolve(__dirname, "../common/src")
         }
     },
     plugins: [

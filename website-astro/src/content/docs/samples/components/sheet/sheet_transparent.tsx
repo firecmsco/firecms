@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Sheet } from "@firecms/ui";
+import { Sheet } from "@rebasepro/ui";
 
 export default function SheetTransparentDemo() {
     const [open, setOpen] = useState(false);

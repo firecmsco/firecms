@@ -3,17 +3,17 @@ slug: "docs/api/functions/EntityCollectionRowActions"
 title: "EntityCollectionRowActions"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionRowActions
+[@rebasepro/core](../README) / EntityCollectionRowActions
 
 # Function: EntityCollectionRowActions()
 
 > **EntityCollectionRowActions**(`entity`): `Element`
 
-Defined in: [components/EntityCollectionTable/EntityCollectionRowActions.tsx:33](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/EntityCollectionRowActions.tsx)
+Defined in: [components/EntityCollectionTable/EntityCollectionRowActions.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionRowActions.tsx)
 
 ## Parameters
 

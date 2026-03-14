@@ -3,17 +3,17 @@ slug: "docs/api/functions/SmallNavigationCard"
 title: "SmallNavigationCard"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SmallNavigationCard
+[@rebasepro/core](../README) / SmallNavigationCard
 
 # Function: SmallNavigationCard()
 
 > **SmallNavigationCard**(`__namedParameters`): `Element`
 
-Defined in: [components/HomePage/SmallNavigationCard.tsx:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/HomePage/SmallNavigationCard.tsx)
+Defined in: [components/HomePage/SmallNavigationCard.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/SmallNavigationCard.tsx)
 
 ## Parameters
 

@@ -1,7 +1,7 @@
-import { DataSource, User, EntityCollection } from "@firecms/types";
+import { DataSource, User, EntityCollection } from "@rebasepro/types";
 import { Request } from "express";
 
-export interface FireCMSRequest extends Request {
+export interface RebaseRequest extends Request {
     user?: User;
     dataSource?: DataSource;
 }
@@ -24,7 +24,7 @@ export interface ApiConfig {
     auth?: {
         enabled: boolean;
         requireAuth?: boolean;
-        validator?: (req: FireCMSRequest) => Promise<AuthResult>;
+        validator?: (req: RebaseRequest) => Promise<AuthResult>;
     };
     pagination?: {
         defaultLimit: number;

@@ -1,5 +1,5 @@
 import request from "supertest";
-import { FireCMSApiServer } from "../../src/api/server";
+import { RebaseApiServer } from "../../src/api/server";
 
 // Wait, the createHandler is mocked out globally in some tests, but for GraphQL E2E we actually want to test the GraphQL engine.
 // Actually, jest.mock is usually on a per-file basis unless it's in a setup file. We won't mock graphql-http here.
@@ -9,7 +9,7 @@ jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next())
 describe("GraphQL E2E Tests", () => {
     let mockDataSource: any;
     let mockCollections: any[];
-    let server: FireCMSApiServer;
+    let server: RebaseApiServer;
     let app: any;
 
     beforeEach(async () => {
@@ -48,7 +48,7 @@ describe("GraphQL E2E Tests", () => {
             deleteEntity: jest.fn().mockResolvedValue(true)
         };
 
-        server = await FireCMSApiServer.create({
+        server = await RebaseApiServer.create({
             dataSource: mockDataSource as any,
             collections: mockCollections,
             enableGraphQL: true,

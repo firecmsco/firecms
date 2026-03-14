@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/EnumValuesChipProps"
 title: "EnumValuesChipProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EnumValuesChipProps
+[@rebasepro/core](../README) / EnumValuesChipProps
 
 # Interface: EnumValuesChipProps
 
-Defined in: [preview/components/EnumValuesChip.tsx:6](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [preview/components/EnumValuesChip.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [preview/components/EnumValuesChip.tsx:6](https://github.com/firecms
 
 > `optional` **children**: `ReactNode`
 
-Defined in: [preview/components/EnumValuesChip.tsx:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [preview/components/EnumValuesChip.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [preview/components/EnumValuesChip.tsx:11](https://github.com/firecm
 
 > `optional` **className**: `string`
 
-Defined in: [preview/components/EnumValuesChip.tsx:10](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [preview/components/EnumValuesChip.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [preview/components/EnumValuesChip.tsx:10](https://github.com/firecm
 
 > **enumKey**: `string` \| `number`
 
-Defined in: [preview/components/EnumValuesChip.tsx:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [preview/components/EnumValuesChip.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [preview/components/EnumValuesChip.tsx:8](https://github.com/firecms
 
 > `optional` **enumValues**: [`EnumValues`](../type-aliases/EnumValues)
 
-Defined in: [preview/components/EnumValuesChip.tsx:7](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [preview/components/EnumValuesChip.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ***
 
@@ -51,4 +51,4 @@ Defined in: [preview/components/EnumValuesChip.tsx:7](https://github.com/firecms
 
 > **size**: `"small"` \| `"medium"` \| `"large"`
 
-Defined in: [preview/components/EnumValuesChip.tsx:9](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [preview/components/EnumValuesChip.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)

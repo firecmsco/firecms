@@ -1,7 +1,7 @@
 import { and, eq, or, sql, SQL, ilike, inArray } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
-import { FilterValues, WhereFilterOp, Relation } from "@firecms/types";
-import { getColumnName, resolveCollectionRelations } from "@firecms/common";
+import { FilterValues, WhereFilterOp, Relation } from "@rebasepro/types";
+import { getColumnName, resolveCollectionRelations } from "@rebasepro/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 import { ConditionBuilderStatic } from "../db/interfaces";
 
@@ -9,7 +9,7 @@ import { ConditionBuilderStatic } from "../db/interfaces";
  * Unified condition builder for Drizzle/PostgreSQL queries.
  * 
  * This class uses static methods and satisfies the ConditionBuilderStatic<SQL> type.
- * It translates FireCMS filter conditions to Drizzle SQL conditions.
+ * It translates Rebase filter conditions to Drizzle SQL conditions.
  * 
  * @example
  * const builder: ConditionBuilderStatic<SQL> = DrizzleConditionBuilder;

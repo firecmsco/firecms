@@ -1,27 +1,27 @@
 ---
 slug: docs/self/controllers
 title: Building a custom backend
-description: Learn how to implement custom DataSource, StorageSource, and AuthController for FireCMS with your own backend.
+description: Learn how to implement custom DataSource, StorageSource, and AuthController for Rebase with your own backend.
 ---
 
-FireCMS internally uses 3 main controllers to manage the data, file storage and authentication.
+Rebase internally uses 3 main controllers to manage the data, file storage and authentication.
 These controllers are designed to be easily extended and replaced with your own implementations.
 
-FireCMS provides default implementations for Firebase, Firestore and Firebase Authentication,
+Rebase provides default implementations for Firebase, Firestore and Firebase Authentication,
 but you can replace them with your own implementations. We also provide an integration with MongoDB Atlas.
 
 ## DataSource
 
 The `DataSource` is the delegate responsible for managing the data source. The delegate will
-be passed to FireCMS and will be used internally by the `DataSource`.
+be passed to Rebase and will be used internally by the `DataSource`.
 
 You can retrieve the data source in any component using the `useDataSource` hook. You can also access the data source
 from callbacks where there is a `context` object defined, under `context.dataSource`.
 
-FireCMS provides default implementations for:
+Rebase provides default implementations for:
 
-- Firebase `useFirestoreDataSource` (package `@firecms/firebase`)
-- MongoDB `useMongoDataSource` (package `@firecms/mongodb`)
+- Firebase `useFirestoreDataSource` (package `@rebasepro/firebase`)
+- MongoDB `useMongoDataSource` (package `@rebasepro/mongodb`)
 
 ### Creating your own DataSource
 
@@ -61,14 +61,14 @@ subscription. If not implemented, the `fetchEntity` method will be used instead.
 ## StorageSource
 
 The `StorageSource` is the controller responsible for managing the file storage. The delegate will
-be passed to FireCMS and will be used internally by CMS.
+be passed to Rebase and will be used internally by CMS.
 
 You can access the storage source in any component using the `useStorageSource` hook. You can also access the storage
 source from callbacks where there is a `context` object defined, under `context.storageSource`.
 
-FireCMS provides default implementations for:
+Rebase provides default implementations for:
 
-- Firebase `useFirebaseStorageSource` (package `@firecms/firebase`)
+- Firebase `useFirebaseStorageSource` (package `@rebasepro/firebase`)
 
 ### Description of Methods
 
@@ -84,16 +84,16 @@ optionally `bucket`.
 ## AuthController
 
 The `AuthController` is the controller responsible for managing the authentication. The delegate will
-be passed to FireCMS and will be used internally by CMS.
+be passed to Rebase and will be used internally by CMS.
 
 You can access the auth controller in any component using the `useAuthController` hook.
 You can also access the auth controller from callbacks where there is a `context` object defined,
 under `context.authController`.
 
-FireCMS provides default implementations for:
+Rebase provides default implementations for:
 
-- Firebase `useFirebaseAuthController` (package `@firecms/firebase`)
-- MongoDB `useMongoDBAuthController` (package `@firecms/mongodb`)
+- Firebase `useFirebaseAuthController` (package `@rebasepro/firebase`)
+- MongoDB `useMongoDBAuthController` (package `@rebasepro/mongodb`)
 
 ### Description of Properties and Methods
 

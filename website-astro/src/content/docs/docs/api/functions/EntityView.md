@@ -3,17 +3,17 @@ slug: "docs/api/functions/EntityView"
 title: "EntityView"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityView
+[@rebasepro/core](../README) / EntityView
 
 # Function: EntityView()
 
 > **EntityView**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [components/EntityView.tsx:20](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityView.tsx)
+Defined in: [components/EntityView.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
 
 ## Type Parameters
 

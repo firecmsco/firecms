@@ -1,12 +1,12 @@
-# FireCMS v4 Breaking Changes & Migration Guide
+# Rebase v4 Breaking Changes & Migration Guide
 
-This document covers breaking changes and migration patterns for FireCMS v4 (custom_backend branch). It serves as a reference for both developers and LLMs when migrating code from the `next` branch or earlier versions.
+This document covers breaking changes and migration patterns for Rebase v4 (custom_backend branch). It serves as a reference for both developers and LLMs when migrating code from the `next` branch or earlier versions.
 
 ---
 
 ## Overview
 
-FireCMS v4 introduces significant architectural changes to support multiple backends (PostgreSQL, MongoDB, Firestore, etc.). The key philosophy change is that **collections and properties are now pre-resolved** - there is no runtime resolution step.
+Rebase v4 introduces significant architectural changes to support multiple backends (PostgreSQL, MongoDB, Firestore, etc.). The key philosophy change is that **collections and properties are now pre-resolved** - there is no runtime resolution step.
 
 ---
 
@@ -16,13 +16,13 @@ FireCMS v4 introduces significant architectural changes to support multiple back
 
 | Old Import | New Import |
 |------------|------------|
-| `import { ... } from "../../types"` | `import { ... } from "@firecms/types"` |
-| `import { ... } from "../types"` | `import { ... } from "@firecms/types"` |
+| `import { ... } from "../../types"` | `import { ... } from "@rebasepro/types"` |
+| `import { ... } from "../types"` | `import { ... } from "@rebasepro/types"` |
 | `import isEqual from "react-fast-compare"` | `import { deepEqual } from "fast-equals"` |
 
-### Type Imports from `@firecms/types`
+### Type Imports from `@rebasepro/types`
 
-All core types should be imported from `@firecms/types`:
+All core types should be imported from `@rebasepro/types`:
 ```typescript
 import {
     Entity,
@@ -33,21 +33,21 @@ import {
     CollectionSize,
     ViewMode,
     EnumValueConfig
-} from "@firecms/types";
+} from "@rebasepro/types";
 ```
 
-### Utility Imports from `@firecms/common`
+### Utility Imports from `@rebasepro/common`
 
-Common utilities should be imported from `@firecms/common`:
+Common utilities should be imported from `@rebasepro/common`:
 ```typescript
 import {
     getValueInPath,
     resolveEnumValues,
     getSubcollections
-} from "@firecms/common";
+} from "@rebasepro/common";
 ```
 
-### Local Utility Imports (firecms_core)
+### Local Utility Imports (core)
 
 Some utilities remain in the local package:
 ```typescript
@@ -158,7 +158,7 @@ const property = collection.properties[key] as Property;
 const subcollections = collection.subcollections;
 
 // NEW (v4)
-import { getSubcollections } from "@firecms/common";
+import { getSubcollections } from "@rebasepro/common";
 const subcollections = getSubcollections(collection);
 ```
 
@@ -300,7 +300,7 @@ if (filterValues && Object.keys(filterValues).length > 0) { ... }
 
 When migrating code from `next` branch to `custom_backend` (v4):
 
-1. **Replace imports**: `../../types` → `@firecms/types`
+1. **Replace imports**: `../../types` → `@rebasepro/types`
 2. **Replace comparison lib**: `react-fast-compare` → `fast-equals`
 3. **Remove resolution calls**: Delete `resolveCollection`, `resolveProperty`, `resolveIdsFrom` usage
 4. **Use collection/property directly**: They're already resolved
@@ -309,12 +309,12 @@ When migrating code from `next` branch to `custom_backend` (v4):
 7. **Fix EntityReference constructor**: Use object syntax `{ id, path }`
 8. **Cast entity.id to String**: When needed for string operations
 9. **Get subcollections via helper**: `getSubcollections(collection)`
-10. **Import utilities from correct packages**: Check `@firecms/common` vs local `../../util`
+10. **Import utilities from correct packages**: Check `@rebasepro/common` vs local `../../util`
 
 ---
 
 ## Version Information
 
 - **Branch**: `custom_backend`
-- **Target**: FireCMS v4 with PostgreSQL/multi-backend support
+- **Target**: Rebase v4 with PostgreSQL/multi-backend support
 - **Last Updated**: 2026-02-04

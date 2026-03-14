@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/SaveEntityProps"
 title: "SaveEntityProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SaveEntityProps
+[@rebasepro/core](../README) / SaveEntityProps
 
 # Type Alias: SaveEntityProps\<M\>
 
 > **SaveEntityProps**\<`M`\> = [`SaveEntityProps`](../interfaces/SaveEntityProps)\<`M`\>
 
-Defined in: [types/datasource.ts:246](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:246](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ## Type Parameters
 

@@ -2,11 +2,11 @@
 slug: docs/properties/config/boolean
 title: Boolean
 sidebar_label: Boolean
-description: Configuration for boolean properties in FireCMS, rendered as toggle switches.
+description: Configuration for boolean properties in Rebase, rendered as toggle switches.
 ---
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const availableProperty = buildProperty({
     name: "Available",

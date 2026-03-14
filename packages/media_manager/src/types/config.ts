@@ -1,4 +1,4 @@
-import { DataSource, StorageSource } from "@firecms/core";
+import { DataSource, StorageSource } from "@rebasepro/core";
 
 /**
  * Configuration for a thumbnail size.

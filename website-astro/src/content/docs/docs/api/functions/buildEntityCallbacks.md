@@ -3,17 +3,17 @@ slug: "docs/api/functions/buildEntityCallbacks"
 title: "buildEntityCallbacks"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / buildEntityCallbacks
+[@rebasepro/core](../README) / buildEntityCallbacks
 
 # Function: buildEntityCallbacks()
 
 > **buildEntityCallbacks**\<`M`\>(`callbacks`): [`EntityCallbacks`](../type-aliases/EntityCallbacks)\<`M`\>
 
-Defined in: [util/builders.ts:113](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/builders.ts)
+Defined in: [util/builders.ts:113](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/builders.ts)
 
 Identity function we use to defeat the type system of Typescript and preserve
 the properties keys.

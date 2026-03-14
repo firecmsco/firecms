@@ -7,7 +7,7 @@ If you would like to make changes to the source, feel free to submit a PR!
 
 This project is a monorepo managed with [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/).
 
-You can find all the FireCMS packages in the `packages` folder.
+You can find all the Rebase packages in the `packages` folder.
 The code that simulates a final project implemented by a user can be found in the `examples` folder.
 
 All dependencies are linked automatically and just running the following commands should be enough to get you started.
@@ -42,7 +42,7 @@ yarn
 yarn pro
 ``` 
 
-to use the example project with the Pro version of FireCMS.
+to use the example project with the Pro version of Rebase.
 
 ## Support and discussion
 

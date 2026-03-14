@@ -2,12 +2,12 @@
 slug: docs/self/auth_self_hosted
 title: Authentication and User Management
 sidebar_label: Authentication and User Management
-description: Instructions on how to set up authentication and user management for a self-hosted FireCMS instance.
+description: Instructions on how to set up authentication and user management for a self-hosted Rebase instance.
 ---
 
-## Recommended: FireCMS Pro and Cloud
+## Recommended: Rebase Pro and Cloud
 
-Before implementing custom authentication, we strongly recommend considering **FireCMS Pro** or **FireCMS Cloud**, which include:
+Before implementing custom authentication, we strongly recommend considering **Rebase Pro** or **Rebase Cloud**, which include:
 
 - ✅ Built-in user management system
 - ✅ Role-based permissions (Admin, Editor, Viewer)
@@ -19,14 +19,14 @@ Before implementing custom authentication, we strongly recommend considering **F
 
 These solutions provide a complete authentication and authorization system out of the box, saving you significant development time and ensuring security best practices.
 
-[Learn more about User Management in FireCMS Pro →](/docs/pro/user_management)
+[Learn more about User Management in Rebase Pro →](/docs/pro/user_management)
 
-[Try FireCMS Cloud →](https://app.firecms.co)
+[Try Rebase Cloud →](https://app.rebase.pro)
 
 
 :::note
 
-When you initialize a new FireCMS project using the CLI, you might find a boilerplate authenticator in your `App.tsx` file. It's a standard FireCMS interface and looks something like this (no need to hate Flanders!):
+When you initialize a new Rebase project using the CLI, you might find a boilerplate authenticator in your `App.tsx` file. It's a standard Rebase interface and looks something like this (no need to hate Flanders!):
 
 ```typescript
 const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
@@ -56,7 +56,7 @@ This section covers how to create a `users` collection to manage users. This is 
 This collection will store your users.
 
 ```typescript
-import { buildCollection, buildProperty } from "@firecms/core";
+import { buildCollection, buildProperty } from "@rebasepro/core";
 
 export type User = {
   name: string;
@@ -95,7 +95,7 @@ Now, let's add a `role` to our users and use it to control access.
 Add a `role` property to your `User` type and collection.
 
 ```typescript
-import { buildCollection, buildProperty } from "@firecms/core";
+import { buildCollection, buildProperty } from "@rebasepro/core";
 
 export enum UserRole {
   admin = "admin",
@@ -144,8 +144,8 @@ First, create a new file named `src/custom_authenticator.ts`. This file will con
 
 **`src/custom_authenticator.ts`**
 ```typescript
-import { Authenticator } from "@firecms/core";
-import { FirebaseUserWrapper } from "@firecms/firebase";
+import { Authenticator } from "@rebasepro/core";
+import { FirebaseUserWrapper } from "@rebasepro/firebase";
 import { User } from "./collections/users"; // Make sure to import your User type
 
 export const roleBasedAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
@@ -181,7 +181,7 @@ Now, import the `roleBasedAuthenticator` in your `App.tsx` and pass it to the `F
 
 **`src/App.tsx`**
 ```typescript
-import { FirebaseCMSApp } from "@firecms/firebase";
+import { FirebaseCMSApp } from "@rebasepro/firebase";
 import { roleBasedAuthenticator } from "./custom_authenticator";
 import { usersCollection } from "./collections/users"; // Make sure to import your collections
 
@@ -208,7 +208,7 @@ export default App;
 Use the `permissions` callback in your collections to control access based on the user's role.
 
 ```typescript
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@rebasepro/core";
 import { UserRole } from "./collections/users";
 
 export const postsCollection = buildCollection({
@@ -259,8 +259,8 @@ export const setUserRole = functions.https.onCall(async (data, context) => {
 This authenticator reads the custom claims from the user's ID token.
 
 ```typescript
-import { Authenticator } from "@firecms/core";
-import { FirebaseUserWrapper } from "@firecms/firebase";
+import { Authenticator } from "@rebasepro/core";
+import { FirebaseUserWrapper } from "@rebasepro/firebase";
 
 export const claimsAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
   user,
@@ -285,7 +285,7 @@ export const claimsAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
 The `permissions` implementation is the same as with the role-based approach, as the role is extracted and placed in `authController.extra`.
 
 ```typescript
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@rebasepro/core";
 
 export const articlesCollection = buildCollection({
   name: "Articles",

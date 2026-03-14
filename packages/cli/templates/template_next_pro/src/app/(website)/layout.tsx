@@ -8,35 +8,35 @@ import { Header } from "@/app/(website)/components/Header";
 import { Footer } from "@/app/(website)/components/Footer";
 
 export const metadata: Metadata = {
-    title: "FireCMS e-commerce and blog demo",
-    description: "This is a demo for using FireCMS as an e-commerce backend",
-    generator: "FireCMS",
+    title: "Rebase e-commerce and blog demo",
+    description: "This is a demo for using Rebase as an e-commerce backend",
+    generator: "Rebase",
 };
 
 export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+    children,
+}: Readonly<{
     children: React.ReactNode;
 }>) {
 
 
     return (
         <html lang="en">
-        <body>
-        <NextTopLoader color={"#16D6D1"}/>
+            <body>
+                <NextTopLoader color={"#16D6D1"} />
 
-        <main className={"relative w-full min-h-[100dvh] flex flex-col"}>
+                <main className={"relative w-full min-h-[100dvh] flex flex-col"}>
 
-            <Header/>
+                    <Header />
 
-            <Providers>
-                {children}
-            </Providers>
+                    <Providers>
+                        {children}
+                    </Providers>
 
-            <Footer/>
-        </main>
+                    <Footer />
+                </main>
 
-        </body>
+            </body>
         </html>
     );
 }

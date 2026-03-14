@@ -1,4 +1,4 @@
-# FireCMS Typesense Search - Google Cloud Marketplace
+# Rebase Typesense Search - Google Cloud Marketplace
 
 Full-text search for Firestore powered by Typesense, distributed via Google Cloud Marketplace.
 
@@ -108,9 +108,9 @@ firebase deploy --only firestore
 Set these in your Cloud Functions environment:
 
 ```bash
-GCP_MARKETPLACE_PROVIDER_ID=firecms
+GCP_MARKETPLACE_PROVIDER_ID=rebase
 GCP_MARKETPLACE_PUBSUB_TOPIC=cloud-commerce-procurement
-APP_URL=https://firecms.co
+APP_URL=https://rebase.pro
 FUNCTIONS_LOCATION=us-central1
 VM_ZONE=us-central1-a
 COLLECTIONS_TO_INDEX=*

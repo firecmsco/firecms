@@ -15,7 +15,7 @@ This hook is used to open a side dialog that allows the selection of entities
 under a given path. You can use it in custom views for selecting entities. You
 need to specify the path of the target collection at least. If your collection
 is not defined in your top collection configuration
-(in your `FireCMS` component), you need to specify explicitly. This is the same
+(in your `Rebase` component), you need to specify explicitly. This is the same
 hook used internally when a reference property is defined.
 
 The props provided by this hook are:
@@ -53,8 +53,8 @@ Example:
 
 ```tsx
 import React from "react";
-import { useReferenceDialog, useSnackbarController, Entity } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { useReferenceDialog, useSnackbarController, Entity } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 type Product = {
     name: string;

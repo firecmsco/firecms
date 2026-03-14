@@ -6,10 +6,10 @@ const firestore = require("@google-cloud/firestore");
 /**
  * To create a new export:
  * ```
- * gcloud firestore export gs://firecms_firestore_backups --project firecms-demo-27150
+ * gcloud firestore export gs://rebase_firestore_backups --project rebase-demo-27150
  * ```
  */
-const bucket = "gs://firecms_firestore_backups/2026-02-03T00:55:23_27520";
+const bucket = "gs://rebase_firestore_backups/2026-02-03T00:55:23_27520";
 
 // export function eraseDatabase() {
 //     const firebase_tools = require("firebase-tools");
@@ -67,10 +67,10 @@ export async function importDatabaseBackup() {
     return importResult;
 }
 
-const collectionsToKeep = ["blog", "products", "users", "crypto", "books", "showcase", "tickets", "__FIRECMS"];
+const collectionsToKeep = ["blog", "products", "users", "crypto", "books", "showcase", "tickets", "__REBASE"];
 
 async function cleanupDocumentIds() {
-    
+
     const firestore = admin.firestore();
     await firestore.collection("/blog")
         .get()

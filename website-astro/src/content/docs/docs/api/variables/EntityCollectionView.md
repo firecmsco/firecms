@@ -3,17 +3,17 @@ slug: "docs/api/variables/EntityCollectionView"
 title: "EntityCollectionView"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionView
+[@rebasepro/core](../README) / EntityCollectionView
 
 # Variable: EntityCollectionView
 
 > `const` **EntityCollectionView**: `FunctionComponent`\<[`EntityCollectionViewProps`](../type-aliases/EntityCollectionViewProps)\<`any`\>\>
 
-Defined in: [components/EntityCollectionView/EntityCollectionView.tsx:143](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionView/EntityCollectionView.tsx)
+Defined in: [components/EntityCollectionView/EntityCollectionView.tsx:143](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionView.tsx)
 
 This component is in charge of binding a datasource path with an [EntityCollection](../interfaces/EntityCollection)
 where it's configuration is defined. It includes an infinite scrolling table

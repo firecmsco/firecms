@@ -1,5 +1,5 @@
 import request from "supertest";
-import { FireCMSApiServer } from "../../src/api/server";
+import { RebaseApiServer } from "../../src/api/server";
 
 // Mock dependencies
 jest.mock("graphql-http/lib/use/express", () => ({
@@ -11,7 +11,7 @@ jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next())
 describe("REST API E2E Tests", () => {
     let mockDataSource: any;
     let mockCollections: any[];
-    let server: FireCMSApiServer;
+    let server: RebaseApiServer;
     let app: any;
 
     beforeEach(async () => {
@@ -44,7 +44,7 @@ describe("REST API E2E Tests", () => {
             getConfigurations: jest.fn().mockResolvedValue({ collections: mockCollections, schema: {} })
         };
 
-        server = await FireCMSApiServer.create({
+        server = await RebaseApiServer.create({
             dataSource: mockDataSource as any,
             collections: mockCollections,
             enableGraphQL: false,

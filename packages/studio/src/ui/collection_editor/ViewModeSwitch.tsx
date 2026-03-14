@@ -1,5 +1,5 @@
-import { ViewMode } from "@firecms/types";
-import { AppsIcon, cls, ListIcon, ToggleButtonGroup, Typography, ViewKanbanIcon } from "@firecms/ui";
+import { ViewMode } from "@rebasepro/types";
+import { AppsIcon, cls, ListIcon, ToggleButtonGroup, Typography, ViewKanbanIcon } from "@rebasepro/ui";
 
 export function ViewModeSwitch({
     value,

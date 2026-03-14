@@ -1,5 +1,5 @@
 {
-    "name": "@firecms/datatalk",
+    "name": "@rebasepro/datatalk",
     "version": "4.0.0",
     "description": "Talk to your Firestore data",
     "type": "module",
@@ -30,16 +30,16 @@
         "react-dom": ">=19.0.0"
     },
     "dependencies": {
-        "@firecms/core": "4.0.0",
-        "@firecms/types": "4.0.0",
-        "@firecms/data_export": "4.0.0",
-        "@firecms/studio": "4.0.0",
-        "@firecms/data_import": "4.0.0",
-        "@firecms/data_import_export": "4.0.0",
-        "@firecms/firebase": "4.0.0",
-        "@firecms/formex": "4.0.0",
-        "@firecms/schema_inference": "4.0.0",
-        "@firecms/ui": "4.0.0",
+        "@rebasepro/core": "4.0.0",
+        "@rebasepro/types": "4.0.0",
+        "@rebasepro/data_export": "4.0.0",
+        "@rebasepro/studio": "4.0.0",
+        "@rebasepro/data_import": "4.0.0",
+        "@rebasepro/data_import_export": "4.0.0",
+        "@rebasepro/firebase": "4.0.0",
+        "@rebasepro/formex": "4.0.0",
+        "@rebasepro/schema_inference": "4.0.0",
+        "@rebasepro/ui": "4.0.0",
         "@monaco-editor/react": "^4.7.0"
     },
     "devDependencies": {

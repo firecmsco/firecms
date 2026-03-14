@@ -1,31 +1,31 @@
 I'll enhance the README with more detailed documentation, configuration options, and better examples:
 
-# FireCMS Data Export Plugin
+# Rebase Data Export Plugin
 
-This plugin enables exporting Firestore collections to CSV or JSON formats directly from your FireCMS interface. It adds
+This plugin enables exporting Firestore collections to CSV or JSON formats directly from your Rebase interface. It adds
 an export button to collection views, providing a simple way to back up data or share it with others.
 
 ## Installation
 
 ```bash
-npm install @firecms/data_export
+npm install @rebasepro/data_export
 # or
-yarn add @firecms/data_export
+yarn add @rebasepro/data_export
 ```
 
 ## Features
 
 - Export collection data to CSV or JSON formats
 - Configure export permissions based on collection size or custom logic
-- Integration with FireCMS analytics events
+- Integration with Rebase analytics events
 - Custom UI for unsupported export scenarios
 
 ## Basic Usage
 
 ```tsx
 import React from "react";
-import { FireCMS } from "@firecms/core";
-import { useExportPlugin } from "@firecms/data_export";
+import { Rebase } from "@rebasepro/core";
+import { useExportPlugin } from "@rebasepro/data_export";
 
 
 export default function App() {
@@ -40,7 +40,7 @@ export default function App() {
         plugins
     }); 
     
-    return <FireCMS
+    return <Rebase
         name={"My Online Shop"}
         navigationController={navigationController}
         authentication={myAuthenticator}

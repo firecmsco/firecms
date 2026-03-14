@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { registerE2EUser } from './auth.setup';
 
-test.describe('E2E testing for FireCMS UI', () => {
+test.describe('E2E testing for Rebase UI', () => {
 
     test.beforeEach(async ({ page }) => {
         await registerE2EUser(page);
@@ -125,7 +125,7 @@ test.describe('E2E testing for FireCMS UI', () => {
         // Testing validation briefly -> clear name to see if it lets us save
         await page.locator('#form_field_name textarea:not([aria-hidden="true"]), #form_field_name input').first().fill('');
         // Ensure form is invalid, attempting to click 'Save' might stay disabled or show error
-        // In FireCMS, the save button might be disabled if form is invalid or unmodified
+        // In Rebase, the save button might be disabled if form is invalid or unmodified
 
         await page.locator('#form_field_name textarea:not([aria-hidden="true"]), #form_field_name input').first().fill(`${authorName} (Updated)`);
         await page.getByText('Save and close', { exact: false }).click();

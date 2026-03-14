@@ -11,7 +11,7 @@ of time. Tasks such as restructuring code packages, renaming variables, altering
 often tedious and fraught with errors. These operations can be effectively automated with the assistance of artificial
 intelligence. This article explains how to use OpenAI's GPT-4 to automatically refactor and migrate code.
 
-At FireCMS, a prime motivation for adopting this approach is the migration of code from the JavaScript CSS library
+At Rebase, a prime motivation for adopting this approach is the migration of code from the JavaScript CSS library
 `emotion` to the CSS framework `tailwindcss`. This article specifically covers how to automatically convert code from
 `emotion` to `tailwindcss`, but the approach can be generalized to automate migration among any pair of libraries.
 
@@ -258,7 +258,7 @@ since your output will be injected into a tsx file.`
 
 ## Conclusion
 
-This process has been successfully applied to the FireCMS codebase, resulting in a significant reduction in the runtime
+This process has been successfully applied to the Rebase codebase, resulting in a significant reduction in the runtime
 footprint of the application. It has helped us intensively in a very tedious task. Of course some manual work is still
 required, but a good part of the work is done.
 

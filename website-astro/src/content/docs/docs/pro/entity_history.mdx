@@ -3,14 +3,14 @@ slug: docs/pro/entity_history
 title: Entity History
 ---
 
-This plugin adds a history view to your entities in FireCMS. It allows you to track changes made to entities over time, showing who made the change and when.
+This plugin adds a history view to your entities in Rebase. It allows you to track changes made to entities over time, showing who made the change and when.
 
 ## Installation
 
 ```bash
-npm install @firecms/entity_history
+npm install @rebasepro/entity_history
 # or
-yarn add @firecms/entity_history
+yarn add @rebasepro/entity_history
 ```
 
 ## Features
@@ -29,8 +29,8 @@ You can also pass your own custom `getUser` function to fetch user details.
 
 ```tsx
 import React from "react";
-import { FireCMS } from "@firecms/core";
-import { useEntityHistoryPlugin } from "@firecms/entity_history";
+import { Rebase } from "@rebasepro/core";
+import { useEntityHistoryPlugin } from "@rebasepro/entity_history";
 
 export default function App() {
 
@@ -56,14 +56,14 @@ export default function App() {
     });
 
     return (
-            <FireCMS
+            <Rebase
                 navigationController={navigationController}
                 /*... rest of your configuration */
             >
               {({ context, loading }) => {
                   // ... your components
               }}
-            </FireCMS>
+            </Rebase>
     );
 }
 ```
@@ -71,7 +71,7 @@ export default function App() {
 By default, the history feature is not enabled for any collection. You need to enable it explicitly in your collection configuration:
 
 ```tsx
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@rebasepro/core";
 
 const productsCollection = buildCollection({
     name: "Products",
@@ -116,10 +116,10 @@ const sampleCollection = buildCollection({
 For advanced use cases where you need to create history entries programmatically (outside of the normal save callbacks), you can use the `createHistoryEntry` function:
 
 ```tsx
-import { createHistoryEntry, NewHistoryEntryParams } from "@firecms/entity_history";
+import { createHistoryEntry, NewHistoryEntryParams } from "@rebasepro/entity_history";
 
 // Example: Creating a history entry when importing data
-const handleDataImport = async (context: FireCMSContext, importedData: any[]) => {
+const handleDataImport = async (context: RebaseContext, importedData: any[]) => {
     for (const item of importedData) {
         // Save the entity first
         await context.dataSource.saveEntity({
@@ -141,7 +141,7 @@ const handleDataImport = async (context: FireCMSContext, importedData: any[]) =>
 };
 
 // Example: Creating a history entry for a custom update operation
-const handleCustomUpdate = async (context: FireCMSContext, entityId: string, oldValues: any, newValues: any) => {
+const handleCustomUpdate = async (context: RebaseContext, entityId: string, oldValues: any, newValues: any) => {
     // Perform your custom update logic here
     await context.dataSource.saveEntity({
         path: "products",
@@ -165,7 +165,7 @@ const handleCustomUpdate = async (context: FireCMSContext, entityId: string, old
 
 | Parameter        | Type                      | Description                                                                                                                                       |
 | ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `context`        | `FireCMSContext<User>`    | The FireCMS context object containing the data source and auth controller                                                                        |
+| `context`        | `RebaseContext<User>`    | The Rebase context object containing the data source and auth controller                                                                        |
 | `previousValues` | `Partial<any>` (optional) | The previous values of the entity. If not provided, the history entry will be marked as a creation rather than an update                       |
 | `values`         | `Partial<any>`            | The current/new values of the entity                                                                                                              |
 | `path`           | `string`                  | The collection path where the entity is stored                                                                                                    |

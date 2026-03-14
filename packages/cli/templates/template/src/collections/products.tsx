@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty, EntityReference } from "@firecms/core";
+import { buildCollection, buildProperty, EntityReference } from "@rebasepro/core";
 
 export type Product = {
     name: string;

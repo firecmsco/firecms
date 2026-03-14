@@ -9,13 +9,13 @@ import {
     AddIcon,
     StorageIcon,
     Tooltip
-} from "@firecms/ui";
-import { useSnackbarController } from "@firecms/core";
+} from "@rebasepro/ui";
+import { useSnackbarController } from "@rebasepro/core";
 import { CollectionEditorDialogProps } from "./CollectionEditorDialog";
 import { AIModifiedPathsProvider } from "./AIModifiedPathsContext";
 import { CollectionEditor } from "./CollectionEditorDialog";
 import { useNavigate } from "react-router-dom";
-import { useCMSUrlController } from "@firecms/core";
+import { useCMSUrlController } from "@rebasepro/core";
 
 export type CollectionStudioViewProps = Omit<CollectionEditorDialogProps, "open" | "isNewCollection" | "editedCollectionId" | "handleClose" | "handleCancel"> & {
     collectionId?: string | "new";

@@ -1,5 +1,5 @@
 import React from "react";
-import { Label, RadioGroup, RadioGroupItem } from "@firecms/ui";
+import { Label, RadioGroup, RadioGroupItem } from "@rebasepro/ui";
 
 export default function LabelRadioButtonDemo() {
     return (
@@ -13,7 +13,7 @@ export default function LabelRadioButtonDemo() {
                     className="cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                     htmlFor="color-black"
                 >
-                    <RadioGroupItem id="color-black" value="black"/>
+                    <RadioGroupItem id="color-black" value="black" />
                     Black
                 </Label>
                 <Label
@@ -21,7 +21,7 @@ export default function LabelRadioButtonDemo() {
                     className="cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                     htmlFor="color-white"
                 >
-                    <RadioGroupItem id="color-white" value="white"/>
+                    <RadioGroupItem id="color-white" value="white" />
                     White
                 </Label>
                 <Label
@@ -29,7 +29,7 @@ export default function LabelRadioButtonDemo() {
                     className="cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                     htmlFor="color-blue"
                 >
-                    <RadioGroupItem id="color-blue" value="blue"/>
+                    <RadioGroupItem id="color-blue" value="blue" />
                     Blue
                 </Label>
             </RadioGroup>

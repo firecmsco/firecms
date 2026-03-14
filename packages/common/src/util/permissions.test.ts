@@ -1,5 +1,5 @@
 import { canCreateEntity, canEditEntity, canDeleteEntity, canReadCollection } from "./permissions";
-import { EntityCollection, AuthController, Entity, User } from "@firecms/types";
+import { EntityCollection, AuthController, Entity, User } from "@rebasepro/types";
 
 describe("Permissions Evaluator", () => {
 

@@ -32,19 +32,19 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@firecms/core": [
-        "../firecms_core/src"
+      "@rebasepro/core": [
+        "../core/src"
       ],
-      "@firecms/types": [
+      "@rebasepro/types": [
         "../types/src"
       ],
-      "@firecms/schema_inference": [
+      "@rebasepro/schema_inference": [
         "../schema_inference/src"
       ],
-      "@firecms/ui": [
+      "@rebasepro/ui": [
         "../ui/src"
       ],
-      "@firecms/formex": [
+      "@rebasepro/formex": [
         "../formex/src"
       ]
     }

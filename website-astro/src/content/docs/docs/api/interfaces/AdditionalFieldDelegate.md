@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/AdditionalFieldDelegate"
 title: "AdditionalFieldDelegate"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / AdditionalFieldDelegate
+[@rebasepro/core](../README) / AdditionalFieldDelegate
 
 # Interface: AdditionalFieldDelegate\<M, USER\>
 
-Defined in: [types/collections.ts:485](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:485](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Use this interface for adding additional fields to entity collection views.
 If you need to do some async loading you can use [AsyncPreviewComponent](../variables/AsyncPreviewComponent)
@@ -32,7 +32,7 @@ If you need to do some async loading you can use [AsyncPreviewComponent](../vari
 
 > `optional` **Builder**: `ComponentType`\<[`AdditionalFieldDelegateProps`](../type-aliases/AdditionalFieldDelegateProps)\<`M`, `USER`\>\>
 
-Defined in: [types/collections.ts:507](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:507](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Builder for the content of the cell for this column
 
@@ -42,7 +42,7 @@ Builder for the content of the cell for this column
 
 > `optional` **dependencies**: `Extract`\<keyof `M`, `string`\>[]
 
-Defined in: [types/collections.ts:517](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:517](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 If this column needs to update dynamically based on other properties,
 you can define an array of keys as strings with the
@@ -57,7 +57,7 @@ it will be updated in every render.
 
 > **key**: `string`
 
-Defined in: [types/collections.ts:492](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:492](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 ID of this column. You can use this id in the `properties` field of the
 collection in any order you want
@@ -68,7 +68,7 @@ collection in any order you want
 
 > **name**: `string`
 
-Defined in: [types/collections.ts:497](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:497](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Header of this column
 
@@ -78,7 +78,7 @@ Header of this column
 
 > `optional` **value**: (`props`) => `string` \| `number` \| `Promise`\<`string` \| `number`\> \| `undefined`
 
-Defined in: [types/collections.ts:526](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:526](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Use this prop to define the value of the column as a string or number.
 This is the value that will be used for exporting the collection.
@@ -91,7 +91,7 @@ view.
 
 ###### context
 
-[`FireCMSContext`](../type-aliases/FireCMSContext)\<`any`\>
+[`RebaseContext`](../type-aliases/RebaseContext)\<`any`\>
 
 ###### entity
 
@@ -107,6 +107,6 @@ view.
 
 > `optional` **width**: `number`
 
-Defined in: [types/collections.ts:502](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:502](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Width of the generated column in pixels

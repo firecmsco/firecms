@@ -1,16 +1,16 @@
 {
-    "name": "@firecms/types",
+    "name": "@rebasepro/types",
     "type": "module",
     "version": "4.0.0",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
-        "url": "https://github.com/sponsors/firecmsco"
+        "url": "https://github.com/sponsors/rebaseco"
     },
-    "author": "FireCMS",
+    "author": "Rebase",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/firecmsco/firecms.git",
+        "url": "https://github.com/rebaseco/rebase.git",
         "directory": "packages/types"
     },
     "main": "./dist/index.umd.js",
@@ -52,9 +52,9 @@
         "@dnd-kit/core": "^6.3.1",
         "@dnd-kit/modifiers": "^9.0.0",
         "@dnd-kit/sortable": "^10.0.0",
-        "@firecms/editor": "4.0.0",
-        "@firecms/formex": "4.0.0",
-        "@firecms/ui": "4.0.0",
+        "@rebasepro/editor": "4.0.0",
+        "@rebasepro/formex": "4.0.0",
+        "@rebasepro/ui": "4.0.0",
         "@radix-ui/react-portal": "^1.1.5",
         "clsx": "^2.1.1",
         "date-fns": "^3.6.0",

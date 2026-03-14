@@ -1,16 +1,16 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { FireCMSApiClient } from "../api-client.js";
+import { RebaseApiClient } from "../api-client.js";
 
 /**
- * Register MCP resources — read-only contextual data about FireCMS projects.
+ * Register MCP resources — read-only contextual data about Rebase projects.
  */
-export function registerProjectResources(server: McpServer, api: FireCMSApiClient) {
+export function registerProjectResources(server: McpServer, api: RebaseApiClient) {
 
     server.registerResource(
         "project-collections",
-        new ResourceTemplate("firecms://projects/{projectId}/collections", { list: undefined }),
+        new ResourceTemplate("rebase://projects/{projectId}/collections", { list: undefined }),
         {
-            description: "Firestore root-level collections for a FireCMS project",
+            description: "Firestore root-level collections for a Rebase project",
             mimeType: "application/json",
         },
         async (uri, variables) => {
@@ -38,9 +38,9 @@ export function registerProjectResources(server: McpServer, api: FireCMSApiClien
 
     server.registerResource(
         "project-users",
-        new ResourceTemplate("firecms://projects/{projectId}/users", { list: undefined }),
+        new ResourceTemplate("rebase://projects/{projectId}/users", { list: undefined }),
         {
-            description: "Users with access to a FireCMS project",
+            description: "Users with access to a Rebase project",
             mimeType: "application/json",
         },
         async (uri, variables) => {

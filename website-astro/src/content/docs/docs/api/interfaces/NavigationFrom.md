@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/NavigationFrom"
 title: "NavigationFrom"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / NavigationFrom
+[@rebasepro/core](../README) / NavigationFrom
 
 # Interface: NavigationFrom\<M\>
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:117](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:117](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [hooks/useResolvedNavigationFrom.tsx:117](https://github.com/firecms
 
 > `optional` **data**: [`ResolvedNavigationEntry`](../type-aliases/ResolvedNavigationEntry)\<`M`\>[]
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:118](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:118](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [hooks/useResolvedNavigationFrom.tsx:118](https://github.com/firecms
 
 > **dataLoading**: `boolean`
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:119](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:119](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -41,4 +41,4 @@ Defined in: [hooks/useResolvedNavigationFrom.tsx:119](https://github.com/firecms
 
 > `optional` **dataLoadingError**: `Error`
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:120](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [hooks/useResolvedNavigationFrom.tsx:120](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)

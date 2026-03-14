@@ -1,4 +1,4 @@
-import { AuthController, Entity, EntityCollection, SecurityRule, User } from "@firecms/types";
+import { AuthController, Entity, EntityCollection, SecurityRule, User } from "@rebasepro/types";
 
 function evaluateAST(sqlString: string, auth: AuthController, entity: Entity<any> | null): boolean {
     // This is a rudimentary client-side SQL evaluator used *only* for optimistic UI updates.
@@ -74,7 +74,7 @@ function checkOperation(
 ): boolean {
     if (!collection.securityRules || collection.securityRules.length === 0) {
         // According to our plan: Postgres RLS implicitly denies if enabled without rules.
-        // But for FireCMS we default to true if securityRules is undefined,
+        // But for Rebase we default to true if securityRules is undefined,
         // so as not to break everything without rules. Let's assume true for now.
         return true;
     }

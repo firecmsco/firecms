@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { CMSView, EntityCollection, FieldCaption, Role, SecurityRule, User, useSnackbarController, ConfirmationDialog, useAuthController, useCollectionRegistryController } from "@firecms/core";
+import { CMSView, EntityCollection, FieldCaption, Role, SecurityRule, User, useSnackbarController, ConfirmationDialog, useAuthController, useCollectionRegistryController } from "@rebasepro/core";
 
 import {
     AddIcon,
@@ -28,7 +28,7 @@ import {
     MultiSelectItem,
     LoadingButton,
     getColorSchemeForSeed
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { UserManagement } from "../hooks/useBackendUserManagement";
 
 interface AdminViewsProps {

@@ -1,13 +1,13 @@
 ---
 slug: "docs/api/README"
-title: "@firecms/core API"
+title: "@rebasepro/core API"
 ---
 
-**@firecms/core**
+**@rebasepro/core**
 
 ***
 
-# @firecms/core
+# @rebasepro/core
 
 ## Classes
 
@@ -140,8 +140,8 @@ title: "@firecms/core API"
 - [enumToObjectEntries](functions/enumToObjectEntries)
 - [FieldCaption](functions/FieldCaption)
 - [FieldHelperText](functions/FieldHelperText)
-- [FireCMSLogo](functions/FireCMSLogo)
-- [FireCMSRouter](functions/FireCMSRouter)
+- [RebaseLogo](functions/RebaseLogo)
+- [RebaseRouter](functions/RebaseRouter)
 - [flattenObject](functions/flattenObject)
 - [FormEntry](functions/FormEntry)
 - [FormLayout](functions/FormLayout)
@@ -319,10 +319,10 @@ title: "@firecms/core API"
 
 - [ScaffoldProps](interfaces/ScaffoldProps)
 - [AppState](type-aliases/AppState)
-- [FireCMSPlugin](type-aliases/FireCMSPlugin)
+- [RebasePlugin](type-aliases/RebasePlugin)
 - [Scaffold](variables/Scaffold)
 - [DefaultDrawer](functions/DefaultDrawer)
-- [FireCMS](functions/FireCMS)
+- [Rebase](functions/Rebase)
 
 ## Datasource
 
@@ -424,7 +424,7 @@ title: "@firecms/core API"
 - [AuthController](type-aliases/AuthController)
 - [Authenticator](type-aliases/Authenticator)
 - [DeleteEntityWithCallbacksProps](type-aliases/DeleteEntityWithCallbacksProps)
-- [FireCMSContext](type-aliases/FireCMSContext)
+- [RebaseContext](type-aliases/RebaseContext)
 - [ResolvedNavigationEntry](type-aliases/ResolvedNavigationEntry)
 - [SaveEntityWithCallbacksProps](type-aliases/SaveEntityWithCallbacksProps)
 - [SnackbarMessageType](type-aliases/SnackbarMessageType)
@@ -437,7 +437,7 @@ title: "@firecms/core API"
 - [useDataSource](functions/useDataSource)
 - [useDialogsController](functions/useDialogsController)
 - [useEntityFetch](functions/useEntityFetch)
-- [useFireCMSContext](functions/useFireCMSContext)
+- [useRebaseContext](functions/useRebaseContext)
 - [useInternalUserManagementController](functions/useInternalUserManagementController)
 - [useModeController](functions/useModeController)
 - [useNavigationController](functions/useNavigationController)
@@ -483,7 +483,7 @@ title: "@firecms/core API"
 - [EntityValues](type-aliases/EntityValues)
 - [FilterCombination](type-aliases/FilterCombination)
 - [FilterValues](type-aliases/FilterValues)
-- [FireCMSProps](type-aliases/FireCMSProps)
+- [RebaseProps](type-aliases/RebaseProps)
 - [Locale](type-aliases/Locale)
 - [NavigationController](type-aliases/NavigationController)
 - [PartialEntityCollection](type-aliases/PartialEntityCollection)

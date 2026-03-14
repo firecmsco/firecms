@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Slider } from "@firecms/ui";
+import { Slider } from "@rebasepro/ui";
 
 export default function SliderRangeDemo() {
     const [value, setValue] = useState([50, 70]);

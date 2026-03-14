@@ -10,7 +10,7 @@ import {
     GraphQLFieldConfig,
     GraphQLInputObjectType,
 } from "graphql";
-import { DataSource, EntityCollection, Property } from "@firecms/types";
+import { DataSource, EntityCollection, Property } from "@rebasepro/types";
 
 /**
  * Lightweight GraphQL schema generator that leverages existing DataSource

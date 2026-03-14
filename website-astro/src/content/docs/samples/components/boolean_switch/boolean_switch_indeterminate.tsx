@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BooleanSwitch } from "@firecms/ui";
+import { BooleanSwitch } from "@rebasepro/ui";
 
 export default function BooleanSwitchIndeterminateDemo() {
     const [value, setValue] = useState<boolean | null>(null);

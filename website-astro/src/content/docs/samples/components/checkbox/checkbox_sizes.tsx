@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Checkbox } from "@firecms/ui";
+import { Checkbox } from "@rebasepro/ui";
 
 export default function CheckboxSizeDemo() {
     const [checked, setChecked] = useState(true);
@@ -10,17 +10,17 @@ export default function CheckboxSizeDemo() {
                 size="small"
                 checked={checked}
                 onCheckedChange={setChecked}
-                color="primary"/>
+                color="primary" />
             <Checkbox
                 size="medium"
                 checked={checked}
                 onCheckedChange={setChecked}
-                color="primary"/>
+                color="primary" />
             <Checkbox
                 size="large"
                 checked={checked}
                 onCheckedChange={setChecked}
-                color="primary"/>
+                color="primary" />
         </div>
     );
 }

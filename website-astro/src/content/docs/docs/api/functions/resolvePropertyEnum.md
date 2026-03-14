@@ -3,17 +3,17 @@ slug: "docs/api/functions/resolvePropertyEnum"
 title: "resolvePropertyEnum"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / resolvePropertyEnum
+[@rebasepro/core](../README) / resolvePropertyEnum
 
 # Function: resolvePropertyEnum()
 
 > **resolvePropertyEnum**(`property`, `fromBuilder?`): [`ResolvedStringProperty`](../type-aliases/ResolvedStringProperty) \| [`ResolvedNumberProperty`](../type-aliases/ResolvedNumberProperty)
 
-Defined in: [util/resolutions.ts:406](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/resolutions.ts)
+Defined in: [util/resolutions.ts:406](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/resolutions.ts)
 
 Resolve enum aliases for a string or number property
 

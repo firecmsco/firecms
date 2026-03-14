@@ -1,18 +1,18 @@
 import { deepEqual as equal } from "fast-equals"
 
-import { CollectionActionsProps, mergeDeep, useAuthController, useSnackbarController } from "@firecms/core";
-import { Button, SaveIcon, Tooltip, UndoIcon, } from "@firecms/ui";
+import { CollectionActionsProps, mergeDeep, useAuthController, useSnackbarController } from "@rebasepro/core";
+import { Button, SaveIcon, Tooltip, UndoIcon, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
 import { PersistedCollection } from "../types/persisted_collection";
 
 export function EditorCollectionActionStart({
-                                                path,
-                                                parentCollectionIds,
-                                                collection,
-                                                tableController
-                                            }: CollectionActionsProps) {
+    path,
+    parentCollectionIds,
+    collection,
+    tableController
+}: CollectionActionsProps) {
 
     const authController = useAuthController();
     const collectionEditorController = useCollectionEditorController();
@@ -51,7 +51,7 @@ export function EditorCollectionActionStart({
                                 message: "Default config saved"
                             });
                         })}>
-                    <SaveIcon/>
+                    <SaveIcon />
                 </Button>
             </Tooltip>
 
@@ -67,7 +67,7 @@ export function EditorCollectionActionStart({
                         if (collection?.sort)
                             tableController.setSortBy?.(collection?.sort);
                     }}>
-                    <UndoIcon/>
+                    <UndoIcon />
                 </Button>
             </Tooltip>}
         </>;

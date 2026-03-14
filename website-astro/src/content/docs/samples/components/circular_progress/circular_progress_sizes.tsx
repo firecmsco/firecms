@@ -1,5 +1,5 @@
 import React from "react";
-import { CircularProgress } from "@firecms/ui";
+import { CircularProgress } from "@rebasepro/ui";
 
 export default function CircularProgressSizesDemo() {
     return (

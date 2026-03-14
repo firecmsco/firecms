@@ -4,7 +4,7 @@ import {
     EntityCollection,
     Properties,
     Property,
-} from "@firecms/types";
+} from "@rebasepro/types";
 import { isPropertyBuilder } from "./entities";
 
 export function sortProperties<M extends Record<string, any>>(properties: Properties, propertiesOrder?: string[]): Properties {

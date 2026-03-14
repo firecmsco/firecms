@@ -17,13 +17,13 @@
     "baseUrl": ".",
     "jsx": "preserve",
     "paths": {
-      "@firecms/types": [
+      "@rebasepro/types": [
         "../../packages/types/src"
       ],
-      "@firecms/backend": [
+      "@rebasepro/backend": [
         "../../packages/backend/src"
       ],
-      "@firecms/common": [
+      "@rebasepro/common": [
         "../../packages/common/src"
       ],
       "shared": [

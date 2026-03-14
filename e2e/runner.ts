@@ -30,7 +30,7 @@ if (!BASE_DB_URL) {
 }
 
 const timestamp = Date.now();
-const DB_NAME = `firecms_e2e_${timestamp}`;
+const DB_NAME = `rebase_e2e_${timestamp}`;
 const E2E_PG_URL = BASE_DB_URL.replace(/\/[^/?]+(\?|$)/, `/${DB_NAME}$1`);
 
 const BACKEND_PORT = 3002;
@@ -114,7 +114,7 @@ async function run() {
         VITE_API_URL: `http://localhost:${BACKEND_PORT}`,
         E2E_FRONTEND_URL: `http://localhost:${FRONTEND_PORT}`,
         E2E_API_URL: `http://localhost:${BACKEND_PORT}`,
-        E2E_ADMIN_EMAIL: 'admin_e2e@test.firecms.co',
+        E2E_ADMIN_EMAIL: 'admin_e2e@test.rebase.pro',
         E2E_ADMIN_PASSWORD: 'Password123!'
     };
 
@@ -149,7 +149,7 @@ async function run() {
     await waitForPort(BACKEND_PORT);
     console.log(`✅ [Runner] Backend is ready.`);
 
-    // Allow time for FireCMS backend to initialize core tables (like users and roles)
+    // Allow time for Rebase backend to initialize core tables (like users and roles)
     await new Promise(r => setTimeout(r, 4000));
 
     // 3. Seed Admin User
@@ -159,7 +159,7 @@ async function run() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                email: 'admin_e2e@test.firecms.co',
+                email: 'admin_e2e@test.rebase.pro',
                 password: 'Password123!',
                 displayName: 'E2E Admin'
             })
@@ -175,8 +175,8 @@ async function run() {
         // Grant admin role via raw postgres
         const e2eClient = new Client({ connectionString: E2E_PG_URL });
         await e2eClient.connect();
-        await e2eClient.query(`INSERT INTO firecms_roles (id, name) VALUES ('admin', 'Admin') ON CONFLICT DO NOTHING`);
-        await e2eClient.query(`INSERT INTO firecms_user_roles (user_id, role_id) VALUES ($1, 'admin') ON CONFLICT DO NOTHING`, [userId]);
+        await e2eClient.query(`INSERT INTO rebase_roles (id, name) VALUES ('admin', 'Admin') ON CONFLICT DO NOTHING`);
+        await e2eClient.query(`INSERT INTO rebase_user_roles (user_id, role_id) VALUES ($1, 'admin') ON CONFLICT DO NOTHING`, [userId]);
         await e2eClient.end();
         console.log(`✅ [Runner] Admin user seeded successfully (${userId}).`);
     } catch (e) {

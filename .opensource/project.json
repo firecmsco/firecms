@@ -1,5 +1,5 @@
 {
-    "name": "FireCMS",
+    "name": "Rebase",
     "platforms": [
         "Admin",
         "CMS",
@@ -21,19 +21,19 @@
     "tabs": [
         {
             "title": "Homepage",
-            "href": "https://firecms.co/"
+            "href": "https://rebase.pro/"
         },
         {
             "title": "NPM",
-            "href": "https://www.npmjs.com/package/firecms"
+            "href": "https://www.npmjs.com/package/rebase"
         },
         {
             "title": "Pricing",
-            "href": "https://firecms.co/pricing"
+            "href": "https://rebase.pro/pricing"
         },
         {
             "title": "Docs",
-            "href": "https://firecms.co/docs"
+            "href": "https://rebase.pro/docs"
         }
     ]
 }

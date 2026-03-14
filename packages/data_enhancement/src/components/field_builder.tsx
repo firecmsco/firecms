@@ -8,7 +8,7 @@ import {
     PluginFieldBuilderParams,
     Property,
     StringProperty,
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     AutoAwesomeIcon,
     CircularProgress,
@@ -20,13 +20,13 @@ import {
     TextField,
     Tooltip,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { useDataEnhancementController } from "./DataEnhancementControllerProvider";
 import { SUPPORTED_FIELDS_ENHANCEMENT } from "../utils/fields";
 import { EnhanceTextFieldBinding } from "./fields/EnhanceTextField";
 import { EnhancedDataResult, EnhanceParams } from "../types/data_enhancement_controller";
 import { countStringCharacters } from "../utils/strings_counter";
-import { EditorAIController } from "@firecms/editor";
+import { EditorAIController } from "@rebasepro/editor";
 
 export function fieldBuilder<P extends Property = Property>
     (params: PluginFieldBuilderParams<P>): React.ComponentType<FieldProps<P>> | null {

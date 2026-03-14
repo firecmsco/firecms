@@ -11,7 +11,7 @@ import {
     AppBar,
     CircularProgressCenter,
     Drawer,
-    FireCMS,
+    Rebase,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -21,7 +21,7 @@ import {
     useBuildModeController,
     useBuildNavigationController,
     useValidateAuthenticator
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     FirebaseAuthController,
     FirebaseLoginView,
@@ -30,22 +30,22 @@ import {
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase
-} from "@firecms/firebase";
+} from "@rebasepro/firebase";
 
 import { firebaseConfig } from "../common/firebase_config";
-import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
-import { useImportPlugin } from "@firecms/data_import";
-import { useExportPlugin } from "@firecms/data_export";
+import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@rebasepro/user_management";
+import { useImportPlugin } from "@rebasepro/data_import";
+import { useExportPlugin } from "@rebasepro/data_export";
 import logo from "@/app/common/logo.svg";
 import { productsCollection } from "./collections/products";
 import { blogCollection } from "@/app/cms/collections/blog";
 import Link from "next/link";
-import { Button, OpenInNewIcon } from "@firecms/ui";
+import { Button, OpenInNewIcon } from "@rebasepro/ui";
 
 export function App() {
 
-    const title = "FireCMS e-commerce and blog demo";
+    const title = "Rebase e-commerce and blog demo";
 
     if (!firebaseConfig?.projectId) {
         throw new Error("Firebase config not found. Please check your `firebase_config.ts` file and make sure it is correctly set up.");
@@ -57,7 +57,7 @@ export function App() {
         configError
     } = useInitialiseFirebase({
         firebaseConfig,
-        name: "FireCMS",
+        name: "Rebase",
     });
 
     const collectionsBuilder = useCallback(() => {
@@ -164,7 +164,7 @@ export function App() {
     const exportPlugin = useExportPlugin();
 
     if (firebaseConfigLoading || !firebaseApp) {
-        return <CircularProgressCenter/>;
+        return <CircularProgressCenter />;
     }
 
     if (configError) {
@@ -175,7 +175,7 @@ export function App() {
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
 
-                <FireCMS
+                <Rebase
                     navigationController={navigationController}
                     authController={userManagement}
                     userConfigPersistence={userConfigPersistence}
@@ -189,13 +189,13 @@ export function App() {
                     ]}
                 >
                     {({
-                          context,
-                          loading
-                      }) => {
+                        context,
+                        loading
+                    }) => {
 
                         let component;
                         if (loading || authLoading) {
-                            component = <CircularProgressCenter size={"large"}/>;
+                            component = <CircularProgressCenter size={"large"} />;
                         } else {
                             if (!canAccessMainView) {
                                 component = (
@@ -206,7 +206,7 @@ export function App() {
                                             signInOptions={signInOptions}
                                             firebaseApp={firebaseApp}
                                             authController={userManagement}
-                                            notAllowedError={notAllowedError}/>
+                                            notAllowedError={notAllowedError} />
                                     </div>
 
                                 );
@@ -216,15 +216,15 @@ export function App() {
                                         logo={logo.src}
                                         autoOpenDrawer={false}>
                                         <AppBar title={title}
-                                                endAdornment={<Link href={"/"} target={"_blank"}>
-                                                    <Button variant={"text"}>
-                                                        <OpenInNewIcon/>
-                                                        Go to website
-                                                    </Button>
-                                                </Link>}/>
-                                        <Drawer/>
-                                        <NavigationRoutes/>
-                                        <SideDialogs/>
+                                            endAdornment={<Link href={"/"} target={"_blank"}>
+                                                <Button variant={"text"}>
+                                                    <OpenInNewIcon />
+                                                    Go to website
+                                                </Button>
+                                            </Link>} />
+                                        <Drawer />
+                                        <NavigationRoutes />
+                                        <SideDialogs />
                                     </Scaffold>
                                 );
                             }
@@ -232,7 +232,7 @@ export function App() {
 
                         return component;
                     }}
-                </FireCMS>
+                </Rebase>
             </ModeControllerProvider>
         </SnackbarProvider>
     );

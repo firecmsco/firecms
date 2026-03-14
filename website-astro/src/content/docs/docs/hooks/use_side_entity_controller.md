@@ -7,7 +7,7 @@ sidebar_label: useSideEntityController
 :::note
 Please note that in order to use these hooks you **must** be in
 a component (you can't use them directly from a callback function).
-Anyhow, callbacks usually include a `FireCMSContext`, which includes all
+Anyhow, callbacks usually include a `RebaseContext`, which includes all
 the controllers.
 :::
 
@@ -16,7 +16,7 @@ This is the same controller the CMS uses when you click on an entity in a collec
 view.
 
 Using this controller you can open a form in a side dialog, also if the path and
-entity schema are not included in the main navigation defined in `FireCMS`.
+entity schema are not included in the main navigation defined in `Rebase`.
 
 The props provided by this hook are:
 
@@ -33,8 +33,8 @@ Example:
 
 ```tsx
 import React from "react";
-import { useSideEntityController } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { useSideEntityController } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 export function ExampleCMSView() {
 

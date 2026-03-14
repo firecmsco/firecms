@@ -3,17 +3,17 @@ slug: "docs/api/functions/removeNulls"
 title: "removeNulls"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / removeNulls
+[@rebasepro/core](../README) / removeNulls
 
 # Function: removeNulls()
 
 > **removeNulls**(`value`): `any`
 
-Defined in: [util/objects.ts:168](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/objects.ts)
+Defined in: [util/objects.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
 
 ## Parameters
 

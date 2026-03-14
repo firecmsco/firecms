@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/FilterCombinationValidProps"
 title: "FilterCombinationValidProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / FilterCombinationValidProps
+[@rebasepro/core](../README) / FilterCombinationValidProps
 
 # Type Alias: FilterCombinationValidProps
 
 > **FilterCombinationValidProps** = `object`
 
-Defined in: [types/datasource.ts:239](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:239](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/datasource.ts:239](https://github.com/firecmsco/firecms/blob/
 
 > **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`any`\>
 
-Defined in: [types/datasource.ts:241](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:241](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [types/datasource.ts:241](https://github.com/firecmsco/firecms/blob/
 
 > **filterValues**: [`FilterValues`](FilterValues)\<`any`\>
 
-Defined in: [types/datasource.ts:242](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:242](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [types/datasource.ts:242](https://github.com/firecmsco/firecms/blob/
 
 > **path**: `string`
 
-Defined in: [types/datasource.ts:240](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:240](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -45,4 +45,4 @@ Defined in: [types/datasource.ts:240](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **sortBy**: \[`string`, `"asc"` \| `"desc"`\]
 
-Defined in: [types/datasource.ts:243](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:243](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)

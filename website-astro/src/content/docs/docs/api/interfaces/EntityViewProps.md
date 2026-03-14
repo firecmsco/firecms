@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/EntityViewProps"
 title: "EntityViewProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityViewProps
+[@rebasepro/core](../README) / EntityViewProps
 
 # Interface: EntityViewProps\<M\>
 
-Defined in: [components/EntityView.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityView.tsx)
+Defined in: [components/EntityView.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [components/EntityView.tsx:13](https://github.com/firecmsco/firecms/
 
 > `optional` **className**: `string`
 
-Defined in: [components/EntityView.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityView.tsx)
+Defined in: [components/EntityView.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [components/EntityView.tsx:17](https://github.com/firecmsco/firecms/
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [components/EntityView.tsx:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityView.tsx)
+Defined in: [components/EntityView.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [components/EntityView.tsx:15](https://github.com/firecmsco/firecms/
 
 > **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [components/EntityView.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityView.tsx)
+Defined in: [components/EntityView.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [components/EntityView.tsx:14](https://github.com/firecmsco/firecms/
 
 > **path**: `string`
 
-Defined in: [components/EntityView.tsx:16](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityView.tsx)
+Defined in: [components/EntityView.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)

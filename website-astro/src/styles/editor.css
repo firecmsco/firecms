@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@firecms/ui/index.css" layer(base);
+@import "@rebasepro/ui/index.css" layer(base);
 
 @import "@material-design-icons/font/filled.css";
 

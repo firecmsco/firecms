@@ -1,6 +1,6 @@
 import { Entity } from "./entities";
 import { User } from "../users";
-import { FireCMSContext } from "../firecms_context";
+import { RebaseContext } from "../rebase_context";
 
 /**
  * You can use this configuration to add additional fields to the data
@@ -8,7 +8,7 @@ import { FireCMSContext } from "../firecms_context";
  * @group Models
  */
 export interface ExportConfig<USER extends User = User> {
-    additionalFields: ExportMappingFunction<USER> [];
+    additionalFields: ExportMappingFunction<USER>[];
 }
 
 /**
@@ -17,10 +17,10 @@ export interface ExportConfig<USER extends User = User> {
 export interface ExportMappingFunction<USER extends User = User> {
     key: string;
     builder: ({
-                  entity,
-                  context
-              }: {
+        entity,
+        context
+    }: {
         entity: Entity<any>,
-        context: FireCMSContext<USER>
+        context: RebaseContext<USER>
     }) => Promise<string> | string;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { InfoLabel } from "@firecms/ui";
+import { InfoLabel } from "@rebasepro/ui";
 
 export default function InfoLabelBasicDemo() {
     return (

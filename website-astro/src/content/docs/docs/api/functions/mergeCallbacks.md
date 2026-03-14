@@ -3,17 +3,17 @@ slug: "docs/api/functions/mergeCallbacks"
 title: "mergeCallbacks"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / mergeCallbacks
+[@rebasepro/core](../README) / mergeCallbacks
 
 # Function: mergeCallbacks()
 
 > **mergeCallbacks**(`baseCallbacks`, `pluginCallbacks`): [`EntityCallbacks`](../type-aliases/EntityCallbacks) \| `undefined`
 
-Defined in: [util/callbacks.ts:3](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/callbacks.ts)
+Defined in: [util/callbacks.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/callbacks.ts)
 
 ## Parameters
 

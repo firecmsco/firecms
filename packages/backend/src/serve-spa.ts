@@ -42,7 +42,7 @@ export interface ServeSPAConfig {
  * 
  * @example
  * ```typescript
- * import { serveSPA } from "@firecms/backend";
+ * import { serveSPA } from "@rebasepro/backend";
  * 
  * // After initializing backend and API...
  * serveSPA(app, {

@@ -2,7 +2,7 @@
 slug: docs/recipes/documents_as_subcollections
 title: Dynamic root collections
 sidebar_label: Dynamic root collections
-description: Learn how to dynamically generate navigation and collections from database documents in FireCMS.
+description: Learn how to dynamically generate navigation and collections from database documents in Rebase.
 ---
 
 Let's build a more complex example where the main navigation is **loaded dynamically** from
@@ -44,12 +44,12 @@ import FullCode from '../../samples/samples_v3/recipes/document_as_subcollection
 
 ### Dynamic collection builder
 
-Typically in FireCMS you pass a static list of collections to the main CMS
+Typically in Rebase you pass a static list of collections to the main CMS
 component, but in this case we need to build the collections dynamically based
 on the data in the database.
 
-FireCMS allows you to pass a function that returns a list of collections to the
-`collections` prop of the `FireCMSApp` component.
+Rebase allows you to pass a function that returns a list of collections to the
+`collections` prop of the `RebaseApp` component.
 
 <Code code={CollectionBuilder} lang="tsx" />
 

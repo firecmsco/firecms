@@ -74,7 +74,7 @@ export function Footer() {
 
         <div className={"flex flex-col gap-2 p-3 text-center"}>
             <a className={"font-headers text-text-disabled text-sm font-medium uppercase"}
-               href={"https://firecms.co"}>Built with <b>FireCMS</b> </a>
+                href={"https://rebase.pro"}>Built with <b>Rebase</b> </a>
         </div>
     </footer>;
 

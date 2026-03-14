@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/ArrayPropertyValidationSchema"
 title: "ArrayPropertyValidationSchema"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ArrayPropertyValidationSchema
+[@rebasepro/core](../README) / ArrayPropertyValidationSchema
 
 # Interface: ArrayPropertyValidationSchema
 
-Defined in: [types/properties.ts:756](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:756](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Validation rules for arrays
 
@@ -25,7 +25,7 @@ Validation rules for arrays
 
 > `optional` **max**: `number`
 
-Defined in: [types/properties.ts:758](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:758](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [types/properties.ts:758](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **min**: `number`
 
-Defined in: [types/properties.ts:757](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:757](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [types/properties.ts:757](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **required**: `boolean`
 
-Defined in: [types/properties.ts:689](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:689](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Is this field required
 
@@ -55,7 +55,7 @@ Is this field required
 
 > `optional` **requiredMessage**: `string`
 
-Defined in: [types/properties.ts:694](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:694](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Customize the required message when the property is not set
 
@@ -69,7 +69,7 @@ Customize the required message when the property is not set
 
 > `optional` **unique**: `boolean`
 
-Defined in: [types/properties.ts:700](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:700](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 If the unique flag is set to `true`, you can only have one entity in the
 collection with this value.
@@ -84,7 +84,7 @@ collection with this value.
 
 > `optional` **uniqueInArray**: `boolean`
 
-Defined in: [types/properties.ts:708](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:708](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 If the uniqueInArray flag is set to `true`, you can only have this value
 once per entry in the parent `ArrayProperty`. It has no effect if this

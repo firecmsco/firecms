@@ -3,15 +3,15 @@ slug: "docs/api/classes/Vector"
 title: "Vector"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / Vector
+[@rebasepro/core](../README) / Vector
 
 # Class: Vector
 
-Defined in: [types/entities.ts:90](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:90](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 ## Constructors
 
@@ -19,7 +19,7 @@ Defined in: [types/entities.ts:90](https://github.com/firecmsco/firecms/blob/mai
 
 > **new Vector**(`value`): `Vector`
 
-Defined in: [types/entities.ts:93](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:93](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 #### Parameters
 
@@ -37,4 +37,4 @@ Defined in: [types/entities.ts:93](https://github.com/firecmsco/firecms/blob/mai
 
 > `readonly` **value**: `number`[]
 
-Defined in: [types/entities.ts:91](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:91](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)

@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import { EntityCollection, FireCMSPlugin } from "@firecms/types";
+import { EntityCollection, RebasePlugin } from "@rebasepro/types";
 import { ExportCollectionAction } from "./export";
 
 /**
  * Use this plugin to be able to export collections data as JSON or CSV
  */
-export function useExportPlugin(props?: ExportPluginProps): FireCMSPlugin<any, any, any, ExportPluginProps> {
+export function useExportPlugin(props?: ExportPluginProps): RebasePlugin<any, any, any, ExportPluginProps> {
 
     return useMemo(() => ({
         key: "export",

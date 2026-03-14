@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/ExportMappingFunction"
 title: "ExportMappingFunction"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ExportMappingFunction
+[@rebasepro/core](../README) / ExportMappingFunction
 
 # Interface: ExportMappingFunction\<USER\>
 
-Defined in: [types/export\_import.ts:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/export_import.ts)
+Defined in: [types/export\_import.ts:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/export_import.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [types/export\_import.ts:17](https://github.com/firecmsco/firecms/bl
 
 > **builder**: (`__namedParameters`) => `string` \| `Promise`\<`string`\>
 
-Defined in: [types/export\_import.ts:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/export_import.ts)
+Defined in: [types/export\_import.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/export_import.ts)
 
 #### Parameters
 
@@ -33,7 +33,7 @@ Defined in: [types/export\_import.ts:19](https://github.com/firecmsco/firecms/bl
 
 ###### context
 
-[`FireCMSContext`](../type-aliases/FireCMSContext)\<`USER`\>
+[`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
 ###### entity
 
@@ -49,4 +49,4 @@ Defined in: [types/export\_import.ts:19](https://github.com/firecmsco/firecms/bl
 
 > **key**: `string`
 
-Defined in: [types/export\_import.ts:18](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/export_import.ts)
+Defined in: [types/export\_import.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/export_import.ts)

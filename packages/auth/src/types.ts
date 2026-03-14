@@ -1,10 +1,10 @@
-import { AuthController, Role, User } from "@firecms/core";
+import { AuthController, Role, User } from "@rebasepro/core";
 
 /**
  * Auth controller that extends the base AuthController
  * with additional methods for email/password and Google login
  */
-export type FireCMSAuthController = AuthController & {
+export type RebaseAuthController = AuthController & {
     /** Login with Google ID token from frontend Google Sign-In */
     googleLogin: (idToken: string) => Promise<void>;
     /** Login with email and password */
@@ -36,9 +36,9 @@ export type FireCMSAuthController = AuthController & {
 }
 
 /**
- * Props for useFireCMSAuthController hook
+ * Props for useRebaseAuthController hook
  */
-export interface FireCMSAuthControllerProps {
+export interface RebaseAuthControllerProps {
     /** Base URL of the backend API */
     apiUrl?: string;
     /** Google OAuth client ID (optional, enables Google login) */

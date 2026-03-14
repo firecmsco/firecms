@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { deploy } from "./commands/deploy";
 import { getCurrentUser, login, logout } from "./commands/auth";
 import arg from "arg";
-import { createFireCMSApp } from "./commands/init";
+import { createRebaseApp } from "./commands/init";
 
 export async function entry(args) {
 
@@ -14,7 +14,7 @@ export async function entry(args) {
     const command = args[2];
 
     if (command === "init") {
-        await createFireCMSApp(args);
+        await createRebaseApp(args);
     } else if (command === "login") {
         await loginArgs(args);
     } else if (command === "logout") {
@@ -43,7 +43,7 @@ async function loginArgs(rawArgs) {
     const debug = args["--debug"] || false;
     if (env !== "prod" && env !== "dev") {
         console.log("Please specify a valid environment: dev or prod");
-        console.log("firecms login --env=prod");
+        console.log("rebase login --env=prod");
         return;
     }
     await login(env, debug);
@@ -63,7 +63,7 @@ async function logoutArgs(rawArgs) {
     const debug = args["--debug"] || false;
     if (env !== "prod" && env !== "dev") {
         console.log("Please specify a valid environment: dev or prod");
-        console.log("firecms logout --env=prod");
+        console.log("rebase logout --env=prod");
         return;
     }
     await logout(env, debug);
@@ -84,14 +84,14 @@ async function deployArgs(rawArgs) {
 
     if (!project) {
         console.log("Please specify a project:");
-        console.log("firecms deploy --project=your-project-id");
+        console.log("rebase deploy --project=your-project-id");
         return;
     }
     const env = args["--env"] || "prod";
     const debug = args["--debug"] || false;
     if (env !== "prod" && env !== "dev") {
         console.log("Please specify a valid environment:");
-        console.log("firecms deploy --project=your-project-id --env=dev");
+        console.log("rebase deploy --project=your-project-id --env=dev");
         return;
     }
 
@@ -106,13 +106,13 @@ async function deployArgs(rawArgs) {
 async function printHelp(env: "prod" | "dev" = "prod", debug: boolean = false) {
 
     console.log(`
-${chalk.red.bold("Welcome to the FireCMS CLI 🔥🔥🔥")}
+${chalk.red.bold("Welcome to the Rebase CLI 🔥🔥🔥")}
 
 ${chalk.green.bold("Usage")}
-firecms ${chalk.blue.bold("<command>")} [options]
+rebase ${chalk.blue.bold("<command>")} [options]
 
 ${chalk.green.bold("Commands")}
-${chalk.blue.bold("login")} - Login to FireCMS
+${chalk.blue.bold("login")} - Login to Rebase
 ${chalk.blue.bold("logout")} - Sign out
 ${chalk.blue.bold("init")} - Create a new CMS project
 ${chalk.blue.bold("deploy")} - Deploy an existing CMS project

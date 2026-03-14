@@ -1,26 +1,26 @@
 ---
 slug: docs/self/mongodb
-title: Integrating MongoDB Atlas with FireCMS
+title: Integrating MongoDB Atlas with Rebase
 sidebar_label: MongoDB Integration
-description: Complete guide to using MongoDB Atlas as your database and authentication provider with FireCMS.
+description: Complete guide to using MongoDB Atlas as your database and authentication provider with Rebase.
 ---
 
-This guide details the steps necessary to integrate MongoDB Atlas as both the authentication system and the primary database for your FireCMS application.
+This guide details the steps necessary to integrate MongoDB Atlas as both the authentication system and the primary database for your Rebase application.
 Mongo Atlas does not support file storage, so you can optionally use Firebase for this purpose, or any
 other storage provider.
 
 ## Project Setup
 
-Start by generating a new project using the FireCMS PRO starter template.
+Start by generating a new project using the Rebase PRO starter template.
 
 ```bash
-npx create-firecms-app --pro
+npx create-rebase-app --pro
 ```
 
 or
 
 ```bash
-yarn create firecms-app --pro
+yarn create rebase-app --pro
 ```
 
 ## MongoDB Atlas Configuration
@@ -57,7 +57,7 @@ const firebaseConfig = {
 };
 ```
 
-## Implementing MongoDB in FireCMS
+## Implementing MongoDB in Rebase
 
 Let's create a new `MongoDBApp` component that integrates MongoDB Atlas (and optionally Firebase).
 
@@ -70,7 +70,7 @@ import React from "react";
 import {
   AppBar,
   CircularProgressCenter,
-  FireCMS,
+  Rebase,
   ModeControllerProvider,
   NavigationRoutes,
   Scaffold,
@@ -80,23 +80,23 @@ import {
   useBuildModeController,
   useBuildNavigationController,
   useValidateAuthenticator
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
   useFirebaseStorageSource,
   useInitialiseFirebase,
-} from "@firecms/firebase";
+} from "@rebasepro/firebase";
 import { productsCollection } from "./collections/products_collection";
-import { CenteredView } from "@firecms/ui";
+import { CenteredView } from "@rebasepro/ui";
 import {
   MongoAuthController,
   MongoLoginView,
   useInitRealmMongodb,
   useMongoDBAuthController,
   useMongoDataSource
-} from "@firecms/mongodb";
+} from "@rebasepro/mongodb";
 
 const MongoDBApp = () => {
-  const name = "My FireCMS App";
+  const name = "My Rebase App";
 
   // Initialize Firebase
   const { firebaseApp, firebaseConfigLoading, configError } = useInitialiseFirebase({ firebaseConfig });
@@ -165,7 +165,7 @@ Finally, wire everything up inside the return statement of your component.
 
 ```jsx
 const MongoDBApp = () => {
-  const name = "My FireCMS App";
+  const name = "My Rebase App";
 
   const { firebaseApp, firebaseConfigLoading, configError } = useInitialiseFirebase({ firebaseConfig });
   const { app } = useInitRealmMongodb(atlasConfig);
@@ -202,7 +202,7 @@ const MongoDBApp = () => {
   return (
     <SnackbarProvider>
       <ModeControllerProvider value={modeController}>
-        <FireCMS
+        <Rebase
           navigationController={navigationController}
           authController={authController}
           userConfigPersistence={userConfigPersistence}
@@ -234,7 +234,7 @@ const MongoDBApp = () => {
               </Scaffold>
             );
           }}
-        </FireCMS>
+        </Rebase>
       </ModeControllerProvider>
     </SnackbarProvider>
   );

@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/AppState"
 title: "AppState"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / AppState
+[@rebasepro/core](../README) / AppState
 
 # Type Alias: AppState
 
 > **AppState** = `object`
 
-Defined in: [app/useApp.tsx:7](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/app/useApp.tsx)
+Defined in: [app/useApp.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 This context represents the state of the app in terms of layout.
 
@@ -23,7 +23,7 @@ This context represents the state of the app in terms of layout.
 
 > `optional` **autoOpenDrawer**: `boolean`
 
-Defined in: [app/useApp.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/app/useApp.tsx)
+Defined in: [app/useApp.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [app/useApp.tsx:13](https://github.com/firecmsco/firecms/blob/main/p
 
 > **closeDrawer**: () => `void`
 
-Defined in: [app/useApp.tsx:12](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/app/useApp.tsx)
+Defined in: [app/useApp.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 #### Returns
 
@@ -43,7 +43,7 @@ Defined in: [app/useApp.tsx:12](https://github.com/firecmsco/firecms/blob/main/p
 
 > **drawerHovered**: `boolean`
 
-Defined in: [app/useApp.tsx:9](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/app/useApp.tsx)
+Defined in: [app/useApp.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [app/useApp.tsx:9](https://github.com/firecmsco/firecms/blob/main/pa
 
 > **drawerOpen**: `boolean`
 
-Defined in: [app/useApp.tsx:10](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/app/useApp.tsx)
+Defined in: [app/useApp.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [app/useApp.tsx:10](https://github.com/firecmsco/firecms/blob/main/p
 
 > **hasDrawer**: `boolean`
 
-Defined in: [app/useApp.tsx:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/app/useApp.tsx)
+Defined in: [app/useApp.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [app/useApp.tsx:8](https://github.com/firecmsco/firecms/blob/main/pa
 
 > `optional` **logo**: `string`
 
-Defined in: [app/useApp.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/app/useApp.tsx)
+Defined in: [app/useApp.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [app/useApp.tsx:14](https://github.com/firecmsco/firecms/blob/main/p
 
 > **openDrawer**: () => `void`
 
-Defined in: [app/useApp.tsx:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/app/useApp.tsx)
+Defined in: [app/useApp.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 #### Returns
 

@@ -1,0 +1,74 @@
+import { ApplicationVerifier, ConfirmationResult, User as FirebaseUser } from "@firebase/auth";
+
+import { AuthController, Role, User } from "@rebasepro/core";
+
+/**
+ * @group Firebase
+ */
+export type FirebaseSignInProvider =
+    | "password"
+    | "phone"
+    | "anonymous"
+    | "google.com"
+    | "facebook.com"
+    | "github.com"
+    | "twitter.com"
+    | "microsoft.com"
+    | "apple.com";
+
+/**
+ * @group Firebase
+ */
+export type FirebaseSignInOption = {
+    provider: FirebaseSignInProvider;
+    scopes?: string[];
+    customParameters?: Record<string, string>;
+}
+
+export type FirebaseUserWrapper = User & FirebaseUser & {
+    firebaseUser: FirebaseUser | null;
+}
+
+/**
+ * @group Firebase
+ */
+export type FirebaseAuthController<USER extends User = FirebaseUserWrapper, ExtraData = any> =
+    AuthController<USER, ExtraData>
+    & {
+
+        confirmationResult?: ConfirmationResult;
+
+        googleLogin: () => void;
+
+        anonymousLogin: () => void;
+
+        appleLogin: () => void;
+
+        facebookLogin: () => void;
+
+        githubLogin: () => void;
+
+        microsoftLogin: () => void;
+
+        twitterLogin: () => void;
+
+        emailPasswordLogin: (email: string, password: string) => void;
+
+        fetchSignInMethodsForEmail: (email: string) => Promise<string[]>;
+
+        createUserWithEmailAndPassword: (email: string, password: string) => void;
+
+        sendPasswordResetEmail: (email: string) => Promise<void>;
+
+        phoneLogin: (phone: string, applicationVerifier: ApplicationVerifier) => void;
+
+        /**
+         * Skip login
+         */
+        skipLogin: () => void;
+
+        setUser: (user: USER | null) => void;
+
+        setUserRoles: (roles: Role[]) => void;
+
+    };

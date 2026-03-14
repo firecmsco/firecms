@@ -60,13 +60,13 @@ import {
     TextField,
     Tooltip,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import React, { useState } from "react";
 
 export default function ClientUIComponentsShowcase({
-                                                       docsUrl,
-                                                       linksInNewTab
-                                                   }: { docsUrl?: string, linksInNewTab?: boolean }) {
+    docsUrl,
+    linksInNewTab
+}: { docsUrl?: string, linksInNewTab?: boolean }) {
 
     const [tabValue, setTabValue] = useState("tab1");
     const [isDialogOpen, setDialogOpen] = useState(false);
@@ -82,33 +82,33 @@ export default function ClientUIComponentsShowcase({
     const cardClasses = "relative p-4 mb-6 flex flex-col gap-2 break-inside-avoid border-none";
 
     return <div className={"@container max-w-7xl mx-auto not-content"}>
-        <MenubarDemo/>
+        <MenubarDemo />
         <div className="@xl:columns-2 @4xl:columns-3 gap-4">
 
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/slider"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/slider"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div" >Slider</Typography>
                 <Slider step={1}
-                        min={0}
-                        max={10}
-                        value={sliderValue}
-                        onValueChange={setSliderValue}/>
+                    min={0}
+                    max={10}
+                    value={sliderValue}
+                    onValueChange={setSliderValue} />
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/button"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/button"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Buttons</Typography>
                 <div className={"flex flex-row flex-wrap gap-2 items-center"}>
@@ -123,11 +123,11 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/tabs"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/tabs"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Tabs</Typography>
                 <Tabs value={tabValue} onValueChange={setTabValue}>
@@ -139,11 +139,11 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/file_upload"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/file_upload"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">File Upload</Typography>
                 <FileUpload
@@ -151,29 +151,29 @@ export default function ClientUIComponentsShowcase({
                     onFilesAdded={() => {
                     }}
                     title="Upload your file"
-                    uploadDescription="Drag and drop a file here or click"/>
+                    uploadDescription="Drag and drop a file here or click" />
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/search_bar"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/search_bar"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Search Bar</Typography>
-                <SearchBar innerClassName={"w-full"}/>
-                <SearchBar large loading/>
+                <SearchBar innerClassName={"w-full"} />
+                <SearchBar large loading />
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/alert"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/alert"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Alert</Typography>
                 <Alert color="info">This is an info alert.</Alert>
@@ -184,44 +184,44 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/markdown"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/markdown"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Markdown
-                    source={`## Markdown Example\nThis is a basic Markdown **rendering**.\n- Bullet one\n- Bullet two`}/>
+                    source={`## Markdown Example\nThis is a basic Markdown **rendering**.\n- Bullet one\n- Bullet two`} />
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/skeleton"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/skeleton"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Skeleton</Typography>
-                <Skeleton width={240} height={20}/>
-                <Skeleton/>
-                <Skeleton width={180}/>
+                <Skeleton width={240} height={20} />
+                <Skeleton />
+                <Skeleton width={180} />
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/chip"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/chip"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Chip</Typography>
                 <div className={"flex flex-row flex-wrap gap-2"}>
                     <Chip>Basic Chip</Chip>
                     <Chip colorScheme="redLighter">Red Light Chip</Chip>
                     <Chip colorScheme="blueDarker" size="small">Small Chip</Chip>
-                    <Chip icon={<FaceIcon size="small"/>}>Chip with Icon</Chip>
+                    <Chip icon={<FaceIcon size="small" />}>Chip with Icon</Chip>
                     <Chip onClick={() => console.log("Chip clicked")}>Clickable Chip</Chip>
                 </div>
             </Card>
@@ -229,39 +229,39 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/boolean_switch"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/boolean_switch"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Boolean Switch</Typography>
                 <div className={"flex flex-row items-center gap-2"}>
                     <BooleanSwitch value={checked}
-                                   size="large"
-                                   onValueChange={() => {
-                                       setChecked(!checked)
-                                   }}/>
+                        size="large"
+                        onValueChange={() => {
+                            setChecked(!checked)
+                        }} />
                     <BooleanSwitch value={checked}
-                                   onValueChange={() => {
-                                       setChecked(!checked)
-                                   }}
-                                   size="medium"/>
+                        onValueChange={() => {
+                            setChecked(!checked)
+                        }}
+                        size="medium" />
                     <BooleanSwitch value={checked}
-                                   onValueChange={() => {
-                                       setChecked(!checked)
-                                   }}
-                                   size="small"/>
+                        onValueChange={() => {
+                            setChecked(!checked)
+                        }}
+                        size="small" />
                 </div>
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/checkbox"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/checkbox"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Checkbox</Typography>
 
@@ -269,56 +269,56 @@ export default function ClientUIComponentsShowcase({
 
                     <Tooltip title={"Regular checkbox"}>
                         <Checkbox checked={checked ?? false}
-                                  onCheckedChange={() => {
-                                      setChecked(!checked)
-                                  }}
-                                  size="medium"/>
+                            onCheckedChange={() => {
+                                setChecked(!checked)
+                            }}
+                            size="medium" />
                     </Tooltip>
                     <Tooltip title={"Small checkbox"}>
                         <Checkbox checked={checked ?? false}
-                                  size="small"
-                                  onCheckedChange={() => {
-                                      setChecked(!checked)
-                                  }}/>
+                            size="small"
+                            onCheckedChange={() => {
+                                setChecked(!checked)
+                            }} />
                     </Tooltip>
                     <Tooltip title={"Indeterminate checkbox"}>
                         <Checkbox checked={checked ?? false}
-                                  indeterminate={checked === null}
-                                  onCheckedChange={() => {
-                                      console.log("Checked", checked)
-                                      if (checked === true) setChecked(false);
-                                      else if (checked === false) setChecked(null);
-                                      else setChecked(true)
-                                  }}/>
+                            indeterminate={checked === null}
+                            onCheckedChange={() => {
+                                console.log("Checked", checked)
+                                if (checked === true) setChecked(false);
+                                else if (checked === false) setChecked(null);
+                                else setChecked(true)
+                            }} />
                     </Tooltip>
                 </div>
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/icon_button"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/icon_button"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">IconButton</Typography>
                 <div className={"flex gap-2 items-center"}>
                     <Tooltip title={"Ghost button"}>
                         <IconButton variant="ghost" onClick={() => console.log("Clicked!")}>
-                            <MusicNoteIcon/>
+                            <MusicNoteIcon />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title={"Small button"}>
                         <IconButton variant="filled" size="small" onClick={() => console.log("Small Clicked!")}>
-                            <SettingsIcon size="small"/>
+                            <SettingsIcon size="small" />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title={"Filled button"}>
                         <IconButton
                             variant="filled"
                             onClick={() => console.log("Square Clicked!")}>
-                            <AddIcon/>
+                            <AddIcon />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title={"Square filled button"}>
@@ -326,7 +326,7 @@ export default function ClientUIComponentsShowcase({
                             variant="filled"
                             shape="square"
                             onClick={() => console.log("Square Clicked!")}>
-                            <CreditCardIcon/>
+                            <CreditCardIcon />
                         </IconButton>
                     </Tooltip>
                 </div>
@@ -335,11 +335,11 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/dialog"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/dialog"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Dialog</Typography>
                 <Button onClick={() => setDialogOpen(true)}>Open Dialog</Button>
@@ -361,11 +361,11 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/popover"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/popover"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Popover</Typography>
                 <Popover trigger={<Button>Open Popover</Button>}>
@@ -375,35 +375,35 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/text_field"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/text_field"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Text Field</Typography>
                 <TextField value={textFieldValue} size={"small"} onChange={(event) => {
                     setTextFieldValue(event.target.value);
-                }} label="Small Text Field" placeholder="Enter text"/>
+                }} label="Small Text Field" placeholder="Enter text" />
                 <TextField value={textFieldValue} onChange={(event) => {
                     setTextFieldValue(event.target.value);
-                }} label="Basic Text Field" placeholder="Enter text"/>
+                }} label="Basic Text Field" placeholder="Enter text" />
                 <TextField value={textFieldValue} onChange={(event) => {
                     setTextFieldValue(event.target.value);
                 }} label="Text Field with Adornment" placeholder="Enter text"
-                           endAdornment={<span>@</span>}/>
+                    endAdornment={<span>@</span>} />
                 <TextField value={textFieldValue} onChange={(event) => {
                     setTextFieldValue(event.target.value);
-                }} label="Multiline Text Field" placeholder="Enter text" multiline minRows={4}/>
+                }} label="Multiline Text Field" placeholder="Enter text" multiline minRows={4} />
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/radio_group"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/radio_group"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Radio Group</Typography>
                 <RadioGroup className="flex items-center gap-2" defaultValue="black" id="color">
@@ -411,21 +411,21 @@ export default function ClientUIComponentsShowcase({
                         className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                         htmlFor="color-black"
                     >
-                        <RadioGroupItem id="color-black" value="black"/>
+                        <RadioGroupItem id="color-black" value="black" />
                         Black
                     </Label>
                     <Label
                         className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                         htmlFor="color-white"
                     >
-                        <RadioGroupItem id="color-white" value="white"/>
+                        <RadioGroupItem id="color-white" value="white" />
                         White
                     </Label>
                     <Label
                         className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-100 dark:[&:has(:checked)]:bg-surface-800"
                         htmlFor="color-blue"
                     >
-                        <RadioGroupItem id="color-blue" value="blue"/>
+                        <RadioGroupItem id="color-blue" value="blue" />
                         Blue
                     </Label>
                 </RadioGroup>
@@ -433,28 +433,28 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/circular_progress"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/circular_progress"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Circular Progress</Typography>
                 <div className={"flex items-center gap-2"}>
-                    <CircularProgress size="large"/>
-                    <CircularProgress/>
-                    <CircularProgress size="small"/>
-                    <CircularProgress size="smallest"/>
+                    <CircularProgress size="large" />
+                    <CircularProgress />
+                    <CircularProgress size="small" />
+                    <CircularProgress size="smallest" />
                 </div>
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/menu"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/menu"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Menu</Typography>
                 <Menu trigger={<Button variant={"outlined"}>Open Menu</Button>}>
@@ -466,16 +466,16 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/expandable_panel"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/expandable_panel"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Expandable Panel</Typography>
                 <ExpandablePanel title={"Click to expand"}
-                                 expanded={isExpandablePanelOpen}
-                                 onExpandedChange={setExpandablePanelOpen}>
+                    expanded={isExpandablePanelOpen}
+                    onExpandedChange={setExpandablePanelOpen}>
                     <div className="flow-root p-4">Here is some content that was hidden but now is
                         visible!
                     </div>
@@ -484,31 +484,31 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/datetimefield"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/datetimefield"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">DateTime Field</Typography>
                 <DateTimeField value={selectedDate ?? undefined} onChange={setSelectedDate} label="Select a date"
-                               mode="date"/>
+                    mode="date" />
                 <DateTimeField value={new Date()} onChange={setSelectedDate}
-                               label="Select date and time" mode="date_time"/>
+                    label="Select date and time" mode="date_time" />
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/avatar"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/avatar"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Avatar</Typography>
                 <div className={"flex flex-row items-center gap-2"}>
                     <Avatar>AB</Avatar>
-                    <Avatar src="https://avatars.githubusercontent.com/u/5120271?v=4" alt="User Name"/>
+                    <Avatar src="https://avatars.githubusercontent.com/u/5120271?v=4" alt="User Name" />
                     <Avatar className="bg-red-500 dark:bg-red-700" style={{
                         width: "80px",
                         height: "80px"
@@ -518,11 +518,11 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/select"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/select"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Select</Typography>
                 <Select
@@ -540,7 +540,7 @@ export default function ClientUIComponentsShowcase({
                     fullWidth={true}
                     placeholder="Select your drinks"
                     value="" onValueChange={() => {
-                }}>
+                    }}>
                     <SelectItem key="coffee" value="coffee">Coffee</SelectItem>
                     <SelectItem key="tea" value="tea">Tea</SelectItem>
                     <SelectItem key="juice" value="juice">Juice</SelectItem>
@@ -552,11 +552,11 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={`${cardClasses} overflow-visible`}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/multiselect"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/multiselect"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">MultiSelect</Typography>
 
@@ -588,11 +588,11 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/sheet"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/sheet"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Sheet</Typography>
                 <Button onClick={() => setSheetOpen(true)}>Open Sheet</Button>
@@ -605,34 +605,34 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/loading_button"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/loading_button"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Loading Button</Typography>
-                <LoadingButton startIcon={<AddIcon size="small"/>} loading onClick={() => {
+                <LoadingButton startIcon={<AddIcon size="small" />} loading onClick={() => {
                 }}>Submitting</LoadingButton>
             </Card>
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/badge"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/badge"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Badge</Typography>
                 <Badge color="primary"
-                       invisible={!badgeDisplayed}>
+                    invisible={!badgeDisplayed}>
                     <Button size={"small"}
-                            variant={"outlined"}
-                            onClick={() => {
-                                setBadgeDisplayed(!badgeDisplayed);
-                            }}
-                            className="p-2">
+                        variant={"outlined"}
+                        onClick={() => {
+                            setBadgeDisplayed(!badgeDisplayed);
+                        }}
+                        className="p-2">
                         Primary
                         Badge</Button></Badge>
                 <Badge color="secondary" invisible={!badgeDisplayed}><span
@@ -642,11 +642,11 @@ export default function ClientUIComponentsShowcase({
 
             <Card className={cardClasses}>
                 <IconButton className="absolute top-2 right-2 hover:no-underline"
-                            component={"a"}
-                            target={linksInNewTab ? "_blank" : undefined}
-                            href={(docsUrl ?? "") + "/docs/components/collapse"}
-                            size="smallest">
-                    <ArrowForwardIcon size="smallest"/>
+                    component={"a"}
+                    target={linksInNewTab ? "_blank" : undefined}
+                    href={(docsUrl ?? "") + "/docs/components/collapse"}
+                    size="smallest">
+                    <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Collapse</Typography>
                 <Button variant={"outlined"} onClick={() => {
@@ -695,11 +695,11 @@ function MenubarDemo() {
                         >
                             New Incognito Window
                         </MenubarItem>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarSub>
                             <MenubarSubTrigger>
                                 Share
-                                <MenubarSubTriggerIndicator/>
+                                <MenubarSubTriggerIndicator />
                             </MenubarSubTrigger>
                             <MenubarPortal>
                                 <MenubarSubContent>
@@ -715,7 +715,7 @@ function MenubarDemo() {
                                 </MenubarSubContent>
                             </MenubarPortal>
                         </MenubarSub>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem>
                             Print…{" "}
                             <MenubarShortcut>
@@ -746,7 +746,7 @@ function MenubarDemo() {
                                 ⇧ ⌘ Z
                             </MenubarShortcut>
                         </MenubarItem>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarSub>
                             <MenubarSubTrigger>
                                 Find
@@ -757,7 +757,7 @@ function MenubarDemo() {
                                     <MenubarItem>
                                         Search the web…
                                     </MenubarItem>
-                                    <MenubarSeparator/>
+                                    <MenubarSeparator />
                                     <MenubarItem>
                                         Find…
                                     </MenubarItem>
@@ -770,7 +770,7 @@ function MenubarDemo() {
                                 </MenubarSubContent>
                             </MenubarPortal>
                         </MenubarSub>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem>
                             Cut
                         </MenubarItem>
@@ -803,11 +803,11 @@ function MenubarDemo() {
                                     )
                                 }
                             >
-                                <MenubarItemIndicator/>
+                                <MenubarItemIndicator />
                                 {item}
                             </MenubarCheckboxItem>
                         ))}
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem leftPadding={true}>
                             Reload{" "}
                             <MenubarShortcut>
@@ -822,12 +822,12 @@ function MenubarDemo() {
                                 ⇧ ⌘ R
                             </MenubarShortcut>
                         </MenubarItem>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem
                             leftPadding>
                             Toggle Fullscreen
                         </MenubarItem>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem
                             leftPadding>
                             Hide Sidebar
@@ -848,16 +848,16 @@ function MenubarDemo() {
                                     key={item}
                                     value={item}>
                                     <MenubarItemIndicator>
-                                        <FiberManualRecordIcon size={"smallest"}/>
+                                        <FiberManualRecordIcon size={"smallest"} />
                                     </MenubarItemIndicator>
                                     {item}
                                 </MenubarRadioItem>
                             ))}
-                            <MenubarSeparator/>
+                            <MenubarSeparator />
                             <MenubarItem leftPadding>
                                 Edit…
                             </MenubarItem>
-                            <MenubarSeparator/>
+                            <MenubarSeparator />
                             <MenubarItem leftPadding>
                                 Add Profile…
                             </MenubarItem>

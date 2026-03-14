@@ -9,7 +9,7 @@ import {
     KeyboardTabIcon,
     Tooltip,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import {
     Entity,
     EntityCollection,
@@ -24,7 +24,7 @@ import {
     useCustomizationController,
     useCollectionRegistryController,
     useSideEntityController
-} from "@firecms/core";
+} from "@rebasepro/core";
 import { useHistoryController } from "../HistoryControllerProvider";
 import { UserChip } from "./UserChip";
 

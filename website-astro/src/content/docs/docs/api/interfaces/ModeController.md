@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/ModeController"
 title: "ModeController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ModeController
+[@rebasepro/core](../README) / ModeController
 
 # Interface: ModeController
 
-Defined in: [hooks/useModeController.tsx:8](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useModeController.tsx)
+Defined in: [hooks/useModeController.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
 
 Use this controller to change color mode
 
@@ -21,7 +21,7 @@ Use this controller to change color mode
 
 > **mode**: `"light"` \| `"dark"`
 
-Defined in: [hooks/useModeController.tsx:9](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useModeController.tsx)
+Defined in: [hooks/useModeController.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [hooks/useModeController.tsx:9](https://github.com/firecmsco/firecms
 
 > **setMode**: (`mode`) => `void`
 
-Defined in: [hooks/useModeController.tsx:10](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useModeController.tsx)
+Defined in: [hooks/useModeController.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
 
 #### Parameters
 

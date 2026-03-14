@@ -1,18 +1,18 @@
-## Create FireCMS app
+## Create Rebase app
 
-Use this package to create a new FireCMS app.
+Use this package to create a new Rebase app.
 
 ```bash
-npx create-firecms-app
+npx create-rebase-app
 ```
 or
 ```bash
-yarn create firecms-app
+yarn create rebase-app
 ```
 
 #### To run locally
 
 ```bash
 npm link
-npx create-firecms-app
+npx create-rebase-app
 ```

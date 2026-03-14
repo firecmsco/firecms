@@ -3,19 +3,19 @@ slug: "docs/api/functions/DefaultAppBar"
 title: "DefaultAppBar"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / DefaultAppBar
+[@rebasepro/core](../README) / DefaultAppBar
 
 # Function: DefaultAppBar()
 
 > **DefaultAppBar**(`__namedParameters`): `Element`
 
-Defined in: [core/DefaultAppBar.tsx:59](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/core/DefaultAppBar.tsx)
+Defined in: [core/DefaultAppBar.tsx:59](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/DefaultAppBar.tsx)
 
-This component renders the main app bar of FireCMS.
+This component renders the main app bar of Rebase.
 You will likely not need to use this component directly.
 
 ## Parameters

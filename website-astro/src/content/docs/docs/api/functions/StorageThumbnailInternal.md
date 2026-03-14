@@ -3,17 +3,17 @@ slug: "docs/api/functions/StorageThumbnailInternal"
 title: "StorageThumbnailInternal"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / StorageThumbnailInternal
+[@rebasepro/core](../README) / StorageThumbnailInternal
 
 # Function: StorageThumbnailInternal()
 
 > **StorageThumbnailInternal**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [preview/components/StorageThumbnail.tsx:31](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/StorageThumbnail.tsx)
+Defined in: [preview/components/StorageThumbnail.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/StorageThumbnail.tsx)
 
 ## Parameters
 

@@ -1,4 +1,4 @@
-const ANALYTICS_API_URL = 'https://api.firecms.co/analytics';
+const ANALYTICS_API_URL = 'https://api.rebase.pro/analytics';
 
 export class Analytics {
     private apiUrl: string;

@@ -4,7 +4,7 @@ import Default from '@astrojs/starlight/components/Head.astro';
 
 // Generate breadcrumb structured data from Starlight's entry data
 const { entry, slug } = Astro.props;
-const canonicalBase = "https://firecms.co";
+const canonicalBase = "https://rebase.pro";
 
 // Build breadcrumb items from the URL path
 function generateBreadcrumbs(slug: string, title: string) {
@@ -87,10 +87,10 @@ const breadcrumbSchema = {
     // Set timestamp - only once
     window.gtag("js", new Date());
 
-    // Initialize GA4 with cross-domain tracking to app.firecms.co
+    // Initialize GA4 with cross-domain tracking to app.rebase.pro
     window.gtag("config", "G-NL75PPNYXD", {
         linker: {
-            domains: ["app.firecms.co"]
+            domains: ["app.rebase.pro"]
         }
     });
 

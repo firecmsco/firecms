@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Popover } from "@firecms/ui";
+import { Button, Popover } from "@rebasepro/ui";
 
 export default function PopoverControlledDemo() {
     const [open, setOpen] = useState(false);

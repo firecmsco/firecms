@@ -8,15 +8,15 @@ import {
     unslugify,
     useAuthController,
     useCustomizationController
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     CloseIcon,
     IconButton,
     Select,
     SelectItem,
     Typography
-} from "@firecms/ui";
-import { useFormex } from "@firecms/formex";
+} from "@rebasepro/ui";
+import { useFormex } from "@rebasepro/formex";
 import { PropertyFormDialog } from "./PropertyEditView";
 
 export function KanbanConfigSection({

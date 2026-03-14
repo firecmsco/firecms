@@ -6,12 +6,12 @@
  */
 
 import { Db, ObjectId, Collection, Document, FindOptions, Filter } from "mongodb";
-import { Entity, FilterValues } from "@firecms/types";
+import { Entity, FilterValues } from "@rebasepro/types";
 import { MongoConditionBuilder } from "./MongoConditionBuilder";
 
 /**
- * Entity repository interface (from @firecms/backend).
- * Copied here to avoid requiring @firecms/backend as a runtime dependency.
+ * Entity repository interface (from @rebasepro/backend).
+ * Copied here to avoid requiring @rebasepro/backend as a runtime dependency.
  */
 export interface EntityRepository {
     fetchEntity<M extends Record<string, any>>(
@@ -106,7 +106,7 @@ export class MongoEntityService implements EntityRepository {
     }
 
     /**
-     * Convert a MongoDB document to a FireCMS Entity
+     * Convert a MongoDB document to a Rebase Entity
      */
     private documentToEntity<M extends Record<string, any>>(
         doc: Document,
@@ -121,7 +121,7 @@ export class MongoEntityService implements EntityRepository {
     }
 
     /**
-     * Convert values from MongoDB format to FireCMS format
+     * Convert values from MongoDB format to Rebase format
      */
     private convertFromMongoValues(values: Record<string, any>): Record<string, any> {
         const result: Record<string, any> = {};

@@ -3,17 +3,17 @@ slug: "docs/api/functions/propertiesToColumns"
 title: "propertiesToColumns"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / propertiesToColumns
+[@rebasepro/core](../README) / propertiesToColumns
 
 # Function: propertiesToColumns()
 
 > **propertiesToColumns**\<`M`\>(`__namedParameters`): [`VirtualTableColumn`](../interfaces/VirtualTableColumn)\<`any`\>[]
 
-Defined in: [components/EntityCollectionTable/column\_utils.tsx:31](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [components/EntityCollectionTable/column\_utils.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
 
 ## Type Parameters
 

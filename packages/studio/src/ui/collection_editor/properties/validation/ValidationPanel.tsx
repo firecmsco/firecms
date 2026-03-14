@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 
-import { ExpandablePanel, RuleIcon, Typography } from "@firecms/ui";
+import { ExpandablePanel, RuleIcon, Typography } from "@rebasepro/ui";
 
 export function ValidationPanel({
     children

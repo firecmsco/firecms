@@ -1,5 +1,5 @@
 import { PgTable, AnyPgColumn } from "drizzle-orm/pg-core";
-import { EntityCollection, Property } from "@firecms/types";
+import { EntityCollection, Property } from "@rebasepro/types";
 import { collectionRegistry } from "../../collections/registry";
 
 /**

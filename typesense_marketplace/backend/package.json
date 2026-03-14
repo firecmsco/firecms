@@ -1,7 +1,7 @@
 {
-  "name": "@firecms/typesense-marketplace",
+  "name": "@rebasepro/typesense-marketplace",
   "version": "1.0.0",
-  "description": "FireCMS Typesense Search - Google Cloud Marketplace Solution",
+  "description": "Rebase Typesense Search - Google Cloud Marketplace Solution",
   "engines": {
     "node": ">=20"
   },

@@ -2,7 +2,7 @@ import StarterKit from "@tiptap/starter-kit";
 
 import { HorizontalRule, Placeholder, TaskItem, TaskList, TiptapLink, } from "./extensions";
 
-import { cls, defaultBorderMixin } from "@firecms/ui";
+import { cls, defaultBorderMixin } from "@rebasepro/ui";
 import OrderedList from "@tiptap/extension-ordered-list";
 import BulletList from "@tiptap/extension-bullet-list";
 import ListItem from "@tiptap/extension-list-item";

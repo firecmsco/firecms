@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/NavigationResult"
 title: "NavigationResult"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / NavigationResult
+[@rebasepro/core](../README) / NavigationResult
 
 # Type Alias: NavigationResult
 
 > **NavigationResult** = `object`
 
-Defined in: [types/navigation.ts:258](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:258](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/navigation.ts:258](https://github.com/firecmsco/firecms/blob/
 
 > **allowDragAndDrop**: `boolean`
 
-Defined in: [types/navigation.ts:260](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:260](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [types/navigation.ts:260](https://github.com/firecmsco/firecms/blob/
 
 > **groups**: `string`[]
 
-Defined in: [types/navigation.ts:264](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:264](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [types/navigation.ts:264](https://github.com/firecmsco/firecms/blob/
 
 > **navigationEntries**: [`NavigationEntry`](../interfaces/NavigationEntry)[]
 
-Defined in: [types/navigation.ts:262](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:262](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [types/navigation.ts:262](https://github.com/firecmsco/firecms/blob/
 
 > **onNavigationEntriesUpdate**: (`entries`) => `void`
 
-Defined in: [types/navigation.ts:266](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:266](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 #### Parameters
 

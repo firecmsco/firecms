@@ -3,17 +3,17 @@ slug: "docs/api/functions/randomColor"
 title: "randomColor"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / randomColor
+[@rebasepro/core](../README) / randomColor
 
 # Function: randomColor()
 
 > **randomColor**(): `string`
 
-Defined in: [util/strings.ts:25](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/strings.ts)
+Defined in: [util/strings.ts:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/strings.ts)
 
 ## Returns
 

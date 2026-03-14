@@ -1,11 +1,11 @@
-import { useCustomizationController } from "@firecms/core";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
+import { useCustomizationController } from "@rebasepro/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@rebasepro/ui";
 import React from "react";
 
 export function EntityActionsSelectDialog({
-                                              open,
-                                              onClose
-                                          }: { open: boolean, onClose: (selectedActionKey?: string) => void }) {
+    open,
+    onClose
+}: { open: boolean, onClose: (selectedActionKey?: string) => void }) {
     const {
         entityActions
     } = useCustomizationController();

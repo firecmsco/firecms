@@ -1,4 +1,4 @@
-import { EntityCallbacks, FireCMSContext, User } from "@firecms/core";
+import { EntityCallbacks, RebaseContext, User } from "@rebasepro/core";
 import { deepEqual as equal } from "fast-equals"
 import { HistoryEntry, NewHistoryEntryParams } from "./types";
 

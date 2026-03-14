@@ -3,17 +3,17 @@ slug: "docs/api/functions/makePropertiesNonEditable"
 title: "makePropertiesNonEditable"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / makePropertiesNonEditable
+[@rebasepro/core](../README) / makePropertiesNonEditable
 
 # Function: makePropertiesNonEditable()
 
 > **makePropertiesNonEditable**(`properties`): [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)
 
-Defined in: [util/make\_properties\_editable.ts:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/make_properties_editable.ts)
+Defined in: [util/make\_properties\_editable.ts:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/make_properties_editable.ts)
 
 ## Parameters
 

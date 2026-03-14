@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/SelectionController"
 title: "SelectionController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SelectionController
+[@rebasepro/core](../README) / SelectionController
 
 # Type Alias: SelectionController\<M\>
 
 > **SelectionController**\<`M`\> = `object`
 
-Defined in: [types/collections.ts:427](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:427](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Use this controller to retrieve the selected entities or modify them in
 an [EntityCollection](../interfaces/EntityCollection)
@@ -30,7 +30,7 @@ an [EntityCollection](../interfaces/EntityCollection)
 
 > **isEntitySelected**: (`entity`) => `boolean`
 
-Defined in: [types/collections.ts:430](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:430](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [types/collections.ts:430](https://github.com/firecmsco/firecms/blob
 
 > **selectedEntities**: [`Entity`](../interfaces/Entity)\<`M`\>[]
 
-Defined in: [types/collections.ts:428](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:428](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [types/collections.ts:428](https://github.com/firecmsco/firecms/blob
 
 > **setSelectedEntities**: `Dispatch`\<`SetStateAction`\<[`Entity`](../interfaces/Entity)\<`M`\>[]\>\>
 
-Defined in: [types/collections.ts:429](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:429](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [types/collections.ts:429](https://github.com/firecmsco/firecms/blob
 
 > **toggleEntitySelection**: (`entity`, `newSelectedState?`) => `void`
 
-Defined in: [types/collections.ts:431](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:431](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 #### Parameters
 

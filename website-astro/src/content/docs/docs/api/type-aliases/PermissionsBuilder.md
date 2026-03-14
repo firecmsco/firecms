@@ -3,11 +3,11 @@ slug: "docs/api/type-aliases/PermissionsBuilder"
 title: "PermissionsBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PermissionsBuilder
+[@rebasepro/core](../README) / PermissionsBuilder
 
 # Type Alias: PermissionsBuilder()\<EC, USER, M\>
 
@@ -18,7 +18,7 @@ title: "PermissionsBuilder"
           authController
       }`) => [`Permissions`](../interfaces/Permissions) \| `undefined`
 
-Defined in: [types/permissions.ts:75](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/permissions.ts)
+Defined in: [types/permissions.ts:75](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/permissions.ts)
 
 Builder used to assign permissions to entities,
 based on the logged user or collection.

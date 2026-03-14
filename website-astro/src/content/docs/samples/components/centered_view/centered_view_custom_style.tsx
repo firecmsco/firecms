@@ -1,5 +1,5 @@
 import React from "react";
-import { CenteredView } from "@firecms/ui";
+import { CenteredView } from "@rebasepro/ui";
 
 export default function CenteredViewCustomStyleDemo() {
     return (

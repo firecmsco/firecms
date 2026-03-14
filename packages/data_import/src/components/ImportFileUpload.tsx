@@ -1,6 +1,6 @@
-import { FileUpload, UploadIcon } from "@firecms/ui";
+import { FileUpload, UploadIcon } from "@rebasepro/ui";
 import { convertFileToJson } from "../utils/file_to_json";
-import { useSnackbarController } from "@firecms/core";
+import { useSnackbarController } from "@rebasepro/core";
 
 export function ImportFileUpload({ onDataAdded }: {
     onDataAdded: (data: object[], propertiesOrder?: string[]) => void
@@ -20,14 +20,14 @@ export function ImportFileUpload({ onDataAdded }: {
         preventDropOnDocument={true}
         size={"small"}
         maxFiles={1}
-        uploadDescription={<><UploadIcon/>Drag and drop a file here or click to upload</>}
+        uploadDescription={<><UploadIcon />Drag and drop a file here or click to upload</>}
         onFilesAdded={(files: File[]) => {
             if (files.length > 0) {
                 convertFileToJson(files[0])
                     .then(({
-                               data,
-                               propertiesOrder
-                           }) => {
+                        data,
+                        propertiesOrder
+                    }) => {
                         onDataAdded(data, propertiesOrder);
                     })
                     .catch((error) => {
@@ -38,5 +38,5 @@ export function ImportFileUpload({ onDataAdded }: {
                         });
                     });
             }
-        }}/>
+        }} />
 }

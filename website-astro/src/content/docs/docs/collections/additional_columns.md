@@ -27,7 +27,7 @@ import {
     buildCollection,
     buildCollection,
     AdditionalFieldDelegate
-} from "@firecms/core";
+} from "@rebasepro/core";
 
 type User = { name: string }
 
@@ -60,7 +60,7 @@ import {
     buildCollection,
     AdditionalFieldDelegate,
     AsyncPreviewComponent
-} from "@firecms/core";
+} from "@rebasepro/core";
 
 export const productAdditionalField: AdditionalFieldDelegate<Product> = {
     key: "spanish_title",
@@ -77,7 +77,7 @@ export const productAdditionalField: AdditionalFieldDelegate<Product> = {
 ```
 
 :::tip
-`AsyncPreviewComponent` is a utility component provided by FireCMS that
+`AsyncPreviewComponent` is a utility component provided by Rebase that
 allows you to render the result of an async computation (such as fetching data
 from a subcollection, like in this case). It will display a skeleton loading
 indicator in the meantime.

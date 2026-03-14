@@ -11,14 +11,14 @@ import {
     RadioGroupItem,
     Select,
     SelectItem
-} from "@firecms/ui";
-import { useSnackbarController } from "@firecms/core";
+} from "@rebasepro/ui";
+import { useSnackbarController } from "@rebasepro/core";
 import { getCurrencySymbol } from "@/app/common/utils";
-import { Product } from "@firecms/types";
+import { Product } from "@rebasepro/types";
 
 export function ProductDetailView({
-                                      product
-                                  }: {
+    product
+}: {
     product?: Product;
 }) {
 
@@ -47,11 +47,11 @@ export function ProductDetailView({
                                 }}
                                 key={`image_${index}`}>
                                 <img src={image}
-                                     className="aspect-5/6 object-contain bg-white rounded-xs"
-                                     style={{
-                                         height: 120,
-                                         width: 100
-                                     }}/>
+                                    className="aspect-5/6 object-contain bg-white rounded-xs"
+                                    style={{
+                                        height: 120,
+                                        width: 100
+                                    }} />
                             </button>
                         ))}
 
@@ -64,7 +64,7 @@ export function ProductDetailView({
                                 width: 900
                             }}
                             className="bg-white aspect-2/3 object-contain w-full rounded-lg overflow-hidden"
-                            src={selectedImage}/>}
+                            src={selectedImage} />}
                     </div>
                 </div>
                 <div className="grid gap-4 md:gap-10 items-start h-full content-center">
@@ -75,15 +75,15 @@ export function ProductDetailView({
                                 {getCurrencySymbol(product.currency)}{product.price}
                             </div>
                         </div>
-                        <Markdown source={product.description}/>
+                        <Markdown source={product.description} />
                         <div className="flex items-center gap-4">
                             <div className="flex items-center gap-0.5">
-                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
-                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
-                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
-                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500"/>
+                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500" />
+                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500" />
+                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500" />
+                                <StarIcon className="w-5 h-5 fill-primary-500 stroke-primary-500" />
                                 <StarIcon
-                                    className="w-5 h-5 fill-primary-100 dark:fill-primary-900 stroke-primary-400 dark:stroke-primary-600"/>
+                                    className="w-5 h-5 fill-primary-100 dark:fill-primary-900 stroke-primary-400 dark:stroke-primary-600" />
                             </div>
                         </div>
                     </div>
@@ -97,21 +97,21 @@ export function ProductDetailView({
                                     className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="color-black"
                                 >
-                                    <RadioGroupItem id="color-black" value="black"/>
+                                    <RadioGroupItem id="color-black" value="black" />
                                     Black
                                 </Label>
                                 <Label
                                     className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="color-white"
                                 >
-                                    <RadioGroupItem id="color-white" value="white"/>
+                                    <RadioGroupItem id="color-white" value="white" />
                                     White
                                 </Label>
                                 <Label
                                     className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="color-blue"
                                 >
-                                    <RadioGroupItem id="color-blue" value="blue"/>
+                                    <RadioGroupItem id="color-blue" value="blue" />
                                     Blue
                                 </Label>
                             </RadioGroup>
@@ -125,35 +125,35 @@ export function ProductDetailView({
                                     className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="size-xs"
                                 >
-                                    <RadioGroupItem id="size-xs" value="xs"/>
+                                    <RadioGroupItem id="size-xs" value="xs" />
                                     XS
                                 </Label>
                                 <Label
                                     className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="size-s"
                                 >
-                                    <RadioGroupItem id="size-s" value="s"/>
+                                    <RadioGroupItem id="size-s" value="s" />
                                     S{"\n                          "}
                                 </Label>
                                 <Label
                                     className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="size-m"
                                 >
-                                    <RadioGroupItem id="size-m" value="m"/>
+                                    <RadioGroupItem id="size-m" value="m" />
                                     M{"\n                          "}
                                 </Label>
                                 <Label
                                     className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="size-l"
                                 >
-                                    <RadioGroupItem id="size-l" value="l"/>
+                                    <RadioGroupItem id="size-l" value="l" />
                                     L{"\n                          "}
                                 </Label>
                                 <Label
                                     className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-surface-accent-100 dark:[&:has(:checked)]:bg-surface-800"
                                     htmlFor="size-xl"
                                 >
-                                    <RadioGroupItem id="size-xl" value="xl"/>
+                                    <RadioGroupItem id="size-xl" value="xl" />
                                     XL
                                 </Label>
                             </RadioGroup>
@@ -163,9 +163,9 @@ export function ProductDetailView({
                                 Quantity
                             </Label>
                             <Select size={"medium"}
-                                    fullWidth
-                                    value={String(quantity)}
-                                    onValueChange={(value) => setQuantity(Number(value))}>
+                                fullWidth
+                                value={String(quantity)}
+                                onValueChange={(value) => setQuantity(Number(value))}>
                                 <SelectItem value="1">1</SelectItem>
                                 <SelectItem value="2">2</SelectItem>
                                 <SelectItem value="3">3</SelectItem>
@@ -174,11 +174,11 @@ export function ProductDetailView({
                             </Select>
                         </div>
                         <Button size="large" fullWidth
-                                onClick={() => snackbarController.open({
-                                    type: "success",
-                                    message: `DEMO: Added ${quantity} ${product.name} to cart`
-                                })}>
-                            <AddIcon/>
+                            onClick={() => snackbarController.open({
+                                type: "success",
+                                message: `DEMO: Added ${quantity} ${product.name} to cart`
+                            })}>
+                            <AddIcon />
                             Add to cart
                         </Button>
                     </div>
@@ -205,7 +205,7 @@ function StarIcon(props: {
             {...props}
         >
             <polygon
-                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
         </svg>
     )
 }

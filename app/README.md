@@ -1,12 +1,12 @@
-# FireCMS PostgreSQL App Example
+# Rebase PostgreSQL App Example
 
-A complete example application demonstrating how to use FireCMS with a PostgreSQL backend, featuring a unified monorepo structure with shared collections and optimal developer experience.
+A complete example application demonstrating how to use Rebase with a PostgreSQL backend, featuring a unified monorepo structure with shared collections and optimal developer experience.
 
 ## 🏗️ Architecture
 
 This application consists of three main parts:
 
-- **`frontend/`** - React application using FireCMS with PostgreSQL data source
+- **`frontend/`** - React application using Rebase with PostgreSQL data source
 - **`backend/`** - Node.js server with PostgreSQL/Drizzle ORM and WebSocket support
 - **`shared/`** - Shared collections and types used by both frontend and backend
 
@@ -98,7 +98,7 @@ The backend serves the frontend statically in production, so you only need to de
 app/
 ├── package.json          # Root package with unified scripts
 ├── .env                  # Environment configuration
-├── frontend/            # React FireCMS application
+├── frontend/            # React Rebase application
 │   ├── src/
 │   ├── package.json
 │   └── vite.config.ts
@@ -137,7 +137,7 @@ app/
 
 The application uses PostgreSQL with Drizzle ORM for:
 - Type-safe database operations
-- Automatic schema generation from FireCMS collections
+- Automatic schema generation from Rebase collections
 - Real-time synchronization via WebSockets
 - Migration management
 

@@ -64,7 +64,7 @@ customize the path and name of the file. The available placeholders are:
 ![Field](/img/fields/File_upload.png)
 
 ```typescript jsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 buildProperty({
     dataType: "string",
@@ -93,7 +93,7 @@ is [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
 ![Field](/img/fields/Multi_file_upload.png)
 
 ```typescript jsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 buildProperty({
     dataType: "array",
@@ -120,10 +120,10 @@ is [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
 ### Custom support for images, videos and audio
 
 You are free to use the `storage` property to upload any kind of file, but
-FireCMS also provides some custom support for images, videos and audio.
+Rebase also provides some custom support for images, videos and audio.
 
 You don't need to make any specific changes and this behaviour is enabled by
-default. FireCMS will automatically detect if the file is an image, video or
+default. Rebase will automatically detect if the file is an image, video or
 audio and will display the preview accordingly.
 
 The MIME types supported for custom previews are:

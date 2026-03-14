@@ -3,17 +3,17 @@ slug: "docs/api/functions/isPropertyBuilder"
 title: "isPropertyBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / isPropertyBuilder
+[@rebasepro/core](../README) / isPropertyBuilder
 
 # Function: isPropertyBuilder()
 
 > **isPropertyBuilder**\<`T`, `M`\>(`propertyOrBuilder?`): `propertyOrBuilder is PropertyBuilder<T, M>`
 
-Defined in: [util/entities.ts:35](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/entities.ts)
+Defined in: [util/entities.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
 
 ## Type Parameters
 

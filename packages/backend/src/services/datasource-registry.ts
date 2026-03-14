@@ -1,7 +1,7 @@
 /**
  * Datasource Registry
  *
- * Manages multiple datasource delegates for FireCMS backend.
+ * Manages multiple datasource delegates for Rebase backend.
  * Allows different databases for different collections.
  *
  * Usage:
@@ -11,7 +11,7 @@
  * - Collections without `databaseId` fallback to "(default)"
  */
 
-import { DataSource } from "@firecms/types";
+import { DataSource } from "@rebasepro/types";
 
 /**
  * The default datasource identifier used when:

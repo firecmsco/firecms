@@ -1,13 +1,13 @@
 /**
  * MongoDataSource Tests
  * 
- * Tests for the DataSource implementation that integrates with FireCMS.
+ * Tests for the DataSource implementation that integrates with Rebase.
  */
 
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { MongoClient, Db, ObjectId } from "mongodb";
 import { MongoDataSource } from "../src/services/MongoDataSource";
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 
 describe("MongoDataSource", () => {
     let mongoServer: MongoMemoryServer;

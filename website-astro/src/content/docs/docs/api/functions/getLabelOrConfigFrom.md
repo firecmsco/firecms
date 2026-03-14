@@ -3,17 +3,17 @@ slug: "docs/api/functions/getLabelOrConfigFrom"
 title: "getLabelOrConfigFrom"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getLabelOrConfigFrom
+[@rebasepro/core](../README) / getLabelOrConfigFrom
 
 # Function: getLabelOrConfigFrom()
 
 > **getLabelOrConfigFrom**(`enumValues`, `key?`): [`EnumValueConfig`](../type-aliases/EnumValueConfig) \| `undefined`
 
-Defined in: [util/enums.ts:24](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/enums.ts)
+Defined in: [util/enums.ts:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/enums.ts)
 
 ## Parameters
 

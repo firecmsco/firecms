@@ -32,7 +32,7 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@firecms/types": [
+      "@rebasepro/types": [
         "../types/src"
       ]
     }

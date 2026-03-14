@@ -13,7 +13,7 @@ import * as admin from "firebase-admin";
 import * as jwt from "jsonwebtoken";
 import { getAccountDetails, approveAccount } from "../procurement/client";
 
-const PROVIDER_ID = process.env.GCP_MARKETPLACE_PROVIDER_ID || "firecms";
+const PROVIDER_ID = process.env.GCP_MARKETPLACE_PROVIDER_ID || "rebase";
 
 // Google's public keys for JWT verification
 // In production, these should be fetched from Google's JWKS endpoint
@@ -103,7 +103,7 @@ export const handleSignup = functions.onRequest(
             });
 
             // Redirect to your app's signup/login page with the account ID
-            const appUrl = process.env.APP_URL || "https://firecms.co";
+            const appUrl = process.env.APP_URL || "https://rebase.pro";
             const redirectUrl = `${appUrl}/marketplace/signup?accountId=${procurementAccountId}`;
 
             // Option 1: Redirect to app
@@ -116,7 +116,7 @@ export const handleSignup = functions.onRequest(
                 <head>
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>FireCMS Typesense Search - Setup</title>
+                    <title>Rebase Typesense Search - Setup</title>
                     <style>
                         * { box-sizing: border-box; }
                         body {
@@ -238,7 +238,7 @@ export const handleSignup = functions.onRequest(
                 <body>
                     <div class="card">
                         <div class="logo">
-                            <img src="https://firecms.co/img/firecms_logo.svg" alt="FireCMS">
+                            <img src="https://rebase.pro/img/rebase_logo.svg" alt="Rebase">
                         </div>
                         
                         <div class="success-icon">
@@ -247,7 +247,7 @@ export const handleSignup = functions.onRequest(
                             </svg>
                         </div>
                         
-                        <h1>Welcome to FireCMS Typesense Search!</h1>
+                        <h1>Welcome to Rebase Typesense Search!</h1>
                         <p class="subtitle">Your subscription has been activated successfully.</p>
                         
                         <div class="account-id">
@@ -263,7 +263,7 @@ export const handleSignup = functions.onRequest(
                             <h3>Next Steps</h3>
                             <div class="step">
                                 <div class="step-num">1</div>
-                                <div class="step-text">Sign in or create a FireCMS account</div>
+                                <div class="step-text">Sign in or create a Rebase account</div>
                             </div>
                             <div class="step">
                                 <div class="step-num">2</div>

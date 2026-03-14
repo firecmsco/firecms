@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/PropertyDisabledConfig"
 title: "PropertyDisabledConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / PropertyDisabledConfig
+[@rebasepro/core](../README) / PropertyDisabledConfig
 
 # Interface: PropertyDisabledConfig
 
-Defined in: [types/properties.ts:171](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:171](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/properties.ts:171](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **clearOnDisabled**: `boolean`
 
-Defined in: [types/properties.ts:180](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:180](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Enable this flag if you would like to clear the value of the field
 when the corresponding property gets disabled.
@@ -33,7 +33,7 @@ properties.
 
 > `optional` **disabledMessage**: `string`
 
-Defined in: [types/properties.ts:186](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:186](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Explanation of why this property is disabled (e.g. a different field
 needs to be enabled)
@@ -44,6 +44,6 @@ needs to be enabled)
 
 > `optional` **hidden**: `boolean`
 
-Defined in: [types/properties.ts:191](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/properties.ts)
+Defined in: [types/properties.ts:191](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
 
 Set this flag to true if you want to hide this field when disabled

@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 import { generateSchema } from "../src/generate-drizzle-schema-logic";
 
 describe("generateDrizzleSchema", () => {

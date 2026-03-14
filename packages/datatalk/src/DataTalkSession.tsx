@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { EntityCollection, randomString } from "@firecms/core";
-import { Button, Checkbox, Label, SendIcon, TextareaAutosize, Tooltip } from "@firecms/ui";
+import { EntityCollection, randomString } from "@rebasepro/core";
+import { Button, Checkbox, Label, SendIcon, TextareaAutosize, Tooltip } from "@rebasepro/ui";
 import { MessageLayout } from "./components/MessageLayout";
 import { streamDataTalkCommand } from "./api";
 import { ChatMessage, FeedbackSlug, Session } from "./types";
 import { buildSchemaContext } from "./utils/schemaContext";
 import { IntroComponent } from "./components/IntroComponent";
 
-const DEFAULT_API_ENDPOINT = "https://api.firecms.co";
+const DEFAULT_API_ENDPOINT = "https://api.rebase.pro";
 
 export function DataTalkSession({
     session,

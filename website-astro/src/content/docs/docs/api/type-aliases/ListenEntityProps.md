@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/ListenEntityProps"
 title: "ListenEntityProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ListenEntityProps
+[@rebasepro/core](../README) / ListenEntityProps
 
 # Type Alias: ListenEntityProps\<M\>
 
 > **ListenEntityProps**\<`M`\> = [`FetchEntityProps`](../interfaces/FetchEntityProps)\<`M`\> & `object`
 
-Defined in: [types/datasource.ts:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ## Type Declaration
 

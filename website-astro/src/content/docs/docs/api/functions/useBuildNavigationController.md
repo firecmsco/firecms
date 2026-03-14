@@ -3,17 +3,17 @@ slug: "docs/api/functions/useBuildNavigationController"
 title: "useBuildNavigationController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useBuildNavigationController
+[@rebasepro/core](../README) / useBuildNavigationController
 
 # Function: useBuildNavigationController()
 
 > **useBuildNavigationController**\<`EC`, `USER`\>(`props`): [`NavigationController`](../type-aliases/NavigationController)
 
-Defined in: [hooks/useBuildNavigationController.tsx:106](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useBuildNavigationController.tsx)
+Defined in: [hooks/useBuildNavigationController.tsx:106](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useBuildNavigationController.tsx)
 
 ## Type Parameters
 

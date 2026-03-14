@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/SearchIconsProps"
 title: "SearchIconsProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SearchIconsProps
+[@rebasepro/core](../README) / SearchIconsProps
 
 # Interface: SearchIconsProps
 
-Defined in: [components/SearchIconsView.tsx:16](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SearchIconsView.tsx)
+Defined in: [components/SearchIconsView.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [components/SearchIconsView.tsx:16](https://github.com/firecmsco/fir
 
 > `optional` **onIconSelected**: (`icon`) => `void`
 
-Defined in: [components/SearchIconsView.tsx:18](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SearchIconsView.tsx)
+Defined in: [components/SearchIconsView.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)
 
 #### Parameters
 
@@ -37,4 +37,4 @@ Defined in: [components/SearchIconsView.tsx:18](https://github.com/firecmsco/fir
 
 > `optional` **selectedIcon**: `string`
 
-Defined in: [components/SearchIconsView.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SearchIconsView.tsx)
+Defined in: [components/SearchIconsView.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)

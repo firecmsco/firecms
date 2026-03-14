@@ -3,17 +3,17 @@ slug: "docs/api/functions/useTableSearchHelper"
 title: "useTableSearchHelper"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useTableSearchHelper
+[@rebasepro/core](../README) / useTableSearchHelper
 
 # Function: useTableSearchHelper()
 
 > **useTableSearchHelper**\<`M`\>(`__namedParameters`): `object`
 
-Defined in: [components/common/useTableSearchHelper.ts:12](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/useTableSearchHelper.ts)
+Defined in: [components/common/useTableSearchHelper.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
 
 ## Type Parameters
 

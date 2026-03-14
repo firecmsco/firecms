@@ -7,7 +7,7 @@ import {
     EntityValues,
     Properties,
     Property,
-} from "@firecms/types";
+} from "@rebasepro/types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
 import { mergeDeep } from "./objects";
 

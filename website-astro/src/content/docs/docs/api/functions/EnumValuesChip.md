@@ -3,17 +3,17 @@ slug: "docs/api/functions/EnumValuesChip"
 title: "EnumValuesChip"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EnumValuesChip
+[@rebasepro/core](../README) / EnumValuesChip
 
 # Function: EnumValuesChip()
 
 > **EnumValuesChip**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [preview/components/EnumValuesChip.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [preview/components/EnumValuesChip.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ## Parameters
 

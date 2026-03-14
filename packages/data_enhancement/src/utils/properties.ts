@@ -5,7 +5,7 @@ import {
     isPropertyBuilder,
     Properties,
     Property
-} from "@firecms/core";
+} from "@rebasepro/core";
 import { InputProperty } from "../types/data_enhancement_controller";
 
 export function getSimplifiedProperties<M extends Record<string, any>>(properties: Properties, values: M, path = ""): Record<string, InputProperty> {

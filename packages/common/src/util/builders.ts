@@ -15,7 +15,7 @@ import {
     ReferenceProperty,
     StringProperty,
     User
-} from "@firecms/types";
+} from "@rebasepro/types";
 
 /**
  * Identity function we use to defeat the type system of Typescript and build
@@ -26,9 +26,9 @@ import {
 export function buildCollection<
     M extends Record<string, any> = any,
     USER extends User = User>
-(
-    collection: EntityCollection<M, USER>
-): EntityCollection<M, USER> {
+    (
+        collection: EntityCollection<M, USER>
+    ): EntityCollection<M, USER> {
     return collection;
 }
 
@@ -42,13 +42,13 @@ export function buildProperty<T, P extends Property = Property>(
     property: P
 ):
     P extends StringProperty ? StringProperty :
-        P extends NumberProperty ? NumberProperty :
-            P extends BooleanProperty ? BooleanProperty :
-                P extends DateProperty ? DateProperty :
-                    P extends GeopointProperty ? GeopointProperty :
-                        P extends ReferenceProperty ? ReferenceProperty :
-                            P extends ArrayProperty ? ArrayProperty :
-                                P extends MapProperty ? MapProperty : never {
+    P extends NumberProperty ? NumberProperty :
+    P extends BooleanProperty ? BooleanProperty :
+    P extends DateProperty ? DateProperty :
+    P extends GeopointProperty ? GeopointProperty :
+    P extends ReferenceProperty ? ReferenceProperty :
+    P extends ArrayProperty ? ArrayProperty :
+    P extends MapProperty ? MapProperty : never {
     return property as any;
 }
 
@@ -132,6 +132,6 @@ export function buildAdditionalFieldDelegate<M extends Record<string, any>, USER
  */
 export function buildFieldConfig(
     propertyConfig: PropertyConfig
-): PropertyConfig{
+): PropertyConfig {
     return propertyConfig;
 }

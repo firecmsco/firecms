@@ -3,17 +3,17 @@ slug: "docs/api/functions/getDefaultValueFor"
 title: "getDefaultValueFor"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getDefaultValueFor
+[@rebasepro/core](../README) / getDefaultValueFor
 
 # Function: getDefaultValueFor()
 
 > **getDefaultValueFor**(`property?`): \{ \} \| `null` \| `undefined`
 
-Defined in: [util/entities.ts:50](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/entities.ts)
+Defined in: [util/entities.ts:50](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
 
 ## Parameters
 

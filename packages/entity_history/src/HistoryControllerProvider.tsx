@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useContext } from "react";
 import { deepEqual as equal } from "fast-equals"
 
-import { User } from "@firecms/core";
+import { User } from "@rebasepro/core";
 
 export type HistoryConfigController = {
     /**
@@ -22,9 +22,9 @@ export interface HistoryControllerProviderProps {
 
 export const HistoryControllerProvider = React.memo(
     function HistoryControllerProvider({
-                                           children,
-                                           getUser,
-                                       }: PropsWithChildren<HistoryControllerProviderProps>) {
+        children,
+        getUser,
+    }: PropsWithChildren<HistoryControllerProviderProps>) {
 
         return (
             <HistoryControllerContext.Provider

@@ -1,15 +1,15 @@
 import React from "react";
 import { StringPropertyValidation } from "./validation/StringPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
-import { getIn, useFormex } from "@firecms/formex";
+import { getIn, useFormex } from "@rebasepro/formex";
 
-import { TextField } from "@firecms/ui";
+import { TextField } from "@rebasepro/ui";
 
 export function StringPropertyField({
-                                        widgetId,
-                                        disabled,
-                                        showErrors
-                                    }: {
+    widgetId,
+    disabled,
+    showErrors
+}: {
     widgetId: "text_field" | "multiline" | "email" | "user_select";
     disabled: boolean;
     showErrors: boolean;
@@ -25,34 +25,34 @@ export function StringPropertyField({
 
                     {widgetId === "text_field" &&
                         <StringPropertyValidation disabled={disabled}
-                                                  length={true}
-                                                  lowercase={true}
-                                                  matches={true}
-                                                  max={true}
-                                                  min={true}
-                                                  trim={true}
-                                                  uppercase={true}
-                                                  showErrors={showErrors}/>}
+                            length={true}
+                            lowercase={true}
+                            matches={true}
+                            max={true}
+                            min={true}
+                            trim={true}
+                            uppercase={true}
+                            showErrors={showErrors} />}
                     {widgetId === "user_select" &&
                         <StringPropertyValidation disabled={disabled}
-                                                  showErrors={showErrors}/>}
+                            showErrors={showErrors} />}
 
                     {widgetId === "multiline" &&
                         <StringPropertyValidation disabled={disabled}
-                                                  length={true}
-                                                  lowercase={true}
-                                                  max={true}
-                                                  min={true}
-                                                  trim={true}
-                                                  uppercase={true}
-                                                  showErrors={showErrors}/>}
+                            length={true}
+                            lowercase={true}
+                            max={true}
+                            min={true}
+                            trim={true}
+                            uppercase={true}
+                            showErrors={showErrors} />}
 
                     {widgetId === "email" &&
                         <StringPropertyValidation disabled={disabled}
-                                                  max={true}
-                                                  min={true}
-                                                  trim={true}
-                                                  showErrors={showErrors}/>}
+                            max={true}
+                            min={true}
+                            trim={true}
+                            showErrors={showErrors} />}
 
                 </ValidationPanel>
 
@@ -61,12 +61,12 @@ export function StringPropertyField({
             <div className={"col-span-12"}>
 
                 <TextField name={"defaultValue"}
-                           disabled={disabled}
-                           onChange={(e: any) => {
-                               setFieldValue("defaultValue", e.target.value === "" ? undefined : e.target.value);
-                           }}
-                           label={"Default value"}
-                           value={getIn(values, "defaultValue") ?? ""}/>
+                    disabled={disabled}
+                    onChange={(e: any) => {
+                        setFieldValue("defaultValue", e.target.value === "" ? undefined : e.target.value);
+                    }}
+                    label={"Default value"}
+                    value={getIn(values, "defaultValue") ?? ""} />
 
             </div>
         </>

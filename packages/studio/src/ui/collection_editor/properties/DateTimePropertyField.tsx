@@ -1,7 +1,7 @@
 import React from "react";
-import { getIn, useFormex } from "@firecms/formex";
-import { FieldCaption, NumberProperty, StringProperty } from "@firecms/core";
-import { Select, SelectItem } from "@firecms/ui";
+import { getIn, useFormex } from "@rebasepro/formex";
+import { FieldCaption, NumberProperty, StringProperty } from "@rebasepro/core";
+import { Select, SelectItem } from "@rebasepro/ui";
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
 

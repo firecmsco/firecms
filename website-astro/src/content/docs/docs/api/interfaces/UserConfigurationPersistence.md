@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/UserConfigurationPersistence"
 title: "UserConfigurationPersistence"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / UserConfigurationPersistence
+[@rebasepro/core](../README) / UserConfigurationPersistence
 
 # Interface: UserConfigurationPersistence
 
-Defined in: [types/local\_config\_persistence.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/local_config_persistence.tsx)
+Defined in: [types/local\_config\_persistence.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/local_config_persistence.tsx)
 
 This interface is in charge of defining the controller that persists
 modifications to a collection or collection, and retrieves them back from
@@ -23,7 +23,7 @@ a data source, such as local storage or Firestore.
 
 > **collapsedGroups**: `string`[]
 
-Defined in: [types/local\_config\_persistence.tsx:21](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/local_config_persistence.tsx)
+Defined in: [types/local\_config\_persistence.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/local_config_persistence.tsx)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [types/local\_config\_persistence.tsx:21](https://github.com/firecms
 
 > **favouritePaths**: `string`[]
 
-Defined in: [types/local\_config\_persistence.tsx:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/local_config_persistence.tsx)
+Defined in: [types/local\_config\_persistence.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/local_config_persistence.tsx)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [types/local\_config\_persistence.tsx:19](https://github.com/firecms
 
 > **getCollectionConfig**: \<`M`\>(`path`) => [`PartialEntityCollection`](../type-aliases/PartialEntityCollection)\<`M`\>
 
-Defined in: [types/local\_config\_persistence.tsx:16](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/local_config_persistence.tsx)
+Defined in: [types/local\_config\_persistence.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/local_config_persistence.tsx)
 
 #### Type Parameters
 
@@ -63,7 +63,7 @@ Defined in: [types/local\_config\_persistence.tsx:16](https://github.com/firecms
 
 > **onCollectionModified**: \<`M`\>(`path`, `partialCollection`) => `void`
 
-Defined in: [types/local\_config\_persistence.tsx:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/local_config_persistence.tsx)
+Defined in: [types/local\_config\_persistence.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/local_config_persistence.tsx)
 
 #### Type Parameters
 
@@ -91,7 +91,7 @@ Defined in: [types/local\_config\_persistence.tsx:15](https://github.com/firecms
 
 > **recentlyVisitedPaths**: `string`[]
 
-Defined in: [types/local\_config\_persistence.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/local_config_persistence.tsx)
+Defined in: [types/local\_config\_persistence.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/local_config_persistence.tsx)
 
 ***
 
@@ -99,7 +99,7 @@ Defined in: [types/local\_config\_persistence.tsx:17](https://github.com/firecms
 
 > **setCollapsedGroups**: (`paths`) => `void`
 
-Defined in: [types/local\_config\_persistence.tsx:22](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/local_config_persistence.tsx)
+Defined in: [types/local\_config\_persistence.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/local_config_persistence.tsx)
 
 #### Parameters
 
@@ -117,7 +117,7 @@ Defined in: [types/local\_config\_persistence.tsx:22](https://github.com/firecms
 
 > **setFavouritePaths**: (`paths`) => `void`
 
-Defined in: [types/local\_config\_persistence.tsx:20](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/local_config_persistence.tsx)
+Defined in: [types/local\_config\_persistence.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/local_config_persistence.tsx)
 
 #### Parameters
 
@@ -135,7 +135,7 @@ Defined in: [types/local\_config\_persistence.tsx:20](https://github.com/firecms
 
 > **setRecentlyVisitedPaths**: (`paths`) => `void`
 
-Defined in: [types/local\_config\_persistence.tsx:18](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/local_config_persistence.tsx)
+Defined in: [types/local\_config\_persistence.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/local_config_persistence.tsx)
 
 #### Parameters
 

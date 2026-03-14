@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@firecms/ui";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@rebasepro/ui";
 
 export default function DialogCustomWidthDemo() {
     const [open, setOpen] = useState(false);

@@ -5,9 +5,9 @@ title: Data Import
 
 ![data_import.png](/img/data_import.png)
 
-The **Data Import Plugin** for FireCMS enables you to import collection data from JSON, CSV, XLSL (Excel) files directly
+The **Data Import Plugin** for Rebase enables you to import collection data from JSON, CSV, XLSL (Excel) files directly
 into your
-FireCMS application. This plugins provide an interface where users can upload files and map the existing data to the
+Rebase application. This plugins provide an interface where users can upload files and map the existing data to the
 collection properties. This makes it very convenient to move data from one service to another and convert data into
 the right data types in the database.
 
@@ -22,7 +22,7 @@ types such as as dates or enums (even if they are stored as strings).
 First, install the Data Import Plugin package:
 
 ```sh
-yarn add @firecms/data_import
+yarn add @rebasepro/data_import
 ```
 
 ## Configuration
@@ -38,15 +38,15 @@ customize its behavior.
 
 ## Hook Usage
 
-Use the `useImportPlugin` hook to create the import plugin and include it in the FireCMS configuration.
+Use the `useImportPlugin` hook to create the import plugin and include it in the Rebase configuration.
 
 ### Example: Integrating the Data Import Plugin
 
 ```jsx
 import React from "react";
-import { CircularProgressCenter, FireCMS, useBuildModeController } from "@firecms/core";
-import { useFirebaseStorageSource } from "@firecms/firebase";
-import { useImportPlugin } from "@firecms/data_import";
+import { CircularProgressCenter, Rebase, useBuildModeController } from "@rebasepro/core";
+import { useFirebaseStorageSource } from "@rebasepro/firebase";
+import { useImportPlugin } from "@rebasepro/data_import";
 
 export function App() {
 
@@ -59,14 +59,14 @@ export function App() {
 
 
     return (
-            <FireCMS
+            <Rebase
                 navigationController={navigationController}
                 /*... rest of your configuration */
             >
               {({ context, loading }) => {
                   // ... your components
               }}
-            </FireCMS>
+            </Rebase>
     );
 }
 
@@ -80,7 +80,7 @@ populate the collections.
 
 ### Steps to Import Data
 
-1. **Navigate to a Collection**: Open the desired collection in your FireCMS application.
+1. **Navigate to a Collection**: Open the desired collection in your Rebase application.
 2. **Initiate Import**: Click on the **Import** action in the collection actions toolbar.
 3. **Upload File**: Select and upload the JSON or CSV file containing the data.
 4. **Data Type Mapping**: Select the data types and how your data should be mapped to the current structure.

@@ -8,15 +8,15 @@ import {
     useAuthController,
     useDataSource,
     useSnackbarController
-} from "@firecms/core";
-import { cls, HistoryIcon, IconButton, Label, Tooltip, Typography } from "@firecms/ui";
+} from "@rebasepro/core";
+import { cls, HistoryIcon, IconButton, Label, Tooltip, Typography } from "@rebasepro/ui";
 import { EntityHistoryEntry } from "./EntityHistoryEntry";
 
 export function EntityHistoryView({
-                                      entity,
-                                      collection,
-                                      formContext
-                                  }: EntityCustomViewParams) {
+    entity,
+    collection,
+    formContext
+}: EntityCustomViewParams) {
 
     const authController = useAuthController();
     const snackbarController = useSnackbarController();
@@ -148,15 +148,15 @@ export function EntityHistoryView({
         });
         return Promise.all([saveReverted, saveRevertedHistory])
             .then(() => {
-                    formContext.formex.resetForm({
-                        values: revertVersion.values
-                    });
-                    setRevertVersionDialog(undefined);
-                    snackbarController.open({
-                        message: "Reverted version",
-                        type: "info"
-                    });
-                }
+                formContext.formex.resetForm({
+                    values: revertVersion.values
+                });
+                setRevertVersionDialog(undefined);
+                snackbarController.open({
+                    message: "Reverted version",
+                    type: "info"
+                });
+            }
             ).catch((error) => {
                 console.error("Error reverting entity:", error);
                 snackbarController.open({
@@ -193,27 +193,27 @@ export function EntityHistoryView({
                 const previousValues: object | undefined = revision.values?.["__metadata"]?.["previous_values"];
                 return <div key={index} className="flex flex-cols gap-2 w-full">
                     <EntityHistoryEntry size={"large"}
-                                        entity={revision}
-                                        collection={collection}
-                                        previewKeys={previewKeys}
-                                        previousValues={previousValues}
-                                        actions={
-                                            <Tooltip title={"Revert to this version"}
-                                                     className={"m-2 grow-0 self-start"}>
-                                                <IconButton
-                                                    onClick={() => {
-                                                        if (dirty) {
-                                                            snackbarController.open({
-                                                                message: "Please save or discard your changes before reverting",
-                                                                type: "warning"
-                                                            });
-                                                        } else {
-                                                            setRevertVersionDialog(revision);
-                                                        }
-                                                    }}>
-                                                    <HistoryIcon/>
-                                                </IconButton>
-                                            </Tooltip>}
+                        entity={revision}
+                        collection={collection}
+                        previewKeys={previewKeys}
+                        previousValues={previousValues}
+                        actions={
+                            <Tooltip title={"Revert to this version"}
+                                className={"m-2 grow-0 self-start"}>
+                                <IconButton
+                                    onClick={() => {
+                                        if (dirty) {
+                                            snackbarController.open({
+                                                message: "Please save or discard your changes before reverting",
+                                                type: "warning"
+                                            });
+                                        } else {
+                                            setRevertVersionDialog(revision);
+                                        }
+                                    }}>
+                                    <HistoryIcon />
+                                </IconButton>
+                            </Tooltip>}
                     />
                 </div>
             })}
@@ -232,18 +232,18 @@ export function EntityHistoryView({
 
         <ErrorBoundary>
             <ConfirmationDialog open={Boolean(revertVersionDialog)}
-                                onAccept={function (): void {
-                                    if (!revertVersionDialog) return;
-                                    doRevert(revertVersionDialog);
-                                }}
-                                onCancel={function (): void {
-                                    setRevertVersionDialog(undefined);
-                                }}
-                                title={<Typography variant={"subtitle2"}>Revert data to this version?</Typography>}
-                                body={revertVersionDialog ?
-                                    <EntityView entity={revertVersionDialog}
-                                                collection={collection}
-                                                path={entity?.path}/> : null}/>
+                onAccept={function (): void {
+                    if (!revertVersionDialog) return;
+                    doRevert(revertVersionDialog);
+                }}
+                onCancel={function (): void {
+                    setRevertVersionDialog(undefined);
+                }}
+                title={<Typography variant={"subtitle2"}>Revert data to this version?</Typography>}
+                body={revertVersionDialog ?
+                    <EntityView entity={revertVersionDialog}
+                        collection={collection}
+                        path={entity?.path} /> : null} />
         </ErrorBoundary>
     </div>
 }

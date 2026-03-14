@@ -1,8 +1,8 @@
 /**
- * Authentication module for the FireCMS MCP server.
+ * Authentication module for the Rebase MCP server.
  *
- * Delegates to the CLI package (@firecms/cli) — same OAuth flow,
- * same token storage at ~/.firecms/tokens.json.
+ * Delegates to the CLI package (@rebasepro/cli) — same OAuth flow,
+ * same token storage at ~/.rebase/tokens.json.
  */
 import {
     login,
@@ -10,7 +10,7 @@ import {
     getTokens,
     refreshCredentials,
     parseJwt,
-} from "@firecms/cli";
+} from "@rebasepro/cli";
 
 const ENV = "prod" as const;
 const DEBUG = false;
@@ -44,12 +44,12 @@ export async function getValidTokens(): Promise<StoredTokens | null> {
 
 export function getCurrentUserEmail(): string | null {
     // getTokens is async, but for a quick sync check we read the file directly.
-    // The CLI stores tokens at ~/.firecms/tokens.json.
+    // The CLI stores tokens at ~/.rebase/tokens.json.
     try {
         const fs = require("fs");
         const path = require("path");
         const os = require("os");
-        const filePath = path.join(os.homedir(), ".firecms", "tokens.json");
+        const filePath = path.join(os.homedir(), ".rebase", "tokens.json");
         if (!fs.existsSync(filePath)) return null;
         const tokens = JSON.parse(fs.readFileSync(filePath, "utf-8"));
         if (!tokens?.id_token) return null;

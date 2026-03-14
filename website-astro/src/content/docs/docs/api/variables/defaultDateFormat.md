@@ -3,14 +3,14 @@ slug: "docs/api/variables/defaultDateFormat"
 title: "defaultDateFormat"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / defaultDateFormat
+[@rebasepro/core](../README) / defaultDateFormat
 
 # Variable: defaultDateFormat
 
 > `const` **defaultDateFormat**: `"MMMM dd, yyyy, HH:mm:ss"` = `"MMMM dd, yyyy, HH:mm:ss"`
 
-Defined in: [util/dates.ts:1](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/dates.ts)
+Defined in: [util/dates.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/dates.ts)

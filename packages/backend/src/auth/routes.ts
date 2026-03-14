@@ -381,7 +381,7 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
                 const resetUrl = `${baseUrl}/reset-password?token=${token}`;
 
                 // Get email template
-                const appName = emailConfig?.appName || "FireCMS";
+                const appName = emailConfig?.appName || "Rebase";
                 const templateFn = emailConfig?.templates?.passwordReset;
                 const emailContent = templateFn
                     ? templateFn(resetUrl, { email: user.email, displayName: user.displayName })
@@ -555,7 +555,7 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
             const verifyUrl = `${baseUrl}/verify-email?token=${token}`;
 
             // Get email template
-            const appName = emailConfig?.appName || "FireCMS";
+            const appName = emailConfig?.appName || "Rebase";
             const templateFn = emailConfig?.templates?.emailVerification;
             const emailContent = templateFn
                 ? templateFn(verifyUrl, { email: user.email, displayName: user.displayName })

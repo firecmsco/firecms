@@ -1,4 +1,4 @@
-import { EntityCollection, Properties, Property, isPropertyBuilder } from "@firecms/core";
+import { EntityCollection, Properties, Property, isPropertyBuilder } from "@rebasepro/core";
 
 /**
  * Schema context passed to the DataTalk API for understanding collection structures.
@@ -23,10 +23,10 @@ export interface SchemaProperty {
 
 /**
  * Build a SchemaContext from an array of EntityCollections.
- * This converts FireCMS collection definitions to the simplified schema format
+ * This converts Rebase collection definitions to the simplified schema format
  * expected by the DataTalk API.
  *
- * @param collections - Array of FireCMS EntityCollection objects
+ * @param collections - Array of Rebase EntityCollection objects
  * @returns SchemaContext for the DataTalk API
  */
 export function buildSchemaContext(collections: EntityCollection[]): SchemaContext {
@@ -40,7 +40,7 @@ export function buildSchemaContext(collections: EntityCollection[]): SchemaConte
 }
 
 /**
- * Convert FireCMS Properties to SchemaProperty records.
+ * Convert Rebase Properties to SchemaProperty records.
  */
 function buildSchemaProperties(properties: Properties): Record<string, SchemaProperty> {
     const result: Record<string, SchemaProperty> = {};
@@ -57,7 +57,7 @@ function buildSchemaProperties(properties: Properties): Record<string, SchemaPro
 }
 
 /**
- * Convert a single FireCMS Property to a SchemaProperty.
+ * Convert a single Rebase Property to a SchemaProperty.
  */
 function buildSchemaProperty(property: Property): SchemaProperty | null {
     if (!property || !property.type) return null;
@@ -154,7 +154,7 @@ function buildSchemaProperty(property: Property): SchemaProperty | null {
 }
 
 /**
- * Extract enum values as string array from various FireCMS enum formats.
+ * Extract enum values as string array from various Rebase enum formats.
  */
 function extractEnumValues(enumValues: any): string[] {
     if (Array.isArray(enumValues)) {

@@ -1,15 +1,15 @@
 ---
 slug: docs/cloud/app_config
 title: App Config
-description: A comprehensive guide to configuring FireCMS, a customizable CMS. It provides detailed instructions on how to initialize a new project, customize the CMS with reusable properties, fields, collections, entity views, and CMS views. It also explains the customization options available, including collections, views, propertyConfigs, entityViews, HomePage, fireCMSAppBarComponentProps, firestoreIndexesBuilder, onFirebaseInit, dateTimeFormat, locale, textSearchController, and autoOpenDrawer. This page is a valuable resource for developers seeking to tailor FireCMS to their specific needs.
+description: A comprehensive guide to configuring Rebase, a customizable CMS. It provides detailed instructions on how to initialize a new project, customize the CMS with reusable properties, fields, collections, entity views, and CMS views. It also explains the customization options available, including collections, views, propertyConfigs, entityViews, HomePage, rebaseAppBarComponentProps, firestoreIndexesBuilder, onFirebaseInit, dateTimeFormat, locale, textSearchController, and autoOpenDrawer. This page is a valuable resource for developers seeking to tailor Rebase to their specific needs.
 ---
 
-The app config is the main configuration object of FireCMS Cloud. It is defined
-by the interface `FireCMSAppConfig`. In order to customize the CMS, you need
-to create a project in [app.firecms.co](https://app.firecms.co) and
-initialise a new project in code with `npx create-firecms-app` or `yarn create firecms-app`.
+The app config is the main configuration object of Rebase Cloud. It is defined
+by the interface `RebaseAppConfig`. In order to customize the CMS, you need
+to create a project in [app.rebase.pro](https://app.rebase.pro) and
+initialise a new project in code with `npx create-rebase-app` or `yarn create rebase-app`.
 
-After those steps are ready you can use the `FireCMSAppConfig` export to add
+After those steps are ready you can use the `RebaseAppConfig` export to add
 your own customizations, like custom reusable properties or fields, collections,
 entity views, cms views, etc.
 
@@ -40,7 +40,7 @@ Let's see all the customization options available:
     See [Entity views](../collections/entity_views) for more information.
 
 * `HomePage`: Use this component to override the home page.
-* `fireCMSAppBarComponentProps`: Additional props passed to the custom AppBar.
+* `rebaseAppBarComponentProps`: Additional props passed to the custom AppBar.
 * `firestoreIndexesBuilder`: Use this builder to indicate which indexes are available in your Firestore database.
     This is used to allow filtering and sorting for multiple fields in the CMS.
 * `onFirebaseInit`: Optional callback after Firebase has been initialised.
@@ -62,9 +62,9 @@ An app config is generated for you automatically when you initialise a new proje
 example of how you can customize it:
 
 ```tsx
-import {FireCMSAppConfig} from "@firecms/cloud";
+import {RebaseAppConfig} from "@rebasepro/cloud";
 
-const appConfig: FireCMSAppConfig = {
+const appConfig: RebaseAppConfig = {
 
     version: "1",
 

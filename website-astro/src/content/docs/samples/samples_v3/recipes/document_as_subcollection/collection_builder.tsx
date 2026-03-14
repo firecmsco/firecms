@@ -1,10 +1,10 @@
-import { buildCollection, EntityCollectionsBuilder } from "@firecms/core";
+import { buildCollection, EntityCollectionsBuilder } from "@rebasepro/core";
 import { Unit, unitsCollection } from "./unit_collection";
 
 const collectionBuilder: EntityCollectionsBuilder = async ({
-                                                               dataSource,
-                                                               user
-                                                           }) => {
+    dataSource,
+    user
+}) => {
     const units = await dataSource.fetchCollection<Unit>({
         path: "units",
     });

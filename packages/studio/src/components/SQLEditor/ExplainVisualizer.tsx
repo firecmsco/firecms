@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Typography, cls, defaultBorderMixin, Collapse } from "@firecms/ui";
+import { Typography, cls, defaultBorderMixin, Collapse } from "@rebasepro/ui";
 
 export interface ExplainPlanNode {
     "Node Type": string;

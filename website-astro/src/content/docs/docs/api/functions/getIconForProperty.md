@@ -3,17 +3,17 @@ slug: "docs/api/functions/getIconForProperty"
 title: "getIconForProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getIconForProperty
+[@rebasepro/core](../README) / getIconForProperty
 
 # Function: getIconForProperty()
 
 > **getIconForProperty**(`property`, `size`, `fields`): `ReactNode`
 
-Defined in: [util/property\_utils.tsx:48](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/property_utils.tsx)
+Defined in: [util/property\_utils.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
 
 ## Parameters
 

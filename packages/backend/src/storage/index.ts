@@ -1,5 +1,5 @@
 /**
- * Storage module for FireCMS backend
+ * Storage module for Rebase backend
  *
  * Provides file storage functionality with support for:
  * - Local filesystem storage (default, zero config)

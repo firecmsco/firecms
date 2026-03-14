@@ -1,4 +1,4 @@
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 import authorsCollection from "./authors";
 import profilesCollection from "./profiles";
 import tagsCollection from "./tags";

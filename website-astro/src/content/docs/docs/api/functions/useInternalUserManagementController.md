@@ -3,17 +3,17 @@ slug: "docs/api/functions/useInternalUserManagementController"
 title: "useInternalUserManagementController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useInternalUserManagementController
+[@rebasepro/core](../README) / useInternalUserManagementController
 
 # Function: useInternalUserManagementController()
 
 > **useInternalUserManagementController**\<`USER`\>(): [`InternalUserManagement`](../type-aliases/InternalUserManagement)\<`USER`\>
 
-Defined in: [hooks/useInternalUserManagementController.tsx:16](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useInternalUserManagementController.tsx)
+Defined in: [hooks/useInternalUserManagementController.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useInternalUserManagementController.tsx)
 
 Use this hook to get the internal user management of the app.
 Note that this is different from the user management plugin controller.

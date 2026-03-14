@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/Entity"
 title: "Entity"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / Entity
+[@rebasepro/core](../README) / Entity
 
 # Interface: Entity\<M\>
 
-Defined in: [types/entities.ts:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 Representation of an entity fetched from the datasource
 
@@ -27,7 +27,7 @@ Representation of an entity fetched from the datasource
 
 > `optional` **databaseId**: `string`
 
-Defined in: [types/entities.ts:29](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/entities.ts:29](https://github.com/firecmsco/firecms/blob/mai
 
 > **id**: `string`
 
-Defined in: [types/entities.ts:16](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 ID of the entity
 
@@ -45,7 +45,7 @@ ID of the entity
 
 > **path**: `string`
 
-Defined in: [types/entities.ts:22](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 A string representing the path of the referenced document (relative
 to the root of the database).
@@ -56,6 +56,6 @@ to the root of the database).
 
 > **values**: `M`
 
-Defined in: [types/entities.ts:27](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entities.ts)
+Defined in: [types/entities.ts:27](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
 
 Current values

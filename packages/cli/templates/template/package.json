@@ -1,12 +1,12 @@
 {
-    "name": "my-firecms-project",
+    "name": "my-rebase-project",
     "version": "4.0.0",
     "private": true,
     "type": "module",
     "dependencies": {
-        "@firecms/core": "4.0.0",
-        "@firecms/firebase": "4.0.0",
-        "@firecms/ui": "4.0.0",
+        "@rebasepro/core": "4.0.0",
+        "@rebasepro/firebase": "4.0.0",
+        "@rebasepro/ui": "4.0.0",
         "firebase": "^12.9.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",

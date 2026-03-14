@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/EntityFormProps"
 title: "EntityFormProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityFormProps
+[@rebasepro/core](../README) / EntityFormProps
 
 # Type Alias: EntityFormProps\<M\>
 
 > **EntityFormProps**\<`M`\> = `object`
 
-Defined in: [form/EntityForm.tsx:67](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:67](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [form/EntityForm.tsx:67](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **Builder**: `React.ComponentType`\<[`EntityCustomViewParams`](../interfaces/EntityCustomViewParams)\<`M`\>\>
 
-Defined in: [form/EntityForm.tsx:102](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:102](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [form/EntityForm.tsx:102](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **children**: `React.ReactNode`
 
-Defined in: [form/EntityForm.tsx:104](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:104](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [form/EntityForm.tsx:104](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **className**: `string`
 
-Defined in: [form/EntityForm.tsx:80](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:80](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [form/EntityForm.tsx:80](https://github.com/firecmsco/firecms/blob/m
 
 > **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
 
-Defined in: [form/EntityForm.tsx:70](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:70](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [form/EntityForm.tsx:70](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **databaseId**: `string`
 
-Defined in: [form/EntityForm.tsx:73](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:73](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [form/EntityForm.tsx:73](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [form/EntityForm.tsx:89](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:89](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 If true, the form will be disabled and no actions will be available
 
@@ -77,7 +77,7 @@ If true, the form will be disabled and no actions will be available
 
 > `optional` **entity**: [`Entity`](../interfaces/Entity)\<`M`\>
 
-Defined in: [form/EntityForm.tsx:72](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:72](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -85,7 +85,7 @@ Defined in: [form/EntityForm.tsx:72](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **EntityFormActionsComponent**: `React.FC`\<`EntityFormActionsProps`\>
 
-Defined in: [form/EntityForm.tsx:100](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:100](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -93,7 +93,7 @@ Defined in: [form/EntityForm.tsx:100](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **entityId**: `string`
 
-Defined in: [form/EntityForm.tsx:71](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:71](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -101,7 +101,7 @@ Defined in: [form/EntityForm.tsx:71](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **forceActionsAtTheBottom**: `boolean`
 
-Defined in: [form/EntityForm.tsx:79](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:79](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -109,7 +109,7 @@ Defined in: [form/EntityForm.tsx:79](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **formex**: `FormexController`\<`M`\>
 
-Defined in: [form/EntityForm.tsx:84](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:84](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -117,7 +117,7 @@ Defined in: [form/EntityForm.tsx:84](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **fullIdPath**: `string`
 
-Defined in: [form/EntityForm.tsx:69](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:69](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -125,7 +125,7 @@ Defined in: [form/EntityForm.tsx:69](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **initialDirtyValues**: `Partial`\<`M`\>
 
-Defined in: [form/EntityForm.tsx:77](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:77](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -133,7 +133,7 @@ Defined in: [form/EntityForm.tsx:77](https://github.com/firecmsco/firecms/blob/m
 
 > **initialStatus**: [`EntityStatus`](EntityStatus)
 
-Defined in: [form/EntityForm.tsx:81](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:81](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -141,7 +141,7 @@ Defined in: [form/EntityForm.tsx:81](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **onEntityChange**: (`entity`) => `void`
 
-Defined in: [form/EntityForm.tsx:83](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:83](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 #### Parameters
 
@@ -159,7 +159,7 @@ Defined in: [form/EntityForm.tsx:83](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **onFormContextReady**: (`formContext`) => `void`
 
-Defined in: [form/EntityForm.tsx:78](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:78](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 #### Parameters
 
@@ -177,7 +177,7 @@ Defined in: [form/EntityForm.tsx:78](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **onIdChange**: (`id`) => `void`
 
-Defined in: [form/EntityForm.tsx:74](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:74](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 #### Parameters
 
@@ -195,7 +195,7 @@ Defined in: [form/EntityForm.tsx:74](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **onSaved**: (`params`) => `void`
 
-Defined in: [form/EntityForm.tsx:76](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:76](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 #### Parameters
 
@@ -213,7 +213,7 @@ Defined in: [form/EntityForm.tsx:76](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **onStatusChange**: (`status`) => `void`
 
-Defined in: [form/EntityForm.tsx:82](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:82](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 #### Parameters
 
@@ -231,7 +231,7 @@ Defined in: [form/EntityForm.tsx:82](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **onValuesModified**: (`modified`, `values`) => `void`
 
-Defined in: [form/EntityForm.tsx:75](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:75](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 #### Parameters
 
@@ -253,7 +253,7 @@ Defined in: [form/EntityForm.tsx:75](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **openEntityMode**: `"side_panel"` \| `"full_screen"`
 
-Defined in: [form/EntityForm.tsx:85](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:85](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -261,7 +261,7 @@ Defined in: [form/EntityForm.tsx:85](https://github.com/firecmsco/firecms/blob/m
 
 > **path**: `string`
 
-Defined in: [form/EntityForm.tsx:68](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:68](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 ***
 
@@ -269,7 +269,7 @@ Defined in: [form/EntityForm.tsx:68](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **showDefaultActions**: `boolean`
 
-Defined in: [form/EntityForm.tsx:93](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:93](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 Include the copy and delete actions in the form
 
@@ -279,6 +279,6 @@ Include the copy and delete actions in the form
 
 > `optional` **showEntityPath**: `boolean`
 
-Defined in: [form/EntityForm.tsx:98](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/EntityForm.tsx)
+Defined in: [form/EntityForm.tsx:98](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
 
 Display the entity path in the form

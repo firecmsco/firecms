@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/FetchEntityProps"
 title: "FetchEntityProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / FetchEntityProps
+[@rebasepro/core](../README) / FetchEntityProps
 
 # Interface: FetchEntityProps\<M\>
 
-Defined in: [types/datasource.ts:9](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [types/datasource.ts:9](https://github.com/firecmsco/firecms/blob/ma
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
 
-Defined in: [types/datasource.ts:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [types/datasource.ts:13](https://github.com/firecmsco/firecms/blob/m
 
 > `optional` **databaseId**: `string`
 
-Defined in: [types/datasource.ts:12](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [types/datasource.ts:12](https://github.com/firecmsco/firecms/blob/m
 
 > **entityId**: `string`
 
-Defined in: [types/datasource.ts:11](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [types/datasource.ts:11](https://github.com/firecmsco/firecms/blob/m
 
 > **path**: `string`
 
-Defined in: [types/datasource.ts:10](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/datasource.ts)
+Defined in: [types/datasource.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)

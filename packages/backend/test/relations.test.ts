@@ -1,6 +1,6 @@
-import { EntityCollection, Relation } from "@firecms/types";
+import { EntityCollection, Relation } from "@rebasepro/types";
 import { generateSchema } from "../src/generate-drizzle-schema-logic";
-import { sanitizeRelation } from "@firecms/common";
+import { sanitizeRelation } from "@rebasepro/common";
 
 const mockAuthorCollection: EntityCollection = {
     name: "Author",

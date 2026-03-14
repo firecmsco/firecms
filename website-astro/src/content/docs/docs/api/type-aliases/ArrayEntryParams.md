@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/ArrayEntryParams"
 title: "ArrayEntryParams"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ArrayEntryParams
+[@rebasepro/core](../README) / ArrayEntryParams
 
 # Type Alias: ArrayEntryParams
 
 > **ArrayEntryParams** = `object`
 
-Defined in: [components/ArrayContainer.tsx:32](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [components/ArrayContainer.tsx:32](https://github.com/firecmsco/fire
 
 > **index**: `number`
 
-Defined in: [components/ArrayContainer.tsx:33](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [components/ArrayContainer.tsx:33](https://github.com/firecmsco/fire
 
 > **internalId**: `number`
 
-Defined in: [components/ArrayContainer.tsx:34](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [components/ArrayContainer.tsx:34](https://github.com/firecmsco/fire
 
 > **isDragging**: `boolean`
 
-Defined in: [components/ArrayContainer.tsx:35](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [components/ArrayContainer.tsx:35](https://github.com/firecmsco/fire
 
 > `optional` **storedProps**: `object`
 
-Defined in: [components/ArrayContainer.tsx:36](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [components/ArrayContainer.tsx:36](https://github.com/firecmsco/fire
 
 > **storeProps**: (`props`) => `void`
 
-Defined in: [components/ArrayContainer.tsx:37](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 #### Parameters
 

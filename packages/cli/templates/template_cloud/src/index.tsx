@@ -1,8 +1,8 @@
-import { FireCMSAppConfig } from "@firecms/cloud";
+import { RebaseAppConfig } from "@rebasepro/cloud";
 import { SampleEntityView } from "./entity_views/SampleEntityView";
 import { demoCollection } from "./collections/demo";
 
-const appConfig: FireCMSAppConfig = {
+const appConfig: RebaseAppConfig = {
     version: "1",
     collections: [
         demoCollection
@@ -19,7 +19,7 @@ const appConfig: FireCMSAppConfig = {
                     height: 20,
                     backgroundColor: value,
                     borderRadius: "4px",
-                }}/>;
+                }} />;
             },
         },
     }],

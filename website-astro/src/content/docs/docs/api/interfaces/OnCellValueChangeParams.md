@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/OnCellValueChangeParams"
 title: "OnCellValueChangeParams"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / OnCellValueChangeParams
+[@rebasepro/core](../README) / OnCellValueChangeParams
 
 # Interface: OnCellValueChangeParams\<T, D\>
 
-Defined in: [components/common/types.tsx:34](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 Props passed in a callback when the content of a cell in a table has been edited
 
@@ -31,7 +31,7 @@ Props passed in a callback when the content of a cell in a table has been edited
 
 > `optional` **data**: `D`
 
-Defined in: [components/common/types.tsx:37](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [components/common/types.tsx:37](https://github.com/firecmsco/firecm
 
 > **onValueUpdated**: () => `void`
 
-Defined in: [components/common/types.tsx:38](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 #### Returns
 
@@ -51,7 +51,7 @@ Defined in: [components/common/types.tsx:38](https://github.com/firecmsco/firecm
 
 > **propertyKey**: `string`
 
-Defined in: [components/common/types.tsx:36](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [components/common/types.tsx:36](https://github.com/firecmsco/firecm
 
 > **setError**: (`e`) => `void`
 
-Defined in: [components/common/types.tsx:39](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 #### Parameters
 
@@ -77,4 +77,4 @@ Defined in: [components/common/types.tsx:39](https://github.com/firecmsco/firecm
 
 > **value**: `T`
 
-Defined in: [components/common/types.tsx:35](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/common/types.tsx)
+Defined in: [components/common/types.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)

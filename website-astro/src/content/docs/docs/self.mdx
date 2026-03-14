@@ -2,10 +2,10 @@
 slug: docs/self
 title: Quickstart
 sidebar_label: Quickstart
-description: Get started with self-hosted FireCMS in minutes. Create a new project using the CLI and run it locally.
+description: Get started with self-hosted Rebase in minutes. Create a new project using the CLI and run it locally.
 ---
 
-Build your own **Firebase admin panel** and **headless CMS** with full control over your infrastructure. FireCMS self-hosted versions let you deploy a powerful **React-based back-office** on your own servers, with complete data ownership.
+Build your own **Firebase admin panel** and **headless CMS** with full control over your infrastructure. Rebase self-hosted versions let you deploy a powerful **React-based back-office** on your own servers, with complete data ownership.
 
 :::tip When to choose self-hosted?
 - **Data sovereignty**: Your data never leaves your infrastructure
@@ -33,17 +33,17 @@ Both versions are built on **React**, connect to **Firebase/Firestore** (or Mong
 
 To create a new project using the CLI, you can run the following command:
 ```bash
-npx create-firecms-app
+npx create-rebase-app
 ```
 or:
 
 ```bash
-yarn create firecms-app
+yarn create rebase-app
 ```
 
 
-This will create a new FireCMS, Community or PRO, project in the selected folder.
-A FireCMS project is a React application that you can customize to fit your needs.
+This will create a new Rebase, Community or PRO, project in the selected folder.
+A Rebase project is a React application that you can customize to fit your needs.
 The initial project will have a basic structure with a few collections and a couple of custom views.
 
 ### Running the project
@@ -66,10 +66,10 @@ npm run dev
 
 This will install the dependencies and start the development server.
 
-### Changing the base URL of FireCMS
+### Changing the base URL of Rebase
 
-FireCMS uses React Router to handle the routing of the application.
-You can change the base URL of FireCMS by modifying the `basename` property of the `BrowserRouter` component in the `src/main.tsx` file.
+Rebase uses React Router to handle the routing of the application.
+You can change the base URL of Rebase by modifying the `basename` property of the `BrowserRouter` component in the `src/main.tsx` file.
 For example, if you want to change the base URL to `/admin`, you can do it like this:
 
 ```tsx

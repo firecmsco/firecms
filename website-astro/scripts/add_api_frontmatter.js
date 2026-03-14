@@ -56,8 +56,8 @@ title: "${title}"
     content = content.replace(/(\[.*?\]\((?:\.\.\/)*(?:\.\/)*[^)]+)\.md(\))/g, '$1$2');
 
     // Fix GitHub links to remove commit hashes and line numbers
-    // Pattern: https://github.com/FireCMSco/firecms/blob/{commit-hash}/packages/... -> https://github.com/firecmsco/firecms/blob/main/packages/...
-    content = content.replace(/https:\/\/github\.com\/FireCMSco\/firecms\/blob\/[a-f0-9]+\//gi, 'https://github.com/firecmsco/firecms/blob/main/');
+    // Pattern: https://github.com/Rebaseco/rebase/blob/{commit-hash}/packages/... -> https://github.com/rebaseco/rebase/blob/main/packages/...
+    content = content.replace(/https:\/\/github\.com\/Rebaseco\/rebase\/blob\/[a-f0-9]+\//gi, 'https://github.com/rebaseco/rebase/blob/main/');
 
     // Remove line numbers from GitHub links (e.g., #L42 or :42)
     content = content.replace(/(https:\/\/github\.com\/[^)]+\.ts)(#L\d+|:\d+)/g, '$1');
@@ -95,7 +95,7 @@ function generateTitle(relativePath) {
 
     // Special case for README
     if (filename === "README") {
-        return "@firecms/core API";
+        return "@rebasepro/core API";
     }
 
     // Return the filename as title

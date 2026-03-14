@@ -10,7 +10,7 @@ import {
     buildCollection,
     CircularProgressCenter,
     Drawer,
-    FireCMS,
+    Rebase,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -20,7 +20,7 @@ import {
     useBuildModeController,
     useBuildNavigationController,
     useValidateAuthenticator
-} from "@firecms/core";
+} from "@rebase/core";
 import {
     FirebaseAuthController,
     FirebaseLoginView,
@@ -29,12 +29,12 @@ import {
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase,
-} from "@firecms/firebase";
-import { useImportPlugin } from "@firecms/data_import";
-import { useExportPlugin } from "@firecms/data_export";
-import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
-import { useFirestoreCollectionsConfigController } from "@firecms/collection_editor_firebase";
-import { mergeCollections, useCollectionEditorPlugin } from "@firecms/collection_editor";
+} from "@rebase/firebase";
+import { useImportPlugin } from "@rebase/data_import";
+import { useExportPlugin } from "@rebase/data_export";
+import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@rebase/user_management";
+import { useFirestoreCollectionsConfigController } from "@rebase/collection_editor_firebase";
+import { mergeCollections, useCollectionEditorPlugin } from "@rebase/collection_editor";
 
 //TODO: replace with your own Firebase config
 export const firebaseConfig = {
@@ -125,7 +125,7 @@ const booksCollection = buildCollection({
     }
 });
 
-export function FireCMSApp() {
+export function RebaseApp() {
 
     const {
         firebaseApp,
@@ -219,7 +219,7 @@ export function FireCMSApp() {
     return (
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
-                <FireCMS
+                <Rebase
                     navigationController={navigationController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
@@ -250,7 +250,7 @@ export function FireCMSApp() {
                             <SideDialogs/>
                         </Scaffold>;
                     }}
-                </FireCMS>
+                </Rebase>
             </ModeControllerProvider>
         </SnackbarProvider>
     );

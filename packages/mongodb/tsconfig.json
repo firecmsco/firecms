@@ -26,10 +26,10 @@
         "noEmit": true,
         "baseUrl": ".",
         "paths": {
-            "@firecms/types": [
+            "@rebasepro/types": [
                 "../types/src"
             ],
-            "@firecms/backend": [
+            "@rebasepro/backend": [
                 "../backend/src"
             ]
         }

@@ -4,13 +4,13 @@ import { BrowserRouter } from "react-router-dom";
 
 import { App } from "./App"
 import "./index.css"
-import { ErrorBoundary } from "@firecms/core";
+import { ErrorBoundary } from "@rebasepro/core";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <ErrorBoundary>
             <BrowserRouter>
-                <App/>
+                <App />
             </BrowserRouter>
         </ErrorBoundary>
     </React.StrictMode>

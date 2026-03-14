@@ -1,16 +1,16 @@
 {
-  "name": "@firecms/mongodb",
+  "name": "@rebasepro/mongodb",
   "type": "module",
   "version": "4.0.0",
-  "description": "MongoDB backend for FireCMS",
+  "description": "MongoDB backend for Rebase",
   "funding": {
-    "url": "https://github.com/sponsors/firecmsco"
+    "url": "https://github.com/sponsors/rebaseco"
   },
-  "author": "FireCMS",
+  "author": "Rebase",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/firecmsco/firecms.git",
+    "url": "https://github.com/rebaseco/rebase.git",
     "directory": "packages/mongodb"
   },
   "main": "./dist/index.umd.js",
@@ -28,7 +28,7 @@
     "mongodb",
     "backend",
     "database",
-    "firecms"
+    "rebase"
   ],
   "scripts": {
     "watch": "vite build --watch",
@@ -48,14 +48,14 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/types": "4.0.0",
-    "@firecms/core": "4.0.0",
+    "@rebasepro/types": "4.0.0",
+    "@rebasepro/core": "4.0.0",
     "mongodb": "^6.12.0",
     "realm-web": "^2.0.0",
     "ws": "^8.16.0"
   },
   "devDependencies": {
-    "@firecms/types": "4.0.0",
+    "@rebasepro/types": "4.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.10.5",
     "@types/ws": "^8.5.10",
@@ -66,10 +66,10 @@
     "mongodb-memory-server": "^10.0.0"
   },
   "peerDependencies": {
-    "@firecms/backend": "4.0.0"
+    "@rebasepro/backend": "4.0.0"
   },
   "peerDependenciesMeta": {
-    "@firecms/backend": {
+    "@rebasepro/backend": {
       "optional": true
     }
   },

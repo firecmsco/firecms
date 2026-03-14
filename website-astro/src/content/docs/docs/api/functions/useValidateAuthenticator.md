@@ -3,17 +3,17 @@ slug: "docs/api/functions/useValidateAuthenticator"
 title: "useValidateAuthenticator"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useValidateAuthenticator
+[@rebasepro/core](../README) / useValidateAuthenticator
 
 # Function: useValidateAuthenticator()
 
 > **useValidateAuthenticator**\<`USER`\>(`authController`): `object`
 
-Defined in: [hooks/useValidateAuthenticator.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useValidateAuthenticator.tsx)
+Defined in: [hooks/useValidateAuthenticator.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useValidateAuthenticator.tsx)
 
 This hook is used internally for validating an authenticator.
 

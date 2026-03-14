@@ -1,5 +1,5 @@
-import { Properties, Property } from "@firecms/core";
-import { isPropertyBuilder } from "@firecms/common";
+import { Properties, Property } from "@rebasepro/core";
+import { isPropertyBuilder } from "@rebasepro/common";
 
 /**
  * Recursively extract all property paths from a Properties object.

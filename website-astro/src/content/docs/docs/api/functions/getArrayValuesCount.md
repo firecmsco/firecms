@@ -3,17 +3,17 @@ slug: "docs/api/functions/getArrayValuesCount"
 title: "getArrayValuesCount"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getArrayValuesCount
+[@rebasepro/core](../README) / getArrayValuesCount
 
 # Function: getArrayValuesCount()
 
 > **getArrayValuesCount**(`array`): [`ArrayValuesCount`](../type-aliases/ArrayValuesCount)
 
-Defined in: [util/flatten\_object.ts:26](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/flatten_object.ts)
+Defined in: [util/flatten\_object.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/flatten_object.ts)
 
 ## Parameters
 

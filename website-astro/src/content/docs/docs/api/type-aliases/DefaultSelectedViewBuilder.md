@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/DefaultSelectedViewBuilder"
 title: "DefaultSelectedViewBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / DefaultSelectedViewBuilder
+[@rebasepro/core](../README) / DefaultSelectedViewBuilder
 
 # Type Alias: DefaultSelectedViewBuilder()
 
 > **DefaultSelectedViewBuilder** = (`params`) => `string` \| `undefined`
 
-Defined in: [types/collections.ts:614](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:614](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Used in the [EntityCollection#defaultSelectedView](../interfaces/EntityCollection.md#defaultselectedview) to define the default
 

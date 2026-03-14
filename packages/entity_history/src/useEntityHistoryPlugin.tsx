@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
-import { EntityCollection, FireCMSPlugin, User } from "@firecms/core";
+import { EntityCollection, RebasePlugin, User } from "@rebasepro/core";
 import { EntityHistoryView } from "./components/EntityHistoryView";
-import { HistoryIcon } from "@firecms/ui";
+import { HistoryIcon } from "@rebasepro/ui";
 import { entityHistoryCallbacks } from "./entity_history_callbacks";
 import { HistoryControllerProvider } from "./HistoryControllerProvider";
 import { LastEditedByFormAction } from "./components/LastEditedByPluginComponents";
@@ -9,7 +9,7 @@ import { LastEditedByFormAction } from "./components/LastEditedByPluginComponent
 /**
  * This plugin adds a history view to the entity side panel.
  */
-export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCMSPlugin<any, any, any, EntityHistoryPluginProps> {
+export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): RebasePlugin<any, any, any, EntityHistoryPluginProps> {
 
     const { defaultEnabled = false } = props ?? {};
 
@@ -102,7 +102,7 @@ export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCM
         collection: {
             modifyCollection
         }
-    } satisfies FireCMSPlugin), [props]);
+    } satisfies RebasePlugin), [props]);
 }
 
 export type EntityHistoryPluginProps = {

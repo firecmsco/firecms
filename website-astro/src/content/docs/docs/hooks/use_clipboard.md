@@ -11,8 +11,8 @@ A utility hook to copy text to the system clipboard. It handles the `navigator.c
 
 ```tsx
 import React from "react";
-import { useClipboard } from "@firecms/core";
-import { Button } from "@firecms/ui";
+import { useClipboard } from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 export function CopyButton({ text }: { text: string }) {
     const { copy, isCoppied } = useClipboard({

@@ -1,13 +1,13 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { getValidTokens } from "./auth.js";
 
-const API_URL = "https://api.firecms.co";
+const API_URL = "https://api.rebase.pro";
 
 /**
- * Typed HTTP client for the FireCMS Cloud backend REST API.
- * Uses the same tokens as the FireCMS CLI (from ~/.firecms/tokens.json).
+ * Typed HTTP client for the Rebase Cloud backend REST API.
+ * Uses the same tokens as the Rebase CLI (from ~/.rebase/tokens.json).
  */
-export class FireCMSApiClient {
+export class RebaseApiClient {
     private client: AxiosInstance;
 
     constructor() {
@@ -21,7 +21,7 @@ export class FireCMSApiClient {
     private async authHeaders(): Promise<Record<string, string>> {
         const tokens = await getValidTokens();
         if (!tokens) {
-            throw new Error("Not logged in. Use the firecms_login tool first.");
+            throw new Error("Not logged in. Use the rebase_login tool first.");
         }
         return {
             Authorization: `Bearer ${tokens.id_token}`,

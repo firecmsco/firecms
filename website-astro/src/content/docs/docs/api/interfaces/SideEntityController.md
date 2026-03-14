@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/SideEntityController"
 title: "SideEntityController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SideEntityController
+[@rebasepro/core](../README) / SideEntityController
 
 # Interface: SideEntityController
 
-Defined in: [types/side\_entity\_controller.tsx:90](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_entity_controller.tsx)
+Defined in: [types/side\_entity\_controller.tsx:90](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_entity_controller.tsx)
 
 Controller to open the side dialog displaying entity forms
 
@@ -21,7 +21,7 @@ Controller to open the side dialog displaying entity forms
 
 > **close**: () => `void`
 
-Defined in: [types/side\_entity\_controller.tsx:94](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_entity_controller.tsx)
+Defined in: [types/side\_entity\_controller.tsx:94](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_entity_controller.tsx)
 
 Close the last panel
 
@@ -35,7 +35,7 @@ Close the last panel
 
 > **open**: \<`M`\>(`props`) => `void`
 
-Defined in: [types/side\_entity\_controller.tsx:105](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_entity_controller.tsx)
+Defined in: [types/side\_entity\_controller.tsx:105](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_entity_controller.tsx)
 
 Open a new entity sideDialog. By default, the collection and configuration
 of the view is fetched from the collections you have specified in the
@@ -66,7 +66,7 @@ to edit. You can set an entityId if you would like to edit and existing one
 
 > **replace**: \<`M`\>(`props`) => `void`
 
-Defined in: [types/side\_entity\_controller.tsx:111](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/side_entity_controller.tsx)
+Defined in: [types/side\_entity\_controller.tsx:111](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/side_entity_controller.tsx)
 
 Replace the last open entity panel with the given one.
 

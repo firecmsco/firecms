@@ -3,17 +3,17 @@ slug: "docs/api/functions/NumberPropertyPreview"
 title: "NumberPropertyPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / NumberPropertyPreview
+[@rebasepro/core](../README) / NumberPropertyPreview
 
 # Function: NumberPropertyPreview()
 
 > **NumberPropertyPreview**(`__namedParameters`): `ReactElement`
 
-Defined in: [preview/property\_previews/NumberPropertyPreview.tsx:9](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/property_previews/NumberPropertyPreview.tsx)
+Defined in: [preview/property\_previews/NumberPropertyPreview.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/NumberPropertyPreview.tsx)
 
 ## Parameters
 

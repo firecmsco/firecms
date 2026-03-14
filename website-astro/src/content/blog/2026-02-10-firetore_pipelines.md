@@ -94,7 +94,7 @@ const snapshot = await db.pipeline()
 This is equivalent to SQL's `HAVING` clause. In standard Firestore, there is no way to express this.
 ### Index-Free Queries
 In Standard Firestore, every query pattern requires a matching composite index. Enterprise Pipelines remove this requirement—queries run against the raw data via collection scans when no suitable index exists.
-This has real implications for tools like FireCMS, where users define arbitrary filters at runtime. Instead of pre-creating indexes for every possible field combination, you can let the pipeline engine scan.
+This has real implications for tools like Rebase, where users define arbitrary filters at runtime. Instead of pre-creating indexes for every possible field combination, you can let the pipeline engine scan.
 The trade-off is performance and cost. Unindexed scans read every document in the collection, and billing is based on data volume (4KB chunks), not document count. For small to mid-size collections, this is perfectly fine. For millions of documents, you'll want to create indexes for your hot paths and use Query Explain to monitor execution.
 ## Additional Capabilities
 Beyond the headline features, the SDK exposes a rich set of pipeline operations:
@@ -127,7 +127,7 @@ The API is in preview. A few constraints to be aware of:
 - **`array-contains` and vector indexes** are not yet leveraged by the pipeline engine. These queries work but fall back to less efficient index types.
 - **60-second deadline** and **128 MiB memory limit** on pipeline execution.
 
-## What This Means for FireCMS
+## What This Means for Rebase
 
 For those of us building admin panels and content management tools on top of Firestore, Pipeline Operations solve a longstanding problem: **flexible, ad-hoc querying without index overhead**.
 

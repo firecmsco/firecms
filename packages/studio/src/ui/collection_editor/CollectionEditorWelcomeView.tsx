@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { AIIcon, EntityCollection, prettifyIdentifier, } from "@firecms/core";
-import { Button, Card, Chip, cls, CodeIcon, Container, Icon, Tooltip, Typography, } from "@firecms/ui";
+import { AIIcon, EntityCollection, prettifyIdentifier, } from "@rebasepro/core";
+import { Button, Card, Chip, cls, CodeIcon, Container, Icon, Tooltip, Typography, } from "@rebasepro/ui";
 import { CollectionJsonImportDialog } from "./CollectionJsonImportDialog";
 
 import { productsCollectionTemplate } from "./templates/products_template";
 import { blogCollectionTemplate } from "./templates/blog_template";
 import { usersCollectionTemplate } from "./templates/users_template";
-import { ImportFileUpload } from "@firecms/data_import";
+import { ImportFileUpload } from "@rebasepro/data_import";
 import { pagesCollectionTemplate } from "./templates/pages_template";
-import { useFormex } from "@firecms/formex";
+import { useFormex } from "@rebasepro/formex";
 import { useCollectionEditorController } from "../../useCollectionEditorController";
 import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
 import { CollectionGenerationCallback } from "../../api/generateCollectionApi";

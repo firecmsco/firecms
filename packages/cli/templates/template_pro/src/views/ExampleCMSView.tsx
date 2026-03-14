@@ -11,14 +11,14 @@ import {
     useSelectionController,
     useSideEntityController,
     useSnackbarController
-} from "@firecms/core";
-import { Button, Chip, GitHubIcon, IconButton, Paper, Tooltip, Typography } from "@firecms/ui";
-import { Product } from "@firecms/types";
+} from "@rebasepro/core";
+import { Button, Chip, GitHubIcon, IconButton, Paper, Tooltip, Typography } from "@rebasepro/ui";
+import { Product } from "@rebasepro/types";
 import { productsCollection } from "../collections/products";
 
 /**
  * Sample CMS view not bound to a collection, customizable by the developer.
- * This view showcases some of the features available in FireCMS.
+ * This view showcases some of the features available in Rebase.
  * It is accessible from the navigation bar.
  *
 
@@ -72,12 +72,12 @@ export function ExampleCMSView() {
             asChild={true}
             title="Get the source code of this example view">
             <IconButton
-                href={"https://github.com/firecmsco/firecms/blob/main/examples/example_cloud/src/views/ExampleCMSView.tsx"}
+                href={"https://github.com/rebaseco/rebase/blob/main/examples/example_cloud/src/views/ExampleCMSView.tsx"}
                 rel="noopener noreferrer"
                 target="_blank"
                 component={"a"}
                 size="large">
-                <GitHubIcon/>
+                <GitHubIcon />
             </IconButton>
         </Tooltip>
     );
@@ -154,12 +154,12 @@ export function ExampleCMSView() {
                             name={"Sample reference widget"}
                             value={sampleSelectedProduct ?? null}
                             onReferenceSelected={({
-                                                      reference,
-                                                      entity
-                                                  }) => setSampleSelectedProduct(reference)}
+                                reference,
+                                entity
+                            }) => setSampleSelectedProduct(reference)}
                             path={"products"}
                             size={"small"}
-                            className={"w-full"}/>
+                            className={"w-full"} />
                     </div>
 
                     <div className="w-full">
@@ -169,7 +169,7 @@ export function ExampleCMSView() {
                         <Paper
                             className={"h-[400px]"}>
                             <EntityCollectionView {...productsCollection}
-                                                  selectionController={tableSelectionController}/>
+                                selectionController={tableSelectionController} />
                         </Paper>
                     </div>
 

@@ -7,7 +7,7 @@
  */
 
 const API_URL = process.env.E2E_API_URL || 'http://localhost:3001';
-const ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL || 'francesco@firecms.co';
+const ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL || 'francesco@rebase.pro';
 const ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD || 'Password123!';
 
 async function globalTeardown() {

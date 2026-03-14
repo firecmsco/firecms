@@ -1,16 +1,16 @@
 {
-    "name": "@firecms/ui",
+    "name": "@rebasepro/ui",
     "type": "module",
     "version": "4.0.0",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
-        "url": "https://github.com/sponsors/firecmsco"
+        "url": "https://github.com/sponsors/rebaseco"
     },
-    "author": "FireCMS",
+    "author": "Rebase",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/firecmsco/firecms.git",
+        "url": "https://github.com/rebaseco/rebase.git",
         "directory": "packages/ui"
     },
     "main": "./dist/index.umd.js",

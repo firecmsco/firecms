@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/EntityCollectionsBuilder"
 title: "EntityCollectionsBuilder"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityCollectionsBuilder
+[@rebasepro/core](../README) / EntityCollectionsBuilder
 
 # Type Alias: EntityCollectionsBuilder()\<EC\>
 
 > **EntityCollectionsBuilder**\<`EC`\> = (`params`) => `EC`[] \| `Promise`\<`EC`[]\>
 
-Defined in: [types/firecms.tsx:28](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/firecms.tsx)
+Defined in: [types/rebase.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
 
 Use this callback to build entity collections dynamically.
 You can use the user to decide which collections to show.

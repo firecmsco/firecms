@@ -1,4 +1,4 @@
-## FireCMS Import/Export Plugin
+## Rebase Import/Export Plugin
 
 This plugin is DEPRECATED and will be removed in future versions. 
-Please use the @firecms/data_import and @firecms/data_export packages instead.
+Please use the @rebasepro/data_import and @rebasepro/data_export packages instead.

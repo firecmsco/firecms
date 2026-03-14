@@ -3,17 +3,17 @@ slug: "docs/api/functions/printChanged"
 title: "printChanged"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / printChanged
+[@rebasepro/core](../README) / printChanged
 
 # Function: printChanged()
 
 > **printChanged**(`props`, `prev`, `path`, `depth`, `maxDepth`): `void`
 
-Defined in: [util/useTraceUpdate.tsx:3](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/useTraceUpdate.tsx)
+Defined in: [util/useTraceUpdate.tsx:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useTraceUpdate.tsx)
 
 ## Parameters
 

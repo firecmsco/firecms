@@ -1,13 +1,13 @@
-import { createPostgresDatabaseConnection } from "@firecms/backend";
-import { hashPassword } from "@firecms/backend/src/auth/password";
+import { createPostgresDatabaseConnection } from "@rebasepro/backend";
+import { hashPassword } from "@rebasepro/backend/src/auth/password";
 import { eq } from "drizzle-orm";
-import { users } from "@firecms/backend/src/db/auth-schema";
+import { users } from "@rebasepro/backend/src/db/auth-schema";
 import * as dotenv from "dotenv";
 import path from "path";
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
-const email = process.argv[2] || "francesco@firecms.co";
+const email = process.argv[2] || "francesco@rebase.pro";
 const newPassword = process.argv[3] || "NewPassword123!";
 
 async function resetPassword() {

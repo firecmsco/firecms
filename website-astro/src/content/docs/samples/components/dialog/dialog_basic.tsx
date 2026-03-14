@@ -8,7 +8,7 @@ import {
     SearchIcon,
     TextField,
     Typography
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
 export default function DialogBasicDemo() {
     const [open, setOpen] = useState(false);
@@ -20,14 +20,14 @@ export default function DialogBasicDemo() {
                 open={open}
                 onOpenChange={setOpen}>
                 <DialogTitle variant={"h6"} className={"flex flex-row gap-4 items-center"}>
-                    <SearchIcon size={"small"}/>
+                    <SearchIcon size={"small"} />
                     Search
                 </DialogTitle>
                 <DialogContent>
                     <Typography variant={"body2"}>
                         Search in your documents
                     </Typography>
-                    <TextField size={"small"}/>
+                    <TextField size={"small"} />
                 </DialogContent>
                 <DialogActions>
                     <Button

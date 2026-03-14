@@ -3,17 +3,17 @@ slug: "docs/api/functions/mergeDeep"
 title: "mergeDeep"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / mergeDeep
+[@rebasepro/core](../README) / mergeDeep
 
 # Function: mergeDeep()
 
 > **mergeDeep**\<`T`, `U`\>(`target`, `source`, `ignoreUndefined`): `T` & `U`
 
-Defined in: [util/objects.ts:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/objects.ts)
+Defined in: [util/objects.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
 
 ## Type Parameters
 

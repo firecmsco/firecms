@@ -1,6 +1,6 @@
 import { useEditor } from "../components";
 import { useEffect, useRef, } from "react";
-import { Button, CheckIcon, cls, DeleteIcon, focusedDisabled, Popover } from "@firecms/ui";
+import { Button, CheckIcon, cls, DeleteIcon, focusedDisabled, Popover } from "@rebasepro/ui";
 
 export function isValidUrl(url: string) {
     try {
@@ -30,9 +30,9 @@ interface LinkSelectorProps {
 }
 
 export const LinkSelector = ({
-                                 open,
-                                 onOpenChange
-                             }: LinkSelectorProps) => {
+    open,
+    onOpenChange
+}: LinkSelectorProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const { editor } = useEditor();
 
@@ -45,17 +45,17 @@ export const LinkSelector = ({
 
     return (
         <Popover modal={true}
-                 open={open}
-                 onOpenChange={onOpenChange}
-                 trigger={<Button variant="text"
-                                  className="gap-2 rounded-none"
-                                  color={"text"}>
-                     <p className={cls("underline decoration-stone-400 underline-offset-4", {
-                         "text-blue-500": editor.isActive("link"),
-                     })}>
-                         Link
-                     </p>
-                 </Button>}>
+            open={open}
+            onOpenChange={onOpenChange}
+            trigger={<Button variant="text"
+                className="gap-2 rounded-none"
+                color={"text"}>
+                <p className={cls("underline decoration-stone-400 underline-offset-4", {
+                    "text-blue-500": editor.isActive("link"),
+                })}>
+                    Link
+                </p>
+            </Button>}>
             <form
                 onSubmit={(e) => {
                     const target = e.currentTarget as HTMLFormElement;
@@ -71,7 +71,7 @@ export const LinkSelector = ({
                     autoFocus={open}
                     placeholder="Paste a link"
                     defaultValue={editor.getAttributes("link").href || ""}
-                    className={cls("text-surface-900 dark:text-white grow bg-transparent p-1 text-sm outline-hidden", focusedDisabled)}/>
+                    className={cls("text-surface-900 dark:text-white grow bg-transparent p-1 text-sm outline-hidden", focusedDisabled)} />
 
                 {editor.getAttributes("link").href ? (
                     <Button
@@ -84,12 +84,12 @@ export const LinkSelector = ({
                             editor.chain().focus().unsetLink().run();
                         }}
                     >
-                        <DeleteIcon size="small"/>
+                        <DeleteIcon size="small" />
                     </Button>
                 ) : (
                     <Button size={"small"}
-                            variant={"text"}>
-                        <CheckIcon size="small"/>
+                        variant={"text"}>
+                        <CheckIcon size="small" />
                     </Button>
                 )}
             </form>

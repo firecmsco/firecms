@@ -5,11 +5,11 @@ import { buildEntityPropertiesFromData } from "../collection_builder";
 //         integrity: "sha384-ABC123"
 //         };
 import usage from "./pop_products.json" assert {
-        type: "json",
-        integrity: "sha384-ABC123"
-        };
+    type: "json",
+    integrity: "sha384-ABC123"
+};
 import * as util from "util";
-import { DataType } from "@firecms/types";
+import { DataType } from "@rebasepro/types";
 
 buildEntityPropertiesFromData(usage, getType)
     .then((res) => console.log(util.inspect(res, { showHidden: false, depth: null, colors: true })));

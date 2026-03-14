@@ -2,11 +2,11 @@
 slug: docs/properties/config/number
 title: Number
 sidebar_label: Number
-description: Configuration for number properties in FireCMS, including validation, enums, and integer constraints.
+description: Configuration for number properties in Rebase, including validation, enums, and integer constraints.
 ---
 
 ```tsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@rebasepro/core";
 
 const rangeProperty = buildProperty({
     name: "Range",
@@ -29,7 +29,7 @@ You can use the enum values providing a map of possible
 
 
 ```tsx
-import { buildProperty, buildEnumValueConfig } from "@firecms/core";
+import { buildProperty, buildEnumValueConfig } from "@rebasepro/core";
 
 const property = buildProperty({
     name: "Status",

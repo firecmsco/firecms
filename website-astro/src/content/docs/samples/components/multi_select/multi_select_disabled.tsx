@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MultiSelect, MultiSelectItem } from "@firecms/ui";
+import { MultiSelect, MultiSelectItem } from "@rebasepro/ui";
 
 export default function MultiSelectDisabledDemo() {
     return (
@@ -8,9 +8,9 @@ export default function MultiSelectDisabledDemo() {
             label="Disabled MultiSelect"
             value={["option1"]}
             renderValues={(values) => (values.map((value) =>
-                    <span
-                        key={value}
-                        style={{
+                <span
+                    key={value}
+                    style={{
                         marginRight: 8,
                         background: "#eee",
                         padding: 4

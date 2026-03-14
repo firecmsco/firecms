@@ -64,7 +64,7 @@ export type InitOptions = Partial<{
     debug: boolean;
 }>
 
-export async function createFireCMSApp(rawArgs) {
+export async function createRebaseApp(rawArgs) {
 
     console.log(`
 ${chalk.green.bold(" ___ _          ___ __  __ ___")}
@@ -72,7 +72,7 @@ ${chalk.green.bold("| __(_)_ _ ___ / __|  \\/  / __|")}
 ${chalk.green.bold("| _|| | '_/ -_) (__| |\\/| \\__ \\")}
 ${chalk.green.bold("|_| |_|_| \\___|\\___|_|  |_|___/")}
 
-${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
+${chalk.red.bold("Welcome to the Rebase CLI")} 🔥
 `);
 
     let options = parseArgumentsIntoOptions(rawArgs);
@@ -106,7 +106,7 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
     } else if (currentUser) {
         console.log("You are logged in as", currentUser["email"]);
     } else {
-        console.log("You can login to FireCMS to automatically set up your project, or continue without logging in");
+        console.log("You can login to Rebase to automatically set up your project, or continue without logging in");
         await promptLogin();
     }
 
@@ -138,7 +138,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
     const env = args["--env"] || "prod";
     if (env !== "prod" && env !== "dev") {
         console.log("Please specify a valid environment: dev or prod");
-        console.log("create-firecms-app --env=prod");
+        console.log("create-rebase-app --env=prod");
         return;
     }
 
@@ -185,19 +185,19 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                 message: "Choose a template",
                 choices: [
                     {
-                        name: "FireCMS Cloud " + chalk.gray("(use this option if you access FireCMS from app.firecms.co)"),
+                        name: "Rebase Cloud " + chalk.gray("(use this option if you access Rebase from app.rebase.pro)"),
                         value: "cloud"
                     },
                     {
-                        name: "FireCMS PRO " + chalk.gray("(self-hosted version with full functionality)"),
+                        name: "Rebase PRO " + chalk.gray("(self-hosted version with full functionality)"),
                         value: "pro"
                     },
                     {
-                        name: "FireCMS PRO with Next.js frontend" + chalk.gray("(self-hosted version with frontend boilerplate CRUD app)"),
+                        name: "Rebase PRO with Next.js frontend" + chalk.gray("(self-hosted version with frontend boilerplate CRUD app)"),
                         value: "next-pro"
                     },
                     {
-                        name: "FireCMS Community " + chalk.gray("(MIT licensed version, free forever)"),
+                        name: "Rebase Community " + chalk.gray("(MIT licensed version, free forever)"),
                         value: "community"
                     }
                 ]
@@ -238,7 +238,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                             spinner.fail("Error loading projects");
                     });
                 if (cloudProjects.length === 0) {
-                    console.log("Please create a FireCMS Cloud project first. Head to https://app.firecms.co to get started and then run this command again!");
+                    console.log("Please create a Rebase Cloud project first. Head to https://app.rebase.pro to get started and then run this command again!");
                 }
             } else {
                 gcpProjects = await getGcpProjects(options.env,
@@ -381,7 +381,7 @@ export async function createProject(options: InitOptions) {
             task: (ctx) => copyTemplateFiles(options)
         },
         {
-            title: "Creating FireCMS webapp in project: " + options.firebaseProjectId,
+            title: "Creating Rebase webapp in project: " + options.firebaseProjectId,
             task: (ctx) => createWebApp(options),
             enabled: () => currentUser && isSelfHostedTemplate(options.template)
         },
@@ -412,7 +412,7 @@ export async function createProject(options: InitOptions) {
         console.log(chalk.cyan.bold("src/firebase_config.ts"));
         if (options.template === "pro") {
             console.log("");
-            console.log(`Also, make sure the user that is logging in has read/write access to the path ${chalk.cyan.bold("__FIRECMS")} in your database `);
+            console.log(`Also, make sure the user that is logging in has read/write access to the path ${chalk.cyan.bold("__REBASE")} in your database `);
         }
         console.log("");
         console.log("Run:");
@@ -424,7 +424,7 @@ export async function createProject(options: InitOptions) {
         console.log("Make sure you have a valid Firebase config in ");
         console.log(chalk.cyan.bold("src/app/common/firebase_config.ts"));
         console.log("");
-        console.log(`Also, make sure the user that is logging in has read/write access to the path ${chalk.cyan.bold("__FIRECMS")} in your database `);
+        console.log(`Also, make sure the user that is logging in has read/write access to the path ${chalk.cyan.bold("__REBASE")} in your database `);
         console.log("");
         console.log("Run:");
         console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
@@ -439,14 +439,14 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("If you want to deploy your project, run:");
         console.log(chalk.bgYellow.black.bold("yarn deploy") + " or " + chalk.bgYellow.black.bold("npm run deploy"));
-        console.log("and see it running in https://app.firecms.co");
+        console.log("and see it running in https://app.rebase.pro");
         console.log("");
     } else {
         throw new Error("createProject: Invalid template");
     }
 
     console.log("Remember to:");
-    console.log("  - Drop a ⭐  in our Github page: https://github.com/firecmsco/firecms");
+    console.log("  - Drop a ⭐  in our Github page: https://github.com/rebaseco/rebase");
     console.log("  - Join our Discord community: https://discord.gg/fxy7xsQm3m to get help and share your projects.");
 
     return true;

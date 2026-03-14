@@ -3,17 +3,17 @@ slug: "docs/api/functions/RepeatFieldBinding"
 title: "RepeatFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / RepeatFieldBinding
+[@rebasepro/core](../README) / RepeatFieldBinding
 
 # Function: RepeatFieldBinding()
 
 > **RepeatFieldBinding**\<`T`\>(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/RepeatFieldBinding.tsx:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/RepeatFieldBinding.tsx)
+Defined in: [form/field\_bindings/RepeatFieldBinding.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/RepeatFieldBinding.tsx)
 
 Generic array field that allows reordering and renders the child property
 as nodes.

@@ -1,8 +1,8 @@
 /**
- * @firecms/postgresql
+ * @rebasepro/postgresql
  *
- * PostgreSQL data source client for FireCMS
- * This package provides a WebSocket-based client for connecting FireCMS applications
+ * PostgreSQL data source client for Rebase
+ * This package provides a WebSocket-based client for connecting Rebase applications
  * to PostgreSQL backends with real-time synchronization capabilities.
  */
 

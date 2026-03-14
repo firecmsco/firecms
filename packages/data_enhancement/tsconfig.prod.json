@@ -6,7 +6,7 @@
   "exclude": [
     "node_modules",
     "dist",
-    "../firecms_core/src",
+    "../core/src",
     "../ui/src"
   ]
 }

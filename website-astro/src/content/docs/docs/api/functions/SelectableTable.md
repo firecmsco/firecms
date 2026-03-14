@@ -3,17 +3,17 @@ slug: "docs/api/functions/SelectableTable"
 title: "SelectableTable"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SelectableTable
+[@rebasepro/core](../README) / SelectableTable
 
 # Function: SelectableTable()
 
 > **SelectableTable**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [components/SelectableTable/SelectableTable.tsx:122](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/SelectableTable/SelectableTable.tsx)
+Defined in: [components/SelectableTable/SelectableTable.tsx:122](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SelectableTable/SelectableTable.tsx)
 
 This component is in charge of rendering a collection table with a high
 degree of customization.

@@ -1,8 +1,8 @@
 /**
  * MongoDB DataSource Delegate
  *
- * Implements the DataSource interface for FireCMS frontend integration.
- * This is the main entry point for FireCMS to interact with MongoDB.
+ * Implements the DataSource interface for Rebase frontend integration.
+ * This is the main entry point for Rebase to interact with MongoDB.
  */
 
 import { Db, ObjectId } from "mongodb";
@@ -16,15 +16,15 @@ import {
     ListenCollectionProps,
     ListenEntityProps,
     SaveEntityProps
-} from "@firecms/types";
+} from "@rebasepro/types";
 import { MongoEntityService } from "../db/MongoEntityService";
 import { MongoRealtimeService } from "./MongoRealtimeService";
 
 /**
  * MongoDB DataSource Delegate
  *
- * Implements the DataSource interface for FireCMS.
- * Provides all data operations needed by the FireCMS frontend.
+ * Implements the DataSource interface for Rebase.
+ * Provides all data operations needed by the Rebase frontend.
  */
 export class MongoDataSource implements DataSource {
     key = "mongodb";

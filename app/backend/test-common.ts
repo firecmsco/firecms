@@ -1,2 +1,2 @@
-import { buildPropertyCallbacks } from "@firecms/common";
+import { buildPropertyCallbacks } from "@rebasepro/common";
 console.log(typeof buildPropertyCallbacks);

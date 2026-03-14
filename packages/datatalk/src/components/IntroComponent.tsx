@@ -1,4 +1,4 @@
-import { Alert, Card, Typography } from "@firecms/ui";
+import { Alert, Card, Typography } from "@rebasepro/ui";
 import { useDataTalk } from "../DataTalkProvider";
 
 export function IntroComponent({ onPromptSuggestionClick }: { onPromptSuggestionClick: (prompt: string) => void }) {
@@ -30,7 +30,7 @@ export function IntroComponent({ onPromptSuggestionClick }: { onPromptSuggestion
                 </Typography>
                 <div className={"flex gap-1 sm:gap-2 md:gap-4 overflow-auto no-scrollbar"}>
                     {promptSuggestions.map((prompt, index) => (
-                        <PromptSuggestion key={index} onClick={onPromptSuggestionClick} prompt={prompt}/>
+                        <PromptSuggestion key={index} onClick={onPromptSuggestionClick} prompt={prompt} />
                     ))}
                 </div>
             </>}
@@ -46,12 +46,12 @@ export function IntroComponent({ onPromptSuggestionClick }: { onPromptSuggestion
 }
 
 function PromptSuggestion({
-                              prompt,
-                              onClick
-                          }: { prompt: string, onClick: (prompt: string) => void }) {
+    prompt,
+    onClick
+}: { prompt: string, onClick: (prompt: string) => void }) {
     return (
         <Card className={"px-4 pt-12 pb-4 border-none w-[220px] min-w-[140px] font-semibold flex items-end"}
-              onClick={() => onClick(prompt)}>
+            onClick={() => onClick(prompt)}>
             {prompt}
         </Card>
     );

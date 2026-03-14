@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/NavigationBlocker"
 title: "NavigationBlocker"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / NavigationBlocker
+[@rebasepro/core](../README) / NavigationBlocker
 
 # Type Alias: NavigationBlocker
 
 > **NavigationBlocker** = `object`
 
-Defined in: [types/navigation.ts:173](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:173](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/navigation.ts:173](https://github.com/firecmsco/firecms/blob/
 
 > **isBlocked**: (`path`) => `boolean`
 
-Defined in: [types/navigation.ts:175](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:175](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 #### Parameters
 
@@ -39,7 +39,7 @@ Defined in: [types/navigation.ts:175](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **proceed**: () => `void`
 
-Defined in: [types/navigation.ts:176](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:176](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 #### Returns
 
@@ -51,7 +51,7 @@ Defined in: [types/navigation.ts:176](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **reset**: () => `void`
 
-Defined in: [types/navigation.ts:177](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:177](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 #### Returns
 
@@ -63,7 +63,7 @@ Defined in: [types/navigation.ts:177](https://github.com/firecmsco/firecms/blob/
 
 > **updateBlockListener**: (`path`, `block`, `basePath?`) => () => `void`
 
-Defined in: [types/navigation.ts:174](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:174](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 #### Parameters
 

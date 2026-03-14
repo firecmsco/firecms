@@ -17,7 +17,7 @@ import {
     MenubarSubTrigger,
     MenubarSubTriggerIndicator,
     MenubarTrigger
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 
 const RADIO_ITEMS = ["Andy", "Benoît", "Luis"];
 const CHECK_ITEMS = ["Always Show Bookmarks Bar", "Always Show Full URLs"];
@@ -50,11 +50,11 @@ export default function MenubarDemo() {
                         >
                             New Incognito Window
                         </MenubarItem>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarSub>
                             <MenubarSubTrigger>
                                 Share
-                                <MenubarSubTriggerIndicator/>
+                                <MenubarSubTriggerIndicator />
                             </MenubarSubTrigger>
                             <MenubarPortal>
                                 <MenubarSubContent>
@@ -70,7 +70,7 @@ export default function MenubarDemo() {
                                 </MenubarSubContent>
                             </MenubarPortal>
                         </MenubarSub>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem>
                             Print…{" "}
                             <MenubarShortcut>
@@ -101,7 +101,7 @@ export default function MenubarDemo() {
                                 ⇧ ⌘ Z
                             </MenubarShortcut>
                         </MenubarItem>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarSub>
                             <MenubarSubTrigger>
                                 Find
@@ -112,7 +112,7 @@ export default function MenubarDemo() {
                                     <MenubarItem>
                                         Search the web…
                                     </MenubarItem>
-                                    <MenubarSeparator/>
+                                    <MenubarSeparator />
                                     <MenubarItem>
                                         Find…
                                     </MenubarItem>
@@ -125,7 +125,7 @@ export default function MenubarDemo() {
                                 </MenubarSubContent>
                             </MenubarPortal>
                         </MenubarSub>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem>
                             Cut
                         </MenubarItem>
@@ -158,11 +158,11 @@ export default function MenubarDemo() {
                                     )
                                 }
                             >
-                                <MenubarItemIndicator/>
+                                <MenubarItemIndicator />
                                 {item}
                             </MenubarCheckboxItem>
                         ))}
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem leftPadding={true}>
                             Reload{" "}
                             <MenubarShortcut>
@@ -177,12 +177,12 @@ export default function MenubarDemo() {
                                 ⇧ ⌘ R
                             </MenubarShortcut>
                         </MenubarItem>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem
                             leftPadding>
                             Toggle Fullscreen
                         </MenubarItem>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem
                             leftPadding>
                             Hide Sidebar
@@ -203,16 +203,16 @@ export default function MenubarDemo() {
                                     key={item}
                                     value={item}>
                                     <MenubarItemIndicator>
-                                        <FiberManualRecordIcon size={"smallest"}/>
+                                        <FiberManualRecordIcon size={"smallest"} />
                                     </MenubarItemIndicator>
                                     {item}
                                 </MenubarRadioItem>
                             ))}
-                            <MenubarSeparator/>
+                            <MenubarSeparator />
                             <MenubarItem leftPadding>
                                 Edit…
                             </MenubarItem>
-                            <MenubarSeparator/>
+                            <MenubarSeparator />
                             <MenubarItem leftPadding>
                                 Add Profile…
                             </MenubarItem>

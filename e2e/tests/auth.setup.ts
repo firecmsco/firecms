@@ -13,7 +13,7 @@ export async function registerE2EUser(page: Page): Promise<string> {
         await createAccountBtn.click();
         await page.waitForTimeout(500);
 
-        const randomEmail = `test_${Date.now()}@firecms.co`;
+        const randomEmail = `test_${Date.now()}@rebase.pro`;
         await page.getByPlaceholder('Display Name (optional)').fill('E2E Tester');
         await page.getByPlaceholder('Email').fill(randomEmail);
         await page.getByPlaceholder('Password').fill('Password123!');

@@ -3,11 +3,11 @@ import React from "react";
 import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController, useAdminModeController, useEffectiveRoleController } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
-import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@firecms/types";
-import { cls, Tooltip, IconButton, Typography } from "@firecms/ui";
+import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@rebase/types";
+import { cls, Tooltip, IconButton, Typography } from "@rebase/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { DrawerNavigationGroup } from "./DrawerNavigationGroup";
-import { FireCMSLogo } from "../components";
+import { RebaseLogo } from "../components";
 import { useApp } from "../app/useApp";
 
 /**
@@ -97,22 +97,22 @@ export function DefaultDrawer({
         <>
             <div className={cls("flex flex-col h-full relative grow w-full", isStudioDark ? "dark:bg-surface-950" : "", className)} style={style}>
 
-                <DrawerHeader 
-                    logo={resolvedLogo} 
-                    title={title} 
+                <DrawerHeader
+                    logo={resolvedLogo}
+                    title={title}
                     logoDestination={logoDestination}
-                    drawerOpen={drawerOpen} 
-                    drawerHovered={drawerHovered} 
-                    openDrawer={openDrawer} 
-                    closeDrawer={closeDrawer} 
+                    drawerOpen={drawerOpen}
+                    drawerHovered={drawerHovered}
+                    openDrawer={openDrawer}
+                    closeDrawer={closeDrawer}
                 />
 
-                <div 
+                <div
                     ref={scrollRef}
                     onScroll={handleScroll}
                     className={"mt-3 flex-grow overflow-scroll no-scrollbar"}
                     style={{
-                        maskImage: scrolled 
+                        maskImage: scrolled
                             ? "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)"
                             : "linear-gradient(to bottom, black 0, black calc(100% - 20px), transparent 100%)",
                     }}>
@@ -145,16 +145,16 @@ export function DefaultDrawer({
  * This is the header displayed in the drawer
  * It mimics Google Cloud Sidebar behavior with the integrated hamburger toggle.
  */
-import { MenuIcon, MenuOpenIcon, CloseIcon } from "@firecms/ui";
+import { MenuIcon, MenuOpenIcon, CloseIcon } from "@rebase/ui";
 
-export function DrawerHeader({ 
-    logo, 
+export function DrawerHeader({
+    logo,
     title,
     logoDestination,
     drawerOpen,
     drawerHovered,
     openDrawer,
-    closeDrawer 
+    closeDrawer
 }: {
     logo?: string;
     title?: React.ReactNode;
@@ -166,12 +166,12 @@ export function DrawerHeader({
 }) {
 
     const urlController = useCMSUrlController();
-    
+
     // States:
     // 1. Expanded (drawerOpen) -> Show MenuOpenIcon or CloseIcon, Show Logo, Show Title
     // 2. Collapsed & Hovered (drawerHovered & !drawerOpen) -> Show MenuIcon, Show Logo, Show Title
     // 3. Collapsed (!drawerHovered & !drawerOpen) -> Show MenuIcon, Hide Logo, Hide Title
-    
+
     const isExpanded = drawerOpen;
     const isHovered = drawerHovered && !drawerOpen;
     const isFloating = isHovered;
@@ -180,7 +180,7 @@ export function DrawerHeader({
     return (
         <div className="flex flex-row items-center shrink-0 pt-2 px-2 pb-0">
             {/* Hamburger Toggle */}
-            <Tooltip 
+            <Tooltip
                 title={isExpanded ? "Close menu" : "Open menu"}
                 side="right"
                 sideOffset={12}
@@ -199,7 +199,7 @@ export function DrawerHeader({
             </Tooltip>
 
             {/* Logo and Title (Fades in when expanded or hovered) */}
-            <div 
+            <div
                 className={cls(
                     "flex flex-row items-center gap-3 ml-2 overflow-hidden transition-all duration-200 ease-in-out",
                     showFullContent ? "opacity-100 w-full" : "opacity-0 w-0"
@@ -211,7 +211,7 @@ export function DrawerHeader({
                 >
                     {logo
                         ? <img src={logo} alt="Logo" className="w-full h-full object-contain" />
-                        : <FireCMSLogo width="32px" height="32px" />
+                        : <RebaseLogo width="32px" height="32px" />
                     }
                 </Link>
 
@@ -220,7 +220,7 @@ export function DrawerHeader({
                         className="visited:text-inherit dark:visited:text-inherit block truncate"
                         to={logoDestination || urlController.basePath}
                     >
-                        {typeof title === "string" 
+                        {typeof title === "string"
                             ? <Typography variant="subtitle1" noWrap className="truncate">{title}</Typography>
                             : title
                         }

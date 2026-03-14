@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/ResolvedArrayProperty"
 title: "ResolvedArrayProperty"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ResolvedArrayProperty
+[@rebasepro/core](../README) / ResolvedArrayProperty
 
 # Type Alias: ResolvedArrayProperty\<T, ArrayT\>
 
 > **ResolvedArrayProperty**\<`T`, `ArrayT`\> = `Omit`\<[`ArrayProperty`](../interfaces/ArrayProperty), `"of"` \| `"oneOf"` \| `"type"`\> & `object`
 
-Defined in: [types/resolved\_entities.ts:121](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/resolved_entities.ts)
+Defined in: [types/resolved\_entities.ts:121](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/resolved_entities.ts)
 
 ## Type Declaration
 

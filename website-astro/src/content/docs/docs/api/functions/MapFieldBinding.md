@@ -3,17 +3,17 @@ slug: "docs/api/functions/MapFieldBinding"
 title: "MapFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / MapFieldBinding
+[@rebasepro/core](../README) / MapFieldBinding
 
 # Function: MapFieldBinding()
 
 > **MapFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/MapFieldBinding.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/MapFieldBinding.tsx)
+Defined in: [form/field\_bindings/MapFieldBinding.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/MapFieldBinding.tsx)
 
 Field that renders the children property fields
 

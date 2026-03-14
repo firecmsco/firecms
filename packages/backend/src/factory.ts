@@ -10,7 +10,7 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { getTableName, isTable, Relations } from "drizzle-orm";
-import { DataSource, EntityCollection } from "@firecms/types";
+import { DataSource, EntityCollection } from "@rebasepro/types";
 
 import { EntityService } from "./db/entityService";
 import { RealtimeService, PostgresRealtimeProvider } from "./services/realtimeService";
@@ -71,7 +71,7 @@ export interface PostgresBackendConfig extends BackendConfig {
 export interface PostgresBackendInstance extends BackendInstance {
     /** The Drizzle database connection */
     db: NodePgDatabase;
-    /** PostgreSQL DataSource for use with FireCMS */
+    /** PostgreSQL DataSource for use with Rebase */
     dataSource: DataSource;
     /** Entity service for direct database operations */
     entityService: EntityService;
@@ -89,11 +89,11 @@ export interface PostgresBackendInstance extends BackendInstance {
  * - EntityService (implements EntityRepository)
  * - RealtimeService (implements RealtimeProvider)
  * - BackendCollectionRegistry (implements CollectionRegistryInterface)
- * - PostgresDataSource (for FireCMS integration)
+ * - PostgresDataSource (for Rebase integration)
  * 
  * @example
  * ```typescript
- * import { createPostgresBackend } from "@firecms/backend";
+ * import { createPostgresBackend } from "@rebasepro/backend";
  * 
  * const backend = createPostgresBackend({
  *     type: "postgres",
@@ -166,7 +166,7 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
  * 
  * @example
  * ```typescript
- * import { createPostgresDelegate } from "@firecms/backend";
+ * import { createPostgresDelegate } from "@rebasepro/backend";
  * 
  * const delegate = createPostgresDelegate(db);
  * ```
@@ -184,7 +184,7 @@ export function createPostgresDelegate(
  * 
  * @example
  * ```typescript
- * import { createPostgresRealtimeService } from "@firecms/backend";
+ * import { createPostgresRealtimeService } from "@rebasepro/backend";
  * 
  * const realtimeService = createPostgresRealtimeService(db);
  * ```
@@ -198,7 +198,7 @@ export function createPostgresRealtimeService(db: NodePgDatabase): RealtimeServi
  * 
  * @example
  * ```typescript
- * import { createPostgresEntityRepository } from "@firecms/backend";
+ * import { createPostgresEntityRepository } from "@rebasepro/backend";
  * 
  * const repository = createPostgresEntityRepository(db);
  * const users = await repository.fetchCollection("users", {});

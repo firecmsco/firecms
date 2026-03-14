@@ -1,4 +1,4 @@
-import { buildPropertyCallbacks } from "@firecms/common";
+import { buildPropertyCallbacks } from "@rebasepro/common";
 import authors from "../shared/collections/authors";
 
 const callbacks = buildPropertyCallbacks(authors.properties);

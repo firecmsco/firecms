@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/DownloadConfig"
 title: "DownloadConfig"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / DownloadConfig
+[@rebasepro/core](../README) / DownloadConfig
 
 # Interface: DownloadConfig
 
-Defined in: [types/storage.ts:29](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/storage.ts:29](https://github.com/firecmsco/firecms/blob/main
 
 > `optional` **fileNotFound**: `boolean`
 
-Defined in: [types/storage.ts:37](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/storage.ts:37](https://github.com/firecmsco/firecms/blob/main
 
 > `optional` **metadata**: [`DownloadMetadata`](DownloadMetadata)
 
-Defined in: [types/storage.ts:35](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 ***
 
@@ -35,6 +35,6 @@ Defined in: [types/storage.ts:35](https://github.com/firecmsco/firecms/blob/main
 
 > **url**: `string` \| `null`
 
-Defined in: [types/storage.ts:33](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/storage.ts)
+Defined in: [types/storage.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
 
 Temporal url that can be used to download the file

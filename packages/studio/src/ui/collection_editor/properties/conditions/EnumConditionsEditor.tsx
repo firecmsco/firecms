@@ -1,5 +1,5 @@
 import React from "react";
-import { useFormex } from "@firecms/formex";
+import { useFormex } from "@rebasepro/formex";
 import {
     DeleteIcon,
     IconButton,
@@ -12,15 +12,15 @@ import {
     defaultBorderMixin,
     DebouncedTextField,
     BooleanSwitchWithLabel
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import {
     Properties,
     Property,
     getFieldConfig,
     DEFAULT_FIELD_CONFIGS,
     EnumValueConfig
-} from "@firecms/core";
-import { isPropertyBuilder } from "@firecms/common";
+} from "@rebasepro/core";
+import { isPropertyBuilder } from "@rebasepro/common";
 import { PropertyWithId } from "../../PropertyEditView";
 import { getPropertyPaths } from "./property_paths";
 

@@ -1,18 +1,18 @@
 ---
 slug: docs/self/custom_storage
-title: Defining Custom Storage in FireCMS
+title: Defining Custom Storage in Rebase
 sidebar_label: Custom Storage Solutions
-description: Implement custom storage solutions like Amazon S3 in FireCMS with this step-by-step guide.
+description: Implement custom storage solutions like Amazon S3 in Rebase with this step-by-step guide.
 ---
 
-FireCMS provides flexibility when it comes to integrating custom storage solutions.
+Rebase provides flexibility when it comes to integrating custom storage solutions.
 While it comes with built-in support for Firebase Storage, you might want to define your
 own storage solutions to handle file uploads, downloads, and metadata management.
 This guide will help you set up a custom storage solution.
 
 ## Creating a Custom Storage Source
 
-A custom storage source in FireCMS is defined by implementing the `StorageSource` interface.
+A custom storage source in Rebase is defined by implementing the `StorageSource` interface.
 Here is a template for creating a custom storage source.
 
 Beware: This is an example on how you can implement and use S3, directly from a custom storage source.
@@ -24,7 +24,7 @@ Instead, you could use [Amplify/Storage](https://docs.amplify.aws/react/build-a-
 Below is a template for creating a custom storage source:
 
 ```tsx
-import {StorageSource, UploadFileProps, UploadFileResult, DownloadConfig} from "@firecms/core";
+import {StorageSource, UploadFileProps, UploadFileResult, DownloadConfig} from "@rebasepro/core";
 import {S3Client, PutObjectCommand, GetObjectCommand} from "@aws-sdk/client-s3";
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
 
@@ -126,18 +126,18 @@ export function useCustomStorageSource(props: S3StorageSourceProps): StorageSour
 
 ## Using the Custom Storage Source
 
-After creating the custom storage source, you can use it in your FireCMS application by initializing it in your component and passing it to the `FireCMS` component.
+After creating the custom storage source, you can use it in your Rebase application by initializing it in your component and passing it to the `Rebase` component.
 
 ### Example Usage
 
-Here is an example of how to use the custom storage source in your FireCMS application
+Here is an example of how to use the custom storage source in your Rebase application
 
 ```tsx
 import React from "react";
 import "typeface-rubik";
 import "@fontsource/jetbrains-mono";
 import {
-  FireCMS,
+  Rebase,
   ModeControllerProvider,
   Scaffold,
   AppBar,
@@ -151,7 +151,7 @@ import {
   useValidateAuthenticator,
   CenteredView,
   CircularProgressCenter
-} from "@firecms/core";
+} from "@rebasepro/core";
 import { productsCollection } from "./collections/products_collection";
 import { useCustomStorageSource, CustomStorageSourceProps } from "./hooks/useCustomStorageSource";
 
@@ -164,7 +164,7 @@ const customStorageConfig: CustomStorageSourceProps = {
 };
 
 const CustomStorageApp: React.FC = () => {
-  const name = "My Custom Storage FireCMS App";
+  const name = "My Custom Storage Rebase App";
 
   const modeController = useBuildModeController();
   const userConfigPersistence = useBuildLocalConfigurationPersistence();
@@ -186,7 +186,7 @@ const CustomStorageApp: React.FC = () => {
   return (
     <SnackbarProvider>
       <ModeControllerProvider value={modeController}>
-        <FireCMS
+        <Rebase
           navigationController={navigationController}
           userConfigPersistence={userConfigPersistence}
           storageSource={storageSource}
@@ -211,7 +211,7 @@ const CustomStorageApp: React.FC = () => {
               </Scaffold>
             );
           }}
-        </FireCMS>
+        </Rebase>
       </ModeControllerProvider>
     </SnackbarProvider>
   );
@@ -248,4 +248,4 @@ as described in the [AWS documentation - Configuring cross-origin resource shari
 ]
 ```
 
-This documentation provides a clear guide for defining custom storage solutions in FireCMS. Follow the template to integrate other storage services as per your requirements.
+This documentation provides a clear guide for defining custom storage solutions in Rebase. Follow the template to integrate other storage services as per your requirements.

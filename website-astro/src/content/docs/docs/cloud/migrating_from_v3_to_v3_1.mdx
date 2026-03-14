@@ -2,18 +2,18 @@
 slug: docs/cloud/migrating_from_v3_to_v3_1
 title: Migrating from v3.0 to v3.1 (Cloud)
 sidebar_label: Migrating from v3.0 to v3.1
-description: Upgrade your FireCMS Cloud custom code to v3.1 — Tailwind CSS v4, React 19, and new collection views.
+description: Upgrade your Rebase Cloud custom code to v3.1 — Tailwind CSS v4, React 19, and new collection views.
 ---
 
-This migration guide applies to **FireCMS Cloud** projects that deploy custom code using the CLI
-(`firecms deploy`).
+This migration guide applies to **Rebase Cloud** projects that deploy custom code using the CLI
+(`rebase deploy`).
 
 ## Do I Need to Do Anything?
 
-**All FireCMS Cloud users get every new feature automatically** — Kanban board, Cards view,
+**All Rebase Cloud users get every new feature automatically** — Kanban board, Cards view,
 AI collection generation, and more are already live in your project. No update needed.
 
-If you deploy **custom code** via the CLI (`firecms deploy`), your existing build will continue to
+If you deploy **custom code** via the CLI (`rebase deploy`), your existing build will continue to
 work exactly as before. However, we strongly encourage you to update your local dependencies to
 Tailwind CSS v4 and React 19. React 18 is still supported today, but **will be deprecated in a
 future release**, so updating now will save you effort later.
@@ -22,19 +22,19 @@ future release**, so updating now will save you effort later.
 
 ## Recommended Updates
 
-### Update FireCMS Packages
+### Update Rebase Packages
 
-Update all `@firecms/*` packages in your `package.json` to version **3.1**:
+Update all `@rebasepro/*` packages in your `package.json` to version **3.1**:
 
 ```bash
-npm i @firecms/cloud@3.1.0
+npm i @rebasepro/cloud@3.1.0
 ```
 
 ---
 
 ### Migrate to Tailwind CSS v4
 
-FireCMS 3.1 ships with **Tailwind CSS v4** support. While your existing Tailwind v3 setup will
+Rebase 3.1 ships with **Tailwind CSS v4** support. While your existing Tailwind v3 setup will
 continue to work, we recommend upgrading for faster builds and simpler configuration.
 
 #### 1. Install Tailwind CSS v4 and the Vite plugin
@@ -75,11 +75,11 @@ Replace your existing CSS with the new v4 format:
 
 ```css
 @import "tailwindcss";
-@import "@firecms/ui/index.css";
+@import "@rebasepro/ui/index.css";
 
 @source "../index.html";
 @source "./**/*.{js,ts,jsx,tsx}";
-@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@rebasepro/**/*.{js,ts,jsx,tsx}";
 
 @custom-variant dark (:is(.dark &));
 
@@ -105,7 +105,7 @@ Remove these files from your project — they are no longer needed:
 
 ### Upgrade to React 19
 
-FireCMS 3.1 supports **React 19** while maintaining backward compatibility with React 18.3.
+Rebase 3.1 supports **React 19** while maintaining backward compatibility with React 18.3.
 We recommend upgrading now — **React 18 support will be removed in a future release**.
 
 ```bash
@@ -122,7 +122,7 @@ If you see TypeScript errors like `Cannot find namespace 'JSX'` after upgrading,
 
 ## What's New in v3.1
 
-These features are already available in your FireCMS Cloud project — no update required:
+These features are already available in your Rebase Cloud project — no update required:
 
 - **Kanban Board view** — drag-and-drop entities grouped by enum properties
 - **Cards view** — visual card layout for content-heavy collections
@@ -149,11 +149,11 @@ Check the [changelog](/docs/changelog) for the complete list of changes.
 ## Troubleshooting
 
 ### Build errors after updating packages
-Ensure **all** `@firecms/*` packages are on the same version. Mixing v3.0 and v3.1 packages will
+Ensure **all** `@rebasepro/*` packages are on the same version. Mixing v3.0 and v3.1 packages will
 cause type mismatches and runtime errors.
 
 ### Styles not applying after Tailwind v4 migration
-- Verify your `index.css` includes the `@source` directives for your project files and `node_modules/@firecms`
+- Verify your `index.css` includes the `@source` directives for your project files and `node_modules/@rebase`
 - Ensure you removed the old `tailwind.config.js` and `postcss.config.js`
 - Clear your `node_modules` folder and reinstall: `rm -rf node_modules && npm install`
 

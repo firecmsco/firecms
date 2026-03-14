@@ -17,9 +17,9 @@ export const done_html = `<html lang="en">
 
 <body>
 
-<img src="https://firecms.co/img/firecms_logo.svg" alt="FireCMS logo" width="100" height="100">
+<img src="https://rebase.pro/img/rebase_logo.svg" alt="Rebase logo" width="100" height="100">
 
-<h2>FireCMS CLI</h2>
+<h2>Rebase CLI</h2>
 
 <p style="margin: 0;">You can now close this tab</p>
 

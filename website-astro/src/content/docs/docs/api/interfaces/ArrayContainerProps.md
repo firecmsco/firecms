@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/ArrayContainerProps"
 title: "ArrayContainerProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / ArrayContainerProps
+[@rebasepro/core](../README) / ArrayContainerProps
 
 # Interface: ArrayContainerProps\<T\>
 
-Defined in: [components/ArrayContainer.tsx:42](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [components/ArrayContainer.tsx:42](https://github.com/firecmsco/fire
 
 > **addLabel**: `string`
 
-Defined in: [components/ArrayContainer.tsx:45](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [components/ArrayContainer.tsx:45](https://github.com/firecmsco/fire
 
 > **buildEntry**: [`ArrayEntryBuilder`](../type-aliases/ArrayEntryBuilder)
 
-Defined in: [components/ArrayContainer.tsx:46](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [components/ArrayContainer.tsx:46](https://github.com/firecmsco/fire
 
 > `optional` **canAddElements**: `boolean`
 
-Defined in: [components/ArrayContainer.tsx:51](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:51](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [components/ArrayContainer.tsx:51](https://github.com/firecmsco/fire
 
 > `optional` **className**: `string`
 
-Defined in: [components/ArrayContainer.tsx:55](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:55](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [components/ArrayContainer.tsx:55](https://github.com/firecmsco/fire
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [components/ArrayContainer.tsx:47](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -65,7 +65,7 @@ Defined in: [components/ArrayContainer.tsx:47](https://github.com/firecmsco/fire
 
 > **droppableId**: `string`
 
-Defined in: [components/ArrayContainer.tsx:43](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -73,7 +73,7 @@ Defined in: [components/ArrayContainer.tsx:43](https://github.com/firecmsco/fire
 
 > `optional` **includeAddButton**: `boolean`
 
-Defined in: [components/ArrayContainer.tsx:50](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:50](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -81,7 +81,7 @@ Defined in: [components/ArrayContainer.tsx:50](https://github.com/firecmsco/fire
 
 > `optional` **max**: `number`
 
-Defined in: [components/ArrayContainer.tsx:57](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:57](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -89,7 +89,7 @@ Defined in: [components/ArrayContainer.tsx:57](https://github.com/firecmsco/fire
 
 > `optional` **min**: `number`
 
-Defined in: [components/ArrayContainer.tsx:56](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -97,7 +97,7 @@ Defined in: [components/ArrayContainer.tsx:56](https://github.com/firecmsco/fire
 
 > **newDefaultEntry**: `T`
 
-Defined in: [components/ArrayContainer.tsx:53](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -105,7 +105,7 @@ Defined in: [components/ArrayContainer.tsx:53](https://github.com/firecmsco/fire
 
 > `optional` **onInternalIdAdded**: (`id`) => `void`
 
-Defined in: [components/ArrayContainer.tsx:49](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:49](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 #### Parameters
 
@@ -123,7 +123,7 @@ Defined in: [components/ArrayContainer.tsx:49](https://github.com/firecmsco/fire
 
 > **onValueChange**: (`value`) => `void`
 
-Defined in: [components/ArrayContainer.tsx:54](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:54](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 #### Parameters
 
@@ -141,7 +141,7 @@ Defined in: [components/ArrayContainer.tsx:54](https://github.com/firecmsco/fire
 
 > `optional` **size**: `"small"` \| `"medium"`
 
-Defined in: [components/ArrayContainer.tsx:48](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -149,7 +149,7 @@ Defined in: [components/ArrayContainer.tsx:48](https://github.com/firecmsco/fire
 
 > `optional` **sortable**: `boolean`
 
-Defined in: [components/ArrayContainer.tsx:52](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:52](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -157,4 +157,4 @@ Defined in: [components/ArrayContainer.tsx:52](https://github.com/firecmsco/fire
 
 > **value**: `T`[]
 
-Defined in: [components/ArrayContainer.tsx:44](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/components/ArrayContainer.tsx)
+Defined in: [components/ArrayContainer.tsx:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)

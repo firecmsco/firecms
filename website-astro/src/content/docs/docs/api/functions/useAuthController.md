@@ -3,22 +3,22 @@ slug: "docs/api/functions/useAuthController"
 title: "useAuthController"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useAuthController
+[@rebasepro/core](../README) / useAuthController
 
 # Function: useAuthController()
 
 > **useAuthController**\<`USER`, `AuthControllerType`\>(): `AuthControllerType`
 
-Defined in: [hooks/useAuthController.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/useAuthController.tsx)
+Defined in: [hooks/useAuthController.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useAuthController.tsx)
 
 Hook to retrieve the AuthContext.
 
 Consider that in order to use this hook you need to have a parent
-`FireCMS`
+`Rebase`
 
 ## Type Parameters
 

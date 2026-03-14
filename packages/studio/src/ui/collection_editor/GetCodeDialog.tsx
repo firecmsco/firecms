@@ -1,10 +1,10 @@
-import { EntityCollection, isEmptyObject, useSnackbarController } from "@firecms/core";
-import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
+import { EntityCollection, isEmptyObject, useSnackbarController } from "@rebasepro/core";
+import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@rebasepro/ui";
 import React from "react";
 import JSON5 from "json5";
 import { Highlight, themes } from "prism-react-renderer"
 import { camelCase } from "./utils/strings";
-import { clone } from "@firecms/formex";
+import { clone } from "@rebasepro/formex";
 
 export function GetCodeDialog({
     collection,
@@ -15,7 +15,7 @@ export function GetCodeDialog({
     const snackbarController = useSnackbarController();
 
     const code = collection
-        ? "import { EntityCollection } from \"@firecms/core\";\n\nconst " + (collection?.name ? camelCase(collection.name) : "my") + "Collection:EntityCollection = " + JSON5.stringify(collectionToCode({ ...collection }), null, "\t")
+        ? "import { EntityCollection } from \"@rebasepro/core\";\n\nconst " + (collection?.name ? camelCase(collection.name) : "my") + "Collection:EntityCollection = " + JSON5.stringify(collectionToCode({ ...collection }), null, "\t")
         : "No collection selected";
     return <Dialog open={open}
         onOpenChange={onOpenChange}
@@ -28,7 +28,7 @@ export function GetCodeDialog({
                 app configuration.
                 More info in the <a
                     rel="noopener noreferrer"
-                    href={"https://firecms.co/docs/cloud/quickstart"}>docs</a>.
+                    href={"https://rebase.pro/docs/cloud/quickstart"}>docs</a>.
             </Typography>
             <Highlight
                 theme={themes.vsDark}

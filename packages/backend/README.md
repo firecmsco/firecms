@@ -1,19 +1,19 @@
-# @firecms/backend
+# @rebasepro/backend
 
-PostgreSQL and Drizzle ORM backend implementation for FireCMS.
+PostgreSQL and Drizzle ORM backend implementation for Rebase.
 
-This package provides a complete backend solution for FireCMS applications using PostgreSQL as the database and Drizzle ORM for type-safe database operations.
+This package provides a complete backend solution for Rebase applications using PostgreSQL as the database and Drizzle ORM for type-safe database operations.
 
 ## Installation
 
 ```bash
-npm install @firecms/backend @firecms/core
+npm install @rebasepro/backend @rebasepro/core
 ```
 
 ## Usage
 
 ```typescript
-import { createBackend } from "@firecms/backend";
+import { createBackend } from "@rebasepro/backend";
 
 const backend = createBackend({
   connectionString: "postgresql://user:password@localhost:5432/database",
@@ -27,13 +27,13 @@ const backend = createBackend({
 - PostgreSQL database support
 - Drizzle ORM integration
 - Type-safe database operations
-- Full FireCMS compatibility
+- Full Rebase compatibility
 - Migration support
 - Connection pooling
 
 ## Development
 
-This package is part of the FireCMS monorepo. For development instructions, see the main repository README.
+This package is part of the Rebase monorepo. For development instructions, see the main repository README.
 
 ## License
 

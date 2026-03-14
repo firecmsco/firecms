@@ -38,7 +38,7 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
     try {
         // Create users table
         await db.execute(sql`
-            CREATE TABLE IF NOT EXISTS firecms_users (
+            CREATE TABLE IF NOT EXISTS rebase_users (
                 id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
                 email TEXT NOT NULL UNIQUE,
                 password_hash TEXT,
@@ -53,19 +53,19 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 
         // Create index on email for faster lookups
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_firecms_users_email 
-            ON firecms_users(email)
+            CREATE INDEX IF NOT EXISTS idx_rebase_users_email 
+            ON rebase_users(email)
         `);
 
         // Create index on google_id for OAuth lookups
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_firecms_users_google_id 
-            ON firecms_users(google_id)
+            CREATE INDEX IF NOT EXISTS idx_rebase_users_google_id 
+            ON rebase_users(google_id)
         `);
 
         // Create roles table
         await db.execute(sql`
-            CREATE TABLE IF NOT EXISTS firecms_roles (
+            CREATE TABLE IF NOT EXISTS rebase_roles (
                 id TEXT PRIMARY KEY,
                 name TEXT NOT NULL,
                 is_admin BOOLEAN DEFAULT FALSE,
@@ -78,30 +78,30 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 
         // Migration: Add collection_permissions column if it doesn't exist (for existing databases)
         await db.execute(sql`
-            ALTER TABLE firecms_roles 
+            ALTER TABLE rebase_roles 
             ADD COLUMN IF NOT EXISTS collection_permissions JSONB
         `);
 
         // Create user_roles junction table
         await db.execute(sql`
-            CREATE TABLE IF NOT EXISTS firecms_user_roles (
-                user_id TEXT NOT NULL REFERENCES firecms_users(id) ON DELETE CASCADE,
-                role_id TEXT NOT NULL REFERENCES firecms_roles(id) ON DELETE CASCADE,
+            CREATE TABLE IF NOT EXISTS rebase_user_roles (
+                user_id TEXT NOT NULL REFERENCES rebase_users(id) ON DELETE CASCADE,
+                role_id TEXT NOT NULL REFERENCES rebase_roles(id) ON DELETE CASCADE,
                 PRIMARY KEY (user_id, role_id)
             )
         `);
 
         // Create index on user_id for faster lookups
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_firecms_user_roles_user 
-            ON firecms_user_roles(user_id)
+            CREATE INDEX IF NOT EXISTS idx_rebase_user_roles_user 
+            ON rebase_user_roles(user_id)
         `);
 
         // Create refresh tokens table
         await db.execute(sql`
-            CREATE TABLE IF NOT EXISTS firecms_refresh_tokens (
+            CREATE TABLE IF NOT EXISTS rebase_refresh_tokens (
                 id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-                user_id TEXT NOT NULL REFERENCES firecms_users(id) ON DELETE CASCADE,
+                user_id TEXT NOT NULL REFERENCES rebase_users(id) ON DELETE CASCADE,
                 token_hash TEXT NOT NULL UNIQUE,
                 expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -110,30 +110,30 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 
         // Create index on token_hash for faster lookups
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_firecms_refresh_tokens_hash 
-            ON firecms_refresh_tokens(token_hash)
+            CREATE INDEX IF NOT EXISTS idx_rebase_refresh_tokens_hash 
+            ON rebase_refresh_tokens(token_hash)
         `);
 
         // Create index on user_id for cleanup operations
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_firecms_refresh_tokens_user 
-            ON firecms_refresh_tokens(user_id)
+            CREATE INDEX IF NOT EXISTS idx_rebase_refresh_tokens_user 
+            ON rebase_refresh_tokens(user_id)
         `);
 
         // Migration: Add user_agent and ip_address to refresh tokens
         await db.execute(sql`
-            ALTER TABLE firecms_refresh_tokens 
+            ALTER TABLE rebase_refresh_tokens 
             ADD COLUMN IF NOT EXISTS user_agent TEXT
         `);
 
         await db.execute(sql`
-            ALTER TABLE firecms_refresh_tokens 
+            ALTER TABLE rebase_refresh_tokens 
             ADD COLUMN IF NOT EXISTS ip_address TEXT
         `);
 
         // Migration: Ensure only ONE active session exists per user/device
         await db.execute(sql`
-            ALTER TABLE firecms_refresh_tokens
+            ALTER TABLE rebase_refresh_tokens
             ADD CONSTRAINT unique_device_session UNIQUE (user_id, user_agent, ip_address)
         `).catch(e => {
             // Ignore if constraint already exists or if data violates it (which we'll softly allow on legacy nodes)
@@ -145,9 +145,9 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 
         // Create password reset tokens table
         await db.execute(sql`
-            CREATE TABLE IF NOT EXISTS firecms_password_reset_tokens (
+            CREATE TABLE IF NOT EXISTS rebase_password_reset_tokens (
                 id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-                user_id TEXT NOT NULL REFERENCES firecms_users(id) ON DELETE CASCADE,
+                user_id TEXT NOT NULL REFERENCES rebase_users(id) ON DELETE CASCADE,
                 token_hash TEXT NOT NULL UNIQUE,
                 expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
                 used_at TIMESTAMP WITH TIME ZONE,
@@ -157,29 +157,29 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 
         // Create index on token_hash for password reset lookups
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_firecms_password_reset_tokens_hash 
-            ON firecms_password_reset_tokens(token_hash)
+            CREATE INDEX IF NOT EXISTS idx_rebase_password_reset_tokens_hash 
+            ON rebase_password_reset_tokens(token_hash)
         `);
 
         // Create index on user_id for password reset cleanup
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_firecms_password_reset_tokens_user 
-            ON firecms_password_reset_tokens(user_id)
+            CREATE INDEX IF NOT EXISTS idx_rebase_password_reset_tokens_user 
+            ON rebase_password_reset_tokens(user_id)
         `);
 
         // Migration: Add email verification columns to users if they don't exist
         await db.execute(sql`
-            ALTER TABLE firecms_users 
+            ALTER TABLE rebase_users 
             ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT FALSE
         `);
 
         await db.execute(sql`
-            ALTER TABLE firecms_users 
+            ALTER TABLE rebase_users 
             ADD COLUMN IF NOT EXISTS email_verification_token TEXT
         `);
 
         await db.execute(sql`
-            ALTER TABLE firecms_users 
+            ALTER TABLE rebase_users 
             ADD COLUMN IF NOT EXISTS email_verification_sent_at TIMESTAMP WITH TIME ZONE
         `);
 
@@ -194,7 +194,7 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
         // This prevents the "tuple concurrently updated" race condition when multiple Node 
         // workers or rapid restarts attempt to CREATE OR REPLACE FUNCTION simultaneously.
         await db.transaction(async (tx) => {
-            await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtext('firecms_auth_functions_init'))`);
+            await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtext('rebase_auth_functions_init'))`);
 
             await tx.execute(sql`
                 CREATE OR REPLACE FUNCTION auth.uid() RETURNS text AS $$
@@ -233,7 +233,7 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
  */
 async function seedDefaultRoles(db: NodePgDatabase): Promise<void> {
     // Check if any roles exist
-    const result = await db.execute(sql`SELECT COUNT(*) as count FROM firecms_roles`);
+    const result = await db.execute(sql`SELECT COUNT(*) as count FROM rebase_roles`);
     const count = parseInt((result.rows[0] as unknown as Record<string, string | number>)?.count as string || "0", 10);
 
     if (count > 0) {
@@ -245,7 +245,7 @@ async function seedDefaultRoles(db: NodePgDatabase): Promise<void> {
 
     for (const role of DEFAULT_ROLES) {
         await db.execute(sql`
-            INSERT INTO firecms_roles (id, name, is_admin, default_permissions, config)
+            INSERT INTO rebase_roles (id, name, is_admin, default_permissions, config)
             VALUES (
                 ${role.id}, 
                 ${role.name}, 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ExpandablePanel } from "@firecms/ui";
+import { ExpandablePanel } from "@rebasepro/ui";
 
 export default function ExpandablePanelFieldDemo() {
     const [expanded, setExpanded] = useState(false);
@@ -16,5 +16,5 @@ export default function ExpandablePanelFieldDemo() {
                 This Expandable Panel is styled as a field, making it a great choice for forms.
             </div>
         </ExpandablePanel>
-);
+    );
 }

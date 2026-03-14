@@ -1,5 +1,5 @@
 import React from "react";
-import { PluginFormActionProps } from "@firecms/core";
+import { PluginFormActionProps } from "@rebasepro/core";
 import { LastEditedByIndicator } from "./LastEditedByIndicator";
 
 /**

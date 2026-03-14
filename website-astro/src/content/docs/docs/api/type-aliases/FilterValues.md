@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/FilterValues"
 title: "FilterValues"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / FilterValues
+[@rebasepro/core](../README) / FilterValues
 
 # Type Alias: FilterValues\<Key\>
 
 > **FilterValues**\<`Key`\> = `Partial`\<`Record`\<`Key`, \[[`WhereFilterOp`](WhereFilterOp), `any`\]\>\>
 
-Defined in: [types/collections.ts:458](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:458](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 Used to define filters applied in collections
 

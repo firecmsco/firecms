@@ -3,17 +3,17 @@ slug: "docs/api/functions/removeUndefined"
 title: "removeUndefined"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / removeUndefined
+[@rebasepro/core](../README) / removeUndefined
 
 # Function: removeUndefined()
 
 > **removeUndefined**(`value`, `removeEmptyStrings?`): `any`
 
-Defined in: [util/objects.ts:143](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/objects.ts)
+Defined in: [util/objects.ts:143](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
 
 ## Parameters
 

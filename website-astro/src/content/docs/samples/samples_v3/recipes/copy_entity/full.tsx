@@ -8,8 +8,8 @@ import {
     useDataSource,
     useReferenceDialog,
     useSnackbarController
-} from "@firecms/core";
-import { Button } from "@firecms/ui";
+} from "@rebasepro/core";
+import { Button } from "@rebasepro/ui";
 
 type Product = {
     name: string;
@@ -24,11 +24,11 @@ type CopyEntityButtonProps = {
 };
 
 function CopyEntityButton({
-                              pathFrom,
-                              collectionFrom,
-                              pathTo,
-                              collectionTo
-                          }: CopyEntityButtonProps) {
+    pathFrom,
+    collectionFrom,
+    pathTo,
+    collectionTo
+}: CopyEntityButtonProps) {
 
     // The datasource allows us to create new documents
     const dataSource = useDataSource();

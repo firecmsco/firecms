@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
+import { Field, FormexFieldProps, getIn, useFormex } from "@rebasepro/formex";
 
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
@@ -16,7 +16,7 @@ export function BooleanPropertyField({ disabled }: {
             <div className={"col-span-12"}>
 
                 <ValidationPanel>
-                    <GeneralPropertyValidation disabled={disabled}/>
+                    <GeneralPropertyValidation disabled={disabled} />
                 </ValidationPanel>
 
             </div>
@@ -31,7 +31,7 @@ export function BooleanPropertyField({ disabled }: {
                             label={defaultValue === null || defaultValue === undefined ? "Default value not set" : ("Default value is " + defaultValue.toString())}
                             disabled={disabled}
                             allowIndeterminate={true} field={field}
-                            form={form}/>
+                            form={form} />
                     }}
                 </Field>
 

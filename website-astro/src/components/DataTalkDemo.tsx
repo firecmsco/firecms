@@ -214,127 +214,18 @@ export function ProductsDemoTable() {
 
     return (
         <div
-            className="h-full w-full flex flex-col rounded-xl border border-surface-800 bg-surface-950/70 backdrop-blur-sm shadow-lg shadow-black/20">
-            {/* Header Toolbar Section */}
-            <div
-                className="min-h-[48px] px-4 md:px-6 py-2 flex flex-row items-center justify-between w-full flex-shrink-0 bg-surface-950/60 border-b border-surface-800 rounded-t-xl">
-                {/* Left Side: Title */}
-                <div className="flex gap-4 md:mr-8 mr-4 self-stretch items-center">
-                    <div className="hidden lg:block">
-                        <div className="flex flex-col items-start justify-center">
-                            <div
-                                className="text-sm font-medium leading-none truncate max-w-[160px] lg:max-w-[240px] text-white">Products
-                            </div>
-                            <div
-                                className="text-xs text-surface-400 w-full text-ellipsis overflow-hidden whitespace-nowrap max-w-xs text-left">{productsData.length} entities
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* Right Side: Search and Action Buttons */}
-                <div className="flex items-center gap-3">
-                    <div
-                        className="relative h-[32px] bg-surface-900/70 border border-surface-800 rounded-md flex items-center">
-                        <div
-                            className="absolute p-0 px-3 h-full pointer-events-none flex items-center justify-center top-0 left-0">
-                            <span className="material-icons text-surface-500 text-xl">search</span>
-                        </div>
-                        <input placeholder="Search" readOnly
-                               className="pointer-events-none placeholder-surface-500 bg-transparent outline-none border-none pl-10 h-full text-surface-200 w-[150px]"
-                               value=""/>
-                    </div>
-                    <button type="button" title="Download"
-                            className="cursor-pointer text-surface-300 inline-flex items-center justify-center p-2 text-sm hover:bg-surface-900 rounded-full w-9 h-9">
-                        <span className="material-icons text-xl">download</span>
-                    </button>
-                </div>
-            </div>
-
+            className="h-full w-full flex flex-col bg-surface-950/70 backdrop-blur-sm -my-1 -mx-2">
             {/* Main Table Area */}
             <div className="flex-grow overflow-x-auto overflow-y-hidden">
-                {/* Sticky Header Row */}
-                <div
-                    className="sticky top-0 z-10 flex flex-row w-fit min-w-full border-b border-surface-800 bg-gradient-to-b from-surface-950 to-surface-900/60 min-h-[52px]">
-                    {/* Header Cell: ID */}
-                    <div
-                        className="flex px-4 py-3.5 h-full text-xs uppercase font-semibold select-none items-center text-surface-300 hover:text-surface-200 hover:bg-surface-900/60 relative"
-                        style={{
-                            minWidth: "140px",
-                            maxWidth: "140px"
-                        }}>
-                        <div className="overflow-hidden flex-grow flex items-center justify-center">
-                            <div className="truncate mx-1">ID</div>
-                        </div>
-                        <div
-                            className="absolute h-full w-[6px] top-0 right-0 cursor-col-resize bg-transparent hover:bg-surface-700/60 opacity-50"></div>
-                    </div>
-                    {/* Header Cell: Name */}
-                    <div
-                        className="flex px-4 py-3.5 h-full text-xs uppercase font-semibold select-none items-center text-surface-300 hover:text-surface-200 hover:bg-surface-900/60 relative"
-                        style={{
-                            minWidth: "240px",
-                            maxWidth: "240px"
-                        }}>
-                        <div className="overflow-hidden flex-grow flex items-center justify-start">
-                            <span className="material-icons mr-2 text-xl" style={{ fontSize: "20px" }}>short_text</span>
-                            <div className="truncate mx-1">Name</div>
-                        </div>
-                        <div
-                            className="absolute h-full w-[6px] top-0 right-0 cursor-col-resize bg-transparent hover:bg-surface-700/60 opacity-50"></div>
-                    </div>
-                    {/* Header Cell: Category */}
-                    <div
-                        className="flex px-4 py-3.5 h-full text-xs uppercase font-semibold select-none items-center text-surface-300 hover:text-surface-200 hover:bg-surface-900/60 relative"
-                        style={{
-                            minWidth: "220px",
-                            maxWidth: "220px"
-                        }}>
-                        <div className="overflow-hidden flex-grow flex items-center justify-start">
-                            <span className="material-icons mr-2 text-xl" style={{ fontSize: "20px" }}>list</span>
-                            <div className="truncate mx-1">Category</div>
-                        </div>
-                        <div
-                            className="absolute h-full w-[6px] top-0 right-0 cursor-col-resize bg-transparent hover:bg-surface-700/60 opacity-50"></div>
-                    </div>
-                    {/* Header Cell: Price */}
-                    <div
-                        className="flex px-4 py-3.5 h-full text-xs uppercase font-semibold select-none items-center text-surface-300 hover:text-surface-200 hover:bg-surface-900/60 relative"
-                        style={{
-                            minWidth: "160px",
-                            maxWidth: "160px"
-                        }}>
-                        <div className="overflow-hidden flex-grow flex items-center justify-end">
-                            <span className="material-icons mr-2 text-xl">numbers</span>
-                            <div className="truncate mx-1">Price</div>
-                        </div>
-                        <div
-                            className="absolute h-full w-[6px] top-0 right-0 cursor-col-resize bg-transparent hover:bg-surface-700/60 opacity-50"></div>
-                    </div>
-                    {/* Header Cell: Currency */}
-                    <div
-                        className="flex px-4 py-3.5 h-full text-xs uppercase font-semibold select-none items-center text-surface-300 hover:text-surface-200 hover:bg-surface-900/60 relative"
-                        style={{
-                            minWidth: "140px",
-                            maxWidth: "140px"
-                        }}>
-                        <div className="overflow-hidden flex-grow flex items-center justify-start">
-                            <span className="material-icons mr-2 text-xl"
-                                  style={{ fontSize: "20px" }}>euro_symbol</span>
-                            <div className="truncate mx-1">Currency</div>
-                        </div>
-                        <div
-                            className="absolute h-full w-[6px] top-0 right-0 cursor-col-resize bg-transparent hover:bg-surface-700/60 opacity-50"></div>
-                    </div>
-                    {/* Add Column Button Placeholder */}
-                    <div
-                        className="p-0.5 w-20 h-full flex items-center justify-center cursor-pointer bg-surface-950 hover:bg-surface-900/60 flex-shrink-0">
-                        <span className="material-icons text-xl text-surface-400"
-                              style={{ fontSize: "20px" }}>add</span>
-                    </div>
-                </div>
-
                 {/* Data Rows */}
                 <div className="w-fit min-w-full">
+                    {/* Header Row */}
+                    <div className="flex items-stretch text-xs font-semibold text-surface-400 tracking-wider uppercase bg-surface-950 border-b border-surface-800">
+                        <div className="flex items-center justify-center px-4 py-3 border-r border-surface-800 flex-shrink-0" style={{ width: "140px" }}>ID</div>
+                        <div className="flex items-center px-4 py-3 border-r border-surface-800 flex-shrink-0" style={{ width: "240px", textAlign: "left" }}>Name</div>
+                        <div className="flex items-center px-4 py-3 border-r border-surface-800 flex-shrink-0" style={{ width: "220px", textAlign: "left" }}>Category</div>
+                        <div className="flex items-center justify-end px-4 py-3 border-r border-surface-800 flex-shrink-0" style={{ width: "160px", textAlign: "right" }}>Price</div>
+                    </div>
                     {productsData.map((row, index) => (
                         <div key={row[0]}
                              className="flex items-stretch text-sm leading-none even:bg-transparent odd:bg-surface-950/40 hover:bg-surface-900/40 transition-colors">

@@ -1,4 +1,4 @@
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@rebasepro/core";
 
 export type Unit = {
     name: string;

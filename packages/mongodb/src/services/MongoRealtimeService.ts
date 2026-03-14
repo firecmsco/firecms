@@ -6,12 +6,12 @@
  */
 
 import { Db, ChangeStream, ChangeStreamDocument, Document, ObjectId } from "mongodb";
-import { Entity } from "@firecms/types";
+import { Entity } from "@rebasepro/types";
 import { MongoEntityService } from "../db/MongoEntityService";
 import { MongoConditionBuilder } from "../db/MongoConditionBuilder";
 
 /**
- * Realtime provider interface (from @firecms/backend).
+ * Realtime provider interface (from @rebasepro/backend).
  */
 export interface RealtimeProvider {
     subscribeToCollection(

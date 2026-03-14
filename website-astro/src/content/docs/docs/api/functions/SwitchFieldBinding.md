@@ -3,17 +3,17 @@ slug: "docs/api/functions/SwitchFieldBinding"
 title: "SwitchFieldBinding"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SwitchFieldBinding
+[@rebasepro/core](../README) / SwitchFieldBinding
 
 # Function: SwitchFieldBinding()
 
 > **SwitchFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/SwitchFieldBinding.tsx:19](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/form/field_bindings/SwitchFieldBinding.tsx)
+Defined in: [form/field\_bindings/SwitchFieldBinding.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/SwitchFieldBinding.tsx)
 
 Simple boolean switch biding to a boolean property.
 

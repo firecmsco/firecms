@@ -3,17 +3,17 @@ slug: "docs/api/functions/serializeRegExp"
 title: "serializeRegExp"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / serializeRegExp
+[@rebasepro/core](../README) / serializeRegExp
 
 # Function: serializeRegExp()
 
 > **serializeRegExp**(`input`): `string`
 
-Defined in: [util/regexp.ts:1](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/regexp.ts)
+Defined in: [util/regexp.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/regexp.ts)
 
 ## Parameters
 

@@ -3,17 +3,17 @@ slug: "docs/api/functions/useTraceUpdate"
 title: "useTraceUpdate"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / useTraceUpdate
+[@rebasepro/core](../README) / useTraceUpdate
 
 # Function: useTraceUpdate()
 
 > **useTraceUpdate**(`props`, `maxDepth`): `void`
 
-Defined in: [util/useTraceUpdate.tsx:17](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/useTraceUpdate.tsx)
+Defined in: [util/useTraceUpdate.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useTraceUpdate.tsx)
 
 ## Parameters
 

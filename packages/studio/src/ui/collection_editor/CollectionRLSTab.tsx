@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Button, Typography, cls, defaultBorderMixin, Chip, KeyIcon } from "@firecms/ui";
+import { Button, Typography, cls, defaultBorderMixin, Chip, KeyIcon } from "@rebasepro/ui";
 import { PostgresPolicy } from "../../components/RLSEditor/RLSEditor";
 import { PolicyEditor } from "../../components/RLSEditor/PolicyEditor";
-import { useFormex } from "@firecms/formex";
+import { useFormex } from "@rebasepro/formex";
 import { PersistedCollection } from "../../types/persisted_collection";
 
 export function CollectionRLSTab() {

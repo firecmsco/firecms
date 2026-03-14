@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
-import { DebouncedTextField } from "@firecms/ui";
+import { Field, FormexFieldProps, getIn, useFormex } from "@rebasepro/formex";
+import { DebouncedTextField } from "@rebasepro/ui";
 import { SwitchControl } from "../../SwitchControl";
 
 export function GeneralPropertyValidation({ disabled }: {
@@ -20,14 +20,14 @@ export function GeneralPropertyValidation({ disabled }: {
         <>
             <div className={"col-span-6"}>
                 <Field name={validationRequired}
-                       type="checkbox">
+                    type="checkbox">
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
                             disabled={disabled}
                             label={"Required"}
                             tooltip={"You won't be able to save this entity if this value is not set"}
                             form={form}
-                            field={field}/>
+                            field={field} />
                     }}
                 </Field>
             </div>
@@ -35,14 +35,14 @@ export function GeneralPropertyValidation({ disabled }: {
             <div className={"col-span-6"}>
 
                 <Field name={validationUnique}
-                       type="checkbox">
+                    type="checkbox">
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
                             disabled={disabled}
                             label={"Unique"}
                             tooltip={"There cannot be multiple entities with the same value"}
                             form={form}
-                            field={field}/>
+                            field={field} />
                     }}
                 </Field>
             </div>
@@ -54,7 +54,7 @@ export function GeneralPropertyValidation({ disabled }: {
                     label={"Required message"}
                     name={validationRequiredMessage}
                     size="small"
-                    onChange={handleChange}/>
+                    onChange={handleChange} />
             </div>}
         </>
     );

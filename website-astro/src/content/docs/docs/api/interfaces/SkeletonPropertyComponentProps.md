@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/SkeletonPropertyComponentProps"
 title: "SkeletonPropertyComponentProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SkeletonPropertyComponentProps
+[@rebasepro/core](../README) / SkeletonPropertyComponentProps
 
 # Interface: SkeletonPropertyComponentProps
 
-Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:13](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
+Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:13](https:
 
 > **property**: [`ResolvedProperty`](../type-aliases/ResolvedProperty)
 
-Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
+Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:14](https:
 
 > **size**: [`PreviewSize`](../type-aliases/PreviewSize)
 
-Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
+Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)

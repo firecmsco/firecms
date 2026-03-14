@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { createFireCMSMcpServer } from "./server.js";
+import { createRebaseMcpServer } from "./server.js";
 import { getCurrentUserEmail } from "./auth.js";
 
 /**
- * FireCMS MCP Server CLI
+ * Rebase MCP Server CLI
  *
  * Usage:
- *   firecms-mcp
+ *   rebase-mcp
  *
- * Auth is handled interactively via the firecms_login tool (browser OAuth),
- * same flow as `firecms login` in the CLI. Tokens are stored at ~/.firecms/tokens.json.
+ * Auth is handled interactively via the rebase_login tool (browser OAuth),
+ * same flow as `rebase login` in the CLI. Tokens are stored at ~/.rebase/tokens.json.
  *
  * Claude Desktop config (claude_desktop_config.json):
  *   {
  *     "mcpServers": {
- *       "firecms": {
+ *       "rebase": {
  *         "command": "node",
  *         "args": ["/path/to/packages/mcp_server/dist/cli.js"]
  *       }
@@ -24,47 +24,47 @@ import { getCurrentUserEmail } from "./auth.js";
  *   }
  */
 async function main() {
-    const args = process.argv.slice(2);
+  const args = process.argv.slice(2);
 
-    if (args.includes("--help") || args.includes("-h")) {
-        console.log(`
-FireCMS MCP Server — Model Context Protocol server for FireCMS Cloud
+  if (args.includes("--help") || args.includes("-h")) {
+    console.log(`
+Rebase MCP Server — Model Context Protocol server for Rebase Cloud
 
 Usage:
-  firecms-mcp
+  rebase-mcp
 
 No configuration needed. Authentication is handled interactively
-via the firecms_login tool, which opens a browser for Google OAuth.
-Tokens are stored at ~/.firecms/tokens.json (shared with the FireCMS CLI).
+via the rebase_login tool, which opens a browser for Google OAuth.
+Tokens are stored at ~/.rebase/tokens.json (shared with the Rebase CLI).
 
 Claude Desktop config (claude_desktop_config.json):
   {
     "mcpServers": {
-      "firecms": {
+      "rebase": {
         "command": "npx",
-        "args": ["@firecms/mcp-server"]
+        "args": ["@rebasepro/mcp-server"]
       }
     }
   }
 `);
-        process.exit(0);
-    }
+    process.exit(0);
+  }
 
-    const server = createFireCMSMcpServer();
-    const transport = new StdioServerTransport();
-    await server.connect(transport);
+  const server = createRebaseMcpServer();
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
 
-    // Log to stderr (stdout is reserved for MCP protocol)
-    const email = getCurrentUserEmail();
-    console.error("FireCMS MCP server started");
-    if (email) {
-        console.error(`  Logged in as: ${email}`);
-    } else {
-        console.error("  Not logged in — use the firecms_login tool to sign in");
-    }
+  // Log to stderr (stdout is reserved for MCP protocol)
+  const email = getCurrentUserEmail();
+  console.error("Rebase MCP server started");
+  if (email) {
+    console.error(`  Logged in as: ${email}`);
+  } else {
+    console.error("  Not logged in — use the rebase_login tool to sign in");
+  }
 }
 
 main().catch((error) => {
-    console.error("Fatal error:", error);
-    process.exit(1);
+  console.error("Fatal error:", error);
+  process.exit(1);
 });

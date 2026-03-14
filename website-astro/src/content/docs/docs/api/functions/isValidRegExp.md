@@ -3,17 +3,17 @@ slug: "docs/api/functions/isValidRegExp"
 title: "isValidRegExp"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / isValidRegExp
+[@rebasepro/core](../README) / isValidRegExp
 
 # Function: isValidRegExp()
 
 > **isValidRegExp**(`input`): `boolean`
 
-Defined in: [util/regexp.ts:26](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/regexp.ts)
+Defined in: [util/regexp.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/regexp.ts)
 
 ## Parameters
 

@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
-import { DebouncedTextField } from "@firecms/ui";
+import { Field, FormexFieldProps, getIn, useFormex } from "@rebasepro/formex";
+import { DebouncedTextField } from "@rebasepro/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 import { SwitchControl } from "../../SwitchControl";
 
@@ -25,28 +25,28 @@ export function NumberPropertyValidation({ disabled }: {
     return (
 
         <div className={"grid grid-cols-12 gap-2"}>
-            <GeneralPropertyValidation disabled={disabled}/>
+            <GeneralPropertyValidation disabled={disabled} />
 
 
             <div className={"col-span-6"}>
                 <DebouncedTextField value={getIn(values, validationMin)}
-                                    label={"Min value"}
-                                    name={validationMin}
-                                    type="number"
-                                    size="small"
-                                    disabled={disabled}
-                                    onChange={handleChange}/>
+                    label={"Min value"}
+                    name={validationMin}
+                    type="number"
+                    size="small"
+                    disabled={disabled}
+                    onChange={handleChange} />
             </div>
 
             <div className={"col-span-6"}>
                 <DebouncedTextField value={getIn(values, validationMax)}
-                                    label={"Max value"}
-                                    name={validationMax}
-                                    type="number"
-                                    size="small"
+                    label={"Max value"}
+                    name={validationMax}
+                    type="number"
+                    size="small"
 
-                                    disabled={disabled}
-                                    onChange={handleChange}/>
+                    disabled={disabled}
+                    onChange={handleChange} />
             </div>
 
 
@@ -59,7 +59,7 @@ export function NumberPropertyValidation({ disabled }: {
                     size="small"
 
                     disabled={disabled}
-                    onChange={handleChange}/>
+                    onChange={handleChange} />
             </div>
 
             <div className={"col-span-6"}>
@@ -71,42 +71,42 @@ export function NumberPropertyValidation({ disabled }: {
                     size="small"
 
                     disabled={disabled}
-                    onChange={handleChange}/>
+                    onChange={handleChange} />
             </div>
 
             <div className={"col-span-4"}>
                 <Field name={validationPositive}
-                       type="checkbox">
+                    type="checkbox">
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
                             label={"Positive value"}
                             disabled={disabled}
                             form={form}
-                            field={field}/>
+                            field={field} />
                     }}
                 </Field>
             </div>
             <div className={"col-span-4"}>
                 <Field name={validationNegative}
-                       type="checkbox">
+                    type="checkbox">
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
                             label={"Negative value"}
                             disabled={disabled}
                             form={form}
-                            field={field}/>
+                            field={field} />
                     }}
                 </Field>
             </div>
             <div className={"col-span-4"}>
                 <Field name={validationInteger}
-                       type="checkbox">
+                    type="checkbox">
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
                             label={"Integer value"}
                             disabled={disabled}
                             form={form}
-                            field={field}/>
+                            field={field} />
                     }}
                 </Field>
             </div>

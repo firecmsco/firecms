@@ -1,9 +1,9 @@
 import React from "react"
-import { FireCMSCloudApp } from "@firecms/cloud";
+import { RebaseCloudApp } from "@rebasepro/cloud";
 import appConfig from "./index";
 
 function App() {
-    return <FireCMSCloudApp
+    return <RebaseCloudApp
         projectId={"[REPLACE_WITH_PROJECT_ID]"}
         appConfig={appConfig}
     />;

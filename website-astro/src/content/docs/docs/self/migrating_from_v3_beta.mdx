@@ -2,12 +2,12 @@
 slug: docs/self/migrating_from_v3_beta
 title: Migrating from previous beta versions
 sidebar_label: Migrating from previous beta versions
-description: Step-by-step migration guide from FireCMS v3 beta versions to the stable release, covering PRO and Cloud changes.
+description: Step-by-step migration guide from Rebase v3 beta versions to the stable release, covering PRO and Cloud changes.
 ---
 
-## FireCMS PRO
+## Rebase PRO
 
-If you are migrating from previous beta versions of FireCMS PRO, you will need to make some updates to your project.
+If you are migrating from previous beta versions of Rebase PRO, you will need to make some updates to your project.
 The main components have changed theis composition. Instead of having a single `Scaffold` components with all the configuration,
 you have additionally an `AppBar` and a `Drawer` component.
 
@@ -65,16 +65,16 @@ necessary to do so.
 
 ### Styling
 
-You also will need to import the default FireCMS styles in your project. You can do this by adding the following import to your `index.css` file:
+You also will need to import the default Rebase styles in your project. You can do this by adding the following import to your `index.css` file:
 
 ```css
-@import "@firecms/ui/index.css" layer(base);
+@import "@rebasepro/ui/index.css" layer(base);
 ```
 
 Your `index.css` file should look like this:
 
 ```css
-@import "@firecms/ui/index.css" layer(base);
+@import "@rebasepro/ui/index.css" layer(base);
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -96,19 +96,19 @@ You need to add these imports:
 
 
 
-## FireCMS Cloud
+## Rebase Cloud
 
-If you are migrating from previous beta versions of FireCMS Cloud, you will need to make some updates to your project.
+If you are migrating from previous beta versions of Rebase Cloud, you will need to make some updates to your project.
 
 ### Dependencies
 
-The main package has been renamed from `firecms` to `@firecms/cloud` since version `3.0.0-beta.4`.
-You can also remove the `@firecms/cli` package, as it is implicitly installed by `@firecms/cloud`.
+The main package has been renamed from `rebase` to `@rebasepro/cloud` since version `3.0.0-beta.4`.
+You can also remove the `@rebasepro/cli` package, as it is implicitly installed by `@rebasepro/cloud`.
 
 This is a sample `package.json` with the new config:
 ```
 {
-  "name": "my-firecms-project",
+  "name": "my-rebase-project",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -116,10 +116,10 @@ This is a sample `package.json` with the new config:
     "dev": "vite --port 5001",
     "build": "vite build",
     "serve": "vite preview --port 5001",
-    "deploy": "run-s build && firecms deploy --project=YOUR_PROJECT_ID"
+    "deploy": "run-s build && rebase deploy --project=YOUR_PROJECT_ID"
   },
   "dependencies": {
-    "@firecms/cloud": "^3.0.0-beta",
+    "@rebasepro/cloud": "^3.0.0-beta",
     "firebase": "^12.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -141,16 +141,16 @@ This is a sample `package.json` with the new config:
 
 ### Imports
 
-You need to update your imports to use the new package name. For example, if you have a file that imports `firecms`:
+You need to update your imports to use the new package name. For example, if you have a file that imports `rebase`:
 
 ```javascript
-import { FireCMS } from "firecms";
+import { Rebase } from "rebase";
 ```
 
 You need to update it to use the new package name:
 
 ```javascript
-import { FireCMS } from "@firecms/core";
+import { Rebase } from "@rebasepro/core";
 ```
 
 ### Vite configuration
@@ -178,10 +178,10 @@ export default defineConfig({
             shared: [
                 "react",
                 "react-dom",
-                "@firecms/cloud",
-                "@firecms/core",
-                "@firecms/firebase",
-                "@firecms/ui",
+                "@rebasepro/cloud",
+                "@rebasepro/core",
+                "@rebasepro/firebase",
+                "@rebasepro/ui",
                 "@firebase/firestore",
                 "@firebase/app",
                 "@firebase/functions",
@@ -211,17 +211,17 @@ export default defineConfig({
 
 - You should also make sure you are using at least version `3.4.3` of the `tailwindcss` package, and `postcss` version `8.4.38`.
 
-- The preset now comes from the `@firecms/ui` package. You can update your `tailwind.config.cjs` file to include the new preset:
+- The preset now comes from the `@rebasepro/ui` package. You can update your `tailwind.config.cjs` file to include the new preset:
 
   ```javascript
-  import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+  import rebaseConfig from "@rebasepro/ui/tailwind.config.js";
 
   export default {
-      presets: [fireCMSConfig],
+      presets: [rebaseConfig],
       content: [
           "./index.html",
           "./src/**/*.{js,ts,jsx,tsx}",
-          "./node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
+          "./node_modules/@rebasepro/**/src/**/*.{js,ts,jsx,tsx}",
       ],
   };
   ```

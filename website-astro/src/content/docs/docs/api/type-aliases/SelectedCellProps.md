@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/SelectedCellProps"
 title: "SelectedCellProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / SelectedCellProps
+[@rebasepro/core](../README) / SelectedCellProps
 
 # Type Alias: SelectedCellProps\<M\>
 
 > **SelectedCellProps**\<`M`\> = `object`
 
-Defined in: [types/collections.ts:657](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:657](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [types/collections.ts:657](https://github.com/firecmsco/firecms/blob
 
 > **cellRect**: `DOMRect`
 
-Defined in: [types/collections.ts:659](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:659](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/collections.ts:659](https://github.com/firecmsco/firecms/blob
 
 > **entityId**: `string`
 
-Defined in: [types/collections.ts:663](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:663](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/collections.ts:663](https://github.com/firecmsco/firecms/blob
 
 > **entityPath**: `string`
 
-Defined in: [types/collections.ts:662](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:662](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/collections.ts:662](https://github.com/firecmsco/firecms/blob
 
 > **height**: `number`
 
-Defined in: [types/collections.ts:661](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:661](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [types/collections.ts:661](https://github.com/firecmsco/firecms/blob
 
 > **propertyKey**: `Extract`\<keyof `M`, `string`\>
 
-Defined in: [types/collections.ts:658](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:658](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
 
 ***
 
@@ -67,4 +67,4 @@ Defined in: [types/collections.ts:658](https://github.com/firecmsco/firecms/blob
 
 > **width**: `number`
 
-Defined in: [types/collections.ts:660](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/collections.ts)
+Defined in: [types/collections.ts:660](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)

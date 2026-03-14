@@ -1,6 +1,6 @@
 import { EntityService } from "../src/db/entityService";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { EntityCollection } from "@firecms/types";
+import { EntityCollection } from "@rebasepro/types";
 import { collectionRegistry } from "../src/collections/registry";
 
 // --- Mock Drizzle ORM table definitions (using 'as any' to avoid TS-specific syntax errors in a misconfigured Jest environment) ---

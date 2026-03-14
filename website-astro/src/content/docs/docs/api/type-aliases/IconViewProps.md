@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/IconViewProps"
 title: "IconViewProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / IconViewProps
+[@rebasepro/core](../README) / IconViewProps
 
 # Type Alias: IconViewProps
 
 > **IconViewProps** = `object`
 
-Defined in: [util/icons.tsx:31](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/icons.tsx)
+Defined in: [util/icons.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [util/icons.tsx:31](https://github.com/firecmsco/firecms/blob/main/p
 
 > `optional` **group**: `string`
 
-Defined in: [util/icons.tsx:35](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/icons.tsx)
+Defined in: [util/icons.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [util/icons.tsx:35](https://github.com/firecmsco/firecms/blob/main/p
 
 > `optional` **icon**: `string` \| `React.ReactNode`
 
-Defined in: [util/icons.tsx:36](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/icons.tsx)
+Defined in: [util/icons.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [util/icons.tsx:36](https://github.com/firecmsco/firecms/blob/main/p
 
 > **name**: `string`
 
-Defined in: [util/icons.tsx:33](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/icons.tsx)
+Defined in: [util/icons.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [util/icons.tsx:33](https://github.com/firecmsco/firecms/blob/main/p
 
 > **path**: `string`
 
-Defined in: [util/icons.tsx:32](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/icons.tsx)
+Defined in: [util/icons.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ***
 
@@ -53,4 +53,4 @@ Defined in: [util/icons.tsx:32](https://github.com/firecmsco/firecms/blob/main/p
 
 > `optional` **singularName**: `string`
 
-Defined in: [util/icons.tsx:34](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/icons.tsx)
+Defined in: [util/icons.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)

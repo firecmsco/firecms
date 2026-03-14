@@ -1,7 +1,7 @@
 import React, { useDeferredValue, useEffect, useRef, useState } from "react";
 import { deepEqual as equal } from "fast-equals"
 
-import { Formex, FormexController, getIn, useCreateFormex } from "@firecms/formex";
+import { Formex, FormexController, getIn, useCreateFormex } from "@rebasepro/formex";
 import {
     ConfirmationDialog,
     DEFAULT_FIELD_CONFIGS,
@@ -14,7 +14,7 @@ import {
     PropertyConfig,
     PropertyConfigBadge,
     PropertyConfigId,
-} from "@firecms/core";
+} from "@rebasepro/core";
 import {
     Button,
     Card,
@@ -32,7 +32,7 @@ import {
     Tooltip,
     Typography,
     WarningIcon
-} from "@firecms/ui";
+} from "@rebasepro/ui";
 import { EnumPropertyField } from "./properties/EnumPropertyField";
 import { StoragePropertyField } from "./properties/StoragePropertyField";
 import { MapPropertyField } from "./properties/MapPropertyField";

@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/EntityIdUpdateProps"
 title: "EntityIdUpdateProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / EntityIdUpdateProps
+[@rebasepro/core](../README) / EntityIdUpdateProps
 
 # Interface: EntityIdUpdateProps\<M\>
 
-Defined in: [types/entity\_callbacks.ts:203](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:203](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Parameters passed to hooks when an entity is deleted
 
@@ -27,7 +27,7 @@ Parameters passed to hooks when an entity is deleted
 
 > **collection**: [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
 
-Defined in: [types/entity\_callbacks.ts:208](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:208](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 collection of the entity being deleted
 
@@ -35,9 +35,9 @@ collection of the entity being deleted
 
 ### context
 
-> **context**: [`FireCMSContext`](../type-aliases/FireCMSContext)
+> **context**: [`RebaseContext`](../type-aliases/RebaseContext)
 
-Defined in: [types/entity\_callbacks.ts:228](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:228](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Context of the app status
 
@@ -47,7 +47,7 @@ Context of the app status
 
 > `optional` **entityId**: `string`
 
-Defined in: [types/entity\_callbacks.ts:218](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:218](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Current entity id
 
@@ -57,7 +57,7 @@ Current entity id
 
 > **path**: `string`
 
-Defined in: [types/entity\_callbacks.ts:213](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:213](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Path of the parent collection
 
@@ -67,6 +67,6 @@ Path of the parent collection
 
 > **values**: `M`
 
-Defined in: [types/entity\_callbacks.ts:223](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/entity_callbacks.ts)
+Defined in: [types/entity\_callbacks.ts:223](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
 
 Entity values

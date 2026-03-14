@@ -7,7 +7,7 @@ sidebar_label: useAuthController
 :::note
 Please note that in order to use these hooks you **must** be in
 a component (you can't use them directly from a callback function).
-Anyhow, callbacks usually include a `FireCMSContext`, which includes all
+Anyhow, callbacks usually include a `RebaseContext`, which includes all
 the controllers.
 :::
 
@@ -35,7 +35,7 @@ Example:
 
 ```tsx
 import React from "react";
-import { useAuthController } from "@firecms/core";
+import { useAuthController } from "@rebasepro/core";
 
 export function ExampleCMSView() {
 

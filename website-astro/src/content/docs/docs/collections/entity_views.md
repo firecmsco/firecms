@@ -2,12 +2,12 @@
 slug: docs/collections/entity_views
 title: Entity views
 sidebar_label: Entity views
-description: FireCMS allows you to add custom view per entity. Whether you're creating previews, web page visualizations, dashboards, form alterations, or any distinctive view, FireCMS's Entity Custom Views cater to your unique requirements. Simply define your custom React component and integrate it within your entity collection schema as an 'EntityCustomView'. For broader applications, register the view in the entity view registry through `FireCMSAppConfig` to make it accessible across different collections. These custom entity views are fundamental elements, offering a granule layer of customization and enhancing your CMS's extensibility for diverse implementations.
+description: Rebase allows you to add custom view per entity. Whether you're creating previews, web page visualizations, dashboards, form alterations, or any distinctive view, Rebase's Entity Custom Views cater to your unique requirements. Simply define your custom React component and integrate it within your entity collection schema as an 'EntityCustomView'. For broader applications, register the view in the entity view registry through `RebaseAppConfig` to make it accessible across different collections. These custom entity views are fundamental elements, offering a granule layer of customization and enhancing your CMS's extensibility for diverse implementations.
 ---
 
 ![Custom entity view](/img/entity_view.png)
 
-FireCMS offers default form and table fields for common use cases and also allows
+Rebase offers default form and table fields for common use cases and also allows
 overriding fields if you need a custom implementation, but that might be not
 enough in certain cases, where you might want to have a full **custom view related
 to one entity**.
@@ -30,7 +30,7 @@ to your schema. Like in this example:
 
 ```tsx
 import React from "react";
-import { EntityCustomView, buildCollection } from "@firecms/core";
+import { EntityCustomView, buildCollection } from "@rebasepro/core";
 
 const sampleView: EntityCustomView = {
     key: "preview",
@@ -61,8 +61,8 @@ will bind the value to the entity, and it will be saved when the entity is saved
 In this example we creating a secondary form with a map field, including name and age:
 
 ```tsx
-import { EntityCustomViewParams, PropertyFieldBinding } from "@firecms/core";
-import { Container } from "@firecms/ui";
+import { EntityCustomViewParams, PropertyFieldBinding } from "@rebasepro/core";
+import { Container } from "@rebasepro/ui";
 
 export function SecondaryForm({
                                   formContext
@@ -121,7 +121,7 @@ If you are editing a collection in code you can add your custom view
 directly to the collection:
 
 ```tsx
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@rebasepro/core";
 
 const blogCollection = buildCollection({
     id: "blog",
@@ -152,15 +152,15 @@ const blogCollection = buildCollection({
 
 You might have an entity view that you want to reuse in different collections.
 
-#### FireCMS Cloud
+#### Rebase Cloud
 
-In FireCMS Cloud, you can add it to the entity view registry in your
-main `FireCMSAppConfig` export:
+In Rebase Cloud, you can add it to the entity view registry in your
+main `RebaseAppConfig` export:
 
 ```tsx
-import { FireCMSAppConfig } from "@firecms/core";
+import { RebaseAppConfig } from "@rebasepro/core";
 
-const appConfig: FireCMSAppConfig = {
+const appConfig: RebaseAppConfig = {
     version: "1",
     collections: async (props) => {
         return ([
@@ -181,14 +181,14 @@ const appConfig: FireCMSAppConfig = {
 export default appConfig;
 ```
 
-#### FireCMS PRO
+#### Rebase PRO
 
-In FireCMS PRO, you can add it to the entity view registry in your main
-`FireCMS` component:
+In Rebase PRO, you can add it to the entity view registry in your main
+`Rebase` component:
 
 ```tsx
 //...
-<FireCMS
+<Rebase
     //...
     entityViews={[{
         key: "test-view",
@@ -210,7 +210,7 @@ It is also possible to use the `entityView` prop in the collection
 with the key of the entity view you want to use:
 
 ```tsx
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@rebasepro/core";
 
 const blogCollection = buildCollection({
     id: "blog",

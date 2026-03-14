@@ -3,17 +3,17 @@ slug: "docs/api/functions/slugify"
 title: "slugify"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / slugify
+[@rebasepro/core](../README) / slugify
 
 # Function: slugify()
 
 > **slugify**(`text?`, `separator?`, `lowercase?`): `string`
 
-Defined in: [util/strings.ts:29](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/strings.ts)
+Defined in: [util/strings.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/strings.ts)
 
 ## Parameters
 

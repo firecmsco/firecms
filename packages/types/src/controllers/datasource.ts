@@ -1,6 +1,6 @@
 import { CollectionRegistryController } from "./navigation";
 import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues } from "../types";
-import { FireCMSContext } from "../firecms_context";
+import { RebaseContext } from "../rebase_context";
 
 /**
  * @group Datasource
@@ -175,7 +175,7 @@ export interface DataSource {
     cmsToDelegateModel?: (data: any) => any;
 
     initTextSearch?: (props: {
-        context: FireCMSContext,
+        context: RebaseContext,
         path: string,
         databaseId?: string,
         collection: EntityCollection,

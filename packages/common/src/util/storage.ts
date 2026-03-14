@@ -1,4 +1,4 @@
-import { ArrayProperty, EntityValues, StorageConfig, StringProperty, UploadedFileContext } from "@firecms/types";
+import { ArrayProperty, EntityValues, StorageConfig, StringProperty, UploadedFileContext } from "@rebasepro/types";
 import { randomString } from "./strings";
 
 interface ResolveFilenameStringParams<M extends object> {
@@ -113,12 +113,12 @@ interface Placeholders {
 }
 
 function replacePlaceholders({
-                                 file,
-                                 input,
-                                 entityId,
-                                 propertyKey,
-                                 path
-                             }: Placeholders) {
+    file,
+    input,
+    entityId,
+    propertyKey,
+    path
+}: Placeholders) {
     const ext = file.name.split(".").pop();
     let result = input
         .replace("{propertyKey}", propertyKey)

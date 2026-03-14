@@ -1,7 +1,7 @@
 ---
 slug: dnd_homepage
-title: Adding Drag-and-Drop to the FireCMS Homepage, and how AI has helped
-description: Learn how we implemented drag-and-drop functionality on the FireCMS homepage with the help of AI tools.
+title: Adding Drag-and-Drop to the Rebase Homepage, and how AI has helped
+description: Learn how we implemented drag-and-drop functionality on the Rebase homepage with the help of AI tools.
 pubDate: 2025-07-18
 image: /img/dnd.webm
 authors: francesco
@@ -11,7 +11,7 @@ authors: francesco
   <source src="/img/dnd.webm" type="video/mp4"/>
 </video>
 
-We have a new FireCMS feature: **drag-and-drop reordering of home screen navigation cards.**
+We have a new Rebase feature: **drag-and-drop reordering of home screen navigation cards.**
 
 A couple thoughts on relying on AI to build this...
 
@@ -30,7 +30,7 @@ when dragged. And search must still work!
 We'd long wanted this feature but postponed it due to complexity. We also had to change our DnD library (to `dnd-kit`
 from `@hello-pangea/dnd`) as the old one wouldn't allow the complex nested interactions we needed.
 
-FireCMS has DnD logic in three other places, so we started there. We used a mix of LLMs, mostly Gemini 2.5 Pro and
+Rebase has DnD logic in three other places, so we started there. We used a mix of LLMs, mostly Gemini 2.5 Pro and
 Claude 3.7, but also o3.
 
 Replacing existing code worked surprisingly well, with just a few prompts. Code quality was good and functionally

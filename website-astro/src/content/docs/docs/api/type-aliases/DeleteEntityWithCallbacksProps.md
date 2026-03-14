@@ -3,17 +3,17 @@ slug: "docs/api/type-aliases/DeleteEntityWithCallbacksProps"
 title: "DeleteEntityWithCallbacksProps"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / DeleteEntityWithCallbacksProps
+[@rebasepro/core](../README) / DeleteEntityWithCallbacksProps
 
 # Type Alias: DeleteEntityWithCallbacksProps\<M, USER\>
 
 > **DeleteEntityWithCallbacksProps**\<`M`, `USER`\> = [`DeleteEntityProps`](../interfaces/DeleteEntityProps)\<`M`\> & `object`
 
-Defined in: [hooks/data/delete.ts:15](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/hooks/data/delete.ts)
+Defined in: [hooks/data/delete.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/delete.ts)
 
 ## Type Declaration
 

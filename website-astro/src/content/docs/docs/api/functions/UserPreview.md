@@ -3,17 +3,17 @@ slug: "docs/api/functions/UserPreview"
 title: "UserPreview"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / UserPreview
+[@rebasepro/core](../README) / UserPreview
 
 # Function: UserPreview()
 
 > **UserPreview**(`__namedParameters`): `Element`
 
-Defined in: [preview/components/UserPreview.tsx:14](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/preview/components/UserPreview.tsx)
+Defined in: [preview/components/UserPreview.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/UserPreview.tsx)
 
 Preview component for displaying user information.
 This is a simple wrapper around UserDisplay.

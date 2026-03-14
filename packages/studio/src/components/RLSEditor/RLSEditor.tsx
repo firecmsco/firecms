@@ -15,8 +15,8 @@ import {
     RefreshIcon,
     WarningIcon,
     KeyIcon
-} from "@firecms/ui";
-import { useDataSource, useSnackbarController, useCollectionRegistryController, ErrorView } from "@firecms/core";
+} from "@rebasepro/ui";
+import { useDataSource, useSnackbarController, useCollectionRegistryController, ErrorView } from "@rebasepro/core";
 import { PolicyEditor } from "./PolicyEditor";
 
 export interface PostgresPolicy {
@@ -52,7 +52,7 @@ export const RLSEditor = () => {
 
     const [sidebarSize, setSidebarSize] = useState(() => {
         try {
-            const saved = localStorage.getItem("firecms_rls_editor_sidebar_size");
+            const saved = localStorage.getItem("rebase_rls_editor_sidebar_size");
             return saved !== null ? parseFloat(saved) : 20;
         } catch (e) {
             return 20;
@@ -63,7 +63,7 @@ export const RLSEditor = () => {
 
     useEffect(() => {
         try {
-            localStorage.setItem("firecms_rls_editor_sidebar_size", sidebarSize.toString());
+            localStorage.setItem("rebase_rls_editor_sidebar_size", sidebarSize.toString());
         } catch (e) { }
     }, [sidebarSize]);
 
@@ -448,7 +448,7 @@ export const RLSEditor = () => {
                                                 Table not managed by Rebase
                                             </Typography>
                                             <Typography variant="caption" className="opacity-80">
-                                                This table is not mapped to a FireCMS Schema via code. To edit security policies visually, you must first import this table into a Schema configuration file.
+                                                This table is not mapped to a Rebase Schema via code. To edit security policies visually, you must first import this table into a Schema configuration file.
                                             </Typography>
                                         </Alert>
                                     )}

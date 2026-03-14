@@ -3,17 +3,17 @@ slug: "docs/api/functions/getDefaultValueForDataType"
 title: "getDefaultValueForDataType"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / getDefaultValueForDataType
+[@rebasepro/core](../README) / getDefaultValueForDataType
 
 # Function: getDefaultValueForDataType()
 
 > **getDefaultValueForDataType**(`dataType`): \{ \} \| `null`
 
-Defined in: [util/entities.ts:64](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/util/entities.ts)
+Defined in: [util/entities.ts:64](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
 
 ## Parameters
 

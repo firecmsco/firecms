@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import * as firestoreLibrary from "@firebase/firestore";
-import { CircularProgressCenter, EntityCollection } from "@firecms/core";
-import { Button, cls, Paper, useDebounceValue } from "@firecms/ui";
+import { CircularProgressCenter, EntityCollection } from "@rebasepro/core";
+import { Button, cls, Paper, useDebounceValue } from "@rebasepro/ui";
 import { AutoHeightEditor } from "./AutoHeightEditor";
 import { extractStringLiterals } from "../utils/extract_literals";
 import { QueryTableResults } from "./QueryTableResults";
 import { DataTable } from "./DataTable";
-import { firestoreToCMSModel } from "@firecms/firebase";
+import { firestoreToCMSModel } from "@rebasepro/firebase";
 
 // @ts-ignore
 window.firestoreLibrary = firestoreLibrary

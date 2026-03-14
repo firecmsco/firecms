@@ -3,15 +3,15 @@ slug: "docs/api/interfaces/NavigationEntry"
 title: "NavigationEntry"
 ---
 
-[**@firecms/core**](../README)
+[**@rebasepro/core**](../README)
 
 ***
 
-[@firecms/core](../README) / NavigationEntry
+[@rebasepro/core](../README) / NavigationEntry
 
 # Interface: NavigationEntry
 
-Defined in: [types/navigation.ts:246](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:246](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/navigation.ts:246](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`any`, `any`\>
 
-Defined in: [types/navigation.ts:252](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:252](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/navigation.ts:252](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **description**: `string`
 
-Defined in: [types/navigation.ts:254](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:254](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/navigation.ts:254](https://github.com/firecmsco/firecms/blob/
 
 > **group**: `string`
 
-Defined in: [types/navigation.ts:255](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:255](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/navigation.ts:255](https://github.com/firecmsco/firecms/blob/
 
 > **id**: `string`
 
-Defined in: [types/navigation.ts:247](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:247](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/navigation.ts:247](https://github.com/firecmsco/firecms/blob/
 
 > **name**: `string`
 
-Defined in: [types/navigation.ts:249](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:249](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [types/navigation.ts:249](https://github.com/firecmsco/firecms/blob/
 
 > **path**: `string`
 
-Defined in: [types/navigation.ts:250](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:250](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [types/navigation.ts:250](https://github.com/firecmsco/firecms/blob/
 
 > **type**: `"view"` \| `"collection"` \| `"admin"`
 
-Defined in: [types/navigation.ts:251](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:251](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [types/navigation.ts:251](https://github.com/firecmsco/firecms/blob/
 
 > **url**: `string`
 
-Defined in: [types/navigation.ts:248](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:248](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
 
 ***
 
@@ -83,4 +83,4 @@ Defined in: [types/navigation.ts:248](https://github.com/firecmsco/firecms/blob/
 
 > `optional` **view**: [`CMSView`](CMSView)
 
-Defined in: [types/navigation.ts:253](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/navigation.ts)
+Defined in: [types/navigation.ts:253](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
