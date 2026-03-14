@@ -1,0 +1,275 @@
+---
+import SectionBackgroundAccents from "./SectionBackgroundAccents.astro";
+---
+
+{/* =====================================================================
+    One Collection. Everything. — No tabs, everything visible at once.
+    Left: compact buildCollection() code snippet
+    Right: 2x3 grid of all generated outputs (CMS Table, Form, DB, REST, GraphQL, TS)
+    ===================================================================== */}
+
+<section id="collection-power" class="relative isolate bg-black py-24 sm:py-32 border-t border-surface-800/40">
+    <SectionBackgroundAccents blob={{ position: "top", size: "lg" }} />
+
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        {/* ── Section Header ── */}
+        <div class="mx-auto max-w-2xl text-center mb-16 animate-on-scroll fade-in-up">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-6">
+                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/zap.svg" alt="" class="h-4 w-4 filter invert opacity-80"/>
+                Code as Truth
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-5xl leading-tight">
+                One collection.<br/>
+                <span class="text-primary subtle-shimmer">Everything generated.</span>
+            </h2>
+            <p class="mt-6 text-lg text-surface-400">
+                Define your data model once in TypeScript. Rebase automatically creates your admin UI,
+                forms, database schema, REST &amp; GraphQL APIs, and TypeScript types.
+            </p>
+        </div>
+
+        {/* ── Main layout: code left, outputs right ── */}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 animate-on-scroll fade-in-up delay-100">
+
+            {/* ── LEFT: Compact code block (like Code as Truth in showcase) ── */}
+            <div>
+                <div class="lg:sticky lg:top-32 flex flex-col gap-4">
+                {/* File panel */}
+                <div class="relative z-10 flex flex-col shadow-2xl shadow-black/80 rounded-xl overflow-hidden">
+                    <div class="flex items-center justify-between px-4 py-3 bg-surface-900 border-b border-surface-800">
+                        <div class="flex items-center gap-3">
+                            <div class="flex gap-1.5">
+                                <div class="w-2.5 h-2.5 rounded-full bg-surface-600"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-surface-600"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-surface-600"></div>
+                            </div>
+                            <div class="text-[11px] text-surface-400 font-mono tracking-wider uppercase font-semibold ml-2">App Code</div>
+                        </div>
+                        <div class="text-[11px] text-surface-500 font-mono">products.ts</div>
+                    </div>
+                    <div tabindex="0" class="whitespace-pre bg-surface-950 p-5 font-mono text-[12.5px] leading-relaxed text-surface-300 overflow-hidden focus:overflow-auto outline-none ring-1 ring-inset ring-surface-800"><span class="text-primary-light">import</span> &#123; buildCollection &#125; <span class="text-primary-light">from</span> <span class="text-green-400">"@rebasepro/core"</span>;
+
+<span class="text-primary-light">export const</span> <span class="text-white">products</span> = buildCollection(&#123;
+  <span class="text-blue-300">name</span>: <span class="text-green-400">"Products"</span>,
+  <span class="text-blue-300">properties</span>: &#123;
+    <span class="text-blue-300">name</span>: &#123; <span class="text-blue-300">name</span>: <span class="text-green-400">"Name"</span>, <span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span>,
+             <span class="text-blue-300">validation</span>: &#123; <span class="text-blue-300">required</span>: <span class="text-primary-light">true</span> &#125; &#125;,
+    <span class="text-blue-300">category</span>: &#123; <span class="text-blue-300">name</span>: <span class="text-green-400">"Category"</span>, <span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span>,
+               <span class="text-blue-300">enum</span>: &#123; <span class="text-blue-300">electronics</span>: <span class="text-green-400">"Electronics"</span>,
+                      <span class="text-blue-300">fashion</span>: <span class="text-green-400">"Fashion"</span>,
+                      <span class="text-blue-300">home</span>: <span class="text-green-400">"Home &amp; Garden"</span> &#125; &#125;,
+    <span class="text-blue-300">price</span>:    &#123; <span class="text-blue-300">name</span>: <span class="text-green-400">"Price"</span>,    <span class="text-blue-300">type</span>: <span class="text-green-400">"number"</span> &#125;,
+    <span class="text-blue-300">in_stock</span>: &#123; <span class="text-blue-300">name</span>: <span class="text-green-400">"In Stock"</span>, <span class="text-blue-300">type</span>: <span class="text-green-400">"boolean"</span> &#125;,
+    <span class="text-blue-300">image_url</span>:&#123; <span class="text-blue-300">name</span>: <span class="text-green-400">"Image"</span>,  <span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span>, <span class="text-blue-300">url</span>: <span class="text-primary-light">true</span> &#125;
+  &#125;
+&#125;);</div>
+                </div>
+
+                {/* "generates all of these" indicator */}
+                <div class="flex items-center gap-3 px-1">
+                    <div class="h-px flex-1 bg-gradient-to-r from-transparent to-surface-700"></div>
+                    <span class="text-xs text-surface-500 font-mono flex items-center gap-1.5">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-40"/>
+                        generates all of the following
+                    </span>
+                    <div class="h-px flex-1 bg-gradient-to-l from-transparent to-surface-700"></div>
+                </div>
+
+                {/* 6 output labels stacked — hint at what's generated */}
+                <div class="flex flex-wrap gap-2">
+                    {[
+                        { icon: "table-2",           label: "CMS Table" },
+                        { icon: "layout-panel-left", label: "Entity Form" },
+                        { icon: "database",          label: "DB Schema" },
+                        { icon: "globe",             label: "REST API" },
+                        { icon: "git-branch",        label: "GraphQL" },
+                    ].map(item => (
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-surface-800 bg-surface-900/60 text-surface-400 text-xs">
+                            <img src={`https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${item.icon}.svg`} alt="" class="h-3 w-3 filter invert opacity-50"/>
+                            {item.label}
+                        </span>
+                    ))}
+                </div>
+                </div>{/* end sticky inner */}
+            </div>{/* end left column */}
+
+            {/* ── RIGHT: 2×3 grid of all generated outputs ── */}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                {/* Card 1: CMS Table */}
+                <div class="col-span-1 sm:col-span-2 rounded-xl overflow-hidden ring-1 ring-surface-800 bg-surface-950 hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-black/40">
+                    <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/table-2.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">CMS Table</span>
+                        <span class="ml-auto inline-flex items-center gap-1 text-[10px] font-medium text-green-400 bg-green-950/60 border border-green-800/50 px-1.5 py-0.5 rounded-full">
+                            <span class="w-1 h-1 rounded-full bg-green-400 inline-block"></span>Live
+                        </span>
+                    </div>
+                    {/* Toolbar */}
+                    <div class="flex items-center justify-between px-4 py-2 border-b border-surface-800/60 bg-surface-950/40">
+                        <span class="text-xs text-white font-medium">Products <span class="text-surface-500 font-normal ml-1">3 rows</span></span>
+                        <div class="flex items-center gap-2">
+                            <div class="h-6 bg-surface-900 border border-surface-800 rounded px-2 flex items-center gap-1">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/search.svg" alt="" class="h-3 w-3 filter invert opacity-30"/>
+                                <span class="text-[10px] text-surface-600">Search</span>
+                            </div>
+                            <div class="w-6 h-6 rounded flex items-center justify-center border border-surface-800 bg-surface-900">
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/plus.svg" alt="" class="h-3 w-3 filter invert opacity-50"/>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Table header */}
+                    <div class="flex text-[10px] font-semibold text-surface-500 tracking-wider uppercase border-b border-surface-800 bg-surface-950">
+                        <div class="px-3 py-2 border-r border-surface-800" style="width:36px">#</div>
+                        <div class="px-3 py-2 border-r border-surface-800 flex-1">Name</div>
+                        <div class="px-3 py-2 border-r border-surface-800" style="width:120px">Category</div>
+                        <div class="px-3 py-2 border-r border-surface-800 text-right" style="width:72px">Price</div>
+                        <div class="px-3 py-2" style="width:64px">Stock</div>
+                    </div>
+                    {/* Rows */}
+                    {[
+                        { name: "Wireless Headphones", cat: "Electronics", catColor: "bg-blue-950 text-blue-300", price: "€129", stock: true },
+                        { name: "Silk Scarf",           cat: "Fashion",     catColor: "bg-pink-950 text-pink-300", price: "€89",  stock: false },
+                        { name: "Watering Can",         cat: "Home & Garden",catColor: "bg-green-950 text-green-300", price: "€34", stock: true },
+                    ].map((row, i) => (
+                        <div class="flex text-xs border-b border-surface-800/60 hover:bg-surface-900/30 transition-colors">
+                            <div class="px-3 py-2.5 border-r border-surface-800/60 text-surface-600 font-mono" style="width:36px">{i+1}</div>
+                            <div class="px-3 py-2.5 border-r border-surface-800/60 text-surface-200 flex-1 truncate">{row.name}</div>
+                            <div class="px-3 py-2.5 border-r border-surface-800/60" style="width:120px">
+                                <span class={`rounded-md px-1.5 py-0.5 text-[10px] font-medium ${row.catColor}`}>{row.cat}</span>
+                            </div>
+                            <div class="px-3 py-2.5 border-r border-surface-800/60 text-surface-200 text-right" style="width:72px">{row.price}</div>
+                            <div class="px-3 py-2.5" style="width:64px">
+                                <span class={`rounded-md px-1.5 py-0.5 text-[10px] font-medium ${row.stock ? 'bg-green-950 text-green-300' : 'bg-surface-800 text-surface-500'}`}>
+                                    {row.stock ? '✓' : '✗'}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Card 2: Entity Form */}
+                <div class="rounded-xl overflow-hidden ring-1 ring-surface-800 bg-surface-950 hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-black/40">
+                    <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-panel-left.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">Entity Form</span>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        {/* Name field */}
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-semibold text-surface-500 uppercase tracking-wider flex items-center gap-1">
+                                Name <span class="text-red-400">*</span>
+                            </label>
+                            <div class="rounded-md bg-surface-900 border border-surface-700 px-3 py-2 text-xs text-surface-200">
+                                Wireless Headphones
+                            </div>
+                        </div>
+                        {/* Category */}
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-semibold text-surface-500 uppercase tracking-wider">Category</label>
+                            <div class="rounded-md bg-surface-900 border border-surface-700 px-3 py-2 flex items-center justify-between text-xs">
+                                <span class="rounded px-1.5 py-0.5 text-[10px] font-medium bg-blue-950 text-blue-300">Electronics</span>
+                                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/chevron-down.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-30"/>
+                            </div>
+                        </div>
+                        {/* Price */}
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-semibold text-surface-500 uppercase tracking-wider">Price</label>
+                            <div class="rounded-md bg-surface-900 border border-surface-700 px-3 py-2 text-xs text-surface-200 flex items-center gap-1.5">
+                                <span class="text-surface-500">€</span> 129
+                            </div>
+                        </div>
+                        {/* In Stock */}
+                        <div class="rounded-md bg-surface-900 border border-surface-700 px-3 py-2 flex items-center gap-3 text-xs">
+                            <div class="w-8 h-4 rounded-full bg-primary relative flex-shrink-0">
+                                <div class="absolute right-0.5 top-0.5 w-3 h-3 rounded-full bg-white shadow-sm"></div>
+                            </div>
+                            <span class="text-surface-300">In Stock — Yes</span>
+                        </div>
+                        {/* Save button */}
+                        <button type="button" class="w-full text-xs py-1.5 rounded-md bg-primary/90 text-white font-semibold text-center">
+                            Save entity
+                        </button>
+                    </div>
+                </div>
+
+                {/* Card 3: DB Schema */}
+                <div class="rounded-xl overflow-hidden ring-1 ring-surface-800 bg-surface-950 hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-black/40">
+                    <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">DB Schema</span>
+                        <img src="https://www.postgresql.org/media/img/about/press/elephant.png" class="h-3 opacity-40 grayscale filter brightness-200 ml-auto" alt="postgres"/>
+                    </div>
+                    <div class="p-4 font-mono text-[11px] leading-relaxed text-surface-400">
+<pre><span class="text-primary-light">CREATE TABLE</span> <span class="text-white">"products"</span> (
+  <span class="text-blue-300">"id"</span>        <span class="text-white">uuid PRIMARY KEY</span>,
+  <span class="text-blue-300">"name"</span>      <span class="text-white">text NOT NULL</span>,
+  <span class="text-blue-300">"category"</span>  <span class="text-white">text</span>,
+  <span class="text-blue-300">"price"</span>     <span class="text-white">numeric(10,2)</span>,
+  <span class="text-blue-300">"in_stock"</span>  <span class="text-white">boolean</span>
+                  <span class="text-surface-600">DEFAULT false</span>,
+  <span class="text-blue-300">"image_url"</span> <span class="text-white">text</span>,
+  <span class="text-blue-300">"created_at"</span> <span class="text-white">timestamptz</span>
+                  <span class="text-surface-600">DEFAULT now()</span>
+);</pre>
+                    </div>
+                </div>
+
+                {/* Card 4: REST API */}
+                <div class="rounded-xl overflow-hidden ring-1 ring-surface-800 bg-surface-950 hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-black/40">
+                    <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/globe.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">REST API</span>
+                    </div>
+                    <div class="divide-y divide-surface-800/60">
+                        {[
+                            { method: "GET",    color: "bg-blue-950 text-blue-300 border-blue-800/40",    path: "/api/products",     desc: "List with pagination & filters" },
+                            { method: "POST",   color: "bg-green-950 text-green-300 border-green-800/40",  path: "/api/products",     desc: "Create new product" },
+                            { method: "GET",    color: "bg-blue-950 text-blue-300 border-blue-800/40",    path: "/api/products/:id", desc: "Get single product" },
+                            { method: "PATCH",  color: "bg-yellow-950 text-yellow-300 border-yellow-800/40", path: "/api/products/:id", desc: "Update product" },
+                            { method: "DELETE", color: "bg-red-950 text-red-300 border-red-800/40",       path: "/api/products/:id", desc: "Delete product" },
+                        ].map(ep => (
+                            <div class="flex items-center gap-2 px-4 py-2 hover:bg-surface-900/30 transition-colors">
+                                <span class={`flex-shrink-0 text-[9px] font-bold border px-1.5 py-0.5 rounded font-mono ${ep.color}`}>{ep.method}</span>
+                                <span class="font-mono text-[11px] text-surface-300 flex-1 truncate">{ep.path}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Card 5: GraphQL */}
+                <div class="rounded-xl overflow-hidden ring-1 ring-surface-800 bg-surface-950 hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-black/40">
+                    <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/git-branch.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">GraphQL</span>
+                        <span class="ml-auto text-[10px] font-bold text-pink-400 font-mono">GQL</span>
+                    </div>
+                    <div class="p-4 font-mono text-[11px] leading-relaxed text-surface-400">
+<pre><span class="text-primary-light">type</span> <span class="text-white">Product</span> &#123;
+  <span class="text-blue-300">id</span>:        <span class="text-green-400">ID!</span>
+  <span class="text-blue-300">name</span>:      <span class="text-green-400">String!</span>
+  <span class="text-blue-300">category</span>:  <span class="text-green-400">ProductCategory</span>
+  <span class="text-blue-300">price</span>:     <span class="text-green-400">Float</span>
+  <span class="text-blue-300">in_stock</span>:  <span class="text-green-400">Boolean</span>
+&#125;
+
+<span class="text-primary-light">type</span> <span class="text-white">Query</span> &#123;
+  <span class="text-blue-300">products</span>: [<span class="text-green-400">Product!</span>]!
+  <span class="text-blue-300">product</span>(<span class="text-blue-300">id</span>: <span class="text-green-400">ID!</span>): <span class="text-green-400">Product</span>
+&#125;
+
+<span class="text-primary-light">type</span> <span class="text-white">Mutation</span> &#123;
+  <span class="text-blue-300">createProduct</span>(...): <span class="text-green-400">Product!</span>
+  <span class="text-blue-300">updateProduct</span>(...): <span class="text-green-400">Product!</span>
+  <span class="text-blue-300">deleteProduct</span>(<span class="text-blue-300">id</span>: <span class="text-green-400">ID!</span>): <span class="text-green-400">Boolean!</span>
+&#125;</pre>
+                    </div>
+                </div>
+
+
+            </div>{/* end output grid */}
+        </div>{/* end main grid */}
+
+    </div>
+</section>
