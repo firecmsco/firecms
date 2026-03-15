@@ -1,148 +1,75 @@
 import chalk from "chalk";
-import { deploy } from "./commands/deploy";
-import { getCurrentUser, login, logout } from "./commands/auth";
 import arg from "arg";
 import { createRebaseApp } from "./commands/init";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-export async function entry(args) {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-    if (args.length < 2) {
-        printHelp();
+function getVersion(): string {
+    try {
+        // Try to read version from package.json
+        const pkgPath = path.resolve(__dirname, "../package.json");
+        if (fs.existsSync(pkgPath)) {
+            return JSON.parse(fs.readFileSync(pkgPath, "utf-8")).version;
+        }
+    } catch {
+        // ignore
+    }
+    return "unknown";
+}
+
+export async function entry(args: string[]) {
+    const parsedArgs = arg(
+        {
+            "--version": Boolean,
+            "--help": Boolean,
+            "-v": "--version",
+            "-h": "--help"
+        },
+        {
+            argv: args.slice(2),
+            permissive: true
+        }
+    );
+
+    if (parsedArgs["--version"]) {
+        console.log(getVersion());
         return;
     }
 
-    const command = args[2];
+    const command = parsedArgs._[0];
+
+    if (!command || parsedArgs["--help"]) {
+        printHelp();
+        return;
+    }
 
     if (command === "init") {
         await createRebaseApp(args);
-    } else if (command === "login") {
-        await loginArgs(args);
-    } else if (command === "logout") {
-        await logoutArgs(args);
-    } else if (command === "deploy") {
-        await deployArgs(args);
     } else {
-        if (command)
-            console.log("Unknown command", command)
+        console.log(chalk.red(`Unknown command: ${command}`));
+        console.log("");
         printHelp();
-        return;
     }
 }
 
-async function loginArgs(rawArgs) {
-    const args = arg(
-        {
-            "--env": String,
-            "--debug": Boolean
-        },
-        {
-            argv: rawArgs.slice(2),
-        }
-    );
-    const env = args["--env"] || "prod";
-    const debug = args["--debug"] || false;
-    if (env !== "prod" && env !== "dev") {
-        console.log("Please specify a valid environment: dev or prod");
-        console.log("rebase login --env=prod");
-        return;
-    }
-    await login(env, debug);
-}
-
-async function logoutArgs(rawArgs) {
-    const args = arg(
-        {
-            "--env": String,
-            "--debug": Boolean
-        },
-        {
-            argv: rawArgs.slice(2),
-        }
-    );
-    const env = args["--env"] || "prod";
-    const debug = args["--debug"] || false;
-    if (env !== "prod" && env !== "dev") {
-        console.log("Please specify a valid environment: dev or prod");
-        console.log("rebase logout --env=prod");
-        return;
-    }
-    await logout(env, debug);
-}
-
-async function deployArgs(rawArgs) {
-    const args = arg(
-        {
-            "--project": String,
-            "--env": String,
-            "--debug": Boolean
-        },
-        {
-            argv: rawArgs.slice(2),
-        }
-    );
-    const project = args["--project"];
-
-    if (!project) {
-        console.log("Please specify a project:");
-        console.log("rebase deploy --project=your-project-id");
-        return;
-    }
-    const env = args["--env"] || "prod";
-    const debug = args["--debug"] || false;
-    if (env !== "prod" && env !== "dev") {
-        console.log("Please specify a valid environment:");
-        console.log("rebase deploy --project=your-project-id --env=dev");
-        return;
-    }
-
-    const currentUser = await getCurrentUser(env, debug);
-    if (!currentUser) {
-        await login(env, debug);
-    }
-
-    await deploy(project, env, debug);
-}
-
-async function printHelp(env: "prod" | "dev" = "prod", debug: boolean = false) {
-
+function printHelp() {
     console.log(`
-${chalk.red.bold("Welcome to the Rebase CLI 🔥🔥🔥")}
+${chalk.bold("Rebase CLI")} — Developer tools for Rebase projects
 
 ${chalk.green.bold("Usage")}
-rebase ${chalk.blue.bold("<command>")} [options]
+  rebase ${chalk.blue("<command>")} [options]
 
 ${chalk.green.bold("Commands")}
-${chalk.blue.bold("login")} - Login to Rebase
-${chalk.blue.bold("logout")} - Sign out
-${chalk.blue.bold("init")} - Create a new CMS project
-${chalk.blue.bold("deploy")} - Deploy an existing CMS project
-`);
-    const currentCredentials = await getCurrentUser(env, debug);
-    if (currentCredentials) {
-        console.log(`${chalk.green.bold("Current user")}
-${currentCredentials["email"]}
-`);
-    }
+  ${chalk.blue.bold("init")}      Create a new Rebase project
 
+${chalk.green.bold("Options")}
+  ${chalk.blue("--version, -v")}   Show version number
+  ${chalk.blue("--help, -h")}      Show this help message
+
+${chalk.gray("Documentation: https://rebase.pro/docs")}
+`);
 }
-
-// function debugPaths() {
-//     // @ts-ignore
-//     const currentFileUrl = import.meta["url"];
-//     console.log("currentFileUrl", currentFileUrl)
-//     console.log("__dirname", __dirname);
-//     console.log("process.cwd()", process.cwd());
-//
-//     const templateDir = path.resolve(
-//         new URL(currentFileUrl).pathname,
-//         '../../template'
-//     );
-//
-//     console.log("templateDir", templateDir);
-//
-//     const templateDir2 = path.resolve(
-//         __dirname,
-//         '../template'
-//     );
-//     console.log("templateDir2", templateDir2);
-// }

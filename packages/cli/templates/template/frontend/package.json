@@ -1,0 +1,52 @@
+{
+    "name": "{{PROJECT_NAME}}-frontend",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "dependencies": {
+        "@rebasepro/auth": "^4.0.0",
+        "@rebasepro/core": "^4.0.0",
+        "@rebasepro/data_enhancement": "^4.0.0",
+        "@rebasepro/data_export": "^4.0.0",
+        "@rebasepro/data_import": "^4.0.0",
+        "@rebasepro/postgresql": "^4.0.0",
+        "@rebasepro/studio": "^4.0.0",
+        "@rebasepro/types": "^4.0.0",
+        "@rebasepro/ui": "^4.0.0",
+        "@fontsource/jetbrains-mono": "^5.2.5",
+        "{{PROJECT_NAME}}-shared": "workspace:*",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "react-router": "^7.0.0",
+        "react-router-dom": "^7.0.0",
+        "typeface-rubik": "^1.1.13"
+    },
+    "scripts": {
+        "dev": "vite --mode development",
+        "build": "vite build && tsc",
+        "preview": "vite build && vite preview"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@tailwindcss/typography": "^0.5.16",
+        "@tailwindcss/vite": "^4.1.12",
+        "@types/react": "^19.0.8",
+        "@types/react-dom": "^19.0.3",
+        "@vitejs/plugin-react": "^4.3.4",
+        "tailwindcss": "^4.1.3",
+        "typescript": "^5.9.2",
+        "vite": "^5.4.17",
+        "vite-plugin-svgr": "^4.3.0"
+    }
+}

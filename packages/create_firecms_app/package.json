@@ -1,7 +1,7 @@
 {
   "name": "create-rebase-app",
   "version": "4.0.0",
-  "description": "A CLI to bootstrap Rebase",
+  "description": "Create a new Rebase project",
   "type": "commonjs",
   "bin": "bin/create-rebase-app.js",
   "publishConfig": {
@@ -16,11 +16,10 @@
     "cli",
     "create-rebase-app",
     "rebase",
-    "firebase",
-    "firestore",
     "cms",
     "react",
-    "typescript"
+    "typescript",
+    "postgresql"
   ],
   "author": "rebase.pro",
   "license": "MIT",
@@ -29,7 +28,6 @@
   },
   "devDependencies": {
     "@types/node": "^20.17.14",
-    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "files": [
@@ -37,6 +35,5 @@
   ],
   "exclude": [
     "node_modules"
-  ],
-  "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae"
+  ]
 }

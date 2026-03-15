@@ -1,33 +1,59 @@
-## Rebase starter template
+# {{PROJECT_NAME}}
 
-Welcome to Rebase!
+A [Rebase](https://rebase.pro) project with a PostgreSQL backend.
 
-Remember to drop a ⭐ in our [Github page](https://github.com/rebaseco/rebase),
-and join our [Discord community](https://discord.gg/fxy7xsQm3m) to get help and
-share your projects.
+## Getting Started
 
-This is a starter template for your next project. It includes the basic
-configuration to get you started.
+### Prerequisites
 
-In order to run this project, you will need to create a Firebase project,
-create a web app and copy the configuration to the `firebase_config.ts`.
+- [Node.js](https://nodejs.org) >= 18
+- [pnpm](https://pnpm.io)
+- A PostgreSQL database
 
-Then simply run:
+### Setup
 
-### Running the project
+1. Install dependencies:
 
 ```bash
-yarn dev
+pnpm install
 ```
 
-### Building the project
+2. Configure your database — edit `.env` and set `DATABASE_URL`:
 
-Make sure you update your `package.json` `build` script with the correct
-project name. Then run:
+```
+DATABASE_URL=postgresql://postgres:password@localhost:5432/mydb
+```
+
+3. Generate and run database migrations:
 
 ```bash
-yarn build
+pnpm db:generate
+pnpm db:migrate
 ```
 
-> Note: this may not work if you have set up your Firebase hosting with
-> a custom config.
+4. Start the dev server:
+
+```bash
+pnpm dev
+```
+
+This starts both the backend (Express + PostgreSQL on port 3001) and the frontend (Vite + React on port 5173) concurrently.
+
+## Project Structure
+
+```
+├── frontend/       # React frontend (Vite)
+├── backend/        # Express backend with PostgreSQL
+├── shared/         # Shared collection definitions
+├── .env            # Environment variables
+└── package.json    # Root workspace config
+```
+
+### Shared Collections
+
+Collections are defined once in `shared/collections/` and used by both the frontend and backend. This ensures your schema stays in sync across the stack.
+
+## Documentation
+
+- [Rebase Docs](https://rebase.pro/docs)
+- [GitHub](https://github.com/rebaseco/rebase)

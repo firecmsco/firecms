@@ -1,55 +1,32 @@
 {
-    "name": "my-rebase-project",
-    "version": "4.0.0",
+    "name": "{{PROJECT_NAME}}",
+    "version": "1.0.0",
+    "description": "Rebase application with PostgreSQL backend",
     "private": true,
     "type": "module",
-    "dependencies": {
-        "@rebasepro/core": "4.0.0",
-        "@rebasepro/firebase": "4.0.0",
-        "@rebasepro/ui": "4.0.0",
-        "firebase": "^12.9.0",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
-        "react-router": "^6.26.2",
-        "react-router-dom": "^6.26.2"
-    },
+    "workspaces": [
+        "frontend",
+        "backend",
+        "shared"
+    ],
     "scripts": {
-        "dev": "vite --mode development",
-        "build": "vite build && tsc",
-        "preview": "vite build && vite preview",
-        "deploy": "vite build && firebase deploy --only hosting --project [REPLACE_WITH_PROJECT_ID]"
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
+        "dev": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:frontend\"",
+        "dev:frontend": "cd frontend && pnpm run dev",
+        "dev:backend": "cd backend && pnpm run dev",
+        "build": "pnpm run build:shared && pnpm run build:frontend && pnpm run build:backend",
+        "build:shared": "cd shared && pnpm run build",
+        "build:frontend": "cd frontend && pnpm run build",
+        "build:backend": "cd backend && pnpm run build",
+        "start": "cd backend && pnpm start",
+        "db:generate": "cd backend && pnpm run db:generate",
+        "db:migrate": "cd backend && pnpm run db:migrate",
+        "db:studio": "cd backend && pnpm run db:studio"
     },
     "devDependencies": {
-        "@tailwindcss/vite": "^4.1.18",
-        "@tailwindcss/typography": "^0.5.15",
-        "@types/react": "^19.0.8",
-        "@types/react-dom": "^19.0.3",
-        "@typescript-eslint/eslint-plugin": "^8.8.1",
-        "@typescript-eslint/parser": "^8.8.1",
-        "@vitejs/plugin-react": "^4.3.2",
-        "autoprefixer": "^10.4.20",
-        "eslint": "^9.12.0",
-        "eslint-plugin-import": "^2.31.0",
-        "eslint-plugin-n": "^17.11.1",
-        "eslint-plugin-promise": "^7.1.0",
-        "eslint-plugin-react": "^7.37.1",
-        "eslint-plugin-react-hooks": "^5.1.0",
-        "eslint-plugin-react-refresh": "^0.4.12",
-        "tailwindcss": "^4.1.14",
-        "typescript": "^5.7.3",
-        "vite": "^5.4.8",
-        "vite-plugin-svgr": "^4.2.0"
+        "concurrently": "^8.2.2",
+        "typescript": "^5.9.2"
+    },
+    "engines": {
+        "node": ">=18.0.0"
     }
 }

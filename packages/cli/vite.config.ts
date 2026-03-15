@@ -1,6 +1,5 @@
 // @ts-ignore
 import path from "path";
-
 import { defineConfig } from "vite";
 
 const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
@@ -28,19 +27,5 @@ export default defineConfig(() => ({
             external: isExternal
         }
     },
-    resolve: {
-        alias: {
-            "@rebasepro/core": path.resolve(__dirname, "../core/src"),
-            "@rebasepro/types": path.resolve(__dirname, "../types/src"),
-            "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
-            "@rebasepro/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
-            "@rebasepro/studio": path.resolve(__dirname, "../studio/src"),
-            "@rebasepro/data_enhancement": path.resolve(__dirname, "../data_enhancement/src"),
-            "@rebasepro/data_import": path.resolve(__dirname, "../data_import/src"),
-            "@rebasepro/data_export": path.resolve(__dirname, "../data_export/src"),
-            "@rebasepro/data_import_export": path.resolve(__dirname, "../data_import_export/src"),
-        }
-    },
-    plugins: [
-    ]
+    plugins: []
 }));

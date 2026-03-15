@@ -1,30 +1,26 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-./src/firebase_config.ts
-./src/appcheck_config.ts
+# Dependencies
+node_modules/
 
-.firebase
+# Build output
+dist/
+build/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Environment
+.env
+.env.local
 
-# testing
-/coverage
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
 
-
+# OS
 .DS_Store
-dist
-dist-ssr
-*.local
+Thumbs.db
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Drizzle
+drizzle/meta/
+
+# Uploads
+uploads/
