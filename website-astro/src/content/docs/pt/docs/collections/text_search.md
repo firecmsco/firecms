@@ -1,52 +1,52 @@
 ---
 slug: pt/docs/collections/text_search
-title: Ricerca testo
-description: Aggiungi ricerca full-text a FireCMS con Typesense o Algolia. Usa la nostra Firebase Extension per una ricerca tollerante agli errori di battitura a ~$7/mese, o integra con Algolia per esigenze enterprise.
+title: Pesquisa de texto
+description: Adicione pesquisa full-text ao FireCMS com Typesense ou Algolia. Use nossa Extensão Firebase para pesquisa tolerante a erros de digitação a ~$7/mês, ou integre com Algolia para necessidades enterprise.
 ---
 
-:::note[La soluzione descritta qui è specifica per Firestore]
-Se stai sviluppando il tuo datasource, sei libero di implementare la ricerca testo nel modo che ha più senso.
+:::note[A solução descrita aqui é específica para o Firestore]
+Se você está desenvolvendo seu próprio datasource, é livre para implementar a pesquisa de texto da maneira que fizer mais sentido.
 :::
 
-Firestore non supporta la ricerca testo nativa, quindi dobbiamo affidarci a soluzioni esterne. Se specifichi un flag `textSearchEnabled` alla **collezione**, vedrai una barra di ricerca in cima alla vista collezione.
+O Firestore não suporta pesquisa de texto nativa, então precisamos recorrer a soluções externas. Se você especificar uma flag `textSearchEnabled` na **coleção**, verá uma barra de pesquisa no topo da visualização da coleção.
 
-## Opzioni di ricerca
+## Opções de pesquisa
 
-| Opzione | Costo | Setup | Migliore per |
-|--------|------|-------|------------|
-| **Estensione Typesense** (Consigliato) | ~$7-14/mese flat | 5 min | La maggior parte dei progetti |
-| **Algolia** | Prezzi per query | 15 min | Enterprise, geo-search |
-| **Ricerca testo locale** | Gratuita | 1 min | Piccole collezioni (<1000 doc) |
+| Opção | Custo | Configuração | Melhor para |
+|-------|-------|--------------|-------------|
+| **Extensão Typesense** (Recomendado) | ~$7-14/mês fixo | 5 min | A maioria dos projetos |
+| **Algolia** | Preços por consulta | 15 min | Enterprise, geo-search |
+| **Pesquisa de texto local** | Gratuita | 1 min | Coleções pequenas (<1000 doc) |
 
 ---
 
-## Usando Typesense (Consigliato)
+## Usando Typesense (Recomendado)
 
-L'**estensione FireCMS Typesense** distribuisce un server di ricerca Typesense su una VM di Compute Engine e sincronizza automaticamente i tuoi dati Firestore.
+A **extensão FireCMS Typesense** implanta um servidor de pesquisa Typesense em uma VM do Compute Engine e sincroniza automaticamente seus dados do Firestore.
 
-- 🔍 **Ricerca tollerante agli errori di battitura** - "headphnes" trova "headphones"
-- ⚡ **Risposte in sub-millisecondi**
-- 💰 **Costo mensile fisso** - Nessun addebito per query
-- 🔄 **Sincronizzazione in tempo reale** - I documenti vengono indicizzati automaticamente
+- 🔍 **Pesquisa tolerante a erros de digitação** - "headphnes" encontra "headphones"
+- ⚡ **Respostas em sub-milissegundos**
+- 💰 **Custo mensal fixo** - Sem cobranças por consulta
+- 🔄 **Sincronização em tempo real** - Os documentos são indexados automaticamente
 
-### Installazione
+### Instalação
 
-**Prerequisiti:**
-- Progetto Firebase con Firestore
-- Fatturazione GCP abilitata
-- [gcloud CLI](https://cloud.google.com/sdk/docs/install) installato
+**Pré-requisitos:**
+- Projeto Firebase com Firestore
+- Faturamento GCP habilitado
+- [gcloud CLI](https://cloud.google.com/sdk/docs/install) instalado
 
-**Passo 1: Installa l'estensione**
+**Passo 1: Instale a extensão**
 
 ```bash
 firebase ext:install https://github.com/firecmsco/typesense-extension --project=YOUR_PROJECT_ID
 ```
 
-**Passo 2: Concedi i permessi**
+**Passo 2: Conceda as permissões**
 
 ```bash
 export PROJECT_ID=your-project-id
-export EXT_INSTANCE_ID=typesense-search  # Nome default estensione
+export EXT_INSTANCE_ID=typesense-search  # Nome padrão da extensão
 
 gcloud projects add-iam-policy-binding $PROJECT_ID \
   --member="serviceAccount:ext-${EXT_INSTANCE_ID}@${PROJECT_ID}.iam.gserviceaccount.com" \
@@ -61,33 +61,33 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --role="roles/datastore.user" --condition=None
 ```
 
-**Passo 3: Provisiona il server di ricerca**
+**Passo 3: Provisione o servidor de pesquisa**
 
 ```bash
 curl "https://REGION-PROJECT_ID.cloudfunctions.net/ext-typesense-search-provisionSearchNode"
 ```
 
-Attendi ~2 minuti. I documenti esistenti vengono indicizzati automaticamente.
+Aguarde ~2 minutos. Os documentos existentes são indexados automaticamente.
 
-### Uso di Typesense in FireCMS Cloud
+### Uso do Typesense no FireCMS Cloud
 
-Naviga in **Impostazioni progetto** e configura:
+Navegue até **Configurações do projeto** e configure:
 
-| Impostazione | Valore |
-|---------|-------|
-| **Regione** | La regione della tua estensione (es., `us-central1`) |
-| **ID istanza estensione** | Default: `typesense-search` |
+| Configuração | Valor |
+|--------------|-------|
+| **Região** | A região da sua extensão (ex., `us-central1`) |
+| **ID da instância da extensão** | Padrão: `typesense-search` |
 
-FireCMS Cloud si connette automaticamente alla tua istanza Typesense.
+O FireCMS Cloud se conecta automaticamente à sua instância Typesense.
 
-### Uso di Typesense in FireCMS Self-Hosted
+### Uso do Typesense no FireCMS Self-Hosted
 
 ```typescript
 import { buildFireCMSSearchController, useFirestoreDelegate } from "@firecms/firebase";
 
 const textSearchControllerBuilder = buildFireCMSSearchController({
-  region: "us-central1",  // La regione della tua estensione
-  extensionInstanceId: "typesense-search"  // Nome default
+  region: "us-central1",  // A região da sua extensão
+  extensionInstanceId: "typesense-search"  // Nome padrão
 });
 
 export function App() {
@@ -95,7 +95,7 @@ export function App() {
     firebaseApp,
     textSearchControllerBuilder
   });
-  // ... resto della tua app
+  // ... restante da sua aplicação
 }
 ```
 
@@ -103,11 +103,11 @@ export function App() {
 
 ## Usando Algolia
 
-Algolia è un servizio di ricerca gestito con prezzi per query. Consigliato per esigenze enterprise o funzionalità avanzate come la geo-ricerca.
+Algolia é um serviço de pesquisa gerenciado com preços por consulta. Recomendado para necessidades enterprise ou funcionalidades avançadas como geo-search.
 
-Devi definire un `FirestoreTextSearchControllerBuilder` e aggiungerlo alla tua configurazione. Configura un account Algolia e sincronizza i documenti usando la loro [estensione Firebase](https://extensions.dev/extensions/algolia/firestore-algolia-search).
+Você precisa definir um `FirestoreTextSearchControllerBuilder` e adicioná-lo à sua configuração. Configure uma conta Algolia e sincronize os documentos usando a [extensão Firebase](https://extensions.dev/extensions/algolia/firestore-algolia-search) deles.
 
-### Uso di Algolia in FireCMS Cloud
+### Uso do Algolia no FireCMS Cloud
 
 ```tsx
 import { algoliasearch, SearchClient } from "algoliasearch";
@@ -145,7 +145,7 @@ const appConfig: FireCMSAppConfig = {
 }
 ```
 
-### Uso di Algolia in FireCMS Self-Hosted
+### Uso do Algolia no FireCMS Self-Hosted
 
 ```tsx
 import { algoliasearch, SearchClient } from "algoliasearch";
@@ -180,17 +180,17 @@ export function App() {
 ```
 
 
-### Ricerca testo locale
+### Pesquisa de texto local
 
-Da FireCMS v3 forniamo un'implementazione di ricerca testo locale. Questo è utile per piccole collezioni o quando vuoi fornire un modo rapido per cercare nei tuoi dati.
+A partir do FireCMS v3, fornecemos uma implementação de pesquisa de texto local. Isso é útil para coleções pequenas ou quando você deseja fornecer uma maneira rápida de pesquisar nos seus dados.
 
-Tuttavia, per collezioni più grandi, vorrai usare un provider di **ricerca esterno**, come Algolia. Questo è l'approccio consigliato.
+No entanto, para coleções maiores, você vai querer usar um provedor de **pesquisa externa**, como Algolia. Esta é a abordagem recomendada.
 
-Puoi usare la ricerca testo locale in FireCMS Cloud, o nelle versioni self-hosted.
+Você pode usar a pesquisa de texto local no FireCMS Cloud ou nas versões self-hosted.
 
-Per FireCMS Cloud, devi solo abilitarla nell'UI.
+Para o FireCMS Cloud, basta habilitá-la na interface.
 
-Per le versioni self-hosted, puoi abilitarla impostando `localTextSearchEnabled` in `useFirestoreDelegate`.
-Poi devi marcare ogni collezione con `textSearchEnabled: true`.
+Para versões self-hosted, você pode habilitá-la definindo `localTextSearchEnabled` em `useFirestoreDelegate`.
+Depois, precisa marcar cada coleção com `textSearchEnabled: true`.
 
-Se hai dichiarato un provider di indicizzazione esterno, la ricerca testo locale sarà efficace **solo per i percorsi non supportati dal provider esterno**.
+Se você declarou um provedor de indexação externo, a pesquisa de texto local será efetiva **apenas para os caminhos não suportados pelo provedor externo**.

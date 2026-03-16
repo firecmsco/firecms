@@ -1,32 +1,32 @@
 ---
 slug: pt/docs/self/deployment
-title: Distribuzione self-hosted
-sidebar_label: Distribuzione
-description: Distribuisci il tuo CMS personalizzato self-hosted su Firebase Hosting o qualsiasi altro provider di hosting statico.
+title: Implantação self-hosted
+sidebar_label: Implantação
+description: Implante seu CMS personalizado self-hosted no Firebase Hosting ou em qualquer outro provedor de hospedagem estática.
 ---
 
-FireCMS funziona come **CMS headless** su Firebase. Si build come una **single page application** che può essere distribuita su qualsiasi provider di hosting statico. Non richiede codice lato server.
+O FireCMS funciona como um **CMS headless** no Firebase. Ele é compilado como uma **single page application** que pode ser implantada em qualquer provedor de hospedagem estática. Não requer código do lado do servidor.
 
-Raccomandiamo di distribuire su Firebase Hosting, poiché si trova nello stesso ecosistema e FireCMS raccoglierà automaticamente la configurazione Firebase dall'ambiente.
+Recomendamos implantar no Firebase Hosting, pois está no mesmo ecossistema e o FireCMS coletará automaticamente a configuração do Firebase a partir do ambiente.
 
 
-## Distribuzione su Firebase Hosting
+## Implantação no Firebase Hosting
 
-Se vuoi distribuire il tuo CMS su Firebase Hosting, devi prima abilitarlo nella scheda Hosting del tuo progetto Firebase.
+Se você deseja implantar seu CMS no Firebase Hosting, primeiro precisa habilitá-lo na aba Hosting do seu projeto Firebase.
 
-Dovrai inizializzare Firebase, con un progetto esistente o uno nuovo:
+Você precisará inicializar o Firebase, com um projeto existente ou um novo:
 
 ```
 firebase init
 ```
 
 :::note
-Non è necessario abilitare nessuno dei servizi, tranne Firebase Hosting se vuoi distribuirlo lì.
+Não é necessário habilitar nenhum dos serviços, exceto o Firebase Hosting se quiser implantá-lo lá.
 :::
 
-Puoi collegare il sito Firebase Hosting all'app web che hai creato per ottenere la tua configurazione Firebase.
+Você pode vincular o site do Firebase Hosting à aplicação web que criou para obter sua configuração do Firebase.
 
-Per far funzionare tutto correttamente, devi configurare i redirect di Firebase Hosting per funzionare come SPA. Il tuo **firebase.json** dovrebbe essere simile a questo (ricorda di sostituire `[YOUR_SITE_HERE]`).
+Para que tudo funcione corretamente, você precisa configurar os redirecionamentos do Firebase Hosting para funcionar como SPA. Seu **firebase.json** deve ser semelhante a isto (lembre-se de substituir `[YOUR_SITE_HERE]`).
 
 ```json5
 {
@@ -49,24 +49,24 @@ Per far funzionare tutto correttamente, devi configurare i redirect di Firebase 
 
 ```
 
-Poi esegui semplicemente:
+Depois, basta executar:
 
 ```bash
 npm run build && firebase deploy --only hosting
 ```
 
-o
+ou
 
 ```bash
 yarn run build && firebase deploy --only hosting
 ```
 
-## Distribuire su altre piattaforme
+## Implantar em outras plataformas
 
-Se vuoi distribuire il tuo CMS su altre piattaforme, puoi fare il build con:
+Se você deseja implantar seu CMS em outras plataformas, pode compilar com:
 
 ```
 yarn run build
 ```
 
-e poi servire la cartella **dist** con il tuo provider di hosting statico preferito.
+e depois servir a pasta **dist** com seu provedor de hospedagem estática preferido.

@@ -1,13 +1,13 @@
 ---
 slug: pt/docs/properties/index
-title: Proprietà
-description: Impara le Proprietà di FireCMS e come definire i campi per form e colonne di collezione nelle tue entity collection.
+title: Propriedades
+description: Aprenda sobre as Propriedades do FireCMS e como definir campos para formulários e colunas de coleção nas suas entity collections.
 ---
 
-Le proprietà definiscono ogni **campo** in un form o colonna in una collezione inclusa in una entity collection.
+As propriedades definem cada **campo** em um formulário ou coluna em uma coleção incluída em uma entity collection.
 
-Puoi costruire le proprietà creando direttamente l'oggetto o usando il metodo helper `buildProperty` (semplicemente la funzione identità che usa il sistema di tipi TypeScript per validare l'input).
+Você pode construir propriedades criando diretamente o objeto ou usando o método auxiliar `buildProperty` (simplesmente a função identidade que usa o sistema de tipos TypeScript para validar a entrada).
 
-Potresti anche voler aggiornare le proprietà **dinamicamente**, basandoti sull'entityId, il percorso o i valori attuali. Controlla la [sezione dei campi condizionali](conditional_fields).
+Você também pode querer atualizar propriedades **dinamicamente**, com base no entityId, no caminho ou nos valores atuais. Confira a [seção de campos condicionais](conditional_fields).
 
-Controlla i diversi campi disponibili nella sezione fields, o le diverse configurazioni di proprietà.
+Confira os diferentes campos disponíveis na seção fields, ou as diferentes configurações de propriedade.

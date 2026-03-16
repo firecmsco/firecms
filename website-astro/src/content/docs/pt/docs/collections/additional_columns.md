@@ -1,20 +1,20 @@
 ---
 slug: pt/docs/collections/additional_columns
-title: Colonne/campi aggiuntivi
-sidebar_label: Colonne/campi aggiuntivi
+title: Colunas/campos adicionais
+sidebar_label: Colunas/campos adicionais
 ---
 
 
-Se vuoi includere una colonna che non mappa direttamente a una proprietà, puoi usare il campo `additionalFields`, fornendo un `AdditionalFieldDelegate`, che include un id, un titolo e un builder che riceve l'entità corrispondente.
+Se você deseja incluir uma coluna que não mapeia diretamente para uma propriedade, pode usar o campo `additionalFields`, fornecendo um `AdditionalFieldDelegate`, que inclui um id, um título e um builder que recebe a entidade correspondente.
 
-Nel builder puoi restituire qualsiasi componente React.
+No builder, você pode retornar qualquer Componente React.
 
 :::note
-Se il tuo campo aggiuntivo dipende dal valore di un'altra proprietà dell'entità, puoi definire la prop `dependencies` come array di chiavi di proprietà in modo che i dati vengano sempre aggiornati.
-Questo triggererà un re-render ogni volta che c'è un cambiamento in uno qualsiasi dei valori di proprietà specificati.
+Se o seu campo adicional depende do valor de outra propriedade da entidade, você pode definir a prop `dependencies` como um array de chaves de propriedade para que os dados sejam sempre atualizados.
+Isso disparará uma re-renderização sempre que houver uma mudança em qualquer um dos valores de propriedade especificados.
 :::
 
-#### Esempio
+#### Exemplo
 
 ```tsx
 import {
@@ -47,7 +47,7 @@ const usersCollection = buildCollection<User>({
 });
 ```
 
-#### Esempio avanzato
+#### Exemplo avançado
 
 ```tsx
 import {
@@ -71,7 +71,5 @@ export const productAdditionalField: AdditionalFieldDelegate<Product> = {
 ```
 
 :::tip
-`AsyncPreviewComponent` è un componente di utilità fornito da FireCMS che
-ti permette di renderizzare il risultato di un calcolo asincrono (come il recupero di dati
-da una sotto-collezione, come in questo caso). Nel frattempo mostrerà un indicatore di caricamento skeleton.
+`AsyncPreviewComponent` é um componente utilitário fornecido pelo FireCMS que permite renderizar o resultado de uma computação assíncrona (como buscar dados de uma subcoleção, como neste caso). Enquanto isso, exibirá um indicador de carregamento skeleton.
 :::

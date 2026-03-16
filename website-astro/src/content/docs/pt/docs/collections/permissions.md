@@ -1,16 +1,16 @@
 ---
 slug: pt/docs/collections/permissions
-title: Permessi
-sidebar_label: Permessi
+title: Permissões
+sidebar_label: Permissões
 ---
 
-Puoi definire i permessi `read`, `edit`, `create` e `delete` a livello di collezione, anche in base all'utente connesso.
+Você pode definir as permissões `read`, `edit`, `create` e `delete` no nível da coleção, inclusive com base no usuário conectado.
 
-Questi definiscono le azioni che l'utente connesso può eseguire su un'entità.
+Estas definem as ações que o usuário conectado pode realizar em uma entidade.
 
-### Permessi semplici
+### Permissões simples
 
-Nel caso più semplice, puoi assegnare direttamente i permessi:
+No caso mais simples, você pode atribuir permissões diretamente:
 
 ```tsx
 import { buildCollection } from "@firecms/core";
@@ -27,13 +27,13 @@ buildCollection({
 });
 ```
 
-### Permessi avanzati
+### Permissões avançadas
 
-Puoi personalizzare i permessi in base all'utente connesso o qualsiasi altro criterio adatto al tuo caso d'uso.
+Você pode personalizar as permissões com base no usuário conectado ou qualquer outro critério adequado ao seu caso de uso.
 
-Puoi usare un `PermissionBuilder`, come nell'esempio seguente, per personalizzare le azioni in base all'utente connesso.
+Pode usar um `PermissionBuilder`, como no exemplo a seguir, para personalizar as ações com base no usuário conectado.
 
-Nell'esempio seguente controlliamo se abbiamo precedentemente salvato il ruolo "admin" nel campo extras nell'`AuthController`.
+No exemplo a seguir, verificamos se anteriormente salvamos o papel "admin" no campo extras do `AuthController`.
 
 ```tsx
 import { buildCollection } from "@firecms/core";
@@ -59,9 +59,9 @@ buildCollection({
 });
 ```
 
-Nota che puoi impostare il parametro `extra` nell'`AuthController` a qualsiasi dato che abbia senso per te. I posti suggeriti dove potresti voler impostare quel parametro sono `Authenticator` poiché viene inizializzato prima del resto dell'app.
+Note que você pode definir o parâmetro `extra` no `AuthController` com qualquer dado que faça sentido para você. Os locais sugeridos onde você pode querer definir esse parâmetro são `Authenticator`, já que ele é inicializado antes do restante da aplicação.
 
-Esempio rapido di come il campo `extra.roles` nell'esempio precedente viene inizializzato:
+Exemplo rápido de como o campo `extra.roles` no exemplo anterior é inicializado:
 
 ```tsx
 import { Authenticator } from "@firecms/core";
@@ -72,14 +72,14 @@ const myAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
                                                                        authController,
                                                                        dataSource
                                                                    }) => {
-    // Questo è un esempio di recupero di dati asincroni relativi all'utente
-    // e memorizzazione nel campo extra del controller
+    // Este é um exemplo de busca de dados assíncronos relacionados ao usuário
+    // e armazenamento no campo extra do controller
     const sampleUserData = await Promise.resolve({
         roles: ["admin"]
     });
     authController.setExtra(sampleUserData);
 
     console.log("Allowing access to", user);
-    return true; // Consenti
+    return true; // Permitir
 };
 ```

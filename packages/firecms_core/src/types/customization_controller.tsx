@@ -5,7 +5,6 @@ import { EntityCustomView } from "./collections";
 import { Locale } from "./locales";
 import { PropertyConfig } from "./property_config";
 import { EntityAction } from "./entity_actions";
-import { DeepPartial, FireCMSTranslations } from "./translations";
 
 export type CustomizationController = {
 
@@ -44,29 +43,9 @@ export type CustomizationController = {
 
     /**
      * Locale of the CMS.
-     * Affects date formatting and, when `translations` is provided for this
-     * locale, the UI language.
+     * Affects date formatting.
      */
     locale?: Locale;
-
-    /**
-     * Override any FireCMS UI string, or provide translations for additional
-     * locales. Keys must match {@link FireCMSTranslations}.
-     *
-     * English is always the built-in fallback — you only need to provide the
-     * keys you want to change.
-     *
-     * @example
-     * // Rename "Save" to "Publish"
-     * translations={{ en: { save: "Publish" } }}
-     *
-     * @example
-     * // Full Spanish locale
-     * translations={{ es: { save: "Guardar", discard: "Descartar" } }}
-     */
-    translations?: {
-        [locale: string]: DeepPartial<FireCMSTranslations>;
-    };
 
     /**
      * Record of custom form fields to be used in the CMS.

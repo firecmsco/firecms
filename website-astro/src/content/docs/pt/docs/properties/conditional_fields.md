@@ -1,23 +1,23 @@
 ---
 slug: pt/docs/properties/conditional_fields
-title: Campi condizionali dalle proprietà
-sidebar_label: Campi condizionali
-description: In FireCMS, i campi condizionali consentono configurazioni di proprietà dinamiche all'interno degli schemi delle collezioni.
+title: Campos condicionais a partir de propriedades
+sidebar_label: Campos condicionais
+description: No FireCMS, os campos condicionais permitem configurações dinâmicas de propriedades dentro dos esquemas de coleção.
 ---
 
-Quando si definiscono le proprietà di una collezione, puoi scegliere di usare un builder [`PropertyBuilder`](../api/type-aliases/PermissionsBuilder), invece di assegnare direttamente la configurazione della proprietà.
+Ao definir as propriedades de uma coleção, você pode optar por usar um builder [`PropertyBuilder`](../api/type-aliases/PermissionsBuilder), em vez de atribuir diretamente a configuração da propriedade.
 
-Questo è utile per cambiare le configurazioni delle proprietà come i valori disponibili al volo, in base ad altri valori.
+Isso é útil para alterar configurações de propriedades, como os valores disponíveis dinamicamente, com base em outros valores.
 
 :::tip
-Puoi usare i property builder a qualsiasi livello del tuo albero di proprietà (inclusi i figli di mappe e array).
+Você pode usar property builders em qualquer nível da sua árvore de propriedades (incluindo filhos de mapas e arrays).
 
-Puoi accedere ai valori completi dell'entità in fase di modifica nel builder tramite la prop `values`, ma anche al valore della proprietà che si sta costruendo con `propertyValue`.
+Pode acessar os valores completos da entidade em edição no builder através da prop `values`, e também o valor da propriedade sendo construída com `propertyValue`.
 :::
 
-### Esempio 1
+### Exemplo 1
 
-Esempio di campo che viene abilitato o disabilitato in base ad altri valori:
+Exemplo de campo que é habilitado ou desabilitado com base em outros valores:
 
 ```tsx
 import {
@@ -63,9 +63,9 @@ export const productCollection: EntityCollection = buildCollection<Partial<Produ
 });
 ```
 
-### Esempio 2
+### Exemplo 2
 
-Un tipo `User` che ha un campo `source` che può essere di tipo `facebook` o `apple`, e i suoi campi cambiano di conseguenza:
+Um tipo `User` que tem um campo `source` que pode ser do tipo `facebook` ou `apple`, e seus campos mudam de acordo:
 
 ```tsx
 import {

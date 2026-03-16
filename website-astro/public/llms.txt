@@ -1179,7 +1179,7 @@ const BooksCollection: EntityCollection = {
 
 Build your own **Firebase admin panel** and **headless CMS** with full control over your infrastructure. FireCMS self-hosted versions let you deploy a powerful **React-based back-office** on your own servers, with complete data ownership.
 
-:::tip When to choose self-hosted?
+:::tip[When to choose self-hosted?]
 - **Data sovereignty**: Your data never leaves your infrastructure
 - **Custom backends**: Use **MongoDB**, custom APIs, or any database
 - **Deep customization**: Full access to extend every part of the CMS
@@ -3411,7 +3411,7 @@ If you are using a starter template, you can set it in the `.env` file.
 
 Control who can access your **Firebase admin panel** and what they can do. The User Management Plugin provides a complete **role-based access control (RBAC)** system for your FireCMS project.
 
-:::tip Why use the User Management Plugin?
+:::tip[Why use the User Management Plugin?]
 Building authentication and permissions from scratch is time-consuming and error-prone. This plugin gives you:
 - **User CRUD**: Create, edit, and delete CMS users directly in the UI
 - **Role definitions**: Define granular permissions (Admin, Editor, Viewer, or custom)
@@ -4218,7 +4218,7 @@ export function App() {
 
 Export your **Firestore** data directly from your **admin panel**. The Data Export Plugin adds one-click JSON and CSV export to any FireCMS collection.
 
-:::tip Common use cases
+:::tip[Common use cases]
 - **Backups**: Create regular snapshots of your data
 - **Migrations**: Move data between environments or databases
 - **Reporting**: Feed data into spreadsheets or BI tools
@@ -5707,7 +5707,7 @@ If you're building a **headless CMS** or **back-office** for your **Firebase** p
 - **Who can do what** (create, read, update, delete permissions)
 - **Custom logic** (callbacks on save, computed fields, side effects)
 
-:::tip Why use FireCMS collections?
+:::tip[Why use FireCMS collections?]
 Unlike traditional CMSs that impose a rigid data model, FireCMS collections map directly to your existing **Firestore** structure. This means you can add a powerful **React-based admin UI** to any Firebase project without migrating your data or changing your schema.
 :::
 
@@ -6258,7 +6258,7 @@ const tasksCollection = buildCollection({
 
 The `orderProperty` uses fractional indexing to maintain order without rewriting every document on each reorder.
 
-:::caution Firestore Index Required
+:::caution[Firestore Index Required]
 When using Kanban view with Firestore, you'll need a composite index on your column property. Firestore will prompt you with the exact index link when you first load the view.
 :::
 

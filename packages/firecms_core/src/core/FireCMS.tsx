@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { CenteredView, Typography } from "@firecms/ui";
 import { AuthController } from "../types";
 import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
@@ -44,7 +44,6 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         userConfigPersistence,
         dateTimeFormat,
         locale,
-        translations,
         authController,
         storageSource,
         dataSourceDelegate,
@@ -85,7 +84,6 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     const customizationController: CustomizationController = {
         dateTimeFormat,
         locale,
-        translations,
         entityLinkBuilder,
         plugins,
         entityViews: entityViews ?? [],
@@ -158,20 +156,27 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         );
     }
 
-    const mergedTranslations = useMemo(() => {
-        const res: Record<string, any> = { ...translations };
+    // Inject plugin translations into the existing i18next instance
+    const { i18n } = useTranslation();
+    useEffect(() => {
+        if (!i18n) return;
         plugins?.forEach(plugin => {
             if (plugin.i18n) {
                 Object.keys(plugin.i18n).forEach(locale => {
-                    res[locale] = { ...res[locale], ...plugin.i18n![locale] };
+                    i18n.addResourceBundle(
+                        locale,
+                        "firecms_core",
+                        plugin.i18n![locale],
+                        true,  // deep merge
+                        true   // overwrite
+                    );
                 });
             }
         });
-        return res;
-    }, [translations, plugins]);
+    }, [i18n, plugins]);
 
     return (
-        <FireCMSi18nProvider locale={locale} translations={mergedTranslations}>
+        <FireCMSi18nProvider locale={locale}>
             <AnalyticsContext.Provider value={analyticsController}>
                 <CustomizationControllerContext.Provider value={customizationController}>
                     <UserConfigurationPersistenceContext.Provider

@@ -1,19 +1,19 @@
 ---
 slug: pt/docs/pro/licensing
-title: Licenze
-description: Informazioni sulle licenze di FireCMS PRO, incluso come acquistare e configurare la licenza per la distribuzione.
+title: Licenças
+description: Informações sobre as licenças do FireCMS PRO, incluindo como adquirir e configurar a licença para implantação.
 ---
 
 :::tip
-Hai domande, vuoi richiedere una prova o hai bisogno di una licenza personalizzata?
-[Contattaci via email](mailto:hello@firecms.co),
-o [prenota una chiamata](https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true).
+Tem perguntas, quer solicitar uma avaliação ou precisa de uma licença personalizada?
+[Entre em contato por email](mailto:hello@firecms.co),
+ou [agende uma chamada](https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0INW8ihjQ90S4gkdo8_rbL_Zx7gagZShLIpHyW43zDXkQDPole6a1coo1sT2O6Gl05X8lxFDlp?gv=true).
 :::
 
-Puoi usare le funzionalità di FireCMS PRO localmente durante lo sviluppo senza una licenza, ma dovrai acquistarne una per distribuirlo. C'è un periodo di grazia dopo la prima distribuzione per consentirti di testarlo in produzione.
+Você pode usar as funcionalidades do FireCMS PRO localmente durante o desenvolvimento sem uma licença, mas precisará adquirir uma para implantá-lo. Há um período de carência após a primeira implantação para permitir que você o teste em produção.
 
-Puoi acquistare una licenza sul [sito delle sottoscrizioni FireCMS](https://app.firecms.co/subscriptions).
+Você pode adquirir uma licença no [site de assinaturas do FireCMS](https://app.firecms.co/subscriptions).
 
-Quando crei la tua licenza, devi specificare gli ID progetto che useranno la licenza. Puoi trovare il tuo ID progetto nella console Firebase.
+Quando criar sua licença, você precisa especificar os IDs de projeto que usarão a licença. Você pode encontrar o ID do seu projeto no console do Firebase.
 
-Riceverai una chiave API che devi passare al tuo componente `FireCMS`. Se stai usando un template starter, puoi impostarla nel file `.env`.
+Você receberá uma chave de API que deve ser passada ao seu componente `FireCMS`. Se estiver usando um template starter, pode configurá-la no arquivo `.env`.

@@ -1,18 +1,19 @@
 ---
 slug: pt/docs/properties/custom_fields
-title: Campi personalizzati
-sidebar_label: Campi personalizzati
-description: "Impara come costruire campi personalizzati per FireCMS: contratto componente, props personalizzate, accesso al contesto entità, composizione di altre proprietà, gestione degli array, validazione, performance ed esempi avanzati."
+title: Campos personalizados
+sidebar_label: Campos personalizados
+description: "Aprenda como construir campos personalizados para o FireCMS: contrato do componente, props personalizadas, acesso ao contexto da entidade, composição de outras propriedades, manipulação de arrays, validação, performance e exemplos avançados."
 ---
 
-I campi personalizzati ti permettono di controllare completamente come il valore di una proprietà viene modificato e visualizzato in un form. Invece del renderer integrato per un `dataType`, fornisci un componente React. Quel componente riceve un ricco set di props (`FieldProps`) così può:
+Os campos personalizados permitem que você controle completamente como o valor de uma propriedade é editado e exibido em um formulário. Em vez do renderizador integrado para um `dataType`, você fornece um componente React. Esse componente recebe um rico conjunto de props (`FieldProps`) para que possa:
 
-- Leggere e aggiornare il valore corrente (`value`, `setValue`)
-- Aggiornare qualsiasi altra proprietà nello stesso form (`setFieldValue` o `context.setFieldValue`)
-- Accedere a tutti i valori attuali dell'entità + utility del form (`context`)
-- Rispettare lo stato del form (`isSubmitting`, `disabled`, `showError`, `error`, `touched`)
-- Adattare il layout (`size`, `partOfArray`, `minimalistView`, `autoFocus`)
-- Usare `customProps` definite dallo sviluppatore
+- Ler e atualizar o valor atual (`value`, `setValue`)
+- Atualizar qualquer outra propriedade no mesmo formulário (`setFieldValue` ou `context.setFieldValue`)
+- Acessar todos os valores atuais da entidade + utilitários do formulário (`context`)
+- Respeitar o estado do formulário (`isSubmitting`, `disabled`, `showError`, `error`, `touched`)
+- Adaptar o layout (`size`, `partOfArray`, `minimalistView`, `autoFocus`)
+- Usar `customProps` definidas pelo desenvolvedor
+
 
 <video style={{
     maxWidth: "100%",
@@ -24,20 +25,20 @@ I campi personalizzati ti permettono di controllare completamente come il valore
     <source src="/img/custom_fields_dark.mp4" type="video/mp4"/>
 </video>
 
-## Quando creare un campo personalizzato?
+## Quando criar um campo personalizado?
 
-Usa un campo personalizzato quando hai bisogno di uno (o più) dei seguenti:
-- Uno stile visivo non coperto dagli integrati (color picker, input tag, slider, grafici, campi assistiti da AI, ecc.)
-- UI composita che combina più proprietà (es. selettore mappa lat/lng che scrive in due campi numerici)
-- Integrazioni (upload su API esterna, recupero suggerimenti, geocodifica, ecc.)
+Use um campo personalizado quando precisar de um (ou mais) dos seguintes:
+- Um estilo visual não coberto pelos integrados (color picker, input de tags, slider, gráficos, campos assistidos por IA, etc.)
+- UI composta que combina múltiplas propriedades (ex. seletor de mapa lat/lng que escreve em dois campos numéricos)
+- Integrações (upload para API externa, busca de sugestões, geocodificação, etc.)
 
-Se hai solo bisogno di validazione o semplice trasformazione, preferisci prima le opzioni `validation` a livello di proprietà per semplicità.
-Se hai bisogno di comportamento dinamico dipendente da altri valori, considera di usare invece i [campi condizionali](./conditional_fields.md).
+Se você precisa apenas de validação ou transformação simples, prefira primeiro as opções de `validation` no nível da propriedade por simplicidade.
+Se você precisa de comportamento dinâmico dependente de outros valores, considere usar os [campos condicionais](./conditional_fields.md).
 
 
-## Esempio di campo personalizzato
+## Exemplo de campo personalizado
 
-Un campo testo personalizzato con colore di sfondo fornito tramite `customProps`:
+Um campo de texto personalizado com cor de fundo fornecida via `customProps`:
 
 ```tsx
 import React from "react";
@@ -84,7 +85,7 @@ export default function CustomColorTextField({
 }
 ```
 
-Uso in una collezione:
+Uso em uma coleção:
 
 ```tsx
 export const blogCollection = buildCollection({
@@ -92,7 +93,7 @@ export const blogCollection = buildCollection({
     path: "blog",
     name: "Blog entry",
     properties: {
-        // ... altre proprietà
+        // ... outras propriedades
         gold_text: {
             name: "Gold text",
             description: "This field is using a custom component defined by the developer",
@@ -106,36 +107,36 @@ export const blogCollection = buildCollection({
 });
 ```
 
-## Contratto componente (FieldProps)
+## Contrato do componente (FieldProps)
 
-Il tuo componente deve minimo:
-1. Leggere il `value` corrente (può essere `undefined` o `null` se vuoto)
-2. Chiamare `setValue(newValue)` quando l'utente lo cambia
+Seu componente deve, no mínimo:
+1. Ler o `value` atual (pode ser `undefined` ou `null` se vazio)
+2. Chamar `setValue(newValue)` quando o usuário o alterar
 
-Best practice consigliate:
-- Rispetta `disabled` / `isSubmitting`
-- Mostra l'etichetta e l'errore (usa la tua UI o `<FieldHelperText>` / integrati)
-- Evita effetti collaterali pesanti ad ogni keystroke (debounce le chiamate di rete)
+Boas práticas recomendadas:
+- Respeite `disabled` / `isSubmitting`
+- Mostre o rótulo e o erro (use sua própria UI ou `<FieldHelperText>` / integrados)
+- Evite efeitos colaterais pesados a cada keystroke (faça debounce nas chamadas de rede)
 
-Interfaccia completa: [`FieldProps`](../api/interfaces/FieldProps).
+Interface completa: [`FieldProps`](../api/interfaces/FieldProps).
 
-## Passare props personalizzate
+## Passar props personalizadas
 
-Fornisci un oggetto `customProps` nella definizione della proprietà. L'oggetto è fortemente tipizzato tramite il secondo generico di `FieldProps<T, CustomProps>`.
+Forneça um objeto `customProps` na definição da propriedade. O objeto é fortemente tipado através do segundo genérico de `FieldProps<T, CustomProps>`.
 
-## Accedere al resto dell'entità (contesto form)
+## Acessar o restante da entidade (contexto do formulário)
 
-`context` ti dà accesso live a:
-- Tutti i valori correnti (`context.values`)
-- `context.setFieldValue(key, value)` per aggiornare qualsiasi altro campo
-- `context.save(values)` per attivare un salvataggio a livello di codice (raramente necessario nei campi)
-- Metadati: `entityId`, `status` (nuovo/esistente/copia), `collection`, `openEntityMode`, `disabled`
+`context` dá acesso em tempo real a:
+- Todos os valores atuais (`context.values`)
+- `context.setFieldValue(key, value)` para atualizar qualquer outro campo
+- `context.save(values)` para disparar um salvamento programaticamente (raramente necessário em campos)
+- Metadados: `entityId`, `status` (novo/existente/cópia), `collection`, `openEntityMode`, `disabled`
 
-Questo abilita logica cross-campo (es. generazione automatica slug quando il titolo cambia) o disabilitazione condizionale.
+Isso habilita lógica entre campos (ex. geração automática de slug quando o título muda) ou desabilitação condicional.
 
-## Renderizzare (o comporre) altre proprietà all'interno di un campo personalizzato
+## Renderizar (ou compor) outras propriedades dentro de um campo personalizado
 
-Se il tuo campo personalizzato vuole includere l'UI di un'altra proprietà, usa `PropertyFieldBinding`:
+Se o seu campo personalizado deseja incluir a UI de outra propriedade, use `PropertyFieldBinding`:
 
 ```tsx
 import { PropertyFieldBinding } from "@firecms/core";
@@ -148,31 +149,31 @@ import { PropertyFieldBinding } from "@firecms/core";
 />
 ```
 
-## Gestione di array e dati annidati
+## Manipulação de arrays e dados aninhados
 
-Quando il tuo campo personalizzato è all'interno di un array:
-- `partOfArray` è `true`
-- Potresti ricevere un indice in un contesto genitore quando costruisci editor di array annidati
+Quando seu campo personalizado está dentro de um array:
+- `partOfArray` é `true`
+- Você pode receber um índice em um contexto pai ao construir editores de arrays aninhados
 
-Per valori annidati (es. modificare `address.street` all'interno di un campo composito), chiama `setFieldValue("address.street", value)`.
+Para valores aninhados (ex. editar `address.street` dentro de um campo composto), chame `setFieldValue("address.street", value)`.
 
-## Strategie di validazione
+## Estratégias de validação
 
-Preferisci la validazione dichiarativa nella configurazione della proprietà quando possibile.
+Prefira validação declarativa na configuração da propriedade quando possível.
 
-Pattern comuni:
-- Trim on blur ma preserva la digitazione dell'utente: mantieni l'input grezzo nello stato locale, chiama `setValue` con il valore pulito on blur.
-- Validazione async (es. unicità): debounce il controllo, imposta un errore locale transitorio, non bloccare la digitazione.
+Padrões comuns:
+- Trim on blur mas preserve a digitação do usuário: mantenha a entrada bruta no estado local, chame `setValue` com o valor limpo no blur.
+- Validação assíncrona (ex. unicidade): faça debounce da verificação, defina um erro local transitório, não bloqueie a digitação.
 
-## Suggerimenti per le performance
+## Dicas de performance
 
-- Debounce le chiamate di rete o i calcoli costosi invece di per ogni keystroke.
-- Memoizza i componenti figli pesanti in base alle props rilevanti.
-- Evita di memorizzare oggetti derivati grandi nello stato; derivali al render o memoizzali.
+- Faça debounce de chamadas de rede ou cálculos custosos em vez de executá-los a cada keystroke.
+- Memoize componentes filhos pesados com base nas props relevantes.
+- Evite armazenar objetos derivados grandes no estado; derive-os na renderização ou memoize-os.
 
-## Esempio avanzato: Editor slug composito
+## Exemplo avançado: Editor de slug composto
 
-Genera automaticamente uno slug dal titolo, ma consente la sovrascrittura manuale.
+Gera automaticamente um slug a partir do título, mas permite substituição manual.
 
 ```tsx
 function SlugField({ value, setValue, context, property, showError, error }: FieldProps<string>) {
@@ -197,10 +198,10 @@ function SlugField({ value, setValue, context, property, showError, error }: Fie
 }
 ```
 
-## Risoluzione dei problemi
+## Resolução de problemas
 
-- **Valore non aggiorna**: Assicurati di chiamare `setValue` (non mutare `value` direttamente) e di non oscurare il `value` nello stato locale senza sincronizzare.
-- **Errore non si mostra mai**: Ricorda che `showError` controlla la visualizzazione visiva; `error` può esistere mentre `showError` è false.
-- **Aggiornamenti cross-campo ignorati**: Usa la chiave di proprietà esatta (es. `address.street`, indici array come `items[0].price`).
-- **Il campo si re-renderizza troppo spesso**: Avvolgi la logica pesante in `useMemo` / `useCallback`, evita di creare nuovi oggetti ad ogni render.
-- **Hai bisogno della modalità sola lettura**: Rispetta `disabled` dalle props o `context.disabled`.
+- **Valor não atualiza**: Certifique-se de chamar `setValue` (não mute `value` diretamente) e de não obscurecer o `value` no estado local sem sincronizar.
+- **Erro nunca aparece**: Lembre-se de que `showError` controla a exibição visual; `error` pode existir enquanto `showError` é false.
+- **Atualizações entre campos ignoradas**: Use a chave de propriedade exata (ex. `address.street`, índices de array como `items[0].price`).
+- **O campo re-renderiza com muita frequência**: Envolva lógica pesada em `useMemo` / `useCallback`, evite criar novos objetos a cada renderização.
+- **Precisa do modo somente leitura**: Respeite `disabled` das props ou `context.disabled`.

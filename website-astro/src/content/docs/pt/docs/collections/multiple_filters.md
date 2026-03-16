@@ -1,35 +1,35 @@
 ---
 slug: pt/docs/collections/multiple_filters
-title: Filtri multipli nelle viste collezione
-sidebar_label: Filtri multipli
+title: Filtros múltiplos nas visualizações de coleção
+sidebar_label: Filtros múltiplos
 ---
 
-Firestore ha alcune limitazioni con il filtraggio e l'ordinamento, limitato a una singola clausola `where` per query per impostazione predefinita. Questo significa che filtrare per più campi non è possibile di base. Questa è una limitazione di Firestore, non di FireCMS.
+O Firestore tem algumas limitações com filtragem e ordenação, limitado a uma única cláusula `where` por consulta por padrão. Isso significa que filtrar por múltiplos campos não é possível nativamente. Esta é uma limitação do Firestore, não do FireCMS.
 
 :::important
-Da FireCMS 3.0, se non definisci gli indici manualmente, FireCMS tenterà comunque di eseguire la tua query; se fallisce, mostrerà un link alla console Firestore per creare gli indici richiesti.
+A partir do FireCMS 3.0, se você não definir os índices manualmente, o FireCMS tentará executar sua consulta mesmo assim; se falhar, mostrará um link para o console do Firestore para criar os índices necessários.
 :::
 
-Se vuoi limitare le operazioni UI che possono essere eseguite in una collezione, in base ai tuoi indici esistenti, puoi definirli in FireCMS, usando un `FirestoreIndexesBuilder`. Questo è un builder che ti permette di dichiarare i tuoi indici Firestore.
-Se definisci i tuoi indici, FireCMS ti permetterà solo di filtrare per i campi che hai definito, o i campi che possono essere filtrati e ordinati senza indici.
+Se você deseja limitar as operações de UI que podem ser realizadas em uma coleção, com base nos seus índices existentes, pode defini-los no FireCMS usando um `FirestoreIndexesBuilder`. Este é um builder que permite declarar seus índices do Firestore.
+Se você definir seus índices, o FireCMS permitirá apenas filtrar pelos campos que você definiu, ou campos que podem ser filtrados e ordenados sem índices.
 
 :::note
-Firestore e FireCMS consentono alcune query senza indici, ma sono limitate.
-Ad esempio, puoi filtrare per un singolo campo, o per più campi se stai
-filtrando per uguaglianza (ma non altri operatori come `>`, `<`, `>=`, `<=`).
-Controlla la [documentazione Firestore](https://firebase.google.com/docs/firestore/query-data/indexing)
+O Firestore e o FireCMS permitem algumas consultas sem índices, mas são limitadas.
+Por exemplo, você pode filtrar por um único campo, ou por múltiplos campos se estiver
+filtrando por igualdade (mas não outros operadores como `>`, `<`, `>=`, `<=`).
+Consulte a [documentação do Firestore](https://firebase.google.com/docs/firestore/query-data/indexing)
 :::
 
 
-Questo è un esempio di come puoi definire un `FirestoreIndexesBuilder`. Puoi poi restituire un array di indici che verranno usati per filtrare la collezione.
+Este é um exemplo de como você pode definir um `FirestoreIndexesBuilder`. Depois, pode retornar um array de índices que serão usados para filtrar a coleção.
 
 ```tsx
 import { FirestoreIndexesBuilder } from "@firecms/firebase";
 
-// Builder di indici che consente il filtraggio per `category` e `available` per la collezione `products`
+// Builder de índices que permite filtragem por `category` e `available` para a coleção `products`
 const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
     if (path === "products") {
-        // Per 2 campi, devi definire 4 indici (lo so...)
+        // Para 2 campos, você precisa definir 4 índices (eu sei...)
         return [
             {
                 category: "asc",
@@ -55,14 +55,14 @@ const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
 ```
 
 
-## Aggiungere i tuoi indici in FireCMS self-hosted
+## Adicionar seus índices no FireCMS self-hosted
 
 ```tsx
 import { FirestoreIndexesBuilder, useFirestoreDelegate } from "@firecms/firebase";
 
 // ...
 
-    // Builder di indici di esempio
+    // Builder de índices de exemplo
     const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
         if (path === "products") {
             return [
@@ -87,7 +87,7 @@ import { FirestoreIndexesBuilder, useFirestoreDelegate } from "@firecms/firebase
         return undefined;
     }
 
-    // Delegato usato per recuperare e salvare dati in Firestore
+    // Delegado usado para buscar e salvar dados no Firestore
     const firestoreDelegate = useFirestoreDelegate({
         // ...
         firestoreIndexesBuilder
@@ -97,13 +97,13 @@ import { FirestoreIndexesBuilder, useFirestoreDelegate } from "@firecms/firebase
 ```
 
 
-## Aggiungere i tuoi indici in FireCMS Cloud
+## Adicionar seus índices no FireCMS Cloud
 
 ```tsx
 import { FireCMSCloudApp } from "@firecms/cloud";
 import { FirestoreIndexesBuilder } from "@firecms/firebase";
 
-// Builder di indici di esempio
+// Builder de índices de exemplo
 const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
     if (path === "products") {
         return [
@@ -128,7 +128,7 @@ const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
     return undefined;
 }
 
-// Aggiunge il tuo builder di indici alla tua app
+// Adiciona seu builder de índices à sua aplicação
 function MyApp() {
 
     return <FireCMSCloudApp

@@ -1,28 +1,28 @@
 ---
 slug: pt/docs/collections/callbacks
-title: Callback delle entità
-sidebar_label: Callback delle entità
+title: Callbacks de entidade
+sidebar_label: Callbacks de entidade
 ---
 
-Quando si lavora con un'entità, puoi allegare diversi callback prima e dopo che viene salvata o recuperata:
+Ao trabalhar com uma entidade, você pode anexar diversos callbacks antes e depois de ela ser salva ou recuperada:
 `onFetch`, `onIdUpdate`, `onPreSave`, `onSaveSuccess` e `onSaveFailure`.
 
-Questi callback sono definiti a livello di collezione sotto la prop `callbacks`.
+Esses callbacks são definidos no nível da coleção sob a prop `callbacks`.
 
-Il callback `onIdUpdate` può essere usato per aggiornare l'ID dell'entità prima di salvarla. Questo è utile se hai bisogno di generare l'ID da altri campi.
+O callback `onIdUpdate` pode ser usado para atualizar o ID da entidade antes de salvá-la. Isso é útil se você precisa gerar o ID a partir de outros campos.
 
-Questo è utile se hai bisogno di aggiungere logica o modificare alcuni campi dell'entità prima/dopo il salvataggio o l'eliminazione delle entità.
+Isso é útil se você precisa adicionar lógica ou modificar alguns campos da entidade antes/depois de salvar ou excluir entidades.
 
-La maggior parte dei callback è asincrona.
+A maioria dos callbacks é assíncrona.
 
 :::note
-Puoi fermare l'esecuzione di questi callback lanciando un `Error` contenente una `string` e verrà visualizzato uno snackbar di errore.
+Você pode interromper a execução desses callbacks lançando um `Error` contendo uma `string` e um snackbar de erro será exibido.
 :::
 
 :::tip
-Puoi usare l'oggetto `context` per accedere al contesto FireCMS.
-L'oggetto `context` contiene tutti i controller e i servizi disponibili nell'app,
-inclusi `authController`, `dataSource`, `storageSource`, `sideDialogsController`, ecc.
+Você pode usar o objeto `context` para acessar o contexto do FireCMS.
+O objeto `context` contém todos os controllers e serviços disponíveis na aplicação,
+incluindo `authController`, `dataSource`, `storageSource`, `sideDialogsController`, etc.
 :::
 
 ```tsx
@@ -50,7 +50,7 @@ const productCallbacks = buildEntityCallbacks({
                     previousValues,
                     status
                 }) => {
-        // restituisce i valori aggiornati
+        // retorna os valores atualizados
         values.uppercase_name = values.name?.toUpperCase();
         return values;
     },
@@ -72,7 +72,7 @@ const productCallbacks = buildEntityCallbacks({
                   }: EntityOnDeleteProps<Product>
     ) => {
         if (!context.authController.user)
-            throw Error("Gli utenti non connessi non possono eliminare i prodotti");
+            throw Error("Usuários não conectados não podem excluir produtos");
     },
 
     onDelete: (props: EntityOnDeleteProps<Product>) => {
@@ -96,7 +96,7 @@ const productCallbacks = buildEntityCallbacks({
                    path,
                    values
                }: EntityIdUpdateProps): string {
-        // restituisce l'ID desiderato
+        // retorna o ID desejado
         return toSnakeCase(values?.name)
     },
 });
@@ -123,42 +123,42 @@ const productCollection = buildCollection<Product>({
 
 #### EntityOnSaveProps
 
-* `collection`: Collezione risolta dell'entità
+* `collection`: Coleção resolvida da entidade
 
-* `path`: string Percorso completo dove questa entità viene salvata (può contenere alias non risolti)
+* `path`: string Caminho completo onde esta entidade está sendo salva (pode conter aliases não resolvidos)
 
-* `resolvedPath`: string Percorso completo con alias risolto
+* `resolvedPath`: string Caminho completo com alias resolvido
 
-* `entityId`: string ID dell'entità
+* `entityId`: string ID da entidade
 
-* `values`: EntityValues Valori che vengono salvati
+* `values`: EntityValues Valores que estão sendo salvos
 
-* `previousValues`: EntityValues Valori precedenti dell'entità
+* `previousValues`: EntityValues Valores anteriores da entidade
 
-* `status`: EntityStatus Entità nuova o esistente
+* `status`: EntityStatus Entidade nova ou existente
 
-* `context`: FireCMSContext Contesto dello stato dell'app
+* `context`: FireCMSContext Contexto do estado da aplicação
 
 #### EntityOnDeleteProps
 
-* `collection`: Collezione risolta dell'entità
+* `collection`: Coleção resolvida da entidade
 
-* `path`: string Percorso completo dove questa entità viene salvata
+* `path`: string Caminho completo onde esta entidade está sendo salva
 
-* `entityId`: string ID dell'entità
+* `entityId`: string ID da entidade
 
-* `entity`: Entity Entità eliminata
+* `entity`: Entity Entidade excluída
 
-* `context`: FireCMSContext Contesto dello stato dell'app
+* `context`: FireCMSContext Contexto do estado da aplicação
 
 #### EntityIdUpdateProps
 
-* `collection`: EntityCollection Collezione risolta dell'entità
+* `collection`: EntityCollection Coleção resolvida da entidade
 
-* `path`: string Percorso completo dove questa entità viene salvata
+* `path`: string Caminho completo onde esta entidade está sendo salva
 
-* `entityId`: string ID dell'entità
+* `entityId`: string ID da entidade
 
-* `values`: Valori entità
+* `values`: Valores da entidade
 
-* `context`: FireCMSContext Contesto dello stato dell'app
+* `context`: FireCMSContext Contexto do estado da aplicação

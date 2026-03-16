@@ -1,21 +1,21 @@
 ---
 slug: pt/docs/self/mongodb
-title: Integrazione di MongoDB Atlas con FireCMS
-sidebar_label: Integrazione MongoDB
-description: Guida completa all'uso di MongoDB Atlas come database e provider di autenticazione con FireCMS.
+title: Integração do MongoDB Atlas com o FireCMS
+sidebar_label: Integração MongoDB
+description: Guia completo de uso do MongoDB Atlas como banco de dados e provedor de autenticação com o FireCMS.
 ---
 
-Questa guida fornisce i passaggi necessari per integrare MongoDB Atlas come sistema di autenticazione e database principale per la tua applicazione FireCMS. Mongo Atlas non supporta l'archiviazione di file, quindi puoi opzionalmente usare Firebase per questo scopo.
+Este guia fornece os passos necessários para integrar o MongoDB Atlas como sistema de autenticação e banco de dados principal para sua aplicação FireCMS. O Mongo Atlas não suporta armazenamento de arquivos, então você pode opcionalmente usar o Firebase para esse fim.
 
-## Configurazione del progetto
+## Configuração do projeto
 
-Inizia generando un nuovo progetto usando il template starter FireCMS PRO:
+Comece gerando um novo projeto usando o template starter do FireCMS PRO:
 
 ```bash
 npx create-firecms-app --pro
 ```
 
-## Configurazione MongoDB Atlas
+## Configuração do MongoDB Atlas
 
 ```js
 const atlasConfig = {
@@ -29,9 +29,9 @@ const atlasConfig = {
 };
 ```
 
-## Configurazione Firebase (opzionale)
+## Configuração do Firebase (opcional)
 
-Se vuoi usare Firebase per l'archiviazione di file:
+Se você deseja usar o Firebase para armazenamento de arquivos:
 
 ```js
 const firebaseConfig = {
@@ -43,9 +43,9 @@ const firebaseConfig = {
 };
 ```
 
-## Implementare MongoDB in FireCMS
+## Implementar MongoDB no FireCMS
 
-### Inizializzazione
+### Inicialização
 
 ```jsx
 import React from "react";
@@ -69,7 +69,7 @@ const MongoDBApp = () => {
 };
 ```
 
-### Controller e persistenza
+### Controller e persistência
 
 ```jsx
 const modeController = useBuildModeController();
@@ -83,13 +83,13 @@ const mongoDataSourceDelegate = useMongoDBDelegate({
 });
 ```
 
-### Sorgente storage Firebase
+### Fonte de armazenamento Firebase
 
 ```jsx
 const storageSource = useFirebaseStorageSource({ firebaseApp });
 ```
 
-### Validazione autenticazione
+### Validação de autenticação
 
 ```jsx
 const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
@@ -110,7 +110,7 @@ const navigationController = useBuildNavigationController({
 });
 ```
 
-### Render dell'applicazione completa
+### Renderização da aplicação completa
 
 ```jsx
 return (

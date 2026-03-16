@@ -1,21 +1,21 @@
 ---
 slug: pt/docs/self/migrating_from_v3_beta
-title: Migrazione dalle versioni beta precedenti
-sidebar_label: Migrazione dalle versioni beta precedenti
-description: Guida alla migrazione passo-passo dalle versioni beta di FireCMS v3 alla release stabile, con copertura delle modifiche PRO e Cloud.
+title: Migração das versões beta anteriores
+sidebar_label: Migração das versões beta anteriores
+description: Guia de migração passo a passo das versões beta do FireCMS v3 para a versão estável, cobrindo modificações PRO e Cloud.
 ---
 
 ## FireCMS PRO
 
-Se stai migrando da versioni beta precedenti di FireCMS PRO, devi apportare alcuni aggiornamenti al tuo progetto. I componenti principali hanno cambiato la loro composizione. Invece di avere un singolo componente `Scaffold` con tutta la configurazione, hai in aggiunta i componenti `AppBar` e `Drawer`.
+Se você está migrando de versões beta anteriores do FireCMS PRO, precisa fazer algumas atualizações no seu projeto. Os componentes principais mudaram sua composição. Em vez de ter um único componente `Scaffold` com toda a configuração, agora você tem também os componentes `AppBar` e `Drawer`.
 
-Ulteriori informazioni sui componenti principali si trovano nella sezione [Componenti principali](/docs/self/main_components).
+Mais informações sobre os componentes principais podem ser encontradas na seção [Componentes principais](/docs/self/main_components).
 
-### Auth controller per la gestione utenti
+### Auth controller para gerenciamento de usuários
 
-È ora il `authController` ad essere passato al controller User Management, invece del contrario.
+Agora é o `authController` que é passado ao controller de User Management, em vez do contrário.
 
-❌ Codice prima:
+❌ Código antes:
 ```typescript
 const userManagement = useBuildUserManagement({
     dataSourceDelegate: firestoreDelegate
@@ -29,7 +29,7 @@ const authController: FirebaseAuthController = useFirebaseAuthController({
 });
 ```
 
-✅ Codice dopo:
+✅ Código depois:
 
 ```typescript
 const authController: FirebaseAuthController = useFirebaseAuthController({
@@ -43,9 +43,9 @@ const userManagement = useBuildUserManagement({
 });
 ```
 
-### Stili
+### Estilos
 
-Devi importare gli stili predefiniti di FireCMS nel tuo progetto. Aggiungendo il seguente import al tuo `index.css`:
+Você precisa importar os estilos padrão do FireCMS no seu projeto. Adicione a seguinte importação ao seu `index.css`:
 
 ```css
 @import "@firecms/ui/index.css";
@@ -59,9 +59,9 @@ Devi importare gli stili predefiniti di FireCMS nel tuo progetto. Aggiungendo il
 }
 ```
 
-### Dipendenze
+### Dependências
 
-I font predefiniti ora vanno importati nel progetto client. Aggiungi queste importazioni:
+As fontes padrão agora devem ser importadas no projeto cliente. Adicione estas importações:
 ```
 "typeface-rubik": "^1.1.13",
 "@fontsource/jetbrains-mono": "^5.0.20",
@@ -70,22 +70,22 @@ I font predefiniti ora vanno importati nel progetto client. Aggiungi queste impo
 
 ## FireCMS Cloud
 
-### Dipendenze
+### Dependências
 
-Il pacchetto principale è stato rinominato da `firecms` a `@firecms/cloud` dalla versione `3.0.0-beta.4`.
-Puoi anche rimuovere il pacchetto `@firecms/cli`, poiché viene installato implicitamente da `@firecms/cloud`.
+O pacote principal foi renomeado de `firecms` para `@firecms/cloud` a partir da versão `3.0.0-beta.4`.
+Você também pode remover o pacote `@firecms/cli`, pois ele é instalado implicitamente por `@firecms/cloud`.
 
-### Importazioni
+### Importações
 
 ```javascript
-// Prima:
+// Antes:
 import { FireCMS } from "firecms";
 
-// Dopo:
+// Depois:
 import { FireCMS } from "@firecms/core";
 ```
 
-### Configurazione Vite
+### Configuração Vite
 
 ```javascript
 import { defineConfig } from "vite"
@@ -123,13 +123,13 @@ export default defineConfig({
 
 ### Tailwind CSS
 
-- Installa il plugin tailwind typography:
+- Instale o plugin tailwind typography:
 
   ```bash
   yarn add -D @tailwindcss/typography
   ```
 
-- Il preset ora proviene dal pacchetto `@firecms/ui`:
+- O preset agora vem do pacote `@firecms/ui`:
 
   ```javascript
   import fireCMSConfig from "@firecms/ui/tailwind.config.js";

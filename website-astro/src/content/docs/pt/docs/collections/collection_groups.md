@@ -1,18 +1,18 @@
 ---
 slug: pt/docs/collections/collection_groups
-title: Gruppi di collezioni
-sidebar_label: Gruppi di collezioni
+title: Grupos de coleções
+sidebar_label: Grupos de coleções
 ---
 
-Puoi ora usare i gruppi di collezioni Firestore in FireCMS. Questo ti permette di interrogare attraverso più collezioni con lo stesso nome. Ad esempio, potresti avere un gruppo di collezioni chiamato `products` che contiene tutti i prodotti da diversi `stores`.
+Agora você pode usar grupos de coleções Firestore no FireCMS. Isso permite consultar várias coleções com o mesmo nome. Por exemplo, você pode ter um grupo de coleções chamado `products` que contém todos os produtos de diferentes `stores`.
 
-Nel nostro progetto demo, abbiamo un gruppo di collezioni chiamato `locales` che contiene tutte le localizzazioni per i diversi `products`.
+No nosso projeto demo, temos um grupo de coleções chamado `locales` que contém todas as localizações para os diferentes `products`.
 
-Vedi il progetto demo [qui](https://demo.firecms.co/c/locales).
+Veja o projeto demo [aqui](https://demo.firecms.co/c/locales).
 
-FireCMS genererà una colonna aggiuntiva nella vista collezione con riferimenti a tutte le collezioni genitore che fanno parte della configurazione.
+O FireCMS gerará uma coluna adicional na visualização da coleção com referências a todas as coleções pai que fazem parte da configuração.
 
-Per usare i gruppi di collezioni, devi specificare la proprietà `collectionGroup` nella configurazione `Collection`.
+Para usar grupos de coleções, você deve especificar a propriedade `collectionGroup` na configuração `Collection`.
 
 ```tsx
 export const localeCollectionGroup = buildCollection({
@@ -32,7 +32,7 @@ export const localeCollectionGroup = buildCollection({
 ```
 
 :::note
-A seconda delle tue regole Firestore, potresti dover aggiungere un'altra regola per consentire le query sui gruppi di collezioni. Ad esempio:
+Dependendo das suas regras do Firestore, pode ser necessário adicionar outra regra para permitir consultas em grupos de coleções. Por exemplo:
 
 ```text
 match /{path=**}/locales/{document=**} {
@@ -40,5 +40,5 @@ match /{path=**}/locales/{document=**} {
 }
 ```
 
-Quando si esegue una query su un gruppo di collezioni, il percorso sarà qualcosa come `/products/{productId}/locales/{localeId}`. Ma la query andrà a tutte le collezioni chiamate `locales` nel tuo database. Ecco perché potresti dover aggiungere una regola come quella sopra.
+Ao consultar um grupo de coleções, o caminho será algo como `/products/{productId}/locales/{localeId}`. Mas a consulta irá a todas as coleções chamadas `locales` no seu banco de dados. É por isso que pode ser necessário adicionar uma regra como a acima.
 :::
