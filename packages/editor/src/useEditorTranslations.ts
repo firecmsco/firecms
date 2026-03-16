@@ -31,7 +31,7 @@ export function useEditorTranslations() {
     const { i18n } = useTranslation();
 
     useEffect(() => {
-        if (!i18n || registered) return;
+        if (!i18n || typeof i18n.addResourceBundle !== "function" || registered) return;
         for (const [locale, translations] of Object.entries(editorLocales)) {
             i18n.addResourceBundle(locale, FIRECMS_NS, translations, true, true);
         }

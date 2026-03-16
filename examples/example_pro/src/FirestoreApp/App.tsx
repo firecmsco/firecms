@@ -19,6 +19,7 @@ import {
     EntityCollectionsBuilder,
     ErrorView,
     FireCMS,
+    FireCMSi18nProvider,
     ModeControllerProvider,
     NavigationRoutes,
     PropertyConfig,
@@ -450,10 +451,11 @@ export function App() {
     // }
 
     return (
-        <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
-                <DataTalkProvider config={dataTalkConfig}>
-                    <FireCMS
+        <FireCMSi18nProvider>
+            <SnackbarProvider>
+                <ModeControllerProvider value={modeController}>
+                    <DataTalkProvider config={dataTalkConfig}>
+                        <FireCMS
                         apiKey={import.meta.env.VITE_FIRECMS_API_KEY as string}
                         navigationController={navigationController}
                         authController={authController}
@@ -496,10 +498,11 @@ export function App() {
                                 <SideDialogs />
                             </Scaffold>;
                         }}
-                    </FireCMS>
-                </DataTalkProvider>
-            </ModeControllerProvider>
-        </SnackbarProvider>
+                        </FireCMS>
+                    </DataTalkProvider>
+                </ModeControllerProvider>
+            </SnackbarProvider>
+        </FireCMSi18nProvider>
     );
 
 }

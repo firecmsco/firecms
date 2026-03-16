@@ -10,6 +10,7 @@ import {
     DataSourceDelegate,
     Drawer,
     FireCMS,
+    FireCMSi18nProvider,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -142,8 +143,9 @@ function GraphQLApp() {
         return <>{configError}</>;
     }
     return (
-        <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
+        <FireCMSi18nProvider>
+            <SnackbarProvider>
+                <ModeControllerProvider value={modeController}>
                 <FireCMS
                     navigationController={navigationController}
                     authController={authController}
@@ -170,8 +172,9 @@ function GraphQLApp() {
                         </Scaffold>;
                     }}
                 </FireCMS>
-            </ModeControllerProvider>
-        </SnackbarProvider>
+                </ModeControllerProvider>
+            </SnackbarProvider>
+        </FireCMSi18nProvider>
     );
 
 }

@@ -8,6 +8,7 @@ import {
     CircularProgressCenter,
     Drawer,
     FireCMS,
+    FireCMSi18nProvider,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -79,8 +80,9 @@ function SupabaseApp() {
     // }
 
     return (
-        <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
+        <FireCMSi18nProvider>
+            <SnackbarProvider>
+                <ModeControllerProvider value={modeController}>
 
                 <FireCMS
                     navigationController={navigationController}
@@ -124,8 +126,9 @@ function SupabaseApp() {
                         return component;
                     }}
                 </FireCMS>
-            </ModeControllerProvider>
-        </SnackbarProvider>
+                </ModeControllerProvider>
+            </SnackbarProvider>
+        </FireCMSi18nProvider>
     );
 }
 

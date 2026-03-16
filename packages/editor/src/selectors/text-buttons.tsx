@@ -1,4 +1,5 @@
-import { EditorBubbleItem, useEditor } from "../components";
+import { EditorState, Transaction } from "prosemirror-state";
+import { EditorBubbleItem } from "../components";
 import type { SelectorItem } from "./node-selector";
 import {
     Button,
@@ -9,64 +10,72 @@ import {
     FormatStrikethroughIcon,
     FormatUnderlinedIcon
 } from "@firecms/ui";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
+import { isMarkActive } from "../utils/prosemirror-utils";
+import { schema } from "../schema";
+import { toggleMark } from "prosemirror-commands";
 
 export const TextButtons = () => {
-    const { editor } = useEditor();
-    if (!editor) return null;
-    const items: SelectorItem[] = [
+    const { state, view } = useProseMirrorContext();
+    if (!state || !view) return null;
+
+    // We pass state directly to isActive, and dispatch to command
+    const items = [
         {
             name: "bold",
             labelKey: "editor_bold",
-            isActive: (editor) => editor?.isActive("bold") ?? false,
-            command: (editor) => editor?.chain().focus().toggleBold().run(),
+            isActive: (s: EditorState) => isMarkActive(s, schema.marks.bold),
+            command: (s: EditorState, dispatch: (tr: Transaction) => void) => toggleMark(schema.marks.bold)(s, dispatch),
             icon: FormatBoldIcon,
         },
         {
             name: "italic",
             labelKey: "editor_italic",
-            isActive: (editor) => editor?.isActive("italic") ?? false,
-            command: (editor) => editor?.chain().focus().toggleItalic().run(),
+            isActive: (s: EditorState) => isMarkActive(s, schema.marks.italic),
+            command: (s: EditorState, dispatch: (tr: Transaction) => void) => toggleMark(schema.marks.italic)(s, dispatch),
             icon: FormatItalicIcon,
         },
         {
             name: "underline",
             labelKey: "editor_underline",
-            isActive: (editor) => editor?.isActive("underline") ?? false,
-            command: (editor) => editor?.chain().focus().toggleUnderline().run(),
+            isActive: (s: EditorState) => isMarkActive(s, schema.marks.underline),
+            command: (s: EditorState, dispatch: (tr: Transaction) => void) => toggleMark(schema.marks.underline)(s, dispatch),
             icon: FormatUnderlinedIcon,
         },
         {
             name: "strike",
             labelKey: "editor_strikethrough",
-            isActive: (editor) => editor?.isActive("strike") ?? false,
-            command: (editor) => editor?.chain().focus().toggleStrike().run(),
+            isActive: (s: EditorState) => isMarkActive(s, schema.marks.strike),
+            command: (s: EditorState, dispatch: (tr: Transaction) => void) => toggleMark(schema.marks.strike)(s, dispatch),
             icon: FormatStrikethroughIcon,
         },
         {
             name: "code",
             labelKey: "editor_code",
-            isActive: (editor) => editor?.isActive("code") ?? false,
-            command: (editor) => editor?.chain().focus().toggleCode().run(),
+            isActive: (s: EditorState) => isMarkActive(s, schema.marks.code),
+            command: (s: EditorState, dispatch: (tr: Transaction) => void) => toggleMark(schema.marks.code)(s, dispatch),
             icon: CodeIcon,
         },
     ];
+
     return (
         <div className="flex">
             {items.map((item, index) => (
                 <EditorBubbleItem
                     key={index}
-                    onSelect={(editor) => {
-                        item.command(editor);
+                    onSelect={() => {
+                        item.command(view.state, view.dispatch);
+                        view.focus();
                     }}
                 >
                     <Button size={"small"}
-                            color="text"
-                            className="gap-2 rounded-none h-full"
-                            variant="text">
+                        color="text"
+                        className="gap-2 rounded-none h-full"
+                        variant="text">
                         <item.icon
-                            className={cls( {
-                                "text-inherit": !item.isActive(editor),
-                                "text-blue-500": item.isActive(editor),
+                            className={cls({
+                                "text-inherit": !item.isActive(state),
+                                "text-blue-500": item.isActive(state),
                             })}
                         />
                     </Button>

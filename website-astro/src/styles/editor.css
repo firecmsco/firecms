@@ -198,3 +198,11 @@ transition: background-color 0.2s;
         background-color: rgb(51 65 85);
     }
 }
+
+.prosemirror-dropcursor-block {
+    background-color: var(--color-surface-accent-600);
+}
+
+[data-theme="dark"] .prosemirror-dropcursor-block {
+    background-color: var(--color-surface-accent-300);
+}

@@ -9,6 +9,7 @@ import {
     CircularProgressCenter,
     Drawer,
     FireCMS,
+    FireCMSi18nProvider,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -129,43 +130,45 @@ function App() {
     }
 
     return (
-        <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
-                <FireCMS
-                    navigationController={navigationController}
-                    authController={authController}
-                    userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={firestoreDelegate}
-                    storageSource={storageSource}
-                >
-                    {({
-                          context,
-                          loading
-                      }) => {
+        <FireCMSi18nProvider>
+            <SnackbarProvider>
+                <ModeControllerProvider value={modeController}>
+                    <FireCMS
+                        navigationController={navigationController}
+                        authController={authController}
+                        userConfigPersistence={userConfigPersistence}
+                        dataSourceDelegate={firestoreDelegate}
+                        storageSource={storageSource}
+                    >
+                        {({
+                              context,
+                              loading
+                          }) => {
 
-                        if (loading || authLoading) {
-                            return <CircularProgressCenter size={"large"}/>;
-                        }
+                            if (loading || authLoading) {
+                                return <CircularProgressCenter size={"large"}/>;
+                            }
 
-                        if (!canAccessMainView) {
-                            return <FirebaseLoginView authController={authController}
-                                                      firebaseApp={firebaseApp}
-                                                      signInOptions={signInOptions}
-                                                      notAllowedError={notAllowedError}/>;
-                        }
+                            if (!canAccessMainView) {
+                                return <FirebaseLoginView authController={authController}
+                                                          firebaseApp={firebaseApp}
+                                                          signInOptions={signInOptions}
+                                                          notAllowedError={notAllowedError}/>;
+                            }
 
-                        return <Scaffold
-                            autoOpenDrawer={false}>
-                            <AppBar
-                                title={"My demo app"}/>
-                            <Drawer/>
-                            <NavigationRoutes/>
-                            <SideDialogs/>
-                        </Scaffold>;
-                    }}
-                </FireCMS>
-            </ModeControllerProvider>
-        </SnackbarProvider>
+                            return <Scaffold
+                                autoOpenDrawer={false}>
+                                <AppBar
+                                    title={"My demo app"}/>
+                                <Drawer/>
+                                <NavigationRoutes/>
+                                <SideDialogs/>
+                            </Scaffold>;
+                        }}
+                    </FireCMS>
+                </ModeControllerProvider>
+            </SnackbarProvider>
+        </FireCMSi18nProvider>
     );
 
 }

@@ -1,13 +1,10 @@
-import { cls, defaultBorderMixin } from "@firecms/ui";
 import { Decoration, DecorationSet, EditorView } from "prosemirror-view";
 import { Plugin, PluginKey } from "prosemirror-state";
+import { schema } from "../../schema";
 
 export type UploadFn = (image: File) => Promise<string>;
 
 export async function onFileRead(view: EditorView, readerEvent: ProgressEvent<FileReader>, pos: number, upload: UploadFn, image: File) {
-
-    const { schema } = view.state;
-
     // @ts-ignore
     const plugin = view.state.plugins.find((p: Plugin) => p.key === ImagePluginKey.key);
     if (!plugin) {
@@ -18,7 +15,8 @@ export async function onFileRead(view: EditorView, readerEvent: ProgressEvent<Fi
 
     const placeholder = document.createElement("div");
     const imageElement = document.createElement("img");
-    imageElement.setAttribute("class", "opacity-40 rounded-lg border " + defaultBorderMixin);
+    // basic styling for loading state
+    imageElement.setAttribute("class", "opacity-40 rounded-lg border");
     imageElement.src = readerEvent.target?.result as string;
     placeholder.appendChild(imageElement);
 
@@ -61,14 +59,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
         },
         props: {
             handleDOMEvents: {
-                dragover: (view: EditorView, event: DragEvent) => {
-                    if (event.dataTransfer?.types?.includes("Files")) {
-                        event.preventDefault();
-                        return true;
-                    }
-                    return false;
-                },
-                drop: (view: EditorView, event: DragEvent) => {
+                drop: (view, event) => {
                     if (!event.dataTransfer?.files || event.dataTransfer?.files.length === 0) {
                         return false;
                     }
@@ -91,7 +82,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
 
                         const reader = new FileReader();
                         reader.onload = async (readerEvent) => {
-                            await onFileRead(view as any, readerEvent, position.pos, upload, image);
+                            await onFileRead(view, readerEvent, position.pos, upload, image);
                         };
                         reader.readAsDataURL(image);
                     });
@@ -99,18 +90,19 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                     return true;
                 }
             },
-            handlePaste(view: EditorView, event: ClipboardEvent, slice: any) {
+            handlePaste(view, event, slice) {
                 const items = Array.from(event.clipboardData?.items || []);
                 const pos = view.state.selection.from;
                 let anyImageFound = false;
 
                 items.forEach((item) => {
                     const image = item.getAsFile();
-                    if (image) {
+                    if (image && /image/i.test(item.type)) {
                         anyImageFound = true;
                         const reader = new FileReader();
+
                         reader.onload = async (readerEvent) => {
-                            await onFileRead(view as any, readerEvent, pos, upload, image);
+                            await onFileRead(view, readerEvent, pos, upload, image);
                         };
                         reader.readAsDataURL(image);
                     }
@@ -123,6 +115,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
             }
         },
         view(editorView) {
+            // This is needed to immediately apply the decoration updates
             return {
                 update(view, prevState) {
                     const prevDecos = plugin.getState(prevState);
@@ -138,5 +131,3 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
 
     return plugin;
 };
-
-

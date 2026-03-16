@@ -1,15 +1,13 @@
 import type { Dispatch, SetStateAction } from "react";
-import { EditorBubbleItem, useEditor } from "../components";
+import { EditorBubbleItem } from "../components";
 import { Button, CheckIcon, KeyboardArrowDownIcon, Popover } from "@firecms/ui";
+import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
+import { isMarkActive, getMarkAttributes, setMark, unsetMark } from "../utils/prosemirror-utils";
+import { schema } from "../schema";
 
 export interface BubbleColorMenuItem {
     name: string;
     color: string;
-}
-
-interface ColorSelectorProps {
-    isOpen: boolean;
-    setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const TEXT_COLORS: BubbleColorMenuItem[] = [
@@ -96,22 +94,19 @@ interface ColorSelectorProps {
 }
 
 export const ColorSelector = ({
-                                  open,
-                                  onOpenChange
-                              }:{
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-}) => {
-    const { editor } = useEditor();
+    open,
+    onOpenChange
+}: ColorSelectorProps) => {
 
-    if (!editor) return null;
-    const activeColorItem = TEXT_COLORS.find(({ color }) =>
-        editor.isActive("textStyle", { color }),
-    );
+    const { state, view } = useProseMirrorContext();
 
-    const activeHighlightItem = HIGHLIGHT_COLORS.find(({ color }) =>
-        editor.isActive("highlight", { color }),
-    );
+    if (!state || !view) return null;
+
+    const currentTextColor = getMarkAttributes(state, schema.marks.textStyle).color;
+    const currentHighlightColor = getMarkAttributes(state, schema.marks.highlight).color;
+
+    const activeColorItem = TEXT_COLORS.find(({ color }) => color === currentTextColor);
+    const activeHighlightItem = HIGHLIGHT_COLORS.find(({ color }) => color === currentHighlightColor);
 
     return (
         <Popover
@@ -120,16 +115,16 @@ export const ColorSelector = ({
             className="my-1 flex max-h-80 w-48 flex-col overflow-hidden overflow-y-auto rounded border p-1 shadow"
             trigger={
                 <Button className="gap-2 rounded-none" variant="text" color={"text"}>
-                      <span
-                          className="rounded px-1"
-                          style={{
-                              color: activeColorItem?.color,
-                              backgroundColor: activeHighlightItem?.color,
-                          }}
-                      >
+                    <span
+                        className="rounded px-1"
+                        style={{
+                            color: activeColorItem?.color,
+                            backgroundColor: activeHighlightItem?.color,
+                        }}
+                    >
                         A
-                      </span>
-                    <KeyboardArrowDownIcon size={"small"}/>
+                    </span>
+                    <KeyboardArrowDownIcon size={"small"} />
                 </Button>}
             modal={true} open={open} onOpenChange={onOpenChange}>
 
@@ -139,19 +134,17 @@ export const ColorSelector = ({
                     Color
                 </div>
                 {TEXT_COLORS.map(({
-                                      name,
-                                      color
-                                  }, index) => (
+                    name,
+                    color
+                }, index) => (
                     <EditorBubbleItem
                         key={index}
                         onSelect={() => {
-                            editor.commands.unsetColor();
-                            name !== "Default" &&
-                            editor
-                                .chain()
-                                .focus()
-                                .setColor(color || "")
-                                .run();
+                            unsetMark(schema.marks.textStyle)(view.state, view.dispatch);
+                            if (name !== "Default") {
+                                setMark(schema.marks.textStyle, { color })(view.state, view.dispatch);
+                            }
+                            view.focus();
                         }}
                         className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-surface-100 hover:dark:bg-surface-700"
                     >
@@ -172,14 +165,17 @@ export const ColorSelector = ({
                     Background
                 </div>
                 {HIGHLIGHT_COLORS.map(({
-                                           name,
-                                           color
-                                       }, index) => (
+                    name,
+                    color
+                }, index) => (
                     <EditorBubbleItem
                         key={index}
                         onSelect={() => {
-                            editor.commands.unsetHighlight();
-                            name !== "Default" && editor.commands.setHighlight({ color });
+                            unsetMark(schema.marks.highlight)(view.state, view.dispatch);
+                            if (name !== "Default") {
+                                setMark(schema.marks.highlight, { color })(view.state, view.dispatch);
+                            }
+                            view.focus();
                         }}
                         className="flex cursor-pointer items-center justify-between px-2 py-1 text-sm hover:bg-surface-100 hover:dark:bg-surface-700"
                     >
@@ -192,8 +188,8 @@ export const ColorSelector = ({
                             </div>
                             <span>{name}</span>
                         </div>
-                        {editor.isActive("highlight", { color }) && (
-                            <CheckIcon className="h-4 w-4"/>
+                        {currentHighlightColor === color && (
+                            <CheckIcon className="h-4 w-4" />
                         )}
                     </EditorBubbleItem>
                 ))}

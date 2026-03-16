@@ -9,6 +9,7 @@ import {
     DataSourceDelegate,
     Drawer,
     FireCMS,
+    FireCMSi18nProvider,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -127,8 +128,9 @@ function MongoDBApp() {
     }
 
     return (
-        <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
+        <FireCMSi18nProvider>
+            <SnackbarProvider>
+                <ModeControllerProvider value={modeController}>
 
                 <FireCMS
                     navigationController={navigationController}
@@ -172,8 +174,9 @@ function MongoDBApp() {
                         return component;
                     }}
                 </FireCMS>
-            </ModeControllerProvider>
-        </SnackbarProvider>
+                </ModeControllerProvider>
+            </SnackbarProvider>
+        </FireCMSi18nProvider>
     );
 }
 
