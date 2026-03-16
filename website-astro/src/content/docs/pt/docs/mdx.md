@@ -1,17 +1,23 @@
 ---
 slug: pt/docs/mdx
-title: Powered by MDX
+title: MDX e componentes personalizados
 ---
 
-You can write JSX and use React components within your Markdown thanks to [MDX](https://mdxjs.com/).
+O FireCMS fornece suporte para **MDX**, permitindo que você use componentes React
+na sua documentação e páginas de conteúdo.
 
-export const Highlight = ({children, color}) => ( <span style={{
-      backgroundColor: color,
-      borderRadius: '2px',
-      color: '#fff',
-      padding: '0.2rem',
-    }}>{children}</span> );
+O MDX é um formato que combina Markdown com JSX, permitindo importar e usar
+componentes React interativos diretamente nos seus documentos Markdown. Isto é
+particularmente útil para criar documentação rica e interativa.
 
-<Highlight color="#25c2a0">Docusaurus green</Highlight> and <Highlight color="#1877F2">Facebook blue</Highlight> are my favorite colors.
+```mdx
+import { Chart } from './Chart'
 
-I can write **Markdown** alongside my _JSX_!
+# Minha Página
+
+Aqui está um gráfico interativo:
+
+<Chart />
+```
+
+Pode usar MDX em qualquer lugar onde Markdown é suportado no FireCMS.

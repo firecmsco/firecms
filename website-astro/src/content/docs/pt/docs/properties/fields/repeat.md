@@ -5,16 +5,16 @@ title: Repeat
 
 ![Field](/img/fields/Repeat.png)
 
-You can use a repeat field when you want to save multiple values in a property.
-For example, you may want to save multiple pieces of text, like tags.
+Pode usar um campo de repetição quando deseja salvar múltiplos valores em uma propriedade.
+Por exemplo, pode querer salvar múltiplos pedaços de texto, como tags.
 
-Please note that if you use an `array` property which uses an `of` prop, the
-resulting field may be one of the specialized ones (such as select, file
-upload or reference field). The repeat field will be used in the rest of cases.
+Note que se usar uma propriedade `array` que usa uma prop `of`, o
+campo resultante pode ser um dos especializados (como select, upload de arquivo
+ou campo de referência). O campo de repetição será usado nos restantes casos.
 
-This fields allows reordering of its entries.
+Este campo permite reordenar suas entradas.
 
-This component can be expanded or collapsed by default.
+Este componente pode ser expandido ou recolhido por padrão.
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -27,13 +27,13 @@ buildProperty({
         previewAsTag: true
     },
     expanded: true,
-    sortable: true, // default is true
-    canAddElements: true, // default is true
+    sortable: true, // padrão é true
+    canAddElements: true, // padrão é true
 });
 ```
 
-The data type is [`array`](../config/array).
+O tipo de dado é [`array`](../config/array).
 
-Internally the component used
-is [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding).
+Internamente o componente usado
+é [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding).
 

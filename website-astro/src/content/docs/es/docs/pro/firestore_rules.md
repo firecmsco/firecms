@@ -1,30 +1,30 @@
 ---
 slug: es/docs/pro/firestore_rules
-title: Firestore Rules
-sidebar_label: Firestore Rules
-description: Configure Firestore security rules for FireCMS PRO to protect user management and collection configuration data.
+title: Reglas de Firestore
+sidebar_label: Reglas de Firestore
+description: Configura las reglas de seguridad de Firestore para FireCMS PRO para proteger los datos de gestión de usuarios y configuración de colecciones.
 ---
 
 :::note
-These rules apply specifically to the FireCMS PRO plugins configuration. If you are using the community version
-you are encouraged to write your own rules to secure your data.
+Estas reglas se aplican específicamente a la configuración de los plugins de FireCMS PRO. Si estás usando la versión community,
+te recomendamos escribir tus propias reglas para proteger tus datos.
 :::
 
-FireCMS PRO saves some configuration data in Firestore to manage user roles and permissions, as well as the
-collections configuration. In order to work properly, you need to set up the Firestore rules to allow
-the plugin to read and write to the specified paths.
+FireCMS PRO guarda algunos datos de configuración en Firestore para gestionar roles y permisos de usuario, así como la
+configuración de colecciones. Para que funcione correctamente, necesitas configurar las reglas de Firestore para permitir
+que el plugin lea y escriba en las rutas especificadas.
 
-These are the default paths used by FireCMS (you can modify those paths in the specific plugin configuration):
+Estas son las rutas por defecto usadas por FireCMS (puedes modificar esas rutas en la configuración específica del plugin):
 
 - `__FIRECMS/config/users`
 - `__FIRECMS/config/roles`
 - `__FIRECMS/config/collections`
 
-### First time setup rules
+### Reglas de configuración inicial
 
-Depending on your project setup, the logged in user might not have permission to write to the Firestore database,
-in the FireCMS config path. In this case we suggest temporarily allowing access to the `__FIRECMS` path and
-subcollections.
+Dependiendo de la configuración de tu proyecto, el usuario conectado podría no tener permiso para escribir en la base de datos Firestore,
+en la ruta de configuración de FireCMS. En este caso sugerimos permitir temporalmente el acceso a la ruta `__FIRECMS` y
+subcolecciones.
 
 ```
 match /__FIRECMS/{document=**} {
@@ -33,12 +33,12 @@ match /__FIRECMS/{document=**} {
 }
 ```
 
-### Final suggested rules
+### Reglas finales sugeridas
 
-After you have created the first user and roles, you can restrict access to the `__FIRECMS` path again.
-We encourage you to set-up specific rules for your project, based on your security requirements.
+Después de haber creado el primer usuario y roles, puedes restringir el acceso a la ruta `__FIRECMS` nuevamente.
+Te recomendamos configurar reglas específicas para tu proyecto, basadas en tus requisitos de seguridad.
 
-These are the rules that we suggest:
+Estas son las reglas que sugerimos:
 
 ```
 match /{document=**} {
@@ -51,7 +51,7 @@ function isFireCMSUser(){
 }
 ```
 
-These rules will allow users that have a CMS role to read and write all the data in your Firestore database.
-The roles will be enforced in the frontend by FireCMS, but if it is a requirement for your project, you can also
-enforce them in the Firestore rules, by setting your own custom rules.
+Estas reglas permitirán a los usuarios que tienen un rol CMS leer y escribir todos los datos en tu base de datos Firestore.
+Los roles se aplicarán en el frontend por FireCMS, pero si es un requisito para tu proyecto, también puedes
+aplicarlos en las reglas de Firestore, configurando tus propias reglas personalizadas.
 

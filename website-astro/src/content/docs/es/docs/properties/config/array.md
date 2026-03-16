@@ -2,19 +2,19 @@
 slug: es/docs/properties/config/array
 title: Array
 sidebar_label: Array
-description: Configuration for array properties in FireCMS, including typed arrays, tuples, blocks (oneOf), and validation.
+description: Configuración de propiedades de tipo array en FireCMS, incluyendo arrays tipados, tuplas, bloques (oneOf) y validación.
 ---
 
 ###  `of`
 
-The property of this array.
+La propiedad de este array.
 
-You can specify any property (except another Array property, since
-Firestore does not support it)
-You can leave this field empty only if you are providing a custom field or
-provide a `oneOf` field otherwise an error will be thrown.
+Puedes especificar cualquier propiedad (excepto otra propiedad Array, ya que
+Firestore no lo soporta).
+Puedes dejar este campo vacío solo si proporcionas un campo personalizado o
+proporcionas un campo `oneOf`, de lo contrario se lanzará un error.
 
-Example `of` array property:
+Ejemplo de propiedad array `of`:
 ```tsx
 import { buildProperty } from "@firecms/core";
 
@@ -29,9 +29,9 @@ const productReferences = buildProperty({
 });
 ```
 
-#### tuple
+#### tupla
 
-You can also specify an array of properties to define a tuple:
+También puedes especificar un array de propiedades para definir una tupla:
 ```tsx
 import { buildProperty } from "@firecms/core";
 
@@ -53,21 +53,21 @@ const tupleDates = buildProperty({
 
 ### `oneOf`
 
-Use this field if you would like to have an array of properties.
-It is useful if you need to have values of different types in the same
+Usa este campo si deseas tener un array de propiedades.
+Es útil si necesitas tener valores de diferentes tipos en el mismo
 array.
-Each entry of the array is an object with the shape:
+Cada entrada del array es un objeto con la forma:
 ```
 { type: "YOUR_TYPE", value: "YOUR_VALUE"}
 ```
-Note that you can use any property so `value` can take any value (strings,
-numbers, array, objects...)
-You can customise the `type` and `value` fields to suit your needs.
+Ten en cuenta que puedes usar cualquier propiedad, por lo que `value` puede tomar cualquier valor (strings,
+números, arrays, objetos...)
+Puedes personalizar los campos `type` y `value` según tus necesidades.
 
-An example use case for this feature may be a blog entry, where you have
-images and text blocks using markdown.
+Un ejemplo de uso de esta funcionalidad puede ser una entrada de blog, donde tienes
+imágenes y bloques de texto usando markdown.
 
-Example of `oneOf` field:
+Ejemplo de campo `oneOf`:
 ```tsx
 import { buildProperty } from "@firecms/core";
 
@@ -97,10 +97,10 @@ const contentProperty = buildProperty({
 
 ### `sortable`
 
-Controls whether elements in this array can be reordered. Defaults to `true`.
-This property has no effect if `disabled` is set to `true`.
+Controla si los elementos de este array pueden ser reordenados. Por defecto es `true`.
+Esta propiedad no tiene efecto si `disabled` está configurado como `true`.
 
-Example:
+Ejemplo:
 ```tsx
 import { buildProperty } from "@firecms/core";
 
@@ -111,16 +111,16 @@ const tagsProperty = buildProperty({
     dataType: "string",
     previewAsTag: true
   },
-  sortable: false // disable reordering
+  sortable: false // deshabilitar reordenamiento
 });
 ```
 
 ### `canAddElements`
 
-Controls whether elements can be added to the array. Defaults to `true`.
-This property has no effect if `disabled` is set to `true`.
+Controla si se pueden agregar elementos al array. Por defecto es `true`.
+Esta propiedad no tiene efecto si `disabled` está configurado como `true`.
 
-Example:
+Ejemplo:
 ```tsx
 import { buildProperty } from "@firecms/core";
 
@@ -130,34 +130,34 @@ const readOnlyTagsProperty = buildProperty({
   of: {
     dataType: "string"
   },
-  canAddElements: false // prevent adding new tags
+  canAddElements: false // evitar agregar nuevos tags
 });
 ```
 
 ### `expanded`
 
-Determines whether the field should be initially expanded. Defaults to `true`.
+Determina si el campo debe estar inicialmente expandido. Por defecto es `true`.
 
 ### `minimalistView`
 
-When set to `true`, displays the child properties directly without being wrapped in an extendable panel.
+Cuando se establece en `true`, muestra las propiedades hijas directamente sin estar envueltas en un panel expandible.
 
 
 ### `validation`
 
-* `required` Should this field be compulsory.
-* `requiredMessage` Message to be displayed as a validation error.
-* `min` Set the minimum length allowed.
-* `max` Set the maximum length allowed.
+* `required` Si este campo debe ser obligatorio.
+* `requiredMessage` Mensaje a mostrar como error de validación.
+* `min` Establecer la longitud mínima permitida.
+* `max` Establecer la longitud máxima permitida.
 
 ---
 
-Based on your configuration the form field widgets that are created are:
-- [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding) generic array field that allows reordering and renders
-  the child property as nodes.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) if the `of` property is a `string` with storage configuration.
-- [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding) if the `of` property is a `reference`
-- [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) if the `oneOf` property is specified
+Según tu configuración, los widgets de campo de formulario que se crean son:
+- [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding) campo de array genérico que permite reordenar y renderiza
+  la propiedad hija como nodos.
+- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) si la propiedad `of` es un `string` con configuración de almacenamiento.
+- [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding) si la propiedad `of` es una `reference`
+- [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) si la propiedad `oneOf` está especificada
 
-Links:
+Enlaces:
 - [API](../../api/interfaces/ArrayProperty)

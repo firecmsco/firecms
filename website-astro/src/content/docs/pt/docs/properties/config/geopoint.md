@@ -1,8 +1,8 @@
 ---
 slug: pt/docs/properties/config/geopoint
-title: Punto geografico
+title: Geopoint
 sidebar_label: Geopoint
 ---
 
-> *THIS PROPERTY IS CURRENTLY NOT SUPPORTED*
+> *ESTA PROPRIEDADE NÃO É ATUALMENTE SUPORTADA*
 

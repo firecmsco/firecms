@@ -1,52 +1,52 @@
 ---
 slug: es/docs/properties/config/properties_common
-title: Common config
-sidebar_label: Common config
+title: Configuración común
+sidebar_label: Configuración común
 ---
 
 
-Each property in the CMS has its own API, but they all share some **common props**:
+Cada propiedad en el CMS tiene su propia API, pero todas comparten algunas **props comunes**:
 
-* `dataType` Datatype of the property. (e.g. `string`, `number`, etc.)
+* `dataType` Tipo de dato de la propiedad. (ej. `string`, `number`, etc.)
 
-* `name` Property name (e.g. Price).
+* `name` Nombre de la propiedad (ej. Precio).
 
-* `description` Property description.
+* `description` Descripción de la propiedad.
 
-* `longDescription` Longer description of a field, displayed under a popover.
+* `longDescription` Descripción más larga de un campo, mostrada bajo un popover.
 
-* `columnWidth` Width in pixels of this column in the collection view. If not
-  set, the width is inferred based on the other configurations.
+* `columnWidth` Ancho en píxeles de esta columna en la vista de colección. Si no
+  se establece, el ancho se infiere basándose en las otras configuraciones.
 
-* `readOnly`Is this a read only property. When set to true, it gets rendered as a
-  preview.
+* `readOnly` Si esta es una propiedad de solo lectura. Cuando se establece en true, se renderiza como una
+  previsualización.
 
-* `disabled`Is this field disabled. When set to true, it gets rendered as a
-  disabled field. You can also specify a configuration for defining the
-  behaviour of disabled properties (including custom messages, clear value on
-  disabled or hide the field completely)
+* `disabled` Si este campo está deshabilitado. Cuando se establece en true, se renderiza como un
+  campo deshabilitado. También puedes especificar una configuración para definir el
+  comportamiento de propiedades deshabilitadas (incluyendo mensajes personalizados, limpiar valor al
+  deshabilitar u ocultar el campo completamente)
   [PropertyDisabledConfig](../../api/interfaces/PropertyDisabledConfig)
 
 * `Field`
-  If you need to render a custom field, you can create a component that
-  takes `FieldProps` as props. You receive the value, a function to update
-  the value and additional utility props such as if there is an error. You
-  can customize it by passing custom props that are received in the
-  component. More details about how to
-  implement [custom fields](../custom_fields.mdx)
+  Si necesitas renderizar un campo personalizado, puedes crear un componente que
+  tome `FieldProps` como props. Recibes el valor, una función para actualizar
+  el valor y props utilitarias adicionales como si hay un error. Puedes
+  personalizarlo pasando props personalizadas que se reciben en el
+  componente. Más detalles sobre cómo
+  implementar [campos personalizados](../custom_fields.mdx)
 
 * `Preview`
-  Configure how a property is displayed as a preview, e.g. in the collection
-  view. You can customize it by passing custom props that are received in
-  the component. More details about how to
-  implement [custom previews](../custom_previews)
+  Configura cómo se muestra una propiedad como previsualización, ej. en la vista de colección.
+  Puedes personalizarlo pasando props personalizadas que se reciben en
+  el componente. Más detalles sobre cómo
+  implementar [previsualizaciones personalizadas](../custom_previews)
 
 * `customProps`
-  Additional props that are passed to the components defined in `Field` or
-  in `Preview`.
+  Props adicionales que se pasan a los componentes definidos en `Field` o
+  en `Preview`.
 
 * `defaultValue`
-  This value will be set by default for new entities.
+  Este valor se establecerá por defecto para nuevas entidades.
 
   
 

@@ -1,20 +1,20 @@
 ---
 slug: pt/docs/properties/fields/selects
-title: Select fields
+title: Campos de seleção
 ---
 
-### Simple select field
+### Campo de seleção simples
 
 ![Field](/img/fields/Select.png)
 
-You can use a simple select field when you would like allow the selection of a
-single value among a limited set of options. Each entry will have a key and a
-label. You can also customise the color of each entry or disable certain options.
+Pode usar um campo de seleção simples quando deseja permitir a seleção de um
+único valor entre um conjunto limitado de opções. Cada entrada terá uma chave e um
+rótulo. Pode também personalizar a cor de cada entrada ou desabilitar certas opções.
 
-Set the `enumValues` prop to a valid configuration in a string property. You can
-define those values as an array
-of [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig)
-or simply as an object with key/value pairs:
+Defina a prop `enumValues` para uma configuração válida em uma propriedade string. Pode
+definir esses valores como um array
+de [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig)
+ou simplesmente como um objeto com pares chave/valor:
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -32,7 +32,7 @@ buildProperty({
 });
 ```
 
-or
+ou
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -47,24 +47,24 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](../config/string) or [`number`](../config/number).
+O tipo de dado é [`string`](../config/string) ou [`number`](../config/number).
 
-Internally the component used
-is [`SelectFieldBinding`](../../api/functions/SelectFieldBinding).
+Internamente o componente usado
+é [`SelectFieldBinding`](../../api/functions/SelectFieldBinding).
 
 
-### Multiple select field
+### Campo de seleção múltipla
 
 ![Field](/img/fields/Multi_select.png)
 
-You can use a multiple select field when you would like allow the selection of a
-zero or more values among a limited set of options. Each entry will have a key
-and a label. You can also customise the color of each entry or disable certain options.
+Pode usar um campo de seleção múltipla quando deseja permitir a seleção de
+zero ou mais valores entre um conjunto limitado de opções. Cada entrada terá uma chave
+e um rótulo. Pode também personalizar a cor de cada entrada ou desabilitar certas opções.
 
-Set the `enumValues` prop to a valid configuration in a string property. You can
-define those values as an array
-of [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig)
-or simply as an object with key/value pairs:
+Defina a prop `enumValues` para uma configuração válida em uma propriedade string. Pode
+definir esses valores como um array
+de [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig)
+ou simplesmente como um objeto com pares chave/valor:
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -88,24 +88,24 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](../config/array) with either string or number
-properties as the `of` prop, using enum values.
+O tipo de dado é [`array`](../config/array) com propriedades string ou number
+como a prop `of`, usando valores enum.
 
-Internally the component used
-is [`SelectFieldBinding`](../../api/functions/SelectFieldBinding).
+Internamente o componente usado
+é [`SelectFieldBinding`](../../api/functions/SelectFieldBinding).
 
-### Customising the colors
+### Personalizar as cores
 
-You can pick the colors among a list of predefined values:
+Pode escolher as cores entre uma lista de valores predefinidos:
 
 
 
 import { Code } from '@astrojs/starlight/components';
-import MyComponentSource from '../../../../../../../../packages/ui/src/util/chip_colors?raw';
+import MyComponentSource from '../../../../../../../packages/ui/src/util/chip_colors?raw';
 
 <Code code={MyComponentSource} lang="tsx" />
 
-And you can also define custom colors using the HTML syntax `#AAAAAA`:
+E pode também definir cores personalizadas usando a sintaxe HTML `#AAAAAA`:
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";

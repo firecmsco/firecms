@@ -199,21 +199,21 @@ export const PropertyForm = React.memo(
                 if (values.dataType === "string") {
                     if (values.validation?.matches && !isValidRegExp(values.validation?.matches.toString())) {
                         errors.validation = {
-                            matches: "Invalid regular expression"
+                            matches: t("invalid_regular_expression")
                         }
                     }
                 }
                 if (values.dataType === "reference" && !values.path) {
-                    errors.path = "You must specify a target collection for the field";
+                    errors.path = t("must_specify_target_collection");
                 }
                 if (values.propertyConfig === "repeat") {
                     if (!(values as any).of) {
-                        errors.of = "You need to specify a repeat field";
+                        errors.of = t("need_specify_repeat_field");
                     }
                 }
                 if (values.propertyConfig === "block") {
                     if (!(values as any).oneOf) {
-                        errors.oneOf = "You need to specify the properties of this block";
+                        errors.oneOf = t("need_specify_block_properties");
                     }
                 }
 
@@ -241,7 +241,7 @@ export const PropertyForm = React.memo(
                     for (const type of conditionTypes) {
                         const rule = conditions[type];
                         if (rule && isIncompleteRule(rule)) {
-                            conditionErrors[type] = "Incomplete condition - please select a field";
+                            conditionErrors[type] = t("incomplete_condition");
                         }
                     }
 
@@ -250,7 +250,7 @@ export const PropertyForm = React.memo(
                         const rule = conditions[enumType];
                         if (rule && typeof rule === "object" && rule.if) {
                             if (isIncompleteRule(rule)) {
-                                conditionErrors[enumType] = "Incomplete condition - please select a field";
+                                conditionErrors[enumType] = t("incomplete_condition");
                             }
                         }
                     }

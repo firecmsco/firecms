@@ -54,6 +54,13 @@ export function LanguageToggle() {
                     {i18n.language === "hi" && <CheckIcon size="small" />}
                 </div>
             </MenuItem>
+            <MenuItem onClick={() => i18n.changeLanguage("pt")}>
+                <div className="flex w-full items-center justify-between gap-4">
+                    {/* eslint-disable-next-line i18next/no-literal-string */}
+                    <Typography variant="body2" className={i18n.language === "pt" ? "font-bold" : ""}>Português</Typography>
+                    {i18n.language === "pt" && <CheckIcon size="small" />}
+                </div>
+            </MenuItem>
         </Menu>
     );
 }

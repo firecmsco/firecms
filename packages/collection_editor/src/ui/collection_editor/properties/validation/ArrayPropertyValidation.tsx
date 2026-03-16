@@ -3,6 +3,7 @@ import React from "react";
 import { getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
+import { useTranslation } from "@firecms/core";
 
 export function ArrayPropertyValidation({
                                             max = true,
@@ -19,6 +20,8 @@ export function ArrayPropertyValidation({
         handleChange
     } = useFormex();
 
+    const { t } = useTranslation();
+
     const validationMin = "validation.min";
     const validationMax = "validation.max";
 
@@ -30,7 +33,7 @@ export function ArrayPropertyValidation({
             {min && <div className={"col-span-6"}>
                 <DebouncedTextField value={getIn(values, validationMin)}
                                     disabled={disabled}
-                                    label={"Min length"}
+                                    label={t("min_length")}
                                     name={validationMin}
                                     type="number"
                                     size="small"
@@ -39,7 +42,7 @@ export function ArrayPropertyValidation({
             {max && <div className={"col-span-6"}>
                 <DebouncedTextField value={getIn(values, validationMax)}
                                     disabled={disabled}
-                                    label={"Max length"}
+                                    label={t("max_length")}
                                     name={validationMax}
                                     type="number"
                                     size="small"

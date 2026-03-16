@@ -5,7 +5,7 @@ title: Switch
 
 ![Field](/img/fields/Switch.png)
 
-Simple toggle for selecting `true` or `false` values.
+Toggle simples para selecionar valores `true` ou `false`.
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -16,8 +16,8 @@ buildProperty({
 });
 ```
 
-The data type is [`boolean`](../config/boolean).
+O tipo de dado é [`boolean`](../config/boolean).
 
-Internally the component used
-is [`SwitchFieldBinding`](../../api/functions/SwitchFieldBinding).
+Internamente o componente usado
+é [`SwitchFieldBinding`](../../api/functions/SwitchFieldBinding).
 

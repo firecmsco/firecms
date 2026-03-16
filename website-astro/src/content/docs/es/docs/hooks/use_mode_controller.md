@@ -2,14 +2,14 @@
 slug: es/docs/hooks/use_mode_controller
 title: useModeController
 sidebar_label: useModeController
-description: Control the FireCMS theme mode (light, dark, or system) with the useModeController hook.
+description: Controla el modo de tema de FireCMS (claro, oscuro o sistema) con el hook useModeController.
 ---
 
-Use this hook to retrieve and control the current theme mode (`light`, `dark`, or `system`).
+Usa este hook para obtener y controlar el modo de tema actual (`light`, `dark` o `system`).
 
 :::note
-Please note that in order to use this hook you **must** be in
-a component that is a child of the `FireCMS` component.
+Ten en cuenta que para usar este hook **debes** estar en
+un componente que sea hijo del componente `FireCMS`.
 :::
 
 ### Props
@@ -21,7 +21,7 @@ a component that is a child of the `FireCMS` component.
 }
 ```
 
-### Example
+### Ejemplo
 
 ```tsx
 import React from "react";
@@ -37,7 +37,7 @@ export function ThemeToggle() {
 
     return (
         <Button onClick={toggleMode}>
-            Current mode: {modeController.mode}
+            Modo actual: {modeController.mode}
         </Button>
     );
 }

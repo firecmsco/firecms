@@ -11,6 +11,7 @@ import { mediaManagerTranslationsDe } from "./locales/de";
 import { mediaManagerTranslationsFr } from "./locales/fr";
 import { mediaManagerTranslationsIt } from "./locales/it";
 import { mediaManagerTranslationsHi } from "./locales/hi";
+import { mediaManagerTranslationsPt } from "./locales/pt";
 
 const DEFAULT_STORAGE_PATH = "media";
 const DEFAULT_COLLECTION_PATH = "media_assets";
@@ -106,7 +107,8 @@ export function useMediaManagerPlugin(props: MediaManagerPluginProps): FireCMSPl
             de: mediaManagerTranslationsDe,
             fr: mediaManagerTranslationsFr,
             it: mediaManagerTranslationsIt,
-            hi: mediaManagerTranslationsHi
+            hi: mediaManagerTranslationsHi,
+            pt: mediaManagerTranslationsPt
         }
     } satisfies FireCMSPlugin), []);
 }

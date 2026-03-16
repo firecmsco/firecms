@@ -1,52 +1,52 @@
 ---
 slug: fr/docs/properties/config/properties_common
-title: Common config
-sidebar_label: Common config
+title: Configuration commune
+sidebar_label: Configuration commune
 ---
 
 
-Each property in the CMS has its own API, but they all share some **common props**:
+Chaque propriété dans le CMS a sa propre API, mais elles partagent toutes certaines **props communes** :
 
-* `dataType` Datatype of the property. (e.g. `string`, `number`, etc.)
+* `dataType` Type de donnée de la propriété. (ex. `string`, `number`, etc.)
 
-* `name` Property name (e.g. Price).
+* `name` Nom de la propriété (ex. Prix).
 
-* `description` Property description.
+* `description` Description de la propriété.
 
-* `longDescription` Longer description of a field, displayed under a popover.
+* `longDescription` Description plus longue d'un champ, affichée sous un popover.
 
-* `columnWidth` Width in pixels of this column in the collection view. If not
-  set, the width is inferred based on the other configurations.
+* `columnWidth` Largeur en pixels de cette colonne dans la vue de collection. Si non
+  définie, la largeur est déduite en fonction des autres configurations.
 
-* `readOnly`Is this a read only property. When set to true, it gets rendered as a
-  preview.
+* `readOnly` Si c'est une propriété en lecture seule. Quand défini à true, elle est rendue comme un
+  aperçu.
 
-* `disabled`Is this field disabled. When set to true, it gets rendered as a
-  disabled field. You can also specify a configuration for defining the
-  behaviour of disabled properties (including custom messages, clear value on
-  disabled or hide the field completely)
+* `disabled` Si ce champ est désactivé. Quand défini à true, il est rendu comme un
+  champ désactivé. Vous pouvez aussi spécifier une configuration pour définir le
+  comportement des propriétés désactivées (incluant des messages personnalisés, effacer la valeur lors de la
+  désactivation ou masquer complètement le champ)
   [PropertyDisabledConfig](../../api/interfaces/PropertyDisabledConfig)
 
 * `Field`
-  If you need to render a custom field, you can create a component that
-  takes `FieldProps` as props. You receive the value, a function to update
-  the value and additional utility props such as if there is an error. You
-  can customize it by passing custom props that are received in the
-  component. More details about how to
-  implement [custom fields](../custom_fields.mdx)
+  Si vous avez besoin de rendre un champ personnalisé, vous pouvez créer un composant qui
+  prend `FieldProps` comme props. Vous recevez la valeur, une fonction pour mettre à jour
+  la valeur et des props utilitaires supplémentaires comme s'il y a une erreur. Vous
+  pouvez le personnaliser en passant des props personnalisées qui sont reçues dans le
+  composant. Plus de détails sur comment
+  implémenter des [champs personnalisés](../custom_fields.mdx)
 
 * `Preview`
-  Configure how a property is displayed as a preview, e.g. in the collection
-  view. You can customize it by passing custom props that are received in
-  the component. More details about how to
-  implement [custom previews](../custom_previews)
+  Configurez comment une propriété est affichée en aperçu, par ex. dans la vue de collection.
+  Vous pouvez la personnaliser en passant des props personnalisées qui sont reçues dans
+  le composant. Plus de détails sur comment
+  implémenter des [aperçus personnalisés](../custom_previews)
 
 * `customProps`
-  Additional props that are passed to the components defined in `Field` or
-  in `Preview`.
+  Props supplémentaires passées aux composants définis dans `Field` ou
+  dans `Preview`.
 
 * `defaultValue`
-  This value will be set by default for new entities.
+  Cette valeur sera définie par défaut pour les nouvelles entités.
 
   
 

@@ -5,24 +5,24 @@ sidebar_label: useSnackbarController
 ---
 
 :::note
-Please note that in order to use these hooks you **must** be in
-a component (you can't use them directly from a callback function).
-Anyhow, callbacks usually include a `FireCMSContext`, which includes all
-the controllers.
+Veuillez noter que pour utiliser ces hooks, vous **devez** être dans
+un composant (vous ne pouvez pas les utiliser directement depuis une fonction callback).
+Quoi qu'il en soit, les callbacks incluent généralement un `FireCMSContext`, qui comprend tous
+les contrôleurs.
 :::
 
-Use this hook to get a snackbar controller to display snackbars, with a message,
-a type and an optional title.
+Utilisez ce hook pour obtenir un contrôleur de snackbar pour afficher des snackbars, avec un message,
+un type et un titre optionnel.
 
-The props provided by this hook are:
+Les props fournies par ce hook sont :
 
-* `isOpen` Is there currently an open snackbar
-* `close()` Close the currently open snackbar
+* `isOpen` Indique s'il y a actuellement un snackbar ouvert
+* `close()` Fermer le snackbar actuellement ouvert
 * `open ({ type: "success" | "info" | "warning" | "error"; title?: string; message: string; })`
-  Display a new snackbar. You need to specify the type and message. You can
-  optionally specify a title
+  Afficher un nouveau snackbar. Vous devez spécifier le type et le message. Vous pouvez
+  optionnellement spécifier un titre
 
-Example:
+Exemple :
 
 ```tsx
 import React from "react";
@@ -37,10 +37,10 @@ export function ExampleCMSView() {
         <Button
             onClick={() => snackbarController.open({
                 type: "success",
-                title: "Hey!",
-                message: "Test snackbar"
+                title: "Salut !",
+                message: "Snackbar de test"
             })}>
-            Click me
+            Cliquez ici
         </Button>
     );
 }

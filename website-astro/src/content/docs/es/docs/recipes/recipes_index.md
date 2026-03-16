@@ -1,20 +1,20 @@
 ---
 slug: es/docs/recipes/recipes_index
-title: Recipes
-sidebar_label: Recipes
-description: Advanced FireCMS tutorials and recipes covering blogs, localizations, entity copying, and dynamic navigation.
+title: Recetas
+sidebar_label: Recetas
+description: Tutoriales avanzados y recetas de FireCMS que cubren blogs, localizaciones, copia de entidades y navegación dinámica.
 ---
 
-In this section we will demonstrate some advanced use cases that can be solved
-with the multiple features provided by FireCMS.
+En esta sección demostraremos algunos casos de uso avanzados que pueden resolverse
+con las múltiples funcionalidades proporcionadas por FireCMS.
 
-For example, we can build the data structure for a **blog** that you can
-then render using SSR (server side rendering) with a tool like
-next.js for blazing fast performance and SEO.
+Por ejemplo, podemos construir la estructura de datos para un **blog** que luego puedes
+renderizar usando SSR (server side rendering) con una herramienta como
+next.js para un rendimiento ultrarrápido y SEO.
 
-In one of the recipes we show you how to add custom logic to copy entities 
-from one collection to another.
+En una de las recetas te mostramos cómo añadir lógica personalizada para copiar entidades
+de una colección a otra.
 
-Another usual problem is handling **localizations**, so we show you
-how to create a data structure that works both for developers and content
-creators.
+Otro problema habitual es manejar **localizaciones**, así que te mostramos
+cómo crear una estructura de datos que funcione tanto para desarrolladores como para creadores
+de contenido.

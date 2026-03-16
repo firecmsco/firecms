@@ -2,7 +2,7 @@
 slug: pt/docs/properties/config/number
 title: Number
 sidebar_label: Number
-description: Configuration for number properties in FireCMS, including validation, enums, and integer constraints.
+description: Configuração de propriedades numéricas no FireCMS, incluindo validação, enums e restrições de inteiros.
 ---
 
 ```tsx
@@ -19,60 +19,29 @@ const rangeProperty = buildProperty({
 ```
 
 ### `clearable`
-Add an icon to clear the value and set it to `null`. Defaults to `false`
-
+Adiciona um ícone para limpar o valor e defini-lo como `null`. Padrão `false`
 
 ### `enumValues`
-You can use the enum values providing a map of possible
-  exclusive values the property can take, mapped to the label that it is
-  displayed in the dropdown.
-
-
-```tsx
-import { buildProperty, buildEnumValueConfig } from "@firecms/core";
-
-const property = buildProperty({
-    name: "Status",
-    dataType: "number",
-    enumValues: [
-      buildEnumValueConfig({
-        id: "-1",
-        label: "Lightly tense",
-        color: "redLighter"
-      }),
-      buildEnumValueConfig({
-        id: "0",
-        label: "Normal",
-        color: "grayLight"
-      }),
-      buildEnumValueConfig({
-        id: "1",
-        label: "Lightly relaxed",
-        color: "blueLighter"
-      })
-    ]
-});
-```
+Você pode usar os valores enum fornecendo um map de valores exclusivos possíveis que a propriedade pode assumir, mapeados para o rótulo exibido no dropdown.
 
 ### `validation`
 
-* `required` Should this field be compulsory.
-* `requiredMessage` Message to be displayed as a validation error.
-* `min` Set the minimum value allowed.
-* `max` Set the maximum value allowed.
-* `lessThan` Value must be less than.
-* `moreThan` Value must be more than.
-* `positive` Value must be a positive number.
-* `negative` Value must be a negative number.
-* `integer` Value must be an integer.
-
+* `required` Se este campo deve ser obrigatório.
+* `requiredMessage` Mensagem a ser exibida como erro de validação.
+* `min` Definir o valor mínimo permitido.
+* `max` Definir o valor máximo permitido.
+* `lessThan` O valor deve ser menor que.
+* `moreThan` O valor deve ser maior que.
+* `positive` O valor deve ser um número positivo.
+* `negative` O valor deve ser um número negativo.
+* `integer` O valor deve ser um inteiro.
 
 ---
 
-The widgets that get created are
-- [`TextFieldBinding`](../../api/functions/TextFieldBinding) generic text field
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) if `enumValues` are set in the string config, this field renders a select
-  where each option is a colored chip.
+Os widgets criados são
+- [`TextFieldBinding`](../../api/functions/TextFieldBinding) campo de texto genérico
+- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) se os `enumValues` estiverem definidos na configuração, este campo renderiza um select
+  onde cada opção é um chip colorido.
 
 Links:
 - [API](../../api/interfaces/NumberProperty)

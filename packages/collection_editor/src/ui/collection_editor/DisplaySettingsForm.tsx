@@ -8,7 +8,8 @@ import {
     resolveCollection,
     unslugify,
     useAuthController,
-    useCustomizationController
+    useCustomizationController,
+    useTranslation
 } from "@firecms/core";
 import {
     BooleanSwitchWithLabel,
@@ -44,6 +45,7 @@ export function DisplaySettingsForm({
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
+    const { t } = useTranslation();
 
     // Resolve collection to get properties for order property select
     const resolvedCollection = useMemo(() => resolveCollection({
@@ -90,7 +92,7 @@ export function DisplaySettingsForm({
 
                 <div>
                     <Typography variant={"h5"} className={"flex-grow"}>
-                        Display settings
+                        {t("display_settings")}
                     </Typography>
                 </div>
 
@@ -122,7 +124,7 @@ export function DisplaySettingsForm({
                                     <Select
                                         key={`order-select-${numberProperties.length}`}
                                         name="orderProperty"
-                                        label="Order Property"
+                                        label={t("order_property")}
                                         size={"large"}
                                         fullWidth={true}
                                         position={"item-aligned"}
@@ -134,10 +136,10 @@ export function DisplaySettingsForm({
                                         }}
                                         renderValue={(value) => {
                                             if (orderPropertyMissing) {
-                                                return <span className="text-red-500">{value} (not found)</span>;
+                                                return <span className="text-red-500">{value} ({t("not_found_suffix")})</span>;
                                             }
                                             const prop = numberProperties.find(p => p.key === value);
-                                            if (!prop) return "Select a property";
+                                            if (!prop) return t("select_a_property");
                                             const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
                                             return (
                                                 <div className="flex items-center gap-2">
@@ -167,7 +169,7 @@ export function DisplaySettingsForm({
                                                         <div>
                                                             <div>{prop.label}</div>
                                                             <Typography variant="caption" color="secondary">
-                                                                {fieldConfig?.name || "Number"}
+                                                                {fieldConfig?.name || t("number")}
                                                             </Typography>
                                                         </div>
                                                     </div>
@@ -177,10 +179,10 @@ export function DisplaySettingsForm({
                                     </Select>
                                     <FieldCaption error={orderPropertyMissing}>
                                         {orderPropertyMissing
-                                            ? `Property "${values.orderProperty}" does not exist or is not a number property. Please select a valid property or clear the selection.`
+                                            ? t("order_property_not_found", { property: values.orderProperty ?? "" })
                                             : numberProperties.length === 0
-                                                ? "No number properties found. Add a number property to enable ordering."
-                                                : "Select a number property to persist the order of items"
+                                                ? t("no_number_properties")
+                                                : t("order_property_description")
                                         }
                                     </FieldCaption>
                                 </>
@@ -207,7 +209,7 @@ export function DisplaySettingsForm({
                                         className="ml-3.5 text-sm text-primary hover:text-primary-dark mt-2"
                                         onClick={() => setOrderPropertyDialogOpen(true)}
                                     >
-                                        + Create "{dialogPropertyKey}" property
+                                        {t("create_property", { property: dialogPropertyKey })}
                                     </button>
                                     <PropertyFormDialog
                                         open={orderPropertyDialogOpen}
@@ -250,7 +252,7 @@ export function DisplaySettingsForm({
                             name="defaultSize"
                             size={"large"}
                             fullWidth={true}
-                            label="Default row size"
+                            label={t("default_row_size")}
                             position={"item-aligned"}
                             onChange={handleChange}
                             value={values.defaultSize ?? ""}
@@ -289,9 +291,9 @@ export function DisplaySettingsForm({
                                 <CloseIcon size={"small"} />
                             </IconButton>}
                             value={values.sideDialogWidth ?? ""}
-                            label={"Side dialog width"} />
+                            label={t("side_dialog_width")} />
                         <FieldCaption>
-                            Optionally define the width (in pixels) of entities side dialog. Default is 768px
+                            {t("side_dialog_width_description")}
                         </FieldCaption>
                     </div>
 
@@ -300,12 +302,12 @@ export function DisplaySettingsForm({
                         <BooleanSwitchWithLabel
                             position={"start"}
                             size={"large"}
-                            label={values.inlineEditing === undefined || values.inlineEditing ? "Data can be edited directly in the table view" : "Data can be edited only in the form view"}
+                            label={values.inlineEditing === undefined || values.inlineEditing ? t("inline_editing_enabled") : t("inline_editing_disabled")}
                             onValueChange={(v) => setFieldValue("inlineEditing", v)}
                             value={values.inlineEditing === undefined ? true : values.inlineEditing}
                         />
                         <FieldCaption>
-                            Allow editing data directly in the table view, without opening the form view.
+                            {t("inline_editing_description")}
                         </FieldCaption>
                     </div>
 
@@ -314,12 +316,12 @@ export function DisplaySettingsForm({
                         <BooleanSwitchWithLabel
                             position={"start"}
                             size={"large"}
-                            label={values.includeJsonView === undefined || values.includeJsonView ? "Include JSON view" : "Do not include JSON view"}
+                            label={values.includeJsonView === undefined || values.includeJsonView ? t("include_json_view") : t("no_json_view")}
                             onValueChange={(v) => setFieldValue("includeJsonView", v)}
                             value={values.includeJsonView === undefined ? true : values.includeJsonView}
                         />
                         <FieldCaption>
-                            Include the JSON representation of the document.
+                            {t("json_view_description")}
                         </FieldCaption>
                     </div>
 

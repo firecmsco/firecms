@@ -1,33 +1,33 @@
 ---
 slug: es/docs/self/mongodb
-title: Integrating MongoDB Atlas with FireCMS
-sidebar_label: MongoDB Integration
-description: Complete guide to using MongoDB Atlas as your database and authentication provider with FireCMS.
+title: Integrar MongoDB Atlas con FireCMS
+sidebar_label: Integración con MongoDB
+description: Guía completa para usar MongoDB Atlas como tu base de datos y proveedor de autenticación con FireCMS.
 ---
 
-This guide details the steps necessary to integrate MongoDB Atlas as both the authentication system and the primary database for your FireCMS application.
-Mongo Atlas does not support file storage, so you can optionally use Firebase for this purpose, or any
-other storage provider.
+Esta guía detalla los pasos necesarios para integrar MongoDB Atlas como sistema de autenticación y base de datos primaria para tu aplicación FireCMS.
+Mongo Atlas no soporta almacenamiento de archivos, por lo que opcionalmente puedes usar Firebase para este propósito, o cualquier
+otro proveedor de almacenamiento.
 
-## Project Setup
+## Configuración del proyecto
 
-Start by generating a new project using the FireCMS PRO starter template.
+Comienza generando un nuevo proyecto usando el template starter de FireCMS PRO.
 
 ```bash
 npx create-firecms-app --pro
 ```
 
-or
+o
 
 ```bash
 yarn create firecms-app --pro
 ```
 
-## MongoDB Atlas Configuration
+## Configuración de MongoDB Atlas
 
-Begin by setting up your MongoDB Atlas project and obtaining the required configuration parameters.
-These parameters include `appId`, `appUrl`, `baseUrl`, `clientApiBaseUrl`, `dataApiBaseUrl`, `dataExplorerLink`,
-and `dataSourceName`.
+Comienza configurando tu proyecto de MongoDB Atlas y obteniendo los parámetros de configuración requeridos.
+Estos parámetros incluyen `appId`, `appUrl`, `baseUrl`, `clientApiBaseUrl`, `dataApiBaseUrl`, `dataExplorerLink`,
+y `dataSourceName`.
 
 ```js
 const atlasConfig = {
@@ -41,9 +41,9 @@ const atlasConfig = {
 };
 ```
 
-## Firebase Configuration (Optional)
+## Configuración de Firebase (Opcional)
 
-If you wish to use Firebase for file storage, configure Firebase as follows:
+Si deseas usar Firebase para almacenamiento de archivos, configura Firebase de la siguiente manera:
 
 ```js
 const firebaseConfig = {
@@ -57,13 +57,13 @@ const firebaseConfig = {
 };
 ```
 
-## Implementing MongoDB in FireCMS
+## Implementar MongoDB en FireCMS
 
-Let's create a new `MongoDBApp` component that integrates MongoDB Atlas (and optionally Firebase).
+Creemos un nuevo componente `MongoDBApp` que integre MongoDB Atlas (y opcionalmente Firebase).
 
-### Initialization
+### Inicialización
 
-Initialize Firebase and MongoDB within your component:
+Inicializa Firebase y MongoDB dentro de tu componente:
 
 ```jsx
 import React from "react";
@@ -98,10 +98,10 @@ import {
 const MongoDBApp = () => {
   const name = "My FireCMS App";
 
-  // Initialize Firebase
+  // Inicializar Firebase
   const { firebaseApp, firebaseConfigLoading, configError } = useInitialiseFirebase({ firebaseConfig });
 
-  // Initialize MongoDB
+  // Inicializar MongoDB
   const { app } = useInitRealmMongodb(atlasConfig);
 
   // ...
@@ -110,9 +110,9 @@ const MongoDBApp = () => {
 export default MongoDBApp;
 ```
 
-### Controllers and Persistence
+### Controladores y persistencia
 
-Next, set up the mode controller, user configuration persistence, and MongoDB auth controller.
+A continuación, configura el controlador de modo, la persistencia de configuración de usuario y el controlador de autenticación de MongoDB.
 
 ```jsx
 const modeController = useBuildModeController();
@@ -126,30 +126,30 @@ const mongoDataSourceDelegate = useMongoDBDelegate({
 });
 ```
 
-### Firebase Storage Source
+### Fuente de almacenamiento Firebase
 
-If you plan to use Firebase for file storage, initialize `storageSource`.
+Si planeas usar Firebase para almacenamiento de archivos, inicializa `storageSource`.
 
 ```jsx
 const storageSource = useFirebaseStorageSource({ firebaseApp });
 ```
 
-### Authenticator Validation
+### Validación del autenticador
 
-Define the validation logic for your authenticator.
+Define la lógica de validación para tu autenticador.
 
 ```jsx
 const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
   authController,
-  authenticator: () => true, // Replace with your logic
+  authenticator: () => true, // Reemplaza con tu lógica
   dataSourceDelegate: mongoDataSourceDelegate,
   storageSource
 });
 ```
 
-### Navigation Controller
+### Controlador de navegación
 
-Set up the navigation controller with your collections.
+Configura el controlador de navegación con tus colecciones.
 
 ```jsx
 const navigationController = useBuildNavigationController({
@@ -159,9 +159,9 @@ const navigationController = useBuildNavigationController({
 });
 ```
 
-### Rendering the Application
+### Renderizar la aplicación
 
-Finally, wire everything up inside the return statement of your component.
+Finalmente, conecta todo dentro del return de tu componente.
 
 ```jsx
 const MongoDBApp = () => {
@@ -181,7 +181,7 @@ const MongoDBApp = () => {
   const storageSource = useFirebaseStorageSource({ firebaseApp });
   const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
     authController,
-    authenticator: () => true, // Replace with your logic
+    authenticator: () => true, // Reemplaza con tu lógica
     dataSourceDelegate: mongoDataSourceDelegate,
     storageSource
   });

@@ -9,15 +9,6 @@ import { it } from "../locales/it";
 import { hi } from "../locales/hi";
 import { pt } from "../locales/pt";
 import { FireCMSTranslations } from "../types/translations";
-import {
-    editorTranslationsEn,
-    editorTranslationsEs,
-    editorTranslationsDe,
-    editorTranslationsFr,
-    editorTranslationsIt,
-    editorTranslationsHi,
-    editorTranslationsPt
-} from "@firecms/editor";
 
 const FIRECMS_NS = "firecms_core";
 
@@ -141,13 +132,13 @@ function buildResources(
     translations?: { [locale: string]: DeepPartial<FireCMSTranslations> }
 ): Record<string, Record<string, object>> {
     const resources: Record<string, Record<string, object>> = {
-        en: { [FIRECMS_NS]: { ...en, ...editorTranslationsEn } },
-        es: { [FIRECMS_NS]: { ...es, ...editorTranslationsEs } },
-        de: { [FIRECMS_NS]: { ...de, ...editorTranslationsDe } },
-        fr: { [FIRECMS_NS]: { ...fr, ...editorTranslationsFr } },
-        it: { [FIRECMS_NS]: { ...it, ...editorTranslationsIt } },
-        hi: { [FIRECMS_NS]: { ...hi, ...editorTranslationsHi } },
-        pt: { [FIRECMS_NS]: { ...pt, ...editorTranslationsPt } },
+        en: { [FIRECMS_NS]: { ...en } },
+        es: { [FIRECMS_NS]: { ...es } },
+        de: { [FIRECMS_NS]: { ...de } },
+        fr: { [FIRECMS_NS]: { ...fr } },
+        it: { [FIRECMS_NS]: { ...it } },
+        hi: { [FIRECMS_NS]: { ...hi } },
+        pt: { [FIRECMS_NS]: { ...pt } },
     };
 
     if (!translations) return resources;

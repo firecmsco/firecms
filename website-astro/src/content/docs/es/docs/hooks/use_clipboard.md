@@ -2,12 +2,12 @@
 slug: es/docs/hooks/use_clipboard
 title: useClipboard
 sidebar_label: useClipboard
-description: Utility hook for copying text to the clipboard.
+description: Hook utilitario para copiar texto al portapapeles.
 ---
 
-A utility hook to copy text to the system clipboard. It handles the `navigator.clipboard` API and fallback mechanisms.
+Un hook utilitario para copiar texto al portapapeles del sistema. Maneja la API `navigator.clipboard` y mecanismos de respaldo.
 
-### Usage
+### Uso
 
 ```tsx
 import React from "react";
@@ -16,80 +16,80 @@ import { Button } from "@firecms/ui";
 
 export function CopyButton({ text }: { text: string }) {
     const { copy, isCoppied } = useClipboard({
-        copiedDuration: 2000 // Reset state after 2 seconds
+        copiedDuration: 2000 // Restablecer estado después de 2 segundos
     });
 
     return (
         <Button onClick={() => copy(text)}>
-            {isCoppied ? "Copied!" : "Copy to clipboard"}
+            {isCoppied ? "¡Copiado!" : "Copiar al portapapeles"}
         </Button>
     );
 }
 ```
 
-### Options
+### Opciones
 
 ```tsx
 export interface UseClipboardProps {
     /**
-     * Callback function called after the `copy` command is executed.
+     * Función callback llamada después de ejecutar el comando `copy`.
      */
     onSuccess?: (text: string) => void;
 
     /**
-     * Triggers when the hook encounters an error.
+     * Se dispara cuando el hook encuentra un error.
      */
     onError?: (error: string) => void;
 
     /**
-     * Disables the new clipboard API `navigator.clipboard` even if it is supported.
+     * Deshabilita la nueva API del portapapeles `navigator.clipboard` incluso si está soportada.
      */
     disableClipboardAPI?: boolean;
 
     /**
-     * Duration in ms to keep the `isCoppied` flag true.
+     * Duración en ms para mantener el flag `isCoppied` en true.
      */
     copiedDuration?: number;
 }
 ```
 
-### Return Values
+### Valores de retorno
 
 ```tsx
 export interface useClipboardReturnType {
     /**
-     * Use ref to pull the text content from.
+     * Usar ref para obtener el contenido de texto.
      */
     ref: MutableRefObject<any>;
 
     /**
-     * Perform the copy operation
+     * Realizar la operación de copiar
      */
     copy: (text?: string) => void;
 
     /**
-     * Perform the cut operation
+     * Realizar la operación de cortar
      */
     cut: () => void;
 
     /**
-     * Indicates whether the content was successfully copied.
-     * Note: Typo inherited from the source library.
+     * Indica si el contenido fue copiado exitosamente.
+     * Nota: Error tipográfico heredado de la librería fuente.
      */
     isCoppied: boolean;
 
     /**
-     * Current selected clipboard content.
+     * Contenido actual seleccionado del portapapeles.
      */
     clipboard: string;
 
     /**
-     * Clears the user clipboard.
+     * Limpia el portapapeles del usuario.
      */
     clearClipboard: () => void;
 
     /**
-     * Check if the browser supports the `navigator.clipboard` API.
+     * Verifica si el navegador soporta la API `navigator.clipboard`.
      */
     isSupported: () => boolean;
 }

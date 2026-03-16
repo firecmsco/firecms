@@ -1,27 +1,27 @@
 ---
 slug: es/docs/self/custom_storage
-title: Defining Custom Storage in FireCMS
-sidebar_label: Custom Storage Solutions
-description: Implement custom storage solutions like Amazon S3 in FireCMS with this step-by-step guide.
+title: Definir almacenamiento personalizado en FireCMS
+sidebar_label: Soluciones de almacenamiento personalizadas
+description: Implementa soluciones de almacenamiento personalizadas como Amazon S3 en FireCMS con esta guía paso a paso.
 ---
 
-FireCMS provides flexibility when it comes to integrating custom storage solutions.
-While it comes with built-in support for Firebase Storage, you might want to define your
-own storage solutions to handle file uploads, downloads, and metadata management.
-This guide will help you set up a custom storage solution.
+FireCMS ofrece flexibilidad a la hora de integrar soluciones de almacenamiento personalizadas.
+Aunque viene con soporte integrado para Firebase Storage, es posible que desees definir tus
+propias soluciones de almacenamiento para manejar subidas de archivos, descargas y gestión de metadatos.
+Esta guía te ayudará a configurar una solución de almacenamiento personalizada.
 
-## Creating a Custom Storage Source
+## Crear una fuente de almacenamiento personalizada
 
-A custom storage source in FireCMS is defined by implementing the `StorageSource` interface.
-Here is a template for creating a custom storage source.
+Una fuente de almacenamiento personalizada en FireCMS se define implementando la interfaz `StorageSource`.
+Aquí hay una plantilla para crear una fuente de almacenamiento personalizada.
 
-Beware: This is an example on how you can implement and use S3, directly from a custom storage source.
-This is not the preferred way of using S3 since it'd discourage to consume it directly from the frontend.
-As you will have to insert the API key and secret in the frontend, which is not secure.
-Instead, you could use [Amplify/Storage](https://docs.amplify.aws/react/build-a-backend/storage/) or a custom IAM auth.
+Atención: Este es un ejemplo de cómo puedes implementar y usar S3 directamente desde una fuente de almacenamiento personalizada.
+No es la forma preferida de usar S3, ya que se desaconseja consumirlo directamente desde el frontend.
+Como tendrás que insertar la API key y el secret en el frontend, lo cual no es seguro.
+En su lugar, podrías usar [Amplify/Storage](https://docs.amplify.aws/react/build-a-backend/storage/) o una autenticación IAM personalizada.
 
 
-Below is a template for creating a custom storage source:
+A continuación una plantilla para crear una fuente de almacenamiento personalizada:
 
 ```tsx
 import {StorageSource, UploadFileProps, UploadFileResult, DownloadConfig} from "@firecms/core";
@@ -80,22 +80,18 @@ function initializeCustomClient({apiKey, apiSecret, region, defaultBucket}: S3St
 }
 
 export function useCustomStorageSource(props: S3StorageSourceProps): StorageSource {
-  // Initialize your storage client based on the props provided
-  // For example, it could be a client for Amazon S3, Google Cloud Storage, etc.
   const customClient = initializeCustomClient(props);
 
   return {
     async uploadFile({file, fileName, path, metadata, bucket}: UploadFileProps): Promise<UploadFileResult> {
       const usedFilename = fileName ?? file.name;
       const destinationPath = `${path}/${usedFilename}`;
-      // Logic to upload file using your storage client
       return await customClient.uploadFile(destinationPath, file, bucket, metadata);
     },
 
     async getFile(path: string, bucket?: string): Promise<File | null> {
       const targetBucket = bucket ?? props.defaultBucket;
       try {
-        // Logic to retrieve the file using your storage client
         const fileData = await customClient.getFile(path, targetBucket);
         if (fileData && fileData.Body) {
           const byteArray = await fileData.Body.transformToByteArray();
@@ -105,14 +101,13 @@ export function useCustomStorageSource(props: S3StorageSourceProps): StorageSour
           return null;
         }
       } catch (e) {
-        return null; // File not found
+        return null;
       }
     },
 
     async getDownloadURL(path: string, bucket?: string): Promise<DownloadConfig> {
       const targetBucket = bucket || props.defaultBucket;
       try {
-        // Logic to get the download URL using your storage client
         const url = await customClient.getDownloadURL(path, targetBucket);
         const metadata = await customClient.getMetadata(path, targetBucket);
         return {url, metadata};
@@ -124,13 +119,13 @@ export function useCustomStorageSource(props: S3StorageSourceProps): StorageSour
 }
 ```
 
-## Using the Custom Storage Source
+## Usar la fuente de almacenamiento personalizada
 
-After creating the custom storage source, you can use it in your FireCMS application by initializing it in your component and passing it to the `FireCMS` component.
+Después de crear la fuente de almacenamiento personalizada, puedes usarla en tu aplicación FireCMS inicializándola en tu componente y pasándola al componente `FireCMS`.
 
-### Example Usage
+### Ejemplo de uso
 
-Here is an example of how to use the custom storage source in your FireCMS application
+Aquí hay un ejemplo de cómo usar la fuente de almacenamiento personalizada en tu aplicación FireCMS
 
 ```tsx
 import React from "react";
@@ -160,7 +155,7 @@ const customStorageConfig: CustomStorageSourceProps = {
   apiSecret: "your-api-secret",
   region: "your-region",
   defaultBucket: "your-bucket-name"
-  // ... other necessary properties
+  // ... otras propiedades necesarias
 };
 
 const CustomStorageApp: React.FC = () => {
@@ -170,18 +165,9 @@ const CustomStorageApp: React.FC = () => {
   const userConfigPersistence = useBuildLocalConfigurationPersistence();
   const storageSource = useCustomStorageSource(customStorageConfig);
 
-  // const authController = useFirebaseAuthController(); // your auth controller
-  // const dataSourceDelegate = {}; // Your data source delegate implementation
-
   const navigationController = useBuildNavigationController({
     collections: [productsCollection],
-    // authController,
-    // dataSourceDelegate
   });
-
-  // if (authLoading) {
-  //   return <CircularProgressCenter />;
-  // }
 
   return (
     <SnackbarProvider>
@@ -190,8 +176,6 @@ const CustomStorageApp: React.FC = () => {
           navigationController={navigationController}
           userConfigPersistence={userConfigPersistence}
           storageSource={storageSource}
-          // authController={authController}
-          // dataSourceDelegate={dataSourceDelegate}
         >
           {({ context, loading }) => {
             if (loading || authLoading) {
@@ -220,8 +204,8 @@ const CustomStorageApp: React.FC = () => {
 export default CustomStorageApp;
 ```
 
-As this example uses AWS S3, you will also need to enable cors in the bucket,
-as described in the [AWS documentation - Configuring cross-origin resource sharing (CORS)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/enabling-cors-examples.html?icmpid=docs_amazons3_console).
+Como este ejemplo usa AWS S3, también necesitarás habilitar CORS en el bucket,
+como se describe en la [documentación de AWS - Configurar el uso compartido de recursos entre orígenes (CORS)](https://docs.aws.amazon.com/AmazonS3/latest/userguide/enabling-cors-examples.html?icmpid=docs_amazons3_console).
 
 ```json
 [
@@ -248,4 +232,4 @@ as described in the [AWS documentation - Configuring cross-origin resource shari
 ]
 ```
 
-This documentation provides a clear guide for defining custom storage solutions in FireCMS. Follow the template to integrate other storage services as per your requirements.
+Esta documentación proporciona una guía clara para definir soluciones de almacenamiento personalizadas en FireCMS. Sigue la plantilla para integrar otros servicios de almacenamiento según tus requisitos.

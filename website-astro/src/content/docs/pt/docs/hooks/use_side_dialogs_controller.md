@@ -2,22 +2,22 @@
 slug: pt/docs/hooks/use_side_dialogs_controller
 title: useSideDialogsController
 sidebar_label: useSideDialogsController
-description: Hook to manage side dialogs/panels in FireCMS.
+description: Hook para gerenciar diálogos/painéis laterais no FireCMS.
 ---
 
-Hook to retrieve the side dialogs' controller. This hook allows you to open and close side panels programmatically. 
+Hook para recuperar o controlador dos diálogos laterais. Este hook permite abrir e fechar painéis laterais programaticamente.
 
-This is the low-level mechanism used by FireCMS to open:
-*   Entity forms (Side Entity Controller)
-*   Reference selection dialogs
+Este é o mecanismo de baixo nível usado pelo FireCMS para abrir:
+*   Formulários de entidades (Side Entity Controller)
+*   Diálogos de seleção de referências
 
-You can use it to open your own custom side panels.
+Você pode utilizá-lo para abrir seus próprios painéis laterais personalizados.
 
 :::tip
-If you just want to open an entity form form, use **[`useSideEntityController`](./use_side_entity_controller)** instead.
+Se deseja simplesmente abrir um formulário de entidade, use **[`useSideEntityController`](./use_side_entity_controller)** em vez disso.
 :::
 
-### Usage
+### Utilização
 
 ```tsx
 import React from "react";
@@ -33,17 +33,17 @@ export function CustomSidePanelExample() {
             width: "500px",
             component: (
                 <div className="p-8">
-                    <h2 className="text-2xl font-bold mb-4">Custom Panel</h2>
-                    <p>This is a custom side panel.</p>
+                    <h2 className="text-2xl font-bold mb-4">Painel personalizado</h2>
+                    <p>Este é um painel lateral personalizado.</p>
                     <Button onClick={() => sideDialogsController.close()}>
-                        Close
+                        Fechar
                     </Button>
                 </div>
             )
         });
     };
 
-    return <Button onClick={openPanel}>Open Custom Panel</Button>;
+    return <Button onClick={openPanel}>Abrir painel personalizado</Button>;
 }
 ```
 
@@ -51,24 +51,9 @@ export function CustomSidePanelExample() {
 
 ```tsx
 export interface SideDialogsController {
-    /**
-     * Close the last panel
-     */
     close: () => void;
-
-    /**
-     * List of side panels currently open
-     */
     sidePanels: SideDialogPanelProps[];
-
-    /**
-     * Open one or multiple side panels
-     */
     open: (panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => void;
-
-    /**
-     * Replace the last open panel with the given one
-     */
     replace: (panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => void;
 }
 ```

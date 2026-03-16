@@ -2,7 +2,7 @@ import { Field, getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
 import { PropertyWithId } from "../PropertyEditView";
 import React from "react";
-import { FieldCaption, prettifyIdentifier, toSnakeCase } from "@firecms/core";
+import { FieldCaption, prettifyIdentifier, toSnakeCase, useTranslation } from "@firecms/core";
 
 type CommonPropertyFieldsProps = {
     showErrors: boolean,
@@ -29,6 +29,8 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
             touched,
             validate
         } = useFormex<PropertyWithId>();
+
+        const { t } = useTranslation();
 
         const name = "name";
         const nameError = showErrors && getIn(errors, name);
@@ -58,7 +60,7 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                             setFieldTouched(name, true);
                         }}
                         style={{ fontSize: 20 }}
-                        placeholder={"Field name"}
+                        placeholder={t("field_name")}
                         required
                         disabled={disabled}
                         error={Boolean(nameError)}/>
@@ -72,7 +74,7 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                     <Field
                         name={id}
                         as={DebouncedTextField}
-                        label={"ID"}
+                        label={t("id")}
                         value={values[id]}
                         onChange={(e: any) => {
                             const newIdValue = e.target.value;
@@ -95,7 +97,7 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                 <div>
                     <Field name={description}
                            as={DebouncedTextField}
-                           label={"Description"}
+                           label={t("description")}
                            disabled={disabled}
                            error={Boolean(descriptionError)}/>
                     <FieldCaption error={Boolean(descriptionError)}>

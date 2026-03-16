@@ -2,29 +2,29 @@
 slug: fr/docs/hooks/use_storage_source
 title: useStorageSource
 sidebar_label: useStorageSource
-description: Access the FireCMS storage source for uploading files and retrieving download URLs. Works with Firebase Storage or any custom storage implementation.
+description: Accédez à la source de stockage FireCMS pour télécharger des fichiers et récupérer des URLs de téléchargement. Fonctionne avec Firebase Storage ou toute implémentation de stockage personnalisée.
 ---
 
-Use this hook to access the storage source being used in your FireCMS application.
+Utilisez ce hook pour accéder à la source de stockage utilisée dans votre application FireCMS.
 
-Each file uploaded in FireCMS is referenced by a string in the form
-`${path}/${fileName}`, which is then referenced in the datasource as a string
-value in properties that have a storage configuration.
+Chaque fichier téléchargé dans FireCMS est référencé par une chaîne de la forme
+`${path}/${fileName}`, qui est ensuite référencée dans la source de données comme une valeur
+string dans les propriétés qui ont une configuration de stockage.
 
-You can use this controller to upload files and get the storage path where it
-was stored. Then you can convert that storagePath into a download URL.
+Vous pouvez utiliser ce contrôleur pour télécharger des fichiers et obtenir le chemin de stockage où il
+a été stocké. Ensuite, vous pouvez convertir ce storagePath en une URL de téléchargement.
 
 :::note
-Please note that in order to use this hook you **must** be in
-a component (you can't use it directly from a callback function).
+Veuillez noter que pour utiliser ce hook, vous **devez** être dans
+un composant (vous ne pouvez pas l'utiliser directement depuis une fonction callback).
 :::
 
-### Available Methods
+### Méthodes disponibles
 
-* `uploadFile`: Upload a file, specifying the file, name, and path
-* `getDownloadURL`: Convert a storage path into a download URL
+* `uploadFile` : Télécharger un fichier, en spécifiant le fichier, le nom et le chemin
+* `getDownloadURL` : Convertir un chemin de stockage en URL de téléchargement
 
-### Example
+### Exemple
 
 ```tsx
 import React from "react";
@@ -40,7 +40,7 @@ export function FileUploader() {
             fileName: file.name,
             path: "uploads",
         });
-        console.log("File uploaded to:", result.path);
+        console.log("Fichier téléchargé vers :", result.path);
     };
 
     return (

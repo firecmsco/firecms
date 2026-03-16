@@ -1,24 +1,24 @@
 ---
 slug: es/docs/recipes/copy_entity
-title: Copying an entity from one collection to another
-sidebar_label: Copying from another collection
-description: Implement custom functionality to copy entities between collections in Firestore using FireCMS with this practical tutorial. Assuming you're equipped with a Firebase project and FireCMS instance, you'll learn how to introduce a copy button to your collection views, enabling the replication of data across different Firestore locations, a helpful feature in denormalized NoSQL databases. This guide walks you through declaring source and target collections, crafting a custom button component leveraging FireCMS hooks, and integrating it as a custom action within your collection's framework. Complete with code snippets illustrating a simple product collection and the custom button logic, this tutorial equips you to handle common scenarios requiring data duplication, enhancing the data management capabilities of your CMS. Whether you're dealing with products, articles, or user data, mastering entity copying can streamline your workflow and maintain data consistency across your FireCMS application.
+title: Copiar una entidad de una colección a otra
+sidebar_label: Copiar de otra colección
+description: Implementa funcionalidad personalizada para copiar entidades entre colecciones en Firestore usando FireCMS con este tutorial práctico.
 ---
 
 ![Product selection](/img/product_selection.webp)
 
-In this tutorial we will show how you can add a button to your collection,
-that will allow you to **copy entities from another collection**.
+En este tutorial mostraremos cómo puedes añadir un botón a tu colección,
+que permitirá **copiar entidades desde otra colección**.
 
-It is very common in NoSQL databases, such as Firestore, to keep denormalized
-data in different collections. That is, keeping the same information in multiple
-locations, instead of normalized databases where information should be ideally
-stored only once.
+Es muy común en bases de datos NoSQL, como Firestore, mantener datos desnormalizados
+en diferentes colecciones. Es decir, mantener la misma información en múltiples
+ubicaciones, en lugar de bases de datos normalizadas donde la información idealmente debería
+almacenarse solo una vez.
 
-### Declare your collections
+### Declara tus colecciones
 
-For illustrative purposes, let's create two simple `products` collection,
-that we will be copying from and to:
+Para fines ilustrativos, creemos dos colecciones `products` simples,
+desde y hacia las cuales copiaremos:
 
 
 
@@ -30,28 +30,28 @@ import FullCode from '../../samples/samples_v3/recipes/copy_entity/full?raw';
 
 <Code code={MyComponentSource} lang="tsx" />
 
-### Add a custom action to your collection
+### Añadir una acción personalizada a tu colección
 
-For the next step we will add a custom button to our target collection.
-This button will open a reference dialog and allow users to select an entity in
-the source.
+Para el siguiente paso añadiremos un botón personalizado a nuestra colección destino.
+Este botón abrirá un diálogo de referencia y permitirá a los usuarios seleccionar una entidad en
+la fuente.
 
-This example is using some hooks provided by FireCMS for developing
-custom component.
+Este ejemplo usa algunos hooks proporcionados por FireCMS para desarrollar
+componentes personalizados.
 
 
 
 <Code code={CopyButton} lang="tsx" />
 
-### Add the custom copy action
+### Añadir la acción de copia personalizada
 
-After your component is ready, you can plug it into your collections `Actions`:
+Después de que tu componente esté listo, puedes conectarlo a las `Actions` de tu colección:
 
 
 
 <Code code={CopyButtonUse} lang="tsx" />
 
-## Full code
+## Código completo
 
 
 

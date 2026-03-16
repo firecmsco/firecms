@@ -11,6 +11,7 @@ import { dataEnhancementTranslationsDe } from "./locales/de";
 import { dataEnhancementTranslationsFr } from "./locales/fr";
 import { dataEnhancementTranslationsIt } from "./locales/it";
 import { dataEnhancementTranslationsHi } from "./locales/hi";
+import { dataEnhancementTranslationsPt } from "./locales/pt";
 
 const DEFAULT_API_KEY = "fcms-U9jdDii0xXWSDC34asfrf54lbkFJBfKfRWcEDEwdc4V5wDWEDF";
 
@@ -88,7 +89,8 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Fi
             de: dataEnhancementTranslationsDe,
             fr: dataEnhancementTranslationsFr,
             it: dataEnhancementTranslationsIt,
-            hi: dataEnhancementTranslationsHi
+            hi: dataEnhancementTranslationsHi,
+            pt: dataEnhancementTranslationsPt
         }
         // loading: configController.loading,
     };

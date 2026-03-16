@@ -5,51 +5,51 @@ sidebar_label: useReferenceDialog
 ---
 
 :::note 
-Please note that in order to use this hook you **must** be in a
-component (you can't use them directly from a callback function).
+Note que para utilizar este hook, você **deve** estar em um
+componente (não pode utilizá-lo diretamente de uma função callback).
 :::
 
 ## `useReferenceDialog`
 
-This hook is used to open a side dialog that allows the selection of entities
-under a given path. You can use it in custom views for selecting entities. You
-need to specify the path of the target collection at least. If your collection
-is not defined in your top collection configuration
-(in your `FireCMS` component), you need to specify explicitly. This is the same
-hook used internally when a reference property is defined.
+Este hook é usado para abrir um diálogo lateral que permite a seleção de entidades
+sob um caminho dado. Você pode usá-lo em vistas personalizadas para selecionar entidades. Você
+precisa especificar o caminho da coleção alvo no mínimo. Se sua coleção
+não estiver definida na configuração de coleção principal
+(no seu componente `FireCMS`), você precisa especificá-la explicitamente. Este é o mesmo
+hook usado internamente quando uma propriedade de referência é definida.
 
-Le props fornite da questo hook sono:
+As props fornecidas por este hook são:
 
 *     multiselect?: boolean;
-  Allow multiple selection of values
+  Permitir seleção múltipla de valores
 
 *     collection?: EntityCollection;
-  Entity collection config
+  Configuração da coleção de entidades
 
 *     path: string;
-  Absolute path of the collection.
-  May be not set if this hook is being used in a component and the path is
-  dynamic. If not set, the dialog won't open.
+  Caminho absoluto da coleção.
+  Pode não ser definido se este hook estiver sendo usado em um componente e o caminho for
+  dinâmico. Se não definido, o diálogo não abrirá.
 
 *     selectedEntityIds?: string[];
-  If you are opening the dialog for the first time, you can select some
-  entity ids to be displayed first.
+  Se estiver abrindo o diálogo pela primeira vez, pode selecionar alguns
+  IDs de entidade para serem exibidos primeiro.
 
 *     onSingleEntitySelected?(entity: Entity | null): void;
-  If `multiselect` is set to `false`, you will get the selected entity
-  in this callback.
+  Se `multiselect` estiver definido como `false`, você receberá a entidade selecionada
+  neste callback.
 
 *     onMultipleEntitiesSelected?(entities: Entity[]): void;
-  If `multiselect` is set to `false`, you will get the selected entities
-  in this callback.
+  Se `multiselect` estiver definido como `false`, você receberá as entidades selecionadas
+  neste callback.
 
 *     onClose?(): void;
-  If the dialog currently open, close it
+  Se o diálogo estiver atualmente aberto, fechá-lo
 
 *     forceFilter?: FilterValues;
-  Allow selection of entities that pass the given filter only.
+  Permitir seleção apenas de entidades que passem no filtro dado.
 
-Esempio:
+Exemplo:
 
 ```tsx
 import React from "react";
@@ -62,17 +62,14 @@ type Product = {
 };
 
 export function ExampleCMSView() {
-
-    // hook to display custom snackbars
     const snackbarController = useSnackbarController();
 
-    // hook to open a reference dialog
     const referenceDialog = useReferenceDialog({
         path: "products",
         onSingleEntitySelected(entity: Entity<Product> | null) {
             snackbarController.open({
                 type: "success",
-                message: "Selected " + entity?.values.name
+                message: "Selecionado " + entity?.values.name
             })
         }
     });
@@ -80,7 +77,7 @@ export function ExampleCMSView() {
     return <Button
         onClick={referenceDialog.open}
         color="primary">
-        Test reference dialog
+        Testar diálogo de referência
     </Button>;
 }
 ```

@@ -249,7 +249,7 @@ export function CollectionDetailsForm({
                                     <Select
                                         key={`order-select-${numberProperties.length}`}
                                         name="orderProperty"
-                                        label="Order Property"
+                                        label={t("order_property")}
                                         size={"large"}
                                         fullWidth={true}
                                         position={"item-aligned"}
@@ -261,10 +261,10 @@ export function CollectionDetailsForm({
                                         }}
                                         renderValue={(value) => {
                                             if (orderPropertyMissing) {
-                                                return <span className="text-red-500">{value} (not found)</span>;
+                                                return <span className="text-red-500">{value} ({t("not_found_suffix")})</span>;
                                             }
                                             const prop = numberProperties.find(p => p.key === value);
-                                            if (!prop) return "Select a property";
+                                            if (!prop) return t("select_a_property");
                                             const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
                                             return (
                                                 <div className="flex items-center gap-2">
@@ -294,7 +294,7 @@ export function CollectionDetailsForm({
                                                         <div>
                                                             <div>{prop.label}</div>
                                                             <Typography variant="caption" color="secondary">
-                                                                {fieldConfig?.name || "Number"}
+                                                                {fieldConfig?.name || t("number")}
                                                             </Typography>
                                                         </div>
                                                     </div>
@@ -304,10 +304,10 @@ export function CollectionDetailsForm({
                                     </Select>
                                     <FieldCaption error={orderPropertyMissing}>
                                         {orderPropertyMissing
-                                            ? `Property "${values.orderProperty}" does not exist or is not a number property. Please select a valid property or clear the selection.`
+                                            ? t("order_property_not_found", { property: values.orderProperty ?? "" })
                                             : numberProperties.length === 0
-                                                ? "No number properties found. Add a number property to enable ordering."
-                                                : "Select a number property to persist the order of items"
+                                                ? t("no_number_properties")
+                                                : t("order_property_description")
                                         }
                                     </FieldCaption>
                                 </>
@@ -336,7 +336,7 @@ export function CollectionDetailsForm({
                                         className="ml-3.5 text-sm text-primary hover:text-primary-dark mt-2"
                                         onClick={() => setOrderPropertyDialogOpen(true)}
                                     >
-                                        + Create "{dialogPropertyKey}" property
+                                        {t("create_property", { property: dialogPropertyKey })}
                                     </button>
                                     <PropertyFormDialog
                                         open={orderPropertyDialogOpen}

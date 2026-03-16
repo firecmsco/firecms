@@ -1,17 +1,17 @@
 ---
-slug: pt/docs/properties/fields/references 
-title: References
+slug: pt/docs/properties/fields/references
+title: Referências
 ---
 
-Use reference fields when you need to establish relations between collections.
-For example, you may have a product that is related to one category, or one 
-that has multiple purchases.
+Use campos de referência quando precisar estabelecer relações entre coleções.
+Por exemplo, pode ter um produto que está relacionado a uma categoria, ou um
+que tem múltiplas compras.
 
-When you set up a FireCMS app, you define collections under paths (or path
-aliases), and those are the paths that you use to configure reference 
-properties.
+Quando configura uma aplicação FireCMS, define coleções sob caminhos (ou aliases
+de caminho), e esses são os caminhos que usa para configurar propriedades de
+referência.
 
-### Single reference field
+### Campo de referência única
 
 ![Field](/img/fields/Reference.png)
 
@@ -25,13 +25,13 @@ buildProperty({
 });
 ```
 
-The data type is [`reference`](../config/reference)
+O tipo de dado é [`reference`](../config/reference)
 
-Internally the component used
-is [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding).
+Internamente o componente usado
+é [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding).
 
 
-### Multiple reference field
+### Campo de referência múltipla
 
 ![Field](/img/fields/Multi_reference.png)
 
@@ -48,9 +48,9 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](../config/array) with a reference
-property as the `of` prop. 
+O tipo de dado é [`array`](../config/array) com uma propriedade de referência
+como a prop `of`.
 
-Internally the component used
-is [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding).
+Internamente o componente usado
+é [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding).
 

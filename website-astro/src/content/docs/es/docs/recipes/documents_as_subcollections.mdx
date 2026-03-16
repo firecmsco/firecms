@@ -1,36 +1,36 @@
 ---
 slug: es/docs/recipes/documents_as_subcollections
-title: Dynamic root collections
-sidebar_label: Dynamic root collections
-description: Learn how to dynamically generate navigation and collections from database documents in FireCMS.
+title: Colecciones raíz dinámicas
+sidebar_label: Colecciones raíz dinámicas
+description: Aprende a generar dinámicamente navegación y colecciones a partir de documentos de la base de datos en FireCMS.
 ---
 
-Let's build a more complex example where the main navigation is **loaded dynamically** from
-the database. We will use the `units` collection as the one for generating the
-rest of the navigation.
+Vamos a construir un ejemplo más complejo donde la navegación principal se **carga dinámicamente** desde
+la base de datos. Usaremos la colección `units` como la que genera el
+resto de la navegación.
 
-For this example we will have `Units` and `Lessons` as the main content types,
-imagine we are modeling the structure for a course.
+Para este ejemplo tendremos `Units` y `Lessons` como los principales tipos de contenido,
+imagina que estamos modelando la estructura de un curso.
 
-In the units collection we will create a document for each unit:
+En la colección de unidades crearemos un documento para cada unidad:
 
 ![dynamic_navigation_collection](/img/recipes/dynamic_navigation_collection.png)
 
-And each of those documents will generate a new navigation item. In this case
-we will have 3 navigation items, one for each unit:
+Y cada uno de esos documentos generará un nuevo elemento de navegación. En este caso
+tendremos 3 elementos de navegación, uno para cada unidad:
 
 ![dynamic_navigation_home](/img/recipes/dynamic_navigation_home.png)
 
 
-### Declare the main collection
+### Declara la colección principal
 
-Let's define the `units` collection as the main one:
+Definamos la colección `units` como la principal:
 
 :::note
-We are going to implement a couple on callbacks on entity save and delete to
-update the navigation when data is changed.
-That prevents the suer from refreshing the app in order to see the changes.
-How cool is that?
+Vamos a implementar un par de callbacks al guardar y eliminar entidades para
+actualizar la navegación cuando los datos cambian.
+Esto evita que el usuario tenga que refrescar la app para ver los cambios.
+¡Qué genial es eso!
 :::
 
 
@@ -42,28 +42,28 @@ import FullCode from '../../samples/samples_v3/recipes/document_as_subcollection
 <Code code={UnitCollection} lang="tsx" />
 
 
-### Dynamic collection builder
+### Constructor de colecciones dinámico
 
-Typically in FireCMS you pass a static list of collections to the main CMS
-component, but in this case we need to build the collections dynamically based
-on the data in the database.
+Típicamente en FireCMS pasas una lista estática de colecciones al componente principal del CMS,
+pero en este caso necesitamos construir las colecciones dinámicamente basándose
+en los datos de la base de datos.
 
-FireCMS allows you to pass a function that returns a list of collections to the
-`collections` prop of the `FireCMSApp` component.
+FireCMS te permite pasar una función que devuelve una lista de colecciones a la
+prop `collections` del componente `FireCMSApp`.
 
 <Code code={CollectionBuilder} lang="tsx" />
 
 :::tip
-Collections can be conveniently loaded asynchronously.
+Las colecciones pueden cargarse convenientemente de forma asíncrona.
 :::
 
-This code is fetching the data that is being generated in the `units` collection
-and creating a new collection for each of the documents.
+Este código obtiene los datos que se están generando en la colección `units`
+y crea una nueva colección para cada uno de los documentos.
 
 
-## Full code
+## Código completo
 
-Wiring it all together we get a simple app that allows us to create new units
-and lessons and navigate between them:
+Conectándolo todo obtenemos una app simple que nos permite crear nuevas unidades
+y lecciones y navegar entre ellas:
 
 <Code code={FullCode} lang="tsx" />

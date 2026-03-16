@@ -11,6 +11,7 @@ import { entityHistoryTranslationsDe } from "./locales/de";
 import { entityHistoryTranslationsFr } from "./locales/fr";
 import { entityHistoryTranslationsIt } from "./locales/it";
 import { entityHistoryTranslationsHi } from "./locales/hi";
+import { entityHistoryTranslationsPt } from "./locales/pt";
 
 /**
  * This plugin adds a history view to the entity side panel.
@@ -59,7 +60,8 @@ export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCM
             de: entityHistoryTranslationsDe,
             fr: entityHistoryTranslationsFr,
             it: entityHistoryTranslationsIt,
-            hi: entityHistoryTranslationsHi
+            hi: entityHistoryTranslationsHi,
+            pt: entityHistoryTranslationsPt
         }
     } satisfies FireCMSPlugin), [props]);
 }

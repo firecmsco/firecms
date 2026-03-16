@@ -2,7 +2,7 @@
 slug: es/docs/properties/config/number
 title: Number
 sidebar_label: Number
-description: Configuration for number properties in FireCMS, including validation, enums, and integer constraints.
+description: Configuración de propiedades numéricas en FireCMS, incluyendo validación, enums y restricciones de enteros.
 ---
 
 ```tsx
@@ -19,13 +19,13 @@ const rangeProperty = buildProperty({
 ```
 
 ### `clearable`
-Add an icon to clear the value and set it to `null`. Defaults to `false`
+Agrega un icono para limpiar el valor y establecerlo en `null`. Por defecto es `false`
 
 
 ### `enumValues`
-You can use the enum values providing a map of possible
-  exclusive values the property can take, mapped to the label that it is
-  displayed in the dropdown.
+Puedes usar los valores enum proporcionando un mapa de posibles
+  valores exclusivos que la propiedad puede tomar, mapeados a la etiqueta que se
+  muestra en el dropdown.
 
 
 ```tsx
@@ -56,23 +56,23 @@ const property = buildProperty({
 
 ### `validation`
 
-* `required` Should this field be compulsory.
-* `requiredMessage` Message to be displayed as a validation error.
-* `min` Set the minimum value allowed.
-* `max` Set the maximum value allowed.
-* `lessThan` Value must be less than.
-* `moreThan` Value must be more than.
-* `positive` Value must be a positive number.
-* `negative` Value must be a negative number.
-* `integer` Value must be an integer.
+* `required` Si este campo debe ser obligatorio.
+* `requiredMessage` Mensaje a mostrar como error de validación.
+* `min` Establecer el valor mínimo permitido.
+* `max` Establecer el valor máximo permitido.
+* `lessThan` El valor debe ser menor que.
+* `moreThan` El valor debe ser mayor que.
+* `positive` El valor debe ser un número positivo.
+* `negative` El valor debe ser un número negativo.
+* `integer` El valor debe ser un entero.
 
 
 ---
 
-The widgets that get created are
-- [`TextFieldBinding`](../../api/functions/TextFieldBinding) generic text field
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) if `enumValues` are set in the string config, this field renders a select
-  where each option is a colored chip.
+Los widgets que se crean son
+- [`TextFieldBinding`](../../api/functions/TextFieldBinding) campo de texto genérico
+- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) si se establecen `enumValues` en la configuración del string, este campo renderiza un select
+  donde cada opción es un chip coloreado.
 
-Links:
+Enlaces:
 - [API](../../api/interfaces/NumberProperty)

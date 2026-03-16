@@ -2,34 +2,33 @@
 slug: pt/docs/hooks/use_storage_source
 title: useStorageSource
 sidebar_label: useStorageSource
-description: Access the FireCMS storage source for uploading files and retrieving download URLs. Works with Firebase Storage or any custom storage implementation.
+description: Acesse a fonte de armazenamento do FireCMS para fazer upload de arquivos e recuperar URLs de download.
 ---
 
-Use this hook to access the storage source being used in your FireCMS application.
+Utilize este hook para acessar a fonte de armazenamento sendo usada na sua aplicação FireCMS.
 
-Each file uploaded in FireCMS is referenced by a string in the form
-`${path}/${fileName}`, which is then referenced in the datasource as a string
-value in properties that have a storage configuration.
+Cada arquivo enviado no FireCMS é referenciado por uma string na forma
+`${path}/${fileName}`, que é então referenciada na fonte de dados como um valor
+string em propriedades que têm uma configuração de armazenamento.
 
-You can use this controller to upload files and get the storage path where it
-was stored. Then you can convert that storagePath into a download URL.
+Você pode usar este controlador para enviar arquivos e obter o caminho de armazenamento onde foi
+armazenado. Depois pode converter esse storagePath em uma URL de download.
 
 :::note
-Please note that in order to use this hook you **must** be in
-a component (you can't use it directly from a callback function).
+Note que para utilizar este hook, você **deve** estar em um
+componente (não pode utilizá-lo diretamente de uma função callback).
 :::
 
-### Available Methods
+### Métodos disponíveis
 
-* `uploadFile`: Upload a file, specifying the file, name, and path
-* `getDownloadURL`: Convert a storage path into a download URL
+* `uploadFile`: Enviar um arquivo, especificando o arquivo, nome e caminho
+* `getDownloadURL`: Converter um caminho de armazenamento em uma URL de download
 
-### Example
+### Exemplo
 
 ```tsx
 import React from "react";
 import { useStorageSource } from "@firecms/core";
-import { Button } from "@firecms/ui";
 
 export function FileUploader() {
     const storageSource = useStorageSource();
@@ -40,7 +39,7 @@ export function FileUploader() {
             fileName: file.name,
             path: "uploads",
         });
-        console.log("File uploaded to:", result.path);
+        console.log("Arquivo enviado para:", result.path);
     };
 
     return (

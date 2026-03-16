@@ -5,33 +5,33 @@ sidebar_label: useAuthController
 ---
 
 :::note
-Please note that in order to use these hooks you **must** be in
-a component (you can't use them directly from a callback function).
-Anyhow, callbacks usually include a `FireCMSContext`, which includes all
-the controllers.
+Ten en cuenta que para usar estos hooks **debes** estar en
+un componente (no puedes usarlos directamente desde una función callback).
+De todos modos, los callbacks generalmente incluyen un `FireCMSContext`, que incluye todos
+los controladores.
 :::
 
 ## `useAuthController`
 
-Hook for accessing the authentication state and performing auth-related operations.
-Works with any backend (Firebase, MongoDB, or custom implementations).
+Hook para acceder al estado de autenticación y realizar operaciones relacionadas con la autenticación.
+Funciona con cualquier backend (Firebase, MongoDB o implementaciones personalizadas).
 
-The props provided by this hook are:
+Las props proporcionadas por este hook son:
 
-* `user` The currently logged-in user object, or `null` if not authenticated
-* `initialLoading` Initial loading flag, used to avoid showing login screen before auth state is determined
-* `authLoading` Is the login/logout process ongoing
-* `signOut()` Sign out the current user
-* `authError` Error during authentication initialization
-* `authProviderError` Error dispatched by the auth provider
-* `getAuthToken()` Retrieve the auth token for the current user (returns a Promise)
-* `loginSkipped` Has the user skipped the login process
-* `extra` Additional data stored in the auth controller (useful for roles, permissions, etc.)
-* `setExtra(extra)` Set additional data in the auth controller
-* `setUser(user)` Programmatically set the current user (optional, implementation-dependent)
-* `setUserRoles(roles)` Set user roles (optional, implementation-dependent)
+* `user` El objeto del usuario actualmente conectado, o `null` si no está autenticado
+* `initialLoading` Flag de carga inicial, utilizado para evitar mostrar la pantalla de login antes de determinar el estado de autenticación
+* `authLoading` Indica si el proceso de login/logout está en curso
+* `signOut()` Cerrar la sesión del usuario actual
+* `authError` Error durante la inicialización de la autenticación
+* `authProviderError` Error despachado por el proveedor de autenticación
+* `getAuthToken()` Obtener el token de autenticación del usuario actual (devuelve una Promise)
+* `loginSkipped` Si el usuario ha omitido el proceso de login
+* `extra` Datos adicionales almacenados en el auth controller (útil para roles, permisos, etc.)
+* `setExtra(extra)` Establecer datos adicionales en el auth controller
+* `setUser(user)` Establecer programáticamente el usuario actual (opcional, dependiente de la implementación)
+* `setUserRoles(roles)` Establecer los roles del usuario (opcional, dependiente de la implementación)
 
-Example:
+Ejemplo:
 
 ```tsx
 import React from "react";

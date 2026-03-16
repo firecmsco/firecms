@@ -8,7 +8,8 @@ import {
     resolveCollection,
     unslugify,
     useAuthController,
-    useCustomizationController
+    useCustomizationController,
+    useTranslation
 } from "@firecms/core";
 import {
     CloseIcon,
@@ -30,6 +31,7 @@ export function KanbanConfigSection({
     const authController = useAuthController();
     const customizationController = useCustomizationController();
     const { values, setFieldValue } = useFormex<EntityCollection>();
+    const { t } = useTranslation();
     const panelRef = useRef<HTMLDivElement>(null);
     const [columnPropertyDialogOpen, setColumnPropertyDialogOpen] = useState(false);
 
@@ -86,7 +88,7 @@ export function KanbanConfigSection({
             <Select
                 key={`column-select-${enumStringProperties.length}`}
                 name="kanban.columnProperty"
-                label="Kanban Column Property"
+                label={t("kanban_column_property")}
                 size={"large"}
                 fullWidth={true}
                 position={"item-aligned"}
@@ -105,10 +107,10 @@ export function KanbanConfigSection({
                 }}
                 renderValue={(value) => {
                     if (columnPropertyMissing) {
-                        return <span className="text-red-500">{value} (not found)</span>;
+                        return <span className="text-red-500">{value} ({t("not_found_suffix")})</span>;
                     }
                     const prop = enumStringProperties.find(p => p.key === value);
-                    if (!prop) return "Select a property";
+                    if (!prop) return t("select_a_property");
                     const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
                     return (
                         <div className="flex items-center gap-2">
@@ -138,7 +140,7 @@ export function KanbanConfigSection({
                                 <div>
                                     <div>{prop.label}</div>
                                     <Typography variant="caption" color="secondary">
-                                        {fieldConfig?.name || "Enum"}
+                                        {fieldConfig?.name || "enum"}
                                     </Typography>
                                 </div>
                             </div>
@@ -148,10 +150,10 @@ export function KanbanConfigSection({
             </Select>
             <FieldCaption error={columnPropertyMissing}>
                 {columnPropertyMissing
-                    ? `Property "${kanbanConfig?.columnProperty}" does not exist or is not an enum string property. Please select a valid property or clear the selection.`
+                    ? t("kanban_property_not_found", { property: kanbanConfig?.columnProperty ?? "" })
                     : enumStringProperties.length === 0
-                        ? "No enum string properties found. Add a string property with enumValues to use Kanban view."
-                        : "Select a string property with enum values to group entities into columns"
+                        ? t("no_enum_string_properties")
+                        : t("kanban_column_description")
                 }
             </FieldCaption>
 
@@ -162,7 +164,7 @@ export function KanbanConfigSection({
                         className="ml-3.5 text-sm text-primary hover:text-primary-dark mt-2"
                         onClick={() => setColumnPropertyDialogOpen(true)}
                     >
-                        + Create "{dialogPropertyKey}" property
+                        {t("create_property", { property: dialogPropertyKey })}
                     </button>
                     <PropertyFormDialog
                         open={columnPropertyDialogOpen}

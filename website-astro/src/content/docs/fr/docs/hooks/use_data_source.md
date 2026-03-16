@@ -2,33 +2,33 @@
 slug: fr/docs/hooks/use_data_source
 title: useDataSource
 sidebar_label: useDataSource
-description: Access the FireCMS data source hook for fetching, saving, and managing entities. Works with Firestore, MongoDB, or any custom backend implementation.
+description: Accédez au hook de source de données FireCMS pour récupérer, enregistrer et gérer les entités. Fonctionne avec Firestore, MongoDB ou toute implémentation backend personnalisée.
 ---
 
-Use this hook to access the data source being used in your FireCMS application.
+Utilisez ce hook pour accéder à la source de données utilisée dans votre application FireCMS.
 
-This controller allows you to fetch and save data from your database (such
-as Firestore or MongoDB) using the abstraction of collections and entities created by FireCMS.
+Ce contrôleur vous permet de récupérer et d'enregistrer des données depuis votre base de données (comme
+Firestore ou MongoDB) en utilisant l'abstraction des collections et entités créée par FireCMS.
 
 :::note
-Please note that in order to use this hook you **must** be in
-a component (you can't use it directly from a callback function).
-Anyhow, callbacks usually include a `FireCMSContext`, which includes all
-the controllers including the `dataSource`.
+Veuillez noter que pour utiliser ce hook, vous **devez** être dans
+un composant (vous ne pouvez pas l'utiliser directement depuis une fonction callback).
+Quoi qu'il en soit, les callbacks incluent généralement un `FireCMSContext`, qui comprend tous
+les contrôleurs y compris le `dataSource`.
 :::
 
-### Available Methods
+### Méthodes disponibles
 
-* `fetchCollection`: Fetch data from a collection
-* `listenCollection`: Listen to entities in a given path with real-time updates
-* `fetchEntity`: Retrieve an entity given a path and an id
-* `listenEntity`: Get real-time updates on one entity
-* `saveEntity`: Save an entity to the specified path
-* `deleteEntity`: Delete an entity
-* `checkUniqueField`: Check if the given property value is unique in the collection
-* `generateEntityId`: Generate a new ID for an entity (optional, implementation dependent)
+* `fetchCollection` : Récupérer des données d'une collection
+* `listenCollection` : Écouter les entités d'un chemin donné avec des mises à jour en temps réel
+* `fetchEntity` : Récupérer une entité à partir d'un chemin et d'un id
+* `listenEntity` : Obtenir des mises à jour en temps réel sur une entité
+* `saveEntity` : Enregistrer une entité dans le chemin spécifié
+* `deleteEntity` : Supprimer une entité
+* `checkUniqueField` : Vérifier si la valeur de la propriété donnée est unique dans la collection
+* `generateEntityId` : Générer un nouvel ID pour une entité (optionnel, dépendant de l'implémentation)
 
-### Example
+### Exemple
 
 ```tsx
 import React, { useEffect, useState } from "react";

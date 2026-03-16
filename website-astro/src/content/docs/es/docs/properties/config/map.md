@@ -2,11 +2,11 @@
 slug: es/docs/properties/config/map
 title: Map
 sidebar_label: Map
-description: Configuration for map properties (nested objects) in FireCMS, including child properties, previews, and key-value mode.
+description: Configuración de propiedades de tipo map (objetos anidados) en FireCMS, incluyendo propiedades hijas, previsualizaciones y modo clave-valor.
 ---
 
-In a map property you define child properties in the same way you define them
-at the entity schema level:
+En una propiedad map defines propiedades hijas de la misma manera que las defines
+a nivel del esquema de entidad:
 
 ```tsx
 import { buildProperty } from "@firecms/core";
@@ -35,46 +35,46 @@ const ctaProperty = buildProperty({
 ```
 
 ###  `properties`
-Record of properties included in this map.
+Registro de propiedades incluidas en este map.
 
 ### `previewProperties`
-List of properties rendered as this map preview. Defaults to first 3.
+Lista de propiedades renderizadas como previsualización de este map. Por defecto las primeras 3.
 
 ### `spreadChildren`
-Display the child properties as independent columns in the collection
-view. Defaults to `false`.
+Muestra las propiedades hijas como columnas independientes en la vista
+de colección. Por defecto es `false`.
 
 ### `pickOnlySomeKeys`
 
-Allow the user to add only some keys in this map.
-By default, all properties of the map have the corresponding field in
-the form view. Setting this flag to true allows to pick only some.
-Useful for map that can have a lot of sub-properties that may not be
-needed.
+Permite al usuario agregar solo algunas claves en este map.
+Por defecto, todas las propiedades del map tienen el campo correspondiente en
+la vista de formulario. Establecer este flag en true permite seleccionar solo algunas.
+Útil para maps que pueden tener muchas sub-propiedades que pueden no ser
+necesarias.
 
 ### `expanded`
 
-Determines whether the field should be initially expanded. Defaults to `true`.
+Determina si el campo debe estar inicialmente expandido. Por defecto es `true`.
 
 ### `keyValue`
 
-Render this map as a key-value table that allows to use
-arbitrary keys. You don't need to define the properties in this case.
+Renderiza este map como una tabla clave-valor que permite usar
+claves arbitrarias. No necesitas definir las propiedades en este caso.
 
 ### `minimalistView`
 
-When set to `true`, displays the child properties directly without being wrapped in an extendable panel.
+Cuando se establece en `true`, muestra las propiedades hijas directamente sin estar envueltas en un panel expandible.
 
 ### `validation`
 
-* `required` Should this field be compulsory.
-* `requiredMessage` Message to be displayed as a validation error.
+* `required` Si este campo debe ser obligatorio.
+* `requiredMessage` Mensaje a mostrar como error de validación.
 
 ---
 
-The widget that gets created is
-- [`MapFieldBinding`](../../api/functions/MapFieldBinding) Field that renders the children
-  property fields
+El widget que se crea es
+- [`MapFieldBinding`](../../api/functions/MapFieldBinding) Campo que renderiza los campos
+  de propiedades hijas
 
-Links:
+Enlaces:
 - [API](../../api/interfaces/MapProperty)

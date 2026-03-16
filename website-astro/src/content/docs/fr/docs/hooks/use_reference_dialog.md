@@ -5,51 +5,51 @@ sidebar_label: useReferenceDialog
 ---
 
 :::note 
-Please note that in order to use this hook you **must** be in a
-component (you can't use them directly from a callback function).
+Veuillez noter que pour utiliser ce hook, vous **devez** être dans un
+composant (vous ne pouvez pas l'utiliser directement depuis une fonction callback).
 :::
 
 ## `useReferenceDialog`
 
-This hook is used to open a side dialog that allows the selection of entities
-under a given path. You can use it in custom views for selecting entities. You
-need to specify the path of the target collection at least. If your collection
-is not defined in your top collection configuration
-(in your `FireCMS` component), you need to specify explicitly. This is the same
-hook used internally when a reference property is defined.
+Ce hook est utilisé pour ouvrir un dialogue latéral qui permet la sélection d'entités
+sous un chemin donné. Vous pouvez l'utiliser dans des vues personnalisées pour sélectionner des entités. Vous
+devez spécifier le chemin de la collection cible au minimum. Si votre collection
+n'est pas définie dans votre configuration de collection principale
+(dans votre composant `FireCMS`), vous devez la spécifier explicitement. C'est le même
+hook utilisé en interne lorsqu'une propriété de référence est définie.
 
-The props provided by this hook are:
+Les props fournies par ce hook sont :
 
 *     multiselect?: boolean;
-  Allow multiple selection of values
+  Permettre la sélection multiple de valeurs
 
 *     collection?: EntityCollection;
-  Entity collection config
+  Configuration de collection d'entités
 
 *     path: string;
-  Absolute path of the collection.
-  May be not set if this hook is being used in a component and the path is
-  dynamic. If not set, the dialog won't open.
+  Chemin absolu de la collection.
+  Peut ne pas être défini si ce hook est utilisé dans un composant et que le chemin est
+  dynamique. S'il n'est pas défini, le dialogue ne s'ouvrira pas.
 
 *     selectedEntityIds?: string[];
-  If you are opening the dialog for the first time, you can select some
-  entity ids to be displayed first.
+  Si vous ouvrez le dialogue pour la première fois, vous pouvez sélectionner certains
+  IDs d'entité à afficher en premier.
 
 *     onSingleEntitySelected?(entity: Entity | null): void;
-  If `multiselect` is set to `false`, you will get the selected entity
-  in this callback.
+  Si `multiselect` est défini sur `false`, vous obtiendrez l'entité sélectionnée
+  dans ce callback.
 
 *     onMultipleEntitiesSelected?(entities: Entity[]): void;
-  If `multiselect` is set to `false`, you will get the selected entities
-  in this callback.
+  Si `multiselect` est défini sur `false`, vous obtiendrez les entités sélectionnées
+  dans ce callback.
 
 *     onClose?(): void;
-  If the dialog currently open, close it
+  Si le dialogue est actuellement ouvert, le fermer
 
 *     forceFilter?: FilterValues;
-  Allow selection of entities that pass the given filter only.
+  Permettre la sélection uniquement des entités qui passent le filtre donné.
 
-Example:
+Exemple :
 
 ```tsx
 import React from "react";
@@ -63,16 +63,16 @@ type Product = {
 
 export function ExampleCMSView() {
 
-    // hook to display custom snackbars
+    // hook pour afficher des snackbars personnalisés
     const snackbarController = useSnackbarController();
 
-    // hook to open a reference dialog
+    // hook pour ouvrir un dialogue de référence
     const referenceDialog = useReferenceDialog({
         path: "products",
         onSingleEntitySelected(entity: Entity<Product> | null) {
             snackbarController.open({
                 type: "success",
-                message: "Selected " + entity?.values.name
+                message: "Sélectionné " + entity?.values.name
             })
         }
     });
@@ -80,7 +80,7 @@ export function ExampleCMSView() {
     return <Button
         onClick={referenceDialog.open}
         color="primary">
-        Test reference dialog
+        Tester le dialogue de référence
     </Button>;
 }
 ```

@@ -1,8 +1,8 @@
 ---
 slug: fr/docs/properties/config/date
-title: Date/Time
-sidebar_label: Date/Time
-description: Configuration for date and time properties in FireCMS, including auto-values, date modes, and validation.
+title: Date/Heure
+sidebar_label: Date/Heure
+description: Configuration des propriétés de date et heure dans FireCMS, incluant les auto-valeurs, les modes de date et la validation.
 ---
 
 ```tsx
@@ -15,28 +15,28 @@ const publicationProperty = buildProperty({
 ```
 ### `autoValue` "on_create" | "on_update"
 
-Use this prop to update this date automatically upon entity creation
-or update.
+Utilisez cette prop pour mettre à jour cette date automatiquement lors de la création
+ou la mise à jour d'une entité.
 
 ### `mode` "date" | "date_time"
 
-Set the granularity of the field to a date, or date + time.
-Defaults to `date_time`.
+Définissez la granularité du champ à une date, ou date + heure.
+Par défaut `date_time`.
 
 ### `clearable`
-Add an icon to clear the value and set it to `null`. Defaults to `false`
+Ajoute une icône pour effacer la valeur et la définir à `null`. Par défaut `false`
 
 ### `validation`
 
-* `required` Should this field be compulsory.
-* `requiredMessage` Message to be displayed as a validation error.
-* `min` Set the minimum date allowed.
-* `max` Set the maximum date allowed.
+* `required` Si ce champ doit être obligatoire.
+* `requiredMessage` Message à afficher comme erreur de validation.
+* `min` Définir la date minimale autorisée.
+* `max` Définir la date maximale autorisée.
 
 ---
 
-The widget that gets created is
-- [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding) Field that allows selecting a date
+Le widget créé est
+- [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding) Champ permettant de sélectionner une date
 
-Links:
+Liens :
 - [API](../../api/interfaces/DateProperty)

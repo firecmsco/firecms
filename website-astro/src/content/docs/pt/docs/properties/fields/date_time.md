@@ -1,20 +1,20 @@
 ---
 slug: pt/docs/properties/fields/date_time
-title: Date/time fields
+title: Campos de data/hora
 ---
 
-Use the date/time fields to allow users to set dates, saved as Firestore timestamps.
+Use os campos de data/hora para permitir que os utilizadores definam datas, salvas como timestamps do Firestore.
 
-You can choose between using dates or date/time fields. 
-Also you can create read-only fields that get updated automatically when 
-entities are created or updated
+Pode escolher entre usar campos de data ou data/hora.
+Também pode criar campos somente leitura que são atualizados automaticamente quando
+entidades são criadas ou atualizadas.
 
-The data type is [`date`](../config/date).
+O tipo de dado é [`date`](../config/date).
 
-Internally the component used
-is [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding).
+Internamente o componente usado
+é [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding).
 
-#### Date field
+#### Campo de data
 
 ![Field](/img/fields/Date.png)
 
@@ -28,7 +28,7 @@ buildProperty({
 });
 ```
 
-#### Date/time field
+#### Campo de data/hora
 
 ![Field](/img/fields/Date_time.png)
 
@@ -42,7 +42,7 @@ buildProperty({
 });
 ```
 
-#### Update on creation
+#### Atualizar na criação
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -54,7 +54,7 @@ buildProperty({
 });
 ```
 
-#### Update on update
+#### Atualizar na atualização
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";

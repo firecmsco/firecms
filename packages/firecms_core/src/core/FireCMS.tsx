@@ -23,7 +23,6 @@ import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { useProjectLog } from "../hooks/useProjectLog";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
-import { FireCMSi18nProvider } from "../i18n/FireCMSi18nProvider";
 
 /**
  * If you are using independent components of the CMS
@@ -62,7 +61,7 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         console.warn("The `plugins` prop is deprecated in the FireCMS component. You should pass your plugins to `useBuildNavigationController` instead.");
     }
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const modeController = useBuildModeController();
 
@@ -113,6 +112,24 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         authController
     });
 
+    // Inject plugin translations into the existing i18next instance
+    useEffect(() => {
+        if (!i18n) return;
+        plugins?.forEach(plugin => {
+            if (plugin.i18n) {
+                Object.keys(plugin.i18n).forEach(locale => {
+                    i18n.addResourceBundle(
+                        locale,
+                        "firecms_core",
+                        plugin.i18n![locale],
+                        true,  // deep merge
+                        true   // overwrite
+                    );
+                });
+            }
+        });
+    }, [i18n, plugins]);
+
     if (accessResponse?.message) {
         console.warn(accessResponse.message);
     }
@@ -156,63 +173,42 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         );
     }
 
-    // Inject plugin translations into the existing i18next instance
-    const { i18n } = useTranslation();
-    useEffect(() => {
-        if (!i18n) return;
-        plugins?.forEach(plugin => {
-            if (plugin.i18n) {
-                Object.keys(plugin.i18n).forEach(locale => {
-                    i18n.addResourceBundle(
-                        locale,
-                        "firecms_core",
-                        plugin.i18n![locale],
-                        true,  // deep merge
-                        true   // overwrite
-                    );
-                });
-            }
-        });
-    }, [i18n, plugins]);
-
     return (
-        <FireCMSi18nProvider locale={locale}>
-            <AnalyticsContext.Provider value={analyticsController}>
-                <CustomizationControllerContext.Provider value={customizationController}>
-                    <UserConfigurationPersistenceContext.Provider
-                        value={userConfigPersistence}>
-                        <StorageSourceContext.Provider
-                            value={storageSource}>
-                            <DataSourceContext.Provider
-                                value={dataSource}>
-                                <AuthControllerContext.Provider
-                                    value={authController}>
-                                    <SideDialogsControllerContext.Provider
-                                        value={sideDialogsController}>
-                                        <SideEntityControllerContext.Provider
-                                            value={sideEntityController}>
-                                            <NavigationContext.Provider
-                                                value={navigationController}>
-                                                <InternalUserManagementContext.Provider value={userManagement}>
-                                                    <DialogsProvider>
-                                                        <BreadcrumbsProvider>
-                                                            <FireCMSInternal
-                                                                loading={loading}>
-                                                                {children}
-                                                            </FireCMSInternal>
-                                                        </BreadcrumbsProvider>
-                                                    </DialogsProvider>
-                                                </InternalUserManagementContext.Provider>
-                                            </NavigationContext.Provider>
-                                        </SideEntityControllerContext.Provider>
-                                    </SideDialogsControllerContext.Provider>
-                                </AuthControllerContext.Provider>
-                            </DataSourceContext.Provider>
-                        </StorageSourceContext.Provider>
-                    </UserConfigurationPersistenceContext.Provider>
-                </CustomizationControllerContext.Provider>
-            </AnalyticsContext.Provider>
-        </FireCMSi18nProvider>
+        <AnalyticsContext.Provider value={analyticsController}>
+            <CustomizationControllerContext.Provider value={customizationController}>
+                <UserConfigurationPersistenceContext.Provider
+                    value={userConfigPersistence}>
+                    <StorageSourceContext.Provider
+                        value={storageSource}>
+                        <DataSourceContext.Provider
+                            value={dataSource}>
+                            <AuthControllerContext.Provider
+                                value={authController}>
+                                <SideDialogsControllerContext.Provider
+                                    value={sideDialogsController}>
+                                    <SideEntityControllerContext.Provider
+                                        value={sideEntityController}>
+                                        <NavigationContext.Provider
+                                            value={navigationController}>
+                                            <InternalUserManagementContext.Provider value={userManagement}>
+                                                <DialogsProvider>
+                                                    <BreadcrumbsProvider>
+                                                        <FireCMSInternal
+                                                            loading={loading}>
+                                                            {children}
+                                                        </FireCMSInternal>
+                                                    </BreadcrumbsProvider>
+                                                </DialogsProvider>
+                                            </InternalUserManagementContext.Provider>
+                                        </NavigationContext.Provider>
+                                    </SideEntityControllerContext.Provider>
+                                </SideDialogsControllerContext.Provider>
+                            </AuthControllerContext.Provider>
+                        </DataSourceContext.Provider>
+                    </StorageSourceContext.Provider>
+                </UserConfigurationPersistenceContext.Provider>
+            </CustomizationControllerContext.Provider>
+        </AnalyticsContext.Provider>
     );
 
 }

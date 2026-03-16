@@ -3,6 +3,7 @@ import React, { useDeferredValue, useEffect, useMemo, useState } from "react";
 
 import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
 import { useTranslation } from "@firecms/core";
+import { useEditorTranslations } from "./useEditorTranslations";
 
 import { Editor, EditorProvider, Extensions } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
@@ -113,6 +114,7 @@ export const FireCMSEditor = ({
   markdownConfig
 }: FireCMSEditorProps) => {
   const { t } = useTranslation();
+  useEditorTranslations();
 
   const ref = React.useRef<HTMLDivElement | null>(null);
   const editorRef = React.useRef<Editor | null>(null);

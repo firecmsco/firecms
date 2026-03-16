@@ -2,7 +2,7 @@
 slug: pt/docs/properties/config/reference
 title: Reference
 sidebar_label: Reference
-description: Configuration for reference properties in FireCMS, linking entities to other collections with previews and filters.
+description: Configuração de propriedades de referência no FireCMS, vinculando entidades a outras coleções com pré-visualizações e filtros.
 ---
 
 ```tsx
@@ -17,61 +17,23 @@ const productsReferenceProperty = buildProperty({
 ```
 
 ### `path`
-
-Absolute collection path of the collection this reference
-points to. The schema of the entity is inferred based on the root navigation,
-so the filters and search delegate existing there are applied to this view as
-well.
+Caminho absoluto da coleção para a qual esta referência aponta.
 
 ### `previewProperties`
-
-List of properties rendered as this reference preview.
-Defaults to first 3.
+Lista de propriedades renderizadas como pré-visualização desta referência. Padrão as 3 primeiras.
 
 ### `forceFilter`
-
-Force a filter in the reference selection. If applied, the rest of the filters
-will be disabled. Filters applied with this prop cannot be changed.
-e.g. `forceFilter: { age: [">=", 18] }`
+Forçar um filtro na seleção de referência.
 
 ### `validation`
 
-* `required` Should this field be compulsory.
-* `requiredMessage` Message to be displayed as a validation error.
-
-### `includeId`
-
-Should the reference include the ID of the entity. Defaults to `true`.
-
-### `includeEntityLink`
-
-Should the reference include a link to the entity (open the entity details). Defaults to `true`.
-
-### `defaultValue`
-
-Default value for this property.
-You can set the default value by defining an EntityReference:
-
-```tsx
-
-import { buildProperty, EntityReference } from "@firecms/core";
-
-const productsReferenceProperty = buildProperty({
-    name: "Product",
-    dataType: "reference",
-    path: "products",
-    defaultValue: new EntityReference("B000P0MDMS", "products")
-});
-```
+* `required` Se este campo deve ser obrigatório.
+* `requiredMessage` Mensagem a ser exibida como erro de validação.
 
 ---
 
-The widget that gets created is
-
-- [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding) Field
-  that opens a
-  reference selection dialog
+O widget criado é
+- [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding) Campo que abre um diálogo de seleção de referência
 
 Links:
-
 - [API](../../api/interfaces/ReferenceProperty)

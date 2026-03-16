@@ -1,30 +1,30 @@
 ---
 slug: es/docs/recipes/entity_callbacks
-title: How to use entity callbacks
-sidebar_label: Using entity callbacks
-description: Learn how to use entity callbacks in FireCMS to add metadata to your entities such as metadata or implement custom logic rules.
+title: Cómo usar entity callbacks
+sidebar_label: Usar entity callbacks
+description: Aprende a usar entity callbacks en FireCMS para añadir metadatos a tus entidades o implementar reglas de lógica personalizada.
 ---
 
 ![Entity Callbacks](/img/recipes/entity_callbacks.png)
 
-In this tutorial we will create a simple collection, containing cars. Then, we are going to use the Entity Callbacks to can track changes in the entity, adding the timestamp of the last update and the user who made the change.
+En este tutorial crearemos una colección simple, que contiene coches. Luego, vamos a usar los Entity Callbacks para rastrear cambios en la entidad, añadiendo la marca de tiempo de la última actualización y el usuario que hizo el cambio.
 
-### What are entity callbacks?
+### ¿Qué son los entity callbacks?
 
-Entity callbacks are functions that are triggered at different stages of an entity's lifecycle in a database. They are particularly useful for:
-- Data Validation: They can be used to validate data before it is saved to the database. This can help ensure that the data meets certain criteria or conforms to certain formats.
-- Data Transformation: They can be used to transform data before it is saved or after it is fetched from the database. This can be useful for tasks like converting data types, formatting data, or adding additional fields.
-- Tracking Changes: They can be used to track changes to entities. For example, they can be used to add metadata to an entity, such as the timestamp of the last update and the user who made the change.
-- Implementing Custom Logic: They can be used to implement custom logic rules. For example, they can be used to prevent certain actions, like deleting entities that the user didn't create. You can use the auth modules and roles to define any logic.
-- Auditing: They can be used to maintain an audit trail of changes made to the data. This can be useful for debugging and for maintaining data integrity.
+Los entity callbacks son funciones que se activan en diferentes etapas del ciclo de vida de una entidad en una base de datos. Son particularmente útiles para:
+- Validación de datos: Se pueden usar para validar datos antes de guardarlos en la base de datos. Esto puede ayudar a asegurar que los datos cumplen ciertos criterios o se ajustan a ciertos formatos.
+- Transformación de datos: Se pueden usar para transformar datos antes de guardarlos o después de obtenerlos de la base de datos. Esto puede ser útil para tareas como convertir tipos de datos, formatear datos o añadir campos adicionales.
+- Seguimiento de cambios: Se pueden usar para rastrear cambios en las entidades. Por ejemplo, se pueden usar para añadir metadatos a una entidad, como la marca de tiempo de la última actualización y el usuario que hizo el cambio.
+- Implementación de lógica personalizada: Se pueden usar para implementar reglas de lógica personalizada. Por ejemplo, se pueden usar para prevenir ciertas acciones, como eliminar entidades que el usuario no creó. Puedes usar los módulos de autenticación y roles para definir cualquier lógica.
+- Auditoría: Se pueden usar para mantener un registro de auditoría de los cambios realizados en los datos. Esto puede ser útil para depuración y para mantener la integridad de los datos.
 
-In FireCMS we have been using these features in all versions, and it's also available in version 3.0.
+En FireCMS hemos usado estas funcionalidades en todas las versiones, y también está disponible en la versión 3.0.
 
-### Create a collection
+### Crear una colección
 
-For illustrative purposes, let's create a simple `cars` collection.
+Para fines ilustrativos, creemos una colección `cars` simple.
 
-The interface of the collection will look like this:
+La interfaz de la colección se verá así:
 
 ```tsx
 interface Car {
@@ -38,7 +38,7 @@ interface Car {
 }
 ```
 
-And the collection configuration will look like this:
+Y la configuración de la colección se verá así:
 
 ```tsx
 
@@ -142,38 +142,38 @@ export const carsCollection = buildCollection<Car>({
 ```
 
 
-Simple enough, right? Now let's add the callbacks.
+Bastante simple, ¿verdad? Ahora añadamos los callbacks.
 
-### Create the entity callbacks
+### Crear los entity callbacks
 
-Now, you can check the interface of the [EntityCallbacks in the documentation](/docs/collections/callbacks). We have all this callbacks available:
-- `onFetch`: Called when an entity is fetched from the database.
-- `onPreSave`: Called before an entity is saved to the database.
-- `onSaveSuccess`: Called after an entity is saved successfully to the database.
-- `onSaveFailure`: Called when an error occurs while saving an entity to the database.
-- `onPreDelete`: Called before an entity is deleted from the database.
-- `onDelete`: Called when an entity is deleted successfully from the database.
-- `onIdUpdate`: Callback fired when any value in the form changes. You can use it to define the ID of the entity based on the current values
+Ahora, puedes consultar la interfaz de los [EntityCallbacks en la documentación](/docs/collections/callbacks). Tenemos todos estos callbacks disponibles:
+- `onFetch`: Se llama cuando se obtiene una entidad de la base de datos.
+- `onPreSave`: Se llama antes de guardar una entidad en la base de datos.
+- `onSaveSuccess`: Se llama después de guardar exitosamente una entidad en la base de datos.
+- `onSaveFailure`: Se llama cuando ocurre un error al guardar una entidad en la base de datos.
+- `onPreDelete`: Se llama antes de eliminar una entidad de la base de datos.
+- `onDelete`: Se llama cuando se elimina exitosamente una entidad de la base de datos.
+- `onIdUpdate`: Callback que se dispara cuando cualquier valor del formulario cambia. Puedes usarlo para definir el ID de la entidad basándote en los valores actuales
 
-We want to save the user who made the last change and the date of the last change. We can use the `onPreSave` callback to achieve this. We are going use the builder util function `buildEntityCallbacks` to create the callbacks. This is helpful for creating the callbacks for a specific entity type. So we have the types inside the functions.
+Queremos guardar el usuario que hizo el último cambio y la fecha del último cambio. Podemos usar el callback `onPreSave` para lograr esto. Vamos a usar la función utilitaria `buildEntityCallbacks` para crear los callbacks. Esto es útil para crear los callbacks para un tipo de entidad específico. Así tenemos los tipos dentro de las funciones.
 
 ```tsx
 const carsCallbacks = buildEntityCallbacks<Car>({
   onPreSave: (entitySaveProps) => {
     console.log("Callback onPreSave<Car>");
-    // We set the modified_at with the current timestamp
+    // Establecemos modified_at con la marca de tiempo actual
     entitySaveProps.values.modified_at = new Date();
-    // We set the modified_by with the user who made the change using the displayName from the logged in user
+    // Establecemos modified_by con el usuario que hizo el cambio usando el displayName del usuario conectado
     entitySaveProps.values.modified_by = entitySaveProps.context.authController.user?.displayName ?? "Unknown User";
-    // We need to return the values
+    // Necesitamos devolver los valores
     return entitySaveProps.values;
   }
 });
 ```
 
-As you can see by the code, we are using a new Date to get the current date and time, and we are using the `authController` to get the user who is making the change. If the user is not logged in, we are going to use the string "Unknown User" as the user who made the change.
+Como puedes ver en el código, estamos usando un new Date para obtener la fecha y hora actual, y estamos usando el `authController` para obtener el usuario que está haciendo el cambio. Si el usuario no está conectado, vamos a usar la cadena "Unknown User" como el usuario que hizo el cambio.
 
-And then, we just need to update the collection config to include the callbacks:
+Y luego, solo necesitamos actualizar la configuración de la colección para incluir los callbacks:
 
 ```tsx
 export const carsCollection = buildCollection<Car>({
@@ -183,37 +183,37 @@ export const carsCollection = buildCollection<Car>({
   callbacks: carsCallbacks,
   singularName: "Car",
   properties: {
-    // ... properties
+    // ... propiedades
   }
 });
 ```
 
-Now, when we save the entity, the `modified_at` and `modified_by` fields will be updated with the current date and the user who made the change.
+Ahora, cuando guardemos la entidad, los campos `modified_at` y `modified_by` se actualizarán con la fecha actual y el usuario que hizo el cambio.
 
 ![entity_callbacks_example](/img/recipes/entity_callbacks.png)
 
 
-Now let's implement another feature, let's block deleting the cars, or entities that you haven't created yourself; for that, we are gonna use the `onPreDelete` callback.
+Ahora implementemos otra funcionalidad, bloqueemos la eliminación de coches, o entidades que no hayas creado tú mismo; para eso, vamos a usar el callback `onPreDelete`.
 
 ```tsx
 const carsCallbacks = buildEntityCallbacks<Car>({
   onPreDelete: (entityDeleteProps) => {
     console.log("Callback onPreDelete<Car>");
     if (entityDeleteProps.context.authController.user?.displayName !== entityDeleteProps.entity.modified_by) {
-      throw new Error("You cannot a car that wasn't created by yourself");
+      throw new Error("No puedes eliminar un coche que no fue creado por ti mismo");
     }
   }
 });
 ```
 
-Now, when a user tries to delete a car that wasn't created by themselves, an error will be thrown.
+Ahora, cuando un usuario intente eliminar un coche que no fue creado por él mismo, se lanzará un error.
 
 
 ![entity_callbacks_delete_example](/img/recipes/entity_callbacks_delete.png)
 
-So, we cannot delete the cars that we didn't create. In this example, the one created by the F1 driver Fernando Alonso.
+Así que no podemos eliminar los coches que no creamos nosotros. En este ejemplo, el creado por el piloto de F1 Fernando Alonso.
 
 
-## Full code
+## Código completo
 
-Full code available in the [FireCMS repository](https://github.com/marianmoldovan/firecms-entity-callbacks-cars)
+Código completo disponible en el [repositorio de FireCMS](https://github.com/marianmoldovan/firecms-entity-callbacks-cars)

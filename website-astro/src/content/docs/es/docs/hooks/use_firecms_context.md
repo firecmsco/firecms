@@ -4,40 +4,40 @@ title: useFireCMSContext
 sidebar_label: useFireCMSContext
 ---
 
-Get the context that includes the internal controllers and contexts used by the app.
-Some controllers and context included in this context can be accessed
-directly from their respective hooks.
+Obtén el contexto que incluye los controladores internos y contextos utilizados por la aplicación.
+Algunos controladores y contextos incluidos en este contexto pueden ser accedidos
+directamente desde sus respectivos hooks.
 
-The props provided by this hook are:
+Las props proporcionadas por este hook son:
 
-* `dataSource`: Connector to your database, e.g. your Firestore database
+* `dataSource`: Conector a tu base de datos, por ejemplo tu base de datos Firestore
 
-* `storageSource`: Used storage implementation
+* `storageSource`: Implementación de almacenamiento utilizada
 
-* `navigation`: Context that includes the resolved navigation and utility methods and
-  attributes.
+* `navigation`: Contexto que incluye la navegación resuelta y métodos y
+  atributos utilitarios.
 
-* `sideEntityController`: Controller to open the side dialog displaying entity forms
+* `sideEntityController`: Controlador para abrir el diálogo lateral que muestra formularios de entidad
 
-* `sideDialogsController`: Controller used to open side dialogs (used internally by
-  side entity dialogs or reference dialogs)
+* `sideDialogsController`: Controlador utilizado para abrir diálogos laterales (usado internamente por
+  los diálogos laterales de entidad o diálogos de referencia)
 
-* `dialogsController`: Controller used to open regular dialogs
+* `dialogsController`: Controlador utilizado para abrir diálogos regulares
 
-* `authController`: Used auth controller
+* `authController`: Controlador de autenticación utilizado
 
-* `customizationController`: Controller holding the customization options for the CMS
+* `customizationController`: Controlador que contiene las opciones de personalización del CMS
 
-* `snackbarController`: Use this controller to display snackbars
+* `snackbarController`: Usa este controlador para mostrar snackbars
 
-* `userConfigPersistence`: Use this controller to access data stored in the browser for the user
+* `userConfigPersistence`: Usa este controlador para acceder a datos almacenados en el navegador para el usuario
 
-* `analyticsController`: Callback to send analytics events (optional)
+* `analyticsController`: Callback para enviar eventos de analítica (opcional)
 
-* `userManagement`: Section used to manage users in the CMS. Used to show user info
-  in various places and assign entity ownership.
+* `userManagement`: Sección utilizada para gestionar usuarios en el CMS. Se usa para mostrar información del usuario
+  en varios lugares y asignar propiedad de entidades.
 
-Example:
+Ejemplo:
 
 ```tsx
 import React from "react";
@@ -47,15 +47,15 @@ export function ExampleCMSView() {
 
     const context = useFireCMSContext();
 
-    // Access the data source
+    // Acceder a la fuente de datos
     const dataSource = context.dataSource;
 
-    // Open a snackbar
+    // Abrir un snackbar
     context.snackbarController.open({
         type: "success",
-        message: "Example message"
+        message: "Mensaje de ejemplo"
     });
 
-    return <div>Example view</div>;
+    return <div>Vista de ejemplo</div>;
 }
 ```

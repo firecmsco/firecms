@@ -5,11 +5,11 @@ title: Group
 
 ![Field](/img/fields/Group.png)
 
-Use this field to group other groups into a single one, represented by an
-expandable panel. This is useful for bundling together data into logical fields,
-both from the UX and the data model perspective.
+Use este campo para agrupar outros campos em um único, representado por um
+painel expansível. Isto é útil para agrupar dados em campos lógicos,
+tanto da perspetiva UX quanto do modelo de dados.
 
-Group fields can be initially expanded or collapsed by default.
+Campos de grupo podem ser inicialmente expandidos ou recolhidos por padrão.
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -31,8 +31,8 @@ buildProperty({
 });
 ```
 
-The data type is [`map`](../config/map).
+O tipo de dado é [`map`](../config/map).
 
-Internally the component used
-is [`MapFieldBinding`](../../api/functions/MapFieldBinding).
+Internamente o componente usado
+é [`MapFieldBinding`](../../api/functions/MapFieldBinding).
 

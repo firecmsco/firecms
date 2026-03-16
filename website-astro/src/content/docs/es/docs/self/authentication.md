@@ -1,32 +1,32 @@
 ---
 slug: es/docs/self/auth_self_hosted
-title: Authentication and User Management
-sidebar_label: Authentication and User Management
-description: Instructions on how to set up authentication and user management for a self-hosted FireCMS instance.
+title: Autenticación y gestión de usuarios
+sidebar_label: Autenticación y gestión de usuarios
+description: Instrucciones sobre cómo configurar la autenticación y gestión de usuarios para una instancia self-hosted de FireCMS.
 ---
 
-## Recommended: FireCMS Pro and Cloud
+## Recomendado: FireCMS Pro y Cloud
 
-Before implementing custom authentication, we strongly recommend considering **FireCMS Pro** or **FireCMS Cloud**, which include:
+Antes de implementar autenticación personalizada, recomendamos encarecidamente considerar **FireCMS Pro** o **FireCMS Cloud**, que incluyen:
 
-- ✅ Built-in user management system
-- ✅ Role-based permissions (Admin, Editor, Viewer)
-- ✅ Team management interface
-- ✅ User invitation system
-- ✅ Granular collection and field-level permissions
-- ✅ Audit logs and user activity tracking
-- ✅ Enterprise-grade security features
+- ✅ Sistema de gestión de usuarios integrado
+- ✅ Permisos basados en roles (Admin, Editor, Viewer)
+- ✅ Interfaz de gestión de equipos
+- ✅ Sistema de invitación de usuarios
+- ✅ Permisos granulares a nivel de colección y campo
+- ✅ Registros de auditoría y seguimiento de actividad de usuarios
+- ✅ Funcionalidades de seguridad de nivel enterprise
 
-These solutions provide a complete authentication and authorization system out of the box, saving you significant development time and ensuring security best practices.
+Estas soluciones proporcionan un sistema completo de autenticación y autorización listo para usar, ahorrándote tiempo significativo de desarrollo y asegurando las mejores prácticas de seguridad.
 
-[Learn more about User Management in FireCMS Pro →](/docs/pro/user_management)
+[Más información sobre gestión de usuarios en FireCMS Pro →](/docs/pro/user_management)
 
-[Try FireCMS Cloud →](https://app.firecms.co)
+[Probar FireCMS Cloud →](https://app.firecms.co)
 
 
 :::note
 
-When you initialize a new FireCMS project using the CLI, you might find a boilerplate authenticator in your `App.tsx` file. It's a standard FireCMS interface and looks something like this (no need to hate Flanders!):
+Cuando inicializas un nuevo proyecto FireCMS usando el CLI, podrías encontrar un autenticador básico en tu archivo `App.tsx`. Es una interfaz estándar de FireCMS y se ve algo así (¡no hace falta odiar a Flanders!):
 
 ```typescript
 const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
@@ -34,26 +34,26 @@ const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
                                                                                    authController
                                                                                }) => {
     if (user?.email?.includes("flanders")) {
-        // You can throw an error to prevent access
-        throw Error("Stupid Flanders!");
+        // Puedes lanzar un error para prevenir el acceso
+        throw Error("¡Estúpido Flanders!");
     }
     console.log("Allowing access to", user);
     return true;
 }, []);
 ```
 
-This is just a placeholder to show you where to implement your own authentication logic. You can replace it with one of the authenticators described below.
+Esto es solo un marcador de posición para mostrarte dónde implementar tu propia lógica de autenticación. Puedes reemplazarlo con uno de los autenticadores descritos abajo.
 
 :::
 
 
-## Part 1: Basic User Management
+## Parte 1: Gestión básica de usuarios
 
-This section covers how to create a `users` collection to manage users. This is the foundation for implementing permissions.
+Esta sección cubre cómo crear una colección `users` para gestionar usuarios. Esta es la base para implementar permisos.
 
-### Create a "Users" Collection
+### Crear una colección "Users"
 
-This collection will store your users.
+Esta colección almacenará tus usuarios.
 
 ```typescript
 import { buildCollection, buildProperty } from "@firecms/core";
@@ -83,16 +83,16 @@ export const usersCollection = buildCollection<User>({
 ```
 
 :::tip
-Don't forget to set up the Firestore security rules for the `users` path to control who can read and write to the collection.
+No olvides configurar las reglas de seguridad de Firestore para la ruta `users` para controlar quién puede leer y escribir en la colección.
 :::
 
-## Part 2: Role-Based Permissions
+## Parte 2: Permisos basados en roles
 
-Now, let's add a `role` to our users and use it to control access.
+Ahora, añadamos un `role` a nuestros usuarios y usémoslo para controlar el acceso.
 
-### Step 1: Update the "Users" Collection with Roles
+### Paso 1: Actualizar la colección "Users" con roles
 
-Add a `role` property to your `User` type and collection.
+Añade una propiedad `role` a tu tipo `User` y colección.
 
 ```typescript
 import { buildCollection, buildProperty } from "@firecms/core";
@@ -138,15 +138,15 @@ export const usersCollection = buildCollection<User>({
 });
 ```
 
-### Step 2: Implement a Role-Based Authenticator
+### Paso 2: Implementar un autenticador basado en roles
 
-First, create a new file named `src/custom_authenticator.ts`. This file will contain your authentication logic.
+Primero, crea un nuevo archivo llamado `src/custom_authenticator.ts`. Este archivo contendrá tu lógica de autenticación.
 
 **`src/custom_authenticator.ts`**
 ```typescript
 import { Authenticator } from "@firecms/core";
 import { FirebaseUserWrapper } from "@firecms/firebase";
-import { User } from "./collections/users"; // Make sure to import your User type
+import { User } from "./collections/users"; // Asegúrate de importar tu tipo User
 
 export const roleBasedAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
   user,
@@ -171,31 +171,31 @@ export const roleBasedAuthenticator: Authenticator<FirebaseUserWrapper> = async 
 
     return false;
   } catch (error) {
-    console.error("Authentication error:", error);
+    console.error("Error de autenticación:", error);
     return false;
   }
 };
 ```
 
-Now, import the `roleBasedAuthenticator` in your `App.tsx` and pass it to the `FirebaseCMSApp` component.
+Ahora, importa el `roleBasedAuthenticator` en tu `App.tsx` y pásalo al componente `FirebaseCMSApp`.
 
 **`src/App.tsx`**
 ```typescript
 import { FirebaseCMSApp } from "@firecms/firebase";
 import { roleBasedAuthenticator } from "./custom_authenticator";
-import { usersCollection } from "./collections/users"; // Make sure to import your collections
+import { usersCollection } from "./collections/users"; // Asegúrate de importar tus colecciones
 
-// ... other imports
+// ... otras importaciones
 
 function App() {
-    // ... other component logic
+    // ... otra lógica del componente
 
     return (
         <FirebaseCMSApp
             name={"My App"}
             authentication={roleBasedAuthenticator}
-            collections={[usersCollection, /* ...other collections */]}
-            // ... other props
+            collections={[usersCollection, /* ...otras colecciones */]}
+            // ... otras props
         />
     );
 }
@@ -203,9 +203,9 @@ function App() {
 export default App;
 ```
 
-### Step 3: Apply Permissions to Collections
+### Paso 3: Aplicar permisos a las colecciones
 
-Use the `permissions` callback in your collections to control access based on the user's role.
+Usa el callback `permissions` en tus colecciones para controlar el acceso basado en el rol del usuario.
 
 ```typescript
 import { buildCollection } from "@firecms/core";
@@ -217,26 +217,26 @@ export const postsCollection = buildCollection({
   permissions: ({ authController }) => {
     const userRole = authController.extra?.role;
     return {
-      read: true, // All roles can read
+      read: true, // Todos los roles pueden leer
       edit: userRole === UserRole.admin || userRole === UserRole.editor,
       create: userRole === UserRole.admin || userRole === UserRole.editor,
       delete: userRole === UserRole.admin
     };
   },
-  // ... properties
+  // ... propiedades
 });
 ```
 
-## Part 3: Using Firebase Custom Claims for Permissions
+## Parte 3: Usar Firebase Custom Claims para permisos
 
-An alternative to storing roles in Firestore is to use Firebase Authentication's custom claims.
+Una alternativa a almacenar roles en Firestore es usar los custom claims de Firebase Authentication.
 
-### Step 1: Set Custom Claims
+### Paso 1: Establecer Custom Claims
 
-You need to set custom claims for a user from a backend environment using the Firebase Admin SDK. This is typically done in a Cloud Function.
+Necesitas establecer custom claims para un usuario desde un entorno backend usando el Firebase Admin SDK. Esto típicamente se hace en una Cloud Function.
 
 ```typescript
-// Example Cloud Function to set a role claim
+// Ejemplo de Cloud Function para establecer un claim de rol
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
@@ -244,19 +244,19 @@ admin.initializeApp();
 
 export const setUserRole = functions.https.onCall(async (data, context) => {
   if (!context.auth?.token.admin) {
-    throw new functions.https.HttpsError("permission-denied", "Must be an admin to set roles.");
+    throw new functions.https.HttpsError("permission-denied", "Debes ser admin para establecer roles.");
   }
 
   const { uid, role } = data;
   await admin.auth().setCustomUserClaims(uid, { role });
 
-  return { message: `Success! User ${uid} has been given the role of ${role}.` };
+  return { message: `¡Éxito! Al usuario ${uid} se le ha dado el rol de ${role}.` };
 });
 ```
 
-### Step 2: Implement a Claims-Based Authenticator
+### Paso 2: Implementar un autenticador basado en Claims
 
-This authenticator reads the custom claims from the user's ID token.
+Este autenticador lee los custom claims del token de ID del usuario.
 
 ```typescript
 import { Authenticator } from "@firecms/core";
@@ -269,20 +269,20 @@ export const claimsAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
   if (!user) return false;
 
   try {
-    const idTokenResult = await user.firebaseUser.getIdTokenResult(true); // Force refresh
-    const role = idTokenResult.claims.role || "viewer"; // Default to 'viewer' if no role claim
+    const idTokenResult = await user.firebaseUser.getIdTokenResult(true); // Forzar refresco
+    const role = idTokenResult.claims.role || "viewer"; // Por defecto 'viewer' si no hay claim de rol
     authController.setExtra({ role });
     return true;
   } catch (error) {
-    console.error("Authentication error:", error);
+    console.error("Error de autenticación:", error);
     return false;
   }
 };
 ```
 
-### Step 3: Use Claims in Collections
+### Paso 3: Usar Claims en las colecciones
 
-The `permissions` implementation is the same as with the role-based approach, as the role is extracted and placed in `authController.extra`.
+La implementación de `permissions` es la misma que con el enfoque basado en roles, ya que el rol se extrae y se coloca en `authController.extra`.
 
 ```typescript
 import { buildCollection } from "@firecms/core";
@@ -299,12 +299,12 @@ export const articlesCollection = buildCollection({
       delete: userRole === "admin"
     };
   },
-  // ... properties
+  // ... propiedades
 });
 ```
 
-## Security Best Practices
+## Mejores prácticas de seguridad
 
-- **Firestore Security Rules**: Always enforce security rules on your backend. Client-side permissions are for UI/UX purposes and can be bypassed.
-- **Server-Side Validation**: For critical operations, validate permissions on a server.
-- **Principle of Least Privilege**: Grant users the minimum level of access they need.
+- **Reglas de seguridad de Firestore**: Siempre aplica reglas de seguridad en tu backend. Los permisos del lado del cliente son para propósitos de UI/UX y pueden ser eludidos.
+- **Validación del lado del servidor**: Para operaciones críticas, valida los permisos en un servidor.
+- **Principio de menor privilegio**: Otorga a los usuarios el nivel mínimo de acceso que necesitan.

@@ -2,70 +2,38 @@
 slug: pt/docs/hooks/use_navigation_controller
 title: useNavigationController
 sidebar_label: useNavigationController
-description: Access the FireCMS navigation controller to get collections, resolve paths, and perform navigation.
+description: Acesse o controlador de navegação do FireCMS para gerenciar coleções e rotas programaticamente.
 ---
 
-Use this hook to access the navigation controller of the app. This controller serves as the central point for:
-*   Accessing the resolved configuration of collections and views.
-*   Resolving paths and IDs (e.g. converting a URL path to a database path).
-*   Programmatic navigation.
+Utilize este hook para acessar o controlador de navegação. Ele permite navegar programaticamente e acessar as coleções e vistas registradas.
 
-### Usage
+:::note
+Note que para utilizar este hook, você **deve** estar em um componente filho do `FireCMS`.
+:::
+
+### Métodos disponíveis
+
+* `collections`: Coleções registradas no sistema
+* `getCollection`: Obter uma coleção dado seu caminho
+* `isUrlCollectionPath`: Verificar se um URL corresponde a um caminho de coleção
+* `urlPathToDataPath`: Converter um caminho URL em um caminho de dados
+* `buildUrlCollectionPath`: Construir um caminho URL para uma coleção
+
+### Exemplo
 
 ```tsx
 import React from "react";
 import { useNavigationController } from "@firecms/core";
-import { Button } from "@firecms/ui";
 
-export function NavigationExample() {
+export function CollectionsList() {
     const navigationController = useNavigationController();
-
-    const goToProducts = () => {
-        // Navigate to the products collection
-        // This handles the correct routing underneath
-        navigationController.navigate("/c/products");
-    };
-    
-    // You can also retrieve collections by their ID
-    const productsCollection = navigationController.getCollection("products");
 
     return (
         <div>
-            <p>Products collection name: {productsCollection?.name}</p>
-            <Button onClick={goToProducts}>Go to Products</Button>
+            {navigationController.collections?.map(collection => (
+                <div key={collection.id}>{collection.name}</div>
+            ))}
         </div>
     );
-}
-```
-
-### Key Methods & Properties
-
-*   **`collections`**: List of all resolved entity collections.
-*   **`views`**: List of custom top-level views.
-*   **`getCollection(pathOrId, includeUserOverride?)`**: Get a collection by its `id` or `path`.
-*   **`navigate(to, options?)`**: Navigate to a specific route.
-*   **`refreshNavigation()`**: Force a re-calculation of the navigation structure (useful if your collections are dynamic).
-*   **`urlPathToDataPath(cmsPath)`**: Convert a CMS URL to a datasource path.
-    *   Esempio: `/c/products/B34SAP8Z` -> `products/B34SAP8Z`
-*   **`buildUrlCollectionPath(path)`**: Convert a datasource path to a CMS URL.
-    *   Esempio: `products` -> `/c/products`
-*   **`resolveIdsFrom(pathWithAliases)`**: Resolve aliases in a path to their actual IDs.
-
-### NavigationController Interface
-
-```tsx
-export type NavigationController = {
-    collections?: EntityCollection[];
-    views?: CMSView[];
-    loading: boolean;
-    initialised: boolean;
-    
-    getCollection: (pathOrId: string, includeUserOverride?: boolean) => EntityCollection | undefined;
-    getCollectionById: (id: string) => EntityCollection | undefined;
-    
-    navigate: (to: string, options?: NavigateOptions) => void;
-    refreshNavigation: () => void;
-    
-    // ... utility methods for path resolution
 }
 ```

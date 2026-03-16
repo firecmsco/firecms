@@ -1,65 +1,48 @@
 ---
 slug: pt/docs/properties/fields/file_upload
-title: File upload
+title: Upload de arquivos
 ---
 
-Use the file upload fields to allow users to upload images, documents or any
-files to your storage solution (Firebase storage by default). This field is in
-charge of uploading the file and saving the storage path as the value
-of your property.
+Use os campos de upload de arquivos para permitir que os utilizadores enviem imagens, documentos ou qualquer
+arquivo para sua solução de armazenamento (Firebase Storage por padrão). Este campo é
+responsável por enviar o arquivo e salvar o caminho de armazenamento como o valor
+da sua propriedade.
 
 :::note
-You can save the URL of the uploaded file, instead of the Storage pah,
-by setting the `storeUrl`.
+Pode salvar a URL do arquivo enviado, em vez do caminho do Storage,
+definindo `storeUrl`.
 :::
 
-You can also allow the upload of only some file types based on
-the [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
-, or restrict the file size.
+Pode também permitir o upload apenas de alguns tipos de arquivo baseado no
+[tipo MIME](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types),
+ou restringir o tamanho do arquivo.
 
-If the file uploaded is an image, you can also choose to resize it before
-it gets uploaded to the storage backend, with the `imageCompression` prop.
+Se o arquivo enviado for uma imagem, pode também escolher redimensioná-la antes
+de ser enviada para o backend de armazenamento, com a prop `imageCompression`.
 
-The complete list of params you can use when uploading files:
+A lista completa de parâmetros que pode usar ao enviar arquivos:
 
-* `mediaType` Media type of this reference, used for displaying the
-  preview.
-* `storagePath` Absolute path in your bucket. You can specify it
-  directly or use a callback
-* `acceptedFiles`
-  File [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
-  that can be uploaded to this
-  reference. Note that you can also use the asterisk notation, so `image/*`
-  accepts any image file, and so on.
-* `metadata` Specific metadata set in your uploaded file.
-* `fileName` You can specify a fileName callback if you need to
-  customize the name of the file
-* `storagePath` You can specify a storage path callback if you need to
-  customize the path where it is stored.
-* `storeUrl` When set to `true`, this flag indicates that the download
-  URL of the file will be saved in Firestore instead of the Cloud
-  storage path. Note that the generated URL may use a token that, if
-  disabled, may make the URL unusable and lose the original reference to
-  Cloud Storage, so it is not encouraged to use this flag. Defaults to
-  false.
-* `imageCompression` Use client side image compression and resizing
-  Will only be applied to these MIME types: `image/jpeg`, `image/png`
-  and `image/webp`
+* `mediaType` Tipo de mídia desta referência, usado para exibir a pré-visualização.
+* `storagePath` Caminho absoluto no seu bucket.
+* `acceptedFiles` [Tipo MIME](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) de arquivo que pode ser enviado.
+* `metadata` Metadados específicos definidos no arquivo enviado.
+* `fileName` Callback para personalizar o nome do arquivo.
+* `storeUrl` Quando `true`, a URL de download será salva no Firestore em vez do caminho do Cloud Storage.
+* `imageCompression` Compressão e redimensionamento de imagem do lado do cliente.
 
 :::note
-You can use some placeholders in the `storagePath` and `fileName` to
-customize the path and name of the file. The available placeholders are:
+Pode usar alguns espaços reservados no `storagePath` e `fileName` para personalizar o caminho e nome do arquivo. Os espaços reservados disponíveis são:
 
-- \{file\} - Full file name
-- \{file.name\} - Name of the file without extension
-- \{file.ext\} - Extension of the file
-- \{rand\} - Random value used to avoid name collisions
-- \{entityId\} - ID of the entity
-- \{propertyKey\} - ID of this property
-- \{path\} - Path of this entity
+- \{file\} - Nome completo do arquivo
+- \{file.name\} - Nome do arquivo sem extensão
+- \{file.ext\} - Extensão do arquivo
+- \{rand\} - Valor aleatório para evitar colisões de nomes
+- \{entityId\} - ID da entidade
+- \{propertyKey\} - ID desta propriedade
+- \{path\} - Caminho desta entidade
 :::
 
-### Single file upload
+### Upload de arquivo único
 
 ![Field](/img/fields/File_upload.png)
 
@@ -83,12 +66,12 @@ buildProperty({
 });
 ```
 
-The data type is [`string`](../config/string).
+O tipo de dado é [`string`](../config/string).
 
-Internally the component used
-is [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
+Internamente o componente usado
+é [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
 
-### Multiple file upload
+### Upload de múltiplos arquivos
 
 ![Field](/img/fields/Multi_file_upload.png)
 
@@ -108,28 +91,28 @@ buildProperty({
             }
         }
     },
-    description: "This fields allows uploading multiple images at once"
+    description: "Este campo permite o upload de múltiplas imagens de uma vez"
 });
 ```
 
-The data type is [`array`](../config/array).
+O tipo de dado é [`array`](../config/array).
 
-Internally the component used
-is [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
+Internamente o componente usado
+é [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
 
-### Custom support for images, videos and audio
+### Suporte personalizado para imagens, vídeos e áudio
 
-You are free to use the `storage` property to upload any kind of file, but
-FireCMS also provides some custom support for images, videos and audio.
+Você é livre para usar a propriedade `storage` para enviar qualquer tipo de arquivo, mas
+o FireCMS também fornece suporte personalizado para imagens, vídeos e áudio.
 
-You don't need to make any specific changes and this behaviour is enabled by
-default. FireCMS will automatically detect if the file is an image, video or
-audio and will display the preview accordingly.
+Não precisa fazer nenhuma alteração específica e este comportamento está habilitado por
+padrão. O FireCMS detectará automaticamente se o arquivo é uma imagem, vídeo ou
+áudio e exibirá a pré-visualização correspondente.
 
-The MIME types supported for custom previews are:
+Os tipos MIME suportados para pré-visualizações personalizadas são:
 
 - `image/*`
 - `video/*`
 - `audio/*`
 
-(this includes all file formats related to these categories)
+(isto inclui todos os formatos de arquivo relacionados a estas categorias)

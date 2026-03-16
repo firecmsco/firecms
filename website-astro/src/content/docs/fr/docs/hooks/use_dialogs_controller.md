@@ -2,16 +2,16 @@
 slug: fr/docs/hooks/use_dialogs_controller
 title: useDialogsController
 sidebar_label: useDialogsController
-description: Hook to open dialogs imperatively in FireCMS.
+description: Hook pour ouvrir des dialogues de manière impérative dans FireCMS.
 ---
 
-Use this hook to open dialogs imperatively. This is useful when you need to show a confirmation dialog or a custom modal from a callback or an event handler, where you can't easily render a component.
+Utilisez ce hook pour ouvrir des dialogues de manière impérative. Cela est utile lorsque vous devez afficher un dialogue de confirmation ou une modale personnalisée depuis un callback ou un gestionnaire d'événements, où vous ne pouvez pas facilement rendre un composant.
 
 :::note
-You need to be a child of the `FireCMS` component to use this hook.
+Vous devez être un enfant du composant `FireCMS` pour utiliser ce hook.
 :::
 
-### Usage
+### Utilisation
 
 ```tsx
 import React from "react";
@@ -26,15 +26,15 @@ export function MyComponent() {
             key: "my_dialog",
             Component: ({ open, closeDialog }) => (
                 <div className="p-4 bg-white rounded shadow-lg">
-                    <h2 className="text-xl font-bold mb-4">Hello!</h2>
-                    <p className="mb-4">This is a custom dialog.</p>
-                    <Button onClick={closeDialog}>Close</Button>
+                    <h2 className="text-xl font-bold mb-4">Bonjour !</h2>
+                    <p className="mb-4">Ceci est un dialogue personnalisé.</p>
+                    <Button onClick={closeDialog}>Fermer</Button>
                 </div>
             )
         });
     };
 
-    return <Button onClick={handleClick}>Open Dialog</Button>;
+    return <Button onClick={handleClick}>Ouvrir le dialogue</Button>;
 }
 ```
 
@@ -43,12 +43,12 @@ export function MyComponent() {
 ```tsx
 export interface DialogsController {
     /**
-     * Close the last dialog
+     * Fermer le dernier dialogue
      */
     close: () => void;
 
     /**
-     * Open a dialog
+     * Ouvrir un dialogue
      */
     open: <T extends object = object>(props: DialogControllerEntryProps<T>) => { closeDialog: () => void };
 }
@@ -60,11 +60,11 @@ export interface DialogsController {
 export interface DialogControllerEntryProps<T extends object = object> {
     key: string;
     /**
-     * The component type that will be rendered
+     * Le type de composant qui sera rendu
      */
     Component: React.ComponentType<{ open: boolean, closeDialog: () => void } & T>;
     /**
-     * Props to pass to the dialog component
+     * Props à passer au composant de dialogue
      */
     props?: T;
 }

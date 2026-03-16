@@ -2,7 +2,7 @@
 slug: es/docs/properties/config/boolean
 title: Boolean
 sidebar_label: Boolean
-description: Configuration for boolean properties in FireCMS, rendered as toggle switches.
+description: Configuración de propiedades booleanas en FireCMS, renderizadas como interruptores toggle.
 ---
 
 ```tsx
@@ -18,13 +18,13 @@ const availableProperty = buildProperty({
 
 ### `validation`
 
-* `required` Should this field be compulsory.
-* `requiredMessage` Message to be displayed as a validation error.
+* `required` Si este campo debe ser obligatorio.
+* `requiredMessage` Mensaje a mostrar como error de validación.
 
 ---
 
-The widget that gets created is
-- [`SwitchFieldBinding`](../../api/functions/SwitchFieldBinding)  simple boolean switch
+El widget que se crea es
+- [`SwitchFieldBinding`](../../api/functions/SwitchFieldBinding)  interruptor booleano simple
 
-Links:
+Enlaces:
 - [API](../../api/interfaces/BooleanProperty)

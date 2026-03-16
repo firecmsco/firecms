@@ -2,16 +2,16 @@
 slug: pt/docs/properties/config/string
 title: String
 sidebar_label: String
-description: Configuration for string properties in FireCMS, including storage, markdown, enums, and validation options.
+description: Configuração de propriedades string no FireCMS, incluindo armazenamento, markdown, enums e opções de validação.
 ---
 
-The **string property** is the most versatile field type in FireCMS. Use it for everything from simple text inputs to file uploads, rich text editors, and dropdowns. When building an **admin panel** for your **Firebase** app, string properties let you create:
+A **propriedade string** é o tipo de campo mais versátil no FireCMS. Use-a para tudo, desde campos de texto simples até uploads de arquivos, editores de texto rico e dropdowns. Ao construir um **painel de administração** para sua aplicação **Firebase**, as propriedades string permitem criar:
 
-- **Text fields**: Names, titles, descriptions
-- **Select dropdowns**: Status fields, categories, options
-- **File uploads**: Images, documents (stored in **Firebase Storage**)
-- **Markdown editors**: Rich content with formatting
-- **Email/URL fields**: Validated input types
+- **Campos de texto**: Nomes, títulos, descrições
+- **Dropdowns de seleção**: Campos de status, categorias, opções
+- **Upload de arquivos**: Imagens, documentos (armazenados no **Firebase Storage**)
+- **Editores markdown**: Conteúdo rico com formatação
+- **Campos email/URL**: Tipos de entrada validados
 
 ```tsx
 import { buildProperty } from "@firecms/core";
@@ -26,65 +26,19 @@ const nameProperty = buildProperty({
 
 ### `storage`
 
-You can specify a `StorageMeta` configuration. It is used to
-indicate that this string refers to a path in Google Cloud Storage.
+Você pode especificar uma configuração `StorageMeta`. É usada para indicar que esta string refere-se a um caminho no Google Cloud Storage.
 
-* `mediaType` Media type of this reference, used for displaying the
-  preview.
-* `acceptedFiles` File [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) that can be uploaded to this
-  reference. Note that you can also use the asterisk notation, so `image/*`
-  accepts any image file, and so on.
-* `metadata` Specific metadata set in your uploaded file.
-* `fileName` You can use this prop to customize the uploaded filename.
-  You can use a function as a callback or a string where you
-  specify some placeholders that get replaced with the corresponding values.
-  - `{file}` - Full file name
-  - `{file.name}` - Name of the file without extension
-  - `{file.ext}` - Extension of the file
-  - `{rand}` - Random value used to avoid name collisions
-  - `{entityId}` - ID of the entity
-  - `{propertyKey}` - ID of this property
-  - `{path}` - Path of this entity
-* `storagePath` Absolute path in your bucket.
-  You can use a function as a callback or a string where you
-  specify some placeholders that get replaced with the corresponding values.
-  - `{file}` - Full file name
-  - `{file.name}` - Name of the file without extension
-  - `{file.ext}` - Extension of the file
-  - `{rand}` - Random value used to avoid name collisions
-  - `{entityId}` - ID of the entity
-  - `{propertyKey}` - ID of this property
-  - `{path}` - Path of this entity
-* `includeBucketUrl` When set to `true`, FireCMS will store a fully-qualified
-  storage URL instead of just the storage path.
-  For Firebase Storage this is a `gs://...` URL, e.g.
-  `gs://my-bucket/path/to/file.png`.
-  Defaults to `false`.
-* `storeUrl` When set to `true`, this flag indicates that the download
-  URL of the file will be saved in Firestore instead of the Cloud
-  storage path. Note that the generated URL may use a token that, if
-  disabled, may make the URL unusable and lose the original reference to
-  Cloud Storage, so it is not encouraged to use this flag. Defaults to
-  `false`.
-* `maxSize` Max file size in bytes.
-* `processFile` Use this callback to process the file before uploading it.
-  If you return `undefined`, the original file is uploaded.
-* `postProcess` Postprocess the saved value (storage path, storage URL or download URL)
-  after it has been resolved.
-* `previewUrl` Provide a custom preview URL for a given file name.
-
-#### Images: resize/compress before upload
-
-FireCMS supports client-side image optimization before upload:
-
-* `imageResize` (recommended) Advanced image resizing and cropping configuration.
-  Only applied to images (`image/jpeg`, `image/png`, `image/webp`).
-  - `maxWidth`, `maxHeight`
-  - `mode`: `contain` or `cover`
-  - `format`: `original`, `jpeg`, `png`, `webp`
-  - `quality`: 0-100
-
-* `imageCompression` (deprecated) Legacy image resizing/compression.
+* `mediaType` Tipo de mídia desta referência, usado para exibir a pré-visualização.
+* `acceptedFiles` [Tipo MIME](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) de arquivo que pode ser enviado para esta referência.
+* `metadata` Metadados específicos definidos no arquivo enviado.
+* `fileName` Personalizar o nome do arquivo enviado.
+* `storagePath` Caminho absoluto no seu bucket.
+* `includeBucketUrl` Quando `true`, o FireCMS armazenará uma URL de armazenamento completa.
+* `storeUrl` Quando `true`, a URL de download do arquivo será salva no Firestore.
+* `maxSize` Tamanho máximo do arquivo em bytes.
+* `processFile` Callback para processar o arquivo antes do upload.
+* `imageResize` (recomendado) Configuração avançada de redimensionamento de imagens.
+* `imageCompression` (depreciado) Redimensionamento/compressão de imagens legado.
 
 ```tsx
 import { buildProperty } from "@firecms/core";
@@ -114,187 +68,60 @@ const imageProperty = buildProperty({
 
 ### `url`
 
-If the value of this property is a URL, you can set this flag
-to `true` to add a link, or one of the supported media types to render a
-preview.
-
-```tsx
-import { buildProperty } from "@firecms/core";
-
-const amazonLinkProperty = buildProperty({
-    dataType: "string",
-    name: "Amazon link",
-    url: true
-});
-```
-
-You can also define the preview type for the url: `image`, `video` or `audio`:
-
-```tsx
-import { buildProperty } from "@firecms/core";
-
-const imageProperty = buildProperty({
-    name: "Image",
-    dataType: "string",
-    url: "image",
-});
-```
+Se o valor desta propriedade for uma URL, pode definir este flag como `true` para adicionar um link, ou um dos tipos de mídia suportados para renderizar uma pré-visualização.
 
 ### `email`
 
-If set to `true`, this field will be validated as an email address and
-rendered with an email-specific input. This is useful for contact forms,
-user profiles, or any field that should contain a valid email.
-
-```tsx
-import { buildProperty } from "@firecms/core";
-
-const emailProperty = buildProperty({
-    name: "Email",
-    dataType: "string",
-    email: true
-});
-```
+Se definido como `true`, este campo será validado como endereço de email.
 
 ### `userSelect`
 
-This property is used to indicate that the string is a **user ID**, and
-it will be rendered as a user picker. Note that the user ID needs to be the
-one used in your authentication provider, e.g. Firebase Auth.
-You can also use a property builder to specify the user path dynamically
-based on other values of the entity.
-
-```tsx
-import { buildProperty } from "@firecms/core";
-
-const assignedUserProperty = buildProperty({
-    name: "Assigned User",
-    dataType: "string",
-    userSelect: true
-});
-```
+Esta propriedade indica que a string é um **ID de utilizador**, e será renderizada como um seletor de utilizador.
 
 ### `enumValues`
 
-You can use the enum values providing a map of possible exclusive values the
-property can take, mapped to the label that it is displayed in the dropdown. You
-can use a simple object with the format
-`value` => `label`, or with the format `value`
-=> [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig) if you need extra
-customization, (like disabling specific options or assigning colors). If you
-need to ensure the order of the elements, you can pass a `Map` instead of a
-plain object.
-
-```tsx
-import { buildProperty } from "@firecms/core";
-
-const amazonLinkProperty = buildProperty({
-    dataType: "string",
-    name: "Amazon link",
-    enumValues: {
-        "es": "Spanish",
-        "de": "German",
-        "en": "English",
-        "it": "Italian",
-        "fr": {
-            id: "fr",
-            label: "French",
-            disabled: true
-        }
-    }
-});
-```
+Você pode usar os valores enum fornecendo um map de valores exclusivos possíveis que a propriedade pode assumir, mapeados para o rótulo exibido no dropdown.
 
 ### `multiline`
 
-Is this string property long enough, so it should be displayed
-in a multiple line field. Defaults to false. If set to `true`, the number
-of lines adapts to the content.
-
-```tsx
-import { buildProperty } from "@firecms/core";
-
-const property = buildProperty({
-    name: "Description",
-    dataType: "string",
-    multiline: true
-});
-```
+Se esta propriedade string for longa o suficiente para ser exibida em um campo multi-linha. Padrão false.
 
 ### `clearable`
 
-Add an icon to clear the value and set it to `null`. Defaults to `false`
+Adiciona um ícone para limpar o valor e defini-lo como `null`. Padrão `false`
 
 ### `markdown`
 
-Should this string property be displayed as a markdown field.
-If `true`, the field is rendered as a text editors that supports markdown
-highlight syntax. It also includes a preview of the result.
-
-```tsx
-import { buildProperty } from "@firecms/core";
-
-const property = buildProperty({
-    dataType: "string",
-    name: "Text",
-    markdown: true
-});
-```
+Se esta propriedade string deve ser exibida como um campo markdown.
 
 ### `previewAsTag`
 
-Should this string be rendered as a tag instead of just text.
-
-```tsx
-import { buildProperty } from "@firecms/core";
-
-const property = buildProperty({
-    name: "Tags",
-    description: "Example of generic array",
-    dataType: "array",
-    of: {
-        dataType: "string",
-        previewAsTag: true
-    }
-});
-```
+Se esta string deve ser renderizada como um tag em vez de texto simples.
 
 ### `validation`
 
-* `required` Should this field be compulsory.
-* `requiredMessage` Message to be displayed as a validation error.
-* `unique` The value of this field must be unique in this collection.
-* `uniqueInArray` If you set it to `true`, the user will only be allowed to
-  have the value of that property once in the parent
-  `ArrayProperty`. It works on direct children properties or on first level
-  children of a `MapProperty` (if set as the `.of` property of
-  the `ArrayProperty`).
-* `length` Set a required length for the string value.
-* `min` Set a minimum length limit for the string value.
-* `max` Set a maximum length limit for the string value.
-* `matches` Provide an arbitrary regex to match the value against.
-* `email` Validates the value as an email address via a regex.
-* `url` Validates the value as a valid URL via a regex.
-* `trim` Transforms string values by removing leading and trailing
-  whitespace.
-* `lowercase` Transforms the string value to lowercase.
-* `uppercase` Transforms the string value to uppercase.
+* `required` Se este campo deve ser obrigatório.
+* `requiredMessage` Mensagem a ser exibida como erro de validação.
+* `unique` O valor deste campo deve ser único nesta coleção.
+* `uniqueInArray` Se `true`, o utilizador só poderá ter o valor desta propriedade uma vez no `ArrayProperty` pai.
+* `length` Definir um comprimento obrigatório para o valor string.
+* `min` Definir um limite de comprimento mínimo.
+* `max` Definir um limite de comprimento máximo.
+* `matches` Fornecer uma regex arbitrária para verificar o valor.
+* `email` Valida o valor como endereço de email.
+* `url` Valida o valor como URL válida.
+* `trim` Transforma valores string removendo espaços em branco no início e no fim.
+* `lowercase` Transforma o valor string para minúsculas.
+* `uppercase` Transforma o valor string para maiúsculas.
 
 ---
 
-Based on your configuration the form field widgets that are created are:
+Com base na sua configuração, os widgets criados são:
 
-- [`TextFieldBinding`](../../api/functions/TextFieldBinding) generic text field
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) if `enumValues`
-  are set in the string config, this field renders a select
-  where each option is a colored chip.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding)
-  the property has a
-  storage configuration.
-- [`MarkdownEditorFieldBinding.`](../../api/functions/MarkdownEditorFieldBinding) the
-  property has a
-  markdown configuration.
+- [`TextFieldBinding`](../../api/functions/TextFieldBinding) campo de texto genérico
+- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) se os `enumValues` estiverem definidos
+- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) configuração de armazenamento
+- [`MarkdownEditorFieldBinding`](../../api/functions/MarkdownEditorFieldBinding) configuração markdown
 
 Links:
-
 - [API](../../api/interfaces/StringProperty)

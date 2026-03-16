@@ -5,16 +5,16 @@ title: Block
 
 ![Field](/img/fields/Block.png)
 
-Block is a special field that allows you to build repeat fields where the
-entries are dynamic. Each entry has a `type` selector that allows the end user
-to chose among different properties.
+Block é um campo especial que permite construir campos de repetição onde as
+entradas são dinâmicas. Cada entrada tem um seletor de `type` que permite ao utilizador final
+escolher entre diferentes propriedades.
 
-It is useful when you want to give the flexibility of building complex
-repeat structures to end users, such as blog entries.
+É útil quando deseja dar a flexibilidade de construir estruturas de repetição
+complexas aos utilizadores finais, como entradas de blog.
 
-This fields allows reordering of its entries.
+Este campo permite reordenar suas entradas.
 
-This component can be expanded or collapsed by default.
+Este componente pode ser expandido ou recolhido por padrão.
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -53,8 +53,8 @@ buildProperty({
 });
 ```
 
-The data type is [`array`](../config/array).
+O tipo de dado é [`array`](../config/array).
 
-Internally the component used
-is [`BlockFieldBinding`](../../api/functions/BlockFieldBinding).
+Internamente o componente usado
+é [`BlockFieldBinding`](../../api/functions/BlockFieldBinding).
 

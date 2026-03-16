@@ -1,39 +1,39 @@
 ---
 slug: es/docs/self/deployment
-title: Self-Hosted Deployment
-sidebar_label: Deployment
-description: Deploy your custom features effortlessly with FireCMS PRO, as it stands out for its capability to host custom user code. FireCMS ensures a seamless integration of your unique needs by leveraging module federation and vite for compiling, allowing the use of any npm package. Simply run `npm run deploy` or `yarn deploy` to serve your CMS directly from FireCMS Cloud without fretting over dependency clashes or CMS version updates. Additionally, FireCMS offers a CLI tool for straightforward cloud deployment management. Deploy outside of FireCMS Cloud with a PRO plan using Firebase Hosting; just configure SPA redirects in your Firebase project and deploy with `npm run build && firebase deploy --only hosting` or `yarn run build && firebase deploy --only hosting` to bring your tailored CMS experience to the web.
+title: Despliegue self-hosted
+sidebar_label: Despliegue
+description: Despliega tu CMS personalizado self-hosted en Firebase Hosting o cualquier otro proveedor de hosting estático.
 ---
 
-FireCMS works as a **headless CMS** on top of Firebase. It builds as a **single page application** that can be deployed 
-to any static hosting provider. It does not require any server-side code. 
+FireCMS funciona como un **CMS headless** sobre Firebase. Se compila como una **single page application** que puede desplegarse
+en cualquier proveedor de hosting estático. No requiere ningún código del lado del servidor.
 
-We recommend deploying to Firebase Hosting, as it is in the same ecosystem, and FireCMS will even
-pick up the Firebase config from the environment.
+Recomendamos desplegar en Firebase Hosting, ya que está en el mismo ecosistema, y FireCMS incluso
+recogerá la configuración de Firebase del entorno.
 
 
-## Deployment to Firebase Hosting
+## Despliegue en Firebase Hosting
 
-If you would like to deploy your CMS to Firebase Hosting, you need to enable
-it first in the Hosting tab of your Firebase project.
+Si deseas desplegar tu CMS en Firebase Hosting, primero necesitas habilitarlo
+en la pestaña Hosting de tu proyecto Firebase.
 
-You will need to init Firebase, either with an existing project or a new one:
+Necesitarás inicializar Firebase, ya sea con un proyecto existente o uno nuevo:
 
 ```
 firebase init
 ```
 
 :::note
-You don't need to enable any of the services, besides Firebase Hosting if you
-would like to deploy it there.
+No necesitas habilitar ninguno de los servicios, además de Firebase Hosting si
+deseas desplegarlo allí.
 :::
 
-You can link the Firebase hosting site to the webapp that you have created
-in order to get your Firebase config.
+Puedes vincular el sitio de Firebase Hosting a la webapp que has creado
+para obtener tu configuración de Firebase.
 
-In order to make everything work as expected, you need to setup Firebase Hosting
-redirects to work as a SPA. Your **firebase.json** should
-look similar to this (remember to replace `[YOUR_SITE_HERE]`).
+Para que todo funcione como se espera, necesitas configurar las redirecciones de Firebase Hosting
+para funcionar como una SPA. Tu **firebase.json** debería
+verse similar a esto (recuerda reemplazar `[YOUR_SITE_HERE]`).
 
 ```json5
 {
@@ -56,35 +56,28 @@ look similar to this (remember to replace `[YOUR_SITE_HERE]`).
 
 ```
 
-Then simply run:
+Luego simplemente ejecuta:
 
 ```bash
 npm run build && firebase deploy --only hosting
 ```
 
-or
+o
 
 ```bash
 yarn run build && firebase deploy --only hosting
 ```
 
-to deploy.
+para desplegar.
 
-```bash
-npm run build
+## Desplegar en otras plataformas
 
-
-or
-
-```bash
-## Deploying to other platforms
-
-If you would like to deploy your CMS to other platforms, you can build it
-with:
+Si deseas desplegar tu CMS en otras plataformas, puedes compilarlo
+con:
 
 ```
 yarn run build
 ```
 
-and then serve the **dist** folder with your favorite static hosting provider.
+y luego servir la carpeta **dist** con tu proveedor de hosting estático favorito.
 

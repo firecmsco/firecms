@@ -562,4 +562,58 @@ export interface FireCMSTranslations {
     explore_docs: string;
     want_to_customize_with_code: string;
     to_scaffold_a_local_project: string;
+
+    // ─── Collection Editor — Validation ──────────────────────────
+    validation: string;
+    unique: string;
+    required_message: string;
+    required_tooltip: string;
+    unique_tooltip: string;
+    lowercase: string;
+    uppercase: string;
+    trim: string;
+    exact_length: string;
+    min_length: string;
+    max_length: string;
+    matches_regex: string;
+    not_valid_regexp: string;
+    regex_helper: string;
+    min_value: string;
+    max_value: string;
+    less_than: string;
+    more_than: string;
+    positive_value: string;
+    negative_value: string;
+    integer_value: string;
+
+    // ─── Collection Editor — Property Edit ───────────────────────
+    invalid_regular_expression: string;
+    must_specify_target_collection: string;
+    need_specify_repeat_field: string;
+    need_specify_block_properties: string;
+    incomplete_condition: string;
+    field_name: string;
+
+    // ─── Collection Editor — Display & Config ────────────────────
+    kanban_column_property: string;
+    select_a_property: string;
+    kanban_property_not_found: string;
+    no_enum_string_properties: string;
+    kanban_column_description: string;
+    create_property: string;
+    order_property: string;
+    order_property_not_found: string;
+    no_number_properties: string;
+    order_property_description: string;
+    display_settings: string;
+    default_row_size: string;
+    side_dialog_width: string;
+    side_dialog_width_description: string;
+    inline_editing_enabled: string;
+    inline_editing_disabled: string;
+    inline_editing_description: string;
+    include_json_view: string;
+    no_json_view: string;
+    json_view_description: string;
+    not_found_suffix: string;
 }

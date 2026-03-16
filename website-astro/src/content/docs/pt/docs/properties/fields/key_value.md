@@ -1,16 +1,16 @@
 ---
 slug: pt/docs/properties/fields/key_value
-title: Key/Value
+title: Chave/Valor
 ---
 
 ![Field](/img/fields/KeyValue.png)
 
-Key/Value is a special field that allows you to input arbitrary key/value pairs.
-You are able to use string as keys and any primitive type as value (including maps
-and arrays).
+Chave/Valor é um campo especial que permite inserir pares chave/valor arbitrários.
+Pode usar strings como chaves e qualquer tipo primitivo como valor (incluindo maps
+e arrays).
 
-To enable this widget, simply set the `dataType` to `map`, and the `keyValue` property
-to `true`.
+Para habilitar este widget, simplesmente defina o `dataType` como `map`, e a propriedade `keyValue`
+como `true`.
 
 ```typescript jsx
 import { buildProperty } from "@firecms/core";
@@ -22,8 +22,8 @@ buildProperty({
 });
 ```
 
-The data type is [`map`](../config/map).
+O tipo de dado é [`map`](../config/map).
 
-Internally the component used
-is [`KeyValueFieldBinding`](../../api/functions/KeyValueFieldBinding).
+Internamente o componente usado
+é [`KeyValueFieldBinding`](../../api/functions/KeyValueFieldBinding).
 

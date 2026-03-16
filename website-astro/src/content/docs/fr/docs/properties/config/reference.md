@@ -2,7 +2,7 @@
 slug: fr/docs/properties/config/reference
 title: Reference
 sidebar_label: Reference
-description: Configuration for reference properties in FireCMS, linking entities to other collections with previews and filters.
+description: Configuration des propriétés de référence dans FireCMS, liant des entités à d'autres collections avec des aperçus et des filtres.
 ---
 
 ```tsx
@@ -18,39 +18,37 @@ const productsReferenceProperty = buildProperty({
 
 ### `path`
 
-Absolute collection path of the collection this reference
-points to. The schema of the entity is inferred based on the root navigation,
-so the filters and search delegate existing there are applied to this view as
-well.
+Chemin absolu de la collection vers laquelle cette référence pointe. Le schéma de l'entité est déduit à partir de la navigation racine,
+donc les filtres et le délégué de recherche existants s'appliquent également à cette vue.
 
 ### `previewProperties`
 
-List of properties rendered as this reference preview.
-Defaults to first 3.
+Liste des propriétés rendues comme aperçu de cette référence.
+Par défaut les 3 premières.
 
 ### `forceFilter`
 
-Force a filter in the reference selection. If applied, the rest of the filters
-will be disabled. Filters applied with this prop cannot be changed.
-e.g. `forceFilter: { age: [">=", 18] }`
+Forcer un filtre dans la sélection de référence. S'il est appliqué, le reste des filtres
+sera désactivé. Les filtres appliqués avec cette prop ne peuvent pas être modifiés.
+ex. `forceFilter: { age: [">=", 18] }`
 
 ### `validation`
 
-* `required` Should this field be compulsory.
-* `requiredMessage` Message to be displayed as a validation error.
+* `required` Si ce champ doit être obligatoire.
+* `requiredMessage` Message à afficher comme erreur de validation.
 
 ### `includeId`
 
-Should the reference include the ID of the entity. Defaults to `true`.
+Si la référence doit inclure l'ID de l'entité. Par défaut `true`.
 
 ### `includeEntityLink`
 
-Should the reference include a link to the entity (open the entity details). Defaults to `true`.
+Si la référence doit inclure un lien vers l'entité (ouvrir les détails de l'entité). Par défaut `true`.
 
 ### `defaultValue`
 
-Default value for this property.
-You can set the default value by defining an EntityReference:
+Valeur par défaut pour cette propriété.
+Vous pouvez définir la valeur par défaut en définissant un EntityReference :
 
 ```tsx
 
@@ -66,12 +64,12 @@ const productsReferenceProperty = buildProperty({
 
 ---
 
-The widget that gets created is
+Le widget créé est
 
-- [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding) Field
-  that opens a
-  reference selection dialog
+- [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding) Champ
+  qui ouvre un
+  dialogue de sélection de référence
 
-Links:
+Liens :
 
 - [API](../../api/interfaces/ReferenceProperty)

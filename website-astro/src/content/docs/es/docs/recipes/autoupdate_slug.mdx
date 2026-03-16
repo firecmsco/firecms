@@ -1,23 +1,23 @@
 ---
 slug: es/docs/recipes/autoupdate_slug
-title: Add a slug to your documents
-sidebar_label: Add a slug to your documents
-description: Learn how to automatically generate slugs for your documents in Firestore using FireCMS. This tutorial will guide you through the process of adding a slug field to your collection, configuring a custom field to generate slugs based on a document's title, and ensuring that slugs are unique across your Firestore database. By leveraging FireCMS's custom field capabilities and Firestore's unique index constraints, you can streamline the process of creating SEO-friendly URLs for your documents, enhancing the user experience and discoverability of your CMS application.
+title: Añadir un slug a tus documentos
+sidebar_label: Añadir un slug a tus documentos
+description: Aprende a generar automáticamente slugs para tus documentos en Firestore usando FireCMS. Este tutorial te guiará a través del proceso de añadir un campo slug a tu colección, configurar un campo personalizado para generar slugs basados en el título del documento, y asegurar que los slugs sean únicos en tu base de datos Firestore.
 ---
 
-When building a CMS, it is common to want to generate slugs for your documents
-based on a specific field, such as the title. This is useful for creating
-SEO-friendly URLs and improving the discoverability of your content.
+Al construir un CMS, es común querer generar slugs para tus documentos
+basándose en un campo específico, como el título. Esto es útil para crear
+URLs amigables para SEO y mejorar la descubribilidad de tu contenido.
 
-In this tutorial, we will show you how to automatically generate slugs for your
-documents using FireCMS. It is very straightforward to add a callback that will
-be executed before saving your document, allowing you to generate the slug based
-on the title field.
+En este tutorial, te mostraremos cómo generar automáticamente slugs para tus
+documentos usando FireCMS. Es muy sencillo añadir un callback que se
+ejecutará antes de guardar tu documento, permitiéndote generar el slug basándose
+en el campo del título.
 
-### Declare your collection
+### Declara tu colección
 
-For illustrative purposes, let's create two simple `pages` collection, with just a title field, that we will
-be adding a slug to:
+Para fines ilustrativos, creemos una colección `pages` simple, con solo un campo de título, a la que le
+añadiremos un slug:
 
 
 import { Code } from '@astrojs/starlight/components';
@@ -27,18 +27,18 @@ import FullCode from '../../samples/samples_v3/recipes/autoupdate_slug/full?raw'
 
 <Code code={AddSlugSource} lang="tsx" />
 
-### Add the pre-save callback
+### Añadir el callback pre-guardado
 
-To add a slug to your documents, you can use the `onPreSave` callback provided by FireCMS.
-This callback will be executed before saving the document, allowing you to modify the document before
-it is written to the database.
+Para añadir un slug a tus documentos, puedes usar el callback `onPreSave` proporcionado por FireCMS.
+Este callback se ejecutará antes de guardar el documento, permitiéndote modificar el documento antes
+de que se escriba en la base de datos.
 
 <Code code={SlugCallbacksSource} lang="tsx" />
 
 
-### Complete code
+### Código completo
 
-Here is the complete code for this example:
+Aquí está el código completo para este ejemplo:
 
 <Code code={FullCode} lang="tsx" />
 
