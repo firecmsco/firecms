@@ -1,5 +1,4 @@
 ---
-slug: pt/docs/hooks/use_clipboard
 title: useClipboard
 sidebar_label: useClipboard
 description: Hook para copiar texto para a área de transferência com feedback em FireCMS.

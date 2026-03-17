@@ -1,5 +1,4 @@
 ---
-slug: it/docs/properties/config/date
 title: Data/Ora
 sidebar_label: Data/Ora
 description: Configurazione per le proprietà data e ora in FireCMS, inclusi valori automatici, modalità data e validazione.

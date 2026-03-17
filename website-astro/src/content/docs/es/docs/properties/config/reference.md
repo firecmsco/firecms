@@ -1,5 +1,4 @@
 ---
-slug: es/docs/properties/config/reference
 title: Reference
 sidebar_label: Reference
 description: Configuración de propiedades de referencia en FireCMS, enlazando entidades a otras colecciones con previsualizaciones y filtros.

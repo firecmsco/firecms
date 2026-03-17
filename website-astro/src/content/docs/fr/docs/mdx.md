@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/mdx
 title: Propulsé par MDX
 ---
 

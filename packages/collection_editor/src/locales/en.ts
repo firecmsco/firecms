@@ -112,6 +112,23 @@ export const collectionEditorTranslationsEn = {
     delete_stored_config_body: "This will not delete any data, only the stored config, and reset to the code state.",
     order_label: "Order",
 
+    // Collection Properties Editor
+    select_property_to_edit: "Select a property to edit it",
+    add_first_property: "Now you can add your first property",
+    add_new_property: "Add new property",
+    no_permission_add_properties: "You don't have permission to add new properties",
+    get_code_for_collection: "Get the code for this collection",
+    add_properties_from_data: "Add new properties based on data",
+    collection_name_placeholder: "Collection name",
+    created_by: "Created by {{name}}",
+    property_defined_as_builder: "This property is defined as a property builder in code",
+
+    // Extend Settings
+    extend_title: "Extend",
+    extend_description: "Add subcollections, custom views, and entity actions to this collection.",
+    collection_defined_in_code: "This collection is defined in code. The changes done in this editor will override the properties defined in code. You can delete the overridden values to revert to the state defined in code.",
+    reset_to_code: "Reset to code",
+
     // Widget Type Groups
     widget_group_text: "Text",
     widget_group_boolean: "Boolean",

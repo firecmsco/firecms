@@ -1334,7 +1334,7 @@ Then we are going to install **FireCMS PRO**. Note that we will not be adding al
 Then install FireCMS and its dependencies:
 
 ```bash
-yarn add firebase@^10 @firecms/core@^3.0.0-beta @firecms/firebase@^3.0.0-beta @firecms/editor@^3.0.0-beta react-router@^6 react-router-dom@^6 @tailwindcss/typography typeface-rubik @fontsource/jetbrains-mono
+yarn add firebase@^10 @firecms/core@^3.0.0-beta @firecms/firebase@^3.0.0-beta react-router@^6 react-router-dom@^6 @tailwindcss/typography typeface-rubik @fontsource/jetbrains-mono
 ```
 
 Now let's import the tailwind config of FireCMS. Add the **FireCMS preset** `tailwind.config.js`, as well as the content paths to FireCMS source code, so the right tailwind classes are picked.

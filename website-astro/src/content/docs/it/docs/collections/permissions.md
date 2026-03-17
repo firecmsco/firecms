@@ -1,5 +1,4 @@
 ---
-slug: it/docs/collections/permissions
 title: Permessi
 sidebar_label: Permessi
 ---

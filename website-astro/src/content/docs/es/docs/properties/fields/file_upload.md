@@ -1,5 +1,4 @@
 ---
-slug: es/docs/properties/fields/file_upload
 title: Carga de archivos (File upload)
 ---
 

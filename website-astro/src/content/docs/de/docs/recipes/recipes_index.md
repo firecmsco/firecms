@@ -1,5 +1,4 @@
 ---
-slug: de/docs/recipes/recipes_index
 title: Rezepte
 sidebar_label: Rezepte
 description: Erweiterte FireCMS-Tutorials und -Rezepte zu Blogs, Lokalisierungen, Entity-Kopieren und dynamischer Navigation.

@@ -1,5 +1,4 @@
 ---
-slug: de/docs/collections/collection_actions
 title: Aktionsleisten für Kollektionen
 sidebar_label: Aktionsleisten für Kollektionen
 ---

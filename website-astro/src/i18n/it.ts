@@ -34,6 +34,7 @@ export const it = {
   'nav.privacy': 'Informativa sulla privacy',
   'nav.cookies': 'Informativa sui cookie',
   'nav.docs': 'Documentazione',
+  'nav.cta.start': 'Inizia a Costruire',
 
   'footer.company': 'Azienda',
   'footer.solutions': 'Soluzioni',
@@ -88,6 +89,7 @@ export const it = {
 
   'seo.title': 'Firebase CMS & Firestore CMS | FireCMS',
   'seo.description': 'FireCMS è un framework CMS per Firebase e Firestore per creare rapidamente pannelli admin e app back-office. Lancia subito con il nostro Cloud gestito o ospita il nostro framework open-source.',
+  'seo.keywords': 'CMS headless, CMS Firebase, CMS Firestore, pannello admin React, backend senza codice, CMS con intelligenza artificiale, costruttore visuale di schemi, gestione dati, applicazione back-office, sistema di gestione dei contenuti, admin Firestore, back office Firebase, interfaccia database',
 
   'pricing.title': 'Prezzi flessibili per ogni esigenza',
   'pricing.subtitle': 'Inizia gratis con la nostra versione Community open-source, prova il Cloud gestito o scegli PRO per funzionalità avanzate self-hosted.',

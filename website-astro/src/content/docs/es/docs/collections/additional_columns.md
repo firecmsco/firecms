@@ -1,5 +1,4 @@
 ---
-slug: es/docs/collections/additional_columns
 title: Columnas/campos adicionales (Additional columns/fields)
 sidebar_label: Columnas adicionales
 ---

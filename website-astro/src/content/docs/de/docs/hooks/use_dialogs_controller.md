@@ -1,5 +1,4 @@
 ---
-slug: de/docs/hooks/use_dialogs_controller
 title: useDialogsController
 sidebar_label: useDialogsController
 description: Hook zum imperativ Öffnen von Dialogen in FireCMS.

@@ -92,6 +92,24 @@ export const collectionEditorTranslationsDe = {
     delete_stored_config: "Gespeicherte Konfiguration löschen?",
     delete_stored_config_body: "Dadurch werden keine Daten gelöscht, nur die gespeicherte Konfiguration, und der Code-Zustand wird wiederhergestellt.",
     order_label: "Reihenfolge",
+
+    // Collection Properties Editor
+    select_property_to_edit: "Wähle eine Eigenschaft aus, um sie zu bearbeiten",
+    add_first_property: "Jetzt kannst du deine erste Eigenschaft hinzufügen",
+    add_new_property: "Neue Eigenschaft hinzufügen",
+    no_permission_add_properties: "Du hast keine Berechtigung, neue Eigenschaften hinzuzufügen",
+    get_code_for_collection: "Code für diese Sammlung abrufen",
+    add_properties_from_data: "Neue Eigenschaften basierend auf Daten hinzufügen",
+    collection_name_placeholder: "Sammlungsname",
+    created_by: "Erstellt von {{name}}",
+    property_defined_as_builder: "Diese Eigenschaft ist als Property Builder im Code definiert",
+
+    // Extend Settings
+    extend_title: "Erweitern",
+    extend_description: "Füge Untersammlungen, benutzerdefinierte Ansichten und Entitätsaktionen zu dieser Sammlung hinzu.",
+    collection_defined_in_code: "Diese Sammlung ist im Code definiert. Die in diesem Editor vorgenommenen Änderungen überschreiben die im Code definierten Eigenschaften. Du kannst die überschriebenen Werte löschen, um zum im Code definierten Zustand zurückzukehren.",
+    reset_to_code: "Auf Code zurücksetzen",
+
     widget_group_text: "Text",
     widget_group_boolean: "Boolean",
     widget_group_users: "Benutzer",

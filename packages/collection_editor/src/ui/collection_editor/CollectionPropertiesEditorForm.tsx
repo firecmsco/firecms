@@ -13,7 +13,8 @@ import {
     PropertyOrBuilder,
     useLargeLayout,
     User,
-    useSnackbarController
+    useSnackbarController,
+    useTranslation
 } from "@firecms/core";
 import {
     AddIcon,
@@ -79,6 +80,7 @@ export function CollectionPropertiesEditorForm({
 
     const largeLayout = useLargeLayout();
     const asDialog = !largeLayout
+    const { t } = useTranslation();
 
     // index of the selected property within the namespace
     const [selectedPropertyIndex, setSelectedPropertyIndex] = useState<number | undefined>();
@@ -431,7 +433,7 @@ export function CollectionPropertiesEditorForm({
                             <Typography variant={"body2"}
                                 className={"ml-2"}
                                 color={"secondary"}>
-                                Created by {owner.displayName}
+                                {t("created_by", { name: owner.displayName ?? "" })}
                             </Typography>}
                     </div>
 
@@ -440,7 +442,7 @@ export function CollectionPropertiesEditorForm({
                     </div>}
 
                     <div className="ml-1 mt-2 flex flex-row gap-2">
-                        <Tooltip title={"Get the code for this collection"}
+                        <Tooltip title={t("get_code_for_collection")}
                             asChild={true}>
                             <IconButton
                                 variant={"filled"}
@@ -449,7 +451,7 @@ export function CollectionPropertiesEditorForm({
                                 <CodeIcon />
                             </IconButton>
                         </Tooltip>
-                        {inferPropertiesFromData && <Tooltip title={"Add new properties based on data"}
+                        {inferPropertiesFromData && <Tooltip title={t("add_properties_from_data")}
                             asChild={true}>
                             <IconButton
                                 variant={"filled"}
@@ -458,7 +460,7 @@ export function CollectionPropertiesEditorForm({
                                 {inferringProperties ? <CircularProgress size={"small"} /> : <FindInPageIcon />}
                             </IconButton>
                         </Tooltip>}
-                        <Tooltip title={"Add new property"}
+                        <Tooltip title={t("add_new_property")}
                             asChild={true}>
                             <Button
                                 onClick={() => setNewPropertyDialogOpen(true)}>
@@ -487,7 +489,7 @@ export function CollectionPropertiesEditorForm({
                     size={"large"}
                     onClick={() => setNewPropertyDialogOpen(true)}
                     startIcon={<AddIcon />}>
-                    Add new property
+                    {t("add_new_property")}
                 </Button>
             </div>
 
@@ -524,20 +526,20 @@ export function CollectionPropertiesEditorForm({
                             <div className={"w-full flex flex-col items-center justify-center h-full gap-4"}>
                                 <Typography variant={"label"} className="">
                                     {emptyCollection
-                                        ? "Now you can add your first property"
-                                        : "Select a property to edit it"}
+                                        ? t("add_first_property")
+                                        : t("select_property_to_edit")}
                                 </Typography>
                                 <Button
                                     onClick={() => setNewPropertyDialogOpen(true)}
                                 >
                                     <AddIcon />
-                                    Add new property
+                                    {t("add_new_property")}
                                 </Button>
                             </div>}
 
                         {selectedProperty && isPropertyBuilder(selectedProperty) &&
                             <Typography variant={"label"} className="flex items-center justify-center">
-                                {"This property is defined as a property builder in code"}
+                                {t("property_defined_as_builder")}
                             </Typography>}
                     </div>
                 </div>}

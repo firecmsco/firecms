@@ -1,5 +1,4 @@
 ---
-slug: de/docs/collections/additional_columns
 title: Zusätzliche Spalten/Felder
 sidebar_label: Zusätzliche Spalten/Felder
 ---

@@ -1,5 +1,4 @@
 ---
-slug: pt/docs/hooks/use_firecms_context
 title: useFireCMSContext
 sidebar_label: useFireCMSContext
 ---

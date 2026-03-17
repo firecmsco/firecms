@@ -1,5 +1,4 @@
 ---
-slug: it/docs/properties/fields/file_upload
 title: Caricamento file
 ---
 

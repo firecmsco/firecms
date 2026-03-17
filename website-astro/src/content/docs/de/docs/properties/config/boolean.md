@@ -1,5 +1,4 @@
 ---
-slug: de/docs/properties/config/boolean
 title: Boolean
 sidebar_label: Boolean
 description: Konfiguration für Boolean-Eigenschaften in FireCMS, als Schalter gerendert.

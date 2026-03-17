@@ -1,5 +1,4 @@
 ---
-slug: es/docs/properties/fields/key_value
 title: Clave/Valor (Key/Value)
 ---
 

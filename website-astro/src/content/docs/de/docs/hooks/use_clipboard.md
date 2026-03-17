@@ -1,5 +1,4 @@
 ---
-slug: de/docs/hooks/use_clipboard
 title: useClipboard
 sidebar_label: useClipboard
 description: Utility-Hook zum Kopieren von Text in die Zwischenablage.

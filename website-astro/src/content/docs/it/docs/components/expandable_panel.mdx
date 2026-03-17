@@ -6,26 +6,26 @@ sidebar_label: ExpandablePanel
 
 import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
 
-`ExpandablePanel` is a versatile component that allows for content to be collapsible, enhancing the organization of UI by hiding content that is not immediately relevant to the user. This component can operate in controlled or uncontrolled mode, with additional features such as an invisible mode for a subtler UI, and an optional field mode to align with form field styling.
+`ExpandablePanel` è un componente versatile che consente di rendere il contenuto comprimibile, migliorando l'organizzazione dell'interfaccia nascondendo contenuti non immediatamente rilevanti per l'utente. Questo componente può operare in modalità controllata o non controllata, con funzionalità aggiuntive come una modalità invisibile per un'interfaccia più sottile e una modalità campo opzionale per allinearsi allo stile dei campi del form.
 
-## Usage
+## Utilizzo
 
-To use the `ExpandablePanel`, import it from your components and provide the necessary props including `title`, `children`, and control props like `expanded`, `onExpandedChange`, and styling props such as `titleClassName`, `className`.
+Per usare l'`ExpandablePanel`, importalo dai tuoi componenti e fornisci le prop necessarie tra cui `title`, `children` e prop di controllo come `expanded`, `onExpandedChange` e prop di stile come `titleClassName`, `className`.
 
-## Basic Expandable Panel
+## ExpandablePanel di base
 
-An example showing the basic usage of the `ExpandablePanel` component.
+Un esempio che mostra l'utilizzo base del componente `ExpandablePanel`.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_basic.tsx"/>
 
-## Expandable Panel as Field
+## ExpandablePanel come campo
 
-This variant showcases the `ExpandablePanel` utilized as a field in a form, demonstrating the combination of `asField` property.
+Questa variante mostra l'`ExpandablePanel` utilizzato come campo in un form, dimostrando la combinazione della proprietà `asField`.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_field.tsx"/>
 
-## Invisible Expandable Panel
+## ExpandablePanel invisibile
 
-An `ExpandablePanel` example where the panel borders are made invisible for a more seamless integration into the surrounding UI.
+Un esempio di `ExpandablePanel` dove i bordi del pannello sono resi invisibili per un'integrazione più fluida nell'interfaccia circostante.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_invisible.tsx"/>

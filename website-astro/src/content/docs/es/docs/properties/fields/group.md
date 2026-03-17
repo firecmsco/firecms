@@ -1,5 +1,4 @@
 ---
-slug: es/docs/properties/fields/group
 title: Grupo (Group)
 ---
 

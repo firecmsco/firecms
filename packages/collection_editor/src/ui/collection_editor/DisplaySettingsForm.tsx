@@ -121,10 +121,10 @@ export function DisplaySettingsForm({
 
                             return (
                                 <>
+                                    <Typography variant={"label"} color={"secondary"} className={"ml-3.5"}>{t("order_property")}</Typography>
                                     <Select
                                         key={`order-select-${numberProperties.length}`}
                                         name="orderProperty"
-                                        label={t("order_property")}
                                         size={"large"}
                                         fullWidth={true}
                                         position={"item-aligned"}

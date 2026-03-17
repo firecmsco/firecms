@@ -1,5 +1,4 @@
 ---
-slug: de/docs/properties/config/date
 title: Datum/Uhrzeit
 sidebar_label: Datum/Uhrzeit
 description: Konfiguration für Datum- und Zeiteigenschaften in FireCMS, einschließlich automatischer Werte, Datumsmodi und Validierung.

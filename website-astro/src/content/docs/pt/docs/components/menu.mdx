@@ -6,26 +6,26 @@ sidebar_label: Menu
 
 import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
 
-The `Menu` component provides a flexible dropdown menu functionality. It leverages the `@radix-ui/react-dropdown-menu` for accessibility and customization features. The `Menu` component and its sub-component, `MenuItem`, can be easily styled and incorporated into your UI for various needs such as navigation menus, options menus, and more.
+O componente `Menu` fornece uma funcionalidade flexível de menu suspenso. Utiliza o `@radix-ui/react-dropdown-menu` para recursos de acessibilidade e personalização. O componente `Menu` e seu subcomponente, `MenuItem`, podem ser facilmente estilizados e incorporados à sua interface para várias necessidades como menus de navegação, menus de opções e mais.
 
-## Usage
+## Uso
 
-The `Menu` component requires a `trigger` element to toggle the visibility of the menu and can accept any ReactNode as its children, which typically includes `MenuItem` components for the menu options.
+O componente `Menu` requer um elemento `trigger` para alternar a visibilidade do menu e pode aceitar qualquer ReactNode como filhos, que tipicamente inclui componentes `MenuItem` para as opções do menu.
 
-## Basic Menu
+## Menu básico
 
-A simple example of using the `Menu` component to create a dropdown menu.
+Um exemplo simples de uso do componente `Menu` para criar um menu suspenso.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_basic.tsx"/>
 
-## Controlled Menu
+## Menu controlado
 
-You can control the visibility of the `Menu` component by passing the `open` and `onOpenChange` props.
+Você pode controlar a visibilidade do componente `Menu` passando as props `open` e `onOpenChange`.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_controlled.tsx"/>
 
-## Dense Menu Items
+## Itens de menu compactos
 
-Showing how to make the `MenuItem` components dense for a more compact menu appearance.
+Mostrando como tornar os componentes `MenuItem` compactos para uma aparência de menu mais condensada.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_dense_items.tsx"/>

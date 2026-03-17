@@ -1,5 +1,4 @@
 ---
-slug: de/docs/collections/multiple_filters
 title: Mehrere Filter in Kollektionsansichten
 sidebar_label: Mehrere Filter
 ---

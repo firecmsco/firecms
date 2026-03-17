@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/hooks/use_storage_source
 title: useStorageSource
 sidebar_label: useStorageSource
 description: Accédez à la source de stockage FireCMS pour télécharger des fichiers et récupérer des URLs de téléchargement. Fonctionne avec Firebase Storage ou toute implémentation de stockage personnalisée.

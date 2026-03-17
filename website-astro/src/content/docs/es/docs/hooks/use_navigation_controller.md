@@ -1,5 +1,4 @@
 ---
-slug: es/docs/hooks/use_navigation_controller
 title: useNavigationController
 sidebar_label: useNavigationController
 description: Accede al controlador de navegación de FireCMS para obtener colecciones, resolver rutas y navegar programáticamente.

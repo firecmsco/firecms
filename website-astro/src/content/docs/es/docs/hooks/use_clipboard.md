@@ -1,5 +1,4 @@
 ---
-slug: es/docs/hooks/use_clipboard
 title: useClipboard
 sidebar_label: useClipboard
 description: Hook utilitario para copiar texto al portapapeles.

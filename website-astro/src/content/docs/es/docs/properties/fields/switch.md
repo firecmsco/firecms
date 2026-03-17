@@ -1,5 +1,4 @@
 ---
-slug: es/docs/properties/fields/switch
 title: Interruptor (Switch)
 ---
 

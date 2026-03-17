@@ -1,5 +1,4 @@
 ---
-slug: de/docs/cloud/eject_collections
 title: "Kollektionen aus der UI in Code exportieren"
 sidebar_label: Kollektionen exportieren
 description: "Konvertieren Sie in der UI definierte Kollektionen in Code für Ihr Headless-CMS. Exportieren Sie Ihre Firestore-Schemasonfiguration für Versionskontrolle und erweiterte Anpassung."

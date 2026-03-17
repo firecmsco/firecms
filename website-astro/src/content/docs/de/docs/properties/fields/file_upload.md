@@ -1,5 +1,4 @@
 ---
-slug: de/docs/properties/fields/file_upload
 title: Datei-Upload
 ---
 

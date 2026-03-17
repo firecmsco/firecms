@@ -1,5 +1,4 @@
 ---
-slug: es/docs/self/main_components
 title: Componentes Principales
 sidebar_label: Componentes Principales
 description: FireCMS proporciona un conjunto de componentes con estilos que estructuran la interfaz del CMS. Estos componentes están diseñados para ser fácilmente personalizables y pueden extenderse para adaptarse a tus necesidades.

@@ -1,5 +1,4 @@
 ---
-slug: de/docs/pro/licensing
 title: Lizenzierung
 description: Informationen zur FireCMS PRO-Lizenzierung, einschließlich Kauf und Konfiguration Ihrer Lizenz für das Deployment.
 ---

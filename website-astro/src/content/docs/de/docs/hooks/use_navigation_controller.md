@@ -1,5 +1,4 @@
 ---
-slug: de/docs/hooks/use_navigation_controller
 title: useNavigationController
 sidebar_label: useNavigationController
 description: Zugriff auf den FireCMS-Navigationscontroller für Kollektionen, Pfadauflösung und Navigation.

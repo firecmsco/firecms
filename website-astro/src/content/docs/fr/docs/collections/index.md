@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/collections/index
 title: Collections
 sidebar_label: Collections
 description: Définissez votre schéma de données Firestore avec les collections FireCMS. Créez des panneaux d'administration typés pour Firebase avec React et TypeScript.

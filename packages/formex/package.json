@@ -33,6 +33,7 @@
     "react-dom": ">=18.3.1 || >=19.0.0"
   },
   "dependencies": {
+    "react-compiler-runtime": "^19.0.0-beta-af1b7da-20250417",
     "react-fast-compare": "^3.2.2"
   },
   "devDependencies": {

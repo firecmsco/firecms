@@ -1,5 +1,4 @@
 ---
-slug: pt/docs/hooks/use_side_dialogs_controller
 title: useSideDialogsController
 sidebar_label: useSideDialogsController
 description: Hook para gerenciar diálogos/painéis laterais no FireCMS.

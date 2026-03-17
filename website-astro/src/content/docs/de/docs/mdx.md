@@ -1,5 +1,4 @@
 ---
-slug: de/docs/mdx
 title: Unterstützt von MDX
 ---
 

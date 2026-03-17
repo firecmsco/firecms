@@ -641,7 +641,19 @@ export default defineConfig({
             },
         }),
         mdx(),
-        sitemap()
+        sitemap({
+            i18n: {
+                defaultLocale: 'en',
+                locales: {
+                    en: 'en',
+                    es: 'es',
+                    de: 'de',
+                    fr: 'fr',
+                    it: 'it',
+                    pt: 'pt',
+                },
+            },
+        })
     ],
     vite: {
         plugins: [

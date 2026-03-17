@@ -24,7 +24,6 @@ import {
     User,
     useSnackbarController,
     useTranslation,
-    FireCMSTranslations
 } from "@firecms/core";
 import {
     ArrowBackIcon,
@@ -918,7 +917,7 @@ function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Rec
 
 }
 
-type TranslateFn = (key: keyof FireCMSTranslations, params?: Record<string, string>) => string;
+type TranslateFn = (key: string, params?: Record<string, string>) => string;
 
 const validatePath = (t: TranslateFn, value: string, isNewCollection: boolean, existingPaths: string[], idValue?: string) => {
     let error;

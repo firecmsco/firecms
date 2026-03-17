@@ -1,52 +1,51 @@
 ---
 slug: pt/docs/components/text_field
-title: Campo di testo
+title: Campo de texto
 sidebar_label: Text Field
-description: Learn how to use Text Field components to let users input, edit, and display text in your application. Includes examples of basic, multiline, and adorned text fields, as well as various sizes.
 ---
 
-# Text Field Component
+# Componente de campo de texto
 
-Text fields are versatile UI elements that allow users to input, edit, and display text within an application.
-They play a crucial role in user interaction, providing a straightforward way for users to enter data, provide
-feedback, complete forms, and interact with various interfaces that require text input. Text fields can be used for
-short inputs like usernames or passwords, as well as for longer text entries like comments, messages, or
-detailed descriptions.
+Campos de texto são elementos de UI versáteis que permitem aos usuários inserir, editar e exibir texto dentro de uma aplicação.
+Desempenham um papel crucial na interação do usuário, fornecendo uma maneira direta para os usuários inserirem dados, fornecerem
+feedback, preencher formulários e interagir com várias interfaces que requerem entrada de texto. Campos de texto podem ser usados para
+entradas curtas como nomes de usuário ou senhas, bem como para entradas de texto mais longas como comentários, mensagens ou
+descrições detalhadas.
 
-In the context of FireCMS UI, the design principles and components are loosely based on Google's Material Design guidelines. This means that
-the text fields in FireCMS benefit from a consistent and user-friendly design language, ensuring a cohesive
-look and feel across different web applications. By leveraging these components, developers can quickly build
-interactive and visually appealing forms and input areas that enhance user experience and maintain design consistency.
+No contexto do FireCMS UI, os princípios de design e componentes são baseados livremente nas diretrizes do Material Design do Google. Isso significa que
+os campos de texto no FireCMS se beneficiam de uma linguagem de design consistente e amigável, garantindo uma
+aparência coesa em diferentes aplicações web. Ao aproveitar esses componentes, os desenvolvedores podem construir rapidamente
+formulários e áreas de entrada interativas e visualmente atraentes que melhoram a experiência do usuário e mantêm a consistência do design.
 
-## Usage
+## Uso
 
-To use the `TextField`, import it from your components directory and pass the `value`, `onChange`, and other necessary props to fit your use case.
+Para usar o `TextField`, importe-o do seu diretório de componentes e passe `value`, `onChange` e outras props necessárias para atender ao seu caso de uso.
 
 
 
 import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
 
-## Basic Text Field
+## Campo de texto básico
 
 
-A basic text field with minimal configuration:
+Um campo de texto básico com configuração mínima:
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_basic.tsx"/>
 
-## Multiline Text Field
+## Campo de texto multilinha
 
-You can create a multiline text field by setting the `multiline` prop to `true`. This is useful for longer text inputs like comments or descriptions.
+Você pode criar um campo de texto multilinha definindo a prop `multiline` como `true`. Isso é útil para entradas de texto mais longas como comentários ou descrições.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_multiline.tsx"/>
 
 ## Sizes
 
-The `TextField` component comes in various sizes to fit different layout needs. You can adjust the size using the `size` prop.
+O componente `TextField` vem em vários tamanhos para se adequar a diferentes necessidades de layout. Você pode ajustar o tamanho usando a prop `size`.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_sizes.tsx"/>
 
-## Adornments
+## Adornos
 
-You can add adornments to the beginning or end of a text field to provide additional context or functionality.
+Você pode adicionar adornos ao início ou fim de um campo de texto para fornecer contexto ou funcionalidade adicional.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_adornment.tsx"/>

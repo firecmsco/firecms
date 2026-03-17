@@ -1,5 +1,5 @@
 ---
-slug: de/docs/self/authentication
+slug: de/docs/self/auth_self_hosted
 title: Authentifizierung und Benutzerverwaltung
 sidebar_label: Authentifizierung und Benutzerverwaltung
 description: Anleitungen zur Einrichtung von Authentifizierung und Benutzerverwaltung für eine selbst gehostete FireCMS-Instanz.

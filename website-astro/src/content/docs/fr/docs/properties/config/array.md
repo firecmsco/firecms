@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/properties/config/array
 title: Array
 sidebar_label: Array
 description: Configuration des propriétés de type array dans FireCMS, incluant les arrays typés, les tuples, les blocs (oneOf) et la validation.

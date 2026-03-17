@@ -1,5 +1,4 @@
 ---
-slug: de/docs/hooks/use_analytics_controller
 title: useAnalyticsController
 sidebar_label: useAnalyticsController
 ---

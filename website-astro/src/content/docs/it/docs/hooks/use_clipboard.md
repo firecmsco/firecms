@@ -1,5 +1,4 @@
 ---
-slug: it/docs/hooks/use_clipboard
 title: useClipboard
 sidebar_label: useClipboard
 description: Hook di utilità per copiare testo negli appunti.

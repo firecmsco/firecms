@@ -1,5 +1,4 @@
 ---
-slug: it/docs/properties/fields/repeat
 title: Repeat
 ---
 

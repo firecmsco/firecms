@@ -1,5 +1,4 @@
 ---
-slug: de/docs/properties/conditional_fields
 title: Bedingte Felder aus Eigenschaften
 sidebar_label: Bedingte Felder
 description: In FireCMS ermöglichen bedingte Felder dynamische Eigenschaftskonfigurationen innerhalb Ihrer Kollektionsschemata, die Schnittstellen bieten, die sich in Echtzeit an andere Eigenschaftswerte anpassen.

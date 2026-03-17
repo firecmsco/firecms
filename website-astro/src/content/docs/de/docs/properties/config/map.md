@@ -1,5 +1,4 @@
 ---
-slug: de/docs/properties/config/map
 title: Map
 sidebar_label: Map
 description: Konfiguration für Map-Eigenschaften in FireCMS, einschließlich Unterfelder und Layoutoptionen.

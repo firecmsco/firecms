@@ -1,5 +1,4 @@
 ---
-slug: es/docs/properties/fields/repeat
 title: Repetir (Repeat)
 ---
 

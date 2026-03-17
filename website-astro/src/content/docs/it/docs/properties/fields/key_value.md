@@ -1,5 +1,4 @@
 ---
-slug: it/docs/properties/fields/key_value
 title: Key/Value
 ---
 

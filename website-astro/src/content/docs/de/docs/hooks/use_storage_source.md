@@ -1,5 +1,4 @@
 ---
-slug: de/docs/hooks/use_storage_source
 title: useStorageSource
 sidebar_label: useStorageSource
 description: Zugriff auf die FireCMS-Speicherquelle zum Hochladen von Dateien und Abrufen von Download-URLs.

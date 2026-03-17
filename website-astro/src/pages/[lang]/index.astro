@@ -16,9 +16,10 @@ const t = useTranslations(lang as keyof typeof languages);
 
 const title = t('seo.title');
 const description = t('seo.description');
+const keywords = t('seo.keywords');
 
 ---
 
-<Layout title={title} description={description} lang={lang}>
+<Layout title={title} description={description} keywords={keywords} lang={lang}>
     <LandingContent lang={lang} t={t} />
 </Layout>

@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/collections/collection_groups
 title: Groupes de collections
 sidebar_label: Groupes de collections
 ---

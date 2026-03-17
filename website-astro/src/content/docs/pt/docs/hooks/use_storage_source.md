@@ -1,5 +1,4 @@
 ---
-slug: pt/docs/hooks/use_storage_source
 title: useStorageSource
 sidebar_label: useStorageSource
 description: Acesse a fonte de armazenamento do FireCMS para fazer upload de arquivos e recuperar URLs de download.

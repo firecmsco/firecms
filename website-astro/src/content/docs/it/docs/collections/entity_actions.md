@@ -1,5 +1,4 @@
 ---
-slug: it/docs/collections/entity_actions
 title: Azioni entità
 sidebar_label: Azioni entità
 ---

@@ -1,6 +1,5 @@
 import { EditorState, Transaction } from "prosemirror-state";
 import { EditorBubbleItem } from "../components";
-import { FireCMSTranslations } from "../../types/translations";
 import { useTranslation } from "../../hooks/useTranslation";
 
 import {
@@ -26,7 +25,7 @@ import { wrapInList } from "prosemirror-schema-list";
 
 export type SelectorItem = {
     name: string;
-    labelKey: keyof FireCMSTranslations;
+    labelKey: string;
     icon: React.ElementType;
     command: (state: EditorState, dispatch: (tr: Transaction) => void) => void;
     isActive: (state: EditorState) => boolean;
@@ -118,7 +117,7 @@ export const NodeSelector = ({
 
     const activeItem = items.filter((item) => item.isActive(state)).pop() ?? {
         name: "Multiple",
-        labelKey: "editor_multiple" as keyof FireCMSTranslations,
+        labelKey: "editor_multiple",
     };
 
     return (

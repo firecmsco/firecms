@@ -1,5 +1,5 @@
 ---
-slug: de/docs/self/main_controllers
+slug: de/docs/self/controllers
 title: Benutzerdefiniertes Backend erstellen
 description: Erfahren Sie, wie Sie benutzerdefinierte DataSourceDelegate, StorageSource und AuthController für FireCMS mit Ihrem eigenen Backend implementieren.
 ---

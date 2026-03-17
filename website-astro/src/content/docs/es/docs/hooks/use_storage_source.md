@@ -1,5 +1,4 @@
 ---
-slug: es/docs/hooks/use_storage_source
 title: useStorageSource
 sidebar_label: useStorageSource
 description: Accede a la fuente de almacenamiento de FireCMS para subir archivos y obtener URLs de descarga. Compatible con Firebase Storage o cualquier implementación de almacenamiento personalizada.

@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/properties/fields/key_value
 title: Clé/Valeur (Key/Value)
 ---
 

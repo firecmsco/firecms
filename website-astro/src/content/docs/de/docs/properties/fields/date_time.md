@@ -1,5 +1,4 @@
 ---
-slug: de/docs/properties/fields/date_time
 title: Datum/Uhrzeit-Felder
 ---
 

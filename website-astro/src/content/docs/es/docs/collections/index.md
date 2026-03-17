@@ -1,5 +1,4 @@
 ---
-slug: es/docs/collections/index
 title: Colecciones (Collections)
 sidebar_label: Colecciones
 description: Define tu esquema de datos de Firestore con las colecciones de FireCMS. Construye paneles de administración con seguridad de tipos para Firebase con React y TypeScript.

@@ -1,5 +1,4 @@
 ---
-slug: pt/docs/properties/conditional_fields
 title: Campos condicionais a partir de propriedades
 sidebar_label: Campos condicionais
 description: No FireCMS, os campos condicionais permitem configurações dinâmicas de propriedades dentro dos esquemas de coleção.

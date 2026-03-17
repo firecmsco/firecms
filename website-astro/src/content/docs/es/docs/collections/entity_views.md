@@ -1,5 +1,4 @@
 ---
-slug: es/docs/collections/entity_views
 title: Vistas de entidad (Entity views)
 sidebar_label: Vistas de entidad
 description: FireCMS te permite añadir vistas personalizadas por entidad. Ya sea que estés creando vistas previas, visualizaciones de páginas web, paneles de control, modificaciones de formularios o cualquier vista distintiva, las 'EntityCustomView' de FireCMS se adaptan a tus requerimientos únicos. Simplemente define tu componente React personalizado e intégralo dentro del esquema de tu colección de entidades como un 'EntityCustomView'. Para aplicaciones más amplias, registra la vista en el registro de vistas de entidades a través de `FireCMSAppConfig` para hacerla accesible a lo largo de diferentes colecciones. Estas vistas personalizadas de entidades son elementos fundamentales, que ofrecen una capa de personalización granular y mejoran la extensibilidad de tu CMS para diversas implementaciones.

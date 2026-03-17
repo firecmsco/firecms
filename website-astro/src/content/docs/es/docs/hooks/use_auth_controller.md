@@ -1,5 +1,4 @@
 ---
-slug: es/docs/hooks/use_auth_controller
 title: useAuthController
 sidebar_label: useAuthController
 ---

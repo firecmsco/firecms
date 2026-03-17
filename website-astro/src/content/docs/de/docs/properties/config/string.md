@@ -1,5 +1,4 @@
 ---
-slug: de/docs/properties/config/string
 title: String
 sidebar_label: String
 description: Konfiguration für String-Eigenschaften in FireCMS, einschließlich Validierung, Enums, URL, E-Mail und mehr.

@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/properties/fields/date_time
 title: Champs de date/heure
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: pt/docs/mdx
 title: MDX e componentes personalizados
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: es/docs/hooks/use_mode_controller
 title: useModeController
 sidebar_label: useModeController
 description: Controla el modo de tema de FireCMS (claro, oscuro o sistema) con el hook useModeController.

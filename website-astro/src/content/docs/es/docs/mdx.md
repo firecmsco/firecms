@@ -1,5 +1,4 @@
 ---
-slug: es/docs/mdx
 title: Potenciado por MDX
 ---
 

@@ -1,5 +1,4 @@
 ---
-slug: it/docs/properties/fields/date_time
 title: Campi data/ora
 ---
 

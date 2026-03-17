@@ -92,6 +92,24 @@ export const collectionEditorTranslationsHi = {
     delete_stored_config: "सहेजा गया कॉन्फ़िगरेशन हटाएँ?",
     delete_stored_config_body: "यह कोई डेटा नहीं हटाएगा, केवल सहेजा गया कॉन्फ़िगरेशन, और कोड स्थिति में रीसेट करेगा।",
     order_label: "क्रम",
+
+    // Collection Properties Editor
+    select_property_to_edit: "संपादित करने के लिए एक प्रॉपर्टी चुनें",
+    add_first_property: "अब आप अपनी पहली प्रॉपर्टी जोड़ सकते हैं",
+    add_new_property: "नई प्रॉपर्टी जोड़ें",
+    no_permission_add_properties: "आपको नई प्रॉपर्टीज़ जोड़ने की अनुमति नहीं है",
+    get_code_for_collection: "इस संग्रह का कोड प्राप्त करें",
+    add_properties_from_data: "डेटा के आधार पर नई प्रॉपर्टीज़ जोड़ें",
+    collection_name_placeholder: "संग्रह का नाम",
+    created_by: "{{name}} द्वारा बनाया गया",
+    property_defined_as_builder: "यह प्रॉपर्टी कोड में property builder के रूप में परिभाषित है",
+
+    // Extend Settings
+    extend_title: "विस्तार",
+    extend_description: "इस संग्रह में उप-संग्रह, कस्टम दृश्य और इकाई क्रियाएँ जोड़ें।",
+    collection_defined_in_code: "यह संग्रह कोड में परिभाषित है। इस संपादक में किए गए परिवर्तन कोड में परिभाषित प्रॉपर्टीज़ को ओवरराइड करेंगे। आप ओवरराइड किए गए मानों को हटाकर कोड में परिभाषित स्थिति पर वापस जा सकते हैं।",
+    reset_to_code: "कोड पर रीसेट करें",
+
     widget_group_text: "टेक्स्ट",
     widget_group_boolean: "बूलियन",
     widget_group_users: "उपयोगकर्ता",

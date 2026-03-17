@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/hooks/use_clipboard
 title: useClipboard
 sidebar_label: useClipboard
 description: Hook utilitaire pour copier du texte dans le presse-papiers.

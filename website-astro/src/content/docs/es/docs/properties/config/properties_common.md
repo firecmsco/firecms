@@ -1,5 +1,4 @@
 ---
-slug: es/docs/properties/config/properties_common
 title: Configuración común
 sidebar_label: Configuración común
 ---

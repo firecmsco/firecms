@@ -1,5 +1,4 @@
 ---
-slug: de/docs/properties/reusing_properties
 title: Eigenschaftskonfigurationen wiederverwenden
 ---
 

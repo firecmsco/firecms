@@ -1,5 +1,4 @@
 ---
-slug: pt/docs/hooks/use_snackbar_controller
 title: useSnackbarController
 sidebar_label: useSnackbarController
 ---

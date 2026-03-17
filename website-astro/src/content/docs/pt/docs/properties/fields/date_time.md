@@ -1,5 +1,4 @@
 ---
-slug: pt/docs/properties/fields/date_time
 title: Campos de data/hora
 ---
 

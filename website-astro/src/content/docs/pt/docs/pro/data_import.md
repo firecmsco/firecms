@@ -1,5 +1,4 @@
 ---
-slug: pt/docs/pro/data_import
 title: Importação de Dados
 ---
 

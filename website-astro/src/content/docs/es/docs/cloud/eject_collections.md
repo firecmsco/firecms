@@ -1,5 +1,4 @@
 ---
-slug: es/docs/cloud/eject_collections
 title: "Expulsar colecciones de la UI al código"
 sidebar_label: Expulsar colecciones
 description: "Convierte las colecciones definidas en la UI en código para tu CMS headless. Exporta la configuración del esquema de tu Firestore para el control de versiones y una personalización avanzada."

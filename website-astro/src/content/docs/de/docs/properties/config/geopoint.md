@@ -1,5 +1,4 @@
 ---
-slug: de/docs/properties/config/geopoint
 title: Geopunkt
 sidebar_label: Geopunkt
 ---

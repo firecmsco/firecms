@@ -1,5 +1,4 @@
 ---
-slug: es/docs/collections/entity_actions
 title: Acciones de entidad (Entity actions)
 sidebar_label: Acciones de entidad
 ---

@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/properties/fields/file_upload
 title: Téléversement de fichiers (File upload)
 ---
 

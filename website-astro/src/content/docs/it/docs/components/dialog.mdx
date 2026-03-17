@@ -6,37 +6,37 @@ sidebar_label: Dialog
 
 import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
 
-Dialog components are used to present content in a layer above the app's main content, and they often request a user response. They are a critical component for modal dialogs, lightboxes, notification pop-ups, and custom content popups.
+I componenti Dialog vengono utilizzati per presentare contenuti in un livello sopra il contenuto principale dell'app, e spesso richiedono una risposta dall'utente. Sono un componente critico per dialoghi modali, lightbox, pop-up di notifica e popup di contenuto personalizzato.
 
-## Usage
+## Utilizzo
 
-To use the `Dialog`, import it from your components and pass the necessary props including `open`, `onOpenChange`, and the dialog's content as children. Optionally, you can customize its appearance with `className`, `fullWidth`, `fullHeight`, `fullScreen`, `scrollable`, `maxWidth`, `modal`, and `onOpenAutoFocus` props.
+Per usare il `Dialog`, importalo dai tuoi componenti e passa le prop necessarie tra cui `open`, `onOpenChange` e il contenuto del dialogo come figli. Opzionalmente, puoi personalizzarne l'aspetto con le prop `className`, `fullWidth`, `fullHeight`, `fullScreen`, `scrollable`, `maxWidth`, `modal` e `onOpenAutoFocus`.
 
 :::caution
-You need to provide a `DialogTitle` in your `Dialog` component to ensure that the dialog is accessible.
-You will see a warning in the console if you forget to provide a `DialogTitle`.
+Devi fornire un `DialogTitle` nel tuo componente `Dialog` per garantire che il dialogo sia accessibile.
+Vedrai un avviso nella console se dimentichi di fornire un `DialogTitle`.
 :::
 
-## Basic Dialog
+## Dialog di base
 
-A basic example of using the dialog component to show a simple pop-up.
+Un esempio base di utilizzo del componente dialog per mostrare un semplice pop-up.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_basic.tsx"/>
 
-## Full-Screen Dialog
+## Dialog a schermo intero
 
-An example of a dialog that covers the entire screen.
+Un esempio di un dialogo che copre l'intero schermo.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_full_screen.tsx"/>
 
-## Scrollable Dialog
+## Dialog con scorrimento
 
-Illustrates how to make a dialog's content scrollable.
+Illustra come rendere il contenuto di un dialogo scorrevole.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_scrollable.tsx"/>
 
-## Dialog with Custom Width
+## Dialog con larghezza personalizzata
 
-Demonstrates usage of the `maxWidth` prop to customize the dialog's width.
+Dimostra l'uso della prop `maxWidth` per personalizzare la larghezza del dialogo.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_custom_width.tsx"/>

@@ -1,5 +1,4 @@
 ---
-slug: de/docs/collections/exporting_data
 title: Daten exportieren
 sidebar_label: Daten exportieren
 ---

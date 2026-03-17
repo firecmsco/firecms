@@ -1,5 +1,4 @@
 ---
-slug: de/docs/collections/permissions
 title: Berechtigungen
 sidebar_label: Berechtigungen
 ---

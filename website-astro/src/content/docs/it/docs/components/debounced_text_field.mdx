@@ -6,16 +6,16 @@ sidebar_label: DebouncedTextField
 
 import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
 
-`DebouncedTextField` is a variation of the standard `TextField` component designed to delay the invocation of the
-`onChange` callback. This delay helps in reducing the number of `onChange` calls for inputs that may have
-frequent updates, such as during typing.
+`DebouncedTextField` è una variazione del componente standard `TextField` progettata per ritardare l'invocazione del
+callback `onChange`. Questo ritardo aiuta a ridurre il numero di chiamate `onChange` per input che possono avere
+aggiornamenti frequenti, come durante la digitazione.
 
-## Usage
+## Utilizzo
 
-To use `DebouncedTextField`, import it from your components. It supports all the `TextField` props including `value`, `onChange` among others.
+Per usare `DebouncedTextField`, importalo dai tuoi componenti. Supporta tutte le prop del `TextField` incluse `value`, `onChange` e altre.
 
-## Basic DebouncedTextField
+## DebouncedTextField di base
 
-This example shows a basic usage of the `DebouncedTextField`, demonstrating how it can be used to handle value changes with a defer mechanism to reduce the number of updates.
+Questo esempio mostra un utilizzo base del `DebouncedTextField`, dimostrando come può essere usato per gestire le modifiche di valore con un meccanismo di ritardo per ridurre il numero di aggiornamenti.
 
 <CodeSampleWithSource path="/src/content/docs/samples/components/debounced_text_field/debounced_text_field_basic.tsx"/>

@@ -1,6 +1,5 @@
 import { useEffect, useRef, } from "react";
 import { Button, CheckIcon, cls, DeleteIcon, focusedDisabled, Popover } from "@firecms/ui";
-import { FireCMSTranslations } from "../../types/translations";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
 import { getMarkAttributes, isMarkActive, setMark, unsetMark } from "../utils/prosemirror-utils";
@@ -81,7 +80,7 @@ export const LinkSelector = ({
                 <p className={cls("underline decoration-stone-400 underline-offset-4", {
                     "text-blue-500": isActive,
                 })}>
-                    {t("editor_link" as keyof FireCMSTranslations)}
+                    {t("editor_link")}
                 </p>
             </Button>}>
             <form
@@ -91,7 +90,7 @@ export const LinkSelector = ({
                 <input
                     ref={inputRef}
                     autoFocus={open}
-                    placeholder={t("editor_paste_or_type_link" as keyof FireCMSTranslations)}
+                    placeholder={t("editor_paste_or_type_link")}
                     defaultValue={href}
                     className={cls("text-surface-900 dark:text-white flex-grow bg-transparent p-1 text-sm outline-none", focusedDisabled)} />
 

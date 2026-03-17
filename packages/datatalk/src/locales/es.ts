@@ -26,5 +26,5 @@ export const datatalkTranslationsEs = {
     datatalk_incorrect_code: "Código incorrecto",
     datatalk_unsafe_or_problematic: "Inseguro o problemático",
     datatalk_other: "Otro",
-    datatalk_feedback_details: "Siente la libertad de añadir detalles específicos"
+    datatalk_feedback_details: "No dudes en añadir detalles específicos"
 };

@@ -1,5 +1,4 @@
 import { useTranslation as useI18nTranslation } from "react-i18next";
-import { FireCMSTranslations } from "../types/translations";
 
 const FIRECMS_NS = "firecms_core";
 
@@ -25,7 +24,7 @@ export function useTranslation() {
      *   t("add_to_field", { fieldName: "Tags" })
      *   t("error_deleting", { message: err.message })
      */
-    const typedT = (key: keyof FireCMSTranslations | (string & {}), vars?: Record<string, string>): string =>
+    const typedT = (key: string, vars?: Record<string, string>): string =>
         t(key, vars) as string;
 
     return { t: typedT, i18n };

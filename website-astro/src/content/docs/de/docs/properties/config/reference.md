@@ -1,5 +1,4 @@
 ---
-slug: de/docs/properties/config/reference
 title: Referenz
 sidebar_label: Referenz
 description: Konfiguration für Referenzeigenschaften in FireCMS, die Entities mit anderen Kollektionen verknüpfen.

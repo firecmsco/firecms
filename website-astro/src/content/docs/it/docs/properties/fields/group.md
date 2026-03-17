@@ -1,5 +1,4 @@
 ---
-slug: it/docs/properties/fields/group
 title: Group
 ---
 

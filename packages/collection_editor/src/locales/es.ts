@@ -92,6 +92,24 @@ export const collectionEditorTranslationsEs = {
     delete_stored_config: "¿Eliminar la configuración almacenada?",
     delete_stored_config_body: "Esto no eliminará ningún dato, solo la configuración almacenada, y se restaurará al estado del código.",
     order_label: "Orden",
+
+    // Collection Properties Editor
+    select_property_to_edit: "Selecciona una propiedad para editarla",
+    add_first_property: "Ahora puedes añadir tu primera propiedad",
+    add_new_property: "Añadir nueva propiedad",
+    no_permission_add_properties: "No tienes permiso para añadir nuevas propiedades",
+    get_code_for_collection: "Obtener el código de esta colección",
+    add_properties_from_data: "Añadir nuevas propiedades basadas en datos",
+    collection_name_placeholder: "Nombre de la colección",
+    created_by: "Creado por {{name}}",
+    property_defined_as_builder: "Esta propiedad está definida como un property builder en código",
+
+    // Extend Settings
+    extend_title: "Extender",
+    extend_description: "Añade subcolecciones, vistas personalizadas y acciones de entidad a esta colección.",
+    collection_defined_in_code: "Esta colección está definida en código. Los cambios realizados en este editor sobreescribirán las propiedades definidas en código. Puedes eliminar los valores sobreescritos para volver al estado definido en código.",
+    reset_to_code: "Restablecer al código",
+
     widget_group_text: "Texto",
     widget_group_boolean: "Booleano",
     widget_group_users: "Usuarios",

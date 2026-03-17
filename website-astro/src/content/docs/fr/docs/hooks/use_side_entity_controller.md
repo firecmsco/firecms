@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/hooks/use_side_entity_controller
 title: useSideEntityController
 sidebar_label: useSideEntityController
 ---

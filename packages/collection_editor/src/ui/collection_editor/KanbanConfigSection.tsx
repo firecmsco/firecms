@@ -85,10 +85,10 @@ export function KanbanConfigSection({
 
     return (
         <div className={className} ref={panelRef}>
+            <Typography variant={"label"} color={"secondary"} className={"ml-3.5"}>{t("kanban_column_property")}</Typography>
             <Select
                 key={`column-select-${enumStringProperties.length}`}
                 name="kanban.columnProperty"
-                label={t("kanban_column_property")}
                 size={"large"}
                 fullWidth={true}
                 position={"item-aligned"}

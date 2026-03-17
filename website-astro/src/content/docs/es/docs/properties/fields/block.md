@@ -1,5 +1,4 @@
 ---
-slug: es/docs/properties/fields/block
 title: Bloque (Block)
 ---
 

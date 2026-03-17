@@ -1,5 +1,4 @@
 ---
-slug: it/docs/mdx
 title: Compatibile con MDX
 ---
 

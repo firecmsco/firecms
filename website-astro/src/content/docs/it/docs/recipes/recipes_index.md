@@ -1,5 +1,4 @@
 ---
-slug: it/docs/recipes/recipes_index
 title: Ricette
 sidebar_label: Ricette
 description: Tutorial avanzati e ricette FireCMS su blog, localizzazioni, copia entità e navigazione dinamica.

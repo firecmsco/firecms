@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/firebase_setup
 title: Configuration de Firebase
 sidebar_label: Configuration de Firebase
 description: Guide étape par étape pour configurer Firebase pour FireCMS, incluant Firestore, Authentication, Storage et les règles de sécurité.

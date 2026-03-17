@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/collections/permissions
 title: Permissions
 sidebar_label: Permissions
 ---

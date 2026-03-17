@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/properties/reusing_properties
 title: Réutilisation des configurations de propriétés
 ---
 

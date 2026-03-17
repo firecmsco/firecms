@@ -1,5 +1,4 @@
 ---
-slug: fr/docs/hooks/use_analytics_controller
 title: useAnalyticsController
 sidebar_label: useAnalyticsController
 description: Hook pour accéder au contrôleur d'analytics et écouter les événements du CMS.

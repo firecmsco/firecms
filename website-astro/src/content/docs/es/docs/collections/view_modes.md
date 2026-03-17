@@ -1,5 +1,4 @@
 ---
-slug: es/docs/collections/view_modes
 title: Modos de vista de colección (Collection View Modes)
 sidebar_label: Modos de vista
 description: Muestra tus colecciones como Tablas, Tarjetas o tableros Kanban en FireCMS. Elige la vista que mejor se adapte a tus datos.

@@ -1,5 +1,4 @@
 ---
-slug: es/docs/collections/text_search
 title: Búsqueda de texto (Text search)
 description: Añade búsqueda de texto completo a FireCMS con Typesense o Algolia. Usa nuestra Extensión de Firebase para búsquedas tolerantes a errores tipográficos por ~$7/mes, o intégrate con Algolia para necesidades empresariales.
 ---

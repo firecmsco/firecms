@@ -1,5 +1,4 @@
 ---
-slug: it/docs/properties/fields/text_fields
 title: Campi di testo
 ---
 
