@@ -3,12 +3,13 @@ import { cls, ExpandMoreIcon, Typography } from "@firecms/ui";
 import { NavigationEntry } from "../types";
 import { IconForView } from "../util";
 import { DrawerNavigationItem } from "./DrawerNavigationItem";
+import { useTranslation } from "../hooks/useTranslation";
 
 export interface DrawerNavigationGroupProps {
     /**
-     * Group name to display in header
+     * Group name to display in header. When null, uses the translated default group name.
      */
-    group: string;
+    group: string | null;
     /**
      * Navigation entries in this group
      */
@@ -58,6 +59,7 @@ export function DrawerNavigationGroup({
     headerActions,
     onItemClick
 }: DrawerNavigationGroupProps) {
+    const { t } = useTranslation();
     return (
         <div
             className={"bg-surface-50 dark:bg-surface-800/30 my-4 rounded-lg ml-3 mr-1"}
@@ -81,7 +83,7 @@ export function DrawerNavigationGroup({
                         color={"secondary"}
                         className="font-medium flex-grow line-clamp-1"
                     >
-                        {(group || "Views").toUpperCase()}
+                        {(group || t("views_group")).toUpperCase()}
                     </Typography>
                     {headerActions && (
                         <div onClick={(e) => e.stopPropagation()}>

@@ -179,6 +179,9 @@ export const fr: FireCMSTranslations = {
     // ─── Search ───────────────────────────────────────────────────
     search_collections: "Rechercher dans les collections",
 
+    // ─── Navigation groups ────────────────────────────────────────
+    views_group: "Vues",
+
     // ─── Entity Edit View ─────────────────────────────────────────
     youd_need_to_save_before_additional_collections: "Vous devez enregistrer votre entité avant d'ajouter des collections supplémentaires",
 

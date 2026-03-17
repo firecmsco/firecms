@@ -186,6 +186,10 @@ export interface FireCMSTranslations {
     // ─── Search ───────────────────────────────────────────────────
     search_collections: string;
 
+    // ─── Navigation groups ────────────────────────────────────────
+    /** Default group name shown when collections/views have no explicit group */
+    views_group: string;
+
     // ─── Entity Edit View ─────────────────────────────────────────
     youd_need_to_save_before_additional_collections: string;
 

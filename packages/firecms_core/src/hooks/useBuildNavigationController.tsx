@@ -34,7 +34,6 @@ import { getParentReferencesFromPath } from "../util/parent_references_from_path
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
 
-export const NAVIGATION_DEFAULT_GROUP_NAME = "Views";
 export const NAVIGATION_ADMIN_GROUP_NAME = "Admin";
 
 export type BuildNavigationContextProps<EC extends EntityCollection, USER extends User> = {
@@ -189,7 +188,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                     path: pathKey,
                     collection,
                     description: collection.description?.trim(),
-                    group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
+                    group: groupName
                 });
                 return acc;
             }, [] as NavigationEntry[]),
@@ -217,7 +216,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
                     path: view.path,
                     view,
                     description: view.description?.trim(),
-                    group: groupName ?? NAVIGATION_DEFAULT_GROUP_NAME
+                    group: groupName
                 });
                 return acc;
             }, [] as NavigationEntry[]),
@@ -242,7 +241,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             }, [] as NavigationEntry[])
         ];
 
-        const groupOrderValue = (groupName?: string): number => {
+        const groupOrderValue = (groupName?: string | null): number => {
             if (groupName === NAVIGATION_ADMIN_GROUP_NAME) return 1;
             return 0; // Other groups
         };
@@ -266,7 +265,10 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
         const collectedGroupsFromEntries = navigationEntries
             .map(e => e.group)
-            .filter(Boolean) as string[];
+            .filter((g): g is string => g !== null && Boolean(g));
+
+        // Check if there are any ungrouped entries
+        const hasUngroupedEntries = navigationEntries.some(e => e.group === null && e.type !== "admin");
 
         // Preserve order from finalNavigationGroupMappings (persisted order)
         const groupsFromMappings = finalNavigationGroupMappings.map(g => g.name);
@@ -284,7 +286,12 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         const uniqueGroupsArray = [...new Set(allDefinedGroups)];
         const adminGroups = uniqueGroupsArray.filter(g => g === NAVIGATION_ADMIN_GROUP_NAME);
         const nonAdminGroups = uniqueGroupsArray.filter(g => g !== NAVIGATION_ADMIN_GROUP_NAME);
-        const uniqueGroups = [...nonAdminGroups, ...adminGroups];
+        // Place null (ungrouped) first if there are ungrouped entries
+        const uniqueGroups: (string | null)[] = [
+            ...(hasUngroupedEntries ? [null] : []),
+            ...nonAdminGroups,
+            ...adminGroups
+        ];
 
         return {
             allowDragAndDrop: plugins?.some(plugin => plugin.homePage?.allowDragAndDrop) ?? false,
@@ -682,12 +689,12 @@ async function resolveCMSViews(
     return resolvedViews;
 }
 
-function getGroup(collectionOrView: EntityCollection<any, any> | CMSView) {
+function getGroup(collectionOrView: EntityCollection<any, any> | CMSView): string | null {
     const trimmed = collectionOrView.group?.trim();
     if (!trimmed || trimmed === "") {
-        return NAVIGATION_DEFAULT_GROUP_NAME;
+        return null;
     }
-    return trimmed ?? NAVIGATION_DEFAULT_GROUP_NAME;
+    return trimmed;
 }
 
 function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
@@ -823,7 +830,7 @@ function computeNavigationGroups({
     (collections ?? []).forEach(collection => {
         const entry = collection.id ?? collection.path;
         if (!assignedEntries.has(entry)) {
-            const groupName = getGroup(collection);
+            const groupName = getGroup(collection) ?? "__default__";
             if (!unassignedGroupMap[groupName]) unassignedGroupMap[groupName] = [];
             unassignedGroupMap[groupName].push(entry);
         }
@@ -833,7 +840,7 @@ function computeNavigationGroups({
     (views ?? []).forEach(view => {
         const entry = view.path;
         if (!assignedEntries.has(entry)) {
-            const groupName = getGroup(view);
+            const groupName = getGroup(view) ?? "__default__";
             if (!unassignedGroupMap[groupName]) unassignedGroupMap[groupName] = [];
             unassignedGroupMap[groupName].push(entry);
         }
@@ -861,7 +868,7 @@ function computeNavigationGroups({
 
         // Add collections
         (collections ?? []).forEach(collection => {
-            const name = getGroup(collection);
+            const name = getGroup(collection) ?? "__default__";
             const entry = collection.id ?? collection.path;
             if (!groupMap[name]) groupMap[name] = [];
             groupMap[name].push(entry);
@@ -869,7 +876,7 @@ function computeNavigationGroups({
 
         // Add views
         (views ?? []).forEach(view => {
-            const name = getGroup(view);
+            const name = getGroup(view) ?? "__default__";
             const entry = view.path;
             if (!groupMap[name]) groupMap[name] = [];
             groupMap[name].push(entry);

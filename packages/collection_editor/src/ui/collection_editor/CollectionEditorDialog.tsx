@@ -309,7 +309,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     collection: PersistedCollection<M> | undefined,
     setCollection: (collection: PersistedCollection<M>) => void,
     propertyConfigs: Record<string, PropertyConfig<any>>,
-    groups: string[],
+    groups: (string | null)[],
 }
 ) {
 

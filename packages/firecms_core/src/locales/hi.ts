@@ -179,6 +179,9 @@ export const hi: FireCMSTranslations = {
     // ─── Search ───────────────────────────────────────────────────
     search_collections: "संग्रह खोजें",
 
+    // ─── Navigation groups ────────────────────────────────────────
+    views_group: "दृश्य",
+
     // ─── Entity Edit View ─────────────────────────────────────────
     youd_need_to_save_before_additional_collections: "अतिरिक्त संग्रह जोड़ने से पहले आपको अपनी इकाई को सहेजना होगा",
 

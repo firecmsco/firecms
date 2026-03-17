@@ -10,7 +10,7 @@ const STORAGE_KEY_PREFIX = "firecms-collapsed-groups";
  * @param groupNames - Array of group names to track
  * @param namespace - Namespace for localStorage key (e.g., "home", "drawer") to allow independent state
  */
-export function useCollapsedGroups(groupNames: string[], namespace: string = "default") {
+export function useCollapsedGroups(groupNames: (string | null)[], namespace: string = "default") {
     const storageKey = `${STORAGE_KEY_PREFIX}-${namespace}`;
 
     // Load collapsed groups from localStorage on mount
@@ -37,7 +37,7 @@ export function useCollapsedGroups(groupNames: string[], namespace: string = "de
         // Only clean up if we have actual groups loaded (avoid cleaning up during initial load)
         if (groupNames.length === 0) return;
 
-        const currentGroupNames = new Set(groupNames);
+        const currentGroupNames = new Set(groupNames.map(g => g ?? "__default__"));
 
         setCollapsedGroups(prev => {
             const cleaned = Object.fromEntries(
@@ -56,12 +56,13 @@ export function useCollapsedGroups(groupNames: string[], namespace: string = "de
         });
     }, [groupNames]);
 
-    const isGroupCollapsed = useCallback((name: string) => {
-        return !!collapsedGroups[name];
+    const isGroupCollapsed = useCallback((name?: string | null) => {
+        return !!collapsedGroups[name ?? "__default__"];
     }, [collapsedGroups]);
 
-    const toggleGroupCollapsed = useCallback((name: string) => {
-        setCollapsedGroups(prev => ({ ...prev, [name]: !prev[name] }));
+    const toggleGroupCollapsed = useCallback((name?: string | null) => {
+        const key = name ?? "__default__";
+        setCollapsedGroups(prev => ({ ...prev, [key]: !prev[key] }));
     }, []);
 
     return {

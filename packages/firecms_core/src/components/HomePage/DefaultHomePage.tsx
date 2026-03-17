@@ -32,7 +32,11 @@ import { restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifier
 import { RenameGroupDialog } from "./RenameGroupDialog";
 import { useTranslation } from "../../hooks/useTranslation";
 
-export const DEFAULT_GROUP_NAME = "Views";
+/**
+ * Internal sentinel key for ungrouped navigation entries.
+ * Not displayed — display components use t("views_group") when group is undefined.
+ */
+const DEFAULT_GROUP_KEY = "__default__";
 export const ADMIN_GROUP_NAME = "Admin";
 
 export function DefaultHomePage({
@@ -110,7 +114,7 @@ export function DefaultHomePage({
             const g =
                 e.type === "admin"
                     ? ADMIN_GROUP_NAME
-                    : e.group ?? DEFAULT_GROUP_NAME;
+                    : e.group ?? DEFAULT_GROUP_KEY;
             (entriesByGroup[g] ??= []).push(e);
         });
 
@@ -121,7 +125,7 @@ export function DefaultHomePage({
 
         if (performingSearch) {
             const ordered = [
-                ...new Set(src.map((e) => e.group ?? DEFAULT_GROUP_NAME))
+                ...new Set(src.map((e) => e.group ?? DEFAULT_GROUP_KEY))
             ];
             allProcessed = ordered
                 .map((name) => ({
@@ -131,11 +135,11 @@ export function DefaultHomePage({
                 .filter((g) => g.entries.length);
         } else {
             allProcessed = groupOrderFromNavController.map((g) => ({
-                name: g,
-                entries: entriesByGroup[g] || []
+                name: g ?? DEFAULT_GROUP_KEY,
+                entries: entriesByGroup[g ?? DEFAULT_GROUP_KEY] || []
             }));
             Object.keys(entriesByGroup).forEach((g) => {
-                if (!groupOrderFromNavController.includes(g))
+                if (!groupOrderFromNavController.map(x => x ?? DEFAULT_GROUP_KEY).includes(g))
                     allProcessed.push({
                         name: g,
                         entries: entriesByGroup[g]
@@ -143,9 +147,9 @@ export function DefaultHomePage({
             });
 
             // Ensure default group exists if there are plugin additional cards but no collections
-            if (hasPluginAdditionalCards && !allProcessed.some(g => g.name === DEFAULT_GROUP_NAME)) {
+            if (hasPluginAdditionalCards && !allProcessed.some(g => g.name === DEFAULT_GROUP_KEY)) {
                 allProcessed.push({
-                    name: DEFAULT_GROUP_NAME,
+                    name: DEFAULT_GROUP_KEY,
                     entries: []
                 });
             }
@@ -153,7 +157,7 @@ export function DefaultHomePage({
             allProcessed = allProcessed.filter(
                 (g) =>
                     g.entries.length ||
-                    (g.name === DEFAULT_GROUP_NAME && hasPluginAdditionalCards)
+                    (g.name === DEFAULT_GROUP_KEY && hasPluginAdditionalCards)
             );
         }
 
@@ -414,7 +418,7 @@ export function DefaultHomePage({
 
                             const actionProps: PluginHomePageAdditionalCardsProps = {
                                 group:
-                                    groupKey === DEFAULT_GROUP_NAME
+                                    groupKey === DEFAULT_GROUP_KEY
                                         ? undefined
                                         : groupKey,
                                 context
@@ -434,7 +438,7 @@ export function DefaultHomePage({
                                 >
                                     <NavigationGroup
                                         group={
-                                            groupKey === DEFAULT_GROUP_NAME
+                                            groupKey === DEFAULT_GROUP_KEY
                                                 ? undefined
                                                 : groupKey
                                         }
@@ -537,7 +541,7 @@ export function DefaultHomePage({
                                 <NavigationGroup
                                     group={
                                         activeGroupData.name ===
-                                            DEFAULT_GROUP_NAME
+                                            DEFAULT_GROUP_KEY
                                             ? undefined
                                             : activeGroupData.name
                                     }
