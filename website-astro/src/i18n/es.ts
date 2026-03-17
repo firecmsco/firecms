@@ -1,5 +1,5 @@
 export const es = {
-  'hero.title.1': 'Framework CMS Headless',
+  'hero.title.1': 'El Framework de CMS Headless',
   'hero.title.2': 'para',
   'hero.subtitle.1': 'Construye potentes aplicaciones de back-office en minutos.',
   'hero.subtitle.2': 'Lanza tu aplicación al instante con nuestro',
@@ -41,18 +41,18 @@ export const es = {
   'footer.product': 'Producto',
   'footer.legal': 'Legal',
   
-  'social.trusted': 'Confiado por desarrolladores de compañías líderes',
+  'social.trusted': 'Utilizado por desarrolladores en empresas líderes',
   'social.more': 'y miles más',
 
   'usecases.title.1': 'Un Framework,',
   'usecases.title.2': 'Infinitas Soluciones de Back-Office',
-  'usecases.subtitle': 'Usa FireCMS para gestionar contenido, usuarios y operaciones directamente desde tu base de datos Firebase o MongoDB.',
-  'usecases.card1.title': 'Gestión de Contenido',
-  'usecases.card1.desc': 'Impulsa blogs y sitios de marketing con un editor intuitivo al estilo Notion, respaldado por tu base de datos.',
-  'usecases.card2.title': 'Herramientas Internas',
-  'usecases.card2.desc': 'Crea paneles internos robustos para soporte y operaciones, conectados directamente a tu base de datos.',
-  'usecases.card3.title': 'Paneles de Administración Personalizados',
-  'usecases.card3.desc': 'Crea paneles de administración a medida e intensivos en datos, con control total para añadir vistas y lógica de negocio personalizadas.',
+  'usecases.subtitle': 'Usa FireCMS como tu CMS de Firestore para gestionar contenido, usuarios y operaciones directamente desde Firebase.',
+  'usecases.card1.title': 'Gestión de Contenido en Firestore',
+  'usecases.card1.desc': 'Impulsa blogs y sitios de marketing con un editor intuitivo al estilo Notion, respaldado por Firestore.',
+  'usecases.card2.title': 'Herramientas Internas para Firebase',
+  'usecases.card2.desc': 'Crea paneles internos robustos para soporte y operaciones, conectados a Firebase y Firestore.',
+  'usecases.card3.title': 'Paneles de Admin Personalizados en Firestore',
+  'usecases.card3.desc': 'Crea paneles de administración a medida con control total para añadir vistas personalizadas y lógica de negocio.',
 
   'tech.title': 'Desarrollado con tecnologías modernas',
 
@@ -69,7 +69,7 @@ export const es = {
 
   'faq.title': 'Preguntas Frecuentes',
   'faq.q1.q': '¿Es FireCMS un CMS para Firebase o un CMS para Firestore?',
-  'faq.q1.a': 'FireCMS funciona como ambos: se conecta a Firebase y utiliza Firestore como base de datos, lo que te brinda una experiencia de CMS de Firestore ideal para la gestión te contenido y herramientas de administración.',
+  'faq.q1.a': 'FireCMS funciona como ambos: se conecta a Firebase y utiliza Firestore como base de datos, brindándote una experiencia de CMS de Firestore ideal para gestión de contenido y herramientas de administración.',
   'faq.q2.q': 'Cloud vs Autoalojado — ¿Cuál debería elegir?',
   'faq.q2.a': 'Elige Cloud para la configuración más rápida y sin mantenimiento. Elige Autoalojado si necesitas control total, flujos de trabajo personalizados o entrega al cliente. Puedes comenzar en Cloud y pasar a autoalojar en cualquier momento.',
   'faq.q3.q': '¿Puedo inferir un esquema desde mis datos existentes?',
@@ -244,7 +244,7 @@ export const es = {
 
   'developers.hero.title': 'El framework de Back-Office<br/> que los desarrolladores adoran',
   'developers.hero.subtitle': "FireCMS está pensado primero para los desarrolladores. Construye paneles de administración y herramientas internas potentes, rápidas y flexibles con React y TypeScript.",
-  'developers.trusted': 'Utilizado por desarrolladores en empresas innovadoras',
+  'developers.trusted': 'Utilizado por desarrolladores en empresas que marcan tendencia',
 
   'developers.paths.title': 'Elige tu camino',
   'developers.paths.subtitle': 'Empieza de inmediato con nuestro cloud gestionado o auto-aloja el proyecto open-source para tener control total.',
@@ -306,7 +306,7 @@ export const es = {
   'startups.hero.title': "Muévete rápido, escala de forma inteligente",
   'startups.hero.subtitle': "Lleva el panel de administración de tu startup de la base de datos a producción en <b>minutos</b>. Deja de perder tiempo escribiendo CRUDs repetitivos y céntrate en tu producto principal.",
   'startups.hero.cta': "Comienza tu prueba gratuita de 1 mes",
-  'startups.trusted': "Con la confianza de desarrolladores en empresas innovadoras",
+  'startups.trusted': "Utilizado por desarrolladores en empresas que marcan tendencia",
 
   'startups.problem.title': "Tu MVP necesita un Back-Office, no una lista de tareas pendientes",
   'startups.problem.desc': "Construir un panel de administración interno es una distracción. FireCMS se conecta directamente a tu base de datos Firebase/MongoDB y te ofrece una interfaz lista para producción en minutos, permitiendo a tus ingenieros enfocarse en lo verdaderamente importante.",
@@ -354,8 +354,8 @@ export const es = {
   'startups.more.l4': "<b>Datos de Productos/E-commerce:</b> Gestiona catálogos, variantes, precios e inventario fácilmente.",
   'startups.more.l5': "<b>Configuración de Aplicaciones:</b> Controla ajustes, tests A/B y funcionalidades en fase de prueba mediante interfaz.",
 
-  'startups.pivots.title': "Pensado para posibles pivots",
-  'startups.pivots.desc': "Las startups evolucionan. Tus herramientas deberían de hacerlo también. FireCMS facilita la adaptación de los modelos de datos. Cambia tus esquemas sin reconstruirlos. La arquitectura headless separa el backend del frontend para mayor flexibilidad.",
+  'startups.pivots.title': "Preparado para los pivots",
+  'startups.pivots.desc': "Las startups evolucionan. Tus herramientas también deberían hacerlo. FireCMS facilita la adaptación de los modelos de datos. Cambia tus esquemas sin reconstruirlos. La arquitectura headless separa el backend del frontend para máxima flexibilidad.",
   'startups.pivots.cta': "Ver todas las Características",
 
   'startups.cta.title': "¿Listo para acelerar tu startup?",
@@ -435,18 +435,18 @@ export const es = {
   'about.hero.title': "Nuestra Misión",
   'about.hero.subtitle': "FireCMS nació de una frustración al ver de forma repetida que: construir herramientas internas y paneles de gestión es una tarea <b>lenta, poco agradecida y algo repetitiva</b>. Creemos en la máxima de que los desarrolladores han de poder enfocarse siempre en la innovación del producto final, en vez de reinventar por enésima vez interfaces para operaciones CRUD.",
 
-  'about.story.title': "Desde un simple kit al Desarrollo de Plataformas Globales.",
-  'about.story.p1': "FireCMS comenzó siendo una herramienta interna para lanzar un back-office en apenas unos minutos, no semanas o meses. Como a muchos compañeros desarrolladores, a nuestros fundadores les aburría tener que reconstruir iterativamente la misma interfaz una y otra vez para cada proyecto nuevo. Por encima de todo, querían invertir su tiempo en construir geniales productos, no gastar semanas con autenticaciones o validaciones de la base de datos.",
-  'about.story.p2': "Este proyecto paralelo empezó pronto a ganar muchísima tracción en la comunidad del software libre. Diversos desarrolladores a escala mundial empezaron el el software de FireCMS en su día a día. Sirviendo para infinidad de objetivos, desde creadores de contenido (CMS) hasta en el modelado de complejas herramientas para clientes en un entorno corporativo.",
-  'about.story.p3': "Hoy, FireCMS es una plataforma en la cual compañías del calibre de <b>Microsoft</b> e <b>IKEA</b> confían, delegándonos las potentes herramientas internas que dan el empujón diferencial a sus negocios diariamente. Estamos muy orgullosos de estar ayudando a miles de desarrolladores a salvar algo de su tiempo cada día.",
+  'about.story.title': "De herramienta de desarrollador a plataforma global.",
+  'about.story.p1': "FireCMS comenzó como una herramienta interna para lanzar un back-office en minutos, no semanas. Como muchos desarrolladores, nuestros fundadores estaban cansados de reconstruir las mismas interfaces de administración para cada proyecto nuevo. Querían dedicar su tiempo a construir grandes productos, no a perderlo con operaciones CRUD, autenticación y validación de formularios.",
+  'about.story.p2': "Lo que empezó como un proyecto secundario ganó tracción rápidamente en la comunidad open-source. Desarrolladores de todo el mundo empezaron a usar FireCMS para construir de todo: desde sistemas de gestión de contenido hasta complejas herramientas internas para empresas.",
+  'about.story.p3': "Hoy, FireCMS es una plataforma en la que confían equipos de empresas como <b>Microsoft</b> e <b>IKEA</b> para construir las herramientas internas que impulsan sus negocios. Estamos orgullosos de ayudar a miles de desarrolladores a ahorrar tiempo y entregar más rápido.",
 
   'about.values.title': "Nuestros Valores",
   'about.values.v1.title': "Primero los Desarrolladores",
-  'about.values.v1.desc': "Todas las decisiones que tomamos se contestan tras plantearnos esta simple pregunta: \"¿Hace esto la vida más fácil a nuestros desarrolladores?\". Por ello, priorizamos DX de primer nivel, documentación extensa, así como poderosas APIs.",
+  'about.values.v1.desc': "Cada decisión que tomamos empieza con una pregunta: \"¿Esto facilita la vida a los desarrolladores?\". Priorizamos una excelente experiencia de desarrollo, documentación completa y APIs potentes.",
   'about.values.v2.title': "Transparencia",
-  'about.values.v2.desc': "Nuestra iniciativa es en la mayoría software de código abierto (open-source) y estamos orgullosos. Nuestro código, toma de decisiones y hojas de ruta son públicas. Creemos firmemente que la única forma de generar un vínculo de confianza es con la honestidad.",
+  'about.values.v2.desc': "Somos open-source y estamos orgullosos de ello. Nuestro código, roadmap y decisiones son públicos. Creemos que la confianza se construye siendo transparentes.",
   'about.values.v3.title': "Orientado a la Comunidad",
-  'about.values.v3.desc': "Nuestras mejores ideas y características nos las dais vosotros, la comunidad. Escuchamos de forma activa, iteramos en medida de lo posible y tratamos de construir las ideas propuestas, siempre con criterio.",
+  'about.values.v3.desc': "Nuestras mejores funcionalidades nacen de la comunidad. Escuchamos, iteramos y construimos lo que los desarrolladores realmente necesitan.",
 
   'about.stats.title': "FireCMS en Números",
   'about.stats.s1.value': "1k+",
@@ -605,7 +605,7 @@ export const es = {
   'security.privacy.f3.title': "Control de Residencia de Datos",
   'security.privacy.f3.desc': "Elige tu región de Firebase/MongoDB para cumplir con los requisitos de residencia de datos.",
 
-  'security.trust.title': "La Confianza de Organizaciones Líderes",
+  'security.trust.title': "Empresas líderes confían en FireCMS",
   'security.trust.subtitle': "Equipos empresariales confían en FireCMS para sus datos más críticos.",
   'security.trust.s1.value': "10000+",
   'security.trust.s1.label': "Proyectos Activos",

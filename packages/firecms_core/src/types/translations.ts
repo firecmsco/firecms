@@ -343,6 +343,7 @@ export interface FireCMSTranslations {
     must_be_at_least_one_admin: string;
     logged_user_not_found: string;
     user: string;
+    user_id: string;
     error_updating_asset: string;
     error_deleting_asset: string;
     name_of_this_user: string;
@@ -655,4 +656,70 @@ export interface FireCMSTranslations {
     editor_strikethrough: string;
     editor_autocomplete: string;
     editor_autocomplete_description: string;
+
+    // ─── Text Search Dialog ─────────────────────────────────────
+    text_search_dialog_title: string;
+    text_search_local_not_recommended: string;
+    text_search_local_fetch_warning: string;
+    text_search_external_suggestion: string;
+    text_search_local_description: string;
+    text_search_own_implementation: string;
+    text_search_enable_for_collection: string;
+    text_search_enable_for_project: string;
+    text_search_enabled_snackbar: string;
+
+    // ─── Cloud Project Settings ──────────────────────────────────
+    settings_subscription_plan: string;
+    settings_subscribed_to: string;
+    settings_no_active_subscription: string;
+    settings_trial_valid_until: string;
+    settings_features_intro: string;
+    settings_feature_managed_service: string;
+    settings_feature_local_text_search: string;
+    settings_feature_unlimited_users_roles: string;
+    settings_feature_theme_logo: string;
+    settings_feature_custom_fields_views: string;
+    settings_feature_secondary_databases: string;
+    settings_feature_ai_content: string;
+    settings_feature_unlimited_export: string;
+    settings_feature_appcheck: string;
+    settings_heading: string;
+    settings_project_name: string;
+    settings_default_language: string;
+    settings_default_language_caption: string;
+    settings_enable_local_text_search: string;
+    settings_local_text_search_caption: string;
+    settings_doc_history_all_collections: string;
+    settings_doc_history_caption: string;
+    settings_theme: string;
+    settings_primary_color: string;
+    settings_secondary_color: string;
+    settings_sample_theme_components: string;
+    settings_drag_drop_logo: string;
+    settings_create_subscription: string;
+    settings_stripe_disclaimer: string;
+    settings_subscription_is: string;
+    settings_next_payment_on: string;
+    settings_seats_count: string;
+    settings_seat: string;
+    settings_seats: string;
+    settings_per_seat: string;
+    settings_current_price: string;
+    settings_per_user_usage: string;
+    settings_cancelled_active_until: string;
+    settings_no_additional_charges: string;
+    settings_manage_subscription: string;
+    settings_security_rules: string;
+    settings_security_rules_description: string;
+    settings_security_rules_add_domain: string;
+    settings_security_rules_caption: string;
+    settings_appcheck: string;
+    settings_appcheck_description: string;
+    settings_appcheck_add_domain: string;
+    settings_appcheck_enable: string;
+    settings_appcheck_site_key: string;
+    settings_appcheck_update: string;
+    settings_appcheck_refresh_note: string;
+    settings_appcheck_updated: string;
+    settings_appcheck_error: string;
 }

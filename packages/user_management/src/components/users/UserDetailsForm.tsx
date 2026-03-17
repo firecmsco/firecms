@@ -3,14 +3,18 @@ import * as Yup from "yup";
 import {
     Button,
     CheckIcon,
+    Chip,
+    CopyIcon,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    IconButton,
     LoadingButton,
     MultiSelect,
     MultiSelectItem,
     TextField,
+    Tooltip,
 } from "@firecms/ui";
 import { FieldCaption, Role, useAuthController, User, useSnackbarController, useTranslation
 } from "@firecms/core";
@@ -146,6 +150,30 @@ export function UserDetailsForm({
                     <DialogContent className="h-full flex-grow">
 
                         <div className={"grid grid-cols-12 gap-4"}>
+
+                            {!isNewUser && userProp?.uid && (
+                                <div className={"col-span-12"}>
+                                    <div className={"flex items-center gap-2"}>
+                                        <span className={"text-sm text-surface-accent-600 dark:text-surface-accent-400"}>{t("user_id")}</span>
+                                        <Chip size={"small"}>
+                                            {userProp.uid}
+                                        </Chip>
+                                        <Tooltip title={t("copy")}>
+                                            <IconButton
+                                                size={"small"}
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(userProp.uid);
+                                                    snackbarController.open({
+                                                        type: "success",
+                                                        message: t("copied")
+                                                    });
+                                                }}>
+                                                <CopyIcon size={"small"}/>
+                                            </IconButton>
+                                        </Tooltip>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className={"col-span-12"}>
                                 <TextField

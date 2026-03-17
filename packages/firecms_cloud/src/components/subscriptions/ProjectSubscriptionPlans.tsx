@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useBrowserTitleAndIcon } from "@firecms/core";
+import { useBrowserTitleAndIcon, useTranslation } from "@firecms/core";
 import { AutoAwesomeIcon, Button, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
@@ -15,6 +15,8 @@ export function ProjectSubscriptionPlans() {
         projectId,
         trialValidUntil
     } = useProjectConfig();
+
+    const { t } = useTranslation();
 
     if (!subscriptionPlan)
         throw new Error("No subscription plan");
@@ -50,19 +52,19 @@ export function ProjectSubscriptionPlans() {
 
                 <div className={"col-span-12 md:col-span-7 flex flex-col gap-2"}>
 
-                    <Typography variant={"h4"} className="mt-4 mb-2">Subscription Plan</Typography>
+                    <Typography variant={"h4"} className="mt-4 mb-2">{t("settings_subscription_plan")}</Typography>
 
                     {isSubscribed &&
                         <Typography
                             variant={"subtitle1"}
                             className="my-2">
-                            You are currently subscribed to <Chip size={"small"}>FireCMS Cloud</Chip>.
+                            {t("settings_subscribed_to")} <Chip size={"small"}>FireCMS Cloud</Chip>.
                         </Typography>}
 
                     {!isSubscribed && <Typography
                         variant={"subtitle1"}
                         className="my-2">
-                        Currently there is no active subscription for this project.
+                        {t("settings_no_active_subscription")}
                     </Typography>}
 
 
@@ -70,7 +72,7 @@ export function ProjectSubscriptionPlans() {
                         <Typography
                             variant={"subtitle1"}
                             className="my-2">
-                            Your trial is valid until {trialValidUntil.toLocaleDateString()}.
+                            {t("settings_trial_valid_until", { date: trialValidUntil.toLocaleDateString() })}
                         </Typography>}
 
                     {!isSubscribed && plusProduct && <UpgradeCloudSubscriptionView
@@ -89,36 +91,36 @@ export function ProjectSubscriptionPlans() {
                     <Card
                         className={"p-6 bg-amber-200 dark:bg-amber-700 border-amber-300 dark:border-amber-800 flex flex-col gap-4"}>
 
-                        <div>These are some of the features you are already enjoying by using FireCMS Cloud
+                        <div>{t("settings_features_intro")}
                         </div>
 
                         <ul className={"px-2 text-base"}>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
-                                Managed always up-to-date service
+                                {t("settings_feature_managed_service")}
                             </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
-                                Local text search
-                            </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />Unlimited
-                                users and roles
-                            </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />Theme and
-                                logo customization
+                                {t("settings_feature_local_text_search")}
                             </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
-                                Custom form fields and custom views
+                                {t("settings_feature_unlimited_users_roles")}
                             </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
-                                Secondary databases
-                            </li>
-                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />AI
-                                content generation with OpenAI and Google
+                                {t("settings_feature_theme_logo")}
                             </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
-                                Unlimited data export
+                                {t("settings_feature_custom_fields_views")}
                             </li>
                             <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
-                                AppCheck
+                                {t("settings_feature_secondary_databases")}
+                            </li>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
+                                {t("settings_feature_ai_content")}
+                            </li>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
+                                {t("settings_feature_unlimited_export")}
+                            </li>
+                            <li className={"flex gap-4 items-center py-0.5"}><AutoAwesomeIcon size={"small"} />
+                                {t("settings_feature_appcheck")}
                             </li>
                         </ul>
                     </Card>
@@ -142,6 +144,8 @@ function CurrentCloudSubscriptionView({
         getBackendAuthToken,
         projectsApi
     } = useFireCMSBackend();
+
+    const { t } = useTranslation();
 
     const statusText = getSubscriptionStatusText(subscription);
     const [cancelLinkUrl, setCancelLinkUrl] = useState<string | undefined>(undefined);
@@ -175,39 +179,37 @@ function CurrentCloudSubscriptionView({
         >
             <div className={"flex flex-col gap-2"}>
                 <div>
-                    The subscription is <Chip
+                    {t("settings_subscription_is")} <Chip
                         className={"inline"}
                         size={"small"}
                         colorScheme={statusText === "Active" ? "greenDark" : "orangeDark"}>
                         {statusText} </Chip>.
 
-                    {subscription.current_period_end && !subscription.canceled_at && <> The next payment is
-                        on {subscription.current_period_end.toDate().toLocaleDateString()}. </>}
+                    {subscription.current_period_end && !subscription.canceled_at && <> {t("settings_next_payment_on", { date: subscription.current_period_end.toDate().toLocaleDateString() })} </>}
 
                     {isPerSeatBilling ? (
                         <>
-                            You have <Chip size={"small"}>{seatCount} {seatCount === 1 ? "seat" : "seats"}</Chip>
-                            {seatPrice && <> at {formatPrice(seatPrice, seatCurrency)}/seat/{subscription.interval ?? "month"}</>}.
+                            {t("settings_seats_count")} <Chip size={"small"}>{seatCount} {seatCount === 1 ? t("settings_seat") : t("settings_seats")}</Chip>
+                            {seatPrice && <> {t("settings_per_seat", { price: formatPrice(seatPrice, seatCurrency), interval: subscription.interval ?? "month" })}</>}.
                         </>
                     ) : (
                         <>
-                            The current price is <Chip
+                            {t("settings_current_price")} <Chip
                                 size={"small"}>{getPriceString(subscription.price)}
-                            </Chip> per user (usage-based).
+                            </Chip> {t("settings_per_user_usage")}
                         </>
                     )}
 
                     {subscription.cancel_at && <>
-                        {" "}This subscription was <b>cancelled</b> and will be active
-                        until {subscription.cancel_at.toDate().toLocaleDateString()}.
-                        {isPerSeatBilling && <> No additional charges will apply after cancellation.</>}
+                        {" "}{t("settings_cancelled_active_until", { date: subscription.cancel_at.toDate().toLocaleDateString() })}
+                        {isPerSeatBilling && <> {t("settings_no_additional_charges")}</>}
                     </>}
 
                     {!subscription.canceled_at && <a
                         className={" " + subscription.canceled_at ? undefined : "text-text-secondary dark:text-text-secondary-dark"}
                         href={cancelLinkUrl}
                         target="_blank" rel="noreferrer">{
-                            " Manage subscription"
+                            " " + t("settings_manage_subscription")
                         }</a>}
 
                 </div>

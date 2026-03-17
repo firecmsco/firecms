@@ -1,6 +1,6 @@
 import React, { useDeferredValue, useEffect, useState } from "react";
 
-import { FieldCaption, FireCMSLogo, useBrowserTitleAndIcon, useSnackbarController } from "@firecms/core";
+import { FieldCaption, FireCMSLogo, useBrowserTitleAndIcon, useSnackbarController, useTranslation } from "@firecms/core";
 import {
     BooleanSwitch,
     BooleanSwitchWithLabel,
@@ -19,13 +19,13 @@ import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 import { ProjectSubscriptionPlans } from "../subscriptions";
 import { SecurityRulesInstructions } from "../SecurityRulesInstructions";
 import { AppCheckSettingsView } from "./AppCheckSettingsView";
-import { TypesenseSettingsView } from "./TypesenseSettingsView";
 
 export function ProjectSettings() {
 
     const { backendUid } = useFireCMSBackend();
 
     const projectConfig = useProjectConfig();
+    const { t } = useTranslation();
 
     useBrowserTitleAndIcon("Project settings")
 
@@ -41,13 +41,13 @@ export function ProjectSettings() {
 
             <div className={"flex flex-col gap-4"}>
 
-                <Typography variant={"h4"} className="mt-4 mb-2">Settings</Typography>
+                <Typography variant={"h4"} className="mt-4 mb-2">{t("settings_heading")}</Typography>
 
                 <ProjectNameTextField />
 
                 <div className={"col-span-12"}>
                      <Select
-                         label={"Default language"}
+                         label={t("settings_default_language")}
                          value={projectConfig.defaultLocale ?? "en"}
                          onValueChange={async (value) => {
                              await projectConfig.updateDefaultLocale(value as string);
@@ -56,40 +56,35 @@ export function ProjectSettings() {
                          <SelectItem value="es">Español</SelectItem>
                      </Select>
                      <FieldCaption>
-                         Select the base language for this project. Users can override this preference in their personal settings.
+                         {t("settings_default_language_caption")}
                      </FieldCaption>
                  </div>
 
                 <div className={"col-span-12"}>
                     <BooleanSwitchWithLabel
                         position={"start"}
-                        label="Enable local text search"
+                        label={t("settings_enable_local_text_search")}
                         onValueChange={(v) => projectConfig.updateLocalTextSearchEnabled(v)}
                         value={projectConfig.localTextSearchEnabled}
                     />
 
                     <FieldCaption>
-                        Enable local text search for all collections. This will allow you to search text fields in your
-                        collections using the FireCMS search bar.
-                        Note that this feature can incur in higher read counts, as it will index all text fields in your
-                        collections.
+                        {t("settings_local_text_search_caption")}
                     </FieldCaption>
                 </div>
 
-                <TypesenseSettingsView />
+                {/* TypesenseSettingsView hidden - not ready for use */}
 
                 <div className={"col-span-12"}>
                     <BooleanSwitchWithLabel
                         position={"start"}
-                        label="Document history enabled for all collections"
+                        label={t("settings_doc_history_all_collections")}
                         onValueChange={(v) => projectConfig.updateHistoryDefaultEnabled(v)}
                         value={projectConfig.historyDefaultEnabled ?? false}
                     />
 
                     <FieldCaption>
-                        When true, all collections will have the history enabled by default. You can override this
-                        setting in each collection.
-                        History will be saved in the <code>__history</code> subcollection of each document.
+                        {t("settings_doc_history_caption")}
                     </FieldCaption>
                 </div>
 
@@ -113,6 +108,7 @@ export function ProjectSettings() {
 function ProjectNameTextField() {
 
     const projectConfig = useProjectConfig();
+    const { t } = useTranslation();
     const [name, setName] = useState(projectConfig.projectName ?? "");
     const deferredName = useDeferredValue(name);
     useEffect(() => {
@@ -120,7 +116,7 @@ function ProjectNameTextField() {
     }, [deferredName]);
 
     return <TextField value={name}
-        label={"Project name"}
+        label={t("settings_project_name")}
         onChange={e => setName(e.target.value)}
         onBlur={() => {
             if (name) projectConfig.updateProjectName(name);
@@ -136,6 +132,7 @@ function LogoUploadField() {
     } = useProjectConfig();
 
     const snackbarContext = useSnackbarController();
+    const { t } = useTranslation();
 
     const onFilesAdded = async (acceptedFiles: File[]) => {
         if (!acceptedFiles.length)
@@ -161,7 +158,7 @@ function LogoUploadField() {
         maxSize={2048 * 1024}
         onFilesAdded={onFilesAdded}
         onFilesRejected={onFilesRejected}
-        uploadDescription={"Drag and drop your logo here"}
+        uploadDescription={t("settings_drag_drop_logo")}
     >
         {logo && <img
             className={"w-40 h-40 p-4"}
@@ -175,8 +172,9 @@ function LogoUploadField() {
 
 function SampleComponents() {
     const [checked, setChecked] = useState<boolean>(true);
+    const { t } = useTranslation();
     return <div className={"p-4 mt-4 flex flex-col items-center gap-2"}>
-        <Typography variant={"label"}>Sample theme components</Typography>
+        <Typography variant={"label"}>{t("settings_sample_theme_components")}</Typography>
         <div className={"flex flex-row gap-4 items-center justify-center"}>
             <Button color={"primary"}> Button </Button>
             <Button> Button </Button>
@@ -190,9 +188,10 @@ function SampleComponents() {
 function ThemeColors() {
 
     const projectConfig = useProjectConfig();
+    const { t } = useTranslation();
     return <div className={"flex flex-col gap-2 mt-4 mb-2"}>
 
-        <Typography variant={"h4"} className="mt-4 mb-2">Theme</Typography>
+        <Typography variant={"h4"} className="mt-4 mb-2">{t("settings_theme")}</Typography>
         <div className={"grid grid-cols-12 gap-4"}>
 
             <div className={"col-span-12 md:col-span-6"}>
@@ -211,7 +210,7 @@ function ThemeColors() {
                                     return projectConfig.updatePrimaryColor(e.target.value);
                                 }}
                             />
-                            <Typography variant={"subtitle2"}>Primary color</Typography>
+                            <Typography variant={"subtitle2"}>{t("settings_primary_color")}</Typography>
                         </div>
                         <div className={"flex flex-row gap-2"}>
                             <input
@@ -221,7 +220,7 @@ function ThemeColors() {
                                     return projectConfig.updateSecondaryColor(e.target.value);
                                 }}
                             />
-                            <Typography variant={"subtitle2"}>Secondary color</Typography>
+                            <Typography variant={"subtitle2"}>{t("settings_secondary_color")}</Typography>
                         </div>
                     </div>
                     <SampleComponents />

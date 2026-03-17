@@ -10,13 +10,14 @@ import {
 } from "@firecms/ui";
 import { useProjectConfig } from "../../hooks";
 import { useState } from "react";
-import { useSnackbarController } from "@firecms/core";
+import { useSnackbarController, useTranslation } from "@firecms/core";
 
 export function AppCheckSettingsView() {
 
     const projectConfig = useProjectConfig();
 
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
 
     const [enabled, setEnabled] = useState<boolean>(Boolean(projectConfig.appCheck));
 
@@ -32,12 +33,12 @@ export function AppCheckSettingsView() {
                     siteKey
                 });
                 snackbarController.open({
-                    message: "AppCheck updated",
+                    message: t("settings_appcheck_updated"),
                     type: "success"
                 });
             } catch (e) {
                 snackbarController.open({
-                    message: "Error updating AppCheck",
+                    message: t("settings_appcheck_error"),
                     type: "error"
                 });
             }
@@ -51,24 +52,18 @@ export function AppCheckSettingsView() {
                      e.preventDefault();
                      saveAppCheck();
                  }}>
-        <Typography variant={"h4"}>AppCheck</Typography>
+        <Typography variant={"h4"}>{t("settings_appcheck")}</Typography>
 
         <Typography>
-            You can enable AppCheck to protect your Firebase services from abuse.
-            Check how to configure it in the <a href={"https://firebase.google.com/docs/app-check"}>Firebase
-            documentation
-        </a>.
-            When you have a provider set, you can enable it here. You will need to provide
-            a secret in your Firebase project settings, and a site key in the FireCMS config.
+            {t("settings_appcheck_description")}
         </Typography>
 
-        <Typography>Remember to add the domain <b>{window.location.origin}</b> to your provider allowed
-            domains</Typography>
+        <Typography>{t("settings_appcheck_add_domain", { domain: window.location.origin })}</Typography>
 
         <BooleanSwitchWithLabel value={enabled}
                                 position={"start"}
                                 size={"medium"}
-                                label={"Enable AppCheck"}
+                                label={t("settings_appcheck_enable")}
                                 onValueChange={(value) => {
                                     setEnabled(value);
                                 }}/>
@@ -97,7 +92,7 @@ export function AppCheckSettingsView() {
                     </Label>
                 </RadioGroup>
 
-                <TextField label={"Site key"}
+                <TextField label={t("settings_appcheck_site_key")}
                            className={"w-full"}
                            value={siteKey ?? ""}
                            onChange={(e) => setSiteKey(e.target.value)}
@@ -106,11 +101,11 @@ export function AppCheckSettingsView() {
 
             <Button
                     type={"submit"}>
-                Update AppCheck
+                {t("settings_appcheck_update")}
             </Button>
 
             <Typography variant={"caption"}>
-                You might need to refresh the page to see the changes, after saving.
+                {t("settings_appcheck_refresh_note")}
             </Typography>
         </Paper>
     </form>

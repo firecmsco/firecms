@@ -10,7 +10,7 @@ import {
     Typography
 } from "@firecms/ui";
 import { useProjectConfig } from "../../hooks";
-import { EntityCollection, useSnackbarController } from "@firecms/core";
+import { EntityCollection, useSnackbarController, useTranslation } from "@firecms/core";
 import { useState } from "react";
 import { CollectionsConfigController } from "@firecms/collection_editor";
 
@@ -31,6 +31,7 @@ export function TextSearchInfoDialog({
     hasOwnTextSearchImplementation: boolean
 }) {
 
+    const { t } = useTranslation();
     const snackbarController = useSnackbarController();
     const projectConfig = useProjectConfig();
     const [enablingLocalSearch, setEnablingLocalSearch] = useState<boolean>(false);
@@ -55,7 +56,7 @@ export function TextSearchInfoDialog({
 
         <DialogTitle variant={"h5"} className={"flex flex-row gap-4 items-center"}>
             <SearchIcon/>
-            Enable text search
+            {t("text_search_dialog_title")}
         </DialogTitle>
         <DialogContent className={"flex flex-col gap-4"}>
 
@@ -63,35 +64,27 @@ export function TextSearchInfoDialog({
 
                 <div className={"flex flex-col gap-2 mb-2"}>
                     <Alert color={"warning"}>
-                        Local text search is not recommended for large collections.
+                        {t("text_search_local_not_recommended")}
                     </Alert>
 
                     <Typography variant={"caption"} className={"mt-4"}>
-                        Note that enabling local text search will need to fetch all documents
-                        from your collection and store them in the browser. This can be inefficient
-                        for large collections. It can also incur in additional costs.
+                        {t("text_search_local_fetch_warning")}
                     </Typography>
 
                     <Typography variant={"caption"}>
-                        For larger collections, you are encouraged to use an external
-                        search engine such as Algolia or Elastic Search, and assign a
-                        search delegate to your config.
+                        {t("text_search_external_suggestion")}
                     </Typography>
                 </div>
 
                 <Typography>
-                    Local text search is the simplest way to enable text search in your
-                    collection. It loads all documents in the collection in the browser
-                    and performs the search locally. This is the recommended option for
-                    small collections.
+                    {t("text_search_local_description")}
                 </Typography>
 
             </>}
 
             {hasOwnTextSearchImplementation && <>
                 <Typography>
-                    You have implemented your own text search controller. You enable text search
-                    for your collection.
+                    {t("text_search_own_implementation")}
                 </Typography>
             </>}
 
@@ -104,14 +97,14 @@ export function TextSearchInfoDialog({
                                        enableTextSearchForCollection()
                                            .then(() => {
                                                snackbarController.open({
-                                                   message: "Local text search enabled",
+                                                   message: t("text_search_enabled_snackbar"),
                                                    type: "success"
                                                });
                                                closeDialog();
                                            })
                                            .finally(() => setEnablingForCollection(false));
                                    }}>
-                        Enable for this collection
+                        {t("text_search_enable_for_collection")}
                     </LoadingButton>}
 
                 {!hasOwnTextSearchImplementation && !projectConfig.localTextSearchEnabled &&
@@ -124,14 +117,14 @@ export function TextSearchInfoDialog({
                                                if (!collection.textSearchEnabled)
                                                    await enableTextSearchForCollection();
                                                snackbarController.open({
-                                                   message: "Local text search enabled",
+                                                   message: t("text_search_enabled_snackbar"),
                                                    type: "success"
                                                });
                                                closeDialog();
                                            })
                                            .finally(() => setEnablingLocalSearch(false));
                                    }}>
-                        Enable for project
+                        {t("text_search_enable_for_project")}
                     </LoadingButton>}
 
             </div>
@@ -144,3 +137,4 @@ export function TextSearchInfoDialog({
         </IconButton>
     </Dialog>;
 }
+
