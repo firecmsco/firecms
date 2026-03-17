@@ -23,7 +23,6 @@
     "@firebase/app-check": "^0.11.0",
     "@firecms/core": "file:../packages/firecms_core",
     "@firecms/data_enhancement": "file:../packages/data_enhancement",
-    "@firecms/editor": "file:../packages/editor",
     "@firecms/firebase": "file:../packages/firebase_firecms",
     "@firecms/neat": "^0.4.0",
     "@firecms/ui": "file:../packages/ui",

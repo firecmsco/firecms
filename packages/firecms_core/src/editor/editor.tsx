@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
-import { useTranslation } from "@firecms/core";
-import { useEditorTranslations } from "./useEditorTranslations";
+import { useTranslation } from "../hooks/useTranslation";
 import { EditorBubble, SlashCommandMenu, type JSONContent } from "./components";
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
@@ -62,7 +61,6 @@ export const FireCMSEditor = ({
   markdownConfig
 }: FireCMSEditorProps) => {
   const { t } = useTranslation();
-  useEditorTranslations();
 
   const [openNode, setOpenNode] = useState(false);
   const [openLink, setOpenLink] = useState(false);

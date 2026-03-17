@@ -25,7 +25,7 @@ export function useTranslation() {
      *   t("add_to_field", { fieldName: "Tags" })
      *   t("error_deleting", { message: err.message })
      */
-    const typedT = (key: keyof FireCMSTranslations, vars?: Record<string, string>): string =>
+    const typedT = (key: keyof FireCMSTranslations | (string & {}), vars?: Record<string, string>): string =>
         t(key, vars) as string;
 
     return { t: typedT, i18n };

@@ -23,7 +23,8 @@ import {
     useNavigationController,
     User,
     useSnackbarController,
-    useTranslation
+    useTranslation,
+    FireCMSTranslations
 } from "@firecms/core";
 import {
     ArrowBackIcon,
@@ -156,7 +157,7 @@ export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
                     open={unsavedChangesDialogOpen}
                     handleOk={() => props.handleClose(undefined)}
                     handleCancel={() => setUnsavedChangesDialogOpen(false)}
-                    body={"There are unsaved changes in this collection"} />
+                    body={t("unsaved_changes_in_collection")} />
             </AIModifiedPathsProvider>
         </Dialog>
     );
@@ -346,7 +347,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 console.error(e);
                 snackbarController.open({
                     type: "error",
-                    message: "Error persisting collection: " + (e.message ?? "Details in the console")
+                    message: t("error_persisting_collection", { error: e.message ?? t("details_in_console") })
                 });
                 return false;
             });
@@ -427,7 +428,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             console.error(e);
             snackbarController.open({
                 type: "error",
-                message: "Error inferring collection: " + (e.message ?? "Details in the console")
+                message: t("error_inferring_collection", { error: e.message ?? t("details_in_console") })
             });
             return newCollection;
         }
@@ -490,7 +491,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         } catch (e: any) {
             snackbarController.open({
                 type: "error",
-                message: "Error persisting collection: " + (e.message ?? "Details in the console")
+                message: t("error_persisting_collection", { error: e.message ?? t("details_in_console") })
             });
             console.error(e);
             formexController.resetForm({ values: newCollectionState });
@@ -514,11 +515,11 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             errors = { ...errors, ...propertyErrorsRef.current };
         }
         if (currentView === "general") {
-            const pathError = validatePath(col.path, isNewCollection, existingPaths, col.id);
+            const pathError = validatePath(t, col.path, isNewCollection, existingPaths, col.id);
             if (pathError) {
                 errors.path = pathError;
             }
-            const idError = validateId(col.id, isNewCollection, existingPaths, existingIds);
+            const idError = validateId(t, col.id, isNewCollection, existingPaths, existingIds);
             if (idError) {
                 errors.id = idError;
             }
@@ -543,7 +544,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     const path = values.path;
     const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
-    const pathError = validatePath(path, isNewCollection, existingPaths, values.id);
+    const pathError = validatePath(t, path, isNewCollection, existingPaths, values.id);
 
     const parentPaths = !pathError && parentCollectionIds ? navigation.convertIdsToPaths(parentCollectionIds) : undefined;
     const resolvedPath = !pathError ? navigation.resolveIdsFrom(updatedFullPath) : undefined;
@@ -605,7 +606,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             setDeleteRequested(false);
             handleCancel();
             snackbarController.open({
-                message: "Collection deleted",
+                message: t("collection_deleted"),
                 type: "success"
             });
         });
@@ -645,16 +646,16 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                     <Tabs value={currentView}
                         onValueChange={(v) => setCurrentView(v as EditorView)}>
                         <Tab value={"general"}>
-                            General
+                            {t("tab_general")}
                         </Tab>
                         <Tab value={"display"}>
-                            Display
+                            {t("tab_display")}
                         </Tab>
                         <Tab value={"properties"}>
-                            Properties
+                            {t("tab_properties")}
                         </Tab>
                         <Tab value={"extend"}>
-                            Extend
+                            {t("tab_extend")}
                         </Tab>
                     </Tabs>
                 </div>}
@@ -699,7 +700,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             onImportSuccess={async (importedCollection) => {
                                 snackbarController.open({
                                     type: "info",
-                                    message: "Data imported successfully"
+                                    message: t("data_imported_successfully_msg")
                                 });
                                 await saveCollection(values);
                                 handleClose(importedCollection);
@@ -861,10 +862,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             open={deleteRequested}
             onAccept={deleteCollection}
             onCancel={() => setDeleteRequested(false)}
-            title={<>Delete the stored config?</>}
-            body={<> This will <b>not
-                delete any data</b>, only
-                the stored config, and reset to the code state.</>} />
+            title={<>{t("delete_stored_config")}</>}
+            body={<>{t("delete_stored_config_body")}</>} />
 
     </DialogContent>
 
@@ -919,30 +918,32 @@ function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Rec
 
 }
 
-const validatePath = (value: string, isNewCollection: boolean, existingPaths: string[], idValue?: string) => {
+type TranslateFn = (key: keyof FireCMSTranslations, params?: Record<string, string>) => string;
+
+const validatePath = (t: TranslateFn, value: string, isNewCollection: boolean, existingPaths: string[], idValue?: string) => {
     let error;
     if (!value) {
-        error = "You must specify a path in the database for this collection";
+        error = t("must_specify_path");
     }
     // if (isNewCollection && existingIds?.includes(value.trim().toLowerCase()))
     //     error = "There is already a collection which uses this path as an id";
     if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()) && !idValue)
-        error = "There is already a collection with the specified path. If you want to have multiple collections referring to the same database path, make sure the have different ids";
+        error = t("collection_path_already_exists");
 
     const subpaths = removeInitialAndTrailingSlashes(value).split("/");
     if (subpaths.length % 2 === 0) {
-        error = `Collection paths must have an odd number of segments: ${value}`;
+        error = t("collection_path_odd_segments", { path: value });
     }
     return error;
 };
 
-const validateId = (value: string, isNewCollection: boolean, existingPaths: string[], existingIds: string[]) => {
+const validateId = (t: TranslateFn, value: string, isNewCollection: boolean, existingPaths: string[], existingIds: string[]) => {
     if (!value) return undefined;
     let error;
     if (isNewCollection && existingPaths?.includes(value.trim().toLowerCase()))
-        error = "There is already a collection that uses this value as a path";
+        error = t("collection_uses_path_as_id");
     if (isNewCollection && existingIds?.includes(value.trim().toLowerCase()))
-        error = "There is already a collection which uses this id";
+        error = t("collection_uses_this_id");
     // if (error) {
     //     setAdvancedPanelExpanded(true);
     // }

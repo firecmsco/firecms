@@ -12,6 +12,7 @@ import {
     TextField,
     Typography
 } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 
 export function MarkdownPropertyField({
     disabled,
@@ -25,6 +26,8 @@ export function MarkdownPropertyField({
         values,
         setFieldValue
     } = useFormex();
+
+    const { t } = useTranslation();
 
     const baseStoragePath = "storage";
     const baseMarkdownPath = "markdown";
@@ -96,7 +99,7 @@ export function MarkdownPropertyField({
                             <SettingsIcon />
                             <Typography variant={"subtitle2"}
                                 className="ml-4">
-                                Paste behavior
+                                {t("paste_behavior")}
                             </Typography>
                         </div>
                     }>
@@ -107,10 +110,10 @@ export function MarkdownPropertyField({
                             disabled={disabled}
                             value={!htmlValue}
                             onValueChange={(value) => updateMarkdownConfig("html", !value)}
-                            label={"Strip HTML on paste"}
+                            label={t("strip_html_on_paste")}
                         />
                         <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
-                            Remove HTML tags and inline styles when pasting content from external sources
+                            {t("strip_html_description")}
                         </Typography>
 
                         <BooleanSwitchWithLabel
@@ -118,10 +121,10 @@ export function MarkdownPropertyField({
                             disabled={disabled}
                             value={transformPastedTextValue}
                             onValueChange={(value) => updateMarkdownConfig("transformPastedText", value)}
-                            label={"Convert pasted text to markdown"}
+                            label={t("convert_pasted_to_markdown")}
                         />
                         <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
-                            Convert rich text (from Google Docs, Word, etc.) to clean markdown format
+                            {t("convert_pasted_description")}
                         </Typography>
                     </div>
                 </ExpandablePanel>
@@ -134,7 +137,7 @@ export function MarkdownPropertyField({
                             <CloudUploadIcon />
                             <Typography variant={"subtitle2"}
                                 className="ml-4">
-                                File upload config
+                                {t("file_upload_config")}
                             </Typography>
                         </div>
                     }>
@@ -145,7 +148,7 @@ export function MarkdownPropertyField({
                         <div className={"col-span-12"}>
                             <Field name={fileName}
                                 as={DebouncedTextField}
-                                label={"File name"}
+                                label={t("file_name_label")}
                                 size={"small"}
                                 disabled={hasFilenameCallback || disabled}
                                 value={hasFilenameCallback ? "-" : fileNameValue}
@@ -154,37 +157,33 @@ export function MarkdownPropertyField({
                         <div className={"col-span-12"}>
                             <Field name={storagePath}
                                 as={DebouncedTextField}
-                                label={"Storage path"}
+                                label={t("storage_path_label")}
                                 disabled={hasStoragePathCallback || disabled}
                                 size={"small"}
                                 value={hasStoragePathCallback ? "-" : storagePathValue}
                             />
                             <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
-                                <p>You can use the following placeholders in
-                                    the file name
-                                    and storage path values:</p>
+                                <p>{t("storage_placeholders_description")}</p>
                                 <ul>
-                                    <li>{"{file} - Full name of the uploaded file"}</li>
-                                    <li>{"{file.name} - Name of the uploaded file without extension"}</li>
-                                    <li>{"{file.ext} - Extension of the uploaded file"}</li>
-                                    <li>{"{entityId} - ID of the entity"}</li>
-                                    <li>{"{propertyKey} - ID of this field"}</li>
-                                    <li>{"{path} - Path of this entity"}</li>
-                                    <li>{"{rand} - Random value used to avoid name collisions"}</li>
+                                    <li>{t("storage_placeholder_file")}</li>
+                                    <li>{t("storage_placeholder_file_name")}</li>
+                                    <li>{t("storage_placeholder_file_ext")}</li>
+                                    <li>{t("storage_placeholder_entity_id")}</li>
+                                    <li>{t("storage_placeholder_property_key")}</li>
+                                    <li>{t("storage_placeholder_path")}</li>
+                                    <li>{t("storage_placeholder_rand")}</li>
                                 </ul>
                             </Typography>
 
                             <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
-                                When using Markdown, the URL of the uploaded files are always saved in the text value
-                                (not
-                                the path).
+                                {t("markdown_url_note")}
                             </Typography>
                         </div>
 
                         <div className={"col-span-12"}>
                             <DebouncedTextField name={maxSize}
                                 type={"number"}
-                                label={"Max size (in bytes)"}
+                                label={t("max_size_bytes")}
                                 size={"small"}
                                 value={maxSizeValue !== undefined && maxSizeValue !== null ? maxSizeValue.toString() : ""}
                                 onChange={(e) => {
@@ -206,7 +205,7 @@ export function MarkdownPropertyField({
                     onChange={(e: any) => {
                         setFieldValue("defaultValue", e.target.value === "" ? undefined : e.target.value);
                     }}
-                    label={"Default value"}
+                    label={t("default_value")}
                     value={getIn(values, "defaultValue") ?? ""} />
 
             </div>

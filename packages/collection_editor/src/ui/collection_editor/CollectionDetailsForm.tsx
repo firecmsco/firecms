@@ -325,7 +325,7 @@ export function CollectionDetailsForm({
                                 : "__order";
                             const dialogPropertyName = orderPropertyMissing && values.orderProperty
                                 ? unslugify(values.orderProperty)
-                                : "Order";
+                                : t("order_label");
 
                             if (!showCreateButton) return null;
 

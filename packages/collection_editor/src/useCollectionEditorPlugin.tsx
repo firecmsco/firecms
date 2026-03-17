@@ -18,6 +18,13 @@ import { NewCollectionCard } from "./ui/NewCollectionCard";
 import { EditorEntityAction } from "./ui/EditorEntityAction";
 import { KanbanSetupAction } from "./ui/KanbanSetupAction";
 import { AddKanbanColumnAction } from "./ui/AddKanbanColumnAction";
+import { collectionEditorTranslationsEn } from "./locales/en";
+import { collectionEditorTranslationsEs } from "./locales/es";
+import { collectionEditorTranslationsDe } from "./locales/de";
+import { collectionEditorTranslationsFr } from "./locales/fr";
+import { collectionEditorTranslationsIt } from "./locales/it";
+import { collectionEditorTranslationsHi } from "./locales/hi";
+import { collectionEditorTranslationsPt } from "./locales/pt";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, USER extends User = User> {
 
@@ -130,6 +137,15 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         },
         form: {
             ActionsTop: EditorEntityAction,
+        },
+        i18n: {
+            en: collectionEditorTranslationsEn,
+            es: collectionEditorTranslationsEs,
+            de: collectionEditorTranslationsDe,
+            fr: collectionEditorTranslationsFr,
+            it: collectionEditorTranslationsIt,
+            hi: collectionEditorTranslationsHi,
+            pt: collectionEditorTranslationsPt
         }
     };
 }

@@ -4,6 +4,7 @@ import { ValidationPanel } from "./validation/ValidationPanel";
 import { getIn, useFormex } from "@firecms/formex";
 
 import { Select, SelectItem, TextField } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 
 export function UrlPropertyField({
                                      disabled,
@@ -14,6 +15,7 @@ export function UrlPropertyField({
 }) {
 
     const { values, setFieldValue } = useFormex();
+    const { t } = useTranslation();
 
     const urlValue = getIn(values, "url");
 
@@ -31,31 +33,31 @@ export function UrlPropertyField({
                         else
                             setFieldValue("url", value);
                     }}
-                    label={"Preview type"}
+                    label={t("preview_type")}
                     renderValue={(value: string) => {
                         switch (value) {
                             case "image":
-                                return "Image";
+                                return t("preview_image");
                             case "video":
-                                return "Video";
+                                return t("preview_video");
                             case "audio":
-                                return "Audio";
+                                return t("preview_audio");
                             default:
-                                return "Display URL";
+                                return t("display_url");
                         }
                     }}
                     value={urlValue ?? "[NONE]"}>
                     <SelectItem value={"[NONE]"}>
-                        Display URL
+                        {t("display_url")}
                     </SelectItem>
                     <SelectItem value={"image"}>
-                        Image
+                        {t("preview_image")}
                     </SelectItem>
                     <SelectItem value={"video"}>
-                        Video
+                        {t("preview_video")}
                     </SelectItem>
                     <SelectItem value={"audio"}>
-                        Audio
+                        {t("preview_audio")}
                     </SelectItem>
                 </Select>
             </div>
@@ -81,7 +83,7 @@ export function UrlPropertyField({
                            onChange={(e: any) => {
                                setFieldValue("defaultValue", e.target.value === "" ? undefined : e.target.value);
                            }}
-                           label={"Default value"}
+                           label={t("default_value")}
                            value={getIn(values, "defaultValue") ?? ""}/>
 
             </div>

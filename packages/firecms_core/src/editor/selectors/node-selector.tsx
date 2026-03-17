@@ -1,6 +1,7 @@
 import { EditorState, Transaction } from "prosemirror-state";
 import { EditorBubbleItem } from "../components";
-import { FireCMSTranslations, useTranslation } from "@firecms/core";
+import { FireCMSTranslations } from "../../types/translations";
+import { useTranslation } from "../../hooks/useTranslation";
 
 import {
     Button,

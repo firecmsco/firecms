@@ -12,7 +12,7 @@ import {
     useStorageSource
 } from "../../index";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
-import { FireCMSEditor, FireCMSEditorProps } from "@firecms/editor";
+import { FireCMSEditor, FireCMSEditorProps } from "../../editor";
 import { resolveProperty, resolveStorageFilenameString, resolveStoragePathString } from "../../util";
 
 interface MarkdownEditorFieldProps {

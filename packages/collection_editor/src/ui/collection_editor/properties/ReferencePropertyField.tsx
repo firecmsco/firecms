@@ -1,6 +1,6 @@
 import React from "react";
 import { Field, getIn, useFormex } from "@firecms/formex";
-import { FieldCaption, IconForView, NumberProperty, StringProperty, useNavigationController } from "@firecms/core";
+import { FieldCaption, IconForView, NumberProperty, StringProperty, useNavigationController, useTranslation } from "@firecms/core";
 import { CircularProgress, Select, SelectGroup, SelectItem, Typography, } from "@firecms/ui";
 
 export function ReferencePropertyField({
@@ -69,6 +69,7 @@ export function CollectionsSelect({
 }) {
 
     const navigation = useNavigationController();
+    const { t } = useTranslation();
 
     if (!navigation)
         return <div className={"col-span-12"}>
@@ -94,7 +95,7 @@ export function CollectionsSelect({
                 size={"large"}
                 fullWidth={true}
                 onChange={handleChange}
-                label={"Target collection"}
+                label={t("target_collection")}
                 renderValue={(selected) => {
                     const selectedCollection = collections.find(collection => collection.id === selected || collection.path === selected);
                     if (!selectedCollection) return null;
@@ -111,7 +112,7 @@ export function CollectionsSelect({
                 {...props}>
 
                 {groups.flatMap((group) => (
-                    <SelectGroup label={group || "Views"}
+                    <SelectGroup label={group || t("views_group")}
                                  key={`group_${group}`}>
                         {
                             collections.filter(collection => collection.group === group)
@@ -134,7 +135,7 @@ export function CollectionsSelect({
                     </SelectGroup>
                 ))}
 
-                {ungroupedCollections && <SelectGroup label={"Views"}>
+                {ungroupedCollections && <SelectGroup label={t("views_group")}>
                     {ungroupedCollections
                         .map((collection) => {
                             return <SelectItem key={collection.id ?? collection.path}

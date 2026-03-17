@@ -35,9 +35,6 @@
       "@firecms/ui": [
         "../../packages/ui/src"
       ],
-      "@firecms/editor": [
-        "../../packages/editor/src"
-      ],
       "@firecms/datatalk": [
         "../../packages/datatalk/src"
       ],

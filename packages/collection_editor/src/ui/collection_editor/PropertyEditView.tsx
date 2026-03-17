@@ -668,29 +668,29 @@ function validateName(value: string, t: any) {
 }
 
 const WIDGET_TYPE_MAP: Record<PropertyConfigId, string> = {
-    text_field: "Text",
-    multiline: "Text",
-    markdown: "Text",
-    url: "Text",
-    email: "Text",
-    switch: "Boolean",
-    user_select: "Users",
-    select: "Select",
-    multi_select: "Select",
-    number_input: "Number",
-    number_select: "Select",
-    multi_number_select: "Select",
-    file_upload: "File",
-    multi_file_upload: "File",
-    reference: "Reference",
-    reference_as_string: "Text",
-    multi_references: "Reference",
-    date_time: "Date",
-    group: "Group",
-    key_value: "Group",
-    repeat: "Array",
-    custom_array: "Array",
-    block: "Group"
+    text_field: "widget_group_text",
+    multiline: "widget_group_text",
+    markdown: "widget_group_text",
+    url: "widget_group_text",
+    email: "widget_group_text",
+    switch: "widget_group_boolean",
+    user_select: "widget_group_users",
+    select: "widget_group_select",
+    multi_select: "widget_group_select",
+    number_input: "widget_group_number",
+    number_select: "widget_group_select",
+    multi_number_select: "widget_group_select",
+    file_upload: "widget_group_file",
+    multi_file_upload: "widget_group_file",
+    reference: "widget_group_reference",
+    reference_as_string: "widget_group_text",
+    multi_references: "widget_group_reference",
+    date_time: "widget_group_date",
+    group: "widget_group_group",
+    key_value: "widget_group_group",
+    repeat: "widget_group_array",
+    custom_array: "widget_group_array",
+    block: "widget_group_group"
 };
 
 function WidgetSelectView({
@@ -741,9 +741,9 @@ function WidgetSelectView({
     const computedFieldConfig = baseFieldConfig && propertyConfig ? mergeDeep(baseFieldConfig, propertyConfig) : propertyConfig;
 
     const groups: string[] = [...new Set(Object.keys(displayedWidgets).map(key => {
-        const group = WIDGET_TYPE_MAP[key as PropertyConfigId];
-        if (group) {
-            return group;
+        const groupKey = WIDGET_TYPE_MAP[key as PropertyConfigId];
+        if (groupKey) {
+            return t(groupKey as any);
         }
         return t("custom_or_other")
     }))];
@@ -791,7 +791,8 @@ function WidgetSelectView({
                             <div className={"grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4"}>
                                 {Object.entries(displayedWidgets).map(([key, propertyConfig]) => {
                                     const groupKey = WIDGET_TYPE_MAP[key as PropertyConfigId];
-                                    if (groupKey === group) {
+                                    const translatedGroup = groupKey ? t(groupKey as any) : t("custom_or_other");
+                                    if (translatedGroup === group) {
                                         return <WidgetSelectViewItem
                                             key={key}
                                             initialProperty={initialProperty}
@@ -838,6 +839,7 @@ export function WidgetSelectViewItem({
     propertyConfig,
     existing
 }: PropertySelectItemProps) {
+    const { t } = useTranslation();
     const baseProperty = propertyConfig.property;
     const shouldWarnChangingDataType = existing && !isPropertyBuilder(baseProperty) && baseProperty.dataType !== initialProperty?.dataType;
 
@@ -854,7 +856,7 @@ export function WidgetSelectViewItem({
             <div>
                 <div className={"flex flex-row gap-2 items-center"}>
                     {shouldWarnChangingDataType && <Tooltip
-                        title={"This widget uses a different data type than the initially selected widget. This can cause errors with existing data."}>
+                        title={t("error_changing_data_type")}>
                         <WarningIcon size="smallest" className={"w-4"} />
                     </Tooltip>}
                     <Typography

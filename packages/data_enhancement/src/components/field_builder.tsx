@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import equal from "react-fast-compare"
 
-import { CMSType, FieldProps, MarkdownEditorFieldBinding, PluginFieldBuilderParams, useTranslation } from "@firecms/core";
+import { CMSType, EditorAIController, FieldProps, MarkdownEditorFieldBinding, PluginFieldBuilderParams, useTranslation } from "@firecms/core";
 import {
     AutoAwesomeIcon,
     CircularProgress,
@@ -19,7 +19,6 @@ import { SUPPORTED_FIELDS_ENHANCEMENT } from "../utils/fields";
 import { EnhanceTextFieldBinding } from "./fields/EnhanceTextField";
 import { EnhancedDataResult, EnhanceParams } from "../types/data_enhancement_controller";
 import { countStringCharacters } from "../utils/strings_counter";
-import { EditorAIController } from "@firecms/editor";
 
 export function fieldBuilder<T extends CMSType = CMSType>
     (params: PluginFieldBuilderParams<T>): React.ComponentType<FieldProps<T>> | null {

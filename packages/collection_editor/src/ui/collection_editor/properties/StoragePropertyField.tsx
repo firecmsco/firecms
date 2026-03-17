@@ -16,14 +16,7 @@ import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidatio
 import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
 import { SwitchControl } from "../SwitchControl";
-
-const fileTypes: Record<string, string> = {
-    "image/*": "Images",
-    "video/*": "Videos",
-    "audio/*": "Audio files",
-    "application/*": "Files (pdf, zip, csv, excel...)",
-    "text/*": "Text files"
-}
+import { useTranslation } from "@firecms/core";
 
 export function StoragePropertyField({
                                          multiple,
@@ -39,6 +32,8 @@ export function StoragePropertyField({
         values,
         setFieldValue
     } = useFormex();
+
+    const { t } = useTranslation();
 
     const baseStoragePath = multiple ? "of.storage" : "storage";
     const acceptedFiles = `${baseStoragePath}.acceptedFiles`;
@@ -73,6 +68,14 @@ export function StoragePropertyField({
     const fileTypesValue: string[] | undefined = Array.isArray(storedValue) ? storedValue : undefined;
     const allFileTypesSelected = !fileTypesValue || fileTypesValue.length === 0;
 
+    const fileTypes: Record<string, string> = {
+        "image/*": t("file_type_images"),
+        "video/*": t("file_type_videos"),
+        "audio/*": t("file_type_audio"),
+        "application/*": t("file_type_applications"),
+        "text/*": t("file_type_text")
+    };
+
     const handleTypesChange = (value: string[]) => {
         if (!value) setFieldValue(acceptedFiles, undefined);
         else setFieldValue(acceptedFiles, value);
@@ -92,7 +95,7 @@ export function StoragePropertyField({
                             <CloudUploadIcon/>
                             <Typography variant={"subtitle2"}
                                         className="ml-4">
-                                File upload config
+                                {t("file_upload_config")}
                             </Typography>
                         </div>
                     }>
@@ -103,14 +106,14 @@ export function StoragePropertyField({
 
                             <MultiSelect
                                 className={"w-full"}
-                                placeholder={"All file types allowed"}
+                                placeholder={t("all_file_types_allowed")}
                                 disabled={disabled}
                                 name={acceptedFiles}
                                 value={fileTypesValue ?? []}
                                 onValueChange={handleTypesChange}
-                                label={allFileTypesSelected ? undefined : "Allowed file types"}
+                                label={allFileTypesSelected ? undefined : t("allowed_file_types")}
                                 renderValues={(selected) => {
-                                    if (!selected || selected.length === 0) return "All file types allowed";
+                                    if (!selected || selected.length === 0) return t("all_file_types_allowed");
                                     return selected.map((v: string) => fileTypes[v])
                                         .filter((v: string) => Boolean(v))
                                         .join(", ");
@@ -130,7 +133,7 @@ export function StoragePropertyField({
                                                     e.stopPropagation();
                                                     return setFieldValue(acceptedFiles, [value]);
                                                 }}>
-                                            Only
+                                            {t("only")}
                                         </Button>
                                     </MultiSelectItem>
                                 ))}
@@ -141,7 +144,7 @@ export function StoragePropertyField({
                         <div className={"col-span-12"}>
                             <Field name={fileName}
                                    as={DebouncedTextField}
-                                   label={"File name"}
+                                   label={t("file_name_label")}
                                    size={"small"}
                                    disabled={hasFilenameCallback || disabled}
                                    value={hasFilenameCallback ? "-" : fileNameValue}
@@ -150,23 +153,21 @@ export function StoragePropertyField({
                         <div className={"col-span-12"}>
                             <Field name={storagePath}
                                    as={DebouncedTextField}
-                                   label={"Storage path"}
+                                   label={t("storage_path_label")}
                                    disabled={hasStoragePathCallback || disabled}
                                    size={"small"}
                                    value={hasStoragePathCallback ? "-" : storagePathValue}
                             />
                             <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
-                                <p>You can use the following placeholders in
-                                    the file name
-                                    and storage path values:</p>
+                                <p>{t("storage_placeholders_description")}</p>
                                 <ul>
-                                    <li>{"{file} - Full name of the uploaded file"}</li>
-                                    <li>{"{file.name} - Name of the uploaded file without extension"}</li>
-                                    <li>{"{file.ext} - Extension of the uploaded file"}</li>
-                                    <li>{"{entityId} - ID of the entity"}</li>
-                                    <li>{"{propertyKey} - ID of this field"}</li>
-                                    <li>{"{path} - Path of this entity"}</li>
-                                    <li>{"{rand} - Random value used to avoid name collisions"}</li>
+                                    <li>{t("storage_placeholder_file")}</li>
+                                    <li>{t("storage_placeholder_file_name")}</li>
+                                    <li>{t("storage_placeholder_file_ext")}</li>
+                                    <li>{t("storage_placeholder_entity_id")}</li>
+                                    <li>{t("storage_placeholder_property_key")}</li>
+                                    <li>{t("storage_placeholder_path")}</li>
+                                    <li>{t("storage_placeholder_rand")}</li>
                                 </ul>
                             </Typography>
 
@@ -177,7 +178,7 @@ export function StoragePropertyField({
                                       form
                                   }: FormexFieldProps) => {
                                     return <SwitchControl
-                                        label={"Include bucket URL (gs://...) in saved value"}
+                                        label={t("include_bucket_url")}
                                         disabled={existing || disabled}
                                         form={form}
                                         field={field}/>;
@@ -185,9 +186,7 @@ export function StoragePropertyField({
                             </Field>
 
                             <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
-                                Turn this setting on if you want to save a fully-qualified storage URL
-                                (e.g. <code>gs://my-bucket/path/to/file</code>) instead of just the storage path.
-                                You can only change this prop upon creation.
+                                {t("include_bucket_url_description")}
                             </Typography>
 
                             <Field name={storeUrl}
@@ -197,7 +196,7 @@ export function StoragePropertyField({
                                       form
                                   }: FormexFieldProps) => {
                                     return <SwitchControl
-                                        label={"Save URL instead of storage path"}
+                                        label={t("save_url_instead_of_path")}
                                         disabled={existing || disabled}
                                         form={form}
                                         field={field}/>;
@@ -205,18 +204,14 @@ export function StoragePropertyField({
                             </Field>
 
                             <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
-                                Turn this setting on, if you prefer to save
-                                the download
-                                URL of the uploaded file instead of the
-                                storage path.
-                                You can only change this prop upon creation.
+                                {t("save_url_description")}
                             </Typography>
                         </div>
 
                         <div className={"col-span-12"}>
                             <DebouncedTextField name={maxSize}
                                                 type={"number"}
-                                                label={"Max size (in bytes)"}
+                                                label={t("max_size_bytes")}
                                                 size={"small"}
                                                 value={maxSizeValue !== undefined && maxSizeValue !== null ? maxSizeValue.toString() : ""}
                                                 onChange={(e) => {
@@ -231,10 +226,10 @@ export function StoragePropertyField({
                             <Typography variant={"subtitle2"}
                                         color={"secondary"}
                                         className={"mb-2 block"}>
-                                Image Resize Configuration
+                                {t("image_resize_configuration")}
                             </Typography>
                             <Typography variant={"caption"} className={"mb-2 block text-xs"}>
-                                Automatically resize and optimize images before upload (JPEG, PNG, WebP only)
+                                {t("image_resize_description")}
                             </Typography>
                         </div>
 
@@ -242,7 +237,7 @@ export function StoragePropertyField({
                             <DebouncedTextField
                                 name={imageResizeMaxWidth}
                                 type={"number"}
-                                label={"Max width (px)"}
+                                label={t("max_width_px")}
                                 size={"small"}
                                 disabled={disabled}
                                 value={imageResizeMaxWidthValue !== undefined && imageResizeMaxWidthValue !== null ? imageResizeMaxWidthValue.toString() : ""}
@@ -258,7 +253,7 @@ export function StoragePropertyField({
                             <DebouncedTextField
                                 name={imageResizeMaxHeight}
                                 type={"number"}
-                                label={"Max height (px)"}
+                                label={t("max_height_px")}
                                 size={"small"}
                                 disabled={disabled}
                                 value={imageResizeMaxHeightValue !== undefined && imageResizeMaxHeightValue !== null ? imageResizeMaxHeightValue.toString() : ""}
@@ -278,16 +273,16 @@ export function StoragePropertyField({
                                 size={"medium"}
                                 value={imageResizeModeValue || "cover"}
                                 onValueChange={(value) => setFieldValue(imageResizeMode, value || "cover")}
-                                label={"Resize mode"}
+                                label={t("resize_mode")}
                                 renderValue={(selected) => {
-                                    if (!selected) return "Cover";
-                                    return selected === "contain" ? "Contain (fit within bounds)" : "Cover (fill bounds, may crop)";
+                                    if (!selected) return t("resize_cover");
+                                    return selected === "contain" ? t("resize_contain_description") : t("resize_cover_description");
                                 }}>
                                 <SelectItem value="contain">
-                                    Contain (fit within bounds)
+                                    {t("resize_contain_description")}
                                 </SelectItem>
                                 <SelectItem value="cover">
-                                    Cover (fill bounds, may crop)
+                                    {t("resize_cover_description")}
                                 </SelectItem>
                             </Select>
                         </div>
@@ -300,13 +295,13 @@ export function StoragePropertyField({
                                 name={imageResizeFormat}
                                 value={imageResizeFormatValue || "original"}
                                 onValueChange={(value) => setFieldValue(imageResizeFormat, value || "original")}
-                                label={"Output format"}
+                                label={t("output_format")}
                                 renderValue={(selected) => {
-                                    if (!selected) return "Original";
+                                    if (!selected) return t("format_original");
                                     return selected.charAt(0).toUpperCase() + selected.slice(1);
                                 }}>
                                 <SelectItem value="original">
-                                    Original (keep same format)
+                                    {t("format_original_description")}
                                 </SelectItem>
                                 <SelectItem value="jpeg">
                                     JPEG
@@ -315,7 +310,7 @@ export function StoragePropertyField({
                                     PNG
                                 </SelectItem>
                                 <SelectItem value="webp">
-                                    WebP (best compression)
+                                    {t("format_webp_description")}
                                 </SelectItem>
                             </Select>
                         </div>
@@ -324,7 +319,7 @@ export function StoragePropertyField({
                             <DebouncedTextField
                                 name={imageResizeQuality}
                                 type={"number"}
-                                label={"Quality (0-100)"}
+                                label={t("quality_label")}
                                 size={"small"}
                                 disabled={disabled}
                                 value={imageResizeQualityValue !== undefined && imageResizeQualityValue !== null ? imageResizeQualityValue.toString() : ""}
@@ -340,7 +335,7 @@ export function StoragePropertyField({
                                 }}
                             />
                             <Typography variant={"caption"} className={"ml-3.5 mt-1 mb-2"}>
-                                Higher quality = larger file size. Recommended: 80-90 for photos, 90-100 for graphics
+                                {t("quality_hint")}
                             </Typography>
                         </div>
 

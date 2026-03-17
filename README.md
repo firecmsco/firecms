@@ -203,7 +203,6 @@ FireCMS is organized as a modular monorepo:
 | `@firecms/core` | Core CMS framework, types, hooks, and components |
 | `@firecms/ui` | Standalone component library (Tailwind + Radix) |
 | `@firecms/firebase` | Firebase/Firestore data source delegate |
-| `@firecms/editor` | Notion-style rich text editor |
 | `@firecms/cli` | CLI for project scaffolding and deployment |
 | `@firecms/collection_editor` | Visual schema/collection editor |
 | `@firecms/data_import` | Data import plugin (CSV, JSON, Excel) |

@@ -80,7 +80,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
                         onClick={() => setPropertyDialogOpen(true)}
                         startIcon={<AddIcon/>}
                     >
-                        Add property to {values.name ?? "this group"}
+                        {t("add_property_to", { name: values.name ?? t("properties_in_this_group") })}
                     </Button>
                 </div>
                 <Paper className="p-2 pl-8">
@@ -99,7 +99,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
                     {empty &&
                         <Typography variant={"label"}
                                     className="h-full flex items-center justify-center p-4">
-                            Add the first property to this group
+                            {t("add_first_property_to_group")}
                         </Typography>}
                 </Paper>
             </div>
@@ -108,13 +108,12 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
                 <BooleanSwitchWithLabel
                     position={"start"}
                     size={"medium"}
-                    label="Spread children as columns"
+                    label={t("spread_children_as_columns")}
                     onValueChange={(v) => setFieldValue("spreadChildren", v)}
                     value={values.spreadChildren ?? false}
                 />
                 <FieldCaption>
-                    Set this flag to true if you want to display the children of this group as individual columns. This
-                    will only work for top level groups.
+                    {t("spread_children_description")}
                 </FieldCaption>
             </div>
 

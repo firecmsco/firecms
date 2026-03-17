@@ -1,4 +1,4 @@
-import { FireCMSEditor } from "@firecms/editor";
+import { FireCMSEditor } from "@firecms/core";
 
 export function FireCMSEditorDemo() {
 

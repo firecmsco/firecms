@@ -1,6 +1,7 @@
 import { useEffect, useRef, } from "react";
 import { Button, CheckIcon, cls, DeleteIcon, focusedDisabled, Popover } from "@firecms/ui";
-import { useTranslation, FireCMSTranslations } from "@firecms/core";
+import { FireCMSTranslations } from "../../types/translations";
+import { useTranslation } from "../../hooks/useTranslation";
 import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
 import { getMarkAttributes, isMarkActive, setMark, unsetMark } from "../utils/prosemirror-utils";
 import { schema } from "../schema";
