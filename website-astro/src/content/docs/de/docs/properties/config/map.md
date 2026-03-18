@@ -1,63 +1,67 @@
 ---
 title: Map
 sidebar_label: Map
-description: Konfiguration für Map-Eigenschaften in FireCMS, einschließlich Unterfelder und Layoutoptionen.
+description: Konfiguration für Map-Eigenschaften (verschachtelte Objekte) in FireCMS, einschließlich Kind-Eigenschaften, Vorschauen und Schlüssel-Wert-Modus.
 ---
+
+In einer Map-Eigenschaft definieren Sie Kind-Eigenschaften auf die gleiche Weise wie auf
+der Ebene des Entity-Schemas:
 
 ```tsx
 import { buildProperty } from "@firecms/core";
 
-const publisherProperty = buildProperty({
-    name: "Publisher",
-    description: "This is an object",
+const ctaProperty = buildProperty({
     dataType: "map",
     properties: {
         name: {
             name: "Name",
+            description: "Text that will be shown on the button",
+            validation: { required: true },
             dataType: "string"
         },
-        external_id: {
-            name: "External id",
-            dataType: "string"
+        type: {
+            name: "Type",
+            description: "Action type that determines the user flow",
+            validation: { required: true, uniqueInArray: true },
+            dataType: "string",
+            enumValues: {
+                complete: "Complete",
+                continue: "Continue"
+            }
         }
     }
 });
 ```
 
-### `properties`
-
-Eigenschaften der Map-Eigenschaft.
+###  `properties`
+Verzeichnis der in dieser Map enthaltenen Eigenschaften.
 
 ### `previewProperties`
+Liste der Eigenschaften, die als Vorschau dieser Map gerendert werden. Standardmäßig die ersten 3.
 
-Liste der Eigenschaften, die in der Vorschau angezeigt werden. Standardmäßig werden die ersten 3 Eigenschaften angezeigt.
+### `spreadChildren`
+Zeigt die Kind-Eigenschaften als unabhängige Spalten in der Sammlungsansicht an. Standardmäßig `false`.
+
+### `pickOnlySomeKeys`
+
+Ermöglicht dem Benutzer, nur einige Schlüssel in dieser Map hinzuzufügen.
+Standardmäßig haben alle Eigenschaften der Map das entsprechende Feld in
+der Formularansicht. Wenn dieses Flag auf true gesetzt wird, können nur einige ausgewählt werden.
+Nützlich für Maps, die viele Untereigenschaften haben können, die möglicherweise nicht
+benötigt werden.
 
 ### `expanded`
 
-Soll dieses Feld zunächst aufgeklappt sein? Standardmäßig `true`.
-
-### `minimalistView`
-
-Wenn auf `true` gesetzt, werden die Kindelemente direkt ohne Wrapper-Panel angezeigt.
-
-### `layout`
-
-Layout der Map-Felder: `"row"` oder `"column"`.
+Bestimmt, ob das Feld zunächst aufgeklappt sein soll. Standardmäßig `true`.
 
 ### `keyValue`
 
-Wenn auf `true` gesetzt, ermöglicht diese Map beliebige Schlüssel-Wert-Paare.
-Dies ist nützlich, wenn die Schlüssel nicht bekannt sind.
+Rendert diese Map als Schlüssel-Wert-Tabelle, die die Verwendung
+beliebiger Schlüssel ermöglicht. Sie müssen in diesem Fall keine Eigenschaften definieren.
 
-```tsx
-import { buildProperty } from "@firecms/core";
+### `minimalistView`
 
-const translationsProperty = buildProperty({
-    name: "Translations",
-    dataType: "map",
-    keyValue: true
-});
-```
+Wenn auf `true` gesetzt, werden die Kind-Eigenschaften direkt ohne umschließendes Panel angezeigt.
 
 ### `validation`
 
@@ -65,6 +69,9 @@ const translationsProperty = buildProperty({
 * `requiredMessage` Meldung bei Validierungsfehler.
 
 ---
+
+Das erstellte Widget ist
+- [`MapFieldBinding`](../../api/functions/MapFieldBinding) Feld, das die Kind-Eigenschaftsfelder rendert
 
 Links:
 - [API](../../api/interfaces/MapProperty)

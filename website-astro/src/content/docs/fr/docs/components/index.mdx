@@ -29,3 +29,70 @@ import ClientUIComponentsShowcase from "../../../../../components/ClientUICompon
 
 
 et plus encore (consultez la barre latérale pour la liste complète).
+
+
+
+## Installation
+
+Si vous utilisez FireCMS, vous n'avez pas besoin d'installer ce package, car il est déjà inclus et
+configuré pour vous.
+
+Pour utiliser les composants dans votre propre projet, vous devez installer le package `@firecms/ui` :
+
+```bash
+yarn add @firecms/ui
+```
+ou
+```bash
+npm install @firecms/ui
+```
+
+Vous devez aussi installer `tailwindcss` :
+
+```bash
+npm install tailwindcss @tailwindcss/typography
+```
+
+ou
+
+```bash
+yarn add tailwindcss @tailwindcss/typography
+```
+
+Et l'initialiser dans votre projet :
+
+```bash
+npx tailwindcss init
+```
+
+Puis ajoutez le preset FireCMS dans votre `tailwind.config.js` :
+
+```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+
+export default {
+    presets: [fireCMSConfig],
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}"
+    ]
+};
+```
+(Vous devrez peut-être ajuster les chemins dans le tableau `content` pour correspondre à la structure de votre projet)
+
+Enfin, vous devez définir vos couleurs primaire et secondaire dans votre fichier `index.css` :
+
+```css
+@import "@firecms/ui/index.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+

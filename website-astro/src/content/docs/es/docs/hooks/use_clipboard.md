@@ -1,10 +1,11 @@
 ---
+slug: es/docs/hooks/use_clipboard
 title: useClipboard
 sidebar_label: useClipboard
 description: Hook utilitario para copiar texto al portapapeles.
 ---
 
-Un hook utilitario para copiar texto al portapapeles del sistema. Maneja la API `navigator.clipboard` y mecanismos de respaldo.
+Un hook utilitario para copiar texto al portapapeles del sistema. Gestiona la API `navigator.clipboard` y mecanismos de respaldo.
 
 ### Uso
 
@@ -36,12 +37,12 @@ export interface UseClipboardProps {
     onSuccess?: (text: string) => void;
 
     /**
-     * Se dispara cuando el hook encuentra un error.
+     * Se activa cuando el hook encuentra un error.
      */
     onError?: (error: string) => void;
 
     /**
-     * Deshabilita la nueva API del portapapeles `navigator.clipboard` incluso si está soportada.
+     * Desactiva la nueva API del portapapeles `navigator.clipboard` incluso si está soportada.
      */
     disableClipboardAPI?: boolean;
 
@@ -57,12 +58,12 @@ export interface UseClipboardProps {
 ```tsx
 export interface useClipboardReturnType {
     /**
-     * Usar ref para obtener el contenido de texto.
+     * Ref para obtener el contenido de texto.
      */
     ref: MutableRefObject<any>;
 
     /**
-     * Realizar la operación de copiar
+     * Realizar la operación de copia
      */
     copy: (text?: string) => void;
 
@@ -78,7 +79,7 @@ export interface useClipboardReturnType {
     isCoppied: boolean;
 
     /**
-     * Contenido actual seleccionado del portapapeles.
+     * Contenido actual del portapapeles seleccionado.
      */
     clipboard: string;
 

@@ -1,10 +1,11 @@
 ---
+slug: fr/docs/hooks/use_clipboard
 title: useClipboard
 sidebar_label: useClipboard
 description: Hook utilitaire pour copier du texte dans le presse-papiers.
 ---
 
-Un hook utilitaire pour copier du texte dans le presse-papiers système. Il gère l'API `navigator.clipboard` et les mécanismes de secours.
+Un hook utilitaire pour copier du texte dans le presse-papiers du système. Il gère l'API `navigator.clipboard` et les mécanismes de secours.
 
 ### Utilisation
 
@@ -31,22 +32,22 @@ export function CopyButton({ text }: { text: string }) {
 ```tsx
 export interface UseClipboardProps {
     /**
-     * Fonction de callback appelée après l'exécution de la commande `copy`.
+     * Fonction callback appelée après l'exécution de la commande `copy`.
      */
     onSuccess?: (text: string) => void;
 
     /**
-     * Se déclenche quand le hook rencontre une erreur.
+     * Se déclenche lorsque le hook rencontre une erreur.
      */
     onError?: (error: string) => void;
 
     /**
-     * Désactive la nouvelle API presse-papiers `navigator.clipboard` même si elle est prise en charge.
+     * Désactive la nouvelle API du presse-papiers `navigator.clipboard` même si elle est supportée.
      */
     disableClipboardAPI?: boolean;
 
     /**
-     * Durée en ms pour garder l'indicateur `isCoppied` à true.
+     * Durée en ms pendant laquelle le flag `isCoppied` reste à true.
      */
     copiedDuration?: number;
 }
@@ -57,7 +58,7 @@ export interface UseClipboardProps {
 ```tsx
 export interface useClipboardReturnType {
     /**
-     * Utiliser ref pour extraire le contenu texte.
+     * Ref pour récupérer le contenu textuel.
      */
     ref: MutableRefObject<any>;
 
@@ -67,7 +68,7 @@ export interface useClipboardReturnType {
     copy: (text?: string) => void;
 
     /**
-     * Effectuer l'opération de coupure
+     * Effectuer l'opération de couper
      */
     cut: () => void;
 
@@ -83,12 +84,12 @@ export interface useClipboardReturnType {
     clipboard: string;
 
     /**
-     * Efface le presse-papiers de l'utilisateur.
+     * Vide le presse-papiers de l'utilisateur.
      */
     clearClipboard: () => void;
 
     /**
-     * Vérifie si le navigateur prend en charge l'API `navigator.clipboard`.
+     * Vérifie si le navigateur supporte l'API `navigator.clipboard`.
      */
     isSupported: () => boolean;
 }

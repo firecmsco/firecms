@@ -1,32 +1,35 @@
 ---
+slug: it/docs/hooks/use_auth_controller
 title: useAuthController
 sidebar_label: useAuthController
 ---
 
 :::note
-Per usare questi hook **devi** trovarti all'interno di un componente (non puoi usarli direttamente da una funzione callback).
-In ogni caso, le callback solitamente includono un `FireCMSContext`, che include tutti i controller.
+Tieni presente che per utilizzare questi hook **devi** essere all'interno
+di un componente (non puoi usarli direttamente da una funzione callback).
+Tuttavia, i callback di solito includono un `FireCMSContext`, che contiene tutti
+i controller.
 :::
 
 ## `useAuthController`
 
-Hook per accedere the authentication state and performing auth-related operations.
-Funziona con qualsiasi backend (Firebase, MongoDB, or custom implementations).
+Hook per accedere allo stato di autenticazione e eseguire operazioni relative all'autenticazione.
+Funziona con qualsiasi backend (Firebase, MongoDB o implementazioni personalizzate).
 
-Le props fornite da questo hook sono:
+Le proprietà fornite da questo hook sono:
 
-* `user` The currently logged-in user object, or `null` if not authenticated
-* `initialLoading` Initial loading flag, used to avoid showing login screen before auth state is determined
-* `authLoading` Is the login/logout process ongoing
-* `signOut()` Sign out the current user
-* `authError` Error during authentication initialization
-* `authProviderError` Error dispatched by the auth provider
-* `getAuthToken()` Retrieve the auth token for the current user (returns a Promise)
-* `loginSkipped` Has the user skipped the login process
-* `extra` Additional data stored in the auth controller (useful for roles, permissions, etc.)
-* `setExtra(extra)` Set additional data in the auth controller
-* `setUser(user)` Programmatically set the current user (optional, implementation-dependent)
-* `setUserRoles(roles)` Set user roles (optional, implementation-dependent)
+* `user` L'oggetto utente attualmente autenticato, o `null` se non autenticato
+* `initialLoading` Flag di caricamento iniziale, utilizzato per evitare di mostrare la schermata di login prima che lo stato di autenticazione sia determinato
+* `authLoading` Indica se il processo di login/logout è in corso
+* `signOut()` Disconnettere l'utente corrente
+* `authError` Errore durante l'inizializzazione dell'autenticazione
+* `authProviderError` Errore emesso dal provider di autenticazione
+* `getAuthToken()` Ottenere il token di autenticazione dell'utente corrente (restituisce una Promise)
+* `loginSkipped` Indica se l'utente ha saltato il processo di login
+* `extra` Dati aggiuntivi memorizzati nel controller di autenticazione (utile per ruoli, permessi, ecc.)
+* `setExtra(extra)` Impostare dati aggiuntivi nel controller di autenticazione
+* `setUser(user)` Impostare l'utente corrente in modo programmatico (opzionale, dipende dall'implementazione)
+* `setUserRoles(roles)` Impostare i ruoli dell'utente (opzionale, dipende dall'implementazione)
 
 Esempio:
 
@@ -50,4 +53,3 @@ export function ExampleCMSView() {
     );
 }
 ```
-

@@ -1,4 +1,5 @@
 ---
+slug: fr/docs/hooks/use_mode_controller
 title: useModeController
 sidebar_label: useModeController
 description: Contrôlez le mode de thème de FireCMS (clair, sombre ou système) avec le hook useModeController.
@@ -8,7 +9,7 @@ Utilisez ce hook pour récupérer et contrôler le mode de thème actuel (`light
 
 :::note
 Veuillez noter que pour utiliser ce hook, vous **devez** être dans
-un composant enfant du composant `FireCMS`.
+un composant qui est un enfant du composant `FireCMS`.
 :::
 
 ### Props

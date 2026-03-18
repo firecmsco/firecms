@@ -1,15 +1,16 @@
 ---
+slug: es/docs/hooks/use_firecms_context
 title: useFireCMSContext
 sidebar_label: useFireCMSContext
 ---
 
-Obtén el contexto que incluye los controladores internos y contextos utilizados por la aplicación.
+Obtiene el contexto que incluye los controladores internos y contextos utilizados por la aplicación.
 Algunos controladores y contextos incluidos en este contexto pueden ser accedidos
 directamente desde sus respectivos hooks.
 
-Las props proporcionadas por este hook son:
+Las propiedades proporcionadas por este hook son:
 
-* `dataSource`: Conector a tu base de datos, por ejemplo tu base de datos Firestore
+* `dataSource`: Conector a su base de datos, por ejemplo, su base de datos Firestore
 
 * `storageSource`: Implementación de almacenamiento utilizada
 
@@ -18,7 +19,7 @@ Las props proporcionadas por este hook son:
 
 * `sideEntityController`: Controlador para abrir el diálogo lateral que muestra formularios de entidad
 
-* `sideDialogsController`: Controlador utilizado para abrir diálogos laterales (usado internamente por
+* `sideDialogsController`: Controlador utilizado para abrir diálogos laterales (utilizado internamente por
   los diálogos laterales de entidad o diálogos de referencia)
 
 * `dialogsController`: Controlador utilizado para abrir diálogos regulares
@@ -27,14 +28,14 @@ Las props proporcionadas por este hook son:
 
 * `customizationController`: Controlador que contiene las opciones de personalización del CMS
 
-* `snackbarController`: Usa este controlador para mostrar snackbars
+* `snackbarController`: Use este controlador para mostrar snackbars
 
-* `userConfigPersistence`: Usa este controlador para acceder a datos almacenados en el navegador para el usuario
+* `userConfigPersistence`: Use este controlador para acceder a datos almacenados en el navegador del usuario
 
-* `analyticsController`: Callback para enviar eventos de analítica (opcional)
+* `analyticsController`: Callback para enviar eventos de analíticas (opcional)
 
 * `userManagement`: Sección utilizada para gestionar usuarios en el CMS. Se usa para mostrar información del usuario
-  en varios lugares y asignar propiedad de entidades.
+  en varios lugares y asignar la propiedad de las entidades.
 
 Ejemplo:
 

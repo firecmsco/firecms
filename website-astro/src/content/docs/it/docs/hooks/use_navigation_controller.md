@@ -1,12 +1,13 @@
 ---
+slug: it/docs/hooks/use_navigation_controller
 title: useNavigationController
 sidebar_label: useNavigationController
-description: Accedi al controller di navigazione di FireCMS per ottenere collezioni, risolvere percorsi ed eseguire la navigazione.
+description: Accedi al controller di navigazione di FireCMS per ottenere collezioni, risolvere percorsi e navigare.
 ---
 
-Usa questo hook per accedere al controller di navigazione dell'app. Questo controller è il punto centrale per:
+Usa questo hook per accedere al controller di navigazione dell'app. Questo controller funge da punto centrale per:
 *   Accedere alla configurazione risolta di collezioni e viste.
-*   Risolvere percorsi e ID (es. convertire un percorso URL in un percorso del database).
+*   Risolvere percorsi e ID (ad esempio, convertire un percorso URL in un percorso del database).
 *   Navigazione programmatica.
 
 ### Utilizzo
@@ -20,8 +21,8 @@ export function NavigationExample() {
     const navigationController = useNavigationController();
 
     const goToProducts = () => {
-        // Naviga alla collezione prodotti
-        // Gestisce il routing corretto internamente
+        // Naviga alla collezione dei prodotti
+        // Questo gestisce il routing corretto internamente
         navigationController.navigate("/c/products");
     };
     
@@ -40,15 +41,15 @@ export function NavigationExample() {
 ### Metodi e proprietà principali
 
 *   **`collections`**: Lista di tutte le collezioni di entità risolte.
-*   **`views`**: Lista delle viste personalizzate top-level.
-*   **`getCollection(pathOrId, includeUserOverride?)`**: Ottieni una collezione tramite il suo `id` o `path`.
-*   **`navigate(to, options?)`**: Naviga verso una route specifica.
-*   **`refreshNavigation()`**: Forza il ricalcolo della struttura di navigazione (utile se le tue collezioni sono dinamiche).
-*   **`urlPathToDataPath(cmsPath)`**: Converti un URL del CMS in un percorso della sorgente dati.
+*   **`views`**: Lista delle viste personalizzate di livello superiore.
+*   **`getCollection(pathOrId, includeUserOverride?)`**: Ottenere una collezione tramite il suo `id` o `path`.
+*   **`navigate(to, options?)`**: Navigare verso una rotta specifica.
+*   **`refreshNavigation()`**: Forzare un ricalcolo della struttura di navigazione (utile se le collezioni sono dinamiche).
+*   **`urlPathToDataPath(cmsPath)`**: Convertire un URL del CMS in un percorso della fonte dati.
     *   Esempio: `/c/products/B34SAP8Z` -> `products/B34SAP8Z`
-*   **`buildUrlCollectionPath(path)`**: Converti un percorso della sorgente dati in un URL del CMS.
+*   **`buildUrlCollectionPath(path)`**: Convertire un percorso della fonte dati in un URL del CMS.
     *   Esempio: `products` -> `/c/products`
-*   **`resolveIdsFrom(pathWithAliases)`**: Risolvi gli alias in un percorso con i loro ID effettivi.
+*   **`resolveIdsFrom(pathWithAliases)`**: Risolvere gli alias in un percorso ai loro ID effettivi.
 
 ### Interfaccia NavigationController
 
@@ -65,6 +66,6 @@ export type NavigationController = {
     navigate: (to: string, options?: NavigateOptions) => void;
     refreshNavigation: () => void;
     
-    // ... metodi di utilità per la risoluzione dei percorsi
+    // ... metodi utilitari per la risoluzione dei percorsi
 }
 ```

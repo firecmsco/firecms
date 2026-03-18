@@ -1,29 +1,35 @@
 ---
+slug: de/docs/hooks/use_auth_controller
 title: useAuthController
 sidebar_label: useAuthController
 ---
 
 :::note
-Bitte beachten Sie, dass Sie zur Verwendung dieser Hooks **in einer Komponente** sein müssen.
-Callbacks beinhalten jedoch normalerweise einen `FireCMSContext`, der alle Controller enthält.
+Bitte beachten Sie, dass Sie diese Hooks **nur** innerhalb
+einer Komponente verwenden können (Sie können sie nicht direkt in einer Callback-Funktion verwenden).
+Callbacks enthalten in der Regel jedoch einen `FireCMSContext`, der alle
+Controller enthält.
 :::
 
 ## `useAuthController`
 
-Hook für den Zugriff auf den Authentifizierungsstatus und die Durchführung auth-bezogener Operationen.
+Hook für den Zugriff auf den Authentifizierungsstatus und die Durchführung von authentifizierungsbezogenen Operationen.
+Funktioniert mit jedem Backend (Firebase, MongoDB oder eigene Implementierungen).
 
-Die von diesem Hook bereitgestellten Props sind:
+Die von diesem Hook bereitgestellten Eigenschaften sind:
 
-* `user` Das aktuell eingeloggte Benutzerobjekt, oder `null` wenn nicht authentifiziert
-* `initialLoading` Initiales Lademarkierung, verwendet um den Login-Bildschirm zu vermeiden, bevor der Auth-Status bestimmt ist
-* `authLoading` Wird der Login/Logout-Prozess gerade durchgeführt
+* `user` Das aktuell angemeldete Benutzerobjekt oder `null`, wenn nicht authentifiziert
+* `initialLoading` Initiales Lade-Flag, um die Anzeige des Anmeldebildschirms zu vermeiden, bevor der Authentifizierungsstatus ermittelt wurde
+* `authLoading` Gibt an, ob der Anmelde-/Abmeldevorgang läuft
 * `signOut()` Den aktuellen Benutzer abmelden
-* `authError` Fehler während der Authentifizierungsinitialisierung
-* `authProviderError` Fehler des Authentifizierungsanbieters
-* `getAuthToken()` Auth-Token für den aktuellen Benutzer abrufen (gibt ein Promise zurück)
-* `loginSkipped` Hat der Benutzer den Login-Prozess übersprungen
-* `extra` Zusätzliche Daten im Auth-Controller (nützlich für Rollen, Berechtigungen, etc.)
-* `setExtra(extra)` Zusätzliche Daten im Auth-Controller setzen
+* `authError` Fehler bei der Initialisierung der Authentifizierung
+* `authProviderError` Fehler, der vom Authentifizierungsanbieter ausgelöst wurde
+* `getAuthToken()` Authentifizierungstoken für den aktuellen Benutzer abrufen (gibt ein Promise zurück)
+* `loginSkipped` Gibt an, ob der Benutzer den Anmeldevorgang übersprungen hat
+* `extra` Zusätzliche Daten im Authentifizierungs-Controller (nützlich für Rollen, Berechtigungen usw.)
+* `setExtra(extra)` Zusätzliche Daten im Authentifizierungs-Controller setzen
+* `setUser(user)` Aktuellen Benutzer programmatisch setzen (optional, implementierungsabhängig)
+* `setUserRoles(roles)` Benutzerrollen setzen (optional, implementierungsabhängig)
 
 Beispiel:
 
@@ -36,14 +42,14 @@ export function ExampleCMSView() {
     const authController = useAuthController();
 
     if (authController.authLoading) {
-        return <div>Laden...</div>;
+        return <div>Loading...</div>;
     }
 
     return (
         authController.user ?
-            <div>Eingeloggt als {authController.user.displayName}</div>
+            <div>Logged in as {authController.user.displayName}</div>
             :
-            <div>Sie sind nicht eingeloggt</div>
+            <div>You are not logged in</div>
     );
 }
 ```

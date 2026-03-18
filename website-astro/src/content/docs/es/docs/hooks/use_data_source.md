@@ -1,31 +1,32 @@
 ---
+slug: es/docs/hooks/use_data_source
 title: useDataSource
 sidebar_label: useDataSource
-description: Accede al hook de fuente de datos de FireCMS para obtener, guardar y gestionar entidades. Compatible con Firestore, MongoDB o cualquier implementación de backend personalizada.
+description: Acceda al hook de fuente de datos de FireCMS para obtener, guardar y gestionar entidades. Funciona con Firestore, MongoDB o cualquier implementación de backend personalizada.
 ---
 
-Usa este hook para acceder a la fuente de datos utilizada en tu aplicación FireCMS.
+Use este hook para acceder a la fuente de datos utilizada en su aplicación FireCMS.
 
-Este controlador te permite obtener y guardar datos de tu base de datos (como
-Firestore o MongoDB) usando la abstracción de colecciones y entidades creada por FireCMS.
+Este controlador le permite obtener y guardar datos de su base de datos (como
+Firestore o MongoDB) utilizando la abstracción de colecciones y entidades creada por FireCMS.
 
 :::note
-Ten en cuenta que para usar este hook **debes** estar en
-un componente (no puedes usarlo directamente desde una función de callback).
-De todos modos, los callbacks normalmente incluyen un `FireCMSContext`, que contiene todos
+Tenga en cuenta que para usar este hook **debe** estar en
+un componente (no puede usarlo directamente desde una función callback).
+De todas formas, los callbacks generalmente incluyen un `FireCMSContext`, que contiene todos
 los controladores incluyendo el `dataSource`.
 :::
 
-### Métodos Disponibles
+### Métodos disponibles
 
-* `fetchCollection`: Obtiene datos de una colección
-* `listenCollection`: Escucha entidades en una ruta dada con actualizaciones en tiempo real
-* `fetchEntity`: Recupera una entidad dada una ruta y un id
-* `listenEntity`: Obtiene actualizaciones en tiempo real de una entidad
-* `saveEntity`: Guarda una entidad en la ruta especificada
-* `deleteEntity`: Elimina una entidad
-* `checkUniqueField`: Verifica si el valor de la propiedad dado es único en la colección
-* `generateEntityId`: Genera un nuevo ID para una entidad (opcional, depende de la implementación)
+* `fetchCollection`: Obtener datos de una colección
+* `listenCollection`: Escuchar entidades en una ruta dada con actualizaciones en tiempo real
+* `fetchEntity`: Recuperar una entidad dado una ruta y un id
+* `listenEntity`: Obtener actualizaciones en tiempo real de una entidad
+* `saveEntity`: Guardar una entidad en la ruta especificada
+* `deleteEntity`: Eliminar una entidad
+* `checkUniqueField`: Verificar si el valor de la propiedad dada es único en la colección
+* `generateEntityId`: Generar un nuevo ID para una entidad (opcional, depende de la implementación)
 
 ### Ejemplo
 

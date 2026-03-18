@@ -1,12 +1,13 @@
 ---
+slug: es/docs/hooks/use_analytics_controller
 title: useAnalyticsController
 sidebar_label: useAnalyticsController
-description: Hook para acceder al controlador de analítica y escuchar eventos del CMS.
+description: Hook para acceder al controlador de analíticas y escuchar eventos del CMS.
 ---
 
-Hook para acceder al controlador de analítica. Este controlador te permite escuchar eventos internos del CMS, como navegación, creación de entidades, edición, etc.
+Hook para acceder al controlador de analíticas. Este controlador le permite escuchar eventos internos del CMS, como navegación, creación de entidades, edición, etc.
 
-Puedes usarlo para integrarte con proveedores de analítica de terceros como Google Analytics, Mixpanel o Segment.
+Puede usarlo para integrarse con proveedores de analíticas de terceros como Google Analytics, Mixpanel o Segment.
 
 ### Uso
 
@@ -18,9 +19,9 @@ export function MyAnalyticsComponent() {
     const analyticsController = useAnalyticsController();
 
     useEffect(() => {
-        // Normalmente configurarías esto en el punto de entrada principal de tu app
+        // Normalmente configuraría esto en el punto de entrada principal de su aplicación
         // Esto es solo para demostración
-        console.log("Controlador de analítica disponible");
+        console.log("Analytics controller available");
     }, [analyticsController]);
 
     return null;
@@ -32,7 +33,7 @@ export function MyAnalyticsComponent() {
 ```tsx
 export type AnalyticsController = {
     /**
-     * Callback usado para recibir eventos de analítica del CMS
+     * Callback utilizado para obtener eventos de analíticas del CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
 }
@@ -42,12 +43,12 @@ export type AnalyticsController = {
 
 El tipo `CMSAnalyticsEvent` define todos los eventos posibles:
 
-* `entity_click`: El usuario hizo clic en una entidad en una colección
+* `entity_click`: El usuario hizo clic en una entidad de una colección
 * `edit_entity_clicked`: El usuario hizo clic en el botón de editar
 * `new_entity_click`: El usuario hizo clic en el botón "Nuevo"
-* `new_entity_saved`: Se creó con éxito una nueva entidad
-* `entity_edited`: Se actualizó una entidad
-* `entity_deleted`: Se eliminó una entidad
-* `drawer_navigate_to_collection`: El usuario navegó a una colección desde el cajón de navegación
+* `new_entity_saved`: Una nueva entidad fue creada exitosamente
+* `entity_edited`: Una entidad fue actualizada
+* `entity_deleted`: Una entidad fue eliminada
+* `drawer_navigate_to_collection`: El usuario navegó a una colección desde el cajón lateral
 * `home_navigate_to_collection`: El usuario navegó a una colección desde la página de inicio
 * ... y más.

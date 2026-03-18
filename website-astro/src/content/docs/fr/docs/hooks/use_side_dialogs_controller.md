@@ -1,19 +1,20 @@
 ---
+slug: fr/docs/hooks/use_side_dialogs_controller
 title: useSideDialogsController
 sidebar_label: useSideDialogsController
 description: Hook pour gérer les dialogues/panneaux latéraux dans FireCMS.
 ---
 
-Hook pour récupérer le contrôleur des dialogues latéraux. Ce hook vous permet d'ouvrir et de fermer des panneaux latéraux de manière programmatique.
+Hook pour récupérer le contrôleur des dialogues latéraux. Ce hook vous permet d'ouvrir et fermer des panneaux latéraux de manière programmatique.
 
 C'est le mécanisme de bas niveau utilisé par FireCMS pour ouvrir :
-*   Les formulaires d'entités (Side Entity Controller)
-*   Les dialogues de sélection de références
+*   Les formulaires d'entité (Side Entity Controller)
+*   Les dialogues de sélection de référence
 
 Vous pouvez l'utiliser pour ouvrir vos propres panneaux latéraux personnalisés.
 
 :::tip
-Si vous souhaitez simplement ouvrir un formulaire d'entité, utilisez **[`useSideEntityController`](./use_side_entity_controller)** à la place.
+Si vous souhaitez simplement ouvrir un formulaire d'entité, utilisez plutôt **[`useSideEntityController`](./use_side_entity_controller)**.
 :::
 
 ### Utilisation

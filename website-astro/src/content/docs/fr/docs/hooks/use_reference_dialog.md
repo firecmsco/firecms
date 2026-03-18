@@ -1,9 +1,10 @@
 ---
+slug: fr/docs/hooks/use_reference_dialog
 title: useReferenceDialog
 sidebar_label: useReferenceDialog
 ---
 
-:::note 
+:::note
 Veuillez noter que pour utiliser ce hook, vous **devez** être dans un
 composant (vous ne pouvez pas l'utiliser directement depuis une fonction callback).
 :::
@@ -11,19 +12,19 @@ composant (vous ne pouvez pas l'utiliser directement depuis une fonction callbac
 ## `useReferenceDialog`
 
 Ce hook est utilisé pour ouvrir un dialogue latéral qui permet la sélection d'entités
-sous un chemin donné. Vous pouvez l'utiliser dans des vues personnalisées pour sélectionner des entités. Vous
-devez spécifier le chemin de la collection cible au minimum. Si votre collection
-n'est pas définie dans votre configuration de collection principale
+sous un chemin donné. Vous pouvez l'utiliser dans des vues personnalisées pour sélectionner des entités.
+Vous devez spécifier au moins le chemin de la collection cible. Si votre collection
+n'est pas définie dans la configuration principale des collections
 (dans votre composant `FireCMS`), vous devez la spécifier explicitement. C'est le même
 hook utilisé en interne lorsqu'une propriété de référence est définie.
 
-Les props fournies par ce hook sont :
+Les propriétés fournies par ce hook sont :
 
 *     multiselect?: boolean;
-  Permettre la sélection multiple de valeurs
+  Autoriser la sélection multiple de valeurs
 
 *     collection?: EntityCollection;
-  Configuration de collection d'entités
+  Configuration de la collection d'entités
 
 *     path: string;
   Chemin absolu de la collection.
@@ -32,7 +33,7 @@ Les props fournies par ce hook sont :
 
 *     selectedEntityIds?: string[];
   Si vous ouvrez le dialogue pour la première fois, vous pouvez sélectionner certains
-  IDs d'entité à afficher en premier.
+  identifiants d'entités à afficher en premier.
 
 *     onSingleEntitySelected?(entity: Entity | null): void;
   Si `multiselect` est défini sur `false`, vous obtiendrez l'entité sélectionnée
@@ -46,7 +47,7 @@ Les props fournies par ce hook sont :
   Si le dialogue est actuellement ouvert, le fermer
 
 *     forceFilter?: FilterValues;
-  Permettre la sélection uniquement des entités qui passent le filtre donné.
+  Autoriser la sélection uniquement des entités qui passent le filtre donné.
 
 Exemple :
 
@@ -71,7 +72,7 @@ export function ExampleCMSView() {
         onSingleEntitySelected(entity: Entity<Product> | null) {
             snackbarController.open({
                 type: "success",
-                message: "Sélectionné " + entity?.values.name
+                message: "Sélectionné : " + entity?.values.name
             })
         }
     });
@@ -83,4 +84,3 @@ export function ExampleCMSView() {
     </Button>;
 }
 ```
-

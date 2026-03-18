@@ -1,47 +1,47 @@
 ---
 slug: pt/docs/pro/collection_editor
-title: Collection Editor UI
+title: Interface do Editor de Coleções
 ---
 
 ![collection_editor.png](/img/collection_editor.png)
 
-This document describes how to use the **Collection Editor UI Plugin** with **FireCMS** to manage and configure your
-Firestore collections. The Collection Editor UI Plugin provides an interface for creating, editing, and organizing
-collections, with support for customizable permissions and configuration options.
+Este documento descreve como usar o **Plugin de Interface do Editor de Coleções** com o **FireCMS** para gerenciar e configurar suas
+coleções do Firestore. O Plugin de Interface do Editor de Coleções fornece uma interface para criar, editar e organizar
+coleções, com suporte para permissões personalizáveis e opções de configuração.
 
-Typically, collections in FireCMS are defined in code, and passed as a prop to the `NavigationController` on
-initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing 
-a more user-friendly and flexible way to organize and configure your Firestore collections.
+Normalmente, as coleções no FireCMS são definidas no código e passadas como propriedade ao `NavigationController` na
+inicialização. O Plugin de Interface do Editor de Coleções permite gerenciar coleções diretamente na aplicação, proporcionando
+uma forma mais amigável e flexível de organizar e configurar suas coleções do Firestore.
 
-In this document, we will cover how to set up and use this plugin in your FireCMS application.
+Neste documento, abordaremos como configurar e usar este plugin na sua aplicação FireCMS.
 
-## Installation
+## Instalação
 
-First, ensure you have installed the necessary dependencies. To use the Collection Editor UI Plugin, you need to have
-FireCMS and Firebase set up in your project.
+Primeiro, certifique-se de ter instalado as dependências necessárias. Para usar o Plugin de Interface do Editor de Coleções, você precisa ter
+o FireCMS e o Firebase configurados no seu projeto.
 
 ```sh
 yarn add @firecms/collection_editor
 ```
-or
+ou
 ```sh
 npm install @firecms/collection_editor
 ```
 
-## Configuration
+## Configuração
 
-The plugin requires several configurations, including controllers for managing collection configurations, permissions,
-and custom views.
+O plugin requer várias configurações, incluindo controladores para gerenciar configurações de coleções, permissões
+e visualizações personalizadas.
 
-### Default Configuration
+### Configuração Padrão
 
-The Collection Editor UI Plugin integrates with your Firestore backend to store and manage collection configurations. By
-default, configurations are managed internally, but you can customize paths and behaviors as needed.
+O Plugin de Interface do Editor de Coleções integra-se com o seu backend Firestore para armazenar e gerenciar configurações de coleções. Por
+padrão, as configurações são gerenciadas internamente, mas você pode personalizar caminhos e comportamentos conforme necessário.
 
-### Firestore Security Rules
+### Regras de Segurança do Firestore
 
-Ensure that your Firestore security rules allow the plugin to read and write to the configuration paths. Below is an
-example of security rules that permit authenticated users to access the collection configurations:
+Certifique-se de que suas regras de segurança do Firestore permitem que o plugin leia e escreva nos caminhos de configuração. Abaixo está um
+exemplo de regras de segurança que permitem que usuários autenticados acessem as configurações de coleções:
 
 ```txt
 match /{document=**} {
@@ -54,13 +54,13 @@ function isFireCMSUser(){
 }
 ```
 
-## Collection Configuration Plugin
+## Plugin de Configuração de Coleções
 
-The Collection Editor UI Plugin allows you to include a UI for editing collection configurations. You can choose where
-the configuration is stored and pass the configuration to the plugin. The plugin includes a controller that saves the
-configuration in your Firestore database. The default path is `__FIRECMS/config/collections`.
+O Plugin de Interface do Editor de Coleções permite incluir uma interface para editar configurações de coleções. Você pode escolher onde
+a configuração é armazenada e passá-la ao plugin. O plugin inclui um controlador que salva a
+configuração no seu banco de dados Firestore. O caminho padrão é `__FIRECMS/config/collections`.
 
-The controller includes methods you can use in your components to manage the collection configuration.
+O controlador inclui métodos que você pode usar nos seus componentes para gerenciar a configuração de coleções.
 
 ```jsx
 const collectionConfigController = useFirestoreCollectionsConfigController({
@@ -68,27 +68,27 @@ const collectionConfigController = useFirestoreCollectionsConfigController({
 });
 ```
 
-You can define your collections in code or use the UI to define them. It is also possible to allow modification in the
-UI of collections defined in code. You can then merge the collections defined in code with those defined in the UI.
+Você pode definir suas coleções no código ou usar a interface para defini-las. Também é possível permitir a modificação na
+interface de coleções definidas no código. Você pode então mesclar as coleções definidas no código com aquelas definidas na interface.
 
 ```jsx
 import { useCallback } from "react";
 import { mergeCollections } from "@firecms/collection_editor";
 import { productsCollection } from "./collections/products_collection";
 
-// The collection builder is passed to the navigation controller
+// O construtor de coleções é passado ao controlador de navegação
 const collectionsBuilder = useCallback(() => {
-    // Define a sample collection in code.
+    // Defina uma coleção de exemplo no código.
     const collections = [
         productsCollection
-        // Your collections here
+        // Suas coleções aqui
     ];
-    // Merge collections defined in the collection editor (UI) with your own collections
+    // Mesclar coleções definidas no editor de coleções (interface) com suas próprias coleções
     return mergeCollections(collections, collectionConfigController.collections ?? []);
 }, [collectionConfigController.collections]);
 ```
 
-To add the Collection Editor UI Plugin, include it in the list of plugins passed to the `FireCMS` component.
+Para adicionar o Plugin de Interface do Editor de Coleções, inclua-o na lista de plugins passados ao componente `FireCMS`.
 
 ```jsx
 const collectionEditorPlugin = useCollectionEditorPlugin({
@@ -96,11 +96,11 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
 });
 ```
 
-This will add an icon in each collection card that allows you to edit the collection configuration.
+Isso adicionará um ícone em cada cartão de coleção que permite editar a configuração da coleção.
 
-## Hook Usage
+## Uso do Hook
 
-The main hook to utilize the plugin's functionality is `useCollectionEditorPlugin`. Here's an example of how to use it:
+O principal hook para utilizar a funcionalidade do plugin é `useCollectionEditorPlugin`. Aqui está um exemplo de como usá-lo:
 
 ```jsx
 import { useCollectionEditorPlugin } from "@firecms/collection_editor";
@@ -110,26 +110,26 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
     configPermissions: customPermissionsBuilder,
     reservedGroups: ["admin"],
     getData: async (path, parentPaths) => {
-        // Fetch and return data for the given path
+        // Buscar e retornar dados para o caminho dado
         return fetchDataForPath(path, parentPaths);
     },
     getUser: (uid) => {
-        // Retrieve and return user data based on UID
+        // Recuperar e retornar dados do usuário com base no UID
         return getUserById(uid);
     },
     onAnalyticsEvent: (event, params) => {
-        // Handle analytics events
+        // Lidar com eventos de analytics
         logAnalyticsEvent(event, params);
     }
 });
 ```
 
-## Setting up the Plugin
+## Configurando o Plugin
 
-To integrate the Collection Editor UI Plugin into FireCMS, use the `useCollectionEditorPlugin` hook and pass the
-resulting plugin into the FireCMS configuration. This is typically done in your main App component.
+Para integrar o Plugin de Interface do Editor de Coleções no FireCMS, use o hook `useCollectionEditorPlugin` e passe o
+plugin resultante na configuração do FireCMS. Isso é normalmente feito no seu componente App principal.
 
-### Example Configuration
+### Exemplo de Configuração
 
 ```jsx
 import React, { useCallback } from "react";
@@ -188,12 +188,12 @@ function App() {
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
     const collectionsBuilder = useCallback(() => {
-        // Define your own collections
+        // Defina suas próprias coleções
         const collections = [
             productsCollection,
-            // Add other collections here
+            // Adicione outras coleções aqui
         ];
-        // Merge with collections defined via the Collection Editor UI
+        // Mesclar com coleções definidas via Interface do Editor de Coleções
         return mergeCollections(collections, collectionConfigController.collections ?? []);
     }, [collectionConfigController.collections]);
 
@@ -257,12 +257,12 @@ function App() {
 export default App;
 ```
 
-## Adding the Collection Editor Views
+## Adicionando as Visualizações do Editor de Coleções
 
-The Collection Editor UI Plugin provides custom views that need to be added to your FireCMS project. These views are
-integrated into the FireCMS navigation and allow users to manage collections.
+O Plugin de Interface do Editor de Coleções fornece visualizações personalizadas que precisam ser adicionadas ao seu projeto FireCMS. Essas visualizações são
+integradas à navegação do FireCMS e permitem que os usuários gerenciem coleções.
 
-### Example Integration
+### Exemplo de Integração
 
 ```jsx
 import { useCollectionEditorPlugin } from "@firecms/collection_editor";
@@ -277,24 +277,24 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
     }
 });
 
-// Include the plugin in your FireCMS configuration
+// Inclua o plugin na sua configuração do FireCMS
 <FireCMS
     navigationController={navigationController}
     authController={authController}
     dataSourceDelegate={firestoreDelegate}
     plugins={[userManagementPlugin, collectionEditorPlugin]}
 >
-    {/* Your application components */}
+    {/* Os componentes da sua aplicação */}
 </FireCMS>
 ```
 
-## Authenticating Users
+## Autenticando Usuários
 
-The Collection Editor UI Plugin integrates with your authentication system to ensure that only authorized users can
-manage collections. You can use the `useValidateAuthenticator` hook to authenticate users and determine their access
-levels.
+O Plugin de Interface do Editor de Coleções integra-se com o seu sistema de autenticação para garantir que apenas usuários autorizados possam
+gerenciar coleções. Você pode usar o hook `useValidateAuthenticator` para autenticar usuários e determinar seus níveis de
+acesso.
 
-### Example Usage
+### Exemplo de Uso
 
 ```jsx
 import { useValidateAuthenticator } from "@firecms/core";
@@ -319,16 +319,16 @@ if (!canAccessMainView) {
     return <AccessDeniedError message={notAllowedError}/>;
 }
 
-// Render your main application view
+// Renderize sua visualização principal da aplicação
 ```
 
-## Integrating Collection Permissions
+## Integrando Permissões de Coleções
 
-The Collection Editor UI Plugin includes a `collectionPermissions` function that determines what operations a user can
-perform based on their roles and the collection configuration. This function ensures that users have appropriate access
-rights throughout your FireCMS project.
+O Plugin de Interface do Editor de Coleções inclui uma função `collectionPermissions` que determina quais operações um usuário pode
+realizar com base em seus papéis e na configuração da coleção. Esta função garante que os usuários tenham direitos de acesso
+apropriados em todo o seu projeto FireCMS.
 
-### Example Integration
+### Exemplo de Integração
 
 ```jsx
 const navigationController = useBuildNavigationController({
@@ -341,14 +341,14 @@ const navigationController = useBuildNavigationController({
 });
 ```
 
-**Note:** Applying permissions to a collection overrides the permissions set in the collection configuration.
+**Nota:** Aplicar permissões a uma coleção substitui as permissões definidas na configuração da coleção.
 
-## Error Handling
+## Tratamento de Erros
 
-The plugin provides error handling through properties such as `configError` and `collectionErrors` in the
-`CollectionEditor` object. These can be used to detect and display error messages when loading or managing collections.
+O plugin fornece tratamento de erros através de propriedades como `configError` e `collectionErrors` no
+objeto `CollectionEditor`. Estas podem ser usadas para detectar e exibir mensagens de erro ao carregar ou gerenciar coleções.
 
-### Example Error Handling
+### Exemplo de Tratamento de Erros
 
 ```jsx
 if (collectionEditorPlugin.configError) {
@@ -360,33 +360,33 @@ if (collectionEditorPlugin.collectionErrors) {
 }
 ```
 
-## Using the Plugin within Your Application
+## Usando o Plugin na sua Aplicação
 
-Once you have set up the Collection Editor UI Plugin, you will have access to tools and functions for managing your
-Firestore collections. You can access the collection management functions and data through the
-`useCollectionEditorPlugin` hook.
+Uma vez configurado o Plugin de Interface do Editor de Coleções, você terá acesso a ferramentas e funções para gerenciar suas
+coleções do Firestore. Você pode acessar as funções e dados de gerenciamento de coleções através do
+hook `useCollectionEditorPlugin`.
 
-### Collection Editor Object
+### Objeto do Editor de Coleções
 
-The `collectionEditor` object returned by the `useCollectionEditorPlugin` hook includes the following properties:
+O objeto `collectionEditor` retornado pelo hook `useCollectionEditorPlugin` inclui as seguintes propriedades:
 
-- **`loading`**: Indicates if the collection data is being loaded. Boolean value.
-- **`collections`**: Array of collection objects. Contains the collections being managed.
-- **`saveCollection`**: Function to persist a collection. Takes a `collection` object and returns a promise resolving
-  with the saved collection.
-- **`deleteCollection`**: Function to delete a collection. Takes a `collection` object and returns a promise resolving
-  when the collection is deleted.
-- **`configError`**: Holds any error that occurred while loading collection configurations.
-- **`collectionPermissions`**: Function that defines the permissions for collections based on user roles and collection
-  configurations.
-- **`createCollection`**: Function to initiate the creation of a new collection.
-- **`reservedGroups`**: Array of group names that are reserved and cannot be used in collection names.
-- **`extraView`**: Custom view added to the FireCMS navigation for collection management.
-- **`defineRolesFor`**: Function to define roles for a given user, typically integrated into your auth controller.
-- **`authenticator`**: Optional. Authenticator callback built from the current configuration of the collection editor.
-  It will only allow access to users with the required roles.
+- **`loading`**: Indica se os dados da coleção estão sendo carregados. Valor booleano.
+- **`collections`**: Array de objetos de coleção. Contém as coleções sendo gerenciadas.
+- **`saveCollection`**: Função para persistir uma coleção. Recebe um objeto `collection` e retorna uma promise resolvendo
+  com a coleção salva.
+- **`deleteCollection`**: Função para excluir uma coleção. Recebe um objeto `collection` e retorna uma promise resolvendo
+  quando a coleção é excluída.
+- **`configError`**: Contém qualquer erro que ocorreu ao carregar configurações de coleções.
+- **`collectionPermissions`**: Função que define as permissões para coleções com base nos papéis do usuário e configurações
+  de coleções.
+- **`createCollection`**: Função para iniciar a criação de uma nova coleção.
+- **`reservedGroups`**: Array de nomes de grupos que são reservados e não podem ser usados em nomes de coleções.
+- **`extraView`**: Visualização personalizada adicionada à navegação do FireCMS para gerenciamento de coleções.
+- **`defineRolesFor`**: Função para definir papéis para um determinado usuário, normalmente integrada ao seu controlador de autenticação.
+- **`authenticator`**: Opcional. Callback de autenticador construído a partir da configuração atual do editor de coleções.
+  Só permitirá acesso a usuários com os papéis necessários.
 
-### Example Access
+### Exemplo de Acesso
 
 ```jsx
 import { useCollectionEditorPlugin } from "@firecms/collection_editor";
@@ -397,7 +397,7 @@ const collectionEditor = useCollectionEditorPlugin({
     reservedGroups: ["admin"]
 });
 
-// Use collectionEditor properties and functions
+// Use as propriedades e funções do collectionEditor
 if (collectionEditor.loading) {
     return <LoadingIndicator/>;
 }
@@ -408,18 +408,18 @@ return (
             <CollectionCard key={collection.id} collection={collection}/>
         ))}
         <Button onClick={() => collectionEditor.createCollection()}>
-            Create New Collection
+            Criar Nova Coleção
         </Button>
     </div>
 );
 ```
 
-## Advanced Configuration
+## Configuração Avançada
 
-### Custom Components
+### Componentes Personalizados
 
-You can modify the UI and functionality of the Collection Editor UI Plugin by providing custom UI components. For
-example, customizing the database field renderer:
+Você pode modificar a interface e funcionalidade do Plugin de Interface do Editor de Coleções fornecendo componentes de interface personalizados. Por
+exemplo, personalizando o renderizador do campo de banco de dados:
 
 ```jsx
 import CustomDatabaseFieldComponent from "./components/CustomDatabaseFieldComponent";
@@ -432,9 +432,9 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
 });
 ```
 
-### Custom Permissions Builder
+### Construtor de Permissões Personalizado
 
-Define custom permissions logic to control what users can do within the collection editor:
+Defina uma lógica de permissões personalizada para controlar o que os usuários podem fazer dentro do editor de coleções:
 
 ```jsx
 const customPermissionsBuilder = ({ user }) => ({
@@ -444,11 +444,11 @@ const customPermissionsBuilder = ({ user }) => ({
 });
 ```
 
-## Example Usage
+## Exemplo de Uso
 
-Below is an example of how to integrate the Collection Editor UI Plugin into a FireCMS application.
+Abaixo está um exemplo de como integrar o Plugin de Interface do Editor de Coleções em uma aplicação FireCMS.
 
-### Plugin Setup
+### Configuração do Plugin
 
 ```jsx
 import React, { useCallback, useMemo } from "react";
@@ -499,46 +499,46 @@ export function App() {
   });
 
   /**
-   * Controller used to save the collection configuration in Firestore.
-   * Note that this is optional and you can define your collections in code.
+   * Controlador usado para salvar a configuração de coleções no Firestore.
+   * Note que isso é opcional e você pode definir suas coleções no código.
    */
   const collectionConfigController = useFirestoreCollectionsConfigController({
     firebaseApp
   });
 
   const collectionsBuilder = useCallback(() => {
-    // Here we define a sample collection in code.
+    // Aqui definimos uma coleção de exemplo no código.
     const collections = [
       productsCollection
-      // Your collections here
+      // Suas coleções aqui
     ];
-    // You can merge collections defined in the collection editor (UI) with your own collections
+    // Você pode mesclar coleções definidas no editor de coleções (interface) com suas próprias coleções
     return mergeCollections(collections, collectionConfigController.collections ?? []);
   }, [collectionConfigController.collections]);
 
   const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
 
   /**
-   * Controller used to manage the dark or light color mode
+   * Controlador usado para gerenciar o modo de cor escuro ou claro
    */
   const modeController = useBuildModeController();
 
   /**
-   * Delegate used for fetching and saving data in Firestore
+   * Delegado usado para buscar e salvar dados no Firestore
    */
   const firestoreDelegate = useFirestoreDelegate({
     firebaseApp
   })
 
   /**
-   * Controller used for saving and fetching files in storage
+   * Controlador usado para salvar e buscar arquivos no armazenamento
    */
   const storageSource = useFirebaseStorageSource({
     firebaseApp
   });
 
   /**
-   * Controller for managing authentication
+   * Controlador para gerenciamento de autenticação
    */
   const authController: FirebaseAuthController = useFirebaseAuthController({
     firebaseApp,
@@ -546,12 +546,12 @@ export function App() {
   });
 
   /**
-   * Controller for saving some user preferences locally.
+   * Controlador para salvar algumas preferências do usuário localmente.
    */
   const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
   /**
-   * Use the authenticator to control access to the main view
+   * Use o autenticador para controlar o acesso à visualização principal
    */
   const {
     authLoading,
@@ -636,4 +636,3 @@ export function App() {
   );
 }
 ```
-

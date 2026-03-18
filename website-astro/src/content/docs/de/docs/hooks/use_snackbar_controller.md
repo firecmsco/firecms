@@ -1,21 +1,26 @@
 ---
+slug: de/docs/hooks/use_snackbar_controller
 title: useSnackbarController
 sidebar_label: useSnackbarController
 ---
 
 :::note
-Bitte beachten Sie, dass Sie zur Verwendung dieser Hooks **in einer Komponente** sein müssen.
-Callbacks beinhalten normalerweise einen `FireCMSContext`, der alle Controller enthält.
+Bitte beachten Sie, dass Sie diese Hooks **nur** innerhalb
+einer Komponente verwenden können (Sie können sie nicht direkt in einer Callback-Funktion verwenden).
+Callbacks enthalten in der Regel jedoch einen `FireCMSContext`, der alle
+Controller enthält.
 :::
 
-Verwenden Sie diesen Hook, um einen Snackbar-Controller zu erhalten und Snackbars mit einer Nachricht, einem Typ und einem optionalen Titel anzuzeigen.
+Verwenden Sie diesen Hook, um einen Snackbar-Controller zum Anzeigen von Snackbars mit einer Nachricht,
+einem Typ und einem optionalen Titel zu erhalten.
 
-Die von diesem Hook bereitgestellten Props sind:
+Die von diesem Hook bereitgestellten Eigenschaften sind:
 
-* `isOpen` Ist derzeit ein Snackbar geöffnet
-* `close()` Den aktuell geöffneten Snackbar schließen
+* `isOpen` Ist derzeit eine Snackbar geöffnet
+* `close()` Die aktuell geöffnete Snackbar schließen
 * `open ({ type: "success" | "info" | "warning" | "error"; title?: string; message: string; })`
-  Einen neuen Snackbar anzeigen. Sie müssen den Typ und die Nachricht angeben.
+  Eine neue Snackbar anzeigen. Sie müssen den Typ und die Nachricht angeben. Optional
+  können Sie einen Titel angeben
 
 Beispiel:
 
@@ -32,8 +37,8 @@ export function ExampleCMSView() {
         <Button
             onClick={() => snackbarController.open({
                 type: "success",
-                title: "Hey!",
-                message: "Test snackbar"
+                title: "Hallo!",
+                message: "Test-Snackbar"
             })}>
             Klick mich
         </Button>

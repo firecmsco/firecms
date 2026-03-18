@@ -1,22 +1,23 @@
 ---
+slug: pt/docs/hooks/use_side_dialogs_controller
 title: useSideDialogsController
 sidebar_label: useSideDialogsController
 description: Hook para gerenciar diálogos/painéis laterais no FireCMS.
 ---
 
-Hook para recuperar o controlador dos diálogos laterais. Este hook permite abrir e fechar painéis laterais programaticamente.
+Hook para obter o controlador dos diálogos laterais. Este hook permite abrir e fechar painéis laterais programaticamente.
 
-Este é o mecanismo de baixo nível usado pelo FireCMS para abrir:
-*   Formulários de entidades (Side Entity Controller)
-*   Diálogos de seleção de referências
+Este é o mecanismo de baixo nível utilizado pelo FireCMS para abrir:
+*   Formulários de entidade (Side Entity Controller)
+*   Diálogos de seleção de referência
 
-Você pode utilizá-lo para abrir seus próprios painéis laterais personalizados.
+Você pode usá-lo para abrir seus próprios painéis laterais personalizados.
 
 :::tip
-Se deseja simplesmente abrir um formulário de entidade, use **[`useSideEntityController`](./use_side_entity_controller)** em vez disso.
+Se você deseja apenas abrir um formulário de entidade, use **[`useSideEntityController`](./use_side_entity_controller)** em vez disso.
 :::
 
-### Utilização
+### Uso
 
 ```tsx
 import React from "react";
@@ -50,9 +51,24 @@ export function CustomSidePanelExample() {
 
 ```tsx
 export interface SideDialogsController {
+    /**
+     * Fechar o último painel
+     */
     close: () => void;
+
+    /**
+     * Lista de painéis laterais atualmente abertos
+     */
     sidePanels: SideDialogPanelProps[];
+
+    /**
+     * Abrir um ou múltiplos painéis laterais
+     */
     open: (panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => void;
+
+    /**
+     * Substituir o último painel aberto pelo dado
+     */
     replace: (panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => void;
 }
 ```

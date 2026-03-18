@@ -1,26 +1,32 @@
 ---
+slug: de/docs/hooks/use_data_source
 title: useDataSource
 sidebar_label: useDataSource
-description: Hook für Zugriff auf die FireCMS-Datenquelle zum Abrufen, Speichern und Verwalten von Entities. Funktioniert mit Firestore, MongoDB oder einer benutzerdefinierten Backend-Implementierung.
+description: Zugriff auf den FireCMS-Datenquellen-Hook zum Abrufen, Speichern und Verwalten von Entitäten. Funktioniert mit Firestore, MongoDB oder jeder benutzerdefinierten Backend-Implementierung.
 ---
 
 Verwenden Sie diesen Hook, um auf die Datenquelle zuzugreifen, die in Ihrer FireCMS-Anwendung verwendet wird.
 
+Dieser Controller ermöglicht es Ihnen, Daten aus Ihrer Datenbank (wie
+Firestore oder MongoDB) abzurufen und zu speichern, wobei die von FireCMS erstellte Abstraktion von Sammlungen und Entitäten verwendet wird.
+
 :::note
-Bitte beachten Sie, dass Sie zur Verwendung dieses Hooks **in einer Komponente** sein müssen.
-Callbacks beinhalten normalerweise einen `FireCMSContext`, der alle Controller einschließlich der `dataSource` enthält.
+Bitte beachten Sie, dass Sie diesen Hook **nur** innerhalb
+einer Komponente verwenden können (Sie können ihn nicht direkt in einer Callback-Funktion verwenden).
+Callbacks enthalten in der Regel jedoch einen `FireCMSContext`, der alle
+Controller einschließlich der `dataSource` enthält.
 :::
 
 ### Verfügbare Methoden
 
-* `fetchCollection`: Daten aus einer Kollektion abrufen
-* `listenCollection`: Auf Entities in einem gegebenen Pfad mit Echtzeit-Updates hören
-* `fetchEntity`: Eine Entity basierend auf einem Pfad und einer ID abrufen
-* `listenEntity`: Echtzeit-Updates für eine Entity erhalten
-* `saveEntity`: Eine Entity im angegebenen Pfad speichern
-* `deleteEntity`: Eine Entity löschen
-* `checkUniqueField`: Prüfen ob ein Eigenschaftswert in der Kollektion eindeutig ist
-* `generateEntityId`: Eine neue ID für eine Entity generieren (optional, implementierungsabhängig)
+* `fetchCollection`: Daten aus einer Sammlung abrufen
+* `listenCollection`: Entitäten in einem bestimmten Pfad mit Echtzeit-Updates abhören
+* `fetchEntity`: Eine Entität anhand eines Pfads und einer ID abrufen
+* `listenEntity`: Echtzeit-Updates für eine Entität erhalten
+* `saveEntity`: Eine Entität im angegebenen Pfad speichern
+* `deleteEntity`: Eine Entität löschen
+* `checkUniqueField`: Prüfen, ob der angegebene Eigenschaftswert in der Sammlung einzigartig ist
+* `generateEntityId`: Eine neue ID für eine Entität generieren (optional, implementierungsabhängig)
 
 ### Beispiel
 
@@ -33,24 +39,23 @@ type Product = {
     price: number;
 };
 
-export function ProductList() {
+export function ProductLoader() {
     const dataSource = useDataSource();
     const [products, setProducts] = useState<Entity<Product>[]>([]);
 
     useEffect(() => {
         dataSource.fetchCollection<Product>({
-            path: "products"
-        }).then(entities => {
-            setProducts(entities);
-        });
-    }, []);
+            path: "products",
+            limit: 10
+        }).then(setProducts);
+    }, [dataSource]);
 
     return (
-        <ul>
+        <div>
             {products.map(product => (
-                <li key={product.id}>{product.values.name}</li>
+                <div key={product.id}>{product.values.name}</div>
             ))}
-        </ul>
+        </div>
     );
 }
 ```

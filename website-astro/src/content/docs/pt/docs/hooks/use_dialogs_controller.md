@@ -1,16 +1,17 @@
 ---
+slug: pt/docs/hooks/use_dialogs_controller
 title: useDialogsController
 sidebar_label: useDialogsController
 description: Hook para abrir diálogos de forma imperativa no FireCMS.
 ---
 
-Utilize este hook para abrir diálogos de forma imperativa. Isto é útil quando você precisa mostrar um diálogo de confirmação ou um modal personalizado a partir de um callback ou manipulador de eventos, onde você não pode facilmente renderizar um componente.
+Use este hook para abrir diálogos de forma imperativa. Isso é útil quando você precisa mostrar um diálogo de confirmação ou um modal personalizado a partir de um callback ou manipulador de eventos, onde não é possível renderizar facilmente um componente.
 
 :::note
-Você precisa ser um filho do componente `FireCMS` para utilizar este hook.
+Você precisa ser filho do componente `FireCMS` para usar este hook.
 :::
 
-### Utilização
+### Uso
 
 ```tsx
 import React from "react";
@@ -33,7 +34,7 @@ export function MyComponent() {
         });
     };
 
-    return <Button onClick={handleClick}>Abrir diálogo</Button>;
+    return <Button onClick={handleClick}>Abrir Diálogo</Button>;
 }
 ```
 
@@ -63,7 +64,7 @@ export interface DialogControllerEntryProps<T extends object = object> {
      */
     Component: React.ComponentType<{ open: boolean, closeDialog: () => void } & T>;
     /**
-     * Props a passar para o componente de diálogo
+     * Props para passar ao componente do diálogo
      */
     props?: T;
 }

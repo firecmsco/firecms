@@ -1,30 +1,33 @@
 ---
+slug: it/docs/hooks/use_side_entity_controller
 title: useSideEntityController
 sidebar_label: useSideEntityController
 ---
 
 :::note
-Per usare questi hook **devi** trovarti all'interno di un componente (non puoi usarli direttamente da una funzione callback).
-In ogni caso, le callback solitamente includono un `FireCMSContext`, che include tutti i controller.
+Tieni presente che per utilizzare questi hook **devi** essere all'interno
+di un componente (non puoi usarli direttamente da una funzione callback).
+Tuttavia, i callback di solito includono un `FireCMSContext`, che contiene tutti
+i controller.
 :::
 
-You can use this controller to open the side entity view used to edit entities.
-This is the same controller the CMS uses when you click on an entity in a collection
-view.
+Puoi usare questo controller per aprire la vista laterale delle entità utilizzata per modificarle.
+Questo è lo stesso controller che il CMS usa quando clicchi su un'entità in una vista di
+collezione.
 
-Using this controller you can open a form in a side dialog, also if the path and
-entity schema are not included in the main navigation defined in `FireCMS`.
+Usando questo controller puoi aprire un formulario in un dialogo laterale, anche se il percorso e
+lo schema dell'entità non sono inclusi nella navigazione principale definita in `FireCMS`.
 
-Le props fornite da questo hook sono:
+Le proprietà fornite da questo hook sono:
 
-* `close()` Close the last panel
-* `sidePanels` List of side entity panels currently open
+* `close()` Chiudere l'ultimo pannello
+* `sidePanels` Lista dei pannelli laterali di entità attualmente aperti
 * `open (props: SideEntityPanelProps)`
-  Open a new entity sideDialog. By default, the schema and configuration of the
-  view is fetched from the collections you have specified in the navigation. At
-  least you need to pass the path of the entity you would like to
-  edit. You can set an entityId if you would like to edit and existing one
-  (or a new one with that id).
+  Aprire un nuovo dialogo laterale di entità. Per impostazione predefinita, lo schema e la configurazione della
+  vista vengono ottenuti dalle collezioni specificate nella navigazione. Come
+  minimo devi passare il percorso dell'entità che desideri
+  modificare. Puoi impostare un entityId se desideri modificare un'entità esistente
+  (o crearne una nuova con quell'id).
 
 Esempio:
 
@@ -37,8 +40,8 @@ export function ExampleCMSView() {
 
     const sideEntityController = useSideEntityController();
 
-    // You don't need to provide a schema if the collection path is mapped in
-    // the main navigation
+    // Non devi fornire uno schema se il percorso della collezione è mappato nella
+    // navigazione principale
     const customProductCollection = buildCollection({
         name: "Product",
         properties: {
@@ -55,12 +58,11 @@ export function ExampleCMSView() {
             onClick={() => sideEntityController.open({
                 entityId: "B003WT1622",
                 path: "/products",
-                collection: customProductCollection // optional
+                collection: customProductCollection // opzionale
             })}
             color="primary">
-            Open entity with custom schema
+            Apri entità con schema personalizzato
         </Button>
     );
 }
 ```
-

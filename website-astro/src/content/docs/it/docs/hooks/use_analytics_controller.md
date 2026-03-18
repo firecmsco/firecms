@@ -1,14 +1,15 @@
 ---
+slug: it/docs/hooks/use_analytics_controller
 title: useAnalyticsController
 sidebar_label: useAnalyticsController
-description: Hook per accedere the analytics controller and listen to CMS events.
+description: Hook per accedere al controller di analytics e ascoltare gli eventi del CMS.
 ---
 
-Hook per accedere the analytics controller. This controller allows you to listen to internal events in the CMS, such as navigation, entity creation, editing, etc.
+Hook per accedere al controller di analytics. Questo controller consente di ascoltare gli eventi interni del CMS, come navigazione, creazione di entità, modifica, ecc.
 
-You can use this to integrate with 3rd party analytics providers like Google Analytics, Mixpanel, or Segment.
+Puoi utilizzarlo per integrarti con provider di analytics di terze parti come Google Analytics, Mixpanel o Segment.
 
-### Usage
+### Utilizzo
 
 ```tsx
 import { useAnalyticsController } from "@firecms/core";
@@ -18,8 +19,8 @@ export function MyAnalyticsComponent() {
     const analyticsController = useAnalyticsController();
 
     useEffect(() => {
-        // You would typically set this up in your main app entry point
-        // This is just for demonstration
+        // Normalmente configureresti questo nel punto di ingresso principale della tua applicazione
+        // Questo è solo a scopo dimostrativo
         console.log("Analytics controller available");
     }, [analyticsController]);
 
@@ -27,27 +28,27 @@ export function MyAnalyticsComponent() {
 }
 ```
 
-### Interface
+### Interfaccia
 
 ```tsx
 export type AnalyticsController = {
     /**
-     * Callback used to get analytics events from the CMS
+     * Callback utilizzato per ricevere gli eventi di analytics dal CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
 }
 ```
 
-### Events
+### Eventi
 
-The `CMSAnalyticsEvent` type defines all the possible events:
+Il tipo `CMSAnalyticsEvent` definisce tutti gli eventi possibili:
 
-* `entity_click`: User clicked on an entity in a collection
-* `edit_entity_clicked`: User clicked the edit button
-* `new_entity_click`: User clicked the "New" button
-* `new_entity_saved`: A new entity was successfully created
-* `entity_edited`: An entity was updated
-* `entity_deleted`: An entity was deleted
-* `drawer_navigate_to_collection`: User navigated to a collection from the drawer
-* `home_navigate_to_collection`: User navigated to a collection from the home page
-* ... and more.
+* `entity_click`: L'utente ha cliccato su un'entità in una collezione
+* `edit_entity_clicked`: L'utente ha cliccato sul pulsante di modifica
+* `new_entity_click`: L'utente ha cliccato sul pulsante "Nuovo"
+* `new_entity_saved`: Una nuova entità è stata creata con successo
+* `entity_edited`: Un'entità è stata aggiornata
+* `entity_deleted`: Un'entità è stata eliminata
+* `drawer_navigate_to_collection`: L'utente ha navigato verso una collezione dal menu laterale
+* `home_navigate_to_collection`: L'utente ha navigato verso una collezione dalla pagina principale
+* ... e altro ancora.

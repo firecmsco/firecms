@@ -1,30 +1,33 @@
 ---
+slug: es/docs/hooks/use_side_entity_controller
 title: useSideEntityController
 sidebar_label: useSideEntityController
 ---
 
 :::note
-Ten en cuenta que para usar estos hooks **debes** estar en
-un componente (no puedes usarlos directamente desde una función de callback).
-De todos modos, los callbacks normalmente incluyen un `FireCMSContext`, que contiene todos
+Tenga en cuenta que para usar estos hooks **debe** estar en
+un componente (no puede usarlos directamente desde una función callback).
+De todas formas, los callbacks generalmente incluyen un `FireCMSContext`, que contiene todos
 los controladores.
 :::
 
-Puedes usar este controlador para abrir la vista de entidad lateral utilizada para editar entidades.
-Es el mismo controlador que usa el CMS cuando haces clic en una entidad en una vista de colección.
+Puede usar este controlador para abrir la vista lateral de entidad utilizada para editar entidades.
+Este es el mismo controlador que usa el CMS cuando hace clic en una entidad en una vista de
+colección.
 
-Usando este controlador puedes abrir un formulario en un diálogo lateral, incluso si la ruta y
-el esquema de entidad no están incluidos en la navegación principal definida en `FireCMS`.
+Usando este controlador puede abrir un formulario en un diálogo lateral, incluso si la ruta y
+el esquema de la entidad no están incluidos en la navegación principal definida en `FireCMS`.
 
-Las props proporcionadas por este hook son:
+Las propiedades proporcionadas por este hook son:
 
-* `close()` Cierra el último panel
-* `sidePanels` Lista de paneles de entidades laterales actualmente abiertos
+* `close()` Cerrar el último panel
+* `sidePanels` Lista de paneles laterales de entidad actualmente abiertos
 * `open (props: SideEntityPanelProps)`
-  Abre un nuevo diálogo lateral de entidad. Por defecto, el esquema y la configuración de la
-  vista se obtienen de las colecciones que has especificado en la navegación. Como mínimo
-  necesitas pasar la ruta de la entidad que deseas editar. Puedes establecer un `entityId`
-  si deseas editar una existente (o una nueva con ese id).
+  Abrir un nuevo diálogo lateral de entidad. Por defecto, el esquema y la configuración de la
+  vista se obtienen de las colecciones que ha especificado en la navegación. Como
+  mínimo necesita pasar la ruta de la entidad que desea
+  editar. Puede establecer un entityId si desea editar una existente
+  (o una nueva con ese id).
 
 Ejemplo:
 
@@ -37,13 +40,13 @@ export function ExampleCMSView() {
 
     const sideEntityController = useSideEntityController();
 
-    // No necesitas proporcionar un esquema si la ruta de la colección está mapeada
-    // en la navegación principal
+    // No necesita proporcionar un esquema si la ruta de la colección está mapeada en
+    // la navegación principal
     const customProductCollection = buildCollection({
-        name: "Producto",
+        name: "Product",
         properties: {
             name: {
-                name: "Nombre",
+                name: "Name",
                 validation: { required: true },
                 dataType: "string"
             },
@@ -63,4 +66,3 @@ export function ExampleCMSView() {
     );
 }
 ```
-

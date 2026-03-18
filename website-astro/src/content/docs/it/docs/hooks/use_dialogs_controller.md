@@ -1,13 +1,14 @@
 ---
+slug: it/docs/hooks/use_dialogs_controller
 title: useDialogsController
 sidebar_label: useDialogsController
-description: Hook per aprire dialog in modo imperativo in FireCMS.
+description: Hook per aprire finestre di dialogo in modo imperativo in FireCMS.
 ---
 
-Usa questo hook per aprire dialog in modo imperativo. È utile quando hai bisogno di mostrare un dialog di conferma o una modale personalizzata da un callback o un gestore di eventi, dove non puoi facilmente renderizzare un componente.
+Usa questo hook per aprire finestre di dialogo in modo imperativo. È utile quando devi mostrare un dialogo di conferma o un modale personalizzato da un callback o un gestore di eventi, dove non puoi facilmente renderizzare un componente.
 
 :::note
-Devi essere figlio del componente `FireCMS` per usare questo hook.
+Devi essere un figlio del componente `FireCMS` per usare questo hook.
 :::
 
 ### Utilizzo
@@ -26,14 +27,14 @@ export function MyComponent() {
             Component: ({ open, closeDialog }) => (
                 <div className="p-4 bg-white rounded shadow-lg">
                     <h2 className="text-xl font-bold mb-4">Ciao!</h2>
-                    <p className="mb-4">Questo è un dialog personalizzato.</p>
+                    <p className="mb-4">Questa è una finestra di dialogo personalizzata.</p>
                     <Button onClick={closeDialog}>Chiudi</Button>
                 </div>
             )
         });
     };
 
-    return <Button onClick={handleClick}>Apri Dialog</Button>;
+    return <Button onClick={handleClick}>Apri Dialogo</Button>;
 }
 ```
 
@@ -42,12 +43,12 @@ export function MyComponent() {
 ```tsx
 export interface DialogsController {
     /**
-     * Chiudi l'ultimo dialog
+     * Chiudere l'ultimo dialogo
      */
     close: () => void;
 
     /**
-     * Apri un dialog
+     * Aprire un dialogo
      */
     open: <T extends object = object>(props: DialogControllerEntryProps<T>) => { closeDialog: () => void };
 }
@@ -63,7 +64,7 @@ export interface DialogControllerEntryProps<T extends object = object> {
      */
     Component: React.ComponentType<{ open: boolean, closeDialog: () => void } & T>;
     /**
-     * Props da passare al componente dialog
+     * Props da passare al componente del dialogo
      */
     props?: T;
 }

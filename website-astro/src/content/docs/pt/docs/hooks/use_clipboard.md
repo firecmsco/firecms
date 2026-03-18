@@ -1,38 +1,96 @@
 ---
+slug: pt/docs/hooks/use_clipboard
 title: useClipboard
 sidebar_label: useClipboard
-description: Hook para copiar texto para a área de transferência com feedback em FireCMS.
+description: Hook utilitário para copiar texto para a área de transferência.
 ---
 
-Utilize este hook para copiar valores para a área de transferência. Ele retorna uma função que, quando chamada com um valor, o copia para a área de transferência e opcionalmente exibe feedback.
+Um hook utilitário para copiar texto para a área de transferência do sistema. Ele gerencia a API `navigator.clipboard` e mecanismos de fallback.
 
-:::note
-Note que para utilizar este hook, você **deve** estar em um
-componente (não pode utilizá-lo diretamente de uma função callback).
-:::
-
-### Utilização
+### Uso
 
 ```tsx
+import React from "react";
 import { useClipboard } from "@firecms/core";
+import { Button } from "@firecms/ui";
 
-export function MyComponent() {
-    const { copy } = useClipboard();
-    
-    return <Button onClick={() => copy("Hello!")}>Copiar</Button>;
+export function CopyButton({ text }: { text: string }) {
+    const { copy, isCoppied } = useClipboard({
+        copiedDuration: 2000 // Redefinir estado após 2 segundos
+    });
+
+    return (
+        <Button onClick={() => copy(text)}>
+            {isCoppied ? "Copiado!" : "Copiar para a área de transferência"}
+        </Button>
+    );
 }
 ```
 
 ### Opções
 
-| Opção | Tipo | Descrição |
-|---|---|---|
-| `timeout` | `number` | Tempo em ms antes que o estado copiado seja redefinido. Padrão `2000`. |
+```tsx
+export interface UseClipboardProps {
+    /**
+     * Função callback chamada após a execução do comando `copy`.
+     */
+    onSuccess?: (text: string) => void;
+
+    /**
+     * Acionado quando o hook encontra um erro.
+     */
+    onError?: (error: string) => void;
+
+    /**
+     * Desabilita a nova API da área de transferência `navigator.clipboard` mesmo que seja suportada.
+     */
+    disableClipboardAPI?: boolean;
+
+    /**
+     * Duração em ms para manter o flag `isCoppied` como true.
+     */
+    copiedDuration?: number;
+}
+```
 
 ### Valores de retorno
 
-| Valor | Tipo | Descrição |
-|---|---|---|
-| `copy` | `(value: string) => void` | Função para copiar um valor para a área de transferência |
-| `copied` | `boolean` | Se um valor foi copiado recentemente |
-| `error` | `Error \| null` | Erro se a cópia falhou |
+```tsx
+export interface useClipboardReturnType {
+    /**
+     * Ref para obter o conteúdo de texto.
+     */
+    ref: MutableRefObject<any>;
+
+    /**
+     * Realizar a operação de cópia
+     */
+    copy: (text?: string) => void;
+
+    /**
+     * Realizar a operação de recortar
+     */
+    cut: () => void;
+
+    /**
+     * Indica se o conteúdo foi copiado com sucesso.
+     * Nota: Erro de digitação herdado da biblioteca de origem.
+     */
+    isCoppied: boolean;
+
+    /**
+     * Conteúdo atual da área de transferência selecionado.
+     */
+    clipboard: string;
+
+    /**
+     * Limpa a área de transferência do usuário.
+     */
+    clearClipboard: () => void;
+
+    /**
+     * Verifica se o navegador suporta a API `navigator.clipboard`.
+     */
+    isSupported: () => boolean;
+}
+```
