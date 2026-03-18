@@ -1,4 +1,5 @@
-import React, { PropsWithChildren, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { TableColumnInfo } from "./utils/pgColumnToProperty";
 import { deepEqual as equal } from "fast-equals";
 
 import { CollectionsConfigController } from "./types/config_controller";
@@ -64,6 +65,10 @@ export interface ConfigControllerProviderProps {
      */
     generateCollection?: CollectionGenerationCallback;
 
+    unmappedTables?: string[];
+
+    onFetchTableColumns?: (tableName: string) => Promise<TableColumnInfo[]>;
+
 }
 
 export const ConfigControllerProvider = React.memo(
@@ -78,7 +83,9 @@ export const ConfigControllerProvider = React.memo(
         getData,
         onAnalyticsEvent,
         pathSuggestions,
-        generateCollection
+        generateCollection,
+        unmappedTables,
+        onFetchTableColumns
     }: ConfigControllerProviderProps & { children?: any }) {
 
         const urlController = useCMSUrlController();
@@ -274,6 +281,8 @@ export const ConfigControllerProvider = React.memo(
                         getUser={getUser}
                         generateCollection={generateCollection}
                         onAnalyticsEvent={onAnalyticsEvent}
+                        unmappedTables={unmappedTables}
+                        onFetchTableColumns={onFetchTableColumns}
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {
                                 if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {

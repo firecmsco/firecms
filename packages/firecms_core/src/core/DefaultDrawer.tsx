@@ -4,7 +4,7 @@ import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCM
 
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@rebase/types";
-import { cls, Tooltip, IconButton, Typography } from "@rebase/ui";
+import { cls, Tooltip, Typography } from "@rebase/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { DrawerNavigationGroup } from "./DrawerNavigationGroup";
 import { RebaseLogo } from "../components";
@@ -97,14 +97,12 @@ export function DefaultDrawer({
         <>
             <div className={cls("flex flex-col h-full relative grow w-full", isStudioDark ? "dark:bg-surface-950" : "", className)} style={style}>
 
-                <DrawerHeader
+                <DrawerLogo
                     logo={resolvedLogo}
                     title={title}
                     logoDestination={logoDestination}
                     drawerOpen={drawerOpen}
                     drawerHovered={drawerHovered}
-                    openDrawer={openDrawer}
-                    closeDrawer={closeDrawer}
                 />
 
                 <div
@@ -135,86 +133,62 @@ export function DefaultDrawer({
                     })}
 
                 </div>
-            </div >
+
+                <DrawerToggle
+                    drawerOpen={drawerOpen}
+                    drawerHovered={drawerHovered}
+                    openDrawer={openDrawer}
+                    closeDrawer={closeDrawer}
+                />
+            </div>
 
         </>
     );
 }
 
 /**
- * This is the header displayed in the drawer
- * It mimics Google Cloud Sidebar behavior with the integrated hamburger toggle.
+ * Logo section at the top of the drawer.
+ * The logo is always visible (even when collapsed). Title appears on open/hover.
  */
-import { MenuIcon, MenuOpenIcon, CloseIcon } from "@rebase/ui";
+import { KeyboardDoubleArrowLeftIcon, KeyboardDoubleArrowRightIcon } from "@rebase/ui";
 
-export function DrawerHeader({
+export function DrawerLogo({
     logo,
     title,
     logoDestination,
     drawerOpen,
     drawerHovered,
-    openDrawer,
-    closeDrawer
 }: {
     logo?: string;
     title?: React.ReactNode;
     logoDestination?: string;
     drawerOpen: boolean;
     drawerHovered: boolean;
-    openDrawer: () => void;
-    closeDrawer: () => void;
 }) {
 
     const urlController = useCMSUrlController();
-
-    // States:
-    // 1. Expanded (drawerOpen) -> Show MenuOpenIcon or CloseIcon, Show Logo, Show Title
-    // 2. Collapsed & Hovered (drawerHovered & !drawerOpen) -> Show MenuIcon, Show Logo, Show Title
-    // 3. Collapsed (!drawerHovered & !drawerOpen) -> Show MenuIcon, Hide Logo, Hide Title
-
-    const isExpanded = drawerOpen;
-    const isHovered = drawerHovered && !drawerOpen;
-    const isFloating = isHovered;
-    const showFullContent = isExpanded || isHovered;
+    const showFullContent = drawerOpen || (drawerHovered && !drawerOpen);
 
     return (
-        <div className="flex flex-row items-center shrink-0 pt-2 px-2 pb-0">
-            {/* Hamburger Toggle */}
-            <Tooltip
-                title={isExpanded ? "Close menu" : "Open menu"}
-                side="right"
-                sideOffset={12}
-                asChild={true}
-                open={isFloating ? false : undefined}
+        <div className="flex flex-row items-center shrink-0 pt-4 pb-2 px-2">
+            {/* Logo — always visible */}
+            <Link
+                className="shrink-0 flex items-center justify-center w-[56px] h-[40px]"
+                to={logoDestination || urlController.basePath}
             >
-                <div className="shrink-0 flex items-center justify-center w-[56px] h-[48px]">
-                    <IconButton
-                        color="inherit"
-                        aria-label="Toggle menu"
-                        onClick={() => isExpanded ? closeDrawer() : openDrawer()}
-                    >
-                        {isExpanded ? <CloseIcon size="small" /> : <MenuIcon size="small" />}
-                    </IconButton>
-                </div>
-            </Tooltip>
+                {logo
+                    ? <img src={logo} alt="Logo" className="w-[28px] h-[28px] object-contain" />
+                    : <RebaseLogo width="28px" height="28px" />
+                }
+            </Link>
 
-            {/* Logo and Title (Fades in when expanded or hovered) */}
+            {/* Title (fades in when expanded or hovered) */}
             <div
                 className={cls(
-                    "flex flex-row items-center gap-3 ml-2 overflow-hidden transition-all duration-200 ease-in-out",
-                    showFullContent ? "opacity-100 w-full" : "opacity-0 w-0"
+                    "flex flex-row items-center overflow-hidden transition-all duration-200 ease-in-out",
+                    showFullContent ? "opacity-100 w-full ml-1" : "opacity-0 w-0 ml-0"
                 )}
             >
-                <Link
-                    className="flex shrink-0 transition-all w-[32px] h-[32px]"
-                    to={logoDestination || urlController.basePath}
-                >
-                    {logo
-                        ? <img src={logo} alt="Logo" className="w-full h-full object-contain" />
-                        : <RebaseLogo width="32px" height="32px" />
-                    }
-                </Link>
-
                 {title && (
                     <Link
                         className="visited:text-inherit dark:visited:text-inherit block truncate"
@@ -227,6 +201,67 @@ export function DrawerHeader({
                     </Link>
                 )}
             </div>
+        </div>
+    );
+}
+
+/**
+ * Toggle button at the bottom of the drawer.
+ * Uses double-chevron icons to indicate collapse/expand direction.
+ */
+export function DrawerToggle({
+    drawerOpen,
+    drawerHovered,
+    openDrawer,
+    closeDrawer,
+}: {
+    drawerOpen: boolean;
+    drawerHovered: boolean;
+    openDrawer: () => void;
+    closeDrawer: () => void;
+}) {
+    const isExpanded = drawerOpen;
+    const isHovered = drawerHovered && !drawerOpen;
+    const isFloating = isHovered;
+    const showFullContent = isExpanded || isHovered;
+
+    return (
+        <div className="shrink-0 mt-auto px-2 py-2">
+            <Tooltip
+                title={isExpanded ? "Collapse" : "Expand"}
+                side="right"
+                sideOffset={12}
+                asChild={true}
+                open={isFloating ? false : undefined}
+            >
+                <div
+                    className={cls(
+                        "flex flex-row items-center rounded-lg cursor-pointer",
+                        "hover:bg-surface-accent-100 dark:hover:bg-surface-800",
+                        "transition-colors duration-150",
+                        "py-2"
+                    )}
+                    onClick={() => isExpanded ? closeDrawer() : openDrawer()}
+                >
+                    <div className="shrink-0 flex items-center justify-center w-[56px] h-[24px] text-surface-500 dark:text-surface-400">
+                        {isExpanded
+                            ? <KeyboardDoubleArrowLeftIcon size="small" />
+                            : <KeyboardDoubleArrowRightIcon size="small" />
+                        }
+                    </div>
+                    <div className={cls(
+                        "overflow-hidden transition-all duration-200 ease-in-out",
+                        showFullContent ? "opacity-100 w-auto" : "opacity-0 w-0"
+                    )}>
+                        <Typography
+                            variant="body2"
+                            className="text-surface-500 dark:text-surface-400 select-none whitespace-nowrap"
+                        >
+                            {isExpanded ? "Collapse" : "Expand"}
+                        </Typography>
+                    </div>
+                </div>
+            </Tooltip>
         </div>
     );
 }

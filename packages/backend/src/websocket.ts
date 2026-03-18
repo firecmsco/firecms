@@ -292,6 +292,41 @@ export function createPostgresWebSocket(
                     }
                         break;
 
+                    case "FETCH_UNMAPPED_TABLES": {
+                        console.debug("📋 [WebSocket Server] Processing FETCH_UNMAPPED_TABLES request");
+                        const delegate = await getScopedDelegate();
+                        let tables: string[] = [];
+                        if ((delegate as any).fetchUnmappedTables) {
+                            tables = await (delegate as any).fetchUnmappedTables(payload?.mappedPaths);
+                        }
+                        console.debug(`📋 [WebSocket Server] Fetched ${tables.length} unmapped tables.`);
+                        const response = {
+                            type: "FETCH_UNMAPPED_TABLES_SUCCESS",
+                            payload: { tables },
+                            requestId
+                        };
+                        ws.send(JSON.stringify(response));
+                    }
+                        break;
+
+                    case "FETCH_TABLE_COLUMNS": {
+                        console.debug("📋 [WebSocket Server] Processing FETCH_TABLE_COLUMNS request");
+                        const { tableName } = payload;
+                        const delegate = await getScopedDelegate();
+                        let columns: any[] = [];
+                        if ((delegate as any).fetchTableColumns) {
+                            columns = await (delegate as any).fetchTableColumns(tableName);
+                        }
+                        console.debug(`📋 [WebSocket Server] Fetched ${columns.length} columns for table '${tableName}'.`);
+                        const response = {
+                            type: "FETCH_TABLE_COLUMNS_SUCCESS",
+                            payload: { columns },
+                            requestId
+                        };
+                        ws.send(JSON.stringify(response));
+                    }
+                        break;
+
                     // Route subscription messages to RealtimeService
                     case "subscribe_collection":
                     case "subscribe_entity":

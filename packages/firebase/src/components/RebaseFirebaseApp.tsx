@@ -11,6 +11,7 @@ import {
     PropertyConfig,
     Scaffold,
     SideDialogs,
+    RebaseRoutes,
     SnackbarProvider,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
@@ -22,7 +23,7 @@ import {
     useBuildNavigationStateController,
     useValidateAuthenticator
 } from "@rebasepro/core";
-import { Route, Routes, Outlet } from "react-router-dom";
+import { Route, Outlet } from "react-router-dom";
 
 import { RebaseFirebaseAppProps } from "./RebaseFirebaseAppProps";
 import { FirebaseLoginView } from "./FirebaseLoginView";
@@ -237,7 +238,7 @@ export function RebaseFirebaseApp({
                                     );
                                 } else {
                                     component = (
-                                        <Routes>
+                                        <RebaseRoutes>
                                             <Route element={
                                                 <Scaffold
                                                     logo={usedLogo}
@@ -251,7 +252,7 @@ export function RebaseFirebaseApp({
                                                 {components?.HomePage && <Route path="/" element={<components.HomePage />} />}
                                                 <Route path="/c/*" element={<RebaseRoute />} />
                                             </Route>
-                                        </Routes>
+                                        </RebaseRoutes>
                                     );
                                 }
                             }

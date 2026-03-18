@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks";
 import { EntitySidePanelProps, SideDialogPanelProps } from "@rebasepro/types";
 import { Sheet } from "@rebasepro/ui";
@@ -62,17 +62,20 @@ export function SideDialogs() {
                 <SideDialogView
                     key={`side_dialog_${index}`}
                     panel={panel}
-                    offsetPosition={sidePanels.length - index - 1} />)
+                    offsetPosition={sidePanels.length - index - 1}
+                    isTopPanel={index === sidePanels.length - 1} />)
         }
     </>;
 }
 
 function SideDialogView({
     offsetPosition,
-    panel
+    panel,
+    isTopPanel
 }: {
     offsetPosition: number,
-    panel?: SideDialogPanelProps
+    panel?: SideDialogPanelProps,
+    isTopPanel: boolean
 }) {
 
     // was the closing of the dialog requested by the drawer
@@ -86,6 +89,13 @@ function SideDialogView({
     const width = widthRef.current;
 
     const sideDialogsController = useSideDialogsController();
+
+    // Prevent non-topmost dialogs from being dismissed by outside clicks.
+    // When stacked Sheets exist, clicking the overlay of the topmost dialog
+    // would otherwise propagate and dismiss lower dialogs too.
+    const preventDismiss = useCallback((e: Event) => {
+        e.preventDefault();
+    }, []);
 
     const {
         navigationWasBlocked,
@@ -135,6 +145,8 @@ function SideDialogView({
 
             <Sheet
                 open={Boolean(panel)}
+                includeBackgroundOverlay={isTopPanel}
+                overlayZIndex="z-40"
                 onOpenChange={(open) => {
                     if (!open) {
                         // Check if any suggestion menu is visible in DOM
@@ -147,6 +159,8 @@ function SideDialogView({
                         onCloseRequest();
                     }
                 }}
+                onPointerDownOutside={!isTopPanel ? preventDismiss : undefined}
+                onInteractOutside={!isTopPanel ? preventDismiss : undefined}
                 title={"Side dialog " + panel?.key}
             >
                 {panel &&

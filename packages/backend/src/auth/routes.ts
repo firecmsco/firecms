@@ -856,8 +856,11 @@ export function createAuthRoutes(config: AuthRoutesConfig): Router {
      */
     router.get("/config", async (_req: Request, res: Response): Promise<void> => {
         try {
-            const registrationAllowed = await isRegistrationAllowed();
+            const allUsers = await userService.listUsers();
+            const needsSetup = allUsers.length === 0;
+            const registrationAllowed = needsSetup || allowRegistration;
             res.json({
+                needsSetup,
                 registrationEnabled: registrationAllowed,
                 googleEnabled: isGoogleOAuthConfigured(),
                 emailServiceEnabled: isEmailConfigured()

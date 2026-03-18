@@ -5,8 +5,18 @@ import { EntityService } from "../db/entityService";
 import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "../types";
 import { Entity, ListenCollectionProps, ListenEntityProps, DataSource } from "@rebasepro/types";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { sql as drizzleSql } from "drizzle-orm";
 import { RealtimeProvider, CollectionSubscriptionConfig, EntitySubscriptionConfig } from "../db/interfaces";
 import { collectionRegistry } from "../collections/registry";
+
+/**
+ * Auth context stored per-subscription so real-time refetches respect RLS.
+ * Mirrors the session variables set by PostgresDataSource.withAuth().
+ */
+export interface SubscriptionAuthContext {
+    userId: string;
+    roles: string[];
+}
 
 type RealTimeListenCollectionProps = ListenCollectionProps & {
     subscriptionId: string
@@ -39,6 +49,9 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             databaseId?: string;
             searchString?: string;
         };
+        // Auth context for RLS — when set, refetches run in a transaction
+        // with set_config('app.user_id', ...) / set_config('app.user_roles', ...)
+        authContext?: SubscriptionAuthContext;
     }>();
 
     // Add callback storage for DataSource subscriptions
@@ -75,8 +88,9 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             databaseId?: string;
             searchString?: string;
         };
+        authContext?: SubscriptionAuthContext;
     }) {
-        console.debug("📋 [RealtimeService] Registering DataSource subscription:", subscriptionId);
+        console.debug("📋 [RealtimeService] Registering DataSource subscription:", subscriptionId, subscription.authContext ? "(with auth)" : "(no auth)");
         this._subscriptions.set(subscriptionId, subscription);
     }
 
@@ -362,43 +376,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                     const collectionRequest = subscription.collectionRequest;
                     console.debug(`📋 [RealtimeService] Refetching collection for subscription: ${subscriptionId}, path: ${notifyPath}`);
 
-                    let entities;
-                    if (this.dataSource) {
-                        const collection = collectionRegistry.getCollectionByPath(notifyPath);
-                        entities = await this.dataSource.fetchCollection({
-                            path: notifyPath,
-                            collection: collection,
-                            filter: collectionRequest.filter,
-                            orderBy: collectionRequest.orderBy,
-                            order: collectionRequest.order,
-                            limit: collectionRequest.limit,
-                            startAfter: collectionRequest.startAfter,
-                            searchString: collectionRequest.searchString
-                        });
-                    } else {
-                        if (collectionRequest.searchString) {
-                            entities = await this.entityService.searchEntities(
-                                notifyPath,
-                                collectionRequest.searchString,
-                                {
-                                    filter: collectionRequest.filter,
-                                    orderBy: collectionRequest.orderBy,
-                                    order: collectionRequest.order,
-                                    limit: collectionRequest.limit,
-                                    databaseId: collectionRequest.databaseId
-                                }
-                            );
-                        } else {
-                            entities = await this.entityService.fetchCollection(notifyPath, {
-                                filter: collectionRequest.filter,
-                                orderBy: collectionRequest.orderBy,
-                                order: collectionRequest.order,
-                                limit: collectionRequest.limit,
-                                startAfter: collectionRequest.startAfter,
-                                databaseId: collectionRequest.databaseId
-                            });
-                        }
-                    }
+                    const entities = await this.fetchCollectionWithAuth(notifyPath, collectionRequest, subscription.authContext);
 
                     console.debug(`📬 [RealtimeService] Sending collection_update with ${entities.length} entities to ${subscriptionId} (path: ${notifyPath})`);
                     this.sendCollectionUpdate(subscription.clientId, subscriptionId, entities);
@@ -430,43 +408,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                     const collectionRequest = subscription.collectionRequest;
                     console.debug(`📋 [RealtimeService] Refetching collection for DataSource subscription: ${subscriptionId}, path: ${notifyPath}`);
 
-                    let entities;
-                    if (this.dataSource) {
-                        const collection = collectionRegistry.getCollectionByPath(notifyPath);
-                        entities = await this.dataSource.fetchCollection({
-                            path: notifyPath,
-                            collection: collection,
-                            filter: collectionRequest.filter,
-                            orderBy: collectionRequest.orderBy,
-                            order: collectionRequest.order,
-                            limit: collectionRequest.limit,
-                            startAfter: collectionRequest.startAfter,
-                            searchString: collectionRequest.searchString
-                        });
-                    } else {
-                        if (collectionRequest.searchString) {
-                            entities = await this.entityService.searchEntities(
-                                notifyPath,
-                                collectionRequest.searchString,
-                                {
-                                    filter: collectionRequest.filter,
-                                    orderBy: collectionRequest.orderBy,
-                                    order: collectionRequest.order,
-                                    limit: collectionRequest.limit,
-                                    databaseId: collectionRequest.databaseId
-                                }
-                            );
-                        } else {
-                            entities = await this.entityService.fetchCollection(notifyPath, {
-                                filter: collectionRequest.filter,
-                                orderBy: collectionRequest.orderBy,
-                                order: collectionRequest.order,
-                                limit: collectionRequest.limit,
-                                startAfter: collectionRequest.startAfter,
-                                databaseId: collectionRequest.databaseId
-                            });
-                        }
-                    }
+                    const entities = await this.fetchCollectionWithAuth(notifyPath, collectionRequest, subscription.authContext);
 
                     console.debug(`📬 [RealtimeService] Calling DataSource callback with ${entities.length} entities for ${subscriptionId} (path: ${notifyPath})`);
                     callback(entities);
@@ -475,6 +417,87 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                 console.error(`❌ [RealtimeService] Error processing DataSource subscription ${subscriptionId}:`, error);
             }
         }
+    }
+
+    /**
+     * Fetch a collection with optional RLS auth context.
+     * When authContext is provided, the fetch runs inside a transaction
+     * with set_config calls so PostgreSQL RLS policies are enforced.
+     */
+    private async fetchCollectionWithAuth(
+        notifyPath: string,
+        collectionRequest: { filter?: any; orderBy?: string; order?: "desc" | "asc"; limit?: number; startAfter?: any; databaseId?: string; searchString?: string },
+        authContext?: SubscriptionAuthContext
+    ): Promise<Entity[]> {
+        if (this.dataSource) {
+            const collection = collectionRegistry.getCollectionByPath(notifyPath);
+            const fetchFn = async () => this.dataSource!.fetchCollection({
+                path: notifyPath,
+                collection: collection,
+                filter: collectionRequest.filter,
+                orderBy: collectionRequest.orderBy,
+                order: collectionRequest.order,
+                limit: collectionRequest.limit,
+                startAfter: collectionRequest.startAfter,
+                searchString: collectionRequest.searchString
+            });
+
+            // If we have auth context, wrap in a transaction with session vars
+            if (authContext) {
+                return await this.db.transaction(async (tx) => {
+                    await tx.execute(drizzleSql`SELECT set_config('app.user_id', ${authContext.userId}, true)`);
+                    await tx.execute(drizzleSql`SELECT set_config('app.user_roles', ${authContext.roles.join(",")}, true)`);
+                    await tx.execute(drizzleSql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: authContext.userId, roles: authContext.roles })}, true)`);
+                    const txEntityService = new EntityService(tx);
+                    if (collectionRequest.searchString) {
+                        return await txEntityService.searchEntities(
+                            notifyPath,
+                            collectionRequest.searchString,
+                            {
+                                filter: collectionRequest.filter,
+                                orderBy: collectionRequest.orderBy,
+                                order: collectionRequest.order,
+                                limit: collectionRequest.limit,
+                                databaseId: collectionRequest.databaseId
+                            }
+                        );
+                    }
+                    return await txEntityService.fetchCollection(notifyPath, {
+                        filter: collectionRequest.filter,
+                        orderBy: collectionRequest.orderBy,
+                        order: collectionRequest.order,
+                        limit: collectionRequest.limit,
+                        startAfter: collectionRequest.startAfter,
+                        databaseId: collectionRequest.databaseId
+                    });
+                });
+            }
+
+            return fetchFn();
+        }
+
+        // No dataSource — use entityService directly (no auth wrapping possible)
+        if (collectionRequest.searchString) {
+            return await this.entityService.searchEntities(
+                notifyPath,
+                collectionRequest.searchString,
+                {
+                    filter: collectionRequest.filter,
+                    orderBy: collectionRequest.orderBy,
+                    order: collectionRequest.order,
+                    limit: collectionRequest.limit,
+                    databaseId: collectionRequest.databaseId
+                }
+            );
+        }
+        return await this.entityService.fetchCollection(notifyPath, {
+            filter: collectionRequest.filter,
+            orderBy: collectionRequest.orderBy,
+            order: collectionRequest.order,
+            limit: collectionRequest.limit,
+            startAfter: collectionRequest.startAfter,
+            databaseId: collectionRequest.databaseId
+        });
     }
 
     private sendCollectionUpdate(clientId: string, subscriptionId: string, entities: Entity[]) {

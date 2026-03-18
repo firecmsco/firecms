@@ -9,5 +9,6 @@ export * from "./field_configs";
 export * from "./SideDialogs";
 
 export * from "./RebaseRouter";
+export * from "./RebaseRoutes";
 
 export * from "../app";

@@ -297,5 +297,32 @@ export async function revokeAllSessions(accessToken: string): Promise<{ success:
     return handleResponse<{ success: boolean; message: string }>(response);
 }
 
+/**
+ * Auth config response from the backend
+ */
+export interface AuthConfigResponse {
+    /** True when there are no users in the system and first user setup is needed */
+    needsSetup: boolean;
+    /** Whether new user registration is enabled */
+    registrationEnabled: boolean;
+    /** Whether Google OAuth is configured */
+    googleEnabled: boolean;
+    /** Whether email service is configured */
+    emailServiceEnabled: boolean;
+}
+
+/**
+ * Fetch auth configuration / status from the backend
+ * This is an unauthenticated endpoint used to detect bootstrap mode
+ */
+export async function fetchAuthConfig(): Promise<AuthConfigResponse> {
+    const response = await fetchWithHandling(`${baseApiUrl}/api/auth/config`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+    });
+
+    return handleResponse<AuthConfigResponse>(response);
+}
+
 export { AuthApiError };
 

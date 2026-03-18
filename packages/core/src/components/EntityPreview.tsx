@@ -95,7 +95,7 @@ export function EntityPreviewData({
     return (
         <>
             <div className={cls("flex  shrink-0", {
-                "w-6 h-6 ml-0 mr-0 my-0.5": size === "small" || size === "smallest",
+                "w-6 h-6 mx-1 my-0.5": size === "small" || size === "smallest",
                 "w-8 h-8 ml-1 mr-2 m-2 self-start": size === "medium",
                 "w-10 h-10 ml-2 mr-2 m-2 self-start": size === "large"
             })}>
@@ -344,7 +344,7 @@ export const EntityPreviewContainer = React.forwardRef<HTMLDivElement, EntityPre
         }}
         className={cls(
             "bg-white dark:bg-surface-900",
-            "min-h-[44px]",
+            size === "small" ? "min-h-[32px]" : "min-h-[44px]",
             fullwidth ? "w-full" : "",
             "items-center",
             hover ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800" : "",

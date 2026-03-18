@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import "@fontsource/jetbrains-mono";
 import "typeface-rubik";
@@ -24,6 +24,7 @@ import {
     RolesView,
     Scaffold,
     SideDialogs,
+    RebaseRoutes,
     SnackbarProvider,
     UserSettingsView,
     UsersView,
@@ -33,14 +34,15 @@ import {
     useBuildCollectionRegistryController,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
-    useBuildNavigationStateController
+    useBuildNavigationStateController,
+    UIReferenceView,
 } from "@rebasepro/core";
 import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
 import { usePostgresClientDataSource } from "@rebasepro/postgresql";
 import { CollectionsStudioView, RLSEditor, SQLEditor, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
 import { CMSView } from "@rebasepro/types";
 import { collections } from "virtual:rebase-collections";
-import { Route, Routes, Outlet } from "react-router-dom";
+import { Route, Outlet } from "react-router-dom";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -75,9 +77,27 @@ export function App() {
     const dataEnhancementPlugin = useDataEnhancementPlugin();
     const collectionConfigController = useLocalCollectionsConfigController(API_URL, collections);
     const configPermissions = useCallback(() => ({ createCollections: true, editCollections: true, deleteCollections: true }), []);
+
+    // Fetch unmapped tables for the "import from table" feature
+    const [unmappedTables, setUnmappedTables] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (!postgresDelegate || authController.initialLoading || !authController.user) return;
+        const existingPaths = collections.map((c: any) => c.dbPath ?? c.slug ?? "").filter(Boolean);
+        (postgresDelegate as any).fetchUnmappedTables?.(existingPaths)
+            .then((tables: string[]) => setUnmappedTables(tables))
+            .catch((e: any) => console.warn("Could not fetch unmapped tables:", e));
+    }, [postgresDelegate, authController.initialLoading, authController.user]);
+
+    const onFetchTableColumns = useCallback(async (tableName: string) => {
+        return (postgresDelegate as any).fetchTableColumns?.(tableName) ?? [];
+    }, [postgresDelegate]);
+
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController,
-        configPermissions
+        configPermissions,
+        unmappedTables,
+        onFetchTableColumns
     });
 
     const collectionsBuilder = useCallback(() => {
@@ -109,7 +129,7 @@ export function App() {
             view: <RLSEditor />
         },
         {
-            slug: ["schema", "schema/*"] as any,
+            slug: ["schema", "schema/*"],
             name: "Edit collections",
             group: "Schema",
             icon: "view_list",
@@ -160,7 +180,7 @@ export function App() {
                             }
 
                             return (
-                                <Routes>
+                                <RebaseRoutes>
                                     <Route element={
                                         <Scaffold autoOpenDrawer={false}>
                                             <AdminModeSyncer devViews={devViews} />
@@ -187,9 +207,12 @@ export function App() {
                                             ))
                                         )}
 
+                                        {/* Hidden debug route — not in sidebar */}
+                                        <Route path={"/debug/ui"} element={<UIReferenceView />} />
+
                                         <Route path={"*"} element={<NotFoundPage />} />
                                     </Route>
-                                </Routes>
+                                </RebaseRoutes>
                             );
                         }}
                     </Rebase>

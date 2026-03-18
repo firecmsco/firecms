@@ -24,4 +24,5 @@ export type { RebaseLoginViewProps } from "./components/RebaseLoginView";
 export { createUserManagementAdminViews, UsersView, RolesView } from "./components/AdminViews";
 
 // API utilities
-export { setApiUrl, getApiUrl, AuthApiError } from "./api";
+export { setApiUrl, getApiUrl, fetchAuthConfig, AuthApiError } from "./api";
+export type { AuthConfigResponse } from "./api";

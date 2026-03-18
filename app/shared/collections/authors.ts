@@ -62,7 +62,7 @@ const authorsCollection: EntityCollection = {
             name: "Profile",
             type: "relation",
             relationName: "profile",
-            description: " <a> </a>",
+            description: "Profile of the author",
             relation: {
                 relationName: "profile",
                 target: () => profilesCollection,

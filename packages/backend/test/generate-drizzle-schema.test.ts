@@ -500,6 +500,31 @@ describe("generateDrizzleSchema V2 improvements", () => {
         // Should be (true) AND (role check) — same effect as access: "public" + roles
         expect(result).toContain("(true) AND (string_to_array(auth.roles(), ',') && ARRAY['admin'])");
     });
+    it("should use pgRoles instead of default 'public' when specified", async () => {
+        const collections: EntityCollection[] = [{
+            slug: "tenant_data",
+            name: "Tenant Data",
+            properties: { data: { type: "string" } },
+            securityRules: [
+                { operation: "select", access: "public", pgRoles: ["app_role", "service_role"] }
+            ]
+        }];
+        const result = await generateSchema(collections);
+        expect(result).toContain('to: ["app_role", "service_role"]');
+        expect(result).not.toContain('to: ["public"]');
+    });
+    it("should default to 'public' pgRole when pgRoles is not specified", async () => {
+        const collections: EntityCollection[] = [{
+            slug: "default_data",
+            name: "Default Data",
+            properties: { data: { type: "string" } },
+            securityRules: [
+                { operation: "select", access: "public" }
+            ]
+        }];
+        const result = await generateSchema(collections);
+        expect(result).toContain('to: ["public"]');
+    });
 });
 
 describe("generateDrizzleSchema ID Generation", () => {

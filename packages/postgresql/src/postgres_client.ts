@@ -47,6 +47,20 @@ export class ApiError extends Error {
     }
 }
 
+/**
+ * Column metadata returned by table introspection.
+ */
+export interface TableColumnInfo {
+    column_name: string;
+    data_type: string;
+    udt_name: string;
+    is_nullable: string;
+    column_default: string | null;
+    character_maximum_length: number | null;
+    /** Enum values, populated for USER-DEFINED (enum) columns */
+    enum_values?: string[];
+}
+
 export class PostgresDataSourceClient {
     private websocketUrl: string;
     private ws: WebSocket | null = null;
@@ -583,6 +597,22 @@ export class PostgresDataSourceClient {
             payload: props
         });
         return response.count;
+    }
+
+    async fetchUnmappedTables(mappedPaths?: string[]): Promise<string[]> {
+        const response = await this.sendMessage({
+            type: "FETCH_UNMAPPED_TABLES",
+            payload: { mappedPaths }
+        });
+        return response.tables || [];
+    }
+
+    async fetchTableColumns(tableName: string): Promise<TableColumnInfo[]> {
+        const response = await this.sendMessage({
+            type: "FETCH_TABLE_COLUMNS",
+            payload: { tableName }
+        });
+        return response.columns || [];
     }
 
     // Subscription methods

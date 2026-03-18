@@ -14,7 +14,8 @@ import {
     SecurityIcon,
     RefreshIcon,
     WarningIcon,
-    KeyIcon
+    KeyIcon,
+    DeleteIcon
 } from "@rebasepro/ui";
 import { useDataSource, useSnackbarController, useCollectionRegistryController, ErrorView } from "@rebasepro/core";
 import { PolicyEditor } from "./PolicyEditor";
@@ -37,7 +38,7 @@ export interface TableRLSStatus {
     policies: PostgresPolicy[];
 }
 
-export const RLSEditor = () => {
+export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
     const dataSource = useDataSource();
     const snackbarController = useSnackbarController();
     const collectionRegistry = useCollectionRegistryController();
@@ -397,7 +398,7 @@ export const RLSEditor = () => {
                                     }
 
                                     try {
-                                        const response = await fetch(`http://localhost:3001/api/schema-editor/collection/save`, {
+                                        const response = await fetch(`${apiUrl}/api/schema-editor/collection/save`, {
                                             method: "POST",
                                             headers: { "Content-Type": "application/json" },
                                             body: JSON.stringify({
@@ -428,17 +429,39 @@ export const RLSEditor = () => {
                                                 <Chip size="small" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800">RLS Disabled</Chip>
                                             )}
                                         </Typography>
-                                        <Button
-                                            variant="filled"
-                                            color="primary"
-                                            disabled={!activeCollection}
-                                            onClick={() => setEditingPolicy("new")}
-                                        >
-                                            Create Policy
-                                        </Button>
+                                        <div className="flex gap-2">
+                                            <Button
+                                                variant="text"
+                                                size="small"
+                                                onClick={async () => {
+                                                    const table = activeTableData.tableName;
+                                                    const action = activeTableData.rlsEnabled ? "DISABLE" : "ENABLE";
+                                                    if (!confirm(`Are you sure you want to ${action.toLowerCase()} Row Level Security on "${table}"?`)) return;
+                                                    try {
+                                                        await dataSource.executeSql!(`ALTER TABLE "${table}" ${action} ROW LEVEL SECURITY`);
+                                                        snackbarController.open({ type: "success", message: `RLS ${action.toLowerCase()}d on ${table}` });
+                                                        fetchRLSData();
+                                                    } catch (e: any) {
+                                                        snackbarController.open({ type: "error", message: e.message });
+                                                    }
+                                                }}
+                                            >
+                                                {activeTableData.rlsEnabled ? "Disable RLS" : "Enable RLS"}
+                                            </Button>
+                                            <Button
+                                                variant="filled"
+                                                size="small"
+                                                color="primary"
+                                                disabled={!activeCollection}
+                                                onClick={() => setEditingPolicy("new")}
+                                            >
+                                                Create Policy
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="p-6 pt-4 flex-grow overflow-auto bg-surface-50 dark:bg-surface-900">
+                                    <div className="max-w-4xl mx-auto">
                                     {activeTableData && !activeCollection && (
                                         <Alert
                                             color="warning"
@@ -486,7 +509,7 @@ export const RLSEditor = () => {
                                                 <div key={policy.policyname} className={cls("p-3 sm:px-4 sm:py-3 bg-white dark:bg-surface-950 border rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4", defaultBorderMixin)}>
                                                     <div className="flex flex-col gap-2 min-w-0">
                                                         <div className="flex items-center gap-2">
-                                                            <KeyIcon size="small" className="text-text-secondary shrink-0" />
+                                                            <KeyIcon size="small" className="text-text-secondary dark:text-text-secondary-dark shrink-0" />
                                                             <Typography variant="body2" className="truncate">{policy.policyname}</Typography>
                                                             {policy.status === "code_only" && (
                                                                 <Tooltip title="This policy is defined in your code but hasn't been applied to the database yet.">
@@ -512,12 +535,33 @@ export const RLSEditor = () => {
                                                         <Button size="small" variant="text" onClick={() => setEditingPolicy(policy)} disabled={!activeCollection}>
                                                             Edit
                                                         </Button>
+                                                        {policy.status !== "code_only" && (
+                                                            <Button
+                                                                size="small"
+                                                                variant="text"
+                                                                className="text-text-secondary dark:text-text-secondary-dark"
+                                                                onClick={async () => {
+                                                                    const table = activeTableData!.tableName;
+                                                                    if (!confirm(`Drop policy "${policy.policyname}" from table "${table}"?`)) return;
+                                                                    try {
+                                                                        await dataSource.executeSql!(`DROP POLICY "${policy.policyname}" ON "${table}"`);
+                                                                        snackbarController.open({ type: "success", message: `Policy "${policy.policyname}" dropped` });
+                                                                        fetchRLSData();
+                                                                    } catch (e: any) {
+                                                                        snackbarController.open({ type: "error", message: e.message });
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <DeleteIcon size="small" />
+                                                            </Button>
+                                                        )}
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
                                     )}
 
+                                    </div>
                                 </div>
                             </div>
                         )}

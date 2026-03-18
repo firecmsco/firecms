@@ -300,7 +300,8 @@ const generateSinglePolicyCode = (tableName: string, rule: SecurityRule, operati
     const parts: string[] = [];
     parts.push(`as: "${mode}"`);
     parts.push(`for: "${operation}"`);
-    parts.push(`to: ["public"]`);
+    const toRoles = rule.pgRoles ?? ["public"];
+    parts.push(`to: [${toRoles.map(r => `"${r}"`).join(", ")}]`);
     if (usingClause) parts.push(`using: ${usingClause}`);
     if (withCheckClause) parts.push(`withCheck: ${withCheckClause}`);
 

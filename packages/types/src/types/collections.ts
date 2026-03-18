@@ -985,4 +985,29 @@ export interface SecurityRule {
      * }
      */
     withCheck?: string;
+
+    // ── Advanced: native PostgreSQL role targeting ───────────────────────
+
+    /**
+     * **Advanced.** Native PostgreSQL database roles the policy applies to.
+     *
+     * By default, all generated policies target the `public` role (i.e.
+     * every database connection). This is correct for most setups where
+     * a single database role is used for all connections.
+     *
+     * **Important:** These are NOT the same as the application-level `roles`
+     * (admin, editor, viewer, etc.) — those are enforced in the USING/WITH
+     * CHECK clauses via `auth.roles()`. This field controls the PostgreSQL
+     * `TO` clause in `CREATE POLICY ... TO role_name`.
+     *
+     * Use this if you have dedicated PostgreSQL roles (e.g. `app_read`,
+     * `app_write`) and want policies to target specific ones.
+     *
+     * @default ["public"]
+     *
+     * @example
+     * // Only apply this policy when connected as `app_role`
+     * { operation: "select", access: "public", pgRoles: ["app_role"] }
+     */
+    pgRoles?: string[];
 }

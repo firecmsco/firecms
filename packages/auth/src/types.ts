@@ -17,6 +17,10 @@ export type RebaseAuthController = AuthController & {
     loginSkipped: boolean;
     /** Error from auth provider (login failure details) */
     authProviderError: Error | null;
+    /** True when there are no users in the system — first-user bootstrap mode */
+    needsSetup: boolean;
+    /** Whether new user registration is enabled (always true during setup) */
+    registrationEnabled: boolean;
     /** Request password reset email */
     forgotPassword: (email: string) => Promise<void>;
     /** Reset password using token from email */

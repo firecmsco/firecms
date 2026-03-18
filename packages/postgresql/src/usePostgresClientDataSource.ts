@@ -230,6 +230,14 @@ export function usePostgresClientDataSource(config: PostgresDataSourceConfig): P
 
         async fetchCurrentDatabase(): Promise<string | undefined> {
             return client.fetchCurrentDatabase();
+        },
+
+        async fetchUnmappedTables(mappedPaths?: string[]): Promise<string[]> {
+            return client.fetchUnmappedTables(mappedPaths);
+        },
+
+        async fetchTableColumns(tableName: string): Promise<any[]> {
+            return client.fetchTableColumns(tableName);
         }
     }), [client]);
 

@@ -15,9 +15,12 @@ interface SheetProps {
     darkBackground?: boolean;
     transparent?: boolean;
     onOpenChange?: (open: boolean) => void;
+    onPointerDownOutside?: (e: Event) => void;
+    onInteractOutside?: (e: Event) => void;
     className?: string;
     style?: React.CSSProperties;
     overlayClassName?: string;
+    overlayZIndex?: string;
     overlayStyle?: React.CSSProperties;
     portalContainer?: HTMLElement | null;
 }
@@ -30,10 +33,13 @@ export const Sheet: React.FC<SheetProps> = ({
     includeBackgroundOverlay = true,
     open,
     onOpenChange,
+    onPointerDownOutside,
+    onInteractOutside,
     transparent,
     className,
     style,
     overlayClassName,
+    overlayZIndex = "z-50",
     overlayStyle,
     portalContainer,
     ...props
@@ -78,8 +84,9 @@ export const Sheet: React.FC<SheetProps> = ({
                 {includeBackgroundOverlay && <DialogPrimitive.Overlay
                     className={cls(
                         "outline-none",
-                        "fixed inset-0 z-20 bg-black/80 dark:bg-surface-900/80",
+                        "fixed inset-0 bg-white/80 dark:bg-surface-900/80",
                         "backdrop-blur-sm transition-all duration-100 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in",
+                        overlayZIndex,
                         overlayClassName
                     )}
                     style={overlayStyle}
@@ -87,6 +94,8 @@ export const Sheet: React.FC<SheetProps> = ({
                 <DialogPrimitive.Content
                     {...props}
                     onFocusCapture={(event) => event.preventDefault()}
+                    onPointerDownOutside={onPointerDownOutside}
+                    onInteractOutside={onInteractOutside}
                     className={cls(
                         "outline-none",
                         borderClass[side],
@@ -94,7 +103,7 @@ export const Sheet: React.FC<SheetProps> = ({
                         "transform-gpu",
                         "will-change-transform",
                         "text-surface-accent-900 dark:text-white",
-                        "fixed transform z-20 transition-all ease-in-out",
+                        "fixed transform z-50 transition-all ease-in-out",
                         !displayed ? "duration-150" : "duration-100",
                         "outline-none focus:outline-none",
                         transparent ? "" : "shadow-md bg-white dark:bg-surface-950",

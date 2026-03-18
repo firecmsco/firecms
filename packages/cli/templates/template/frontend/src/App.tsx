@@ -18,6 +18,7 @@ import {
     NotFoundPage,
     Scaffold,
     SideDialogs,
+    RebaseRoutes,
     SnackbarProvider,
     ContentHomePage,
     useBackendStorageSource,
@@ -29,7 +30,7 @@ import {
 } from "@rebasepro/core";
 import { usePostgresClientDataSource } from "@rebasepro/postgresql";
 import { collections } from "virtual:rebase-collections";
-import { Route, Routes, Outlet } from "react-router-dom";
+import { Route, Outlet } from "react-router-dom";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -108,7 +109,7 @@ export function App() {
                         }
 
                         return (
-                            <Routes>
+                            <RebaseRoutes>
                                 <Route element={
                                     <Scaffold autoOpenDrawer={false}>
                                         <AppBar />
@@ -121,7 +122,7 @@ export function App() {
                                     <Route path={"/c/*"} element={<RebaseRoute />} />
                                     <Route path={"*"} element={<NotFoundPage />} />
                                 </Route>
-                            </Routes>
+                            </RebaseRoutes>
                         );
                     }}
                 </Rebase>

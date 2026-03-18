@@ -158,9 +158,9 @@ export const DefaultAppBar = function DefaultAppBar({
                 <div className={"flex flex-row gap-2 items-center"}>
                     {breadcrumbs.breadcrumbs.map((breadcrumb, index) => {
                         return <React.Fragment key={breadcrumb.url + "_" + index}>
-                            <Typography variant={"caption"} color={"secondary"}>
+                            {index > 0 && <Typography variant={"caption"} color={"secondary"}>
                                 /
-                            </Typography>
+                            </Typography>}
                             <Link
                                 key={index}
                                 className="visited:text-inherit dark:visited:text-inherit block"

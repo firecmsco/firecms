@@ -300,6 +300,15 @@ export class RefreshTokenService {
         const safeUserAgent = userAgent || "";
         const safeIpAddress = ipAddress || "";
 
+        // Delete any existing session for this user/device combo, then insert.
+        // This approach doesn't require the unique_device_session constraint to exist.
+        await this.db.execute(sql`
+            DELETE FROM rebase_refresh_tokens 
+            WHERE user_id = ${userId} 
+            AND user_agent = ${safeUserAgent} 
+            AND ip_address = ${safeIpAddress}
+        `);
+
         await this.db.insert(refreshTokens)
             .values({
                 userId,
@@ -307,15 +316,6 @@ export class RefreshTokenService {
                 expiresAt,
                 userAgent: safeUserAgent,
                 ipAddress: safeIpAddress
-            })
-            .onConflictDoUpdate({
-                // Target the composite unique index defined in schema
-                target: [refreshTokens.userId, refreshTokens.userAgent, refreshTokens.ipAddress],
-                set: {
-                    tokenHash,
-                    expiresAt,
-                    createdAt: new Date() // Reset creation time to appear at top of list
-                }
             });
     }
 

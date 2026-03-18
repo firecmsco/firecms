@@ -21,6 +21,7 @@ import { Markdown } from "@rebasepro/ui";
 import { StringPropertyPreview } from "./property_previews/StringPropertyPreview";
 import { ArrayPropertyPreview } from "./property_previews/ArrayPropertyPreview";
 import { ArrayOfReferencesPreview } from "./property_previews/ArrayOfReferencesPreview";
+import { ArrayOfRelationsPreview } from "./property_previews/ArrayOfRelationsPreview";
 import { ArrayOfStorageComponentsPreview } from "./property_previews/ArrayOfStorageComponentsPreview";
 import { ArrayPropertyEnumPreview } from "./property_previews/ArrayPropertyEnumPreview";
 import { ArrayOfStringsPreview } from "./property_previews/ArrayOfStringsPreview";
@@ -148,6 +149,10 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
                     content = <ArrayOfReferencesPreview {...props}
                         value={value}
                         property={property} />;
+                } else if (arrayProperty.of.type === "relation") {
+                    content = <ArrayOfRelationsPreview {...props}
+                        value={value}
+                        property={property} />;
                 } else if (arrayProperty.of.type === "string") {
                     if (arrayProperty.of.enum) {
                         content = <ArrayPropertyEnumPreview
@@ -222,18 +227,53 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
     } else if (property.type === "relation") {
         if (!value) {
             content = <EmptyValue />;
-        }
-        if (typeof value === "object" && "isEntityRelation" in value && value.isEntityRelation()) {
-            content = <RelationPreview
-                disabled={!property.relation}
-                previewProperties={property.previewProperties}
-                includeId={property.includeId}
-                includeEntityLink={property.includeEntityLink}
-                size={props.size}
-                relation={value as EntityRelation}
-            />;
+        } else if (Array.isArray(value)) {
+            // Many-cardinality relation: value is an array of EntityRelation (or plain objects)
+            content = (
+                <div className="flex flex-col w-full gap-0.5">
+                    {(value as any[]).map((item: any, index: number) => {
+                        const entityRelation: EntityRelation | null = (item instanceof EntityRelation)
+                            ? item
+                            : (item && typeof item === "object" && (item.__type === "relation" || ("isEntityRelation" in item && item.isEntityRelation())))
+                                ? new EntityRelation(item.id, item.path)
+                                : null;
+                        if (!entityRelation) return null;
+                        return (
+                            <div className="w-full"
+                                key={`preview_rel_${propertyKey}_${index}`}>
+                                <RelationPreview
+                                    disabled={!property.relation}
+                                    previewProperties={property.previewProperties}
+                                    includeId={property.includeId}
+                                    includeEntityLink={property.includeEntityLink}
+                                    size={"small"}
+                                    relation={entityRelation}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            );
         } else {
-            content = buildWrongValueType(propertyKey, property.type, value);
+            // Single-cardinality relation
+            const rawValue = value as any;
+            const relationValue: EntityRelation | null = (value instanceof EntityRelation)
+                ? value
+                : (typeof rawValue === "object" && (rawValue.__type === "relation" || ("isEntityRelation" in rawValue && rawValue.isEntityRelation())))
+                    ? new EntityRelation(rawValue.id, rawValue.path)
+                    : null;
+            if (relationValue) {
+                content = <RelationPreview
+                    disabled={!property.relation}
+                    previewProperties={property.previewProperties}
+                    includeId={property.includeId}
+                    includeEntityLink={property.includeEntityLink}
+                    size={props.size}
+                    relation={relationValue}
+                />;
+            } else {
+                content = buildWrongValueType(propertyKey, property.type, value);
+            }
         }
 
     } else if (property.type === "boolean") {

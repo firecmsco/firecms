@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import { User } from "@rebasepro/core";
 import * as authApi from "../api";
+import { AuthConfigResponse } from "../api";
 import {
     RebaseAuthController,
     RebaseAuthControllerProps,
@@ -107,6 +108,7 @@ export function useRebaseAuthController(
     const [authProviderError, setAuthProviderError] = useState<Error | null>(null);
     const [loginSkipped, setLoginSkipped] = useState(false);
     const [extra, setExtra] = useState<any>(null);
+    const [authConfig, setAuthConfig] = useState<AuthConfigResponse | null>(null);
 
     // Store tokens in ref for quick access, but also persist to localStorage
     const tokensRef = useRef<AuthTokens | null>(null);
@@ -502,6 +504,17 @@ export function useRebaseAuthController(
 
         const restoreAuth = async () => {
             console.log("[AUTH] Attempting to restore auth from storage...");
+
+            // Fetch auth config (needsSetup, registrationEnabled, etc.)
+            try {
+                const config = await authApi.fetchAuthConfig();
+                if (isMountedRef.current) {
+                    setAuthConfig(config);
+                }
+            } catch (e) {
+                console.warn("[AUTH] Failed to fetch auth config:", e);
+            }
+
             const stored = loadAuthFromStorage();
 
             if (!stored) {
@@ -692,6 +705,8 @@ export function useRebaseAuthController(
         authError,
         authProviderError,
         loginSkipped,
+        needsSetup: authConfig?.needsSetup ?? false,
+        registrationEnabled: authConfig?.registrationEnabled ?? false,
         getAuthToken,
         getApiUrl,
         signOut,

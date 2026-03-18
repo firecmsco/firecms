@@ -81,6 +81,9 @@ export function RebaseLoginView({
     const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
     const [forgotPasswordSelected, setForgotPasswordSelected] = useState(false);
 
+    // Auto-show setup form when no users exist (bootstrap mode)
+    const isBootstrapMode = authController.needsSetup;
+
     function buildErrorView() {
         if (!authController.authProviderError) return null;
         if (authController.user != null) return null;
@@ -123,7 +126,23 @@ export function RebaseLoginView({
                     </div>
                 }
                 {!forgotPasswordSelected && buildErrorView()}
-                {(!passwordLoginSelected && !registrationSelected && !forgotPasswordSelected) && (
+
+                {/* Bootstrap mode: show setup form directly */}
+                {isBootstrapMode && !authController.user && (
+                    <LoginForm
+                        authController={authController}
+                        registrationMode={true}
+                        onClose={() => {}}
+                        onForgotPassword={() => {}}
+                        mode={modeState.mode}
+                        noUserComponent={noUserComponent}
+                        disableSignupScreen={false}
+                        bootstrapMode={true}
+                    />
+                )}
+
+                {/* Normal mode: show login/register buttons */}
+                {!isBootstrapMode && !passwordLoginSelected && !registrationSelected && !forgotPasswordSelected && (
                     <>
                         <LoginButton
                             disabled={disabled}
@@ -142,7 +161,7 @@ export function RebaseLoginView({
                                 authController={authController}
                             />
                         )}
-                        {!disableSignupScreen && (
+                        {!disableSignupScreen && authController.registrationEnabled && (
                             <LoginButton
                                 disabled={disabled}
                                 text={"Create account"}
@@ -156,7 +175,7 @@ export function RebaseLoginView({
                         )}
                     </>
                 )}
-                {(passwordLoginSelected || registrationSelected) && !forgotPasswordSelected && (
+                {!isBootstrapMode && (passwordLoginSelected || registrationSelected) && !forgotPasswordSelected && (
                     <LoginForm
                         authController={authController}
                         registrationMode={registrationSelected}
@@ -281,7 +300,8 @@ function LoginForm({
     mode,
     registrationMode,
     noUserComponent,
-    disableSignupScreen
+    disableSignupScreen,
+    bootstrapMode = false
 }: {
     onClose: () => void,
     onForgotPassword: () => void,
@@ -289,7 +309,8 @@ function LoginForm({
     mode: "light" | "dark",
     registrationMode: boolean,
     noUserComponent?: ReactNode,
-    disableSignupScreen: boolean
+    disableSignupScreen: boolean,
+    bootstrapMode?: boolean
 }) {
 
     const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -336,23 +357,34 @@ function LoginForm({
         else
             handleEnterPassword();
     }
-    const label = registrationMode
-        ? "Create a new account"
-        : "Enter your email and password";
+
+    const label = bootstrapMode
+        ? "Welcome! Create your admin account"
+        : registrationMode
+            ? "Create a new account"
+            : "Enter your email and password";
 
     const button = registrationMode ? "Create account" : "Login";
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-[500px] gap-2">
-            <div className="w-full">
-                <IconButton onClick={onBackPressed}>
-                    <ArrowBackIcon />
-                </IconButton>
-            </div>
+            {!bootstrapMode && (
+                <div className="w-full">
+                    <IconButton onClick={onBackPressed}>
+                        <ArrowBackIcon />
+                    </IconButton>
+                </div>
+            )}
 
             <div className="flex justify-center w-full py-2">
-                <Typography align={"center"} variant={"subtitle2"}>{label}</Typography>
+                <Typography align={"center"} variant={bootstrapMode ? "subtitle1" : "subtitle2"}>{label}</Typography>
             </div>
+
+            {bootstrapMode && (
+                <Typography variant="body2" className="text-gray-500 text-center mb-2">
+                    No users found. Create the first account to get started. This account will have admin privileges.
+                </Typography>
+            )}
 
             {registrationMode && (
                 <div className="w-full">

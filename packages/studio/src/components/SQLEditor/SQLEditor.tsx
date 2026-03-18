@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
     Button,
     Paper,
@@ -21,18 +21,20 @@ import {
     SelectItem,
     Menu,
     MenuItem,
-    ResizablePanels
+    ResizablePanels,
+    Chip
 } from "@rebasepro/ui";
-import { useDataSource, useSnackbarController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView } from "@rebasepro/core";
+import { useDataSource, useSnackbarController, useCollectionRegistryController, useSideEntityController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView, IconForView } from "@rebasepro/core";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
 import { parseFirst } from "pgsql-ast-parser";
-import { determineTableAndPK } from "../../utils/sql_utils";
+import { determineTableAndPK, resolveQueryCollections, ResolvedQueryCollection } from "../../utils/sql_utils";
 import { ExplainVisualizer } from "./ExplainVisualizer";
 
 export interface TableColumnInfo {
     name: string;
     dataType: string;
+    isPrimaryKey: boolean;
 }
 
 export interface TableInfo {
@@ -73,10 +75,13 @@ const STORAGE_KEY_ACTIVE_TAB = "rebase_sql_active_tab";
 export const SQLEditor = () => {
     const dataSource = useDataSource();
     const snackbarController = useSnackbarController();
+    const collectionRegistry = useCollectionRegistryController();
+    const sideEntityController = useSideEntityController();
 
     // Schema state
     const [schemas, setSchemas] = useState<Record<string, TableInfo[]>>({});
     const [isSchemaLoading, setIsSchemaLoading] = useState(true);
+    const schemaFetchedRef = useRef(false);
     const [schemaError, setSchemaError] = useState<string | null>(null);
 
     // Connection state
@@ -112,14 +117,12 @@ export const SQLEditor = () => {
                     setAvailableDatabases(dbs);
                     setAvailableRoles(roles);
 
-                    // Set default database if not selected, preferring current DB -> postgres -> first available
-                    if (!localStorage.getItem("rebase_sql_selected_db") && dbs.length > 0) {
-                        let defaultDb = currentDbFromApi;
-                        if (!defaultDb || !dbs.includes(defaultDb)) {
-                            defaultDb = dbs.includes("postgres") ? "postgres" : dbs[0];
-                        }
-                        setSelectedDatabase(defaultDb);
-                        localStorage.setItem("rebase_sql_selected_db", defaultDb);
+                    // Set default database: always prefer the actual connected database.
+                    // The 'postgres' system database is typically empty and not useful as a default.
+                    if (dbs.length > 0) {
+                        const actualDb = currentDbFromApi && dbs.includes(currentDbFromApi) ? currentDbFromApi : dbs[0];
+                        setSelectedDatabase(actualDb);
+                        localStorage.setItem("rebase_sql_selected_db", actualDb);
                     }
 
                     // Set default role if not selected, preferring 'postgres'
@@ -149,6 +152,8 @@ export const SQLEditor = () => {
     const handleDatabaseChange = (db: string) => {
         setSelectedDatabase(db);
         localStorage.setItem("rebase_sql_selected_db", db);
+        // Reset so the schema will be re-fetched for the new database
+        schemaFetchedRef.current = false;
     };
 
     const handleRoleChange = (role: string) => {
@@ -166,21 +171,31 @@ export const SQLEditor = () => {
         setIsSchemaLoading(true);
         setSchemaError(null);
         try {
-            console.log("Fetching database schema for SQLEditor...");
             const sql = `
                 SELECT 
-                    table_schema as schema, 
-                    table_name as "table", 
-                    column_name as "column",
-                    data_type as "data_type"
+                    c.table_schema as schema, 
+                    c.table_name as "table", 
+                    c.column_name as "column",
+                    c.data_type as "data_type",
+                    CASE WHEN kcu.column_name IS NOT NULL THEN true ELSE false END as "is_pk"
                 FROM 
-                    information_schema.columns
+                    information_schema.columns c
+                LEFT JOIN information_schema.table_constraints tc
+                    ON tc.table_schema = c.table_schema 
+                    AND tc.table_name = c.table_name 
+                    AND tc.constraint_type = 'PRIMARY KEY'
+                LEFT JOIN information_schema.key_column_usage kcu
+                    ON kcu.constraint_name = tc.constraint_name
+                    AND kcu.table_schema = tc.table_schema
+                    AND kcu.table_name = tc.table_name
+                    AND kcu.column_name = c.column_name
                 WHERE 
-                    table_schema NOT IN ('information_schema', 'pg_catalog')
+                    c.table_schema NOT IN ('information_schema', 'pg_catalog')
                 ORDER BY 
-                    schema, "table", ordinal_position;
+                    c.table_schema, c.table_name, c.ordinal_position;
             `;
-            const result = await dataSource.executeSql(sql, { database: selectedDatabase, role: selectedRole });
+            // Pass the selected database so schema introspection targets the right DB.
+            const result = await dataSource.executeSql(sql, { database: selectedDatabase });
 
             const processGrouped = (data: any[]) => {
                 const grouped = data.reduce((acc: Record<string, TableInfo[]>, curr: any) => {
@@ -188,6 +203,7 @@ export const SQLEditor = () => {
                     const table = curr.table || curr.TABLE || curr.table_name;
                     const column = curr.column || curr.COLUMN || curr.column_name;
                     const dataType = curr.data_type || curr.DATA_TYPE || "";
+                    const isPrimaryKey = curr.is_pk === true || curr.is_pk === "true";
 
                     if (!acc[schema]) acc[schema] = [];
                     let tableInfo = acc[schema].find(t => t.tableName === table);
@@ -195,7 +211,7 @@ export const SQLEditor = () => {
                         tableInfo = { schemaName: schema, tableName: table, columns: [] };
                         acc[schema].push(tableInfo);
                     }
-                    tableInfo.columns.push({ name: column, dataType });
+                    tableInfo.columns.push({ name: column, dataType, isPrimaryKey });
                     return acc;
                 }, {});
                 setSchemas(grouped);
@@ -215,21 +231,21 @@ export const SQLEditor = () => {
                 processGrouped(result);
             }
 
+            schemaFetchedRef.current = true;
         } catch (e: any) {
             console.error("Schema fetch error:", e);
             setSchemaError("Failed to fetch schema: " + (e.message || String(e)));
         } finally {
             setIsSchemaLoading(false);
         }
-    }, [dataSource, selectedDatabase, selectedRole]);
+    }, [dataSource, selectedDatabase]);
 
     useEffect(() => {
-        // Wait till config is loaded (to have the correct selectedDatabase/Role chosen).
-        // It's possible we already run with `undefined`, then it defaults. 
-        if (!isLoadingConfig) {
+        // Fetch schema after config finishes loading, and re-fetch when the selected database changes.
+        if (!isLoadingConfig && !schemaFetchedRef.current) {
             fetchSchema();
         }
-    }, [fetchSchema, isLoadingConfig, selectedDatabase, selectedRole]);
+    }, [fetchSchema, isLoadingConfig, selectedDatabase]);
 
     // Tabbed interface state
     const [tabs, setTabs] = useState<Array<{
@@ -305,7 +321,7 @@ export const SQLEditor = () => {
 
         const resolution = determineTableAndPK(activeTab.lastExecutedSql, columnKey, schemas);
 
-        if (resolution.error || !resolution.primaryKey) {
+        if (resolution.error || !resolution.primaryKeys || resolution.primaryKeys.length === 0) {
             snackbarController.open({
                 type: "error",
                 message: resolution.error || "Could not resolve table/primary key"
@@ -313,11 +329,14 @@ export const SQLEditor = () => {
             return;
         }
 
-        const pk = resolution.primaryKey;
-        if (rowData[pk] === undefined || rowData[pk] === null) {
+        // Check all PK values are present in the row
+        const missingPKs = resolution.primaryKeys.filter(
+            pk => rowData[pk.resultColumn] === undefined || rowData[pk.resultColumn] === null
+        );
+        if (missingPKs.length > 0) {
             snackbarController.open({
                 type: "error",
-                message: `Row is missing primary key "${pk}", cannot safely update.`
+                message: `Row is missing primary key column(s): ${missingPKs.map(pk => `"${pk.resultColumn}"`).join(", ")}. Cannot safely update.`
             });
             return;
         }
@@ -333,14 +352,12 @@ export const SQLEditor = () => {
         if (newValue === editingCell.initialValue) return;
 
         const resolution = determineTableAndPK(activeTab.lastExecutedSql, columnKey, schemas);
-        if (resolution.error || !resolution.tableName || !resolution.primaryKey) {
+        if (resolution.error || !resolution.tableName || !resolution.primaryKeys || resolution.primaryKeys.length === 0) {
             snackbarController.open({ type: "error", message: resolution.error || "Resolution failed." });
             return;
         }
 
         const tableName = resolution.tableName;
-        const pk = resolution.primaryKey;
-        const pkValue = rowData[pk];
 
         const formatValue = (val: any) => {
             if (val === null || val === undefined) return "NULL";
@@ -349,7 +366,34 @@ export const SQLEditor = () => {
             return `'${String(val).replace(/'/g, "''")}'`;
         };
 
-        const updateSql = `UPDATE "${tableName}" SET "${columnKey}" = ${formatValue(newValue)} WHERE "${pk}" = ${formatValue(pkValue)};`;
+        // Resolve the actual DB column name for the edited column (may differ from the result alias)
+        // e.g. if the query has `a.name AS author_name`, columnKey = "author_name" but DB column = "name"
+        const resolveDbColumnName = (resultColKey: string): string => {
+            try {
+                const ast = parseFirst(activeTab.lastExecutedSql!);
+                if (ast.type === "select" && ast.columns) {
+                    for (const col of ast.columns) {
+                        if (col.expr?.type === "ref") {
+                            const alias = col.alias?.name;
+                            const colName = col.expr.name;
+                            if (alias === resultColKey || (!alias && colName === resultColKey)) {
+                                return colName;
+                            }
+                        }
+                    }
+                }
+            } catch { /* fall back to columnKey */ }
+            return resultColKey;
+        };
+
+        const dbColumnName = resolveDbColumnName(columnKey);
+
+        // Build composite WHERE clause
+        const whereConditions = resolution.primaryKeys.map(
+            pk => `"${pk.dbColumn}" = ${formatValue(rowData[pk.resultColumn])}`
+        ).join(" AND ");
+
+        const updateSql = `UPDATE "${tableName}" SET "${dbColumnName}" = ${formatValue(newValue)} WHERE ${whereConditions};`;
 
         try {
             if (dataSource.executeSql) {
@@ -717,7 +761,34 @@ export const SQLEditor = () => {
         }
 
         const savedWidths = columnWidths[activeTab.sql] || {};
-        const columns: VirtualTableColumn[] = Object.keys(results[0]).map(key => ({
+        const resultColumnKeys = Object.keys(results[0]);
+
+        // Compute matched CMS collections for this query, including PK column detection
+        const matchedCollections: ResolvedQueryCollection[] = (() => {
+            if (!activeTab.lastExecutedSql || !collectionRegistry.collections) return [];
+            try {
+                return resolveQueryCollections(activeTab.lastExecutedSql, schemas, collectionRegistry.collections, resultColumnKeys);
+            } catch {
+                return [];
+            }
+        })();
+
+        // Only collections that have a PK column in the result set can be opened
+        const actionableCollections = matchedCollections.filter(mc => mc.pkColumn && resultColumnKeys.includes(mc.pkColumn));
+
+        // For each row, determine which entities can be opened
+        const getRowEntityActions = (rowData: any): { collection: ResolvedQueryCollection, entityId: string | number }[] => {
+            if (!rowData) return [];
+            return actionableCollections
+                .filter(mc => rowData[mc.pkColumn!] != null)
+                .map(mc => ({
+                    collection: mc,
+                    entityId: rowData[mc.pkColumn!]
+                }));
+        };
+
+        // Build the columns array. If we have actionable CMS collections, prepend a dedicated action column.
+        const dataColumns: VirtualTableColumn[] = resultColumnKeys.map(key => ({
             key,
             title: key,
             width: savedWidths[key] ?? 150,
@@ -725,8 +796,32 @@ export const SQLEditor = () => {
             resizable: true
         }));
 
+        const columns: VirtualTableColumn[] = actionableCollections.length > 0
+            ? [{ key: "__cms_action__", title: "", width: 36, sortable: false, resizable: false }, ...dataColumns]
+            : dataColumns;
+
         return (
             <div className="flex-grow flex flex-col overflow-hidden min-h-0">
+                {/* CMS Collection Badges Bar */}
+                {actionableCollections.length > 0 && (
+                    <div className={cls("px-4 py-1.5 border-b flex items-center gap-2 shrink-0 bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                        <Tooltip title="Tables in this query that are mapped as CMS collections">
+                            <Typography variant="caption" className="text-[10px] font-bold uppercase tracking-widest text-text-disabled dark:text-text-disabled-dark mr-1 shrink-0 cursor-help">CMS:</Typography>
+                        </Tooltip>
+                        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                            {actionableCollections.map(mc => (
+                                <Tooltip key={mc.tableName} title={`Table "${mc.tableName}" → ${mc.collection.name} (PK: ${mc.pkColumn})`}>
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-primary/10 dark:bg-primary-dark/15 text-primary dark:text-primary-dark whitespace-nowrap border border-primary/20 dark:border-primary-dark/20">
+                                        {typeof mc.collection.icon === "string" && (
+                                            <IconForView collectionOrView={{ icon: mc.collection.icon } as any} className="text-[12px]" />
+                                        )}
+                                        {mc.collection.name}
+                                    </span>
+                                </Tooltip>
+                            ))}
+                        </div>
+                    </div>
+                )}
                 <div className="flex-grow relative h-full">
                     <VirtualTable
                         data={results}
@@ -735,6 +830,70 @@ export const SQLEditor = () => {
                         headerHeight={32}
                         onColumnResizeEnd={handleColumnResize}
                         cellRenderer={({ rowData, column, rowIndex }) => {
+                            // Dedicated CMS action column
+                            if (column.key === "__cms_action__") {
+                                const rowActions = getRowEntityActions(rowData);
+                                if (rowActions.length === 0) {
+                                    return <div className="h-full w-full" />;
+                                }
+                                if (rowActions.length === 1) {
+                                    const ra = rowActions[0];
+                                    return (
+                                        <div className="h-full flex items-center justify-center">
+                                            <Tooltip title={`Edit ${ra.collection.collection.name} #${ra.entityId}`}>
+                                                <button
+                                                    className="p-1 text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors rounded"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        sideEntityController.open({
+                                                            path: ra.collection.collection.slug,
+                                                            entityId: ra.entityId,
+                                                            collection: ra.collection.collection,
+                                                            updateUrl: false
+                                                        });
+                                                    }}
+                                                >
+                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                                </button>
+                                            </Tooltip>
+                                        </div>
+                                    );
+                                }
+                                // Multiple matched collections (JOIN) — show a dropdown
+                                return (
+                                    <div className="h-full flex items-center justify-center">
+                                        <Menu
+                                            trigger={
+                                                <button
+                                                    className="p-1 text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors rounded"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                >
+                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                                </button>
+                                            }
+                                        >
+                                            {rowActions.map(ra => (
+                                                <MenuItem
+                                                    key={ra.collection.tableName}
+                                                    dense
+                                                    onClick={() => {
+                                                        sideEntityController.open({
+                                                            path: ra.collection.collection.slug,
+                                                            entityId: ra.entityId,
+                                                            collection: ra.collection.collection,
+                                                            updateUrl: false
+                                                        });
+                                                    }}
+                                                >
+                                                    Edit {ra.collection.collection.name} #{ra.entityId}
+                                                </MenuItem>
+                                            ))}
+                                        </Menu>
+                                    </div>
+                                );
+                            }
+
+                            // Regular data cell
                             const isEditing = editingCell?.rowIndex === rowIndex && editingCell?.columnKey === column.key;
                             const value = rowData ? rowData[column.key] : null;
                             const displayValue = typeof value === "object" && value !== null ? JSON.stringify(value) : String(value ?? "");
@@ -759,10 +918,10 @@ export const SQLEditor = () => {
 
                             return (
                                 <div
-                                    className="px-4 py-1.5 h-full flex items-center whitespace-nowrap text-[13px] text-text-primary dark:text-text-primary-dark font-mono cursor-text"
+                                    className="px-4 py-1.5 h-full flex items-center whitespace-nowrap text-[13px] text-text-primary dark:text-text-primary-dark font-mono cursor-text group/cell"
                                     onDoubleClick={() => handleDoubleClick(rowIndex, column.key, displayValue, rowData)}
                                 >
-                                    <div className="truncate" title={displayValue}>
+                                    <div className="truncate flex-grow" title={displayValue}>
                                         {displayValue === "" ? <span className="text-text-disabled dark:text-text-disabled-dark italic text-[11px]">NULL</span> : displayValue}
                                     </div>
                                 </div>

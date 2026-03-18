@@ -187,7 +187,7 @@ export const PolicyEditor = ({
                     </Typography>
                 </div>
                 <div className="flex gap-2">
-                    <Button size="small" variant="outlined" onClick={onCancel}>
+                    <Button size="small" variant="outlined" color="neutral" onClick={onCancel}>
                         Cancel
                     </Button>
                     <Button size="small" variant="filled" color="primary" onClick={handleSave} disabled={!name}>
@@ -197,9 +197,11 @@ export const PolicyEditor = ({
             </div>
 
             <div className="flex-grow p-4 md:p-6 overflow-y-auto">
+                <div className="max-w-4xl mx-auto">
                 <Paper className={cls("p-4 md:p-6 flex flex-col gap-6 bg-white dark:bg-surface-900 border-none sm:border-solid rounded-none sm:rounded-xl", defaultBorderMixin)}>
 
-                    {/* Presets */}
+                    {/* Presets - only for new policies */}
+                    {!policy && (
                     <div className="flex flex-col gap-1.5 bg-primary/5 dark:bg-primary-bg-dark/20 p-3 sm:p-4 rounded-lg border border-primary/10 dark:border-primary/20">
                         <Typography variant="caption" className="text-primary dark:text-primary-light uppercase tracking-wider font-semibold">Start from a template (Optional)</Typography>
                         <Select
@@ -220,6 +222,7 @@ export const PolicyEditor = ({
                             ))}
                         </Select>
                     </div>
+                    )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         {/* Policy Name */}
@@ -273,7 +276,7 @@ export const PolicyEditor = ({
                                     key={cmd}
                                     size="small"
                                     variant={command === cmd ? "filled" : "outlined"}
-                                    color={command === cmd ? "primary" : "neutral"}
+                                    color="neutral"
                                     onClick={() => setCommand(cmd)}
                                     className="min-w-[80px]"
                                 >
@@ -342,6 +345,7 @@ export const PolicyEditor = ({
                     )}
                 </div>
 
+                </div>
             </div >
         </div >
     );

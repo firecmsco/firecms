@@ -44,5 +44,6 @@ export * from "./EntityPreview";
 
 export * from "./AIIcon";
 export * from "./Debug/UIStyleGuide";
+export * from "./Debug/UIReferenceView";
 export * from "./AdminModeSyncer";
 export * from "./UserSettingsView";

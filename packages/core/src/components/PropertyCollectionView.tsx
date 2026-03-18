@@ -127,8 +127,12 @@ export const PropertyCollectionView = ({
         const isArrayOfMaps = ofProp?.type === "map";
         const isArrayOfPrimitives = property?.type === "array" && ofProp && ofProp.type !== "map";
 
-        // Array of primitives -> single row
-        if (baseKey && property && isArrayOfPrimitives) {
+        // Many-cardinality relation: property type is "relation" but value is an array
+        // Render as a single row via PropertyPreview (which handles relation arrays)
+        const isRelationArray = property?.type === "relation";
+
+        // Array of primitives or many-relation -> single row
+        if (baseKey && property && (isArrayOfPrimitives || isRelationArray)) {
             return (
                 <div
                     className={`grid grid-cols-12 gap-x-4 ${isTopLevel ? "py-4" : "py-2"} items-start ${isTopLevel ? `border-b ${defaultBorderMixin} last:border-b-0` : ""}`}>

@@ -580,29 +580,57 @@ export class PostgresDataSource implements DataSource {
     }
 
     async executeSql(sqlText: string, options?: { database?: string, role?: string }): Promise<Record<string, unknown>[]> {
-        console.log(`[DataSource] executeSql CALLED: options=`, options, `sql=`, sqlText.substring(0, 50));
         if (!options?.database && !options?.role) {
             return this.entityService.executeSql(sqlText);
         }
 
         const targetDb = this.getTargetDb(options?.database);
 
-        if (options?.role) {
-            const safeRole = options.role.replace(/"/g, '""');
-            return await targetDb.transaction(async (tx) => {
-                await tx.execute(drizzleSql.raw(`SET LOCAL ROLE "${safeRole}"`));
-                const result = await tx.execute(drizzleSql.raw(sqlText));
-                return result.rows as Record<string, unknown>[];
-            });
-        }
+        try {
+            if (options?.role) {
+                const safeRole = options.role.replace(/"/g, '""');
+                return await targetDb.transaction(async (tx) => {
+                    await tx.execute(drizzleSql.raw(`SET LOCAL ROLE "${safeRole}"`));
+                    const result = await tx.execute(drizzleSql.raw(sqlText));
+                    return result.rows as Record<string, unknown>[];
+                });
+            }
 
-        const result = await targetDb.execute(drizzleSql.raw(sqlText));
-        return result.rows as Record<string, unknown>[];
+            const result = await targetDb.execute(drizzleSql.raw(sqlText));
+            return result.rows as Record<string, unknown>[];
+        } catch (error: any) {
+            const msg = error?.message || String(error);
+            // Provide a user-friendly message for connection/auth errors
+            if (msg.includes("pg_hba.conf") || msg.includes("no encryption") || msg.includes("connection refused")) {
+                const dbName = options?.database || "unknown";
+                throw new Error(`Cannot connect to database "${dbName}": the server rejected the connection. This database may require SSL or is not accessible from this host.`);
+            }
+            throw error;
+        }
     }
 
     async fetchAvailableDatabases(): Promise<string[]> {
-        const result = await this.executeSql(`SELECT datname FROM pg_database WHERE datistemplate = false;`);
-        return result.map((r: any) => r.datname as string);
+        // Exclude template databases, Cloud SQL internal databases, and the default 'postgres' system db
+        const result = await this.executeSql(
+            `SELECT datname FROM pg_database 
+             WHERE datistemplate = false 
+             AND datname NOT IN ('postgres', 'cloudsqladmin', '_cloudsqladmin')
+             ORDER BY datname;`
+        );
+        const databases = result.map((r: any) => r.datname as string);
+        // Ensure the current connected database is always first in the list
+        const currentDb = this.poolManager?.defaultDatabaseName;
+        if (currentDb && !databases.includes(currentDb)) {
+            databases.unshift(currentDb);
+        } else if (currentDb) {
+            // Move it to the front
+            const idx = databases.indexOf(currentDb);
+            if (idx > 0) {
+                databases.splice(idx, 1);
+                databases.unshift(currentDb);
+            }
+        }
+        return databases;
     }
 
     async fetchAvailableRoles(): Promise<string[]> {
@@ -612,6 +640,118 @@ export class PostgresDataSource implements DataSource {
 
     async fetchCurrentDatabase(): Promise<string | undefined> {
         return this.poolManager?.defaultDatabaseName;
+    }
+
+    /**
+     * Fetch public tables that are not yet mapped to a collection.
+     * Excludes internal tables (_rebase_*, _auth_*, auth tables, etc.)
+     * and junction/connection tables used for many-to-many relations.
+     */
+    async fetchUnmappedTables(mappedPaths?: string[]): Promise<string[]> {
+        const result = await this.executeSql(`
+            SELECT table_name
+            FROM information_schema.tables
+            WHERE table_schema = 'public'
+              AND table_type = 'BASE TABLE'
+            ORDER BY table_name;
+        `);
+
+        const internalPrefixes = ["_rebase_", "_auth_"];
+        const internalExact = [
+            "users", "roles", "user_roles", "refresh_tokens",
+            "password_reset_tokens", "email_verification_tokens"
+        ];
+
+        const allTables = result
+            .map((r: any) => r.table_name as string)
+            .filter((name: string) => {
+                if (internalPrefixes.some(prefix => name.startsWith(prefix))) return false;
+                if (internalExact.includes(name)) return false;
+                return true;
+            });
+
+        // Detect junction tables: tables where every column is part of a foreign key.
+        // These are typically many-to-many connection tables and shouldn't be suggested.
+        let junctionTables = new Set<string>();
+        try {
+            const junctionResult = await this.executeSql(`
+                SELECT t.table_name
+                FROM information_schema.tables t
+                WHERE t.table_schema = 'public'
+                  AND t.table_type = 'BASE TABLE'
+                  AND NOT EXISTS (
+                    -- Find columns that are NOT part of any foreign key
+                    SELECT 1
+                    FROM information_schema.columns c
+                    WHERE c.table_schema = t.table_schema
+                      AND c.table_name = t.table_name
+                      AND c.column_name NOT IN (
+                        SELECT kcu.column_name
+                        FROM information_schema.key_column_usage kcu
+                        JOIN information_schema.table_constraints tc
+                          ON tc.constraint_name = kcu.constraint_name
+                          AND tc.table_schema = kcu.table_schema
+                        WHERE tc.constraint_type = 'FOREIGN KEY'
+                          AND kcu.table_schema = t.table_schema
+                          AND kcu.table_name = t.table_name
+                      )
+                  );
+            `);
+            junctionTables = new Set(junctionResult.map((r: any) => r.table_name as string));
+        } catch (e) {
+            console.warn("Could not detect junction tables:", e);
+        }
+
+        const filteredTables = allTables.filter(name => !junctionTables.has(name));
+
+        if (!mappedPaths || mappedPaths.length === 0) return filteredTables;
+
+        const mappedSet = new Set(mappedPaths.map(p => p.toLowerCase()));
+        return filteredTables.filter((name: string) => !mappedSet.has(name.toLowerCase()));
+    }
+
+    /**
+     * Fetch column metadata for a given table from information_schema.
+     */
+    async fetchTableColumns(tableName: string): Promise<{
+        column_name: string;
+        data_type: string;
+        udt_name: string;
+        is_nullable: string;
+        column_default: string | null;
+        character_maximum_length: number | null;
+    }[]> {
+        // Sanitize table name to prevent SQL injection
+        const safeName = tableName.replace(/[^a-zA-Z0-9_]/g, "");
+
+        const columns = await this.executeSql(`
+            SELECT column_name, data_type, udt_name, is_nullable, column_default, character_maximum_length
+            FROM information_schema.columns
+            WHERE table_schema = 'public'
+              AND table_name = '${safeName}'
+            ORDER BY ordinal_position;
+        `);
+
+        // Also fetch enum values for any USER-DEFINED columns
+        const enumColumns = columns.filter((c: any) => c.data_type === "USER-DEFINED");
+        if (enumColumns.length > 0) {
+            for (const col of enumColumns) {
+                try {
+                    const enumValues = await this.executeSql(`
+                        SELECT e.enumlabel
+                        FROM pg_type t
+                        JOIN pg_enum e ON t.oid = e.enumtypid
+                        WHERE t.typname = '${(col as any).udt_name}'
+                        ORDER BY e.enumsortorder;
+                    `);
+                    (col as any).enum_values = enumValues.map((e: any) => e.enumlabel);
+                } catch {
+                    (col as any).enum_values = [];
+                }
+            }
+        }
+
+        return columns as any;
     }
 
     private generateSubscriptionId(): string {
@@ -716,17 +856,39 @@ export class PostgresDataSource implements DataSource {
         authenticatedDelegate.fetchAvailableDatabases = this.fetchAvailableDatabases.bind(this);
         authenticatedDelegate.fetchCurrentDatabase = this.fetchCurrentDatabase.bind(this);
         authenticatedDelegate.fetchAvailableRoles = this.fetchAvailableRoles.bind(this);
+        authenticatedDelegate.fetchUnmappedTables = this.fetchUnmappedTables.bind(this);
+        authenticatedDelegate.fetchTableColumns = this.fetchTableColumns.bind(this);
 
-        // Listen methods use websockets/realtime service which handles auth differently (via connection params usually),
-        // OR we might need to think about how listen works with RLS.
-        // For now, let's assume Listen is handled separately or doesn't need this transaction wrap
-        // because it establishes a long-lived connection where we might set config once?
-        // Actually, RealtimeService logic generates queries too?
-        // If RealtimeService uses `db` to fetch updates, it needs RLS too.
-        // But RealtimeService is a singleton.
-        // Only the initial fetch in `listenCollection` uses `fetchCollection`.
-        // So wrapping `fetchCollection` covers the initial data.
-        // Subsequent updates come from `notifyEntityUpdate`.
+        // Listen methods: initial fetches are already RLS-protected because
+        // listenCollection/listenEntity call this.fetchCollection/fetchEntity on the
+        // delegate, and those ARE wrapped above. For subsequent real-time refetches,
+        // we override the listen methods to inject authContext into the subscription
+        // registration so RealtimeService.fetchCollectionWithAuth can set session vars.
+        const authContext = { userId: user.uid || "anonymous", roles: user.roles ?? [] };
+        const originalListenCollection = this.listenCollection.bind(authenticatedDelegate);
+        const originalListenEntity = this.listenEntity.bind(authenticatedDelegate);
+        const realtimeService = this.realtimeService;
+
+        authenticatedDelegate.listenCollection = function <M extends Record<string, any>>(props: any): () => void {
+            const unsubscribe = originalListenCollection(props);
+            // Patch the most recently registered subscription with auth context
+            const entries = Array.from(realtimeService.subscriptions.entries());
+            const lastEntry = entries[entries.length - 1];
+            if (lastEntry && lastEntry[1].clientId === "datasource") {
+                lastEntry[1].authContext = authContext;
+            }
+            return unsubscribe;
+        };
+
+        authenticatedDelegate.listenEntity = function <M extends Record<string, any>>(props: any): () => void {
+            const unsubscribe = originalListenEntity(props);
+            const entries = Array.from(realtimeService.subscriptions.entries());
+            const lastEntry = entries[entries.length - 1];
+            if (lastEntry && lastEntry[1].clientId === "datasource") {
+                lastEntry[1].authContext = authContext;
+            }
+            return unsubscribe;
+        };
 
         return authenticatedDelegate;
     }

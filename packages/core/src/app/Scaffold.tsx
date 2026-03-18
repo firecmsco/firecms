@@ -123,6 +123,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         onMouseLeave={setOnHoverFalse}
                         open={drawerOpen}
                         hovered={onHover}
+                        isStudioDark={isStudioDark}
                         setDrawerOpen={setDrawerOpen}>
                         {includeDrawer && drawerChildren}
                     </DrawerWrapper>
@@ -164,6 +165,7 @@ function DrawerWrapper(props: {
     open: boolean,
     logo?: string,
     hovered: boolean,
+    isStudioDark: boolean,
     setDrawerOpen: (open: boolean) => void,
     onMouseEnter: () => void,
     onMouseMove: () => void,
@@ -174,10 +176,11 @@ function DrawerWrapper(props: {
     const visualWidth = !props.displayed ? 0 : ((props.open || props.hovered) ? DRAWER_WIDTH : 72);
 
     const isFloating = props.hovered && !props.open;
+    const darkBg = props.isStudioDark ? "dark:bg-surface-950" : "dark:bg-surface-900";
 
     const innerDrawer = <div
         className={cls("h-full no-scrollbar overflow-y-auto overflow-x-hidden", defaultBorderMixin,
-            isFloating ? "absolute top-0 left-0 bottom-0 z-50 bg-visual-background dark:bg-surface-950 shadow-2xl border-r" : "relative")}
+            isFloating ? "absolute top-0 left-0 bottom-0 z-50 bg-surface-50 dark:bg-surface-950 shadow-2xl border-r" : `relative bg-surface-50 ${darkBg}`)}
         style={{
             width: visualWidth,
             transition: "left 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"

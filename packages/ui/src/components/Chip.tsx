@@ -21,7 +21,7 @@ export interface ChipProps {
 }
 
 const sizeClassNames = {
-    smallest: "px-1 text-xs",
+    smallest: "px-1.5 text-xs",
     small: "px-2 py-0.5 text-sm",
     medium: "px-3 py-1 text-sm",
     large: "px-4 py-1.5 text-sm"

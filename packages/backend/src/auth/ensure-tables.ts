@@ -97,14 +97,17 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
             ON rebase_user_roles(user_id)
         `);
 
-        // Create refresh tokens table
+        // Create refresh tokens table (includes user_agent, ip_address, and unique constraint)
         await db.execute(sql`
             CREATE TABLE IF NOT EXISTS rebase_refresh_tokens (
                 id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
                 user_id TEXT NOT NULL REFERENCES rebase_users(id) ON DELETE CASCADE,
                 token_hash TEXT NOT NULL UNIQUE,
                 expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
-                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+                user_agent TEXT,
+                ip_address TEXT,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                CONSTRAINT unique_device_session UNIQUE (user_id, user_agent, ip_address)
             )
         `);
 
@@ -120,7 +123,7 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
             ON rebase_refresh_tokens(user_id)
         `);
 
-        // Migration: Add user_agent and ip_address to refresh tokens
+        // Migration: Add user_agent and ip_address to refresh tokens (for tables created before these columns existed)
         await db.execute(sql`
             ALTER TABLE rebase_refresh_tokens 
             ADD COLUMN IF NOT EXISTS user_agent TEXT
@@ -131,17 +134,45 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
             ADD COLUMN IF NOT EXISTS ip_address TEXT
         `);
 
-        // Migration: Ensure only ONE active session exists per user/device
-        await db.execute(sql`
-            ALTER TABLE rebase_refresh_tokens
-            ADD CONSTRAINT unique_device_session UNIQUE (user_id, user_agent, ip_address)
-        `).catch(e => {
-            // Ignore if constraint already exists or if data violates it (which we'll softly allow on legacy nodes)
-            // Postgres uniquely handles constraints differently than IF NOT EXISTS columns.
-            if (!e.message.includes('already exists') && !e.message.includes('could not create unique index')) {
-                console.error("Constraint migration issue:", e.message);
+        // Migration: Ensure unique_device_session constraint exists (for tables created before it was in CREATE TABLE)
+        // Check if constraint already exists before attempting to add it
+        const constraintCheck = await db.execute(sql`
+            SELECT 1 FROM information_schema.table_constraints 
+            WHERE constraint_name = 'unique_device_session' 
+            AND table_name = 'rebase_refresh_tokens'
+        `);
+        if (constraintCheck.rows.length === 0) {
+            try {
+                await db.execute(sql`
+                    ALTER TABLE rebase_refresh_tokens
+                    ADD CONSTRAINT unique_device_session UNIQUE (user_id, user_agent, ip_address)
+                `);
+                console.log("✅ Added unique_device_session constraint");
+            } catch (e: any) {
+                // If there's duplicate data preventing the constraint, clean up first
+                if (e.message.includes('could not create unique index')) {
+                    console.warn("⚠️ Duplicate sessions found, cleaning up before adding constraint...");
+                    // Keep only the most recent token per user/device combo
+                    await db.execute(sql`
+                        DELETE FROM rebase_refresh_tokens a
+                        USING rebase_refresh_tokens b
+                        WHERE a.user_id = b.user_id 
+                        AND COALESCE(a.user_agent, '') = COALESCE(b.user_agent, '')
+                        AND COALESCE(a.ip_address, '') = COALESCE(b.ip_address, '')
+                        AND a.created_at < b.created_at
+                    `);
+                    // Retry constraint creation
+                    await db.execute(sql`
+                        ALTER TABLE rebase_refresh_tokens
+                        ADD CONSTRAINT unique_device_session UNIQUE (user_id, user_agent, ip_address)
+                    `).catch(retryErr => {
+                        console.error("Failed to add unique_device_session constraint after cleanup:", (retryErr as any).message);
+                    });
+                } else {
+                    console.error("Constraint migration issue:", e.message);
+                }
             }
-        });
+        }
 
         // Create password reset tokens table
         await db.execute(sql`

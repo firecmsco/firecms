@@ -19,7 +19,9 @@ export function CollectionEditorWelcomeView({
     onContinue,
     existingCollectionPaths,
     generateCollection,
-    onAnalyticsEvent
+    onAnalyticsEvent,
+    unmappedTables,
+    onImportFromTable
 }: {
     path: string;
     parentCollection?: EntityCollection;
@@ -27,6 +29,8 @@ export function CollectionEditorWelcomeView({
     existingCollectionPaths?: string[];
     generateCollection?: CollectionGenerationCallback;
     onAnalyticsEvent?: (event: string, params?: object) => void;
+    unmappedTables?: string[];
+    onImportFromTable?: (tableName: string) => void;
 }) {
 
     const { pathSuggestions } = useCollectionEditorController();
@@ -41,6 +45,12 @@ export function CollectionEditorWelcomeView({
     } = useFormex<EntityCollection>();
 
     const [jsonImportOpen, setJsonImportOpen] = useState(false);
+    const [importingTable, setImportingTable] = useState<string | null>(null);
+
+    // Filter unmapped tables that aren't already mapped
+    const filteredUnmappedTables = (unmappedTables ?? []).filter(
+        t => !(existingCollectionPaths ?? []).find(c => c.trim().toLowerCase() === t.trim().toLowerCase())
+    );
 
     return (
         <div className={"overflow-auto my-auto"}>
@@ -58,6 +68,39 @@ export function CollectionEditorWelcomeView({
                         This is a subcollection of <b>{parentCollection.name}</b>
                     </Typography>
                 </Chip>}
+
+                {filteredUnmappedTables.length > 0 && <div className={"my-2"}>
+
+                    <Typography variant={"caption"}
+                        color={"secondary"}>
+                        ● Import from an existing database table:
+                    </Typography>
+                    <div className={"flex flex-wrap gap-x-2 gap-y-1 items-center my-2 min-h-7"}>
+
+                        {filteredUnmappedTables.map((tableName) => (
+                            <Chip key={tableName}
+                                colorScheme={"purpleLighter"}
+                                onClick={() => {
+                                    if (onImportFromTable) {
+                                        setImportingTable(tableName);
+                                        onImportFromTable(tableName);
+                                    } else {
+                                        // Fallback: just set path/name like pathSuggestions
+                                        setFieldValue("name", prettifyIdentifier(tableName));
+                                        setFieldValue("id", tableName);
+                                        setFieldValue("path", tableName);
+                                        onContinue();
+                                    }
+                                }}
+                                size="small">
+                                <Icon iconKey={"table"} size={"smallest"} />
+                                {importingTable === tableName ? "Loading..." : tableName}
+                            </Chip>
+                        ))}
+
+                    </div>
+
+                </div>}
 
                 {(filteredSuggestions ?? []).length > 0 && <div className={"my-2"}>
 

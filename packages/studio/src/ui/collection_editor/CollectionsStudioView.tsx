@@ -9,7 +9,7 @@ import {
     AddIcon,
     StorageIcon,
 } from "@rebasepro/ui";
-import { useCMSUrlController, useNavigationStateController } from "@rebasepro/core";
+import { useCMSUrlController, useNavigationStateController, IconForView } from "@rebasepro/core";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionStudioView } from "./CollectionStudioView";
 
@@ -89,12 +89,17 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                                         key={collectionKey}
                                         onClick={() => navigate(urlController.buildCMSUrlPath(`schema/${collectionKey}`))}
                                         className={cls(
-                                            "w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex items-center justify-between group",
+                                            "w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex items-center gap-3 group",
                                             isSelected
                                                 ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light"
                                                 : "hover:bg-surface-200 dark:hover:bg-surface-800 text-text-secondary dark:text-text-secondary-dark"
                                         )}
                                     >
+                                        <IconForView collectionOrView={collection} size={18} className={cls(
+                                            isSelected
+                                                ? "text-primary dark:text-primary-light"
+                                                : "text-text-secondary dark:text-text-secondary-dark"
+                                        )} />
                                         <span className="truncate flex-1">
                                             {collection.name || collection.slug || collection.dbPath}
                                         </span>

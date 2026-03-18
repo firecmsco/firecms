@@ -277,9 +277,19 @@ const propsToSidePanel = (props: EntitySidePanelProps,
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
 
-    const urlPath = props.entityId
-        ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}${props.selectedTab ? "/" + props.selectedTab : ""}${locationSearch}#${SIDE_URL_HASH}`)
-        : buildUrlCollectionPath(`${collectionPath}${locationSearch}#${NEW_URL_HASH}`);
+    // When updateUrl is explicitly false, don't generate URL paths — the dialog
+    // opens as an overlay without affecting the browser URL / router.
+    const shouldUpdateUrl = props.updateUrl !== false;
+
+    const urlPath = shouldUpdateUrl
+        ? (props.entityId
+            ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}${props.selectedTab ? "/" + props.selectedTab : ""}${locationSearch}#${SIDE_URL_HASH}`)
+            : buildUrlCollectionPath(`${collectionPath}${locationSearch}#${NEW_URL_HASH}`))
+        : undefined;
+
+    const parentUrlPath = shouldUpdateUrl
+        ? buildUrlCollectionPath(collectionPath)
+        : undefined;
 
     const resolvedPanelProps: EntitySidePanelProps<any> = {
         ...props,
@@ -291,7 +301,7 @@ const propsToSidePanel = (props: EntitySidePanelProps,
         key: `${props.path}/${props.entityId}`,
         component: undefined, // Lazy render in SideDialogs for better performance
         urlPath: urlPath,
-        parentUrlPath: buildUrlCollectionPath(collectionPath),
+        parentUrlPath: parentUrlPath,
         width: entityViewWidth,
         onClose: props.onClose,
         additional: resolvedPanelProps

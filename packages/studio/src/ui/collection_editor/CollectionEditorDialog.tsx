@@ -63,6 +63,7 @@ import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
 import { AIModifiedPathsProvider, useAIModifiedPaths } from "./AIModifiedPathsContext";
 import { CollectionOperation, CollectionGenerationCallback } from "../../api/generateCollectionApi";
 import { CollectionRLSTab } from "./CollectionRLSTab";
+import { buildCollectionFromTableColumns, TableColumnInfo } from "../../utils/pgColumnToProperty";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -116,6 +117,14 @@ export interface CollectionEditorDialogProps {
      * If true, it indicates that the editor is rendered inline (not in a dialog) and therefore updates headers and footers to adapt to the layout.
      */
     fullScreen?: boolean;
+    /**
+     * List of unmapped database tables available for import.
+     */
+    unmappedTables?: string[];
+    /**
+     * Callback to fetch column metadata for a table.
+     */
+    onFetchTableColumns?: (tableName: string) => Promise<TableColumnInfo[]>;
 }
 
 export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
@@ -310,7 +319,9 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     expandKanban,
     generateCollection,
     onAnalyticsEvent,
-    fullScreen
+    fullScreen,
+    unmappedTables,
+    onFetchTableColumns
 }: CollectionEditorDialogProps & {
     handleCancel: () => void,
     setFormDirty: (dirty: boolean) => void,
@@ -722,7 +733,25 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 existingCollectionPaths={existingPaths}
                                 parentCollection={parentCollection}
                                 generateCollection={generateCollection}
-                                onAnalyticsEvent={onAnalyticsEvent} />}
+                                onAnalyticsEvent={onAnalyticsEvent}
+                                unmappedTables={unmappedTables}
+                                onImportFromTable={onFetchTableColumns ? async (tableName: string) => {
+                                    try {
+                                        const columns = await onFetchTableColumns!(tableName);
+                                        const collectionData = buildCollectionFromTableColumns(tableName, columns);
+                                        formController.setValues({
+                                            ...formController.values,
+                                            ...collectionData
+                                        } as PersistedCollection<M>);
+                                        onWelcomeScreenContinue();
+                                    } catch (e: any) {
+                                        console.error("Error importing table:", e);
+                                        snackbarController.open({
+                                            type: "error",
+                                            message: "Error importing table: " + (e.message ?? "Unknown error")
+                                        });
+                                    }
+                                } : undefined} />}
 
                         {currentView === "import_data_mapping" && importConfig &&
                             <CollectionEditorImportMapping importConfig={importConfig}
