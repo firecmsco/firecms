@@ -1,5 +1,6 @@
 ---
 title: Déploiement auto-hébergé
+slug: fr/docs/self/deployment
 sidebar_label: Déploiement
 description: Déployez votre CMS FireCMS auto-hébergé sur Firebase Hosting ou tout autre hébergeur statique.
 ---

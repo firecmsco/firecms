@@ -1,5 +1,6 @@
 ---
 title: Implantação self-hosted
+slug: pt/docs/self/deployment
 sidebar_label: Implantação
 description: Implante seu CMS personalizado self-hosted no Firebase Hosting ou em qualquer outro provedor de hospedagem estática.
 ---

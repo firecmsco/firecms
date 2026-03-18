@@ -1,5 +1,6 @@
 ---
 title: Zahl
+slug: de/docs/properties/config/number
 sidebar_label: Zahl
 description: Konfiguration für Zahleneigenschaften in FireCMS, einschließlich Validierung, Enums und Integer-Einschränkungen.
 ---

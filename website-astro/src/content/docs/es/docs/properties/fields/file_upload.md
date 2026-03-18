@@ -1,5 +1,6 @@
 ---
 title: Carga de archivos (File upload)
+slug: es/docs/properties/fields/file_upload
 ---
 
 Usa los campos de carga de archivos para permitir que los usuarios suban imágenes, documentos o cualquier

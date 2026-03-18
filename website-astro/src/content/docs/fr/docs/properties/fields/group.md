@@ -1,5 +1,6 @@
 ---
 title: Groupe (Group)
+slug: fr/docs/properties/fields/group
 ---
 
 ![Field](/img/fields/Group.png)

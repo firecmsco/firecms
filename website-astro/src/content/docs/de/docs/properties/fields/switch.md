@@ -1,5 +1,6 @@
 ---
 title: Schalter
+slug: de/docs/properties/fields/switch
 ---
 
 ![Field](/img/fields/Switch.png)

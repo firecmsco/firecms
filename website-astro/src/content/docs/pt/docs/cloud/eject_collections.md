@@ -1,5 +1,6 @@
 ---
 title: "Ejetar Coleções da UI para o Código"
+slug: pt/docs/cloud/eject_collections
 sidebar_label: Ejetar Coleções
 description: "Converta coleções definidas na UI para código para o seu headless CMS. Exporte sua configuração de schema do Firestore para controle de versão e personalização avançada."
 ---

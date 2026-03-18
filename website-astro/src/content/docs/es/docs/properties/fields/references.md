@@ -1,5 +1,6 @@
 ---
 title: Referencias (References)
+slug: es/docs/properties/fields/references
 ---
 
 Usa campos de referencia cuando necesites establecer relaciones entre colecciones.

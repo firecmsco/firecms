@@ -1,5 +1,6 @@
 ---
 title: Actions de la barre de collection
+slug: fr/docs/collections/collection_actions
 sidebar_label: Actions de la barre de collection
 ---
 

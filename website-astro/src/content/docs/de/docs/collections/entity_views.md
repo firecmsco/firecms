@@ -1,5 +1,6 @@
 ---
 title: Entity-Ansichten
+slug: de/docs/collections/entity_views
 sidebar_label: Entity-Ansichten
 description: FireCMS ermöglicht es Ihnen, benutzerdefinierte Ansichten pro Entity hinzuzufügen. Erstellen Sie Vorschauen, Web-Seiten-Visualisierungen, Dashboards, Formularänderungen oder andere individuelle Ansichten in Ihrem CMS.
 ---

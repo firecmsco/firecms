@@ -1,5 +1,6 @@
 ---
 title: Campos de texto (Text fields)
+slug: es/docs/properties/fields/text_fields
 ---
 
 

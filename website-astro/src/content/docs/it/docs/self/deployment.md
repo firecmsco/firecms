@@ -1,5 +1,6 @@
 ---
 title: Distribuzione self-hosted
+slug: it/docs/self/deployment
 sidebar_label: Distribuzione
 description: Distribuisci il tuo CMS personalizzato self-hosted su Firebase Hosting o qualsiasi altro provider di hosting statico.
 ---

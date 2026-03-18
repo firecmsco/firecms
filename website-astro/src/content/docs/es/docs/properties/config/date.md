@@ -1,5 +1,6 @@
 ---
 title: Fecha/Hora
+slug: es/docs/properties/config/date
 sidebar_label: Fecha/Hora
 description: Configuración de propiedades de fecha y hora en FireCMS, incluyendo auto-valores, modos de fecha y validación.
 ---

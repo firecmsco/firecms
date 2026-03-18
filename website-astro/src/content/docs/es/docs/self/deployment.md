@@ -1,5 +1,6 @@
 ---
 title: Despliegue self-hosted
+slug: es/docs/self/deployment
 sidebar_label: Despliegue
 description: Despliega tu CMS personalizado self-hosted en Firebase Hosting o cualquier otro proveedor de hosting estático.
 ---

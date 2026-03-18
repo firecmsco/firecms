@@ -1,5 +1,6 @@
 ---
 title: Berechtigungen
+slug: de/docs/collections/permissions
 sidebar_label: Berechtigungen
 ---
 

@@ -1,5 +1,6 @@
 ---
 title: Bloque (Block)
+slug: es/docs/properties/fields/block
 ---
 
 ![Field](/img/fields/Block.png)

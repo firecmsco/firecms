@@ -1,5 +1,6 @@
 ---
 title: Firestore-Regeln
+slug: de/docs/pro/firestore_rules
 sidebar_label: Firestore Rules
 description: Konfigurieren Sie Firestore-Sicherheitsregeln für FireCMS PRO, um Benutzerverwaltungs- und Kollektionskonfigurationsdaten zu schützen.
 ---

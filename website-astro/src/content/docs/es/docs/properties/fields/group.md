@@ -1,5 +1,6 @@
 ---
 title: Grupo (Group)
+slug: es/docs/properties/fields/group
 ---
 
 ![Field](/img/fields/Group.png)

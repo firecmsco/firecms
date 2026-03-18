@@ -1,5 +1,6 @@
 ---
 title: "Éjecter les collections de l'interface vers le code"
+slug: fr/docs/cloud/eject_collections
 sidebar_label: Éjecter les collections
 description: "Convertissez les collections définies dans l'interface en code pour votre CMS headless. Exportez la configuration de votre schéma Firestore pour le contrôle de version et la personnalisation avancée."
 ---

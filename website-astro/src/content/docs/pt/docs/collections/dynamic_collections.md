@@ -1,5 +1,6 @@
 ---
 title: Coleções dinâmicas
+slug: pt/docs/collections/dynamic_collections
 sidebar_label: Coleções dinâmicas
 description: Desbloqueie o gerenciamento de conteúdo personalizado com Coleções Dinâmicas no FireCMS, onde as coleções podem se adaptar ao perfil do usuário logado usando callbacks assíncronos.
 ---

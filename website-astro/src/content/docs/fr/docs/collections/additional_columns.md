@@ -1,5 +1,6 @@
 ---
 title: Colonnes/champs supplémentaires
+slug: fr/docs/collections/additional_columns
 sidebar_label: Colonnes/champs supplémentaires
 ---
 

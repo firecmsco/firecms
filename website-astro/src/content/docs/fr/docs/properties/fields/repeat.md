@@ -1,5 +1,6 @@
 ---
 title: Répéter (Repeat)
+slug: fr/docs/properties/fields/repeat
 ---
 
 ![Field](/img/fields/Repeat.png)

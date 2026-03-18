@@ -1,5 +1,6 @@
 ---
 title: Composants principaux
+slug: fr/docs/self/main_components
 sidebar_label: Composants principaux
 description: FireCMS fournit un ensemble de composants stylisables qui constituent l'interface du CMS. Ces composants sont conçus pour être facilement personnalisables et peuvent être étendus pour répondre à vos besoins.
 ---

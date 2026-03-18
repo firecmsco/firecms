@@ -1,5 +1,6 @@
 ---
 title: Textsuche
+slug: de/docs/collections/text_search
 description: Fügen Sie FireCMS Volltextsuche mit Typesense oder Algolia hinzu. Verwenden Sie unsere Firebase-Erweiterung für tippfehlertolerante Suche ab ~7$/Monat oder integrieren Sie Algolia für Unternehmensbedürfnisse.
 ---
 

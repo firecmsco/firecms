@@ -1,5 +1,6 @@
 ---
 title: Campi condizionali dalle proprietà
+slug: it/docs/properties/conditional_fields
 sidebar_label: Campi condizionali
 description: In FireCMS, i campi condizionali consentono configurazioni di proprietà dinamiche all'interno degli schemi delle collezioni.
 ---

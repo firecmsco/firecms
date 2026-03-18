@@ -1,5 +1,6 @@
 ---
 title: Entity-Aktionen
+slug: de/docs/collections/entity_actions
 sidebar_label: Entity-Aktionen
 ---
 

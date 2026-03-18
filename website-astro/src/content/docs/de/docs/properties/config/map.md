@@ -1,5 +1,6 @@
 ---
 title: Map
+slug: de/docs/properties/config/map
 sidebar_label: Map
 description: Konfiguration für Map-Eigenschaften (verschachtelte Objekte) in FireCMS, einschließlich Kind-Eigenschaften, Vorschauen und Schlüssel-Wert-Modus.
 ---

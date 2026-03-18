@@ -1,5 +1,6 @@
 ---
 title: Vues d'entité
+slug: fr/docs/collections/entity_views
 sidebar_label: Vues d'entité
 description: FireCMS vous permet d'ajouter des vues personnalisées par entité. Que vous créiez des aperçus, des visualisations de pages web, des tableaux de bord, des modifications de formulaires ou toute autre vue distinctive, les vues d'entité personnalisées de FireCMS répondent à vos besoins uniques.
 ---

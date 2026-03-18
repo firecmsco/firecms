@@ -1,5 +1,6 @@
 ---
 title: Map
+slug: it/docs/properties/config/map
 sidebar_label: Map
 description: Configurazione per le proprietà map (oggetti annidati) in FireCMS, incluse proprietà figlio, anteprime e modalità chiave-valore.
 ---

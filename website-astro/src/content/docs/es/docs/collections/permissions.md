@@ -1,5 +1,6 @@
 ---
 title: Permisos (Permissions)
+slug: es/docs/collections/permissions
 sidebar_label: Permisos
 ---
 

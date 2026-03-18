@@ -1,5 +1,6 @@
 ---
 title: Wiederholen
+slug: de/docs/properties/fields/repeat
 ---
 
 ![Field](/img/fields/Repeat.png)

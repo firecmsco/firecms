@@ -1,5 +1,6 @@
 ---
 title: Textfelder
+slug: de/docs/properties/fields/text_fields
 ---
 
 

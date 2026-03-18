@@ -1,5 +1,6 @@
 ---
 title: Kollektionsgruppen
+slug: de/docs/collections/collection_groups
 sidebar_label: Kollektionsgruppen
 ---
 

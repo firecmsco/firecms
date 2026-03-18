@@ -1,5 +1,6 @@
 ---
 title: Campos de fecha/hora (Date/time)
+slug: es/docs/properties/fields/date_time
 ---
 
 Usa los campos de fecha/hora para permitir a los usuarios establecer fechas, guardadas como marcas de tiempo (timestamps) de Firestore.

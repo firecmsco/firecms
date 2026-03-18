@@ -1,5 +1,6 @@
 ---
 title: Téléversement de fichiers (File upload)
+slug: fr/docs/properties/fields/file_upload
 ---
 
 Utilisez les champs de téléversement de fichiers pour permettre aux utilisateurs de téléverser des images, des documents ou tout fichier vers votre solution de stockage (Firebase Storage par défaut). Ce champ gère le téléversement du fichier et enregistre le chemin de stockage comme valeur de votre propriété.

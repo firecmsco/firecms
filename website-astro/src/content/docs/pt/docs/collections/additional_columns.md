@@ -1,5 +1,6 @@
 ---
 title: Colunas/campos adicionais
+slug: pt/docs/collections/additional_columns
 sidebar_label: Colunas/campos adicionais
 ---
 

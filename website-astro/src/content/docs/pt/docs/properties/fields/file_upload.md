@@ -1,5 +1,6 @@
 ---
 title: Upload de arquivos
+slug: pt/docs/properties/fields/file_upload
 ---
 
 Use os campos de upload de arquivos para permitir que os utilizadores enviem imagens, documentos ou qualquer

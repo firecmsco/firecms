@@ -1,5 +1,6 @@
 ---
 title: Clé/Valeur (Key/Value)
+slug: fr/docs/properties/fields/key_value
 ---
 
 ![Field](/img/fields/KeyValue.png)

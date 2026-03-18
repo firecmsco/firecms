@@ -1,5 +1,6 @@
 ---
 title: Collezioni
+slug: it/docs/collections/index
 sidebar_label: Collezioni
 description: Definisci il tuo schema dati Firestore con le collezioni FireCMS. Crea pannelli admin type-safe per Firebase con React e TypeScript.
 ---

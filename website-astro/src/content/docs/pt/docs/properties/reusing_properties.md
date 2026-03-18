@@ -1,5 +1,6 @@
 ---
 title: Reutilizando configurações de propriedade
+slug: pt/docs/properties/reusing_properties
 ---
 
 :::tip

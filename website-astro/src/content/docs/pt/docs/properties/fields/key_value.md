@@ -1,5 +1,6 @@
 ---
 title: Chave/Valor
+slug: pt/docs/properties/fields/key_value
 ---
 
 ![Field](/img/fields/KeyValue.png)

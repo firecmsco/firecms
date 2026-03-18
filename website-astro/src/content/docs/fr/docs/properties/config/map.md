@@ -1,5 +1,6 @@
 ---
 title: Map
+slug: fr/docs/properties/config/map
 sidebar_label: Map
 description: Configuration des propriétés de type map (objets imbriqués) dans FireCMS, incluant les propriétés enfants, les aperçus et le mode clé-valeur.
 ---

@@ -1,5 +1,6 @@
 ---
 title: Boolean
+slug: it/docs/properties/config/boolean
 sidebar_label: Boolean
 description: Configurazione per le proprietà booleane in FireCMS, rese come interruttori a levetta.
 ---

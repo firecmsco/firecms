@@ -1,5 +1,6 @@
 ---
 title: Prévias personalizadas
+slug: pt/docs/properties/custom_previews
 sidebar_label: Prévias personalizadas
 description: No FireCMS, as prévias personalizadas dão vida ao seu CMS, permitindo personalizar como as propriedades são exibidas em contextos somente leitura, como views de coleção.
 ---

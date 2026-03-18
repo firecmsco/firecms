@@ -1,5 +1,6 @@
 ---
 title: "Ihr Firebase CMS und Admin-UI deployen"
+slug: de/docs/cloud/deployment
 sidebar_label: Deployment
 description: "Deployen Sie Ihren benutzerdefinierten React-CMS und Admin-Panel-Code zu FireCMS Cloud. Vollständig verwaltetes Hosting für Ihr Firestore Content-Management-System."
 ---

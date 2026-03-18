@@ -1,5 +1,6 @@
 ---
 title: "Desplegando tu CMS de Firebase y UI de Administración"
+slug: es/docs/cloud/deployment
 sidebar_label: Despliegue
 description: "Despliega el código personalizado de tu CMS en React y panel de administración en FireCMS Cloud. Alojamiento totalmente administrado para tu sistema de gestión de contenido de Firestore."
 ---

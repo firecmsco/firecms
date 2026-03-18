@@ -1,5 +1,6 @@
 ---
 title: Vistas previas personalizadas
+slug: es/docs/properties/custom_previews
 sidebar_label: Vistas previas personalizadas
 description: En FireCMS, las vistas previas personalizadas infunden vida a tu CMS al permitirte personalizar cómo se muestran las propiedades en contextos de solo lectura, como las vistas de colección. Crea cada vista previa con un componente React único que aproveche `PropertyPreviewProps`, admitiendo tanto el tipo de propiedad como cualquier accesorio (prop) personalizado adicional. El ejemplo muestra una vista previa de propiedad booleana a medida que utiliza íconos distintos para los estados verdadero o falso, lo que hace que la interpretación de los datos sea instantánea e intuitiva. La implementación de este tipo de vistas previas personalizadas le permite alinear la representación visual de sus datos con las necesidades y la marca específicas de su proyecto, brindando una experiencia de CMS más atractiva e informativa.
 ---

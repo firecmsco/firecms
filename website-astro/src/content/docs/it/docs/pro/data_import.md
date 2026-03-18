@@ -1,5 +1,6 @@
 ---
 title: Importazione dati
+slug: it/docs/pro/data_import
 ---
 
 ![data_import.png](/img/data_import.png)

@@ -1,5 +1,6 @@
 ---
 title: MDX e componentes personalizados
+slug: pt/docs/mdx
 ---
 
 O FireCMS fornece suporte para **MDX**, permitindo que você use componentes React

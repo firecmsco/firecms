@@ -1,5 +1,6 @@
 ---
 title: Benutzerdefinierte Vorschauen
+slug: de/docs/properties/custom_previews
 sidebar_label: Benutzerdefinierte Vorschauen
 description: In FireCMS ermöglichen benutzerdefinierte Vorschauen eine individuelle Darstellung von Eigenschaften in schreibgeschützten Kontexten wie Kollektionsansichten.
 ---

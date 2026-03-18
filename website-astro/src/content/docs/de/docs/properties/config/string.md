@@ -1,5 +1,6 @@
 ---
 title: String
+slug: de/docs/properties/config/string
 sidebar_label: String
 description: Konfiguration für String-Eigenschaften in FireCMS, einschließlich Speicher, Markdown, Enums und Validierungsoptionen.
 ---

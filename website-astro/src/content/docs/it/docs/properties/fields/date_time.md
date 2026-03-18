@@ -1,5 +1,6 @@
 ---
 title: Campi data/ora
+slug: it/docs/properties/fields/date_time
 ---
 
 Usa i campi data/ora per consentire agli utenti di impostare date, salvate come timestamp Firestore.

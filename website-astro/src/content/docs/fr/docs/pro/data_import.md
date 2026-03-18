@@ -1,5 +1,6 @@
 ---
 title: Import de données
+slug: fr/docs/pro/data_import
 sidebar_label: Import de données
 ---
 

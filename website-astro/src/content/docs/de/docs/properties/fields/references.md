@@ -1,5 +1,6 @@
 ---
 title: Referenzen
+slug: de/docs/properties/fields/references
 ---
 
 Verwenden Sie Referenzfelder, wenn Sie Beziehungen zwischen Kollektionen herstellen müssen.

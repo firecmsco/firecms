@@ -1,5 +1,6 @@
 ---
 title: Repeat
+slug: pt/docs/properties/fields/repeat
 ---
 
 ![Field](/img/fields/Repeat.png)

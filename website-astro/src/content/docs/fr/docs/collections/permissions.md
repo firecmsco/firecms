@@ -1,5 +1,6 @@
 ---
 title: Permissions
+slug: fr/docs/collections/permissions
 sidebar_label: Permissions
 ---
 

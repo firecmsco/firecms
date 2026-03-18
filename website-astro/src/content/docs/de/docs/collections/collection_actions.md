@@ -1,5 +1,6 @@
 ---
 title: Aktionsleisten für Kollektionen
+slug: de/docs/collections/collection_actions
 sidebar_label: Aktionsleisten für Kollektionen
 ---
 

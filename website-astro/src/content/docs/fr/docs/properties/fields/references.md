@@ -1,5 +1,6 @@
 ---
 title: Références (References)
+slug: fr/docs/properties/fields/references
 ---
 
 Utilisez des champs de référence lorsque vous devez établir des relations entre collections. Par exemple, vous pouvez avoir un produit qui est lié à une catégorie, ou un qui a plusieurs achats.

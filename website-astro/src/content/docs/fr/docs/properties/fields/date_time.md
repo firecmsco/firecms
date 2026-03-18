@@ -1,5 +1,6 @@
 ---
 title: Champs de date/heure
+slug: fr/docs/properties/fields/date_time
 ---
 
 Utilisez les champs de date/heure pour permettre aux utilisateurs de définir des dates, enregistrées comme des timestamps Firestore.

@@ -1,5 +1,6 @@
 ---
 title: Datum/Uhrzeit-Felder
+slug: de/docs/properties/fields/date_time
 ---
 
 Verwenden Sie die Datum/Uhrzeit-Felder, damit Benutzer Datumsangaben setzen können, die als Firestore-Timestamps gespeichert werden.

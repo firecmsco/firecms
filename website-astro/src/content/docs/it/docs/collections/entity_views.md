@@ -1,5 +1,6 @@
 ---
 title: Viste entità
+slug: it/docs/collections/entity_views
 sidebar_label: Viste entità
 description: FireCMS ti permette di aggiungere viste personalizzate per entità.
 ---

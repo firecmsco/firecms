@@ -1,5 +1,6 @@
 ---
 title: Datei-Upload
+slug: de/docs/properties/fields/file_upload
 ---
 
 Verwenden Sie die Datei-Upload-Felder, um Benutzern das Hochladen von Bildern, Dokumenten oder beliebigen Dateien

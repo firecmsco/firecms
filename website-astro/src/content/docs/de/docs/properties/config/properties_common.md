@@ -1,5 +1,6 @@
 ---
 title: Gemeinsame Konfiguration
+slug: de/docs/properties/config/properties_common
 sidebar_label: Gemeinsame Konfiguration
 ---
 

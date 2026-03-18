@@ -1,5 +1,6 @@
 ---
 title: Interruptor (Switch)
+slug: es/docs/properties/fields/switch
 ---
 
 ![Field](/img/fields/Switch.png)

@@ -1,5 +1,6 @@
 ---
 title: Number
+slug: pt/docs/properties/config/number
 sidebar_label: Number
 description: Configuração de propriedades numéricas no FireCMS, incluindo validação, enums e restrições de inteiros.
 ---

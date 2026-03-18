@@ -1,5 +1,6 @@
 ---
 title: Ansichtsmodi für Kollektionen
+slug: de/docs/collections/view_modes
 sidebar_label: Ansichtsmodi
 description: Erkunden Sie die drei Kollektionsansichten in FireCMS — Tabelle, Karten und Kanban. Erfahren Sie, wie Sie den Standard-Ansichtsmodus konfigurieren und Drag-and-Drop-Neusortierung in Kanban aktivieren.
 ---

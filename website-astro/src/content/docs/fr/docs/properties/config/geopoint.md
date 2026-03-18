@@ -1,5 +1,6 @@
 ---
 title: Geopoint
+slug: fr/docs/properties/config/geopoint
 sidebar_label: Geopoint
 ---
 

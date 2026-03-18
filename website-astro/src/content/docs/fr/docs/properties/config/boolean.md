@@ -1,5 +1,6 @@
 ---
 title: Boolean
+slug: fr/docs/properties/config/boolean
 sidebar_label: Boolean
 description: Configuration des propriétés booléennes dans FireCMS, rendues comme des interrupteurs toggle.
 ---

@@ -1,5 +1,6 @@
 ---
 title: Aperçus personnalisés
+slug: fr/docs/properties/custom_previews
 sidebar_label: Aperçus personnalisés
 description: Dans FireCMS, les aperçus personnalisés donnent vie à votre CMS en vous permettant de personnaliser la façon dont les propriétés sont affichées dans les contextes en lecture seule, comme les vues de collection.
 ---

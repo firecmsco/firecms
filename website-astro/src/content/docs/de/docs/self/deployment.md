@@ -1,5 +1,6 @@
 ---
 title: Self-Hosted Deployment
+slug: de/docs/self/deployment
 sidebar_label: Deployment
 description: Deployment Ihrer FireCMS Self-Hosted Instanz auf Firebase Hosting oder anderen statischen Hosting-Plattformen.
 ---

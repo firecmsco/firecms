@@ -1,5 +1,6 @@
 ---
 title: Receitas
+slug: pt/docs/recipes/recipes_index
 sidebar_label: Receitas
 description: Tutoriais e receitas avançadas do FireCMS abrangendo blogs, localizações, cópia de entidades e navegação dinâmica.
 ---

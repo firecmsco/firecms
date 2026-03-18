@@ -1,5 +1,6 @@
 ---
 title: Anteprime personalizzate
+slug: it/docs/properties/custom_previews
 sidebar_label: Anteprime personalizzate
 description: In FireCMS, le anteprime personalizzate ti permettono di personalizzare come le proprietà vengono visualizzate in contesti read-only, come le viste collezione.
 ---

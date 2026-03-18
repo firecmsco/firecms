@@ -1,5 +1,6 @@
 ---
 title: Kollektionen
+slug: de/docs/collections/index
 sidebar_label: Collections
 description: Definieren Sie Ihr Firestore-Datenschema mit FireCMS-Kollektionen. Erstellen Sie typsichere Admin-Panels für Firebase mit React und TypeScript.
 ---

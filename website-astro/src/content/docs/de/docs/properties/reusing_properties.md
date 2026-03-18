@@ -1,5 +1,6 @@
 ---
 title: Eigenschaftskonfigurationen wiederverwenden
+slug: de/docs/properties/reusing_properties
 ---
 
 :::tip

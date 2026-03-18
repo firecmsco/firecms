@@ -1,5 +1,6 @@
 ---
 title: Unterstützt von MDX
+slug: de/docs/mdx
 ---
 
 Sie können JSX schreiben und React-Komponenten in Ihrem Markdown dank [MDX](https://mdxjs.com/) verwenden.

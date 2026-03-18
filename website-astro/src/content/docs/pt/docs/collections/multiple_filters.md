@@ -1,5 +1,6 @@
 ---
 title: Filtros múltiplos nas visualizações de coleção
+slug: pt/docs/collections/multiple_filters
 sidebar_label: Filtros múltiplos
 ---
 

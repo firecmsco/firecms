@@ -1,5 +1,6 @@
 ---
 title: Daten exportieren
+slug: de/docs/collections/exporting_data
 sidebar_label: Daten exportieren
 ---
 

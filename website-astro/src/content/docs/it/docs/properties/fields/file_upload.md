@@ -1,5 +1,6 @@
 ---
 title: Caricamento file
+slug: it/docs/properties/fields/file_upload
 ---
 
 Usa i campi di caricamento file per consentire agli utenti di caricare immagini, documenti o qualsiasi

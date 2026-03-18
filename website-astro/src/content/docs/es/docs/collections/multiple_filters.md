@@ -1,5 +1,6 @@
 ---
 title: Múltiples filtros en vistas de colección (Multiple filters)
+slug: es/docs/collections/multiple_filters
 sidebar_label: Múltiples filtros
 ---
 

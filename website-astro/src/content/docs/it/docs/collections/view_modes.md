@@ -1,5 +1,6 @@
 ---
 title: Modalità di visualizzazione collezione
+slug: it/docs/collections/view_modes
 sidebar_label: Modalità di visualizzazione
 description: Visualizza le tue collezioni come Tabelle, Schede o bacheche Kanban in FireCMS.
 ---

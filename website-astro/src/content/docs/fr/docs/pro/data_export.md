@@ -1,5 +1,6 @@
 ---
 title: Export de données
+slug: fr/docs/pro/data_export
 sidebar_label: Export de données
 description: Exportez les données de collection vers des fichiers CSV ou JSON avec le plugin d'export FireCMS PRO.
 ---

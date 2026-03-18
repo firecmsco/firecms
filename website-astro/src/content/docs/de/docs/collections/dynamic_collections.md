@@ -1,5 +1,6 @@
 ---
 title: Dynamische Kollektionen
+slug: de/docs/collections/dynamic_collections
 sidebar_label: Dynamische Kollektionen
 description: Entsperren Sie personalisiertes Content-Management mit dynamischen Kollektionen in FireCMS, bei denen Kollektionen sich an das Profil des eingeloggten Benutzers anpassen können.
 ---

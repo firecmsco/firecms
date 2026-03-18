@@ -1,5 +1,6 @@
 ---
 title: "Eject delle Collezioni dall'UI al Codice"
+slug: it/docs/cloud/eject_collections
 sidebar_label: Eject Collezioni
 description: "Converti le collezioni definite tramite UI in codice per il tuo CMS headless."
 ---

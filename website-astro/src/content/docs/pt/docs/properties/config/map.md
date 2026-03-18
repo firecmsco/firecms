@@ -1,5 +1,6 @@
 ---
 title: Map
+slug: pt/docs/properties/config/map
 sidebar_label: Map
 description: Configuração de propriedades do tipo map (objetos aninhados) no FireCMS, incluindo propriedades filhas, pré-visualizações e modo chave-valor.
 ---

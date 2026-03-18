@@ -1,5 +1,6 @@
 ---
 title: Hauptkomponenten
+slug: de/docs/self/main_components
 sidebar_label: Main Components
 description: FireCMS stellt eine Reihe von steuerbaren Komponenten bereit, die das CMS-Interface aufbauen. Diese Komponenten sind so konzipiert, dass sie leicht anpassbar sind und erweitert werden können.
 ---

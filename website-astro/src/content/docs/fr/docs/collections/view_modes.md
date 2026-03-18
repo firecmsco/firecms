@@ -1,5 +1,6 @@
 ---
 title: Modes d'affichage des collections
+slug: fr/docs/collections/view_modes
 sidebar_label: Modes d'affichage
 description: Affichez vos collections sous forme de tableaux, de cartes ou de tableaux Kanban dans FireCMS. Choisissez la vue qui correspond à vos données.
 ---

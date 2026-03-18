@@ -1,5 +1,6 @@
 ---
 title: Licenze
+slug: it/docs/pro/licensing
 description: Informazioni sulle licenze di FireCMS PRO, incluso come acquistare e configurare la licenza per la distribuzione.
 ---
 

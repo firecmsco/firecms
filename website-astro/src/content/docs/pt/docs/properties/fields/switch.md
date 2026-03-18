@@ -1,5 +1,6 @@
 ---
 title: Switch
+slug: pt/docs/properties/fields/switch
 ---
 
 ![Field](/img/fields/Switch.png)

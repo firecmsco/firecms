@@ -1,5 +1,6 @@
 ---
 title: Views de Entidade
+slug: pt/docs/collections/entity_views
 sidebar_label: Views de Entidade
 description: O FireCMS permite que você adicione views personalizadas por entidade. Seja criando prévias, visualizações de páginas web, dashboards, alterações de formulário, ou qualquer view distinta, as Entity Custom Views do FireCMS atendem aos seus requisitos únicos.
 ---

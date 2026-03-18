@@ -1,5 +1,6 @@
 ---
 title: Campos condicionales a partir de propiedades
+slug: es/docs/properties/conditional_fields
 sidebar_label: Campos condicionales
 description: En FireCMS, los campos condicionales permiten configuraciones dinámicas de propiedades dentro de los esquemas de tu colección, lo que ofrece interfaces receptivas que se adaptan a los valores de otras propiedades en tiempo real. La función `PropertyBuilder` te permite construir propiedades cuyos atributos, como los estados habilitado o deshabilitado, están determinados por los valores de otros campos en la entidad. Esto es particularmente útil cuando deseas crear formularios intuitivos que cambian según la entrada del usuario o el contexto de los datos, garantizando una experiencia de gestión de contenido fluida. Ya sea que estés trabajando con interruptores booleanos o tipos de propiedades condicionales, como en las fuentes de autenticación de usuarios, los campos condicionales de FireCMS son herramientas esenciales para crear plataformas CMS flexibles y centradas en el usuario.
 ---

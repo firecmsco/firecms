@@ -1,5 +1,6 @@
 ---
 title: Champs conditionnels depuis les propriétés
+slug: fr/docs/properties/conditional_fields
 sidebar_label: Champs conditionnels
 description: Dans FireCMS, les champs conditionnels permettent des configurations de propriétés dynamiques au sein de vos schémas de collection, offrant des interfaces réactives qui s'adaptent à d'autres valeurs de propriétés en temps réel. La fonction `PropertyBuilder` vous permet de construire des propriétés dont les attributs sont déterminés par les valeurs d'autres champs dans l'entité.
 ---

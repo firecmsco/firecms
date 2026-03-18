@@ -1,5 +1,6 @@
 ---
 title: Esportazione dati
+slug: it/docs/pro/data_export
 description: Esporta le tue collezioni Firestore in JSON o CSV con il plugin Data Export di FireCMS.
 ---
 

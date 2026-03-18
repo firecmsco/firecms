@@ -1,5 +1,6 @@
 ---
 title: Colecciones dinámicas (Dynamic collections)
+slug: es/docs/collections/dynamic_collections
 sidebar_label: Colecciones dinámicas
 description: Desbloquea la gestión de contenido personalizado con colecciones dinámicas en FireCMS, donde las colecciones pueden adaptarse al perfil del usuario conectado utilizando devoluciones de llamada asíncronas. Adapta tu CMS con propiedades personalizadas creadas sobre la marcha, asegurando un entorno altamente reactivo y seguro que se alinea con los roles y permisos del usuario. Mediante la utilización estratégica de `EntityCollectionsBuilder` y `AuthController`, genera dinámicamente esquemas de datos adecuados para cada usuario, mejorando su experiencia en el CMS con interfaces inteligentes y específicas para cada rol.
 ---

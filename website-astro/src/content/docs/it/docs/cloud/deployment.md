@@ -1,5 +1,6 @@
 ---
 title: "Distribuzione del tuo CMS Firebase e pannello admin"
+slug: it/docs/cloud/deployment
 sidebar_label: Distribuzione
 description: "Distribuisci il tuo codice CMS e pannello admin React personalizzato su FireCMS Cloud."
 ---
