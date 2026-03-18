@@ -15,6 +15,11 @@ interface UseProseMirrorProps {
 }
 
 export function useProseMirror({ initialContent, onChange, editable = true, handleImageUpload }: UseProseMirrorProps) {
+    // Store onChange in a ref so that the latest version is always called inside
+    // the dispatchTransaction closure (which only runs once at mount with [] deps).
+    const onChangeRef = useRef(onChange);
+    onChangeRef.current = onChange;
+
     const plugins = [...corePlugins];
     if (handleImageUpload) {
         plugins.push(createDropImagePlugin(handleImageUpload));
@@ -46,9 +51,24 @@ export function useProseMirror({ initialContent, onChange, editable = true, hand
                 const newState = editorView.state.apply(tr);
                 editorView.updateState(newState);
                 setState(newState);
-                onChange?.(newState, editorView);
+                onChangeRef.current?.(newState, editorView);
             },
-            nodeViews: nodeViews
+            nodeViews: nodeViews,
+            transformPastedHTML(html: string) {
+                // Strip inline styles and classes from pasted HTML so we don't
+                // get textStyle marks (color, font-size, etc.) that have no
+                // markdown representation. This makes paste look consistent.
+                const div = document.createElement("div");
+                div.innerHTML = html;
+                div.querySelectorAll("*").forEach((el) => {
+                    el.removeAttribute("style");
+                    el.removeAttribute("class");
+                    el.removeAttribute("color");
+                    el.removeAttribute("bgcolor");
+                    el.removeAttribute("face");
+                });
+                return div.innerHTML;
+            },
         });
 
         // Patch posAtCoords to allow dropping/interacting anywhere horizontally natively

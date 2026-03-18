@@ -55,12 +55,12 @@ export function MarkdownEditorFieldBinding({
         }
         internalValue.current = content;
         setValue(content);
-    }, [setValue]);
+    }, [setValue, value]);
 
     useEffect(() => {
         if (internalValue.current !== value) {
             internalValue.current = value;
-            setFieldVersion(fieldVersion + 1);
+            setFieldVersion(v => v + 1);
         }
     }, [value]);
 

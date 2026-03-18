@@ -104,17 +104,19 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                 const pos = view.state.selection.from;
                 let anyImageFound = false;
 
-                items.forEach((item) => {
-                    const image = item.getAsFile();
-                    if (image) {
-                        anyImageFound = true;
-                        const reader = new FileReader();
-                        reader.onload = async (readerEvent) => {
-                            await onFileRead(view as any, readerEvent, pos, upload, image);
-                        };
-                        reader.readAsDataURL(image);
-                    }
-                });
+                items
+                    .filter((item) => item.type.startsWith("image/"))
+                    .forEach((item) => {
+                        const image = item.getAsFile();
+                        if (image) {
+                            anyImageFound = true;
+                            const reader = new FileReader();
+                            reader.onload = async (readerEvent) => {
+                                await onFileRead(view as any, readerEvent, pos, upload, image);
+                            };
+                            reader.readAsDataURL(image);
+                        }
+                    });
 
                 return anyImageFound;
             },

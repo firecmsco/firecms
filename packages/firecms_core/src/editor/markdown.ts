@@ -87,6 +87,8 @@ export const markdownSerializer = new MarkdownSerializer(
         strike: { open: "~~", close: "~~", mixable: true, expelEnclosingWhitespace: true },
         highlight: { open: "==", close: "==", mixable: true, expelEnclosingWhitespace: true },
         underline: { open: "++", close: "++", mixable: true, expelEnclosingWhitespace: true },
+        // textStyle (colored text from HTML) has no markdown equivalent — emit content as-is
+        textStyle: { open: "", close: "", mixable: true, expelEnclosingWhitespace: true },
     }
 );
 export const parser = markdownParser;

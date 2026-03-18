@@ -73,8 +73,12 @@ export const FireCMSEditor = ({
     handleImageUpload,
     onChange: (newState, editorView) => {
       if (onMarkdownContentChange) {
-        const markdown = addLineBreakAfterImages(serializer.serialize(newState.doc));
-        onMarkdownContentChange(markdown);
+        try {
+          const markdown = addLineBreakAfterImages(serializer.serialize(newState.doc));
+          onMarkdownContentChange(markdown);
+        } catch (e) {
+          console.warn("[FireCMSEditor] Could not serialize editor state to markdown:", e);
+        }
       }
       if (onJsonContentChange) {
         const jsonContent = removeClassesFromJson(newState.doc.toJSON()) as JSONContent;
