@@ -207,8 +207,13 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
             }
         });
 
-        // Initialize Google Ads tag for conversion linker
-        window.gtag("config", "AW-17381868760");
+        // Initialize Google Ads tag with cross-domain linker
+        window.gtag("config", "AW-17381868760", {
+            linker: {
+                domains: ["app.firecms.co"],
+                accept_incoming: true
+            }
+        });
 
     </script>
 
