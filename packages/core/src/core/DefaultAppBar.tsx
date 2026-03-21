@@ -130,7 +130,7 @@ export const DefaultAppBar = function DefaultAppBar({
                 className)}>
 
 
-            {navigation && <div className="mr-2 hidden lg:block">
+            {navigation && (!hasDrawer || title) && <div className="mr-2 hidden lg:block">
                 <Link
                     className="visited:text-inherit dark:visited:text-inherit block"
                     to={navigation?.basePath ?? "/"}

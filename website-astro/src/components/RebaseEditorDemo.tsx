@@ -15,7 +15,7 @@ export function RebaseEditorDemo() {
 }
 
 const defaultEditorContent = `
-![](https://firebasestorage.googleapis.com/v0/b/rebase-demo-27150.appspot.com/o/rebase_logo_192.png?alt=media&token=aac5bda6-0e3e-4a43-822c-970ebb1bb08d)
+![](/img/rebase_logo_192.png)
 # Edit me!
 
 > The [Rebase editor](https://rebase.pro/) is a Notion-style WYSIWYG editor built with [Tiptap](https://tiptap.dev/).

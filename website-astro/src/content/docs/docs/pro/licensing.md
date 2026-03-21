@@ -17,7 +17,7 @@ to allow you to test it in production.
 You can purchase a license in the [Rebase subscriptions site](https://app.rebase.pro/subscriptions).
 
 When creating your license, you need to specify the project IDs that will be
-using the license. You can find your project ID in the Firebase console.
+using the license. You can find your project ID in your Rebase project settings.
 
 You will receive an API key that you need to pass to your `Rebase` component.
 If you are using a starter template, you can set it in the `.env` file.

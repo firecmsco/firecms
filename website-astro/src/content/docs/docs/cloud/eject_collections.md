@@ -2,7 +2,7 @@
 slug: docs/cloud/eject_collections
 title: "Eject Collections from UI to Code"
 sidebar_label: Eject Collections
-description: "Convert UI-defined collections to code for your headless CMS. Export your Firestore schema configuration for version control and advanced customization."
+description: "Convert UI-defined collections to code for your headless CMS. Export your schema configuration for version control and advanced customization."
 ---
 
 The **newest version of [Rebase](https://app.rebase.pro)**, version 3.0 allows you to fully manage the CMS in the Cloud

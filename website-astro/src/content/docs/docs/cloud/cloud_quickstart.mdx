@@ -1,8 +1,8 @@
 ---
 slug: docs/cloud/quickstart
-title: "Quickstart: Build a Custom Firebase Admin Panel"
+title: "Quickstart: Build a Custom PostgreSQL Admin Panel"
 sidebar_label: Quickstart
-description: "Learn how to build a custom back-office and admin panel for Firebase/Firestore in minutes. Start with no-code and extend with React."
+description: "Learn how to build a custom back-office and admin panel for PostgreSQL in minutes. Start with no-code and extend with React."
 ---
 
 
@@ -17,11 +17,11 @@ This guide is for developers who want to add custom code to their Rebase project
 :::
 
 In order to add custom code to your Rebase Cloud project, you need:
-- A **Firebase** project
+- A **PostgreSQL** database
 - A **Rebase Cloud** project
 
-You can create both projects from Rebase Cloud, or connect an existing Firebase
-project to a new Rebase Cloud project.
+You can create both from Rebase Cloud, or connect an existing PostgreSQL
+database to a new Rebase Cloud project.
 
 <DocsCloudCTA/>
 
@@ -69,23 +69,12 @@ If you want to deploy to Rebase Cloud your module must export a
 `RebaseAppConfig` object. You can find more information about this object
 in the [App config section](./app_config) reference.
 
-:::important
-Vite uses the default url `http://127.0.0.1:5173` for the development server
-in versions of `node` < 18.0.0.
-If you are using a version of node < 18.0.0, you will need to add this url to
-the authorized domains in the Firebase console.
-Firebase Auth will require to add this url to the authorized domains in the
-Firebase console.
-Alternatively, you can use the url `http://localhost:5173`.
-:::
-
 ## How does code upload work?
 
 We use module federation to upload your code to Rebase Cloud.
 This means that you can upload your code to Rebase Cloud without
 having to worry about the infrastructure.
 When you run the command `npm run deploy` or `yarn deploy`, your code
-When you run the command `yarn deploy` or `npm run deploy`, your code
 will be uploaded to Rebase Cloud and will be available in the
 Rebase Cloud instance.
 
@@ -96,4 +85,3 @@ system, the same collections, the same pages, etc.
 This approach allows you to have a CMS that is fully customizable
 while still benefiting of the continuous improvements and updates
 that we provide in Rebase Cloud.
-

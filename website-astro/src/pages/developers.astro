@@ -375,17 +375,17 @@ export const productsCollection = buildCollection({
                                         code: `const lastMonth = new Date();
 lastMonth.setMonth(lastMonth.getMonth() - 1);
 
-const users = await db.collection('users')
-  .where('signupDate', '>=', lastMonth)
-  .get();
+const users = await db.query(
+  "SELECT * FROM users WHERE signup_date >= $1",
+  [lastMonth]
+);
 
-const batch = db.batch();
-users.docs.forEach(doc => {
-  batch.update(doc.ref, { status: 'active' });
-});
+await db.query(
+  "UPDATE users SET status = 'active' WHERE signup_date >= $1",
+  [lastMonth]
+);
 
-await batch.commit();
-console.log("Updated \${users.size} users");`
+console.log("Updated \${users.rowCount} users");`
                                     }
                                 ]}
                         />
@@ -414,7 +414,7 @@ console.log("Updated \${users.size} users");`
                             Fields</h2>
                         <p class="mt-4 text-lg text-surface-400">
                             We've built all the complex fields you don't want to. Get a <strong>Notion-style rich text
-                            editor</strong>, file uploads to Firebase Storage, <strong>relational data
+                            editor</strong>, file uploads and storage, <strong>relational data
                             (references)</strong>, enums, arrays,
                             maps, and more, all as pre-built components.
                         </p>

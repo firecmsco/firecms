@@ -5,8 +5,8 @@ import CollectionPowerSection from "../components/CollectionPowerSection.astro";
 import SpotlightCard from "../components/SpotlightCard.astro";
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
 
-const title = "Rebase — The Postgres Admin Panel Built for Developers";
-const description = "Rebase is an open-source admin framework built on PostgreSQL. Own your data. Run it your way. Ship internal tools, back-office apps, and data workspaces faster than ever — with a database you already trust.";
+const title = "Rebase — The Open-Source Postgres Admin Panel for Developers";
+const description = "Connect your PostgreSQL database and get a full admin panel, REST & GraphQL APIs, a built-in SQL editor, and row-level security — in minutes. Open-source, self-hostable, built in Europe.";
 
 ---
 
@@ -15,7 +15,7 @@ const description = "Rebase is an open-source admin framework built on PostgreSQ
     <main>
 
         <!-- Hero -->
-        <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-24 sm:pt-32 sm:pb-32 lg:pt-48 lg:pb-48">
+        <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-20 sm:pt-32 sm:pb-28 lg:pt-44 lg:pb-36">
 
             <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
                 <!-- EU badge -->
@@ -26,20 +26,22 @@ const description = "Rebase is an open-source admin framework built on PostgreSQ
                     </span>
                 </div>
 
-                <h1 class="mb-8 text-5xl sm:text-6xl font-extrabold tracking-tight leading-none md:text-6xl lg:text-7xl text-white font-sans animate-on-scroll fade-in-up">
-                    Your data.<br/>
-                    <span class="text-primary subtle-shimmer">Your rules.</span>
+                <h1 class="mb-8 text-5xl sm:text-6xl font-extrabold tracking-tight leading-[1.1] md:text-6xl lg:text-7xl text-white font-sans animate-on-scroll fade-in-up">
+                    From Postgres to<br/>
+                    <span class="text-primary subtle-shimmer">production admin</span><br/>
+                    in minutes.
                 </h1>
                 <p class="mt-8 text-xl leading-8 text-surface-400 max-w-2xl mx-auto font-light">
-                    An <b class="text-white font-medium">internal tools framework</b> built directly on your PostgreSQL database.<br/>
-                    Open-source. Instant GraphQL APIs. React 19.
+                    Connect your database. Get a <b class="text-white font-medium">full admin panel</b>,
+                    REST & GraphQL APIs, a <b class="text-white font-medium">SQL editor</b>,
+                    and <b class="text-white font-medium">row-level security</b> — all from your existing schema.
                 </p>
-                <div class="flex flex-wrap items-center justify-center gap-4 animate-on-scroll fade-in-up">
-                    <a href="mailto:hello@rebase.pro?subject=Rebase%20Early%20Access"
+                <div class="mt-10 flex flex-wrap items-center justify-center gap-4 animate-on-scroll fade-in-up">
+                    <a href="/docs"
                        data-track
                        id="hero-start-building"
                        class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
-                        Request early access
+                        Get Started
                         <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
                              class="h-5 w-5 text-white filter invert"/>
                     </a>
@@ -55,55 +57,214 @@ const description = "Rebase is an open-source admin framework built on PostgreSQ
 
         </section>
 
-        <!-- 3 core value props -->
-        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden">
+        <!-- Product video -->
+        <section class="bg-black py-4 sm:py-8">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-[1000px] animate-on-scroll fade-in-up">
+                    <video
+                            class="aspect-[607/373] bg-surface-950 border border-surface-800 rounded-xl flex flex-col items-center justify-center gap-4 shadow-2xl shadow-primary/5"
+                            style="pointer-events: none;"
+                            loop
+                            autoplay
+                            muted
+                            playsinline>
+                        <source src="/img/landing_1080.webm" type="video/webm"/>
+                    </video>
+                </div>
+            </div>
+        </section>
+
+        <!-- One Collection. Everything. -->
+        <CollectionPowerSection/>
+
+        <!-- Scroll-sync feature showcase -->
+        <ScrollSyncShowcase/>
+
+        <!-- 6 core value props -->
+        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden border-t border-surface-800/40">
             <SectionBackgroundAccents topLine={true}/>
 
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl text-center mb-16 animate-on-scroll fade-in-up">
                     <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">
-                        The admin layer your Postgres database deserves
+                        Everything you need. Nothing you don't.
                     </h2>
                     <p class="mt-4 text-lg text-surface-400">
-                        Connect your database. Get a fully functional CMS in minutes.
+                        A complete toolkit that works with your existing Postgres database.
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 animate-on-scroll fade-in-up delay-100">
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-list.svg"
-                            title="Define collections easily"
-                            description="Build your database schema directly in the UI or write it in TypeScript. Rebase maps perfectly to your Postgres tables."
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg"
+                            title="Postgres-native"
+                            description="Reads your existing schema, respects your constraints, and works with the database you already trust. No migration, no new data layer."
                     />
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sparkles.svg"
-                            title="Get the perfect UI"
-                            description="Instant, beautiful spreadsheet-like interfaces for your data. No more building internal tools from scratch."
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-panel-left.svg"
+                            title="Instant admin UI"
+                            description="Spreadsheet-like tables, forms, Kanban boards, and filters generated straight from your schema. No boilerplate, no repetitive CRUD code."
                     />
                     <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code.svg"
-                            title="Limitless customization"
-                            description="It's a framework, not a black box. Override any component, inject your own React views, and write custom hooks."
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/radio.svg"
+                            title="Real-time everywhere"
+                            description="Every table, form, and Kanban view stays in sync. When data changes, all connected clients see updates instantly — no refresh needed."
                     />
                     <SpotlightCard
                             icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg"
-                            title="API & Security out of the box"
-                            description="Instant REST API and fine-grained Role-Based Access Control (RBAC) securely locked down from day one."
+                            title="Row-level security"
+                            description="Define dynamic RLS policies in TypeScript. Fine-grained permissions per collection, per field, per user role."
+                    />
+                    <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code.svg"
+                            title="Code-first, not code-only"
+                            description="Define collections in TypeScript or build them in the UI. Override any component, inject custom React views, and extend with hooks."
                     />
                     <SpotlightCard
                             icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/server.svg"
                             title="Self-host anywhere"
-                            description="Deploy the Node.js backend and React frontend wherever you want. Docker, VPS, or PaaS — you own the infrastructure."
+                            description="A React SPA plus a lightweight Node.js backend. Deploy on Docker, Railway, Fly, or bare metal — no vendor lock-in, ever."
                     />
                 </div>
             </div>
         </section>
 
-        <!-- Scroll-sync feature showcase -->
-        <ScrollSyncShowcase/>
+        <!-- SQL Editor + RLS Showcase -->
+        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden border-t border-surface-800/40">
+            <SectionBackgroundAccents blob={{ position: "top", size: "md" }}/>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
 
-        <!-- One Collection. Everything. -->
-        <CollectionPowerSection/>
+                <!-- SQL Editor -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24 animate-on-scroll fade-in-up">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-6">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/terminal.svg" alt="" class="h-4 w-4 filter invert opacity-80"/>
+                            Differentiator
+                        </div>
+                        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">
+                            A SQL editor built<br/>into your admin panel
+                        </h2>
+                        <p class="text-lg text-surface-400 mb-6">
+                            No more switching between pgAdmin and your CMS.
+                            Rebase ships a full-featured SQL editor with autocomplete,
+                            query explain visualization, inline result editing, and snippet favorites.
+                        </p>
+                        <ul class="space-y-3">
+                            {[
+                                "SQL autocomplete with keyword + table suggestions",
+                                "Visual EXPLAIN query plans",
+                                "Edit query results inline — changes write back to Postgres",
+                                "Save and organize favorite queries"
+                            ].map(item => (
+                                <li class="flex items-start gap-3 text-surface-300 text-sm">
+                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check.svg" alt="" class="h-4 w-4 filter invert opacity-60 mt-0.5 flex-shrink-0"/>
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-700/50 bg-surface-950 p-6">
+                        <!-- Mock SQL editor UI -->
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="flex gap-1.5">
+                                <div class="w-3 h-3 rounded-full bg-surface-700"></div>
+                                <div class="w-3 h-3 rounded-full bg-surface-700"></div>
+                                <div class="w-3 h-3 rounded-full bg-surface-700"></div>
+                            </div>
+                            <span class="text-xs text-surface-500 ml-2 font-mono">SQL Editor</span>
+                        </div>
+                        <div class="bg-surface-900/80 rounded-lg p-4 font-mono text-sm mb-4">
+                            <div class="text-blue-400">SELECT</div>
+                            <div class="pl-4 text-surface-300">p.name, p.price, c.name <span class="text-blue-400">AS</span> category</div>
+                            <div class="text-blue-400">FROM</div>
+                            <div class="pl-4 text-surface-300">products p</div>
+                            <div class="text-blue-400">JOIN</div>
+                            <div class="pl-4 text-surface-300">categories c <span class="text-blue-400">ON</span> p.category_id = c.id</div>
+                            <div class="text-blue-400">WHERE</div>
+                            <div class="pl-4 text-surface-300">p.price > <span class="text-amber-400">100</span></div>
+                            <div class="text-blue-400">ORDER BY</div>
+                            <div class="pl-4 text-surface-300">p.price <span class="text-blue-400">DESC</span>;</div>
+                        </div>
+                        <div class="bg-surface-900/60 rounded-lg overflow-hidden">
+                            <div class="grid grid-cols-3 text-xs font-semibold text-surface-400 uppercase px-3 py-2 border-b border-surface-800">
+                                <span>name</span><span>price</span><span>category</span>
+                            </div>
+                            {[
+                                ["Ergonomic Chair", "€299.00", "Furniture"],
+                                ["Standing Desk", "€549.00", "Furniture"],
+                                ["4K Monitor", "€449.00", "Electronics"],
+                            ].map(row => (
+                                <div class="grid grid-cols-3 text-sm text-surface-300 px-3 py-2 border-b border-surface-800/50 hover:bg-surface-800/30">
+                                    <span>{row[0]}</span><span class="text-amber-400/80">{row[1]}</span><span>{row[2]}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <div class="mt-3 flex items-center gap-2 text-xs text-surface-500">
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-green-500/10 text-green-400 text-xs font-medium">✓ 3 rows</span>
+                            <span>12ms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RLS -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center animate-on-scroll fade-in-up">
+                    <div class="lg:order-last">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-6">
+                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg" alt="" class="h-4 w-4 filter invert opacity-80"/>
+                            Enterprise-ready
+                        </div>
+                        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">
+                            Row-level security<br/>without the headache
+                        </h2>
+                        <p class="text-lg text-surface-400 mb-6">
+                            Define Postgres RLS policies directly from the Rebase UI using TypeScript.
+                            No hand-written SQL policies, no guessing about who can access what.
+                        </p>
+                        <ul class="space-y-3">
+                            {[
+                                "Create and edit RLS policies visually",
+                                "Define dynamic policies in TypeScript",
+                                "Per-collection, per-field, per-role permissions",
+                                "Live preview of policy effects"
+                            ].map(item => (
+                                <li class="flex items-start gap-3 text-surface-300 text-sm">
+                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check.svg" alt="" class="h-4 w-4 filter invert opacity-60 mt-0.5 flex-shrink-0"/>
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-700/50 bg-surface-950 p-6">
+                        <!-- Mock RLS policy UI -->
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-sm font-semibold text-white">RLS Policies — <span class="text-primary">products</span></span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-green-500/10 text-green-400 text-xs font-medium">RLS enabled</span>
+                        </div>
+                        <div class="space-y-3">
+                            {[
+                                { name: "admin_full_access", action: "ALL", role: "admin", using: "true" },
+                                { name: "team_read_own", action: "SELECT", role: "editor", using: "team_id = current_user_team()" },
+                                { name: "public_read_published", action: "SELECT", role: "viewer", using: "status = 'published'" },
+                            ].map(policy => (
+                                <div class="bg-surface-900/80 rounded-lg p-3 ring-1 ring-surface-800/50">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-white">{policy.name}</span>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400">{policy.action}</span>
+                                            <span class="text-xs px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-400">{policy.role}</span>
+                                        </div>
+                                    </div>
+                                    <div class="font-mono text-xs text-surface-400">
+                                        <span class="text-blue-400">USING</span> ({policy.using})
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
 
         <!-- EU / data sovereignty section -->
         <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden border-t border-surface-800/40">
@@ -119,13 +280,13 @@ const description = "Rebase is an open-source admin framework built on PostgreSQ
                             Stop sending your data<br/>across the Atlantic
                         </h2>
                         <p class="text-lg text-surface-400 mb-8">
-                            Rebase is a Postgres data workspace designed, built, and operated entirely within the EU. 
-                            We don't just "comply" with GDPR — data sovereignty is our core architecture. 
-                            Your data stays in Europe, under your control, free from the CLOUD Act.
+                            Rebase is designed and built in Europe, and because it's fully self-hosted,
+                            you decide exactly where your data lives.
+                            No surprise transfers, no vendor lock-in, no CLOUD Act exposure.
                         </p>
                         <ul class="space-y-4">
                             {[
-                                "EU infrastructure — no surprise data transfers",
+                                "Self-host in any region — full control over where data lives",
                                 "GDPR-compliant by design, not by patch",
                                 "Self-host anywhere in the world on your own infrastructure",
                                 "Open-source core — audit every line"
@@ -155,211 +316,159 @@ const description = "Rebase is an open-source admin framework built on PostgreSQ
             </div>
         </section>
 
-        {/* Hidden temporarily to streamline the hype/launch page 
-
-        <!-- Built with modern tech -->
-        <section class="bg-black py-16 sm:py-24">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <p class="text-center text-sm font-medium text-surface-500 mb-10 uppercase tracking-wider">
-                    Built with modern technologies
-                </p>
-                <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 sm:gap-x-16">
-                    <img class="h-10 w-auto opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                         src="/img/reactjs-icon.svg" alt="React">
-                    <img class="h-10 w-auto opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                         src="/img/typescript_logo.svg" alt="TypeScript">
-                    <img class="h-8 w-auto opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                         src="/img/tailwind_logo.svg" alt="Tailwind CSS">
-                    <img class="h-10 w-auto opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                         src="https://www.postgresql.org/media/img/about/press/elephant.png" alt="PostgreSQL">
-                </div>
-            </div>
-        </section>
-
-        <!-- Architecture section -->
-        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden border-t border-surface-800/40">
-            <SectionBackgroundAccents blob={{ position: "top", size: "sm" }}/>
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-                    <div class="animate-on-scroll fade-in-up">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-surface-700 bg-surface-900/60 text-surface-400 text-sm font-medium mb-6">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layers.svg" alt="" class="h-4 w-4 filter invert opacity-60"/>
-                            Architecture
-                        </div>
-                        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-6">
-                            No SSR magic.<br/>Just a clean architecture.
-                        </h2>
-                        <p class="text-lg text-surface-400 mb-6">
-                            Admin panels don't need server-side rendering. They need speed,
-                            reliability, and the ability to run anywhere. So we didn't use Next.js.
-                        </p>
-                        <p class="text-surface-400">
-                            Rebase is a <strong class="text-white">React SPA</strong> talking to a
-                            <strong class="text-white">dedicated Node.js backend</strong> that connects directly to your Postgres database.
-                            No monolithic framework, no vendor runtime, no surprise re-renders. The frontend and backend
-                            are separate concerns — each deployed, scaled, and debugged independently.
-                        </p>
-                    </div>
-                    <div class="space-y-4 animate-on-scroll fade-in-up delay-100">
-                        {[
-                            {
-                                icon: "layout-panel-left",
-                                label: "React SPA frontend",
-                                desc: "A fast, embeddable React app. Mount it inside your own app or deploy it standalone. No SSR quirks, no hydration issues."
-                            },
-                            {
-                                icon: "server",
-                                label: "Dedicated REST backend",
-                                desc: "A lightweight Node.js service that owns your Postgres connection, handles auth, and exposes a clean API. No runtime magic."
-                            },
-                            {
-                                icon: "package",
-                                label: "Deploy anywhere",
-                                desc: "Docker, bare metal, Railway, Fly, your own VPS — the backend runs wherever Node.js runs. No platform lock-in."
-                            },
-                            {
-                                icon: "plug",
-                                label: "Embeddable by design",
-                                desc: "Need internal tools inside an existing React app? Rebase is distributed as an npm package. Drop it in, configure it, ship it."
-                            }
-                        ].map(item => (
-                            <div class="flex items-start gap-4 p-4 rounded-xl bg-surface-900/50 ring-1 ring-surface-800">
-                                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0 mt-0.5">
-                                    <img src={`https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${item.icon}.svg`}
-                                         alt="" class="h-4 w-4 filter invert opacity-80"/>
-                                </div>
-                                <div>
-                                    <div class="font-semibold text-white text-sm mb-1">{item.label}</div>
-                                    <p class="text-surface-400 text-sm">{item.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden">
-            <SectionBackgroundAccents topLine={true} blob={{ position: "bottom", size: "md" }}/>
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="mx-auto max-w-2xl text-center mb-16 animate-on-scroll fade-in-up">
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Made for teams who care about their data</h2>
-                    <p class="mt-4 text-surface-400 text-lg">Whether you're a solo developer or a growing team.</p>
-                </div>
-                <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                    <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg"
-                            title="Startups"
-                            description="Ship your MVP's back-office in hours. Grow into it — add custom views and logic as your product evolves."
-                            link={{ href: "/startups", text: "Learn More" }}
-                    />
-                    <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/briefcase.svg"
-                            title="Agencies"
-                            description="Deliver white-labeled, self-hosted admin tools to clients. You own the stack, they love the product."
-                            link={{ href: "/agencies", text: "Learn More" }}
-                    />
-                    <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code.svg"
-                            title="Developers"
-                            description="Full TypeScript, extensible architecture, open-source core. Rebase gets out of your way and lets you build."
-                            link={{ href: "/developers", text: "Learn More" }}
-                    />
-                </div>
-            </div>
-        </section>
-        
-        */}
-
-        <!-- Power Features Section -->
+        <!-- More power features -->
         <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden border-t border-surface-800/40">
             <SectionBackgroundAccents blob={{ position: "bottom", size: "lg" }}/>
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-2xl text-center mb-16 animate-on-scroll fade-in-up">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-6">
-                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sparkles.svg" alt="" class="h-4 w-4 filter invert opacity-80"/>
-                        New in Rebase
-                    </div>
-                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Next-Generation Power Features</h2>
-                    <p class="mt-4 text-surface-400 text-lg">We're shipping at lightspeed. Check out what's new.</p>
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">And so much more</h2>
+                    <p class="mt-4 text-surface-400 text-lg">Powerful features that keep shipping. Every view updates in real time.</p>
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
-                    <!-- Feature 1: AI MCP -->
-                    <div class="col-span-1 rounded-2xl bg-surface-900/50 p-8 ring-1 ring-inset ring-surface-800">
-                        <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/clock.svg" alt=""
-                                 class="h-6 w-6 filter invert"/>
+
+                <!-- Row 1: Real admin view showcases -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-6">
+                    <!-- Kanban board views -->
+                    <div class="group rounded-2xl overflow-hidden ring-1 ring-surface-800 hover:ring-primary/40 transition-all duration-300 animate-on-scroll fade-in-up bg-surface-900/50">
+                        <div class="aspect-[4/3] overflow-hidden bg-surface-950">
+                            <video
+                                class="w-full h-full object-cover object-top"
+                                style="pointer-events: none;"
+                                loop
+                                autoplay
+                                muted
+                                playsinline>
+                                <source src="/img/dnd.webm" type="video/webm"/>
+                            </video>
                         </div>
-                        <h3 class="text-xl font-semibold tracking-tight text-white mb-3">Live in minutes</h3>
-                        <p class="text-surface-400">
-                            Connect your database. Get a fully functional admin panel in minutes without writing repetitive boilerplate code.
-                        </p>
+                        <div class="p-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
+                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/kanban.svg" alt="" class="h-3.5 w-3.5 filter invert"/>
+                                </div>
+                                <h3 class="text-base font-semibold text-white">Kanban board views</h3>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium ring-1 ring-primary/20 ml-auto">
+                                    Drag & drop
+                                </span>
+                            </div>
+                            <p class="text-surface-400 text-sm leading-relaxed">Visualize and manage your Postgres records as interactive Kanban boards. Drag cards between columns to update status fields instantly.</p>
+                        </div>
                     </div>
 
-                    <!-- Feature 2: RLS -->
-                    <div class="group relative p-8 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-primary/50 transition-all duration-300 animate-on-scroll fade-in-up delay-75">
-                        <div class="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg" alt="Security" class="h-6 w-6 filter invert"/>
+                    <!-- Data history & audit -->
+                    <div class="group rounded-2xl overflow-hidden ring-1 ring-surface-800 hover:ring-primary/40 transition-all duration-300 animate-on-scroll fade-in-up bg-surface-900/50">
+                        <div class="aspect-[4/3] overflow-hidden bg-surface-950">
+                            <img
+                                src="/img/history.png"
+                                alt="Data history and audit view"
+                                class="w-full h-full object-cover object-top"/>
                         </div>
-                        <h3 class="text-xl font-semibold text-white mb-3">Row Level Security (RLS)</h3>
-                        <p class="text-surface-400 leading-relaxed">
-                            Enterprise-grade security without the hassle. Secure your Postgres data down to the individual row using intuitive, dynamic TypeScript policies directly inside Rebase.
-                        </p>
+                        <div class="p-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
+                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/history.svg" alt="" class="h-3.5 w-3.5 filter invert"/>
+                                </div>
+                                <h3 class="text-base font-semibold text-white">Data history & audit</h3>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium ring-1 ring-primary/20 ml-auto">
+                                    Versioning
+                                </span>
+                            </div>
+                            <p class="text-surface-400 text-sm leading-relaxed">Track who changed what and when. Compare versions side by side and safely revert to any previous state with one click.</p>
+                        </div>
                     </div>
 
-                    <!-- Feature 3: Kanban -->
-                    <div class="group relative p-8 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-primary/50 transition-all duration-300 animate-on-scroll fade-in-up delay-100">
-                        <div class="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/kanban.svg" alt="Kanban Boards" class="h-6 w-6 filter invert"/>
+                    <!-- Import & export -->
+                    <div class="group rounded-2xl overflow-hidden ring-1 ring-surface-800 hover:ring-primary/40 transition-all duration-300 animate-on-scroll fade-in-up bg-surface-900/50">
+                        <div class="aspect-[4/3] overflow-hidden bg-surface-950">
+                            <video
+                                class="w-full h-full object-cover object-top"
+                                style="pointer-events: none;"
+                                loop
+                                autoplay
+                                muted
+                                playsinline>
+                                <source src="/img/import.webm" type="video/webm"/>
+                            </video>
                         </div>
-                        <h3 class="text-xl font-semibold text-white mb-3">Kanban Board Views</h3>
-                        <p class="text-surface-400 leading-relaxed">
-                            Your data doesn't have to be just spreadsheets. Instantly visualize and manage your Postgres records as interactive, drag-and-drop Kanban boards.
-                        </p>
+                        <div class="p-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
+                                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/upload.svg" alt="" class="h-3.5 w-3.5 filter invert"/>
+                                </div>
+                                <h3 class="text-base font-semibold text-white">Import & export</h3>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium ring-1 ring-primary/20 ml-auto">
+                                    Bulk ops
+                                </span>
+                            </div>
+                            <p class="text-surface-400 text-sm leading-relaxed">Bulk import from CSV, JSON, or Excel with automatic field mapping. One-click export for backups and reporting.</p>
+                        </div>
                     </div>
+                </div>
 
-                    <!-- Feature 4: SQL Editor -->
-                    <div class="group relative p-8 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-primary/50 transition-all duration-300 animate-on-scroll fade-in-up delay-150">
-                        <div class="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/terminal.svg" alt="SQL Editor" class="h-6 w-6 filter invert"/>
+                <!-- Row 2: Icon + text cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    {[
+                        {
+                            icon: "sparkles",
+                            title: "AI content generation",
+                            desc: "Context-aware autofill that understands your schema. Generate titles, descriptions, translations in one click."
+                        },
+                        {
+                            icon: "file-text",
+                            title: "Notion-style editor",
+                            desc: "A rich text editor with slash commands, media embeds, and structured content — built in as a field type."
+                        },
+                        {
+                            icon: "puzzle",
+                            title: "React extensibility",
+                            desc: "Custom fields, entity views, or entire pages — if you can build it in React, you can build it in Rebase."
+                        },
+                    ].map(item => (
+                        <div class="group relative p-6 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-primary/40 transition-all duration-300 animate-on-scroll fade-in-up">
+                            <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
+                                <img src={`https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${item.icon}.svg`} alt="" class="h-5 w-5 filter invert"/>
+                            </div>
+                            <h3 class="text-base font-semibold text-white mb-2">{item.title}</h3>
+                            <p class="text-surface-400 text-sm leading-relaxed">{item.desc}</p>
                         </div>
-                        <h3 class="text-xl font-semibold text-white mb-3">Built-in SQL Editor</h3>
-                        <p class="text-surface-400 leading-relaxed">
-                            Never leave the UI. A fully-featured, built-in SQL editor connects directly to your Postgres database for complex migrations, raw queries, and immediate data manipulation.
-                        </p>
-                    </div>
+                    ))}
                 </div>
             </div>
         </section>
 
         <!-- FAQ -->
-        <section class="bg-black py-24 sm:py-32">
+        <section class="bg-black py-24 sm:py-32 border-t border-surface-800/40">
             <div class="mx-auto max-w-7xl px-6">
                 <div class="mx-auto max-w-3xl text-center animate-on-scroll fade-in-up">
                     <h2 class="text-3xl sm:text-4xl font-medium text-white">Frequently asked questions</h2>
                 </div>
                 <div class="mt-10 max-w-3xl mx-auto space-y-4 animate-on-scroll fade-in-up delay-100">
                     <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
-                        <summary class="cursor-pointer text-white font-semibold">What database does Rebase use?</summary>
-                        <p class="mt-2 text-surface-300">Rebase is built on <strong>PostgreSQL</strong>. You connect your own Postgres database and Rebase automatically generates a full admin interface on top of it — no extra database, no data migration required.</p>
+                        <summary class="cursor-pointer text-white font-semibold">What database does Rebase support?</summary>
+                        <p class="mt-2 text-surface-300">Rebase is built on <strong>PostgreSQL</strong>. You connect your own Postgres database — Rebase introspects the schema and generates a full admin interface automatically. No extra database, no data migration required.</p>
                     </details>
                     <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
-                        <summary class="cursor-pointer text-white font-semibold">Is my data safe with Rebase?</summary>
-                        <p class="mt-2 text-surface-300">Yes. Your data lives in your own Postgres database — Rebase never copies or stores it. Our open-source codebase can be audited and self-hosted at any time.</p>
+                        <summary class="cursor-pointer text-white font-semibold">How is Rebase different from Retool or Supabase?</summary>
+                        <p class="mt-2 text-surface-300">Unlike Retool, Rebase is open-source with no per-seat pricing lock-in, and it's a real React framework you can extend with your own code. Unlike Supabase, Rebase works with <em>your existing</em> Postgres database — it's not a BaaS that owns your infrastructure. You keep full control.</p>
                     </details>
                     <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
                         <summary class="cursor-pointer text-white font-semibold">Can I use Rebase with an existing database?</summary>
-                        <p class="mt-2 text-surface-300">Yes, that's the primary use case. Connect any Postgres database and Rebase will introspect the schema to generate an admin panel automatically. You can then refine the UI visually without writing config files.</p>
+                        <p class="mt-2 text-surface-300">Yes — that's the primary use case. Connect any Postgres database and Rebase will introspect the schema to generate an admin panel automatically. You can then refine the UI visually or in TypeScript.</p>
                     </details>
                     <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
                         <summary class="cursor-pointer text-white font-semibold">Is Rebase open-source?</summary>
-                        <p class="mt-2 text-surface-300">Yes. The core framework is MIT-licensed and open-source. A PRO license unlocks advanced UI components, theming, and premium support.</p>
+                        <p class="mt-2 text-surface-300">Yes. The core framework is MIT-licensed and open-source. A PRO license unlocks advanced UI components (schema editor, data import/export, user management UI) and priority support.</p>
+                    </details>
+                    <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
+                        <summary class="cursor-pointer text-white font-semibold">What's the tech stack?</summary>
+                        <p class="mt-2 text-surface-300">The admin panel is a <strong>React 19 SPA</strong> built with TypeScript and Tailwind CSS. The backend is a lightweight <strong>Node.js</strong> service that connects directly to your PostgreSQL database. No SSR, no monolithic framework.</p>
                     </details>
                     <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
                         <summary class="cursor-pointer text-white font-semibold">Do you support SSO or enterprise auth?</summary>
                         <p class="mt-2 text-surface-300">Yes. SSO, SAML, and advanced enterprise authentication are available on Enterprise plans. Reach out to talk through your requirements.</p>
+                    </details>
+                    <details class="group rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 p-4">
+                        <summary class="cursor-pointer text-white font-semibold">Can I embed Rebase inside my existing React app?</summary>
+                        <p class="mt-2 text-surface-300">Yes. Rebase is distributed as npm packages. You can mount the entire admin panel inside your existing React application, or deploy it as a standalone SPA. It's designed to be embeddable.</p>
                     </details>
                 </div>
             </div>
@@ -370,17 +479,17 @@ const description = "Rebase is an open-source admin framework built on PostgreSQ
             <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg" }}/>
             <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
                 <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4 animate-on-scroll fade-in-up">
-                    Ready to own your data?
+                    Your Postgres deserves better than pgAdmin.
                 </h2>
                 <p class="text-surface-400 mb-10 text-lg animate-on-scroll fade-in-up">
-                    Start in minutes. No credit card required.
+                    Start building in minutes. Open-source. No credit card required.
                 </p>
                 <div class="flex flex-wrap items-center justify-center gap-4 animate-on-scroll fade-in-up delay-100">
-                    <a href="mailto:hello@rebase.pro?subject=Rebase%20Early%20Access"
+                    <a href="/docs"
                        data-track
                        id="cta-try-rebase"
                        class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-200 ease-in-out btn-glow">
-                        Request early access
+                        Get Started
                         <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
                              class="h-5 w-5 text-white filter invert"/>
                     </a>

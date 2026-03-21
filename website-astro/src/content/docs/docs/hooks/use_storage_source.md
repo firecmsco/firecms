@@ -2,7 +2,7 @@
 slug: docs/hooks/use_storage_source
 title: useStorageSource
 sidebar_label: useStorageSource
-description: Access the Rebase storage source for uploading files and retrieving download URLs. Works with Firebase Storage or any custom storage implementation.
+description: Access the Rebase storage source for uploading files and retrieving download URLs. Works with the built-in server storage or any custom storage implementation.
 ---
 
 Use this hook to access the storage source being used in your Rebase application.

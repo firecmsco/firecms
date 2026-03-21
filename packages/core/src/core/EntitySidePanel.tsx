@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo } from "react";
 
 import { EntityCollection, EntitySidePanelProps } from "@rebasepro/types";
 import { useCollectionRegistryController, useSideEntityController } from "../hooks";
+import { useCMSUrlController } from "../hooks/navigation/contexts";
 
 import { ErrorBoundary } from "../components";
 import { EntityEditView, OnUpdateParams } from "./EntityEditView";
@@ -40,6 +41,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     const sideEntityController = useSideEntityController();
     const navigationController = useCollectionRegistryController();
     const sideDialogsController = useSideDialogContext();
+    const cmsUrlController = useCMSUrlController();
 
     const onClose = () => {
         if (props.onClose) {
@@ -132,10 +134,19 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                                 onClick={() => {
                                     const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
                                     saveEntityToMemoryCache(key, values);
-                                    if (entityId)
-                                        navigate(location.pathname + location.search);
-                                    else
-                                        navigate(location.pathname + location.search + "#new");
+                                    // Clear blocked so no unsaved-changes dialog fires
+                                    setBlocked(false);
+                                    setBlockedNavigationMessage(undefined);
+                                    // IMPORTANT: useLocation() returns the frozen base_location from RebaseRoutes
+                                    // (the collection URL), not the actual browser URL.
+                                    // Build the full-screen URL directly from props using cmsUrlController.
+                                    if (entityId) {
+                                        const fullScreenUrl = cmsUrlController.buildUrlCollectionPath(`${path}/${entityId}`);
+                                        navigate(fullScreenUrl, { state: null });
+                                    } else {
+                                        const fullScreenUrl = cmsUrlController.buildUrlCollectionPath(path);
+                                        navigate(fullScreenUrl + "#new", { state: null });
+                                    }
                                 }}>
                                 <OpenInFullIcon size={"smallest"} />
                             </IconButton>}

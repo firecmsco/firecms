@@ -7,8 +7,8 @@ description: Learn how to implement custom DataSource, StorageSource, and AuthCo
 Rebase internally uses 3 main controllers to manage the data, file storage and authentication.
 These controllers are designed to be easily extended and replaced with your own implementations.
 
-Rebase provides default implementations for Firebase, Firestore and Firebase Authentication,
-but you can replace them with your own implementations. We also provide an integration with MongoDB Atlas.
+Rebase provides default implementations for PostgreSQL through the `usePostgresClientDataSource` hook,
+but you can replace them with your own implementations.
 
 ## DataSource
 
@@ -20,8 +20,7 @@ from callbacks where there is a `context` object defined, under `context.dataSou
 
 Rebase provides default implementations for:
 
-- Firebase `useFirestoreDataSource` (package `@rebasepro/firebase`)
-- MongoDB `useMongoDataSource` (package `@rebasepro/mongodb`)
+- PostgreSQL `usePostgresClientDataSource` (package `@rebasepro/postgres`)
 
 ### Creating your own DataSource
 
@@ -60,15 +59,13 @@ subscription. If not implemented, the `fetchEntity` method will be used instead.
 
 ## StorageSource
 
-The `StorageSource` is the controller responsible for managing the file storage. The delegate will
-be passed to Rebase and will be used internally by CMS.
+The `StorageSource` is the controller responsible for managing file storage. The delegate will
+be passed to Rebase and will be used internally by the CMS.
 
 You can access the storage source in any component using the `useStorageSource` hook. You can also access the storage
 source from callbacks where there is a `context` object defined, under `context.storageSource`.
 
-Rebase provides default implementations for:
-
-- Firebase `useFirebaseStorageSource` (package `@rebasepro/firebase`)
+Rebase provides a built-in storage source that stores files on the server's filesystem via the backend API.
 
 ### Description of Methods
 
@@ -83,17 +80,14 @@ optionally `bucket`.
 
 ## AuthController
 
-The `AuthController` is the controller responsible for managing the authentication. The delegate will
-be passed to Rebase and will be used internally by CMS.
+The `AuthController` is the controller responsible for managing authentication. The delegate will
+be passed to Rebase and will be used internally by the CMS.
 
 You can access the auth controller in any component using the `useAuthController` hook.
 You can also access the auth controller from callbacks where there is a `context` object defined,
 under `context.authController`.
 
-Rebase provides default implementations for:
-
-- Firebase `useFirebaseAuthController` (package `@rebasepro/firebase`)
-- MongoDB `useMongoDBAuthController` (package `@rebasepro/mongodb`)
+Rebase provides a built-in authentication system with JWT tokens managed by the backend.
 
 ### Description of Properties and Methods
 
@@ -121,7 +115,7 @@ status has not yet been determined.
 **setExtra**: A method to set the additional data for the authentication controller. Accepts `extra` parameter of
 type `ExtraData`.
 
-#### Additional Methods for `useFirebaseAuthController`
+#### Auth Methods
 
 **googleLogin**: A method to initiate login using Google authentication.
 
@@ -129,35 +123,14 @@ type `ExtraData`.
 
 **appleLogin**: A method to initiate login using Apple authentication.
 
-**facebookLogin**: A method to initiate login using Facebook authentication.
-
-**githubLogin**: A method to initiate login using GitHub authentication.
-
-**microsoftLogin**: A method to initiate login using Microsoft authentication.
-
-**twitterLogin**: A method to initiate login using Twitter authentication.
-
 **emailPasswordLogin**: A method to log in using an email and password. Takes `email` and `password` as parameters.
-
-**fetchSignInMethodsForEmail**: A method to fetch sign-in methods for a given email. Takes `email` as a parameter and returns a `Promise<string[]>`.
 
 **createUserWithEmailAndPassword**: A method to create a new user using an email and password. Takes `email` and `password` as parameters.
 
 **sendPasswordResetEmail**: A method to send a password reset email. Takes `email` as a parameter and returns a `Promise<void>`.
 
-**phoneLogin**: A method to log in using a phone number. Takes `phone` and `applicationVerifier` as parameters.
-
-**confirmationResult**: (Optional) An object containing the result of a phone number authentication operation.
-
 **skipLogin**: A method to skip the login process.
 
-**setUser**: A method to set the user object. Takes `user` of type `FirebaseUser` or `null` as a parameter.
+**setUser**: A method to set the user object. Takes `user` of type `User` or `null` as a parameter.
 
 **setRoles**: A method to set roles for the logged-in user. Takes an array of `Role` objects as a parameter.
-
-
-
-
-
-
-

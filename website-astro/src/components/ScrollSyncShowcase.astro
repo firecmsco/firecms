@@ -2,8 +2,6 @@
 // ScrollSyncShowcase.astro
 // A two-column scroll-sync section with a sticky index on the left
 // Uses Tailwind classes available in the site. Pure placeholders.
-import { ProductsDemoTable } from "./DataTalkDemo";
-
 
 ---
 
@@ -38,11 +36,11 @@ import { ProductsDemoTable } from "./DataTalkDemo";
                         <li>
                             <a href="#screen-2" data-index-item class="group block" data-active="false">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Code as Truth</span>
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">AI Data Enhancement</span>
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                      <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        Define your data models in simple TypeScript using Rebase collections. Rebase automatically maps this to Postgres and instantly generates a fully-featured, beautifully designed administrative interface. One definition, everywhere.
+                                        Enrich your data with AI-powered suggestions. Automatically generate descriptions, translations, categories, and more — right from inside the admin panel. No third-party tools needed.
                                     </p>
                                 </div>
                             </a>
@@ -101,86 +99,22 @@ import { ProductsDemoTable } from "./DataTalkDemo";
                         </section>
                     </div>
 
-                    <!-- Screen 2: Code as Truth -->
+                    <!-- Screen 2: AI Data Enhancement -->
                     <div id="screen-2" class="scroll-mt-32">
-                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Code as Truth</h3>
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">AI Data Enhancement</h3>
                         <section data-screen class="w-full will-change-transform">
                             <div class="relative rounded-2xl p-[1px]">
-                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950 flex flex-col min-h-[600px] p-6 lg:p-8 gap-6 z-0">
-                                    <div class="absolute -top-40 -left-60 h-[400px] w-[600px] rounded-full bg-primary/10 blur-[100px] -z-10"></div>
-                                    <div class="absolute -bottom-40 -right-40 h-[400px] w-[500px] rounded-full bg-blue-600/5 blur-[100px] -z-10"></div>
-                                    
-                                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full h-auto">
-                                        <!-- 1. Code Definition -->
-                                        <div class="w-full relative z-10 flex flex-col shadow-2xl shadow-black/80 rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300">
-                                            <div class="flex items-center justify-between px-4 py-3 bg-surface-900 border-b border-surface-800">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="flex gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-surface-600"></div><div class="w-2.5 h-2.5 rounded-full bg-surface-600"></div><div class="w-2.5 h-2.5 rounded-full bg-surface-600"></div></div>
-                                                    <div class="text-[11px] text-surface-400 font-mono tracking-wider uppercase font-semibold ml-2">App Code</div>
-                                                </div>
-                                                <div class="text-[11px] text-surface-500 font-mono">products.tsx</div>
-                                            </div>
-                                            <div tabindex="0" class="whitespace-pre bg-surface-950 p-5 font-mono text-[13px] leading-relaxed text-surface-300 overflow-hidden focus:overflow-auto outline-none ring-1 ring-inset ring-surface-800 h-[220px]"><span class="text-primary-light">import</span> &#123; buildCollection &#125; <span class="text-primary-light">from</span> <span class="text-green-400">"@rebasepro/core"</span>;
-
-<span class="text-primary-light">export const</span> <span class="text-white">products</span> = buildCollection(&#123;
-&nbsp;&nbsp;<span class="text-blue-300">name</span>: <span class="text-green-400">"Products"</span>,
-&nbsp;&nbsp;<span class="text-blue-300">properties</span>: &#123;
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">name</span>: &#123; 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">name</span>: <span class="text-green-400">"Name"</span>, 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span>,
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">validation</span>: &#123; <span class="text-blue-300">required</span>: <span class="text-primary-light">true</span> &#125;
-&nbsp;&nbsp;&nbsp;&nbsp;&#125;,
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">category</span>: &#123; 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span>,
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">name</span>: <span class="text-green-400">"Category"</span>, 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">enum</span>: &#123; 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">home</span>: <span class="text-green-400">"Home storage"</span>, 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">sunglasses</span>: <span class="text-green-400">"Sunglasses"</span>,
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">toys</span>: <span class="text-green-400">"Toys and games"</span>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#125; 
-&nbsp;&nbsp;&nbsp;&nbsp;&#125;,
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">price</span>: &#123; 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">name</span>: <span class="text-green-400">"Price"</span>, 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">type</span>: <span class="text-green-400">"number"</span> 
-&nbsp;&nbsp;&nbsp;&nbsp;&#125;,
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">currency</span>: &#123; 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">name</span>: <span class="text-green-400">"Currency"</span>, 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span> 
-&nbsp;&nbsp;&nbsp;&nbsp;&#125;
-&nbsp;&nbsp;&#125;
-&#125;);
-                                            </div>
-                                        </div>
-
-                                        <!-- 2. Postgres Database -->
-                                        <div class="w-full relative z-10 flex flex-col shadow-2xl shadow-black/80 rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300">
-                                            <div class="flex items-center justify-between px-4 py-3 bg-surface-900 border-b border-surface-800">
-                                                <div class="text-[11px] text-surface-400 font-mono tracking-wider uppercase font-semibold">Postgres DB Structure</div>
-                                                <img src="https://www.postgresql.org/media/img/about/press/elephant.png" class="h-3.5 opacity-60 grayscale filter brightness-200" alt="postgres"/>
-                                            </div>
-                                            <div tabindex="0" class="whitespace-pre bg-surface-950 p-5 font-mono text-[13px] leading-relaxed text-surface-400 overflow-hidden focus:overflow-auto outline-none ring-1 ring-inset ring-surface-800 h-[220px]"><span class="text-surface-500 italic">-- Automatically inferred mappings</span><br/>
-<span class="text-primary-light">CREATE TABLE</span> <span class="text-white">"products"</span> (
-&nbsp;&nbsp;<span class="text-blue-300">"id"</span> <span class="text-white">uuid PRIMARY KEY NOT NULL</span>,
-&nbsp;&nbsp;<span class="text-blue-300">"name"</span> <span class="text-white">text NOT NULL</span>,
-&nbsp;&nbsp;<span class="text-blue-300">"category"</span> <span class="text-white">text</span>,
-&nbsp;&nbsp;<span class="text-blue-300">"price"</span> <span class="text-white">numeric</span>,
-&nbsp;&nbsp;<span class="text-blue-300">"currency"</span> <span class="text-white">text</span>
-);
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-span-12 w-full mt-2 relative z-10 flex flex-col shadow-2xl shadow-black/80 rounded-xl overflow-hidden border border-surface-800 bg-surface-950 hover:scale-[1.01] transition-transform duration-300">
-                                        <div class="flex items-center gap-2 px-4 py-3 border-b border-surface-800">
-                                            <h3 class="text-[11px] font-semibold text-white/50 tracking-wider uppercase">Instantly Generated UI</h3>
-                                        </div>
-                                        <div class="w-full h-[250px] relative pointer-events-none overflow-hidden bg-surface-950">
-                                            <div class="absolute inset-0">
-                                                <ProductsDemoTable client:idle />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
+                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950">
+                                    <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>
+                                    <video
+                                            class="w-full h-auto"
+                                            style="pointer-events: none;"
+                                            loop
+                                            autoplay
+                                            muted
+                                            playsinline>
+                                        <source src="/img/data_enhancement.webm" type="video/webm"/>
+                                    </video>
                                 </div>
                             </div>
                         </section>

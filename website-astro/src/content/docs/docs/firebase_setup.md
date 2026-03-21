@@ -1,126 +1,101 @@
 ---
 slug: docs/firebase_setup
-title: Firebase setup
-sidebar_label: Firebase setup
-description: Step-by-step guide to setting up Firebase for Rebase, including Firestore, Authentication, Storage, and security rules.
+title: Database Setup
+sidebar_label: Database Setup
+description: Step-by-step guide to setting up your PostgreSQL database for Rebase, including database creation, environment configuration, migrations, and Row Level Security.
 ---
 
-Rebase connects directly to your **Firebase** project to provide a powerful **admin panel** for your **Firestore database**. Before you can use Rebase as a **headless CMS** or **back-office** for your app, you need to configure your Firebase project.
+Rebase connects directly to your **PostgreSQL** database to provide a powerful **admin panel** for managing your data. Before you can use Rebase, you need to set up your Postgres database and configure the connection.
 
 This guide covers the essential setup steps:
-1. **Firestore** - Your primary database
-2. **Authentication** - Control who can access the admin panel
-3. **Storage** - For file uploads and media management
-4. **Security Rules** - Protect your data
+1. **PostgreSQL** — Your primary database
+2. **Environment Configuration** — Connect Rebase to your database
+3. **Migrations** — Set up your database schema
+4. **Row Level Security (RLS)** — Protect your data
 
-### Firestore
+### PostgreSQL
 
-You need to enable **Firestore** in it. You can initialise the security rules
-in test mode to allow reads and writes, but you are encouraged to write rules
-that are suited for your domain.
+You need a running PostgreSQL instance. You can use a local installation, a Docker container, or a managed service like:
 
-Keep in mind that rules should be defined for each collection and should be
-defined in a way that is suited for your domain.
+- [Supabase](https://supabase.com/)
+- [Neon](https://neon.tech/)
+- [Railway](https://railway.app/)
+- [AWS RDS](https://aws.amazon.com/rds/postgresql/)
 
-Please check the [Firestore documentation](https://firebase.google.com/docs/firestore/security/get-started)
-for more information.
+:::tip
+For local development, a simple Docker container works great:
+```bash
+docker run --name rebase-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=rebase -p 5432:5432 -d postgres:16
+```
+:::
+
+### Environment Configuration
+
+Configure your database connection in the `.env` file at the root of your project:
+
+```bash
+DATABASE_URL=postgresql://username:password@localhost:5432/your_database
+```
 
 :::important
-In a default Firestore project, it is likely that your Firestore rules
-will not allow you to read or write to the database. Continue reading to
-learn how to set up your rules.
+Make sure your PostgreSQL user has sufficient permissions to create tables, run migrations, and manage RLS policies. For development, using a superuser is fine. For production, create a dedicated user with appropriate permissions.
 :::
 
-For example, a simple rule that allows any authenticated user to read and write
-to any collection would be:
+### Database Migrations
 
+Rebase uses **Drizzle ORM** to manage your database schema. Your TypeScript collection definitions in the `shared/collections/` directory are the source of truth, and Drizzle generates the corresponding Postgres tables.
+
+Common database commands:
+
+```bash
+# Generate schema from your collections
+pnpm generate:schema
+
+# Run database migrations
+pnpm db:migrate
+
+# Open Drizzle Studio to visually browse your database
+pnpm db:studio
 ```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if request.auth != null;
-    }
-  }
-}
-```
 
-but ideally you will want to make it more restricitve. For the products demo to work, your rules should look like this:
+After defining or modifying a collection, run `pnpm generate:schema` followed by `pnpm db:migrate` to apply the changes to your database.
 
-```
-rules_version = '2';
-service cloud.firestore {
+### Row Level Security (RLS)
 
-    // everything is private by default
-    match /{document=**} {
-      allow read: if false;
-      allow write: if false;
-    }
-    
-    // allow every read to products collection but write only to authenticated users
-    match /databases/{database}/documents {
-        match /products/{id=**} {
-          allow read: if true;
-          allow write: if request.auth != null;
+Rebase supports **Row Level Security (RLS)** policies defined directly in your collection configuration. RLS policies control which rows a user can read, insert, update, or delete based on their role or other conditions.
+
+For example, in a `posts` collection, you might define a security rule that allows public read access:
+
+```typescript
+const postsCollection: EntityCollection = {
+    name: "Posts",
+    slug: "posts",
+    dbPath: "posts",
+    properties: {
+        // ... your properties
+    },
+    securityRules: [
+        {
+            name: "Enable read access for all users",
+            operation: "select",
+            mode: "permissive",
+            using: "true",
+            roles: ["public"]
         }
-    }
-    
-    // allow users to modify only their own user document
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-}
-
+    ]
+};
 ```
 
-### Web app
-
-In the project settings, you need to create a **Web app** within your
-project, from which you can get your Firebase config as a Javascript object.
-That is the object that you need to pass to the CMS.
-
-![firebase_setup](/img/firebase_setup_app.png)
-
-:::tip[Firebase Hosting]
-Note that you can also link your new webapp to **Firebase Hosting** which will
-allow you to deploy it with very little effort. You can create the
-Firebase Hosting site at a later stage and link it to your webapp.
-:::
+These security rules are applied at the Postgres level, meaning they are enforced regardless of how the data is accessed — whether through Rebase or directly via SQL.
 
 ### Authentication
 
-You will most likely want to enable authentication in order to pass the login
-screen
+Rebase uses a built-in authentication system with JWT tokens. The backend handles user authentication and passes the user context to the database for RLS enforcement.
 
-:::important
-Vite uses the default url `http://127.0.0.1:5173` for the development server.
-Firebase Auth will require to add this url to the authorized domains in the
-Firebase console.
-Alternatively, you can use the url `http://localhost:5173`.
-:::
-
-![firebase_setup](/img/firebase_setup_auth.png)
+You can configure authentication providers (email/password, Google Sign-In) in your backend settings. See the [Authentication](/docs/self/auth_self_hosted) guide for more details.
 
 ### Storage
 
-In case you want to use the different storage fields provided by the CMS, you
-need to enable **Firebase Storage**. The default bucket will be used to
-save your stored files.
+Rebase includes a built-in file storage system that works through the backend API. Files are stored on your server's filesystem (configurable via the `UPLOADS_PATH` environment variable). No external storage services are required by default.
 
-:::note
-If you are experiencing any CORS issues, you can enable CORS in your bucket
-settings as specified in: https://firebase.google.com/docs/storage/web/download-files#cors_configuration
-Create a file with the content:
-
-```
-[
-  {
-    "origin": ["*"],
-    "method": ["GET"],
-    "maxAgeSeconds": 3600
-  }
-]
-```
-
-and upload it with: `gsutil cors set cors.json gs://<your-cloud-storage-bucket>`.
-:::
+If you need to use external storage (e.g., S3, Google Cloud Storage), see the [Custom Storage](/docs/self/custom_storage) guide.

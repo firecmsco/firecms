@@ -24,12 +24,12 @@ const dataTalkExchanges = [
     {
         query: "Update all out of stock items to mark them as unavailable",
         responseText: "I'll help you update those items:",
-        code: `export default async () => {\n  const firestore = getFirestore();\n  const productsRef = collection(firestore, \"products\");\n  const q = query(productsRef, where(\"stock\", \"==\", 0));\n  const productsToUpdate = await getDocs(q);\n  const batch = writeBatch(firestore);\n  productsToUpdate.forEach((doc) => {\n    batch.update(doc.ref, { available: false });\n  });\n  return await batch.commit();\n}`
+        code: `export default async () => {\n  const products = await db.query(\n    \"SELECT * FROM products WHERE stock = 0\"\n  );\n  await db.query(\n    \"UPDATE products SET available = false WHERE stock = 0\"\n  );\n  return { updated: products.length };\n}`
     },
     {
         query: "Find users who signed up in the last 30 days",
         responseText: "Here's how to find recent users:",
-        code: `const thirtyDaysAgo = new Date();\nthirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);\n\ncollection(\"users\")\n  .where(\"createdAt\", \">\", thirtyDaysAgo)\n  .get()`,
+        code: `const thirtyDaysAgo = new Date();\nthirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);\n\nawait db.query(\n  \"SELECT * FROM users WHERE created_at > $1\",\n  [thirtyDaysAgo]\n)`,
         showUsersTable: true
     }
 ];
@@ -128,34 +128,34 @@ const dataTalkExchanges = [
                 </div>
                 <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                     <SpotlightCard
+                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/terminal.svg"
+                            title="Built-in SQL Editor"
+                            description="Run queries, visualize EXPLAIN plans, edit results inline, and save favorite snippets — all without leaving the admin panel."
+                    />
+                    <SpotlightCard
                             icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg"
-                            title="Advanced Permissions"
-                            description="Granular role-based access control for collections, fields, and actions."
+                            title="Row-Level Security"
+                            description="Create and manage Postgres RLS policies visually. Define per-row, per-role access rules in TypeScript."
                     />
                     <SpotlightCard
                             icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/folder.svg"
                             title="File Storage"
-                            description="Seamless integration with Firebase Storage for images, videos, and documents."
-                    />
-                    <SpotlightCard
-                            icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/radio.svg"
-                            title="Real-time Updates"
-                            description="See changes instantly across all users with real-time data synchronization."
+                            description="Seamless file storage integration for images, videos, and documents."
                     />
                     <SpotlightCard
                             icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/layout-dashboard.svg"
-                            title="Custom Views"
-                            description="Build custom React components and integrate them seamlessly."
+                            title="Custom React Views"
+                            description="Build custom dashboards, entity previews, or full pages with your own React components."
                     />
                     <SpotlightCard
                             icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/clipboard-list.svg"
                             title="Powerful Forms"
-                            description="Go beyond basic fields with conditional logic, complex validation, and custom form widgets."
+                            description="Conditional logic, complex validation, and custom form widgets for every data type."
                     />
                     <SpotlightCard
                             icon="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/history.svg"
-                            title="Data History"
-                            description="Track who changed what and when. Compare versions, audit edits, and revert changes safely."
+                            title="Data History & Audit"
+                            description="Track who changed what and when. Compare versions and safely revert to previous states."
                     />
                 </div>
             </div>

@@ -2,7 +2,7 @@
 title: Getting started
 sidebar_label: Getting started
 slug: docs/index
-description: Welcome to Rebase, the open source headless CMS and admin panel expertly crafted to empower developers. Built on Firebase, Rebase guarantees full ownership of your project with an intuitive toolkit that streamlines the creation of your custom admin panel. Dive into Rebase Cloud, the hosted version that offers a fully managed service, allowing you to create and manage your content in a user-friendly interface without writing a single line of code. Even in its hosted format, Rebase remains flexible, granting you the freedom to upload your own code for bespoke properties, views, and more. From collection editing to user and role management, Rebase is your all-in-one solution for a scalable and maintenance-free CMS experience, perfectly tailored to your Firestore project. Get started with Rebase today and unlock the potential to elevate your content management to new heights.
+description: Welcome to Rebase, the open-source Postgres admin panel and headless CMS built for developers. Rebase connects directly to your PostgreSQL database to provide a powerful, type-safe interface for managing your data. Define your schema as TypeScript collections, and Rebase generates a full CRUD UI with tables, forms, relations, and validation — all backed by real-time WebSocket sync. Get started with Rebase Cloud or self-host it in your own environment.
 ---
 
 <video className="intro_video" loop autoPlay muted>
@@ -10,10 +10,10 @@ description: Welcome to Rebase, the open source headless CMS and admin panel exp
 </video>
 
 :::important
-Rebase is an **open-source headless CMS and admin panel framework** built with React and TypeScript. It connects directly to your **Firebase** or **MongoDB** project to provide a powerful, intuitive, and type-safe interface for managing your data.
+Rebase is an **open-source Postgres admin panel and headless CMS** built with React and TypeScript. It connects directly to your **PostgreSQL** database to provide a powerful, intuitive, and type-safe interface for managing your data.
 :::
 
-Rebase is designed to be the fastest way to build a production-ready back-office. It generates full CRUD (Create, Read, Update, Delete) views from your data configuration, imposes **no data structure restrictions**, and can be set up in minutes.
+Rebase is designed to be the fastest way to build a production-ready back-office on top of Postgres. It generates full CRUD (Create, Read, Update, Delete) views from your TypeScript collection definitions, supports **relations**, **Row Level Security (RLS)**, and can be set up in minutes.
 
 ## Two Ways to Get Started
 
@@ -43,11 +43,11 @@ For maximum control and customization. Free, open-source, and deployed in your o
 
 ## What Can You Build?
 
-Rebase is flexible enough to be the backend for any project. Common use cases include:
+Rebase is flexible enough to be the admin panel for any Postgres-backed project. Common use cases include:
 
   * **Custom Admin Panels:** Create a type-safe UI for managing your application's data (e.g., users, products, orders) without the frontend hassle.
   * **Internal Tools:** Build bespoke tools for your operations, sales, or support teams to manage workflows, track data, and run internal processes.
-  * **Headless CMS:** Power your websites, mobile apps, and marketing content from a single, powerful admin interface.
+  * **Headless CMS:** Power your websites, mobile apps, and marketing content from a single, powerful admin interface backed by Postgres.
 
 ## Core Developer Features
 
@@ -55,15 +55,19 @@ Rebase is built by developers, for developers.
 
 ### 1\. Schema as Code
 
-Define your data models as TypeScript objects. Your code becomes the single source of truth, enabling version control, type-safety, and a seamless git-based workflow.
+Define your data models as TypeScript collections. Each collection maps to a Postgres table and supports typed properties, relations, enums, and security rules. Your code becomes the single source of truth, enabling version control, type-safety, and a seamless git-based workflow.
 
 ### 2\. Instant CRUD UI
 
-Rebase reads your schema and automatically generates a full-featured, performant, and beautiful CRUD interface with tables, forms, validation, and more.
+Rebase reads your schema and automatically generates a full-featured, performant, and beautiful CRUD interface with tables, forms, validation, relations, and more.
 
-### 3\. Radical Extensibility
+### 3\. Real-time Sync
 
-If you can build it in React, you can build it in Rebase. Create custom form fields, entirely new top-level views, or replace any part of the UI with your own components. No black boxes.
+Rebase uses WebSockets to provide real-time data synchronization. When data changes in Postgres, your admin panel updates instantly.
+
+### 4\. Radical Extensibility
+
+If you can build it in React, you can build it in Rebase. Create custom form fields, entirely new top-level views (like SQL consoles or RLS editors), or replace any part of the UI with your own components. No black boxes.
 
 -----
 
@@ -73,4 +77,4 @@ Ready to dive in?
 
   * **🚀 Try Rebase Cloud:** [**Start your 1-month free trial**](https://app.rebase.pro) and build your project in minutes.
   * **💻 Start the Self-Hosted Quickstart:** Follow our [**Self-Hosting guide**](/docs/self) to get your project running locally with `npx`.
-  * **📚 Learn about Collections:** Understand the core concept of how Rebase maps [**Collections**](/docs/collections) to your database.
+  * **📚 Learn about Collections:** Understand the core concept of how Rebase maps [**Collections**](/docs/collections) to your Postgres tables.

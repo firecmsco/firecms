@@ -27,6 +27,11 @@ export function useBuildSideDialogsController(): SideDialogsController {
             .filter(p => Boolean(p)) as SideDialogPanelProps[];
         if (!equal(sidePanelsRef.current.map(p => p.key), newPanels.map(p => p.key))) {
             updateSidePanels(newPanels);
+            // If all panels were cleared via explicit navigation (full-screen expand),
+            // reset routesCount so close() doesn't fire navigate(-1)
+            if (newPanels.length === 0) {
+                routesCount.current = 0;
+            }
         }
     }, [location]);
 

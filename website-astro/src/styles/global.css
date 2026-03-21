@@ -21,7 +21,7 @@
 /* Content sources (scan paths) - paths are relative to this file (src/styles/global.css) */
 @source "../**/*.{astro,html,js,jsx,ts,tsx,md,mdx}";
 @source "../pages/**/*.{astro,md,mdx,ts,tsx}";
-@source "../../../node_modules/@rebasepro/**/src/**/*.{js,ts,jsx,tsx}";
+@source "../../../packages/ui/src/**/*.{js,ts,jsx,tsx}";
 
 
 .material-icons {

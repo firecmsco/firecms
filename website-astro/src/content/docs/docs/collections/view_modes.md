@@ -163,8 +163,8 @@ const tasksCollection = buildCollection({
 
 The `orderProperty` uses fractional indexing to maintain order without rewriting every document on each reorder.
 
-:::caution Firestore Index Required
-When using Kanban view with Firestore, you'll need a composite index on your column property. Firestore will prompt you with the exact index link when you first load the view.
+:::tip Performance Tip
+For large collections using Kanban view, consider adding a database index on your column property and order property for optimal performance.
 :::
 
 **Best for:** Task management, order fulfillment, content pipelines, support tickets, hiring workflows — any collection with distinct stages.

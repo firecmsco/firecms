@@ -72,10 +72,9 @@ Quick example of how the `extra.roles` field in the previous example is
 initialised:
 
 ```tsx
-import { Authenticator } from "@rebasepro/core";
-import { FirebaseUserWrapper } from "@rebasepro/firebase";
+import { Authenticator, User } from "@rebasepro/core";
 
-const myAuthenticator: Authenticator<FirebaseUserWrapper> = async ({
+const myAuthenticator: Authenticator<User> = async ({
                                                                        user,
                                                                        authController,
                                                                        dataSource

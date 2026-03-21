@@ -1,7 +1,7 @@
 ---
 slug: docs/cloud/app_config
 title: App Config
-description: A comprehensive guide to configuring Rebase, a customizable CMS. It provides detailed instructions on how to initialize a new project, customize the CMS with reusable properties, fields, collections, entity views, and CMS views. It also explains the customization options available, including collections, views, propertyConfigs, entityViews, HomePage, rebaseAppBarComponentProps, firestoreIndexesBuilder, onFirebaseInit, dateTimeFormat, locale, textSearchController, and autoOpenDrawer. This page is a valuable resource for developers seeking to tailor Rebase to their specific needs.
+description: A comprehensive guide to configuring Rebase, a customizable CMS. It provides detailed instructions on how to initialize a new project, customize the CMS with reusable properties, fields, collections, entity views, and CMS views. It also explains the customization options available, including collections, views, propertyConfigs, entityViews, HomePage, dateTimeFormat, locale, textSearchController, and autoOpenDrawer. This page is a valuable resource for developers seeking to tailor Rebase to their specific needs.
 ---
 
 The app config is the main configuration object of Rebase Cloud. It is defined
@@ -41,20 +41,15 @@ Let's see all the customization options available:
 
 * `HomePage`: Use this component to override the home page.
 * `rebaseAppBarComponentProps`: Additional props passed to the custom AppBar.
-* `firestoreIndexesBuilder`: Use this builder to indicate which indexes are available in your Firestore database.
-    This is used to allow filtering and sorting for multiple fields in the CMS.
-* `onFirebaseInit`: Optional callback after Firebase has been initialised.
-    Useful for using the local emulator or retrieving the used configuration.
+* `indexesBuilder`: Use this builder to indicate which indexes are available in your Postgres database.
+    This is used to optimize filtering and sorting for multiple fields in the CMS.
+* `onInit`: Optional callback after the CMS has been initialised.
+    Useful for custom initialization or retrieving the used configuration.
 * `dateTimeFormat`: Format of the dates in the CMS.
     Defaults to 'MMMM dd, yyyy, HH:mm:ss'.
 * `locale`: Locale of the CMS, currently only affecting dates.
-* `textSearchController`: Use this controller to return text search results as document ids, that get then fetched from Firestore.
+* `textSearchController`: Use this controller to return text search results as document ids, that get then fetched from the database.
 * `autoOpenDrawer`: Experimental feature to open the drawer automatically when hovering.
-* `appCheck`: Firebase App Check configuration.
-    - `provider`: The provider to use for App Check.
-    - `isTokenAutoRefreshEnabled`: Whether to automatically refresh the token.
-    - `debugToken`: Debug token to use for App Check.
-    - `forceRefresh`: Whether to force refresh the token.
 
 ### Example
 

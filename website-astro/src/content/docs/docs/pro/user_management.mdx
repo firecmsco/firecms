@@ -1,26 +1,26 @@
 ---
 slug: docs/pro/user_management
 title: User Management
-description: Add role-based access control to your Firebase admin panel with the Rebase User Management plugin. Manage users, roles, and permissions in Firestore.
+description: Add role-based access control to your PostgreSQL admin panel with the Rebase User Management plugin. Manage users, roles, and permissions in your database.
 ---
 
 ![user_management.png](/img/user_management.png)
 
-Control who can access your **Firebase admin panel** and what they can do. The User Management Plugin provides a complete **role-based access control (RBAC)** system for your Rebase project.
+Control who can access your **Rebase admin panel** and what they can do. The User Management Plugin provides a complete **role-based access control (RBAC)** system for your Rebase project.
 
 :::tip Why use the User Management Plugin?
 Building authentication and permissions from scratch is time-consuming and error-prone. This plugin gives you:
 - **User CRUD**: Create, edit, and delete CMS users directly in the UI
 - **Role definitions**: Define granular permissions (Admin, Editor, Viewer, or custom)
 - **Per-collection permissions**: Control who can read, create, edit, or delete in each collection
-- **Firestore integration**: All user/role data stored securely in your **Firestore** database
+- **Database integration**: All user/role data stored securely in your **PostgreSQL** database
 :::
 
 
 ## Installation
 
 First, ensure you have installed the necessary dependencies.
-To use the plugin, you need to have Rebase and Firebase set up in your project.
+To use the plugin, you need to have Rebase set up in your project.
 
 ```sh
 yarn add @rebasepro/user_management
@@ -31,31 +31,16 @@ yarn add @rebasepro/user_management
 
 The plugin requires several configurations, including paths for storing user and role data.
 
-The default config of the plugin will be saved to your database under the path `__REBASE/config`,
-but you can customize this path as needed.
-
-If you are using Firestore, make sure to set up the Firestore rules to allow the plugin to read and write to the specified paths.
-We suggest adding these rules to your Firestore security rules, which will allow users with the correct roles to access the user management data.
-
-```
-match /{document=**} {
-  allow read: if isRebaseUser();
-  allow write: if isRebaseUser();
-}
-
-function isRebaseUser(){
-  return exists(/databases/$(database)/documents/__REBASE/config/users/$(request.auth.token.email));
-}
-```
-
+The default config of the plugin will be saved to your database in the `__rebase_users` and `__rebase_roles` tables,
+but you can customize the table names as needed.
 
 ### User Management Parameters
 
 Below are the parameters you can configure:
 
-- **firebaseApp**: The Firebase app to use for user management.
-- **usersPath**: Path in Firestore where user configurations are stored. Default is `__REBASE/config/users`.
-- **rolesPath**: Path in Firestore where role configurations are stored. Default is `__REBASE/config/roles`.
+- **dataSource**: The data source to use for user management.
+- **usersPath**: Path/table where user configurations are stored. Default is `__rebase_users`.
+- **rolesPath**: Path/table where role configurations are stored. Default is `__rebase_roles`.
 - **allowDefaultRolesCreation**: If there are no roles in the database, show a button to create default roles. Default is `true`.
 
 ### Hook Usage
@@ -67,9 +52,9 @@ The main hook to initialize the plugin's functionality is `useBuildUserManagemen
 import {useBuildUserManagement} from "@rebasepro/user_management";
 
 const userManagement = useBuildUserManagement({
-    dataSource: firestoreDelegate,
-    usersPath: "__REBASE/config/users",
-    rolesPath: "__REBASE/config/roles",
+    dataSource,
+    usersPath: "__rebase_users",
+    rolesPath: "__rebase_roles",
     allowDefaultRolesCreation: true,
 });
 ```
@@ -89,14 +74,14 @@ import {useBuildUserManagement, useUserManagementPlugin, userManagementAdminView
 
 function App() {
 
-    // .. rest of your configuration, including the `authController` and `firestoreDelegate`
+    // .. rest of your configuration, including the `authController` and `dataSource`
 
     const userManagementPlugin = useUserManagementPlugin({ userManagement });
 
     const userManagement = useBuildUserManagement({
-        dataSource: firestoreDelegate,
-        usersPath: "__REBASE/config/users",
-        rolesPath: "__REBASE/config/roles",
+        dataSource,
+        usersPath: "__rebase_users",
+        rolesPath: "__rebase_roles",
         allowDefaultRolesCreation: true,
         includeCollectionConfigPermissions: true,
     });
@@ -109,7 +94,7 @@ function App() {
         disabled: userManagement.loading,
         authController,
         authenticator: userManagement.authenticator,
-        dataSource: firestoreDelegate,
+        dataSource,
         storageSource
     });
 
@@ -121,7 +106,7 @@ function App() {
         adminViews: userManagementAdminViews,
         collectionPermissions: userManagement.collectionPermissions, // Optional, link collection permissions to user management
         authController,
-        dataSource: firestoreDelegate,
+        dataSource,
         plugins
     });
 
@@ -152,7 +137,7 @@ const navigationController = useBuildNavigationController({
     adminViews: userManagementAdminViews,
     collectionPermissions: userManagement.collectionPermissions,
     authController,
-    dataSource: firestoreDelegate
+    dataSource
 });
 ````
 
@@ -170,7 +155,7 @@ const {
     disabled: userManagement.loading,
     authController,
     authenticator: userManagement.authenticator,
-    dataSource: firestoreDelegate,
+    dataSource,
     storageSource
 });
 ```
@@ -184,19 +169,19 @@ to customize the authentication process.
 
 The `UserManagement` object includes a `collectionPermissions` function that checks what operations a
 user can perform based on their roles and the collection configuration.
-The permissions will be based on your users and roles configuration in Firestore.
+The permissions will be based on your users and roles configuration in the database.
 
 You can pass this function to the `useBuildNavigationController` hook to integrate collection
 permissions into your Rebase project.
 
-Note that if you apply permissions to a collection,they will override the permissions set in the collection configuration.
+Note that if you apply permissions to a collection, they will override the permissions set in the collection configuration.
 
 ```jsx
 const navigationController = useBuildNavigationController({
     collections,
     collectionPermissions: userManagement.collectionPermissions,
     authController,
-    dataSource: firestoreDelegate
+    dataSource
 });
 ```
 
@@ -238,6 +223,3 @@ The `userManagement` object returned by the `useUserManagement` hook includes th
 - **`authenticator`**: Optional. Authenticator callback built from the current configuration of the user management. It will only allow access to users with the required roles.
 - **`rolesError`**: Optional. Holds any error occurred while loading roles.
 - **`usersError`**: Optional. Holds any error occurred while loading users.
-
-
-

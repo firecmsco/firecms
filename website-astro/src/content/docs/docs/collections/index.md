@@ -2,19 +2,19 @@
 slug: docs/collections/index
 title: Collections
 sidebar_label: Collections
-description: Define your Firestore data schema with Rebase collections. Build type-safe admin panels for Firebase with React and TypeScript.
+description: Define your data schema with Rebase collections. Build type-safe admin panels for PostgreSQL with React and TypeScript.
 ---
 
-**Collections** are the core building blocks of your Rebase **admin panel**. They define how your **Firestore data** is displayed, edited, and managed in the CMS interface.
+**Collections** are the core building blocks of your Rebase **admin panel**. They define how your **Postgres data** is displayed, edited, and managed in the CMS interface.
 
-If you're building a **headless CMS** or **back-office** for your **Firebase** project, collections are where you define:
+If you're building a **headless CMS** or **back-office** for your **PostgreSQL** project, collections are where you define:
 - **What data** users can manage (products, users, articles, orders, etc.)
 - **How that data looks** in forms and tables (field types, validation, layout)
 - **Who can do what** (create, read, update, delete permissions)
 - **Custom logic** (callbacks on save, computed fields, side effects)
 
 :::tip Why use Rebase collections?
-Unlike traditional CMSs that impose a rigid data model, Rebase collections map directly to your existing **Firestore** structure. This means you can add a powerful **React-based admin UI** to any Firebase project without migrating your data or changing your schema.
+Unlike traditional CMSs that impose a rigid data model, Rebase collections map directly to your existing **Postgres tables**. This means you can add a powerful **React-based admin UI** to any PostgreSQL project without migrating your data or changing your schema.
 :::
 
 Collections appear at the **top level** of the navigation (home page and drawer), or as **subcollections** nested under parent entities.
@@ -215,11 +215,9 @@ prop. You can also force a filter combination to be always applied by using the 
 Filtering is enabled by default for string, numbers, booleans, dates, and arrays. A dropdown is included in every
 column of the collection where applicable.
 
-Since Firestore has limited querying capabilities, each time you apply a filter or new sort, the previous sort/filter
-combination gets reset by default (unless filtering, sorting by the same property).
+Since Postgres supports complex queries natively, you can apply multiple filters and sorting at the same time.
 
-If you need to enable filtering/sorting by more than one property at a time, you can specify the filters that you have
-enabled in your Firestore configuration. In order to do so, just pass the indexes configuration to your collection:
+If you want to optimize query performance for specific filter/sort combinations, you can define indexes in your collection configuration:
 
 ```tsx
 import { buildCollection } from "@rebasepro/core";
@@ -252,8 +250,7 @@ to `false` in the collection configuration.
 
 - **`name`**: The plural name of the collection. E.g., 'Products'.
 - **`singularName`**: The singular name of an entry in the collection. E.g., 'Product'.
-- **`path`**: Relative Firestore path of this view to its parent. If this view is in the root, the path is equal to the
-  absolute one. This path also determines the URL in Rebase.
+- **`path`**: The database table name or path for this collection. This path also determines the URL in Rebase.
 - **`properties`**: Object defining the properties for the entity schema. More information
   in [Properties](../properties/properties_intro).
 - **`propertiesOrder`**: Order in which the properties are displayed.
@@ -284,7 +281,7 @@ to `false` in the collection configuration.
   You can also pass your own icon component (`React.ReactNode`).
 - **`customId`**: If this prop is not set, the ID of the document will be created by the datasource. You can set the
   value to 'true' to force the users to choose the ID.
-- **`subcollections`**: Following the Firestore document and collection schema, you can add subcollections to your
+- **`subcollections`**: You can add subcollections to your
   entity in the same way you define the root collections.
 - **`defaultSize`**: Default size of the rendered collection.
 - **`group`**: Optional field used to group top-level navigation entries under a navigation view. If you set this value

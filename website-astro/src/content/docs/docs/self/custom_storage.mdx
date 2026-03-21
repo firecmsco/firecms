@@ -6,7 +6,7 @@ description: Implement custom storage solutions like Amazon S3 in Rebase with th
 ---
 
 Rebase provides flexibility when it comes to integrating custom storage solutions.
-While it comes with built-in support for Firebase Storage, you might want to define your
+While it comes with a built-in storage system that works through the backend API, you might want to define your
 own storage solutions to handle file uploads, downloads, and metadata management.
 This guide will help you set up a custom storage solution.
 
@@ -170,7 +170,7 @@ const CustomStorageApp: React.FC = () => {
   const userConfigPersistence = useBuildLocalConfigurationPersistence();
   const storageSource = useCustomStorageSource(customStorageConfig);
 
-  // const authController = useFirebaseAuthController(); // your auth controller
+  // const authController = useAuthController(); // your auth controller
   // const dataSource = {}; // Your data source delegate implementation
 
   const navigationController = useBuildNavigationController({

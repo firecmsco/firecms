@@ -135,7 +135,7 @@ const appConfig: RebaseAppConfig = {
 ## Examples
 
 Let's build an example where we add an action to archive a product.
-When the action is clicked, we will call a Google Cloud Function that will run some business logic in the backend.
+When the action is clicked, we will call a backend API endpoint that will run some business logic.
 
 ### Using the `fetch` API
 
@@ -184,23 +184,14 @@ export const productsCollection = buildCollection<Product>({
 });
 ```
 
-### Using the Firebase Functions SDK
+### Calling a backend API endpoint
 
-If you're using Firebase, the recommended approach is to use the Firebase Functions SDK. It simplifies calling functions and automatically handles authentication tokens.
-
-First, ensure you have the `firebase` package installed and initialized in your project.
-
-Then, you can define your action like this:
+You can use the `fetch` API to call any endpoint on your Rebase backend or any external API.
+This is useful for running server-side business logic from entity actions.
 
 ```tsx
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { ArchiveIcon } from "@rebasepro/ui";
 import { buildCollection, Product } from "@rebasepro/core";
-
-// Initialize Firebase Functions
-// Make sure you have initialized Firebase elsewhere in your app
-const functions = getFunctions();
-const archiveProductCallable = httpsCallable(functions, 'archiveProduct');
+import { ArchiveIcon } from "@rebasepro/ui";
 
 export const productsCollection = buildCollection<Product>({
     id: "products",
@@ -209,7 +200,7 @@ export const productsCollection = buildCollection<Product>({
     entityActions: [
         {
             icon: <ArchiveIcon/>,
-            name: "Archive with Firebase",
+            name: "Archive via API",
             collapsed: false,
             async onClick({
                         entity,
@@ -217,7 +208,12 @@ export const productsCollection = buildCollection<Product>({
                     }) {
                 const snackbarController = context.snackbarController;
                 try {
-                    await archiveProductCallable({ productId: entity.id });
+                    const response = await fetch("/api/archive-product", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ productId: entity.id })
+                    });
+                    if (!response.ok) throw new Error("Failed to archive");
                     snackbarController.open({
                         message: "Product archived successfully",
                         type: "success"
@@ -225,7 +221,7 @@ export const productsCollection = buildCollection<Product>({
                 } catch (error) {
                     console.error("Error archiving product:", error);
                     snackbarController.open({
-                        message: "Error archiving product: " + error.message,
+                        message: "Error archiving product",
                         type: "error"
                     });
                 }

@@ -1,8 +1,8 @@
 ---
 slug: docs/cloud/deployment
-title: "Deploying your Firebase CMS and Admin UI"
+title: "Deploying your Rebase CMS and Admin UI"
 sidebar_label: Deployment
-description: "Deploy your custom React CMS and admin panel code to Rebase Cloud. Fully managed hosting for your Firestore content management system."
+description: "Deploy your custom React CMS and admin panel code to Rebase Cloud. Fully managed hosting for your PostgreSQL content management system."
 ---
 
 ## Deployment to Rebase Cloud

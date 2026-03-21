@@ -10,7 +10,7 @@ directly from their respective hooks.
 
 The props provided by this hook are:
 
-* `dataSource`: Connector to your database, e.g. your Firestore database
+* `dataSource`: Connector to your database, e.g. your PostgreSQL database
 
 * `storageSource`: Used storage implementation
 

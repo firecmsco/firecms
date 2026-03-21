@@ -5,11 +5,11 @@ sidebar_label: Quickstart
 description: Get started with self-hosted Rebase in minutes. Create a new project using the CLI and run it locally.
 ---
 
-Build your own **Firebase admin panel** and **headless CMS** with full control over your infrastructure. Rebase self-hosted versions let you deploy a powerful **React-based back-office** on your own servers, with complete data ownership.
+Build your own **Postgres admin panel** and **headless CMS** with full control over your infrastructure. Rebase self-hosted lets you deploy a powerful **React-based back-office** on your own servers, with complete data ownership.
 
 :::tip When to choose self-hosted?
 - **Data sovereignty**: Your data never leaves your infrastructure
-- **Custom backends**: Use **MongoDB**, custom APIs, or any database
+- **Full Postgres control**: Use your own PostgreSQL database, schemas, and security policies
 - **Deep customization**: Full access to extend every part of the CMS
 - **On-premise requirements**: Deploy behind firewalls or in private clouds
 :::
@@ -26,7 +26,7 @@ Build your own **Firebase admin panel** and **headless CMS** with full control o
 | LLM autocompletion | ❌ | ✅ |
 | User & role management | ❌ | ✅ |
 
-Both versions are built on **React**, connect to **Firebase/Firestore** (or MongoDB), and give you a production-ready **admin panel** in minutes.
+Both versions are built on **React**, connect to **PostgreSQL** via a Node.js backend with **Drizzle ORM**, and give you a production-ready **admin panel** in minutes.
 
 
 ### Create a new project using the CLI
@@ -42,29 +42,60 @@ yarn create rebase-app
 ```
 
 
-This will create a new Rebase, Community or PRO, project in the selected folder.
-A Rebase project is a React application that you can customize to fit your needs.
-The initial project will have a basic structure with a few collections and a couple of custom views.
+This will create a new Rebase project (Community or PRO) in the selected folder.
+A Rebase project includes three parts:
+
+- **`frontend/`** — React application using Rebase with the PostgreSQL data source
+- **`backend/`** — Node.js server with PostgreSQL, Drizzle ORM, and WebSocket support
+- **`shared/`** — Shared TypeScript collections used by both frontend and backend
+
+### Prerequisites
+
+- Node.js 18+
+- PostgreSQL database
+- pnpm (recommended)
+
+### Environment Setup
+
+After creating the project, configure your database connection in the `.env` file:
+
+```bash
+DATABASE_URL=postgresql://username:password@localhost:5432/your_database
+```
 
 ### Running the project
 
-To run the project, you run the following commands:
+Start both frontend and backend with a single command:
 
 ```bash
-cd my-cms
-yarn
-yarn dev
+pnpm dev
 ```
 
-or
+This will:
+- Start the backend server on `http://localhost:3001`
+- Start the frontend development server
+- Enable hot reloading for both applications
+- Provide real-time WebSocket synchronization
+
+You can also start them individually:
 
 ```bash
-cd my-cms
-npm install
-npm run dev
+# Backend only
+pnpm dev:backend
+
+# Frontend only
+pnpm dev:frontend
 ```
 
-This will install the dependencies and start the development server.
+### Database operations
+
+Rebase uses Drizzle ORM for type-safe database operations. Common database commands:
+
+```bash
+pnpm db:migrate      # Run database migrations
+pnpm db:studio       # Open Drizzle Studio
+pnpm generate:schema # Generate Postgres schema from your collections
+```
 
 ### Changing the base URL of Rebase
 

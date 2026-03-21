@@ -1,21 +1,14 @@
 ---
 slug: docs/collections/collection_groups
-title: Collections Groups
-sidebar_label: Collections Groups
+title: Collection Groups
+sidebar_label: Collection Groups
 ---
 
-You can now use Firestore collection groups in Rebase. This allows you to
-query across multiple collections with the same name. For example, you could
-have a collection group called `products` that contains all the products
-from different `stores`.
+Collection groups allow you to query across related tables that share a common structure. For example, you could
+have a `locales` subcollection that exists under different product entities, and query all locales at once.
 
-In our demo project, we have a collection group called `locales` that
-contains all the locales for the different `products`.
-
-See the demo project [here](https://demo.rebase.pro/c/locales).
-
-Rebase will generate an additional column in the collection view to
-with references to all the parent collections that are part of the
+Rebase will generate an additional column in the collection view with
+references to all the parent collections that are part of the
 configuration.
 
 In order to use collection groups, you need to specify the `collectionGroup`
@@ -39,17 +32,7 @@ export const localeCollectionGroup = buildCollection({
 ```
 
 :::note
-Depending on your Firestore rules, you may need to add another
-rule to allow collection group queries. For example:
-
-```text
-match /{path=**}/locales/{document=**} {
-  allow read, write: if true;
-}
-```
-
-When doing a collection group query, the path will be something like
-`/products/{productId}/locales/{localeId}`. But the query will go to all 
-the collections called `locales` in your database. That is why you might need
-to add a rule like the one above.
+When using collection groups with Postgres, the data source will query the relevant table
+and join with parent tables as needed. Make sure your database schema supports the 
+relationships you're querying.
 :::

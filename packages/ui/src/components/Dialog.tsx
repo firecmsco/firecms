@@ -89,12 +89,12 @@ export const Dialog = ({
                               onOpenChange={onOpenChange}>
             <DialogPrimitive.Portal container={finalContainer}>
 
-                <div className={cls("fixed inset-0 z-30", containerClassName)}>
+                <div className={cls("fixed inset-0 z-50", containerClassName)}>
 
                     <DialogPrimitive.Overlay
-                        className={cls("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black dark:bg-opacity-60 dark:bg-black/60 bg-opacity-50 bg-black/50 dark: bg-black/60  backdrop-blur-sm ",
+                        className={cls("fixed inset-0 transition-opacity ease-in-out duration-200 bg-black dark:bg-opacity-60 dark:bg-black/60 bg-opacity-50 bg-black/50 dark: bg-black/60  backdrop-blur-sm ",
                             displayed && open ? "opacity-100" : "opacity-0",
-                            "z-20 fixed top-0 left-0 w-full h-full flex justify-center items-center"
+                            "z-50 fixed top-0 left-0 w-full h-full flex justify-center items-center"
                         )}
                         style={{
                             pointerEvents: displayed ? "auto" : "none"
@@ -111,12 +111,12 @@ export const Dialog = ({
                         }}
                         onPointerDownOutside={onPointerDownOutside}
                         onInteractOutside={onInteractOutside}
-                        className={cls("h-full outline-none flex justify-center items-center z-40 opacity-100 transition-all duration-200 ease-in-out")}
+                        className={cls("h-full outline-none flex justify-center items-center z-60 opacity-100 transition-all duration-200 ease-in-out")}
                     >
                         <div
                             className={cls(paperMixin,
                                 "rounded-2xl",
-                                "z-30",
+                                "z-60",
                                 "relative",
                                 "overflow-hidden",
                                 "outline-none focus:outline-none",

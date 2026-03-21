@@ -98,25 +98,11 @@ export default defineConfig({
                             label: "Overview",
                             slug: "docs/self"
                         },
+
+
                         {
-                            label: "Next.js Integration",
-                            slug: "docs/pro/nextjs",
-                            badge: {
-                                text: "PRO",
-                                variant: "tip"
-                            }
-                        },
-                        {
-                            label: "Firestore Rules",
-                            slug: "docs/pro/firestore_rules",
-                            badge: {
-                                text: "PRO",
-                                variant: "tip"
-                            }
-                        },
-                        {
-                            label: "Sample PRO Project",
-                            slug: "docs/pro/sample_pro",
+                            label: "Template Walkthrough",
+                            slug: "docs/pro/template_walkthrough",
                             badge: {
                                 text: "PRO",
                                 variant: "tip"
@@ -143,13 +129,10 @@ export default defineConfig({
                             slug: "docs/pro/app_check"
                         },
                         {
-                            label: "Firebase Setup",
+                            label: "Database Setup",
                             slug: "docs/firebase_setup"
                         },
-                        {
-                            label: "MongoDB",
-                            slug: "docs/self/mongodb"
-                        },
+
                         {
                             label: "Licensing",
                             slug: "docs/pro/licensing",
@@ -388,10 +371,7 @@ export default defineConfig({
                         },
                     ],
                 },
-                {
-                    label: "Top Level Views",
-                    slug: "docs/top_level_views",
-                },
+
                 {
                     label: "Provided Hooks",
                     collapsed: true,
@@ -434,10 +414,6 @@ export default defineConfig({
                     label: "Recipes",
                     collapsed: false,
                     items: [
-                        {
-                            label: "Building a Blog",
-                            slug: "docs/recipes/building_a_blog"
-                        },
                         {
                             label: "Auto-update Slug",
                             slug: "docs/recipes/autoupdate_slug"
