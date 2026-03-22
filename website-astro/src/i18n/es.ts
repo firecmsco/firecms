@@ -7,7 +7,7 @@ export const es = {
   'hero.subtitle.4': 'o autoaloja nuestro',
   'hero.subtitle.5': 'framework de código abierto',
   'hero.subtitle.6': 'para tener control total.',
-  'hero.cta.start': 'Empieza a construir gratis',
+  'hero.cta.start': 'Empezar gratis',
   'hero.cta.explore': 'Explora la versión autohospedada',
 
   'nav.features': 'Funcionalidades',
@@ -34,7 +34,7 @@ export const es = {
   'nav.privacy': 'Política de privacidad',
   'nav.cookies': 'Política de cookies',
   'nav.docs': 'Documentación',
-  'nav.cta.start': 'Empieza a Construir',
+  'nav.cta.start': 'Empezar',
 
   'footer.company': 'Compañía',
   'footer.solutions': 'Soluciones',
@@ -296,7 +296,7 @@ export const es = {
   'developers.ready.desc': 'Pruébalo al instante de manera gratuita con FireCMS Cloud, o sumérgete en el código open-source.',
   'developers.ready.cloud.title': 'Probar FireCMS Cloud',
   'developers.ready.cloud.desc': 'La forma más rápida de empezar. Perfecto para MVPs, startups y equipos agiles.',
-  'developers.ready.cloud.cta': 'Construir Gratis',
+  'developers.ready.cloud.cta': 'Empezar gratis',
   'developers.ready.docs.title': 'Explorar Docs',
   'developers.ready.docs.desc': 'Descubre nuestro framework open-source. Perfecto para agencias, corporaciones y los que deciden no conformarse.',
   'developers.ready.docs.cta': 'Ver Documentación',
@@ -687,6 +687,6 @@ export const es = {
   'why.when.no.f3': "Un builder no-code con extensibilidad muy limitada",
 
   'why.cta.title': "¿Listo para probar FireCMS?",
-  'why.cta.start': "Comienza a Construir Gratis",
+  'why.cta.start': 'Empezar gratis',
   'why.cta.explore': "Explorar la Versión Auto-alojada",
 };
