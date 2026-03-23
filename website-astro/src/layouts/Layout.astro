@@ -4,11 +4,17 @@ export interface BreadcrumbItem {
     url: string;
 }
 
+export interface FaqItem {
+    question: string;
+    answer: string;
+}
+
 export interface Props {
     title?: string;
     description?: string;
     keywords?: string;
     breadcrumbs?: BreadcrumbItem[];
+    faqItems?: FaqItem[];
     lang?: string;
 }
 
@@ -25,6 +31,7 @@ const {
     description = "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB with AI-powered features, visual schema builder, and beautiful data management interface.",
     keywords = "headless CMS, Firebase CMS, Firestore CMS, React admin panel, no-code backend, AI-powered CMS, visual schema builder, data management, back-office application, content management system, Firestore admin, Firebase back office, database UI",
     breadcrumbs,
+    faqItems,
     lang = "en"
 } = Astro.props;
 
@@ -53,6 +60,20 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
         "item": item.url
     }))
 } : null;
+
+// Generate FAQPage structured data
+const faqSchema = faqItems && faqItems.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(({ question, answer }) => ({
+        "@type": "Question",
+        "name": question,
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": answer
+        }
+    }))
+} : null;
 ---
 
 <!DOCTYPE html>
@@ -62,6 +83,9 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <title>{title}</title>
     <link rel="shortcut icon" href="/favicon.svg" type="image/x-icon">
     <link rel="canonical" href={canonical}>
+    <!-- Preload primary body font to reduce LCP font-swap delay -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="https://fonts.gstatic.com/s/rubik/v14/iJWKBXyIfDnIV7nBrXyw023e.woff2">
     <meta name="description" content={description}>
     <meta name="keywords" content={keywords}>
     <meta name="robots" content="index, follow">
@@ -151,6 +175,10 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
 
     {breadcrumbSchema && (
         <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    )}
+
+    {faqSchema && (
+        <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
     )}
 
     <!-- DNS Prefetch -->

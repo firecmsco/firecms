@@ -121,8 +121,9 @@ collection("users")
                                             loop
                                             autoplay
                                             muted
-                                            playsinline>
-                                        <source src="/img/landing_1080.webm" type="video/webm"/>
+                                            playsinline
+                                            data-lazy-video>
+                                        <source data-src="/img/landing_1080.webm" type="video/webm"/>
                                     </video>
                                 </div>
                             </div>
@@ -137,7 +138,7 @@ collection("users")
                                 <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800">
                                     <DataTalkDemo
                                             height={600}
-                                            exchanges={dataTalkExchanges} client:load/>
+                                            exchanges={dataTalkExchanges} client:visible/>
                                 </div>
                             </div>
                         </section>
@@ -156,8 +157,9 @@ collection("users")
                                             loop
                                             autoplay
                                             muted
-                                            playsinline>
-                                        <source src="/img/editor_demo_dark.webm" type="video/webm"/>
+                                            playsinline
+                                            data-lazy-video>
+                                        <source data-src="/img/editor_demo_dark.webm" type="video/webm"/>
                                     </video>
                                 </div>
                             </div>
@@ -228,6 +230,34 @@ collection("users")
     </div>
 
     <script>
+        // Non-blocking Material Icons font (used by DataTalkDemo & SchemaEditorDemo below the fold)
+        (() => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://fonts.googleapis.com/icon?family=Material+Icons';
+            link.media = 'print';
+            link.onload = () => { link.media = 'all'; };
+            document.head.appendChild(link);
+        })();
+
+        // Lazy-load videos when they approach the viewport
+        const lazyVideos = document.querySelectorAll('video[data-lazy-video]');
+        if (lazyVideos.length) {
+            const videoIO = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    const video = entry.target as HTMLVideoElement;
+                    video.querySelectorAll('source[data-src]').forEach(s => {
+                        const src = s.getAttribute('data-src');
+                        if (src) { s.setAttribute('src', src); s.removeAttribute('data-src'); }
+                    });
+                    video.load();
+                    obs.unobserve(video);
+                });
+            }, { rootMargin: '200px' });
+            lazyVideos.forEach(v => videoIO.observe(v));
+        }
+
         const root = document.getElementById("scroll-sync-showcase");
         const wrappers = (root?.querySelectorAll("[id^='screen-']") as NodeListOf<HTMLElement>) || null;
         const screens = (root?.querySelectorAll("[data-screen]") as NodeListOf<HTMLElement>) || null;

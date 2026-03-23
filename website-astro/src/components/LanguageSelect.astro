@@ -41,6 +41,7 @@ const { iconOnly = false } = Astro.props;
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
             </svg>
             <select
+                    aria-label="Change language"
                     class="appearance-none bg-black border border-surface-800 text-surface-400 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full outline-none pl-9 pr-8 py-2 hover:bg-surface-900 transition-colors cursor-pointer"
             >
                 {Object.entries(languages).map(([code, label]) => (

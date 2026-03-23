@@ -11,13 +11,34 @@ const breadcrumbs = [
     { name: "Home", url: "https://firecms.co" },
     { name: "Pricing", url: "https://firecms.co/pricing" }
 ];
+
+const faqItems = [
+    {
+        question: t('pricing.faq.q1.q'),
+        answer: `${t('pricing.faq.q1.a1')} ${t('pricing.faq.q1.a2')}`
+    },
+    {
+        question: t('pricing.faq.q2.q'),
+        answer: `${t('pricing.faq.q2.a1')} ${t('pricing.faq.q2.a2')}`
+    },
+    {
+        question: t('pricing.faq.q3.q'),
+        answer: t('pricing.faq.q3.a')
+    },
+    {
+        question: t('pricing.faq.q4.q'),
+        answer: t('pricing.faq.q4.a')
+    },
+];
 ---
 
 <Layout
         title="FireCMS Pricing - Cloud Trial & Self-Hosted Options"
         description="Explore FireCMS plans: Start with our free Community version (self-hosted), try Cloud free for a month, or unlock PRO features."
         breadcrumbs={breadcrumbs}
+        faqItems={faqItems}
         lang={lang}
 >
     <PricingContent lang={lang} t={t} />
 </Layout>
+
