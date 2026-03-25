@@ -129,7 +129,14 @@ export function App() {
             view: <RLSEditor />
         },
         {
-            slug: ["schema", "schema/*"],
+            slug: "schema",
+            name: "Edit collections",
+            group: "Schema",
+            icon: "view_list",
+            view: <CollectionsStudioView configController={collectionConfigController} />
+        },
+        {
+            slug: "schema/*",
             name: "Edit collections",
             group: "Schema",
             icon: "view_list",

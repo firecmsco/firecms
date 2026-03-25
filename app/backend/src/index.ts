@@ -4,7 +4,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createServer } from "http";
 import { createPostgresDatabaseConnection, initializeRebaseAPI, initializeRebaseBackend, serveSPA } from "@rebasepro/backend";
-import { createMongoDBConnection, createMongoDelegate } from "@rebasepro/mongodb";
 
 import { enums, relations, tables } from "./schema.generated";
 
@@ -52,25 +51,6 @@ async function startServer() {
             adminConnectionString: process.env.ADMIN_CONNECTION_STRING || process.env.DATABASE_URL
         }
     };
-
-    // Optional MongoDB connection
-    const mongoUrl = process.env.MONGODB_URL;
-    const mongoDatabase = process.env.MONGODB_DATABASE;
-
-    if (mongoUrl && mongoDatabase) {
-        console.log("🍃 Connecting to MongoDB...");
-        try {
-            const mongoConnection = await createMongoDBConnection(mongoUrl, mongoDatabase);
-            const mongoDelegate = createMongoDelegate(mongoConnection.db);
-            datasources["mongodb"] = mongoDelegate;
-            console.log(`✅ MongoDB connected: ${mongoDatabase}`);
-        } catch (error) {
-            console.error("❌ Failed to connect to MongoDB:", error);
-            // Continue without MongoDB - it's optional
-        }
-    } else {
-        console.log("ℹ️ MongoDB not configured (set MONGODB_URL and MONGODB_DATABASE to enable)");
-    }
 
     // Initialize Rebase Backend with auth (now async)
     // Auth, admin, and storage routes are automatically mounted

@@ -46,9 +46,6 @@
       "@rebasepro/datatalk": [
         "../../packages/datatalk/src"
       ],
-      "@rebasepro/mongodb": [
-        "../../packages/mongodb/src"
-      ],
       "@rebasepro/data_enhancement": [
         "../../packages/data_enhancement/src"
       ],

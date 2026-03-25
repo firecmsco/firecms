@@ -1,4 +1,4 @@
-import { OAuth2Client } from "google-auth-library";
+import { OAuth2Client } from "google-auth-library/build/src/index.js";
 
 export interface GoogleUserInfo {
     googleId: string;

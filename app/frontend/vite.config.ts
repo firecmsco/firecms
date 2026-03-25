@@ -45,7 +45,6 @@ export default defineConfig({
             "@rebasepro/formex": path.resolve(__dirname, "../../packages/formex/src"),
             "@rebasepro/editor": path.resolve(__dirname, "../../packages/editor/src"),
             "@rebasepro/datatalk": path.resolve(__dirname, "../../packages/datatalk/src"),
-            "@rebasepro/mongodb": path.resolve(__dirname, "../../packages/mongodb/src"),
             "@rebasepro/postgresql": path.resolve(__dirname, "../../packages/postgresql/src"),
             "@rebasepro/firebase": path.resolve(__dirname, "../../packages/firebase/src"),
             "@rebasepro/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),

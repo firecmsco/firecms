@@ -18,12 +18,10 @@
   "dependencies": {
     "rebase-app-shared": "workspace:*",
     "@rebasepro/backend": "4.0.0",
-    "@rebasepro/mongodb": "4.0.0",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.44.4",
     "express": "^5.1.0",
     "pg": "^8.11.3",
-    "mongodb": "^6.12.0",
     "ws": "^8.16.0",
     "zod": "^3.22.4",
     "dotenv": "^16.0.0"
