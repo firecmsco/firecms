@@ -110,6 +110,191 @@ describe("generateDrizzleSchema", () => {
         expect(cleanResult).toContain("export const postsRelations = drizzleRelations(posts, ({ one, many }) => ({ tags: many(postsToTags, { relationName: \"tags\" }) }));");
     });
 
+    describe("generateDrizzleSchema Column Types", () => {
+        
+        describe("String Property", () => {
+            it("should default to varchar if no columnType or isId is specified", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "texts", name: "Texts", properties: { t_default: { type: "string" } }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("t_default: varchar(\"t_default\")");
+            });
+
+            it("should respect explicit columnType overrides", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "texts",
+                    name: "Texts",
+                    properties: {
+                        t_text: { type: "string", columnType: "text" },
+                        t_char: { type: "string", columnType: "char" },
+                        t_varchar: { type: "string", columnType: "varchar" },
+                    }
+                }];
+                const result = await generateSchema(collections);
+                const cleanResult = cleanSchema(result);
+
+                expect(cleanResult).toContain("t_text: text(\"t_text\"),");
+                expect(cleanResult).toContain("t_char: char(\"t_char\"),");
+                expect(cleanResult).toContain("t_varchar: varchar(\"t_varchar\")");
+            });
+
+            it("should prioritize isId='uuid' over default varchar", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "texts", name: "Texts", properties: { t_uuid: { type: "string", isId: "uuid" } }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("t_uuid: uuid(\"t_uuid\").primaryKey().defaultRandom()");
+            });
+            
+            it("should combine isId=true with columnType overrides", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "texts", name: "Texts", properties: { t_id: { type: "string", isId: true, columnType: "text" } }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("t_id: text(\"t_id\").primaryKey()");
+            });
+            
+            it("should respect validation.unique along with columnType", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "texts", name: "Texts", properties: { t_unique: { type: "string", columnType: "char", validation: { unique: true } } }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("t_unique: char(\"t_unique\").unique()");
+            });
+        });
+
+        describe("Number Property", () => {
+            it("should default to numeric for normal numbers", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "nums", name: "Nums", properties: { n_def: { type: "number" } }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("n_def: numeric(\"n_def\")");
+            });
+
+            it("should default to integer if validation.integer is true", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "nums", name: "Nums", properties: { n_int: { type: "number", validation: { integer: true } } }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("n_int: integer(\"n_int\")");
+            });
+
+            it("should default to integer if isId is true", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "nums", name: "Nums", properties: { n_id: { type: "number", isId: true } }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("n_id: integer(\"n_id\").primaryKey()");
+            });
+
+            it("should respect exact columnType overrides and replace baseType", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "numbers",
+                    name: "Numbers",
+                    properties: {
+                        n_int: { type: "number", columnType: "integer" },
+                        n_real: { type: "number", columnType: "real" },
+                        n_dp: { type: "number", columnType: "double precision" },
+                        n_num: { type: "number", columnType: "numeric" },
+                        n_bigint: { type: "number", columnType: "bigint" },
+                        n_serial: { type: "number", columnType: "serial" },
+                        n_bigserial: { type: "number", columnType: "bigserial" },
+                    }
+                }];
+                const result = await generateSchema(collections);
+                const cleanResult = cleanSchema(result);
+
+                expect(cleanResult).toContain("n_int: integer(\"n_int\"),");
+                expect(cleanResult).toContain("n_real: real(\"n_real\"),");
+                expect(cleanResult).toContain("n_dp: doublePrecision(\"n_dp\"),");
+                expect(cleanResult).toContain("n_num: numeric(\"n_num\"),");
+                expect(cleanResult).toContain("n_bigint: bigint(\"n_bigint\"),");
+                expect(cleanResult).toContain("n_serial: serial(\"n_serial\"),");
+                expect(cleanResult).toContain("n_bigserial: bigserial(\"n_bigserial\"),");
+            });
+
+            it("should combine isId='increment' with columnType overrides safely", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "nums", name: "Nums", properties: { n_inc: { type: "number", isId: "increment", columnType: "bigint" } }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("n_inc: bigint(\"n_inc\").generatedByDefaultAsIdentity().primaryKey()");
+            });
+            
+            it("should combine validation.unique with columnType override", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "nums", name: "Nums", properties: { n_uniq: { type: "number", columnType: "real", validation: { unique: true } } }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("n_uniq: real(\"n_uniq\").unique()");
+            });
+        });
+
+        describe("Date Property", () => {
+            it("should default to timestamp with timezone", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "dates", name: "Dates", properties: { d_def: { type: "date" } }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("d_def: timestamp(\"d_def\", { withTimezone: true, mode: 'string' })");
+            });
+
+            it("should respect date and time columnType overrides", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "dates",
+                    name: "Dates",
+                    properties: {
+                        d_date: { type: "date", columnType: "date" },
+                        d_time: { type: "date", columnType: "time" },
+                        d_ts: { type: "date", columnType: "timestamp" },
+                    }
+                }];
+                const result = await generateSchema(collections);
+                const cleanResult = cleanSchema(result);
+
+                expect(cleanResult).toContain("d_date: date(\"d_date\", { mode: 'string' }),");
+                expect(cleanResult).toContain("d_time: time(\"d_time\"),");
+                expect(cleanResult).toContain("d_ts: timestamp(\"d_ts\", { withTimezone: true, mode: 'string' }),");
+            });
+        });
+        
+        describe("Map & Array Properties", () => {
+            it("should default to jsonb", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "json_data", name: "JSON Data", properties: {
+                        arr_def: { type: "array" },
+                        map_def: { type: "map" }
+                    }
+                }];
+                const result = await generateSchema(collections);
+                expect(cleanSchema(result)).toContain("arr_def: jsonb(\"arr_def\"),");
+                expect(cleanSchema(result)).toContain("map_def: jsonb(\"map_def\")");
+            });
+
+            it("should respect json columnType overrides", async () => {
+                const collections: EntityCollection[] = [{
+                    slug: "json_data",
+                    name: "JSON Data",
+                    properties: {
+                        a_json: { type: "array", columnType: "json" },
+                        a_jsonb: { type: "array", columnType: "jsonb" },
+                        m_json: { type: "map", columnType: "json" },
+                        m_jsonb: { type: "map", columnType: "jsonb" },
+                    }
+                }];
+                const result = await generateSchema(collections);
+                const cleanResult = cleanSchema(result);
+
+                expect(cleanResult).toContain("a_json: json(\"a_json\"),");
+                expect(cleanResult).toContain("a_jsonb: jsonb(\"a_jsonb\"),");
+                expect(cleanResult).toContain("m_json: json(\"m_json\"),");
+                expect(cleanResult).toContain("m_jsonb: jsonb(\"m_jsonb\")");
+            });
+        });
+    });
+
     // ── RLS Policy Tests ────────────────────────────────────────────────
 
     describe("RLS policy generation", () => {
@@ -200,7 +385,7 @@ describe("generateDrizzleSchema", () => {
             }];
 
             const result = await generateSchema(collections);
-            expect(result).toContain("string_to_array(auth.roles(), ',') && ARRAY['admin']");
+            expect(result).toContain("string_to_array(auth.roles(), ',') @> ARRAY['admin']");
         });
 
         it("should safely handle complex sub-string roles overlapping like 'view' and 'viewer'", async () => {
@@ -216,7 +401,7 @@ describe("generateDrizzleSchema", () => {
             const result = await generateSchema(collections);
             // Before array change: auth.roles() ~ 'view' would match 'viewer'
             // Now: array intersection prevents this
-            expect(result).toContain("string_to_array(auth.roles(), ',') && ARRAY['view']");
+            expect(result).toContain("string_to_array(auth.roles(), ',') @> ARRAY['view']");
         });
 
         it("should securely handle multiple allowed roles", async () => {
@@ -230,7 +415,7 @@ describe("generateDrizzleSchema", () => {
             }];
 
             const result = await generateSchema(collections);
-            expect(result).toContain("string_to_array(auth.roles(), ',') && ARRAY['admin','editor','super-admin']");
+            expect(result).toContain("string_to_array(auth.roles(), ',') @> ARRAY['admin','editor','super-admin']");
         });
 
         it("should combine roles with access: public", async () => {
@@ -245,7 +430,7 @@ describe("generateDrizzleSchema", () => {
 
             const result = await generateSchema(collections);
             // Should be (true) AND (role check)
-            expect(result).toContain("(true) AND (string_to_array(auth.roles(), ',') && ARRAY['admin','manager'])");
+            expect(result).toContain("(true) AND (string_to_array(auth.roles(), ',') @> ARRAY['admin','manager'])");
         });
 
         it("should combine roles with ownerField", async () => {
@@ -264,7 +449,7 @@ describe("generateDrizzleSchema", () => {
             const result = await generateSchema(collections);
             // Should combine owner check AND role check
             expect(result).toContain("auth.uid()");
-            expect(result).toContain("string_to_array(auth.roles(), ',') && ARRAY['editor']");
+            expect(result).toContain("string_to_array(auth.roles(), ',') @> ARRAY['editor']");
             expect(result).toContain("AND");
         });
 
@@ -402,7 +587,7 @@ describe("generateDrizzleSchema V2 improvements", () => {
             ]
         }];
         const result = await generateSchema(collections);
-        expect(result).toContain("string_to_array(auth.roles(), ',') && ARRAY['admin']");
+        expect(result).toContain("string_to_array(auth.roles(), ',') @> ARRAY['admin']");
     });
     it("should generate multiple policies from operations array", async () => {
         const collections: EntityCollection[] = [{
@@ -498,7 +683,7 @@ describe("generateDrizzleSchema V2 improvements", () => {
         }];
         const result = await generateSchema(collections);
         // Should be (true) AND (role check) — same effect as access: "public" + roles
-        expect(result).toContain("(true) AND (string_to_array(auth.roles(), ',') && ARRAY['admin'])");
+        expect(result).toContain("(true) AND (string_to_array(auth.roles(), ',') @> ARRAY['admin'])");
     });
     it("should use pgRoles instead of default 'public' when specified", async () => {
         const collections: EntityCollection[] = [{

@@ -43,21 +43,21 @@ export function PropertyFieldPreview({
 
     const borderColorClass = hasError
         ? "border-red-500 dark:border-red-500 border-red-500/100 dark:border-red-500/100 ring-0 dark:ring-0"
-        : (selected ? "border-primary" : "border-transparent");
+        : (selected ? "border-primary" : "");
 
     return <ErrorBoundary>
         <div onClick={onClick} className={onClick ? "cursor-pointer" : ""}>
         <Paper
             className={cls(
-                "border w-full flex flex-row gap-4 items-center px-4 py-1.5",
                 cardMixin,
+                "border w-full flex flex-row gap-4 items-center px-4 py-1",
                 onClick ? cardClickableMixin : "",
                 selected ? cardSelectedMixin : "",
                 "border transition-colors duration-200",
-                borderColorClass
+                selected ? "border-primary" : ""
             )}
         >
-            <PropertyConfigBadge propertyConfig={propertyConfig} size="extraSmall" />
+            <PropertyConfigBadge propertyConfig={propertyConfig} size="small" />
 
             <div className="w-full flex flex-col pr-8">
                 {includeName &&
@@ -67,7 +67,7 @@ export function PropertyFieldPreview({
                                 {property.name || propertyKey || "\u00a0"}
                             </Typography>
                             {property.name && propertyKey && property.name !== propertyKey && (
-                                <Typography variant="caption" component="span" color="secondary" className="font-mono text-[10px]">
+                                <Typography variant="caption" component="span" color="secondary" className="font-mono">
                                     {propertyKey}
                                 </Typography>
                             )}
@@ -84,7 +84,7 @@ export function PropertyFieldPreview({
                         </Typography>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                        <Typography variant="caption" component="span" color="disabled" className="text-[10px]">
+                        <Typography variant="caption" component="span" color="disabled" className="font-mono">
                             {property.type}
                         </Typography>
                     </ErrorBoundary>
@@ -116,16 +116,16 @@ export function NonEditablePropertyPreview({
         <div onClick={onClick} className={onClick ? "cursor-pointer" : ""}>
         <Paper
             className={cls(
-                "border w-full flex flex-row gap-4 items-center px-4 py-1.5",
                 cardMixin,
+                "border w-full flex flex-row gap-4 items-center px-4 py-1",
                 onClick ? cardClickableMixin : "",
                 selected ? cardSelectedMixin : "",
                 "border transition-colors duration-200",
-                selected ? "border-primary" : "border-transparent"
+                selected ? "border-primary" : ""
             )}
         >
             <div className={"relative shrink-0"}>
-                {propertyConfig && <PropertyConfigBadge propertyConfig={propertyConfig} size="extraSmall" />}
+                {propertyConfig && <PropertyConfigBadge propertyConfig={propertyConfig} size="small" />}
                 {!propertyConfig && <div
                     className={"h-8 w-8 flex items-center justify-center rounded-full shadow-2xs text-white bg-surface-500"}>
                     <FunctionsIcon color={"inherit"} size={"small"} />

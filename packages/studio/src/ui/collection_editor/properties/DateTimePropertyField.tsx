@@ -81,6 +81,10 @@ export function DateTimePropertyField({ disabled }: {
     const timezoneValue: string | undefined = getIn(values, timezonePath);
     const timezoneError: string | undefined = getIn(touched, timezonePath) && getIn(errors, timezonePath);
 
+    const columnTypePath = "columnType";
+    const columnTypeValue: string | undefined = getIn(values, columnTypePath);
+    const columnTypeError: string | undefined = getIn(touched, columnTypePath) && getIn(errors, columnTypePath);
+
     return (
         <>
             <div className={"flex flex-col col-span-12 gap-2"}>
@@ -163,6 +167,34 @@ export function DateTimePropertyField({ disabled }: {
                     </FieldCaption>
                 </div>
 
+            </div>
+            
+            <div className={"col-span-12"}>
+                <Select name={columnTypePath}
+                    disabled={disabled}
+                    size={"large"}
+                    fullWidth={true}
+                    value={columnTypeValue ?? "_default_"}
+                    onValueChange={(v) => setFieldValue(columnTypePath, v === "_default_" ? undefined : v)}
+                    renderValue={(v) => {
+                        switch (v) {
+                            case "timestamp": return "timestamp (with timezone)";
+                            case "date": return "date";
+                            case "time": return "time";
+                            case "_default_": return "Default (timestamp)";
+                            default: return "Default (timestamp)";
+                        }
+                    }}
+                    error={Boolean(columnTypeError)}
+                    label={"Database Column Type"}>
+                    <SelectItem value={"_default_"}> Default (timestamp) </SelectItem>
+                    <SelectItem value={"timestamp"}> timestamp (with timezone) </SelectItem>
+                    <SelectItem value={"date"}> date </SelectItem>
+                    <SelectItem value={"time"}> time </SelectItem>
+                </Select>
+                <FieldCaption error={Boolean(columnTypeError)}>
+                    {columnTypeError ?? "Optional database override for this date field."}
+                </FieldCaption>
             </div>
 
             <div className={"col-span-12"}>

@@ -218,6 +218,11 @@ export interface BaseProperty<CustomProps = any> {
 export interface StringProperty extends BaseProperty {
     type: "string";
     /**
+     * Optional database column type. If not set, it defaults to `varchar` or `uuid` depending on `isId` configuration.
+     * Use `text` for strings with unbound length, `char` for fixed-length strings, or `varchar` for variable-length strings with a limit.
+     */
+    columnType?: "varchar" | "text" | "char";
+    /**
      * Rules for validating this property
      */
     validation?: StringPropertyValidationSchema;
@@ -307,6 +312,11 @@ export interface StringProperty extends BaseProperty {
 export interface NumberProperty extends BaseProperty {
     type: "number";
     /**
+     * Optional database column type. Allows specifying exact database numeric types.
+     * If not provided, integer fields (where validation.integer is true or isId is true) default to `integer`, others to `numeric`.
+     */
+    columnType?: "integer" | "real" | "double precision" | "numeric" | "bigint" | "serial" | "bigserial";
+    /**
      * Rules for validating this property
      */
     validation?: NumberPropertyValidationSchema;
@@ -349,6 +359,10 @@ export interface BooleanProperty extends BaseProperty {
  */
 export interface DateProperty extends BaseProperty {
     type: "date";
+    /**
+     * Optional database column type. If not set, defaults to `timestamp` with timezone.
+     */
+    columnType?: "timestamp" | "date" | "time";
     /**
      * Rules for validating this property
      */
@@ -487,6 +501,10 @@ export interface RelationProperty extends BaseProperty {
 export interface ArrayProperty extends BaseProperty {
     type: "array";
     /**
+     * Optional database column type. Defaults to `jsonb`.
+     */
+    columnType?: "json" | "jsonb";
+    /**
      * The property of this array.
      * You can specify any property (except another Array property)
      * You can leave this field empty only if you are providing a custom field,
@@ -561,6 +579,10 @@ export interface ArrayProperty extends BaseProperty {
  */
 export interface MapProperty extends BaseProperty {
     type: "map";
+    /**
+     * Optional database column type. Defaults to `jsonb`.
+     */
+    columnType?: "json" | "jsonb";
     /**
      * Record of properties included in this map.
      */

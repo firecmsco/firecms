@@ -50,11 +50,15 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             const stringProp = prop as StringProperty;
             if (stringProp.enum) {
                 const enumName = getEnumVarName(getTableName(collection), propName);
-                columnDefinition = `${enumName}(\"${colName}\")`;
+                columnDefinition = `${enumName}("${colName}")`;
             } else if ("isId" in stringProp && stringProp.isId === "uuid") {
-                columnDefinition = `uuid(\"${colName}\")`;
+                columnDefinition = `uuid("${colName}")`;
+            } else if (stringProp.columnType === "text") {
+                columnDefinition = `text("${colName}")`;
+            } else if (stringProp.columnType === "char") {
+                columnDefinition = `char("${colName}")`;
             } else {
-                columnDefinition = `varchar(\"${colName}\")`;
+                columnDefinition = `varchar("${colName}")`;
             }
             if (isIdProperty(propName, prop, collection)) {
                 columnDefinition += `.primaryKey()`;
@@ -80,16 +84,22 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             const numProp = prop as NumberProperty;
             const isId = isIdProperty(propName, prop, collection);
 
+            let baseType = (numProp.validation?.integer || isId) ? `integer("${colName}")` : `numeric("${colName}")`;
+            if (numProp.columnType) {
+                if (numProp.columnType === "double precision") baseType = `doublePrecision("${colName}")`;
+                else baseType = `${numProp.columnType}("${colName}")`;
+            }
+
             if ("isId" in numProp && numProp.isId === "increment") {
-                columnDefinition = `integer(\"${colName}\").generatedByDefaultAsIdentity()`;
+                columnDefinition = `${baseType}.generatedByDefaultAsIdentity()`;
             } else if ("isId" in numProp && typeof numProp.isId === "string" && numProp.isId !== "manual") {
-                columnDefinition = (numProp.validation?.integer || isId) ? `integer(\"${colName}\")` : `numeric(\"${colName}\")`;
+                columnDefinition = baseType;
                 const sqlContent = numProp.isId.startsWith("sql`") && numProp.isId.endsWith("`")
                     ? numProp.isId.substring(4, numProp.isId.length - 1)
                     : numProp.isId;
                 columnDefinition += `.default(sql\`${sqlContent}\`)`;
             } else {
-                columnDefinition = (numProp.validation?.integer || isId) ? `integer(\"${colName}\")` : `numeric(\"${colName}\")`;
+                columnDefinition = baseType;
             }
 
             if (isId) {
@@ -101,15 +111,29 @@ const getDrizzleColumn = (propName: string, prop: Property, collection: EntityCo
             break;
         }
         case "boolean":
-            columnDefinition = `boolean(\"${colName}\")`;
+            columnDefinition = `boolean("${colName}")`;
             break;
-        case "date":
-            columnDefinition = `timestamp(\"${colName}\", { withTimezone: true, mode: 'string' })`;
+        case "date": {
+            const dateProp = prop as import("@rebasepro/types").DateProperty;
+            if (dateProp.columnType === "date") {
+                columnDefinition = `date("${colName}", { mode: 'string' })`;
+            } else if (dateProp.columnType === "time") {
+                columnDefinition = `time("${colName}")`;
+            } else {
+                columnDefinition = `timestamp("${colName}", { withTimezone: true, mode: 'string' })`;
+            }
             break;
+        }
         case "map":
-        case "array": // Arrays of non-relational data are stored as JSON
-            columnDefinition = `jsonb(\"${colName}\")`;
+        case "array": {
+            const arrayOrMapProp = prop as import("@rebasepro/types").ArrayProperty | import("@rebasepro/types").MapProperty;
+            if (arrayOrMapProp.columnType === "json") {
+                columnDefinition = `json("${colName}")`;
+            } else {
+                columnDefinition = `jsonb("${colName}")`;
+            }
             break;
+        }
         case "relation": {
             const refProp = prop as RelationProperty;
             const resolvedRelations = resolveCollectionRelations(collection);
@@ -319,7 +343,13 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
         )
     );
 
-    const pgCoreImports = ["primaryKey", "pgTable", "integer", "varchar", "boolean", "timestamp", "jsonb", "pgEnum", "numeric", "serial"];
+    const hasJson = collections.some(c =>
+        c.properties && Object.values(c.properties).some(
+            (p: any) => (p.type === "map" || p.type === "array") && p.columnType === "json"
+        )
+    );
+
+    const pgCoreImports = ["primaryKey", "pgTable", "integer", "varchar", "text", "char", "boolean", "timestamp", "date", "time", "jsonb", "json", "pgEnum", "numeric", "real", "doublePrecision", "bigint", "serial", "bigserial"];
     if (hasRLS) pgCoreImports.push("pgPolicy");
     if (hasUuid) pgCoreImports.push("uuid");
     schemaContent += `import { ${pgCoreImports.join(", ")} } from 'drizzle-orm/pg-core';\n`;
