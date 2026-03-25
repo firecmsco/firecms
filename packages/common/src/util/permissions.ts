@@ -1,35 +1,104 @@
 import { AuthController, Entity, EntityCollection, SecurityRule, User } from "@rebasepro/types";
 
 function evaluateAST(sqlString: string, auth: AuthController, entity: Entity<any> | null): boolean {
-    // This is a rudimentary client-side SQL evaluator used *only* for optimistic UI updates.
-    // It is NOT a security boundary; true security is enforced by PostgreSQL RLS on the server.
-    // If we can't parse it easily, we optimistically return true to show the button/field.
+    // This is a client-side SQL evaluator used *only* for optimistic UI updates.
+    // It parses basic AND / OR statements to evaluate RLS without backend roundtrips.
     if (!entity) return true;
 
-    // Reject complex queries early to trigger the optimistic fallback
-    const upperSQL = sqlString.toUpperCase();
-    if (upperSQL.includes(" AND ") || upperSQL.includes(" OR ") || upperSQL.includes(" IN ") || upperSQL.includes(" EXISTS ")) {
+    // 1. Clean outer parentheses
+    let cleanedSQL = sqlString.trim();
+    while (cleanedSQL.startsWith('(') && cleanedSQL.endsWith(')')) {
+        let openCount = 0;
+        let isEnclosing = true;
+        for (let i = 0; i < cleanedSQL.length - 1; i++) {
+            if (cleanedSQL[i] === '(') openCount++;
+            else if (cleanedSQL[i] === ')') openCount--;
+            if (openCount === 0) {
+                isEnclosing = false;
+                break;
+            }
+        }
+        if (isEnclosing) {
+            cleanedSQL = cleanedSQL.substring(1, cleanedSQL.length - 1).trim();
+        } else {
+            break;
+        }
+    }
+
+    // 2. Split top-level OR / AND
+    const splitByTopLevel = (str: string, delimiter: string) => {
+        const parts: string[] = [];
+        let current = "";
+        let openCount = 0;
+        let i = 0;
+        while (i < str.length) {
+            if (str[i] === '(') openCount++;
+            else if (str[i] === ')') openCount--;
+            
+            if (openCount === 0 && str.substring(i).toUpperCase().startsWith(delimiter)) {
+                parts.push(current);
+                current = "";
+                i += delimiter.length;
+            } else {
+                current += str[i];
+                i++;
+            }
+        }
+        parts.push(current);
+        return parts;
+    };
+
+    const orParts = splitByTopLevel(cleanedSQL, " OR ");
+    if (orParts.length > 1) {
+        return orParts.some(part => evaluateAST(part, auth, entity));
+    }
+
+    const andParts = splitByTopLevel(cleanedSQL, " AND ");
+    if (andParts.length > 1) {
+        return andParts.every(part => evaluateAST(part, auth, entity));
+    }
+
+    const upperSQL = cleanedSQL.toUpperCase();
+
+    // 3. Fallback for unparseable complex queries
+    if (upperSQL.includes(" IN ") || upperSQL.includes(" EXISTS ")) {
         return true;
     }
 
-    // PostgreSQL session variables are set in the backend via set_config('app.user_id', ...)
-    // Pattern 1: `field = current_setting('app.user_id')`
-    const pattern1 = new RegExp(`^([a-zA-Z0-9_]+)\\s*=\\s*current_setting\\s*\\(\\s*'app\\.user_id'\\s*\\)$`);
-    // Pattern 2: `current_setting('app.user_id') = field`
-    const pattern2 = new RegExp(`^current_setting\\s*\\(\\s*'app\\.user_id'\\s*\\)\\s*=\\s*([a-zA-Z0-9_]+)$`);
+    // 4. Role array checks
+    // Pattern: `string_to_array(auth.roles(), ',') && ARRAY['admin', 'editor']`
+    const roleIntersectMatch = cleanedSQL.match(/string_to_array\s*\(\s*auth\.roles\(\)\s*,\s*','\s*\)\s*&&\s*ARRAY\[(.*?)\]/i);
+    if (roleIntersectMatch && roleIntersectMatch[1]) {
+        const requiredRoles = roleIntersectMatch[1].split(',').map(r => r.trim().replace(/'/g, ''));
+        const userRoles = auth.user?.roles || [];
+        return requiredRoles.some(r => userRoles.includes(r));
+    }
 
-    const match1 = sqlString.match(pattern1);
+    // Pattern: `string_to_array(auth.roles(), ',') @> ARRAY['admin']`
+    const roleContainMatch = cleanedSQL.match(/string_to_array\s*\(\s*auth\.roles\(\)\s*,\s*','\s*\)\s*@>\s*ARRAY\[(.*?)\]/i);
+    if (roleContainMatch && roleContainMatch[1]) {
+        const requiredRoles = roleContainMatch[1].split(',').map(r => r.trim().replace(/'/g, ''));
+        const userRoles = auth.user?.roles || [];
+        return requiredRoles.every(r => userRoles.includes(r));
+    }
+
+    // 5. Existing ID patterns
+    const pattern1 = new RegExp(`^\\{?([a-zA-Z0-9_]+)\\}?\\s*=\\s*(?:current_setting\\s*\\(\\s*'app\\.user_id'\\s*\\)|auth\\.uid\\(\\))`);
+    const pattern2 = new RegExp(`^(?:current_setting\\s*\\(\\s*'app\\.user_id'\\s*\\)|auth\\.uid\\(\\))\\s*=\\s*\\{?([a-zA-Z0-9_]+)\\}?`);
+
+    const match1 = cleanedSQL.match(pattern1);
     if (match1 && match1[1]) {
         return entity.values[match1[1]] === auth.user?.uid;
     }
 
-    const match2 = sqlString.match(pattern2);
+    const match2 = cleanedSQL.match(pattern2);
     if (match2 && match2[1]) {
         return entity.values[match2[1]] === auth.user?.uid;
     }
 
-    // Pattern 3: `field = 'value'` or `field != 'value'`
-    const simpleEqualityMatch = sqlString.match(/([\w_]+)\s*(=|!=)\s*'([^']+)'/i);
+    // 6. Simple equality
+    // Pattern: `field = 'value'` or `{field} != 'value'`
+    const simpleEqualityMatch = cleanedSQL.match(/^\{?([\w_]+)\}?\s*(=|!=)\s*'([^']+)'$/i);
     if (simpleEqualityMatch) {
         const field = simpleEqualityMatch[1];
         const operator = simpleEqualityMatch[2];
@@ -39,7 +108,7 @@ function evaluateAST(sqlString: string, auth: AuthController, entity: Entity<any
         if (operator === "!=") return entityValue !== value;
     }
 
-    return true; // Optimistic fallback for complex SQL (`AND`, `OR`, `IN`, `EXISTS`, etc.)
+    return true; // Optimistic fallback for anything else
 }
 
 function evaluateRule(rule: SecurityRule, auth: AuthController, entity: Entity<any> | null): boolean {

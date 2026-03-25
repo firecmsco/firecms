@@ -15,7 +15,8 @@ import {
     RefreshIcon,
     WarningIcon,
     KeyIcon,
-    DeleteIcon
+    DeleteIcon,
+    IconButton
 } from "@rebasepro/ui";
 import { useDataSource, useSnackbarController, useCollectionRegistryController, ErrorView } from "@rebasepro/core";
 import { PolicyEditor } from "./PolicyEditor";
@@ -493,8 +494,10 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                             </div>
                                             <Button
                                                 size="medium"
+                                                variant="filled"
+                                                color="primary"
                                                 onClick={() => setEditingPolicy("new")}
-                                                className="whitespace-nowrap bg-yellow-100 hover:bg-yellow-200 text-yellow-800 dark:bg-yellow-900/50 dark:hover:bg-yellow-900 dark:text-yellow-500 border-none shrink-0"
+                                                className="shrink-0 whitespace-nowrap"
                                                 disabled={!activeCollection}
                                             >
                                                 Create Policy
@@ -506,7 +509,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                         <div className="mt-8 flex flex-col gap-3">
                                             <Typography variant="subtitle2" className="text-text-secondary dark:text-text-secondary-dark uppercase tracking-wider mb-1">Active Policies</Typography>
                                             {mergedPolicies.map(policy => (
-                                                <div key={policy.policyname} className={cls("p-3 sm:px-4 sm:py-3 bg-white dark:bg-surface-950 border rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4", defaultBorderMixin)}>
+                                                <Paper key={policy.policyname} className={cls("p-3 sm:px-4 sm:py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border rounded-lg", defaultBorderMixin)}>
                                                     <div className="flex flex-col gap-2 min-w-0">
                                                         <div className="flex items-center gap-2">
                                                             <KeyIcon size="small" className="text-text-secondary dark:text-text-secondary-dark shrink-0" />
@@ -532,31 +535,31 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-2 shrink-0">
-                                                        <Button size="small" variant="text" onClick={() => setEditingPolicy(policy)} disabled={!activeCollection}>
+                                                        <Button size="small" variant="outlined" color="primary" onClick={() => setEditingPolicy(policy)} disabled={!activeCollection}>
                                                             Edit
                                                         </Button>
                                                         {policy.status !== "code_only" && (
-                                                            <Button
-                                                                size="small"
-                                                                variant="text"
-                                                                className="text-text-secondary dark:text-text-secondary-dark"
-                                                                onClick={async () => {
-                                                                    const table = activeTableData!.tableName;
-                                                                    if (!confirm(`Drop policy "${policy.policyname}" from table "${table}"?`)) return;
-                                                                    try {
-                                                                        await dataSource.executeSql!(`DROP POLICY "${policy.policyname}" ON "${table}"`);
-                                                                        snackbarController.open({ type: "success", message: `Policy "${policy.policyname}" dropped` });
-                                                                        fetchRLSData();
-                                                                    } catch (e: any) {
-                                                                        snackbarController.open({ type: "error", message: e.message });
-                                                                    }
-                                                                }}
-                                                            >
-                                                                <DeleteIcon size="small" />
-                                                            </Button>
+                                                            <Tooltip title={"Delete this policy"} asChild={true}>
+                                                                <IconButton
+                                                                    size="small"
+                                                                    onClick={async () => {
+                                                                        const table = activeTableData!.tableName;
+                                                                        if (!confirm(`Drop policy "${policy.policyname}" from table "${table}"?`)) return;
+                                                                        try {
+                                                                            await dataSource.executeSql!(`DROP POLICY "${policy.policyname}" ON "${table}"`);
+                                                                            snackbarController.open({ type: "success", message: `Policy "${policy.policyname}" dropped` });
+                                                                            fetchRLSData();
+                                                                        } catch (e: any) {
+                                                                            snackbarController.open({ type: "error", message: e.message });
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    <DeleteIcon size="small" />
+                                                                </IconButton>
+                                                            </Tooltip>
                                                         )}
                                                     </div>
-                                                </div>
+                                                </Paper>
                                             ))}
                                         </div>
                                     )}

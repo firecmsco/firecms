@@ -31,14 +31,14 @@ export function isRelationProperty(property: Property) {
 }
 
 export function getIconForWidget(widget: PropertyConfig | undefined,
-    size: "small" | "medium" | "large") {
+    size: "smallest" | "small" | "medium" | "large" | number) {
     const Icon = widget?.Icon ?? CircleIcon;
     return <Icon size={size} />;
 }
 
 export function getIconForProperty(
     property: Property,
-    size: "small" | "medium" | "large" = "small",
+    size: "smallest" | "small" | "medium" | "large" | number = "small",
     fields: Record<string, PropertyConfig> = {}
 ): React.ReactNode {
 

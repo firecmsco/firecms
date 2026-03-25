@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Typography, cls, defaultBorderMixin, Chip, KeyIcon } from "@rebasepro/ui";
+import { Button, IconButton, Typography, cls, defaultBorderMixin, Chip, KeyIcon, DeleteIcon, Paper } from "@rebasepro/ui";
 import { PostgresPolicy } from "../../components/RLSEditor/RLSEditor";
 import { PolicyEditor } from "../../components/RLSEditor/PolicyEditor";
 import { useFormex } from "@rebasepro/formex";
@@ -62,7 +62,7 @@ export function CollectionRLSTab() {
             ) : (
                 <div className="flex flex-col gap-3">
                     {rules.map((rule: any) => (
-                        <div key={rule.name} className={cls("p-4 bg-white dark:bg-surface-950 border rounded-lg flex flex-col justify-between gap-4", defaultBorderMixin)}>
+                        <Paper key={rule.name} className={cls("p-4 border rounded-lg flex flex-col justify-between gap-4", defaultBorderMixin)}>
                             <div className="flex flex-col gap-2">
                                 <Typography variant="subtitle2" className="flex items-center gap-2">
                                     <KeyIcon size="small" className="text-text-secondary" /> {rule.name}
@@ -84,13 +84,13 @@ export function CollectionRLSTab() {
                                 })}>
                                     Edit
                                 </Button>
-                                <Button size="small" variant="text" color="error" className="ml-2" onClick={() => {
+                                <IconButton size="small" className="ml-2" onClick={() => {
                                     setFieldValue("securityRules" as any, rules.filter((r: any) => r.name !== rule.name));
                                 }}>
-                                    Delete
-                                </Button>
+                                    <DeleteIcon size="small" />
+                                </IconButton>
                             </div>
-                        </div>
+                        </Paper>
                     ))}
                 </div>
             )}

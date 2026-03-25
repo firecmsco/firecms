@@ -38,80 +38,61 @@ export function PropertyFieldPreview({
 }) {
 
     const { propertyConfigs } = useCustomizationController();
-
     const propertyConfig = getFieldConfig(property, propertyConfigs);
     const disabled = !editableProperty(property);
 
     const borderColorClass = hasError
-        ? "border-red-500 dark:border-red-500 border-opacity-100 dark:border-opacity-100 border-red-500/100 dark:border-red-500/100 ring-0 dark:ring-0"
+        ? "border-red-500 dark:border-red-500 border-red-500/100 dark:border-red-500/100 ring-0 dark:ring-0"
         : (selected ? "border-primary" : "border-transparent");
 
     return <ErrorBoundary>
-        <div
-            onClick={onClick}
-            className="flex flex-row w-full cursor-pointer">
-            <div className={"m-4"}>
-                <PropertyConfigBadge propertyConfig={propertyConfig} />
-            </div>
-            <Paper
-                className={cls(
-                    "m-1",
-                    "border",
-                    "pl-2 w-full flex flex-row gap-4 items-center",
-                    cardMixin,
-                    onClick ? cardClickableMixin : "",
-                    selected ? cardSelectedMixin : "",
-                    "grow p-4 border transition-colors duration-200",
-                    borderColorClass
-                )}
-            >
+        <div onClick={onClick} className={onClick ? "cursor-pointer" : ""}>
+        <Paper
+            className={cls(
+                "border w-full flex flex-row gap-4 items-center px-4 py-1.5",
+                cardMixin,
+                onClick ? cardClickableMixin : "",
+                selected ? cardSelectedMixin : "",
+                "border transition-colors duration-200",
+                borderColorClass
+            )}
+        >
+            <PropertyConfigBadge propertyConfig={propertyConfig} size="extraSmall" />
 
-                <div className="w-full flex flex-col">
-
-                    {includeName &&
-                        <ErrorBoundary>
-                            <div className="flex items-center gap-2">
-                                <Typography variant="label"
-                                    component="span"
-                                    className="pr-2">
-                                    {property.name || propertyKey || "\u00a0"}
+            <div className="w-full flex flex-col pr-8">
+                {includeName &&
+                    <ErrorBoundary>
+                        <div className="flex items-center gap-2">
+                            <Typography variant="body2" component="span" className="font-semibold">
+                                {property.name || propertyKey || "\u00a0"}
+                            </Typography>
+                            {property.name && propertyKey && property.name !== propertyKey && (
+                                <Typography variant="caption" component="span" color="secondary" className="font-mono text-[10px]">
+                                    {propertyKey}
                                 </Typography>
-                                {property.name && propertyKey && property.name !== propertyKey && (
-                                    <Typography variant="caption"
-                                        component="span"
-                                        color="secondary"
-                                        className="font-mono">
-                                        {propertyKey}
-                                    </Typography>
-                                )}
-                            </div>
-                        </ErrorBoundary>}
+                            )}
+                        </div>
+                    </ErrorBoundary>}
 
-                    <div className="flex flex-row items-center">
-                        <ErrorBoundary>
-                            <Typography className="grow pr-2"
-                                variant={includeName ? "body2" : "label"}
-                                component="span"
-                                color="secondary">
-                                {propertyConfig?.name}
-                            </Typography>
-                        </ErrorBoundary>
-                        <ErrorBoundary>
-                            <Typography variant="body2"
-                                component="span"
-                                color="disabled">
-                                {property.type}
-                            </Typography>
-                        </ErrorBoundary>
-
-                    </div>
+                <div className="flex flex-row items-center gap-2">
+                    <ErrorBoundary>
+                        <Typography
+                            variant={"caption"}
+                            component="span"
+                            color="secondary">
+                            {propertyConfig?.name}
+                        </Typography>
+                    </ErrorBoundary>
+                    <ErrorBoundary>
+                        <Typography variant="caption" component="span" color="disabled" className="text-[10px]">
+                            {property.type}
+                        </Typography>
+                    </ErrorBoundary>
                 </div>
+            </div>
 
-                {includeEditButton && <Typography variant={"button"}>
-                    EDIT
-                </Typography>}
-
-            </Paper>
+            {includeEditButton && <Typography variant={"button"}>EDIT</Typography>}
+        </Paper>
         </div>
     </ErrorBoundary>
 }
@@ -129,85 +110,59 @@ export function NonEditablePropertyPreview({
 }) {
 
     const { propertyConfigs } = useCustomizationController();
-
     const propertyConfig = !isPropertyBuilder(property) && property ? getFieldConfig(property, propertyConfigs) : undefined;
 
     return (
-        <div
-            onClick={onClick}
-            className="flex flex-row w-full cursor-pointer">
-            <div className={"relative m-4"}>
-                {propertyConfig && <PropertyConfigBadge propertyConfig={propertyConfig} />}
+        <div onClick={onClick} className={onClick ? "cursor-pointer" : ""}>
+        <Paper
+            className={cls(
+                "border w-full flex flex-row gap-4 items-center px-4 py-1.5",
+                cardMixin,
+                onClick ? cardClickableMixin : "",
+                selected ? cardSelectedMixin : "",
+                "border transition-colors duration-200",
+                selected ? "border-primary" : "border-transparent"
+            )}
+        >
+            <div className={"relative shrink-0"}>
+                {propertyConfig && <PropertyConfigBadge propertyConfig={propertyConfig} size="extraSmall" />}
                 {!propertyConfig && <div
                     className={"h-8 w-8 flex items-center justify-center rounded-full shadow-2xs text-white bg-surface-500"}>
                     <FunctionsIcon color={"inherit"} size={"small"} />
                 </div>}
-                <DoNotDisturbOnIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2"} />
+                <DoNotDisturbOnIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2 bg-surface-50 dark:bg-surface-900 rounded-full"} />
             </div>
-            <Paper
-                className={cls(
-                    "pl-2 w-full flex flex-row gap-4 items-center",
-                    cardMixin,
-                    onClick ? cardClickableMixin : "",
-                    selected ? cardSelectedMixin : "",
-                    "grow p-4 border transition-colors duration-200",
-                    selected ? "border-primary" : "border-transparent")}
-            >
 
-                <div className="w-full flex flex-col">
-                    <Typography variant="label"
-                        component="span"
-                        className="grow pr-2">
-                        {property?.name
-                            ? property.name
-                            : name
-                        }
-                    </Typography>
+            <div className="w-full flex flex-col pr-8">
+                <Typography variant="label" component="span" className="grow pr-2">
+                    {property?.name ? property.name : name}
+                </Typography>
 
-                    <div className="flex flex-row items-center">
-                        {propertyConfig && <Typography className="grow pr-2"
-                            variant={"body2"}
-                            component="span"
-                            color="secondary">
-                            {propertyConfig?.name}
-                        </Typography>}
+                <div className="flex flex-row items-center gap-2">
+                    {propertyConfig && <Typography variant={"body2"} component="span" color="secondary">
+                        {propertyConfig?.name}
+                    </Typography>}
 
-                        {property && !isPropertyBuilder(property) && <ErrorBoundary>
-                            <Typography variant="body2"
-                                component="span"
-                                color="disabled">
-                                {property.type}
-                            </Typography>
-                        </ErrorBoundary>}
+                    {property && !isPropertyBuilder(property) && <ErrorBoundary>
+                        <Typography variant="caption" component="span" color="disabled">
+                            {property.type}
+                        </Typography>
+                    </ErrorBoundary>}
 
-                        {property && isPropertyBuilder(property) && <ErrorBoundary>
-                            <Typography variant="body2"
-                                component="span"
-                                color="disabled">
-                                This property is defined as a property builder in code
-                            </Typography>
-                        </ErrorBoundary>}
+                    {property && isPropertyBuilder(property) && <ErrorBoundary>
+                        <Typography variant="caption" component="span" color="disabled">
+                            Defined in code
+                        </Typography>
+                    </ErrorBoundary>}
 
-                        {!property && <ErrorBoundary>
-                            <Typography variant="body2"
-                                component="span"
-                                color="disabled">
-                                This field is defined as an additional field in code
-                            </Typography>
-                        </ErrorBoundary>}
-
-                    </div>
-
-                    {/*<div className="flex flex-row text-xs">*/}
-                    {/*    <Typography className="grow pr-2"*/}
-                    {/*                variant="body2"*/}
-                    {/*                component="span"*/}
-                    {/*                color="secondary">*/}
-                    {/*        This field can only be edited in code*/}
-                    {/*    </Typography>*/}
-                    {/*</div>*/}
+                    {!property && <ErrorBoundary>
+                        <Typography variant="caption" component="span" color="disabled">
+                            Additional field
+                        </Typography>
+                    </ErrorBoundary>}
                 </div>
-
-            </Paper>
-        </div>)
+            </div>
+        </Paper>
+        </div>
+    )
 }

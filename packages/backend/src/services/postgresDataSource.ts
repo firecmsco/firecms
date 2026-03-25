@@ -805,9 +805,12 @@ export class PostgresDataSource implements DataSource {
                     const rolesString = userRoles.join(",");
 
                     // Set the user context for RLS (read by auth.uid(), auth.roles(), auth.jwt())
-                    await tx.execute(drizzleSql`SELECT set_config('app.user_id', ${userId}, true)`);
-                    await tx.execute(drizzleSql`SELECT set_config('app.user_roles', ${rolesString}, true)`);
-                    await tx.execute(drizzleSql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles })}, true)`);
+                    await tx.execute(drizzleSql`
+                        SELECT 
+                            set_config('app.user_id', ${userId}, true),
+                            set_config('app.user_roles', ${rolesString}, true),
+                            set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles })}, true)
+                    `);
 
                     // Create a temporary delegate using the transaction client
                     const txEntityService = new EntityService(tx);

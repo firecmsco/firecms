@@ -5,6 +5,7 @@ import { AdditionalFieldDelegate, isPropertyBuilder, Properties, Property, AIMod
 import {
     FindInPageIcon,
     defaultBorderMixin,
+    cls,
     DeleteIcon,
     IconButton,
     Menu,
@@ -135,7 +136,7 @@ export const PropertyTree = React.memo(
                     items={items}
                     strategy={verticalListSortingStrategy}
                 >
-                    <div className={className}>
+                    <div className={cls("flex flex-col gap-0.5", className)}>
 
                         {propertiesOrder && propertiesOrder
                             .map((propertyKey: string, index: number) => {
@@ -259,7 +260,7 @@ export function PropertyTreeEntry({
         <div
             ref={setNodeRef}
             style={style}
-            className="relative -ml-8 cursor-grab"
+            className="relative cursor-grab"
             {...attributes}
             {...listeners}
         >
@@ -267,8 +268,8 @@ export function PropertyTreeEntry({
                 {subtree && <div
                     className={"absolute border-l " + defaultBorderMixin}
                     style={{
-                        left: "32px",
-                        top: "64px",
+                        left: "24px",
+                        top: "40px",
                         bottom: "16px"
                     }} />}
 
@@ -286,7 +287,7 @@ export function PropertyTreeEntry({
                             selected={selected} />}
                 </div>
 
-                <div className="absolute top-3 right-3 flex flex-row items-center gap-1">
+                <div className="absolute top-1/2 -translate-y-1/2 right-3 flex flex-row items-center gap-1">
                     {isAIModified && <AIModifiedIndicator />}
                     {isPropertyInferred && <>
                         <Tooltip title={"Inferred property"} asChild={true}>
@@ -355,7 +356,7 @@ export function PropertyTreeEntry({
 
                 </div>
 
-                {subtree && <div className={"ml-16"}>{subtree}</div>}
+                {subtree && <div className={"ml-12"}>{subtree}</div>}
             </div>
         </div>
     );

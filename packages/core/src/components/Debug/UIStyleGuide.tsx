@@ -6,7 +6,8 @@ import {
     Paper,
     Container,
     Separator,
-    cls
+    cls,
+    DeleteIcon
 } from "@rebasepro/ui";
 
 export const UIStyleGuide = () => {
@@ -136,6 +137,12 @@ export const UIStyleGuide = () => {
                                 <IconExample />
                             </IconButton>
                             <span className="text-[10px] text-text-disabled font-mono">disabled</span>
+                        </div>
+                        <div className="flex flex-col items-center gap-2">
+                            <IconButton size="small" color="error">
+                                <DeleteIcon />
+                            </IconButton>
+                            <span className="text-[10px] text-text-disabled font-mono">delete</span>
                         </div>
                     </div>
                 </Paper>

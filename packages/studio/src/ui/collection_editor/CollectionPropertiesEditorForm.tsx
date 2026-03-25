@@ -442,7 +442,7 @@ export function CollectionPropertiesEditorForm({
                     </div>}
 
                     <div className="ml-1 mt-2 flex flex-row gap-2">
-                        <Tooltip title={"Get the code for this collection"}
+                        {/* <Tooltip title={"Get the code for this collection"}
                             asChild={true}>
                             <IconButton
                                 variant={"filled"}
@@ -450,7 +450,7 @@ export function CollectionPropertiesEditorForm({
                                 onClick={() => setCodeDialogOpen(true)}>
                                 <CodeIcon />
                             </IconButton>
-                        </Tooltip>
+                        </Tooltip> */}
                         {inferPropertiesFromData && <Tooltip title={"Add new properties based on data"}
                             asChild={true}>
                             <IconButton
@@ -473,7 +473,7 @@ export function CollectionPropertiesEditorForm({
 
                 <ErrorBoundary>
                     <PropertyTree
-                        className={"pl-8"}
+                        className={"mt-2"}
                         inferredPropertyKeys={inferredPropertyKeys}
                         selectedPropertyKey={selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined}
                         properties={values.properties}

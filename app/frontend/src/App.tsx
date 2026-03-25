@@ -140,6 +140,7 @@ export function App() {
             name: "Edit collections",
             group: "Schema",
             icon: "view_list",
+            hideFromNavigation: true,
             view: <CollectionsStudioView configController={collectionConfigController} />
         }
     ], [collectionConfigController]);

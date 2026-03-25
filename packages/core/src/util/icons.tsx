@@ -72,7 +72,13 @@ export const IconForView = React.memo(
 
         return <Icon iconKey={key} size={size} className={className} color={color} />;
     }, (prevProps, nextProps) => {
-        return equal(prevProps.collectionOrView?.icon, nextProps.collectionOrView?.icon) && equal(prevProps.color, nextProps.color);
+        return equal(prevProps.collectionOrView?.icon, nextProps.collectionOrView?.icon) &&
+            prevProps.collectionOrView?.name === nextProps.collectionOrView?.name &&
+            prevProps.collectionOrView?.slug === nextProps.collectionOrView?.slug &&
+            prevProps.collectionOrView?.singularName === nextProps.collectionOrView?.singularName &&
+            equal(prevProps.color, nextProps.color) &&
+            prevProps.className === nextProps.className &&
+            prevProps.size === nextProps.size;
     });
 
 const iconKeysMap: Record<string, string> = iconKeys.reduce((acc: Record<string, string>, key) => {
