@@ -15,6 +15,10 @@ export function NumberPropertyField({ disabled }: {
     const columnTypeValue: string | undefined = getIn(values, columnTypePath);
     const columnTypeError: string | undefined = getIn(touched, columnTypePath) && getIn(errors, columnTypePath);
 
+    const isIdPath = "isId";
+    const isIdValue: string | boolean | undefined = getIn(values, isIdPath);
+    const isIdError: string | undefined = getIn(touched, isIdPath) && getIn(errors, isIdPath);
+
     return (
         <>
 
@@ -28,8 +32,7 @@ export function NumberPropertyField({ disabled }: {
 
             <div className={"col-span-12"}>
                 <Select name={columnTypePath}
-                    disabled={disabled}
-                    size={"large"}
+                    disabled={disabled || Boolean(isIdValue)}
                     fullWidth={true}
                     value={columnTypeValue ?? "_default_"}
                     onValueChange={(v) => setFieldValue(columnTypePath, v === "_default_" ? undefined : v)}
@@ -59,6 +62,38 @@ export function NumberPropertyField({ disabled }: {
                 </Select>
                 <FieldCaption error={Boolean(columnTypeError)}>
                     {columnTypeError ?? "Optional database override for this number field."}
+                </FieldCaption>
+            </div>
+
+            <div className={"col-span-12"}>
+                <Select name={isIdPath}
+                    disabled={disabled}
+                    fullWidth={true}
+                    value={isIdValue === true ? "true" : (isIdValue === false ? "false" : (isIdValue ?? "_default_"))}
+                    onValueChange={(v) => {
+                        if (v === "_default_" || v === "false") setFieldValue(isIdPath, undefined);
+                        else if (v === "true") setFieldValue(isIdPath, true);
+                        else setFieldValue(isIdPath, v);
+                    }}
+                    renderValue={(v) => {
+                        switch (v) {
+                            case "true": return "Yes (Auto-increment/identity)";
+                            case "increment": return "Yes (Increment)";
+                            case "manual": return "Yes (Manual input)";
+                            case "false":
+                            case "_default_": return "No";
+                            default: return `Yes (${v})`;
+                        }
+                    }}
+                    error={Boolean(isIdError)}
+                    label={"Primary Key / Unique ID"}>
+                    <SelectItem value={"_default_"}> No </SelectItem>
+                    <SelectItem value={"manual"}> Yes (Manual input) </SelectItem>
+                    <SelectItem value={"true"}> Yes (Auto-increment/identity) </SelectItem>
+                    <SelectItem value={"increment"}> Yes (Increment) </SelectItem>
+                </Select>
+                <FieldCaption error={Boolean(isIdError)}>
+                    {isIdError ?? "Set as Primary Key and configure ID generation strategy."}
                 </FieldCaption>
             </div>
 

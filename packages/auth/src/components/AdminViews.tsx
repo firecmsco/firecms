@@ -187,7 +187,7 @@ export function UsersView({ userManagement, apiUrl, getAuthToken }: {
                 <Typography gutterBottom variant="h4" className="grow" component="h4">
                     Users
                 </Typography>
-                <Button size="large" startIcon={<AddIcon />} onClick={handleAddUser}>
+                <Button startIcon={<AddIcon />} onClick={handleAddUser}>
                     Add user
                 </Button>
             </div>
@@ -473,7 +473,7 @@ export function RolesView({ userManagement }: { userManagement: UserManagement }
                 <Typography gutterBottom variant="h4" className="grow" component="h4">
                     Roles
                 </Typography>
-                <Button size="large" startIcon={<AddIcon />} onClick={handleAddRole}>
+                <Button startIcon={<AddIcon />} onClick={handleAddRole}>
                     Add role
                 </Button>
             </div>

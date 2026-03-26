@@ -78,7 +78,6 @@ export function KanbanConfigSection({
                 key={`column-select-${enumStringProperties.length}`}
                 name="kanban.columnProperty"
                 label="Kanban Column Property"
-                size={"large"}
                 fullWidth={true}
                 position={"item-aligned"}
                 disabled={enumStringProperties.length === 0}

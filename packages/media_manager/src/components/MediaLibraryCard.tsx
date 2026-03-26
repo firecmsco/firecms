@@ -38,7 +38,7 @@ export function MediaLibraryCard({ group }: MediaLibraryCardProps) {
                         <ImageIcon className="text-primary" size="medium" />
                     </div>
                     <div className="flex-1">
-                        <Typography variant="subtitle2" className="font-medium">
+                        <Typography variant="subtitle2">
                             Media Library
                         </Typography>
                         <Typography

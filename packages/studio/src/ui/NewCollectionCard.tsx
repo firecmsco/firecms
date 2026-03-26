@@ -32,7 +32,7 @@ export function NewCollectionCard({
 
             <div
                 className="flex items-center justify-center h-full w-full grow flex-col">
-                <AddIcon color="primary" size={"large"} />
+                <AddIcon color="primary" />
                 <Typography color="primary"
                     variant={"caption"}
                     className={"font-medium"}>{"Add new collection".toUpperCase()}</Typography>

@@ -55,7 +55,7 @@ export const NavigationCard = React.memo(function NavigationCard({
                     </div>
 
                     <Typography gutterBottom variant="subtitle1"
-                        className="font-medium mt-1"
+                        className="mt-1"
                         component="h2">
                         {name}
                     </Typography>

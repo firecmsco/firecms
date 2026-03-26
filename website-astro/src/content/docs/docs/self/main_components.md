@@ -70,7 +70,7 @@ return <AppBar title={title}
                    <Tooltip
                            asChild={true}
                            title={"Your custom action"}>
-                       <Button variant={"outlined"}><ForumIcon size="small"/></Button>
+                       <Button variant={"text"}><ForumIcon size="small"/></Button>
                    </Tooltip>
                </>}
                dropDownActions={

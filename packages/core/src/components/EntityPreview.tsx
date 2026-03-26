@@ -132,10 +132,10 @@ export function EntityPreviewData({
                                     propertyKey={titleProperty as string}
                                     value={getValueInPath(entity.values, titleProperty)}
                                     property={collection.properties[titleProperty as string] as Property}
-                                    size={"large"} />
+ />
                                 : <SkeletonPropertyComponent
                                     property={collection.properties[titleProperty as string] as Property}
-                                    size={"large"} />
+ />
                         }
                     </div>
                 )}

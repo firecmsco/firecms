@@ -145,7 +145,6 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
         <InputLabel>Add property</InputLabel>
         <Select
             value={""}
-            size={"large"}
             fullWidth={true}
             disabled={disabled}
             onValueChange={handleAddProperty}

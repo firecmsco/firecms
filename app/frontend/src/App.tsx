@@ -75,7 +75,13 @@ export function App() {
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();
-    const collectionConfigController = useLocalCollectionsConfigController(API_URL, collections);
+    const collectionConfigController = useLocalCollectionsConfigController(
+        API_URL,
+        collections,
+        {
+            getAuthToken: authController.getAuthToken
+        }
+    );
     const configPermissions = useCallback(() => ({ createCollections: true, editCollections: true, deleteCollections: true }), []);
 
     // Fetch unmapped tables for the "import from table" feature

@@ -86,7 +86,6 @@ export function VirtualTableUserSelect(props: {
             </MultiSelect>
             : <Select
                 inputRef={ref}
-                size={"large"}
                 fullWidth={true}
                 className="w-full h-full p-0 bg-transparent"
                 position={"item-aligned"}

@@ -242,7 +242,6 @@ export function CollectionDetailsForm({
                                         key={`order-select-${numberProperties.length}`}
                                         name="orderProperty"
                                         label="Order Property"
-                                        size={"large"}
                                         fullWidth={true}
                                         position={"item-aligned"}
                                         disabled={numberProperties.length === 0}
@@ -368,7 +367,6 @@ export function CollectionDetailsForm({
                     <div className={"col-span-12"}>
                         <BooleanSwitchWithLabel
                             position={"start"}
-                            size={"large"}
                             allowIndeterminate={true}
                             label={<span className="flex items-center gap-2"><HistoryIcon size={"smallest"} />{values.history === null || values.history === undefined ? "Document history revisions enabled if enabled globally" : (
                                 values.history ? "Document history revisions ENABLED" : "Document history revisions NOT enabled"

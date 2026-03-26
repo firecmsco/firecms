@@ -24,7 +24,7 @@
     "packages/create_rebase_app",
     "packages/mongodb",
     "packages/firebase",
-    "packages/collection_editor",
+    "packages/studio",
     "packages/user_management",
     "packages/data_import",
     "packages/data_export",

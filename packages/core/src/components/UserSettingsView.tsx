@@ -158,7 +158,8 @@ export function UserSettingsView() {
                         <div className="flex flex-col gap-4">
                             <div className="flex justify-end mb-2">
                                 <Button
-                                    variant="outlined"
+                                    variant="text"
+                                    color="error"
                                     onClick={handleRevokeAll}
                                     disabled={revokingAll}
                                 >
@@ -169,7 +170,7 @@ export function UserSettingsView() {
                                 <div key={session.id} className="flex justify-between items-center p-4 bg-white dark:bg-surface-800 border rounded-lg dark:border-surface-700 shadow-sm">
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <Typography variant="body1" className="font-semibold">
+                                            <Typography variant="body1">
                                                 {session.userAgent || "Unknown Device"}
                                             </Typography>
                                             {session.isCurrentSession && (

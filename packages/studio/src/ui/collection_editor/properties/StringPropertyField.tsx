@@ -21,6 +21,10 @@ export function StringPropertyField({
     const columnTypeValue: string | undefined = getIn(values, columnTypePath);
     const columnTypeError: string | undefined = getIn(touched, columnTypePath) && getIn(errors, columnTypePath);
 
+    const isIdPath = "isId";
+    const isIdValue: string | boolean | undefined = getIn(values, isIdPath);
+    const isIdError: string | undefined = getIn(touched, isIdPath) && getIn(errors, isIdPath);
+
     return (
         <>
             <div className={"col-span-12"}>
@@ -64,29 +68,64 @@ export function StringPropertyField({
             
             <div className={"col-span-12"}>
                 <Select name={columnTypePath}
-                    disabled={disabled}
-                    size={"large"}
+                    disabled={disabled || Boolean(isIdValue)}
                     fullWidth={true}
-                    value={columnTypeValue ?? "_default_"}
+                    value={isIdValue === "uuid" ? "uuid" : (columnTypeValue ?? "_default_")}
                     onValueChange={(v) => setFieldValue(columnTypePath, v === "_default_" ? undefined : v)}
                     renderValue={(v) => {
+                        if (isIdValue === "uuid") return "uuid (forced by Primary Key)";
                         switch (v) {
                             case "text": return "text (unlimited)";
                             case "char": return "char (fixed length)";
                             case "varchar": return "varchar (variable length)";
-                            case "_default_": return "Default (varchar/uuid)";
-                            default: return "Default (varchar/uuid)";
+                            case "_default_": return "Default (varchar)";
+                            default: return "Default (varchar)";
                         }
                     }}
                     error={Boolean(columnTypeError)}
                     label={"Database Column Type"}>
-                    <SelectItem value={"_default_"}> Default (varchar/uuid) </SelectItem>
+                    {isIdValue === "uuid" && <SelectItem value={"uuid"}> uuid (forced by Primary Key) </SelectItem>}
+                    <SelectItem value={"_default_"}> Default (varchar) </SelectItem>
                     <SelectItem value={"varchar"}> varchar (variable length) </SelectItem>
                     <SelectItem value={"text"}> text (unlimited) </SelectItem>
                     <SelectItem value={"char"}> char (fixed length) </SelectItem>
                 </Select>
                 <FieldCaption error={Boolean(columnTypeError)}>
                     {columnTypeError ?? "Optional database override for this string field."}
+                </FieldCaption>
+            </div>
+
+            <div className={"col-span-12"}>
+                <Select name={isIdPath}
+                    disabled={disabled}
+                    fullWidth={true}
+                    value={isIdValue === true ? "true" : (isIdValue === false ? "false" : (isIdValue ?? "_default_"))}
+                    onValueChange={(v) => {
+                        if (v === "_default_" || v === "false") setFieldValue(isIdPath, undefined);
+                        else if (v === "true") setFieldValue(isIdPath, true);
+                        else setFieldValue(isIdPath, v);
+                    }}
+                    renderValue={(v) => {
+                        switch (v) {
+                            case "true": return "Yes (Auto-generated UUID/String)";
+                            case "manual": return "Yes (Manual input)";
+                            case "uuid": return "Yes (UUID)";
+                            case "cuid": return "Yes (CUID)";
+                            case "false":
+                            case "_default_": return "No";
+                            default: return `Yes (${v})`;
+                        }
+                    }}
+                    error={Boolean(isIdError)}
+                    label={"Primary Key / Unique ID"}>
+                    <SelectItem value={"_default_"}> No </SelectItem>
+                    <SelectItem value={"manual"}> Yes (Manual input) </SelectItem>
+                    <SelectItem value={"true"}> Yes (Auto-generated UUID/String) </SelectItem>
+                    <SelectItem value={"uuid"}> Yes (UUID) </SelectItem>
+                    <SelectItem value={"cuid"}> Yes (CUID) </SelectItem>
+                </Select>
+                <FieldCaption error={Boolean(isIdError)}>
+                    {isIdError ?? "Set as Primary Key and configure ID generation strategy."}
                 </FieldCaption>
             </div>
 

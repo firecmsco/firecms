@@ -204,7 +204,6 @@ function DrawerWrapper(props: {
                 color="inherit"
                 aria-label="Open drawer"
                 onClick={() => props.setDrawerOpen(true)}
-                size="large"
                 className="absolute sm:top-2 sm:left-4 top-1 left-2"
             >
                 <MenuIcon />

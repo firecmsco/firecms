@@ -345,13 +345,17 @@ export function createPostgresWebSocket(
                 }
             } catch (error: any) {
                 console.error("💥 [WebSocket Server] Error handling message:", error);
+                if (error instanceof Error) {
+                    console.error("Stack trace:", error.stack);
+                }
                 const errorResponse = {
                     type: "ERROR",
-                    requestId,
+                    requestId, // assuming requestId is in scope, if it's from message parser
                     payload: {
                         error: "Internal server error",
                         code: "INTERNAL_SERVER_ERROR",
-                        message: error.message || "Internal unknown error"
+                        message: error.message || "Internal unknown error",
+                        details: error instanceof Error ? error.stack : String(error)
                     }
                 };
                 console.error("💥 [WebSocket Server] Sending error response:", errorResponse);

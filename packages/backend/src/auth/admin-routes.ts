@@ -331,7 +331,16 @@ export function createAdminRoutes(config: AdminRoutesConfig): Router {
             });
         } catch (error: any) {
             console.error("List roles error:", error);
-            res.status(500).json({ error: { message: "Failed to list roles", code: "INTERNAL_ERROR" } });
+            if (error instanceof Error) {
+                console.error("Stack trace:", error.stack);
+            }
+            res.status(500).json({
+                error: {
+                    message: "Failed to list roles",
+                    code: "INTERNAL_ERROR",
+                    details: error instanceof Error ? error.stack : String(error)
+                }
+            });
         }
     });
 

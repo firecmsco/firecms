@@ -58,7 +58,7 @@ export function MediaAssetCard({
         />
     ) : (
         <div className="w-full h-full flex items-center justify-center bg-surface-100 dark:bg-surface-800">
-            <FileIcon size="large" className="text-surface-400 dark:text-surface-500" />
+            <FileIcon className="text-surface-400 dark:text-surface-500" />
         </div>
     );
 

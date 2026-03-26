@@ -654,7 +654,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                     {indexUrl && (
                         <Button
                             size="small"
-                            variant="outlined"
+                            variant="filled"
                             color="error"
                             onClick={() => window.open(indexUrl, "_blank")}
                         >

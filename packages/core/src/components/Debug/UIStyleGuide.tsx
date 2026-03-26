@@ -19,7 +19,7 @@ export const UIStyleGuide = () => {
     ] as const;
 
     const colors = ["primary", "secondary", "disabled", "error"] as const;
-    const buttonVariants = ["filled", "outlined", "text"] as const;
+    const buttonVariants = ["filled", "text"] as const;
     const buttonColors = ["primary", "secondary", "text", "error", "neutral"] as const;
     const buttonSizes = ["small", "medium", "large", "xl", "2xl"] as const;
 
@@ -154,7 +154,7 @@ export const UIStyleGuide = () => {
                         <Typography variant="h5">Dark Mode Check</Typography>
                         <Typography variant="body2" color="secondary">Typography and buttons should adapt automatically.</Typography>
                     </div>
-                    <Button variant="outlined" startIcon={<IconExample />}>
+                    <Button variant="filled" color="neutral" startIcon={<IconExample />}>
                         Sample Action
                     </Button>
                 </div>

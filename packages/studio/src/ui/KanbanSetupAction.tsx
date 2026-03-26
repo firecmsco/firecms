@@ -29,7 +29,7 @@ export function KanbanSetupAction({
 
     return (
         <Button
-            variant="outlined"
+            variant="filled"
             onClick={handleConfigureClick}
         >
             Configure Kanban

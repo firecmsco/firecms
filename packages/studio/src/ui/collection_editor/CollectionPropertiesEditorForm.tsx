@@ -441,7 +441,7 @@ export function CollectionPropertiesEditorForm({
                         {extraIcon}
                     </div>}
 
-                    <div className="ml-1 mt-2 flex flex-row gap-2">
+                    <div className="ml-4 flex flex-row gap-2 items-center flex-shrink-0">
                         {/* <Tooltip title={"Get the code for this collection"}
                             asChild={true}>
                             <IconButton
@@ -486,8 +486,9 @@ export function CollectionPropertiesEditorForm({
                         errors={errors} />
                 </ErrorBoundary>
 
-                <Button className={"mt-8 w-full"}
-                    size={"large"}
+                <Button className={"mt-4 xl:mt-8 w-full"}
+                    variant="filled"
+                    color="neutral"
                     disabled={configController?.readOnly}
                     onClick={() => setNewPropertyDialogOpen(true)}
                     startIcon={<AddIcon />}>

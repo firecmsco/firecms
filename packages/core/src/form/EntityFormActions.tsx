@@ -180,7 +180,6 @@ function buildSideActions<M extends object>({
             variant="filled"
             color="primary"
             type="submit"
-            size={"large"}
             startIcon={hasErrors ? <ErrorIcon /> : undefined}
             disabled={disabled || formex.isSubmitting}>
             {status === "existing" && "Save"}

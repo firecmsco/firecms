@@ -63,7 +63,7 @@ export function MediaLibraryView({
                 <Container maxWidth="6xl" className="py-4">
                     <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <Typography variant="h5" className="font-semibold">
+                            <Typography variant="h5">
                                 Media Library
                             </Typography>
                             {controller.totalCount !== undefined && (

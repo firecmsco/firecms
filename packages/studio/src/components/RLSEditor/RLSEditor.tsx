@@ -107,11 +107,11 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
             `;
             const policiesResult = await dataSource.executeSql(policiesSql);
 
-            const extractRows = (result: any) => {
-                if (result && typeof result === "object" && "rows" in result && Array.isArray((result as any).rows)) {
-                    return (result as any).rows;
+            const extractRows = (result: unknown): Record<string, unknown>[] => {
+                if (result && typeof result === "object" && "rows" in result && Array.isArray((result as { rows: Record<string, unknown>[] }).rows)) {
+                    return (result as { rows: Record<string, unknown>[] }).rows;
                 }
-                if (Array.isArray(result)) return result;
+                if (Array.isArray(result)) return result as Record<string, unknown>[];
                 return [];
             };
 
@@ -120,9 +120,10 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
 
             const tableMap: Record<string, TableRLSStatus> = {};
 
-            tRows.forEach((t: any) => {
+            tRows.forEach((tRow: Record<string, unknown>) => {
+                const t = tRow as { schemaname?: string, SCHEMANAME?: string, tablename?: string, TABLENAME?: string, rowsecurity?: boolean, ROWSECURITY?: boolean };
                 const schema = t.schemaname || t.SCHEMANAME || "public";
-                const table = t.tablename || t.TABLENAME;
+                const table = t.tablename || t.TABLENAME || "";
                 const rlsEnabled = t.rowsecurity || t.ROWSECURITY || false;
 
                 const key = `${schema}.${table}`;
@@ -134,9 +135,10 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                 };
             });
 
-            pRows.forEach((p: any) => {
+            pRows.forEach((pRow: Record<string, unknown>) => {
+                const p = pRow as { schemaname?: string, SCHEMANAME?: string, tablename?: string, TABLENAME?: string, roles?: string | string[], ROLES?: string | string[], policyname?: string, POLICYNAME?: string, permissive?: "PERMISSIVE" | "RESTRICTIVE", PERMISSIVE?: "PERMISSIVE" | "RESTRICTIVE", cmd?: "SELECT" | "INSERT" | "UPDATE" | "DELETE" | "ALL", CMD?: "SELECT" | "INSERT" | "UPDATE" | "DELETE" | "ALL", qual?: string | null, QUAL?: string | null, with_check?: string | null, WITH_CHECK?: string | null };
                 const schema = p.schemaname || p.SCHEMANAME || "public";
-                const table = p.tablename || p.TABLENAME;
+                const table = p.tablename || p.TABLENAME || "";
                 const key = `${schema}.${table}`;
 
                 if (tableMap[key]) {
@@ -150,13 +152,13 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                     }
 
                     tableMap[key].policies.push({
-                        policyname: p.policyname || p.POLICYNAME,
+                        policyname: p.policyname || p.POLICYNAME || "",
                         tablename: table,
-                        permissive: p.permissive || p.PERMISSIVE,
+                        permissive: p.permissive || p.PERMISSIVE || "PERMISSIVE",
                         roles: parsedRoles,
-                        cmd: p.cmd || p.CMD,
-                        qual: p.qual || p.QUAL,
-                        with_check: p.with_check || p.WITH_CHECK
+                        cmd: p.cmd || p.CMD || "ALL",
+                        qual: p.qual || p.QUAL || null,
+                        with_check: p.with_check || p.WITH_CHECK || null
                     });
                 }
             });
@@ -168,9 +170,9 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                 setSelectedTable(`${sortedTables[0].schemaName}.${sortedTables[0].tableName}`);
             }
 
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error("RLS fetch error:", e);
-            setError("Failed to fetch RLS policies: " + (e.message || String(e)));
+            setError("Failed to fetch RLS policies: " + (e instanceof Error ? e.message : String(e)));
         } finally {
             setIsLoading(false);
         }
@@ -202,7 +204,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
 
     const activeCollection = useMemo(() => {
         if (!activeTableData) return null;
-        return collectionRegistry.collections?.find((c: any) =>
+        return collectionRegistry.collections?.find((c: { id?: string, path?: string, dbPath?: string, slug?: string, collectionId?: string }) =>
             c.id === activeTableData.tableName ||
             c.path === activeTableData.tableName ||
             c.dbPath === activeTableData.tableName ||
@@ -223,7 +225,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
 
         // Merge code-based policies
         if (activeCollection && activeCollection.securityRules) {
-            activeCollection.securityRules.forEach((rule: any) => {
+            activeCollection.securityRules.forEach((rule: { name?: string, mode?: string, operation?: string, roles?: string[], using?: string, withCheck?: string }) => {
                 const ruleName = rule.name;
                 if (!ruleName) return;
 
@@ -232,8 +234,8 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                     policiesMap[ruleName] = {
                         policyname: ruleName,
                         tablename: activeTableData.tableName,
-                        permissive: (rule.mode || "permissive").toUpperCase() as any,
-                        cmd: (rule.operation || "ALL").toUpperCase() as any,
+                        permissive: (rule.mode || "permissive").toUpperCase() as PostgresPolicy["permissive"],
+                        cmd: (rule.operation || "ALL").toUpperCase() as PostgresPolicy["cmd"],
                         roles: rule.roles || ["public"],
                         qual: rule.using || null,
                         with_check: rule.withCheck || null,
@@ -243,8 +245,8 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                     policiesMap[ruleName] = {
                         policyname: ruleName,
                         tablename: activeTableData.tableName,
-                        permissive: (rule.mode || "permissive").toUpperCase() as any,
-                        cmd: (rule.operation || "ALL").toUpperCase() as any,
+                        permissive: (rule.mode || "permissive").toUpperCase() as PostgresPolicy["permissive"],
+                        cmd: (rule.operation || "ALL").toUpperCase() as PostgresPolicy["cmd"],
                         roles: rule.roles || ["public"],
                         qual: rule.using || null,
                         with_check: rule.withCheck || null,
@@ -304,7 +306,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                             onClick={() => setExpandedSchemas(prev => ({ ...prev, [schemaName]: !prev[schemaName] }))}
                                         >
                                             <svg className={cls("w-3.5 h-3.5 mr-1.5 transition-transform text-text-secondary dark:text-text-secondary-dark", expandedSchemas[schemaName] ? "rotate-90" : "")} fill="currentColor" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" /></svg>
-                                            <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark font-semibold uppercase tracking-wider text-[11px] truncate flex-grow group-hover:text-text-primary dark:group-hover:text-text-primary-dark transition-colors">{schemaName}</Typography>
+                                            <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark uppercase tracking-wider text-[11px] truncate flex-grow group-hover:text-text-primary dark:group-hover:text-text-primary-dark transition-colors">{schemaName}</Typography>
                                         </div>
 
                                         {expandedSchemas[schemaName] && (
@@ -381,7 +383,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                 table={activeTableData.tableName}
                                 onSave={async (newPolicy) => {
                                     if (!activeCollection) return;
-                                    const rule: any = {
+                                    const rule: Record<string, unknown> = {
                                         name: newPolicy.policyname,
                                         operation: newPolicy.cmd?.toLowerCase(),
                                         mode: newPolicy.permissive?.toLowerCase(),
@@ -395,7 +397,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                     if (editingPolicy === "new") {
                                         newRules = [...existingRules, rule];
                                     } else {
-                                        newRules = existingRules.map((r: any) => r.name === editingPolicy.policyname ? rule : r);
+                                        newRules = existingRules.map((r: { name?: string }) => r.name === editingPolicy.policyname ? rule : r);
                                     }
 
                                     try {
@@ -403,7 +405,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                             method: "POST",
                                             headers: { "Content-Type": "application/json" },
                                             body: JSON.stringify({
-                                                collectionId: (activeCollection as any).id || (activeCollection as any).path || (activeCollection as any).alias || activeTableData.tableName,
+                                                collectionId: (activeCollection as { id?: string, path?: string, alias?: string }).id || (activeCollection as { id?: string, path?: string, alias?: string }).path || (activeCollection as { id?: string, path?: string, alias?: string }).alias || activeTableData.tableName,
                                                 collectionData: { securityRules: newRules }
                                             })
                                         });
@@ -412,8 +414,8 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                         snackbarController.open({ type: "success", message: "Policy saved successfully" });
                                         setEditingPolicy(null);
                                         fetchRLSData();
-                                    } catch (e: any) {
-                                        snackbarController.open({ type: "error", message: e.message });
+                                    } catch (e: unknown) {
+                                        snackbarController.open({ type: "error", message: e instanceof Error ? e.message : String(e) });
                                     }
                                 }}
                                 onCancel={() => setEditingPolicy(null)}
@@ -442,8 +444,8 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                         await dataSource.executeSql!(`ALTER TABLE "${table}" ${action} ROW LEVEL SECURITY`);
                                                         snackbarController.open({ type: "success", message: `RLS ${action.toLowerCase()}d on ${table}` });
                                                         fetchRLSData();
-                                                    } catch (e: any) {
-                                                        snackbarController.open({ type: "error", message: e.message });
+                                                    } catch (e: unknown) {
+                                                        snackbarController.open({ type: "error", message: e instanceof Error ? e.message : String(e) });
                                                     }
                                                 }}
                                             >
@@ -452,7 +454,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                             <Button
                                                 variant="filled"
                                                 size="small"
-                                                color="primary"
+                                                color="neutral"
                                                 disabled={!activeCollection}
                                                 onClick={() => setEditingPolicy("new")}
                                             >
@@ -495,7 +497,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                             <Button
                                                 size="medium"
                                                 variant="filled"
-                                                color="primary"
+                                                color="neutral"
                                                 onClick={() => setEditingPolicy("new")}
                                                 className="shrink-0 whitespace-nowrap"
                                                 disabled={!activeCollection}
@@ -535,7 +537,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-2 shrink-0">
-                                                        <Button size="small" variant="outlined" color="primary" onClick={() => setEditingPolicy(policy)} disabled={!activeCollection}>
+                                                        <Button size="small" variant="text" color="primary" onClick={() => setEditingPolicy(policy)} disabled={!activeCollection}>
                                                             Edit
                                                         </Button>
                                                         {policy.status !== "code_only" && (
@@ -549,8 +551,8 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                                             await dataSource.executeSql!(`DROP POLICY "${policy.policyname}" ON "${table}"`);
                                                                             snackbarController.open({ type: "success", message: `Policy "${policy.policyname}" dropped` });
                                                                             fetchRLSData();
-                                                                        } catch (e: any) {
-                                                                            snackbarController.open({ type: "error", message: e.message });
+                                                                        } catch (e: unknown) {
+                                                                            snackbarController.open({ type: "error", message: e instanceof Error ? e.message : String(e) });
                                                                         }
                                                                     }}
                                                                 >

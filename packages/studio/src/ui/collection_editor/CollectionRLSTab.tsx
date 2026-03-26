@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, IconButton, Typography, cls, defaultBorderMixin, Chip, KeyIcon, DeleteIcon, Paper } from "@rebasepro/ui";
+import { Button, IconButton, Typography, cls, defaultBorderMixin, Chip, KeyIcon, DeleteIcon, Paper, Container } from "@rebasepro/ui";
 import { PostgresPolicy } from "../../components/RLSEditor/RLSEditor";
 import { PolicyEditor } from "../../components/RLSEditor/PolicyEditor";
 import { useFormex } from "@rebasepro/formex";
@@ -47,53 +47,59 @@ export function CollectionRLSTab() {
     }
 
     return (
-        <div className="h-full w-full flex flex-col p-6 bg-surface-50 dark:bg-surface-900 overflow-auto">
-            <div className="flex items-start justify-between mb-4 mt-2">
-                <Typography variant="h6">Row Level Security</Typography>
-                <Button variant="filled" color="primary" onClick={() => setEditingPolicy("new")}>
-                    Create Policy
-                </Button>
-            </div>
+        <div className={"overflow-auto my-auto"}>
+            <Container maxWidth={"4xl"} className={"flex flex-col gap-4 p-8 m-auto"}>
+                <div className="w-full flex flex-col">
+                <div className="flex items-center justify-between mb-8">
+                    <Typography variant="h5">Row Level Security</Typography>
+                    <Button variant="filled" color="neutral" onClick={() => setEditingPolicy("new")}>
+                        CREATE POLICY
+                    </Button>
+                </div>
 
-            {rules.length === 0 ? (
-                <div className="flex-grow flex items-center justify-center text-text-disabled py-12">
-                    <Typography variant="body2">No RLS policies defined for this collection.</Typography>
-                </div>
-            ) : (
-                <div className="flex flex-col gap-3">
-                    {rules.map((rule: any) => (
-                        <Paper key={rule.name} className={cls("p-4 border rounded-lg flex flex-col justify-between gap-4", defaultBorderMixin)}>
-                            <div className="flex flex-col gap-2">
-                                <Typography variant="subtitle2" className="flex items-center gap-2">
-                                    <KeyIcon size="small" className="text-text-secondary" /> {rule.name}
-                                </Typography>
-                                <div className="flex gap-2 text-xs">
-                                    <Chip size="small">Action: {rule.operation || "ALL"}</Chip>
-                                    <Chip size="small">Roles: {Array.isArray(rule.roles) ? rule.roles.join(", ") : rule.roles}</Chip>
+                {rules.length === 0 ? (
+                    <div className="flex-grow flex items-center justify-center text-text-disabled py-12">
+                        <Typography variant="body2">No RLS policies defined for this collection.</Typography>
+                    </div>
+                ) : (
+                    <div className="flex flex-col gap-3">
+                        {rules.map((rule: any) => (
+                            <Paper key={rule.name} 
+                                className={"p-4 border border-transparent hover:border-surface-200 dark:hover:border-surface-800 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors bg-white dark:bg-surface-950 shadow-sm"}>
+                                <div className="flex flex-col gap-1.5 min-w-0">
+                                    <div className="flex items-center gap-2">
+                                        <KeyIcon size="small" className="text-text-disabled dark:text-text-disabled-dark shrink-0" />
+                                        <Typography variant="subtitle2" className="truncate">{rule.name}</Typography>
+                                    </div>
+                                    <div className="flex gap-2 text-xs pl-6 overflow-x-auto hide-scrollbar">
+                                        <Chip size="small" className="bg-surface-100 dark:bg-surface-800 text-text-secondary border-none">Action: {rule.operation || "ALL"}</Chip>
+                                        <Chip size="small" className="bg-surface-100 dark:bg-surface-800 text-text-secondary border-none">Roles: {Array.isArray(rule.roles) ? rule.roles.join(", ") : rule.roles}</Chip>
+                                    </div>
                                 </div>
-                            </div>
-                            <div>
-                                <Button size="small" variant="outlined" onClick={() => setEditingPolicy({
-                                    policyname: rule.name,
-                                    tablename: (values as any).id || (values as any).dbPath || (values as any).alias || "your_table",
-                                    permissive: (rule.mode || "permissive").toUpperCase() as any,
-                                    cmd: (rule.operation || "ALL").toUpperCase() as any,
-                                    roles: rule.roles || ["public"],
-                                    qual: rule.using || null,
-                                    with_check: rule.withCheck || null
-                                })}>
-                                    Edit
-                                </Button>
-                                <IconButton size="small" className="ml-2" onClick={() => {
-                                    setFieldValue("securityRules" as any, rules.filter((r: any) => r.name !== rule.name));
-                                }}>
-                                    <DeleteIcon size="small" />
-                                </IconButton>
-                            </div>
-                        </Paper>
-                    ))}
+                                <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                                    <Button size="small" variant="text" onClick={() => setEditingPolicy({
+                                        policyname: rule.name,
+                                        tablename: (values as any).id || (values as any).dbPath || (values as any).alias || "your_table",
+                                        permissive: (rule.mode || "permissive").toUpperCase() as any,
+                                        cmd: (rule.operation || "ALL").toUpperCase() as any,
+                                        roles: rule.roles || ["public"],
+                                        qual: rule.using || null,
+                                        with_check: rule.withCheck || null
+                                    })}>
+                                        EDIT
+                                    </Button>
+                                    <IconButton size="small" onClick={() => {
+                                        setFieldValue("securityRules" as any, rules.filter((r: any) => r.name !== rule.name));
+                                    }}>
+                                        <DeleteIcon size="small" className="text-text-secondary dark:text-text-secondary-dark hover:text-red-500 dark:hover:text-red-500 transition-colors" />
+                                    </IconButton>
+                                </div>
+                            </Paper>
+                        ))}
+                    </div>
+                )}
                 </div>
-            )}
+            </Container>
         </div>
     );
 }

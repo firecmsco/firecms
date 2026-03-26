@@ -21,7 +21,7 @@ import {
 import { useNavigationURLs } from "./navigation/useNavigationURLs";
 import { useNavigationRegistry } from "./navigation/useNavigationRegistry";
 import { resolveCollections, resolveCMSViews } from "./navigation/useNavigationResolution";
-import { useCustomBlocker } from "./navigation/useCustomBlocker";
+
 import { computeNavigationGroups, getGroup, NAVIGATION_ADMIN_GROUP_NAME, NAVIGATION_DEFAULT_GROUP_NAME } from "./navigation/utils";
 
 export type BuildNavigationContextProps<EC extends EntityCollection, USER extends User> = {

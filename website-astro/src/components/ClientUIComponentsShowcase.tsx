@@ -114,10 +114,9 @@ export default function ClientUIComponentsShowcase({
                 <div className={"flex flex-row flex-wrap gap-2 items-center"}>
                     <Button size="small">Small Button</Button>
                     <Button size="medium">Medium Button</Button>
-                    <Button size="large">Large Button</Button>
+                    <Button>Large Button</Button>
                     <Button color={"primary"}>Primary Button</Button>
                     <Button variant={"text"}>Text Button</Button>
-                    <Button variant={"outlined"}>Outlined Button</Button>
                 </div>
             </Card>
 
@@ -238,7 +237,6 @@ export default function ClientUIComponentsShowcase({
                 <Typography variant="subtitle2" component="div">Boolean Switch</Typography>
                 <div className={"flex flex-row items-center gap-2"}>
                     <BooleanSwitch value={checked}
-                        size="large"
                         onValueChange={() => {
                             setChecked(!checked)
                         }} />
@@ -441,7 +439,7 @@ export default function ClientUIComponentsShowcase({
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Circular Progress</Typography>
                 <div className={"flex items-center gap-2"}>
-                    <CircularProgress size="large" />
+                    <CircularProgress />
                     <CircularProgress />
                     <CircularProgress size="small" />
                     <CircularProgress size="smallest" />
@@ -457,7 +455,7 @@ export default function ClientUIComponentsShowcase({
                     <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Menu</Typography>
-                <Menu trigger={<Button variant={"outlined"}>Open Menu</Button>}>
+                <Menu trigger={<Button color="neutral">Open Menu</Button>}>
                     <MenuItem onClick={() => alert("Menu Item 1 clicked")}>Menu Item 1</MenuItem>
                     <MenuItem onClick={() => alert("Menu Item 2 clicked")}>Menu Item 2</MenuItem>
                     <MenuItem onClick={() => alert("Menu Item 3 clicked")}>Menu Item 3</MenuItem>
@@ -526,7 +524,6 @@ export default function ClientUIComponentsShowcase({
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Select</Typography>
                 <Select
-                    size={"large"}
                     fullWidth={true}
                     value={""}
                     onValueChange={() => {
@@ -536,7 +533,6 @@ export default function ClientUIComponentsShowcase({
                     <SelectItem value="option2">Option 2</SelectItem>
                 </Select>
                 <Select
-                    size={"large"}
                     fullWidth={true}
                     placeholder="Select your drinks"
                     value="" onValueChange={() => {
@@ -628,7 +624,7 @@ export default function ClientUIComponentsShowcase({
                 <Badge color="primary"
                     invisible={!badgeDisplayed}>
                     <Button size={"small"}
-                        variant={"outlined"}
+                        color={"neutral"}
                         onClick={() => {
                             setBadgeDisplayed(!badgeDisplayed);
                         }}
@@ -649,7 +645,7 @@ export default function ClientUIComponentsShowcase({
                     <ArrowForwardIcon size="smallest" />
                 </IconButton>
                 <Typography variant="subtitle2" component="div">Collapse</Typography>
-                <Button variant={"outlined"} onClick={() => {
+                <Button color="neutral" onClick={() => {
                     setCollapseOpen(!isCollapseOpen);
                 }}>
                     Toggle Collapse

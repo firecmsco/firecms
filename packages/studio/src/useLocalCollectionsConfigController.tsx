@@ -10,6 +10,7 @@ export function useLocalCollectionsConfigController(
     baseCollections: EntityCollection[] = [],
     options?: {
         readOnly?: boolean;
+        getAuthToken?: () => Promise<string | null>;
     }
 ): CollectionsConfigController {
 
@@ -18,9 +19,15 @@ export function useLocalCollectionsConfigController(
     const request = async (endpoint: string, payload: any) => {
         console.log("dispatching dev server request", endpoint, payload);
         try {
+            const token = options?.getAuthToken ? await options.getAuthToken() : null;
+            const headers: Record<string, string> = { "Content-Type": "application/json" };
+            if (token) {
+                headers["Authorization"] = `Bearer ${token}`;
+            }
+
             const response = await fetch(`${apiUrl.replace(/\/$/, '')}/api/schema-editor${endpoint}`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers,
                 body: JSON.stringify(payload)
             });
             console.log("dev server response", endpoint, response.status);
@@ -87,5 +94,5 @@ export function useLocalCollectionsConfigController(
 
         navigationEntries: [],
         saveNavigationEntries: async () => { },
-    }), [apiUrl, parsedCollections, options?.readOnly]);
+    }), [apiUrl, parsedCollections, options?.readOnly, options?.getAuthToken]);
 }

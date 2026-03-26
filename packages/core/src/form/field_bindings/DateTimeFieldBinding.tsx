@@ -46,7 +46,6 @@ export function DateTimeFieldBinding({
                 <DateTimeField
                     value={internalValue}
                     onChange={(dateValue) => setValue(dateValue)}
-                    size={"large"}
                     mode={property.mode}
                     clearable={property.clearable}
                     locale={locale}

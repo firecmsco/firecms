@@ -69,16 +69,15 @@ export function SubcollectionsEditTab({
     const totalEntityViews = resolvedEntityViews.length + hardCodedEntityViews.length;
 
     return (
-        <div className={"overflow-auto my-auto"}>
-            <Container maxWidth={"2xl"} className={"flex flex-col gap-4 p-8 m-auto"}>
-                <div className={"flex  flex-col gap-16"}>
+        <>
+            <div className={"flex flex-col gap-12 w-full"}>
 
-                    <div className={"grow flex flex-col gap-4 items-start"}>
-                        <Typography variant={"h5"}>
+                    <div className={"grow flex flex-col gap-4 items-start w-full"}>
+                        <Typography variant={"h6"}>
                             Subcollections of {values.name}
                         </Typography>
 
-                        <Paper className={"flex flex-col gap-4 p-2 w-full"}>
+                        <div className={"flex flex-col gap-4 w-full"}>
                             {subcollections && subcollections.length > 0 && <Table>
                                 <TableBody>
                                     {subcollections.map((subcollection) => (
@@ -119,34 +118,25 @@ export function SubcollectionsEditTab({
                                         isNewCollection: true
                                     });
                                 }}
-                                variant={"text"}
+                                variant="filled"
+                                color="neutral"
                                 startIcon={<AddIcon />}>
                                 Add subcollection
                             </Button>
 
-                        </Paper>
+                        </div>
 
                     </div>
 
-                    <div className={"grow  flex flex-col gap-4 items-start"}>
-                        <Typography variant={"h5"}>
+                    <div className={"grow flex flex-col gap-4 items-start w-full"}>
+                        <Typography variant={"h6"}>
                             Custom views
                         </Typography>
 
-                        {totalEntityViews === 0 &&
-                            <Alert action={<Button variant="text"
-                                size={"small"}
-                                href={"https://rebase.pro/docs/cloud/quickstart"}
-                                component={"a"}
-                                rel="noopener noreferrer"
-                                target="_blank">More info</Button>}>
-                                Define your own custom views by uploading them with the CLI.
-                            </Alert>
-                        }
 
                         {<>
-                            <Paper className={"flex flex-col gap-4 p-2 w-full"}>
-                                <Table>
+                            <div className={"flex flex-col gap-4 w-full"}>
+                                {totalEntityViews > 0 && <Table>
                                     <TableBody>
                                         {resolvedEntityViews.map((view) => (
                                             <TableRow key={view.key}>
@@ -188,17 +178,18 @@ export function SubcollectionsEditTab({
                                             </TableRow>
                                         ))}
                                     </TableBody>
-                                </Table>
+                                </Table>}
 
                                 <Button
                                     onClick={() => {
                                         setAddEntityViewDialogOpen(true);
                                     }}
-                                    variant={"text"}
+                                    variant="filled"
+                                    color="neutral"
                                     startIcon={<AddIcon />}>
                                     Add custom entity view
                                 </Button>
-                            </Paper>
+                            </div>
 
                         </>}
 
@@ -206,15 +197,12 @@ export function SubcollectionsEditTab({
                     </div>
 
                 </div>
-            </Container>
-
-            <div style={{ height: "52px" }} />
 
             {subcollectionToDelete &&
                 <ConfirmationDialog open={Boolean(subcollectionToDelete)}
                     onAccept={() => {
                         const props = {
-                            id: subcollectionToDelete,
+                            id: subcollectionToDelete!,
                             parentCollectionIds: [...(parentCollectionIds ?? []), collection.slug]
                         };
                         console.debug("Deleting subcollection", props)
@@ -264,6 +252,6 @@ export function SubcollectionsEditTab({
                     }
                     setAddEntityViewDialogOpen(false);
                 }} />
-        </div>
+        </>
     );
 }

@@ -147,7 +147,6 @@ export function EntityCard<M extends Record<string, any> = any>({
                         <IconForView
                             collectionOrView={collection}
                             color="disabled"
-                            size="large"
                         />
                     </div>
                 )}

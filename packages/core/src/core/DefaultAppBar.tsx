@@ -229,7 +229,7 @@ export const DefaultAppBar = function DefaultAppBar({
                     trigger={<IconButton
                         color="inherit"
                         aria-label="Open drawer"
-                        size="large">
+>
                         {mode === "dark"
                             ? <DarkModeIcon />
                             : <LightModeIcon />}

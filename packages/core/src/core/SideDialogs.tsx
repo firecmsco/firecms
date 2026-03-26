@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks";
 import { EntitySidePanelProps, SideDialogPanelProps } from "@rebasepro/types";
 import { Sheet } from "@rebasepro/ui";
-import { useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
+import { useUnsavedChangesDialog } from "../hooks";
 import { ErrorBoundary } from "../components";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
 import { EntitySidePanel } from "./EntitySidePanel";
@@ -97,12 +97,8 @@ function SideDialogView({
         e.preventDefault();
     }, []);
 
-    const {
-        navigationWasBlocked,
-        handleOk: handleNavigationOk,
-        handleCancel: handleNavigationCancel
-    } = useNavigationUnsavedChangesDialog(
-        blocked && !drawerCloseRequested,
+    const { dialogProps, triggerDialog } = useUnsavedChangesDialog(
+        blocked,
         () => setBlocked(false)
     );
 
@@ -125,6 +121,7 @@ function SideDialogView({
     const onCloseRequest = (force?: boolean) => {
         if (blocked && !force) {
             setDrawerCloseRequested(true);
+            triggerDialog();
         } else {
             sideDialogsController.close();
             panel?.onClose?.();
@@ -182,10 +179,20 @@ function SideDialogView({
             </Sheet>
 
             <UnsavedChangesDialog
-                open={drawerCloseRequested}
-                handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
-                handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
-                body={blockedNavigationMessage} />
+                {...dialogProps}
+                handleOk={() => {
+                    dialogProps.handleOk();
+                    if (drawerCloseRequested) {
+                        handleDrawerCloseOk();
+                    }
+                }}
+                handleCancel={() => {
+                    dialogProps.handleCancel();
+                    if (drawerCloseRequested) {
+                        handleDrawerCloseCancel();
+                    }
+                }}
+                body={blockedNavigationMessage || "There are unsaved changes"} />
 
         </SideDialogContext.Provider>
 

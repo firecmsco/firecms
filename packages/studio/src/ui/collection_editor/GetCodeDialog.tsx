@@ -119,7 +119,6 @@ function collectionToCode(collection: EntityCollection): object {
         path: collection.dbPath,
         description: collection.description,
         editable: true,
-        collectionGroup: collection.collectionGroup,
         icon: collection.icon,
         group: collection.group,
         filter: collection.filter,

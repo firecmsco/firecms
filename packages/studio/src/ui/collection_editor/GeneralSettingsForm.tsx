@@ -89,7 +89,7 @@ export function GeneralSettingsForm({
             <Container maxWidth={"4xl"} className={"flex flex-col gap-4 p-8 m-auto"}>
 
                 <div>
-                    <div className="flex flex-row gap-2 py-2 pt-3 items-center">
+                    <div className="flex flex-row gap-2 items-center">
                         <Typography variant={!isNewCollection ? "h5" : "h4"} className={"flex-grow"}>
                             {isNewCollection ? "New collection" : `${values?.name} collection`}
                         </Typography>
@@ -196,25 +196,12 @@ export function GeneralSettingsForm({
                             </FieldCaption>
                         </div>
 
-                        {/* Collection Group */}
-                        <div className={"col-span-12"}>
-                            <BooleanSwitchWithLabel
-                                position={"start"}
-                                size={"large"}
-                                label="Collection group"
-                                onValueChange={(v) => setFieldValue("collectionGroup", v)}
-                                value={values.collectionGroup ?? false}
-                            />
-                            <FieldCaption>
-                                A collection group consists of all collections with the same path. This allows
-                                you to query over multiple collections at once.
-                            </FieldCaption>
-                        </div>
+
 
                     </div>
 
                     {/* Advanced Settings */}
-                    <ExpandablePanel
+                    {false && <ExpandablePanel
                         title={<Typography variant="subtitle2">Advanced settings</Typography>}
                         initiallyExpanded={false}
                         className="mt-4"
@@ -224,7 +211,6 @@ export function GeneralSettingsForm({
                         <div>
                             <BooleanSwitchWithLabel
                                 position={"start"}
-                                size={"large"}
                                 allowIndeterminate={true}
                                 label={<span className="flex items-center gap-2"><HistoryIcon size={"smallest"} />{values.history === null || values.history === undefined ? "Document history revisions enabled if enabled globally" : (
                                     values.history ? "Document history revisions ENABLED" : "Document history revisions NOT enabled"
@@ -239,8 +225,7 @@ export function GeneralSettingsForm({
                             </FieldCaption>
                         </div>
 
-
-                    </ExpandablePanel>
+                    </ExpandablePanel>}
                 </fieldset>
 
                 <div style={{ height: "52px" }} />

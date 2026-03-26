@@ -122,7 +122,7 @@ export function UsersView({ userManagement }: {
                 <Typography gutterBottom variant="h4" className="grow" component="h4">
                     Users
                 </Typography>
-                <Button size="large" startIcon={<AddIcon />} onClick={handleAddUser} disabled={!saveUser}>
+                <Button startIcon={<AddIcon />} onClick={handleAddUser} disabled={!saveUser}>
                     Add user
                 </Button>
             </div>

@@ -538,7 +538,7 @@ function PropertyEditFormFields({
                     </IconButton>}
             </div>
 
-            <div className={"grid grid-cols-12 gap-y-12 mt-8 mb-8"}>
+            <div className={"grid grid-cols-12 gap-y-8 mt-6 mb-8"}>
                 {includeIdAndTitle &&
                     <CommonPropertyFields showErrors={showErrors}
                         disabledId={existing}
@@ -682,22 +682,21 @@ function WidgetSelectView({
                 }
             }}
             className={cls(
-                "select-none rounded-md text-sm p-4",
-                fieldBackgroundMixin,
-                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                "relative flex items-center",
+                "select-none rounded-md text-sm py-2 px-1 transition-colors duration-200",
+                !disabled && "hover:bg-surface-50 dark:hover:bg-surface-800 cursor-pointer",
+                "relative flex items-center mb-2",
             )}>
             {!value && <em>Select a property widget</em>}
             {value && computedFieldConfig && <div
                 className={cls(
                     "flex items-center")}>
-                <div className={"mr-8"}>
+                <div className={"mr-4"}>
                     <PropertyConfigBadge propertyConfig={computedFieldConfig} />
                 </div>
-                <div className={"flex flex-col items-start text-base text-left"}>
-                    <div>{computedFieldConfig.name}</div>
+                <div className={"flex flex-col items-start text-left"}>
+                    <div className="font-semibold text-text-primary dark:text-text-primary-dark tracking-tight">{computedFieldConfig.name}</div>
                     <Typography variant={"caption"}
-                        color={"secondary"}>
+                        className="text-text-secondary dark:text-text-secondary-dark mt-0.5">
                         {computedFieldConfig.description}
                     </Typography>
                 </div>

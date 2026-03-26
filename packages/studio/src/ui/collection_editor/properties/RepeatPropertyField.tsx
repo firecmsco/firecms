@@ -68,7 +68,6 @@ export function RepeatPropertyField({
                                 hasError={false} />}
 
                             {!disabled && !ofProperty && <Button variant={"text"}
-                                size={"large"}
                                 color={ofPropertyError ? "error" : "primary"}
                                 onClick={() => setPropertyDialogOpen(true)}>
                                 Edit {`${widget ? widget.name : "repeat component"}`}

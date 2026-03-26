@@ -50,26 +50,15 @@ export function EntityActionsEditTab({
     const totalEntityActions = resolvedEntityActions.length + hardCodedEntityActions.length;
 
     const content = (
-        <div className={"flex flex-col gap-16"}>
-            <div className={"flex-grow flex flex-col gap-4 items-start"}>
+        <div className={"flex flex-col gap-12"}>
+            <div className={"flex-grow flex flex-col gap-4 items-start w-full"}>
                 <Typography variant={"h6"}>
                     Custom actions
                 </Typography>
 
-                {totalEntityActions === 0 &&
-                    <Alert action={<Button variant="text"
-                        size={"small"}
-                        href={"https://rebase.pro/docs/custom_actions"}
-                        component={"a"}
-                        rel="noopener noreferrer"
-                        target="_blank">More info</Button>}>
-                        Define your own custom actions by uploading them with the CLI.
-                    </Alert>
-                }
-
                 {<>
-                    <Paper className={"flex flex-col gap-4 p-2 w-full"}>
-                        <Table>
+                    <div className={"flex flex-col gap-4 w-full"}>
+                        {totalEntityActions > 0 && <Table>
                             <TableBody>
                                 {resolvedEntityActions.map((action) => (
                                     <TableRow key={action.key}>
@@ -111,16 +100,18 @@ export function EntityActionsEditTab({
                                     </TableRow>
                                 ))}
                             </TableBody>
-                        </Table>
+                        </Table>}
 
                         <Button
                             onClick={() => {
                                 setAddEntityActionDialogOpen(true);
                             }}
+                            variant="filled"
+                            color="neutral"
                             startIcon={<AddIcon />}>
                             Add custom entity action
                         </Button>
-                    </Paper>
+                    </div>
 
                 </>}
 

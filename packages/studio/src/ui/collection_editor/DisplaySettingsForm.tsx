@@ -107,7 +107,6 @@ export function DisplaySettingsForm({
                                             key={`order-select-${numberProperties.length}`}
                                             name="orderProperty"
                                             label="Order Property"
-                                            size={"large"}
                                             fullWidth={true}
                                             position={"item-aligned"}
                                             disabled={numberProperties.length === 0}
@@ -232,7 +231,6 @@ export function DisplaySettingsForm({
                         <div className={"col-span-12"}>
                             <Select
                                 name="defaultSize"
-                                size={"large"}
                                 fullWidth={true}
                                 label="Default row size"
                                 position={"item-aligned"}
@@ -283,7 +281,6 @@ export function DisplaySettingsForm({
                         <div className={"col-span-12"}>
                             <BooleanSwitchWithLabel
                                 position={"start"}
-                                size={"large"}
                                 label={values.inlineEditing === undefined || values.inlineEditing ? "Data can be edited directly in the table view" : "Data can be edited only in the form view"}
                                 onValueChange={(v) => setFieldValue("inlineEditing", v)}
                                 value={values.inlineEditing === undefined ? true : values.inlineEditing}
@@ -297,7 +294,6 @@ export function DisplaySettingsForm({
                         <div className={"col-span-12"}>
                             <BooleanSwitchWithLabel
                                 position={"start"}
-                                size={"large"}
                                 label={values.includeJsonView === undefined || values.includeJsonView ? "Include JSON view" : "Do not include JSON view"}
                                 onValueChange={(v) => setFieldValue("includeJsonView", v)}
                                 value={values.includeJsonView === undefined ? true : values.includeJsonView}

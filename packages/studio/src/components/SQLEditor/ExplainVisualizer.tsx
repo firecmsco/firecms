@@ -58,7 +58,7 @@ export const ExplainVisualizer: React.FC<ExplainVisualizerProps> = ({ plan, isRo
                             <div className="w-4 h-4"></div>
                         )}
 
-                        <Typography variant="body1" className="font-semibold flex items-center">
+                        <Typography variant="body1" className="flex items-center">
                             {plan["Node Type"]}
                         </Typography>
 

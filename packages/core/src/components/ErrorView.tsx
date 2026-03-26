@@ -40,7 +40,7 @@ export function ErrorView({
                     {title && <Typography
                         variant={"body2"}
                         className="font-medium text-text-primary">{title}</Typography>}
-                    <Typography variant={"body2"} className="font-semibold text-text-secondary">{component}</Typography>
+                    <Typography variant={"body2"} className="text-text-secondary">{component}</Typography>
                     {onRetry && (
                         <div className="mt-3">
                             <Button

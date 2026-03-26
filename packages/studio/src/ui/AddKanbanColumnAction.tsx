@@ -148,8 +148,8 @@ export function AddKanbanColumnAction({
                 )}
                 onClick={() => setDialogOpen(true)}
             >
-                <IconButton size="large" className="opacity-60 hover:opacity-100">
-                    <AddIcon size="large" />
+                <IconButton className="opacity-60 hover:opacity-100">
+                    <AddIcon />
                 </IconButton>
                 <Typography variant="caption" color="secondary" className="mt-2">
                     Add Column

@@ -23,7 +23,8 @@ import {
     useCollectionRegistryController,
     useCMSUrlController,
     User,
-    useSnackbarController
+    useSnackbarController,
+    useUnsavedChangesDialog
 } from "@rebasepro/core";
 import {
     ArrowBackIcon,
@@ -47,7 +48,7 @@ import { GeneralSettingsForm } from "./GeneralSettingsForm";
 import { DisplaySettingsForm } from "./DisplaySettingsForm";
 import { CollectionPropertiesEditorForm } from "./CollectionPropertiesEditorForm";
 import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
-import { ExtendSettingsForm } from "./ExtendSettingsForm";
+import { CollectionRelationsTab } from "./CollectionRelationsTab";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView";
 import { CollectionInference } from "../../types/collection_inference";
@@ -132,20 +133,23 @@ export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
     const open = props.open;
 
     const [formDirty, setFormDirty] = React.useState<boolean>(false);
-    const [unsavedChangesDialogOpen, setUnsavedChangesDialogOpen] = React.useState<boolean>(false);
+
+    const { dialogProps, triggerDialog } = useUnsavedChangesDialog(
+        open && formDirty,
+        () => props.handleClose(undefined)
+    );
 
     const handleCancel = () => {
         if (!formDirty) {
             props.handleClose(undefined);
         } else {
-            setUnsavedChangesDialogOpen(true);
+            triggerDialog();
         }
     };
 
     useEffect(() => {
         if (!open) {
             setFormDirty(false);
-            setUnsavedChangesDialogOpen(false);
         }
     }, [open]);
 
@@ -164,11 +168,7 @@ export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
                     handleCancel={handleCancel}
                     setFormDirty={setFormDirty} />}
 
-                <UnsavedChangesDialog
-                    open={unsavedChangesDialogOpen}
-                    handleOk={() => props.handleClose(undefined)}
-                    handleCancel={() => setUnsavedChangesDialogOpen(false)}
-                    body={"There are unsaved changes in this collection"} />
+                <UnsavedChangesDialog {...dialogProps} />
             </AIModifiedPathsProvider>
         </Dialog>
     );
@@ -183,7 +183,7 @@ type EditorView = "welcome"
     | "properties"
     | "loading"
     | "extra_view"
-    | "extend"
+    | "relations"
     | "rls";
 
 export function CollectionEditor(props: CollectionEditorDialogProps & {
@@ -525,7 +525,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const validation = (col: PersistedCollection) => {
 
         let errors: Record<string, any> = {};
-        const schema = (currentView === "properties" || currentView === "extend" || currentView === "general") && YupSchema;
+        const schema = (currentView === "properties" || currentView === "relations" || currentView === "general") && YupSchema;
         if (schema) {
             try {
                 schema.validateSync(col, { abortEarly: false });
@@ -680,8 +680,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             <Tab value={"rls"}>
                                 RLS
                             </Tab>
-                            <Tab value={"extend"}>
-                                Extend
+                            <Tab value={"relations"}>
+                                Relations
                             </Tab>
                         </Tabs>
                     </div>
@@ -700,9 +700,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                     variant="filled"
                                     color="primary"
                                     type="submit"
-                                    size="small"
                                     onClick={() => formController.handleSubmit()}
-                                    disabled={isSubmitting || configController?.readOnly}
+                                    disabled={!dirty || isSubmitting || configController?.readOnly}
                                     loading={isSubmitting}
                                 >
                                     {configController?.readOnly ? "Update (Read-only)" : "Update"}
@@ -789,16 +788,8 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             <DisplaySettingsForm expandKanban={expandKanban} />
                         }
 
-                        {currentView === "extend" && collection &&
-                            <ExtendSettingsForm
-                                collection={collection}
-                                parentCollection={parentCollection}
-                                configController={configController}
-                                collectionInference={collectionInference}
-                                getUser={getUser}
-                                parentCollectionIds={parentCollectionIds}
-                                isMergedCollection={!isNewCollection && isMergedCollection}
-                                onResetToCode={() => setDeleteRequested(true)} />
+                        {currentView === "relations" &&
+                            <CollectionRelationsTab />
                         }
 
                         {currentView === "rls" &&
@@ -974,12 +965,12 @@ function applyPropertiesConfig(property: Property, propertyConfigs: Record<strin
     let internalProperty = property;
     if (propertyConfigs && internalProperty && typeof internalProperty === "object" && internalProperty.propertyConfig) {
         const propertyConfig = propertyConfigs[internalProperty.propertyConfig];
-        if (propertyConfig && isPropertyBuilder(propertyConfig.property)) {
-            internalProperty = propertyConfig.property;
+        if (propertyConfig && isPropertyBuilder(propertyConfig.property as any)) {
+            internalProperty = propertyConfig.property as unknown as Property;
         } else {
 
             if (propertyConfig) {
-                internalProperty = mergeDeep(propertyConfig.property, internalProperty);
+                internalProperty = mergeDeep(propertyConfig.property as any, internalProperty);
             }
 
             if (!isPropertyBuilder(internalProperty) && internalProperty.type === "map" && internalProperty.properties) {

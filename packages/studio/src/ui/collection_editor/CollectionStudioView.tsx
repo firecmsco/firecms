@@ -8,14 +8,13 @@ import {
     Button,
     AddIcon,
     StorageIcon,
-    Tooltip
 } from "@rebasepro/ui";
-import { useSnackbarController } from "@rebasepro/core";
+import { useSnackbarController, useCMSUrlController, useUnsavedChangesDialog } from "@rebasepro/core";
 import { CollectionEditorDialogProps } from "./CollectionEditorDialog";
 import { AIModifiedPathsProvider } from "./AIModifiedPathsContext";
 import { CollectionEditor } from "./CollectionEditorDialog";
+import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
 import { useNavigate } from "react-router-dom";
-import { useCMSUrlController } from "@rebasepro/core";
 
 export type CollectionStudioViewProps = Omit<CollectionEditorDialogProps, "open" | "isNewCollection" | "editedCollectionId" | "handleClose" | "handleCancel"> & {
     collectionId?: string | "new";
@@ -28,9 +27,24 @@ export function CollectionStudioView({ collectionId, ...props }: CollectionStudi
 
     // Form state from the editor
     const [formDirty, setFormDirty] = useState<boolean>(false);
+    const [cancelRequested, setCancelRequested] = useState<boolean>(false);
+
+    const { dialogProps, triggerDialog } = useUnsavedChangesDialog(
+        formDirty,
+        () => setFormDirty(false)
+    );
 
     // Map collectionId from URL params if missing? We can pass it directly.
     const activeCollectionId = collectionId;
+
+    const handleCancelClick = () => {
+        if (!formDirty) {
+            navigate(urlController.buildCMSUrlPath("/"));
+        } else {
+            setCancelRequested(true);
+            triggerDialog();
+        }
+    };
 
     return (
         <div className="flex-grow flex flex-col h-full w-full bg-white dark:bg-surface-950">
@@ -43,7 +57,7 @@ export function CollectionStudioView({ collectionId, ...props }: CollectionStudi
                         open={true}
                         isNewCollection={activeCollectionId === "new"}
                         editedCollectionId={activeCollectionId !== "new" ? activeCollectionId : undefined}
-                        handleCancel={() => navigate(urlController.buildCMSUrlPath("/"))}
+                        handleCancel={handleCancelClick}
                         handleClose={(savedCollection) => {
                             setFormDirty(false);
                             if (savedCollection) {
@@ -63,6 +77,21 @@ export function CollectionStudioView({ collectionId, ...props }: CollectionStudi
                         <Typography variant="body2">Select a collection or create a new one</Typography>
                     </div>
                 )}
+                
+                <UnsavedChangesDialog
+                    {...dialogProps}
+                    handleOk={() => {
+                        dialogProps.handleOk();
+                        if (cancelRequested) {
+                            navigate(urlController.buildCMSUrlPath("/"));
+                            setCancelRequested(false);
+                        }
+                    }}
+                    handleCancel={() => {
+                        dialogProps.handleCancel();
+                        setCancelRequested(false);
+                    }}
+                />
             </AIModifiedPathsProvider>
         </div>
     );

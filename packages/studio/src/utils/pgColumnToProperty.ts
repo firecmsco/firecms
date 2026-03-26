@@ -1,4 +1,4 @@
-import { EntityCollection, Property, StringProperty } from "@rebasepro/types";
+import { EntityCollection, Property, StringProperty, NumberProperty, ArrayProperty } from "@rebasepro/types";
 
 /**
  * Column metadata returned by table introspection.
@@ -15,9 +15,9 @@ export interface TableColumnInfo {
 }
 
 /**
- * Maps a PostgreSQL column data type to a FireCMS property type.
+ * Maps a PostgreSQL column data type to a Rebase property type.
  */
-function pgTypeToFireCMSProperty(column: TableColumnInfo): Property | null {
+function pgTypeToRebaseProperty(column: TableColumnInfo): Property | null {
     const {
         column_name,
         data_type,
@@ -50,16 +50,21 @@ function pgTypeToFireCMSProperty(column: TableColumnInfo): Property | null {
         } as StringProperty;
     }
 
-    switch (data_type.toLowerCase()) {
+    const dt = data_type.toLowerCase();
+    switch (dt) {
         case "character varying":
         case "varchar":
         case "text":
         case "char":
         case "character":
         case "citext": {
-            const prop: any = {
+            let colType: "varchar" | "text" | "char" = "varchar";
+            if (dt === "text" || dt === "citext") colType = "text";
+            if (dt === "char" || dt === "character") colType = "char";
+            const prop: StringProperty = {
                 type: "string",
                 name: prettifiedName,
+                columnType: colType,
                 validation: required ? { required: true } : undefined
             };
             if (isAutoId) {
@@ -69,7 +74,7 @@ function pgTypeToFireCMSProperty(column: TableColumnInfo): Property | null {
         }
 
         case "uuid": {
-            const prop: any = {
+            const prop: StringProperty = {
                 type: "string",
                 name: prettifiedName,
                 validation: required ? { required: true } : undefined
@@ -83,9 +88,11 @@ function pgTypeToFireCMSProperty(column: TableColumnInfo): Property | null {
         case "integer":
         case "bigint":
         case "smallint": {
-            const prop: any = {
+            const colType = dt === "bigint" ? "bigint" : "integer";
+            const prop: NumberProperty = {
                 type: "number",
                 name: prettifiedName,
+                columnType: colType,
                 validation: {
                     ...(required ? { required: true } : {}),
                     integer: true
@@ -99,26 +106,34 @@ function pgTypeToFireCMSProperty(column: TableColumnInfo): Property | null {
 
         case "serial":
         case "bigserial":
-        case "smallserial":
+        case "smallserial": {
+            const colType = dt === "bigserial" ? "bigserial" : "serial";
             return {
                 type: "number",
                 name: prettifiedName,
+                columnType: colType,
                 isId: "increment",
                 validation: {
                     ...(required ? { required: true } : {}),
                     integer: true
                 }
-            } as any;
+            } as NumberProperty;
+        }
 
         case "numeric":
         case "decimal":
         case "real":
-        case "double precision":
+        case "double precision": {
+            let colType: any = "numeric";
+            if (dt === "real") colType = "real";
+            if (dt === "double precision") colType = "double precision";
             return {
                 type: "number",
                 name: prettifiedName,
+                columnType: colType,
                 validation: required ? { required: true } : undefined
             };
+        }
 
         case "boolean":
             return {
@@ -134,18 +149,24 @@ function pgTypeToFireCMSProperty(column: TableColumnInfo): Property | null {
         case "date":
         case "time with time zone":
         case "time without time zone":
-        case "time":
+        case "time": {
+            let colType: "timestamp" | "date" | "time" = "timestamp";
+            if (dt.startsWith("date")) colType = "date";
+            if (dt.startsWith("time ") || dt === "time") colType = "time";
             return {
                 type: "date",
                 name: prettifiedName,
+                columnType: colType,
                 validation: required ? { required: true } : undefined
             };
+        }
 
         case "jsonb":
         case "json":
             return {
                 type: "map",
                 name: prettifiedName,
+                columnType: dt === "jsonb" ? "jsonb" : "json",
                 keyValue: true,
                 properties: {}
             };
@@ -156,7 +177,7 @@ function pgTypeToFireCMSProperty(column: TableColumnInfo): Property | null {
                 type: "array",
                 name: prettifiedName,
                 of: { type: "string" }
-            } as any;
+            } as ArrayProperty;
 
         default:
             // Fallback: treat unknown types as string
@@ -180,8 +201,11 @@ export function buildCollectionFromTableColumns(
     const propertiesOrder: string[] = [];
 
     for (const column of columns) {
-        const property = pgTypeToFireCMSProperty(column);
+        const property = pgTypeToRebaseProperty(column);
         if (property) {
+            // Remove undefined keys so we don't output "validation: undefined"
+            Object.keys(property).forEach(key => (property as unknown as Record<string, unknown>)[key] === undefined && delete (property as unknown as Record<string, unknown>)[key]);
+            
             properties[column.column_name] = property;
             propertiesOrder.push(column.column_name);
         }

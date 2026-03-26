@@ -91,7 +91,6 @@ export function CollectionsSelect({
                 value={value ?? ""}
                 position={"item-aligned"}
                 name={pathPath}
-                size={"large"}
                 fullWidth={true}
                 onChange={handleChange}
                 label={"Target collection"}
@@ -103,7 +102,7 @@ export function CollectionsSelect({
                             <IconForView collectionOrView={selectedCollection} />
                             <Typography
                                 variant={"subtitle2"}
-                                className="font-medium ml-4">
+                                className="ml-4">
                                 {selectedCollection?.name.toUpperCase()}
                             </Typography>
                         </div>)
@@ -123,7 +122,7 @@ export function CollectionsSelect({
                                             <IconForView collectionOrView={collection} />
                                             <Typography
                                                 variant={"subtitle2"}
-                                                className="font-medium ml-4">
+                                                className="ml-4">
                                                 {collection?.name.toUpperCase()}
                                             </Typography>
                                         </div>
@@ -143,7 +142,7 @@ export function CollectionsSelect({
                                     <IconForView collectionOrView={collection} />
                                     <Typography
                                         variant={"subtitle2"}
-                                        className="font-medium ml-4">
+                                        className="ml-4">
                                         {collection?.name.toUpperCase()}
                                     </Typography>
                                 </div>

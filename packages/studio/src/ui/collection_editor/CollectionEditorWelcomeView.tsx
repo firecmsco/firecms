@@ -147,7 +147,8 @@ export function CollectionEditorWelcomeView({
                                 onAnalyticsEvent={onAnalyticsEvent}
                                 trigger={
                                     <Button
-                                        variant="outlined"
+                                        variant="filled"
+                                        color="neutral"
                                         startIcon={<AIIcon size="small" />}
                                     >
                                         Generate with AI
@@ -165,7 +166,8 @@ export function CollectionEditorWelcomeView({
                         </Typography>
 
                         <Button
-                            variant={"outlined"}
+                            variant="filled"
+                            color="neutral"
                             onClick={() => setJsonImportOpen(true)}
                             startIcon={<CodeIcon size="small" />}
                         >

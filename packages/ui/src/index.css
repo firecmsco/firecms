@@ -85,7 +85,7 @@
 }
 
 .typography-h6 {
-    @apply text-xl font-headers font-medium;
+    @apply text-xl font-headers font-normal;
 }
 
 .typography-subtitle1 {

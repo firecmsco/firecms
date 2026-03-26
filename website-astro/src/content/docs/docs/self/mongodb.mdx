@@ -211,7 +211,7 @@ const MongoDBApp = () => {
         >
           {({ context, loading }) => {
             if (loading || authLoading) {
-              return <CircularProgressCenter size="large" />;
+              return <CircularProgressCenter />;
             }
 
             if (!canAccessMainView) {

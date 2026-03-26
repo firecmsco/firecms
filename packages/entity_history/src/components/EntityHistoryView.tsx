@@ -192,7 +192,7 @@ export function EntityHistoryView({
                 // @ts-ignore
                 const previousValues: object | undefined = revision.values?.["__metadata"]?.["previous_values"];
                 return <div key={index} className="flex flex-cols gap-2 w-full">
-                    <EntityHistoryEntry size={"large"}
+                    <EntityHistoryEntry
                         entity={revision}
                         collection={collection}
                         previewKeys={previewKeys}

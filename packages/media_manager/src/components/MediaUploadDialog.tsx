@@ -164,7 +164,6 @@ export function MediaUploadDialog({
                         onClick={() => document.getElementById("file-upload-input")?.click()}
                     >
                         <CloudUploadIcon
-                            size="large"
                             className={cls(
                                 isDragging ? "text-primary" : "text-surface-accent-400"
                             )}

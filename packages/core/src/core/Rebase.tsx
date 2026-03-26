@@ -25,7 +25,6 @@ import { DialogsProvider } from "../contexts/DialogsProvider";
 import { useBuildDataSource } from "../internal/useBuildDataSource";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
-import { useProjectLog } from "../hooks/useProjectLog";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
 import { EffectiveRoleControllerContext } from "../contexts/EffectiveRoleController";
@@ -102,13 +101,6 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         onAnalyticsEvent
     }), []);
 
-    const accessResponse = useProjectLog({
-        apiKey,
-        authController,
-        dataSource: dataSourceProp,
-        plugins
-    });
-
     /**
      * Controller in charge of fetching and persisting data
      */
@@ -122,10 +114,6 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
 
     const fallbackEffectiveRoleController = useBuildEffectiveRoleController();
     const activeEffectiveRoleController = effectiveRoleController ?? fallbackEffectiveRoleController;
-
-    if (accessResponse?.message) {
-        console.warn(accessResponse.message);
-    }
 
     if (navigationStateController.navigationLoadingError) {
         return (
@@ -143,22 +131,6 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                 <ErrorView
                     title={"Error loading auth"}
                     error={authController.authError} />
-            </CenteredView>
-        );
-    }
-
-    if (accessResponse?.blocked) {
-        return (
-            <CenteredView maxWidth={"md"} fullScreen={true} className={"flex flex-col gap-2"}>
-                <Typography variant={"h4"} gutterBottom>
-                    License needed
-                </Typography>
-                <Typography>
-                    You need a valid license to use Rebase PRO. Please reach out at <a
-                        href={"mailto:hello@rebase.pro"}>hello@rebase.pro</a> for more information.
-                </Typography>
-                {accessResponse?.message &&
-                    <Typography>{accessResponse?.message}</Typography>}
             </CenteredView>
         );
     }

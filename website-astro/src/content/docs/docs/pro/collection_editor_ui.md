@@ -603,7 +603,7 @@ export function App() {
 
                   let component;
                   if (loading || authLoading) {
-                    component = <CircularProgressCenter size={"large"}/>;
+                    component = <CircularProgressCenter/>;
                   } else {
                     if (!canAccessMainView) {
                       component = (

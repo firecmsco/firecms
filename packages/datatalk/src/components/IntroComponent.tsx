@@ -17,7 +17,7 @@ export function IntroComponent({ onPromptSuggestionClick }: { onPromptSuggestion
 
     return (
         <div className={"my-8"}>
-            <Typography variant={"h3"} gutterBottom={true} className={"font-mono ml-4 my-2"}>
+            <Typography variant={"h3"} gutterBottom={true} className={"ml-4 my-2"}>
                 Welcome to DATATALK
             </Typography>
             <Typography paragraph={true} className={"ml-4 my-2"}>

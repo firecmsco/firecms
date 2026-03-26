@@ -91,13 +91,13 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                                         className={cls(
                                             "w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex items-center gap-3 group",
                                             isSelected
-                                                ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light"
-                                                : "hover:bg-surface-200 dark:hover:bg-surface-800 text-text-secondary dark:text-text-secondary-dark"
+                                                ? "bg-primary text-white"
+                                                : "hover:bg-surface-100 dark:hover:bg-surface-800 text-text-secondary dark:text-text-secondary-dark"
                                         )}
                                     >
                                         <IconForView collectionOrView={collection} size={18} className={cls(
                                             isSelected
-                                                ? "text-primary dark:text-primary-light"
+                                                ? "text-white"
                                                 : "text-text-secondary dark:text-text-secondary-dark"
                                         )} />
                                         <span className="truncate flex-1">
@@ -120,7 +120,7 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                             />
                         ) : (
                             <div className="flex flex-col items-center justify-center h-full text-text-disabled dark:text-text-disabled-dark">
-                                <StorageIcon size="large" className="opacity-20 mb-4 h-16 w-16" />
+                                <StorageIcon className="opacity-20 mb-4 h-16 w-16" />
                                 <Typography variant="body1">Select a collection or create a new one to start editing.</Typography>
                             </div>
                         )}

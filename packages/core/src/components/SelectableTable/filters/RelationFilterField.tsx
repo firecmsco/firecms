@@ -94,7 +94,6 @@ export function RelationFilterField({
             <div className="">
                 <Select
                     value={operation}
-                    size={"large"}
                     fullWidth={true}
                     onValueChange={(newOp) => {
                         updateFilter(newOp as VirtualTableWhereFilterOp, internalValue);

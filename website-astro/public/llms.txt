@@ -824,7 +824,7 @@ Tip: ChatGPT is great at converting Box components to div with tailwind classes.
 - `Menu` and `MenuItem`: Menu items do not have an id anymore. You can add an `onClick` props per menu item.
 - `Select` does not use `labelId` anymore. Just add the label as a component in `label`.
   - `SelectChangeEvent` is now `ChangeEvent<HTMLSelectElement>`
-- `CircularProgress` size is a string instead of a number. You can use `size="small"` or `size="large"`.
+- `CircularProgress` size is a string instead of a number. You can use `size="small"` or ``.
 
 #### Deployment
 
@@ -1611,7 +1611,7 @@ return <AppBar title={title}
                    <Tooltip
                            asChild={true}
                            title={"Your custom action"}>
-                       <Button variant={"outlined"}><ForumIcon size="small"/></Button>
+                       <Button variant={"text"}><ForumIcon size="small"/></Button>
                    </Tooltip>
                </>}
                dropDownActions={
@@ -3260,7 +3260,7 @@ export function App() {
 
                   let component;
                   if (loading || authLoading) {
-                    component = <CircularProgressCenter size={"large"}/>;
+                    component = <CircularProgressCenter/>;
                   } else {
                     if (!canAccessMainView) {
                       component = (
@@ -3926,7 +3926,7 @@ const CustomStorageApp: React.FC = () => {
         >
           {({ context, loading }) => {
             if (loading || authLoading) {
-              return <CircularProgressCenter size="large" />;
+              return <CircularProgressCenter />;
             }
 
             if (!canAccessMainView) {
@@ -4729,7 +4729,7 @@ Tip: ChatGPT is great at converting Box components to div with tailwind classes.
 - `Menu` and `MenuItem`: Menu items do not have an id anymore. You can add an `onClick` props per menu item.
 - `Select` does not use `labelId` anymore. Just add the label as a component in `label`.
 - `SelectChangeEvent` is now `ChangeEvent<HTMLSelectElement>`
-- `CircularProgress` size is a string instead of a number. You can use `size="small"` or `size="large"`.
+- `CircularProgress` size is a string instead of a number. You can use `size="small"` or ``.
 
 #### Continue using MUI
 

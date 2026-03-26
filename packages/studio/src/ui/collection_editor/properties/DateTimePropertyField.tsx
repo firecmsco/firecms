@@ -92,7 +92,6 @@ export function DateTimePropertyField({ disabled }: {
                     <Select name={modePath}
                         value={modeValue ?? "date"}
                         error={Boolean(modeError)}
-                        size={"large"}
                         onValueChange={(v) => setFieldValue(modePath, v)}
                         label={"Mode"}
                         fullWidth={true}
@@ -117,7 +116,6 @@ export function DateTimePropertyField({ disabled }: {
                 <div>
                     <Select name={autoValuePath}
                         disabled={disabled}
-                        size={"large"}
                         fullWidth={true}
                         value={autoValueValue ?? ""}
                         onValueChange={(v) => setFieldValue(autoValuePath, v === "none" ? null : v)}
@@ -144,7 +142,6 @@ export function DateTimePropertyField({ disabled }: {
                 <div>
                     <Select name={timezonePath}
                         disabled={disabled}
-                        size={"large"}
                         fullWidth={true}
                         value={timezoneValue ?? "__local__"}
                         onValueChange={(v) => setFieldValue(timezonePath, v === "__local__" ? undefined : v)}
@@ -172,7 +169,6 @@ export function DateTimePropertyField({ disabled }: {
             <div className={"col-span-12"}>
                 <Select name={columnTypePath}
                     disabled={disabled}
-                    size={"large"}
                     fullWidth={true}
                     value={columnTypeValue ?? "_default_"}
                     onValueChange={(v) => setFieldValue(columnTypePath, v === "_default_" ? undefined : v)}

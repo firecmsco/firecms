@@ -95,7 +95,7 @@ export function App() {
                 >
                     {({ loading }) => {
                         if (loading || authController.initialLoading) {
-                            return <CircularProgressCenter size={"large"} />;
+                            return <CircularProgressCenter />;
                         }
 
                         if (!authController.user) {

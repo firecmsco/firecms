@@ -14,6 +14,7 @@ export * from "./navigation/useResolvedCollections";
 export * from "./navigation/useResolvedViews";
 export * from "./navigation/useTopLevelNavigation";
 
+export * from "./useUnsavedChangesDialog";
 export * from "./useResolvedNavigationFrom";
 
 export * from "./useStorageSource";

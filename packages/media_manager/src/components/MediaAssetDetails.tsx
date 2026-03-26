@@ -143,7 +143,7 @@ export function MediaAssetDetails({
             )}>
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-surface-accent-200 dark:border-surface-accent-700">
-                    <Typography variant="subtitle1" className="font-medium truncate flex-1 mr-2">
+                    <Typography variant="subtitle1" className="truncate flex-1 mr-2">
                         {asset.title || asset.fileName}
                     </Typography>
                     <div className="flex items-center gap-1">
@@ -322,7 +322,7 @@ export function MediaAssetDetails({
                 onOpenChange={setDeleteDialogOpen}
             >
                 <DialogContent>
-                    <Typography variant="subtitle1" className="font-medium mb-2">
+                    <Typography variant="subtitle1" className="mb-2">
                         Delete Asset?
                     </Typography>
                     <Typography className="text-surface-accent-600 dark:text-surface-accent-400">

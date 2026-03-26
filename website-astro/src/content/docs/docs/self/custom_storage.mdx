@@ -195,7 +195,7 @@ const CustomStorageApp: React.FC = () => {
         >
           {({ context, loading }) => {
             if (loading || authLoading) {
-              return <CircularProgressCenter size="large" />;
+              return <CircularProgressCenter />;
             }
 
             if (!canAccessMainView) {

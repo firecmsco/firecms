@@ -110,10 +110,17 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
         endpoint: string,
         method: string = "GET",
         body?: any,
-        retryCount: number = 6
+        retryCount: number = 6,
+        signal?: AbortSignal
     ): Promise<any> => {
         let lastError: Error | null = null;
         for (let attempt = 0; attempt < retryCount; attempt++) {
+            if (signal?.aborted) {
+                const error = new Error("Request aborted");
+                error.name = "AbortError";
+                throw error;
+            }
+
             try {
                 const token = await getAuthToken();
                 // Use /api/admin prefix for admin endpoints
@@ -123,7 +130,8 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
                         "Content-Type": "application/json",
                         "Authorization": `Bearer ${token}`
                     },
-                    body: body ? JSON.stringify(body) : undefined
+                    body: body ? JSON.stringify(body) : undefined,
+                    signal
                 });
 
                 if (!response.ok) {
@@ -143,6 +151,10 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
 
                 return await response.json();
             } catch (error: any) {
+                if (error.name === "AbortError" || signal?.aborted) {
+                    throw error;
+                }
+
                 lastError = error;
 
                 // Retry conditions: Network errors (TypeError) OR 5xx Server Errors (Backend rebooting)
@@ -152,7 +164,24 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
                 if (attempt < retryCount - 1 && (isNetworkError || isServerError)) {
                     const delay = Math.min(1000 * Math.pow(2, attempt), 5000); // 1s, 2s, 4s...
                     console.warn(`Admin API request to ${endpoint} failed, retrying in ${delay}ms...`);
-                    await new Promise(resolve => setTimeout(resolve, delay));
+                    
+                    // Wait for delay or abort
+                    await new Promise<void>((resolve, reject) => {
+                        if (signal?.aborted) return reject(new Error("AbortError"));
+                        const timer = setTimeout(resolve, delay);
+                        if (signal) {
+                            signal.addEventListener("abort", () => {
+                                clearTimeout(timer);
+                                reject(new Error("AbortError"));
+                            }, { once: true });
+                        }
+                    }).catch(() => {}); // Catch AbortError from wait
+                    
+                    if (signal?.aborted) {
+                        const abortError = new Error("Request aborted");
+                        abortError.name = "AbortError";
+                        throw abortError;
+                    }
                     continue;
                 }
 
@@ -167,12 +196,13 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
      * Load users from API
      * @param availableRoles - Optional roles array to resolve role names
      */
-    const loadUsers = useCallback(async () => {
+    const loadUsers = useCallback(async (signal?: AbortSignal) => {
         try {
-            const data = await apiRequest("/users");
+            const data = await apiRequest("/users", "GET", undefined, 6, signal);
             setUsers(data.users.map((u: ApiUser) => convertUser(u)));
             setUsersError(undefined);
-        } catch (error) {
+        } catch (error: any) {
+            if (error.name === "AbortError") return;
             console.error("Failed to load users:", error);
             setUsersError(error as Error);
         }
@@ -181,12 +211,13 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
     /**
      * Load roles from API
      */
-    const loadRoles = useCallback(async () => {
+    const loadRoles = useCallback(async (signal?: AbortSignal) => {
         try {
-            const data = await apiRequest("/roles");
+            const data = await apiRequest("/roles", "GET", undefined, 6, signal);
             setRoles(data.roles.map(convertRole));
             setRolesError(undefined);
-        } catch (error) {
+        } catch (error: any) {
+            if (error.name === "AbortError") return;
             console.error("Failed to load roles:", error);
             setRolesError(error as Error);
         }
@@ -203,24 +234,37 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
             return;
         }
 
+        const abortController = new AbortController();
+
         const load = async () => {
             setLoading(true);
             // Load roles first
             let loadedRoles: Role[] = [];
             try {
-                const data = await apiRequest("/roles");
+                const data = await apiRequest("/roles", "GET", undefined, 6, abortController.signal);
                 loadedRoles = data.roles.map(convertRole);
                 setRoles(loadedRoles);
                 setRolesError(undefined);
-            } catch (error) {
-                console.error("Failed to load roles:", error);
-                setRolesError(error as Error);
+            } catch (error: any) {
+                if (error.name !== "AbortError") {
+                    console.error("Failed to load roles:", error);
+                    setRolesError(error as Error);
+                }
             }
-            // Then load users
-            await loadUsers();
-            setLoading(false);
+            // Then load users if not aborted
+            if (!abortController.signal.aborted) {
+                await loadUsers(abortController.signal);
+            }
+            
+            if (!abortController.signal.aborted) {
+                setLoading(false);
+            }
         };
         load();
+        
+        return () => {
+            abortController.abort();
+        };
     }, [currentUser, apiRequest, loadUsers]);
 
     /**

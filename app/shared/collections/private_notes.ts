@@ -11,7 +11,9 @@ const privateNotesCollection: EntityCollection = {
         {
             name: "admin_bypass",
             operation: "all",
-            roles: ["admin"],
+            roles: [
+                "admin"
+            ],
             using: "true"
         },
         {
@@ -38,14 +40,17 @@ const privateNotesCollection: EntityCollection = {
     },
     properties: {
         id: {
-            name: "ID",
+            name: "ID2",
             type: "string",
             isId: "uuid"
         },
         title: {
             name: "Title",
             type: "string",
-            validation: { required: true }
+            validation: {
+                required: true
+            },
+            columnType: "varchar"
         },
         content: {
             name: "Content",

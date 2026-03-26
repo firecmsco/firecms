@@ -93,7 +93,7 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
                 <Typography gutterBottom variant="h4" className="grow" component="h4">
                     Roles
                 </Typography>
-                <Button size="large" startIcon={<AddIcon />} onClick={handleAddRole} disabled={!saveRole}>
+                <Button startIcon={<AddIcon />} onClick={handleAddRole} disabled={!saveRole}>
                     Add role
                 </Button>
             </div>

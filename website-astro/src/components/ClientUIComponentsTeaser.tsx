@@ -50,7 +50,6 @@ export default function ClientUIComponentsTeaser() {
 
                 <div className={cardClasses + " flex-row"}>
                     <Button>Buttons</Button>
-                    <Button variant={"outlined"}>Buttons</Button>
                     <Button variant={"text"}>Buttons</Button>
                 </div>
 
@@ -70,7 +69,6 @@ export default function ClientUIComponentsTeaser() {
 
                 <div className={cardClasses}>
                     <Select
-                        size={"large"}
                         className={"w-full"}
                         value={selectedValue}
                         onValueChange={setSelectedValue}
@@ -100,8 +98,8 @@ export default function ClientUIComponentsTeaser() {
                 </div>
 
                 <div className={cardClasses + " flex-row"}>
-                    <Button variant="outlined" size="small" onClick={() => setDialogOpen(true)}>Open Dialog</Button>
-                    <Button variant="outlined" size="small" onClick={() => setSheetOpen(true)}>Open side
+                    <Button color="neutral" size="small" onClick={() => setDialogOpen(true)}>Open Dialog</Button>
+                    <Button color="neutral" size="small" onClick={() => setSheetOpen(true)}>Open side
                         sheet
                         <KeyboardTabIcon size={"small"} />
                     </Button>

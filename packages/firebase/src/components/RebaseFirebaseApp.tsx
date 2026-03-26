@@ -222,7 +222,7 @@ export function RebaseFirebaseApp({
 
                             let component;
                             if (loading || authLoading) {
-                                component = <CircularProgressCenter size={"large"} />;
+                                component = <CircularProgressCenter />;
                             } else {
                                 const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
                                 if (!canAccessMainView) {

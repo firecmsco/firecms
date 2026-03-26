@@ -132,10 +132,11 @@ export const SQLEditor = () => {
                         localStorage.setItem("rebase_sql_selected_role", defaultRole);
                     }
                 }
-            } catch (err: any) {
+            } catch (err: unknown) {
                 console.error("Failed to fetch databases or roles:", err);
                 if (mounted) {
-                    setConnectionConfigError("Failed to fetch connection options: " + (err.message || String(err)));
+                    const message = err instanceof Error ? err.message : String(err);
+                    setConnectionConfigError("Failed to fetch connection options: " + message);
                 }
             } finally {
                 if (mounted) {
@@ -197,12 +198,12 @@ export const SQLEditor = () => {
             // Pass the selected database so schema introspection targets the right DB.
             const result = await dataSource.executeSql(sql, { database: selectedDatabase });
 
-            const processGrouped = (data: any[]) => {
-                const grouped = data.reduce((acc: Record<string, TableInfo[]>, curr: any) => {
-                    const schema = curr.schema || curr.SCHEMA || curr.table_schema || "public";
-                    const table = curr.table || curr.TABLE || curr.table_name;
-                    const column = curr.column || curr.COLUMN || curr.column_name;
-                    const dataType = curr.data_type || curr.DATA_TYPE || "";
+            const processGrouped = (data: Record<string, unknown>[]) => {
+                const grouped = data.reduce((acc: Record<string, TableInfo[]>, curr: Record<string, unknown>) => {
+                    const schema = (curr.schema || curr.SCHEMA || curr.table_schema || "public") as string;
+                    const table = (curr.table || curr.TABLE || curr.table_name) as string;
+                    const column = (curr.column || curr.COLUMN || curr.column_name) as string;
+                    const dataType = (curr.data_type || curr.DATA_TYPE || "") as string;
                     const isPrimaryKey = curr.is_pk === true || curr.is_pk === "true";
 
                     if (!acc[schema]) acc[schema] = [];
@@ -218,8 +219,8 @@ export const SQLEditor = () => {
             };
 
             if (!result || !Array.isArray(result)) {
-                if (result && typeof result === "object" && "rows" in result && Array.isArray((result as any).rows)) {
-                    processGrouped((result as any).rows);
+                if (result && typeof result === "object" && "rows" in result && Array.isArray((result as { rows: Record<string, unknown>[] }).rows)) {
+                    processGrouped((result as { rows: Record<string, unknown>[] }).rows);
                 } else {
                     setSchemaError(`Unexpected data format: ${typeof result}`);
                     setSchemas({});
@@ -232,9 +233,10 @@ export const SQLEditor = () => {
             }
 
             schemaFetchedRef.current = true;
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error("Schema fetch error:", e);
-            setSchemaError("Failed to fetch schema: " + (e.message || String(e)));
+            const message = e instanceof Error ? e.message : String(e);
+            setSchemaError("Failed to fetch schema: " + message);
         } finally {
             setIsSchemaLoading(false);
         }
@@ -252,7 +254,7 @@ export const SQLEditor = () => {
         id: string,
         name: string,
         sql: string,
-        results: any[] | null,
+        results: Record<string, unknown>[] | null,
         loading: boolean,
         error: string | null,
         execTime: number | null,
@@ -261,7 +263,7 @@ export const SQLEditor = () => {
         const saved = localStorage.getItem(STORAGE_KEY_TABS);
         if (saved) {
             const parsed = JSON.parse(saved);
-            return parsed.map((t: any) => ({
+            return parsed.map((t: Record<string, unknown>) => ({
                 ...t,
                 results: null,
                 loading: false,
@@ -299,7 +301,7 @@ export const SQLEditor = () => {
     const execTime = activeTab.execTime;
 
     const setSql = (newSql: string) => updateActiveTab({ sql: newSql });
-    const setResults = (newResults: any[] | null) => updateActiveTab({ results: newResults });
+    const setResults = (newResults: Record<string, unknown>[] | null) => updateActiveTab({ results: newResults });
     const setLoading = (newLoading: boolean) => updateActiveTab({ loading: newLoading });
     const setError = (newError: string | null) => updateActiveTab({ error: newError });
 
@@ -308,9 +310,9 @@ export const SQLEditor = () => {
     const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
 
     // Inline editing state
-    const [editingCell, setEditingCell] = useState<{ rowIndex: number, columnKey: string, initialValue: any } | null>(null);
+    const [editingCell, setEditingCell] = useState<{ rowIndex: number, columnKey: string, initialValue: unknown } | null>(null);
 
-    const handleDoubleClick = useCallback((rowIndex: number, columnKey: string, initialValue: any, rowData: any) => {
+    const handleDoubleClick = useCallback((rowIndex: number, columnKey: string, initialValue: unknown, rowData: Record<string, unknown>) => {
         if (!activeTab.lastExecutedSql) {
             snackbarController.open({
                 type: "error",
@@ -344,7 +346,7 @@ export const SQLEditor = () => {
         setEditingCell({ rowIndex, columnKey, initialValue });
     }, [activeTab.lastExecutedSql, schemas, snackbarController]);
 
-    const handleCellSave = useCallback(async (newValue: string | null, rowData: any, columnKey: string, rowIndex: number) => {
+    const handleCellSave = useCallback(async (newValue: string | null, rowData: Record<string, unknown>, columnKey: string, rowIndex: number) => {
         if (!editingCell || !activeTab.lastExecutedSql) return;
 
         setEditingCell(null); // Optimistically close
@@ -359,7 +361,7 @@ export const SQLEditor = () => {
 
         const tableName = resolution.tableName;
 
-        const formatValue = (val: any) => {
+        const formatValue = (val: unknown) => {
             if (val === null || val === undefined) return "NULL";
             if (typeof val === "number") return val;
             if (typeof val === "boolean") return val ? "TRUE" : "FALSE";
@@ -410,10 +412,10 @@ export const SQLEditor = () => {
                     message: "Row updated successfully."
                 });
             }
-        } catch (e: any) {
+        } catch (e: unknown) {
             snackbarController.open({
                 type: "error",
-                message: `Failed to update: ${e.message}`
+                message: `Failed to update: ${e instanceof Error ? e.message : String(e)}`
             });
         }
     }, [editingCell, schemas, activeTab.lastExecutedSql, activeTab.results, dataSource, updateActiveTab, snackbarController, selectedDatabase, selectedRole]);
@@ -540,8 +542,9 @@ export const SQLEditor = () => {
                 const result = await dataSource.executeSql(explainSql, { database: selectedDatabase, role: selectedRole });
                 updateActiveTab({ results: result, execTime: Math.round(performance.now() - start) });
             }
-        } catch (e: any) {
-            updateActiveTab({ error: e.message || "An error occurred while explaining the query." });
+        } catch (e: unknown) {
+            const message = e instanceof Error ? e.message : String(e);
+            updateActiveTab({ error: message || "An error occurred while explaining the query." });
         } finally {
             updateActiveTab({ loading: false });
         }
@@ -571,8 +574,9 @@ export const SQLEditor = () => {
             } else {
                 updateActiveTab({ error: "SQL execution is not supported by the current data source." });
             }
-        } catch (e: any) {
-            updateActiveTab({ error: e.message || "An error occurred while executing the query." });
+        } catch (e: unknown) {
+            const message = e instanceof Error ? e.message : String(e);
+            updateActiveTab({ error: message || "An error occurred while executing the query." });
         } finally {
             updateActiveTab({ loading: false });
         }
@@ -777,13 +781,13 @@ export const SQLEditor = () => {
         const actionableCollections = matchedCollections.filter(mc => mc.pkColumn && resultColumnKeys.includes(mc.pkColumn));
 
         // For each row, determine which entities can be opened
-        const getRowEntityActions = (rowData: any): { collection: ResolvedQueryCollection, entityId: string | number }[] => {
+        const getRowEntityActions = (rowData: Record<string, unknown>): { collection: ResolvedQueryCollection, entityId: string | number }[] => {
             if (!rowData) return [];
             return actionableCollections
                 .filter(mc => rowData[mc.pkColumn!] != null)
                 .map(mc => ({
                     collection: mc,
-                    entityId: rowData[mc.pkColumn!]
+                    entityId: rowData[mc.pkColumn!] as string | number
                 }));
         };
 
@@ -813,7 +817,7 @@ export const SQLEditor = () => {
                                 <Tooltip key={mc.tableName} title={`Table "${mc.tableName}" → ${mc.collection.name} (PK: ${mc.pkColumn})`}>
                                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-primary/10 dark:bg-primary-dark/15 text-primary dark:text-primary-dark whitespace-nowrap border border-primary/20 dark:border-primary-dark/20">
                                         {typeof mc.collection.icon === "string" && (
-                                            <IconForView collectionOrView={{ icon: mc.collection.icon } as any} className="text-[12px]" />
+                                            <IconForView collectionOrView={{ icon: mc.collection.icon } as never} className="text-[12px]" />
                                         )}
                                         {mc.collection.name}
                                     </span>

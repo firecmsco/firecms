@@ -16,6 +16,7 @@ import {
     FetchEntityProps,
     ListenCollectionProps,
     ListenEntityProps,
+    RebaseCallContext,
     SaveEntityProps
 } from "@rebasepro/types";
 
@@ -53,7 +54,7 @@ export class PostgresDataSource implements DataSource {
     /**
      * Set a date to midnight (start of day) in UTC
      */
-    setDateToMidnight(input?: any): any {
+    setDateToMidnight(input?: Date | string | number): Date | null {
         if (!input) return null;
         const date = input instanceof Date ? input : new Date(input);
         date.setUTCHours(0, 0, 0, 0);
@@ -106,7 +107,7 @@ export class PostgresDataSource implements DataSource {
         if (callbacks?.afterRead || propertyCallbacks?.afterRead) {
             const contextForCallback = {
                 user: this.user
-            } as any; // Backend context
+            } as RebaseCallContext; // Backend context
             return Promise.all(entities.map(async (entity) => {
                 let fetched = entity;
                 if (callbacks?.afterRead) {
@@ -228,7 +229,7 @@ export class PostgresDataSource implements DataSource {
         if (entity && (callbacks?.afterRead || propertyCallbacks?.afterRead)) {
             const contextForCallback = {
                 user: this.user
-            } as any; // Backend context
+            } as RebaseCallContext; // Backend context
             if (callbacks?.afterRead) {
                 entity = await callbacks.afterRead({
                     collection: resolvedCollection as EntityCollection<M>,
@@ -313,7 +314,7 @@ export class PostgresDataSource implements DataSource {
         let updatedValues = values;
         const contextForCallback = {
             user: this.user
-        } as any;
+        } as RebaseCallContext;
 
         if (callbacks?.beforeSave || propertyCallbacks?.beforeSave) {
             let previousValues: Partial<Entity<M>["values"]> | undefined;
@@ -467,7 +468,7 @@ export class PostgresDataSource implements DataSource {
 
         const contextForCallback = {
             user: this.user
-        } as any;
+        } as RebaseCallContext;
 
         if (callbacks?.beforeDelete || propertyCallbacks?.beforeDelete) {
             if (callbacks?.beforeDelete) {
@@ -542,7 +543,7 @@ export class PostgresDataSource implements DataSource {
     async checkUniqueField(
         path: string,
         name: string,
-        value: any,
+        value: unknown,
         entityId?: string,
         collection?: EntityCollection
     ): Promise<boolean> {
@@ -598,8 +599,8 @@ export class PostgresDataSource implements DataSource {
 
             const result = await targetDb.execute(drizzleSql.raw(sqlText));
             return result.rows as Record<string, unknown>[];
-        } catch (error: any) {
-            const msg = error?.message || String(error);
+        } catch (error: unknown) {
+            const msg = error instanceof Error ? error.message : String(error);
             // Provide a user-friendly message for connection/auth errors
             if (msg.includes("pg_hba.conf") || msg.includes("no encryption") || msg.includes("connection refused")) {
                 const dbName = options?.database || "unknown";
@@ -617,7 +618,7 @@ export class PostgresDataSource implements DataSource {
              AND datname NOT IN ('postgres', 'cloudsqladmin', '_cloudsqladmin')
              ORDER BY datname;`
         );
-        const databases = result.map((r: any) => r.datname as string);
+        const databases = result.map((r: Record<string, unknown>) => r.datname as string);
         // Ensure the current connected database is always first in the list
         const currentDb = this.poolManager?.defaultDatabaseName;
         if (currentDb && !databases.includes(currentDb)) {
@@ -635,7 +636,7 @@ export class PostgresDataSource implements DataSource {
 
     async fetchAvailableRoles(): Promise<string[]> {
         const result = await this.executeSql(`SELECT rolname FROM pg_roles;`);
-        return result.map((r: any) => r.rolname as string);
+        return result.map((r: Record<string, unknown>) => r.rolname as string);
     }
 
     async fetchCurrentDatabase(): Promise<string | undefined> {
@@ -663,7 +664,7 @@ export class PostgresDataSource implements DataSource {
         ];
 
         const allTables = result
-            .map((r: any) => r.table_name as string)
+            .map((r: Record<string, unknown>) => r.table_name as string)
             .filter((name: string) => {
                 if (internalPrefixes.some(prefix => name.startsWith(prefix))) return false;
                 if (internalExact.includes(name)) return false;
@@ -697,7 +698,7 @@ export class PostgresDataSource implements DataSource {
                       )
                   );
             `);
-            junctionTables = new Set(junctionResult.map((r: any) => r.table_name as string));
+            junctionTables = new Set(junctionResult.map((r: Record<string, unknown>) => r.table_name as string));
         } catch (e) {
             console.warn("Could not detect junction tables:", e);
         }
@@ -733,7 +734,7 @@ export class PostgresDataSource implements DataSource {
         `);
 
         // Also fetch enum values for any USER-DEFINED columns
-        const enumColumns = columns.filter((c: any) => c.data_type === "USER-DEFINED");
+        const enumColumns = columns.filter((c: Record<string, unknown>) => c.data_type === "USER-DEFINED");
         if (enumColumns.length > 0) {
             for (const col of enumColumns) {
                 try {
@@ -741,17 +742,25 @@ export class PostgresDataSource implements DataSource {
                         SELECT e.enumlabel
                         FROM pg_type t
                         JOIN pg_enum e ON t.oid = e.enumtypid
-                        WHERE t.typname = '${(col as any).udt_name}'
+                        WHERE t.typname = '${(col as Record<string, unknown>).udt_name}'
                         ORDER BY e.enumsortorder;
                     `);
-                    (col as any).enum_values = enumValues.map((e: any) => e.enumlabel);
+                    (col as Record<string, unknown>).enum_values = enumValues.map((e: Record<string, unknown>) => e.enumlabel);
                 } catch {
-                    (col as any).enum_values = [];
+                    (col as Record<string, unknown>).enum_values = [];
                 }
             }
         }
 
-        return columns as any;
+        return columns as {
+            column_name: string;
+            data_type: string;
+            udt_name: string;
+            is_nullable: string;
+            column_default: string | null;
+            character_maximum_length: number | null;
+            enum_values?: string[];
+        }[];
     }
 
     private generateSubscriptionId(): string {
@@ -782,7 +791,7 @@ export class PostgresDataSource implements DataSource {
 
         const wrapMethod = (methodName: keyof PostgresDataSource) => {
             const originalMethod = this[methodName] as Function;
-            return async (...args: any[]) => {
+            return async (...args: unknown[]) => {
                 // Collect deferred notifications so we can flush them after the
                 // transaction commits.  This is critical: notifyEntityUpdate
                 // refetches from a *separate* connection and therefore cannot see
@@ -872,7 +881,7 @@ export class PostgresDataSource implements DataSource {
         const originalListenEntity = this.listenEntity.bind(authenticatedDelegate);
         const realtimeService = this.realtimeService;
 
-        authenticatedDelegate.listenCollection = function <M extends Record<string, any>>(props: any): () => void {
+        authenticatedDelegate.listenCollection = function <M extends Record<string, any>>(props: ListenCollectionProps<M>): () => void {
             const unsubscribe = originalListenCollection(props);
             // Patch the most recently registered subscription with auth context
             const entries = Array.from(realtimeService.subscriptions.entries());
@@ -883,7 +892,7 @@ export class PostgresDataSource implements DataSource {
             return unsubscribe;
         };
 
-        authenticatedDelegate.listenEntity = function <M extends Record<string, any>>(props: any): () => void {
+        authenticatedDelegate.listenEntity = function <M extends Record<string, any>>(props: ListenEntityProps<M>): () => void {
             const unsubscribe = originalListenEntity(props);
             const entries = Array.from(realtimeService.subscriptions.entries());
             const lastEntry = entries[entries.length - 1];

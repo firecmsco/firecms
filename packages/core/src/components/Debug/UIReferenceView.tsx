@@ -292,7 +292,7 @@ export function UIReferenceView() {
                         </div>
                         {/* Theme menu — from DefaultAppBar line 227-241 */}
                         <Menu trigger={
-                            <IconButton color="inherit" size="large">
+                            <IconButton color="inherit">
                                 <DarkModeIcon />
                             </IconButton>
                         }>
@@ -339,7 +339,7 @@ export function UIReferenceView() {
                 ═══════════════════════════════════════════════ */}
                 <SectionBlock id="buttons" title="Buttons">
                     <div className="flex flex-col gap-6">
-                        {(["filled","outlined","text"] as const).map(variant => (
+                        {(["filled","text"] as const).map(variant => (
                             <div key={variant}>
                                 <Typography variant="caption" color="secondary" className="block mb-2 font-mono">variant="{variant}"</Typography>
                                 <div className="flex flex-wrap gap-3 items-center">
@@ -375,7 +375,6 @@ export function UIReferenceView() {
                             <div className="flex flex-wrap gap-3">
                                 <LoadingButton loading={true}>Saving…</LoadingButton>
                                 <LoadingButton loading={false}>Idle</LoadingButton>
-                                <LoadingButton loading={true} variant="outlined">Outlined</LoadingButton>
                             </div>
                         </div>
                     </div>
@@ -499,7 +498,7 @@ export function UIReferenceView() {
                     {/* Header — from UsersView line 121-128 */}
                     <div className="flex items-center mt-12">
                         <Typography gutterBottom variant="h4" className="grow" component="h4">Users</Typography>
-                        <Button size="large" startIcon={<AddIcon />}>Add user</Button>
+                        <Button startIcon={<AddIcon />}>Add user</Button>
                     </div>
                     {/* Table — from UsersView line 130-182 */}
                     <div className="overflow-auto">
@@ -584,7 +583,7 @@ export function UIReferenceView() {
                     </Typography>
                     <div className="flex items-center mt-12">
                         <Typography gutterBottom variant="h4" className="grow" component="h4">Roles</Typography>
-                        <Button size="large" startIcon={<AddIcon />}>Add role</Button>
+                        <Button startIcon={<AddIcon />}>Add role</Button>
                     </div>
                     <div className="w-full overflow-auto">
                         <Table className="w-full">

@@ -30,7 +30,7 @@ export function SmallNavigationCard({
 
                     <Typography gutterBottom variant="subtitle1"
                         component="h2"
-                        className="mb-0 ml-3 font-medium">
+                        className="mb-0 ml-3">
                         {name}
                     </Typography>
                 </div>

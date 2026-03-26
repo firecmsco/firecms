@@ -105,7 +105,6 @@ export function VirtualTableSelect(props: {
             </MultiSelect>
             : <Select
                 inputRef={ref}
-                size={"large"}
                 fullWidth={true}
                 className="w-full h-full p-0 bg-transparent outline-none [&_button]:ring-0 [&_button]:ring-offset-0"
                 inputClassName="ring-0 ring-offset-0 focus:ring-0 focus-visible:ring-0 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-offset-0"

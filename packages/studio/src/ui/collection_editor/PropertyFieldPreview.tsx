@@ -7,9 +7,6 @@ import {
     useCustomizationController,
 } from "@rebasepro/core";
 import {
-    cardClickableMixin,
-    cardMixin,
-    cardSelectedMixin,
     cls,
     DoNotDisturbOnIcon,
     FunctionsIcon,
@@ -49,12 +46,10 @@ export function PropertyFieldPreview({
         <div onClick={onClick} className={onClick ? "cursor-pointer" : ""}>
         <Paper
             className={cls(
-                cardMixin,
-                "border w-full flex flex-row gap-4 items-center px-4 py-1",
-                onClick ? cardClickableMixin : "",
-                selected ? cardSelectedMixin : "",
-                "border transition-colors duration-200",
-                selected ? "border-primary" : ""
+                "w-full flex flex-row gap-3 items-center px-3 py-2 rounded-lg transition-all duration-200 border border-transparent bg-transparent",
+                selected 
+                    ? "bg-primary/5 dark:bg-primary/10 ring-1 ring-inset ring-primary" 
+                    : "hover:bg-surface-50 dark:hover:bg-surface-800"
             )}
         >
             <PropertyConfigBadge propertyConfig={propertyConfig} size="small" />
@@ -63,7 +58,7 @@ export function PropertyFieldPreview({
                 {includeName &&
                     <ErrorBoundary>
                         <div className="flex items-center gap-2">
-                            <Typography variant="body2" component="span" className="font-semibold">
+                            <Typography variant="body2" component="span">
                                 {property.name || propertyKey || "\u00a0"}
                             </Typography>
                             {property.name && propertyKey && property.name !== propertyKey && (
@@ -74,18 +69,18 @@ export function PropertyFieldPreview({
                         </div>
                     </ErrorBoundary>}
 
-                <div className="flex flex-row items-center gap-2">
+                <div className="flex flex-row items-center gap-2 mt-0.5">
                     <ErrorBoundary>
                         <Typography
                             variant={"caption"}
                             component="span"
-                            color="secondary">
+                            className="text-text-secondary dark:text-text-secondary-dark font-medium">
                             {propertyConfig?.name}
                         </Typography>
                     </ErrorBoundary>
                     <ErrorBoundary>
-                        <Typography variant="caption" component="span" color="disabled" className="font-mono">
-                            {property.type}
+                        <Typography variant="caption" component="span" className="text-text-disabled dark:text-text-disabled-dark font-mono bg-surface-100 dark:bg-surface-800 px-1 py-0.5 rounded">
+                            {("columnType" in property ? (property as any).columnType as string : undefined) || property.type}
                         </Typography>
                     </ErrorBoundary>
                 </div>
@@ -116,12 +111,10 @@ export function NonEditablePropertyPreview({
         <div onClick={onClick} className={onClick ? "cursor-pointer" : ""}>
         <Paper
             className={cls(
-                cardMixin,
-                "border w-full flex flex-row gap-4 items-center px-4 py-1",
-                onClick ? cardClickableMixin : "",
-                selected ? cardSelectedMixin : "",
-                "border transition-colors duration-200",
-                selected ? "border-primary" : ""
+                "w-full flex flex-row gap-3 items-center px-3 py-2 rounded-lg transition-all duration-200 border border-transparent bg-transparent",
+                selected 
+                    ? "bg-primary/5 dark:bg-primary/10 ring-1 ring-inset ring-primary" 
+                    : "hover:bg-surface-50 dark:hover:bg-surface-800"
             )}
         >
             <div className={"relative shrink-0"}>
@@ -138,25 +131,25 @@ export function NonEditablePropertyPreview({
                     {property?.name ? property.name : name}
                 </Typography>
 
-                <div className="flex flex-row items-center gap-2">
-                    {propertyConfig && <Typography variant={"body2"} component="span" color="secondary">
+                <div className="flex flex-row items-center gap-2 mt-0.5">
+                    {propertyConfig && <Typography variant={"caption"} component="span" className="text-text-secondary dark:text-text-secondary-dark font-medium">
                         {propertyConfig?.name}
                     </Typography>}
 
                     {property && !isPropertyBuilder(property) && <ErrorBoundary>
-                        <Typography variant="caption" component="span" color="disabled">
-                            {property.type}
+                        <Typography variant="caption" component="span" className="text-text-disabled dark:text-text-disabled-dark font-mono bg-surface-100 dark:bg-surface-800 px-1 py-0.5 rounded">
+                            {("columnType" in property ? (property as any).columnType as string : undefined) || property.type}
                         </Typography>
                     </ErrorBoundary>}
 
                     {property && isPropertyBuilder(property) && <ErrorBoundary>
-                        <Typography variant="caption" component="span" color="disabled">
+                        <Typography variant="caption" component="span" className="text-text-disabled dark:text-text-disabled-dark">
                             Defined in code
                         </Typography>
                     </ErrorBoundary>}
 
                     {!property && <ErrorBoundary>
-                        <Typography variant="caption" component="span" color="disabled">
+                        <Typography variant="caption" component="span" className="text-text-disabled dark:text-text-disabled-dark">
                             Additional field
                         </Typography>
                     </ErrorBoundary>}

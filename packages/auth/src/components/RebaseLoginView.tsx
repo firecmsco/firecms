@@ -147,7 +147,7 @@ export function RebaseLoginView({
                         <LoginButton
                             disabled={disabled}
                             text={"Email/password"}
-                            icon={<MailIcon size={"large"} />}
+                            icon={<MailIcon />}
                             onClick={() => {
                                 setRegistrationSelected(false);
                                 setPasswordLoginSelected(true);
@@ -165,7 +165,7 @@ export function RebaseLoginView({
                             <LoginButton
                                 disabled={disabled}
                                 text={"Create account"}
-                                icon={<MailIcon size={"large"} />}
+                                icon={<MailIcon />}
                                 onClick={() => {
                                     setRegistrationSelected(true);
                                     setPasswordLoginSelected(false);
