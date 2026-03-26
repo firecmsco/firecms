@@ -66,21 +66,54 @@ const { iconOnly = false } = Astro.props;
         constructor() {
             super();
             const select = this.querySelector('select');
-            if (select) {
-                select.addEventListener('change', (e) => {
-                    if (e.currentTarget instanceof HTMLSelectElement) {
-                        window.location.pathname = e.currentTarget.value;
-                    }
-                });
-                window.addEventListener('pageshow', (event) => {
-                    if (!event.persisted) return;
-                    const markupSelectedIndex =
-                        select.querySelector<HTMLOptionElement>('option[selected]')?.index;
-                    if (markupSelectedIndex !== select.selectedIndex) {
-                        select.selectedIndex = markupSelectedIndex ?? 0;
-                    }
-                });
+            if (!select) return;
+
+            // Sync select to the current URL path on init (handles Firebase Hosting
+            // auto-redirects based on Accept-Language that may conflict with user choice)
+            this._syncToCurrentPath(select);
+
+            select.addEventListener('change', (e) => {
+                if (e.currentTarget instanceof HTMLSelectElement) {
+                    const targetPath = e.currentTarget.value;
+                    // Persist the user's explicit language preference
+                    try {
+                        const knownLangs = ['es', 'de', 'fr', 'it', 'pt'];
+                        const firstSegment = targetPath.split('/').filter(Boolean)[0];
+                        const lang = knownLangs.includes(firstSegment) ? firstSegment : 'en';
+                        localStorage.setItem('preferred-lang', lang);
+                    } catch (_) {}
+                    window.location.pathname = targetPath;
+                }
+            });
+
+            // On bfcache restore, sync to current URL instead of resetting to
+            // server-rendered markup value (which reflects Firebase's auto-detection,
+            // not the user's explicit choice)
+            window.addEventListener('pageshow', (event) => {
+                if (!event.persisted) return;
+                this._syncToCurrentPath(select);
+            });
+        }
+
+        _syncToCurrentPath(select: HTMLSelectElement) {
+            const currentPath = window.location.pathname;
+            // Find the option whose value best matches the current path
+            let bestIndex = 0;
+            let bestMatch = 0;
+            for (let i = 0; i < select.options.length; i++) {
+                const optVal = select.options[i].value;
+                // Exact match
+                if (optVal === currentPath) {
+                    bestIndex = i;
+                    break;
+                }
+                // Prefix match (e.g. option "/pt/" matches "/pt/docs/...")
+                if (currentPath.startsWith(optVal) && optVal.length > bestMatch) {
+                    bestMatch = optVal.length;
+                    bestIndex = i;
+                }
             }
+            select.selectedIndex = bestIndex;
         }
     }
     customElements.define('starlight-lang-select', StarlightLanguageSelect);

@@ -235,14 +235,54 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
             }
         });
 
-        // Initialize Google Ads tag with cross-domain linker
-        window.gtag("config", "AW-17381868760", {
-            linker: {
-                domains: ["app.firecms.co"],
-                accept_incoming: true
-            }
-        });
 
+
+    </script>
+
+    <!-- Language auto-detection & preference enforcement -->
+    <script is:inline>
+        (function () {
+            try {
+                var knownLangs = ['es', 'de', 'fr', 'it', 'pt'];
+                var pathname = window.location.pathname;
+                var segments = pathname.split('/').filter(Boolean);
+                var currentLang = knownLangs.indexOf(segments[0]) !== -1 ? segments[0] : 'en';
+
+                // Compute the unlocalized path (strip any lang prefix)
+                var unlocalizedPath = knownLangs.indexOf(segments[0]) !== -1
+                    ? '/' + segments.slice(1).join('/')
+                    : pathname;
+                if (!unlocalizedPath || unlocalizedPath === '/') unlocalizedPath = '/';
+
+                var stored = null;
+                try { stored = localStorage.getItem('preferred-lang'); } catch (_) {}
+
+                var targetLang;
+                if (stored) {
+                    // User has an explicit preference — respect it
+                    targetLang = stored;
+                } else {
+                    // First visit: detect from browser language
+                    var browserLangs = (navigator.languages || [navigator.language || 'en']);
+                    targetLang = 'en';
+                    for (var i = 0; i < browserLangs.length; i++) {
+                        var code = browserLangs[i].toLowerCase().split('-')[0];
+                        if (knownLangs.indexOf(code) !== -1) {
+                            targetLang = code;
+                            break;
+                        }
+                    }
+                }
+
+                // Redirect if we're not on the right language path
+                if (targetLang !== currentLang) {
+                    var targetPath = targetLang === 'en'
+                        ? (unlocalizedPath || '/')
+                        : '/' + targetLang + (unlocalizedPath === '/' ? '' : unlocalizedPath);
+                    window.location.replace(targetPath);
+                }
+            } catch (_) {}
+        })();
     </script>
 
     <!-- View Transitions -->
