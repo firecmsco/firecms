@@ -1,0 +1,19 @@
+---
+export const prerender = false;
+import "@/styles/index.css";
+import "@fontsource/poppins";
+import "@fontsource/playfair-display";
+import "@fontsource/jetbrains-mono";
+import { BlogPost } from "../../blog/BlogPost";
+---
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog Post — FireCMS Astro Demo</title>
+    <meta name="description" content="Read this blog entry from the FireCMS demo, powered by Astro and Firestore." />
+</head>
+<body>
+    <BlogPost client:only="react" />
+</body>
+</html>
