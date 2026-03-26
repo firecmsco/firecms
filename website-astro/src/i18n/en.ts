@@ -689,4 +689,10 @@ export const en = {
   'why.cta.title': "Ready to try FireCMS?",
   'why.cta.start': "Start Building for Free",
   'why.cta.explore': "Explore Self‑Hosted",
+
+  'cookie.title': 'Cookie Preferences',
+  'cookie.desc.1': 'We use cookies to enhance your browsing experience and analyze our traffic. By clicking "Accept", you consent to ',
+  'cookie.desc.2': 'our use of cookies.',
+  'cookie.decline': 'Decline',
+  'cookie.accept': 'Accept',
 };

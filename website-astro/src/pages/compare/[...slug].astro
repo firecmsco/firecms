@@ -1,0 +1,51 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+	const comparisons = await getCollection('comparisons');
+    if (!comparisons) return [];
+	return comparisons.map((page) => ({
+		params: { slug: page.id },
+		props: page,
+	}));
+}
+
+const page = Astro.props;
+const { Content } = await render(page);
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Compare", url: "https://firecms.co/compare" },
+    { name: page.data.title, url: `https://firecms.co/compare/${page.id}` }
+];
+---
+
+<Layout
+        title={page.data.title}
+        description={page.data.description}
+        breadcrumbs={breadcrumbs}
+        lang={lang}
+>
+    <main class="min-h-screen py-24">
+        <article class="max-w-4xl mx-auto px-6">
+            {page.data.image && (
+                <div class="mb-12 rounded-2xl overflow-hidden border border-surface-800 bg-surface-900/50">
+                    <img
+                        src={page.data.image}
+                        alt={page.data.title}
+                        class="w-full h-auto aspect-[1200/630] object-contain"
+                    />
+                </div>
+            )}
+
+            <div class="prose prose-invert prose-lg max-w-3xl mx-auto [&_p]:my-3 [&_img]:my-8 [&_h1]:mt-12 [&_h1]:mb-4 [&_h2]:mt-16 [&_h2]:mb-4 [&_h3]:mt-12 [&_h3]:mb-3 [&_h4]:mt-8 [&_h4]:mb-2 [&_ul]:my-4 [&_ol]:my-4 [&_li]:my-1 [&_blockquote]:my-4 [&_pre]:my-4 [&_hr]:my-6 [&_table]:my-4 [&_figure]:my-4">
+                <Content />
+            </div>
+        </article>
+    </main>
+</Layout>

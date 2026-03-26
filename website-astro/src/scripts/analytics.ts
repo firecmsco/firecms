@@ -50,7 +50,7 @@ export class Analytics {
             if (scrollPercent > this.maxScroll) {
                 this.maxScroll = Math.floor(scrollPercent / 25) * 25;
             }
-        });
+        }, { passive: true });
 
         // Browser close/reload
         window.addEventListener('beforeunload', () => {

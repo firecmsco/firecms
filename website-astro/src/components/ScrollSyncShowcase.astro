@@ -351,15 +351,22 @@ collection("users")
                 const end = vh * 0.6;
                 const span = Math.max(1, end - start);
 
-                screens.forEach((s) => {
-                    const rect = s.getBoundingClientRect();
-                    if (prefersReduced) {
+                if (prefersReduced) {
+                    screens.forEach((s) => {
                         s.style.opacity = "1";
                         s.style.transform = "translate3d(0,0,0)";
-                        return;
-                    }
+                    });
+                    return;
+                }
+
+                // Phase 1: Read UI state first to avoid layout thrashing
+                const tops = Array.from(screens).map((s) => s.getBoundingClientRect().top);
+
+                // Phase 2: Write UI state
+                screens.forEach((s, i) => {
+                    const top = tops[i];
                     // progress 0..1 based on section top moving from start to end
-                    const p = clamp((end - rect.top) / span, 0, 1);
+                    const p = clamp((end - top) / span, 0, 1);
                     const tx = (1 - p) * maxOffsetPx;
                     const op = minOpacity + p * (1 - minOpacity);
                     s.style.opacity = String(op);

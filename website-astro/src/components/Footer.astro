@@ -1,4 +1,5 @@
 ---
+import { getCollection } from "astro:content";
 import SectionBackgroundAccents from "./SectionBackgroundAccents.astro";
 import LanguageSelect from "./LanguageSelect.astro";
 import { useTranslatedPath, useTranslations } from "../i18n/utils";
@@ -6,6 +7,12 @@ import { useTranslatedPath, useTranslations } from "../i18n/utils";
 const { lang = "en" } = Astro.props;
 const tp = useTranslatedPath(lang as any);
 const t = useTranslations(lang as any);
+
+const comparisons = await getCollection('comparisons');
+const compareLinks = (comparisons || []).map(c => ({
+    label: c.data.title,
+    url: tp(`/compare/${c.id}`)
+}));
 
 const footerNavs = [
     {
@@ -39,6 +46,10 @@ const footerNavs = [
         ],
     },
     {
+        title: t("nav.compare") || "Compare",
+        links: compareLinks,
+    },
+    {
         title: t("footer.legal") || "Legal",
         links: [
             { label: t("nav.privacy") || "Privacy Policy", url: "/policy/privacy_policy" },
@@ -62,7 +73,7 @@ const footerNavs = [
                     The Headless CMS Framework for Firebase
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-4">
+            <div class="grid grid-cols-2 gap-8 sm:gap-6 lg:grid-cols-5">
                 {footerNavs.map((nav) => (
                     <div>
                         <p class="mb-6 text-sm font-semibold uppercase text-white">{nav.title}</p>

@@ -37,10 +37,17 @@ const {
 
 const canonicalBase = "https://firecms.co";
 const path = Astro.url.pathname;
-const canonical = path === "/" ? canonicalBase : `${canonicalBase}${path}`;
+
+const unlocalizedPath = getUnlocalizedPath(Astro.url);
+
+// If the page is in the API docs (which aren't translated), canonical points to the English original.
+// Otherwise, it points to itself.
+const isUntranslatedApi = unlocalizedPath.startsWith("/docs/api");
+const canonicalPath = isUntranslatedApi ? unlocalizedPath : path;
+
+const canonical = canonicalPath === "/" ? canonicalBase : `${canonicalBase}${canonicalPath}`;
 
 // Build hreflang alternate URLs for all supported languages
-const unlocalizedPath = getUnlocalizedPath(Astro.url);
 const supportedLangs = Object.keys(languages) as Array<keyof typeof languages>;
 const hreflangLinks = supportedLangs.map(code => ({
     lang: code,

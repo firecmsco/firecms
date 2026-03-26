@@ -51,7 +51,7 @@ export const es = {
   'usecases.card1.desc': 'Impulsa blogs y sitios de marketing con un editor intuitivo al estilo Notion, respaldado por Firestore.',
   'usecases.card2.title': 'Herramientas Internas para Firebase',
   'usecases.card2.desc': 'Crea paneles internos robustos para soporte y operaciones, conectados a Firebase y Firestore.',
-  'usecases.card3.title': 'Paneles de Admin Personalizados en Firestore',
+  'usecases.card3.title': 'Paneles de Administración Personalizados en Firestore',
   'usecases.card3.desc': 'Crea paneles de administración a medida con control total para añadir vistas personalizadas y lógica de negocio.',
 
   'tech.title': 'Desarrollado con tecnologías modernas',
@@ -181,7 +181,7 @@ export const es = {
   'showcase.item4.title': 'Integración Sencilla',
   'showcase.item4.desc': 'Empieza en minutos con la plataforma gestionada de FireCMS Cloud, o auto-aloja nuestro framework open-source con soporte completo de TypeScript.',
 
-  'showcase.integration.npm.title': 'Instalación NPM Simple',
+  'showcase.integration.npm.title': 'Instalación sencilla con NPM',
   'showcase.integration.npm.desc': 'Añade FireCMS a tu proyecto con un único comando',
   'showcase.integration.cloud.title': 'O usa FireCMS Cloud',
   'showcase.integration.cloud.desc': 'Sin configuración. Conecta tu proyecto de Firebase y empieza a gestionar tus datos al instante.',
@@ -194,7 +194,7 @@ export const es = {
   'features.explore': 'Explora todo lo que FireCMS tiene para ofrecer',
 
 
-  'features.data.title': 'Una experiencia de edición de datos sin igual',
+  'features.data.title': 'Una experiencia de edición de datos incomparable',
   'features.data.desc': 'Diseñado para los usuarios finales, FireCMS hace que la gestión de datos sea intuitiva y rápida. Edita, ordena y filtra datos en tiempo real con nuestra excepcional vista de hoja de cálculo. Crea contenido hermoso y estructurado con un editor estilo Notion.',
 
   'features.schema.title': 'Construye tus modelos de datos a tu manera',
@@ -257,7 +257,7 @@ export const es = {
   'developers.paths.cloud.cta': 'Comienza en la nube',
 
   'developers.paths.self.title': 'Auto-alojado',
-  'developers.paths.self.badge': 'Ideal para Agencias y Vistas Customizadas',
+  'developers.paths.self.badge': 'Ideal para Agencias y Vistas Personalizadas',
   'developers.paths.self.desc': 'Para máximo control y personalización profunda. Despliégalo donde quieras.',
   'developers.paths.self.f1': 'Acceso total al código fuente (licencia MIT)',
   'developers.paths.self.f2': 'Despliega en tu propia infraestructura',
@@ -287,7 +287,7 @@ export const es = {
   'developers.datatalk.desc': 'Deja de escribir scripts para realizar actualizaciones lógicas o consultas complejas. DataTalk te permite operar sobre tus bases de datos mediante lenguaje natural, convirtiendo tareas tediosas en segundos de trabajo.',
 
   'developers.fields.title': 'Más de 20 Tipos de Datos',
-  'developers.fields.desc': "Hemos desarrollado todo para ti. Tendrás acceso a un <strong>Editor de texto enriquecido (tipo Notion)</strong>, subida de ficheros, <strong>datos relacionales (referencias)</strong>, enumeraciones, listas y más, todo configurado de caja.",
+  'developers.fields.desc': "Hemos desarrollado todo para ti. Tendrás acceso a un <strong>Editor de texto enriquecido (tipo Notion)</strong>, subida de ficheros, <strong>datos relacionales (referencias)</strong>, enumeraciones, listas y más, todo listo para usar.",
 
   'developers.cli.title': 'Empieza de manera auto alojada',
   'developers.cli.docs': 'Ver Documentación Completa',
@@ -689,4 +689,10 @@ export const es = {
   'why.cta.title': "¿Listo para probar FireCMS?",
   'why.cta.start': 'Empezar gratis',
   'why.cta.explore': "Explorar la Versión Auto-alojada",
+
+  'cookie.title': 'Preferencias de Cookies',
+  'cookie.desc.1': 'Usamos cookies para mejorar tu experiencia de navegación y analizar nuestro tráfico. Al hacer clic en "Aceptar", aceptas ',
+  'cookie.desc.2': 'nuestro uso de cookies.',
+  'cookie.decline': 'Rechazar',
+  'cookie.accept': 'Aceptar',
 };
