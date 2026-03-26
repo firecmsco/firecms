@@ -1,0 +1,74 @@
+---
+import "@/styles/index.css";
+import "@fontsource/rubik/400.css";
+import "@fontsource/rubik/500.css";
+import "@fontsource/rubik/600.css";
+import "@fontsource/rubik/700.css";
+---
+
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FireCMS Astro Example</title>
+    <meta name="description" content="A FireCMS demo built with Astro — explore the CMS dashboard and public blog." />
+    <style>
+      html { font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif; }
+      body { margin: 0; background: #000000; color: #b7b7bf; }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+      }
+      
+      .glow-blue {
+        box-shadow: 0 0 20px rgba(0, 112, 244, 0.3);
+      }
+      
+      .glow-blue:hover {
+        box-shadow: 0 0 30px rgba(0, 112, 244, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;padding:2rem;position:relative;overflow:hidden;">
+      <!-- Background glow effect -->
+      <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(ellipse at center, rgba(0, 112, 244, 0.15) 0%, transparent 70%);pointer-events:none;"></div>
+      
+      <div style="text-align:center;position:relative;z-index:10;">
+        <p style="color:#0070f4;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;font-weight:500;">FireCMS + Astro</p>
+        <h1 style="font-size:clamp(2.5rem, 8vw, 4rem);font-weight:500;margin:0;color:#ffffff;line-height:1.1;">
+          Welcome
+        </h1>
+        <p style="color:#6b7280;margin-top:0.75rem;max-width:28rem;font-size:1.1rem;line-height:1.6;">
+          This is a demo of FireCMS running inside an Astro application with a public blog view.
+        </p>
+      </div>
+      
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;position:relative;z-index:10;">
+        <a 
+          href="/cms" 
+          class="glow-blue"
+          style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;border-radius:0.5rem;background:#0070f4;color:#ffffff;font-weight:600;text-decoration:none;transition:all 0.2s;"
+          onmouseenter="this.style.transform='scale(1.05)'"
+          onmouseleave="this.style.transform='scale(1)'"
+        >
+          Open CMS →
+        </a>
+        <a 
+          href="/blog" 
+          style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;border-radius:0.5rem;border:1px solid #454552;background:rgba(23, 23, 26, 0.5);color:#b7b7bf;font-weight:500;text-decoration:none;transition:all 0.2s;"
+          onmouseenter="this.style.borderColor='#0070f4';this.style.color='#0070f4'"
+          onmouseleave="this.style.borderColor='#454552';this.style.color='#b7b7bf'"
+        >
+          View Blog →
+        </a>
+      </div>
+      
+      <!-- Decorative elements -->
+      <div style="position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);text-align:center;color:#6b7280;font-size:0.875rem;">
+        <p style="margin:0;">Built with <span style="color:#0070f4;">FireCMS</span></p>
+      </div>
+    </div>
+  </body>
+</html>
