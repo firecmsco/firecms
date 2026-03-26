@@ -331,6 +331,11 @@ function encodeFilterAndSort(filterValues?: FilterValues<string>, sortBy?: [stri
                         } else if (val instanceof EntityReference) {
                             encodedValue = encodeRef(val);
                         }
+                    } else if (typeof val === "string") {
+                        // JSON.stringify wraps the string in quotes (e.g. "4" → '"4"')
+                        // so that decodeString's JSON.parse restores the string type,
+                        // not a number. Without this, "4" round-trips as the number 4.
+                        encodedValue = JSON.stringify(val);
                     }
                 } catch (e) {
                     encodedValue = val;
