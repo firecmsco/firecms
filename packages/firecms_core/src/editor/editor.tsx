@@ -147,7 +147,7 @@ export const FireCMSEditor = ({
 };
 
 function addLineBreakAfterImages(markdown: string): string {
-  const imageRegex = /!\[.*?\]\(.*?\)/g;
+  const imageRegex = /!\[.*?\]\((?:[^)\\]|\\.)*\)/g;
   return markdown.replace(imageRegex, (match) => `${match}\n`);
 }
 

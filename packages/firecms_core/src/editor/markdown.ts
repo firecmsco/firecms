@@ -78,6 +78,11 @@ export const markdownSerializer = new MarkdownSerializer(
         horizontal_rule(state, node) {
             state.write(node.attrs.markup || "---");
             state.closeBlock(node);
+        },
+        image(state, node) {
+            const src = node.attrs.src.replace(/ /g, "%20");
+            state.write("![" + state.esc(node.attrs.alt || "") + "](" + src.replace(/[\(\)]/g, "\\$&") +
+                (node.attrs.title ? ' "' + node.attrs.title.replace(/"/g, '\\"') + '"' : "") + ")");
         }
     },
     {
@@ -87,6 +92,16 @@ export const markdownSerializer = new MarkdownSerializer(
         strike: { open: "~~", close: "~~", mixable: true, expelEnclosingWhitespace: true },
         highlight: { open: "==", close: "==", mixable: true, expelEnclosingWhitespace: true },
         underline: { open: "++", close: "++", mixable: true, expelEnclosingWhitespace: true },
+        link: {
+            ...defaultMarkdownSerializer.marks.link,
+            close(state: any, mark, parent, index) {
+                const inAutolink = state.inAutolink;
+                state.inAutolink = undefined;
+                const href = mark.attrs.href.replace(/ /g, "%20");
+                return inAutolink ? ">"
+                    : "](" + href.replace(/[\(\)"]/g, "\\$&") + (mark.attrs.title ? ` "${mark.attrs.title.replace(/"/g, '\\"')}"` : "") + ")";
+            }
+        },
         // textStyle (colored text from HTML) has no markdown equivalent — emit content as-is
         textStyle: { open: "", close: "", mixable: true, expelEnclosingWhitespace: true },
     }
