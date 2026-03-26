@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
+import node from "@astrojs/node";
 import path from "node:path";
 
 const __dirname = new URL(".", import.meta.url).pathname;
@@ -9,6 +10,9 @@ const __dirname = new URL(".", import.meta.url).pathname;
 // https://astro.build/config
 export default defineConfig({
     output: "server",
+    adapter: node({
+      mode: "standalone"
+    }),
     integrations: [
         react({
             experimentalReactChildren: true
@@ -24,7 +28,6 @@ export default defineConfig({
                 "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
                 "@firecms/firebase": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
                 "@firecms/ui": path.resolve(__dirname, "../../packages/ui/src"),
-                "@firecms/editor": path.resolve(__dirname, "../../packages/editor/src"),
                 "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
                 "@firecms/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src"),
                 "@firecms/collection_editor_firebase": path.resolve(__dirname, "../../packages/collection_editor_firebase/src"),

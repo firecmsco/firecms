@@ -11,6 +11,7 @@
         "astro": "astro"
     },
     "dependencies": {
+        "@astrojs/node": "^9.5.5",
         "@astrojs/react": "^4.4.0",
         "@firecms/collection_editor": "file:../../packages/collection_editor",
         "@firecms/collection_editor_firebase": "file:../../packages/collection_editor_firebase",
@@ -18,7 +19,6 @@
         "@firecms/data_enhancement": "file:../../packages/data_enhancement",
         "@firecms/data_export": "file:../../packages/data_export",
         "@firecms/data_import": "file:../../packages/data_import",
-        "@firecms/editor": "file:../../packages/editor",
         "@firecms/firebase": "file:../../packages/firebase_firecms",
         "@firecms/schema_inference": "file:../../packages/schema_inference",
         "@firecms/ui": "file:../../packages/ui",

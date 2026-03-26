@@ -17,9 +17,6 @@
             "@firecms/ui": [
                 "../../packages/ui/src"
             ],
-            "@firecms/editor": [
-                "../../packages/editor/src"
-            ],
             "@firecms/data_enhancement": [
                 "../../packages/data_enhancement/src"
             ],
