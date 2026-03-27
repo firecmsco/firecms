@@ -46,7 +46,7 @@
     "sharp": "^0.34.2",
     "tailwindcss": "^4.1.14",
     "typeface-rubik": "^1.1.13",
-    "yaml": "^2.8.1"
+    "yaml": "^2.8.3"
   },
   "devDependencies": {
     "@google/genai": "^1.46.0",
