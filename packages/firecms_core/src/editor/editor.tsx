@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { EditorState } from "prosemirror-state";
 import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
 import { useTranslation } from "../hooks/useTranslation";
 import { EditorBubble, ImageBubble, SlashCommandMenu, type JSONContent } from "./components";
@@ -74,7 +75,7 @@ export const FireCMSEditor = ({
     onChange: (newState, editorView) => {
       if (onMarkdownContentChange) {
         try {
-          const markdown = addLineBreakAfterImages(serializer.serialize(newState.doc));
+          const markdown = serializer.serialize(newState.doc);
           onMarkdownContentChange(markdown);
         } catch (e) {
           console.warn("[FireCMSEditor] Could not serialize editor state to markdown:", e);
@@ -90,15 +91,7 @@ export const FireCMSEditor = ({
     }
   });
 
-  useEffect(() => {
-    if (version !== undefined && version > -1 && view) {
-      if (!content) return;
-      const newDoc = typeof content === "string" ? parser.parse(content) : schema.nodeFromJSON(content);
-      if (newDoc) {
-        view.dispatch(view.state.tr.replaceWith(0, view.state.doc.content.size, newDoc.content));
-      }
-    }
-  }, [version]);
+
 
   useEffect(() => {
     if (view) {
@@ -155,10 +148,7 @@ export const FireCMSEditor = ({
   );
 };
 
-function addLineBreakAfterImages(markdown: string): string {
-  const imageRegex = /!\[.*?\]\((?:[^)\\]|\\.)*\)/g;
-  return markdown.replace(imageRegex, (match) => `${match}\n`);
-}
+
 
 const cssStyles = `
 .ProseMirror {

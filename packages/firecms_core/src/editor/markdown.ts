@@ -89,6 +89,7 @@ export const markdownSerializer = new MarkdownSerializer(
             const src = node.attrs.src.replace(/ /g, "%20");
             state.write("![" + state.esc(node.attrs.alt || "") + "](" + src.replace(/[\(\)]/g, "\\$&") +
                 (node.attrs.title ? ' "' + node.attrs.title.replace(/"/g, '\\"') + '"' : "") + ")");
+            state.closeBlock(node);
         },
         table(state, node) {
             node.forEach((row, _, i) => {

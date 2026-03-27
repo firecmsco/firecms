@@ -136,6 +136,7 @@ export function MarkdownEditorFieldBinding({
     };
 
     const editor = <FireCMSEditor
+        key={context.formex.version + fieldVersion}
         content={value}
         onMarkdownContentChange={onContentChange}
         version={context.formex.version + fieldVersion}
