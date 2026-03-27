@@ -1,6 +1,7 @@
 export { EditorBubble } from "./editor-bubble";
 export { EditorBubbleItem } from "./editor-bubble-item";
 export { SlashCommandMenu } from "./SlashCommandMenu";
+export { ImageBubble } from "./image-bubble";
 
 export type JSONContent = {
     type?: string;

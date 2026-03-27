@@ -136,7 +136,6 @@ export function StorageUploadFieldBinding({
                 error={error}
                 disabled={disabled}
                 property={property} />
-
         </>
     );
 }

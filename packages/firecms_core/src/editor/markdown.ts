@@ -35,7 +35,13 @@ const parserTokens: any = {
     },
     ins: {
         mark: "underline"
-    }
+    },
+    table: { block: "table" },
+    thead: { ignore: true },
+    tbody: { ignore: true },
+    tr: { block: "table_row" },
+    th: { block: "table_header" },
+    td: { block: "table_cell" }
 };
 
 const md = markdownIt({ html: false })
@@ -83,7 +89,29 @@ export const markdownSerializer = new MarkdownSerializer(
             const src = node.attrs.src.replace(/ /g, "%20");
             state.write("![" + state.esc(node.attrs.alt || "") + "](" + src.replace(/[\(\)]/g, "\\$&") +
                 (node.attrs.title ? ' "' + node.attrs.title.replace(/"/g, '\\"') + '"' : "") + ")");
-        }
+        },
+        table(state, node) {
+            node.forEach((row, _, i) => {
+                row.forEach((cell, _, j) => {
+                    state.write(j === 0 ? "| " : " ");
+                    cell.forEach((block) => {
+                        state.renderInline(block);
+                    });
+                    state.write(" |");
+                });
+                state.write("\n");
+                if (i === 0) {
+                    row.forEach((cell, _, j) => {
+                        state.write(j === 0 ? "|---|" : "---|");
+                    });
+                    state.write("\n");
+                }
+            });
+            state.closeBlock(node);
+        },
+        table_row() {},
+        table_cell() {},
+        table_header() {}
     },
     {
         ...defaultMarkdownSerializer.marks,

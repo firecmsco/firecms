@@ -14,6 +14,7 @@ import {
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
 import { FireCMSEditor, FireCMSEditorProps } from "../../editor";
 import { resolveProperty, resolveStorageFilenameString, resolveStoragePathString } from "../../util";
+import { isImageFile, resizeImage } from "../../util/useStorageUploadController";
 
 interface MarkdownEditorFieldProps {
     highlight?: { from: number, to: number };
@@ -112,6 +113,28 @@ export function MarkdownEditorFieldBinding({
     // Extract markdown config from property - can be boolean or object
     const markdownConfig = typeof property.markdown === 'object' ? property.markdown : undefined;
 
+    const handleImageUpload = async (file: File) => {
+        const imageResize = storage?.imageResize;
+        const legacyCompression = storage?.imageCompression;
+        if ((imageResize || legacyCompression) && isImageFile(file)) {
+            file = await resizeImage(file, imageResize, legacyCompression);
+        }
+
+        const storagePath = storagePathBuilder(file);
+        const fileName = await fileNameBuilder(file);
+        const result = await storageSource.uploadFile({
+            file,
+            fileName,
+            path: storagePath,
+        });
+        const downloadConfig = await storageSource.getDownloadURL(result.path);
+        const url = downloadConfig.url;
+        if (!url) {
+            throw new Error("Error uploading image");
+        }
+        return url;
+    };
+
     const editor = <FireCMSEditor
         content={value}
         onMarkdownContentChange={onContentChange}
@@ -119,26 +142,16 @@ export function MarkdownEditorFieldBinding({
         highlight={highlight}
         disabled={disabled}
         markdownConfig={markdownConfig}
-        handleImageUpload={async (file: File) => {
-            const storagePath = storagePathBuilder(file);
-            const fileName = await fileNameBuilder(file);
-            const result = await storageSource.uploadFile({
-                file,
-                fileName,
-                path: storagePath,
-            });
-            const downloadConfig = await storageSource.getDownloadURL(result.path);
-            const url = downloadConfig.url;
-            if (!url) {
-                throw new Error("Error uploading image");
-            }
-            return url;
-        }}
+        handleImageUpload={handleImageUpload}
         {...editorProps}
     />;
 
     if (minimalistView)
-        return editor;
+        return (
+            <>
+                {editor}
+            </>
+        );
 
     return (
         <>

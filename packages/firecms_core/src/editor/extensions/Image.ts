@@ -14,15 +14,16 @@ export async function onFileRead(view: EditorView, readerEvent: ProgressEvent<Fi
         console.error("Image plugin not found");
         return;
     }
-    let decorationSet = plugin.getState(view.state);
 
+    const decoId = Math.random().toString(36).substring(7);
     const placeholder = document.createElement("div");
     const imageElement = document.createElement("img");
     imageElement.setAttribute("class", "opacity-40 rounded-lg border " + defaultBorderMixin);
     imageElement.src = readerEvent.target?.result as string;
     placeholder.appendChild(imageElement);
 
-    const deco = Decoration.widget(pos, placeholder);
+    const deco = Decoration.widget(pos, placeholder, { id: decoId });
+    let decorationSet = plugin.getState(view.state);
     decorationSet = decorationSet?.add(view.state.doc, [deco]);
     view.dispatch(view.state.tr.setMeta(plugin, { decorationSet }));
 
@@ -30,14 +31,34 @@ export async function onFileRead(view: EditorView, readerEvent: ProgressEvent<Fi
     const src = await upload(image);
     console.debug("Uploaded image", src);
 
-    // Replace placeholder with actual image
-    const imageNode = schema.nodes.image.create({ src });
-    const tr = view.state.tr.replaceWith(pos, pos, imageNode);
+    const replacePlaceholder = () => {
+        // Retrieve the LATEST state after the async upload
+        let currentDecos = plugin.getState(view.state) as DecorationSet;
+        const foundDecos = currentDecos.find(undefined, undefined, spec => spec.id === decoId);
+        
+        if (foundDecos.length === 0) {
+            console.warn("Image placeholder removed before upload completed.");
+            return;
+        }
+        
+        // Get the mapped position of the decoration
+        const currentPos = foundDecos[0].from;
 
-    // Remove placeholder decoration
-    decorationSet = decorationSet?.remove([deco]);
-    tr.setMeta(plugin, { decorationSet });
-    view.dispatch(tr);
+        // Replace placeholder with actual image at the correct mapped position
+        const imageNode = view.state.schema.nodes.image.create({ src });
+        const tr = view.state.tr.replaceWith(currentPos, currentPos, imageNode);
+
+        // Remove placeholder decoration using the LATEST decorationSet
+        currentDecos = currentDecos.remove(foundDecos);
+        tr.setMeta(plugin, { decorationSet: currentDecos });
+        view.dispatch(tr);
+    };
+
+    // Preload the image so it doesn't cause a layout shift when replacing the placeholder
+    const preloader = new Image();
+    preloader.src = src;
+    preloader.onload = replacePlaceholder;
+    preloader.onerror = replacePlaceholder;
 }
 
 export const ImagePluginKey = new PluginKey("imagePlugin");
@@ -100,6 +121,12 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                 }
             },
             handlePaste(view: EditorView, event: ClipboardEvent, slice: any) {
+                const html = event.clipboardData?.getData("text/html");
+                if (html && html.includes("<img")) {
+                    // Let ProseMirror handle the HTML paste natively (e.g. copy-pasted from the editor itself or a webpage)
+                    return false;
+                }
+
                 const items = Array.from(event.clipboardData?.items || []);
                 const pos = view.state.selection.from;
                 let anyImageFound = false;

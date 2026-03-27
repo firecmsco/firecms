@@ -62,10 +62,40 @@ export function unsetMark(type: any) {
         const { empty, $cursor, ranges } = state.selection as any;
         if ((empty && !$cursor) || !type) return false;
         if (dispatch) {
+            let tr = state.tr;
             if ($cursor) {
-                dispatch(state.tr.removeStoredMark(type));
+                const parent = $cursor.parent;
+                let markStart = -1;
+                let markEnd = -1;
+                let currentMarkStart = -1;
+                
+                parent.forEach((child: any, offset: number) => {
+                    const childStart = $cursor.start() + offset;
+                    const childEnd = childStart + child.nodeSize;
+                    
+                    if (type.isInSet(child.marks)) {
+                        if (currentMarkStart === -1) currentMarkStart = childStart;
+                        if ($cursor.pos >= childStart && $cursor.pos <= childEnd) {
+                            markStart = currentMarkStart;
+                        }
+                    } else {
+                        if (currentMarkStart !== -1) {
+                            if (markStart !== -1 && markEnd === -1) markEnd = childStart;
+                            currentMarkStart = -1;
+                        }
+                    }
+                });
+                
+                if (markStart !== -1 && markEnd === -1) {
+                    markEnd = $cursor.end();
+                }
+                
+                if (markStart !== -1 && markEnd !== -1) {
+                    tr.removeMark(markStart, markEnd, type);
+                }
+                tr.removeStoredMark(type);
+                dispatch(tr.scrollIntoView());
             } else {
-                let tr = state.tr;
                 for (let i = 0; i < ranges.length; i++) {
                     let { $from, $to } = ranges[i];
                     tr.removeMark($from.pos, $to.pos, type);

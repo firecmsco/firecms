@@ -1,4 +1,5 @@
 import { Schema, NodeSpec, MarkSpec } from "prosemirror-model";
+import { tableNodes } from "prosemirror-tables";
 
 const marks: { [key: string]: MarkSpec } = {
     link: {
@@ -223,6 +224,17 @@ const nodes: { [key: string]: NodeSpec } = {
         parseDOM: [{ tag: "br" }],
         toDOM() { return ["br"]; },
     },
+    ...tableNodes({
+        tableGroup: "block",
+        cellContent: "block+",
+        cellAttributes: {
+            background: {
+                default: null,
+                getFromDOM(dom: HTMLElement) { return dom.style.backgroundColor || null },
+                setDOMAttr(value: any, attrs: any) { if (value) attrs.style = (attrs.style || "") + `background-color: ${value};` }
+            }
+        }
+    })
 };
 
 export const schema = new Schema({ nodes, marks });

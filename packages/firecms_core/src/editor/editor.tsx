@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
 import { useTranslation } from "../hooks/useTranslation";
-import { EditorBubble, SlashCommandMenu, type JSONContent } from "./components";
+import { EditorBubble, ImageBubble, SlashCommandMenu, type JSONContent } from "./components";
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
 import { TextButtons } from "./selectors/text-buttons";
@@ -124,19 +124,28 @@ export const FireCMSEditor = ({
         />
 
         {view && (
-          <EditorBubble
-            options={{
-              placement: "top",
-              offset: 6,
-            }}
-            className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-surface-900 shadow", defaultBorderMixin)}
-          >
-            <NodeSelector portalContainer={editorRef.current} open={openNode} onOpenChange={setOpenNode} />
-            <Separator orientation="vertical" />
-            <LinkSelector open={openLink} onOpenChange={setOpenLink} />
-            <Separator orientation="vertical" />
-            <TextButtons />
-          </EditorBubble>
+          <>
+            <EditorBubble
+              options={{
+                placement: "top",
+                offset: 6,
+              }}
+              className={cls("flex w-fit max-w-[90vw] h-10 overflow-hidden rounded border bg-white dark:bg-surface-900 shadow", defaultBorderMixin)}
+            >
+              <NodeSelector portalContainer={editorRef.current} open={openNode} onOpenChange={setOpenNode} />
+              <Separator orientation="vertical" />
+              <LinkSelector open={openLink} onOpenChange={setOpenLink} />
+              <Separator orientation="vertical" />
+              <TextButtons />
+            </EditorBubble>
+
+            <ImageBubble
+               options={{
+                placement: "bottom",
+                offset: 6,
+              }}
+            />
+          </>
         )}
 
         <SlashCommandMenu upload={handleImageUpload} aiController={aiController} />

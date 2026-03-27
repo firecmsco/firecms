@@ -6,6 +6,7 @@ import { corePlugins } from "../plugins";
 import { parser } from "../markdown";
 import { nodeViews } from "../nodeViews";
 import { createDropImagePlugin } from "../extensions/Image";
+import { columnResizing, tableEditing } from "prosemirror-tables";
 
 interface UseProseMirrorProps {
     initialContent?: string | any;
@@ -20,7 +21,11 @@ export function useProseMirror({ initialContent, onChange, editable = true, hand
     const onChangeRef = useRef(onChange);
     onChangeRef.current = onChange;
 
-    const plugins = [...corePlugins];
+    const plugins = [
+        ...corePlugins,
+        columnResizing(),
+        tableEditing()
+    ];
     if (handleImageUpload) {
         plugins.push(createDropImagePlugin(handleImageUpload));
     }
