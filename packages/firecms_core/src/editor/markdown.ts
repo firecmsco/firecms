@@ -118,9 +118,19 @@ export const markdownSerializer = new MarkdownSerializer(
             node.forEach((row, _, i) => {
                 row.forEach((cell, _, j) => {
                     state.write(j === 0 ? "| " : " ");
-                    cell.forEach((block) => {
+                    let cellContent = "";
+                    const oldWrite = state.write.bind(state);
+                    state.write = (s: string) => { cellContent += s; };
+                    
+                    let first = true;
+                    cell.forEach((block: any) => {
+                        if (!first) cellContent += "<br>";
                         state.renderInline(block);
+                        first = false;
                     });
+                    
+                    state.write = oldWrite;
+                    state.write(cellContent.replace(/\|/g, "\\|"));
                     state.write(" |");
                 });
                 state.write("\n");

@@ -150,18 +150,6 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
             decorations(state) {
                 return plugin.getState(state);
             }
-        },
-        view(editorView) {
-            return {
-                update(view, prevState) {
-                    const prevDecos = plugin.getState(prevState);
-                    const newDecos = plugin.getState(view.state);
-
-                    if (prevDecos !== newDecos) {
-                        view.updateState(view.state);
-                    }
-                }
-            };
         }
     });
 

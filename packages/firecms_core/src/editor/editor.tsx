@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { EditorState } from "prosemirror-state";
-import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
+import { cls, defaultBorderMixin, Separator, useInjectStyles, TextareaAutosize } from "@firecms/ui";
 import { useTranslation } from "../hooks/useTranslation";
 import { EditorBubble, ImageBubble, SlashCommandMenu, TableBubble, type JSONContent } from "./components";
 import { NodeSelector } from "./selectors/node-selector";
@@ -65,6 +65,58 @@ export const FireCMSEditor = ({
 
   const [openNode, setOpenNode] = useState(false);
   const [openLink, setOpenLink] = useState(false);
+
+  const [isMarkdownMode, setIsMarkdownMode] = useState(false);
+  const [internalMarkdown, setInternalMarkdown] = useState<string>("");
+
+  useEffect(() => {
+    if (!isMarkdownMode) return;
+    const timeout = setTimeout(() => {
+      if (callbacksRef.current.onMarkdownContentChange) {
+        callbacksRef.current.onMarkdownContentChange(internalMarkdown);
+      }
+    }, 250);
+    return () => clearTimeout(timeout);
+  }, [internalMarkdown, isMarkdownMode]);
+
+  const handleToggleMarkdown = () => {
+    if (!isMarkdownMode) {
+      if (view) {
+        setInternalMarkdown(serializer.serialize(view.state.doc));
+      }
+      setIsMarkdownMode(true);
+    } else {
+      if (view) {
+        const newDoc = parser.parse(internalMarkdown);
+        if (newDoc) {
+          const tr = view.state.tr.replaceWith(0, view.state.doc.content.size, newDoc.content);
+          view.dispatch(tr);
+        }
+      }
+      setIsMarkdownMode(false);
+    }
+  };
+
+  const handleMarkdownChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInternalMarkdown(e.target.value);
+  };
+
+  const handleMarkdownBlur = () => {
+    const { onMarkdownContentChange, onJsonContentChange } = callbacksRef.current;
+    if (onMarkdownContentChange) {
+      onMarkdownContentChange(internalMarkdown);
+    }
+    if (onJsonContentChange) {
+      try {
+        const newDoc = parser.parse(internalMarkdown);
+        if (newDoc) {
+          onJsonContentChange(removeClassesFromJson(newDoc.toJSON()) as JSONContent);
+        }
+      } catch (e) {
+        console.warn("Could not parse markdown to JSON", e);
+      }
+    }
+  };
 
   useInjectStyles("Editor", cssStyles);
 
@@ -132,14 +184,24 @@ export const FireCMSEditor = ({
 
   return (
     <div className="relative min-h-[300px] w-full">
+      <button
+        type="button"
+        onClick={handleToggleMarkdown}
+        title={isMarkdownMode ? "Switch to Visual Editor" : "Switch to Markdown"}
+        className="absolute top-2 right-2 z-10 px-2 py-1 text-xs font-medium text-surface-400 hover:text-surface-700 dark:text-surface-600 dark:hover:text-surface-300 transition-colors opacity-50 hover:opacity-100 bg-transparent rounded"
+      >
+        {isMarkdownMode ? "Visual" : "Markdown"}
+      </button>
+
       <ProseMirrorContext.Provider value={{ state, view }}>
 
-        <div
-          ref={editorRef}
-          className={cls(proseClass, "prose-headings:font-title font-default focus:outline-none max-w-full p-12")}
-        />
+        <div style={{ display: isMarkdownMode ? "none" : "block" }}>
+          <div
+            ref={editorRef}
+            className={cls(proseClass, "prose-headings:font-title font-default focus:outline-none max-w-full p-12")}
+          />
 
-        {view && (
+          {view && (
           <>
             <EditorBubble
               options={{
@@ -166,6 +228,25 @@ export const FireCMSEditor = ({
         )}
 
         <SlashCommandMenu upload={handleImageUpload} aiController={aiController} />
+        </div>
+
+        {isMarkdownMode && (
+          <TextareaAutosize
+            value={internalMarkdown}
+            onChange={handleMarkdownChange as any}
+            onBlur={handleMarkdownBlur as any}
+            className={cls(
+              "w-full h-full min-h-[300px] p-12 bg-transparent resize-none font-mono focus:ring-0",
+              proseClass
+            )}
+            style={{ 
+              tabSize: 4,
+              outline: "none",
+              border: "none",
+              boxShadow: "none"
+            }}
+          />
+        )}
 
       </ProseMirrorContext.Provider>
     </div>

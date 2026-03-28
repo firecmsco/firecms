@@ -370,6 +370,15 @@ export function EntityForm<M extends Record<string, any>>({
     useEffect(() => {
 
         const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.defaultPrevented) return;
+            const activeElement = document.activeElement as HTMLElement;
+            const isInput = activeElement && (
+                activeElement.tagName === "INPUT" ||
+                activeElement.tagName === "TEXTAREA" ||
+                activeElement.isContentEditable
+            );
+            if (isInput) return;
+
             const isUndo = (e.metaKey || e.ctrlKey) && !e.shiftKey && e.key.toLowerCase() === "z";
             const isRedo =
                 ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === "z") ||

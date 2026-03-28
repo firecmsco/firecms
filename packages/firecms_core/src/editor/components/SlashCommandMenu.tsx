@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, ReactNode } from "react";
-import { Fragment } from "prosemirror-model";
+import { Fragment, DOMParser } from "prosemirror-model";
 import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
 import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
 import { SlashCommandPluginKey } from "../plugins/slashCommandPlugin";
@@ -209,7 +209,17 @@ const autocompleteSuggestionItem: SuggestionItem = {
             // We need to un-escape these back to genuine newlines so MarkdownIt block-parsing works.
             const unescapedResult = result.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
 
-            const parsedDoc = parser.parse(unescapedResult);
+            const isHTML = /<\/?[a-z][\s\S]*>/i.test(unescapedResult);
+            let parsedDoc;
+
+            if (isHTML) {
+                const div = document.createElement("div");
+                div.innerHTML = unescapedResult;
+                parsedDoc = DOMParser.fromSchema(view.state.schema).parse(div);
+            } else {
+                parsedDoc = parser.parse(unescapedResult);
+            }
+
             if (parsedDoc) {
                 const tr = view.state.tr.replaceWith(view.state.selection.from, view.state.selection.from, parsedDoc.content);
                 view.dispatch(tr);
