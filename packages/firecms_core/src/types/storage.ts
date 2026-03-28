@@ -6,7 +6,8 @@ export interface UploadFileProps {
     fileName?: string,
     path?: string,
     metadata?: any,
-    bucket?: string
+    bucket?: string,
+    onProgress?: (progress: number) => void
 }
 
 /**
