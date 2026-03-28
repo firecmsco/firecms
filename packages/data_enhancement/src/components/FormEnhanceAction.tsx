@@ -238,6 +238,7 @@ export interface EnhanceDialogProps {
 function getPromptsForExistingEntities(properties: PropertiesOrBuilders, t: any): SamplePrompt[] {
 
     const multilineProperties = Object.values(properties).filter((p: PropertyOrBuilder) => {
+        if (!p) return false;
         if (isPropertyBuilder(p)) {
             return false;
         }

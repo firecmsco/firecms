@@ -12,8 +12,11 @@ import { gapCursor } from "prosemirror-gapcursor";
 import { dropCursor } from "prosemirror-dropcursor";
 import { markdownInputRules } from "./inputrules";
 import { placeholderPlugin } from "./placeholderPlugin";
+import { goToNextCell } from "prosemirror-tables";
 
 const customKeymap = {
+    "Tab": goToNextCell(1),
+    "Shift-Tab": goToNextCell(-1),
     "Mod-z": undo,
     "Mod-y": redo,
     "Shift-Mod-z": redo,

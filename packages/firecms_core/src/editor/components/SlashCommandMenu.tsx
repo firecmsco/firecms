@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, ReactNode } from "react";
+import { Fragment } from "prosemirror-model";
 import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
 import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
 import { SlashCommandPluginKey } from "../plugins/slashCommandPlugin";
@@ -15,12 +16,14 @@ import {
     FormatQuoteIcon,
     CodeIcon,
     ImageIcon,
-    AutoFixHighIcon
+    AutoFixHighIcon,
+    TableChartIcon
 } from "@firecms/ui";
 import { setBlockType, wrapIn } from "prosemirror-commands";
 import { wrapInList } from "prosemirror-schema-list";
 import { schema } from "../schema";
 import { EditorView } from "prosemirror-view";
+import { TextSelection } from "prosemirror-state";
 import { EditorAIController } from "../types";
 import { onFileRead, UploadFn } from "../extensions/Image";
 import { textLoadingCommands } from "../extensions/TextLoadingDecorationExtension";
@@ -31,7 +34,13 @@ interface SuggestionItem {
     description: string;
     icon: ReactNode;
     searchTerms?: string[];
-    command: (view: EditorView, range: { from: number; to: number }, upload: UploadFn, aiController?: EditorAIController) => void;
+    command: (
+        view: EditorView, 
+        range: { from: number; to: number }, 
+        upload: UploadFn, 
+        aiController?: EditorAIController,
+        setSubView?: (viewId: string | null) => void
+    ) => void;
 }
 
 const suggestionItems: SuggestionItem[] = [
@@ -157,6 +166,15 @@ const suggestionItems: SuggestionItem[] = [
             };
             input.click();
         }
+    },
+    {
+        title: "Table",
+        description: "Insert a custom grid table.",
+        searchTerms: ["table", "grid", "row", "col"],
+        icon: <TableChartIcon size={18} />,
+        command: (view, range, upload, aiController, setSubView) => {
+            if (setSubView) setSubView("table-grid");
+        }
     }
 ];
 
@@ -209,6 +227,8 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
     const { view, state } = useProseMirrorContext();
     const menuRef = useRef<HTMLDivElement>(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [subView, setSubView] = useState<string | null>(null);
+    const [tableGridCoords, setTableGridCoords] = useState({ r: 0, c: 0 });
 
     const pluginState = state ? SlashCommandPluginKey.getState(state) : null;
     const isActive = pluginState?.active;
@@ -230,6 +250,10 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
     useEffect(() => {
         setSelectedIndex(0);
     }, [query]);
+
+    useEffect(() => {
+        if (!isActive) setSubView(null);
+    }, [isActive]);
 
     useEffect(() => {
         if (!view || !isActive || !range || !menuRef.current) return;
@@ -273,6 +297,44 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
         if (!isActive || !view) return;
 
         const handleKeyDown = (e: KeyboardEvent) => {
+            if (subView === "table-grid") {
+                if (e.key === "Escape") {
+                    e.preventDefault(); e.stopPropagation();
+                    setSubView(null);
+                    setTableGridCoords({ r: 0, c: 0 });
+                } else if (e.key === "ArrowUp") {
+                    e.preventDefault(); e.stopPropagation();
+                    setTableGridCoords(prev => ({ r: Math.max(0, prev.r - 1), c: prev.c }));
+                } else if (e.key === "ArrowDown") {
+                    e.preventDefault(); e.stopPropagation();
+                    setTableGridCoords(prev => ({ r: Math.min(4, prev.r + 1), c: prev.c }));
+                } else if (e.key === "ArrowLeft") {
+                    e.preventDefault(); e.stopPropagation();
+                    setTableGridCoords(prev => ({ r: prev.r, c: Math.max(0, prev.c - 1) }));
+                } else if (e.key === "ArrowRight") {
+                    e.preventDefault(); e.stopPropagation();
+                    setTableGridCoords(prev => ({ r: prev.r, c: Math.min(4, prev.c + 1) }));
+                } else if (e.key === "Enter") {
+                    e.preventDefault(); e.stopPropagation();
+                    if (range) {
+                        const tableNode = createTableNode(view.state.schema, tableGridCoords.r + 1, tableGridCoords.c + 1);
+                        const tr = view.state.tr.replaceWith(range.from, range.to, tableNode);
+                        try {
+                            const selection = TextSelection.create(tr.doc, range.from + 4);
+                            tr.setSelection(selection);
+                        } catch (e) {
+                            console.warn("Could not select first cell", e);
+                        }
+                        tr.setMeta(SlashCommandPluginKey, { active: false });
+                        view.dispatch(tr);
+                        view.focus();
+                        setSubView(null);
+                        setTableGridCoords({ r: 0, c: 0 });
+                    }
+                }
+                return;
+            }
+
             if (e.key === "ArrowUp") {
                 e.preventDefault();
                 e.stopPropagation();
@@ -285,21 +347,24 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
                 e.preventDefault();
                 e.stopPropagation();
                 if (filteredItems[selectedIndex] && range) {
-                    filteredItems[selectedIndex].command(view, range, upload, aiController);
-                    view.focus();
+                    filteredItems[selectedIndex].command(view, range, upload, aiController, setSubView);
+                    // Do not focus view if a subview opened
+                    setTimeout(() => {
+                        // Focus is managed by the caller
+                    }, 0);
                 }
             } else if (e.key === "Escape") {
                 e.preventDefault();
                 e.stopPropagation();
-                // Close menu gracefully
-                view.dispatch(view.state.tr.setMeta(SlashCommandPluginKey, { active: false }));
+                // Close menu gracefully and keep it dismissed
+                view.dispatch(view.state.tr.setMeta(SlashCommandPluginKey, { active: false, dismissed: true }));
             }
         };
 
         const dom = view.dom;
         dom.addEventListener("keydown", handleKeyDown, { capture: true });
         return () => dom.removeEventListener("keydown", handleKeyDown, { capture: true });
-    }, [isActive, selectedIndex, filteredItems, view, range, upload, aiController]);
+    }, [isActive, selectedIndex, filteredItems, view, range, upload, aiController, subView, tableGridCoords]);
 
     const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -309,7 +374,44 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
         }
     }, [selectedIndex]);
 
+    useEffect(() => {
+        if (!subView) {
+            setTableGridCoords({ r: 0, c: 0 });
+        }
+    }, [subView]);
+
     if (!isActive || filteredItems.length === 0) return null;
+
+    if (subView === "table-grid" && range && view) {
+        return (
+            <div
+                ref={menuRef}
+                onMouseDown={(e) => e.preventDefault()}
+                style={{ position: "fixed", zIndex: 9999, visibility: "hidden" }}
+                className={cls("text-surface-900 dark:text-white rounded-md border bg-white dark:bg-surface-900 p-2 shadow transition-none", defaultBorderMixin)}
+            >
+                <TableGridPicker
+                    hoveredRow={tableGridCoords.r}
+                    hoveredCol={tableGridCoords.c}
+                    onHover={(r, c) => setTableGridCoords({ r, c })}
+                    onSelect={(rows, cols) => {
+                        const tableNode = createTableNode(view.state.schema, rows, cols);
+                        const tr = view.state.tr.replaceWith(range.from, range.to, tableNode);
+                        try {
+                            const selection = TextSelection.create(tr.doc, range.from + 4);
+                            tr.setSelection(selection);
+                        } catch (e) {
+                            console.warn("Could not select first cell", e);
+                        }
+                        tr.setMeta(SlashCommandPluginKey, { active: false });
+                        view.dispatch(tr);
+                        view.focus();
+                        setSubView(null);
+                    }}
+                />
+            </div>
+        );
+    }
 
     return (
         <div
@@ -324,8 +426,9 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
                     onClick={(e) => {
                         e.preventDefault();
                         if (range && view) {
-                            item.command(view, range, upload, aiController);
-                            view.focus();
+                            item.command(view, range, upload, aiController, setSubView);
+                            // Only focus back to editor if it didn't open a sub-view
+                            if (!subView) view.focus();
                         }
                     }}
                     onMouseDown={(e) => e.preventDefault()}
@@ -343,6 +446,61 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
                     </div>
                 </button>
             ))}
+        </div>
+    );
+};
+
+const createTableNode = (schema: any, rowsCount: number, colsCount: number) => {
+    const rows = [];
+    for (let r = 0; r < rowsCount; r++) {
+        const cells = [];
+        for (let c = 0; c < colsCount; c++) {
+            const isHeader = r === 0;
+            const cellType = isHeader ? schema.nodes.table_header : schema.nodes.table_cell;
+            const cell = cellType.createAndFill();
+            if (cell) cells.push(cell);
+        }
+        const row = schema.nodes.table_row.create(null, Fragment.from(cells));
+        rows.push(row);
+    }
+    return schema.nodes.table.create(null, Fragment.from(rows));
+};
+
+const TableGridPicker = ({ 
+    hoveredRow, 
+    hoveredCol, 
+    onHover, 
+    onSelect 
+}: { 
+    hoveredRow: number; 
+    hoveredCol: number; 
+    onHover: (r: number, c: number) => void;
+    onSelect: (r: number, c: number) => void; 
+}) => {
+    return (
+        <div className="flex flex-col gap-1 items-center justify-center p-1 w-fit">
+            <span className="text-xs text-gray-500 font-medium mb-1">
+                {hoveredCol + 1} x {hoveredRow + 1} Table
+            </span>
+            <div className="flex flex-col gap-1">
+                {Array.from({ length: 5 }).map((_, r) => (
+                    <div key={r} className="flex gap-1">
+                        {Array.from({ length: 5 }).map((_, c) => (
+                            <div
+                                key={c}
+                                className={cls(
+                                    "w-5 h-5 border rounded-sm cursor-pointer transition-colors duration-75",
+                                    r <= hoveredRow && c <= hoveredCol 
+                                        ? "bg-blue-100 border-blue-400 dark:bg-blue-900 dark:border-blue-500" 
+                                        : "bg-white dark:bg-surface-800 border-gray-200 dark:border-gray-700 hover:border-blue-300"
+                                )}
+                                onMouseEnter={() => onHover(r, c)}
+                                onClick={() => onSelect(hoveredRow + 1, hoveredCol + 1)}
+                            />
+                        ))}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

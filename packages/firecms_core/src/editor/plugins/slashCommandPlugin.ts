@@ -6,6 +6,7 @@ export interface SlashCommandState {
     active: boolean;
     range?: { from: number; to: number };
     query?: string;
+    dismissed?: boolean;
 }
 
 export function slashCommandPlugin() {
@@ -16,6 +17,11 @@ export function slashCommandPlugin() {
                 return { active: false };
             },
             apply(tr, value, oldState, newState): SlashCommandState {
+                const meta = tr.getMeta(SlashCommandPluginKey);
+                if (meta !== undefined) {
+                    return meta;
+                }
+                
                 const { selection } = newState;
                 if (!(selection instanceof TextSelection) || !selection.empty) {
                     return { active: false };
@@ -35,14 +41,20 @@ export function slashCommandPlugin() {
                 );
                 const match = textBefore.match(/(?:\s|^)(\/)([a-zA-Z0-9]*)$/);
 
-                if (match) {
-                    // match[1] is the slash, match[2] is the query
-                    const query = match[2];
-                    const from = $anchor.pos - query.length - 1;
-                    const to = $anchor.pos;
-                    return { active: true, range: { from, to }, query };
+                if (!match) {
+                    return { active: false };
                 }
-                return { active: false };
+
+                // If the user previously dismissed this slash command, keep it dismissed
+                if (value.dismissed) {
+                    return { active: false, dismissed: true };
+                }
+
+                // match[1] is the slash, match[2] is the query
+                const query = match[2];
+                const from = $anchor.pos - query.length - 1;
+                const to = $anchor.pos;
+                return { active: true, range: { from, to }, query };
             },
         }
     });

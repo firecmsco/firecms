@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { EditorState } from "prosemirror-state";
 import { cls, defaultBorderMixin, Separator, useInjectStyles } from "@firecms/ui";
 import { useTranslation } from "../hooks/useTranslation";
-import { EditorBubble, ImageBubble, SlashCommandMenu, type JSONContent } from "./components";
+import { EditorBubble, ImageBubble, SlashCommandMenu, TableBubble, type JSONContent } from "./components";
 import { NodeSelector } from "./selectors/node-selector";
 import { LinkSelector } from "./selectors/link-selector";
 import { TextButtons } from "./selectors/text-buttons";
@@ -68,28 +68,51 @@ export const FireCMSEditor = ({
 
   useInjectStyles("Editor", cssStyles);
 
+  const callbacksRef = useRef({ onMarkdownContentChange, onJsonContentChange });
+  useEffect(() => {
+    callbacksRef.current = { onMarkdownContentChange, onJsonContentChange };
+  }, [onMarkdownContentChange, onJsonContentChange]);
+
+  const flushChanges = (currentState: EditorState) => {
+    const { onMarkdownContentChange, onJsonContentChange } = callbacksRef.current;
+    if (onMarkdownContentChange) {
+      try {
+        const markdown = serializer.serialize(currentState.doc);
+        onMarkdownContentChange(markdown);
+      } catch (e) {
+        console.warn("[FireCMSEditor] Could not serialize editor state to markdown:", e);
+      }
+    }
+    if (onJsonContentChange) {
+      const jsonContent = removeClassesFromJson(currentState.doc.toJSON()) as JSONContent;
+      onJsonContentChange(jsonContent);
+    }
+  };
+
   const { state, view, editorRef } = useProseMirror({
     initialContent: content,
     editable: !disabled,
     handleImageUpload,
-    onChange: (newState, editorView) => {
-      if (onMarkdownContentChange) {
-        try {
-          const markdown = serializer.serialize(newState.doc);
-          onMarkdownContentChange(markdown);
-        } catch (e) {
-          console.warn("[FireCMSEditor] Could not serialize editor state to markdown:", e);
-        }
-      }
-      if (onJsonContentChange) {
-        const jsonContent = removeClassesFromJson(newState.doc.toJSON()) as JSONContent;
-        onJsonContentChange(jsonContent);
-      }
-      if (onHtmlContentChange) {
-        // Not strictly required for FireCMS initially, DOMParser/Serializer can be added if needed
-      }
-    }
   });
+
+  const doc = state?.doc;
+  useEffect(() => {
+    if (!state) return;
+    const timeout = setTimeout(() => {
+      flushChanges(state);
+    }, 250);
+    return () => clearTimeout(timeout);
+  }, [doc]);
+
+  useEffect(() => {
+    if (!view) return;
+    const dom = view.dom;
+    const handleBlur = () => {
+      flushChanges(view.state);
+    };
+    dom.addEventListener("blur", handleBlur);
+    return () => dom.removeEventListener("blur", handleBlur);
+  }, [view]);
 
 
 
@@ -138,6 +161,7 @@ export const FireCMSEditor = ({
                 offset: 6,
               }}
             />
+            <TableBubble />
           </>
         )}
 
@@ -302,5 +326,49 @@ ul[data-type="taskList"] li[data-checked="true"] > div > p {
 }
 [data-theme="dark"] .prosemirror-dropcursor-block {
   background-color: var(--color-surface-accent-300);
+}
+
+.ProseMirror table {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  width: 100%;
+  margin: 1em 0;
+  overflow: hidden;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+}
+[data-theme="dark"] .ProseMirror table {
+  border-color: #374151;
+}
+
+.ProseMirror td, .ProseMirror th {
+  min-width: 1em;
+  padding: 8px 10px;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+[data-theme="dark"] .ProseMirror td, [data-theme="dark"] .ProseMirror th {
+  border-right-color: #374151;
+  border-bottom-color: #374151;
+}
+
+.ProseMirror tr:last-child td, .ProseMirror tr:last-child th {
+  border-bottom: none;
+}
+.ProseMirror th:last-child, .ProseMirror td:last-child {
+  border-right: none;
+}
+
+.ProseMirror th {
+  font-weight: 600;
+  text-align: left;
+  background-color: #f9fafb;
+}
+[data-theme="dark"] .ProseMirror th {
+  background-color: #1f2937;
 }
 `;

@@ -426,7 +426,15 @@ export function globalDragDropPlugin() {
                         }
 
                         // 3. Force insertion. tr.replace slices and splits lists. tr.insert preserves the explicit boundary.
-                        tr = tr.insert(mappedTarget, nodeToInsert);
+                        try {
+                            tr = tr.insert(mappedTarget, nodeToInsert);
+                        } catch (e) {
+                            console.warn("Could not insert dragged node exactly at target. Attempting fallback.", e);
+                            const point = dropPoint(tr.doc, mappedTarget, slice);
+                            if (point !== null) {
+                                tr = tr.replace(point, point, slice);
+                            }
+                        }
                     } else if (slice) {
                         // For generic slices (e.g native image dragging), we MUST use dropPoint
                         // so ProseMirror finds a schema-valid depth to insert the node structure natively.

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
-import { EditorState, Transaction } from "prosemirror-state";
+import { EditorState, Transaction, Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { schema } from "../schema";
 import { corePlugins } from "../plugins";
@@ -8,23 +8,28 @@ import { nodeViews } from "../nodeViews";
 import { createDropImagePlugin } from "../extensions/Image";
 import { columnResizing, tableEditing } from "prosemirror-tables";
 
+const trailingNodePlugin = new Plugin({
+    appendTransaction: (_, oldState, newState) => {
+        const doc = newState.doc;
+        if (doc.lastChild && doc.lastChild.type.name !== "paragraph") {
+            return newState.tr.insert(doc.content.size, newState.schema.nodes.paragraph.create());
+        }
+        return null;
+    }
+});
+
 interface UseProseMirrorProps {
     initialContent?: string | any;
-    onChange?: (state: EditorState, view: EditorView) => void;
     editable?: boolean;
     handleImageUpload?: (file: File) => Promise<string>;
 }
 
-export function useProseMirror({ initialContent, onChange, editable = true, handleImageUpload }: UseProseMirrorProps) {
-    // Store onChange in a ref so that the latest version is always called inside
-    // the dispatchTransaction closure (which only runs once at mount with [] deps).
-    const onChangeRef = useRef(onChange);
-    onChangeRef.current = onChange;
-
+export function useProseMirror({ initialContent, editable = true, handleImageUpload }: UseProseMirrorProps) {
     const plugins = [
         ...corePlugins,
         columnResizing(),
-        tableEditing()
+        tableEditing(),
+        trailingNodePlugin
     ];
     if (handleImageUpload) {
         plugins.push(createDropImagePlugin(handleImageUpload));
@@ -56,7 +61,6 @@ export function useProseMirror({ initialContent, onChange, editable = true, hand
                 const newState = editorView.state.apply(tr);
                 editorView.updateState(newState);
                 setState(newState);
-                onChangeRef.current?.(newState, editorView);
             },
             nodeViews: nodeViews,
             transformPastedHTML(html: string) {
