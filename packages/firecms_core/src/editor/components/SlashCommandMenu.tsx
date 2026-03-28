@@ -309,7 +309,7 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
         const handleKeyDown = (e: KeyboardEvent) => {
             if (subView === "table-grid") {
                 if (e.key === "Escape") {
-                    e.preventDefault(); e.stopPropagation();
+                    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
                     setSubView(null);
                     setTableGridCoords({ r: 0, c: 0 });
                 } else if (e.key === "ArrowUp") {
@@ -366,14 +366,14 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
             } else if (e.key === "Escape") {
                 e.preventDefault();
                 e.stopPropagation();
+                e.stopImmediatePropagation();
                 // Close menu gracefully and keep it dismissed
                 view.dispatch(view.state.tr.setMeta(SlashCommandPluginKey, { active: false, dismissed: true }));
             }
         };
 
-        const dom = view.dom;
-        dom.addEventListener("keydown", handleKeyDown, { capture: true });
-        return () => dom.removeEventListener("keydown", handleKeyDown, { capture: true });
+        window.addEventListener("keydown", handleKeyDown, { capture: true });
+        return () => window.removeEventListener("keydown", handleKeyDown, { capture: true });
     }, [isActive, selectedIndex, filteredItems, view, range, upload, aiController, subView, tableGridCoords]);
 
     const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
