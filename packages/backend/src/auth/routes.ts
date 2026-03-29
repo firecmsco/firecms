@@ -168,37 +168,28 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
      */
     router.post("/login", defaultAuthLimiter, asyncHandler(async (req: Request, res: Response) => {
         const { email, password } = req.body;
-        console.log(`[AUTH] Login attempt for email: ${email}`);
 
         if (!email || !password) {
-            console.log("[AUTH] Login failed: Missing email or password");
             throw ApiError.badRequest("Email and password are required", "INVALID_INPUT");
         }
 
         const user = await userService.getUserByEmail(email);
         if (!user) {
-            console.log(`[AUTH] Login failed: No user found with email ${email}`);
             throw ApiError.unauthorized("Invalid email or password", "INVALID_CREDENTIALS");
         }
 
         if (!user.passwordHash) {
-            console.log(`[AUTH] Login failed: User ${email} has no password (provider: ${user.provider})`);
             throw ApiError.unauthorized("Invalid email or password", "INVALID_CREDENTIALS");
         }
 
-        console.log(`[AUTH] User found: ${user.id}, provider: ${user.provider}, verifying password...`);
         const isValidPassword = await verifyPassword(password, user.passwordHash);
         if (!isValidPassword) {
-            console.log(`[AUTH] Login failed: Invalid password for ${email}`);
             throw ApiError.unauthorized("Invalid email or password", "INVALID_CREDENTIALS");
         }
-
-        console.log(`[AUTH] Password valid for ${email}, generating tokens...`);
 
         // Generate tokens
         const roles = await userService.getUserRoles(user.id);
         const roleIds = roles.map(r => r.id);
-        console.log(`[AUTH] User roles: ${roleIds.join(", ") || "(none)"}`);
 
         const accessToken = generateAccessToken(user.id, roleIds);
         const refreshToken = generateRefreshToken();
@@ -213,7 +204,6 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
             userAgent,
             ipAddress
         );
-        console.log(`[AUTH] Login successful for ${email}`);
 
         res.json({
             user: {
@@ -539,26 +529,19 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
      */
     router.post("/refresh", asyncHandler(async (req: Request, res: Response) => {
         const { refreshToken } = req.body;
-        console.log("[AUTH] Token refresh request received");
 
         if (!refreshToken) {
-            console.log("[AUTH] Refresh failed: No refresh token provided");
             throw ApiError.badRequest("Refresh token is required", "INVALID_INPUT");
         }
 
         const tokenHash = hashRefreshToken(refreshToken);
-        console.log("[AUTH] Looking up refresh token...");
         const storedToken = await refreshTokenService.findByHash(tokenHash);
 
         if (!storedToken) {
-            console.log("[AUTH] Refresh failed: Token not found in database (hash mismatch or deleted)");
             throw ApiError.unauthorized("Invalid refresh token", "INVALID_TOKEN");
         }
 
-        console.log(`[AUTH] Token found for user: ${storedToken.userId}, expires: ${storedToken.expiresAt}`);
-
         if (new Date() > storedToken.expiresAt) {
-            console.log("[AUTH] Refresh failed: Token expired at", storedToken.expiresAt);
             await refreshTokenService.deleteByHash(tokenHash);
             throw ApiError.unauthorized("Refresh token expired", "TOKEN_EXPIRED");
         }
@@ -566,7 +549,6 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
         // Generate new tokens
         const roles = await userService.getUserRoles(storedToken.userId);
         const roleIds = roles.map(r => r.id);
-        console.log(`[AUTH] Generating new tokens for user ${storedToken.userId}, roles: ${roleIds.join(", ") || "(none)"}`);
 
         const newAccessToken = generateAccessToken(storedToken.userId, roleIds);
         const newRefreshToken = generateRefreshToken();
@@ -583,7 +565,6 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
             userAgent,
             ipAddress
         );
-        console.log("[AUTH] Token refresh successful, new tokens issued");
 
         res.json({
             tokens: {

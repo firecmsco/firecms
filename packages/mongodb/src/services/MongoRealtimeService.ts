@@ -6,59 +6,13 @@
  */
 
 import { Db, ChangeStream, ChangeStreamDocument, Document, ObjectId } from "mongodb";
-import { Entity } from "@rebasepro/types";
+import {
+    Entity,
+    RealtimeProvider,
+    CollectionSubscriptionConfig,
+    EntitySubscriptionConfig,
+} from "@rebasepro/types";
 import { MongoEntityService } from "../db/MongoEntityService";
-import { MongoConditionBuilder } from "../db/MongoConditionBuilder";
-
-/**
- * Realtime provider interface (from @rebasepro/backend).
- */
-export interface RealtimeProvider {
-    subscribeToCollection(
-        subscriptionId: string,
-        config: CollectionSubscriptionConfig,
-        callback?: (entities: Entity[]) => void
-    ): void;
-
-    subscribeToEntity(
-        subscriptionId: string,
-        config: EntitySubscriptionConfig,
-        callback?: (entity: Entity | null) => void
-    ): void;
-
-    unsubscribe(subscriptionId: string): void;
-
-    notifyEntityUpdate(
-        path: string,
-        entityId: string,
-        entity: Entity | null,
-        databaseId?: string
-    ): Promise<void>;
-}
-
-/**
- * Configuration for subscribing to a collection
- */
-export interface CollectionSubscriptionConfig {
-    clientId: string;
-    path: string;
-    filter?: any;
-    orderBy?: string;
-    order?: "desc" | "asc";
-    limit?: number;
-    startAfter?: any;
-    databaseId?: string;
-    searchString?: string;
-}
-
-/**
- * Configuration for subscribing to a single entity
- */
-export interface EntitySubscriptionConfig {
-    clientId: string;
-    path: string;
-    entityId: string | number;
-}
 
 interface Subscription {
     type: "collection" | "entity";

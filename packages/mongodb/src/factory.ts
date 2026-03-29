@@ -8,42 +8,11 @@
 import { Db, MongoClient } from "mongodb";
 import { DataSource, EntityCollection } from "@rebasepro/types";
 
-import { MongoEntityService, EntityRepository } from "./db/MongoEntityService";
-import { MongoRealtimeService, RealtimeProvider } from "./services/MongoRealtimeService";
+import { MongoEntityService } from "./db/MongoEntityService";
+import { MongoRealtimeService } from "./services/MongoRealtimeService";
 import { MongoDataSource } from "./services/MongoDataSource";
-import { MongoDBConnection, DatabaseConnection } from "./connection";
-
-// =============================================================================
-// MongoDB-Specific Configuration Types
-// =============================================================================
-
-/**
- * Backend instance interface (from @rebasepro/backend).
- */
-export interface BackendInstance {
-    entityRepository: EntityRepository;
-    realtimeProvider: RealtimeProvider;
-    collectionRegistry: CollectionRegistryInterface;
-    connection: DatabaseConnection;
-}
-
-/**
- * Backend config interface (from @rebasepro/backend).
- */
-export interface BackendConfig {
-    type: string;
-    connection: any;
-    schema?: any;
-}
-
-/**
- * Collection registry interface (from @rebasepro/backend).
- */
-export interface CollectionRegistryInterface {
-    register(collection: EntityCollection): void;
-    getCollectionByPath(path: string): EntityCollection | undefined;
-    getCollections(): EntityCollection[];
-}
+import { MongoDBConnection } from "./connection";
+import { BackendConfig, BackendInstance, CollectionRegistryInterface, EntityRepository, RealtimeProvider, DatabaseConnection } from "@rebasepro/types";
 
 /**
  * Configuration for creating a MongoDB backend.

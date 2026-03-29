@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 
 import "@fontsource/jetbrains-mono";
 import "typeface-rubik";
@@ -84,26 +84,9 @@ export function App() {
     );
     const configPermissions = useCallback(() => ({ createCollections: true, editCollections: true, deleteCollections: true }), []);
 
-    // Fetch unmapped tables for the "import from table" feature
-    const [unmappedTables, setUnmappedTables] = useState<string[]>([]);
-
-    useEffect(() => {
-        if (!postgresDelegate || authController.initialLoading || !authController.user) return;
-        const existingPaths = collections.map((c: any) => c.dbPath ?? c.slug ?? "").filter(Boolean);
-        (postgresDelegate as any).fetchUnmappedTables?.(existingPaths)
-            .then((tables: string[]) => setUnmappedTables(tables))
-            .catch((e: any) => console.warn("Could not fetch unmapped tables:", e));
-    }, [postgresDelegate, authController.initialLoading, authController.user]);
-
-    const onFetchTableColumns = useCallback(async (tableName: string) => {
-        return (postgresDelegate as any).fetchTableColumns?.(tableName) ?? [];
-    }, [postgresDelegate]);
-
     const collectionEditorPlugin = useCollectionEditorPlugin({
         collectionConfigController,
-        configPermissions,
-        unmappedTables,
-        onFetchTableColumns
+        configPermissions
     });
 
     const collectionsBuilder = useCallback(() => {

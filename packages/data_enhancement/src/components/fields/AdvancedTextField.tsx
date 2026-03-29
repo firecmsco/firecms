@@ -10,7 +10,7 @@ import {
     TextField
 } from "@rebasepro/ui";
 
-export type InputType<T> = T extends string ? "text" : "number";
+export type AdvancedInputType<T> = T extends string ? "text" : "number";
 
 export function AdvancedTextField({
     value,
@@ -24,7 +24,7 @@ export function AdvancedTextField({
     size = "large",
     className
 }: {
-    inputType: InputType<string | number>,
+    inputType: AdvancedInputType<string | number>,
     value: string | number,
     setValue: (value: string | number | null) => void,
     highlight?: string,

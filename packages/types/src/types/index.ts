@@ -16,3 +16,5 @@ export * from "./plugins";
 export * from "./rebase";
 export * from "./export_import";
 export * from "./modify_collections";
+export * from "./websockets";
+export * from "./backend";

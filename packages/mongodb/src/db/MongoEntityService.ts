@@ -6,76 +6,8 @@
  */
 
 import { Db, ObjectId, Collection, Document, FindOptions, Filter } from "mongodb";
-import { Entity, FilterValues } from "@rebasepro/types";
+import { Entity, FilterValues, EntityRepository } from "@rebasepro/types";
 import { MongoConditionBuilder } from "./MongoConditionBuilder";
-
-/**
- * Entity repository interface (from @rebasepro/backend).
- * Copied here to avoid requiring @rebasepro/backend as a runtime dependency.
- */
-export interface EntityRepository {
-    fetchEntity<M extends Record<string, any>>(
-        collectionPath: string,
-        entityId: string | number,
-        databaseId?: string
-    ): Promise<Entity<M> | undefined>;
-
-    fetchCollection<M extends Record<string, any>>(
-        collectionPath: string,
-        options?: {
-            filter?: FilterValues<Extract<keyof M, string>>;
-            orderBy?: string;
-            order?: "desc" | "asc";
-            limit?: number;
-            startAfter?: any;
-            searchString?: string;
-            databaseId?: string;
-        }
-    ): Promise<Entity<M>[]>;
-
-    searchEntities<M extends Record<string, any>>(
-        collectionPath: string,
-        searchString: string,
-        options?: {
-            filter?: FilterValues<Extract<keyof M, string>>;
-            orderBy?: string;
-            order?: "desc" | "asc";
-            limit?: number;
-            databaseId?: string;
-        }
-    ): Promise<Entity<M>[]>;
-
-    countEntities<M extends Record<string, any>>(
-        collectionPath: string,
-        options?: {
-            filter?: FilterValues<Extract<keyof M, string>>;
-            databaseId?: string;
-        }
-    ): Promise<number>;
-
-    saveEntity<M extends Record<string, any>>(
-        collectionPath: string,
-        values: Partial<M>,
-        entityId?: string | number,
-        databaseId?: string
-    ): Promise<Entity<M>>;
-
-    deleteEntity(
-        collectionPath: string,
-        entityId: string | number,
-        databaseId?: string
-    ): Promise<void>;
-
-    checkUniqueField(
-        collectionPath: string,
-        fieldName: string,
-        value: any,
-        excludeEntityId?: string,
-        databaseId?: string
-    ): Promise<boolean>;
-
-    generateEntityId(): string;
-}
 
 /**
  * MongoDB Entity Service

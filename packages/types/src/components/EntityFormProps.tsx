@@ -4,12 +4,13 @@ import { EntityFormActionsProps } from "./EntityFormActionsProps";
 
 export type EntityFormProps<M extends Record<string, any>> = {
     path: string;
+    fullIdPath?: string;
     collection: EntityCollection<M>;
     entityId?: string | number;
     entity?: Entity<M>;
     databaseId?: string;
     onIdChange?: (id: string | number) => void;
-    onValuesModified?: (modified: boolean) => void;
+    onValuesModified?: (modified: boolean, values: M) => void;
     onSaved?: (params: OnUpdateParams) => void;
     initialDirtyValues?: Partial<M>; // dirty cached entity in memory
     onFormContextReady?: (formContext: FormContext) => void;

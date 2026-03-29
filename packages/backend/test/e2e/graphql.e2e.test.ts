@@ -40,11 +40,16 @@ describe("GraphQL E2E Tests", () => {
                 values: { title: "Dune", pages: 412 },
                 path: "books"
             }),
-            saveEntity: jest.fn().mockImplementation((args: any) => ({
-                id: args.entityId || "new-b1",
-                values: args.values,
-                path: args.path
-            })),
+            saveEntity: jest.fn().mockImplementation(async (args: any) => {
+                if (args.status === "existing" && args.entityId === "non-existent") {
+                    throw new Error("Entity non-existent not found");
+                }
+                return {
+                    id: args.entityId || "new-b1",
+                    values: args.values,
+                    path: args.path
+                };
+            }),
             deleteEntity: jest.fn().mockResolvedValue(true)
         };
 
@@ -52,7 +57,8 @@ describe("GraphQL E2E Tests", () => {
             dataSource: mockDataSource as any,
             collections: mockCollections,
             enableGraphQL: true,
-            enableREST: false
+            enableREST: false,
+            requireAuth: false
         });
 
         app = server.getApp();
@@ -200,5 +206,67 @@ describe("GraphQL E2E Tests", () => {
         expect(res.status).toBe(200);
         expect(res.body.data.deleteBook).toBe(true);
         expect(mockDataSource.deleteEntity).toHaveBeenCalled();
+    });
+
+    describe("Error Handling", () => {
+        it("should return null or error when querying a non-existent entity", async () => {
+            mockDataSource.fetchEntity.mockResolvedValueOnce(null);
+
+            const query = `
+                query {
+                    book(id: "non-existent") {
+                        id
+                        title
+                    }
+                }
+            `;
+
+            const res = await request(app)
+                .post("/api/graphql")
+                .send({ query });
+
+            expect(res.status).toBe(200);
+            // In GraphQL, querying a single entity that doesn't exist typically returns null for that field.
+            expect(res.body.data.book).toBeNull();
+        });
+
+        it("should return error when updating a non-existent entity", async () => {
+            // fetchEntity returns null when checking if it exists before update
+            mockDataSource.fetchEntity.mockResolvedValueOnce(null);
+
+            const mutation = `
+                mutation {
+                    updateBook(id: "non-existent", input: { title: "Doesn't Matter" }) {
+                        id
+                    }
+                }
+            `;
+
+            const res = await request(app)
+                .post("/api/graphql")
+                .send({ query: mutation });
+
+            expect(res.status).toBe(200); // the HTTP request succeeds
+            expect(res.body.errors).toBeDefined(); // but GraphQL returns errors
+            expect(res.body.errors[0].message).toContain("not found");
+        });
+
+        it("should return false when deleting a non-existent entity", async () => {
+            mockDataSource.fetchEntity.mockResolvedValueOnce(null);
+
+            const mutation = `
+                mutation {
+                    deleteBook(id: "non-existent")
+                }
+            `;
+
+            const res = await request(app)
+                .post("/api/graphql")
+                .send({ query: mutation });
+
+            expect(res.status).toBe(200);
+            expect(res.body.errors).toBeUndefined();
+            expect(res.body.data.deleteBook).toBe(false);
+        });
     });
 });

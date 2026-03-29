@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 
-import { EntityCollection, EntitySidePanelProps } from "@rebasepro/types";
+import { EntityCollection, EntitySidePanelProps, OnUpdateParams } from "@rebasepro/types";
 import { useCollectionRegistryController, useSideEntityController } from "../hooks";
 import { useCMSUrlController } from "../hooks/navigation/contexts";
 
 import { ErrorBoundary } from "../components";
-import { EntityEditView, OnUpdateParams } from "./EntityEditView";
+import { EntityEditView } from "./EntityEditView";
 import { useSideDialogContext } from "./SideDialogs";
 import { CloseIcon, IconButton, OpenInFullIcon } from "@rebasepro/ui";
 import { useLocation, useNavigate } from "react-router-dom";

@@ -28,7 +28,7 @@ import {
 } from "../hooks";
 import { getEntityFromMemoryCache } from "../util/entity_cache";
 import { EntityForm } from "../form";
-import { EntityFormProps } from "@rebasepro/types";
+import { EntityFormProps, OnUpdateParams } from "@rebasepro/types";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
 import { createFormexStub, getEntityFromCache } from "../util";
@@ -36,15 +36,6 @@ import { usePermissions } from "../hooks/usePermissions";
 
 export const MAIN_TAB_VALUE = "__main_##Q$SC^#S6";
 export const JSON_TAB_VALUE = "__json";
-
-export type OnUpdateParams = {
-    entity: Entity<any>,
-    status: EntityStatus,
-    path: string,
-    entityId?: string | number;
-    selectedTab?: string;
-    collection: EntityCollection<any>
-};
 
 export type BarActionsParams = {
     values: object,

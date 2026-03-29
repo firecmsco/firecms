@@ -7,11 +7,12 @@ import { DataSource, EntityCollection } from "@rebasepro/types";
 import { ApiConfig, RebaseRequest } from "./types";
 import * as fs from "fs";
 import * as path from "path";
+import { loadCollectionsFromDirectory } from "../collections/loader";
 import { createSchemaEditorRoutes } from "./schema-editor-routes";
-import { createCallbacksTestRouter } from "./test_callbacks_route";
 import { PostgresDataSource } from "../services/postgresDataSource";
 import { createAuthMiddleware, requireAuth, requireAdmin } from "../auth/middleware";
 import { errorHandler } from "./errors";
+import { generateOpenApiSpec } from "./openapi-generator";
 /**
  * Simplified API server that leverages existing Rebase infrastructure
  * Can be used standalone or mounted on existing Express app
@@ -48,7 +49,7 @@ export class RebaseApiServer {
     public static async create(config: ApiConfig & { dataSource: DataSource }): Promise<RebaseApiServer> {
         // Auto-discover collections if a directory is provided and collections aren't explicitly passed
         if (config.collectionsDir && (!config.collections || config.collections.length === 0)) {
-            config.collections = await RebaseApiServer.loadCollectionsFromDirectory(config.collectionsDir);
+            config.collections = await loadCollectionsFromDirectory(config.collectionsDir);
         } else if (!config.collections) {
             config.collections = [];
         }
@@ -59,49 +60,6 @@ export class RebaseApiServer {
         return server;
     }
 
-    /**
-     * Asynchronously load collection files from a directory
-     */
-    private static async loadCollectionsFromDirectory(directory: string): Promise<EntityCollection[]> {
-        const collections: EntityCollection[] = [];
-        try {
-            if (!fs.existsSync(directory)) {
-                console.warn(`[RebaseApiServer] Collections directory not found: ${directory}`);
-                return collections;
-            }
-
-            const files = fs.readdirSync(directory);
-            for (const file of files) {
-                // Only load .ts and .js files, ignore test files and declaration files
-                if ((file.endsWith('.ts') || file.endsWith('.js')) &&
-                    !file.includes('.test.') &&
-                    !file.endsWith('.d.ts') &&
-                    file !== 'index.ts' && file !== 'index.js') {
-
-                    const filePath = path.join(directory, file);
-                    try {
-                        const fileUrl = process.platform === 'win32'
-                            ? `file://${filePath.replace(/\\/g, '/')}`
-                            : filePath;
-
-                        // Use dynamic import for synchronous loading in Node.js ESM mode
-                        const module = await import(fileUrl);
-                        // Expect the collection to be the default export
-                        if (module && module.default) {
-                            collections.push(module.default);
-                        } else {
-                            console.warn(`[RebaseApiServer] File ${file} does not have a default export. Skipping.`);
-                        }
-                    } catch (err: any) {
-                        console.error(`[RebaseApiServer] Failed to load collection from ${file}: ${err.message}`);
-                    }
-                }
-            }
-        } catch (err) {
-            console.error(`[RebaseApiServer] Error reading collections directory: ${err}`);
-        }
-        return collections;
-    }
 
     /**
      * Setup Express middleware
@@ -117,13 +75,10 @@ export class RebaseApiServer {
         this.router.use(express.urlencoded({ extended: true }));
 
         // Auth middleware - delegates to canonical createAuthMiddleware()
-        if (this.config.auth?.enabled) {
-            this.router.use(createAuthMiddleware({
-                dataSource: this.dataSource,
-                requireAuth: this.config.auth.requireAuth,
-                validator: this.config.auth.validator
-            }));
-        }
+        this.router.use(createAuthMiddleware({
+            dataSource: this.dataSource,
+            requireAuth: this.config.requireAuth ?? true
+        }));
     }
 
     /**
@@ -214,17 +169,17 @@ export class RebaseApiServer {
 
         // Schema Editor (AST Generation) endpoints
         if (this.config.collectionsDir) {
-            const schemaEditorRoutes = createSchemaEditorRoutes(this.config.collectionsDir);
-            this.router.use(`${basePath}/schema-editor`, requireAuth, requireAdmin, schemaEditorRoutes);
-        }
-
-        if (this.dataSource instanceof PostgresDataSource) {
-            this.router.use(basePath, createCallbacksTestRouter(this.dataSource));
+            if (process.env.NODE_ENV === "production") {
+                console.warn("[RebaseApiServer] Schema Editor is disabled in production environments for security.");
+            } else {
+                const schemaEditorRoutes = createSchemaEditorRoutes(this.config.collectionsDir);
+                this.router.use(`${basePath}/schema-editor`, requireAuth, requireAdmin, schemaEditorRoutes);
+            }
         }
 
         // OpenAPI/Swagger documentation endpoint
         this.router.get(`${basePath}/docs`, (req: Request, res: Response) => {
-            const openApiSpec = this.generateOpenApiSpec();
+            const openApiSpec = generateOpenApiSpec(this.config.collections || [], this.config.basePath);
             res.json(openApiSpec);
         });
 
@@ -255,167 +210,6 @@ export class RebaseApiServer {
 
         // Global Error Handling Middleware for API Routes
         this.router.use(errorHandler);
-    }
-
-    /**
-     * Generate OpenAPI specification for the REST API
-     */
-    private generateOpenApiSpec(): any {
-        const spec = {
-            openapi: "3.0.0",
-            info: {
-                title: "Rebase Auto-Generated API",
-                version: "1.0.0",
-                description: "Automatically generated REST API from Rebase collections"
-            },
-            servers: [
-                {
-                    url: this.config.basePath,
-                    description: "API Server"
-                }
-            ],
-            paths: {} as Record<string, unknown>,
-            components: {
-                schemas: {} as Record<string, unknown>
-            }
-        };
-
-        (this.config.collections || []).forEach(collection => {
-            spec.components.schemas[collection.singularName || collection.name] = {
-                type: "object",
-                properties: {
-                    id: { type: "string" },
-                    ...Object.entries(collection.properties).reduce((props, [key, property]) => {
-                        if (property.type !== "relation") {
-                            props[key] = this.convertPropertyToOpenApiType(property);
-                        }
-                        return props;
-                    }, {} as Record<string, unknown>)
-                }
-            };
-
-            const basePath = `/${collection.slug}`;
-
-            spec.paths[basePath] = {
-                get: {
-                    summary: `List ${collection.name}`,
-                    parameters: [
-                        { name: "limit", in: "query", schema: { type: "integer", default: 20 } },
-                        { name: "offset", in: "query", schema: { type: "integer", default: 0 } },
-                        { name: "where", in: "query", schema: { type: "string" } },
-                        { name: "orderBy", in: "query", schema: { type: "string" } }
-                    ],
-                    responses: {
-                        200: {
-                            description: "Success",
-                            content: {
-                                "application/json": {
-                                    schema: {
-                                        type: "object",
-                                        properties: {
-                                            data: {
-                                                type: "array",
-                                                items: { $ref: `#/components/schemas/${collection.singularName}` }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                post: {
-                    summary: `Create ${collection.singularName}`,
-                    requestBody: {
-                        content: {
-                            "application/json": {
-                                schema: { $ref: `#/components/schemas/${collection.singularName}` }
-                            }
-                        }
-                    },
-                    responses: {
-                        201: {
-                            description: "Created",
-                            content: {
-                                "application/json": {
-                                    schema: { $ref: `#/components/schemas/${collection.singularName}` }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-
-            spec.paths[`${basePath}/{id}`] = {
-                get: {
-                    summary: `Get ${collection.singularName} by ID`,
-                    parameters: [
-                        { name: "id", in: "path", required: true, schema: { type: "string" } }
-                    ],
-                    responses: {
-                        200: {
-                            description: "Success",
-                            content: {
-                                "application/json": {
-                                    schema: { $ref: `#/components/schemas/${collection.singularName}` }
-                                }
-                            }
-                        }
-                    }
-                },
-                put: {
-                    summary: `Update ${collection.singularName}`,
-                    parameters: [
-                        { name: "id", in: "path", required: true, schema: { type: "string" } }
-                    ],
-                    requestBody: {
-                        content: {
-                            "application/json": {
-                                schema: { $ref: `#/components/schemas/${collection.singularName}` }
-                            }
-                        }
-                    },
-                    responses: {
-                        200: {
-                            description: "Updated",
-                            content: {
-                                "application/json": {
-                                    schema: { $ref: `#/components/schemas/${collection.singularName}` }
-                                }
-                            }
-                        }
-                    }
-                },
-                delete: {
-                    summary: `Delete ${collection.singularName}`,
-                    parameters: [
-                        { name: "id", in: "path", required: true, schema: { type: "string" } }
-                    ],
-                    responses: {
-                        204: { description: "Deleted" }
-                    }
-                }
-            };
-        });
-
-        return spec;
-    }
-
-    private convertPropertyToOpenApiType(property: any): any {
-        switch (property.type) {
-            case "string":
-                return { type: "string" };
-            case "number":
-                return { type: "number" };
-            case "boolean":
-                return { type: "boolean" };
-            case "date":
-                return { type: "string", format: "date-time" };
-            case "array":
-                return { type: "array", items: { type: "string" } };
-            default:
-                return { type: "string" };
-        }
     }
 
     /**

@@ -1,6 +1,6 @@
 import { RealtimeService } from "./services/realtimeService";
 import { PostgresDataSource } from "./services/postgresDataSource";
-import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps } from "@rebasepro/types";
+import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps, TableColumnInfo } from "@rebasepro/types";
 import { WebSocketServer, WebSocket } from "ws";
 import { Server } from "http";
 import { inspect } from "util";
@@ -290,8 +290,8 @@ export function createPostgresWebSocket(
                         console.debug("📋 [WebSocket Server] Processing FETCH_UNMAPPED_TABLES request");
                         const delegate = await getScopedDelegate();
                         let tables: string[] = [];
-                        if ((delegate as any).fetchUnmappedTables) {
-                            tables = await (delegate as any).fetchUnmappedTables(payload?.mappedPaths);
+                        if (delegate.fetchUnmappedTables) {
+                            tables = await delegate.fetchUnmappedTables(payload?.mappedPaths);
                         }
                         console.debug(`📋 [WebSocket Server] Fetched ${tables.length} unmapped tables.`);
                         const response = {
@@ -307,9 +307,9 @@ export function createPostgresWebSocket(
                         console.debug("📋 [WebSocket Server] Processing FETCH_TABLE_COLUMNS request");
                         const { tableName } = payload;
                         const delegate = await getScopedDelegate();
-                        let columns: any[] = [];
-                        if ((delegate as any).fetchTableColumns) {
-                            columns = await (delegate as any).fetchTableColumns(tableName);
+                        let columns: TableColumnInfo[] = [];
+                        if (delegate.fetchTableColumns) {
+                            columns = await delegate.fetchTableColumns(tableName);
                         }
                         console.debug(`📋 [WebSocket Server] Fetched ${columns.length} columns for table '${tableName}'.`);
                         const response = {

@@ -2,6 +2,7 @@ import { Router, Response } from "express";
 import { ApiError, asyncHandler } from "../api/errors";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { UserService, RoleService, Role } from "./services";
+import { NewUser } from "../db/auth-schema";
 import { requireAuth, requireAdmin, AuthenticatedRequest } from "./middleware";
 import { hashPassword, validatePasswordStrength } from "./password";
 import { AuthModuleConfig } from "./routes";
@@ -191,7 +192,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
         }
 
         // Build update object
-        const updates: any = {};
+        const updates: Partial<NewUser> = {};
         if (email !== undefined) updates.email = email.toLowerCase();
         if (displayName !== undefined) updates.displayName = displayName;
 

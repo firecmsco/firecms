@@ -11,20 +11,6 @@ export interface RebaseRequest extends AuthenticatedRequest {}
  * Configuration for API generation
  */
 /**
- * Auth configuration for the optional REST/GraphQL API layer.
- * This controls authentication for externally-exposed API endpoints,
- * separate from the core backend auth (AuthConfig in init.ts).
- */
-export interface ApiAuthConfig {
-    /** Whether auth is enabled for API endpoints */
-    enabled: boolean;
-    /** Whether auth is required (vs optional) for API endpoints */
-    requireAuth?: boolean;
-    /** Custom token validator (overrides default JWT validation) */
-    validator?: (req: RebaseRequest) => Promise<AuthResult>;
-}
-
-/**
  * Configuration for API generation
  */
 export interface ApiConfig {
@@ -37,7 +23,8 @@ export interface ApiConfig {
         origin?: string | string[] | boolean;
         credentials?: boolean;
     };
-    auth?: ApiAuthConfig;
+    /** Whether auth is required for API endpoints (default: true) */
+    requireAuth?: boolean;
     pagination?: {
         defaultLimit: number;
         maxLimit: number;

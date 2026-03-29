@@ -1,5 +1,5 @@
 import { CollectionRegistryController } from "./navigation";
-import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues } from "../types";
+import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues, TableColumnInfo } from "../types";
 import { RebaseContext } from "../rebase_context";
 
 /**
@@ -201,6 +201,16 @@ export interface DataSource {
      * Fetch the current database name (if supported by the datasource)
      */
     fetchCurrentDatabase?(): Promise<string | undefined>;
+
+    /**
+     * Fetch database tables not yet mapped to a collection (if supported)
+     */
+    fetchUnmappedTables?(mappedPaths?: string[]): Promise<string[]>;
+
+    /**
+     * Fetch column metadata for a given table (if supported)
+     */
+    fetchTableColumns?(tableName: string): Promise<TableColumnInfo[]>;
 
     /**
      * Flag to indicate if the datasource delegate has requested the initialization of the text search index

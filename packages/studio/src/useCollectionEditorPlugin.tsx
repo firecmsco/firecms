@@ -12,7 +12,6 @@ import { CollectionViewHeaderAction } from "./ui/CollectionViewHeaderAction";
 import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent";
 import { NewCollectionButton } from "./ui/NewCollectionButton";
 import { AddIcon, Button, Paper, Typography } from "@rebasepro/ui";
-import { TableColumnInfo } from "./utils/pgColumnToProperty";
 import { useCollectionEditorController } from "./useCollectionEditorController";
 import { EditorCollectionActionStart } from "./ui/EditorCollectionActionStart";
 import { NewCollectionCard } from "./ui/NewCollectionCard";
@@ -64,10 +63,6 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
      */
     generateCollection?: CollectionGenerationCallback;
 
-    unmappedTables?: string[];
-
-    onFetchTableColumns?: (tableName: string) => Promise<TableColumnInfo[]>;
-
 }
 
 /**
@@ -93,9 +88,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         onAnalyticsEvent,
         includeIntroView = true,
         pathSuggestions,
-        generateCollection,
-        unmappedTables,
-        onFetchTableColumns
+        generateCollection
     }: CollectionConfigControllerProps<EC, USER>): RebasePlugin<any, any, PersistedCollection> {
 
     return React.useMemo(() => ({
@@ -113,9 +106,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
                 getData,
                 onAnalyticsEvent,
                 pathSuggestions,
-                generateCollection,
-                unmappedTables,
-                onFetchTableColumns
+                generateCollection
             }
         },
         homePage: {
@@ -152,9 +143,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         onAnalyticsEvent,
         pathSuggestions,
         generateCollection,
-        includeIntroView,
-        unmappedTables,
-        onFetchTableColumns
+        includeIntroView
     ]);
 }
 

@@ -9,7 +9,8 @@ import {
     FetchEntityProps,
     ListenCollectionProps,
     ListenEntityProps,
-    SaveEntityProps
+    SaveEntityProps,
+    TableColumnInfo
 } from "@rebasepro/types";
 import { PostgresDataSourceClient, PostgresDataSourceConfig } from "./postgres_client";
 
@@ -236,7 +237,7 @@ export function usePostgresClientDataSource(config: PostgresDataSourceConfig): P
             return client.fetchUnmappedTables(mappedPaths);
         },
 
-        async fetchTableColumns(tableName: string): Promise<any[]> {
+        async fetchTableColumns(tableName: string): Promise<TableColumnInfo[]> {
             return client.fetchTableColumns(tableName);
         }
     }), [client]);

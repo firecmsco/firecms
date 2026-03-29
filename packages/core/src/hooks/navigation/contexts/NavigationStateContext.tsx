@@ -1,15 +1,5 @@
 import React, { createContext } from "react";
-import { CMSView, NavigationResult, RebasePlugin } from "@rebasepro/types";
-
-export type NavigationStateController = {
-    views?: CMSView[];
-    adminViews?: CMSView[];
-    topLevelNavigation?: NavigationResult;
-    loading: boolean;
-    navigationLoadingError?: any;
-    refreshNavigation: () => void;
-    plugins?: RebasePlugin<any, any, any>[];
-};
+import { NavigationStateController, CMSView, NavigationResult, RebasePlugin } from "@rebasepro/types";
 
 export const NavigationStateContext = createContext<NavigationStateController>({
     loading: true,

@@ -2,8 +2,7 @@ import { WebSocket } from "ws";
 import { EventEmitter } from "events";
 import { EntityService } from "../db/entityService";
 
-import { CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "../types";
-import { Entity, ListenCollectionProps, ListenEntityProps, DataSource } from "@rebasepro/types";
+import { Entity, ListenCollectionProps, ListenEntityProps, DataSource, CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "@rebasepro/types";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { sql as drizzleSql } from "drizzle-orm";
 import { RealtimeProvider, CollectionSubscriptionConfig, EntitySubscriptionConfig } from "../db/interfaces";

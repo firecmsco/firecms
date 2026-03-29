@@ -1,15 +1,5 @@
 import React, { createContext } from "react";
-import { EntityCollection, EntityReference } from "@rebasepro/types";
-
-export type CollectionRegistryController<EC extends EntityCollection = EntityCollection<any>> = {
-    getCollection: (slugOrPath: string, includeUserOverride?: boolean) => EC | undefined;
-    getRawCollection: (slugOrPath: string) => EC | undefined;
-    getParentReferencesFromPath: (path: string) => EntityReference[];
-    getParentCollectionIds: (path: string) => string[];
-    convertIdsToPaths: (ids: string[]) => string[];
-    initialised: boolean;
-    collections?: EntityCollection[];
-};
+import { CollectionRegistryController, EntityCollection, EntityReference } from "@rebasepro/types";
 
 export const CollectionRegistryContext = createContext<CollectionRegistryController>({
     getCollection: () => undefined,

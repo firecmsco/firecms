@@ -1,6 +1,7 @@
 import { DataSource, EntityCollection } from "@rebasepro/types";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "./collections/registry";
+import { loadCollectionsFromDirectory } from "./collections/loader";
 import { getTableName, isTable, Relations } from "drizzle-orm";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { PostgresDataSource } from "./services/postgresDataSource";
@@ -589,7 +590,7 @@ export async function initializeRebaseAPI(
         enableGraphQL: config.enableGraphQL ?? true,
         enableREST: config.enableREST ?? true,
         cors: config.cors,
-        auth: config.auth,
+        requireAuth: config.requireAuth !== undefined ? config.requireAuth : (backend.userService ? true : false),
         pagination: config.pagination
     });
 
@@ -604,46 +605,4 @@ export async function initializeRebaseAPI(
     return apiServer;
 }
 
-/**
- * Asynchronously load collection files from a directory for backend initialization
- */
-async function loadCollectionsFromDirectory(directory: string): Promise<EntityCollection[]> {
-    const collections: EntityCollection[] = [];
-    try {
-        if (!fs.existsSync(directory)) {
-            console.warn(`[initializeRebaseBackend] Collections directory not found: ${directory}`);
-            return collections;
-        }
-
-        const files = fs.readdirSync(directory);
-        for (const file of files) {
-            // Only load .ts and .js files, ignore test files and declaration files
-            if ((file.endsWith('.ts') || file.endsWith('.js')) &&
-                !file.includes('.test.') &&
-                !file.endsWith('.d.ts') &&
-                file !== 'index.ts' && file !== 'index.js') {
-
-                const filePath = path.join(directory, file);
-                try {
-                    const fileUrl = pathToFileURL(filePath).href;
-
-                    // Use new Function to compile dynamic import natively and bypass tsc converting import() to require()
-                    const dynamicImport = new Function('url', 'return import(url)');
-                    const module = await dynamicImport(fileUrl);
-                    // Expect the collection to be the default export
-                    if (module && module.default) {
-                        collections.push(module.default);
-                    } else {
-                        console.warn(`[initializeRebaseBackend] File ${file} does not have a default export. Skipping.`);
-                    }
-                } catch (err: any) {
-                    console.error(`[initializeRebaseBackend] Failed to load collection from ${file}: ${err.message}`);
-                }
-            }
-        }
-    } catch (err) {
-        console.error(`[initializeRebaseBackend] Error reading collections directory: ${err}`);
-    }
-    return collections;
-}
 

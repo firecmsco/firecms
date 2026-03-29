@@ -11,30 +11,11 @@ import {
     RoleData,
     CreateRoleData,
     RefreshTokenInfo,
-    PasswordResetTokenInfo
+    PasswordResetTokenInfo,
+    RoleData as Role
 } from "./interfaces";
 
-/**
- * Role type from database
- */
-export interface Role {
-    id: string;
-    name: string;
-    isAdmin: boolean;
-    defaultPermissions: {
-        read?: boolean;
-        create?: boolean;
-        edit?: boolean;
-        delete?: boolean;
-    } | null;
-    collectionPermissions: Record<string, {
-        read?: boolean;
-        create?: boolean;
-        edit?: boolean;
-        delete?: boolean;
-    }> | null;
-    config: Record<string, any> | null;
-}
+export type { Role };
 
 /**
  * PostgreSQL implementation of UserRepository.

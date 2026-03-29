@@ -5,16 +5,7 @@
  */
 
 import { Db, MongoClient } from "mongodb";
-
-/**
- * Abstract database connection interface (from @rebasepro/backend).
- * Copied here to avoid requiring @rebasepro/backend as a runtime dependency.
- */
-export interface DatabaseConnection {
-    readonly type: string;
-    readonly isConnected?: boolean;
-    close?(): Promise<void>;
-}
+import { DatabaseConnection } from "@rebasepro/types";
 
 /**
  * MongoDB database connection wrapper that implements DatabaseConnection interface.

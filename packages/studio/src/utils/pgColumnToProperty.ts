@@ -1,18 +1,4 @@
-import { EntityCollection, Property, StringProperty, NumberProperty, ArrayProperty } from "@rebasepro/types";
-
-/**
- * Column metadata returned by table introspection.
- * Duplicated here to avoid cross-package dependency on @rebasepro/postgresql.
- */
-export interface TableColumnInfo {
-    column_name: string;
-    data_type: string;
-    udt_name: string;
-    is_nullable: string;
-    column_default: string | null;
-    character_maximum_length: number | null;
-    enum_values?: string[];
-}
+import { EntityCollection, Property, StringProperty, NumberProperty, ArrayProperty, TableColumnInfo } from "@rebasepro/types";
 
 /**
  * Maps a PostgreSQL column data type to a Rebase property type.

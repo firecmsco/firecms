@@ -255,7 +255,7 @@ function PropertySelect({
                 });
             }}>
             {Object.entries(supportedFields).map(([key, widget]) => {
-                return <PropertySelectItem
+                return <ImportPropertySelectItem
                     key={key}
                     value={key}
                     optionDisabled={false}
@@ -267,14 +267,14 @@ function PropertySelect({
     </Tooltip>;
 }
 
-export interface PropertySelectItemProps {
+export interface ImportPropertySelectItemProps {
     value: string;
     optionDisabled: boolean;
     propertyConfig: PropertyConfig;
     existing: boolean;
 }
 
-export function PropertySelectItem({ value, optionDisabled, propertyConfig, existing }: PropertySelectItemProps) {
+export function ImportPropertySelectItem({ value, optionDisabled, propertyConfig, existing }: ImportPropertySelectItemProps) {
     return <SelectItem value={value}
         disabled={optionDisabled}
         className={"flex flex-row items-center"}>

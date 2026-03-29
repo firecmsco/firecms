@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { TableColumnInfo } from "./utils/pgColumnToProperty";
+import { TableColumnInfo } from "@rebasepro/types";
 import { deepEqual as equal } from "fast-equals";
 
 import { CollectionsConfigController } from "./types/config_controller";
@@ -8,6 +8,8 @@ import {
     Property,
     useCustomizationController,
     useCMSUrlController,
+    useDataSource,
+    useAuthController,
     User,
     useSnackbarController
 } from "@rebasepro/core";
@@ -65,10 +67,6 @@ export interface ConfigControllerProviderProps {
      */
     generateCollection?: CollectionGenerationCallback;
 
-    unmappedTables?: string[];
-
-    onFetchTableColumns?: (tableName: string) => Promise<TableColumnInfo[]>;
-
 }
 
 export const ConfigControllerProvider = React.memo(
@@ -83,10 +81,25 @@ export const ConfigControllerProvider = React.memo(
         getData,
         onAnalyticsEvent,
         pathSuggestions,
-        generateCollection,
-        unmappedTables,
-        onFetchTableColumns
+        generateCollection
     }: ConfigControllerProviderProps & { children?: any }) {
+
+        // Internal: fetch unmapped tables and table columns from the data source
+        const dataSource = useDataSource();
+        const authController = useAuthController();
+        const [unmappedTables, setUnmappedTables] = useState<string[]>([]);
+
+        useEffect(() => {
+            if (!dataSource.fetchUnmappedTables || authController.initialLoading || !authController.user) return;
+            const existingPaths = (collectionConfigController.collections ?? []).map(c => c.dbPath ?? c.slug ?? "").filter(Boolean);
+            dataSource.fetchUnmappedTables(existingPaths)
+                .then((tables: string[]) => setUnmappedTables(tables))
+                .catch((e: unknown) => console.warn("Could not fetch unmapped tables:", e));
+        }, [dataSource, authController.initialLoading, authController.user, collectionConfigController.collections]);
+
+        const onFetchTableColumns = useCallback(async (tableName: string): Promise<TableColumnInfo[]> => {
+            return dataSource.fetchTableColumns?.(tableName) ?? [];
+        }, [dataSource]);
 
         const urlController = useCMSUrlController();
         const navigate = useNavigate();

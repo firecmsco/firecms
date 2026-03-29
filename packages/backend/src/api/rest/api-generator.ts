@@ -1,8 +1,9 @@
 import { Router, Response, NextFunction } from "express";
 import { DataSource, EntityCollection } from "@rebasepro/types";
 import { ApiResponse, QueryOptions, RebaseRequest } from "../types";
-import { ApiError } from "../errors";
+import { ApiError, asyncHandler } from "../errors";
 import { buildPropertyCallbacks } from "@rebasepro/common";
+import { parseQueryOptions } from "./query-parser";
 
 /**
  * Lightweight REST API generator that leverages existing Rebase DataSource
@@ -38,58 +39,48 @@ export class RestApiGenerator {
         const resolvedCollection = collection;
 
         // GET /collection - List entities (fetch raw data without Entity wrapper)
-        this.router.get(basePath, async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
-            try {
-                const queryOptions = this.parseQueryOptions(req.query);
+        this.router.get(basePath, asyncHandler(async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
+            const queryOptions = parseQueryOptions(req.query);
 
-                // Get data source from request (injected by Auth middleware) or fallback to instance default
-                const dataSource = req.dataSource || this.dataSource;
+            // Get data source from request (injected by Auth middleware) or fallback to instance default
+            const dataSource = req.dataSource || this.dataSource;
 
-                // Fetch raw data directly from EntityService without Entity wrapper
-                const entities = await this.fetchRawCollection(dataSource, resolvedCollection, queryOptions);
+            // Fetch raw data directly from EntityService without Entity wrapper
+            const entities = await this.fetchRawCollection(dataSource, resolvedCollection, queryOptions);
 
-                // Get count if needed
-                const total = await this.countRawEntities(dataSource, resolvedCollection, queryOptions);
+            // Get count if needed
+            const total = await this.countRawEntities(dataSource, resolvedCollection, queryOptions);
 
-                res.json({
-                    data: entities,
-                    meta: {
-                        total,
-                        limit: queryOptions.limit,
-                        offset: queryOptions.offset,
-                        hasMore: (queryOptions.offset || 0) + entities.length < total
-                    }
-                });
-                return;
-            } catch (error) {
-                next(error);
-            }
-        });
+            res.json({
+                data: entities,
+                meta: {
+                    total,
+                    limit: queryOptions.limit,
+                    offset: queryOptions.offset,
+                    hasMore: (queryOptions.offset || 0) + entities.length < total
+                }
+            });
+        }));
 
         // GET /collection/:id - Get single entity (fetch raw data without Entity wrapper)
-        this.router.get(`${basePath}/:id`, async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
-            try {
-                const { id } = req.params;
+        this.router.get(`${basePath}/:id`, asyncHandler(async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
+            const { id } = req.params;
 
-                // Get data source from request (injected by Auth middleware) or fallback to instance default
-                const dataSource = req.dataSource || this.dataSource;
+            // Get data source from request (injected by Auth middleware) or fallback to instance default
+            const dataSource = req.dataSource || this.dataSource;
 
-                // Fetch raw data directly from EntityService without Entity wrapper
-                const entity = await this.fetchRawEntity(dataSource, resolvedCollection, String(id));
+            // Fetch raw data directly from EntityService without Entity wrapper
+            const entity = await this.fetchRawEntity(dataSource, resolvedCollection, String(id));
 
-                if (!entity) {
-                    throw ApiError.notFound("Entity not found");
-                }
-
-                res.json(entity);
-                return;
-            } catch (error) {
-                next(error);
+            if (!entity) {
+                throw ApiError.notFound("Entity not found");
             }
-        });
+
+            res.json(entity);
+        }));
 
         // POST /collection - Create entity (uses existing saveEntity)
-        this.router.post(basePath, async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
+        this.router.post(basePath, asyncHandler(async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
             try {
                 // Get data source from request (injected by Auth middleware) or fallback to instance default
                 const dataSource = req.dataSource || this.dataSource;
@@ -104,16 +95,15 @@ export class RestApiGenerator {
                 });
 
                 res.status(201).json(this.formatResponse(entity));
-                return;
             } catch (error) {
                 const err = error as Error & { code?: string };
                 err.code = err.code || "BAD_REQUEST";
-                next(err);
+                throw err;
             }
-        });
+        }));
 
         // PUT /collection/:id - Update entity (uses existing saveEntity)
-        this.router.put(`${basePath}/:id`, async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
+        this.router.put(`${basePath}/:id`, asyncHandler(async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
             try {
                 const { id } = req.params;
 
@@ -141,179 +131,42 @@ export class RestApiGenerator {
                 });
 
                 res.json(this.formatResponse(entity));
-                return;
             } catch (error) {
                 const err = error as Error & { code?: string };
                 err.code = err.code || "BAD_REQUEST";
-                next(err);
+                throw err;
             }
-        });
+        }));
 
         // DELETE /collection/:id - Delete entity (uses existing deleteEntity)
-        this.router.delete(`${basePath}/:id`, async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
-            try {
-                const { id } = req.params;
+        this.router.delete(`${basePath}/:id`, asyncHandler(async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
+            const { id } = req.params;
 
-                // Get data source from request (injected by Auth middleware) or fallback to instance default
-                const dataSource = req.dataSource || this.dataSource;
+            // Get data source from request (injected by Auth middleware) or fallback to instance default
+            const dataSource = req.dataSource || this.dataSource;
 
-                // Check if entity exists first
-                const existingEntity = await dataSource.fetchEntity({
-                    path: collection.dbPath || collection.slug,
-                    entityId: String(id),
-                    collection: resolvedCollection
-                });
+            // Check if entity exists first
+            const existingEntity = await dataSource.fetchEntity({
+                path: collection.dbPath || collection.slug,
+                entityId: String(id),
+                collection: resolvedCollection
+            });
 
-                if (!existingEntity) {
-                    throw ApiError.notFound("Entity not found");
-                }
-
-                // Use existing deleteEntity from DataSource (expects the full entity)
-                await dataSource.deleteEntity({
-                    entity: existingEntity,
-                    collection: resolvedCollection
-                });
-
-                res.status(204).send();
-                return;
-            } catch (error) {
-                next(error);
+            if (!existingEntity) {
+                throw ApiError.notFound("Entity not found");
             }
-        });
+
+            // Use existing deleteEntity from DataSource (expects the full entity)
+            await dataSource.deleteEntity({
+                entity: existingEntity,
+                collection: resolvedCollection
+            });
+
+            res.status(204).send();
+        }));
     }
 
 
-
-    /**
-     * Map PostgREST-style operators to Rebase WhereFilterOp
-     */
-    private mapOperator(op: string): string | null {
-        switch (op) {
-            case "eq": return "==";
-            case "neq": return "!=";
-            case "gt": return ">";
-            case "gte": return ">=";
-            case "lt": return "<";
-            case "lte": return "<=";
-            case "in": return "in";
-            case "nin": return "not-in";
-            case "cs": return "array-contains";
-            case "csa": return "array-contains-any";
-            default: return null;
-        }
-    }
-
-    /**
-     * Parse query parameters into QueryOptions
-     */
-    private parseQueryOptions(query: any): QueryOptions {
-        const options: QueryOptions = {};
-
-        // Pagination
-        if (query.limit) options.limit = parseInt(query.limit);
-        if (query.offset) options.offset = parseInt(query.offset);
-        if (query.page) {
-            const page = parseInt(query.page);
-            const limit = options.limit || 20;
-            options.offset = (page - 1) * limit;
-        }
-
-        // Filtering
-        options.where = {};
-
-        // Legacy JSON where clause
-        if (query.where) {
-            try {
-                const parsedWhere = typeof query.where === "string"
-                    ? JSON.parse(query.where)
-                    : query.where;
-                Object.assign(options.where, parsedWhere);
-            } catch {
-                // Invalid JSON, ignore
-            }
-        }
-
-        // PostgREST style filtering
-        const reservedQueryKeys = ["limit", "offset", "page", "orderBy", "where", "include"];
-        for (const [key, rawValue] of Object.entries(query)) {
-            if (reservedQueryKeys.includes(key)) continue;
-
-            const value = Array.isArray(rawValue) ? rawValue[rawValue.length - 1] : rawValue;
-
-            if (typeof value === "string") {
-                const parts = value.split(".");
-                if (parts.length >= 2) {
-                    const op = parts[0];
-                    const val = parts.slice(1).join(".");
-                    const rebaseOp = this.mapOperator(op);
-
-                    if (rebaseOp) {
-                        let parsedVal: any = val;
-                        // Attempt to parse primitive types or arrays
-                        if (val === "true") parsedVal = true;
-                        else if (val === "false") parsedVal = false;
-                        else if (val === "null") parsedVal = null;
-                        else if (!isNaN(Number(val)) && val.trim() !== "") parsedVal = Number(val);
-                        else if (val.startsWith("(")) {
-                            // Array for 'in' or 'not-in' ops (e.g. (1,2,3) or (a,b,c))
-                            const arrayContent = val.endsWith(")") ? val.slice(1, -1) : val.slice(1);
-                            parsedVal = arrayContent.split(",").map(v => {
-                                const trimmed = v.trim();
-                                if (!isNaN(Number(trimmed)) && trimmed !== "") return Number(trimmed);
-                                if (trimmed === "true") return true;
-                                if (trimmed === "false") return false;
-                                if (trimmed === "null") return null;
-                                return trimmed;
-                            });
-                        }
-
-                        options.where[key] = [rebaseOp, parsedVal];
-                    } else {
-                        // Fallback: assume implicit eq if the dot wasn't an operator (e.g. email or float)
-                        let parsedVal: any = value;
-                        if (!isNaN(Number(value)) && value.trim() !== "") parsedVal = Number(value);
-                        options.where[key] = ["==", parsedVal];
-                    }
-                } else {
-                    // Implicit eq
-                    let parsedVal: any = value;
-                    if (value === "true") parsedVal = true;
-                    else if (value === "false") parsedVal = false;
-                    else if (value === "null") parsedVal = null;
-                    else if (!isNaN(Number(value)) && value.trim() !== "") parsedVal = Number(value);
-
-                    options.where[key] = ["==", parsedVal];
-                }
-            }
-        }
-
-        if (Object.keys(options.where).length === 0) {
-            delete options.where;
-        }
-
-        // Sorting
-        if (query.orderBy) {
-            try {
-                options.orderBy = typeof query.orderBy === "string"
-                    ? JSON.parse(query.orderBy)
-                    : query.orderBy;
-            } catch {
-                // Try simple format: "field:direction"
-                if (typeof query.orderBy === "string") {
-                    const [field, direction] = query.orderBy.split(":");
-                    const dir = (direction === "desc" ? "desc" : "asc") as "asc" | "desc";
-                    options.orderBy = [
-                        {
-                            field,
-                            direction: dir
-                        }
-                    ];
-                }
-            }
-        }
-
-        return options;
-    }
 
     /**
      * Format successful API response - flattened for traditional REST API

@@ -31,7 +31,7 @@ import { parseFirst } from "pgsql-ast-parser";
 import { determineTableAndPK, resolveQueryCollections, ResolvedQueryCollection } from "../../utils/sql_utils";
 import { ExplainVisualizer } from "./ExplainVisualizer";
 
-export interface TableColumnInfo {
+export interface SQLEditorColumnInfo {
     name: string;
     dataType: string;
     isPrimaryKey: boolean;
@@ -40,7 +40,7 @@ export interface TableColumnInfo {
 export interface TableInfo {
     schemaName: string;
     tableName: string;
-    columns: TableColumnInfo[];
+    columns: SQLEditorColumnInfo[];
 }
 
 const QueryLoadingView = () => {

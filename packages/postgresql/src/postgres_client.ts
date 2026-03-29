@@ -4,7 +4,11 @@ import {
     EntityCollection,
     FetchCollectionProps,
     FetchEntityProps,
-    SaveEntityProps
+    SaveEntityProps,
+    WebSocketMessage,
+    CollectionUpdateMessage,
+    EntityUpdateMessage,
+    TableColumnInfo
 } from "@rebasepro/types";
 
 export interface PostgresDataSourceConfig {
@@ -13,27 +17,6 @@ export interface PostgresDataSourceConfig {
     getAuthToken?: () => Promise<string>;
 }
 
-export interface WebSocketMessage {
-    type: string;
-    payload?: any;
-    subscriptionId?: string;
-    requestId?: string;
-    entities?: Entity[];
-    entity?: Entity | null;
-    error?: string;
-}
-
-export interface CollectionUpdateMessage extends WebSocketMessage {
-    type: "collection_update";
-    subscriptionId: string;
-    entities: Entity[];
-}
-
-export interface EntityUpdateMessage extends WebSocketMessage {
-    type: "entity_update";
-    subscriptionId: string;
-    entity: Entity | null;
-}
 
 export class ApiError extends Error {
     public code?: string;
@@ -47,19 +30,6 @@ export class ApiError extends Error {
     }
 }
 
-/**
- * Column metadata returned by table introspection.
- */
-export interface TableColumnInfo {
-    column_name: string;
-    data_type: string;
-    udt_name: string;
-    is_nullable: string;
-    column_default: string | null;
-    character_maximum_length: number | null;
-    /** Enum values, populated for USER-DEFINED (enum) columns */
-    enum_values?: string[];
-}
 
 export class PostgresDataSourceClient {
     private websocketUrl: string;
