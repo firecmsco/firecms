@@ -8,16 +8,15 @@ export type { PasswordValidationResult } from "./password";
 export { configureGoogleOAuth, verifyGoogleIdToken, isGoogleOAuthConfigured } from "./google-oauth";
 export type { GoogleUserInfo } from "./google-oauth";
 
-export { requireAuth, optionalAuth, extractUserFromToken } from "./middleware";
-export type { AuthenticatedRequest } from "./middleware";
+export { requireAuth, requireAdmin, optionalAuth, extractUserFromToken, createAuthMiddleware } from "./middleware";
+export type { AuthenticatedRequest, AuthMiddlewareOptions, AuthResult } from "./middleware";
 
 export { UserService, RoleService, RefreshTokenService, PasswordResetTokenService } from "./services";
 export type { Role } from "./services";
 
 export { createAuthRoutes } from "./routes";
-export type { AuthRoutesConfig } from "./routes";
+export type { AuthModuleConfig } from "./routes";
 
 export { createAdminRoutes } from "./admin-routes";
-export type { AdminRoutesConfig } from "./admin-routes";
 
 export { ensureAuthTablesExist } from "./ensure-tables";

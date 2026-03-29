@@ -51,14 +51,19 @@ export function createPostgresWebSocket(
                 console.debug(`[WS] ${clientId} → ${type}`, requestId ? `(${requestId})` : "");
 
                 // Handle authentication first
+                // Helper: send a canonical error frame
+                const sendError = (errType: "ERROR" | "AUTH_ERROR", code: string, msg: string) => {
+                    ws.send(JSON.stringify({
+                        type: errType,
+                        requestId,
+                        payload: { error: { message: msg, code } }
+                    }));
+                };
+
                 if (type === "AUTHENTICATE") {
                     const { token } = payload || {};
                     if (!token) {
-                        ws.send(JSON.stringify({
-                            type: "AUTH_ERROR",
-                            requestId,
-                            payload: { error: "Token is required" }
-                        }));
+                        sendError("AUTH_ERROR", "INVALID_INPUT", "Token is required");
                         return;
                     }
 
@@ -78,11 +83,7 @@ export function createPostgresWebSocket(
                         console.debug(`🔐 [WebSocket Server] Client ${clientId} authenticated as ${user.userId}`);
                     } else {
                         console.debug(`[WS] replying AUTH_ERROR for requestId ${requestId} (invalid token)`);
-                        ws.send(JSON.stringify({
-                            type: "AUTH_ERROR",
-                            requestId,
-                            payload: { error: "Invalid or expired token" }
-                        }));
+                        sendError("AUTH_ERROR", "INVALID_TOKEN", "Invalid or expired token");
                     }
                     return;
                 }
@@ -91,14 +92,7 @@ export function createPostgresWebSocket(
                 if (requireAuth) {
                     const session = clientSessions.get(clientId);
                     if (!session?.authenticated) {
-                        ws.send(JSON.stringify({
-                            type: "ERROR",
-                            requestId,
-                            payload: {
-                                error: "Authentication required",
-                                code: "UNAUTHORIZED"
-                            }
-                        }));
+                        sendError("ERROR", "UNAUTHORIZED", "Authentication required");
                         return;
                     }
                 }
@@ -350,15 +344,14 @@ export function createPostgresWebSocket(
                 }
                 const errorResponse = {
                     type: "ERROR",
-                    requestId, // assuming requestId is in scope, if it's from message parser
+                    requestId,
                     payload: {
-                        error: "Internal server error",
-                        code: "INTERNAL_SERVER_ERROR",
-                        message: error.message || "Internal unknown error",
-                        details: error instanceof Error ? error.stack : String(error)
+                        error: {
+                            message: error.message || "An unexpected error occurred",
+                            code: "INTERNAL_ERROR"
+                        }
                     }
                 };
-                console.error("💥 [WebSocket Server] Sending error response:", errorResponse);
                 ws.send(JSON.stringify(errorResponse));
             }
         });

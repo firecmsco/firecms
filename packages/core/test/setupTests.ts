@@ -1,3 +1,7 @@
+// Polyfill TextEncoder/TextDecoder for JSDOM (required by react-router-dom v7)
+import { TextEncoder, TextDecoder } from "util";
+Object.assign(global, { TextEncoder, TextDecoder });
+
 // Jest setup file for JSDOM environment
 // Mock window.matchMedia which is not implemented in JSDOM
 Object.defineProperty(window, 'matchMedia', {

@@ -71,7 +71,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
 
         expect(res.status).toBe(200);
         expect(mockWithAuth).toHaveBeenCalledTimes(1);
-        expect(mockWithAuth).toHaveBeenCalledWith(mockUser);
+        expect(mockWithAuth).toHaveBeenCalledWith(expect.objectContaining({ uid: "user-abc" }));
 
         expect(mockScopedDataSource.fetchCollection).toHaveBeenCalledTimes(1);
         expect(mockDefaultDataSource.fetchCollection).not.toHaveBeenCalled();
@@ -119,7 +119,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
 
         expect(res.status).toBe(200);
         expect(mockWithAuth).toHaveBeenCalledTimes(1);
-        expect(mockWithAuth).toHaveBeenCalledWith(mockUser);
+        expect(mockWithAuth).toHaveBeenCalledWith(expect.objectContaining({ uid: "graphql-user" }));
         expect(mockScopedDataSource.fetchCollection).toHaveBeenCalledTimes(1);
         expect(mockDefaultDataSource.fetchCollection).not.toHaveBeenCalled();
     });

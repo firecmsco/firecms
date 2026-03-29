@@ -94,7 +94,7 @@ describe('RebaseApiServer RLS Integration', () => {
         const response = await fetch(`${baseUrl}/test_collection`);
         const data = await response.json();
 
-        expect(mockWithAuth).toHaveBeenCalledWith(user);
+        expect(mockWithAuth).toHaveBeenCalledWith(expect.objectContaining({ uid: 'test-user', email: 'test@example.com' }));
         expect(mockDataSource.fetchCollection).not.toHaveBeenCalled();
         expect(mockScopedDataSource.fetchCollection).toHaveBeenCalled();
         expect(data.data[0].name).toBe('Scoped');

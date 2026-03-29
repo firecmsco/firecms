@@ -9,10 +9,6 @@ jest.mock("graphql-http/lib/use/express", () => ({
 
 jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next()));
 
-import { extractUserFromToken } from "../src/auth/middleware";
-jest.mock("../src/auth/middleware", () => ({
-    extractUserFromToken: jest.fn()
-}));
 import request from "supertest";
 describe("RebaseApiServer", () => {
     let mockDataSource: jest.Mocked<PostgresDataSource>;
@@ -264,8 +260,11 @@ describe("RebaseApiServer", () => {
     });
 
     describe("Middleware", () => {
-        beforeEach(() => {
-            (extractUserFromToken as jest.Mock).mockReset();
+        const testSecret = "api-server-test-secret";
+
+        beforeAll(() => {
+            const { configureJwt } = require("../src/auth/jwt");
+            configureJwt({ secret: testSecret, accessExpiresIn: "1h", refreshExpiresIn: "30d" });
         });
 
         it("should apply CORS middleware when configured", async () => {
@@ -291,10 +290,8 @@ describe("RebaseApiServer", () => {
         });
 
         it("should apply default authentication extraction when auth is enabled and no validator is present", async () => {
-            (extractUserFromToken as jest.Mock).mockReturnValue({
-                userId: "test-user-id",
-                roles: ["admin"]
-            });
+            const { generateAccessToken } = require("../src/auth/jwt");
+            const token = generateAccessToken("test-user-id", ["admin"]);
 
             const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
@@ -308,15 +305,12 @@ describe("RebaseApiServer", () => {
 
             const response = await request(app)
                 .get("/api/products")
-                .set("Authorization", "Bearer mock-token");
+                .set("Authorization", `Bearer ${token}`);
 
             expect(response.status).not.toBe(401);
-            expect(extractUserFromToken).toHaveBeenCalledWith("mock-token");
         });
 
         it("should reject requests when requireAuth is true and token is invalid or missing", async () => {
-            (extractUserFromToken as jest.Mock).mockReturnValue(null); // Invalid token
-
             const server = await RebaseApiServer.create({
                 dataSource: mockDataSource,
                 collections: mockCollections,
@@ -337,7 +331,6 @@ describe("RebaseApiServer", () => {
                 .get("/api/products")
                 .set("Authorization", "Bearer invalid-token");
             expect(response2.status).toBe(401);
-            expect(extractUserFromToken).toHaveBeenCalledWith("invalid-token");
         });
 
         it("should use custom validator if provided instead of default extraction", async () => {
@@ -357,7 +350,6 @@ describe("RebaseApiServer", () => {
             await request(app).get("/api/products");
 
             expect(customValidator).toHaveBeenCalled();
-            expect(extractUserFromToken).not.toHaveBeenCalled();
         });
     });
 

@@ -1,6 +1,7 @@
 import { Router, Response, NextFunction } from "express";
 import { DataSource, EntityCollection } from "@rebasepro/types";
 import { ApiResponse, QueryOptions, RebaseRequest } from "../types";
+import { ApiError } from "../errors";
 import { buildPropertyCallbacks } from "@rebasepro/common";
 
 /**
@@ -77,7 +78,7 @@ export class RestApiGenerator {
                 const entity = await this.fetchRawEntity(dataSource, resolvedCollection, String(id));
 
                 if (!entity) {
-                    throw Object.assign(new Error("Entity not found"), { code: "NOT_FOUND" });
+                    throw ApiError.notFound("Entity not found");
                 }
 
                 res.json(entity);
@@ -127,7 +128,7 @@ export class RestApiGenerator {
                 });
 
                 if (!existingEntity) {
-                    throw Object.assign(new Error("Entity not found"), { code: "NOT_FOUND" });
+                    throw ApiError.notFound("Entity not found");
                 }
 
                 // Use existing saveEntity from DataSource
@@ -164,7 +165,7 @@ export class RestApiGenerator {
                 });
 
                 if (!existingEntity) {
-                    throw Object.assign(new Error("Entity not found"), { code: "NOT_FOUND" });
+                    throw ApiError.notFound("Entity not found");
                 }
 
                 // Use existing deleteEntity from DataSource (expects the full entity)

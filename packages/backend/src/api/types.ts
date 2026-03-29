@@ -1,12 +1,28 @@
-import { DataSource, User, EntityCollection } from "@rebasepro/types";
-import { Request } from "express";
+import { EntityCollection } from "@rebasepro/types";
+import { AuthenticatedRequest, AuthResult } from "../auth/middleware";
 
-export interface RebaseRequest extends Request {
-    user?: User;
-    dataSource?: DataSource;
+/**
+ * Extended request type for API endpoints.
+ * Extends AuthenticatedRequest which provides `user` and `dataSource`.
+ */
+export interface RebaseRequest extends AuthenticatedRequest {}
+
+/**
+ * Configuration for API generation
+ */
+/**
+ * Auth configuration for the optional REST/GraphQL API layer.
+ * This controls authentication for externally-exposed API endpoints,
+ * separate from the core backend auth (AuthConfig in init.ts).
+ */
+export interface ApiAuthConfig {
+    /** Whether auth is enabled for API endpoints */
+    enabled: boolean;
+    /** Whether auth is required (vs optional) for API endpoints */
+    requireAuth?: boolean;
+    /** Custom token validator (overrides default JWT validation) */
+    validator?: (req: RebaseRequest) => Promise<AuthResult>;
 }
-
-export type AuthResult = boolean | User | { userId: string; roles?: string[];[key: string]: any };
 
 /**
  * Configuration for API generation
@@ -21,11 +37,7 @@ export interface ApiConfig {
         origin?: string | string[] | boolean;
         credentials?: boolean;
     };
-    auth?: {
-        enabled: boolean;
-        requireAuth?: boolean;
-        validator?: (req: RebaseRequest) => Promise<AuthResult>;
-    };
+    auth?: ApiAuthConfig;
     pagination?: {
         defaultLimit: number;
         maxLimit: number;

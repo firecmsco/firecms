@@ -3,14 +3,15 @@ import { createHandler } from "graphql-http/lib/use/express";
 import cors from "cors";
 import { GraphQLSchemaGenerator } from "./graphql/graphql-schema-generator";
 import { RestApiGenerator } from "./rest/api-generator";
-import { DataSource, User, EntityCollection } from "@rebasepro/types";
+import { DataSource, EntityCollection } from "@rebasepro/types";
 import { ApiConfig, RebaseRequest } from "./types";
 import * as fs from "fs";
 import * as path from "path";
 import { createSchemaEditorRoutes } from "./schema-editor-routes";
 import { createCallbacksTestRouter } from "./test_callbacks_route";
 import { PostgresDataSource } from "../services/postgresDataSource";
-import { extractUserFromToken, requireAuth, requireAdmin } from "../auth/middleware";
+import { createAuthMiddleware, requireAuth, requireAdmin } from "../auth/middleware";
+import { errorHandler } from "./errors";
 /**
  * Simplified API server that leverages existing Rebase infrastructure
  * Can be used standalone or mounted on existing Express app
@@ -115,69 +116,13 @@ export class RebaseApiServer {
         this.router.use(express.json({ limit: "10mb" }));
         this.router.use(express.urlencoded({ extended: true }));
 
-        // Auth middleware - only for our routes
+        // Auth middleware - delegates to canonical createAuthMiddleware()
         if (this.config.auth?.enabled) {
-            this.router.use(async (req: RebaseRequest, res: Response, next): Promise<void> => {
-                if (this.config.auth?.validator) {
-                    try {
-                        const authResult = await this.config.auth.validator(req);
-                        if (authResult) {
-                            const user = typeof authResult === "object" ? authResult : { uid: "default" } as User;
-                            req.user = user as unknown as User;
-
-                            // If the data source supports RLS/scoped auth, use it
-                            if ("withAuth" in this.dataSource && typeof (this.dataSource as { withAuth?: Function }).withAuth === "function") {
-                                try {
-                                    req.dataSource = await (this.dataSource as { withAuth: Function }).withAuth(user);
-                                } catch (e) {
-                                    console.error("Failed to initialize scoped data source", e);
-                                    // Fallback to default which might fail if RLS enforces policies the default user doesn't meet
-                                    req.dataSource = this.dataSource;
-                                }
-                            } else {
-                                req.dataSource = this.dataSource;
-                            }
-                        }
-                    } catch (error) {
-                        res.status(401).json({ error: { message: "Unauthorized" } });
-                        return; // ensure exit without calling next
-                    }
-                } else {
-                    try {
-                        const authHeader = req.headers.authorization;
-                        if (authHeader && authHeader.startsWith("Bearer ")) {
-                            const token = authHeader.substring(7);
-                            const payload = extractUserFromToken(token);
-
-                            if (payload) {
-                                const user = { uid: payload.userId, roles: payload.roles } as unknown as User;
-                                req.user = user;
-
-                                // If the data source supports RLS/scoped auth, use it
-                                if ("withAuth" in this.dataSource && typeof (this.dataSource as { withAuth?: Function }).withAuth === "function") {
-                                    try {
-                                        req.dataSource = await (this.dataSource as { withAuth: Function }).withAuth(user);
-                                    } catch (e) {
-                                        console.error("Failed to initialize scoped data source", e);
-                                        req.dataSource = this.dataSource;
-                                    }
-                                } else {
-                                    req.dataSource = this.dataSource;
-                                }
-                            }
-                        }
-                    } catch (error) {
-                        console.error("Default auth validation error", error);
-                    }
-                }
-
-                if (this.config.auth?.requireAuth && !req.user) {
-                    res.status(401).json({ error: { message: "Unauthorized: Invalid or missing token" } });
-                    return;
-                }
-
-                next();
-            });
+            this.router.use(createAuthMiddleware({
+                dataSource: this.dataSource,
+                requireAuth: this.config.auth.requireAuth,
+                validator: this.config.auth.validator
+            }));
         }
     }
 
@@ -309,20 +254,7 @@ export class RebaseApiServer {
         // Don't mount routes automatically - let the consumer mount the router
 
         // Global Error Handling Middleware for API Routes
-        this.router.use((err: Error & { statusCode?: number, code?: string, details?: unknown }, req: Request, res: Response, next: NextFunction) => {
-            console.error("Rebase API Error:", err);
-
-            const statusCode = err.statusCode ||
-                (err.message && err.message.includes("not found") ? 404 : 500);
-
-            res.status(statusCode).json({
-                error: {
-                    message: err.message || "An unexpected error occurred",
-                    code: err.code || "INTERNAL_ERROR",
-                    details: err.details
-                }
-            });
-        });
+        this.router.use(errorHandler);
     }
 
     /**

@@ -811,7 +811,11 @@ export class PostgresDataSource implements DataSource {
                     if (!user.roles) {
                         console.warn(`[DataSource] User roles are missing for authenticated delegate. Using empty array. User object:`, user);
                     }
-                    const rolesString = userRoles.join(",");
+                    // Normalize roles: support both string[] and {id: string}[] shapes
+                    const normalizedRoles = userRoles.map((r: unknown) =>
+                        typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+                    );
+                    const rolesString = normalizedRoles.join(",");
 
                     // Set the user context for RLS (read by auth.uid(), auth.roles(), auth.jwt())
                     await tx.execute(drizzleSql`

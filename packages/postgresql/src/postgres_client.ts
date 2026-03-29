@@ -293,7 +293,14 @@ export class PostgresDataSourceClient {
             this.pendingRequests.delete(requestId);
 
             if (type === "ERROR" || type === "AUTH_ERROR" || message.error) {
-                reject(new ApiError(message.payload?.message || message.payload?.error || message.error || "Unknown error", message.payload?.error ?? message.error, message.payload?.code));
+                const errPayload = message.payload?.error;
+                const errorMessage = typeof errPayload === "object"
+                    ? errPayload.message
+                    : message.payload?.message || errPayload || message.error || "Unknown error";
+                const errorCode = typeof errPayload === "object"
+                    ? errPayload.code
+                    : message.payload?.code;
+                reject(new ApiError(errorMessage, errorMessage, errorCode));
             } else {
                 resolve(message.payload || message);
             }
@@ -362,7 +369,14 @@ export class PostgresDataSourceClient {
             if (collectionKey) {
                 const collectionSub = this.collectionSubscriptions.get(collectionKey);
                 if (collectionSub) {
-                    const error = new ApiError(message.payload?.message || message.error || "Unknown error", message.payload?.error ?? message.error, message.payload?.code);
+                    const errPayload = message.payload?.error;
+                    const errorMessage = typeof errPayload === "object"
+                        ? errPayload.message
+                        : message.payload?.message || errPayload || message.error || "Unknown error";
+                    const errorCode = typeof errPayload === "object"
+                        ? errPayload.code
+                        : message.payload?.code;
+                    const error = new ApiError(errorMessage, errorMessage, errorCode);
                     collectionSub.callbacks.forEach(callback => {
                         if (callback.onError) {
                             callback.onError(error);
@@ -376,7 +390,14 @@ export class PostgresDataSourceClient {
             if (entityKey) {
                 const entitySub = this.entitySubscriptions.get(entityKey);
                 if (entitySub) {
-                    const error = new ApiError(message.payload?.message || message.error || "Unknown error", message.payload?.error ?? message.error, message.payload?.code);
+                    const errPayload = message.payload?.error;
+                    const errorMessage = typeof errPayload === "object"
+                        ? errPayload.message
+                        : message.payload?.message || errPayload || message.error || "Unknown error";
+                    const errorCode = typeof errPayload === "object"
+                        ? errPayload.code
+                        : message.payload?.code;
+                    const error = new ApiError(errorMessage, errorMessage, errorCode);
                     entitySub.callbacks.forEach(callback => {
                         if (callback.onError) {
                             callback.onError(error);
@@ -395,7 +416,14 @@ export class PostgresDataSourceClient {
             }
             if (message.type === "ERROR" || message.error) {
                 if (callback.onError) {
-                    callback.onError(new ApiError(message.payload?.message || message.error || "Unknown error", message.payload?.error ?? message.error, message.payload?.code));
+                    const errPayload = message.payload?.error;
+                    const errorMessage = typeof errPayload === "object"
+                        ? errPayload.message
+                        : message.payload?.message || errPayload || message.error || "Unknown error";
+                    const errorCode = typeof errPayload === "object"
+                        ? errPayload.code
+                        : message.payload?.code;
+                    callback.onError(new ApiError(errorMessage, errorMessage, errorCode));
                 }
             } else {
                 callback.onUpdate(message);

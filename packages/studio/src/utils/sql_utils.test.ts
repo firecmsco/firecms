@@ -1,5 +1,5 @@
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "@jest/globals";
 import { determineTableAndPK, extractTablesFromQuery, resolveQueryCollections } from "./sql_utils";
 import { TableInfo } from "../components/SQLEditor/SQLEditor";
 import { EntityCollection } from "@rebasepro/types";

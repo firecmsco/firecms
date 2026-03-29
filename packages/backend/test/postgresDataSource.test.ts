@@ -142,12 +142,12 @@ describe('PostgresDataSource', () => {
 
             try { await transactionCallback(mockTx); } catch (e) {}
 
-            expect(mockTx.execute).toHaveBeenCalledTimes(3);
+            expect(mockTx.execute).toHaveBeenCalledTimes(1);
             
-            // Check the second execute call which sets app.user_roles
-            const userRolesCall = mockTx.execute.mock.calls[1][0];
-            const callString = JSON.stringify(userRolesCall);
-            expect(callString).toContain("set_config('app.user_roles'");
+            // The single execute call sets user_id, user_roles, and jwt together
+            const sqlCall = mockTx.execute.mock.calls[0][0];
+            const callString = JSON.stringify(sqlCall);
+            expect(callString).toContain("set_config");
             expect(callString).toContain("admin,editor");
         });
 
@@ -166,10 +166,10 @@ describe('PostgresDataSource', () => {
 
             try { await transactionCallback(mockTx); } catch (e) {}
 
-            expect(mockTx.execute).toHaveBeenCalledTimes(3);
-            const userRolesCall = mockTx.execute.mock.calls[1][0];
-            const callString = JSON.stringify(userRolesCall);
-            expect(callString).toContain("set_config('app.user_roles'");
+            expect(mockTx.execute).toHaveBeenCalledTimes(1);
+            const sqlCall = mockTx.execute.mock.calls[0][0];
+            const callString = JSON.stringify(sqlCall);
+            expect(callString).toContain("set_config");
             expect(callString).toContain("admin,editor");
         });
 
@@ -188,21 +188,13 @@ describe('PostgresDataSource', () => {
 
             try { await transactionCallback(mockTx); } catch (e) {}
 
-            expect(mockTx.execute).toHaveBeenCalledTimes(3);
+            expect(mockTx.execute).toHaveBeenCalledTimes(1);
             
-            // Expected UID is 'anonymous'
-            const userIdCall = mockTx.execute.mock.calls[0][0];
-            const userIdCallString = JSON.stringify(userIdCall);
-            expect(userIdCallString).toContain("set_config('app.user_id'");
-            expect(userIdCallString).toContain("anonymous");
-            
-            // Expected roles is empty string
-            const userRolesCall = mockTx.execute.mock.calls[1][0];
-            const userRolesCallString = JSON.stringify(userRolesCall);
-            expect(userRolesCallString).toContain("set_config('app.user_roles'");
-            
-            // It will json stringify the empty string or empty array depending on drizzle internals
-            expect(userRolesCallString).toContain("");
+            // The single execute call sets user_id, user_roles, and jwt together
+            const sqlCall = mockTx.execute.mock.calls[0][0];
+            const callString = JSON.stringify(sqlCall);
+            expect(callString).toContain("set_config");
+            expect(callString).toContain("anonymous");
         });
     });
 });
