@@ -7,6 +7,7 @@ import { promisify } from "util";
 import execa from "execa";
 import ncp from "ncp";
 import { fileURLToPath } from "url";
+import crypto from "crypto";
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
@@ -134,11 +135,30 @@ async function createProject(options: InitOptions) {
     // Replace placeholder project name in package.json files
     await replacePlaceholders(options);
 
-    // Rename .env.template to .env if it exists
+    // Rename .env.template to .env if it exists and randomize secrets
     const envTemplatePath = path.join(options.targetDirectory, ".env.template");
     const envPath = path.join(options.targetDirectory, ".env");
     if (fs.existsSync(envTemplatePath) && !fs.existsSync(envPath)) {
         fs.renameSync(envTemplatePath, envPath);
+        
+        // Generate secure random strings
+        const jwtSecret = crypto.randomBytes(32).toString("hex");
+        const dbPassword = crypto.randomBytes(16).toString("hex");
+        
+        let envContent = fs.readFileSync(envPath, "utf-8");
+        envContent = envContent.replace(
+            "postgresql://rebase:password@localhost:5432/rebase",
+            `postgresql://rebase:${dbPassword}@localhost:5432/rebase`
+        );
+        envContent = envContent.replace(
+            "change-this-to-a-secure-random-string",
+            jwtSecret
+        );
+        
+        // Append POSTGRES_PASSWORD for docker-compose interpolation
+        envContent += `\n# Docker Compose Database Password\nPOSTGRES_PASSWORD=${dbPassword}\n`;
+        
+        fs.writeFileSync(envPath, envContent, "utf-8");
     }
 
     // Initialize git
