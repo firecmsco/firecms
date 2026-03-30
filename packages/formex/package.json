@@ -1,7 +1,7 @@
 {
     "name": "@rebasepro/formex",
     "type": "module",
-    "version": "0.0.1-canary.1041cefe9",
+    "version": "0.0.1",
     "publishConfig": {
         "access": "public"
     },

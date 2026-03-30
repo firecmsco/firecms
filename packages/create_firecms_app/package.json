@@ -24,7 +24,7 @@
   "author": "rebase.pro",
   "license": "MIT",
   "dependencies": {
-    "@rebasepro/cli": "workspace:*"
+    "@rebasepro/cli": "0.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.17.14",

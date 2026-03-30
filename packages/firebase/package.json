@@ -1,7 +1,7 @@
 {
     "name": "@rebasepro/firebase",
     "type": "module",
-    "version": "0.0.1-canary.1041cefe9",
+    "version": "0.0.1",
     "publishConfig": {
         "access": "public"
     },
@@ -11,16 +11,16 @@
     "source": "src/index.ts",
     "dependencies": {
         "@firebase/auth": "*",
-        "@rebasepro/common": "^0.0.1-canary.1041cefe9",
-        "@rebasepro/core": "^0.0.1-canary.1041cefe9",
-        "@rebasepro/data_enhancement": "^0.0.1-canary.1041cefe9",
-        "@rebasepro/data_export": "^0.0.1-canary.1041cefe9",
-        "@rebasepro/data_import": "^0.0.1-canary.1041cefe9",
-        "@rebasepro/data_import_export": "^0.0.1-canary.1041cefe9",
-        "@rebasepro/schema_inference": "^0.0.1-canary.1041cefe9",
-        "@rebasepro/studio": "workspace:*",
-        "@rebasepro/types": "^0.0.1-canary.1041cefe9",
-        "@rebasepro/ui": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/common": "^0.0.1",
+        "@rebasepro/core": "^0.0.1",
+        "@rebasepro/data_enhancement": "^0.0.1",
+        "@rebasepro/data_export": "^0.0.1",
+        "@rebasepro/data_import": "^0.0.1",
+        "@rebasepro/data_import_export": "^0.0.1",
+        "@rebasepro/schema_inference": "^0.0.1",
+        "@rebasepro/studio": "0.0.1",
+        "@rebasepro/types": "^0.0.1",
+        "@rebasepro/ui": "^0.0.1",
         "react-router": "^7.13.1",
         "react-router-dom": "^7.13.1"
     },

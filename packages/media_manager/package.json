@@ -1,7 +1,7 @@
 {
     "name": "@rebasepro/media_manager",
     "type": "module",
-    "version": "0.0.1-canary.1041cefe9",
+    "version": "0.0.1",
     "publishConfig": {
         "access": "public"
     },
@@ -27,9 +27,9 @@
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "dependencies": {
-        "@rebasepro/core": "^0.0.1-canary.1041cefe9",
-        "@rebasepro/formex": "^0.0.1-canary.1041cefe9",
-        "@rebasepro/ui": "^0.0.1-canary.1041cefe9"
+        "@rebasepro/core": "^0.0.1",
+        "@rebasepro/formex": "^0.0.1",
+        "@rebasepro/ui": "^0.0.1"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

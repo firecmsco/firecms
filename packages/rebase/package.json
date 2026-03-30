@@ -1,6 +1,6 @@
 {
   "name": "rebase",
-  "version": "0.0.1-canary.1041cefe9",
+  "version": "0.0.1",
   "description": "A CLI to perform Rebase operations. This package is just a wrapper around @rebasepro/cli",
   "bin": "bin/rebase.js",
   "publishConfig": {
@@ -29,7 +29,7 @@
   "author": "rebase.pro",
   "license": "MIT",
   "dependencies": {
-    "@rebasepro/cli": "^0.0.1-canary.1041cefe9"
+    "@rebasepro/cli": "^0.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.17.14",

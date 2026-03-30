@@ -1,6 +1,6 @@
 {
     "name": "@rebasepro/editor",
-    "version": "0.0.1-canary.1041cefe9",
+    "version": "0.0.1",
     "description": "Notion-style WYSIWYG editor for Rebase",
     "type": "module",
     "main": "dist/index.cjs",
@@ -32,7 +32,7 @@
     "dependencies": {
         "@floating-ui/dom": "^1.7.4",
         "@radix-ui/react-slot": "^1.2.4",
-        "@rebasepro/ui": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/ui": "^0.0.1",
         "@tiptap/core": "3.19.0",
         "@tiptap/extension-blockquote": "3.19.0",
         "@tiptap/extension-bold": "3.19.0",
