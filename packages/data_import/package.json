@@ -1,19 +1,19 @@
 {
     "name": "@rebasepro/data_import",
     "type": "module",
-    "version": "0.0.1-canary.2",
+    "version": "0.0.1-canary.1041cefe9",
     "access": "public",
     "main": "./dist/index.umd.js",
     "module": "./dist/index.es.js",
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "dependencies": {
-        "@rebasepro/common": "^0.0.1-canary.2",
-        "@rebasepro/core": "^0.0.1-canary.2",
-        "@rebasepro/formex": "^0.0.1-canary.2",
-        "@rebasepro/schema_inference": "^0.0.1-canary.2",
-        "@rebasepro/types": "^0.0.1-canary.2",
-        "@rebasepro/ui": "^0.0.1-canary.2",
+        "@rebasepro/common": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/core": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/formex": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/schema_inference": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/types": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/ui": "^0.0.1-canary.1041cefe9",
         "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
     },
     "peerDependencies": {

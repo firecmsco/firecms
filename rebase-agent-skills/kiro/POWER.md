@@ -32,11 +32,6 @@ Before using the Rebase MCP server, ensure Node.js and the required tools are in
   - Check: `psql --version`
   - Or use Docker: `docker run --name rebase-postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:16`
 
-- **Verify MCP Connection**: Ensure the MCP server is connected
-  - Use the `rebase_get_current_user` tool to check connection status
-  - If connection fails, rebuild the MCP server:
-    1. Run `cd packages/mcp_server && npm install && npm run build`
-    2. Restart your AI tool's MCP server connection
 
 ## Usage and Features
 

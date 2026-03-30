@@ -67,7 +67,6 @@ rebase/
 │   ├── studio/               # @rebasepro/studio — admin panel
 │   ├── auth/                 # @rebasepro/auth — authentication
 │   ├── cli/                  # @rebasepro/cli — CLI tool
-│   ├── mcp_server/           # @rebasepro/mcp-server — MCP server
 │   ├── editor/               # @rebasepro/editor — rich text editor
 │   ├── firebase/             # @rebasepro/firebase — Firebase data source
 │   ├── postgresql/           # @rebasepro/postgresql — PostgreSQL data source
@@ -110,4 +109,3 @@ The Rebase MCP server provides these tools for AI agents:
 - **`DATABASE_URL is not set`:** Ensure `app/.env` exists with `DATABASE_URL=postgresql://user:password@localhost:5432/rebase`
 - **pnpm not found:** Install with `npm install -g pnpm`
 - **Node.js version mismatch:** Rebase requires Node.js v20+. Use `nvm install 20 && nvm use 20`
-- **MCP server connection failed:** Rebuild with `cd packages/mcp_server && npm install && npm run build`

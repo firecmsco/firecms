@@ -1,17 +1,17 @@
 {
     "name": "@rebasepro/entity_history",
     "type": "module",
-    "version": "0.0.1-canary.2",
+    "version": "0.0.1-canary.1041cefe9",
     "access": "public",
     "main": "./dist/index.umd.js",
     "module": "./dist/index.es.js",
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "dependencies": {
-        "@rebasepro/core": "^0.0.1-canary.2",
-        "@rebasepro/formex": "^0.0.1-canary.2",
-        "@rebasepro/types": "^0.0.1-canary.2",
-        "@rebasepro/ui": "^0.0.1-canary.2"
+        "@rebasepro/core": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/formex": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/types": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/ui": "^0.0.1-canary.1041cefe9"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

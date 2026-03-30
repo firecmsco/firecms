@@ -1,7 +1,7 @@
 {
   "name": "@rebasepro/backend",
   "type": "module",
-  "version": "0.0.1-canary.2",
+  "version": "0.0.1-canary.1041cefe9",
   "description": "PostgreSQL and Drizzle ORM backend for Rebase",
   "funding": {
     "url": "https://github.com/sponsors/rebaseco"
@@ -51,8 +51,8 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.654.0",
     "@aws-sdk/s3-request-presigner": "^3.654.0",
-    "@rebasepro/common": "^0.0.1-canary.2",
-    "@rebasepro/types": "^0.0.1-canary.2",
+    "@rebasepro/common": "^0.0.1-canary.1041cefe9",
+    "@rebasepro/types": "^0.0.1-canary.1041cefe9",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.44.4",
     "express": "^5.1.0",

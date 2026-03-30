@@ -1,6 +1,6 @@
 {
     "name": "@rebasepro/datatalk",
-    "version": "0.0.1-canary.2",
+    "version": "0.0.1-canary.1041cefe9",
     "description": "Talk to your Firestore data",
     "type": "module",
     "main": "dist/index.cjs",
@@ -31,16 +31,16 @@
     },
     "dependencies": {
         "@monaco-editor/react": "^4.7.0",
-        "@rebasepro/core": "^0.0.1-canary.2",
-        "@rebasepro/data_export": "^0.0.1-canary.2",
-        "@rebasepro/data_import": "^0.0.1-canary.2",
-        "@rebasepro/data_import_export": "^0.0.1-canary.2",
-        "@rebasepro/firebase": "^0.0.1-canary.2",
-        "@rebasepro/formex": "^0.0.1-canary.2",
-        "@rebasepro/schema_inference": "^0.0.1-canary.2",
+        "@rebasepro/core": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/data_export": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/data_import": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/data_import_export": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/firebase": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/formex": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/schema_inference": "^0.0.1-canary.1041cefe9",
         "@rebasepro/studio": "4.0.0",
-        "@rebasepro/types": "^0.0.1-canary.2",
-        "@rebasepro/ui": "^0.0.1-canary.2"
+        "@rebasepro/types": "^0.0.1-canary.1041cefe9",
+        "@rebasepro/ui": "^0.0.1-canary.1041cefe9"
     },
     "devDependencies": {
         "@types/node": "20.19.17",

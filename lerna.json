@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "0.0.1-canary.2",
+  "version": "0.0.1-canary.1041cefe9",
   "packages": [
     "packages/auth",
     "packages/rebase",
@@ -19,7 +19,6 @@
     "packages/firebase",
     "packages/mongodb",
     "packages/cli",
-    "packages/mcp_server",
     "packages/editor",
     "packages/create_rebase_app",
     "packages/collection_editor",

@@ -106,19 +106,3 @@ pnpm run dev
 ```
 
 This starts both the frontend (Vite) and backend (Express) servers.
-
-## 8. Install MCP Server (Optional)
-
-For AI agent integration:
-
-```bash
-cd packages/mcp_server
-npm install
-npm run build
-```
-
-Then configure your AI tool to point to `packages/mcp_server/dist/cli.js`.
-
----
-
-**CRITICAL AGENT RULE:** Do NOT proceed with any other Rebase tasks until EVERY step above has been successfully verified and completed.
