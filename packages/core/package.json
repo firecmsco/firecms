@@ -33,7 +33,7 @@
     ],
     "scripts": {
         "watch": "vite build --watch",
-        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json && npx esbuild src/vitePlugin.ts --platform=node --format=esm --outfile=dist/vitePlugin.js",
         "prepublishOnly": "run-s build",
         "test:lint": "eslint \"src/**\" --quiet",
         "test": "jest --passWithNoTests",
@@ -49,9 +49,9 @@
         },
         "./vitePlugin": {
             "development": "./src/vitePlugin.ts",
-            "types": "./src/vitePlugin.ts",
-            "import": "./src/vitePlugin.ts",
-            "require": "./src/vitePlugin.ts"
+            "types": "./dist/vitePlugin.d.ts",
+            "import": "./dist/vitePlugin.js",
+            "require": "./dist/vitePlugin.js"
         },
         "./package.json": "./package.json"
     },
