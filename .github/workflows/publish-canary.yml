@@ -35,6 +35,8 @@ jobs:
 
       - name: Build packages
         run: pnpm run build
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
 
       - name: Set canary version
         run: |
