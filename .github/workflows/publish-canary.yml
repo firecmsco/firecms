@@ -34,7 +34,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: pnpm run build
+        run: npx lerna run build --concurrency 1
 
       - name: Set canary version
         run: |
