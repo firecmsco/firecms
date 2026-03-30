@@ -79,7 +79,7 @@ importers:
   app/backend:
     dependencies:
       '@rebasepro/backend':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/backend
       cors:
         specifier: ^2.8.5
@@ -137,49 +137,49 @@ importers:
         specifier: ^5.2.6
         version: 5.2.9
       '@rebasepro/auth':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/auth
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/core
       '@rebasepro/data_enhancement':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/data_enhancement
       '@rebasepro/data_export':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/data_export
       '@rebasepro/data_import':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/data_import
       '@rebasepro/datatalk':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/datatalk
       '@rebasepro/editor':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/editor
       '@rebasepro/entity_history':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/entity_history
       '@rebasepro/firebase':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/firebase
       '@rebasepro/formex':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/formex
       '@rebasepro/postgresql':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/postgresql
       '@rebasepro/schema_inference':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/schema_inference
       '@rebasepro/studio':
         specifier: 4.0.0
         version: link:../../packages/studio
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/types
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../../packages/ui
       algoliasearch:
         specifier: ^5.19.0
@@ -286,13 +286,13 @@ importers:
   packages/auth:
     dependencies:
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       react:
         specifier: '>=19.0.0'
@@ -326,10 +326,10 @@ importers:
         specifier: ^3.654.0
         version: 3.1006.0
       '@rebasepro/common':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../common
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       cors:
         specifier: ^2.8.5
@@ -463,7 +463,7 @@ importers:
   packages/common:
     dependencies:
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       fast-equals:
         specifier: 5.3.0
@@ -557,19 +557,19 @@ importers:
         specifier: ^1.1.10
         version: 1.1.10(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@rebasepro/common':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../common
       '@rebasepro/editor':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../editor
       '@rebasepro/formex':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../formex
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       clsx:
         specifier: ^2.1.1
@@ -718,16 +718,16 @@ importers:
   packages/data_enhancement:
     dependencies:
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/editor':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../editor
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       firebase:
         specifier: ^10.12.2 || ^11.0.0 || ^12.0.0
@@ -785,19 +785,19 @@ importers:
   packages/data_export:
     dependencies:
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/formex':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../formex
       '@rebasepro/schema_inference':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../schema_inference
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       react:
         specifier: '>=19.0.0'
@@ -855,22 +855,22 @@ importers:
   packages/data_import:
     dependencies:
       '@rebasepro/common':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../common
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/formex':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../formex
       '@rebasepro/schema_inference':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../schema_inference
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       react:
         specifier: '>=19.0.0'
@@ -931,16 +931,16 @@ importers:
   packages/data_import_export:
     dependencies:
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/data_export':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../data_export
       '@rebasepro/data_import':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../data_import
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       react:
         specifier: '>=19.0.0'
@@ -995,34 +995,34 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0(monaco-editor@0.55.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/data_export':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../data_export
       '@rebasepro/data_import':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../data_import
       '@rebasepro/data_import_export':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../data_import_export
       '@rebasepro/firebase':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../firebase
       '@rebasepro/formex':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../formex
       '@rebasepro/schema_inference':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../schema_inference
       '@rebasepro/studio':
         specifier: 4.0.0
         version: link:../studio
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       react:
         specifier: '>=19.0.0'
@@ -1056,7 +1056,7 @@ importers:
         specifier: ^1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.2.4)
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       '@tiptap/core':
         specifier: 3.19.0
@@ -1195,16 +1195,16 @@ importers:
   packages/entity_history:
     dependencies:
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/formex':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../formex
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       react:
         specifier: '>=19.0.0'
@@ -1259,34 +1259,34 @@ importers:
         specifier: '*'
         version: 1.12.1(@firebase/app@0.14.9)
       '@rebasepro/common':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../common
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/data_enhancement':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../data_enhancement
       '@rebasepro/data_export':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../data_export
       '@rebasepro/data_import':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../data_import
       '@rebasepro/data_import_export':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../data_import_export
       '@rebasepro/schema_inference':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../schema_inference
       '@rebasepro/studio':
         specifier: 4.0.0
         version: link:../studio
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       firebase:
         specifier: ^10.12.2 || ^11.0.0 || ^12.0.0
@@ -1381,7 +1381,7 @@ importers:
         specifier: ^1.12.1
         version: 1.27.1(zod@3.25.76)
       '@rebasepro/cli':
-        specifier: ^3.1.0
+        specifier: workspace:*
         version: link:../cli
       axios:
         specifier: ^1.7.0
@@ -1400,13 +1400,13 @@ importers:
   packages/media_manager:
     dependencies:
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/formex':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../formex
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       react:
         specifier: '>=19.0.0'
@@ -1446,10 +1446,10 @@ importers:
         specifier: 4.0.0
         version: link:../backend
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       mongodb:
         specifier: ^6.12.0
@@ -1489,10 +1489,10 @@ importers:
   packages/postgresql:
     dependencies:
       '@rebasepro/core':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../core
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       react:
         specifier: '>=19.0.0'
@@ -1526,7 +1526,7 @@ importers:
   packages/rebase:
     dependencies:
       '@rebasepro/cli':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../cli
     devDependencies:
       '@types/node':
@@ -1549,7 +1549,7 @@ importers:
         version: 3.1.4(vite@7.3.1(@types/node@20.19.17)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
     devDependencies:
       '@rebasepro/types':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../types
       '@types/node':
         specifier: ^20.17.14
@@ -1661,13 +1661,13 @@ importers:
         specifier: ^1.1.5
         version: 1.1.10(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@rebasepro/editor':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../editor
       '@rebasepro/formex':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../formex
       '@rebasepro/ui':
-        specifier: ^0.0.1-canary.2
+        specifier: ^0.0.1-canary.1041cefe9
         version: link:../ui
       clsx:
         specifier: ^2.1.1
