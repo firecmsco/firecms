@@ -1,6 +1,6 @@
 import { EntityCollection } from "@rebasepro/core";
 
-export const productsCollectionTemplate: EntityCollection = {
+export const productsCollectionTemplate = {
     slug: "products",
     dbPath: "products",
     name: "Products",
@@ -85,4 +85,4 @@ export const productsCollectionTemplate: EntityCollection = {
             autoValue: "on_create"
         }
     }
-};
+} as unknown as EntityCollection;

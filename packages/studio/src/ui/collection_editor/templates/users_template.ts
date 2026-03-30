@@ -1,6 +1,6 @@
 import { EntityCollection } from "@rebasepro/core";
 
-export const usersCollectionTemplate: EntityCollection = {
+export const usersCollectionTemplate = {
     slug: "users",
     dbPath: "users",
     name: "Users",
@@ -39,4 +39,4 @@ export const usersCollectionTemplate: EntityCollection = {
             url: "image"
         }
     },
-};
+} as unknown as EntityCollection;

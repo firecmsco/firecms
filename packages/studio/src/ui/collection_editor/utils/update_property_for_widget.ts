@@ -29,7 +29,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: undefined,
                 enum: undefined,
                 userSelect: undefined
-            } satisfies StringProperty
+            } as StringProperty
         );
     } else if (selectedWidgetId === "user_select") {
         updatedProperty = mergeDeep(
@@ -44,7 +44,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: undefined,
                 enum: undefined,
                 userSelect: true
-            } satisfies StringProperty
+            } as StringProperty
         );
     } else if (selectedWidgetId === "multiline") {
         updatedProperty = mergeDeep(
@@ -59,7 +59,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: undefined,
                 enum: undefined,
                 userSelect: undefined
-            } satisfies StringProperty
+            } as StringProperty
         );
     } else if (selectedWidgetId === "markdown") {
         updatedProperty = mergeDeep(
@@ -73,7 +73,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 email: undefined,
                 url: undefined,
                 userSelect: undefined
-            } satisfies StringProperty
+            } as StringProperty
         );
     } else if (selectedWidgetId === "url") {
         updatedProperty = mergeDeep(
@@ -88,7 +88,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: true,
                 enum: undefined,
                 userSelect: undefined
-            } satisfies StringProperty
+            } as StringProperty
         );
     } else if (selectedWidgetId === "email") {
         updatedProperty = mergeDeep(
@@ -103,7 +103,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: undefined,
                 enum: undefined,
                 userSelect: undefined
-            } satisfies StringProperty
+            } as StringProperty
         );
     } else if (selectedWidgetId === "select") {
         updatedProperty = mergeDeep(
@@ -118,7 +118,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: undefined,
                 enum: propertyData.enumValues ?? [],
                 userSelect: undefined
-            } satisfies StringProperty
+            } as StringProperty
         );
     } else if (selectedWidgetId === "multi_select") {
         updatedProperty = mergeDeep(
@@ -130,7 +130,7 @@ export function updatePropertyFromWidget(propertyData: any,
                     type: "string",
                     enum: propertyData.of?.enum ?? []
                 }
-            } satisfies ArrayProperty
+            } as ArrayProperty
         );
     } else if (selectedWidgetId === "number_input") {
         updatedProperty = mergeDeep(
@@ -139,7 +139,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 type: "number",
                 propertyConfig: "number_input",
                 enum: undefined
-            } satisfies NumberProperty
+            } as NumberProperty
         );
     } else if (selectedWidgetId === "number_select") {
         updatedProperty = mergeDeep(
@@ -148,7 +148,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 type: "number",
                 propertyConfig: "number_select",
                 enum: propertyData.enumValues ?? []
-            } satisfies NumberProperty
+            } as NumberProperty
         );
     } else if (selectedWidgetId === "multi_number_select") {
         updatedProperty = mergeDeep(
@@ -160,7 +160,7 @@ export function updatePropertyFromWidget(propertyData: any,
                     type: "number",
                     enum: propertyData.of?.enum ?? []
                 }
-            } satisfies ArrayProperty
+            } as ArrayProperty
         );
     } else if (selectedWidgetId === "file_upload") {
         updatedProperty = mergeDeep(
@@ -171,7 +171,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 storage: {
                     storagePath: "/"
                 }
-            } satisfies StringProperty
+            } as StringProperty
         );
     } else if (selectedWidgetId === "multi_file_upload") {
         updatedProperty = mergeDeep(
@@ -185,7 +185,7 @@ export function updatePropertyFromWidget(propertyData: any,
                         storagePath: "/"
                     }
                 }
-            } satisfies ArrayProperty
+            } as ArrayProperty
         );
     } else if (selectedWidgetId === "group") {
         updatedProperty = mergeDeep(
@@ -195,7 +195,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 propertyConfig: "group",
                 keyValue: false,
                 properties: propertyData.properties ?? {}
-            } satisfies MapProperty
+            } as MapProperty
         );
     } else if (selectedWidgetId === "key_value") {
         updatedProperty = mergeDeep(
@@ -205,7 +205,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 propertyConfig: "key_value",
                 keyValue: true,
                 properties: undefined
-            } satisfies MapProperty
+            } as MapProperty
         );
     } else if (selectedWidgetId === "reference") {
         updatedProperty = mergeDeep(
@@ -213,7 +213,7 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "reference",
                 propertyConfig: "reference",
-            } satisfies Property
+            } as Property
         );
     } else if (selectedWidgetId === "reference_as_string") {
         updatedProperty = mergeDeep(
@@ -221,7 +221,7 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "reference_as_string",
-            } satisfies Property
+            } as Property
         );
     } else if (selectedWidgetId === "multi_references") {
         updatedProperty = mergeDeep(
@@ -232,7 +232,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 of: {
                     type: "reference"
                 }
-            } satisfies ArrayProperty
+            } as ArrayProperty
         );
     } else if (selectedWidgetId === "switch") {
         updatedProperty = mergeDeep(
@@ -240,7 +240,7 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "boolean",
                 propertyConfig: "switch",
-            } satisfies BooleanProperty
+            } as BooleanProperty
         );
     } else if (selectedWidgetId === "date_time") {
         updatedProperty = mergeDeep(
@@ -249,7 +249,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 type: "date",
                 propertyConfig: "date_time",
                 mode: "date_time"
-            } satisfies DateProperty
+            } as DateProperty
         );
     } else if (selectedWidgetId === "repeat") {
         updatedProperty = mergeDeep(
@@ -257,7 +257,7 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "repeat",
-            } satisfies ArrayProperty
+            } as ArrayProperty
         );
     } else if (selectedWidgetId === "block") {
         updatedProperty = mergeDeep(
@@ -268,7 +268,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 oneOf: {
                     properties: {}
                 }
-            } satisfies ArrayProperty
+            } as ArrayProperty
         );
     } else if (selectedWidgetId && propertyConfigs[selectedWidgetId]) {
         updatedProperty = {
