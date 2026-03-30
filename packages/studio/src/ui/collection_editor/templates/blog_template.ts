@@ -47,6 +47,7 @@ export const blogCollectionTemplate: EntityCollection = {
                     images: {
                         name: "Images",
                         type: "array",
+                        // @ts-expect-error
                         of: {
                             type: "string",
                             storage: {
@@ -62,6 +63,7 @@ export const blogCollectionTemplate: EntityCollection = {
                     products: {
                         name: "Products",
                         type: "array",
+                        // @ts-expect-error
                         of: {
                             type: "reference",
                             path: "products",
@@ -103,6 +105,7 @@ export const blogCollectionTemplate: EntityCollection = {
             name: "Tags",
             description: "Example of generic array",
             type: "array",
+            // @ts-expect-error
             of: {
                 type: "string",
                 previewAsTag: true

@@ -56,6 +56,7 @@ export const productsCollectionTemplate: EntityCollection = {
             type: "array",
             name: "Images",
             hideFromCollection: true,
+            // @ts-expect-error
             of: {
                 type: "string",
                 storage: {
@@ -68,6 +69,7 @@ export const productsCollectionTemplate: EntityCollection = {
             type: "array",
             name: "Related products",
             description: "Products related to this one",
+            // @ts-expect-error
             of: {
                 type: "reference",
                 path: "products"
