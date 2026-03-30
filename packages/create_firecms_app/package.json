@@ -1,6 +1,6 @@
 {
   "name": "@rebasepro/create",
-  "version": "4.0.0",
+  "version": "0.0.1",
   "description": "Create a new Rebase project",
   "type": "commonjs",
   "bin": "bin/create-rebase-app.js",
@@ -24,7 +24,7 @@
   "author": "rebase.pro",
   "license": "MIT",
   "dependencies": {
-    "@rebasepro/cli": "4.0.0"
+    "@rebasepro/cli": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.17.14",

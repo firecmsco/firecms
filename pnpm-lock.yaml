@@ -705,7 +705,7 @@ importers:
   packages/create_firecms_app:
     dependencies:
       '@rebasepro/cli':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../cli
     devDependencies:
       '@types/node':
@@ -1421,7 +1421,7 @@ importers:
   packages/mongodb:
     dependencies:
       '@rebasepro/backend':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../backend
       '@rebasepro/core':
         specifier: ^0.0.1-canary.1041cefe9
@@ -1545,31 +1545,31 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0(monaco-editor@0.55.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@rebasepro/common':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../common
       '@rebasepro/core':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../core
       '@rebasepro/data_export':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../data_export
       '@rebasepro/data_import':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../data_import
       '@rebasepro/data_import_export':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../data_import_export
       '@rebasepro/formex':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../formex
       '@rebasepro/schema_inference':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../schema_inference
       '@rebasepro/types':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../types
       '@rebasepro/ui':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../ui
       json5:
         specifier: ^2.2.3

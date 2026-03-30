@@ -69,8 +69,8 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@rebasepro/common": "4.0.0",
-    "@rebasepro/types": "4.0.0",
+    "@rebasepro/common": "workspace:*",
+    "@rebasepro/types": "workspace:*",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/express-rate-limit": "6.0.2",
