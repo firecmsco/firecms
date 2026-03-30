@@ -1,7 +1,7 @@
 {
     "name": "@rebasepro/common",
     "type": "module",
-    "version": "0.0.1-canary.1",
+    "version": "0.0.1-canary.2",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/rebaseco"
@@ -50,7 +50,7 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
-        "@rebasepro/types": "^0.0.1-canary.1",
+        "@rebasepro/types": "^0.0.1-canary.2",
         "fast-equals": "5.3.0"
     },
     "peerDependencies": {

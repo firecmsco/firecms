@@ -1,7 +1,7 @@
 {
     "name": "@rebasepro/ui",
     "type": "module",
-    "version": "0.0.1-canary.1",
+    "version": "0.0.1-canary.2",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/rebaseco"

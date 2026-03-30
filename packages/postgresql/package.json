@@ -1,7 +1,7 @@
 {
   "name": "@rebasepro/postgresql",
   "type": "module",
-  "version": "0.0.1-canary.1",
+  "version": "0.0.1-canary.2",
   "description": "PostgreSQL data source client for Rebase",
   "funding": {
     "url": "https://github.com/sponsors/rebaseco"
@@ -67,8 +67,8 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@rebasepro/core": "^0.0.1-canary.1",
-    "@rebasepro/types": "^0.0.1-canary.1"
+    "@rebasepro/core": "^0.0.1-canary.2",
+    "@rebasepro/types": "^0.0.1-canary.2"
   },
   "peerDependencies": {
     "react": ">=19.0.0",

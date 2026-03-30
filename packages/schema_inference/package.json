@@ -1,6 +1,6 @@
 {
   "name": "@rebasepro/schema_inference",
-  "version": "0.0.1-canary.1",
+  "version": "0.0.1-canary.2",
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -10,7 +10,7 @@
   "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "devDependencies": {
-    "@rebasepro/types": "^0.0.1-canary.1",
+    "@rebasepro/types": "^0.0.1-canary.2",
     "@types/node": "^20.17.14",
     "typescript": "^5.9.3",
     "vite": "^7.2.4"

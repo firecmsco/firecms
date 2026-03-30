@@ -1,7 +1,7 @@
 {
     "name": "@rebasepro/core",
     "type": "module",
-    "version": "0.0.1-canary.1",
+    "version": "0.0.1-canary.2",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/rebaseco"
@@ -60,11 +60,11 @@
         "@dnd-kit/modifiers": "^9.0.0",
         "@dnd-kit/sortable": "^10.0.0",
         "@radix-ui/react-portal": "^1.1.10",
-        "@rebasepro/common": "^0.0.1-canary.1",
-        "@rebasepro/editor": "^0.0.1-canary.1",
-        "@rebasepro/formex": "^0.0.1-canary.1",
-        "@rebasepro/types": "^0.0.1-canary.1",
-        "@rebasepro/ui": "^0.0.1-canary.1",
+        "@rebasepro/common": "^0.0.1-canary.2",
+        "@rebasepro/editor": "^0.0.1-canary.2",
+        "@rebasepro/formex": "^0.0.1-canary.2",
+        "@rebasepro/types": "^0.0.1-canary.2",
+        "@rebasepro/ui": "^0.0.1-canary.2",
         "clsx": "^2.1.1",
         "compressorjs": "^1.2.1",
         "date-fns": "^3.6.0",
