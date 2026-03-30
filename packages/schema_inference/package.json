@@ -1,41 +1,41 @@
 {
-  "name": "@rebasepro/schema_inference",
-  "version": "0.0.1",
-  "type": "module",
-  "publishConfig": {
-    "access": "public"
-  },
-  "main": "./dist/index.umd.cjs",
-  "module": "./dist/index.es.js",
-  "types": "dist/index.d.ts",
-  "source": "src/index.ts",
-  "devDependencies": {
-    "@rebasepro/types": "^0.0.1",
-    "@types/node": "^20.17.14",
-    "typescript": "^5.9.3",
-    "vite": "^7.2.4"
-  },
-  "exports": {
-    ".": {
-      "development": "./src/index.ts",
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.cjs",
-      "types": "./dist/index.d.ts"
+    "name": "@rebasepro/schema_inference",
+    "version": "0.0.1",
+    "type": "module",
+    "publishConfig": {
+        "access": "public"
     },
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "dist",
-    "src"
-  ],
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
-    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
-  },
-  "gitHead": "d935eefa5aa8d1009a2398cfac2c1e4ee9aeb6b6",
-  "dependencies": {
-    "axios": "1.13.5",
-    "vite-plugin-static-copy": "3.1.4"
-  }
+    "main": "./dist/index.umd.cjs",
+    "module": "./dist/index.es.js",
+    "types": "dist/index.d.ts",
+    "source": "src/index.ts",
+    "devDependencies": {
+        "@rebasepro/types": "0.0.1",
+        "@types/node": "^20.17.14",
+        "typescript": "^5.9.3",
+        "vite": "^7.2.4"
+    },
+    "exports": {
+        ".": {
+            "development": "./src/index.ts",
+            "import": "./dist/index.es.js",
+            "require": "./dist/index.umd.cjs",
+            "types": "./dist/index.d.ts"
+        },
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist",
+        "src"
+    ],
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+        "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+    },
+    "gitHead": "d935eefa5aa8d1009a2398cfac2c1e4ee9aeb6b6",
+    "dependencies": {
+        "axios": "1.13.5",
+        "vite-plugin-static-copy": "3.1.4"
+    }
 }

@@ -16,10 +16,10 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
-        "@rebasepro/core": "^0.0.1",
-        "@rebasepro/editor": "^0.0.1",
-        "@rebasepro/types": "^0.0.1",
-        "@rebasepro/ui": "^0.0.1"
+        "@rebasepro/core": "0.0.1",
+        "@rebasepro/editor": "0.0.1",
+        "@rebasepro/types": "0.0.1",
+        "@rebasepro/ui": "0.0.1"
     },
     "peerDependencies": {
         "firebase": "^10.12.2 || ^11.0.0 || ^12.0.0",

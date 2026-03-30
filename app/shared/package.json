@@ -1,29 +1,28 @@
 {
-  "name": "rebase-app-shared",
-  "version": "1.0.0",
-  "description": "Shared collections and config for Rebase app",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "clean": "rm -rf dist"
-  },
-  "dependencies": {
-    "@rebasepro/types": "4.0.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.9.2"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+    "name": "rebase-app-shared",
+    "version": "1.0.0",
+    "description": "Shared collections and config for Rebase app",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "clean": "rm -rf dist"
     },
-    "./package.json": "./package.json"
-  }
+    "dependencies": {
+        "@rebasepro/types": "0.0.1"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.2"
+    },
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        },
+        "./package.json": "./package.json"
+    }
 }
-

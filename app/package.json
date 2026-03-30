@@ -1,37 +1,36 @@
 {
-  "name": "@rebasepro/app-example",
-  "version": "1.0.0",
-  "description": "Complete Rebase application example with PostgreSQL backend",
-  "private": true,
-  "type": "module",
-  "workspaces": [
-    "frontend",
-    "backend",
-    "shared"
-  ],
-  "scripts": {
-    "dev": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:frontend\"",
-    "dev:frontend": "cd frontend && pnpm run dev",
-    "dev:backend": "cd backend && pnpm run dev",
-    "build": "pnpm run build:shared && pnpm run build:frontend && pnpm run build:backend",
-    "build:shared": "cd shared && pnpm run build",
-    "build:frontend": "cd frontend && pnpm run build",
-    "build:backend": "cd backend && pnpm run build",
-    "start": "cd backend && pnpm start",
-    "deploy": "pnpm run build && pnpm run start",
-    "db:pull": "cd backend && pnpm run db:pull",
-    "db:generate": "cd backend && pnpm run db:generate",
-    "db:migrate": "cd backend && pnpm run db:migrate",
-    "db:studio": "cd backend && pnpm run db:studio",
-    "generate:schema": "cd backend && pnpm run generate:schema"
-  },
-  "devDependencies": {
-    "@rebasepro/types": "*",
-    "concurrently": "^8.2.2",
-    "typescript": "^5.0.0"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+    "name": "@rebasepro/app-example",
+    "version": "1.0.0",
+    "description": "Complete Rebase application example with PostgreSQL backend",
+    "private": true,
+    "type": "module",
+    "workspaces": [
+        "frontend",
+        "backend",
+        "shared"
+    ],
+    "scripts": {
+        "dev": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:frontend\"",
+        "dev:frontend": "cd frontend && pnpm run dev",
+        "dev:backend": "cd backend && pnpm run dev",
+        "build": "pnpm run build:shared && pnpm run build:frontend && pnpm run build:backend",
+        "build:shared": "cd shared && pnpm run build",
+        "build:frontend": "cd frontend && pnpm run build",
+        "build:backend": "cd backend && pnpm run build",
+        "start": "cd backend && pnpm start",
+        "deploy": "pnpm run build && pnpm run start",
+        "db:pull": "cd backend && pnpm run db:pull",
+        "db:generate": "cd backend && pnpm run db:generate",
+        "db:migrate": "cd backend && pnpm run db:migrate",
+        "db:studio": "cd backend && pnpm run db:studio",
+        "generate:schema": "cd backend && pnpm run generate:schema"
+    },
+    "devDependencies": {
+        "@rebasepro/types": "0.0.1",
+        "concurrently": "^8.2.2",
+        "typescript": "^5.0.0"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
 }
-
