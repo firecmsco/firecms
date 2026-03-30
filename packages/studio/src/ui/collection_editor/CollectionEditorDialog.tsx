@@ -807,7 +807,6 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                         ...propertyErrorsRef.current,
                                         [getFullIdPath(propertyKey, namespace)]: removeUndefined(error, true)
                                     }, true);
-                                    // @ts-expect-error
                                     propertyErrorsRef.current = current;
                                     formController.validate();
                                 }}

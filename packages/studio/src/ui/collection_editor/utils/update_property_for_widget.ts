@@ -29,7 +29,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: undefined,
                 enum: undefined,
                 userSelect: undefined
-            // @ts-expect-error
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "user_select") {
@@ -45,7 +44,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: undefined,
                 enum: undefined,
                 userSelect: true
-            // @ts-expect-error
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "multiline") {
@@ -61,7 +59,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: undefined,
                 enum: undefined,
                 userSelect: undefined
-            // @ts-expect-error
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "markdown") {
@@ -76,7 +73,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 email: undefined,
                 url: undefined,
                 userSelect: undefined
-            // @ts-expect-error
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "url") {
@@ -92,7 +88,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: true,
                 enum: undefined,
                 userSelect: undefined
-            // @ts-expect-error
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "email") {
@@ -108,7 +103,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: undefined,
                 enum: undefined,
                 userSelect: undefined
-            // @ts-expect-error
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "select") {
@@ -124,7 +118,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 url: undefined,
                 enum: propertyData.enumValues ?? [],
                 userSelect: undefined
-            // @ts-expect-error
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "multi_select") {
@@ -133,7 +126,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "multi_select",
-                // @ts-expect-error
                 of: {
                     type: "string",
                     enum: propertyData.of?.enum ?? []
@@ -147,7 +139,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 type: "number",
                 propertyConfig: "number_input",
                 enum: undefined
-            // @ts-expect-error
             } satisfies NumberProperty
         );
     } else if (selectedWidgetId === "number_select") {
@@ -157,7 +148,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 type: "number",
                 propertyConfig: "number_select",
                 enum: propertyData.enumValues ?? []
-            // @ts-expect-error
             } satisfies NumberProperty
         );
     } else if (selectedWidgetId === "multi_number_select") {
@@ -166,7 +156,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "multi_number_select",
-                // @ts-expect-error
                 of: {
                     type: "number",
                     enum: propertyData.of?.enum ?? []
@@ -182,7 +171,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 storage: {
                     storagePath: "/"
                 }
-            // @ts-expect-error
             } satisfies StringProperty
         );
     } else if (selectedWidgetId === "multi_file_upload") {
@@ -191,7 +179,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "multi_file_upload",
-                // @ts-expect-error
                 of: {
                     type: "string",
                     storage: propertyData.of?.storage ?? {
@@ -208,7 +195,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 propertyConfig: "group",
                 keyValue: false,
                 properties: propertyData.properties ?? {}
-            // @ts-expect-error
             } satisfies MapProperty
         );
     } else if (selectedWidgetId === "key_value") {
@@ -219,7 +205,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 propertyConfig: "key_value",
                 keyValue: true,
                 properties: undefined
-            // @ts-expect-error
             } satisfies MapProperty
         );
     } else if (selectedWidgetId === "reference") {
@@ -228,7 +213,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "reference",
                 propertyConfig: "reference",
-            // @ts-expect-error
             } satisfies Property
         );
     } else if (selectedWidgetId === "reference_as_string") {
@@ -237,7 +221,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "string",
                 propertyConfig: "reference_as_string",
-            // @ts-expect-error
             } satisfies Property
         );
     } else if (selectedWidgetId === "multi_references") {
@@ -246,7 +229,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "multi_references",
-                // @ts-expect-error
                 of: {
                     type: "reference"
                 }
@@ -258,7 +240,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "boolean",
                 propertyConfig: "switch",
-            // @ts-expect-error
             } satisfies BooleanProperty
         );
     } else if (selectedWidgetId === "date_time") {
@@ -268,7 +249,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 type: "date",
                 propertyConfig: "date_time",
                 mode: "date_time"
-            // @ts-expect-error
             } satisfies DateProperty
         );
     } else if (selectedWidgetId === "repeat") {
@@ -277,7 +257,6 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "array",
                 propertyConfig: "repeat",
-            // @ts-expect-error
             } satisfies ArrayProperty
         );
     } else if (selectedWidgetId === "block") {
@@ -289,7 +268,6 @@ export function updatePropertyFromWidget(propertyData: any,
                 oneOf: {
                     properties: {}
                 }
-            // @ts-expect-error
             } satisfies ArrayProperty
         );
     } else if (selectedWidgetId && propertyConfigs[selectedWidgetId]) {

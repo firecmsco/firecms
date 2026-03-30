@@ -1,8 +1,5 @@
 import { EntityCollection, Property, StringProperty, NumberProperty, ArrayProperty, TableColumnInfo } from "@rebasepro/types";
 
-// @ts-expect-error
-export { TableColumnInfo };
-
 /**
  * Maps a PostgreSQL column data type to a Rebase property type.
  */

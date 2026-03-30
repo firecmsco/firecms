@@ -99,7 +99,6 @@ describe("pgColumnToProperty Inference Logic", () => {
             expect((collection.properties!.precision_val as NumberProperty).columnType).toBe("double precision");
             
             // Decimal shouldn't have integer explicitly forced
-            // @ts-expect-error
             expect(collection.properties!.price.validation?.integer).toBeUndefined();
         });
     });

@@ -108,7 +108,6 @@ export const pagesCollectionTemplate: EntityCollection = {
                                     name: "Title",
                                     validation: { required: true }
                                 },
-                                // @ts-expect-error
                                 image: {
                                     type: "string",
                                     storage: {
@@ -153,7 +152,6 @@ export const pagesCollectionTemplate: EntityCollection = {
                 focus_keywords: {
                     type: "array",
                     name: "Focus Keywords",
-                    // @ts-expect-error
                     of: {
                         type: "string"
                     }

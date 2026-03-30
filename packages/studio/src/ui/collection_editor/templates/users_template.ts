@@ -28,7 +28,6 @@ export const usersCollectionTemplate: EntityCollection = {
         favourite_products: {
             name: "Favourite products",
             type: "array",
-            // @ts-expect-error
             of: {
                 type: "reference",
                 path: "products"
