@@ -90,5 +90,6 @@
         "ts-jest": "29.4.1",
         "typescript": "^5.0.0",
         "vite": "^5.0.0"
-    }
+    },
+    "gitHead": "646afae9c387c3ce02c699d98cd8c7272bdd1929"
 }
