@@ -1,7 +1,7 @@
 {
     "name": "@rebasepro/data_enhancement",
     "type": "module",
-    "version": "0.0.1-canary.0",
+    "version": "0.0.1-canary.1",
     "main": "./dist/index.umd.js",
     "module": "./dist/index.es.js",
     "types": "./dist/index.d.ts",
@@ -16,10 +16,10 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
-        "@rebasepro/core": "0.0.1-canary.0",
-        "@rebasepro/editor": "0.0.1-canary.0",
-        "@rebasepro/types": "0.0.1-canary.0",
-        "@rebasepro/ui": "0.0.1-canary.0"
+        "@rebasepro/core": "^0.0.1-canary.1",
+        "@rebasepro/editor": "^0.0.1-canary.1",
+        "@rebasepro/types": "^0.0.1-canary.1",
+        "@rebasepro/ui": "^0.0.1-canary.1"
     },
     "peerDependencies": {
         "firebase": "^10.12.2 || ^11.0.0 || ^12.0.0",

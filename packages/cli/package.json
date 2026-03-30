@@ -1,6 +1,6 @@
 {
   "name": "@rebasepro/cli",
-  "version": "0.0.1-canary.0",
+  "version": "0.0.1-canary.1",
   "description": "Developer tools for Rebase projects",
   "main": "./dist/index.cjs",
   "module": "./dist/index.es.js",

@@ -1,6 +1,6 @@
 {
   "name": "rebase-app-backend",
-  "version": "0.0.1-canary.0",
+  "version": "0.0.1-canary.1",
   "description": "Custom PostgreSQL backend for Rebase with real-time sync",
   "main": "src/index.ts",
   "type": "module",
@@ -16,7 +16,7 @@
     "db:studio": "DOTENV_CONFIG_PATH=../.env drizzle-kit studio"
   },
   "dependencies": {
-    "@rebasepro/backend": "0.0.1-canary.0",
+    "@rebasepro/backend": "^0.0.1-canary.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "drizzle-orm": "^0.44.4",
