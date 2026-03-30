@@ -47,7 +47,7 @@ export function unslugify(slug?: string): string {
     if (slug.includes("-") || slug.includes("_") || !slug.includes(" ")) {
         const result = slug.replace(/[-_]/g, " ");
         return result.replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1);
+            return txt.charAt(0).toUpperCase() + txt.substring(1);
         }).trim();
     } else {
         return slug.trim();

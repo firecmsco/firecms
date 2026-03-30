@@ -269,7 +269,6 @@ export function useFirestoreDataSource({
 
     return {
         key: "firestore",
-        setDateToMidnight,
 
         currentTime,
 
@@ -711,13 +710,6 @@ function getCMSPathFromFirestorePath(fsPath: string): string {
     return fsPath.substring(0, to);
 }
 
-function setDateToMidnight(input?: unknown): unknown {
-    if (!input) return input;
-    if (!(input instanceof Timestamp)) return input;
-    const date = input.toDate();
-    date.setHours(0, 0, 0, 0);
-    return Timestamp.fromDate(date);
-}
 
 export function cmsToFirestoreModel(data: any, firestore: Firestore, inArray = false): any {
     if (data === undefined) {

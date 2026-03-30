@@ -51,15 +51,7 @@ export class PostgresDataSource implements DataSource {
         this.user = user;
     }
 
-    /**
-     * Set a date to midnight (start of day) in UTC
-     */
-    setDateToMidnight(input?: unknown): Date | null {
-        if (!input) return null;
-        const date = input instanceof Date ? input : new Date(input as string | number);
-        date.setUTCHours(0, 0, 0, 0);
-        return date;
-    }
+
 
     private resolveCollectionCallbacks<M extends Record<string, any>>(collection: EntityCollection<M> | undefined, path: string) {
         if (!collection && !path) return { collection: undefined, callbacks: undefined, propertyCallbacks: undefined };
@@ -764,7 +756,7 @@ export class PostgresDataSource implements DataSource {
     }
 
     private generateSubscriptionId(): string {
-        return `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        return `sub_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     }
 
     /**

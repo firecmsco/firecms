@@ -1,5 +1,5 @@
 {
-  "name": "create-rebase-app",
+  "name": "@rebasepro/create",
   "version": "4.0.0",
   "description": "Create a new Rebase project",
   "type": "commonjs",

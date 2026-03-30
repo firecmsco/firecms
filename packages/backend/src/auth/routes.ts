@@ -40,6 +40,31 @@ export interface AuthModuleConfig {
 }
 
 /**
+ * Helper to build standard auth response output
+ */
+function buildAuthResponse(
+    user: { id: string; email: string; displayName: string | null; photoUrl: string | null },
+    roleIds: string[],
+    accessToken: string,
+    refreshToken: string
+) {
+    return {
+        user: {
+            uid: user.id,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoUrl,
+            roles: roleIds
+        },
+        tokens: {
+            accessToken,
+            refreshToken,
+            accessTokenExpiresAt: getAccessTokenExpiry()
+        }
+    };
+}
+
+/**
  * Generate a secure random token
  */
 function generateSecureToken(): string {
@@ -146,20 +171,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
             ipAddress
         );
 
-        res.status(201).json({
-            user: {
-                uid: user.id,
-                email: user.email,
-                displayName: user.displayName,
-                photoURL: user.photoUrl,
-                roles: roleIds
-            },
-            tokens: {
-                accessToken,
-                refreshToken,
-                accessTokenExpiresAt: getAccessTokenExpiry()
-            }
-        });
+        res.status(201).json(buildAuthResponse(user, roleIds, accessToken, refreshToken));
     }));
 
     /**
@@ -205,20 +217,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
             ipAddress
         );
 
-        res.json({
-            user: {
-                uid: user.id,
-                email: user.email,
-                displayName: user.displayName,
-                photoURL: user.photoUrl,
-                roles: roleIds
-            },
-            tokens: {
-                accessToken,
-                refreshToken,
-                accessTokenExpiresAt: getAccessTokenExpiry()
-            }
-        });
+        res.json(buildAuthResponse(user, roleIds, accessToken, refreshToken));
     }));
 
     /**
@@ -291,20 +290,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
             ipAddress
         );
 
-        res.json({
-            user: {
-                uid: user.id,
-                email: user.email,
-                displayName: user.displayName,
-                photoURL: user.photoUrl,
-                roles: roleIds
-            },
-            tokens: {
-                accessToken,
-                refreshToken,
-                accessTokenExpiresAt: getAccessTokenExpiry()
-            }
-        });
+        res.json(buildAuthResponse(user, roleIds, accessToken, refreshToken));
     }));
 
     /**

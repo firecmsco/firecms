@@ -83,15 +83,13 @@ export function updateDateAutoValues<M extends Record<string, any>>({
     inputValues,
     properties,
     status,
-    timestampNowValue,
-    setDateToMidnight
+    timestampNowValue
 }:
     {
         inputValues: Partial<EntityValues<M>>,
         properties: Properties,
         status: EntityStatus,
-        timestampNowValue: unknown,
-        setDateToMidnight?: (input?: unknown) => unknown | undefined
+        timestampNowValue: unknown
     }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,

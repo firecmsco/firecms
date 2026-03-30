@@ -1,6 +1,6 @@
 {
   "name": "@rebasepro/mcp-server",
-  "version": "3.1.0",
+  "version": "0.0.1-canary.0",
   "publishConfig": {
     "access": "public"
   },
@@ -18,8 +18,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@rebasepro/cli": "^3.1.0",
     "@modelcontextprotocol/sdk": "^1.12.1",
+    "@rebasepro/cli": "^3.1.0",
     "axios": "^1.7.0",
     "zod": "^3.24.0"
   },

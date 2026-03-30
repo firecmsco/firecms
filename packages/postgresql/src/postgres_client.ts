@@ -494,7 +494,7 @@ export class PostgresDataSourceClient {
             }
         }
 
-        const requestId = message.requestId || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const requestId = message.requestId || `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
         message.requestId = requestId;
 
         if (!this.pendingRequests.has(requestId)) {
@@ -620,7 +620,7 @@ export class PostgresDataSourceClient {
         onError?: (error: Error) => void
     ): () => void {
         const subscriptionKey = this.createCollectionSubscriptionKey(props);
-        const callbackId = `callback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const callbackId = `callback_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
         // Check if we already have a subscription for these exact parameters
         const existingSubscription = this.collectionSubscriptions.get(subscriptionKey);
@@ -663,7 +663,7 @@ export class PostgresDataSourceClient {
         }
 
         // Create new subscription
-        const backendSubscriptionId = `collection_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const backendSubscriptionId = `collection_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
         const callbackMap = new Map<string, {
             onUpdate: (entities: Entity[]) => void;
             onError?: (error: Error) => void;
@@ -716,7 +716,7 @@ export class PostgresDataSourceClient {
         onError?: (error: Error) => void
     ): () => void {
         const subscriptionKey = this.createEntitySubscriptionKey(props);
-        const callbackId = `callback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const callbackId = `callback_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
         // Check if we already have a subscription for these exact parameters
         const existingSubscription = this.entitySubscriptions.get(subscriptionKey);
@@ -759,7 +759,7 @@ export class PostgresDataSourceClient {
         }
 
         // Create new subscription
-        const backendSubscriptionId = `entity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const backendSubscriptionId = `entity_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
         const callbackMap = new Map<string, {
             onUpdate: (entity: Entity | null) => void;
             onError?: (error: Error) => void;

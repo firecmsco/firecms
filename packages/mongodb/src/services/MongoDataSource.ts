@@ -41,16 +41,7 @@ export class MongoDataSource implements DataSource {
         this.realtimeService = realtimeService ?? new MongoRealtimeService(db);
     }
 
-    /**
-     * Set a date to midnight (start of day) in UTC
-     */
-    setDateToMidnight(input?: any): any {
-        if (!input) return input;
-        if (!(input instanceof Date)) return input;
-        const date = new Date(input);
-        date.setUTCHours(0, 0, 0, 0);
-        return date;
-    }
+
 
     /**
      * Get the current timestamp
@@ -248,7 +239,7 @@ export class MongoDataSource implements DataSource {
      * Generate a unique subscription ID
      */
     private generateSubscriptionId(): string {
-        return `mongo_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        return `mongo_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
     }
 
     /**

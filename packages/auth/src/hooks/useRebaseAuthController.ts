@@ -42,14 +42,11 @@ interface StoredAuthData {
  */
 function saveAuthToStorage(tokens: AuthTokens, user: UserInfo): void {
     try {
-        console.log("[AUTH] saveAuthToStorage - accessTokenExpiresAt value:", tokens.accessTokenExpiresAt, "type:", typeof tokens.accessTokenExpiresAt);
         const data: StoredAuthData = { tokens, user };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         const expiryDate = new Date(tokens.accessTokenExpiresAt);
         const expiryStr = Number.isFinite(tokens.accessTokenExpiresAt) ? expiryDate.toISOString() : "invalid";
-        console.log("[AUTH] Saved auth to storage for user:", user.email, "expires:", expiryStr);
     } catch (e) {
-        console.warn("[AUTH] Failed to save auth to storage:", e);
     }
 }
 
@@ -61,7 +58,6 @@ function loadAuthFromStorage(): StoredAuthData | null {
         const data = localStorage.getItem(STORAGE_KEY);
         if (data) {
             const parsed = JSON.parse(data);
-            console.log("[AUTH] loadAuthFromStorage - accessTokenExpiresAt value:", parsed?.tokens?.accessTokenExpiresAt, "type:", typeof parsed?.tokens?.accessTokenExpiresAt);
             return parsed;
         }
     } catch (e) {
@@ -76,7 +72,6 @@ function loadAuthFromStorage(): StoredAuthData | null {
 function clearAuthFromStorage(): void {
     try {
         localStorage.removeItem(STORAGE_KEY);
-        console.log("[AUTH] Cleared auth from storage");
     } catch (e) {
         console.warn("Failed to clear auth from storage:", e);
     }
@@ -127,7 +122,6 @@ export function useRebaseAuthController(
 
     // Clear session and sign out
     const clearSessionAndSignOut = useCallback(() => {
-        console.log("[AUTH] Clearing session and signing out");
         tokensRef.current = null;
         clearAuthFromStorage();
         if (refreshTimeoutRef.current) {
@@ -146,7 +140,6 @@ export function useRebaseAuthController(
     const refreshAccessToken = useCallback(async (): Promise<AuthTokens | null> => {
         // Prevent concurrent refreshes
         if (refreshPromiseRef.current) {
-            console.log("[AUTH] Refresh already in progress, waiting...");
             // Wait for the current refresh to complete
             return refreshPromiseRef.current;
         }
@@ -158,7 +151,6 @@ export function useRebaseAuthController(
                 const storedTokens = storedData.tokens;
                 // If stored token is newer and not expired
                 if (!isTokenExpiredOrNearExpiry(storedTokens.accessTokenExpiresAt) && storedTokens.accessToken !== tokensRef.current?.accessToken) {
-                    console.log("[AUTH] Found valid newer token in storage, skipping network refresh");
                     tokensRef.current = storedTokens;
                     return storedTokens;
                 }
@@ -166,11 +158,9 @@ export function useRebaseAuthController(
 
             const currentTokens = tokensRef.current;
             if (!currentTokens?.refreshToken) {
-                console.log("[AUTH] No refresh token available");
                 return null;
             }
 
-            console.log("[AUTH] Refreshing access token...");
 
             try {
                 const response = await authApi.refreshAccessToken(currentTokens.refreshToken);
@@ -186,10 +176,8 @@ export function useRebaseAuthController(
                 }
 
                 const newExpiryStr = Number.isFinite(newTokens.accessTokenExpiresAt) ? new Date(newTokens.accessTokenExpiresAt).toISOString() : "invalid";
-                console.log("[AUTH] Token refresh successful, new expiry:", newExpiryStr);
                 return newTokens;
             } catch (error: unknown) {
-                console.error("[AUTH] Token refresh failed:", error instanceof Error ? error.message : String(error));
 
                 // If it's a network error (e.g., backend restarting), we throw so callers can retry
                 // instead of immediately assuming the refresh token is invalid and signing out.
@@ -219,7 +207,6 @@ export function useRebaseAuthController(
 
         if (timeUntilRefresh <= 0) {
             // Token already expired or about to expire - refresh now
-            console.log("[AUTH] Token expired or near expiry, refreshing immediately");
             refreshAccessToken().then(newTokens => {
                 if (newTokens && isMountedRef.current) {
                     scheduleTokenRefresh(newTokens);
@@ -230,24 +217,20 @@ export function useRebaseAuthController(
             return;
         }
 
-        console.log(`[AUTH] Scheduling token refresh in ${Math.round(timeUntilRefresh / 1000)}s`);
 
         refreshTimeoutRef.current = setTimeout(async () => {
             if (!isMountedRef.current) return;
 
-            console.log("[AUTH] Scheduled token refresh triggered");
             try {
                 const newTokens = await refreshAccessToken();
 
                 if (newTokens && isMountedRef.current) {
                     scheduleTokenRefresh(newTokens);
                 } else if (!newTokens && isMountedRef.current) {
-                    console.log("[AUTH] Scheduled refresh failed due to invalid token, signing out");
                     clearSessionAndSignOut();
                 }
             } catch (error) {
                 // Network error - try again shortly instead of logging out
-                console.log("[AUTH] Network error during scheduled refresh, retrying in 10s");
                 if (isMountedRef.current) {
                     refreshTimeoutRef.current = setTimeout(() => {
                         scheduleTokenRefresh(tokens);
@@ -271,7 +254,6 @@ export function useRebaseAuthController(
 
         // Check if token is expired or about to expire
         if (isTokenExpiredOrNearExpiry(currentTokens.accessTokenExpiresAt)) {
-            console.log("[AUTH] Token expired or near expiry, refreshing before returning...");
             try {
                 const newTokens = await refreshAccessToken();
                 if (!newTokens) {
@@ -503,7 +485,6 @@ export function useRebaseAuthController(
         isMountedRef.current = true;
 
         const restoreAuth = async () => {
-            console.log("[AUTH] Attempting to restore auth from storage...");
 
             // Fetch auth config (needsSetup, registrationEnabled, etc.)
             try {
@@ -512,41 +493,34 @@ export function useRebaseAuthController(
                     setAuthConfig(config);
                 }
             } catch (e) {
-                console.warn("[AUTH] Failed to fetch auth config:", e);
             }
 
             const stored = loadAuthFromStorage();
 
             if (!stored) {
-                console.log("[AUTH] No stored auth found in localStorage");
                 setInitialLoading(false);
                 return;
             }
 
             if (!stored.tokens?.refreshToken) {
-                console.log("[AUTH] Stored auth has no refresh token, clearing");
                 clearAuthFromStorage();
                 setInitialLoading(false);
                 return;
             }
 
-            console.log("[AUTH] Found stored auth for user:", stored.user?.email);
 
             // Validate accessTokenExpiresAt is a valid number
             const expiresAt = stored.tokens.accessTokenExpiresAt;
             if (typeof expiresAt !== "number" || !Number.isFinite(expiresAt)) {
-                console.log("[AUTH] Invalid token expiry value, clearing auth");
                 clearAuthFromStorage();
                 setInitialLoading(false);
                 return;
             }
 
-            console.log("[AUTH] Token expires at:", new Date(expiresAt).toISOString());
 
             // Check if access token is still valid
             if (!isTokenExpiredOrNearExpiry(stored.tokens.accessTokenExpiresAt)) {
                 // Token is still valid - use it directly
-                console.log("[AUTH] Access token still valid, using stored tokens");
                 tokensRef.current = stored.tokens;
 
                 let userToSet = convertToUser(stored.user);
@@ -564,14 +538,12 @@ export function useRebaseAuthController(
             }
 
             // Token is expired or near expiry - refresh it
-            console.log("[AUTH] Access token expired or near expiry, refreshing...");
             tokensRef.current = stored.tokens; // Set so refreshAccessToken can use it
 
             try {
                 const newTokens = await refreshAccessToken();
 
                 if (!newTokens) {
-                    console.log("[AUTH] Token refresh failed during restore, clearing auth");
                     clearAuthFromStorage();
                     tokensRef.current = null;
                     setInitialLoading(false);
@@ -583,13 +555,11 @@ export function useRebaseAuthController(
                 // Fetch fresh user data from the server
                 let userToSet: User;
                 try {
-                    console.log("[AUTH] Fetching fresh user data...");
                     const meResponse = await authApi.getCurrentUser(newTokens.accessToken);
 
                     if (!isMountedRef.current) return;
 
                     const freshUserInfo = meResponse.user;
-                    console.log("[AUTH] Got fresh user data:", freshUserInfo.email);
 
                     // Update stored data with fresh user info
                     saveAuthToStorage(newTokens, freshUserInfo);
@@ -605,18 +575,15 @@ export function useRebaseAuthController(
                     }
                 } catch (meError: unknown) {
                     if (!isMountedRef.current) return;
-                    console.warn("[AUTH] Failed to fetch fresh user data:", meError instanceof Error ? meError.message : String(meError));
                     userToSet = convertToUser(stored.user);
                 }
 
                 if (!isMountedRef.current) return;
 
-                console.log("[AUTH] Auth restoration complete, user:", userToSet.email);
                 setUser(userToSet);
                 scheduleTokenRefresh(newTokens);
             } catch (error: unknown) {
                 if (!isMountedRef.current) return;
-                console.error("[AUTH] Token refresh failed during restore:", error instanceof Error ? (error as Error).message : String(error));
 
                 // Do not clear the session entirely if it's just a temporary network outage
                 if (!(error instanceof Error && (error as { code?: string }).code === "NETWORK_ERROR")) {
@@ -645,7 +612,6 @@ export function useRebaseAuthController(
             if (document.visibilityState === "visible" && tokensRef.current) {
                 // Check if token needs refreshing
                 if (isTokenExpiredOrNearExpiry(tokensRef.current.accessTokenExpiresAt)) {
-                    console.log("[AUTH] Visibility change - token needs refresh");
                     try {
                         const newTokens = await refreshAccessToken();
 
@@ -655,7 +621,6 @@ export function useRebaseAuthController(
                             clearSessionAndSignOut();
                         }
                     } catch (error) {
-                        console.log("[AUTH] Network error during visibility refresh, deferring.");
                     }
                 }
             }

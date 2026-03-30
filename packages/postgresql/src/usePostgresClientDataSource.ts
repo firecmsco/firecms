@@ -97,12 +97,6 @@ export function usePostgresClientDataSource(config: PostgresDataSourceConfig): P
 
         client,
 
-        setDateToMidnight: (date: Date) => {
-            const d = new Date(date);
-            d.setHours(0, 0, 0, 0);
-            return d;
-        },
-
         async fetchCollection<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<Entity<M>[]> {
             // Strip out navigationController and any other unnecessary props before sending to client
             const {

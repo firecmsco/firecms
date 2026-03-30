@@ -1,17 +1,17 @@
 {
     "name": "@rebasepro/data_import_export",
     "type": "module",
-    "version": "4.0.0",
+    "version": "0.0.1-canary.0",
     "access": "public",
     "main": "./dist/index.umd.js",
     "module": "./dist/index.es.js",
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "dependencies": {
-        "@rebasepro/core": "4.0.0",
-        "@rebasepro/types": "4.0.0",
-        "@rebasepro/data_export": "4.0.0",
-        "@rebasepro/data_import": "4.0.0"
+        "@rebasepro/core": "0.0.1-canary.0",
+        "@rebasepro/data_export": "0.0.1-canary.0",
+        "@rebasepro/data_import": "0.0.1-canary.0",
+        "@rebasepro/types": "0.0.1-canary.0"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

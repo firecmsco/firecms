@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: rebase
+      POSTGRES_PASSWORD: rebasepassword
+      POSTGRES_DB: rebase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rebase"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: 
+      context: ../..
+      dockerfile: app/backend/Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgresql://rebase:rebasepassword@db:5432/rebase
+      - JWT_SECRET=super-secret-jwt-key
+      - NODE_ENV=development
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/app/app/backend/uploads
+
+volumes:
+  postgres_data:

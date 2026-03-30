@@ -73,7 +73,7 @@ export function findCommonInitialStringInPath(valuesCount?: ValuesCountEntry) {
     if (!pathWithSlash)
         return undefined;
 
-    const searchedPath = pathWithSlash.substr(0, pathWithSlash.lastIndexOf("/"));
+    const searchedPath = pathWithSlash.substring(0, pathWithSlash.lastIndexOf("/"));
 
     const yep = valuesCount.values
         .filter((value) => {

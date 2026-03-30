@@ -1,6 +1,6 @@
 {
     "name": "@rebasepro/datatalk",
-    "version": "4.0.0",
+    "version": "0.0.1-canary.0",
     "description": "Talk to your Firestore data",
     "type": "module",
     "main": "dist/index.cjs",
@@ -30,17 +30,17 @@
         "react-dom": ">=19.0.0"
     },
     "dependencies": {
-        "@rebasepro/core": "4.0.0",
-        "@rebasepro/types": "4.0.0",
-        "@rebasepro/data_export": "4.0.0",
+        "@monaco-editor/react": "^4.7.0",
+        "@rebasepro/core": "0.0.1-canary.0",
+        "@rebasepro/data_export": "0.0.1-canary.0",
+        "@rebasepro/data_import": "0.0.1-canary.0",
+        "@rebasepro/data_import_export": "0.0.1-canary.0",
+        "@rebasepro/firebase": "0.0.1-canary.0",
+        "@rebasepro/formex": "0.0.1-canary.0",
+        "@rebasepro/schema_inference": "0.0.1-canary.0",
         "@rebasepro/studio": "4.0.0",
-        "@rebasepro/data_import": "4.0.0",
-        "@rebasepro/data_import_export": "4.0.0",
-        "@rebasepro/firebase": "4.0.0",
-        "@rebasepro/formex": "4.0.0",
-        "@rebasepro/schema_inference": "4.0.0",
-        "@rebasepro/ui": "4.0.0",
-        "@monaco-editor/react": "^4.7.0"
+        "@rebasepro/types": "0.0.1-canary.0",
+        "@rebasepro/ui": "0.0.1-canary.0"
     },
     "devDependencies": {
         "@types/node": "20.19.17",

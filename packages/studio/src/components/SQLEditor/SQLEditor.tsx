@@ -467,7 +467,7 @@ export const SQLEditor = () => {
     };
 
     const handleAddTab = () => {
-        const newId = Math.random().toString(36).substr(2, 9);
+        const newId = Math.random().toString(36).substring(2, 9);
 
         // Find the next available query number
         let maxNumber = 0;
@@ -627,7 +627,7 @@ export const SQLEditor = () => {
         if (!newSnippetName.trim() || !sql.trim()) return;
 
         const newSnippet: Snippet = {
-            id: Math.random().toString(36).substr(2, 9),
+            id: Math.random().toString(36).substring(2, 9),
             name: newSnippetName,
             sql: sql,
             createdAt: Date.now()

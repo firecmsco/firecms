@@ -77,23 +77,6 @@ describe("MongoDataSource", () => {
         });
     });
 
-    describe("setDateToMidnight", () => {
-        it("should set date to midnight UTC", () => {
-            const date = new Date("2024-06-15T14:30:00Z");
-            const midnight = delegate.setDateToMidnight(date);
-
-            expect(midnight.getUTCHours()).toBe(0);
-            expect(midnight.getUTCMinutes()).toBe(0);
-            expect(midnight.getUTCSeconds()).toBe(0);
-            expect(midnight.getUTCMilliseconds()).toBe(0);
-        });
-
-        it("should return non-Date values unchanged", () => {
-            expect(delegate.setDateToMidnight("string")).toBe("string");
-            expect(delegate.setDateToMidnight(123)).toBe(123);
-            expect(delegate.setDateToMidnight(null)).toBe(null);
-        });
-    });
 
     describe("fetchEntity", () => {
         it("should fetch an entity", async () => {

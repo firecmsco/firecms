@@ -1,6 +1,6 @@
 {
   "name": "rebase",
-  "version": "4.0.0",
+  "version": "0.0.1-canary.0",
   "description": "A CLI to perform Rebase operations. This package is just a wrapper around @rebasepro/cli",
   "bin": "bin/rebase.js",
   "publishConfig": {
@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "build": "echo \"create-rebase-app: no need to build\" && exit 0",
-    "clean": "echo \"create-rebase-app: no need to clean\" && exit 0"
+    "build": "echo \"@rebasepro/create: no need to build\" && exit 0",
+    "clean": "echo \"@rebasepro/create: no need to clean\" && exit 0"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
   "author": "rebase.pro",
   "license": "MIT",
   "dependencies": {
-    "@rebasepro/cli": "4.0.0"
+    "@rebasepro/cli": "0.0.1-canary.0"
   },
   "devDependencies": {
     "@types/node": "^20.17.14",

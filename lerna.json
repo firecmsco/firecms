@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "4.0.0-alpha.1",
+  "version": "0.0.1-canary.0",
   "packages": [
     "packages/auth",
     "packages/rebase",

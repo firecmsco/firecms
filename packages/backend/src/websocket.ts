@@ -25,7 +25,7 @@ export function createPostgresWebSocket(
     const requireAuth = authConfig?.requireAuth !== false && authConfig?.jwtSecret;
 
     wss.on("connection", (ws) => {
-        const clientId = `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const clientId = `client_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
         console.debug(`WebSocket client connected: ${clientId}`);
 
         // Initialize client session

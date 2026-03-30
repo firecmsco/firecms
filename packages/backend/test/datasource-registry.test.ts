@@ -16,8 +16,7 @@ function createMockDataSourceDelegate(key: string): DataSource {
         fetchEntity: jest.fn().mockResolvedValue(undefined),
         saveEntity: jest.fn().mockResolvedValue({ id: "test-id", path: "test", values: {} }),
         deleteEntity: jest.fn().mockResolvedValue(undefined),
-        checkUniqueField: jest.fn().mockResolvedValue(true),
-        setDateToMidnight: jest.fn((input) => input),
+        checkUniqueField: jest.fn().mockResolvedValue(true)
     };
 }
 

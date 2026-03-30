@@ -168,8 +168,6 @@ export interface DataSource {
      */
     currentTime?: () => unknown;
 
-    setDateToMidnight?: (input?: unknown) => unknown;
-
     delegateToCMSModel?: (data: unknown) => unknown;
 
     cmsToDelegateModel?: (data: unknown) => unknown;

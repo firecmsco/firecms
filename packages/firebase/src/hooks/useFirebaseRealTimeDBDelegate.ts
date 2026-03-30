@@ -217,17 +217,11 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         deleteEntity,
         checkUniqueField,
         isFilterCombinationValid,
-        currentTime: () => new Date(),
-        setDateToMidnight
+        currentTime: () => new Date()
     };
 }
 
-function setDateToMidnight(date?: unknown): unknown {
-    if (!date || !(date instanceof Date)) return date;
-    const newDate = new Date(date);
-    newDate.setHours(0, 0, 0, 0);
-    return newDate;
-}
+
 
 /**
  * Transform data from RTDB format back to CMS format
