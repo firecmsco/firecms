@@ -33,5 +33,6 @@
     "drizzle-kit": "^0.31.4",
     "typescript": "^5.3.3"
   },
-  "gitHead": "646afae9c387c3ce02c699d98cd8c7272bdd1929"
+  "gitHead": "e42be25c08d53e4b59790f8619ba848cce455363",
+  "private": true
 }
