@@ -1016,7 +1016,7 @@ importers:
         specifier: ^0.0.1-canary.1041cefe9
         version: link:../schema_inference
       '@rebasepro/studio':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../studio
       '@rebasepro/types':
         specifier: ^0.0.1-canary.1041cefe9
@@ -1280,7 +1280,7 @@ importers:
         specifier: ^0.0.1-canary.1041cefe9
         version: link:../schema_inference
       '@rebasepro/studio':
-        specifier: 4.0.0
+        specifier: workspace:*
         version: link:../studio
       '@rebasepro/types':
         specifier: ^0.0.1-canary.1041cefe9
