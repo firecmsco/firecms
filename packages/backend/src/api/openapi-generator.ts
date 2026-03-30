@@ -1,6 +1,6 @@
-import { EntityCollection } from "@rebasepro/types";
+import { EntityCollection, Property } from "@rebasepro/types";
 
-export function generateOpenApiSpec(collections: EntityCollection[], basePath: string = "/api"): any {
+export function generateOpenApiSpec(collections: EntityCollection[], basePath: string = "/api"): Record<string, unknown> {
     const spec = {
         openapi: "3.0.0",
         info: {
@@ -142,7 +142,7 @@ export function generateOpenApiSpec(collections: EntityCollection[], basePath: s
     return spec;
 }
 
-function convertPropertyToOpenApiType(property: any): any {
+function convertPropertyToOpenApiType(property: Property): Record<string, unknown> {
     switch (property.type) {
         case "string":
             return { type: "string" };

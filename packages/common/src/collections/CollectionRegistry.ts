@@ -137,14 +137,14 @@ export class CollectionRegistry {
         } else if ((newProperty.type === "string" || newProperty.type === "number") && newProperty.enum) {
             const stringOrNumberProperty = newProperty as StringProperty | NumberProperty;
             if (typeof stringOrNumberProperty.enum === "object" && !Array.isArray(stringOrNumberProperty.enum)) {
-                (stringOrNumberProperty as any).enum = enumToObjectEntries(stringOrNumberProperty.enum)?.filter((value) => value && (value.id || value.id === 0) && value.label) ?? [];
+                (stringOrNumberProperty as unknown as Record<string, unknown>).enum = enumToObjectEntries(stringOrNumberProperty.enum)?.filter((value) => value && (value.id || value.id === 0) && value.label) ?? [];
             }
         } else if (newProperty.type === "relation") {
             const relationProperty = newProperty as RelationProperty;
             const relation = relations.find(r => r.relationName === relationProperty.relationName);
             if (relation) {
                 // we attach the resolved relation to the property
-                (relationProperty as any).relation = relation;
+                (relationProperty as unknown as Record<string, unknown>).relation = relation;
             } else {
                 console.warn(`Could not find relation for property with relationName: ${relationProperty.relationName}`);
             }

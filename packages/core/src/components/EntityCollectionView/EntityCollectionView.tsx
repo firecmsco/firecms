@@ -617,7 +617,7 @@ export const EntityCollectionView = React.memo(
                         <Button
                             className={"max-w-full truncate justify-start"}
                             startIcon={<KeyboardTabIcon size={"small"} />}
-                            onClick={(event: any) => {
+                            onClick={(event: React.MouseEvent) => {
                                 event.stopPropagation();
                                 navigateToEntity({
                                     openEntityMode,

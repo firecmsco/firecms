@@ -63,7 +63,7 @@ const buildIdsMap = (value: any[]) =>
             .map((v, index) => {
                 if (!v) return {};
                 return {
-                    [getHashValue(v) + index]: getRandomId()
+                    [getHashValue(v) ?? String(index) + index]: getRandomId()
                 };
             })
             .reduce((a, b) => ({ ...a, ...b }), {})
@@ -381,7 +381,7 @@ export function ArrayContainer<T>({
     useEffect(() => {
         if (hasValue && value && value.length !== internalIds.length) {
             const newInternalIds = value.map((v, index) => {
-                const hashValue = getHashValue(v) + index;
+                const hashValue = (getHashValue(v) ?? String(index)) + index;
                 if (hashValue in internalIdsRef.current) {
                     return internalIdsRef.current[hashValue];
                 } else {

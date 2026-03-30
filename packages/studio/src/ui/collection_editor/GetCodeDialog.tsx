@@ -10,7 +10,7 @@ export function GetCodeDialog({
     collection,
     onOpenChange,
     open
-}: { onOpenChange: (open: boolean) => void, collection: any, open: any }) {
+}: { onOpenChange: (open: boolean) => void, collection: EntityCollection, open: boolean }) {
 
     const snackbarController = useSnackbarController();
 
@@ -78,7 +78,7 @@ export function GetCodeDialog({
 
 function collectionToCode(collection: EntityCollection): object {
 
-    const propertyCleanup = (value: any): any => {
+    const propertyCleanup = (value: unknown): unknown => {
         if (value === undefined || value === null) {
             return value;
         }
@@ -87,7 +87,7 @@ function collectionToCode(collection: EntityCollection): object {
             return valueCopy;
         }
         if (Array.isArray(valueCopy)) {
-            return valueCopy.map((v: any) => propertyCleanup(v));
+            return valueCopy.map((v: unknown) => propertyCleanup(v));
         }
         if (typeof valueCopy === "object") {
             if (valueCopy === null)

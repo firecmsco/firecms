@@ -46,7 +46,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
 
         // Example to apply "limit" and "startAfter"
         if (startAfter !== undefined) {
-            dbQuery = query(dbQuery, orderByKey(), startAt(startAfter));
+            dbQuery = query(dbQuery, orderByKey(), startAt(startAfter as any));
         }
         if (limit !== undefined) {
             dbQuery = query(dbQuery, limitToFirst(limit));
@@ -222,7 +222,8 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
     };
 }
 
-function setDateToMidnight(date: Date): Date {
+function setDateToMidnight(date?: unknown): unknown {
+    if (!date || !(date instanceof Date)) return date;
     const newDate = new Date(date);
     newDate.setHours(0, 0, 0, 0);
     return newDate;

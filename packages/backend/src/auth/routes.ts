@@ -355,8 +355,8 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
                     html: emailContent.html,
                     text: emailContent.text
                 });
-            } catch (emailError: any) {
-                console.error("Failed to send password reset email:", emailError.message);
+            } catch (emailError: unknown) {
+                console.error("Failed to send password reset email:", emailError instanceof Error ? emailError.message : emailError);
                 // Don't reveal email sending failure to client
             }
         }

@@ -44,7 +44,7 @@ export function MapFieldBinding({
             mapProperties = pick(property.properties,
                 ...Object.keys(value)
                     .filter(key => key in property.properties!)
-            );
+            ) as Properties;
         } else {
             mapProperties = {};
         }

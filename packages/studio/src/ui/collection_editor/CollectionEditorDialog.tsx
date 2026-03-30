@@ -24,7 +24,8 @@ import {
     useCMSUrlController,
     User,
     useSnackbarController,
-    useUnsavedChangesDialog
+    useUnsavedChangesDialog,
+    UnsavedChangesDialog
 } from "@rebasepro/core";
 import {
     ArrowBackIcon,
@@ -47,7 +48,6 @@ import { YupSchema } from "./CollectionYupValidation";
 import { GeneralSettingsForm } from "./GeneralSettingsForm";
 import { DisplaySettingsForm } from "./DisplaySettingsForm";
 import { CollectionPropertiesEditorForm } from "./CollectionPropertiesEditorForm";
-import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
 import { CollectionRelationsTab } from "./CollectionRelationsTab";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView";
@@ -444,11 +444,11 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 values
             });
             return values;
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error(e);
             snackbarController.open({
                 type: "error",
-                message: "Error inferring collection: " + (e.message ?? "Details in the console")
+                message: "Error inferring collection: " + (e instanceof Error ? e.message : "Details in the console")
             });
             return newCollection;
         }
@@ -512,10 +512,10 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                 setNextMode();
                 formexController.resetForm({ values: newCollectionState });
             }
-        } catch (e: any) {
+        } catch (e: unknown) {
             snackbarController.open({
                 type: "error",
-                message: "Error persisting collection: " + (e.message ?? "Details in the console")
+                message: "Error persisting collection: " + (e instanceof Error ? e.message : "Details in the console")
             });
             console.error(e);
             formexController.resetForm({ values: newCollectionState });
@@ -524,13 +524,14 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     const validation = (col: PersistedCollection) => {
 
-        let errors: Record<string, any> = {};
+        let errors: Record<string, string> = {};
         const schema = (currentView === "properties" || currentView === "relations" || currentView === "general") && YupSchema;
         if (schema) {
             try {
                 schema.validateSync(col, { abortEarly: false });
-            } catch (e: any) {
-                e.inner.forEach((err: any) => {
+            } catch (e: unknown) {
+                const yupError = e as { inner?: Array<{ path?: string; message: string }> };
+                yupError.inner?.forEach((err) => {
                     if (err.path) {
                         errors[err.path] = err.message;
                     }
@@ -743,11 +744,11 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                             ...collectionData
                                         } as PersistedCollection<M>);
                                         onWelcomeScreenContinue();
-                                    } catch (e: any) {
+                                    } catch (e: unknown) {
                                         console.error("Error importing table:", e);
                                         snackbarController.open({
                                             type: "error",
-                                            message: "Error importing table: " + (e.message ?? "Unknown error")
+                                            message: "Error importing table: " + (e instanceof Error ? e.message : "Unknown error")
                                         });
                                     }
                                 } : undefined} />}

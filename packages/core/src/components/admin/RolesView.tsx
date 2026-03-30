@@ -66,8 +66,8 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
             snackbarController.open({ type: "success", message: "Role deleted successfully" });
             setDeleteConfirmOpen(false);
             setRoleToDelete(undefined);
-        } catch (error: any) {
-            snackbarController.open({ type: "error", message: error.message || "Error deleting role" });
+        } catch (error: unknown) {
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Error deleting role" });
         } finally {
             setDeleteInProgress(false);
         }
@@ -226,8 +226,8 @@ function RoleDetailsForm({
                 isAdmin
             });
             handleClose();
-        } catch (error: any) {
-            snackbarController.open({ type: "error", message: error.message || "Failed to save role" });
+        } catch (error: unknown) {
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Failed to save role" });
         } finally {
             setIsSubmitting(false);
         }

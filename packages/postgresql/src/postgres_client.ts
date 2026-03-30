@@ -263,13 +263,13 @@ export class PostgresDataSourceClient {
             this.pendingRequests.delete(requestId);
 
             if (type === "ERROR" || type === "AUTH_ERROR" || message.error) {
-                const errPayload = message.payload?.error;
+                const errPayload = (message.payload as any)?.error;
                 const errorMessage = typeof errPayload === "object"
                     ? errPayload.message
-                    : message.payload?.message || errPayload || message.error || "Unknown error";
+                    : (message.payload as any)?.message || errPayload || message.error || "Unknown error";
                 const errorCode = typeof errPayload === "object"
                     ? errPayload.code
-                    : message.payload?.code;
+                    : (message.payload as any)?.code;
                 reject(new ApiError(errorMessage, errorMessage, errorCode));
             } else {
                 resolve(message.payload || message);
@@ -339,13 +339,13 @@ export class PostgresDataSourceClient {
             if (collectionKey) {
                 const collectionSub = this.collectionSubscriptions.get(collectionKey);
                 if (collectionSub) {
-                    const errPayload = message.payload?.error;
+                    const errPayload = (message.payload as any)?.error;
                     const errorMessage = typeof errPayload === "object"
                         ? errPayload.message
-                        : message.payload?.message || errPayload || message.error || "Unknown error";
+                        : (message.payload as any)?.message || errPayload || message.error || "Unknown error";
                     const errorCode = typeof errPayload === "object"
                         ? errPayload.code
-                        : message.payload?.code;
+                        : (message.payload as any)?.code;
                     const error = new ApiError(errorMessage, errorMessage, errorCode);
                     collectionSub.callbacks.forEach(callback => {
                         if (callback.onError) {
@@ -360,13 +360,13 @@ export class PostgresDataSourceClient {
             if (entityKey) {
                 const entitySub = this.entitySubscriptions.get(entityKey);
                 if (entitySub) {
-                    const errPayload = message.payload?.error;
+                    const errPayload = (message.payload as any)?.error;
                     const errorMessage = typeof errPayload === "object"
                         ? errPayload.message
-                        : message.payload?.message || errPayload || message.error || "Unknown error";
+                        : (message.payload as any)?.message || errPayload || message.error || "Unknown error";
                     const errorCode = typeof errPayload === "object"
                         ? errPayload.code
-                        : message.payload?.code;
+                        : (message.payload as any)?.code;
                     const error = new ApiError(errorMessage, errorMessage, errorCode);
                     entitySub.callbacks.forEach(callback => {
                         if (callback.onError) {
@@ -386,13 +386,13 @@ export class PostgresDataSourceClient {
             }
             if (message.type === "ERROR" || message.error) {
                 if (callback.onError) {
-                    const errPayload = message.payload?.error;
+                    const errPayload = (message.payload as any)?.error;
                     const errorMessage = typeof errPayload === "object"
                         ? errPayload.message
-                        : message.payload?.message || errPayload || message.error || "Unknown error";
+                        : (message.payload as any)?.message || errPayload || message.error || "Unknown error";
                     const errorCode = typeof errPayload === "object"
                         ? errPayload.code
-                        : message.payload?.code;
+                        : (message.payload as any)?.code;
                     callback.onError(new ApiError(errorMessage, errorMessage, errorCode));
                 }
             } else {

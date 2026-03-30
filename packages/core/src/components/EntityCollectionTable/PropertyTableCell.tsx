@@ -167,9 +167,9 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                                 onValueUpdated,
                                 data: entity,
                             });
-                        } catch (e: any) {
+                        } catch (e: unknown) {
                             console.error("onValueChange error", e);
-                            setError(e);
+                            setError(e instanceof Error ? e : new Error(String(e)));
                         }
 
                     }

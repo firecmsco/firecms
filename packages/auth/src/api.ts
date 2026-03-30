@@ -1,4 +1,4 @@
-import { AuthResponse, RefreshResponse, UserInfo } from "./types";
+import { AuthResponse, RefreshResponse, Session, UserInfo } from "./types";
 
 /**
  * Default API URL - can be overridden in hook props
@@ -30,7 +30,7 @@ class AuthApiError extends Error {
 }
 
 async function handleResponse<T>(response: Response): Promise<T> {
-    let data: any;
+    let data: Record<string, unknown>;
     try {
         data = await response.json();
     } catch (parseError) {
@@ -43,8 +43,8 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
     if (!response.ok) {
         throw new AuthApiError(
-            data.error?.message || "Request failed",
-            data.error?.code || "UNKNOWN_ERROR"
+            (data as Record<string, Record<string, string>>).error?.message || "Request failed",
+            (data as Record<string, Record<string, string>>).error?.code || "UNKNOWN_ERROR"
         );
     }
 
@@ -58,14 +58,14 @@ async function handleResponse<T>(response: Response): Promise<T> {
 async function fetchWithHandling(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
     try {
         return await fetch(input, init);
-    } catch (error: any) {
-        if (error.name === "TypeError" && error.message.includes("Failed to fetch")) {
+    } catch (error: unknown) {
+        if (error instanceof TypeError && error.message.includes("Failed to fetch")) {
             throw new AuthApiError(
                 "Failed to connect to the backend server. The backend might be down or failed to initialize (e.g., database connection timeout).",
                 "NETWORK_ERROR"
             );
         }
-        throw new AuthApiError("Network error: " + error.message, "NETWORK_ERROR");
+        throw new AuthApiError("Network error: " + (error instanceof Error ? error.message : String(error)), "NETWORK_ERROR");
     }
 }
 
@@ -250,7 +250,7 @@ export async function updateProfile(
 /**
  * Fetch active sessions for current user
  */
-export async function fetchSessions(accessToken: string, currentRefreshToken?: string): Promise<{ sessions: any[] }> {
+export async function fetchSessions(accessToken: string, currentRefreshToken?: string): Promise<{ sessions: Session[] }> {
     const headers: Record<string, string> = {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${accessToken}`
@@ -264,7 +264,7 @@ export async function fetchSessions(accessToken: string, currentRefreshToken?: s
         headers
     });
 
-    return handleResponse<{ sessions: any[] }>(response);
+    return handleResponse<{ sessions: Session[] }>(response);
 }
 
 /**

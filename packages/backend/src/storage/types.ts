@@ -47,7 +47,7 @@ export interface S3StorageConfig {
 /**
  * Storage configuration - either local filesystem or S3-compatible
  */
-export type StorageConfig = LocalStorageConfig | S3StorageConfig;
+export type BackendStorageConfig = LocalStorageConfig | S3StorageConfig;
 
 /**
  * Storage controller interface for backend implementations

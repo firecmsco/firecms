@@ -48,7 +48,7 @@ function EntityBoardCardInner<M extends Record<string, any> = any>({
     const imageProperty = imagePropertyKey ? collection.properties[imagePropertyKey] : undefined;
     const usedImageProperty = imageProperty && "of" in imageProperty ? imageProperty.of : imageProperty;
 
-    const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) : undefined;
+    const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) as any : undefined;
     const usedImageValue = imageProperty !== undefined
         ? ("of" in imageProperty
             ? ((imageValue ?? []).length > 0 ? imageValue[0] : undefined)

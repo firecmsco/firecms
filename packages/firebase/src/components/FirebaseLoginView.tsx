@@ -151,7 +151,7 @@ export function FirebaseLoginView({
         const auth = getAuth(firebaseApp);
         const recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha", { size: "invisible" });
 
-        const resolver = getMultiFactorResolver(auth, authController.authProviderError);
+        const resolver = getMultiFactorResolver(auth, authController.authProviderError as any);
 
         if (resolver.hints[0].factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
 
@@ -185,8 +185,9 @@ export function FirebaseLoginView({
         if (authController.user != null) return errorView; // if the user is logged in via MFA
         const ignoredCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
         if (authController.authProviderError) {
-            if (authController.authProviderError.code === "auth/operation-not-allowed" ||
-                authController.authProviderError.code === "auth/configuration-not-found") {
+            const authError = authController.authProviderError as any;
+            if (authError.code === "auth/operation-not-allowed" ||
+                authError.code === "auth/configuration-not-found") {
                 errorView =
                     <>
                         <div className="p-4">
@@ -206,31 +207,31 @@ export function FirebaseLoginView({
                                 </a>
                             </div>}
                     </>;
-            } else if (authController.authProviderError.code === "auth/invalid-api-key") {
+            } else if (authError.code === "auth/invalid-api-key") {
                 errorView = <div className="p-4">
                     <ErrorView
                         title={"Invalid API key"}
                         error={"auth/invalid-api-key: Check that your Firebase config is set correctly in your `firebase_config.ts` file"} />
                 </div>;
-            } else if (authController.authProviderError.code === "auth/email-already-in-use") {
+            } else if (authError.code === "auth/email-already-in-use") {
                 errorView = <div className="p-4">
                     <ErrorView
                         title={"Email already in use"}
                         error={"The selected email is already in use by another account"} />
                 </div>;
-            } else if (authController.authProviderError.code === "auth/invalid-credential") {
+            } else if (authError.code === "auth/invalid-credential") {
                 errorView = <div className="p-4">
                     <ErrorView
                         title={"Invalid credential"}
                         error={"The provided credential is not correct"} />
                 </div>;
-            } else if (!ignoredCodes.includes(authController.authProviderError.code)) {
-                if (authController.authProviderError.code === "auth/multi-factor-auth-required") {
+            } else if (!ignoredCodes.includes(authError.code)) {
+                if (authError.code === "auth/multi-factor-auth-required") {
                     sendMFASms();
                 }
                 errorView =
                     <div className="p-4">
-                        <ErrorView error={authController.authProviderError} />
+                        <ErrorView error={authController.authProviderError as Error} />
                     </div>;
             }
         }

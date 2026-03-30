@@ -47,24 +47,26 @@ export function EnumForm({
         initialValues: { enum: enumValues },
         validateOnChange: true,
         validation: (values) => {
-            const errors: any = {};
+            interface EnumFieldError { label?: string; id?: string; }
+            const enumErrors: EnumFieldError[] = [];
+            let hasAnyError = false;
             if (values.enum) {
                 values.enum.forEach((enumValue, index) => {
+                    const fieldError: EnumFieldError = {};
                     if (!enumValue?.label) {
-                        errors.enum = errors.enum ?? [];
-                        errors.enum[index] = errors.enum[index] ?? {};
-                        errors.enum[index].label = "You must specify a label for this enum value entry";
+                        fieldError.label = "You must specify a label for this enum value entry";
+                        hasAnyError = true;
                     }
                     if (!enumValue?.id) {
-                        errors.enum = errors.enum ?? [];
-                        errors.enum[index] = errors.enum[index] ?? {};
-                        errors.enum[index].id = "You must specify an ID for this enum value entry";
+                        fieldError.id = "You must specify an ID for this enum value entry";
+                        hasAnyError = true;
                     }
+                    enumErrors[index] = fieldError;
                 });
             }
-            const hasError = Boolean(errors?.enum && Object.keys(errors?.enum).length > 0);
-            onError?.(hasError);
-            return errors;
+            const errors = hasAnyError ? { enum: enumErrors } : {};
+            onError?.(hasAnyError);
+            return errors as Record<string, string>;
         }
     });
 
@@ -95,7 +97,7 @@ type EnumFormFieldsProps = {
     values: {
         enum: EnumValueConfig[]
     };
-    errors: any;
+    errors: { enum?: Array<{ label?: string; id?: string }> };
     enumValuesPath: string;
     shouldUpdateId: boolean;
     disabled: boolean;
@@ -130,7 +132,7 @@ function EnumFormFields({
         internalId
     }: ArrayEntryParams) => {
         const justAdded = lastInternalIdAdded === internalId;
-        const entryError = errors?.enum && errors?.enum[index];
+        const entryError = errors?.enum?.[index];
         return <EnumEntry index={index}
             disabled={disabled}
             enumValuesPath={enumValuesPath}
@@ -159,7 +161,7 @@ function EnumFormFields({
 
             // add only new enum values
             const newEnumValues = foundEnumValues.filter((enumValue) => {
-                return !currentEnumValues?.some((v: any) => v.id === enumValue.id);
+                return !currentEnumValues?.some((v: EnumValueConfig) => v.id === enumValue.id);
             });
 
             newEnumValues.forEach((enumValue) => {

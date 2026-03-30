@@ -634,7 +634,7 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
      */
     value?: (props: {
         entity: Entity<M>,
-        context: RebaseContext<any>
+        context: RebaseContext
     }) => string | number | Promise<string | number> | undefined;
 }
 
@@ -765,7 +765,7 @@ export type EntityTableController<M extends Record<string, any> = any> = {
 
 export type SelectedCellProps<M extends Record<string, any> = any> = {
     propertyKey: Extract<keyof M, string>;
-    cellRect: any;
+    cellRect: DOMRect;
     width: number;
     height: number;
     entityPath: string;

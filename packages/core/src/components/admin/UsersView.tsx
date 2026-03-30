@@ -57,8 +57,8 @@ export function UsersView({ userManagement }: {
             snackbarController.open({ type: "success", message: "You are now an admin! Refreshing..." });
             // Reload to get new roles
             window.location.reload();
-        } catch (error: any) {
-            snackbarController.open({ type: "error", message: error.message || "Failed to bootstrap admin" });
+        } catch (error: unknown) {
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Failed to bootstrap admin" });
         } finally {
             setBootstrapping(false);
         }
@@ -88,8 +88,8 @@ export function UsersView({ userManagement }: {
             snackbarController.open({ type: "success", message: "User deleted successfully" });
             setDeleteConfirmOpen(false);
             setUserToDelete(undefined);
-        } catch (error: any) {
-            snackbarController.open({ type: "error", message: error.message || "Error deleting user" });
+        } catch (error: unknown) {
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Error deleting user" });
         } finally {
             setDeleteInProgress(false);
         }
@@ -263,8 +263,8 @@ function UserDetailsForm({
             };
             await saveUser(userToSave);
             handleClose();
-        } catch (error: any) {
-            snackbarController.open({ type: "error", message: error.message || "Failed to save user" });
+        } catch (error: unknown) {
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Failed to save user" });
         } finally {
             setIsSubmitting(false);
         }

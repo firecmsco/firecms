@@ -37,9 +37,11 @@ export function extractTablesFromQuery(sqlString: string): ExtractedTable[] {
 
         const tables: ExtractedTable[] = [];
 
-        const processFrom = (fromItems: any[]) => {
+        // pgsql-ast-parser From items — tables and joins with left/right branches
+        type FromNode = { type: string; name?: { name: string; alias?: string }; left?: FromNode; right?: FromNode };
+        const processFrom = (fromItems: FromNode[]) => {
             for (const item of fromItems) {
-                if (item.type === "table") {
+                if (item.type === "table" && item.name) {
                     tables.push({ name: item.name.name, alias: item.name.alias });
                 }
                 if (item.type === "join") {
@@ -287,8 +289,9 @@ export function determineTableAndPK(sqlString: string, columnKey: string, schema
         });
 
         return { tableName: resolvedTableName, primaryKeys };
-    } catch (e: any) {
+    } catch (e: unknown) {
         console.warn("Failed to parse SQL AST:", e);
-        return { error: `Could not safely parse query for inline editing: ${e.message}` };
+        const message = e instanceof Error ? e.message : String(e);
+        return { error: `Could not safely parse query for inline editing: ${message}` };
     }
 }

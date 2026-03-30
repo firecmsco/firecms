@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useBlocker } from "react-router-dom";
-
-export interface UnsavedChangesDialogProps {
-    open: boolean;
-    handleOk: () => void;
-    handleCancel: () => void;
-    body: string;
-}
+import { UnsavedChangesDialogProps } from "../components/UnsavedChangesDialog";
 
 /**
  * A single, unified hook to prevent navigation when there are unsaved changes.

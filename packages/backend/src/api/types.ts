@@ -1,5 +1,6 @@
 import { EntityCollection } from "@rebasepro/types";
 import { AuthenticatedRequest, AuthResult } from "../auth/middleware";
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
 
 /**
  * Extended request type for API endpoints.
@@ -35,20 +36,20 @@ export interface ApiConfig {
  * Context passed to resolvers and handlers
  */
 export interface ApiContext {
-    user?: any;
+    user?: AuthResult;
     collections: Map<string, EntityCollection>;
-    db: any; // Drizzle DB instance
+    db: NodePgDatabase; // Drizzle DB instance
 }
 
 /**
  * Standard API response format
  */
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
     data?: T;
     error?: {
         message: string;
         code?: string;
-        details?: any;
+        details?: unknown;
     };
     meta?: {
         total?: number;
@@ -64,7 +65,7 @@ export interface ApiResponse<T = any> {
 export interface QueryOptions {
     limit?: number;
     offset?: number;
-    where?: Record<string, any>;
+    where?: Record<string, unknown>;
     orderBy?: Array<{ field: string; direction: 'asc' | 'desc' }>;
     include?: string[];
 }

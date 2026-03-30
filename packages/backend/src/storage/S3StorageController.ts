@@ -112,7 +112,7 @@ export class S3StorageController implements StorageController {
     /**
      * Flatten nested metadata to string values (S3 requirement)
      */
-    private flattenMetadata(metadata: Record<string, any>): Record<string, string> {
+    private flattenMetadata(metadata: Record<string, unknown>): Record<string, string> {
         const flattened: Record<string, string> = {};
         for (const [key, value] of Object.entries(metadata)) {
             if (typeof value === 'string') {
@@ -169,8 +169,9 @@ export class S3StorageController implements StorageController {
                 url,
                 metadata
             };
-        } catch (error: any) {
-            if (error.name === 'NotFound' || error.$metadata?.httpStatusCode === 404) {
+        } catch (error: unknown) {
+            const s3Error = error as { name?: string; $metadata?: { httpStatusCode?: number } };
+            if (s3Error.name === 'NotFound' || s3Error.$metadata?.httpStatusCode === 404) {
                 return {
                     url: null,
                     fileNotFound: true
@@ -219,8 +220,9 @@ export class S3StorageController implements StorageController {
 
             const blob = new Blob([buffer], { type: contentType });
             return new File([blob], fileName, { type: contentType });
-        } catch (error: any) {
-            if (error.name === 'NoSuchKey' || error.$metadata?.httpStatusCode === 404) {
+        } catch (error: unknown) {
+            const s3Error = error as { name?: string; $metadata?: { httpStatusCode?: number } };
+            if (s3Error.name === 'NoSuchKey' || s3Error.$metadata?.httpStatusCode === 404) {
                 return null;
             }
             throw error;

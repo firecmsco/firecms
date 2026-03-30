@@ -158,7 +158,7 @@ export class EntityPersistService {
         });
 
         // Separate relations that require special handling
-        const relationValues: Record<string, any> = {};
+        const relationValues: Record<string, unknown> = {};
         const otherValues: Partial<M> = { ...effectiveValues };
         const resolvedRelations = resolveCollectionRelations(collection);
 
@@ -177,7 +177,7 @@ export class EntityPersistService {
 
         // Extract relation updates before sanitizing
         const inverseRelationUpdates = ((processedData as Record<string, unknown>).__inverseRelationUpdates as Array<{ relationKey: string; relation: Relation; newValue: unknown; currentEntityId?: string | number; }>) || [];
-        const joinPathRelationUpdates = ((processedData as Record<string, unknown>).__joinPathRelationUpdates as Array<{ relationKey: string; relation: Relation; newTargetId: unknown; }>) || [];
+        const joinPathRelationUpdates = ((processedData as Record<string, unknown>).__joinPathRelationUpdates as Array<{ relationKey: string; relation: Relation; newTargetId: string | number | null; }>) || [];
         const junctionTableInfo = (processedData as Record<string, unknown>).__junction_table_info as { parentCollection: EntityCollection<any, any>; parentId: string | number; relation: Relation; relationKey: string; } | undefined;
         delete (processedData as Record<string, unknown>).__inverseRelationUpdates;
         delete (processedData as Record<string, unknown>).__joinPathRelationUpdates;
@@ -193,7 +193,7 @@ export class EntityPersistService {
                 currentId = entityId; // `entityId` is already the formatted composite or singular string
                 const idValues = parseIdValues(entityId, idInfoArray);
 
-                let updateQuery = tx.update(table).set(entityData);
+                let updateQuery = tx.update(table).set(entityData as Record<string, unknown>);
                 const conditions = [];
                 for (const info of idInfoArray) {
                     const field = table[info.fieldName as keyof typeof table] as AnyPgColumn;
@@ -202,7 +202,7 @@ export class EntityPersistService {
 
                 await updateQuery.where(and(...conditions));
             } else {
-                const dataForInsert = { ...entityData } as any;
+                const dataForInsert = { ...(entityData as Record<string, unknown>) };
 
                 // Strip empty primary keys so the database defaults (e.g. uuid_gen(), auto-increment) can trigger
                 for (const info of idInfoArray) {

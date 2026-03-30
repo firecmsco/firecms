@@ -77,6 +77,6 @@ export interface SideDialogPanelProps {
     /**
      * Use this prop to store additional data in the panel
      */
-    additional?: any;
+    additional?: unknown;
 
 }

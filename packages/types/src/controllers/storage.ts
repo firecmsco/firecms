@@ -5,7 +5,7 @@ export interface UploadFileProps {
     file: File,
     fileName?: string,
     path?: string,
-    metadata?: any,
+    metadata?: Record<string, unknown>,
     bucket?: string
 }
 

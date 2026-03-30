@@ -98,7 +98,7 @@ export function ImagePreview({
                         rel="noopener noreferrer"
                         target="_blank"
                         size={"smallest"}
-                        onClick={(e: any) => e.stopPropagation()}
+                        onClick={(e: React.MouseEvent) => e.stopPropagation()}
                     >
                         <OpenInNewIcon className={"text-surface-700 dark:text-surface-300"}
                             size={"smallest"} />

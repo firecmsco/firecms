@@ -36,8 +36,9 @@ export async function loadCollectionsFromDirectory(directory: string): Promise<E
                     } else {
                         console.warn(`[loadCollectionsFromDirectory] File ${file} does not have a default export. Skipping.`);
                     }
-                } catch (err: any) {
-                    console.error(`[loadCollectionsFromDirectory] Failed to load collection from ${file}: ${err.message}`);
+                } catch (err: unknown) {
+                    const message = err instanceof Error ? err.message : String(err);
+                    console.error(`[loadCollectionsFromDirectory] Failed to load collection from ${file}: ${message}`);
                 }
             }
         }

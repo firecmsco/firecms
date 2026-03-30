@@ -8,7 +8,7 @@ export interface EntityTableCellActionsProps {
     showExpandIcon: boolean | undefined;
     selected: boolean | undefined;
     openPopup?: (cellRect: DOMRect | undefined) => void;
-    children?: any;
+    children?: React.ReactNode;
 }
 
 export function EntityTableCellActions({

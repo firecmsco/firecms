@@ -50,7 +50,7 @@ export function EnumPropertyField({
             return;
         setFieldValue(enumValuesPath, value);
         if (!multiselect) {
-            const enumIds = value.filter(v => Boolean(v?.id)).map((v: any) => v.id);
+            const enumIds = value.filter(v => Boolean(v?.id)).map((v: EnumValueConfig) => v.id);
             if (defaultValue && !enumIds.includes(defaultValue)) {
                 setFieldValue("defaultValue", undefined);
                 snackbarContext.open({

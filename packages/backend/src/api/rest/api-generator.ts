@@ -1,5 +1,5 @@
 import { Router, Response, NextFunction } from "express";
-import { DataSource, EntityCollection } from "@rebasepro/types";
+import { DataSource, Entity, EntityCollection, FetchCollectionProps } from "@rebasepro/types";
 import { ApiResponse, QueryOptions, RebaseRequest } from "../types";
 import { ApiError, asyncHandler } from "../errors";
 import { buildPropertyCallbacks } from "@rebasepro/common";
@@ -171,7 +171,7 @@ export class RestApiGenerator {
     /**
      * Format successful API response - flattened for traditional REST API
      */
-    private formatResponse<T>(data: T, meta?: any): any {
+    private formatResponse<T>(data: T, meta?: Record<string, unknown>): unknown {
         // If data is an array of entities, flatten each one
         if (Array.isArray(data)) {
             const flattenedData = data.map(entity => this.flattenEntity(entity));
@@ -186,7 +186,7 @@ export class RestApiGenerator {
 
         // If data is a single entity, flatten it
         if (data && typeof data === "object" && "values" in data) {
-            return this.flattenEntity(data);
+            return this.flattenEntity(data as unknown as Entity<Record<string, unknown>>);
         }
 
         // Return as-is for other data types
@@ -202,7 +202,7 @@ export class RestApiGenerator {
     /**
      * Flatten Rebase entity structure to traditional REST format
      */
-    private flattenEntity(entity: any): any {
+    private flattenEntity(entity: Entity<Record<string, unknown>>): Record<string, unknown> {
         if (!entity || typeof entity !== "object") {
             return entity;
         }
@@ -215,7 +215,7 @@ export class RestApiGenerator {
             };
         }
 
-        return entity;
+        return entity as unknown as Record<string, unknown>;
     }
 
 
@@ -228,7 +228,7 @@ export class RestApiGenerator {
         const entities = await dataSource.fetchCollection({
             path: collection.dbPath || collection.slug,
             collection,
-            filter: queryOptions.where,
+            filter: queryOptions.where as FetchCollectionProps["filter"],
             limit: queryOptions.limit,
             orderBy: queryOptions.orderBy?.[0]?.field,
             order: queryOptions.orderBy?.[0]?.direction === "desc" ? "desc" : "asc",
@@ -246,7 +246,7 @@ export class RestApiGenerator {
         return dataSource.countEntities ? await dataSource.countEntities({
             path: collection.dbPath || collection.slug,
             collection,
-            filter: queryOptions.where
+            filter: queryOptions.where as FetchCollectionProps["filter"]
         }) : 0;
     }
 

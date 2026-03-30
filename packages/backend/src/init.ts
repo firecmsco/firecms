@@ -31,7 +31,7 @@ import {
     createStorageRoutes,
     DEFAULT_STORAGE_ID,
     DefaultStorageRegistry,
-    StorageConfig,
+    BackendStorageConfig,
     StorageController,
     StorageRegistry
 } from "./storage";
@@ -163,7 +163,7 @@ export interface RebaseBackendConfig {
      * String properties use `storageId` in their config to specify which storage.
      * Properties without `storageId` use "(default)".
      */
-    storage?: StorageConfig | Record<string, StorageConfig>;
+    storage?: BackendStorageConfig | Record<string, BackendStorageConfig>;
 }
 
 export interface RebaseBackendInstance {
@@ -210,7 +210,7 @@ export interface RebaseBackendInstance {
 export async function initializeRebaseBackend(config: RebaseBackendConfig): Promise<RebaseBackendInstance> {
     try {
         return await _initializeRebaseBackend(config);
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("❌ Critical error during Rebase Backend initialization:", error);
 
         const basePath = config.basePath || "/api";
@@ -227,9 +227,9 @@ export async function initializeRebaseBackend(config: RebaseBackendConfig): Prom
         return {
             __failed: true,
             datasourceRegistry: DefaultDatasourceRegistry.create({}),
-            dataSource: {} as any,
+            dataSource: {} as unknown as DataSource,
             realtimeServices: {},
-            realtimeService: {} as any,
+            realtimeService: {} as unknown as RealtimeService,
         } as unknown as RebaseBackendInstance;
     }
 }
@@ -393,7 +393,7 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
 
         const controllers: Record<string, StorageController> = {};
 
-        if (isStorageConfig(config.storage)) {
+        if (isBackendStorageConfig(config.storage)) {
             // Single storage config → maps to "(default)"
             const controller = createStorageController(config.storage);
             controllers[DEFAULT_STORAGE_ID] = controller;
@@ -401,7 +401,7 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         } else {
             // Map of storage configs
             for (const [storageId, storageConfig] of Object.entries(config.storage)) {
-                if (isStorageConfig(storageConfig)) {
+                if (isBackendStorageConfig(storageConfig)) {
                     const controller = createStorageController(storageConfig);
                     controllers[storageId] = controller;
                     console.log(`✅ Storage "${storageId}" configured (${storageConfig.type})`);
@@ -539,15 +539,15 @@ function resolveDatasourceConfig(config: DatasourceConfig): {
 }
 
 /**
- * Type guard to check if an object is a StorageConfig (single storage)
- * vs a Record<string, StorageConfig> (multiple storages)
+ * Type guard to check if an object is a BackendStorageConfig (single storage)
+ * vs a Record<string, BackendStorageConfig> (multiple storages)
  */
-function isStorageConfig(obj: unknown): obj is StorageConfig {
+function isBackendStorageConfig(obj: unknown): obj is BackendStorageConfig {
     if (typeof obj !== "object" || obj === null) {
         return false;
     }
-    const config = obj as StorageConfig;
-    // A StorageConfig has a `type` property that is 'local' or 's3'
+    const config = obj as BackendStorageConfig;
+    // A BackendStorageConfig has a `type` property that is 'local' or 's3'
     return (
         config.type === "local" || config.type === "s3"
     );
@@ -570,11 +570,11 @@ export async function initializeRebaseAPI(
     backend: RebaseBackendInstance,
     config: Partial<ApiConfig> = {}
 ): Promise<RebaseApiServer> {
-    if ((backend as any).__failed) {
+    if ((backend as unknown as Record<string, unknown>).__failed) {
         console.warn("⚠️ Skipping REST/GraphQL API initialization because backend initialization failed.");
         // Return a dummy api server
         const express = await import("express");
-        return { getRouter: () => express.Router() } as any;
+        return { getRouter: () => express.Router() } as unknown as RebaseApiServer;
     }
 
     console.log("🚀 Initializing Rebase REST/GraphQL API (optional for external integrations)");

@@ -2,24 +2,24 @@ import { Entity } from "./entities";
 
 export interface WebSocketMessage {
     type: string;
-    payload?: any;
+    payload?: unknown;
     subscriptionId?: string;
     requestId?: string;
-    entities?: Entity<any>[];
-    entity?: Entity<any> | null;
+    entities?: Entity<Record<string, unknown>>[];
+    entity?: Entity<Record<string, unknown>> | null;
     error?: string;
 }
 
 export interface CollectionUpdateMessage extends WebSocketMessage {
     type: "collection_update";
     subscriptionId: string;
-    entities: Entity<any>[];
+    entities: Entity<Record<string, unknown>>[];
 }
 
 export interface EntityUpdateMessage extends WebSocketMessage {
     type: "entity_update";
     subscriptionId: string;
-    entity: Entity<any> | null;
+    entity: Entity<Record<string, unknown>> | null;
 }
 
 /**

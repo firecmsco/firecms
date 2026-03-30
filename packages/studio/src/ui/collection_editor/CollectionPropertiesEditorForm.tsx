@@ -152,7 +152,7 @@ export function CollectionPropertiesEditorForm({
                                 const existingMapProps = typeof existingProp === "object" &&
                                     "type" in existingProp &&
                                     existingProp.dataType === "map"
-                                    ? (existingProp as any).properties
+                                    ? (existingProp as MapProperty).properties
                                     : undefined;
                                 keys.push(...findNewPropertyKeys(existingMapProps, newProp.properties as Record<string, PropertyOrBuilder>, fullKey));
                             }

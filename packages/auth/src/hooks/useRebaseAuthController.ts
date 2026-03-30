@@ -107,7 +107,7 @@ export function useRebaseAuthController(
     const [authError, setAuthError] = useState<Error | null>(null);
     const [authProviderError, setAuthProviderError] = useState<Error | null>(null);
     const [loginSkipped, setLoginSkipped] = useState(false);
-    const [extra, setExtra] = useState<any>(null);
+    const [extra, setExtra] = useState<unknown>(null);
     const [authConfig, setAuthConfig] = useState<AuthConfigResponse | null>(null);
 
     // Store tokens in ref for quick access, but also persist to localStorage
@@ -188,12 +188,12 @@ export function useRebaseAuthController(
                 const newExpiryStr = Number.isFinite(newTokens.accessTokenExpiresAt) ? new Date(newTokens.accessTokenExpiresAt).toISOString() : "invalid";
                 console.log("[AUTH] Token refresh successful, new expiry:", newExpiryStr);
                 return newTokens;
-            } catch (error: any) {
-                console.error("[AUTH] Token refresh failed:", error?.message);
+            } catch (error: unknown) {
+                console.error("[AUTH] Token refresh failed:", error instanceof Error ? error.message : String(error));
 
                 // If it's a network error (e.g., backend restarting), we throw so callers can retry
                 // instead of immediately assuming the refresh token is invalid and signing out.
-                if (error?.code === "NETWORK_ERROR") {
+                if (error instanceof Error && (error as { code?: string }).code === "NETWORK_ERROR") {
                     throw error;
                 }
                 return null;
@@ -279,10 +279,10 @@ export function useRebaseAuthController(
                     throw new Error("Session expired. Please login again.");
                 }
                 return newTokens.accessToken;
-            } catch (error: any) {
+            } catch (error: unknown) {
                 // If the error was a network error during refresh, just re-throw it 
                 // so the user isn't logged out locally and the network request fails naturally.
-                if (error?.code === "NETWORK_ERROR") {
+                if (error instanceof Error && (error as { code?: string }).code === "NETWORK_ERROR") {
                     throw error;
                 }
                 clearSessionAndSignOut();
@@ -603,9 +603,9 @@ export function useRebaseAuthController(
                             userToSet = { ...userToSet, roles: customRoles.map(r => r.id) };
                         }
                     }
-                } catch (meError: any) {
+                } catch (meError: unknown) {
                     if (!isMountedRef.current) return;
-                    console.warn("[AUTH] Failed to fetch fresh user data:", meError?.message);
+                    console.warn("[AUTH] Failed to fetch fresh user data:", meError instanceof Error ? meError.message : String(meError));
                     userToSet = convertToUser(stored.user);
                 }
 
@@ -614,12 +614,12 @@ export function useRebaseAuthController(
                 console.log("[AUTH] Auth restoration complete, user:", userToSet.email);
                 setUser(userToSet);
                 scheduleTokenRefresh(newTokens);
-            } catch (error: any) {
+            } catch (error: unknown) {
                 if (!isMountedRef.current) return;
-                console.error("[AUTH] Token refresh failed during restore:", error?.message);
+                console.error("[AUTH] Token refresh failed during restore:", error instanceof Error ? (error as Error).message : String(error));
 
                 // Do not clear the session entirely if it's just a temporary network outage
-                if (error?.code !== "NETWORK_ERROR") {
+                if (!(error instanceof Error && (error as { code?: string }).code === "NETWORK_ERROR")) {
                     clearAuthFromStorage();
                     tokensRef.current = null;
                 }

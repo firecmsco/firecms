@@ -71,7 +71,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
         const [openFilter, setOpenFilter] = React.useState(false);
         const [hidden, setHidden] = React.useState(false);
 
-        const handleSettingsClick = useCallback((event: any) => {
+        const handleSettingsClick = useCallback((_event: React.MouseEvent) => {
             setOpenFilter(true);
         }, []);
 
@@ -227,7 +227,7 @@ function FilterForm<M>({
         onFilterUpdate(filterInternal, false);
     };
 
-    const reset = (e: any) => {
+    const reset = (_e: React.MouseEvent) => {
         onFilterUpdate(undefined, false);
     };
 

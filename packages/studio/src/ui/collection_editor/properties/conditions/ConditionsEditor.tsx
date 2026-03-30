@@ -569,7 +569,7 @@ function simpleRuleToJsonLogic(rule: SimpleRule): Record<string, any> {
     }
 
     // Parse value - try to convert to appropriate type
-    let parsedValue: any = rule.value;
+    let parsedValue: string | number | boolean | null | string[] = rule.value;
     if (rule.value === "true") parsedValue = true;
     else if (rule.value === "false") parsedValue = false;
     else if (rule.value === "null") parsedValue = null;
@@ -749,7 +749,7 @@ export function ConditionsEditor({ disabled, collectionProperties }: ConditionsE
         : [];
 
     // Get current conditions from form values
-    const conditions = (values as any).conditions ?? {};
+    const conditions: Record<string, unknown> = ("conditions" in values ? (values as unknown as Record<string, unknown>).conditions : undefined) as Record<string, unknown> ?? {};
 
     // DEBUG: Log conditions to see what's being loaded
     console.log("[ConditionsEditor] Loaded conditions:", conditions);
@@ -791,7 +791,7 @@ export function ConditionsEditor({ disabled, collectionProperties }: ConditionsE
 
     const handleRemoveCondition = (type: ConditionType) => {
         const newConditions = { ...conditions };
-        delete (newConditions as any)[type];
+        delete newConditions[type];
         if (Object.keys(newConditions).length === 0) {
             setFieldValue("conditions", undefined);
         } else {

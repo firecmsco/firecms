@@ -236,7 +236,7 @@ export function DisplaySettingsForm({
                                 position={"item-aligned"}
                                 onChange={handleChange}
                                 value={values.defaultSize ?? ""}
-                                renderValue={(value: any) => value.toUpperCase()}
+                                renderValue={(value: string) => value.toUpperCase()}
                             >
                                 {["xs", "s", "m", "l", "xl"].map((value) => (
                                     <SelectItem

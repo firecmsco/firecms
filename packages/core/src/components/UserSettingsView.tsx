@@ -12,8 +12,25 @@ import {
 } from "@rebasepro/ui";
 import { useAuthController } from "../hooks";
 
+interface SessionInfo {
+    id: string;
+    userAgent?: string;
+    ipAddress?: string;
+    createdAt: string;
+    isCurrentSession?: boolean;
+}
+
+interface ExtendedAuthController {
+    user: { displayName?: string | null; photoURL?: string | null; email?: string | null } | null;
+    updateProfile?: (displayName: string, photoURL: string) => Promise<void>;
+    fetchSessions?: () => Promise<SessionInfo[]>;
+    revokeSession?: (id: string) => Promise<void>;
+    revokeAllSessions?: () => Promise<void>;
+    signOut: () => Promise<void>;
+}
+
 export function UserSettingsView() {
-    const authController = useAuthController() as any;
+    const authController = useAuthController() as unknown as ExtendedAuthController;
     const user = authController.user;
 
     const [activeTab, setActiveTab] = useState<"profile" | "sessions">("profile");
@@ -25,7 +42,7 @@ export function UserSettingsView() {
     const [profileError, setProfileError] = useState<string | null>(null);
 
     // Sessions state
-    const [sessions, setSessions] = useState<any[]>([]);
+    const [sessions, setSessions] = useState<SessionInfo[]>([]);
     const [loadingSessions, setLoadingSessions] = useState(false);
     const [sessionsError, setSessionsError] = useState<string | null>(null);
     const [revokingSessionId, setRevokingSessionId] = useState<string | null>(null);
@@ -48,8 +65,8 @@ export function UserSettingsView() {
             } else {
                 throw new Error("updateProfile not implemented in this auth controller.");
             }
-        } catch (e: any) {
-            setProfileError(e.message);
+        } catch (e: unknown) {
+            setProfileError(e instanceof Error ? e.message : String(e));
         } finally {
             setSavingProfile(false);
         }
@@ -61,15 +78,15 @@ export function UserSettingsView() {
         try {
             if (authController.fetchSessions) {
                 const fetchedSessions = await authController.fetchSessions();
-                const sortedSessions = (fetchedSessions || []).sort((a: any, b: any) =>
+                const sortedSessions = (fetchedSessions || []).sort((a: SessionInfo, b: SessionInfo) =>
                     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 );
                 setSessions(sortedSessions);
             } else {
                 throw new Error("fetchSessions not implemented in this auth controller.");
             }
-        } catch (e: any) {
-            setSessionsError(e.message);
+        } catch (e: unknown) {
+            setSessionsError(e instanceof Error ? e.message : String(e));
         } finally {
             setLoadingSessions(false);
         }
@@ -87,8 +104,8 @@ export function UserSettingsView() {
             } else {
                 throw new Error("revokeSession not implemented in this auth controller.");
             }
-        } catch (e: any) {
-            setSessionsError(e.message);
+        } catch (e: unknown) {
+            setSessionsError(e instanceof Error ? e.message : String(e));
         } finally {
             setRevokingSessionId(null);
         }
@@ -102,8 +119,8 @@ export function UserSettingsView() {
             } else {
                 throw new Error("revokeAllSessions not implemented in this auth controller.");
             }
-        } catch (e: any) {
-            setSessionsError(e.message);
+        } catch (e: unknown) {
+            setSessionsError(e instanceof Error ? e.message : String(e));
         } finally {
             setRevokingAll(false);
         }
@@ -115,7 +132,7 @@ export function UserSettingsView() {
         <div className="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6 md:p-12">
             <Typography variant="h4" className="mb-8">Account Settings</Typography>
 
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="mb-8">
+            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "profile" | "sessions")} className="mb-8">
                 <Tab value="profile">Profile</Tab>
                 <Tab value="sessions">Sessions</Tab>
             </Tabs>

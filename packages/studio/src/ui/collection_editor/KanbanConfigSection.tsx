@@ -165,7 +165,7 @@ export function KanbanConfigSection({
                                 { id: "in_progress", label: "In Progress" },
                                 { id: "done", label: "Done" }
                             ]
-                        } as any}
+                        } as Property}
                         propertyKey={dialogPropertyKey}
                         existingProperty={false}
                         autoOpenTypeSelect={false}

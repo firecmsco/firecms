@@ -333,7 +333,7 @@ export function useFirestoreDataSource({
                 order,
                 isCollectionGroup
             });
-            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter, limit, isCollectionGroup, databaseId);
+            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter as any[] | undefined, limit, isCollectionGroup, databaseId);
 
             const snapshot = await getDocs(query);
             return snapshot.docs.map((doc) => createEntityFromDocument(doc, databaseId));
@@ -402,7 +402,7 @@ export function useFirestoreDataSource({
                 path,
                 resolvedPath
             });
-            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter, limit, isCollectionGroup, databaseId);
+            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter as any[] | undefined, limit, isCollectionGroup, databaseId);
             return onSnapshot(query,
                 {
                     next: (snapshot) => {
@@ -711,7 +711,7 @@ function getCMSPathFromFirestorePath(fsPath: string): string {
     return fsPath.substring(0, to);
 }
 
-function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
+function setDateToMidnight(input?: unknown): unknown {
     if (!input) return input;
     if (!(input instanceof Timestamp)) return input;
     const date = input.toDate();

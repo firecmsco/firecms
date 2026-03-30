@@ -19,8 +19,8 @@ export function ReferencePropertyField({
 
     const {
         values,
-        handleChange,
         errors,
+        setFieldValue,
     } = useFormex<StringProperty | NumberProperty>();
 
     const collectionRegistry = useCollectionRegistryController();
@@ -44,7 +44,7 @@ export function ReferencePropertyField({
                     disabled={disabled}
                     value={pathValue}
                     error={pathError}
-                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
                     as={CollectionsSelect} />
 
             </div>
@@ -57,14 +57,14 @@ export function CollectionsSelect({
     disabled,
     pathPath,
     value,
-    handleChange,
+    setFieldValue,
     error,
     ...props
 }: {
     disabled: boolean,
     pathPath: string,
     value?: string,
-    handleChange: (event: any) => void,
+    setFieldValue: (field: string, value: string) => void,
     error?: string
 }) {
 
@@ -92,9 +92,9 @@ export function CollectionsSelect({
                 position={"item-aligned"}
                 name={pathPath}
                 fullWidth={true}
-                onChange={handleChange}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFieldValue(pathPath, e.target.value)}
                 label={"Target collection"}
-                renderValue={(selected: any) => {
+                renderValue={(selected: string) => {
                     const selectedCollection = collections.find(collection => collection.slug === selected || collection.dbPath === selected);
                     if (!selectedCollection) return null;
                     return (

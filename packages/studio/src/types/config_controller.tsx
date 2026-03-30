@@ -58,14 +58,14 @@ export interface CollectionsConfigController {
 
 }
 
-export type UpdateCollectionParams<M extends Record<string, any>> = {
+export type UpdateCollectionParams<M extends Record<string, any> = any> = {
     id: string,
     collectionData: Partial<PersistedCollection<M>>,
     previousId?: string,
     parentCollectionIds?: string[]
 }
 
-export type SaveCollectionParams<M extends Record<string, any>> = {
+export type SaveCollectionParams<M extends Record<string, any> = any> = {
     id: string,
     collectionData: PersistedCollection<M>,
     previousId?: string,
@@ -97,14 +97,14 @@ export type DeleteCollectionParams = {
 export type UpdatePropertiesOrderParams = {
     fullPath: string;
     parentCollectionIds: string[];
-    collection: EntityCollection<any>;
+    collection: EntityCollection;
     newPropertiesOrder: string[];
 }
 
 export type UpdateKanbanColumnsOrderParams = {
     fullPath: string;
     parentCollectionIds: string[];
-    collection: EntityCollection<any>;
+    collection: EntityCollection;
     kanbanColumnProperty: string;
     newColumnsOrder: string[];
 }

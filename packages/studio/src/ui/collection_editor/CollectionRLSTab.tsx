@@ -5,15 +5,31 @@ import { PolicyEditor } from "../../components/RLSEditor/PolicyEditor";
 import { useFormex } from "@rebasepro/formex";
 import { PersistedCollection } from "../../types/persisted_collection";
 
+interface SecurityRule {
+    name: string;
+    operation?: string;
+    mode?: string;
+    using?: string;
+    withCheck?: string;
+    roles?: string[];
+}
+
+type CollectionWithSecurity = PersistedCollection & {
+    securityRules?: SecurityRule[];
+    id?: string;
+    dbPath?: string;
+    alias?: string;
+};
+
 export function CollectionRLSTab() {
-    const { values, setFieldValue } = useFormex<PersistedCollection>();
+    const { values, setFieldValue } = useFormex<CollectionWithSecurity>();
     const [editingPolicy, setEditingPolicy] = useState<PostgresPolicy | "new" | null>(null);
 
-    const rules = (values as any).securityRules || [];
+    const rules: SecurityRule[] = values.securityRules || [];
 
     const handleSave = async (newPolicy: Partial<PostgresPolicy>) => {
-        const rule: any = {
-            name: newPolicy.policyname,
+        const rule: SecurityRule = {
+            name: newPolicy.policyname ?? "",
             operation: newPolicy.cmd?.toLowerCase(),
             mode: newPolicy.permissive?.toLowerCase(),
             using: newPolicy.qual || undefined,
@@ -25,10 +41,9 @@ export function CollectionRLSTab() {
         if (editingPolicy === "new") {
             newRules = [...rules, rule];
         } else {
-            // @ts-ignore
-            newRules = rules.map((r: any) => r.name === editingPolicy.policyname ? rule : r);
+            newRules = rules.map((r: SecurityRule) => r.name === (editingPolicy as PostgresPolicy).policyname ? rule : r);
         }
-        setFieldValue("securityRules" as any, newRules);
+        setFieldValue("securityRules", newRules);
         setEditingPolicy(null);
     };
 
@@ -38,7 +53,7 @@ export function CollectionRLSTab() {
                 <PolicyEditor
                     policy={editingPolicy === "new" ? undefined : editingPolicy}
                     schema={"public"}
-                    table={(values as any).id || (values as any).dbPath || (values as any).alias || "your_table"}
+                    table={values.id || values.dbPath || values.alias || "your_table"}
                     onSave={handleSave}
                     onCancel={() => setEditingPolicy(null)}
                 />
@@ -63,7 +78,7 @@ export function CollectionRLSTab() {
                     </div>
                 ) : (
                     <div className="flex flex-col gap-3">
-                        {rules.map((rule: any) => (
+                        {rules.map((rule: SecurityRule) => (
                             <Paper key={rule.name} 
                                 className={"p-4 border border-transparent hover:border-surface-200 dark:hover:border-surface-800 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors bg-white dark:bg-surface-950 shadow-sm"}>
                                 <div className="flex flex-col gap-1.5 min-w-0">
@@ -79,9 +94,9 @@ export function CollectionRLSTab() {
                                 <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                                     <Button size="small" variant="text" onClick={() => setEditingPolicy({
                                         policyname: rule.name,
-                                        tablename: (values as any).id || (values as any).dbPath || (values as any).alias || "your_table",
-                                        permissive: (rule.mode || "permissive").toUpperCase() as any,
-                                        cmd: (rule.operation || "ALL").toUpperCase() as any,
+                                        tablename: values.id || values.dbPath || values.alias || "your_table",
+                                        permissive: (rule.mode || "permissive").toUpperCase() as PostgresPolicy["permissive"],
+                                        cmd: (rule.operation || "ALL").toUpperCase() as PostgresPolicy["cmd"],
                                         roles: rule.roles || ["public"],
                                         qual: rule.using || null,
                                         with_check: rule.withCheck || null
@@ -89,7 +104,7 @@ export function CollectionRLSTab() {
                                         EDIT
                                     </Button>
                                     <IconButton size="small" onClick={() => {
-                                        setFieldValue("securityRules" as any, rules.filter((r: any) => r.name !== rule.name));
+                                        setFieldValue("securityRules", rules.filter((r: SecurityRule) => r.name !== rule.name));
                                     }}>
                                         <DeleteIcon size="small" className="text-text-secondary dark:text-text-secondary-dark hover:text-red-500 dark:hover:text-red-500 transition-colors" />
                                     </IconButton>

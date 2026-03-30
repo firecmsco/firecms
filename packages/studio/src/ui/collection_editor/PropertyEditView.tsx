@@ -191,12 +191,12 @@ export const PropertyForm = React.memo(
                     errors.slug = "You must specify a target collection for the field";
                 }
                 if (values.propertyConfig === "repeat") {
-                    if (!(values as any).of) {
+                    if (!("of" in values) || !values.of) {
                         errors.of = "You need to specify a repeat field";
                     }
                 }
                 if (values.propertyConfig === "block") {
-                    if (!(values as any).oneOf) {
+                    if (!("oneOf" in values) || !values.oneOf) {
                         errors.oneOf = "You need to specify the properties of this block";
                     }
                 }

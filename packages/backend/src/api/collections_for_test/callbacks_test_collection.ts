@@ -1,6 +1,6 @@
-import { EntityCollection } from "@rebasepro/types";
+import { EntityCollection, EntityBeforeSaveProps, EntityAfterSaveProps, EntityAfterSaveErrorProps, EntityAfterReadProps, EntityBeforeDeleteProps, EntityAfterDeleteProps } from "@rebasepro/types";
 
-export const callbacksTestCollection: EntityCollection<any> = {
+export const callbacksTestCollection: EntityCollection = {
     name: "Callback Tests",
     slug: "callback_tests",
     dbPath: "callback_tests",
@@ -25,7 +25,7 @@ export const callbacksTestCollection: EntityCollection<any> = {
         }
     },
     callbacks: {
-        beforeSave: (props: any) => {
+        beforeSave: (props: EntityBeforeSaveProps) => {
             console.log("🔥 [BACKEND_CALLBACK] beforeSave Triggered!", props);
             return {
                 ...props.values,
@@ -33,24 +33,24 @@ export const callbacksTestCollection: EntityCollection<any> = {
                 name: props.values.name + " (PreSaved)" // Modifying value before save
             };
         },
-        afterSave: (props: any) => {
+        afterSave: (props: EntityAfterSaveProps) => {
             console.log("🔥 [BACKEND_CALLBACK] afterSave Triggered!", props);
             // This usually triggers other side effects (emails, notifications), log for now
         },
-        afterSaveError: (props: any) => {
+        afterSaveError: (props: EntityAfterSaveErrorProps) => {
             console.error("🔥 [BACKEND_CALLBACK] afterSaveError Triggered!", props);
         },
-        afterRead: (props: any) => {
+        afterRead: (props: EntityAfterReadProps) => {
             console.log("🔥 [BACKEND_CALLBACK] afterRead Triggered!", props);
             return {
                 ...props.entity.values,
                 hasFetchTriggered: true
             };
         },
-        beforeDelete: (props: any) => {
+        beforeDelete: (props: EntityBeforeDeleteProps) => {
             console.log("🔥 [BACKEND_CALLBACK] beforeDelete Triggered!", props);
         },
-        afterDelete: (props: any) => {
+        afterDelete: (props: EntityAfterDeleteProps) => {
             console.log("🔥 [BACKEND_CALLBACK] afterDelete Triggered!", props);
         }
     }

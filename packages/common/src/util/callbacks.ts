@@ -26,11 +26,11 @@ function hasPropertyCallbacks(properties: Properties, callbackName: "afterRead" 
  */
 async function processProperties(
     properties: Properties,
-    values: any,
-    previousValues: any,
-    propsContext: any,
+    values: Record<string, unknown>,
+    previousValues: Record<string, unknown>,
+    propsContext: unknown,
     callbackName: "afterRead" | "beforeSave"
-): Promise<any> {
+): Promise<Record<string, unknown>> {
     if (!values || typeof values !== "object") return values;
 
     let result = { ...values };
@@ -56,16 +56,17 @@ async function processProperties(
         }
         // 2. Map Property
         else if (property.type === "map" && property.properties && typeof currentValue === "object") {
-            currentValue = await processProperties(property.properties, currentValue, previousValue, propsContext, callbackName);
+            currentValue = await processProperties(property.properties, currentValue as Record<string, unknown>, (previousValue ?? {}) as Record<string, unknown>, propsContext, callbackName);
         }
 
         // 3. Property's own callback
         if (property.callbacks?.[callbackName]) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const cbRes = await Promise.resolve(property.callbacks[callbackName]({
-                ...propsContext,
+                ...(propsContext as Record<string, unknown>),
                 value: currentValue,
                 previousValue
-            }));
+            } as any));
             if (cbRes !== undefined) {
                 currentValue = cbRes;
             }
@@ -89,9 +90,9 @@ export const buildPropertyCallbacks = (properties: Properties): EntityCallbacks 
         propertyCallbacks.afterRead = async (props) => {
             const processedValues = await processProperties(
                 properties,
-                props.entity.values,
-                props.entity.values,
-                props,
+                props.entity.values as Record<string, unknown>,
+                props.entity.values as Record<string, unknown>,
+                props as unknown,
                 "afterRead"
             );
             return { ...props.entity, values: processedValues };
@@ -102,9 +103,9 @@ export const buildPropertyCallbacks = (properties: Properties): EntityCallbacks 
         propertyCallbacks.beforeSave = async (props) => {
             return await processProperties(
                 properties,
-                props.values,
-                props.previousValues,
-                props,
+                props.values as Record<string, unknown>,
+                (props.previousValues ?? {}) as Record<string, unknown>,
+                props as unknown,
                 "beforeSave"
             );
         };

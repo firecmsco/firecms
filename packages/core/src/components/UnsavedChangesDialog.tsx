@@ -1,8 +1,9 @@
+import React from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@rebasepro/ui";
 
 export interface UnsavedChangesDialogProps {
     open: boolean;
-    body?: any;
+    body?: React.ReactNode;
     title?: string;
     handleOk: () => void;
     handleCancel: () => void;

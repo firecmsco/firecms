@@ -97,7 +97,7 @@ export function SubcollectionsEditTab({
                                                 <Tooltip title={"Remove"}
                                                     asChild={true}>
                                                     <IconButton size="small"
-                                                        onClick={(e: any) => {
+                                                        onClick={(e: React.MouseEvent) => {
                                                             e.preventDefault();
                                                             e.stopPropagation();
                                                             setSubcollectionToDelete(subcollection.slug);
@@ -151,7 +151,7 @@ export function SubcollectionsEditTab({
                                                     <Tooltip title={"Remove"}
                                                         asChild={true}>
                                                         <IconButton size="small"
-                                                            onClick={(e: any) => {
+                                                            onClick={(e: React.MouseEvent) => {
                                                                 e.preventDefault();
                                                                 e.stopPropagation();
                                                                 setViewToDelete(view.key);

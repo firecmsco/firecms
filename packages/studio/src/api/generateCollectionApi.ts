@@ -18,7 +18,7 @@ export type CollectionOperationType = "add" | "modify" | "delete";
 export interface CollectionOperation {
     op: CollectionOperationType;
     path: string;
-    value?: any;
+    value?: unknown;
 }
 
 /** Result from collection generation, including optional delta operations */

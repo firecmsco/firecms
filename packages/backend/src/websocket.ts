@@ -1,6 +1,6 @@
 import { RealtimeService } from "./services/realtimeService";
 import { PostgresDataSource } from "./services/postgresDataSource";
-import { DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps, TableColumnInfo } from "@rebasepro/types";
+import { DataSource, DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps, TableColumnInfo } from "@rebasepro/types";
 import { WebSocketServer, WebSocket } from "ws";
 import { Server } from "http";
 import { inspect } from "util";
@@ -100,14 +100,14 @@ export function createPostgresWebSocket(
                 // Helper to get correctly scoped delegate for the current request
                 const getScopedDelegate = async () => {
                     const session = clientSessions.get(clientId);
-                    if (session?.user && "withAuth" in dataSource && typeof (dataSource as any).withAuth === "function") {
+                    if (session?.user && "withAuth" in dataSource && typeof (dataSource as unknown as Record<string, unknown>).withAuth === "function") {
                         try {
                             // Map AccessTokenPayload back to User interface for withAuth (roles are already string IDs from JWT)
-                            const userForAuth: any = {
+                            const userForAuth: Record<string, unknown> = {
                                 uid: session.user.userId,
                                 roles: session.user.roles ?? []
                             };
-                            return await (dataSource as any).withAuth(userForAuth);
+                            return await (dataSource as unknown as { withAuth: (user: Record<string, unknown>) => Promise<DataSource> }).withAuth(userForAuth);
                         } catch (e) {
                             console.error("Failed to create authenticated delegate for WS request", e);
                             return dataSource;
@@ -337,7 +337,7 @@ export function createPostgresWebSocket(
                     default:
                         console.error("❌ [WebSocket Server] Unknown message type:", type);
                 }
-            } catch (error: any) {
+            } catch (error: unknown) {
                 console.error("💥 [WebSocket Server] Error handling message:", error);
                 if (error instanceof Error) {
                     console.error("Stack trace:", error.stack);
@@ -347,7 +347,7 @@ export function createPostgresWebSocket(
                     requestId,
                     payload: {
                         error: {
-                            message: error.message || "An unexpected error occurred",
+                            message: error instanceof Error ? error.message : "An unexpected error occurred",
                             code: "INTERNAL_ERROR"
                         }
                     }

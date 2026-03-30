@@ -17,7 +17,7 @@ export interface AuthenticatedRequest extends Request {
  * - `true` = authenticated as default user
  * - object with `userId` or `uid` = authenticated with user info
  */
-export type AuthResult = boolean | null | undefined | { userId?: string; uid?: string; roles?: string[]; [key: string]: any };
+export type AuthResult = boolean | null | undefined | { userId?: string; uid?: string; roles?: string[]; [key: string]: unknown };
 
 /**
  * Options for creating an auth middleware via createAuthMiddleware()
@@ -90,7 +90,7 @@ export const requireAdmin: RequestHandler = (
 
     const roles = req.user.roles || [];
     const isAdmin = roles.some(role => {
-        const roleId = typeof role === "string" ? role : (role as any).id;
+        const roleId = typeof role === "string" ? role : (role as { id: string }).id;
         return roleId === "admin" || roleId === "schema-admin";
     });
 
@@ -145,9 +145,9 @@ async function scopeDataSource(
     dataSource: DataSource,
     user: { uid: string; roles?: string[] }
 ): Promise<DataSource> {
-    if ("withAuth" in dataSource && typeof (dataSource as any).withAuth === "function") {
+    if ("withAuth" in dataSource && typeof (dataSource as Record<string, unknown>).withAuth === "function") {
         try {
-            return await (dataSource as any).withAuth(user);
+            return await (dataSource as unknown as { withAuth: (user: Record<string, unknown>) => Promise<DataSource> }).withAuth(user);
         } catch (e) {
             console.error("Failed to initialize scoped data source", e);
             return dataSource;

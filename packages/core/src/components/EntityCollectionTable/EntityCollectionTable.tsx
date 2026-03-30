@@ -90,7 +90,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
     const largeLayout = useLargeLayout();
     const selectedEntities = (selectionController?.selectedEntities?.length > 0 ? selectionController?.selectedEntities : highlightedEntities)?.filter(Boolean);
 
-    const context: RebaseContext<USER> = useRebaseContext();
+    const context = useRebaseContext();
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize ?? "m");
 
@@ -206,11 +206,11 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
         }
 
         const child: React.ReactNode = Builder
-            ? <Builder entity={entity} context={context} />
+            ? <Builder entity={entity} context={context as any} />
             : <>
                 {additionalField.value?.({
                     entity,
-                    context
+                    context: context as any
                 })?.toString()}
             </>;
 
@@ -322,7 +322,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             } else {
                 throw Error("Internal: columns not mapped properly");
             }
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error("Error rendering cell", e);
             return <EntityTableCell
                 size={size}
@@ -338,7 +338,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                 isDragging={props.isDragging}
                 isDraggable={props.isDraggable}
                 frozen={props.frozen}>
-                <ErrorView error={e} />
+                <ErrorView error={e instanceof Error ? e : new Error(String(e))} />
             </EntityTableCell>;
         }
     }, [tableRowActionsBuilder, additionalCellRenderer, propertyCellRenderer, size]);

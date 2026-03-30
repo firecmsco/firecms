@@ -1,0 +1,13 @@
+{
+  "name": "rebase",
+  "description": "Official Claude plugin for Rebase. Manage projects, browse data, create collections, deploy apps, and more",
+  "version": "1.0.0",
+  "author": {
+    "name": "Rebase",
+    "url": "https://rebase.pro/"
+  },
+  "homepage": "https://github.com/rebaseco/agent-skills",
+  "repository": "https://github.com/rebaseco/agent-skills.git",
+  "license": "MIT",
+  "keywords": ["rebase", "mcp", "cms", "headless-cms", "postgresql", "drizzle", "admin-panel", "baas"]
+}

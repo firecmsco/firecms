@@ -21,7 +21,7 @@ export function getParentReferencesFromPath(props: {
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
 
-        const collection: EntityCollection<any> | undefined = collections && collections.find((entry) => entry.slug === subpathCombination);
+        const collection: EntityCollection | undefined = collections && collections.find((entry) => entry.slug === subpathCombination);
 
         // If we find a collection, we add the reference and continue
         if (collection) {

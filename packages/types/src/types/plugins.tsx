@@ -77,7 +77,7 @@ export type RebasePlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollect
         /**
          * Additional props passed to `CollectionActions`
          */
-        extraProps?: any;
+        extraProps?: Record<string, unknown>;
 
         /**
          * Add additional cards to each collection group in the home page.
@@ -128,10 +128,10 @@ export type RebasePlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollect
          * Use this component to add custom actions to the entity collections
          * toolbar.
          */
-        CollectionActions?: React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_PROPS> | React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_PROPS>[];
+        CollectionActions?: React.ComponentType<CollectionActionsProps<Record<string, unknown>, User, EC> & COL_ACTIONS_PROPS> | React.ComponentType<CollectionActionsProps<Record<string, unknown>, User, EC> & COL_ACTIONS_PROPS>[];
         collectionActionsProps?: COL_ACTIONS_PROPS;
 
-        CollectionActionsStart?: React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_START__PROPS> | React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_START__PROPS>[];
+        CollectionActionsStart?: React.ComponentType<CollectionActionsProps<Record<string, unknown>, User, EC> & COL_ACTIONS_START__PROPS> | React.ComponentType<CollectionActionsProps<Record<string, unknown>, User, EC> & COL_ACTIONS_START__PROPS>[];
         collectionActionsStartProps?: COL_ACTIONS_START__PROPS;
 
         blockSearch?: (props: {
@@ -227,26 +227,26 @@ export type RebasePlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollect
 
     form?: {
         provider?: {
-            Component: React.ComponentType<PropsWithChildren<FORM_PROPS & PluginFormActionProps<any, EC>>>;
+            Component: React.ComponentType<PropsWithChildren<FORM_PROPS & PluginFormActionProps<User, EC>>>;
             props?: FORM_PROPS;
         }
 
         /**
          * Add custom actions to the default ones ("Save", "Discard"...)
          */
-        Actions?: React.ComponentType<PluginFormActionProps<any, EC>>;
+        Actions?: React.ComponentType<PluginFormActionProps<User, EC>>;
 
         /**
          * Add custom actions to the top of the form
          */
-        ActionsTop?: React.ComponentType<PluginFormActionProps<any, EC>>;
+        ActionsTop?: React.ComponentType<PluginFormActionProps<User, EC>>;
 
         /**
          * Add custom content above the entity title in the form view
          */
-        BeforeTitle?: React.ComponentType<PluginFormActionProps<any, EC>>;
+        BeforeTitle?: React.ComponentType<PluginFormActionProps<User, EC>>;
 
-        fieldBuilder?: <T>(props: PluginFieldBuilderParams<any, EC>) => React.ComponentType<FieldProps<any>> | null;
+        fieldBuilder?: <T>(props: PluginFieldBuilderParams<Record<string, unknown>, EC>) => React.ComponentType<FieldProps<any>> | null;
 
         fieldBuilderEnabled?: <T>(props: PluginFieldBuilderParams) => boolean;
     }
@@ -303,7 +303,7 @@ export interface PluginFormActionProps<USER extends User = User, EC extends Enti
     status: EntityStatus;
     collection: EC;
     disabled: boolean;
-    formContext?: FormContext<any>;
+    formContext?: FormContext;
     context: RebaseContext<USER>;
     openEntityMode: "side_panel" | "full_screen";
 }
@@ -312,7 +312,7 @@ export type PluginFieldBuilderParams<M extends Record<string, any> = any, EC ext
     fieldConfigId: string;
     propertyKey: string;
     property: Property;
-    Field: React.ComponentType<FieldProps<any, any, M>>;
+    Field: React.ComponentType<FieldProps<Property, unknown, M>>;
     plugin: RebasePlugin;
     path?: string;
     collection?: EC;

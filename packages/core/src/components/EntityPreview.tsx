@@ -85,7 +85,7 @@ export function EntityPreviewData({
     const usedImageProperty = imageProperty && "of" in imageProperty ? imageProperty.of : imageProperty;
     const restProperties = listProperties.filter(p => p !== titleProperty && p !== imagePropertyKey);
 
-    const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) : undefined;
+    const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) as any : undefined;
     const usedImageValue = imageProperty !== undefined ? ("of" in imageProperty
         ? ((imageValue ?? []).length > 0
             ? imageValue[0] : undefined)
@@ -130,12 +130,12 @@ export function EntityPreviewData({
                             entity
                                 ? <PropertyPreview
                                     propertyKey={titleProperty as string}
-                                    value={getValueInPath(entity.values, titleProperty)}
+                                    value={getValueInPath(entity.values, titleProperty) as any}
                                     property={collection.properties[titleProperty as string] as Property}
- />
+                                    size={"medium"} />
                                 : <SkeletonPropertyComponent
                                     property={collection.properties[titleProperty as string] as Property}
- />
+                                    size={"medium"} />
                         }
                     </div>
                 )}
@@ -152,7 +152,7 @@ export function EntityPreviewData({
                                 entity
                                     ? <PropertyPreview
                                         propertyKey={key as string}
-                                        value={valueInPath}
+                                        value={valueInPath as any}
                                         property={childProperty as Property}
                                         size={"small"} />
                                     : <SkeletonPropertyComponent

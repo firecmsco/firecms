@@ -37,7 +37,7 @@ export interface CollectionValidationResult {
  * Validates a property object recursively
  */
 function validateProperty(
-    property: any,
+    property: Record<string, unknown>,
     path: string,
     errors: CollectionValidationError[]
 ): void {
@@ -55,7 +55,7 @@ function validateProperty(
             path: `${path}.dataType`,
             message: "Required field is missing"
         });
-    } else if (!VALID_DATA_TYPES.includes(property.dataType)) {
+    } else if (!VALID_DATA_TYPES.includes(property.dataType as DataType)) {
         errors.push({
             path: `${path}.dataType`,
             message: `Invalid value "${property.dataType}", expected one of: ${VALID_DATA_TYPES.join(", ")}`
@@ -74,11 +74,11 @@ function validateProperty(
     if (property.dataType === "array") {
         if (property.of) {
             if (Array.isArray(property.of)) {
-                property.of.forEach((ofProp: any, index: number) => {
+                property.of.forEach((ofProp: Record<string, unknown>, index: number) => {
                     validateProperty(ofProp, `${path}.of[${index}]`, errors);
                 });
             } else {
-                validateProperty(property.of, `${path}.of`, errors);
+                validateProperty(property.of as Record<string, unknown>, `${path}.of`, errors);
             }
         }
         // oneOf validation
@@ -88,15 +88,15 @@ function validateProperty(
                     path: `${path}.oneOf`,
                     message: "Must be an object"
                 });
-            } else if (property.oneOf.properties) {
-                validateProperties(property.oneOf.properties, `${path}.oneOf.properties`, errors);
+            } else if ((property.oneOf as Record<string, unknown>).properties) {
+                validateProperties((property.oneOf as Record<string, unknown>).properties as Record<string, unknown>, `${path}.oneOf.properties`, errors);
             }
         }
     }
 
     // Validate map properties
     if (property.dataType === "map" && property.properties) {
-        validateProperties(property.properties, `${path}.properties`, errors);
+        validateProperties(property.properties as Record<string, unknown>, `${path}.properties`, errors);
     }
 
     // Validate reference path
@@ -134,7 +134,7 @@ function validateProperty(
  * Validates a properties object (collection of property definitions)
  */
 function validateProperties(
-    properties: any,
+    properties: Record<string, unknown>,
     path: string,
     errors: CollectionValidationError[]
 ): void {
@@ -147,7 +147,7 @@ function validateProperties(
     }
 
     for (const [key, property] of Object.entries(properties)) {
-        validateProperty(property, `${path}.${key}`, errors);
+        validateProperty(property as Record<string, unknown>, `${path}.${key}`, errors);
     }
 }
 
@@ -155,7 +155,7 @@ function validateProperties(
  * Validates optional collection fields
  */
 function validateOptionalFields(
-    collection: any,
+    collection: Record<string, unknown>,
     errors: CollectionValidationError[]
 ): void {
     // String fields
@@ -215,7 +215,7 @@ function validateOptionalFields(
                 path: "propertiesOrder",
                 message: "Must be an array of strings"
             });
-        } else if (!collection.propertiesOrder.every((item: any) => typeof item === "string")) {
+        } else if (!collection.propertiesOrder.every((item: unknown) => typeof item === "string")) {
             errors.push({
                 path: "propertiesOrder",
                 message: "All items must be strings"
@@ -231,7 +231,7 @@ function validateOptionalFields(
                 message: "Must be an array"
             });
         } else {
-            collection.subcollections.forEach((sub: any, index: number) => {
+            collection.subcollections.forEach((sub: Record<string, unknown>, index: number) => {
                 const subErrors: CollectionValidationError[] = [];
                 validateCollectionObject(sub, subErrors);
                 subErrors.forEach(err => {
@@ -247,7 +247,7 @@ function validateOptionalFields(
     // defaultViewMode validation
     const validViewModes = ["table", "cards", "kanban"];
     if (collection.defaultViewMode !== undefined) {
-        if (!validViewModes.includes(collection.defaultViewMode)) {
+        if (!validViewModes.includes(collection.defaultViewMode as string)) {
             errors.push({
                 path: "defaultViewMode",
                 message: `Invalid value, expected one of: ${validViewModes.join(", ")}`
@@ -262,8 +262,8 @@ function validateOptionalFields(
                 path: "kanban",
                 message: "Must be an object"
             });
-        } else if (collection.kanban.columnProperty !== undefined &&
-            typeof collection.kanban.columnProperty !== "string") {
+        } else if ((collection.kanban as Record<string, unknown>).columnProperty !== undefined &&
+            typeof (collection.kanban as Record<string, unknown>).columnProperty !== "string") {
             errors.push({
                 path: "kanban.columnProperty",
                 message: "Must be a string"
@@ -276,7 +276,7 @@ function validateOptionalFields(
  * Validates a collection object
  */
 function validateCollectionObject(
-    collection: any,
+    collection: Record<string, unknown>,
     errors: CollectionValidationError[]
 ): void {
     // Required fields
@@ -318,7 +318,7 @@ function validateCollectionObject(
 
     // Properties validation
     if (collection.properties !== undefined) {
-        validateProperties(collection.properties, "properties", errors);
+        validateProperties(collection.properties as Record<string, unknown>, "properties", errors);
     }
 
     // Optional fields
@@ -334,21 +334,22 @@ export function validateCollectionJson(jsonString: string): CollectionValidation
     const errors: CollectionValidationError[] = [];
 
     // Try to parse JSON
-    let parsed: any;
+    let parsed: Record<string, unknown>;
     try {
         parsed = JSON.parse(jsonString);
-    } catch (e: any) {
+    } catch (e: unknown) {
         // Try to extract line/column info from the error
-        const match = e.message.match(/position (\d+)/);
+        const message_ = e instanceof Error ? e.message : String(e);
+        const match = message_.match(/position (\d+)/);
         let message = "Invalid JSON syntax";
         if (match) {
             const position = parseInt(match[1], 10);
             const lines = jsonString.substring(0, position).split("\n");
             const line = lines.length;
             const column = lines[lines.length - 1].length + 1;
-            message = `Invalid JSON syntax at line ${line}, column ${column}: ${e.message}`;
+            message = `Invalid JSON syntax at line ${line}, column ${column}: ${message_}`;
         } else {
-            message = `Invalid JSON syntax: ${e.message}`;
+            message = `Invalid JSON syntax: ${message_}`;
         }
         return {
             valid: false,
@@ -370,11 +371,11 @@ export function validateCollectionJson(jsonString: string): CollectionValidation
         };
     }
 
-    validateCollectionObject(parsed, errors);
+    validateCollectionObject(parsed as Record<string, unknown>, errors);
 
     return {
         valid: errors.length === 0,
         errors,
-        collection: errors.length === 0 ? parsed as EntityCollection : undefined
+        collection: errors.length === 0 ? parsed as unknown as EntityCollection : undefined
     };
 }

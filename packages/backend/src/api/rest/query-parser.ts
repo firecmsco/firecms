@@ -22,14 +22,14 @@ export function mapOperator(op: string): string | null {
 /**
  * Parse query parameters into QueryOptions
  */
-export function parseQueryOptions(query: any): QueryOptions {
+export function parseQueryOptions(query: Record<string, unknown>): QueryOptions {
     const options: QueryOptions = {};
 
     // Pagination
-    if (query.limit) options.limit = parseInt(query.limit);
-    if (query.offset) options.offset = parseInt(query.offset);
+    if (query.limit) options.limit = parseInt(String(query.limit));
+    if (query.offset) options.offset = parseInt(String(query.offset));
     if (query.page) {
-        const page = parseInt(query.page);
+        const page = parseInt(String(query.page));
         const limit = options.limit || 20;
         options.offset = (page - 1) * limit;
     }
@@ -64,7 +64,7 @@ export function parseQueryOptions(query: any): QueryOptions {
                 const rebaseOp = mapOperator(op);
 
                 if (rebaseOp) {
-                    let parsedVal: any = val;
+                    let parsedVal: string | number | boolean | null | (string | number | boolean | null)[] = val;
                     // Attempt to parse primitive types or arrays
                     if (val === "true") parsedVal = true;
                     else if (val === "false") parsedVal = false;
@@ -86,13 +86,13 @@ export function parseQueryOptions(query: any): QueryOptions {
                     options.where[key] = [rebaseOp, parsedVal];
                 } else {
                     // Fallback: assume implicit eq if the dot wasn't an operator (e.g. email or float)
-                    let parsedVal: any = value;
+                    let parsedVal: string | number | boolean | null = value;
                     if (!isNaN(Number(value)) && value.trim() !== "") parsedVal = Number(value);
                     options.where[key] = ["==", parsedVal];
                 }
             } else {
                 // Implicit eq
-                let parsedVal: any = value;
+                let parsedVal: string | number | boolean | null = value;
                 if (value === "true") parsedVal = true;
                 else if (value === "false") parsedVal = false;
                 else if (value === "null") parsedVal = null;

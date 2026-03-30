@@ -89,7 +89,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                 "h-full flex items-center justify-center flex-col bg-surface-50/90 dark:bg-surface-900/90 z-10",
                 frozen ? "sticky left-0" : ""
             )}
-            onClick={useCallback((event: any) => {
+            onClick={useCallback((event: React.MouseEvent) => {
                 event.stopPropagation();
             }, [])}
             style={{

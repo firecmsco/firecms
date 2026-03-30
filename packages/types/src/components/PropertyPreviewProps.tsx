@@ -8,7 +8,7 @@ export type PreviewSize = "small" | "medium" | "large";
 /**
  * @group Preview components
  */
-export interface PropertyPreviewProps<P extends Property, CustomProps = any> {
+export interface PropertyPreviewProps<P extends Property, CustomProps = unknown> {
     /**
      * Name of the property
      */

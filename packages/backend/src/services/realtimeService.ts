@@ -2,7 +2,7 @@ import { WebSocket } from "ws";
 import { EventEmitter } from "events";
 import { EntityService } from "../db/entityService";
 
-import { Entity, ListenCollectionProps, ListenEntityProps, DataSource, CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "@rebasepro/types";
+import { Entity, FetchCollectionProps, ListenCollectionProps, ListenEntityProps, DataSource, CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "@rebasepro/types";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { sql as drizzleSql } from "drizzle-orm";
 import { RealtimeProvider, CollectionSubscriptionConfig, EntitySubscriptionConfig } from "../db/interfaces";
@@ -40,11 +40,11 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         entityId?: string | number;
         // Store full collection request parameters for proper refetching
         collectionRequest?: {
-            filter?: any;
+            filter?: Record<string, unknown>;
             orderBy?: string;
             order?: "desc" | "asc";
             limit?: number;
-            startAfter?: any;
+            startAfter?: Record<string, unknown>;
             databaseId?: string;
             searchString?: string;
         };
@@ -54,7 +54,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
     }>();
 
     // Add callback storage for DataSource subscriptions
-    private subscriptionCallbacks = new Map<string, (data: any) => void>();
+    private subscriptionCallbacks = new Map<string, (data: Entity[] | Entity | null) => void>();
 
     private dataSource?: DataSource;
 
@@ -79,11 +79,11 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         path: string;
         entityId?: string | number;
         collectionRequest?: {
-            filter?: any;
+            filter?: Record<string, unknown>;
             orderBy?: string;
             order?: "desc" | "asc";
             limit?: number;
-            startAfter?: any;
+            startAfter?: Record<string, unknown>;
             databaseId?: string;
             searchString?: string;
         };
@@ -94,7 +94,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
     }
 
     // Add callback management methods
-    addSubscriptionCallback(subscriptionId: string, callback: (data: any) => void) {
+    addSubscriptionCallback(subscriptionId: string, callback: (data: Entity[] | Entity | null) => void) {
         console.debug("📋 [RealtimeService] Adding callback for subscription:", subscriptionId);
         this.subscriptionCallbacks.set(subscriptionId, callback);
     }
@@ -121,18 +121,18 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             type: "collection",
             path: config.path,
             collectionRequest: {
-                filter: config.filter,
+                filter: config.filter as Record<string, unknown> | undefined,
                 orderBy: config.orderBy,
                 order: config.order,
                 limit: config.limit,
-                startAfter: config.startAfter,
+                startAfter: config.startAfter as Record<string, unknown> | undefined,
                 databaseId: config.databaseId,
                 searchString: config.searchString
             }
         });
 
         if (callback) {
-            this.subscriptionCallbacks.set(subscriptionId, callback);
+            this.subscriptionCallbacks.set(subscriptionId, callback as (data: Entity[] | Entity | null) => void);
         }
     }
 
@@ -152,7 +152,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         });
 
         if (callback) {
-            this.subscriptionCallbacks.set(subscriptionId, callback);
+            this.subscriptionCallbacks.set(subscriptionId, callback as (data: Entity[] | Entity | null) => void);
         }
     }
 
@@ -227,7 +227,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                     orderBy: request.orderBy,
                     order: request.order,
                     limit: request.limit,
-                    startAfter: request.startAfter,
+                    startAfter: request.startAfter as Record<string, unknown> | undefined,
                     databaseId: request.collection?.databaseId,
                     searchString: request.searchString
                 }
@@ -253,7 +253,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                     orderBy: request.orderBy,
                     order: request.order,
                     limit: request.limit,
-                    startAfter: request.startAfter,
+                    startAfter: request.startAfter as Record<string, unknown> | undefined,
                     databaseId: request.collection?.databaseId,
                     searchString: request.searchString
                 });
@@ -425,7 +425,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
      */
     private async fetchCollectionWithAuth(
         notifyPath: string,
-        collectionRequest: { filter?: any; orderBy?: string; order?: "desc" | "asc"; limit?: number; startAfter?: any; databaseId?: string; searchString?: string },
+        collectionRequest: { filter?: Record<string, unknown>; orderBy?: string; order?: "desc" | "asc"; limit?: number; startAfter?: Record<string, unknown>; databaseId?: string; searchString?: string },
         authContext?: SubscriptionAuthContext
     ): Promise<Entity[]> {
         if (this.dataSource) {
@@ -433,7 +433,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             const fetchFn = async () => this.dataSource!.fetchCollection({
                 path: notifyPath,
                 collection: collection,
-                filter: collectionRequest.filter,
+                filter: collectionRequest.filter as FetchCollectionProps["filter"],
                 orderBy: collectionRequest.orderBy,
                 order: collectionRequest.order,
                 limit: collectionRequest.limit,
@@ -503,7 +503,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         const message: CollectionUpdateMessage = {
             type: "collection_update",
             subscriptionId,
-            entities
+            entities: entities as Entity<Record<string, unknown>>[]
         };
         this.sendMessage(clientId, message);
     }
@@ -512,7 +512,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         const message: EntityUpdateMessage = {
             type: "entity_update",
             subscriptionId,
-            entity
+            entity: entity as Entity<Record<string, unknown>> | null
         };
         this.sendMessage(clientId, message);
     }
@@ -527,7 +527,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         this.sendMessage(clientId, message);
     }
 
-    private sendMessage(clientId: string, message: any) {
+    private sendMessage(clientId: string, message: CollectionUpdateMessage | EntityUpdateMessage | { type: string; subscriptionId?: string; error?: string }) {
         const client = this.clients.get(clientId);
         if (client && client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify(message));

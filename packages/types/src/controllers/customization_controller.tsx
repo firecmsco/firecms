@@ -11,7 +11,7 @@ export type CustomizationController = {
     /**
      * Use plugins to modify the behaviour of the CMS.
      */
-    plugins?: RebasePlugin<any, any, any>[];
+    plugins?: RebasePlugin[];
 
     /**
      * List of additional custom views for entities.
@@ -28,7 +28,7 @@ export type CustomizationController = {
      * You can later reuse these actions in the `entityActions` prop of a collection,
      * by specifying the `key` of the action.
      */
-    entityActions?: EntityAction<any, any>[];
+    entityActions?: EntityAction[];
 
     /**
      * Format of the dates in the CMS.

@@ -1,0 +1,22 @@
+{
+  "name": "rebase",
+  "owner": {
+    "name": "Rebase",
+    "email": "hello@rebase.pro"
+  },
+  "plugins": [
+    {
+      "name": "rebase",
+      "description": "Official Claude plugin for Rebase. Manage CMS projects, browse data, build collections, deploy apps, and more",
+      "category": "development",
+      "tags": [
+        "rebase",
+        "cms",
+        "headless-cms",
+        "postgresql",
+        "admin-panel"
+      ],
+      "source": "./"
+    }
+  ]
+}

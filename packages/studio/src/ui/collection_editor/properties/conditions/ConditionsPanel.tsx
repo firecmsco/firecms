@@ -4,7 +4,7 @@ import { ExpandablePanel, SettingsIcon, Typography } from "@rebasepro/ui";
 
 export function ConditionsPanel({
     children
-}: { children?: any }) {
+}: { children?: React.ReactNode }) {
 
     return (
         <ExpandablePanel

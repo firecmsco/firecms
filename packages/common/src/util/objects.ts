@@ -2,33 +2,33 @@ import hash from "object-hash";
 import { GeoPoint } from "@rebasepro/types";
 
 /** @private is the value an empty array? */
-export const isEmptyArray = (value?: any) =>
+export const isEmptyArray = (value?: unknown) =>
     Array.isArray(value) && value.length === 0;
 
 /** @private is the given object a Function? */
-export const isFunction = (obj: any): obj is Function =>
+export const isFunction = (obj: unknown): obj is Function =>
     typeof obj === "function";
 
 /** @private is the given object an integer? */
-export const isInteger = (obj: any): boolean =>
-    String(Math.floor(Number(obj))) === obj;
+export const isInteger = (obj: unknown): boolean =>
+    String(Math.floor(Number(obj))) === String(obj);
 
 /** @private is the given object a NaN? */
 // eslint-disable-next-line no-self-compare
-export const isNaN = (obj: any): boolean => obj !== obj;
+export const isNaN = (obj: unknown): boolean => obj !== obj;
 
 /**
  * Deeply get a value from an object via its path.
  */
 export function getIn(
-    obj: any,
+    obj: Record<string, unknown> | unknown[] | unknown,
     key: string | string[],
-    def?: any,
+    def?: unknown,
     p = 0
 ) {
     const path = toPath(key);
     while (obj && p < path.length) {
-        obj = obj[path[p++]];
+        obj = (obj as Record<string, unknown>)[path[p++]];
     }
 
     // check if path is not in the end
@@ -39,27 +39,27 @@ export function getIn(
     return obj === undefined ? def : obj;
 }
 
-export function setIn(obj: any, path: string, value: any): any {
-    const res: any = clone(obj); // this keeps inheritance when obj is a class
-    let resVal: any = res;
+export function setIn<T>(obj: T, path: string, value: unknown): T {
+    const res = clone(obj) as Record<string, unknown>;
+    let resVal: Record<string, unknown> = res;
     let i = 0;
     const pathArray = toPath(path);
 
     for (; i < pathArray.length - 1; i++) {
         const currentPath: string = pathArray[i];
-        const currentObj: any = getIn(obj, pathArray.slice(0, i + 1));
+        const currentObj = getIn(obj as Record<string, unknown>, pathArray.slice(0, i + 1));
 
         if (currentObj && (isObject(currentObj) || Array.isArray(currentObj))) {
-            resVal = resVal[currentPath] = clone(currentObj);
+            resVal = resVal[currentPath] = clone(currentObj) as Record<string, unknown>;
         } else {
             const nextPath: string = pathArray[i + 1];
             resVal = resVal[currentPath] =
-                isInteger(nextPath) && Number(nextPath) >= 0 ? [] : {};
+                (isInteger(nextPath) && Number(nextPath) >= 0 ? [] : {}) as Record<string, unknown>;
         }
     }
 
     // Return original object if new value is the same as current
-    if ((i === 0 ? obj : resVal)[pathArray[i]] === value) {
+    if ((i === 0 ? obj as Record<string, unknown> : resVal)[pathArray[i]] === value) {
         return obj;
     }
 
@@ -75,14 +75,14 @@ export function setIn(obj: any, path: string, value: any): any {
         delete res[pathArray[i]];
     }
 
-    return res;
+    return res as T;
 }
 
-export function clone(value: any) {
+export function clone<T>(value: T): T {
     if (Array.isArray(value)) {
-        return [...value];
+        return [...value] as unknown as T;
     } else if (typeof value === "object" && value !== null) {
-        return { ...value };
+        return { ...value } as T;
     } else {
         return value; // This is for primitive types which do not need cloning.
     }
@@ -95,18 +95,18 @@ function toPath(value: string | string[]) {
 }
 
 
-export const pick: <T>(obj: T, ...args: any[]) => T = (obj: any, ...args: any[]) => ({
-    ...args.reduce((res, key) => ({
+export const pick: <T extends Record<string, unknown>>(obj: T, ...args: (keyof T)[]) => Partial<T> = <T extends Record<string, unknown>>(obj: T, ...args: (keyof T)[]) => ({
+    ...args.reduce<Record<string, unknown>>((res, key) => ({
         ...res,
-        [key]: obj[key]
+        [key as string]: obj[key as string]
     }), {})
-});
+}) as Partial<T>;
 
-export function isObject(item: any) {
-    return item && typeof item === "object" && !Array.isArray(item);
+export function isObject(item: unknown): item is Record<string, unknown> {
+    return !!item && typeof item === "object" && !Array.isArray(item);
 }
 
-export function isPlainObject(obj: any) {
+export function isPlainObject(obj: unknown): obj is Record<string, unknown> {
     // 1. Rule out non-objects, null, and arrays
     if (typeof obj !== "object" || obj === null || Array.isArray(obj)) {
         return false;
@@ -119,7 +119,7 @@ export function isPlainObject(obj: any) {
     return proto === Object.prototype;
 }
 
-export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>>(
+export function mergeDeep<T extends Record<string, any>, U extends Record<string, any>>(
     target: T,
     source: U,
     ignoreUndefined: boolean = false
@@ -150,9 +150,9 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
                 continue;
             }
 
-            if ((sourceValue as any) instanceof Date) {
+            if ((sourceValue as unknown) instanceof Date) {
                 // If source value is a Date, create a new Date instance.
-                (output as any)[key] = new Date(sourceValue.getTime());
+                (output as Record<string, unknown>)[key] = new Date((sourceValue as unknown as Date).getTime());
             } else if (Array.isArray(sourceValue)) {
                 if (Array.isArray(outputValue)) {
                     const newArray = [];
@@ -175,29 +175,29 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
                             newArray[i] = sourceItem;
                         }
                     }
-                    (output as any)[key] = newArray;
+                    (output as Record<string, unknown>)[key] = newArray;
                 } else {
                     // If output's value (from target) is not an array,
                     // overwrite with a shallow copy of the source array.
-                    (output as any)[key] = [...sourceValue];
+                    (output as Record<string, unknown>)[key] = [...sourceValue];
                 }
             } else if (isPlainObject(sourceValue)) {
                 // If source value is a plain object (not a class instance like EntityReference, GeoPoint, etc.):
                 if (isPlainObject(outputValue)) {
                     // If the corresponding value in output (from target) is also a plain object, recurse.
                     // Ensure the ignoreUndefined flag is passed down.
-                    (output as any)[key] = mergeDeep(outputValue, sourceValue, ignoreUndefined);
+                    (output as Record<string, unknown>)[key] = mergeDeep(outputValue as Record<string, unknown>, sourceValue, ignoreUndefined);
                 } else {
                     // If output's value (from target) is not a plain object (e.g., null, primitive, class instance, or key didn't exist in original target),
                     // overwrite with the source object.
-                    (output as any)[key] = sourceValue;
+                    (output as Record<string, unknown>)[key] = sourceValue;
                 }
             } else if (isObject(sourceValue)) {
                 // If source value is a class instance (not a plain object), use it directly to preserve prototype
-                (output as any)[key] = sourceValue;
+                (output as Record<string, unknown>)[key] = sourceValue;
             } else {
                 // If source value is a primitive, null, or undefined (and not ignored).
-                (output as any)[key] = sourceValue;
+                (output as Record<string, unknown>)[key] = sourceValue;
             }
         }
     }
@@ -205,11 +205,11 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
     return output as T & U;
 }
 
-export function getValueInPath(o: object | undefined, path: string): any {
+export function getValueInPath(o: object | undefined, path: string): unknown {
     if (!o) return undefined;
     if (typeof o === "object") {
         if (path in o) {
-            return (o as any)[path];
+            return (o as Record<string, unknown>)[path];
         }
         if (path.includes(".") || path.includes("[")) {
             let pathSegments = path.split(/[.[]/);
@@ -217,15 +217,15 @@ export function getValueInPath(o: object | undefined, path: string): any {
                 pathSegments = pathSegments.map(segment => segment.replace("]", ""));
             }
             const firstSegment = pathSegments[0];
-            const isArrayAndIndexExists = Array.isArray((o as any)[firstSegment]) && !isNaN(parseInt(pathSegments[1]));
+            const isArrayAndIndexExists = Array.isArray((o as Record<string, unknown>)[firstSegment]) && !isNaN(parseInt(pathSegments[1]));
             const nextObject = isArrayAndIndexExists
-                ? (o as any)[firstSegment][parseInt(pathSegments[1])]
-                : (o as any)[firstSegment];
+                ? ((o as Record<string, unknown>)[firstSegment] as unknown[])[parseInt(pathSegments[1])]
+                : (o as Record<string, unknown>)[firstSegment];
 
             const nextPath = pathSegments.slice(isArrayAndIndexExists ? 2 : 1).join(".");
             if (nextPath === "")
                 return nextObject;
-            return getValueInPath(nextObject, nextPath)
+            return getValueInPath(nextObject as object | undefined, nextPath);
         }
     }
     return undefined;
@@ -236,14 +236,14 @@ export function removeInPath(o: object, path: string): object | undefined {
     const parts = path.split(".");
     const last = parts.pop();
     for (const part of parts) {
-        currentObject = (currentObject as any)[part]
+        currentObject = (currentObject as Record<string, unknown>)[part] as Record<string, unknown>;
     }
     if (last)
-        delete (currentObject as any)[last];
+        delete (currentObject as Record<string, unknown>)[last];
     return currentObject;
 }
 
-export function removeFunctions(o: object | undefined): any {
+export function removeFunctions(o: unknown): unknown {
     if (o === undefined) return undefined;
     if (o === null) return null;
     if (typeof o === "object") {
@@ -269,25 +269,25 @@ export function removeFunctions(o: object | undefined): any {
     return o;
 }
 
-export function getHashValue<T>(v: T) {
+export function getHashValue<T>(v: T): string | null {
     if (!v) return null;
-    if (typeof v === "object") {
+    if (typeof v === "object" && v !== null) {
         if ("id" in v)
-            return (v as any).id;
+            return String((v as Record<string, unknown>).id);
         else if (v instanceof Date)
             return v.toLocaleString();
         else if (v instanceof GeoPoint)
-            return hash(v as Record<string, unknown>);
+            return hash(v as unknown as Record<string, unknown>);
     }
-    return hash(v, { ignoreUnknown: true });
+    return hash(v as object, { ignoreUnknown: true });
 }
 
-export function removeUndefined(value: any, removeEmptyStrings?: boolean): any {
+export function removeUndefined(value: unknown, removeEmptyStrings?: boolean): unknown {
     if (typeof value === "function") {
         return value;
     }
     if (Array.isArray(value)) {
-        return value.map((v: any) => removeUndefined(v, removeEmptyStrings));
+        return value.map((v: unknown) => removeUndefined(v, removeEmptyStrings));
     }
     if (typeof value === "object") {
         if (value === null)
@@ -296,14 +296,14 @@ export function removeUndefined(value: any, removeEmptyStrings?: boolean): any {
         if (!isPlainObject(value)) {
             return value;
         }
-        const res: object = {};
+        const res: Record<string, unknown> = {};
         Object.keys(value).forEach((key) => {
-            if (!isEmptyObject(value)) {
-                const childRes = removeUndefined(value[key], removeEmptyStrings);
+            if (!isEmptyObject(value as object)) {
+                const childRes = removeUndefined((value as Record<string, unknown>)[key], removeEmptyStrings);
                 const isString = typeof childRes === "string";
                 const shouldKeepIfString = !removeEmptyStrings || (removeEmptyStrings && !isString) || (removeEmptyStrings && isString && childRes !== "");
-                if (childRes !== undefined && !isEmptyObject(childRes) && shouldKeepIfString)
-                    (res as any)[key] = childRes;
+                if (childRes !== undefined && !isEmptyObject(childRes as object) && shouldKeepIfString)
+                    res[key] = childRes;
             }
         });
         return res;
@@ -311,12 +311,12 @@ export function removeUndefined(value: any, removeEmptyStrings?: boolean): any {
     return value;
 }
 
-export function removeNulls(value: any): any {
+export function removeNulls(value: unknown): unknown {
     if (typeof value === "function") {
         return value;
     }
     if (Array.isArray(value)) {
-        return value.map((v: any) => removeNulls(v));
+        return value.map((v: unknown) => removeNulls(v));
     }
     if (typeof value === "object") {
         if (value === null)
@@ -325,10 +325,11 @@ export function removeNulls(value: any): any {
         if (!isPlainObject(value)) {
             return value;
         }
-        const res: object = {};
-        Object.keys(value).forEach((key) => {
-            if (value[key] !== null)
-                (res as any)[key] = removeNulls(value[key]);
+        const res: Record<string, unknown> = {};
+        const obj = value as Record<string, unknown>;
+        Object.keys(obj).forEach((key) => {
+            if (obj[key] !== null)
+                res[key] = removeNulls(obj[key]);
         });
         return res;
     }
@@ -341,9 +342,9 @@ export function isEmptyObject(obj: object) {
         Object.keys(obj).length === 0
 }
 
-export function removePropsIfExisting(source: any, comparison: any) {
-    const isObject = (val: any) => typeof val === "object" && val !== null;
-    const isArray = (val: any) => Array.isArray(val);
+export function removePropsIfExisting(source: Record<string, unknown> | unknown[], comparison: Record<string, unknown> | unknown[]) {
+    const isObject = (val: unknown): val is Record<string, unknown> => typeof val === "object" && val !== null;
+    const isArray = (val: unknown): val is unknown[] => Array.isArray(val);
 
     if (!isObject(source) || !isObject(comparison)) {
         return source;
@@ -356,7 +357,7 @@ export function removePropsIfExisting(source: any, comparison: any) {
             if (res[i] === comparison[i]) {
                 res.splice(i, 1);
             } else if (isObject(res[i]) && isObject(comparison[i])) {
-                res[i] = removePropsIfExisting(res[i], comparison[i]);
+                res[i] = removePropsIfExisting(res[i] as Record<string, unknown>, (comparison as unknown as unknown[])[i] as Record<string, unknown>);
             }
         }
     } else {

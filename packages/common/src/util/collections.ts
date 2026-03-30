@@ -26,7 +26,7 @@ export function sortProperties<M extends Record<string, any>>(properties: Proper
                         return ({ [key]: property });
                     }
                 })
-                .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as Properties;
+                .reduce((a: Properties, b: Properties) => ({ ...a, ...b }), {}) as Properties;
         }
 
         // Filter propertiesOrder to only include TOP-LEVEL property keys that exist
@@ -113,7 +113,7 @@ export function getLocalChangesBackup(collection: EntityCollection) {
 export function getPrimaryKeys<M extends Record<string, any>>(collection: EntityCollection<M>): Extract<keyof M, string>[] {
     const properties = collection.properties;
     if (!properties) {
-        return ["id"] as any;
+        return ["id"] as Extract<keyof M, string>[];
     }
     const ids = Object.entries(properties)
         .filter(([key, prop]) => typeof prop === "object" && prop !== null && "isId" in prop && Boolean(prop.isId))
@@ -122,5 +122,5 @@ export function getPrimaryKeys<M extends Record<string, any>>(collection: Entity
     if (ids.length > 0) {
         return ids as Extract<keyof M, string>[];
     }
-    return ["id"] as any;
+    return ["id"] as Extract<keyof M, string>[];
 }

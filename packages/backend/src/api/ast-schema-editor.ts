@@ -1,4 +1,4 @@
-import { Project, SyntaxKind, ObjectLiteralExpression, PropertyAssignment, VariableDeclaration, IndentationText } from "ts-morph";
+import { Project, SyntaxKind, ObjectLiteralExpression, ObjectLiteralElementLike, PropertyAssignment, VariableDeclaration, IndentationText } from "ts-morph";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -52,7 +52,7 @@ export class AstSchemaEditor {
         return null;
     }
 
-    private convertJsonToAstString(obj: any, indentLevel: number = 0, oldAstNode?: ObjectLiteralExpression): string {
+    private convertJsonToAstString(obj: unknown, indentLevel: number = 0, oldAstNode?: ObjectLiteralExpression): string {
         // Base TS-morph parses arrays as 2 levels deep from the property key: 
         // PropertiesObject = level 1, PropertyConfig = level 2.
         // We calibrate the spacing multiples to keep the items flush with standard TS format.
@@ -75,7 +75,8 @@ export class AstSchemaEditor {
             return `[\n${innerIndent}${items.join(`,\n${innerIndent}`)}\n${indent}]`;
         }
         if (typeof obj === "object") {
-            const keys = Object.keys(obj);
+            const record = obj as Record<string, unknown>;
+            const keys = Object.keys(record);
 
             // Collect preserved AST properties
             const preservedProps: string[] = [];
@@ -89,7 +90,7 @@ export class AstSchemaEditor {
                         if (name.startsWith("'") && name.endsWith("'")) name = name.slice(1, -1);
 
                         // If the JSON object doesn't have this key, check if we should preserve it
-                        if (!(name in obj)) {
+                        if (!(name in record)) {
                             const init = oldProp.getInitializer();
                             if (init) {
                                 const kind = init.getKind();
@@ -117,16 +118,16 @@ export class AstSchemaEditor {
 
                 // If the value is an object, pass the old AST node to recurse
                 let childAstNode: ObjectLiteralExpression | undefined;
-                if (oldAstNode && typeof obj[key] === "object" && obj[key] !== null && !Array.isArray(obj[key])) {
+                if (oldAstNode && typeof record[key] === "object" && record[key] !== null && !Array.isArray(record[key])) {
                     const oldProp = oldAstNode.getProperty(
-                        (p: any) => p.getName && (p.getName() === key || p.getName() === `"${key}"` || p.getName() === `'${key}'`)
+                        (p: ObjectLiteralElementLike) => 'getName' in p && typeof (p as PropertyAssignment).getName === 'function' && ((p as PropertyAssignment).getName() === key || (p as PropertyAssignment).getName() === `"${key}"` || (p as PropertyAssignment).getName() === `'${key}'`)
                     );
                     if (oldProp && oldProp.isKind(SyntaxKind.PropertyAssignment)) {
                         childAstNode = oldProp.getInitializerIfKind(SyntaxKind.ObjectLiteralExpression);
                     }
                 }
 
-                return `${keyStr}: ${this.convertJsonToAstString(obj[key], indentLevel + 1, childAstNode)}`;
+                return `${keyStr}: ${this.convertJsonToAstString(record[key], indentLevel + 1, childAstNode)}`;
             });
 
             const allProps = [...props, ...preservedProps];
@@ -135,7 +136,7 @@ export class AstSchemaEditor {
         return "undefined";
     }
 
-    public async saveProperty(collectionId: string, propertyKey: string, propertyConfig: any) {
+    public async saveProperty(collectionId: string, propertyKey: string, propertyConfig: Record<string, unknown>) {
         const collectionObj = this.getCollectionObject(collectionId);
         if (!collectionObj) throw new Error(`Collection ${collectionId} not found in ATS workspace.`);
 
@@ -150,7 +151,7 @@ export class AstSchemaEditor {
         const propsObj = propertiesProp.getInitializerIfKind(SyntaxKind.ObjectLiteralExpression);
         if (propsObj) {
             let existingProp = propsObj.getProperty(
-                (p: any) => p.getName && (p.getName() === propertyKey || p.getName() === `"${propertyKey}"`)
+                (p: ObjectLiteralElementLike) => 'getName' in p && typeof (p as PropertyAssignment).getName === 'function' && ((p as PropertyAssignment).getName() === propertyKey || (p as PropertyAssignment).getName() === `"${propertyKey}"`)
             );
 
             let oldPropAstNode: ObjectLiteralExpression | undefined;
@@ -188,7 +189,7 @@ export class AstSchemaEditor {
             const propsObj = propertiesProp.getInitializerIfKind(SyntaxKind.ObjectLiteralExpression);
             if (propsObj) {
                 const existingProp = propsObj.getProperty(
-                    (p: any) => p.getName && (p.getName() === propertyKey || p.getName() === `"${propertyKey}"`)
+                    (p: ObjectLiteralElementLike) => 'getName' in p && typeof (p as PropertyAssignment).getName === 'function' && ((p as PropertyAssignment).getName() === propertyKey || (p as PropertyAssignment).getName() === `"${propertyKey}"`)
                 );
                 if (existingProp) {
                     existingProp.remove();
@@ -202,7 +203,7 @@ export class AstSchemaEditor {
         }
     }
 
-    public async saveCollection(collectionId: string, collectionData: any) {
+    public async saveCollection(collectionId: string, collectionData: Record<string, unknown>) {
         let file = this.getCollectionFile(collectionId);
         let collectionObj = this.getCollectionObject(collectionId);
 

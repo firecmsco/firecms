@@ -155,7 +155,7 @@ export interface BaseProperty<CustomProps = any> {
     /**
      * This value will be set by default for new entities.
      */
-    defaultValue?: any;
+    defaultValue?: unknown;
 
     /**
      * A number between 0 and 100 that indicates the width of the field in the form view.
@@ -638,7 +638,7 @@ export interface MapProperty extends BaseProperty {
 export type PropertyBuilderProps<M extends Record<string, any> = any> = {
     values: Partial<M>;
     previousValues?: Partial<M>;
-    propertyValue?: any;
+    propertyValue?: unknown;
     index?: number;
     path: string;
     entityId?: string | number;
@@ -1229,7 +1229,7 @@ export interface ConditionContext {
     /**
      * Current value of this property specifically.
      */
-    propertyValue: any;
+    propertyValue: unknown;
 
     /**
      * Collection path (e.g., "products", "users/uid123/orders")

@@ -282,7 +282,7 @@ export function getArrayResolvedProperties({
     property,
     ...props
 }: {
-    propertyValue: any,
+    propertyValue: unknown,
     propertyKey?: string,
     property: ArrayProperty,
     ignoreMissingFields: boolean,
@@ -301,7 +301,7 @@ export function getArrayResolvedProperties({
             `Trying to resolve an array property (${propertyKey}) without providing an 'of' property`
         )
     return Array.isArray(propertyValue)
-        ? propertyValue.map((v: any, index: number) => {
+        ? propertyValue.map((v: unknown, index: number) => {
             return resolveProperty({
                 propertyKey: `${propertyKey}.${index}`,
                 property: Array.isArray(of) ? of[index] : of,

@@ -203,7 +203,7 @@ export function MarkdownPropertyField({
 
                 <TextField name={"defaultValue"}
                     disabled={disabled}
-                    onChange={(e: any) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                         setFieldValue("defaultValue", e.target.value === "" ? undefined : e.target.value);
                     }}
                     label={"Default value"}

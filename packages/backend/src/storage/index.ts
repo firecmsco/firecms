@@ -13,14 +13,14 @@ export { createStorageRoutes } from './routes';
 export type { StorageRoutesConfig } from './routes';
 export * from './storage-registry';
 
-import { StorageConfig, StorageController } from './types';
+import { BackendStorageConfig, StorageController } from './types';
 import { LocalStorageController } from './LocalStorageController';
 import { S3StorageController } from './S3StorageController';
 
 /**
  * Factory function to create a storage controller based on configuration
  */
-export function createStorageController(config: StorageConfig): StorageController {
+export function createStorageController(config: BackendStorageConfig): StorageController {
     switch (config.type) {
         case 'local':
             return new LocalStorageController(config);

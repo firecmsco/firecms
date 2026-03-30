@@ -53,7 +53,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const [exportType, setExportType] = React.useState<"csv" | "json">("csv");
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
 
-    const context = useRebaseContext<USER>();
+    const context = useRebaseContext<USER>() as any;
     const dataSource = useDataSource();
     const cmsUrlController = useCMSUrlController();
 

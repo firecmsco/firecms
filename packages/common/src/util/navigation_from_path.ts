@@ -35,7 +35,7 @@ export function getNavigationEntriesFromPath(props: {
     path: string,
     collections: EntityCollection[] | undefined,
     currentFullPath?: string,
-    contextEntityViews?: EntityCustomView<any>[]
+    contextEntityViews?: EntityCustomView[]
 }): NavigationViewInternal[] {
 
     const {
@@ -112,7 +112,7 @@ export function getNavigationEntriesFromPath(props: {
     return result;
 }
 
-function resolveEntityView(entityView: string | EntityCustomView<any>, contextEntityViews?: EntityCustomView<any>[]): EntityCustomView<any> | undefined {
+function resolveEntityView(entityView: string | EntityCustomView, contextEntityViews?: EntityCustomView[]): EntityCustomView | undefined {
     if (typeof entityView === "string") {
         return contextEntityViews?.find((entry) => entry.key === entityView);
     } else {

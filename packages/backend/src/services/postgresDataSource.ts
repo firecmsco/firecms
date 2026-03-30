@@ -54,9 +54,9 @@ export class PostgresDataSource implements DataSource {
     /**
      * Set a date to midnight (start of day) in UTC
      */
-    setDateToMidnight(input?: Date | string | number): Date | null {
+    setDateToMidnight(input?: unknown): Date | null {
         if (!input) return null;
-        const date = input instanceof Date ? input : new Date(input);
+        const date = input instanceof Date ? input : new Date(input as string | number);
         date.setUTCHours(0, 0, 0, 0);
         return date;
     }
@@ -97,7 +97,7 @@ export class PostgresDataSource implements DataSource {
             orderBy,
             order,
             limit,
-            startAfter,
+            startAfter: startAfter as Record<string, unknown> | undefined,
             databaseId: collection?.databaseId,
             searchString
         });
@@ -171,14 +171,14 @@ export class PostgresDataSource implements DataSource {
                 orderBy,
                 order,
                 limit,
-                startAfter,
+                startAfter: startAfter as Record<string, unknown> | undefined,
                 databaseId: collection?.databaseId,
                 searchString
             }
         });
 
         // Store the callback for this subscription
-        this.realtimeService.addSubscriptionCallback(subscriptionId, callbackWrapper);
+        this.realtimeService.addSubscriptionCallback(subscriptionId, callbackWrapper as (data: Entity | Entity[] | null) => void);
 
         console.log("🔄 [DataSource] Subscription registered with RealtimeService");
         console.log("🔄 [DataSource] Total subscriptions:", this.realtimeService.subscriptions.size);
@@ -278,7 +278,7 @@ export class PostgresDataSource implements DataSource {
         });
 
         // Store the callback for this subscription
-        this.realtimeService.addSubscriptionCallback(subscriptionId, callbackWrapper);
+        this.realtimeService.addSubscriptionCallback(subscriptionId, callbackWrapper as (data: Entity | Entity[] | null) => void);
 
         // Fetch initial data
         this.fetchEntity({

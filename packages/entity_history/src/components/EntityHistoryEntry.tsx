@@ -28,7 +28,7 @@ import {
 import { useHistoryController } from "../HistoryControllerProvider";
 import { UserChip } from "./UserChip";
 
-export type EntityPreviewProps = {
+export type EntityHistoryEntryProps = {
     size: PreviewSize,
     actions?: React.ReactNode,
     collection?: EntityCollection,
@@ -88,7 +88,7 @@ export function EntityHistoryEntry({
     size,
     entity,
     previousValues
-}: EntityPreviewProps) {
+}: EntityHistoryEntryProps) {
 
     const authController = useAuthController();
     const customizationController = useCustomizationController();
@@ -157,8 +157,8 @@ export function EntityHistoryEntry({
                 {previewKeys && previewKeys.map((key) => {
                     const childProperty = getPropertyInPath(collection.properties, key);
 
-                    const valueInPath = getValueInPath(entity.values, key);
-                    const previousValueInPath = previousValues ? getValueInPath(previousValues, key) : undefined;
+                    const valueInPath = getValueInPath(entity.values, key) as any;
+                    const previousValueInPath = previousValues ? getValueInPath(previousValues, key) as any : undefined;
 
                     const element = childProperty ? (entity
                         ? <PropertyPreview

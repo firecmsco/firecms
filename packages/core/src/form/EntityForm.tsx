@@ -513,7 +513,7 @@ export function EntityForm<M extends Record<string, any>>({
     }
 
     const titlePropertyKey = getEntityTitlePropertyKey(collection, customizationController.propertyConfigs);
-    const title = (formex.values && titlePropertyKey ? getValueInPath(formex.values, titlePropertyKey) : undefined)
+    const title = (formex.values && titlePropertyKey ? getValueInPath(formex.values, titlePropertyKey) as React.ReactNode : undefined)
         ?? collection.singularName
         ?? collection.name;
 

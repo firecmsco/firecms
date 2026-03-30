@@ -1,19 +1,23 @@
 import jsonLogic from "json-logic-js";
 import {
+    ArrayProperty,
     AuthController,
     ConditionContext,
     EnumValueConfig,
     JsonLogicRule,
+    NumberProperty,
     PropertyConditions,
-    Property
+    Property,
+    ReferenceProperty,
+    StringProperty
 } from "@rebasepro/types";
 
 /**
  * Access a nested property from an object via dot notation.
  */
-function getIn(obj: any, path: string): any {
+function getIn(obj: Record<string, unknown> | unknown, path: string): unknown {
     if (!obj || !path) return undefined;
-    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+    return path.split('.').reduce((acc: unknown, part: string) => acc && (acc as Record<string, unknown>)[part], obj);
 }
 
 let operationsRegistered = false;
@@ -64,7 +68,7 @@ export function registerConditionOperations(): void {
 /**
  * Evaluate a JSON Logic rule against the given context.
  */
-export function evaluateCondition(rule: JsonLogicRule, context: ConditionContext): any {
+export function evaluateCondition(rule: JsonLogicRule, context: ConditionContext): unknown {
     // Ensure operations are registered
     registerConditionOperations();
     return jsonLogic.apply(rule, context);
@@ -74,7 +78,7 @@ export function evaluateCondition(rule: JsonLogicRule, context: ConditionContext
  * Convert a value to a format suitable for JSON Logic evaluation.
  * Specifically handles Date objects by converting them to Unix timestamps.
  */
-function serializeValueForConditions(value: any): any {
+function serializeValueForConditions(value: unknown): unknown {
     if (value === null || value === undefined) {
         return value;
     }
@@ -85,11 +89,11 @@ function serializeValueForConditions(value: any): any {
     }
 
     // Handle Firestore Timestamp-like objects (have toDate or toMillis)
-    if (typeof value?.toMillis === "function") {
-        return value.toMillis();
+    if (typeof (value as { toMillis?: () => number })?.toMillis === "function") {
+        return (value as { toMillis: () => number }).toMillis();
     }
-    if (typeof value?.toDate === "function") {
-        return value.toDate().getTime();
+    if (typeof (value as { toDate?: () => Date })?.toDate === "function") {
+        return (value as { toDate: () => Date }).toDate().getTime();
     }
 
     // Handle arrays recursively
@@ -99,9 +103,9 @@ function serializeValueForConditions(value: any): any {
 
     // Handle plain objects recursively
     if (typeof value === "object") {
-        const result: Record<string, any> = {};
-        for (const key of Object.keys(value)) {
-            result[key] = serializeValueForConditions(value[key]);
+        const result: Record<string, unknown> = {};
+        for (const key of Object.keys(value as Record<string, unknown>)) {
+            result[key] = serializeValueForConditions((value as Record<string, unknown>)[key]);
         }
         return result;
     }
@@ -114,8 +118,8 @@ function serializeValueForConditions(value: any): any {
  */
 export function buildConditionContext(params: {
     propertyKey?: string;
-    values?: Record<string, any>;
-    previousValues?: Record<string, any>;
+    values?: Record<string, unknown>;
+    previousValues?: Record<string, unknown>;
     path: string;
     entityId?: string;
     index?: number;
@@ -136,8 +140,8 @@ export function buildConditionContext(params: {
     const serializedPreviousValues = serializeValueForConditions(previousValues ?? values ?? {});
 
     return {
-        values: serializedValues,
-        previousValues: serializedPreviousValues,
+        values: serializedValues as Record<string, unknown>,
+        previousValues: serializedPreviousValues as Record<string, unknown>,
         propertyValue: propertyKey ? getIn(serializedValues, propertyKey) : undefined,
         path,
         entityId,
@@ -208,10 +212,10 @@ export function applyPropertyConditions(
 
     // Evaluate required condition
     if (conditions.required !== undefined) {
-        const isRequired = evaluateCondition(conditions.required, context);
+        const isRequired = evaluateCondition(conditions.required, context) as boolean;
         result.validation = {
             ...result.validation,
-            required: isRequired,
+            required: isRequired as boolean | undefined,
             requiredMessage: conditions.requiredMessage
         };
     }
@@ -222,7 +226,7 @@ export function applyPropertyConditions(
 
     // Apply default value for new entities
     if (context.isNew && conditions.defaultValue !== undefined) {
-        result.defaultValue = evaluateCondition(conditions.defaultValue, context);
+        result.defaultValue = evaluateCondition(conditions.defaultValue, context) as Property["defaultValue"];
     }
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -230,7 +234,7 @@ export function applyPropertyConditions(
     // ═══════════════════════════════════════════════════════════════════════
 
     if ("enumValues" in result && result.enumValues && (conditions.enumConditions || conditions.allowedEnumValues || conditions.excludedEnumValues)) {
-        (result as any).enumValues = applyEnumConditions(
+        (result as Record<string, unknown>).enumValues = applyEnumConditions(
             result.enumValues as EnumValueConfig[],
             conditions,
             context
@@ -243,10 +247,10 @@ export function applyPropertyConditions(
 
     if (result.type === "reference") {
         if (conditions.referencePath) {
-            (result as any).path = evaluateCondition(conditions.referencePath, context);
+            (result as ReferenceProperty).path = evaluateCondition(conditions.referencePath, context) as string;
         }
         if (conditions.referenceFilter) {
-            (result as any).forceFilter = evaluateCondition(conditions.referenceFilter, context);
+            (result as ReferenceProperty).forceFilter = evaluateCondition(conditions.referenceFilter, context) as ReferenceProperty["forceFilter"];
         }
     }
 
@@ -256,10 +260,10 @@ export function applyPropertyConditions(
 
     if (result.type === "array") {
         if (conditions.canAddElements !== undefined) {
-            (result as any).canAddElements = evaluateCondition(conditions.canAddElements, context);
+            (result as ArrayProperty).canAddElements = evaluateCondition(conditions.canAddElements, context) as boolean;
         }
         if (conditions.sortable !== undefined) {
-            (result as any).sortable = evaluateCondition(conditions.sortable, context);
+            (result as ArrayProperty).sortable = evaluateCondition(conditions.sortable, context) as boolean;
         }
     }
 

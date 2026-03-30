@@ -40,7 +40,7 @@ import { useAIModifiedPaths } from "./AIModifiedPathsContext";
 
 export const PropertyTree = React.memo(
     function PropertyTree<M extends {
-        [Key: string]: any
+        [Key: string]: unknown
     }>({
         namespace,
         selectedPropertyKey,
@@ -299,7 +299,7 @@ export function PropertyTreeEntry({
                             asChild={true}>
                             <IconButton size="smallest"
                                 color="inherit"
-                                onClick={(e: any) => {
+                                onClick={(e: React.MouseEvent) => {
                                     e.stopPropagation();
                                     onPropertyRemove(propertyKey, namespace);
                                 }}>

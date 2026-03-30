@@ -90,8 +90,8 @@ export function updateDateAutoValues<M extends Record<string, any>>({
         inputValues: Partial<EntityValues<M>>,
         properties: Properties,
         status: EntityStatus,
-        timestampNowValue: any,
-        setDateToMidnight?: (input?: any) => any | undefined
+        timestampNowValue: unknown,
+        setDateToMidnight?: (input?: unknown) => unknown | undefined
     }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
@@ -124,7 +124,7 @@ export function sanitizeData<M extends Record<string, any>>
         values: EntityValues<M>,
         properties: Properties
     ) {
-    const result: any = values;
+    const result = values as Record<string, unknown>;
     Object.entries(properties)
         .forEach(([key, property]) => {
             if (values && values[key] !== undefined) result[key] = values[key];
@@ -151,7 +151,7 @@ export function getRelationFrom<M extends Record<string, any>>(entity: Entity<M>
 export function traverseValuesProperties<M extends Record<string, any>>(
     inputValues: Partial<EntityValues<M>>,
     properties: Properties,
-    operation: (value: any, property: Property) => any
+    operation: (value: unknown, property: Property) => unknown
 ): EntityValues<M> | undefined {
     // Handle null/undefined inputValues - use empty object as base for mergeDeep
     const safeInputValues = inputValues ?? {};
@@ -171,13 +171,13 @@ export function traverseValuesProperties<M extends Record<string, any>>(
     return result;
 }
 
-export function traverseValueProperty(inputValue: any,
+export function traverseValueProperty(inputValue: unknown,
     property: Property,
-    operation: (value: any, property: Property) => any): any {
+    operation: (value: unknown, property: Property) => unknown): unknown {
 
     let value;
     if (property.type === "map" && property.properties) {
-        value = traverseValuesProperties(inputValue, property.properties, operation);
+        value = traverseValuesProperties(inputValue as Partial<Record<string, unknown>>, property.properties, operation);
     } else if (property.type === "array") {
         const of = property.of;
         if (of && Array.isArray(inputValue) && !Array.isArray(of)) {
@@ -194,12 +194,13 @@ export function traverseValueProperty(inputValue: any,
             value = inputValue.map((e) => {
                 if (e === null) return null;
                 if (typeof e !== "object") return e;
-                const type = e[typeField];
+                const rec = e as Record<string, unknown>;
+                const type = rec[typeField] as string;
                 const childProperty = property.oneOf?.properties[type];
                 if (!type || !childProperty) return e;
                 return {
                     [typeField]: type,
-                    [valueField]: traverseValueProperty(e[valueField], childProperty, operation)
+                    [valueField]: traverseValueProperty(rec[valueField], childProperty, operation)
                 };
             });
         } else {

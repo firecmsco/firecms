@@ -97,13 +97,13 @@ export type EntityActionClickProps<M extends object, USER extends User = User> =
      * Optional highlight function to highlight the entity in the collection view
      * @param entity
      */
-    highlightEntity?: (entity: Entity<any>) => void;
+    highlightEntity?: (entity: Entity<Record<string, unknown>>) => void;
 
     /**
      * Optional unhighlight function to remove the highlight from the entity in the collection view
      * @param entity
      */
-    unhighlightEntity?: (entity: Entity<any>) => void;
+    unhighlightEntity?: (entity: Entity<Record<string, unknown>>) => void;
 
     /**
      * Optional function to navigate back (e.g. when deleting an entity or navigating from a form)

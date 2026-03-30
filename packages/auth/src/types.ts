@@ -30,7 +30,7 @@ export type RebaseAuthController = AuthController & {
     /** Update user profile */
     updateProfile: (displayName?: string, photoURL?: string) => Promise<User>;
     /** Fetch active sessions */
-    fetchSessions: () => Promise<any[]>;
+    fetchSessions: () => Promise<Session[]>;
     /** Revoke a session */
     revokeSession: (sessionId: string) => Promise<void>;
     /** Revoke all active sessions */
@@ -90,3 +90,13 @@ export interface RefreshResponse {
     tokens: AuthTokens;
 }
 
+/**
+ * Session info from the backend
+ */
+export interface Session {
+    id: string;
+    userAgent?: string;
+    ipAddress?: string;
+    createdAt: string;
+    isCurrentSession?: boolean;
+}

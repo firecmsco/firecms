@@ -4,7 +4,7 @@ import { ExpandablePanel, RuleIcon, Typography } from "@rebasepro/ui";
 
 export function ValidationPanel({
     children
-}: { children?: any }) {
+}: { children?: React.ReactNode }) {
 
     return (
         <ExpandablePanel

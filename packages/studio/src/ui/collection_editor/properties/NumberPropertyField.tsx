@@ -102,7 +102,7 @@ export function NumberPropertyField({ disabled }: {
                 <TextField name={"defaultValue"}
                     disabled={disabled}
                     type={"number"}
-                    onChange={(e: any) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                         setFieldValue("defaultValue", e.target.value === "" ? undefined : parseFloat(e.target.value));
                     }}
                     label={"Default value"}

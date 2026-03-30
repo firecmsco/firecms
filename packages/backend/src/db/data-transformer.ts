@@ -1,7 +1,7 @@
 import { eq, SQL } from "drizzle-orm";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { EntityCollection, Properties, Property } from "@rebasepro/types";
+import { EntityCollection, Properties, Property, Relation } from "@rebasepro/types";
 import { resolveCollectionRelations } from "@rebasepro/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 import { DrizzleConditionBuilder } from "../utils/drizzle-conditions";
@@ -14,7 +14,7 @@ import { getPrimaryKeys, buildCompositeId } from "./services/entity-helpers";
 /**
  * Helper function to sanitize and convert dates to ISO strings
  */
-export function sanitizeAndConvertDates(obj: any): any {
+export function sanitizeAndConvertDates(obj: unknown): unknown {
     if (obj === null || obj === undefined) {
         return null;
     }
@@ -36,10 +36,10 @@ export function sanitizeAndConvertDates(obj: any): any {
     }
 
     if (typeof obj === "object") {
-        const newObj: Record<string, any> = {};
+        const newObj: Record<string, unknown> = {};
         for (const key in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                newObj[key] = sanitizeAndConvertDates(obj[key]);
+                newObj[key] = sanitizeAndConvertDates((obj as Record<string, unknown>)[key]);
             }
         }
         return newObj;
@@ -77,14 +77,14 @@ export function serializeDataToServer<M extends Record<string, any>>(
     // Track inverse relations that need to be handled separately
     const inverseRelationUpdates: Array<{
         relationKey: string;
-        relation: any;
-        newValue: any;
+        relation: Relation;
+        newValue: unknown;
         currentEntityId?: string | number;
     }> = [];
     const joinPathRelationUpdates: Array<{
         relationKey: string;
-        relation: any;
-        newTargetId: any;
+        relation: Relation;
+        newTargetId: string | number | null;
     }> = [];
 
     for (const [key, value] of Object.entries(entity)) {
@@ -136,7 +136,7 @@ export function serializeDataToServer<M extends Record<string, any>>(
                     joinPathRelationUpdates.push({
                         relationKey: key,
                         relation,
-                        newTargetId: serializedValue
+                        newTargetId: serializedValue as string | number | null
                     });
                     // Don't include this property directly in payload
                     continue;
@@ -160,7 +160,7 @@ export function serializeDataToServer<M extends Record<string, any>>(
 /**
  * Serialize a single property value for database storage
  */
-export function serializePropertyToServer(value: any, property: Property): any {
+export function serializePropertyToServer(value: unknown, property: Property): unknown {
     if (value === null || value === undefined) {
         return value;
     }
@@ -171,8 +171,8 @@ export function serializePropertyToServer(value: any, property: Property): any {
         case "relation":
             if (Array.isArray(value)) {
                 return value.map(v => serializePropertyToServer(v, property));
-            } else if (typeof value === "object" && value?.id !== undefined) {
-                return value.id;
+            } else if (typeof value === "object" && value !== null && "id" in value) {
+                return (value as Record<string, unknown>).id;
             }
             return value;
 
@@ -296,7 +296,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
                                     } else {
                                         // One-to-many: return array of relation objects
                                         const targetPks = getPrimaryKeys(targetCollection);
-                                        result[propKey] = relatedEntities.map((entity: any) => ({
+                                        result[propKey] = relatedEntities.map((entity: Record<string, unknown>) => ({
                                             id: buildCompositeId(entity, targetPks),
                                             path: targetCollection.slug || targetCollection.dbPath,
                                             __type: "relation"
@@ -397,7 +397,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
                                     };
                                 } else {
                                     // One-to-many: return array of relation objects
-                                    result[propKey] = joinResults.map((joinResult: any) => {
+                                    result[propKey] = joinResults.map((joinResult: Record<string, unknown>) => {
                                         const targetEntity = joinResult[targetTableName] || joinResult;
                                         return {
                                             id: buildCompositeId(targetEntity, targetPks),
@@ -422,7 +422,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
 /**
  * Parse a single property value from database format to frontend format
  */
-export function parsePropertyFromServer(value: any, property: Property, collection: EntityCollection): any {
+export function parsePropertyFromServer(value: unknown, property: Property, collection: EntityCollection): unknown {
     if (value === null || value === undefined) {
         return value;
     }

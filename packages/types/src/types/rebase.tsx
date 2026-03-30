@@ -82,6 +82,13 @@ export type RebaseProps<USER extends User> = {
     apiKey?: string;
 
     /**
+     * Base URL for the backend API (e.g. "http://localhost:3001").
+     * When provided, this is available via `useApiConfig()` to any hook
+     * in the tree, reducing repetitive `apiUrl` threading.
+     */
+    apiUrl?: string;
+
+    /**
      * Record of custom form fields to be used in the CMS.
      * You can use the key to reference the custom field in
      * the `propertyConfig` prop of a property in a collection.

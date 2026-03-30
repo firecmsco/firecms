@@ -1,0 +1,29 @@
+{
+  "name": "rebase",
+  "displayName": "Rebase",
+  "version": "1.0.0",
+  "description": "The official Rebase Cursor plugin. Build, deploy & manage headless CMS backends with PostgreSQL, auto-generated APIs, and more.",
+  "author": {
+    "name": "Rebase",
+    "email": "hello@rebase.pro",
+    "url": "https://rebase.pro"
+  },
+  "license": "MIT",
+  "keywords": [
+    "rebase",
+    "cursor",
+    "skills",
+    "mcp",
+    "postgresql",
+    "drizzle",
+    "cms",
+    "headless-cms",
+    "admin-panel",
+    "baas"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "logo": "./assets/rebase_logo.svg",
+  "homepage": "https://github.com/rebaseco/agent-skills",
+  "repository": "https://github.com/rebaseco/agent-skills"
+}

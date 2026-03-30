@@ -1,0 +1,49 @@
+{
+  "name": "rebase",
+  "description": "Build, deploy & manage headless CMS backends with Rebase — PostgreSQL, auto-generated APIs, authentication, realtime, and more.",
+  "version": "1.0.0",
+  "contextFileName": "REBASE.md",
+  "mcpServers": {
+    "rebase": {
+      "command": "node",
+      "args": ["node_modules/@rebasepro/mcp-server/dist/cli.js"],
+      "env": {
+        "IS_GEMINI_CLI_EXTENSION": "true"
+      }
+    }
+  },
+  "themes": [
+    {
+      "name": "rebase-default-dark",
+      "type": "custom",
+      "background": {
+        "primary": "#1A1A2E",
+        "diff": {
+          "added": "green",
+          "removed": "red"
+        }
+      },
+      "text": {
+        "primary": "#E8E8E8",
+        "secondary": "#A6A6A6",
+        "link": "#FF6B35",
+        "accent": "#FF6B35",
+        "response": "#FF6B35"
+      },
+      "status": {
+        "success": "#6DD58C",
+        "warning": "#FFB300",
+        "error": "#E46962"
+      },
+      "border": {
+        "default": "#2F3032",
+        "focused": "#FF6B35"
+      },
+      "ui": {
+        "comment": "#FF6B35",
+        "symbol": "#2F3032",
+        "gradient": ["#FF6B35", "#FF8C42", "#FFA500"]
+      }
+    }
+  ]
+}

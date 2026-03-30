@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "rebase": {
+      "command": "node",
+      "args": [
+        "node_modules/@rebasepro/mcp-server/dist/cli.js"
+      ],
+      "env": {
+        "IS_REBASE_MCP": "true"
+      }
+    }
+  }
+}

@@ -128,7 +128,7 @@ export function TextFieldBinding<T extends string | number>({
                             <CloseIcon />
                         </IconButton>
                     }
-                    error={showError ? error : undefined}
+                    error={showError ? !!error : undefined}
                     inputClassName={error ? "text-red-500 dark:text-red-600" : ""} />
             )}
         </PropertyIdCopyTooltip>

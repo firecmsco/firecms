@@ -130,11 +130,11 @@ export function getYupMapObjectSchema({
                     name: `${name}[${childName}]`,
                     entityId
                 });
-            } catch (e: any) {
+            } catch (e: unknown) {
                 console.error(`Error creating validation schema for property ${childName}:`, e);
                 objectSchema[childName] = yup.mixed().test(
                     "validation-error",
-                    `Validation error: ${e?.message ?? "Unknown error"}`,
+                    `Validation error: ${e instanceof Error ? e.message : "Unknown error"}`,
                     () => false
                 );
             }
@@ -463,12 +463,12 @@ function getYupArraySchema({
                             entityId
                         })
                     };
-                } catch (e: any) {
+                } catch (e: unknown) {
                     console.error(`Error creating validation schema for array item ${index}:`, e);
                     return {
                         [`${name}[${index}]`]: yup.mixed().test(
                             "validation-error",
-                            `Validation error: ${e?.message ?? "Unknown error"}`,
+                            `Validation error: ${e instanceof Error ? e.message : "Unknown error"}`,
                             () => false
                         )
                     };
@@ -479,7 +479,7 @@ function getYupArraySchema({
                     "Dynamic object validation",
                     "Dynamic object validation error",
                     (object, context) => {
-                        const yupProperty = getValueInPath(yupProperties, context.path);
+                        const yupProperty = getValueInPath(yupProperties, context.path) as AnySchema;
                         return yupProperty.validate(object);
                     }
                 )
@@ -491,11 +491,11 @@ function getYupArraySchema({
                     parentProperty: property,
                     entityId
                 }));
-            } catch (e: any) {
+            } catch (e: unknown) {
                 console.error(`Error creating validation schema for array of property:`, e);
                 arraySchema = arraySchema.of(yup.mixed().test(
                     "validation-error",
-                    `Validation error: ${e?.message ?? "Unknown error"}`,
+                    `Validation error: ${e instanceof Error ? e.message : "Unknown error"}`,
                     () => false
                 ));
             }

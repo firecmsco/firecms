@@ -109,7 +109,7 @@ export function StoragePropertyField({
                                 value={fileTypesValue ?? []}
                                 onValueChange={handleTypesChange}
                                 label={allFileTypesSelected ? undefined : "Allowed file types"}
-                                renderValues={(selected: any[]) => {
+                                renderValues={(selected: string[]) => {
                                     if (!selected || selected.length === 0) return "All file types allowed";
                                     return selected.map((v: string) => fileTypes[v])
                                         .filter((v: string) => Boolean(v))
@@ -125,7 +125,7 @@ export function StoragePropertyField({
                                         </div>
                                         <Button size={"small"}
                                             variant={"text"}
-                                            onClick={(e: any) => {
+                                            onClick={(e: React.MouseEvent) => {
                                                 e.preventDefault();
                                                 e.stopPropagation();
                                                 return setFieldValue(acceptedFiles, [value]);
@@ -219,7 +219,7 @@ export function StoragePropertyField({
                                 label={"Max size (in bytes)"}
                                 size={"small"}
                                 value={maxSizeValue !== undefined && maxSizeValue !== null ? maxSizeValue.toString() : ""}
-                                onChange={(e: any) => {
+                                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                                     const value = e.target.value;
                                     if (value === "") setFieldValue(maxSize, undefined);
                                     else setFieldValue(maxSize, parseInt(value));
@@ -246,7 +246,7 @@ export function StoragePropertyField({
                                 size={"small"}
                                 disabled={disabled}
                                 value={imageResizeMaxWidthValue !== undefined && imageResizeMaxWidthValue !== null ? imageResizeMaxWidthValue.toString() : ""}
-                                onChange={(e: any) => {
+                                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                                     const value = e.target.value;
                                     if (value === "") setFieldValue(imageResizeMaxWidth, undefined);
                                     else setFieldValue(imageResizeMaxWidth, parseInt(value));
@@ -262,7 +262,7 @@ export function StoragePropertyField({
                                 size={"small"}
                                 disabled={disabled}
                                 value={imageResizeMaxHeightValue !== undefined && imageResizeMaxHeightValue !== null ? imageResizeMaxHeightValue.toString() : ""}
-                                onChange={(e: any) => {
+                                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                                     const value = e.target.value;
                                     if (value === "") setFieldValue(imageResizeMaxHeight, undefined);
                                     else setFieldValue(imageResizeMaxHeight, parseInt(value));
@@ -328,7 +328,7 @@ export function StoragePropertyField({
                                 size={"small"}
                                 disabled={disabled}
                                 value={imageResizeQualityValue !== undefined && imageResizeQualityValue !== null ? imageResizeQualityValue.toString() : ""}
-                                onChange={(e: any) => {
+                                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                                     const value = e.target.value;
                                     if (value === "") setFieldValue(imageResizeQuality, undefined);
                                     else {

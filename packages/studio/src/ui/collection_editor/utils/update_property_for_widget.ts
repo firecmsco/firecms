@@ -10,6 +10,7 @@ import {
     StringProperty
 } from "@rebasepro/core";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- propertyData is a partial property shape built incrementally via mergeDeep
 export function updatePropertyFromWidget(propertyData: any,
     selectedWidgetId: string | undefined,
     propertyConfigs: Record<string, PropertyConfig>): Property {

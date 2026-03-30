@@ -148,9 +148,10 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
                     ADD CONSTRAINT unique_device_session UNIQUE (user_id, user_agent, ip_address)
                 `);
                 console.log("✅ Added unique_device_session constraint");
-            } catch (e: any) {
+            } catch (e: unknown) {
+                const errorMessage = e instanceof Error ? e.message : String(e);
                 // If there's duplicate data preventing the constraint, clean up first
-                if (e.message.includes('could not create unique index')) {
+                if (errorMessage.includes('could not create unique index')) {
                     console.warn("⚠️ Duplicate sessions found, cleaning up before adding constraint...");
                     // Keep only the most recent token per user/device combo
                     await db.execute(sql`
@@ -165,11 +166,12 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
                     await db.execute(sql`
                         ALTER TABLE rebase_refresh_tokens
                         ADD CONSTRAINT unique_device_session UNIQUE (user_id, user_agent, ip_address)
-                    `).catch(retryErr => {
-                        console.error("Failed to add unique_device_session constraint after cleanup:", (retryErr as any).message);
+                    `).catch((retryErr: unknown) => {
+                        const retryMessage = retryErr instanceof Error ? retryErr.message : String(retryErr);
+                        console.error("Failed to add unique_device_session constraint after cleanup:", retryMessage);
                     });
                 } else {
-                    console.error("Constraint migration issue:", e.message);
+                    console.error("Constraint migration issue:", errorMessage);
                 }
             }
         }

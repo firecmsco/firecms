@@ -134,7 +134,7 @@ export class EntityFetchService {
             orderBy?: string;
             order?: "desc" | "asc";
             limit?: number;
-            startAfter?: any;
+            startAfter?: Record<string, unknown>;
             searchString?: string;
             databaseId?: string;
         } = {}
@@ -149,7 +149,7 @@ export class EntityFetchService {
             throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
         }
 
-        let query: any = this.db.select().from(table);
+        let query = this.db.select().from(table).$dynamic();
         const allConditions: SQL[] = [];
 
         // Add search conditions if search string is provided
@@ -206,8 +206,9 @@ export class EntityFetchService {
             if (options.orderBy) {
                 const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
                 if (orderByField) {
-                    const startAfterOrderValue = options.startAfter.values?.[options.orderBy] ?? options.startAfter[options.orderBy];
-                    const startAfterId = options.startAfter.id ?? options.startAfter[idInfo.fieldName];
+                    const cursor = options.startAfter as Record<string, unknown>;
+                    const startAfterOrderValue = (cursor.values as Record<string, unknown> | undefined)?.[options.orderBy] ?? cursor[options.orderBy];
+                    const startAfterId = cursor.id ?? cursor[idInfo.fieldName];
 
                     if (startAfterOrderValue !== undefined && startAfterId !== undefined) {
                         if (options.order === "asc") {
@@ -234,9 +235,10 @@ export class EntityFetchService {
                     }
                 }
             } else {
-                const startAfterId = options.startAfter.id ?? options.startAfter[idInfo.fieldName];
-                if (startAfterId !== undefined) {
-                    const parsedStartAfterIdObj = parseIdValues(startAfterId, idInfoArray);
+                const cursor = options.startAfter as Record<string, unknown>;
+                const startAfterId = cursor.id ?? cursor[idInfo.fieldName];
+                if (startAfterId !== undefined && startAfterId !== null) {
+                    const parsedStartAfterIdObj = parseIdValues(startAfterId as string | number, idInfoArray);
                     const parsedStartAfterId = parsedStartAfterIdObj[idInfo.fieldName];
                     startAfterConditions.push(lt(idField, parsedStartAfterId));
                 }
@@ -269,7 +271,7 @@ export class EntityFetchService {
      * Process raw database results into Entity objects with relations
      */
     private async processEntityResults<M extends Record<string, any>>(
-        results: any[],
+        results: Record<string, unknown>[],
         collection: EntityCollection,
         collectionPath: string,
         idInfo: { fieldName: string; type: "string" | "number" },
@@ -278,12 +280,12 @@ export class EntityFetchService {
         if (results.length === 0) return [];
 
         // First pass: parse all entities
-        const entitiesWithValues = await Promise.all(results.map(async (entity: any) => {
+        const entitiesWithValues = await Promise.all(results.map(async (entity: Record<string, unknown>) => {
             const values = await parseDataFromServer(entity as M, collection, this.db, collectionRegistry);
             return {
                 entity,
                 values,
-                id: entity[idInfo.fieldName].toString(),
+                id: String(entity[idInfo.fieldName]),
                 path: collectionPath
             };
         }));
@@ -302,7 +304,7 @@ export class EntityFetchService {
             if (entitiesMissingRelation.length === 0) continue;
 
             try {
-                const entityIds = entitiesMissingRelation.map(item => item.entity[idInfo.fieldName]);
+                const entityIds = entitiesMissingRelation.map(item => item.entity[idInfo.fieldName] as string | number);
                 const relationResults = await this.relationService.batchFetchRelatedEntities(
                     collectionPath,
                     entityIds,
@@ -311,7 +313,7 @@ export class EntityFetchService {
                 );
 
                 entitiesMissingRelation.forEach(item => {
-                    const entityId = item.entity[idInfo.fieldName];
+                    const entityId = item.entity[idInfo.fieldName] as string | number;
                     const relatedEntity = relationResults.get(entityId);
                     if (relatedEntity) {
                         (item.values as Record<string, unknown>)[key] = {
@@ -334,7 +336,7 @@ export class EntityFetchService {
                     try {
                         const relatedEntities = await this.relationService.fetchRelatedEntities(
                             collectionPath,
-                            item.entity[idInfo.fieldName],
+                            item.entity[idInfo.fieldName] as string | number,
                             key,
                             {}
                         );
@@ -370,7 +372,7 @@ export class EntityFetchService {
             orderBy?: string;
             order?: "desc" | "asc";
             limit?: number;
-            startAfter?: any;
+            startAfter?: Record<string, unknown>;
             searchString?: string;
             databaseId?: string;
         } = {}
@@ -413,7 +415,7 @@ export class EntityFetchService {
             orderBy?: string;
             order?: "desc" | "asc";
             limit?: number;
-            startAfter?: any;
+            startAfter?: Record<string, unknown>;
             searchString?: string;
             databaseId?: string;
         } = {}
@@ -473,7 +475,7 @@ export class EntityFetchService {
         const collection = getCollectionByPath(collectionPath);
         const table = getTableForCollection(collection);
 
-        let query: any = this.db.select({ count: count() }).from(table);
+        let query = this.db.select({ count: count() }).from(table).$dynamic();
 
         if (options.filter) {
             const filterConditions = this.buildFilterConditions(options.filter, table, collectionPath);
@@ -536,7 +538,7 @@ export class EntityFetchService {
     async checkUniqueField(
         collectionPath: string,
         fieldName: string,
-        value: any,
+        value: unknown,
         excludeEntityId?: string,
         _databaseId?: string
     ): Promise<boolean> {

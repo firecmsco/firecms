@@ -5,7 +5,7 @@ export type FormexController<T extends object> = {
     values: T;
     initialValues: T;
     setValues: (values: T) => void;
-    setFieldValue: (key: string, value: any, shouldValidate?: boolean) => void;
+    setFieldValue: (key: string, value: unknown, shouldValidate?: boolean) => void;
     touched: Record<string, boolean>;
     setFieldTouched: (key: string, touched: boolean, shouldValidate?: boolean) => void;
     setTouched: (touched: Record<string, boolean>) => void;

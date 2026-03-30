@@ -65,8 +65,8 @@ export class LocalStorageController implements StorageController {
     private async ensureDir(dirPath: string): Promise<void> {
         try {
             await mkdir(dirPath, { recursive: true });
-        } catch (error: any) {
-            if (error.code !== 'EEXIST') {
+        } catch (error: unknown) {
+            if (error instanceof Error && (error as NodeJS.ErrnoException).code !== 'EEXIST') {
                 throw error;
             }
         }
@@ -273,8 +273,8 @@ export class LocalStorageController implements StorageController {
             } catch {
                 // Metadata file might not exist
             }
-        } catch (error: any) {
-            if (error.code !== 'ENOENT') {
+        } catch (error: unknown) {
+            if (error instanceof Error && (error as NodeJS.ErrnoException).code !== 'ENOENT') {
                 throw error;
             }
             // File doesn't exist, nothing to delete
@@ -337,8 +337,9 @@ export class LocalStorageController implements StorageController {
                 prefixes,
                 nextPageToken
             };
-        } catch (error: any) {
-            if (error.code === 'ENOENT' || error.code === 'ENOTDIR') {
+        } catch (error: unknown) {
+            const code = error instanceof Error ? (error as NodeJS.ErrnoException).code : undefined;
+            if (code === 'ENOENT' || code === 'ENOTDIR') {
                 return { items: [], prefixes: [] };
             }
             throw error;

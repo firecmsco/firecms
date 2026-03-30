@@ -1,6 +1,6 @@
 import { and, eq, inArray, sql, SQL } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { DrizzleClient } from "../interfaces";
 import { Entity, EntityCollection, FilterValues, Relation } from "@rebasepro/types";
 import { getTableName, resolveCollectionRelations } from "@rebasepro/common";
 import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
@@ -19,7 +19,7 @@ import { parseDataFromServer } from "../data-transformer";
  * Handles fetching, updating, and managing entity relations.
  */
 export class RelationService {
-    constructor(private db: NodePgDatabase<any>) { }
+    constructor(private db: DrizzleClient) { }
 
     /**
      * Fetch entities related to a parent entity through a specific relation
@@ -33,7 +33,7 @@ export class RelationService {
             orderBy?: string;
             order?: "desc" | "asc";
             limit?: number;
-            startAfter?: any;
+            startAfter?: Record<string, unknown>;
             searchString?: string;
             databaseId?: string;
         } = {}
@@ -61,7 +61,7 @@ export class RelationService {
             orderBy?: string;
             order?: "desc" | "asc";
             limit?: number;
-            startAfter?: any;
+            startAfter?: Record<string, unknown>;
             searchString?: string;
             databaseId?: string;
         } = {}
@@ -140,7 +140,7 @@ export class RelationService {
         }
 
         // Handle other relation types
-        let query: any = this.db.select().from(targetTable);
+        let query = this.db.select().from(targetTable).$dynamic();
 
         // Build additional filter conditions
         const additionalFilters: SQL[] = [];
@@ -175,7 +175,7 @@ export class RelationService {
             idField,
             collectionRegistry,
             additionalFilters
-        );
+        ) as typeof query;
 
         if (options.limit) {
             query = query.limit(options.limit);
@@ -233,7 +233,7 @@ export class RelationService {
         const parentIdCol = parentTable[parentIdInfo.fieldName as keyof typeof parentTable] as AnyPgColumn;
 
         // Start count with distinct to avoid duplicates from junction tables
-        let query: any = this.db.select({ count: sql<number>`count(distinct ${targetIdField})` }).from(targetTable);
+        let query = this.db.select({ count: sql<number>`count(distinct ${targetIdField})` }).from(targetTable).$dynamic();
 
         // Build additional filter conditions
         const additionalFilters: SQL[] = [];
@@ -263,7 +263,7 @@ export class RelationService {
         parentEntityIds: (string | number)[],
         _relationKey: string,
         relation: Relation
-    ): Promise<Map<string | number, Entity<any>>> {
+    ): Promise<Map<string | number, Entity<Record<string, unknown>>>> {
         if (parentEntityIds.length === 0) return new Map();
 
         const parentCollection = getCollectionByPath(parentCollectionPath);
@@ -320,16 +320,16 @@ export class RelationService {
 
             const results = await query;
             const targetTableName = relation.joinPath[relation.joinPath.length - 1].table;
-            const resultMap = new Map<string | number, Entity<any>>();
+            const resultMap = new Map<string | number, Entity<Record<string, unknown>>>();
 
             // Group results by parent ID
-            results.forEach((row: any) => {
-                const parentEntity = row[getTableName(parentCollection)] || row;
-                const targetEntity = row[targetTableName] || row;
-                const parentId = parentEntity[parentIdInfo.fieldName];
+            results.forEach((row: Record<string, unknown>) => {
+                const parentEntity = (row[getTableName(parentCollection)] || row) as Record<string, unknown>;
+                const targetEntity = (row[targetTableName] || row) as Record<string, unknown>;
+                const parentId = parentEntity[parentIdInfo.fieldName] as string | number;
 
                 resultMap.set(parentId, {
-                    id: targetEntity[targetIdInfo.fieldName].toString(),
+                    id: String(targetEntity[targetIdInfo.fieldName]),
                     path: targetCollection.slug ?? targetCollection.dbPath,
                     values: targetEntity
                 });
@@ -339,7 +339,7 @@ export class RelationService {
         }
 
         // Handle other relation types with batching
-        let query: any = this.db.select().from(targetTable);
+        let query = this.db.select().from(targetTable).$dynamic();
 
         // Build the relation query with ALL parent IDs
         query = DrizzleConditionBuilder.buildRelationQuery(
@@ -352,23 +352,23 @@ export class RelationService {
             targetIdField,
             collectionRegistry,
             []
-        );
+        ) as typeof query;
 
         const results = await query;
-        const resultMap = new Map<string | number, Entity<any>>();
+        const resultMap = new Map<string | number, Entity<Record<string, unknown>>>();
 
         // Map results back to parent entities
-        results.forEach((row: any) => {
-            const targetEntity = row[getTableName(targetCollection)] || row;
+        results.forEach((row: Record<string, unknown>) => {
+            const targetEntity = (row[getTableName(targetCollection)] || row) as Record<string, unknown>;
 
             // Determine the parent ID this result belongs to based on the relation type
             let parentId: string | number | undefined;
 
             if (relation.direction === "inverse" && relation.foreignKeyOnTarget) {
-                parentId = targetEntity[relation.foreignKeyOnTarget];
+                parentId = targetEntity[relation.foreignKeyOnTarget] as string | number | undefined;
             } else if (relation.direction === "inverse" && relation.cardinality === "one" && relation.inverseRelationName) {
                 const inferredForeignKeyName = `${relation.inverseRelationName}_id`;
-                parentId = targetEntity[inferredForeignKeyName];
+                parentId = targetEntity[inferredForeignKeyName] as string | number | undefined;
             } else if (relation.direction === "owning" && relation.localKey) {
                 for (const parsedParentId of parsedParentIds) {
                     if (!resultMap.has(parsedParentId)) {
@@ -380,7 +380,7 @@ export class RelationService {
 
             if (parentId !== undefined && parsedParentIds.includes(parentId)) {
                 resultMap.set(parentId, {
-                    id: targetEntity[targetIdInfo.fieldName].toString(),
+                    id: String(targetEntity[targetIdInfo.fieldName]),
                     path: targetCollection.slug ?? targetCollection.dbPath,
                     values: targetEntity
                 });
@@ -394,7 +394,7 @@ export class RelationService {
      * Update many-to-many and junction relations
      */
     async updateRelationsUsingJoins<M extends Record<string, any>>(
-        tx: NodePgDatabase<any>,
+        tx: DrizzleClient,
         collection: EntityCollection,
         entityId: string | number,
         relationValues: Partial<M>
@@ -405,7 +405,7 @@ export class RelationService {
             const relation = resolvedRelations[key];
             if (!relation || relation.cardinality !== "many") continue;
 
-            const targetEntityIds = (value && Array.isArray(value)) ? value.map((rel: any) => rel.id) : [];
+            const targetEntityIds = (value && Array.isArray(value)) ? value.map((rel: { id: string | number }) => rel.id) : [];
             const targetCollection = relation.target();
 
             // Use joinPath if available
@@ -561,13 +561,13 @@ export class RelationService {
      * Update inverse relations (where FK is on the target table)
      */
     async updateInverseRelations(
-        tx: NodePgDatabase<any>,
+        tx: DrizzleClient,
         sourceCollection: EntityCollection,
         sourceEntityId: string | number,
         inverseRelationUpdates: Array<{
             relationKey: string;
             relation: Relation;
-            newValue: any;
+            newValue: unknown;
             currentEntityId?: string | number;
         }>
     ) {
@@ -649,7 +649,7 @@ export class RelationService {
                         .set({ [relation.foreignKeyOnTarget!]: null })
                         .where(eq(foreignKeyColumn, parsedSourceId));
                 } else {
-                    const parsedNewTargetIdObj = parseIdValues(newValue, targetPks);
+                    const parsedNewTargetIdObj = parseIdValues(newValue as string | number, targetPks);
                     const parsedNewTargetId = parsedNewTargetIdObj[targetIdInfo.fieldName];
                     const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
 
@@ -675,12 +675,12 @@ export class RelationService {
      * Handle inverse relations with joinPath
      */
     private async updateInverseJoinPathRelation(
-        tx: NodePgDatabase<any>,
+        tx: DrizzleClient,
         sourceCollection: EntityCollection,
         sourceEntityId: string | number,
         targetCollection: EntityCollection,
         relation: Relation,
-        newValue: any
+        newValue: unknown
     ) {
         try {
             if (!relation.joinPath || relation.joinPath.length === 0) {
@@ -748,7 +748,7 @@ export class RelationService {
                 if (newValue && Array.isArray(newValue) && newValue.length > 0) {
                     const targetPks = getPrimaryKeys(targetCollection);
                     const targetIdInfo = targetPks[0];
-                    const targetEntityIds = newValue.map((rel: any) => rel.id || rel);
+                    const targetEntityIds = (newValue as Array<{ id: string | number } | string | number>).map((rel) => typeof rel === 'object' && rel !== null ? rel.id : rel);
                     const parsedTargetIds = targetEntityIds.map(id => parseIdValues(id, targetPks)[targetIdInfo.fieldName]);
 
                     const newLinks = parsedTargetIds.map(targetId => ({
@@ -763,7 +763,7 @@ export class RelationService {
                     // Single value for one-to-one
                     const targetPks = getPrimaryKeys(targetCollection);
                     const targetIdInfo = targetPks[0];
-                    const targetId = typeof newValue === 'object' ? newValue.id : newValue;
+                    const targetId = typeof newValue === 'object' && newValue !== null ? (newValue as Record<string, unknown>).id as string | number : newValue as string | number;
                     const parsedTargetIdObj = parseIdValues(targetId, targetPks);
                     const parsedTargetId = parsedTargetIdObj[targetIdInfo.fieldName];
 
@@ -785,12 +785,12 @@ export class RelationService {
      * Handle many-to-many inverse relation updates using junction tables
      */
     private async updateManyToManyInverseRelation(
-        tx: NodePgDatabase<any>,
+        tx: DrizzleClient,
         sourceCollection: EntityCollection,
         sourceEntityId: string | number,
         targetCollection: EntityCollection,
         relation: Relation,
-        newValue: any,
+        newValue: unknown,
         junctionInfo: { table: string; sourceColumn: string; targetColumn: string }
     ) {
         try {
@@ -820,7 +820,7 @@ export class RelationService {
             if (newValue && Array.isArray(newValue) && newValue.length > 0) {
                 const targetPks = getPrimaryKeys(targetCollection);
                 const targetIdInfo = targetPks[0];
-                const targetEntityIds = newValue.map((rel: any) => rel.id);
+                const targetEntityIds = (newValue as Array<{ id: string | number }>).map((rel) => rel.id);
                 const parsedTargetIds = targetEntityIds.map(id => parseIdValues(id, targetPks)[targetIdInfo.fieldName]);
 
                 const newLinks = parsedTargetIds.map(targetId => ({
@@ -842,13 +842,13 @@ export class RelationService {
      * Update one-to-one relations that use joinPath
      */
     async updateJoinPathOneToOneRelations(
-        tx: NodePgDatabase<any>,
+        tx: DrizzleClient,
         parentCollection: EntityCollection,
         parentEntityId: string | number,
         updates: Array<{
             relationKey: string;
             relation: Relation;
-            newTargetId: any;
+            newTargetId: string | number | null;
         }>
     ) {
         for (const upd of updates) {
@@ -958,7 +958,7 @@ export class RelationService {
      * Handle junction table creation for many-to-many path-based saves
      */
     async handleJunctionTableCreation(
-        tx: NodePgDatabase<any>,
+        tx: DrizzleClient,
         newEntityId: string | number,
         junctionTableInfo: {
             parentCollection: EntityCollection;

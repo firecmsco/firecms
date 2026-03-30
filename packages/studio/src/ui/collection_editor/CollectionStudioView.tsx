@@ -9,11 +9,10 @@ import {
     AddIcon,
     StorageIcon,
 } from "@rebasepro/ui";
-import { useSnackbarController, useCMSUrlController, useUnsavedChangesDialog } from "@rebasepro/core";
+import { useSnackbarController, useCMSUrlController, useUnsavedChangesDialog, UnsavedChangesDialog } from "@rebasepro/core";
 import { CollectionEditorDialogProps } from "./CollectionEditorDialog";
 import { AIModifiedPathsProvider } from "./AIModifiedPathsContext";
 import { CollectionEditor } from "./CollectionEditorDialog";
-import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
 import { useNavigate } from "react-router-dom";
 
 export type CollectionStudioViewProps = Omit<CollectionEditorDialogProps, "open" | "isNewCollection" | "editedCollectionId" | "handleClose" | "handleCancel"> & {

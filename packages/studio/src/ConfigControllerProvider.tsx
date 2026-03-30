@@ -22,8 +22,8 @@ import { PropertyFormDialog } from "./ui/collection_editor/PropertyEditView";
 import { PersistedCollection } from "./types/persisted_collection";
 import { CollectionGenerationCallback } from "./api/generateCollectionApi";
 
-export const ConfigControllerContext = React.createContext<CollectionsConfigController>({} as any);
-export const CollectionEditorContext = React.createContext<CollectionEditorController>({} as any);
+export const ConfigControllerContext = React.createContext<CollectionsConfigController>({} as CollectionsConfigController);
+export const CollectionEditorContext = React.createContext<CollectionEditorController>({} as CollectionEditorController);
 
 export interface ConfigControllerProviderProps {
     /**
@@ -50,7 +50,7 @@ export interface ConfigControllerProviderProps {
         View: React.ComponentType<{
             path: string
         }>,
-        icon: React.ReactNode | any
+        icon: React.ReactNode
     };
 
     pathSuggestions?: string[];
@@ -82,7 +82,7 @@ export const ConfigControllerProvider = React.memo(
         onAnalyticsEvent,
         pathSuggestions,
         generateCollection
-    }: ConfigControllerProviderProps & { children?: any }) {
+    }: ConfigControllerProviderProps & { children?: React.ReactNode }) {
 
         // Internal: fetch unmapped tables and table columns from the data source
         const dataSource = useDataSource();
@@ -119,7 +119,7 @@ export const ConfigControllerProvider = React.memo(
             },
             copyFrom?: PersistedCollection,
             redirect: boolean,
-            existingEntities?: Entity<any>[],
+            existingEntities?: Entity[],
             pathSuggestions?: string[];
             initialView?: "general" | "display" | "properties";
             expandKanban?: boolean;
@@ -135,7 +135,7 @@ export const ConfigControllerProvider = React.memo(
             path?: string,
             parentCollectionIds: string[],
             collectionEditable: boolean;
-            existingEntities?: Entity<any>[];
+            existingEntities?: Entity[];
             collection?: PersistedCollection;
         }>();
 
@@ -158,7 +158,7 @@ export const ConfigControllerProvider = React.memo(
             path?: string,
             parentCollectionIds: string[],
             parentCollection?: PersistedCollection,
-            existingEntities?: Entity<any>[],
+            existingEntities?: Entity[],
             initialView?: "general" | "display" | "properties",
             expandKanban?: boolean
         }) => {
@@ -196,7 +196,7 @@ export const ConfigControllerProvider = React.memo(
             editedCollectionId: string,
             parentCollectionIds: string[],
             collection: PersistedCollection,
-            existingEntities?: Entity<any>[]
+            existingEntities?: Entity[]
         }) => {
             console.debug("Edit property", propertyKey, property, editedCollectionId, currentPropertiesOrder, parentCollectionIds, collection);
             onAnalyticsEvent?.("edit_property", {

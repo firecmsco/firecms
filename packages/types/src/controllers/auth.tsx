@@ -8,7 +8,7 @@ import { Role, User } from "../users";
  * to do it as the result of a hook.
  * @group Hooks and utilities
  */
-export type AuthController<USER extends User = any, ExtraData = any> = {
+export type AuthController<USER extends User = any, ExtraData = unknown> = {
 
     /**
      * The user currently logged in
@@ -37,12 +37,12 @@ export type AuthController<USER extends User = any, ExtraData = any> = {
     /**
      * Error initializing the authentication
      */
-    authError?: any;
+    authError?: unknown;
 
     /**
      * Error dispatched by the auth provider
      */
-    authProviderError?: any;
+    authProviderError?: unknown;
 
     /**
      * You can use this method to retrieve the auth token for the current user.

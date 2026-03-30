@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import Editor, { Monaco, OnMount } from "@monaco-editor/react";
+import type { editor, Position, IRange } from "monaco-editor";
 import { cls, defaultBorderMixin } from "@rebasepro/ui";
 import { useModeController } from "@rebasepro/core";
 
@@ -23,7 +24,7 @@ export const MonacoEditor = ({
     schemas
 }: MonacoEditorProps) => {
     const { mode } = useModeController();
-    const editorRef = useRef<any>(null);
+    const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
     const monacoRef = useRef<Monaco | null>(null);
     const onRunRef = useRef(onRun);
     onRunRef.current = onRun;
@@ -66,7 +67,7 @@ export const MonacoEditor = ({
 
         monaco.languages.registerCompletionItemProvider("pgsql", {
             triggerCharacters: [".", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
-            provideCompletionItems: (model: any, position: any) => {
+            provideCompletionItems: (model: editor.ITextModel, position: Position) => {
                 const word = model.getWordUntilPosition(position);
                 const range = {
                     startLineNumber: position.lineNumber,
@@ -86,7 +87,7 @@ export const MonacoEditor = ({
                 const match = textUntilPosition.match(/([a-zA-Z0-9_]+)\.$/);
                 const tableNameMatch = match ? match[1] : null;
 
-                const suggestions: any[] = [];
+                const suggestions: { label: string; kind: number; insertText: string; range: IRange; detail: string; sortText: string }[] = [];
                 const allSchemas = schemasRef.current || {};
 
                 if (tableNameMatch) {

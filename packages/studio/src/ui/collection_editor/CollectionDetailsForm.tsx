@@ -158,7 +158,7 @@ export function CollectionDetailsForm({
                     <div className={"col-span-12"}>
                         <TextField
                             value={values.name ?? ""}
-                            onChange={(e: any) => updateName(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => updateName(e.target.value)}
                             label={"Name"}
                             autoFocus={true}
                             required
@@ -423,7 +423,7 @@ function DefaultDatabaseField({
             invisible={true}
             inputClassName={"text-end"}
             value={databaseId ?? ""}
-            onChange={(e: any) => onDatabaseIdUpdate(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onDatabaseIdUpdate(e.target.value)}
             placeholder={"(default)"}></TextField>
     </Tooltip>
 }

@@ -1,8 +1,7 @@
 import { EntityCollection, User } from "@rebasepro/core";
 
-export type PersistedCollection<M extends Record<string, any> = any, USER extends User = User>
-    = Omit<EntityCollection<M, USER>, "subcollections"> & {
+export type PersistedCollection<M extends Record<string, any> = any> = Omit<EntityCollection<M>, "subcollections"> & {
         ownerId?: string;
-        subcollections?: () => PersistedCollection<any, any>[];
+        subcollections?: () => PersistedCollection[];
         editable?: boolean;
     }

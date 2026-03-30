@@ -110,7 +110,7 @@ function pgTypeToRebaseProperty(column: TableColumnInfo): Property | null {
         case "decimal":
         case "real":
         case "double precision": {
-            let colType: any = "numeric";
+            let colType: "numeric" | "real" | "double precision" = "numeric";
             if (dt === "real") colType = "real";
             if (dt === "double precision") colType = "double precision";
             return {

@@ -123,7 +123,7 @@ export class MongoRealtimeService implements RealtimeProvider {
     ): Promise<void> {
         try {
             const entities = await this.entityService.fetchCollection(config.path, {
-                filter: config.filter,
+                filter: config.filter as any,
                 orderBy: config.orderBy,
                 order: config.order,
                 limit: config.limit,

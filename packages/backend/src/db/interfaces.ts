@@ -35,7 +35,7 @@ import { PgTransaction } from "drizzle-orm/pg-core";
  * Type representing either a direct database connection or a transaction.
  * Used to allow services to operate within a transaction context.
  */
-export type DrizzleClient = NodePgDatabase<any> | PgTransaction<any, any, any>;
+export type DrizzleClient = NodePgDatabase<Record<string, never>> | PgTransaction<any, any, any>;
 
 export type {
     DatabaseConnection,

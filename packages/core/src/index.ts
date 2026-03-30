@@ -13,4 +13,5 @@ export * from "./util";
 export * from "./contexts";
 export * from "./routes";
 export { useUnsavedChangesDialog } from "./hooks/useUnsavedChangesDialog";
-export type { UnsavedChangesDialogProps } from "./hooks/useUnsavedChangesDialog";
+export type { UnsavedChangesDialogProps } from "./components/UnsavedChangesDialog";
+export { UnsavedChangesDialog } from "./components/UnsavedChangesDialog";

@@ -108,7 +108,7 @@ export function DefaultDrawer({
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className={"mt-3 flex-grow overflow-scroll no-scrollbar"}
+                    className={"mt-1 flex-grow overflow-scroll no-scrollbar"}
                     style={{
                         maskImage: scrolled
                             ? "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)"
@@ -170,7 +170,7 @@ export function DrawerLogo({
     const showFullContent = drawerOpen || (drawerHovered && !drawerOpen);
 
     return (
-        <div className="flex flex-row items-center shrink-0 pt-4 pb-2 px-2">
+        <div className="flex flex-row items-center shrink-0 pt-4 pb-0 px-2">
             {/* Logo — always visible */}
             <Link
                 className="shrink-0 flex items-center justify-center w-[56px] h-[40px]"

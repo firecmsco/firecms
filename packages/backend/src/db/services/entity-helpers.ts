@@ -29,7 +29,7 @@ export function getPrimaryKeys(collection: EntityCollection): { fieldName: strin
     // Fallback to explicitly defined isId properties
     if (collection.properties) {
         const idProps = Object.entries(collection.properties)
-            .filter(([_, prop]) => "isId" in (prop as object) && Boolean((prop as any).isId))
+            .filter(([_, prop]) => "isId" in (prop as object) && Boolean((prop as unknown as Record<string, unknown>).isId))
             .map(([key, prop]) => ({
                 fieldName: key,
                 type: prop.type === "number" ? "number" as const : "string" as const
@@ -45,7 +45,7 @@ export function getPrimaryKeys(collection: EntityCollection): { fieldName: strin
     for (const [key, colRaw] of Object.entries(table)) {
         const col = colRaw as AnyPgColumn;
         if (col && typeof col === "object" && "primary" in col && col.primary) {
-            const type = col.dataType === "number" || (col as any).columnType === "PgSerial" || (col as any).columnType === "PgInteger" ? "number" : "string";
+            const type = col.dataType === "number" || (col as unknown as Record<string, unknown>).columnType === "PgSerial" || (col as unknown as Record<string, unknown>).columnType === "PgInteger" ? "number" : "string";
             keys.push({ fieldName: key, type });
         }
     }
@@ -54,7 +54,7 @@ export function getPrimaryKeys(collection: EntityCollection): { fieldName: strin
     // This maintains backwards compatibility
     if (keys.length === 0 && "id" in table) {
         const idCol = table["id" as keyof typeof table] as AnyPgColumn;
-        const type = idCol.dataType === "number" || (idCol as any).columnType === "PgSerial" || (idCol as any).columnType === "PgInteger" ? "number" : "string";
+        const type = idCol.dataType === "number" || (idCol as unknown as Record<string, unknown>).columnType === "PgSerial" || (idCol as unknown as Record<string, unknown>).columnType === "PgInteger" ? "number" : "string";
         keys.push({ fieldName: "id", type });
     }
 

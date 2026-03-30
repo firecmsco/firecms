@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import {
     EntityCollection,
+    EnumValueConfig,
     getPropertyInPath,
     StringProperty,
     resolveEnumValues,
@@ -82,7 +83,7 @@ export function AddKanbanColumnAction({
             }
 
             // Now we know property is a StringProperty
-            const stringProperty = property as { type: "string"; enum?: any; name?: string };
+            const stringProperty = property as { type: "string"; enum?: EnumValueConfig[]; name?: string };
 
             // Create new enum value
             const newId = toSnakeCase(newValueLabel.trim());

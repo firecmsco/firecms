@@ -12,7 +12,7 @@ import {
 
 const getPrimaryKeyProp = (collection: EntityCollection): { name: string, type: "string" | "number" } => {
     if (collection.properties) {
-        const idPropEntry = Object.entries(collection.properties).find(([_, prop]) => "isId" in (prop as object) && Boolean((prop as any).isId));
+        const idPropEntry = Object.entries(collection.properties).find(([_, prop]) => "isId" in (prop as object) && Boolean((prop as unknown as Record<string, unknown>).isId));
         if (idPropEntry) {
             return { name: idPropEntry[0], type: (idPropEntry[1] as Property).type === "number" ? "number" : "string" };
         }
@@ -37,7 +37,7 @@ const isIdProperty = (propName: string, prop: Property, collection: EntityCollec
     if ("isId" in prop && Boolean(prop.isId)) return true;
 
     // We only fallback to "id" if NO property is explicitly marked with `isId: true` or a generator string
-    const hasExplicitId = Object.values(collection.properties ?? {}).some(p => "isId" in (p as object) && Boolean((p as any).isId));
+    const hasExplicitId = Object.values(collection.properties ?? {}).some(p => "isId" in (p as object) && Boolean((p as unknown as Record<string, unknown>).isId));
     return !hasExplicitId && propName === "id";
 };
 
@@ -339,13 +339,13 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
     const hasRLS = collections.some(c => c.securityRules && c.securityRules.length > 0);
     const hasUuid = collections.some(c =>
         c.properties && Object.values(c.properties).some(
-            (p: any) => p.type === "string" && (p.autoValue === "uuid" || p.isId === "uuid")
+            (p: Property) => p.type === "string" && ((p as unknown as Record<string, unknown>).autoValue === "uuid" || (p as unknown as Record<string, unknown>).isId === "uuid")
         )
     );
 
     const hasJson = collections.some(c =>
         c.properties && Object.values(c.properties).some(
-            (p: any) => (p.type === "map" || p.type === "array") && p.columnType === "json"
+            (p: Property) => (p.type === "map" || p.type === "array") && (p as unknown as Record<string, unknown>).columnType === "json"
         )
     );
 

@@ -57,7 +57,7 @@ export class EntityService implements EntityRepository {
             orderBy?: string;
             order?: "desc" | "asc";
             limit?: number;
-            startAfter?: any;
+            startAfter?: Record<string, unknown>;
             searchString?: string;
             databaseId?: string;
         } = {}
@@ -101,7 +101,7 @@ export class EntityService implements EntityRepository {
     async checkUniqueField(
         collectionPath: string,
         fieldName: string,
-        value: any,
+        value: unknown,
         excludeEntityId?: string,
         databaseId?: string
     ): Promise<boolean> {
@@ -120,7 +120,7 @@ export class EntityService implements EntityRepository {
             orderBy?: string;
             order?: "desc" | "asc";
             limit?: number;
-            startAfter?: any;
+            startAfter?: Record<string, unknown>;
             searchString?: string;
             databaseId?: string;
         } = {}

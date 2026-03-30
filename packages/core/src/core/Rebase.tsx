@@ -13,6 +13,7 @@ import {
 import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
 import { useCustomizationController, useRebaseContext } from "../hooks";
+import { ApiConfigProvider } from "../hooks/ApiConfigContext";
 import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { ErrorView } from "../components";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
@@ -63,7 +64,8 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         navigationStateController,
         apiKey,
         userManagement: _userManagement,
-        effectiveRoleController
+        effectiveRoleController,
+        apiUrl
     } = props;
 
     if (_pluginsProp) {
@@ -120,7 +122,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
             <CenteredView maxWidth={"md"}>
                 <ErrorView
                     title={"Error loading navigation"}
-                    error={navigationStateController.navigationLoadingError} />
+                    error={navigationStateController.navigationLoadingError as Error | string} />
             </CenteredView>
         );
     }
@@ -130,12 +132,12 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
             <CenteredView maxWidth={"md"}>
                 <ErrorView
                     title={"Error loading auth"}
-                    error={authController.authError} />
+                    error={authController.authError as Error | string} />
             </CenteredView>
         );
     }
 
-    return (
+    const content = (
         <AnalyticsContext.Provider value={analyticsController}>
             <CustomizationControllerContext.Provider value={customizationController}>
                 <UserConfigurationPersistenceContext.Provider
@@ -177,6 +179,16 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
             </CustomizationControllerContext.Provider>
         </AnalyticsContext.Provider>
     );
+
+    if (apiUrl) {
+        return (
+            <ApiConfigProvider apiUrl={apiUrl} getAuthToken={authController.getAuthToken}>
+                {content}
+            </ApiConfigProvider>
+        );
+    }
+
+    return content;
 
 }
 

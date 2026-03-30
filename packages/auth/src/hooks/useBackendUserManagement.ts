@@ -109,7 +109,7 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
     const apiRequest = useCallback(async (
         endpoint: string,
         method: string = "GET",
-        body?: any,
+        body?: Record<string, unknown>,
         retryCount: number = 6,
         signal?: AbortSignal
     ): Promise<any> => {
@@ -144,22 +144,21 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
                         errorMessage = errorText || `HTTP error ${response.status}`;
                     }
 
-                    const error: any = new Error(errorMessage);
-                    error.status = response.status;
+                    const error = Object.assign(new Error(errorMessage), { status: response.status });
                     throw error;
                 }
 
                 return await response.json();
-            } catch (error: any) {
-                if (error.name === "AbortError" || signal?.aborted) {
+            } catch (error: unknown) {
+                if (error instanceof Error && error.name === "AbortError" || signal?.aborted) {
                     throw error;
                 }
 
-                lastError = error;
+                lastError = error instanceof Error ? error : new Error(String(error));
 
                 // Retry conditions: Network errors (TypeError) OR 5xx Server Errors (Backend rebooting)
-                const isNetworkError = error instanceof TypeError || error?.name === "TypeError";
-                const isServerError = error.status >= 500 && error.status < 600;
+                const isNetworkError = error instanceof TypeError;
+                const isServerError = typeof (error as { status?: number }).status === "number" && (error as { status: number }).status >= 500 && (error as { status: number }).status < 600;
 
                 if (attempt < retryCount - 1 && (isNetworkError || isServerError)) {
                     const delay = Math.min(1000 * Math.pow(2, attempt), 5000); // 1s, 2s, 4s...
@@ -201,10 +200,10 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
             const data = await apiRequest("/users", "GET", undefined, 6, signal);
             setUsers(data.users.map((u: ApiUser) => convertUser(u)));
             setUsersError(undefined);
-        } catch (error: any) {
-            if (error.name === "AbortError") return;
+        } catch (error: unknown) {
+            if (error instanceof Error && error.name === "AbortError") return;
             console.error("Failed to load users:", error);
-            setUsersError(error as Error);
+            setUsersError(error instanceof Error ? error : new Error(String(error)));
         }
     }, [apiRequest]);
 
@@ -216,10 +215,10 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
             const data = await apiRequest("/roles", "GET", undefined, 6, signal);
             setRoles(data.roles.map(convertRole));
             setRolesError(undefined);
-        } catch (error: any) {
-            if (error.name === "AbortError") return;
+        } catch (error: unknown) {
+            if (error instanceof Error && error.name === "AbortError") return;
             console.error("Failed to load roles:", error);
-            setRolesError(error as Error);
+            setRolesError(error instanceof Error ? error : new Error(String(error)));
         }
     }, [apiRequest]);
 
@@ -245,10 +244,10 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
                 loadedRoles = data.roles.map(convertRole);
                 setRoles(loadedRoles);
                 setRolesError(undefined);
-            } catch (error: any) {
-                if (error.name !== "AbortError") {
+            } catch (error: unknown) {
+                if (error instanceof Error && error.name !== "AbortError") {
                     console.error("Failed to load roles:", error);
-                    setRolesError(error as Error);
+                    setRolesError(error);
                 }
             }
             // Then load users if not aborted

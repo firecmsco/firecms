@@ -30,7 +30,7 @@ export interface FetchCollectionProps<M extends Record<string, any> = any> {
     collection?: EntityCollection<M>;
     filter?: FilterValues<Extract<keyof M, string>>,
     limit?: number;
-    startAfter?: any;
+    startAfter?: unknown;
     orderBy?: string;
     searchString?: string;
     order?: "desc" | "asc";
@@ -145,7 +145,7 @@ export interface DataSource {
     checkUniqueField(
         path: string,
         name: string,
-        value: any,
+        value: unknown,
         entityId?: string | number,
         collection?: EntityCollection
     ): Promise<boolean>;
@@ -166,13 +166,13 @@ export interface DataSource {
     /**
      * Get the object to generate the current time in the datasource
      */
-    currentTime?: () => any;
+    currentTime?: () => unknown;
 
-    setDateToMidnight?: (input?: any) => any;
+    setDateToMidnight?: (input?: unknown) => unknown;
 
-    delegateToCMSModel?: (data: any) => any;
+    delegateToCMSModel?: (data: unknown) => unknown;
 
-    cmsToDelegateModel?: (data: any) => any;
+    cmsToDelegateModel?: (data: unknown) => unknown;
 
     initTextSearch?: (props: {
         context: RebaseContext,
@@ -185,7 +185,7 @@ export interface DataSource {
     /**
      * Execute raw SQL (if supported by the datasource)
      */
-    executeSql?(sql: string, options?: { database?: string, role?: string }): Promise<any[]>;
+    executeSql?(sql: string, options?: { database?: string, role?: string }): Promise<Record<string, unknown>[]>;
 
     /**
      * Fetch the available databases (if supported by the datasource)

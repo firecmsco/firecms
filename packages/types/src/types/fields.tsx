@@ -62,7 +62,7 @@ export interface FieldProps<
      * @param value
      * @param shouldValidate
      */
-    setFieldValue: (propertyKey: string, value: any | null, shouldValidate?: boolean) => void;
+    setFieldValue: (propertyKey: string, value: unknown, shouldValidate?: boolean) => void;
 
     /**
      * Is the form currently submitting
@@ -82,7 +82,7 @@ export interface FieldProps<
      * the field, replacing values with a string containing the error.
      * It takes the value `null` if there is no error
      */
-    error?: any | null;
+    error?: string;
 
     /**
      * Has this field been touched
@@ -174,7 +174,7 @@ export interface FormContext<M extends Record<string, any> = any> {
      * @param value
      * @param shouldValidate
      */
-    setFieldValue: (key: string, value: any, shouldValidate?: boolean) => void;
+    setFieldValue: (key: string, value: unknown, shouldValidate?: boolean) => void;
 
     /**
      * Save the entity.

@@ -21,8 +21,8 @@ export function useDraggable({
 
     const listeningRef = React.useRef(false);
 
-    const onMouseDown = useCallback((event: any) => {
-        if (event.button !== 0 || !containerRef.current || event.defaultPrevented || event.innerClicked) {
+    const onMouseDown = useCallback((event: MouseEvent) => {
+        if (event.button !== 0 || !containerRef.current || event.defaultPrevented || (event as MouseEvent & { innerClicked?: boolean }).innerClicked) {
             return;
         }
 
@@ -40,17 +40,16 @@ export function useDraggable({
         // event.stopPropagation();
     }, [containerRef, onMove]);
 
-    const onMouseDownInner = useCallback((event: any) => {
-        // @ts-ignore
-        event.innerClicked = true;
+    const onMouseDownInner = useCallback((event: MouseEvent) => {
+        (event as MouseEvent & { innerClicked?: boolean }).innerClicked = true;
     }, [])
 
-    const onSelect = useCallback((event: any) => {
+    const onSelect = useCallback((event: Event) => {
         event.preventDefault()
         event.stopPropagation();
     }, [])
 
-    const onMouseUp = (event: any) => {
+    const onMouseUp = (event: MouseEvent) => {
         document.removeEventListener("mousemove", onMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
         document.removeEventListener("selectstart", onSelect);
@@ -58,8 +57,8 @@ export function useDraggable({
         listeningRef.current = false;
     };
 
-    const onMouseMove = (event: any) => {
-        if (event.target.localName === "input" || !listeningRef.current)
+    const onMouseMove = (event: MouseEvent) => {
+        if ((event.target as HTMLElement)?.localName === "input" || !listeningRef.current)
             return;
         onMove({
             x: event.screenX - relX,

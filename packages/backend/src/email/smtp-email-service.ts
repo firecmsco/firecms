@@ -54,9 +54,10 @@ export class SMTPEmailService implements EmailService {
                 html: options.html,
                 text: options.text
             });
-        } catch (error: any) {
-            console.error("Failed to send email:", error.message);
-            throw new Error(`Failed to send email: ${error.message}`);
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : String(error);
+            console.error("Failed to send email:", message);
+            throw new Error(`Failed to send email: ${message}`);
         }
     }
 
@@ -71,8 +72,9 @@ export class SMTPEmailService implements EmailService {
         try {
             await this.transporter.verify();
             return true;
-        } catch (error: any) {
-            console.error("SMTP connection verification failed:", error.message);
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : String(error);
+            console.error("SMTP connection verification failed:", message);
             return false;
         }
     }

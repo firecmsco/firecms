@@ -197,6 +197,7 @@ export function EntityHistoryView({
                         collection={collection}
                         previewKeys={previewKeys}
                         previousValues={previousValues}
+                        size={"medium"}
                         actions={
                             <Tooltip title={"Revert to this version"}
                                 className={"m-2 grow-0 self-start"}>

@@ -11,7 +11,6 @@ import {
     PropertyConfig,
     Scaffold,
     SideDialogs,
-    RebaseRoutes,
     SnackbarProvider,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
@@ -23,7 +22,7 @@ import {
     useBuildNavigationStateController,
     useValidateAuthenticator
 } from "@rebasepro/core";
-import { Route, Outlet } from "react-router-dom";
+import { Route, Routes, Outlet } from "react-router-dom";
 
 import { RebaseFirebaseAppProps } from "./RebaseFirebaseAppProps";
 import { FirebaseLoginView } from "./FirebaseLoginView";
@@ -222,7 +221,7 @@ export function RebaseFirebaseApp({
 
                             let component;
                             if (loading || authLoading) {
-                                component = <CircularProgressCenter />;
+                                component = <CircularProgressCenter size={"large"} />;
                             } else {
                                 const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
                                 if (!canAccessMainView) {
@@ -238,7 +237,7 @@ export function RebaseFirebaseApp({
                                     );
                                 } else {
                                     component = (
-                                        <RebaseRoutes>
+                                        <Routes>
                                             <Route element={
                                                 <Scaffold
                                                     logo={usedLogo}
@@ -252,7 +251,7 @@ export function RebaseFirebaseApp({
                                                 {components?.HomePage && <Route path="/" element={<components.HomePage />} />}
                                                 <Route path="/c/*" element={<RebaseRoute />} />
                                             </Route>
-                                        </RebaseRoutes>
+                                        </Routes>
                                     );
                                 }
                             }

@@ -159,7 +159,7 @@ export const useBuildSideEntityController = (collectionRegistryController: Colle
     useEffect(() => {
         const updatedSidePanels = sideDialogsController.sidePanels.map(sidePanelProps => {
             if (sidePanelProps.additional) {
-                return propsToSidePanel(sidePanelProps.additional, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController, location.search);
+                return propsToSidePanel(sidePanelProps.additional as EntitySidePanelProps, cmsUrlController.buildUrlCollectionPath, cmsUrlController.resolveDatabasePathsFrom, smallLayout, customizationController, authController, location.search);
             }
             return sidePanelProps;
         });

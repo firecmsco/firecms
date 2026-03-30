@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 
 import "@fontsource/jetbrains-mono";
 import "typeface-rubik";
@@ -13,7 +13,6 @@ import {
     AdminModeSyncer,
     AppBar,
     CircularProgressCenter,
-    CustomCMSRoute,
     ContentHomePage,
     StudioHomePage,
     Drawer,
@@ -82,16 +81,11 @@ export function App() {
             getAuthToken: authController.getAuthToken
         }
     );
-    const configPermissions = useCallback(() => ({ createCollections: true, editCollections: true, deleteCollections: true }), []);
-
     const collectionEditorPlugin = useCollectionEditorPlugin({
-        collectionConfigController,
-        configPermissions
+        collectionConfigController
     });
 
-    const collectionsBuilder = useCallback(() => {
-        return [...collections];
-    }, []);
+    const collectionsBuilder = () => [...collections];
 
     const collectionRegistryController = useBuildCollectionRegistryController({ userConfigPersistence });
     const cmsUrlController = useBuildCMSUrlController({
@@ -122,14 +116,7 @@ export function App() {
             name: "Edit collections",
             group: "Schema",
             icon: "view_list",
-            view: <CollectionsStudioView configController={collectionConfigController} />
-        },
-        {
-            slug: "schema/*",
-            name: "Edit collections",
-            group: "Schema",
-            icon: "view_list",
-            hideFromNavigation: true,
+            nestedRoutes: true,
             view: <CollectionsStudioView configController={collectionConfigController} />
         }
     ], [collectionConfigController]);
@@ -153,6 +140,7 @@ export function App() {
             <ModeControllerProvider value={modeController}>
                 <AdminModeControllerProvider value={adminModeController}>
                     <Rebase
+                        apiUrl={API_URL}
                         collectionRegistryController={collectionRegistryController}
                         cmsUrlController={cmsUrlController}
                         navigationStateController={navigationStateController}
@@ -197,12 +185,6 @@ export function App() {
                                         <Route path={"/settings"} element={<UserSettingsView />} />
                                         <Route path={"/roles"} element={<RolesView userManagement={userManagement} />} />
                                         <Route path={"/users"} element={<UsersView userManagement={userManagement} />} />
-
-                                        {devViews.flatMap(view =>
-                                            (Array.isArray(view.slug) ? view.slug : [view.slug]).map(path => (
-                                                <Route key={path} path={path} element={<CustomCMSRoute cmsView={view} />} />
-                                            ))
-                                        )}
 
                                         {/* Hidden debug route — not in sidebar */}
                                         <Route path={"/debug/ui"} element={<UIReferenceView />} />

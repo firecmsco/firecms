@@ -48,7 +48,7 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                         inputRef={ref}
                         as={DebouncedTextField}
                         value={values[name]}
-                        onChange={(e: any) => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                             const newNameValue = e.target.value;
                             const idTouched = getIn(touched, id);
                             if (!idTouched && autoUpdateId) {
@@ -73,7 +73,7 @@ export const CommonPropertyFields = React.forwardRef<HTMLDivElement, CommonPrope
                         name={id}
                         label={"ID"}
                         value={values[id]}
-                        onChange={(e: any) => {
+                        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                             const newIdValue = e.target.value;
                             const nameTouched = getIn(touched, name);
                             if (!nameTouched && autoUpdateId) {

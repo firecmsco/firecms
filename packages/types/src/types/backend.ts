@@ -35,7 +35,7 @@ export interface DatabaseConnection {
 export interface QueryFilter {
     field: string;
     operator: WhereFilterOp;
-    value: any;
+    value: unknown;
 }
 
 /**
@@ -46,7 +46,7 @@ export interface FetchCollectionOptions<M extends Record<string, any> = any> {
     orderBy?: string;
     order?: "desc" | "asc";
     limit?: number;
-    startAfter?: any;
+    startAfter?: unknown;
     searchString?: string;
     databaseId?: string;
 }
@@ -86,7 +86,7 @@ export interface ConditionBuilder<T = any> {
     buildFilterConditions<M extends Record<string, any>>(
         filter: FilterValues<Extract<keyof M, string>>,
         collectionPath: string,
-        ...args: any[]
+        ...args: unknown[]
     ): T[];
 
     /**
@@ -94,8 +94,8 @@ export interface ConditionBuilder<T = any> {
      */
     buildSearchConditions(
         searchString: string,
-        properties: Record<string, any>,
-        ...args: any[]
+        properties: Record<string, unknown>,
+        ...args: unknown[]
     ): T[];
 
     /**
@@ -120,12 +120,12 @@ export interface ConditionBuilder<T = any> {
 export type ConditionBuilderStatic<T = any> = {
     buildFilterConditions<M extends Record<string, any>>(
         filter: FilterValues<Extract<keyof M, string>>,
-        ...args: any[]
+        ...args: unknown[]
     ): T[];
     buildSearchConditions(
         searchString: string,
-        properties: Record<string, any>,
-        ...args: any[]
+        properties: Record<string, unknown>,
+        ...args: unknown[]
     ): T[];
     combineConditionsWithAnd(conditions: T[]): T | undefined;
     combineConditionsWithOr(conditions: T[]): T | undefined;
@@ -204,7 +204,7 @@ export interface EntityRepository {
     checkUniqueField(
         collectionPath: string,
         fieldName: string,
-        value: any,
+        value: unknown,
         excludeEntityId?: string,
         databaseId?: string
     ): Promise<boolean>;
@@ -221,11 +221,11 @@ export interface EntityRepository {
 export interface CollectionSubscriptionConfig {
     clientId: string;
     path: string;
-    filter?: any;
+    filter?: unknown;
     orderBy?: string;
     order?: "desc" | "asc";
     limit?: number;
-    startAfter?: any;
+    startAfter?: unknown;
     databaseId?: string;
     searchString?: string;
 }
@@ -345,12 +345,12 @@ export interface BackendConfig {
     /**
      * Database connection (implementation-specific)
      */
-    connection: any;
+    connection: unknown;
 
     /**
      * Schema definition (implementation-specific, e.g., Drizzle schema for PostgreSQL)
      */
-    schema?: any;
+    schema?: unknown;
 }
 
 /**

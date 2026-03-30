@@ -1,9 +1,16 @@
 import { and, eq, or, sql, SQL, ilike, inArray } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
-import { FilterValues, WhereFilterOp, Relation } from "@rebasepro/types";
+import { FilterValues, WhereFilterOp, Relation, JoinStep } from "@rebasepro/types";
 import { getColumnName, resolveCollectionRelations } from "@rebasepro/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 import { ConditionBuilderStatic } from "../db/interfaces";
+
+/** Drizzle dynamic query builder — accepts innerJoin + where chaining */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface DrizzleDynamicQuery {
+    innerJoin(table: PgTable<any>, condition: SQL): this;
+    where(condition: SQL | undefined): this;
+}
 
 /**
  * Unified condition builder for Drizzle/PostgreSQL queries.
@@ -52,7 +59,7 @@ export class DrizzleConditionBuilder {
     static buildSingleFilterCondition(
         column: AnyPgColumn,
         op: WhereFilterOp,
-        value: any
+        value: unknown
     ): SQL | null {
         switch (op) {
             case "==":
@@ -206,7 +213,7 @@ export class DrizzleConditionBuilder {
      * Build conditions for join path relations
      */
     private static buildJoinPathConditions(
-        joinPath: any[],
+        joinPath: JoinStep[],
         targetTable: PgTable<any>,
         parentTable: PgTable<any>,
         parentIdColumn: AnyPgColumn,
@@ -421,8 +428,8 @@ export class DrizzleConditionBuilder {
 
                 if (junctionSourceCol && junctionTargetCol) {
                     // Found a valid junction table setup
-                    const currentTableIdCol = Object.values(currentTable).find((col: any) => col.primary) as AnyPgColumn;
-                    const targetTableIdCol = Object.values(targetTable).find((col: any) => col.primary) as AnyPgColumn;
+                    const currentTableIdCol = Object.values(currentTable).find((col: Record<string, unknown>) => col.primary) as AnyPgColumn;
+                    const targetTableIdCol = Object.values(targetTable).find((col: Record<string, unknown>) => col.primary) as AnyPgColumn;
 
                     if (!currentTableIdCol || !targetTableIdCol) {
                         continue; // Skip if we can't find primary keys
@@ -550,10 +557,10 @@ export class DrizzleConditionBuilder {
         if (relation.direction === "owning" && relation.localKey) {
             // For owning relations, the parentEntityId is actually the foreign key value
             // that should match the target table's primary key
-            const targetIdCol = Object.values(targetTable).find((col: any) => col.primary) as AnyPgColumn;
+            const targetIdCol = Object.values(targetTable).find((col: Record<string, unknown>) => col.primary) as AnyPgColumn;
             if (!targetIdCol) {
                 // Fallback to looking for an "id" column by name
-                const idCol = Object.values(targetTable).find((col: any) => col.name === "id") as AnyPgColumn;
+                const idCol = Object.values(targetTable).find((col: Record<string, unknown>) => col.name === "id") as AnyPgColumn;
                 if (!idCol) {
                     throw new Error("No primary key or \"id\" column found in target table");
                 }
@@ -651,7 +658,7 @@ export class DrizzleConditionBuilder {
      */
     static buildUniqueFieldCondition(
         fieldColumn: AnyPgColumn,
-        value: any,
+        value: unknown,
         idColumn?: AnyPgColumn,
         excludeId?: string | number
     ): SQL[] {
@@ -667,8 +674,8 @@ export class DrizzleConditionBuilder {
     /**
      * Build relation-based query with joins and conditions
      */
-    static buildRelationQuery(
-        baseQuery: any,
+    static buildRelationQuery<T extends DrizzleDynamicQuery>(
+        baseQuery: T,
         relation: Relation,
         parentEntityId: string | number | (string | number)[],
         targetTable: PgTable<any>,
@@ -677,7 +684,7 @@ export class DrizzleConditionBuilder {
         targetIdColumn: AnyPgColumn,
         registry: BackendCollectionRegistry,
         additionalFilters?: SQL[]
-    ): any {
+    ): T {
         const { joinConditions, whereConditions } = this.buildRelationConditions(
             relation,
             parentEntityId,
@@ -712,8 +719,8 @@ export class DrizzleConditionBuilder {
     /**
      * Build count query for relations with proper joins and conditions
      */
-    static buildRelationCountQuery(
-        baseCountQuery: any,
+    static buildRelationCountQuery<T extends DrizzleDynamicQuery>(
+        baseCountQuery: T,
         relation: Relation,
         parentEntityId: string | number,
         targetTable: PgTable<any>,
@@ -722,7 +729,7 @@ export class DrizzleConditionBuilder {
         targetIdColumn: AnyPgColumn,
         registry: BackendCollectionRegistry,
         additionalFilters?: SQL[]
-    ): any {
+    ): T {
         // For count queries, we need to handle joins differently to avoid duplicates
         if (relation.joinPath && relation.joinPath.length > 0) {
             return this.buildJoinPathCountQuery(
@@ -774,16 +781,16 @@ export class DrizzleConditionBuilder {
     /**
      * Build join path conditions for count queries
      */
-    private static buildJoinPathCountQuery(
-        baseCountQuery: any,
-        joinPath: any[],
+    private static buildJoinPathCountQuery<T extends DrizzleDynamicQuery>(
+        baseCountQuery: T,
+        joinPath: JoinStep[],
         targetTable: PgTable<any>,
         parentTable: PgTable<any>,
         parentIdColumn: AnyPgColumn,
         parentEntityId: string | number,
         registry: BackendCollectionRegistry,
         additionalFilters?: SQL[]
-    ): any {
+    ): T {
         let query = baseCountQuery;
         let currentTable = targetTable;
 
@@ -830,14 +837,14 @@ export class DrizzleConditionBuilder {
     /**
      * Build junction table conditions for count queries
      */
-    private static buildJunctionCountQuery(
-        baseCountQuery: any,
+    private static buildJunctionCountQuery<T extends DrizzleDynamicQuery>(
+        baseCountQuery: T,
         through: { table: string; sourceColumn: string; targetColumn: string },
         targetIdColumn: AnyPgColumn,
         parentEntityId: string | number,
         registry: BackendCollectionRegistry,
         additionalFilters?: SQL[]
-    ): any {
+    ): T {
         const junctionTable = registry.getTable(through.table);
         if (!junctionTable) {
             throw new Error(`Junction table not found: ${through.table}`);
@@ -866,14 +873,14 @@ export class DrizzleConditionBuilder {
     /**
      * Build inverse junction table conditions for count queries
      */
-    private static buildInverseJunctionCountQuery(
-        baseCountQuery: any,
+    private static buildInverseJunctionCountQuery<T extends DrizzleDynamicQuery>(
+        baseCountQuery: T,
         through: { table: string; sourceColumn: string; targetColumn: string },
         targetIdColumn: AnyPgColumn,
         parentEntityId: string | number,
         registry: BackendCollectionRegistry,
         additionalFilters?: SQL[]
-    ): any {
+    ): T {
         const junctionTable = registry.getTable(through.table);
         if (!junctionTable) {
             throw new Error(`Junction table not found: ${through.table}`);

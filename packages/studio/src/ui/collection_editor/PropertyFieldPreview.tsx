@@ -80,7 +80,7 @@ export function PropertyFieldPreview({
                     </ErrorBoundary>
                     <ErrorBoundary>
                         <Typography variant="caption" component="span" className="text-text-disabled dark:text-text-disabled-dark font-mono bg-surface-100 dark:bg-surface-800 px-1 py-0.5 rounded">
-                            {("columnType" in property ? (property as any).columnType as string : undefined) || property.type}
+                            {("columnType" in property ? (property as unknown as Record<string, unknown>).columnType as string : undefined) || property.type}
                         </Typography>
                     </ErrorBoundary>
                 </div>
@@ -138,7 +138,7 @@ export function NonEditablePropertyPreview({
 
                     {property && !isPropertyBuilder(property) && <ErrorBoundary>
                         <Typography variant="caption" component="span" className="text-text-disabled dark:text-text-disabled-dark font-mono bg-surface-100 dark:bg-surface-800 px-1 py-0.5 rounded">
-                            {("columnType" in property ? (property as any).columnType as string : undefined) || property.type}
+                            {("columnType" in property ? (property as unknown as Record<string, unknown>).columnType as string : undefined) || property.type}
                         </Typography>
                     </ErrorBoundary>}
 

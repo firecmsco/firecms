@@ -238,22 +238,24 @@ export function clearEntityCache(): void {
     }
 }
 
-export function flattenKeys(obj: any, prefix = "", result: string[] = []): string[] {
+export function flattenKeys(obj: Record<string, unknown> | unknown[], prefix = "", result: string[] = []): string[] {
 
     if (isObject(obj) || Array.isArray(obj)) {
         const plainObject = isPlainObject(obj);
         if (!plainObject && prefix) {
             result.push(prefix);
         } else {
-            for (const key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            const record = obj as Record<string, unknown>;
+            for (const key in record) {
+                if (Object.prototype.hasOwnProperty.call(record, key)) {
                     const newKey = prefix
                         ? Array.isArray(obj)
                             ? `${prefix}[${key}]`
                             : `${prefix}.${key}`
                         : key;
-                    if (isObject(obj[key]) || Array.isArray(obj[key])) {
-                        flattenKeys(obj[key], newKey, result);
+                    const val = record[key];
+                    if (isObject(val) || Array.isArray(val)) {
+                        flattenKeys(val as Record<string, unknown> | unknown[], newKey, result);
                     } else {
                         result.push(newKey);
                     }

@@ -123,7 +123,7 @@ export function GeneralSettingsForm({
                         <div className={"col-span-12"}>
                             <TextField
                                 value={values.name ?? ""}
-                                onChange={(e: any) => updateName(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => updateName(e.target.value)}
                                 label={"Name"}
                                 autoFocus={true}
                                 required
@@ -187,7 +187,7 @@ export function GeneralSettingsForm({
                             <DebouncedTextField
                                 name={"slug"}
                                 value={values.slug ?? ""}
-                                onChange={(e: any) => setFieldValue("slug", e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setFieldValue("slug", e.target.value)}
                                 disabled={!isNewCollection}
                                 label={"Collection ID"}
                                 error={showErrors && Boolean(errors.slug)} />
@@ -216,7 +216,7 @@ export function GeneralSettingsForm({
                                     values.history ? "Document history revisions ENABLED" : "Document history revisions NOT enabled"
                                 )}</span>}
                                 onValueChange={(v) => setFieldValue("history", v)}
-                                value={values.history === undefined ? null : values.history}
+                                value={values.history ?? null}
                             />
                             <FieldCaption>
                                 When enabled, each document in this collection will have a history of changes.
@@ -264,7 +264,7 @@ function DefaultDatabaseField({
             inputClassName={"text-end"}
             disabled={disabled}
             value={databaseId ?? ""}
-            onChange={(e: any) => onDatabaseIdUpdate(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onDatabaseIdUpdate(e.target.value)}
             placeholder={"(default)"}></TextField>
     </Tooltip>
 }

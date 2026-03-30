@@ -17,7 +17,7 @@ export interface ExplainPlanNode {
     "Index Cond"?: string;
     "Hash Cond"?: string;
     "Plans"?: ExplainPlanNode[];
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface ExplainVisualizerProps {

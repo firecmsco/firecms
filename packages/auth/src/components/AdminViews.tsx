@@ -27,7 +27,9 @@ import {
     MultiSelect,
     MultiSelectItem,
     LoadingButton,
-    getColorSchemeForSeed
+    getColorSchemeForSeed,
+    ChipColorScheme,
+    ChipColorKey
 } from "@rebasepro/ui";
 import { UserManagement } from "../hooks/useBackendUserManagement";
 
@@ -63,7 +65,7 @@ export function createUserManagementAdminViews({ userManagement, apiUrl, getAuth
 // RoleChip Component (matches original)
 // ============================================
 function RoleChip({ role }: { role: Role }) {
-    let colorScheme: any;
+    let colorScheme: ChipColorScheme | ChipColorKey;
     if (role.isAdmin) {
         colorScheme = "blueDarker";
     } else if (role.id === "editor") {
@@ -75,7 +77,7 @@ function RoleChip({ role }: { role: Role }) {
     }
 
     return (
-        <Chip colorScheme={colorScheme as any} key={role.id}>
+        <Chip colorScheme={colorScheme} key={role.id}>
             {role.name}
         </Chip>
     );
@@ -122,8 +124,8 @@ export function UsersView({ userManagement, apiUrl, getAuthToken }: {
             snackbarController.open({ type: "success", message: "You are now an admin! Refreshing..." });
             // Reload to get new roles
             window.location.reload();
-        } catch (error: any) {
-            snackbarController.open({ type: "error", message: error.message || "Failed to bootstrap admin" });
+        } catch (error: unknown) {
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Failed to bootstrap admin" });
         } finally {
             setBootstrapping(false);
         }
@@ -153,8 +155,8 @@ export function UsersView({ userManagement, apiUrl, getAuthToken }: {
             snackbarController.open({ type: "success", message: "User deleted successfully" });
             setDeleteConfirmOpen(false);
             setUserToDelete(undefined);
-        } catch (error: any) {
-            snackbarController.open({ type: "error", message: error.message || "Error deleting user" });
+        } catch (error: unknown) {
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Error deleting user" });
         } finally {
             setDeleteInProgress(false);
         }
@@ -324,8 +326,8 @@ function UserDetailsForm({
             };
             await saveUser(userToSave);
             handleClose();
-        } catch (error: any) {
-            snackbarController.open({ type: "error", message: error.message || "Failed to save user" });
+        } catch (error: unknown) {
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Failed to save user" });
         } finally {
             setIsSubmitting(false);
         }
@@ -447,8 +449,8 @@ export function RolesView({ userManagement }: { userManagement: UserManagement }
             snackbarController.open({ type: "success", message: "Role deleted successfully" });
             setDeleteConfirmOpen(false);
             setRoleToDelete(undefined);
-        } catch (error: any) {
-            snackbarController.open({ type: "error", message: error.message || "Error deleting role" });
+        } catch (error: unknown) {
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Error deleting role" });
         } finally {
             setDeleteInProgress(false);
         }
@@ -603,8 +605,8 @@ function RoleDetailsForm({
                 isAdmin
             });
             handleClose();
-        } catch (error: any) {
-            snackbarController.open({ type: "error", message: error.message || "Failed to save role" });
+        } catch (error: unknown) {
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Failed to save role" });
         } finally {
             setIsSubmitting(false);
         }

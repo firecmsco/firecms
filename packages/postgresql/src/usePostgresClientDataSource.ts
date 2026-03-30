@@ -240,6 +240,6 @@ export function usePostgresClientDataSource(config: PostgresDataSourceConfig): P
         async fetchTableColumns(tableName: string): Promise<TableColumnInfo[]> {
             return client.fetchTableColumns(tableName);
         }
-    }), [client]);
+    }), [client]) as PostgresDataSource;
 
 }

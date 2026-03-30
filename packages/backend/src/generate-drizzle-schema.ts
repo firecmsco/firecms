@@ -4,6 +4,7 @@ import path from "path";
 import { pathToFileURL } from "url";
 import chokidar from "chokidar";
 import { generateSchema } from "./generate-drizzle-schema-logic";
+import { EntityCollection } from "@rebasepro/types";
 
 // --- Helper Functions ---
 
@@ -51,7 +52,7 @@ const runGeneration = async (collectionsFilePath?: string, outputPath?: string) 
         }
 
         const resolvedPath = path.resolve(collectionsFilePath);
-        let collections: any[] = [];
+        let collections: EntityCollection[] = [];
         const stats = fs.statSync(resolvedPath);
 
         if (stats.isDirectory()) {
@@ -70,8 +71,9 @@ const runGeneration = async (collectionsFilePath?: string, outputPath?: string) 
                         if (module && module.default) {
                             collections.push(module.default);
                         }
-                    } catch (err: any) {
-                        console.error(`Error loading ${file}:`, err.message);
+                    } catch (err: unknown) {
+                        const message = err instanceof Error ? err.message : String(err);
+                        console.error(`Error loading ${file}:`, message);
                     }
                 }
             }

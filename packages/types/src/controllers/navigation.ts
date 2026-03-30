@@ -102,7 +102,7 @@ export type NavigationStateController = {
     /**
      * Was there an error while loading the navigation data
      */
-    navigationLoadingError?: any;
+    navigationLoadingError?: unknown;
 
     /**
      * Call this method to recalculate the navigation
@@ -182,7 +182,7 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
 
 export interface NavigateOptions {
     replace?: boolean;
-    state?: any;
+    state?: unknown;
     preventScrollReset?: boolean;
     relative?: "route" | "path";
     flushSync?: boolean;
@@ -246,6 +246,12 @@ export interface CMSView {
      * This prop is ignored for admin views.
      */
     group?: string;
+
+    /**
+     * If true, a wildcard route (slug/*) is automatically registered
+     * alongside the base route, enabling nested navigation within this view.
+     */
+    nestedRoutes?: boolean;
 
 }
 

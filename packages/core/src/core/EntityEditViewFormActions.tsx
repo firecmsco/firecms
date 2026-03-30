@@ -329,10 +329,10 @@ function EntityActionButton({
                         }
 
                     }
-                } catch (e: any) {
+                } catch (e: unknown) {
                     console.error("Error executing action", action.key, e);
                     snackbarController.open({
-                        message: `Error executing action: ${e.message}`,
+                        message: `Error executing action: ${e instanceof Error ? e.message : String(e)}`,
                         type: "error"
                     });
                 }

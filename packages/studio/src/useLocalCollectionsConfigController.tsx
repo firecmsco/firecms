@@ -1,4 +1,4 @@
-import { CollectionsConfigController } from "./types/config_controller";
+import { CollectionsConfigController, SaveCollectionParams, UpdateCollectionParams, DeleteCollectionParams, SavePropertyParams, DeletePropertyParams, UpdatePropertiesOrderParams } from "./types/config_controller";
 import { EntityCollection, Properties, getSubcollections } from "@rebasepro/core";
 import { PersistedCollection } from "./types/persisted_collection";
 
@@ -16,7 +16,7 @@ export function useLocalCollectionsConfigController(
 
     const parsedCollections = baseCollections;
 
-    const request = async (endpoint: string, payload: any) => {
+    const request = async (endpoint: string, payload: Record<string, unknown>) => {
         console.log("dispatching dev server request", endpoint, payload);
         try {
             const token = options?.getAuthToken ? await options.getAuthToken() : null;
@@ -33,7 +33,7 @@ export function useLocalCollectionsConfigController(
             console.log("dev server response", endpoint, response.status);
             if (!response.ok) {
                 const text = await response.text();
-                let err: any = {};
+                let err: Record<string, unknown> = {};
                 try {
                     err = JSON.parse(text);
                 } catch (e) { }
@@ -42,7 +42,11 @@ export function useLocalCollectionsConfigController(
                     err = { message: text };
                 }
                 console.error("dev server error payload:", err);
-                throw new Error(err.error?.message || err.error || err.message || "Error communicating with local dev server");
+                const errObj = err.error as Record<string, unknown> | string | undefined;
+                const errMessage = typeof errObj === "object" && errObj !== null
+                    ? (errObj.message as string)
+                    : (typeof errObj === "string" ? errObj : (err.message as string | undefined));
+                throw new Error(errMessage || "Error communicating with local dev server");
             }
         } catch (e) {
             console.error("fetch request failed", e);
@@ -56,36 +60,36 @@ export function useLocalCollectionsConfigController(
         readOnlyReason: "Local collection editing is only available in development mode.",
         collections: parsedCollections,
         getCollection: (id: string) => {
-            const found = parsedCollections.find(c => (c as any).id === id || c.slug === id);
+            const found = parsedCollections.find(c => (c as PersistedCollection & { id?: string }).id === id || c.slug === id);
             if (found) return found;
             throw Error(`Collection ${id} not found in local mode`);
         },
 
-        saveCollection: async ({ id, collectionData }: any) => {
+        saveCollection: async ({ id, collectionData }: SaveCollectionParams) => {
             await request("/collection/save", { collectionId: id, collectionData });
         },
-        updateCollection: async ({ id, collectionData }: any) => {
+        updateCollection: async ({ id, collectionData }: UpdateCollectionParams) => {
             await request("/collection/save", { collectionId: id, collectionData });
         },
-        deleteCollection: async ({ id }: any) => {
+        deleteCollection: async ({ id }: DeleteCollectionParams) => {
             await request("/collection/delete", { collectionId: id });
         },
 
-        saveProperty: async ({ path, propertyKey, property, newPropertiesOrder }: any) => {
+        saveProperty: async ({ path, propertyKey, property, newPropertiesOrder }: SavePropertyParams) => {
             await request("/property/save", { collectionId: path, propertyKey, propertyConfig: property });
             if (newPropertiesOrder) {
                 await request("/collection/save", { collectionId: path, collectionData: { propertiesOrder: newPropertiesOrder } });
             }
         },
-        deleteProperty: async ({ path, propertyKey, newPropertiesOrder }: any) => {
+        deleteProperty: async ({ path, propertyKey, newPropertiesOrder }: DeletePropertyParams) => {
             await request("/property/delete", { collectionId: path, propertyKey });
             if (newPropertiesOrder) {
                 await request("/collection/save", { collectionId: path, collectionData: { propertiesOrder: newPropertiesOrder } });
             }
         },
 
-        updatePropertiesOrder: async ({ collection, fullPath, newPropertiesOrder }: any) => {
-            const collectionId = (collection as any).id || fullPath.split("/").pop();
+        updatePropertiesOrder: async ({ collection, fullPath, newPropertiesOrder }: UpdatePropertiesOrderParams) => {
+            const collectionId = (collection as PersistedCollection & { id?: string }).id || fullPath.split("/").pop();
             await request("/collection/save", { collectionId, collectionData: { propertiesOrder: newPropertiesOrder } });
         },
         updateKanbanColumnsOrder: async () => {

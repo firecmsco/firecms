@@ -47,7 +47,7 @@ export interface RebaseLoginViewProps {
     /**
      * Error message when user is not allowed access
      */
-    notAllowedError?: any;
+    notAllowedError?: string | Error;
 
     /**
      * Enable Google login button (requires googleClientId in hook)
@@ -242,7 +242,7 @@ function GoogleLoginButton({
 }) {
     const handleGoogleLogin = async () => {
         try {
-            const { google } = window as any;
+            const google = (window as unknown as { google?: { accounts: { id: { initialize: (config: { client_id: string; callback: (response: { credential: string }) => void }) => void; prompt: () => void } } } }).google;
             if (!google) {
                 console.error("Google Sign-In not loaded");
                 return;
@@ -250,17 +250,17 @@ function GoogleLoginButton({
 
             google.accounts.id.initialize({
                 client_id: googleClientId,
-                callback: async (response: any) => {
+                callback: async (response: { credential: string }) => {
                     try {
                         await authController.googleLogin(response.credential);
-                    } catch (err: any) {
+                    } catch (err: unknown) {
                         console.error("Google login error:", err);
                     }
                 }
             });
 
             google.accounts.id.prompt();
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Google login error:", err);
         }
     };
@@ -323,7 +323,7 @@ function LoginForm({
 
     useEffect(() => {
         if (!document) return;
-        const escFunction = (event: any) => {
+        const escFunction = (event: KeyboardEvent) => {
             if (event.keyCode === 27) {
                 onClose();
             }
@@ -350,7 +350,7 @@ function LoginForm({
         onClose();
     }
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         if (registrationMode)
             handleRegistration();
@@ -464,7 +464,7 @@ function ForgotPasswordForm({
 
     useEffect(() => {
         if (!document) return;
-        const escFunction = (event: any) => {
+        const escFunction = (event: KeyboardEvent) => {
             if (event.keyCode === 27) {
                 onClose();
             }
@@ -487,9 +487,9 @@ function ForgotPasswordForm({
         try {
             await authController.forgotPassword(email);
             setSubmitted(true);
-        } catch (err: any) {
+        } catch (err: unknown) {
             // Check for EMAIL_NOT_CONFIGURED error
-            if (err.code === "EMAIL_NOT_CONFIGURED") {
+            if (err instanceof Error && (err as { code?: string }).code === "EMAIL_NOT_CONFIGURED") {
                 setError("Password reset is not available. Please contact your administrator.");
             } else {
                 // Still show success (security: don't reveal if email exists)

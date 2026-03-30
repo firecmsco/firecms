@@ -255,7 +255,7 @@ export const PolicyEditor = ({
                             </Typography>
                             <Select
                                 value={behavior}
-                                onValueChange={(val) => setBehavior(val as any)}
+                                onValueChange={(val) => setBehavior(val as "PERMISSIVE" | "RESTRICTIVE")}
                                 position="item-aligned"
                             >
                                 <SelectItem value="PERMISSIVE">
