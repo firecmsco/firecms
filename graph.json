@@ -1,0 +1,3380 @@
+{
+  "graph": {
+    "nodes": {
+      "@rebasepro/create": {
+        "name": "@rebasepro/create",
+        "type": "lib",
+        "data": {
+          "root": "packages/create_firecms_app",
+          "name": "@rebasepro/create",
+          "tags": [
+            "npm:public",
+            "npm:cli",
+            "npm:create-rebase-app",
+            "npm:rebase",
+            "npm:cms",
+            "npm:react",
+            "npm:typescript",
+            "npm:postgresql"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "test",
+                "build",
+                "clean"
+              ]
+            },
+            "description": "Create a new Rebase project",
+            "js": {
+              "packageName": "@rebasepro/create",
+              "packageVersion": "0.0.1",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "echo \"Error: no test specified\" && exit 0",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "echo \"create-rebase-app: no need to build\" && exit 0",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "echo \"create-rebase-app: no need to clean\" && exit 0",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/data_import_export": {
+        "name": "@rebasepro/data_import_export",
+        "type": "lib",
+        "data": {
+          "root": "packages/data_import_export",
+          "name": "@rebasepro/data_import_export",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "prepublishOnly",
+                "clean",
+                "test"
+              ]
+            },
+            "js": {
+              "packageName": "@rebasepro/data_import_export",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/data_enhancement": {
+        "name": "@rebasepro/data_enhancement",
+        "type": "lib",
+        "data": {
+          "root": "packages/data_enhancement",
+          "name": "@rebasepro/data_enhancement",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "prepublishOnly",
+                "test"
+              ]
+            },
+            "js": {
+              "packageName": "@rebasepro/data_enhancement",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/schema_inference": {
+        "name": "@rebasepro/schema_inference",
+        "type": "lib",
+        "data": {
+          "root": "packages/schema_inference",
+          "name": "@rebasepro/schema_inference",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "clean"
+              ]
+            },
+            "js": {
+              "packageName": "@rebasepro/schema_inference",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.cjs",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.cjs",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/entity_history": {
+        "name": "@rebasepro/entity_history",
+        "type": "lib",
+        "data": {
+          "root": "packages/entity_history",
+          "name": "@rebasepro/entity_history",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "prepublishOnly",
+                "clean",
+                "test"
+              ]
+            },
+            "js": {
+              "packageName": "@rebasepro/entity_history",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/media_manager": {
+        "name": "@rebasepro/media_manager",
+        "type": "lib",
+        "data": {
+          "root": "packages/media_manager",
+          "name": "@rebasepro/media_manager",
+          "tags": [
+            "npm:public",
+            "npm:firebase",
+            "npm:cms",
+            "npm:media",
+            "npm:media manager",
+            "npm:asset manager",
+            "npm:rebase",
+            "npm:storage"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "clean"
+              ]
+            },
+            "js": {
+              "packageName": "@rebasepro/media_manager",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "types": "./dist/index.d.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/data_export": {
+        "name": "@rebasepro/data_export",
+        "type": "lib",
+        "data": {
+          "root": "packages/data_export",
+          "name": "@rebasepro/data_export",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "prepublishOnly",
+                "clean",
+                "test"
+              ]
+            },
+            "js": {
+              "packageName": "@rebasepro/data_export",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/data_import": {
+        "name": "@rebasepro/data_import",
+        "type": "lib",
+        "data": {
+          "root": "packages/data_import",
+          "name": "@rebasepro/data_import",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "prepublishOnly",
+                "clean",
+                "test"
+              ]
+            },
+            "js": {
+              "packageName": "@rebasepro/data_import",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/postgresql": {
+        "name": "@rebasepro/postgresql",
+        "type": "lib",
+        "data": {
+          "root": "packages/postgresql",
+          "name": "@rebasepro/postgresql",
+          "tags": [
+            "npm:public",
+            "npm:firebase",
+            "npm:cms",
+            "npm:admin",
+            "npm:admin panel",
+            "npm:postgresql",
+            "npm:database",
+            "npm:rebase",
+            "npm:client"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "watch",
+                "build",
+                "prepublishOnly",
+                "test:lint",
+                "test",
+                "clean"
+              ]
+            },
+            "description": "PostgreSQL data source client for Rebase",
+            "js": {
+              "packageName": "@rebasepro/postgresql",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "watch"
+              },
+              "metadata": {
+                "scriptContent": "vite build --watch",
+                "runCommand": "pnpm run watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:lint"
+              },
+              "metadata": {
+                "scriptContent": "eslint \"src/**\" --quiet",
+                "runCommand": "pnpm run test:lint"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/datatalk": {
+        "name": "@rebasepro/datatalk",
+        "type": "lib",
+        "data": {
+          "root": "packages/datatalk",
+          "name": "@rebasepro/datatalk",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "clean"
+              ]
+            },
+            "description": "Talk to your Firestore data",
+            "js": {
+              "packageName": "@rebasepro/datatalk",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "types": "./dist/index.d.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js"
+                }
+              },
+              "packageMain": "dist/index.cjs",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/firebase": {
+        "name": "@rebasepro/firebase",
+        "type": "lib",
+        "data": {
+          "root": "packages/firebase",
+          "name": "@rebasepro/firebase",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "clean"
+              ]
+            },
+            "js": {
+              "packageName": "@rebasepro/firebase",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/backend": {
+        "name": "@rebasepro/backend",
+        "type": "lib",
+        "data": {
+          "root": "packages/backend",
+          "name": "@rebasepro/backend",
+          "tags": [
+            "npm:public",
+            "npm:firebase",
+            "npm:cms",
+            "npm:admin",
+            "npm:admin panel",
+            "npm:postgresql",
+            "npm:drizzle",
+            "npm:backend",
+            "npm:database",
+            "npm:rebase"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "watch",
+                "build",
+                "prepublishOnly",
+                "test:lint",
+                "test",
+                "clean"
+              ]
+            },
+            "description": "PostgreSQL and Drizzle ORM backend for Rebase",
+            "js": {
+              "packageName": "@rebasepro/backend",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "watch"
+              },
+              "metadata": {
+                "scriptContent": "vite build --watch",
+                "runCommand": "pnpm run watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:lint"
+              },
+              "metadata": {
+                "scriptContent": "eslint \"src/**\" --quiet",
+                "runCommand": "pnpm run test:lint"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/mongodb": {
+        "name": "@rebasepro/mongodb",
+        "type": "lib",
+        "data": {
+          "root": "packages/mongodb",
+          "name": "@rebasepro/mongodb",
+          "tags": [
+            "npm:public",
+            "npm:firebase",
+            "npm:cms",
+            "npm:admin",
+            "npm:admin panel",
+            "npm:mongodb",
+            "npm:backend",
+            "npm:database",
+            "npm:rebase"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "watch",
+                "build",
+                "prepublishOnly",
+                "test:lint",
+                "test",
+                "clean"
+              ]
+            },
+            "description": "MongoDB backend for Rebase",
+            "js": {
+              "packageName": "@rebasepro/mongodb",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/mongodb/src/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "watch"
+              },
+              "metadata": {
+                "scriptContent": "vite build --watch",
+                "runCommand": "pnpm run watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:lint"
+              },
+              "metadata": {
+                "scriptContent": "eslint \"src/**\" --quiet",
+                "runCommand": "pnpm run test:lint"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/common": {
+        "name": "@rebasepro/common",
+        "type": "lib",
+        "data": {
+          "root": "packages/common",
+          "name": "@rebasepro/common",
+          "tags": [
+            "npm:public",
+            "npm:firebase",
+            "npm:cms",
+            "npm:admin",
+            "npm:admin panel",
+            "npm:firebase panel",
+            "npm:firestore",
+            "npm:headless",
+            "npm:headless cms",
+            "npm:content manager"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "watch",
+                "build",
+                "prepublishOnly",
+                "test:lint",
+                "test",
+                "clean",
+                "generateIcons"
+              ]
+            },
+            "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+            "js": {
+              "packageName": "@rebasepro/common",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "watch"
+              },
+              "metadata": {
+                "scriptContent": "vite build --watch",
+                "runCommand": "pnpm run watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:lint"
+              },
+              "metadata": {
+                "scriptContent": "eslint \"src/**\" --quiet",
+                "runCommand": "pnpm run test:lint"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generateIcons": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generateIcons"
+              },
+              "metadata": {
+                "scriptContent": "ts-node --esm src/icons/generateIcons.ts",
+                "runCommand": "pnpm run generateIcons"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/editor": {
+        "name": "@rebasepro/editor",
+        "type": "lib",
+        "data": {
+          "root": "packages/editor",
+          "name": "@rebasepro/editor",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "clean"
+              ]
+            },
+            "description": "Notion-style WYSIWYG editor for Rebase",
+            "js": {
+              "packageName": "@rebasepro/editor",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "types": "./dist/index.d.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js"
+                }
+              },
+              "packageMain": "dist/index.cjs",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/formex": {
+        "name": "@rebasepro/formex",
+        "type": "lib",
+        "data": {
+          "root": "packages/formex",
+          "name": "@rebasepro/formex",
+          "tags": [
+            "npm:public",
+            "npm:firebase",
+            "npm:cms",
+            "npm:admin",
+            "npm:admin panel",
+            "npm:firebase panel",
+            "npm:firestore",
+            "npm:headless",
+            "npm:headless cms",
+            "npm:content manager"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "clean",
+                "test"
+              ]
+            },
+            "js": {
+              "packageName": "@rebasepro/formex",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/studio": {
+        "name": "@rebasepro/studio",
+        "type": "lib",
+        "data": {
+          "root": "packages/studio",
+          "name": "@rebasepro/studio",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "test",
+                "build",
+                "clean"
+              ]
+            },
+            "js": {
+              "packageName": "@rebasepro/studio",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "types": "./dist/index.d.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "rebase": {
+        "name": "rebase",
+        "type": "lib",
+        "data": {
+          "root": "packages/rebase",
+          "name": "rebase",
+          "tags": [
+            "npm:public",
+            "npm:cli",
+            "npm:create-rebase-app",
+            "npm:rebase",
+            "npm:firebase",
+            "npm:firestore",
+            "npm:cms",
+            "npm:react",
+            "npm:typescript"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "test",
+                "build",
+                "clean"
+              ]
+            },
+            "description": "A CLI to perform Rebase operations. This package is just a wrapper around @rebasepro/cli",
+            "js": {
+              "packageName": "rebase",
+              "packageVersion": "0.0.1",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "echo \"Error: no test specified\" && exit 0",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "echo \"@rebasepro/create: no need to build\" && exit 0",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "echo \"@rebasepro/create: no need to clean\" && exit 0",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/types": {
+        "name": "@rebasepro/types",
+        "type": "lib",
+        "data": {
+          "root": "packages/types",
+          "name": "@rebasepro/types",
+          "tags": [
+            "npm:public",
+            "npm:firebase",
+            "npm:cms",
+            "npm:admin",
+            "npm:admin panel",
+            "npm:firebase panel",
+            "npm:firestore",
+            "npm:headless",
+            "npm:headless cms",
+            "npm:content manager"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "watch",
+                "build",
+                "prepublishOnly",
+                "test:lint",
+                "test",
+                "clean"
+              ]
+            },
+            "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+            "js": {
+              "packageName": "@rebasepro/types",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "watch"
+              },
+              "metadata": {
+                "scriptContent": "vite build --watch",
+                "runCommand": "pnpm run watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:lint"
+              },
+              "metadata": {
+                "scriptContent": "eslint \"src/**\" --quiet",
+                "runCommand": "pnpm run test:lint"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/auth": {
+        "name": "@rebasepro/auth",
+        "type": "lib",
+        "data": {
+          "root": "packages/auth",
+          "name": "@rebasepro/auth",
+          "tags": [
+            "npm:public"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "clean"
+              ]
+            },
+            "description": "Custom JWT authentication for Rebase with PostgreSQL backend",
+            "js": {
+              "packageName": "@rebasepro/auth",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/core": {
+        "name": "@rebasepro/core",
+        "type": "lib",
+        "data": {
+          "root": "packages/core",
+          "name": "@rebasepro/core",
+          "tags": [
+            "npm:public",
+            "npm:firebase",
+            "npm:cms",
+            "npm:admin",
+            "npm:admin panel",
+            "npm:firebase panel",
+            "npm:firestore",
+            "npm:headless",
+            "npm:headless cms",
+            "npm:content manager"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "watch",
+                "build",
+                "prepublishOnly",
+                "test:lint",
+                "test",
+                "clean",
+                "generateIcons"
+              ]
+            },
+            "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+            "js": {
+              "packageName": "@rebasepro/core",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "types": "./dist/index.d.ts",
+                  "require": "./dist/index.umd.js"
+                },
+                "./vitePlugin": {
+                  "development": "./src/vitePlugin.ts",
+                  "types": "./src/vitePlugin.ts",
+                  "import": "./src/vitePlugin.ts",
+                  "require": "./src/vitePlugin.ts"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "watch"
+              },
+              "metadata": {
+                "scriptContent": "vite build --watch",
+                "runCommand": "pnpm run watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:lint"
+              },
+              "metadata": {
+                "scriptContent": "eslint \"src/**\" --quiet",
+                "runCommand": "pnpm run test:lint"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generateIcons": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generateIcons"
+              },
+              "metadata": {
+                "scriptContent": "ts-node --esm src/icons/generateIcons.ts",
+                "runCommand": "pnpm run generateIcons"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/cli": {
+        "name": "@rebasepro/cli",
+        "type": "lib",
+        "data": {
+          "root": "packages/cli",
+          "name": "@rebasepro/cli",
+          "tags": [
+            "npm:public",
+            "npm:cli",
+            "npm:create-rebase-app",
+            "npm:rebase",
+            "npm:cms",
+            "npm:react",
+            "npm:typescript",
+            "npm:postgresql"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "test",
+                "build",
+                "clean"
+              ]
+            },
+            "description": "Developer tools for Rebase projects",
+            "js": {
+              "packageName": "@rebasepro/cli",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "types": "./dist/index.d.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.cjs"
+                }
+              },
+              "packageMain": "./dist/index.cjs",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "echo \"Error: no test specified\" && exit 0",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc --emitDeclarationOnly -p tsconfig.json",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "rebase-app-frontend": {
+        "name": "rebase-app-frontend",
+        "type": "app",
+        "data": {
+          "root": "app/frontend",
+          "name": "rebase-app-frontend",
+          "tags": [
+            "npm:private"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "login",
+                "logout",
+                "clean",
+                "dev",
+                "build",
+                "preview",
+                "deploy"
+              ]
+            },
+            "js": {
+              "packageName": "rebase-app-frontend",
+              "packageVersion": "0.0.1",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "login": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "login"
+              },
+              "metadata": {
+                "scriptContent": "rebase login",
+                "runCommand": "pnpm run login"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "logout": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "logout"
+              },
+              "metadata": {
+                "scriptContent": "rebase logout",
+                "runCommand": "pnpm run logout"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "vite --mode development",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "vite build && tsc",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "preview": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "preview"
+              },
+              "metadata": {
+                "scriptContent": "vite build && vite preview",
+                "runCommand": "pnpm run preview"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "deploy": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "deploy"
+              },
+              "metadata": {
+                "scriptContent": "vite build && firebase deploy --only hosting:rebase-demo-27150",
+                "runCommand": "pnpm run deploy"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/ui": {
+        "name": "@rebasepro/ui",
+        "type": "lib",
+        "data": {
+          "root": "packages/ui",
+          "name": "@rebasepro/ui",
+          "tags": [
+            "npm:public",
+            "npm:firebase",
+            "npm:cms",
+            "npm:admin",
+            "npm:admin panel",
+            "npm:firebase panel",
+            "npm:firestore",
+            "npm:headless",
+            "npm:headless cms",
+            "npm:content manager"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "watch",
+                "build",
+                "prepublishOnly",
+                "test:lint",
+                "test",
+                "clean",
+                "generateIcons"
+              ]
+            },
+            "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+            "js": {
+              "packageName": "@rebasepro/ui",
+              "packageVersion": "0.0.1",
+              "packageExports": {
+                ".": {
+                  "development": "./src/index.ts",
+                  "import": "./dist/index.es.js",
+                  "require": "./dist/index.umd.js",
+                  "types": "./dist/index.d.ts"
+                },
+                "./package.json": "./package.json",
+                "./index.css": "./dist/index.css",
+                "./dist/index.css": "./dist/index.css"
+              },
+              "packageMain": "./dist/index.umd.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "watch": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "watch"
+              },
+              "metadata": {
+                "scriptContent": "vite build --watch",
+                "runCommand": "pnpm run watch"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf ./dist && vite build && tsc --emitDeclarationOnly",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "prepublishOnly": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "prepublishOnly"
+              },
+              "metadata": {
+                "scriptContent": "run-s build",
+                "runCommand": "pnpm run prepublishOnly"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test:lint": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test:lint"
+              },
+              "metadata": {
+                "scriptContent": "eslint \"src/**\" --quiet",
+                "runCommand": "pnpm run test:lint"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "test"
+              },
+              "metadata": {
+                "scriptContent": "jest --passWithNoTests",
+                "runCommand": "pnpm run test"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generateIcons": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generateIcons"
+              },
+              "metadata": {
+                "scriptContent": "bun --esm src/scripts/generateIcons.ts",
+                "runCommand": "pnpm run generateIcons"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "Rebase": {
+        "name": "Rebase",
+        "type": "lib",
+        "data": {
+          "root": ".opensource",
+          "name": "Rebase",
+          "platforms": [
+            "Admin",
+            "CMS",
+            "Firebase",
+            "Web"
+          ],
+          "content": "README.md",
+          "pages": {
+            "website/docs/index.md": "Intro",
+            "website/docs/quickstart.mdx": "Quickstart",
+            "website/docs/collections/collections.md": "Collections",
+            "website/docs/properties/custom_fields.md": "Custom fields",
+            "website/docs/navigation/top_level_views.mdx": "Custom views",
+            "website/docs/properties/custom_previews.md": "Custom previews",
+            "website/docs/firebase_setup.md": "Firebase setup",
+            "website/docs/deployment.md": "Deployment"
+          },
+          "related": [],
+          "tabs": [
+            {
+              "title": "Homepage",
+              "href": "https://rebase.pro/"
+            },
+            {
+              "title": "NPM",
+              "href": "https://www.npmjs.com/package/rebase"
+            },
+            {
+              "title": "Pricing",
+              "href": "https://rebase.pro/pricing"
+            },
+            {
+              "title": "Docs",
+              "href": "https://rebase.pro/docs"
+            }
+          ],
+          "implicitDependencies": [],
+          "targets": {},
+          "tags": []
+        }
+      },
+      "rebase-app-backend": {
+        "name": "rebase-app-backend",
+        "type": "lib",
+        "data": {
+          "root": "app/backend",
+          "name": "rebase-app-backend",
+          "tags": [
+            "npm:private"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "build",
+                "start",
+                "generate:schema",
+                "db:pull",
+                "db:generate",
+                "db:migrate",
+                "db:push",
+                "db:studio"
+              ]
+            },
+            "description": "Custom PostgreSQL backend for Rebase with real-time sync",
+            "js": {
+              "packageName": "rebase-app-backend",
+              "packageVersion": "0.0.1",
+              "packageMain": "src/index.ts",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "tsx watch --watch=\"../shared/**/*\" --watch=\"../../packages/backend/src/**/*\" --conditions development src/index.ts",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc --noEmit",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "start": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start"
+              },
+              "metadata": {
+                "scriptContent": "tsx src/index.ts",
+                "runCommand": "pnpm run start"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:schema": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:schema"
+              },
+              "metadata": {
+                "scriptContent": "tsx ../../packages/backend/src/generate-drizzle-schema.ts --collections=../shared/collections --output=src/schema.generated.ts",
+                "runCommand": "pnpm run generate:schema"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:pull": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "db:pull"
+              },
+              "metadata": {
+                "scriptContent": "DOTENV_CONFIG_PATH=../.env drizzle-kit pull",
+                "runCommand": "pnpm run db:pull"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:generate": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "db:generate"
+              },
+              "metadata": {
+                "scriptContent": "pnpm generate:schema && tsx scripts/db-generate.ts",
+                "runCommand": "pnpm run db:generate"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:migrate": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "db:migrate"
+              },
+              "metadata": {
+                "scriptContent": "DOTENV_CONFIG_PATH=../.env drizzle-kit migrate",
+                "runCommand": "pnpm run db:migrate"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:push": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "db:push"
+              },
+              "metadata": {
+                "scriptContent": "DOTENV_CONFIG_PATH=../.env drizzle-kit push",
+                "runCommand": "pnpm run db:push"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:studio": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "db:studio"
+              },
+              "metadata": {
+                "scriptContent": "DOTENV_CONFIG_PATH=../.env drizzle-kit studio",
+                "runCommand": "pnpm run db:studio"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "rebase-app-shared": {
+        "name": "rebase-app-shared",
+        "type": "lib",
+        "data": {
+          "root": "app/shared",
+          "name": "rebase-app-shared",
+          "tags": [
+            "npm:private"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "build",
+                "dev",
+                "clean"
+              ]
+            },
+            "description": "Shared collections and config for Rebase app",
+            "js": {
+              "packageName": "rebase-app-shared",
+              "packageVersion": "1.0.0",
+              "packageExports": {
+                ".": {
+                  "import": "./dist/index.js",
+                  "types": "./dist/index.d.ts",
+                  "default": "./dist/index.js"
+                },
+                "./package.json": "./package.json"
+              },
+              "packageMain": "dist/index.js",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "tsc",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "tsc --watch",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "clean": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "clean"
+              },
+              "metadata": {
+                "scriptContent": "rm -rf dist",
+                "runCommand": "pnpm run clean"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      },
+      "@rebasepro/app-example": {
+        "name": "@rebasepro/app-example",
+        "type": "app",
+        "data": {
+          "root": "app",
+          "name": "@rebasepro/app-example",
+          "tags": [
+            "npm:private"
+          ],
+          "metadata": {
+            "targetGroups": {
+              "NPM Scripts": [
+                "dev",
+                "dev:frontend",
+                "dev:backend",
+                "build",
+                "build:shared",
+                "build:frontend",
+                "build:backend",
+                "start",
+                "deploy",
+                "db:pull",
+                "db:generate",
+                "db:migrate",
+                "db:studio",
+                "generate:schema"
+              ]
+            },
+            "description": "Complete Rebase application example with PostgreSQL backend",
+            "js": {
+              "packageName": "@rebasepro/app-example",
+              "packageVersion": "1.0.0",
+              "isInPackageManagerWorkspaces": true
+            }
+          },
+          "targets": {
+            "dev": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev"
+              },
+              "metadata": {
+                "scriptContent": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:frontend\"",
+                "runCommand": "pnpm run dev"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:frontend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:frontend"
+              },
+              "metadata": {
+                "scriptContent": "cd frontend && pnpm run dev",
+                "runCommand": "pnpm run dev:frontend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev:backend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "dev:backend"
+              },
+              "metadata": {
+                "scriptContent": "cd backend && pnpm run dev",
+                "runCommand": "pnpm run dev:backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build"
+              },
+              "metadata": {
+                "scriptContent": "pnpm run build:shared && pnpm run build:frontend && pnpm run build:backend",
+                "runCommand": "pnpm run build"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:shared": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:shared"
+              },
+              "metadata": {
+                "scriptContent": "cd shared && pnpm run build",
+                "runCommand": "pnpm run build:shared"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:frontend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:frontend"
+              },
+              "metadata": {
+                "scriptContent": "cd frontend && pnpm run build",
+                "runCommand": "pnpm run build:frontend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "build:backend": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "build:backend"
+              },
+              "metadata": {
+                "scriptContent": "cd backend && pnpm run build",
+                "runCommand": "pnpm run build:backend"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "start": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "start"
+              },
+              "metadata": {
+                "scriptContent": "cd backend && pnpm start",
+                "runCommand": "pnpm run start"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "deploy": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "deploy"
+              },
+              "metadata": {
+                "scriptContent": "pnpm run build && pnpm run start",
+                "runCommand": "pnpm run deploy"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:pull": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "db:pull"
+              },
+              "metadata": {
+                "scriptContent": "cd backend && pnpm run db:pull",
+                "runCommand": "pnpm run db:pull"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:generate": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "db:generate"
+              },
+              "metadata": {
+                "scriptContent": "cd backend && pnpm run db:generate",
+                "runCommand": "pnpm run db:generate"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:migrate": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "db:migrate"
+              },
+              "metadata": {
+                "scriptContent": "cd backend && pnpm run db:migrate",
+                "runCommand": "pnpm run db:migrate"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "db:studio": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "db:studio"
+              },
+              "metadata": {
+                "scriptContent": "cd backend && pnpm run db:studio",
+                "runCommand": "pnpm run db:studio"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "generate:schema": {
+              "executor": "nx:run-script",
+              "options": {
+                "script": "generate:schema"
+              },
+              "metadata": {
+                "scriptContent": "cd backend && pnpm run generate:schema",
+                "runCommand": "pnpm run generate:schema"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "implicitDependencies": []
+        }
+      }
+    },
+    "dependencies": {
+      "@rebasepro/create": [
+        {
+          "source": "@rebasepro/create",
+          "target": "@rebasepro/cli",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/data_import_export": [
+        {
+          "source": "@rebasepro/data_import_export",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_import_export",
+          "target": "@rebasepro/data_export",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_import_export",
+          "target": "@rebasepro/data_import",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_import_export",
+          "target": "@rebasepro/types",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/data_enhancement": [
+        {
+          "source": "@rebasepro/data_enhancement",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_enhancement",
+          "target": "@rebasepro/editor",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_enhancement",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_enhancement",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/schema_inference": [
+        {
+          "source": "@rebasepro/schema_inference",
+          "target": "@rebasepro/types",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/entity_history": [
+        {
+          "source": "@rebasepro/entity_history",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/entity_history",
+          "target": "@rebasepro/formex",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/entity_history",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/entity_history",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/media_manager": [
+        {
+          "source": "@rebasepro/media_manager",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/media_manager",
+          "target": "@rebasepro/formex",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/media_manager",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/data_export": [
+        {
+          "source": "@rebasepro/data_export",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_export",
+          "target": "@rebasepro/formex",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_export",
+          "target": "@rebasepro/schema_inference",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_export",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_export",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/data_import": [
+        {
+          "source": "@rebasepro/data_import",
+          "target": "@rebasepro/common",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_import",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_import",
+          "target": "@rebasepro/formex",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_import",
+          "target": "@rebasepro/schema_inference",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_import",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/data_import",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/postgresql": [
+        {
+          "source": "@rebasepro/postgresql",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/postgresql",
+          "target": "@rebasepro/types",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/datatalk": [
+        {
+          "source": "@rebasepro/datatalk",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/datatalk",
+          "target": "@rebasepro/data_export",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/datatalk",
+          "target": "@rebasepro/data_import",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/datatalk",
+          "target": "@rebasepro/data_import_export",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/datatalk",
+          "target": "@rebasepro/firebase",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/datatalk",
+          "target": "@rebasepro/formex",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/datatalk",
+          "target": "@rebasepro/schema_inference",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/datatalk",
+          "target": "@rebasepro/studio",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/datatalk",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/datatalk",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/firebase": [
+        {
+          "source": "@rebasepro/firebase",
+          "target": "@rebasepro/common",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/firebase",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/firebase",
+          "target": "@rebasepro/data_enhancement",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/firebase",
+          "target": "@rebasepro/data_export",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/firebase",
+          "target": "@rebasepro/data_import",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/firebase",
+          "target": "@rebasepro/data_import_export",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/firebase",
+          "target": "@rebasepro/schema_inference",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/firebase",
+          "target": "@rebasepro/studio",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/firebase",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/firebase",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/backend": [
+        {
+          "source": "@rebasepro/backend",
+          "target": "@rebasepro/common",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/backend",
+          "target": "@rebasepro/types",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/mongodb": [
+        {
+          "source": "@rebasepro/mongodb",
+          "target": "@rebasepro/backend",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/mongodb",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/mongodb",
+          "target": "@rebasepro/core",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/common": [
+        {
+          "source": "@rebasepro/common",
+          "target": "@rebasepro/types",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/editor": [
+        {
+          "source": "@rebasepro/editor",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/formex": [],
+      "@rebasepro/studio": [
+        {
+          "source": "@rebasepro/studio",
+          "target": "@rebasepro/common",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/studio",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/studio",
+          "target": "@rebasepro/data_export",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/studio",
+          "target": "@rebasepro/data_import",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/studio",
+          "target": "@rebasepro/data_import_export",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/studio",
+          "target": "@rebasepro/formex",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/studio",
+          "target": "@rebasepro/schema_inference",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/studio",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/studio",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "rebase": [
+        {
+          "source": "rebase",
+          "target": "@rebasepro/cli",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/types": [
+        {
+          "source": "@rebasepro/types",
+          "target": "@rebasepro/editor",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/types",
+          "target": "@rebasepro/formex",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/types",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/auth": [
+        {
+          "source": "@rebasepro/auth",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/auth",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/auth",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/core": [
+        {
+          "source": "@rebasepro/core",
+          "target": "@rebasepro/common",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/core",
+          "target": "@rebasepro/editor",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/core",
+          "target": "@rebasepro/formex",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/core",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "@rebasepro/core",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/cli": [],
+      "rebase-app-frontend": [
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/auth",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/core",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/data_enhancement",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/data_export",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/data_import",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/datatalk",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/editor",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/entity_history",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/firebase",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/formex",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/postgresql",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/schema_inference",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/types",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "@rebasepro/ui",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-frontend",
+          "target": "rebase-app-shared",
+          "type": "static"
+        }
+      ],
+      "@rebasepro/ui": [],
+      "Rebase": [],
+      "rebase-app-backend": [
+        {
+          "source": "rebase-app-backend",
+          "target": "@rebasepro/backend",
+          "type": "static"
+        },
+        {
+          "source": "rebase-app-backend",
+          "target": "rebase-app-shared",
+          "type": "static"
+        }
+      ],
+      "rebase-app-shared": [],
+      "@rebasepro/app-example": [
+        {
+          "source": "@rebasepro/app-example",
+          "target": "@rebasepro/types",
+          "type": "static"
+        }
+      ]
+    }
+  }
+}

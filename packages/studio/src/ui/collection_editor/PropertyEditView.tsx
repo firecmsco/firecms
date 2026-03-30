@@ -764,7 +764,7 @@ export function WidgetSelectViewItem({
     existing
 }: PropertySelectItemProps) {
     const baseProperty = propertyConfig.property;
-    const shouldWarnChangingtype = existing && !isPropertyBuilder(baseProperty) && (baseProperty as any).type !== initialProperty?.type;
+    const shouldWarnChangingtype = existing && !isPropertyBuilder(baseProperty as any) && (baseProperty as any).type !== initialProperty?.type;
 
     return <Card
         onClick={onClick}

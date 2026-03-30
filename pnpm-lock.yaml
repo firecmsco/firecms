@@ -705,7 +705,7 @@ importers:
   packages/create_firecms_app:
     dependencies:
       '@rebasepro/cli':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../cli
     devDependencies:
       '@types/node':
@@ -1016,7 +1016,7 @@ importers:
         specifier: ^0.0.1
         version: link:../schema_inference
       '@rebasepro/studio':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../studio
       '@rebasepro/types':
         specifier: ^0.0.1
@@ -1280,7 +1280,7 @@ importers:
         specifier: ^0.0.1
         version: link:../schema_inference
       '@rebasepro/studio':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../studio
       '@rebasepro/types':
         specifier: ^0.0.1
@@ -1421,7 +1421,7 @@ importers:
   packages/mongodb:
     dependencies:
       '@rebasepro/backend':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../backend
       '@rebasepro/core':
         specifier: ^0.0.1
@@ -1545,31 +1545,31 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0(monaco-editor@0.55.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@rebasepro/common':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../common
       '@rebasepro/core':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../core
       '@rebasepro/data_export':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../data_export
       '@rebasepro/data_import':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../data_import
       '@rebasepro/data_import_export':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../data_import_export
       '@rebasepro/formex':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../formex
       '@rebasepro/schema_inference':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../schema_inference
       '@rebasepro/types':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../types
       '@rebasepro/ui':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../ui
       json5:
         specifier: ^2.2.3

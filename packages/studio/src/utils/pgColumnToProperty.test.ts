@@ -1,5 +1,5 @@
-import { buildCollectionFromTableColumns, TableColumnInfo } from "./pgColumnToProperty";
-import { StringProperty, NumberProperty, DateProperty, MapProperty, ArrayProperty, BooleanProperty } from "@rebasepro/types";
+import { buildCollectionFromTableColumns } from "./pgColumnToProperty";
+import { StringProperty, NumberProperty, DateProperty, MapProperty, ArrayProperty, BooleanProperty, TableColumnInfo } from "@rebasepro/types";
 
 describe("pgColumnToProperty Inference Logic", () => {
     describe("String Data Types", () => {
@@ -99,7 +99,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             expect((collection.properties!.precision_val as NumberProperty).columnType).toBe("double precision");
             
             // Decimal shouldn't have integer explicitly forced
-            expect(collection.properties!.price.validation?.integer).toBeUndefined();
+            expect((collection.properties!.price as NumberProperty).validation?.integer).toBeUndefined();
         });
     });
 

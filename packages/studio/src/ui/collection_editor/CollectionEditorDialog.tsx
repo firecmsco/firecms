@@ -64,8 +64,8 @@ import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
 import { AIModifiedPathsProvider, useAIModifiedPaths } from "./AIModifiedPathsContext";
 import { CollectionOperation, CollectionGenerationCallback } from "../../api/generateCollectionApi";
 import { CollectionRLSTab } from "./CollectionRLSTab";
-import { buildCollectionFromTableColumns, TableColumnInfo } from "../../utils/pgColumnToProperty";
-
+import { buildCollectionFromTableColumns } from "../../utils/pgColumnToProperty";
+import { TableColumnInfo } from "@rebasepro/types";
 export interface CollectionEditorDialogProps {
     open: boolean;
     isNewCollection: boolean;
@@ -342,7 +342,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const snackbarController = useSnackbarController();
 
     // Use this ref to store which properties have errors
-    const propertyErrorsRef = useRef({});
+    const propertyErrorsRef = useRef<Record<string, any>>({});
 
     const initialView = isNewCollection
         ? (includeTemplates ? "welcome" : "general")
@@ -806,7 +806,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                     const current = removeUndefined({
                                         ...propertyErrorsRef.current,
                                         [getFullIdPath(propertyKey, namespace)]: removeUndefined(error, true)
-                                    }, true);
+                                    }, true) as Record<string, any>;
                                     propertyErrorsRef.current = current;
                                     formController.validate();
                                 }}
