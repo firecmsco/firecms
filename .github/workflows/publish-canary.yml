@@ -3,7 +3,7 @@ name: Publish Canary Packages
 on:
   push:
     branches:
-      - canary
+      - main
 
 concurrency:
   group: canary-publish-${{ github.ref }}
@@ -18,22 +18,28 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: npm run build
+        run: pnpm run build
 
       - name: Set canary version
         run: |
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          CANARY_VERSION="3.1.0-canary.${SHORT_SHA}"
+          CANARY_VERSION="0.0.1-canary.${SHORT_SHA}"
           echo "CANARY_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
           echo "Publishing canary version: $CANARY_VERSION"
 
@@ -62,5 +68,5 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Install with:" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "npm install @rebasepro/core@canary" >> $GITHUB_STEP_SUMMARY
+          echo "pnpm add @rebasepro/core@canary" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
