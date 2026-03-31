@@ -641,4 +641,3 @@ async function createSelfHostedProjectWebappConfig(env, projectId, debug, onErr?
 function isSelfHostedTemplate(template: Template) {
     return ["pro", "next-pro", "community", "astro"].includes(template);
 }
-
