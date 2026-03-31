@@ -39,7 +39,7 @@ jobs:
           echo "Publishing canary version: $CANARY_VERSION"
 
           # Update all package versions without creating git tags or commits
-          npx lerna version "$CANARY_VERSION" --no-git-tag-version --no-push --exact --yes
+          npx lerna version "$CANARY_VERSION" --no-git-tag-version --no-push --exact --force-publish --yes
 
           # Commit version changes locally so lerna publish doesn't complain
           # (this commit is never pushed back)
