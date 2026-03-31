@@ -1,2 +1,2 @@
-export const firebaseConfig = {
+export const firebaseConfig: Record<string, unknown> = {
 }
