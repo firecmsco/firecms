@@ -85,6 +85,15 @@
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.57.1",
-    "@rollup/rollup-linux-x64-musl": "4.57.1"
+    "@rollup/rollup-linux-x64-musl": "4.57.1",
+    "lightningcss-linux-x64-gnu": "1.30.2",
+    "lightningcss-linux-x64-musl": "1.30.2",
+    "@esbuild/linux-x64": "0.25.12",
+    "@tailwindcss/oxide-linux-x64-gnu": "4.1.18",
+    "@tailwindcss/oxide-linux-x64-musl": "4.1.18",
+    "@unrs/resolver-binding-linux-x64-gnu": "1.11.1",
+    "@unrs/resolver-binding-linux-x64-musl": "1.11.1",
+    "@nx/nx-linux-x64-gnu": "22.5.1",
+    "@nx/nx-linux-x64-musl": "22.5.1"
   }
 }
