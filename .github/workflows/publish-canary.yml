@@ -33,7 +33,8 @@ jobs:
       - name: Set canary version
         run: |
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          CANARY_VERSION="3.1.0-canary.${SHORT_SHA}"
+          BASE_VERSION=$(node -p "require('./lerna.json').version")
+          CANARY_VERSION="${BASE_VERSION}-canary.${SHORT_SHA}"
           echo "CANARY_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
           echo "Publishing canary version: $CANARY_VERSION"
 
