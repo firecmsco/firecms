@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 
 import "@/styles/index.css"
-import "typeface-rubik";
+import "@fontsource/rubik";
 import "@fontsource/jetbrains-mono";
 
 import {

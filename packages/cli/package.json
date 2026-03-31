@@ -13,7 +13,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf templates/template_cloud/node_modules && rm -rf templates/template_cloud/yarn.lock && vite build && tsc --emitDeclarationOnly -p tsconfig.json",
+    "build": "rm -rf templates/template_cloud/node_modules && rm -rf templates/template_cloud/yarn.lock && rm -rf templates/template_astro/node_modules && rm -rf templates/template_astro/dist && rm -rf templates/template_astro/.astro && vite build && tsc --emitDeclarationOnly -p tsconfig.json",
     "dev": "ts-node src/test.ts",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
