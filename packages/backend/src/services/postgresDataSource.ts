@@ -24,9 +24,9 @@ export class PostgresDataSource implements DataSource {
     key = "postgres";
     initialised = true;
 
-    private entityService: EntityService;
-    private realtimeService: RealtimeService;
-    private user?: User;
+    public entityService: EntityService;
+    public realtimeService: RealtimeService;
+    public user?: User;
 
     /**
      * When true, realtime notifications are deferred until after the
@@ -41,10 +41,10 @@ export class PostgresDataSource implements DataSource {
     }> = [];
 
     constructor(
-        private db: DrizzleClient,
+        public db: DrizzleClient,
         realtimeService: RealtimeService,
         user?: User,
-        private poolManager?: DatabasePoolManager
+        public poolManager?: DatabasePoolManager
     ) {
         this.entityService = new EntityService(db);
         this.realtimeService = realtimeService;
@@ -764,140 +764,148 @@ export class PostgresDataSource implements DataSource {
      * Starts a transaction and sets the current_user_id and current_user_roles
      * configuration parameters for PostgreSQL Row Level Security.
      */
-    async withAuth(user: User): Promise<PostgresDataSource> {
-        // We need to return a proxy that wraps every method in a transaction
-        // But since we can't easily start a transaction and keep it open for multiple calls without a callback,
-        // we'll implement a different approach:
-        // We returns a new delegate where every operation will start its own transaction,
-        // set the config, and then perform the operation.
-        // Ideally, if Drizzle supported session variables on connection, we'd use that.
-        // Since we are using a pool, we MUST use a transaction to guarantee the SET LOCAL applies to the query.
+    async withAuth(user: User): Promise<DataSource> {
+        return new AuthenticatedPostgresDataSource(this, user);
+    }
+}
 
-        const authenticatedDelegate = Object.create(this);
-        const originalDb = this.db;
+export class AuthenticatedPostgresDataSource implements DataSource {
+    key = "postgres";
+    initialised = true;
 
-        // We can't directly "return" a delegate that shares a single transaction for *future* calls
-        // because typical usage is: get delegate -> await fetch -> await save.
-        // Each await releases the event loop.
-        // So we have to wrap each method.
+    constructor(
+        public delegate: PostgresDataSource,
+        public user: User
+    ) {}
 
-        const wrapMethod = (methodName: keyof PostgresDataSource) => {
-            const originalMethod = this[methodName] as Function;
-            return async (...args: unknown[]) => {
-                // Collect deferred notifications so we can flush them after the
-                // transaction commits.  This is critical: notifyEntityUpdate
-                // refetches from a *separate* connection and therefore cannot see
-                // uncommitted writes inside the transaction.
-                const pendingNotifications: PostgresDataSource["_pendingNotifications"] = [];
-
-                // @ts-ignore
-                const result = await originalDb.transaction(async (tx) => {
-                    // Defensive checks for user properties
-                    let userId = user.uid;
-                    if (!userId) {
-                        console.warn(`[DataSource] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, user);
-                        userId = 'anonymous';
-                    }
-
-                    let userRoles = user.roles ?? [];
-                    if (!user.roles) {
-                        console.warn(`[DataSource] User roles are missing for authenticated delegate. Using empty array. User object:`, user);
-                    }
-                    // Normalize roles: support both string[] and {id: string}[] shapes
-                    const normalizedRoles = userRoles.map((r: unknown) =>
-                        typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
-                    );
-                    const rolesString = normalizedRoles.join(",");
-
-                    // Set the user context for RLS (read by auth.uid(), auth.roles(), auth.jwt())
-                    await tx.execute(drizzleSql`
-                        SELECT 
-                            set_config('app.user_id', ${userId}, true),
-                            set_config('app.user_roles', ${rolesString}, true),
-                            set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles })}, true)
-                    `);
-
-                    // Create a temporary delegate using the transaction client
-                    const txEntityService = new EntityService(tx);
-
-                    const txDelegate = new PostgresDataSource(tx, this.realtimeService, user, this.poolManager);
-                    // Force inject the transactional entity service
-                    // @ts-ignore
-                    txDelegate.entityService = txEntityService;
-                    // Defer realtime notifications — they'll be flushed post-commit
-                    txDelegate._deferNotifications = true;
-                    txDelegate._pendingNotifications = pendingNotifications;
-
-                    return await originalMethod.apply(txDelegate, args);
-                });
-
-                // Transaction committed — now flush deferred realtime notifications
-                // so subscribers refetch data that includes the committed changes.
-                for (const notification of pendingNotifications) {
-                    try {
-                        await this.realtimeService.notifyEntityUpdate(
-                            notification.path,
-                            notification.entityId,
-                            notification.entity,
-                            notification.databaseId
-                        );
-                    } catch (e) {
-                        console.error("[DataSource] Error flushing deferred notification:", e);
-                    }
-                }
-
-                return result;
-            };
-        };
-
-        // Wrap the methods that perform DB operations
-        authenticatedDelegate.fetchCollection = wrapMethod("fetchCollection");
-        authenticatedDelegate.fetchEntity = wrapMethod("fetchEntity");
-        authenticatedDelegate.saveEntity = wrapMethod("saveEntity");
-        authenticatedDelegate.deleteEntity = wrapMethod("deleteEntity");
-        authenticatedDelegate.checkUniqueField = wrapMethod("checkUniqueField");
-        authenticatedDelegate.countEntities = wrapMethod("countEntities");
-
-        // These bypass the RLS transaction — they use the pool manager directly
-        // or query cluster-wide catalogs where RLS doesn't apply.
-        authenticatedDelegate.executeSql = this.executeSql.bind(this);
-        authenticatedDelegate.fetchAvailableDatabases = this.fetchAvailableDatabases.bind(this);
-        authenticatedDelegate.fetchCurrentDatabase = this.fetchCurrentDatabase.bind(this);
-        authenticatedDelegate.fetchAvailableRoles = this.fetchAvailableRoles.bind(this);
-        authenticatedDelegate.fetchUnmappedTables = this.fetchUnmappedTables.bind(this);
-        authenticatedDelegate.fetchTableColumns = this.fetchTableColumns.bind(this);
-
-        // Listen methods: initial fetches are already RLS-protected because
-        // listenCollection/listenEntity call this.fetchCollection/fetchEntity on the
-        // delegate, and those ARE wrapped above. For subsequent real-time refetches,
-        // we override the listen methods to inject authContext into the subscription
-        // registration so RealtimeService.fetchCollectionWithAuth can set session vars.
-        const authContext = { userId: user.uid || "anonymous", roles: user.roles ?? [] };
-        const originalListenCollection = this.listenCollection.bind(authenticatedDelegate);
-        const originalListenEntity = this.listenEntity.bind(authenticatedDelegate);
-        const realtimeService = this.realtimeService;
-
-        authenticatedDelegate.listenCollection = function <M extends Record<string, any>>(props: ListenCollectionProps<M>): () => void {
-            const unsubscribe = originalListenCollection(props);
-            // Patch the most recently registered subscription with auth context
-            const entries = Array.from(realtimeService.subscriptions.entries());
-            const lastEntry = entries[entries.length - 1];
-            if (lastEntry && lastEntry[1].clientId === "datasource") {
-                lastEntry[1].authContext = authContext;
+    private async withTransaction<T>(
+        operation: (delegate: PostgresDataSource) => Promise<T>
+    ): Promise<T> {
+        const pendingNotifications: PostgresDataSource["_pendingNotifications"] = [];
+        
+        const result = await this.delegate.db.transaction(async (tx) => {
+            let userId = this.user?.uid;
+            if (!userId) {
+                console.warn(`[DataSource] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, this.user);
+                userId = 'anonymous';
             }
-            return unsubscribe;
-        };
 
-        authenticatedDelegate.listenEntity = function <M extends Record<string, any>>(props: ListenEntityProps<M>): () => void {
-            const unsubscribe = originalListenEntity(props);
-            const entries = Array.from(realtimeService.subscriptions.entries());
-            const lastEntry = entries[entries.length - 1];
-            if (lastEntry && lastEntry[1].clientId === "datasource") {
-                lastEntry[1].authContext = authContext;
+            let userRoles = this.user?.roles ?? [];
+            if (!this.user?.roles) {
+                console.warn(`[DataSource] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
             }
-            return unsubscribe;
-        };
+            const normalizedRoles = userRoles.map((r: unknown) =>
+                typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+            );
+            const rolesString = normalizedRoles.join(",");
 
-        return authenticatedDelegate;
+            await tx.execute(drizzleSql`
+                SELECT 
+                    set_config('app.user_id', ${userId}, true),
+                    set_config('app.user_roles', ${rolesString}, true),
+                    set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles })}, true)
+            `);
+
+            const txEntityService = new EntityService(tx);
+            const txDelegate = new PostgresDataSource(tx, this.delegate.realtimeService, this.user, this.delegate.poolManager);
+            
+            // @ts-ignore
+            txDelegate.entityService = txEntityService;
+            txDelegate._deferNotifications = true;
+            txDelegate._pendingNotifications = pendingNotifications;
+
+            return await operation(txDelegate);
+        });
+
+        for (const notification of pendingNotifications) {
+            try {
+                await this.delegate.realtimeService.notifyEntityUpdate(
+                    notification.path,
+                    notification.entityId,
+                    notification.entity,
+                    notification.databaseId
+                );
+            } catch (e) {
+                console.error("[DataSource] Error flushing deferred notification:", e);
+            }
+        }
+
+        return result;
+    }
+
+    async fetchCollection<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<Entity<M>[]> {
+        return this.withTransaction((delegate) => delegate.fetchCollection(props));
+    }
+
+    listenCollection<M extends Record<string, any>>(props: ListenCollectionProps<M>): () => void {
+        const unsubscribe = this.delegate.listenCollection(props);
+        const authContext = { userId: this.user?.uid || "anonymous", roles: this.user?.roles ?? [] };
+        const entries = Array.from(this.delegate.realtimeService.subscriptions.entries());
+        const lastEntry = entries[entries.length - 1];
+        if (lastEntry && lastEntry[1].clientId === "datasource") {
+            lastEntry[1].authContext = authContext;
+        }
+        return unsubscribe;
+    }
+
+    async fetchEntity<M extends Record<string, any>>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
+        return this.withTransaction((delegate) => delegate.fetchEntity(props));
+    }
+
+    listenEntity<M extends Record<string, any>>(props: ListenEntityProps<M>): () => void {
+        const unsubscribe = this.delegate.listenEntity(props);
+        const authContext = { userId: this.user?.uid || "anonymous", roles: this.user?.roles ?? [] };
+        const entries = Array.from(this.delegate.realtimeService.subscriptions.entries());
+        const lastEntry = entries[entries.length - 1];
+        if (lastEntry && lastEntry[1].clientId === "datasource") {
+            lastEntry[1].authContext = authContext;
+        }
+        return unsubscribe;
+    }
+
+    async saveEntity<M extends Record<string, any>>(props: SaveEntityProps<M>): Promise<Entity<M>> {
+        return this.withTransaction((delegate) => delegate.saveEntity(props));
+    }
+
+    async deleteEntity<M extends Record<string, any>>(props: DeleteEntityProps<M>): Promise<void> {
+        return this.withTransaction((delegate) => delegate.deleteEntity(props));
+    }
+
+    async checkUniqueField(
+        path: string,
+        name: string,
+        value: unknown,
+        entityId?: string,
+        collection?: EntityCollection
+    ): Promise<boolean> {
+        return this.withTransaction((delegate) => delegate.checkUniqueField(path, name, value, entityId, collection));
+    }
+
+    async countEntities<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<number> {
+        return this.withTransaction((delegate) => delegate.countEntities(props));
+    }
+
+    async executeSql(sqlText: string, options?: { database?: string, role?: string }): Promise<Record<string, unknown>[]> {
+        return this.delegate.executeSql(sqlText, options);
+    }
+
+    async fetchAvailableDatabases(): Promise<string[]> {
+        return this.delegate.fetchAvailableDatabases();
+    }
+
+    async fetchAvailableRoles(): Promise<string[]> {
+        return this.delegate.fetchAvailableRoles();
+    }
+
+    async fetchCurrentDatabase(): Promise<string | undefined> {
+        return this.delegate.fetchCurrentDatabase();
+    }
+
+    async fetchUnmappedTables(mappedPaths?: string[]): Promise<string[]> {
+        return this.delegate.fetchUnmappedTables(mappedPaths);
+    }
+
+    async fetchTableColumns(tableName: string) {
+        return this.delegate.fetchTableColumns(tableName);
     }
 }
