@@ -1,0 +1,193 @@
+---
+slug: docs/self/migrating_from_v3_1_to_v3_2
+title: Migrating from v3.1 to v3.2
+sidebar_label: Migrating from v3.1 to v3.2
+description: Upgrade your self-hosted FireCMS project to v3.2 — i18n provider, editor rewrite, and new features.
+---
+
+This migration guide applies to **self-hosted versions** of FireCMS, including both **Community** and **PRO** editions.
+FireCMS v3.2 introduces internationalization support, a completely rewritten rich text editor, and several
+quality-of-life improvements.
+
+## Before You Start
+
+- Ensure you are currently on **FireCMS v3.1.x**
+- Back up your project or commit your current state to version control
+- Ensure you are using **Node.js 18+**
+
+## Update FireCMS Packages
+
+Update all `@firecms/*` packages to version **3.2**:
+
+```bash
+npm i @firecms/core@3.2.0 @firecms/ui@3.2.0 @firecms/firebase@3.2.0 @firecms/collection_editor@3.2.0 @firecms/collection_editor_firebase@3.2.0 @firecms/data_enhancement@3.2.0 @firecms/data_export@3.2.0 @firecms/data_import@3.2.0 @firecms/schema_inference@3.2.0 @firecms/user_management@3.2.0
+```
+
+Make sure to include **all** `@firecms/*` packages listed in your `package.json`. Mixing v3.1 and v3.2 packages will cause issues.
+
+---
+
+## Breaking Changes
+
+### 1. Wrap Your App with `FireCMSi18nProvider`
+
+FireCMS v3.2 introduces full internationalization support using **i18next**. All internal UI strings now go through
+a translation layer, which requires a new provider component wrapping your app.
+
+:::caution
+This is a **required change**. Without the `FireCMSi18nProvider`, your app will crash at runtime because internal
+components rely on the translation context.
+:::
+
+Import `FireCMSi18nProvider` from `@firecms/core` and wrap your component tree with it. It should be placed
+**outside** all other FireCMS providers:
+
+**Before (v3.1):**
+```tsx
+return (
+    <SnackbarProvider>
+        <ModeControllerProvider value={modeController}>
+            <FireCMS
+                navigationController={navigationController}
+                authController={authController}
+                // ...
+            >
+                {({ context, loading }) => {
+                    // ...
+                }}
+            </FireCMS>
+        </ModeControllerProvider>
+    </SnackbarProvider>
+);
+```
+
+**After (v3.2):**
+```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
+
+return (
+    <FireCMSi18nProvider>
+        <SnackbarProvider>
+            <ModeControllerProvider value={modeController}>
+                <FireCMS
+                    navigationController={navigationController}
+                    authController={authController}
+                    // ...
+                >
+                    {({ context, loading }) => {
+                        // ...
+                    }}
+                </FireCMS>
+            </ModeControllerProvider>
+        </SnackbarProvider>
+    </FireCMSi18nProvider>
+);
+```
+
+#### Setting a Default Locale
+
+By default, FireCMS uses English (`en`). You can set a different default locale:
+
+```tsx
+<FireCMSi18nProvider locale="es">
+```
+
+Supported languages out of the box: **English** (`en`), **Spanish** (`es`), **German** (`de`), **French** (`fr`),
+**Italian** (`it`), **Hindi** (`hi`), and **Portuguese** (`pt`).
+
+#### Overriding Translation Strings
+
+You can override any UI string with the `translations` prop:
+
+```tsx
+<FireCMSi18nProvider
+    locale="en"
+    translations={{
+        en: { save: "Publish", discard: "Revert" },
+        es: { save: "Publicar", discard: "Revertir" }
+    }}
+>
+```
+
+The user's language preference is automatically persisted in `localStorage`.
+
+#### Language Selector
+
+A language toggle is now included in the default `AppBar`. Users can switch languages at runtime without any
+additional configuration.
+
+### 2. Remove `@firecms/editor` Dependency
+
+The `@firecms/editor` package has been **removed**. All editor components have been consolidated into
+`@firecms/core`. If you have `@firecms/editor` in your `package.json`, remove it:
+
+```bash
+npm uninstall @firecms/editor
+```
+
+If you were importing anything from `@firecms/editor`, update your imports to use `@firecms/core` instead.
+
+### 3. Install New Peer Dependencies
+
+`@firecms/core` now depends on `i18next` and `react-i18next`. If you're using **npm** with a flat `node_modules`
+layout, these will be installed automatically. If you're using a strict package manager like **pnpm**, you may need
+to install them explicitly:
+
+```bash
+npm i i18next react-i18next
+```
+
+---
+
+## New Features
+
+### Rewritten Rich Text Editor
+
+The markdown/rich text editor has been completely rewritten with a new ProseMirror-based architecture:
+
+- **Table support** — insert and edit tables directly in the editor, with a bubble UI for managing rows/columns
+- **Image bubble** — click on images to edit alt text and title attributes inline
+- **Markdown editing mode** — toggle between rich text and raw markdown editing
+- **Improved slash commands** — better HTML parsing, fixed event bubbling issues
+- **Better paste behavior** — improved handling of pasted content, images, and links
+
+### Storage Upload Progress
+
+File uploads now display **progress indicators**, giving users visual feedback during uploads.
+
+### Collection Data Error Banner
+
+A new dedicated error banner displays collection data loading errors with **Firestore index suggestions** — no more 
+digging through the console to find missing index links.
+
+### URL-Synced Filters and Sorting
+
+Table filters and sorting state are now **synchronized with URL parameters**, making it possible to bookmark
+or share specific filtered views.
+
+---
+
+## Bug Fixes
+
+- Fixed Firestore transaction `set` operation to **overwrite** documents instead of merging
+- Fixed filter sync issues in collections
+- Preserved string type when encoding filter values in URL
+- Improved date field robustness
+- Fixed markdown image and link serialization with special characters
+
+---
+
+## Troubleshooting
+
+### `Cannot find module 'i18next'`
+Install the required peer dependencies:
+```bash
+npm i i18next react-i18next
+```
+
+### Editor components not found after removing `@firecms/editor`
+Update your imports to use `@firecms/core` instead of `@firecms/editor`.
+
+### Build errors after updating packages
+Ensure **all** `@firecms/*` packages are on the same version. Mixing v3.1 and v3.2 packages will cause type
+mismatches and runtime errors.

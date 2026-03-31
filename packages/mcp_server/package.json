@@ -18,7 +18,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@firecms/cli": "^3.2.0",
+    "@firecms/cli": "3.2.0",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "axios": "^1.7.0",
     "zod": "^3.24.0"

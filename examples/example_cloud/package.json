@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@firebase/auth": "*",
-    "@firecms/cloud": "^3.2.0",
+    "@firecms/cloud": "3.2.0",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "firebase": "^12.9.0",
     "react": "^19.2.3",

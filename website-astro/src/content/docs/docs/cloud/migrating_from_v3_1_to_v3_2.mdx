@@ -1,0 +1,81 @@
+---
+slug: docs/cloud/migrating_from_v3_1_to_v3_2
+title: Migrating from v3.1 to v3.2 (Cloud)
+sidebar_label: Migrating from v3.1 to v3.2
+description: Upgrade your FireCMS Cloud custom code to v3.2 — i18n support, rewritten editor, and new features.
+---
+
+This migration guide applies to **FireCMS Cloud** projects that deploy custom code using the CLI
+(`firecms deploy`).
+
+## Do I Need to Do Anything?
+
+**All FireCMS Cloud users get every new feature automatically** — the rewritten editor, i18n support,
+upload progress indicators, and more are already live in your project.
+
+If you deploy **custom code** via the CLI (`firecms deploy`), you need to update your local
+dependencies to v3.2. The main change is wrapping your app with the new `FireCMSi18nProvider`.
+
+---
+
+## Required Changes
+
+### Update FireCMS Packages
+
+Update all `@firecms/*` packages in your `package.json` to version **3.2**:
+
+```bash
+npm i @firecms/cloud@3.2.0
+```
+
+### Wrap Your App with `FireCMSi18nProvider`
+
+FireCMS v3.2 requires the new `FireCMSi18nProvider` to be wrapping your component tree.
+If you're using `FireCMSCloudApp`, this is handled automatically — **no changes needed**.
+
+If you have a custom app setup, import and add the provider:
+
+```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
+
+// Wrap your component tree
+<FireCMSi18nProvider>
+    {/* your existing app */}
+</FireCMSi18nProvider>
+```
+
+### Remove `@firecms/editor` (if used)
+
+The `@firecms/editor` package has been merged into `@firecms/core`. If you have it in your
+dependencies, remove it:
+
+```bash
+npm uninstall @firecms/editor
+```
+
+Update any imports from `@firecms/editor` to `@firecms/core`.
+
+---
+
+## What's New in v3.2
+
+These features are available in your FireCMS Cloud project:
+
+- **Internationalization** — UI available in English, Spanish, German, French, Italian, Hindi, and Portuguese, with a language toggle in the app bar
+- **Rewritten rich text editor** — table support, image bubble for alt/title editing, markdown mode toggle, improved slash commands
+- **Upload progress indicators** — visual progress bars during file uploads
+- **Collection data error banner** — dedicated error display with Firestore index suggestions
+- **URL-synced filters** — table filters and sorting are now persisted in the URL
+
+Check the [changelog](/docs/changelog) for the complete list of changes.
+
+---
+
+## Troubleshooting
+
+### Build errors after updating packages
+Ensure **all** `@firecms/*` packages are on the same version. Mixing v3.1 and v3.2 packages will
+cause type mismatches and runtime errors.
+
+### Editor imports not found
+If you were importing from `@firecms/editor`, update your imports to use `@firecms/core` instead.
