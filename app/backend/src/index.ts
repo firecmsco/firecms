@@ -19,7 +19,7 @@ dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 const app = express();
 const server = createServer(app);
 
-// PostgreSQL connection (required, default datasource)
+// PostgreSQL connection (required, default driver)
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
     throw new Error("DATABASE_URL environment variable is not set");
@@ -39,12 +39,12 @@ async function startServer() {
     }
 
     // ================================================================
-    // Multi-Datasource Configuration
+    // Multi-Driver Configuration
     // ================================================================
 
-    // Build datasource configuration
-    // Default datasource is always PostgreSQL (required for auth)
-    const datasources: Record<string, any> = {
+    // Build driver configuration
+    // Default driver is always PostgreSQL (required for auth)
+    const drivers: Record<string, any> = {
         "(default)": {
             connection: db,
             schema: { tables, enums, relations },
@@ -58,8 +58,8 @@ async function startServer() {
         collectionsDir: path.resolve(__dirname, "../../shared/collections"),
         server,
         app, // Express app for mounting auth/storage routes
-        // Multi-datasource configuration
-        datasource: datasources,
+        // Multi-driver configuration
+        driver: drivers,
         auth: {
             jwtSecret,
             accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1h",
@@ -114,13 +114,13 @@ async function startServer() {
     }
 
     app.get("/health", (req, res) => {
-        const datasourceList = Object.keys(datasources).join(", ");
+        const driverList = Object.keys(drivers).join(", ");
         res.json({
             status: "ok",
             timestamp: new Date().toISOString(),
             environment: process.env.NODE_ENV,
             authEnabled: true,
-            datasources: datasourceList
+            drivers: driverList
         });
     });
 
@@ -146,7 +146,7 @@ async function startServer() {
         console.log(`   • Health Check: http://localhost:${PORT}/health`);
         console.log("🔐 JWT Authentication enabled");
         console.log("📡 WebSocket server ready for all operations");
-        console.log(`🗄️ Datasources: ${Object.keys(datasources).join(", ")}`);
+        console.log(`🗄️ Drivers: ${Object.keys(drivers).join(", ")}`);
         console.log("🔄 Real-time sync enabled via WebSockets");
     });
 }

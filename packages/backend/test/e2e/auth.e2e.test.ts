@@ -7,8 +7,8 @@ jest.mock("graphql-http/lib/use/express", () => ({
     createHandler: jest.fn().mockImplementation(({ context }) => {
         return (req: any, res: any) => {
             const ctx = context(req);
-            // Simulate a simple resolution that just accesses the dataSource to trigger spies
-            return ctx.dataSource.fetchCollection({ path: "secrets" }).then(() => {
+            // Simulate a simple resolution that just accesses the driver to trigger spies
+            return ctx.driver.fetchCollection({ path: "secrets" }).then(() => {
                 res.json({ data: { fetch: true } });
             });
         };
@@ -18,8 +18,8 @@ jest.mock("graphql-http/lib/use/express", () => ({
 jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next()));
 
 describe("Auth and Context Request Scope E2E Tests", () => {
-    let mockDefaultDataSource: any;
-    let mockScopedDataSource: any;
+    let mockDefaultDataDriver: any;
+    let mockScopedDataDriver: any;
     let mockCollections: any[];
     let mockWithAuth: jest.Mock;
     let server: RebaseApiServer;
@@ -37,14 +37,14 @@ describe("Auth and Context Request Scope E2E Tests", () => {
             }
         ];
 
-        mockScopedDataSource = {
+        mockScopedDataDriver = {
             fetchCollection: jest.fn().mockResolvedValue([{ id: "scoped-1" }]),
             fetchEntity: jest.fn().mockResolvedValue({ id: "scoped-1" }),
         };
 
-        mockWithAuth = jest.fn().mockResolvedValue(mockScopedDataSource);
+        mockWithAuth = jest.fn().mockResolvedValue(mockScopedDataDriver);
 
-        mockDefaultDataSource = {
+        mockDefaultDataDriver = {
             key: "mock-data-source",
             withAuth: mockWithAuth,
             fetchCollection: jest.fn().mockResolvedValue([{ id: "default-1" }]),
@@ -53,11 +53,11 @@ describe("Auth and Context Request Scope E2E Tests", () => {
         };
     });
 
-    it("REST API: should route requests explicitly to the authenticated datasource if auth yields a User", async () => {
+    it("REST API: should route requests explicitly to the authenticated driver if auth yields a User", async () => {
         const mockUser: User = { uid: "user-abc" };
 
         server = await RebaseApiServer.create({
-            dataSource: mockDefaultDataSource as any,
+            driver: mockDefaultDataDriver as any,
             collections: mockCollections,
             enableREST: true,
             auth: {
@@ -73,14 +73,14 @@ describe("Auth and Context Request Scope E2E Tests", () => {
         expect(mockWithAuth).toHaveBeenCalledTimes(1);
         expect(mockWithAuth).toHaveBeenCalledWith(expect.objectContaining({ uid: "user-abc" }));
 
-        expect(mockScopedDataSource.fetchCollection).toHaveBeenCalledTimes(1);
-        expect(mockDefaultDataSource.fetchCollection).not.toHaveBeenCalled();
+        expect(mockScopedDataDriver.fetchCollection).toHaveBeenCalledTimes(1);
+        expect(mockDefaultDataDriver.fetchCollection).not.toHaveBeenCalled();
         expect(res.body.data[0].id).toBe("scoped-1");
     });
 
-    it("REST API: should fallback to global datasource if auth is completely disabled", async () => {
+    it("REST API: should fallback to global driver if auth is completely disabled", async () => {
         server = await RebaseApiServer.create({
-            dataSource: mockDefaultDataSource as any,
+            driver: mockDefaultDataDriver as any,
             collections: mockCollections,
             enableREST: true,
             auth: {
@@ -92,8 +92,8 @@ describe("Auth and Context Request Scope E2E Tests", () => {
         const res = await request(app).get("/api/secrets");
 
         expect(mockWithAuth).not.toHaveBeenCalled();
-        expect(mockScopedDataSource.fetchCollection).not.toHaveBeenCalled();
-        expect(mockDefaultDataSource.fetchCollection).toHaveBeenCalledTimes(1);
+        expect(mockScopedDataDriver.fetchCollection).not.toHaveBeenCalled();
+        expect(mockDefaultDataDriver.fetchCollection).toHaveBeenCalledTimes(1);
         expect(res.body.data[0].id).toBe("default-1");
     });
 
@@ -101,7 +101,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
         const mockUser: User = { uid: "graphql-user" };
 
         server = await RebaseApiServer.create({
-            dataSource: mockDefaultDataSource as any,
+            driver: mockDefaultDataDriver as any,
             collections: mockCollections,
             enableGraphQL: true,
             enableREST: false,
@@ -112,7 +112,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
         });
         app = server.getApp();
 
-        // The mocked graphQL handler will forcibly access ctx.dataSource.fetchCollection() internally
+        // The mocked graphQL handler will forcibly access ctx.driver.fetchCollection() internally
         const res = await request(app)
             .post("/api/graphql")
             .send({ query: "query { secrets { id } }" });
@@ -120,7 +120,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
         expect(res.status).toBe(200);
         expect(mockWithAuth).toHaveBeenCalledTimes(1);
         expect(mockWithAuth).toHaveBeenCalledWith(expect.objectContaining({ uid: "graphql-user" }));
-        expect(mockScopedDataSource.fetchCollection).toHaveBeenCalledTimes(1);
-        expect(mockDefaultDataSource.fetchCollection).not.toHaveBeenCalled();
+        expect(mockScopedDataDriver.fetchCollection).toHaveBeenCalledTimes(1);
+        expect(mockDefaultDataDriver.fetchCollection).not.toHaveBeenCalled();
     });
 });

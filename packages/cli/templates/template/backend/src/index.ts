@@ -40,7 +40,7 @@ async function startServer() {
         collectionsDir: path.resolve(__dirname, "../../shared/collections"),
         server,
         app,
-        datasource: {
+        driver: {
             "(default)": {
                 connection: db,
                 schema: { tables, enums, relations },

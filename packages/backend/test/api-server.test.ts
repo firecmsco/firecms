@@ -1,6 +1,6 @@
 import express, { Express, Router } from "express";
 import { RebaseApiServer } from "../src/api/server";
-import { PostgresDataSource } from "../src/services/dataSource";
+import { PostgresDataDriver } from "../src/services/driver";
 
 // Mock dependencies
 jest.mock("graphql-http/lib/use/express", () => ({
@@ -11,7 +11,7 @@ jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next())
 
 import request from "supertest";
 describe("RebaseApiServer", () => {
-    let mockDataSource: jest.Mocked<PostgresDataSource>;
+    let mockDataDriver: jest.Mocked<PostgresDataDriver>;
     let mockCollections: any[];
 
     beforeEach(async () => {
@@ -41,7 +41,7 @@ describe("RebaseApiServer", () => {
             }
         ];
 
-        mockDataSource = {
+        mockDataDriver = {
             key: "mock-data-source",
             fetchCollection: jest.fn().mockResolvedValue([]),
             fetchEntity: jest.fn().mockResolvedValue(null),
@@ -54,7 +54,7 @@ describe("RebaseApiServer", () => {
     describe("constructor", () => {
         it("should initialize with required configuration", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
 
@@ -65,7 +65,7 @@ describe("RebaseApiServer", () => {
 
         it("should accept optional CORS configuration", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections,
                 cors: {
                     origin: "https://example.com",
@@ -80,7 +80,7 @@ describe("RebaseApiServer", () => {
     describe("getRouter", () => {
         it("should return an Express router", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
 
@@ -93,7 +93,7 @@ describe("RebaseApiServer", () => {
     describe("getApp", () => {
         it("should return an Express app", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
 
@@ -106,7 +106,7 @@ describe("RebaseApiServer", () => {
     describe("generateOpenApiSpec", () => {
         it("should generate OpenAPI specification", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
 
@@ -120,7 +120,7 @@ describe("RebaseApiServer", () => {
 
         it("should include paths for each collection", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
 
@@ -133,7 +133,7 @@ describe("RebaseApiServer", () => {
 
         it("should include CRUD operations", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
 
@@ -151,7 +151,7 @@ describe("RebaseApiServer", () => {
 
         it("should use default title and version", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
 
@@ -168,17 +168,17 @@ describe("RebaseApiServer", () => {
 
         beforeEach(async () => {
             server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
         });
 
         it("should have route for listing entities", async () => {
-            mockDataSource.fetchCollection.mockResolvedValue([
+            mockDataDriver.fetchCollection.mockResolvedValue([
                 { id: "1", values: { name: "Product 1" }, path: "products" }
             ]);
 
-            const entities = await mockDataSource.fetchCollection({
+            const entities = await mockDataDriver.fetchCollection({
                 path: "products"
             });
 
@@ -187,13 +187,13 @@ describe("RebaseApiServer", () => {
         });
 
         it("should have route for getting single entity", async () => {
-            mockDataSource.fetchEntity.mockResolvedValue({
+            mockDataDriver.fetchEntity.mockResolvedValue({
                 id: "1",
                 values: { name: "Product 1", price: 99 },
                 path: "products"
             });
 
-            const entity = await mockDataSource.fetchEntity({
+            const entity = await mockDataDriver.fetchEntity({
                 path: "products",
                 entityId: "1"
             });
@@ -203,13 +203,13 @@ describe("RebaseApiServer", () => {
         });
 
         it("should have route for creating entity", async () => {
-            mockDataSource.saveEntity.mockResolvedValue({
+            mockDataDriver.saveEntity.mockResolvedValue({
                 id: "new-id",
                 values: { name: "New Product", price: 50 },
                 path: "products"
             });
 
-            const entity = await mockDataSource.saveEntity({
+            const entity = await mockDataDriver.saveEntity({
                 path: "products",
                 values: { name: "New Product", price: 50 }
             });
@@ -218,13 +218,13 @@ describe("RebaseApiServer", () => {
         });
 
         it("should have route for updating entity", async () => {
-            mockDataSource.saveEntity.mockResolvedValue({
+            mockDataDriver.saveEntity.mockResolvedValue({
                 id: "1",
                 values: { name: "Updated Product", price: 150 },
                 path: "products"
             });
 
-            const entity = await mockDataSource.saveEntity({
+            const entity = await mockDataDriver.saveEntity({
                 path: "products",
                 entityId: "1",
                 values: { name: "Updated Product", price: 150 }
@@ -234,12 +234,12 @@ describe("RebaseApiServer", () => {
         });
 
         it("should have route for deleting entity", async () => {
-            await mockDataSource.deleteEntity({
+            await mockDataDriver.deleteEntity({
                 path: "products",
                 entityId: "1"
             });
 
-            expect(mockDataSource.deleteEntity).toHaveBeenCalledWith({
+            expect(mockDataDriver.deleteEntity).toHaveBeenCalledWith({
                 path: "products",
                 entityId: "1"
             });
@@ -249,7 +249,7 @@ describe("RebaseApiServer", () => {
     describe("GraphQL Endpoint", () => {
         it("should setup GraphQL handler", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
 
@@ -271,7 +271,7 @@ describe("RebaseApiServer", () => {
             const cors = require("cors");
 
             await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections,
                 cors: { origin: "*" }
             });
@@ -281,7 +281,7 @@ describe("RebaseApiServer", () => {
 
         it("should apply JSON parsing middleware", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
 
@@ -294,7 +294,7 @@ describe("RebaseApiServer", () => {
             const token = generateAccessToken("test-user-id", ["admin"]);
 
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections,
                 auth: {
                     enabled: true
@@ -312,7 +312,7 @@ describe("RebaseApiServer", () => {
 
         it("should reject requests when requireAuth is true and token is invalid or missing", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections,
                 auth: {
                     enabled: true,
@@ -337,7 +337,7 @@ describe("RebaseApiServer", () => {
             const customValidator = jest.fn().mockResolvedValue({ uid: "custom-user" });
 
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections,
                 auth: {
                     enabled: true,
@@ -356,7 +356,7 @@ describe("RebaseApiServer", () => {
     describe("listen", () => {
         it("should have listen method for standalone mode", async () => {
             const server = await RebaseApiServer.create({
-                dataSource: mockDataSource,
+                driver: mockDataDriver,
                 collections: mockCollections
             });
 

@@ -8,7 +8,7 @@ import {
     Property,
     useCustomizationController,
     useCMSUrlController,
-    useDataSource,
+    useRebaseContext,
     useAuthController,
     User,
     useSnackbarController
@@ -85,21 +85,21 @@ export const ConfigControllerProvider = React.memo(
     }: ConfigControllerProviderProps & { children?: React.ReactNode }) {
 
         // Internal: fetch unmapped tables and table columns from the data source
-        const dataSource = useDataSource();
+        const { databaseAdmin } = useRebaseContext();
         const authController = useAuthController();
         const [unmappedTables, setUnmappedTables] = useState<string[]>([]);
 
         useEffect(() => {
-            if (!dataSource.fetchUnmappedTables || authController.initialLoading || !authController.user) return;
+            if (!databaseAdmin?.fetchUnmappedTables || authController.initialLoading || !authController.user) return;
             const existingPaths = (collectionConfigController.collections ?? []).map(c => c.dbPath ?? c.slug ?? "").filter(Boolean);
-            dataSource.fetchUnmappedTables(existingPaths)
+            databaseAdmin.fetchUnmappedTables(existingPaths)
                 .then((tables: string[]) => setUnmappedTables(tables))
                 .catch((e: unknown) => console.warn("Could not fetch unmapped tables:", e));
-        }, [dataSource, authController.initialLoading, authController.user, collectionConfigController.collections]);
+        }, [databaseAdmin, authController.initialLoading, authController.user, collectionConfigController.collections]);
 
         const onFetchTableColumns = useCallback(async (tableName: string): Promise<TableColumnInfo[]> => {
-            return dataSource.fetchTableColumns?.(tableName) ?? [];
-        }, [dataSource]);
+            return databaseAdmin?.fetchTableColumns?.(tableName) ?? [];
+        }, [databaseAdmin]);
 
         const urlController = useCMSUrlController();
         const navigate = useNavigate();

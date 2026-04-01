@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { EntityCollection } from "@rebasepro/types";
-import { useCustomizationController, useDataSource, useRebaseContext } from "../../hooks";
+import { useCustomizationController, useRebaseContext } from "../../hooks";
 
 export interface UseTableSearchHelperParams<M extends Record<string, any>> {
     collection: EntityCollection<M>;
@@ -17,7 +17,6 @@ export function useTableSearchHelper<M extends Record<string, any>>({
 
     const context = useRebaseContext();
     const customizationController = useCustomizationController();
-    const dataSource = useDataSource();
 
     const [textSearchLoading, setTextSearchLoading] = useState<boolean>(false);
     const [textSearchInitialised, setTextSearchInitialised] = useState<boolean>(false);
@@ -36,7 +35,7 @@ export function useTableSearchHelper<M extends Record<string, any>>({
         return p.collectionView?.blockSearch?.(props);
     });
 
-    const addTextSearchClickListener = Boolean(dataSource?.initTextSearch) || customizationController.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
+    const addTextSearchClickListener = customizationController.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
 
     if (addTextSearchClickListener) {
 
@@ -44,9 +43,6 @@ export function useTableSearchHelper<M extends Record<string, any>>({
             ? () => {
                 setTextSearchLoading(true);
                 const promises: Promise<boolean>[] = [];
-                if (dataSource.initTextSearch && dataSource.needsInitTextSearch && !searchBlocked) {
-                    promises.push(dataSource.initTextSearch(props));
-                }
                 if (searchBlocked) {
                     customizationController.plugins?.forEach(p => {
                         if (p.collectionView?.onTextSearchClick)

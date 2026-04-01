@@ -9,7 +9,7 @@ import {
     EntityCollectionsBuilder,
     CMSViewsBuilder,
     NavigationStateController,
-    DataSource,
+    RebaseData,
     CollectionRegistryController,
     CMSUrlController,
     NavigationGroupMapping,
@@ -28,7 +28,7 @@ export type BuildNavigationStateProps<EC extends EntityCollection, USER extends 
     collections?: EC[] | EntityCollectionsBuilder<EC>;
     views?: CMSView[] | CMSViewsBuilder;
     adminViews?: CMSView[] | CMSViewsBuilder;
-    dataSource: DataSource;
+    data: RebaseData;
     plugins?: RebasePlugin[];
     navigationGroupMappings?: NavigationGroupMapping[];
     disabled?: boolean;
@@ -61,7 +61,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         adminViews: adminViewsProp,
         viewsOrder,
         plugins,
-        dataSource,
+        data,
         disabled,
         navigationGroupMappings,
         collectionRegistryController,
@@ -80,7 +80,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
     } = useResolvedCollections({
         authController,
         collections: collectionsProp,
-        dataSource,
+        data,
         plugins,
         disabled,
         collectionRegistryController
@@ -97,7 +97,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         authController,
         views: viewsProp,
         adminViews: adminViewsProp,
-        dataSource,
+        data,
         plugins,
         adminMode,
         effectiveRoleController,

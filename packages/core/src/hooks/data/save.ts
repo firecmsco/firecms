@@ -1,5 +1,5 @@
-import { DataSource, Entity, EntityCollection, EntityValues, RebaseContext, SaveEntityProps } from "@rebasepro/types";
-import { useDataSource } from "./useDataSource";
+import { DataDriver, Entity, EntityCollection, EntityValues, RebaseContext, SaveEntityProps } from "@rebasepro/types";
+import { RebaseData } from "@rebasepro/types";
 
 /**
  * @group Hooks and utilities
@@ -12,14 +12,10 @@ export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
     }
 
 /**
- * This function is in charge of saving an entity to the datasource.
+ * This function is in charge of saving an entity.
  * It will run all the save callbacks specified in the collection.
  * It is also possible to attach callbacks on save success or error, and callback
  * errors.
- *
- * If you just want to save the data without running the `afterSave`,
- * `afterSaveError` and `beforeSave` callbacks, you can use the `saveEntity` method
- * in the datasource ({@link useDataSource}).
  *
  * @param collection
  * @param path
@@ -28,11 +24,10 @@ export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
  * @param values
  * @param previousValues
  * @param status
- * @param dataSource
+ * @param data
  * @param context
  * @param afterSave
  * @param afterSaveError
- * @see useDataSource
  * @group Hooks and utilities
  */
 export async function saveEntityWithCallbacks<M extends Record<string, any>>({
@@ -42,13 +37,13 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>>({
     values,
     previousValues,
     status,
-    dataSource,
+    data,
     context,
     afterSave,
     afterSaveError
 }: SaveEntityWithCallbacksProps<M> & {
     collection: EntityCollection,
-    dataSource: DataSource,
+    data: RebaseData,
     context: RebaseContext,
 }
 ): Promise<Entity<M>> {
@@ -57,14 +52,16 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>>({
         throw new Error("Entity id must be specified when updating an existing entity");
     }
 
-    return dataSource.saveEntity({
-        collection,
-        path,
-        entityId,
-        values,
-        previousValues,
-        status
-    }).then((entity) => {
+    const accessor = data.collection(path);
+
+    let savePromise: Promise<Entity<M>>;
+    if (status === "new") {
+        savePromise = accessor.create(values, entityId);
+    } else {
+        savePromise = accessor.update(entityId!, values);
+    }
+
+    return savePromise.then((entity) => {
         if (afterSave)
             afterSave(entity);
         return entity as Entity<M>;

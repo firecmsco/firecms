@@ -8,7 +8,7 @@ import {
     getDefaultValuesFor,
     useAuthController,
     useCustomizationController,
-    useDataSource,
+    useData,
     useRebaseContext,
     useCMSUrlController,
     User
@@ -54,7 +54,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
 
     const context = useRebaseContext<USER>() as any;
-    const dataSource = useDataSource();
+    const dataClient = useData();
     const cmsUrlController = useCMSUrlController();
 
     const path = cmsUrlController.resolveDatabasePathsFrom(inputPath);
@@ -122,11 +122,9 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
             collection: collection.slug
         });
         setDataLoading(true);
-        dataSource.fetchCollection<M>({
-            path: path,
-            collection
-        })
-            .then(async (data) => {
+        dataClient.collection(path).find({})
+            .then(async (res) => {
+                const data = res.data;
                 setDataLoadingError(undefined);
                 const additionalData = await fetchAdditionalFields(data);
                 const additionalHeaders = [
@@ -164,7 +162,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
             })
             .finally(() => setDataLoading(false));
 
-    }, [onAnalyticsEvent, dataSource, path, fetchAdditionalFields, includeUndefinedValues, flattenArrays, exportType, dateExportType]);
+    }, [onAnalyticsEvent, dataClient, path, fetchAdditionalFields, includeUndefinedValues, flattenArrays, exportType, dateExportType]);
 
     const onOkClicked = useCallback(() => {
         doDownload(collection, exportConfig);

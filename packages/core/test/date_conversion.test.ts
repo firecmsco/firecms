@@ -175,7 +175,7 @@ describe("Date-to-String Conversion Bug", () => {
                 updated_on: createAutoDateProperty("on_update"),
             };
 
-            // Step 2: Apply date auto values (simulates useBuildDataSource)
+            // Step 2: Apply date auto values (simulates useBuildDataDriver)
             const timestampNow = new Date();
             const valuesWithDates = updateDateAutoValues({
                 inputValues: formValues,

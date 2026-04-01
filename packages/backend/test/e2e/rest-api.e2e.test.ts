@@ -9,7 +9,7 @@ jest.mock("graphql-http/lib/use/express", () => ({
 jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next()));
 
 describe("REST API E2E Tests", () => {
-    let mockDataSource: any;
+    let mockDataDriver: any;
     let mockCollections: any[];
     let server: RebaseApiServer;
     let app: any;
@@ -35,7 +35,7 @@ describe("REST API E2E Tests", () => {
             }
         ];
 
-        mockDataSource = {
+        mockDataDriver = {
             key: "mock-data-source",
             fetchCollection: jest.fn().mockResolvedValue([]),
             fetchEntity: jest.fn().mockResolvedValue(null),
@@ -45,7 +45,7 @@ describe("REST API E2E Tests", () => {
         };
 
         server = await RebaseApiServer.create({
-            dataSource: mockDataSource as any,
+            driver: mockDataDriver as any,
             collections: mockCollections,
             enableGraphQL: false,
             enableREST: true,
@@ -57,7 +57,7 @@ describe("REST API E2E Tests", () => {
 
     describe("CRUD Operations", () => {
         it("should create an entity", async () => {
-            mockDataSource.saveEntity.mockResolvedValueOnce({
+            mockDataDriver.saveEntity.mockResolvedValueOnce({
                 id: "123",
                 values: { name: "Test Product", price: 99 },
                 path: "products"
@@ -69,7 +69,7 @@ describe("REST API E2E Tests", () => {
 
             expect(res.status).toBe(201);
             expect(res.body.id).toBe("123");
-            expect(mockDataSource.saveEntity).toHaveBeenCalledWith(
+            expect(mockDataDriver.saveEntity).toHaveBeenCalledWith(
                 expect.objectContaining({
                     values: { name: "Test Product", price: 99 }
                 })
@@ -77,7 +77,7 @@ describe("REST API E2E Tests", () => {
         });
 
         it("should retrieve an entity and verify PropertyCallbacks were built on the collection", async () => {
-            mockDataSource.fetchEntity.mockResolvedValueOnce({
+            mockDataDriver.fetchEntity.mockResolvedValueOnce({
                 id: "123",
                 values: { name: "Test Product", price: 99 },
                 path: "products"
@@ -92,12 +92,12 @@ describe("REST API E2E Tests", () => {
 
         it("should update an entity", async () => {
             // Must fetch before update
-            mockDataSource.fetchEntity.mockResolvedValueOnce({
+            mockDataDriver.fetchEntity.mockResolvedValueOnce({
                 id: "123",
                 values: { name: "Test", price: 50 },
                 path: "products"
             });
-            mockDataSource.saveEntity.mockResolvedValueOnce({
+            mockDataDriver.saveEntity.mockResolvedValueOnce({
                 id: "123",
                 values: { name: "Test", price: 60 },
                 path: "products"
@@ -109,7 +109,7 @@ describe("REST API E2E Tests", () => {
 
             expect(res.status).toBe(200);
             expect(res.body.price).toBe(60);
-            expect(mockDataSource.saveEntity).toHaveBeenCalledWith(
+            expect(mockDataDriver.saveEntity).toHaveBeenCalledWith(
                 expect.objectContaining({
                     entityId: "123",
                     values: { price: 60 } // It merges in the backend normally, but we sent 60
@@ -118,7 +118,7 @@ describe("REST API E2E Tests", () => {
         });
 
         it("should delete an entity", async () => {
-            mockDataSource.fetchEntity.mockResolvedValueOnce({
+            mockDataDriver.fetchEntity.mockResolvedValueOnce({
                 id: "123",
                 values: { name: "Test Product" },
                 path: "products"
@@ -127,13 +127,13 @@ describe("REST API E2E Tests", () => {
             const res = await request(app).delete("/api/products/123");
 
             expect(res.status).toBe(204);
-            expect(mockDataSource.deleteEntity).toHaveBeenCalled();
+            expect(mockDataDriver.deleteEntity).toHaveBeenCalled();
         });
     });
 
     describe("Error Handling", () => {
         it("should return 404 when getting a non-existent entity", async () => {
-            mockDataSource.fetchEntity.mockResolvedValueOnce(null);
+            mockDataDriver.fetchEntity.mockResolvedValueOnce(null);
 
             const res = await request(app).get("/api/products/999");
             expect(res.status).toBe(404);
@@ -142,7 +142,7 @@ describe("REST API E2E Tests", () => {
         });
 
         it("should return 404 when updating a non-existent entity", async () => {
-            mockDataSource.fetchEntity.mockResolvedValueOnce(null);
+            mockDataDriver.fetchEntity.mockResolvedValueOnce(null);
 
             const res = await request(app)
                 .put("/api/products/999")
@@ -153,7 +153,7 @@ describe("REST API E2E Tests", () => {
         });
 
         it("should return 404 when deleting a non-existent entity", async () => {
-            mockDataSource.fetchEntity.mockResolvedValueOnce(null);
+            mockDataDriver.fetchEntity.mockResolvedValueOnce(null);
 
             const res = await request(app).delete("/api/products/999");
             expect(res.status).toBe(404);
@@ -161,7 +161,7 @@ describe("REST API E2E Tests", () => {
         });
 
         it("should propagate errors from the data source on creation", async () => {
-            mockDataSource.saveEntity.mockRejectedValueOnce(
+            mockDataDriver.saveEntity.mockRejectedValueOnce(
                 new Error("Database error")
             );
 
@@ -177,7 +177,7 @@ describe("REST API E2E Tests", () => {
     describe("PostgREST-style Filtering", () => {
         it("should parse eq operator", async () => {
             await request(app).get("/api/products?name=eq.Apple");
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     filter: { name: ["==", "Apple"] }
                 })
@@ -186,7 +186,7 @@ describe("REST API E2E Tests", () => {
 
         it("should parse implicit eq", async () => {
             await request(app).get("/api/products?name=Apple");
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     filter: { name: ["==", "Apple"] }
                 })
@@ -195,7 +195,7 @@ describe("REST API E2E Tests", () => {
 
         it("should parse implicit eq for numbers", async () => {
             await request(app).get("/api/products?price=10.5");
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     filter: { price: ["==", 10.5] }
                 })
@@ -204,7 +204,7 @@ describe("REST API E2E Tests", () => {
 
         it("should parse gt and lt operators", async () => {
             await request(app).get("/api/products?price=gt.100&price=lt.200");
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     filter: { price: ["<", 200] } // Since keys get overwritten, we might want to check the last one. Wait, query params as arrays? Currently api-generator merges it, actually standard query parsing uses the last value if duplicate keys, or array. We'll just check if it parses one correctly.
                 })
@@ -213,7 +213,7 @@ describe("REST API E2E Tests", () => {
 
         it("should parse gte operator", async () => {
             await request(app).get("/api/products?price=gte.100");
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     filter: { price: [">=", 100] }
                 })
@@ -222,7 +222,7 @@ describe("REST API E2E Tests", () => {
 
         it("should parse in operator with tuple", async () => {
             await request(app).get("/api/products?category=in.(electronics,books)");
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     filter: { category: ["in", ["electronics", "books"]] }
                 })
@@ -231,7 +231,7 @@ describe("REST API E2E Tests", () => {
 
         it("should parse cs (array-contains) operator", async () => {
             await request(app).get("/api/products?tags=cs.featured");
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     filter: { tags: ["array-contains", "featured"] }
                 })
@@ -240,7 +240,7 @@ describe("REST API E2E Tests", () => {
 
         it("should parse boolean strings", async () => {
             await request(app).get("/api/products?inStock=eq.true");
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     filter: { inStock: ["==", true] }
                 })
@@ -251,7 +251,7 @@ describe("REST API E2E Tests", () => {
     describe("Pagination and Sorting", () => {
         it("should parse limit and offset", async () => {
             await request(app).get("/api/products?limit=5&offset=10");
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     limit: 5,
                     startAfter: "10"
@@ -261,7 +261,7 @@ describe("REST API E2E Tests", () => {
 
         it("should parse page parameter", async () => {
             await request(app).get("/api/products?limit=10&page=3"); // page 3 means offset 20
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     limit: 10,
                     startAfter: "20"
@@ -270,11 +270,11 @@ describe("REST API E2E Tests", () => {
         });
 
         it("should return correct pagination metadata", async () => {
-            mockDataSource.fetchCollection.mockResolvedValueOnce([
+            mockDataDriver.fetchCollection.mockResolvedValueOnce([
                 { id: "1", values: {}, path: "products" },
                 { id: "2", values: {}, path: "products" }
             ]);
-            mockDataSource.countEntities = jest.fn().mockResolvedValueOnce(50);
+            mockDataDriver.countEntities = jest.fn().mockResolvedValueOnce(50);
 
             const res = await request(app).get("/api/products?limit=2&offset=10");
             
@@ -287,10 +287,10 @@ describe("REST API E2E Tests", () => {
         });
 
         it("should identify when hasMore is false", async () => {
-            mockDataSource.fetchCollection.mockResolvedValueOnce([
+            mockDataDriver.fetchCollection.mockResolvedValueOnce([
                 { id: "1", values: {}, path: "products" }
             ]);
-            mockDataSource.countEntities = jest.fn().mockResolvedValueOnce(11);
+            mockDataDriver.countEntities = jest.fn().mockResolvedValueOnce(11);
 
             // Offset 10 + 1 item returned = 11, total 11 -> hasMore false
             const res = await request(app).get("/api/products?limit=5&offset=10");
@@ -301,7 +301,7 @@ describe("REST API E2E Tests", () => {
 
         it("should parse orderBy parameter", async () => {
             await request(app).get("/api/products?orderBy=price:desc");
-            expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+            expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
                 expect.objectContaining({
                     orderBy: "price",
                     order: "desc"

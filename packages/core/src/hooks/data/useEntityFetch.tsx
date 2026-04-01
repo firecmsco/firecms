@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Entity, EntityCollection, RebaseContext, User } from "@rebasepro/types";
-import { useDataSource } from "./useDataSource";
+import { useData } from "./useData";
 import { useCMSUrlController } from "../navigation/contexts";
 import { useRebaseContext } from "../useRebaseContext";
 
@@ -28,7 +28,7 @@ const CACHE: Record<string, Entity<any> | undefined> = {};
 
 /**
  * This hook is used to fetch an entity.
- * It gives real time updates if the datasource supports it.
+ * It gives real time updates if the driver supports it.
  * @param path
  * @param collection
  * @param entityId
@@ -45,7 +45,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
         useCache = false
     }: EntityFetchProps<M, USER>): EntityFetchResult<M> {
 
-    const dataSource = useDataSource(collection);
+    const dataClient = useData();
     const navigationController = useCMSUrlController();
 
     const path = navigationController.resolveDatabasePathsFrom(inputPath);
@@ -82,22 +82,12 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
             return () => {
             };
         } else if (entityId && path && collection) {
-            if (dataSource.listenEntity) {
-                return dataSource.listenEntity<M>({
-                    path,
-                    entityId,
-                    databaseId,
-                    collection,
-                    onUpdate: onEntityUpdate,
-                    onError
-                });
+            const accessor = dataClient.collection(path);
+            
+            if (accessor.listenById) {
+                return accessor.listenById(entityId, onEntityUpdate, onError);
             } else {
-                dataSource.fetchEntity<M>({
-                    path,
-                    entityId,
-                    databaseId,
-                    collection
-                })
+                accessor.findById(entityId)
                     .then(onEntityUpdate)
                     .catch(onError);
                 return () => {

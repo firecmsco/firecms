@@ -1,6 +1,6 @@
 
 import { describe, it, expect, beforeEach } from '@jest/globals';
-import { PostgresDataSource } from '../src/services/postgresDataSource';
+import { PostgresDataDriver } from '../src/services/postgresDataDriver';
 import { RealtimeService } from '../src/services/realtimeService';
 import { EntityService } from '../src/db/entityService';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
@@ -18,7 +18,7 @@ const mockDb = {
 } as unknown as NodePgDatabase<any>;
 
 const mockRealtimeService = {
-    registerDataSourceSubscription: jest.fn(),
+    registerDataDriverSubscription: jest.fn(),
     addSubscriptionCallback: jest.fn(),
     removeSubscriptionCallback: jest.fn(),
     subscriptions: new Map(),
@@ -26,12 +26,12 @@ const mockRealtimeService = {
 } as unknown as RealtimeService;
 
 
-describe('PostgresDataSource', () => {
-    let delegate: PostgresDataSource;
+describe('PostgresDataDriver', () => {
+    let delegate: PostgresDataDriver;
 
     beforeEach(() => {
         jest.clearAllMocks();
-        delegate = new PostgresDataSource(mockDb, mockRealtimeService);
+        delegate = new PostgresDataDriver(mockDb, mockRealtimeService);
     });
 
     it('should initialize correctly', () => {
@@ -57,7 +57,7 @@ describe('PostgresDataSource', () => {
                 return await cb(mockTx);
             });
 
-            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+            jest.spyOn(PostgresDataDriver.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
             await authDelegate.fetchCollection({ path: 'test_collection', collection: { slug: 'test', properties: {} } as any });
 
@@ -73,7 +73,7 @@ describe('PostgresDataSource', () => {
                 return await cb(mockTx);
             });
 
-            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+            jest.spyOn(PostgresDataDriver.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
             await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any });
 
@@ -94,7 +94,7 @@ describe('PostgresDataSource', () => {
                 return await cb(mockTx);
             });
 
-            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+            jest.spyOn(PostgresDataDriver.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
             await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any });
 
@@ -114,7 +114,7 @@ describe('PostgresDataSource', () => {
                 return await cb(mockTx);
             });
 
-            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+            jest.spyOn(PostgresDataDriver.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
             await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any });
 
@@ -135,7 +135,7 @@ describe('PostgresDataSource', () => {
             });
 
             // We mock fetchCollection to just return something and not crash
-            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+            jest.spyOn(PostgresDataDriver.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
             await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any });
 
@@ -159,7 +159,7 @@ describe('PostgresDataSource', () => {
                 return cb(mockTx);
             });
 
-            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+            jest.spyOn(PostgresDataDriver.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
             await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any });
 
@@ -174,7 +174,7 @@ describe('PostgresDataSource', () => {
         });
     });
 
-    describe('AuthenticatedPostgresDataSource Transactional Integrity', () => {
+    describe('AuthenticatedPostgresDataDriver Transactional Integrity', () => {
         let authDelegate: any;
 
         beforeEach(async () => {
@@ -191,7 +191,7 @@ describe('PostgresDataSource', () => {
             });
 
             // Let's pretend the operation queues a notification
-            jest.spyOn(PostgresDataSource.prototype, 'saveEntity').mockImplementationOnce(async function(this: any) {
+            jest.spyOn(PostgresDataDriver.prototype, 'saveEntity').mockImplementationOnce(async function(this: any) {
                 this._pendingNotifications?.push({
                     path: 'test',
                     entityId: '123',
@@ -218,7 +218,7 @@ describe('PostgresDataSource', () => {
                 return await cb(mockTx);
             });
 
-            jest.spyOn(PostgresDataSource.prototype, 'saveEntity').mockImplementationOnce(async function(this: any) {
+            jest.spyOn(PostgresDataDriver.prototype, 'saveEntity').mockImplementationOnce(async function(this: any) {
                 this._pendingNotifications?.push({
                     path: 'test',
                     entityId: '123',
@@ -242,7 +242,7 @@ describe('PostgresDataSource', () => {
                 return await cb(mockTx);
             });
 
-            jest.spyOn(PostgresDataSource.prototype, 'saveEntity').mockImplementationOnce(async function(this: any) {
+            jest.spyOn(PostgresDataDriver.prototype, 'saveEntity').mockImplementationOnce(async function(this: any) {
                 this._pendingNotifications?.push({
                     path: 'test',
                     entityId: 'buggy-123',
@@ -274,13 +274,13 @@ describe('PostgresDataSource', () => {
             });
 
             // Operation 1 flags a notification
-            const save1 = jest.spyOn(PostgresDataSource.prototype, 'saveEntity').mockImplementationOnce(async function(this: any) {
+            const save1 = jest.spyOn(PostgresDataDriver.prototype, 'saveEntity').mockImplementationOnce(async function(this: any) {
                 this._pendingNotifications?.push({ path: 'scope-1', entityId: '1', entity: {} as any });
                 return {} as any;
             });
 
             // Operation 2 flags a different notification
-            const save2 = jest.spyOn(PostgresDataSource.prototype, 'saveEntity').mockImplementationOnce(async function(this: any) {
+            const save2 = jest.spyOn(PostgresDataDriver.prototype, 'saveEntity').mockImplementationOnce(async function(this: any) {
                 this._pendingNotifications?.push({ path: 'scope-2', entityId: '2', entity: {} as any });
                 return {} as any;
             });
@@ -300,7 +300,7 @@ describe('PostgresDataSource', () => {
         });
     });
 
-    describe('AuthenticatedPostgresDataSource Delegation', () => {
+    describe('AuthenticatedPostgresDataDriver Delegation', () => {
         let authDelegate: any;
 
         beforeEach(async () => {
@@ -325,7 +325,7 @@ describe('PostgresDataSource', () => {
             
             // The act of calling the delegated method should update the last subscription
             jest.spyOn(delegate, 'listenCollection').mockImplementationOnce(() => {
-                mockRealtimeService.subscriptions.set('sub1', { clientId: 'datasource', authContext: undefined });
+                mockRealtimeService.subscriptions.set('sub1', { clientId: 'driver', authContext: undefined });
                 return mockUnsubscribe;
             });
 
@@ -341,7 +341,7 @@ describe('PostgresDataSource', () => {
             mockRealtimeService.subscriptions.clear();
             
             jest.spyOn(delegate, 'listenEntity').mockImplementationOnce(() => {
-                mockRealtimeService.subscriptions.set('sub2', { clientId: 'datasource', authContext: undefined });
+                mockRealtimeService.subscriptions.set('sub2', { clientId: 'driver', authContext: undefined });
                 return mockUnsubscribe;
             });
 
@@ -359,7 +359,7 @@ describe('PostgresDataSource', () => {
             expect(unsub).toBe(mockUnsubscribe);
         });
 
-        it('should NOT skip authContext injection if subscription has a non-datasource clientId', () => {
+        it('should NOT skip authContext injection if subscription has a non-driver clientId', () => {
             const mockUnsubscribe = jest.fn();
             mockRealtimeService.subscriptions.clear();
             jest.spyOn(delegate, 'listenCollection').mockImplementationOnce(() => {
@@ -367,7 +367,7 @@ describe('PostgresDataSource', () => {
                 return mockUnsubscribe;
             });
             authDelegate.listenCollection({ path: 'test', collection: {} as any, callbacks: {} as any });
-            // authContext should NOT be injected because clientId !== 'datasource'
+            // authContext should NOT be injected because clientId !== 'driver'
             expect(mockRealtimeService.subscriptions.get('sub-ext').authContext).toBeUndefined();
         });
 
@@ -407,7 +407,7 @@ describe('PostgresDataSource', () => {
         });
     });
 
-    describe('AuthenticatedPostgresDataSource Security & Contract', () => {
+    describe('AuthenticatedPostgresDataDriver Security & Contract', () => {
         it('should use parameterized queries (drizzle sql``) NOT string interpolation for set_config', async () => {
             // A malicious uid should be passed as a parameter, not concatenated
             const maliciousUser = { uid: "admin'; DROP TABLE users; --", email: 'hacker@evil.com' } as any;
@@ -418,7 +418,7 @@ describe('PostgresDataSource', () => {
                 return await cb(mockTx);
             });
 
-            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+            jest.spyOn(PostgresDataDriver.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
             await authDelegate.fetchCollection({ path: 'x', collection: { slug: 'x', properties: {} } as any });
 
@@ -441,7 +441,7 @@ describe('PostgresDataSource', () => {
                 return await cb(mockTx);
             });
 
-            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+            jest.spyOn(PostgresDataDriver.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
             await authDelegate.fetchCollection({ path: 'x', collection: { slug: 'x', properties: {} } as any });
 
@@ -460,7 +460,7 @@ describe('PostgresDataSource', () => {
                 return await cb(mockTx);
             });
 
-            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+            jest.spyOn(PostgresDataDriver.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
             await authDelegate.fetchCollection({ path: 'x', collection: { slug: 'x', properties: {} } as any });
 
@@ -473,7 +473,7 @@ describe('PostgresDataSource', () => {
             (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => {
                 return await cb({ execute: jest.fn() });
             });
-            jest.spyOn(PostgresDataSource.prototype, 'deleteEntity').mockResolvedValueOnce(undefined);
+            jest.spyOn(PostgresDataDriver.prototype, 'deleteEntity').mockResolvedValueOnce(undefined);
 
             const authDelegate = await delegate.withAuth({ uid: 'deleter', email: 'del@test.com' } as any);
             await authDelegate.deleteEntity({ entity: { id: '1', path: 'x', values: {} } as any });
@@ -485,7 +485,7 @@ describe('PostgresDataSource', () => {
             (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => {
                 return await cb({ execute: jest.fn() });
             });
-            jest.spyOn(PostgresDataSource.prototype, 'checkUniqueField').mockResolvedValueOnce(true);
+            jest.spyOn(PostgresDataDriver.prototype, 'checkUniqueField').mockResolvedValueOnce(true);
 
             const authDelegate = await delegate.withAuth({ uid: 'checker', email: 'c@test.com' } as any);
             const result = await authDelegate.checkUniqueField('path', 'email', 'test@x.com', '1');
@@ -498,7 +498,7 @@ describe('PostgresDataSource', () => {
             (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => {
                 return await cb({ execute: jest.fn() });
             });
-            jest.spyOn(PostgresDataSource.prototype, 'countEntities').mockResolvedValueOnce(42);
+            jest.spyOn(PostgresDataDriver.prototype, 'countEntities').mockResolvedValueOnce(42);
 
             const authDelegate = await delegate.withAuth({ uid: 'counter', email: 'c@test.com' } as any);
             const result = await authDelegate.countEntities({ path: 'items', collection: {} as any });
@@ -529,7 +529,7 @@ describe('PostgresDataSource', () => {
 
             (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => await cb(mockTx));
 
-            jest.spyOn(PostgresDataSource.prototype, 'saveEntity')
+            jest.spyOn(PostgresDataDriver.prototype, 'saveEntity')
                 .mockImplementationOnce(async function(this: any) {
                     this._pendingNotifications?.push({ path: 'call-1', entityId: '1', entity: {} as any });
                     return {} as any;

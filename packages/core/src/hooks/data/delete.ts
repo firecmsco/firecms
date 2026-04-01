@@ -1,5 +1,4 @@
 import {
-    DataSource,
     DeleteEntityProps,
     Entity,
     EntityCallbacks,
@@ -8,6 +7,7 @@ import {
     RebaseContext,
     User
 } from "@rebasepro/types";
+import { RebaseData } from "@rebasepro/types";
 
 /**
  * @group Hooks and utilities
@@ -21,16 +21,12 @@ export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, USER e
     }
 
 /**
- * This function is in charge of deleting an entity in the datasource.
+ * This function is in charge of deleting an entity.
  * It will run all the delete callbacks specified in the collection.
  * It is also possible to attach callbacks on save success or error, and callback
  * errors.
  *
- * If you just want to delete any data without running the `beforeDelete`,
- * and `afterDelete` callbacks, you can use the `deleteEntity` method
- * in the datasource ({@link useDataSource}).
- *
- * @param dataSource
+ * @param data
  * @param entity
  * @param collection
  * @param callbacks
@@ -40,7 +36,7 @@ export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, USER e
  * @group Hooks and utilities
  */
 export async function deleteEntityWithCallbacks<M extends Record<string, any>, USER extends User>({
-    dataSource,
+    data,
     entity,
     collection,
     callbacks,
@@ -49,7 +45,7 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
     context
 }: DeleteEntityWithCallbacksProps<M> & {
     collection: EntityCollection<M>,
-    dataSource: DataSource,
+    data: RebaseData,
     context: RebaseContext<USER>
 }
 ): Promise<boolean> {
@@ -64,10 +60,7 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
         context
     };
 
-    return dataSource.deleteEntity({
-        entity,
-        collection
-    }).then(() => {
+    return data.collection(entity.path).delete(entity.id).then(() => {
         onDeleteSuccess && onDeleteSuccess(entity);
         return true;
     }).catch((e) => {

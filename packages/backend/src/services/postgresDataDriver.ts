@@ -8,7 +8,7 @@ import { sql as drizzleSql } from "drizzle-orm";
 import { buildPropertyCallbacks, mergeDeep } from "@rebasepro/common";
 import { collectionRegistry } from "../collections/registry";
 import {
-    DataSource,
+    DataDriver,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -17,16 +17,19 @@ import {
     ListenCollectionProps,
     ListenEntityProps,
     RebaseCallContext,
-    SaveEntityProps
+    SaveEntityProps,
+    RebaseData
 } from "@rebasepro/types";
+import { buildRebaseData } from "@rebasepro/common";
 
-export class PostgresDataSource implements DataSource {
+export class PostgresDataDriver implements DataDriver {
     key = "postgres";
     initialised = true;
 
     public entityService: EntityService;
     public realtimeService: RealtimeService;
     public user?: User;
+    public data: RebaseData;
 
     /**
      * When true, realtime notifications are deferred until after the
@@ -49,6 +52,7 @@ export class PostgresDataSource implements DataSource {
         this.entityService = new EntityService(db);
         this.realtimeService = realtimeService;
         this.user = user;
+        this.data = buildRebaseData(this);
     }
 
 
@@ -98,8 +102,10 @@ export class PostgresDataSource implements DataSource {
 
         if (callbacks?.afterRead || propertyCallbacks?.afterRead) {
             const contextForCallback = {
-                user: this.user
-            } as RebaseCallContext; // Backend context
+                user: this.user,
+                driver: this,
+                data: this.data
+            } as unknown as RebaseCallContext; // Backend context
             return Promise.all(entities.map(async (entity) => {
                 let fetched = entity;
                 if (callbacks?.afterRead) {
@@ -146,8 +152,8 @@ export class PostgresDataSource implements DataSource {
         };
 
         // Store the subscription in RealtimeService properly using the new public method
-        this.realtimeService.registerDataSourceSubscription(subscriptionId, {
-            clientId: "datasource",
+        this.realtimeService.registerDataDriverSubscription(subscriptionId, {
+            clientId: "driver",
             type: "collection" as const,
             path,
             collectionRequest: {
@@ -202,8 +208,10 @@ export class PostgresDataSource implements DataSource {
 
         if (entity && (callbacks?.afterRead || propertyCallbacks?.afterRead)) {
             const contextForCallback = {
-                user: this.user
-            } as RebaseCallContext; // Backend context
+                user: this.user,
+                driver: this,
+                data: this.data
+            } as unknown as RebaseCallContext; // Backend context
             if (callbacks?.afterRead) {
                 entity = await callbacks.afterRead({
                     collection: resolvedCollection as EntityCollection<M>,
@@ -240,8 +248,8 @@ export class PostgresDataSource implements DataSource {
         };
 
         // Register the subscription with the RealtimeService
-        this.realtimeService.registerDataSourceSubscription(subscriptionId, {
-            clientId: "datasource",
+        this.realtimeService.registerDataDriverSubscription(subscriptionId, {
+            clientId: "driver",
             type: "entity" as const,
             path,
             entityId
@@ -282,8 +290,10 @@ export class PostgresDataSource implements DataSource {
 
         let updatedValues = values;
         const contextForCallback = {
-            user: this.user
-        } as RebaseCallContext;
+            user: this.user,
+            driver: this,
+            data: this.data
+        } as unknown as RebaseCallContext;
 
         if (callbacks?.beforeSave || propertyCallbacks?.beforeSave) {
             let previousValues: Partial<Entity<M>["values"]> | undefined;
@@ -431,8 +441,10 @@ export class PostgresDataSource implements DataSource {
         const { collection: resolvedCollection, callbacks, propertyCallbacks } = this.resolveCollectionCallbacks(collection, entity.path);
 
         const contextForCallback = {
-            user: this.user
-        } as RebaseCallContext;
+            user: this.user,
+            driver: this,
+            data: this.data
+        } as unknown as RebaseCallContext;
 
         if (callbacks?.beforeDelete || propertyCallbacks?.beforeDelete) {
             if (callbacks?.beforeDelete) {
@@ -734,35 +746,41 @@ export class PostgresDataSource implements DataSource {
      * Starts a transaction and sets the current_user_id and current_user_roles
      * configuration parameters for PostgreSQL Row Level Security.
      */
-    async withAuth(user: User): Promise<DataSource> {
-        return new AuthenticatedPostgresDataSource(this, user);
+    async withAuth(user: User): Promise<DataDriver> {
+        return new AuthenticatedPostgresDataDriver(this, user);
     }
 }
 
-export class AuthenticatedPostgresDataSource implements DataSource {
+export class AuthenticatedPostgresDataDriver implements DataDriver {
     key = "postgres";
     initialised = true;
 
+    public user: User;
+    public data: RebaseData;
+
     constructor(
-        public delegate: PostgresDataSource,
-        public user: User
-    ) {}
+        public delegate: PostgresDataDriver,
+        user: User
+    ) {
+        this.user = user;
+        this.data = buildRebaseData(this);
+    }
 
     private async withTransaction<T>(
-        operation: (delegate: PostgresDataSource) => Promise<T>
+        operation: (delegate: PostgresDataDriver) => Promise<T>
     ): Promise<T> {
-        const pendingNotifications: PostgresDataSource["_pendingNotifications"] = [];
+        const pendingNotifications: PostgresDataDriver["_pendingNotifications"] = [];
         
         const result = await this.delegate.db.transaction(async (tx) => {
             let userId = this.user?.uid;
             if (!userId) {
-                console.warn(`[DataSource] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, this.user);
+                console.warn(`[DataDriver] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, this.user);
                 userId = 'anonymous';
             }
 
             let userRoles = this.user?.roles ?? [];
             if (!this.user?.roles) {
-                console.warn(`[DataSource] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+                console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
             }
             const normalizedRoles = userRoles.map((r: unknown) =>
                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
@@ -777,7 +795,7 @@ export class AuthenticatedPostgresDataSource implements DataSource {
             `);
 
             const txEntityService = new EntityService(tx);
-            const txDelegate = new PostgresDataSource(tx, this.delegate.realtimeService, this.user, this.delegate.poolManager);
+            const txDelegate = new PostgresDataDriver(tx, this.delegate.realtimeService, this.user, this.delegate.poolManager);
             
             txDelegate.entityService = txEntityService;
             txDelegate._deferNotifications = true;
@@ -795,7 +813,7 @@ export class AuthenticatedPostgresDataSource implements DataSource {
                     notification.databaseId
                 );
             } catch (e) {
-                console.error("[DataSource] Error flushing deferred notification:", e);
+                console.error("[DataDriver] Error flushing deferred notification:", e);
             }
         }
 
@@ -814,7 +832,7 @@ export class AuthenticatedPostgresDataSource implements DataSource {
         const authContext = { userId: this.user?.uid || "anonymous", roles: this.user?.roles ?? [] };
         const entries = Array.from(this.delegate.realtimeService.subscriptions.entries());
         const lastEntry = entries[entries.length - 1];
-        if (lastEntry && lastEntry[1].clientId === "datasource") {
+        if (lastEntry && lastEntry[1].clientId === "driver") {
             lastEntry[1].authContext = authContext;
         }
         return unsubscribe;

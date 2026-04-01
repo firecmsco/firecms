@@ -3,7 +3,8 @@ import { useAuthController } from "./useAuthController";
 import { useSideDialogsController } from "./useSideDialogsController";
 import { useCollectionRegistryController, useNavigationStateController, useCMSUrlController } from "./navigation/contexts";
 import { useSideEntityController } from "./useSideEntityController";
-import { useDataSource } from "./data/useDataSource";
+
+import { useData } from "./data/useData";
 import { useStorageSource } from "./useStorageSource";
 import { useSnackbarController } from "./useSnackbarController";
 import { useUserConfigurationPersistence } from "./useUserConfigurationPersistence";
@@ -11,8 +12,13 @@ import { useDialogsController } from "./useDialogsController";
 import { useCustomizationController } from "./useCustomizationController";
 import { useAnalyticsController } from "./useAnalyticsController";
 import { useEffectiveRoleController } from "./useEffectiveRoleController";
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { useInternalUserManagementController } from "./useInternalUserManagementController";
+
+// Temporary context for databaseAdmin - assuming we might add one, or we need to get it from Rebase.tsx.
+// Wait, `databaseAdmin` hasn't been added to a context yet. Let's add it to a context in Rebase.tsx later.
+// Let's create a placeholder for databaseAdmin context access.
+import { DatabaseAdminContext } from "../contexts/DatabaseAdminContext";
 
 /**
  * Hook to retrieve the {@link RebaseContext}.
@@ -38,7 +44,8 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
         ...cmsUrlController,
         getCollectionBySlug: collectionRegistry.getCollection
     }), [collectionRegistry, navigationState, cmsUrlController]);
-    const dataSource = useDataSource();
+    
+    const data = useData();
     const storageSource = useStorageSource();
     const snackbarController = useSnackbarController();
     const userConfigPersistence = useUserConfigurationPersistence();
@@ -47,13 +54,16 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
     const analyticsController = useAnalyticsController();
     const effectiveRoleController = useEffectiveRoleController();
     const userManagement = useInternalUserManagementController<USER>();
+    
+    // Will get `databaseAdmin` from context
+    const databaseAdmin = useContext(DatabaseAdminContext);
 
     const rebaseContextRef = React.useRef<RebaseContext<USER, AuthControllerType>>({
         authController,
         sideDialogsController,
         sideEntityController,
         navigation: navigation as any,
-        dataSource,
+        data,
         storageSource,
         snackbarController,
         userConfigPersistence,
@@ -61,7 +71,8 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
         customizationController,
         analyticsController,
         userManagement,
-        effectiveRoleController
+        effectiveRoleController,
+        databaseAdmin
     });
 
     React.useEffect(() => {
@@ -70,7 +81,7 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
             sideDialogsController,
             sideEntityController,
             navigation: navigation as any,
-            dataSource,
+            data,
             storageSource,
             snackbarController,
             userConfigPersistence,
@@ -78,9 +89,10 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
             customizationController,
             analyticsController,
             userManagement,
-            effectiveRoleController
+            effectiveRoleController,
+            databaseAdmin
         };
-    }, [authController, dialogsController, navigation, sideDialogsController, effectiveRoleController]);
+    }, [authController, dialogsController, navigation, sideDialogsController, effectiveRoleController, data, databaseAdmin]);
 
     return rebaseContextRef.current;
 }

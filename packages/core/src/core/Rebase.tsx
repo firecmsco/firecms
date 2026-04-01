@@ -18,12 +18,15 @@ import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsCo
 import { ErrorView } from "../components";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
 import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
-import { DataSourceContext } from "../contexts/DataSourceContext";
+import { DataDriverContext } from "../contexts/DataDriverContext";
+import { RebaseDataContext } from "../contexts/RebaseDataContext";
+import { DatabaseAdminContext } from "../contexts/DatabaseAdminContext";
 import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
 import { CollectionRegistryContext, NavigationStateContext, CMSUrlContext } from "../hooks/navigation/contexts";
 import { DialogsProvider } from "../contexts/DialogsProvider";
-import { useBuildDataSource } from "../internal/useBuildDataSource";
+import { useBuildDataDriver } from "../internal/useBuildDataDriver";
+import { buildRebaseData } from "@rebasepro/common";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
@@ -52,7 +55,8 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         locale,
         authController,
         storageSource,
-        dataSource: dataSourceProp,
+        driver: driverProp,
+        databaseAdmin,
         plugins: _pluginsProp,
         onAnalyticsEvent,
         propertyConfigs,
@@ -106,13 +110,16 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     /**
      * Controller in charge of fetching and persisting data
      */
-    const dataSource = useBuildDataSource({
-        delegate: dataSourceProp,
+    const driver = useBuildDataDriver({
+        delegate: driverProp,
         propertyConfigs,
-        // Used by DataSource internally for type resolution, pass the registry
+        // Used by DataDriver internally for type resolution, pass the registry
         collectionRegistryController,
         authController
     });
+    
+    // Unified data API Proxy
+    const data = useMemo(() => buildRebaseData(driver), [driver]);
 
     const fallbackEffectiveRoleController = useBuildEffectiveRoleController();
     const activeEffectiveRoleController = effectiveRoleController ?? fallbackEffectiveRoleController;
@@ -144,36 +151,42 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                     value={userConfigPersistence}>
                     <StorageSourceContext.Provider
                         value={storageSource}>
-                        <DataSourceContext.Provider
-                            value={dataSource}>
-                            <AuthControllerContext.Provider
-                                value={authController}>
-                                <SideDialogsControllerContext.Provider
-                                    value={sideDialogsController}>
-                                    <SideEntityControllerContext.Provider
-                                        value={sideEntityController}>
-                                        <CollectionRegistryContext.Provider value={collectionRegistryController}>
-                                            <NavigationStateContext.Provider value={navigationStateController}>
-                                                <CMSUrlContext.Provider value={cmsUrlController}>
-                                                    <InternalUserManagementContext.Provider value={userManagement}>
-                                                        <EffectiveRoleControllerContext.Provider value={activeEffectiveRoleController}>
-                                                            <DialogsProvider>
-                                                                <BreadcrumbsProvider>
-                                                                    <RebaseInternal
-                                                                        loading={loading}>
-                                                                        {children}
-                                                                    </RebaseInternal>
-                                                                </BreadcrumbsProvider>
-                                                            </DialogsProvider>
-                                                        </EffectiveRoleControllerContext.Provider>
-                                                    </InternalUserManagementContext.Provider>
-                                                </CMSUrlContext.Provider>
-                                            </NavigationStateContext.Provider>
-                                        </CollectionRegistryContext.Provider>
-                                    </SideEntityControllerContext.Provider>
-                                </SideDialogsControllerContext.Provider>
-                            </AuthControllerContext.Provider>
-                        </DataSourceContext.Provider>
+                        <DataDriverContext.Provider
+                            value={driver}>
+                            <RebaseDataContext.Provider
+                                value={data}>
+                                <DatabaseAdminContext.Provider
+                                    value={databaseAdmin}>
+                                    <AuthControllerContext.Provider
+                                        value={authController}>
+                                        <SideDialogsControllerContext.Provider
+                                            value={sideDialogsController}>
+                                            <SideEntityControllerContext.Provider
+                                                value={sideEntityController}>
+                                                <CollectionRegistryContext.Provider value={collectionRegistryController}>
+                                                    <NavigationStateContext.Provider value={navigationStateController}>
+                                                        <CMSUrlContext.Provider value={cmsUrlController}>
+                                                            <InternalUserManagementContext.Provider value={userManagement}>
+                                                                <EffectiveRoleControllerContext.Provider value={activeEffectiveRoleController}>
+                                                                    <DialogsProvider>
+                                                                        <BreadcrumbsProvider>
+                                                                            <RebaseInternal
+                                                                                loading={loading}>
+                                                                                {children}
+                                                                            </RebaseInternal>
+                                                                        </BreadcrumbsProvider>
+                                                                    </DialogsProvider>
+                                                                </EffectiveRoleControllerContext.Provider>
+                                                            </InternalUserManagementContext.Provider>
+                                                        </CMSUrlContext.Provider>
+                                                    </NavigationStateContext.Provider>
+                                                </CollectionRegistryContext.Provider>
+                                            </SideEntityControllerContext.Provider>
+                                        </SideDialogsControllerContext.Provider>
+                                    </AuthControllerContext.Provider>
+                                </DatabaseAdminContext.Provider>
+                            </RebaseDataContext.Provider>
+                        </DataDriverContext.Provider>
                     </StorageSourceContext.Provider>
                 </UserConfigurationPersistenceContext.Provider>
             </CustomizationControllerContext.Provider>

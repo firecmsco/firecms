@@ -1,6 +1,6 @@
-import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
 import { Role, User } from "../users";
+import { RebaseData } from "./data";
 
 /**
  * Controller for retrieving the logged user or performing auth related operations.
@@ -82,9 +82,9 @@ export type Authenticator<USER extends User = User> = (props: {
     authController: AuthController<USER>;
 
     /**
-     * Connector to your database, e.g. your Firestore database
+     * Unified data access API
      */
-    dataSource: DataSource;
+    data: RebaseData;
 
     /**
      * Used storage implementation

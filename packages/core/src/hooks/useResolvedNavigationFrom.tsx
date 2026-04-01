@@ -63,7 +63,7 @@ export function resolveNavigationFrom<M extends Record<string, any>, USER extend
     context: RebaseContext<USER>
 }): Promise<ResolvedNavigationEntry<M>[]> {
 
-    const dataSource = context.dataSource;
+    const data = context.data;
     const navigation = context.navigation;
 
     if (!navigation) {
@@ -84,11 +84,7 @@ export function resolveNavigationFrom<M extends Record<string, any>, USER extend
                 if (!collection) {
                     throw Error(`No collection defined in the navigation for the entity with path ${entry.slug}`);
                 }
-                return dataSource.fetchEntity({
-                    path: entry.slug,
-                    entityId: entry.entityId,
-                    collection
-                })
+                return data.collection(entry.slug).findById(entry.entityId)
                     .then((entity) => {
                         if (!entity) return undefined;
                         return { ...entry, entity };

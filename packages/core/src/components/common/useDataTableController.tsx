@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import { useDataSource, useRebaseContext } from "../../hooks";
+import { useData, useRebaseContext } from "../../hooks";
 import { useDataOrder } from "../../hooks/data/useDataOrder";
 import {
     Entity,
@@ -13,13 +13,14 @@ import {
     RebaseContext,
     SelectedCellProps,
     User,
-    WhereFilterOp
+    WhereFilterOp,
+    FindResponse
 } from "@rebasepro/types";
 import { ScrollRestorationController } from "./useScrollRestoration";
 
 export const DEFAULT_PAGE_SIZE = 50;
 
-export type DataSourceTableControllerProps<M extends Record<string, any> = any> = {
+export type DataTableControllerProps<M extends Record<string, any> = any> = {
     /**
      * Full path where the data of this table is located
      */
@@ -52,7 +53,7 @@ export type DataSourceTableControllerProps<M extends Record<string, any> = any> 
 
 /**
  * Use this hook to build a controller for the {@link EntityCollectionTable}.
- * This controller is bound to data in a path in your specified datasource.
+ * This controller is bound to data in a path in your specified driver.
  *
  * Note that you can build your own hook returning a {@link EntityTableController}
  * if you would like to display different data.
@@ -65,7 +66,7 @@ export type DataSourceTableControllerProps<M extends Record<string, any> = any> 
  * @param forceFilterFromProps
  * @param updateUrl
  */
-export function useDataSourceTableController<M extends Record<string, any> = any, USER extends User = User>(
+export function useDataTableController<M extends Record<string, any> = any, USER extends User = User>(
     {
         path,
         collection,
@@ -74,7 +75,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         lastDeleteTimestamp: _lastDeleteTimestamp,
         forceFilter: forceFilterFromProps,
         updateUrl
-    }: DataSourceTableControllerProps<M>)
+    }: DataTableControllerProps<M>)
     : EntityTableController<M> {
 
     const {
@@ -84,7 +85,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     } = collection;
 
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
-    const dataSource = useDataSource(collection);
+    const dataClient = useData();
 
     const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
@@ -94,13 +95,8 @@ export function useDataSourceTableController<M extends Record<string, any> = any
 
     const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
         sortBy?: [string, "asc" | "desc"]) => {
-        if (!dataSource.isFilterCombinationValid)
-            return true;
-        return dataSource.isFilterCombinationValid({
-            path,
-            filterValues,
-            sortBy
-        })
+        // PostgREST/SQL can handle arbitrary filter/sort combinations natively.
+        return true;
     }, []);
 
     const onScroll = ({
@@ -237,35 +233,56 @@ export function useDataSourceTableController<M extends Record<string, any> = any
             setDataLoadingError(error);
         };
 
-        if (dataSource.listenCollection) {
-            return dataSource.listenCollection<M>({
-                path,
-                collection,
-                onUpdate: onEntitiesUpdate,
-                onError,
-                searchString,
-                filter: filterValues,
-                limit: itemCount,
-                startAfter: undefined,
-                orderBy: sortByProperty,
-                order: currentSort
+        const accessor = dataClient.collection(path);
+        
+        // Convert filterValues to PostgREST where clause
+        const whereMap: Record<string, string> = {};
+        if (filterValues) {
+            Object.entries(filterValues).forEach(([key, value]) => {
+                if (value && Array.isArray(value)) {
+                    const [op, val] = value;
+                    const postgrestOp = op === "==" ? "eq" : op === "!=" ? "neq" : op === ">" ? "gt" : op === ">=" ? "gte" : op === "<" ? "lt" : op === "<=" ? "lte" : op === "in" ? "in" : op === "not-in" ? "nin" : op === "array-contains" ? "cs" : op === "array-contains-any" ? "csa" : "eq";
+                    
+                    let stringVal: string;
+                    if (Array.isArray(val)) {
+                        stringVal = `(${val.join(",")})`;
+                    } else {
+                        stringVal = String(val);
+                    }
+                    whereMap[key] = `${postgrestOp}.${stringVal}`;
+                }
             });
-        } else {
-            dataSource.fetchCollection<M>({
-                path,
-                collection,
-                searchString,
-                filter: filterValues,
-                limit: itemCount,
-                startAfter: undefined,
-                orderBy: sortByProperty,
-                order: currentSort
-            })
-                .then(onEntitiesUpdate)
-                .catch(onError);
-            return () => undefined;
         }
-    }, [path, itemCount, currentSort, sortByProperty, filterValues, searchString]);
+        const whereParams = Object.keys(whereMap).length > 0 ? whereMap : undefined;
+        const orderByParams = sortByProperty ? `${String(sortByProperty)}:${currentSort}` : undefined;
+
+        // Note: For now, offset is determined based on how many elements we already have.
+        // Actually, this is a table controller; fetching the whole list up to itemCount is how it worked.
+        // So offset: 0, limit: itemCount.
+        
+        let unsubscribe: (() => void) | undefined;
+        
+        if (accessor.listen) {
+            unsubscribe = accessor.listen({
+                where: whereParams,
+                limit: itemCount,
+                orderBy: orderByParams,
+                searchString
+            }, (res: FindResponse<M>) => onEntitiesUpdate(res.data), onError);
+        } else {
+            accessor.find({
+                where: whereParams,
+                limit: itemCount,
+                orderBy: orderByParams,
+                searchString
+            })
+                .then((res: FindResponse<M>) => onEntitiesUpdate(res.data))
+                .catch(onError);
+            unsubscribe = () => undefined;
+        }
+        
+        return unsubscribe;
+    }, [dataClient, path, itemCount, currentSort, sortByProperty, filterValues, searchString]);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const orderedData = useDataOrder({

@@ -30,7 +30,7 @@
 // import {
 //     useAuthController,
 //     useCustomizationController,
-//     useDataSource,
+//     useData,
 //     useRebaseContext,
 //     useSideEntityController
 // } from "../hooks";
@@ -64,7 +64,7 @@
 //
 //     /**
 //      * The updated entity is passed from the parent component when the underlying data
-//      * has changed in the datasource
+//      * has changed in the driver
 //      */
 //     entity?: Entity<M>;
 //
@@ -138,7 +138,7 @@
 //             equal(a.entity?.values, b.entity?.values);
 //     }) as typeof EntityFormInternal;
 //
-// function getDataSourceEntityValues<M extends object>(initialResolvedCollection: EntityCollection,
+// function getDataDriverEntityValues<M extends object>(initialResolvedCollection: EntityCollection,
 //                                                      status: "new" | "existing" | "copy",
 //                                                      entity: Entity<M> | undefined): Partial<EntityValues<M>> {
 //     const properties = initialResolvedCollection.properties;
@@ -176,7 +176,7 @@
 //     const customizationController = useCustomizationController();
 //
 //     const context = useRebaseContext();
-//     const dataSource = useDataSource(inputCollection);
+//     const dataClient = useData();
 //     const plugins = customizationController.plugins;
 //
 //     const initialResolvedCollection = useMemo(() => resolveCollection({
@@ -188,7 +188,7 @@
 //
 //     const initialEntityId = useMemo(() => {
 //         if (status === "new" || status === "copy") {
-//             return dataSource.generateEntityId(path);
+//             return driver.generateEntityId(path);
 //         } else {
 //             return entity?.id;
 //         }
@@ -196,7 +196,7 @@
 //
 //     const closeAfterSaveRef = useRef(false);
 //
-//     const baseDataSourceValuesRef = useRef<Partial<EntityValues<M>>>(getDataSourceEntityValues(initialResolvedCollection, status, entity));
+//     const baseDataDriverValuesRef = useRef<Partial<EntityValues<M>>>(getDataDriverEntityValues(initialResolvedCollection, status, entity));
 //
 //     const [entityId, setEntityId] = React.useState<string | undefined>(initialEntityId);
 //     const [entityIdError, setEntityIdError] = React.useState<boolean>(false);
@@ -204,8 +204,8 @@
 //
 
 //
-//     // const initialValuesRef = useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
-//     const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(entity?.values ?? baseDataSourceValuesRef.current as EntityValues<M>);
+//     // const initialValuesRef = useRef<EntityValues<M>>(entity?.values ?? baseDataDriverValues as EntityValues<M>);
+//     const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(entity?.values ?? baseDataDriverValuesRef.current as EntityValues<M>);
 //
 //     const save = (values: EntityValues<M>): Promise<void> => {
 //         return onEntitySaveRequested({
@@ -251,7 +251,7 @@
 //     };
 //
 //     const formex: FormexController<M> = useCreateFormex<M>({
-//         initialValues: baseDataSourceValuesRef.current as M,
+//         initialValues: baseDataDriverValuesRef.current as M,
 //         onSubmit,
 //         validation: (values) => {
 //             return validationSchema?.validate(values, { abortEarly: false })
@@ -270,7 +270,7 @@
 //     });
 //
 //     useEffect(() => {
-//         baseDataSourceValuesRef.current = getDataSourceEntityValues(initialResolvedCollection, status, entity);
+//         baseDataDriverValuesRef.current = getDataDriverEntityValues(initialResolvedCollection, status, entity);
 //         const initialValues = formex.initialValues;
 //         if (!formex.isSubmitting && initialValues && status === "existing") {
 //             setUnderlyingChanges(
@@ -280,7 +280,7 @@
 //                             return {};
 //                         }
 //                         const initialValue = initialValues[key];
-//                         const latestValue = baseDataSourceValuesRef.current[key];
+//                         const latestValue = baseDataDriverValuesRef.current[key];
 //                         if (!equal(initialValue, latestValue)) {
 //                             return { [key]: latestValue };
 //                         }
@@ -352,8 +352,8 @@
 //                                                                         name,
 //                                                                         value,
 //                                                                         property
-//                                                                     }) => dataSource.checkUniqueField(path, name, value, entityId),
-//         [dataSource, path, entityId]);
+//                                                                     }) => driver.checkUniqueField(path, name, value, entityId),
+//         [driver, path, entityId]);
 //
 //     const validationSchema = useMemo(() => entityId
 //             ? getYupEntitySchema(
@@ -523,7 +523,7 @@
 //             Object.entries(underlyingChanges).forEach(([key, value]) => {
 //                 const formValue = values[key];
 //                 if (!equal(value, formValue) && !touched[key]) {
-//                     console.debug("Updated value from the datasource:", key, value);
+//                     console.debug("Updated value from the driver:", key, value);
 //                     setFieldValue(key, value !== undefined ? value : null);
 //                 }
 //             });

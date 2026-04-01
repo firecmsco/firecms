@@ -2,7 +2,7 @@ import { WebSocket } from "ws";
 import { EventEmitter } from "events";
 import { EntityService } from "../db/entityService";
 
-import { Entity, FetchCollectionProps, ListenCollectionProps, ListenEntityProps, DataSource, CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "@rebasepro/types";
+import { Entity, FetchCollectionProps, ListenCollectionProps, ListenEntityProps, DataDriver, CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "@rebasepro/types";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { sql as drizzleSql } from "drizzle-orm";
 import { RealtimeProvider, CollectionSubscriptionConfig, EntitySubscriptionConfig } from "../db/interfaces";
@@ -10,7 +10,7 @@ import { collectionRegistry } from "../collections/registry";
 
 /**
  * Auth context stored per-subscription so real-time refetches respect RLS.
- * Mirrors the session variables set by PostgresDataSource.withAuth().
+ * Mirrors the session variables set by PostgresDataDriver.withAuth().
  */
 export interface SubscriptionAuthContext {
     userId: string;
@@ -53,27 +53,27 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         authContext?: SubscriptionAuthContext;
     }>();
 
-    // Add callback storage for DataSource subscriptions
+    // Add callback storage for DataDriver subscriptions
     private subscriptionCallbacks = new Map<string, (data: Entity[] | Entity | null) => void>();
 
-    private dataSource?: DataSource;
+    private driver?: DataDriver;
 
     constructor(private db: NodePgDatabase) {
         super();
         this.entityService = new EntityService(db);
     }
 
-    setDataSource(dataSource: DataSource) {
-        this.dataSource = dataSource;
+    setDataDriver(driver: DataDriver) {
+        this.driver = driver;
     }
 
-    // Make subscriptions accessible for DataSource
+    // Make subscriptions accessible for DataDriver
     get subscriptions() {
         return this._subscriptions;
     }
 
-    // Add public method to register DataSource subscriptions
-    registerDataSourceSubscription(subscriptionId: string, subscription: {
+    // Add public method to register DataDriver subscriptions
+    registerDataDriverSubscription(subscriptionId: string, subscription: {
         clientId: string;
         type: "collection" | "entity";
         path: string;
@@ -89,7 +89,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         };
         authContext?: SubscriptionAuthContext;
     }) {
-        console.debug("📋 [RealtimeService] Registering DataSource subscription:", subscriptionId, subscription.authContext ? "(with auth)" : "(no auth)");
+        console.debug("📋 [RealtimeService] Registering DataDriver subscription:", subscriptionId, subscription.authContext ? "(with auth)" : "(no auth)");
         this._subscriptions.set(subscriptionId, subscription);
     }
 
@@ -235,9 +235,9 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
 
             // Send initial data
             let entities;
-            if (this.dataSource) {
+            if (this.driver) {
                 const collection = collectionRegistry.getCollectionByPath(request.path);
-                entities = await this.dataSource.fetchCollection({
+                entities = await this.driver.fetchCollection({
                     path: request.path,
                     collection: collection,
                     filter: request.filter,
@@ -280,9 +280,9 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
 
             // Send initial data
             let entity;
-            if (this.dataSource) {
+            if (this.driver) {
                 const collection = collectionRegistry.getCollectionByPath(request.path);
-                entity = await this.dataSource.fetchEntity({
+                entity = await this.driver.fetchEntity({
                     path: request.path,
                     entityId: request.entityId,
                     collection: collection
@@ -351,13 +351,13 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
 
         console.debug(`📡 [RealtimeService] Found ${allSubscriptions.length} subscriptions for path: ${notifyPath}`);
 
-        // Separate WebSocket subscriptions from DataSource callback subscriptions
+        // Separate WebSocket subscriptions from DataDriver callback subscriptions
         const webSocketSubscriptions = allSubscriptions.filter(([, sub]) =>
-            sub.clientId !== "datasource" && this.clients.has(sub.clientId)
+            sub.clientId !== "driver" && this.clients.has(sub.clientId)
         );
 
-        const dataSourceSubscriptions = allSubscriptions.filter(([subscriptionId, sub]) =>
-            sub.clientId === "datasource" && this.subscriptionCallbacks.has(subscriptionId)
+        const driverSubscriptions = allSubscriptions.filter(([subscriptionId, sub]) =>
+            sub.clientId === "driver" && this.subscriptionCallbacks.has(subscriptionId)
         );
 
         // Handle WebSocket subscriptions
@@ -386,34 +386,34 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             }
         }
 
-        // Handle DataSource callback subscriptions
-        for (const [subscriptionId, subscription] of dataSourceSubscriptions) {
+        // Handle DataDriver callback subscriptions
+        for (const [subscriptionId, subscription] of driverSubscriptions) {
             try {
-                console.debug(`🔄 [RealtimeService] Processing DataSource subscription: ${subscriptionId} of type: ${subscription.type} for path: ${notifyPath}`);
+                console.debug(`🔄 [RealtimeService] Processing DataDriver subscription: ${subscriptionId} of type: ${subscription.type} for path: ${notifyPath}`);
 
                 const callback = this.subscriptionCallbacks.get(subscriptionId);
                 if (!callback) {
-                    console.debug(`⚠️ [RealtimeService] No callback found for DataSource subscription: ${subscriptionId}`);
+                    console.debug(`⚠️ [RealtimeService] No callback found for DataDriver subscription: ${subscriptionId}`);
                     continue;
                 }
 
                 if (subscription.type === "entity" && notifyPath === originalPath) {
                     // Call the callback directly with the entity (only for exact path matches)
                     callback(entity);
-                    console.debug(`📄 [RealtimeService] Called DataSource callback for entity ${subscriptionId}`);
+                    console.debug(`📄 [RealtimeService] Called DataDriver callback for entity ${subscriptionId}`);
 
                 } else if (subscription.type === "collection" && subscription.collectionRequest) {
                     // Refetch the collection and call the callback
                     const collectionRequest = subscription.collectionRequest;
-                    console.debug(`📋 [RealtimeService] Refetching collection for DataSource subscription: ${subscriptionId}, path: ${notifyPath}`);
+                    console.debug(`📋 [RealtimeService] Refetching collection for DataDriver subscription: ${subscriptionId}, path: ${notifyPath}`);
 
                     const entities = await this.fetchCollectionWithAuth(notifyPath, collectionRequest, subscription.authContext);
 
-                    console.debug(`📬 [RealtimeService] Calling DataSource callback with ${entities.length} entities for ${subscriptionId} (path: ${notifyPath})`);
+                    console.debug(`📬 [RealtimeService] Calling DataDriver callback with ${entities.length} entities for ${subscriptionId} (path: ${notifyPath})`);
                     callback(entities);
                 }
             } catch (error) {
-                console.error(`❌ [RealtimeService] Error processing DataSource subscription ${subscriptionId}:`, error);
+                console.error(`❌ [RealtimeService] Error processing DataDriver subscription ${subscriptionId}:`, error);
             }
         }
     }
@@ -428,9 +428,9 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         collectionRequest: { filter?: Record<string, unknown>; orderBy?: string; order?: "desc" | "asc"; limit?: number; startAfter?: Record<string, unknown>; databaseId?: string; searchString?: string },
         authContext?: SubscriptionAuthContext
     ): Promise<Entity[]> {
-        if (this.dataSource) {
+        if (this.driver) {
             const collection = collectionRegistry.getCollectionByPath(notifyPath);
-            const fetchFn = async () => this.dataSource!.fetchCollection({
+            const fetchFn = async () => this.driver!.fetchCollection({
                 path: notifyPath,
                 collection: collection,
                 filter: collectionRequest.filter as FetchCollectionProps["filter"],
@@ -475,7 +475,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             return fetchFn();
         }
 
-        // No dataSource — use entityService directly (no auth wrapping possible)
+        // No driver — use entityService directly (no auth wrapping possible)
         if (collectionRequest.searchString) {
             return await this.entityService.searchEntities(
                 notifyPath,

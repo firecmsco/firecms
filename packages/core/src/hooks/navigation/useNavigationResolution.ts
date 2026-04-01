@@ -2,11 +2,12 @@ import {
     AuthController,
     CMSView,
     CMSViewsBuilder,
-    DataSource,
+    DataDriver,
     EntityCollection,
     EntityCollectionsBuilder,
     RebasePlugin,
-    User
+    User,
+    RebaseData
 } from "@rebasepro/types";
 import { canReadCollection } from "@rebasepro/common";
 
@@ -38,7 +39,7 @@ export function applyPluginModifyCollection(resolvedCollections: EntityCollectio
 export async function resolveCollections(
     collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>,
     authController: AuthController,
-    dataSource: DataSource,
+    data: RebaseData,
     plugins: RebasePlugin[] | undefined
 ): Promise<EntityCollection[]> {
     let resolvedCollections: EntityCollection[] = [];
@@ -46,7 +47,7 @@ export async function resolveCollections(
         resolvedCollections = await collections({
             user: authController.user,
             authController,
-            dataSource
+            data
         });
     } else if (Array.isArray(collections)) {
         resolvedCollections = collections;
@@ -71,7 +72,7 @@ export async function resolveCollections(
 export async function resolveCMSViews(
     baseViews: CMSView[] | CMSViewsBuilder | undefined,
     authController: AuthController,
-    dataSource: DataSource,
+    data: RebaseData,
     plugins?: RebasePlugin[]
 ) {
     let resolvedViews: CMSView[] = [];
@@ -79,7 +80,7 @@ export async function resolveCMSViews(
         resolvedViews = await baseViews({
             user: authController.user,
             authController,
-            dataSource
+            data
         });
     } else if (Array.isArray(baseViews)) {
         resolvedViews = baseViews;

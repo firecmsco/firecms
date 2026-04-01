@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from "react";
 import {
-    DataSource,
+    DataDriver,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -12,10 +12,10 @@ import {
     SaveEntityProps,
     TableColumnInfo
 } from "@rebasepro/types";
-import { PostgresDataSourceClient, PostgresDataSourceConfig } from "./postgres_client";
+import { PostgresDataDriverClient, PostgresDataDriverConfig } from "./postgres_client";
 
-export interface PostgresDataSource extends DataSource {
-    client: PostgresDataSourceClient;
+export interface PostgresDataDriver extends DataDriver {
+    client: PostgresDataDriverClient;
 }
 
 function recursivelyMap(
@@ -79,8 +79,8 @@ function cmsToDelegateModel(data: any): any {
     });
 }
 
-export function usePostgresClientDataSource(config: PostgresDataSourceConfig): PostgresDataSource {
-    const client = useMemo(() => new PostgresDataSourceClient(config), [config.websocketUrl]);
+export function usePostgresClientDriver(config: PostgresDataDriverConfig): PostgresDataDriver {
+    const client = useMemo(() => new PostgresDataDriverClient(config), [config.websocketUrl]);
 
     // Update auth token getter when it changes (e.g., when auth loading completes)
     useEffect(() => {
@@ -234,6 +234,6 @@ export function usePostgresClientDataSource(config: PostgresDataSourceConfig): P
         async fetchTableColumns(tableName: string): Promise<TableColumnInfo[]> {
             return client.fetchTableColumns(tableName);
         }
-    }), [client]) as PostgresDataSource;
+    }), [client]) as PostgresDataDriver;
 
 }

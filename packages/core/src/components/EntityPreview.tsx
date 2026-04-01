@@ -9,9 +9,9 @@ import { PropertyPreview, SkeletonPropertyComponent } from "../preview";
 import {
     useAuthController,
     useCustomizationController,
-    useDataSource,
     useCollectionRegistryController,
-    useSideEntityController
+    useSideEntityController,
+    useData
 } from "../hooks";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { getPropertyInPath, IconForView } from "../util";
@@ -209,7 +209,7 @@ export function EntityPreviewWithId({
 
     const [entity, setEntity] = React.useState<Entity | undefined>();
     const [dataLoading, setDataLoading] = React.useState(false);
-    const dataSource = useDataSource();
+    const dataClient = useData();
 
     useEffect(() => {
         let isMounted = true;
@@ -220,11 +220,7 @@ export function EntityPreviewWithId({
         const fetchEntity = async () => {
             setDataLoading(true);
             try {
-                const fetchedEntity = await dataSource.fetchEntity({
-                    path,
-                    entityId,
-                    databaseId: props.databaseId
-                });
+                const fetchedEntity = await dataClient.collection(path).findById(entityId);
                 if (isMounted) {
                     setEntity(fetchedEntity);
                 }

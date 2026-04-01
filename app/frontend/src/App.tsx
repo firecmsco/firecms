@@ -38,9 +38,10 @@ import {
     UIReferenceView,
 } from "@rebasepro/core";
 import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
-import { usePostgresClientDataSource } from "@rebasepro/postgresql";
+import { usePostgresClientDriver } from "@rebasepro/postgresql";
 import { CollectionsStudioView, RLSEditor, SQLEditor, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
 import { CMSView } from "@rebasepro/types";
+import { buildRebaseData } from "@rebasepro/common";
 import { collections } from "virtual:rebase-collections";
 import { Route, Outlet } from "react-router-dom";
 
@@ -69,7 +70,7 @@ export function App() {
         currentUser: authController.user
     });
 
-    const postgresDelegate = usePostgresClientDataSource({
+    const postgresDelegate = usePostgresClientDriver({
         websocketUrl: API_URL.replace(/^http/, "ws"),
         getAuthToken: authController.initialLoading ? undefined : authController.getAuthToken
     });
@@ -129,7 +130,7 @@ export function App() {
         collections: collectionsBuilder,
         views: devViews,
         authController,
-        dataSource: postgresDelegate,
+        data: buildRebaseData(postgresDelegate),
         collectionRegistryController,
         cmsUrlController,
         adminMode: adminModeController.mode,
@@ -148,7 +149,7 @@ export function App() {
                         navigationStateController={navigationStateController}
                         authController={authController}
                         userConfigPersistence={userConfigPersistence}
-                        dataSource={postgresDelegate}
+                        driver={postgresDelegate}
                         storageSource={storageSource}
                     >
                         {({ loading }) => {

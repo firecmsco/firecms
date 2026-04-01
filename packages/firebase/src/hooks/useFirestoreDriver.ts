@@ -1,5 +1,5 @@
 import {
-    DataSource,
+    DataDriver,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -49,7 +49,7 @@ import { getAuth } from "@firebase/auth";
 /**
  * @group Firebase
  */
-export interface FirestoreDataSourceProps {
+export interface FirestoreDataDriverProps {
     firebaseApp?: FirebaseApp,
     /**
      * You can use this controller to return a list of ids from a search index, given a
@@ -76,7 +76,7 @@ export type FirestoreIndexesBuilder = (params: {
     collection: EntityCollection<any>,
 }) => FilterCombination<string>[] | undefined
 
-export type FirestoreDataSource = DataSource & {
+export type FirestoreDataDriver = DataDriver & {
 
     initTextSearch: (props: {
         path: string,
@@ -86,17 +86,17 @@ export type FirestoreDataSource = DataSource & {
 }
 
 /**
- * Use this hook to build a {@link DataSource} based on Firestore
+ * Use this hook to build a {@link DataDriver} based on Firestore
  * @param firebaseApp
  * @param textSearchControllerBuilder
  * @group Firebase
  */
-export function useFirestoreDataSource({
+export function useFirestoreDriver({
     firebaseApp,
     textSearchControllerBuilder,
     firestoreIndexesBuilder,
     localTextSearchEnabled
-}: FirestoreDataSourceProps): FirestoreDataSource {
+}: FirestoreDataDriverProps): FirestoreDataDriver {
 
     const searchControllerRef = useRef<FirestoreTextSearchController>(undefined);
 
@@ -120,7 +120,7 @@ export function useFirestoreDataSource({
         limit: number | undefined,
         databaseId?: string) => {
 
-        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDriver Firebase not initialised");
 
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
         const collectionReference: Query = collectionClause(firestore, path);
@@ -154,7 +154,7 @@ export function useFirestoreDataSource({
         entityId: string | number,
         databaseId?: string
     ): Promise<Entity<M> | undefined> => {
-        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDriver Firebase not initialised");
 
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
 
@@ -175,7 +175,7 @@ export function useFirestoreDataSource({
             onUpdate,
             onError,
         }: ListenEntityProps<M>): () => void => {
-        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDriver Firebase not initialised");
 
         const databaseId = collection?.databaseId;
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
@@ -206,7 +206,7 @@ export function useFirestoreDataSource({
         onUpdate: (entities: Entity<M>[]) => void,
     }): () => void => {
 
-        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDriver Firebase not initialised");
 
         const textSearchController = searchControllerRef.current;
         if (!textSearchController)
@@ -279,7 +279,7 @@ export function useFirestoreDataSource({
         }) => {
             console.debug("Init text search controller", searchControllerRef.current, props.path);
             if (!searchControllerRef.current) {
-                console.warn("You are trying to use text search, but have not provided a text search controller in `useFirestoreDataSource`. You can also set the flag `localTextSearchEnabled` to use local search in `useFirestoreDataSource`. Local text search can incur in performance issues and higher costs for large datasets.");
+                console.warn("You are trying to use text search, but have not provided a text search controller in `useFirestoreDriver`. You can also set the flag `localTextSearchEnabled` to use local search in `useFirestoreDriver`. Local text search can incur in performance issues and higher costs for large datasets.");
                 return false;
             }
             try {
@@ -377,7 +377,7 @@ export function useFirestoreDataSource({
             });
 
             if (!firebaseApp) {
-                throw Error("useFirestoreDataSource Firebase not initialised");
+                throw Error("useFirestoreDriver Firebase not initialised");
             }
 
             const databaseId = collection?.databaseId;
@@ -458,7 +458,7 @@ export function useFirestoreDataSource({
                 status,
             }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDriver Firebase not initialised");
 
             console.debug("1", {
                 path,
@@ -518,7 +518,7 @@ export function useFirestoreDataSource({
                 entity
             }: DeleteEntityProps<M>
         ): Promise<void> => {
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDriver Firebase not initialised");
 
             const databaseId = entity.databaseId;
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
@@ -544,7 +544,7 @@ export function useFirestoreDataSource({
             collection?: EntityCollection<any>
         ): Promise<boolean> => {
 
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDriver Firebase not initialised");
 
             const databaseId = collection?.databaseId;
             const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
@@ -565,7 +565,7 @@ export function useFirestoreDataSource({
             orderBy,
             collection,
         }: FetchCollectionProps<any>): Promise<number> => {
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDriver Firebase not initialised");
             const databaseId = collection?.databaseId;
             const resolvedPath = path;
             const query = buildQuery(resolvedPath, filter, orderBy, order, undefined, undefined, databaseId);
@@ -585,7 +585,7 @@ export function useFirestoreDataSource({
             sortBy?: [string, "asc" | "desc"],
         }): boolean => {
 
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDriver Firebase not initialised");
 
             // If no indexes are defined, we assume the query is valid.
             // If there is no index in Firestore, and error message will be shown

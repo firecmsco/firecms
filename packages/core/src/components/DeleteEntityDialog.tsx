@@ -5,7 +5,7 @@ import {
     deleteEntityWithCallbacks,
     useAuthController,
     useCustomizationController,
-    useDataSource,
+    useData,
     useRebaseContext,
     useSnackbarController,
     useTranslation
@@ -36,7 +36,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     path
 }: DeleteEntityDialogProps<M>) {
     const authController = useAuthController();
-    const dataSource = useDataSource(collection);
+    const dataClient = useData();
     const customizationController = useCustomizationController();
     const snackbarController = useSnackbarController();
     const { t } = useTranslation();
@@ -72,14 +72,14 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
     const performDelete = useCallback((entity: Entity<M>): Promise<boolean> =>
         deleteEntityWithCallbacks({
-            dataSource,
+            data: dataClient,
             entity,
             collection: collection,
             callbacks,
             onDeleteSuccess,
             onDeleteFailure,
             context
-        }), [dataSource, collection, callbacks, onDeleteSuccess, onDeleteFailure, context]);
+        }), [dataClient, collection, callbacks, onDeleteSuccess, onDeleteFailure, context]);
 
     const handleOk = useCallback(async () => {
         if (entityOrEntities) {

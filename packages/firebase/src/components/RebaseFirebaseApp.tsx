@@ -22,6 +22,7 @@ import {
     useBuildNavigationStateController,
     useValidateAuthenticator
 } from "@rebasepro/core";
+import { buildRebaseData } from "@rebasepro/common";
 import { Route, Routes, Outlet } from "react-router-dom";
 
 import { RebaseFirebaseAppProps } from "./RebaseFirebaseAppProps";
@@ -30,7 +31,7 @@ import {
     useAppCheck,
     useFirebaseAuthController,
     useFirebaseStorageSource,
-    useFirestoreDataSource,
+    useFirestoreDriver,
     useInitialiseFirebase,
 } from "../hooks";
 import { CenteredView } from "@rebasepro/ui";
@@ -133,7 +134,7 @@ export function RebaseFirebaseApp({
      */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    const firestoreDelegate = useFirestoreDataSource({
+    const firestoreDelegate = useFirestoreDriver({
         firebaseApp,
         textSearchControllerBuilder: textSearchControllerBuilder,
         firestoreIndexesBuilder: firestoreIndexesBuilder,
@@ -157,7 +158,7 @@ export function RebaseFirebaseApp({
     } = useValidateAuthenticator({
         authController,
         authenticator,
-        dataSource: firestoreDelegate,
+        data: buildRebaseData(firestoreDelegate),
         storageSource
     });
 
@@ -175,8 +176,8 @@ export function RebaseFirebaseApp({
         collections,
         views,
         adminViews,
-        authController,
-        dataSource: firestoreDelegate,
+        authController: authController as any,
+        data: buildRebaseData(firestoreDelegate),
         plugins,
         collectionRegistryController,
         cmsUrlController,
@@ -206,7 +207,7 @@ export function RebaseFirebaseApp({
                         navigationStateController={navigationStateController}
                         userConfigPersistence={userConfigPersistence}
                         dateTimeFormat={dateTimeFormat}
-                        dataSource={firestoreDelegate}
+                        driver={firestoreDelegate}
                         storageSource={storageSource}
                         userManagement={userManagement}
                         entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}

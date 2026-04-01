@@ -2,15 +2,16 @@ import {
     AnalyticsController,
     AuthController,
     CustomizationController,
-    DataSource,
     DialogsController,
     NavigationController,
     SideDialogsController,
     SideEntityController,
     SnackbarController,
     StorageSource,
-    UserConfigurationPersistence
+    UserConfigurationPersistence,
+    DatabaseAdmin
 } from "./controllers";
+import { RebaseData } from "./controllers/data";
 import { User } from "./users";
 import { UserManagementDelegate, EffectiveRoleController } from "./types";
 
@@ -22,9 +23,10 @@ import { UserManagementDelegate, EffectiveRoleController } from "./types";
 export type RebaseCallContext<USER extends User = User> = {
 
     /**
-     * Connector to your database, e.g. your Firestore database
+     * Unified data access — `context.data.products.create(...)`.
+     * Access any collection as a dynamic property.
      */
-    dataSource: DataSource;
+    data: RebaseData;
 
     /**
      * Used storage implementation
@@ -76,8 +78,6 @@ export type RebaseContext<USER extends User = User, AuthControllerType extends A
      */
     authController?: AuthControllerType;
 
-
-
     /**
      * This controller holds the customization options for the CMS.
      */
@@ -118,5 +118,11 @@ export type RebaseContext<USER extends User = User, AuthControllerType extends A
      * Controller to simulate different roles when dev mode is active.
      */
     effectiveRoleController?: EffectiveRoleController;
+
+    /**
+     * Administrative database operations (SQL, schema discovery).
+     * Only available in developer/admin contexts.
+     */
+    databaseAdmin?: DatabaseAdmin;
 
 };

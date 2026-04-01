@@ -5,7 +5,7 @@ import {
     AuthController,
     CMSView,
     CMSViewsBuilder,
-    DataSource,
+    RebaseData,
     EffectiveRoleController,
     EntityCollection,
     RebasePlugin,
@@ -21,7 +21,7 @@ export type UseResolvedViewsProps<USER extends User> = {
     authController: AuthController<USER>;
     views?: CMSView[] | CMSViewsBuilder;
     adminViews?: CMSView[] | CMSViewsBuilder;
-    dataSource: DataSource;
+    data: RebaseData;
     plugins?: RebasePlugin[];
     adminMode?: "content" | "studio" | "settings";
     effectiveRoleController?: EffectiveRoleController;
@@ -41,7 +41,7 @@ export type UseResolvedViewsResult = {
  * into concrete CMSView[]. Also injects Users/Roles admin views when userManagement
  * is provided.
  *
- * Uses refs for potentially-unstable dependencies (dataSource, authController,
+ * Uses refs for potentially-unstable dependencies (driver, authController,
  * plugins) to avoid re-triggering effects when their object identity changes.
  */
 export function useResolvedViews<USER extends User>(
@@ -52,7 +52,7 @@ export function useResolvedViews<USER extends User>(
         authController,
         views: viewsProp,
         adminViews: adminViewsProp,
-        dataSource,
+        data,
         plugins,
         adminMode = "content",
         effectiveRoleController,
@@ -77,8 +77,8 @@ export function useResolvedViews<USER extends User>(
 
     // Use refs for values that may be new objects each render but shouldn't
     // re-trigger the effect. The effect reads them at execution time.
-    const dataSourceRef = useRef(dataSource);
-    dataSourceRef.current = dataSource;
+    const dataRef = useRef(data);
+    dataRef.current = data;
     const authControllerRef = useRef(authController);
     authControllerRef.current = authController;
     const pluginsRef = useRef(plugins);
@@ -150,8 +150,8 @@ export function useResolvedViews<USER extends User>(
         (async () => {
             try {
                 const [newViews, newAdminViewsProp] = await Promise.all([
-                    resolveCMSViews(viewsProp, resolvedAuthControllerRef.current, dataSourceRef.current, pluginsRef.current),
-                    resolveCMSViews(adminViewsProp, resolvedAuthControllerRef.current, dataSourceRef.current)
+                    resolveCMSViews(viewsProp, resolvedAuthControllerRef.current, dataRef.current, pluginsRef.current),
+                    resolveCMSViews(adminViewsProp, resolvedAuthControllerRef.current, dataRef.current)
                 ]);
 
                 if (cancelled) return;

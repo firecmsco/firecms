@@ -2,16 +2,16 @@
 slug: docs/collections/dynamic_collections
 title: Dynamic collections
 sidebar_label: Dynamic collections
-description: Unlock personalized content management with Dynamic Collections in Rebase, where collections can adapt to the logged-in user's profile using asynchronous callbacks. Tailor your CMS with custom properties built on-the-fly, ensuring a highly responsive and secure environment that aligns with user roles and permissions. Through strategic utilization of `EntityCollectionsBuilder` and `AuthController`, dynamically generate data schemas suitable for each user, enhancing their CMS experience with intelligent, role-specific interfaces.
+description: Tailor the Rebase UI to your logged-in users with Dynamic Collections. While the backend database schema is strictly typed, Rebase allows you to dynamically adjust the presentation, visibility, and properties of your collections using asynchronous callbacks in the frontend. Through strategic utilization of EntityCollectionsBuilder and AuthController, you can build intelligent, role-specific interfaces and populate UI elements asynchronously.
 ---
 
-Rebase offers the possibility to define collections dynamically. This means
-that collections can be built asynchronously, based on the logged-in user,
-based on the data of other collections, or based on any other arbitrary
-condition.
+While Rebase relies on a statically generated backend schema (powered by Firebase Data Connect and PostgreSQL), the **presentation** of your collections in the CMS can be extremely dynamic. This means you can adjust which collections are visible, configure field options, or populate UI elements asynchronously based on the logged-in user or data from other collections.
 
-Instead of defining your collections as an array, use a `EntityCollectionsBuilder`,
-a function that returns a promise of an object containing the collections.
+:::important
+Dynamic collections in Rebase are a **frontend concept**. You cannot create new database tables or columns on the fly. Any properties or collections returned by your dynamic builder must perfectly map to your generated static backend schema.
+:::
+
+Instead of defining your collections as a static array, use an `EntityCollectionsBuilder`—a function that returns a promise of an object containing the collections.
 
 ```tsx
 import { EntityCollectionsBuilder } from "@rebasepro/core";

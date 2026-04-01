@@ -14,7 +14,7 @@ export interface ErrorViewProps {
 
 /**
  * Generic error view. Displayed for example when an unexpected value comes
- * from the datasource in a collection view.
+ * from the driver in a collection view.
  * @param title
  * @param error
  * @param tooltip

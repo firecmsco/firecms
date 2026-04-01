@@ -60,7 +60,7 @@ export type SelectableTableProps<M extends Record<string, any>> = {
 
     /**
      * Controller holding the logic for the table
-     * {@link useDataSourceTableController}
+     * {@link useDataTableController}
      * {@link EntityTableController}
      */
     tableController: EntityTableController<M>;
@@ -117,8 +117,8 @@ export type SelectableTableProps<M extends Record<string, any>> = {
  * check {@link EntityCollectionView}.
  *
  * The data displayed in the table is managed by a {@link EntityTableController}.
- * You can build the default, bound to a path in the datasource, by using the hook
- * {@link useDataSourceTableController}
+ * You can build the default, bound to a path in the driver, by using the hook
+ * {@link useDataTableController}
  *
  * @see EntityCollectionTableProps
  * @see EntityCollectionView

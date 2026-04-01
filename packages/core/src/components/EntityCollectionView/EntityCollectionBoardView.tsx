@@ -32,7 +32,7 @@ import {
     saveEntityWithCallbacks,
     useAuthController,
     useCustomizationController,
-    useDataSource,
+    useData,
     useRebaseContext,
     useSideEntityController,
     useTranslation
@@ -75,7 +75,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     const authController = useAuthController();
     const customizationController = useCustomizationController();
     const context = useRebaseContext();
-    const dataSource = useDataSource(collection);
+    const dataClient = useData();
     const sideEntityController = useSideEntityController();
     const analyticsController = useAnalyticsController();
     const { t } = useTranslation();
@@ -245,17 +245,17 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     // Just TWO counts: total and ordered (for the entire collection, not per column)
     const [missingOrderCount, setMissingOrderCount] = useState<number>(0);
 
-    // Use refs for objects that shouldn't trigger re-runs
-    const dataSourceRef = useRef(dataSource);
+    const dataClientRef = useRef(dataClient);
     const collectionRef = useRef(collection);
-    dataSourceRef.current = dataSource;
+    dataClientRef.current = dataClient;
     collectionRef.current = collection;
 
     useEffect(() => {
-        const currentDataSource = dataSourceRef.current;
+        const currentDataClient = dataClientRef.current;
         const currentCollection = collectionRef.current;
+        const accessor = currentDataClient.collection(fullPath);
 
-        if (!orderProperty || !currentDataSource.countEntities) {
+        if (!orderProperty || !accessor.count) {
             setMissingOrderCount(0);
             return;
         }
@@ -266,10 +266,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         let orderedCount = 0;
         let completed = 0;
 
-        currentDataSource.countEntities({
-            path: fullPath,
-            collection: currentCollection
-        }).then(count => {
+        accessor.count().then(count => {
             totalCount = count;
             completed++;
             if (completed === 2) {
@@ -277,10 +274,8 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             }
         }).catch(e => console.warn("Failed to get total count:", e));
 
-        currentDataSource.countEntities({
-            path: fullPath,
-            collection: currentCollection,
-            filter: { [orderProperty]: ["!=", null] } as FilterValues<string>
+        accessor.count({
+            where: { [orderProperty]: "neq.null" }
         }).then(count => {
             orderedCount = count;
             completed++;
@@ -460,7 +455,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             await saveEntityWithCallbacks({
                 ...saveProps,
                 collection,
-                dataSource,
+                data: dataClient,
                 context,
                 afterSave: () => {
                 },
@@ -469,7 +464,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         } catch (e) {
             console.error("Error saving entity:", e);
         }
-    }, [collection, columnProperty, orderProperty, context, dataSource, calculateNewOrder, boardDataController, analyticsController, fullPath]);
+    }, [collection, columnProperty, orderProperty, context, dataClient, calculateNewOrder, boardDataController, analyticsController, fullPath]);
 
     // Backfill order values for all entities
     const handleBackfill = useCallback(async () => {
@@ -486,11 +481,10 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         try {
             // Fetch ALL documents from collection (not relying on loaded entities)
             console.log("Fetching all documents from collection...");
-            const allDocs = await dataSource.fetchCollection<M>({
-                path: fullPath,
-                collection,
+            const allDocsRes = await dataClient.collection(fullPath).find({
                 limit: 10000 // Fetch all
             });
+            const allDocs = allDocsRes.data;
             console.log(`Fetched ${allDocs.length} documents`);
 
             // Find entities missing order property
@@ -519,7 +513,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                     saveEntityWithCallbacks({
                         ...saveProps,
                         collection,
-                        dataSource,
+                        data: dataClient,
                         context,
                         afterSave: () => {
                             console.log(`Saved entity ${entity.id}`);
@@ -545,7 +539,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         } finally {
             setBackfillLoading(false);
         }
-    }, [orderProperty, fullPath, collection, dataSource, context, boardDataController, analyticsController]);
+    }, [orderProperty, fullPath, collection, dataClient, context, boardDataController, analyticsController]);
 
     const handleEntityClick = useCallback((entity: Entity<M>) => {
         onEntityClick?.(entity);

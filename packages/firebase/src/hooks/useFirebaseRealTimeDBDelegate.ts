@@ -16,7 +16,7 @@ import {
 } from "@firebase/database";
 import { useCallback } from "react";
 import {
-    DataSource,
+    DataDriver,
     DeleteEntityProps,
     Entity,
     FetchCollectionProps,
@@ -26,7 +26,7 @@ import {
     SaveEntityProps
 } from "@rebasepro/core";
 
-export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: FirebaseApp }): DataSource {
+export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: FirebaseApp }): DataDriver {
 
     const fetchCollection = useCallback(async <M extends Record<string, any>>({
         path,
@@ -175,7 +175,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
         await remove(ref(database, `${entity.path}/${entity.id}`));
     }, [firebaseApp]);
 
-    // Implementing additional methods required by DataSource
+    // Implementing additional methods required by DataDriver
     const checkUniqueField = useCallback(async (slug: string, name: string, value: any, entityId?: string | number): Promise<boolean> => {
         if (!firebaseApp) {
             throw new Error("Firebase app not provided");

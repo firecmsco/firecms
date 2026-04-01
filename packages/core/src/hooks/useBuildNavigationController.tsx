@@ -15,7 +15,7 @@ import {
     EntityCollectionsBuilder,
     CMSViewsBuilder,
     UserConfigurationPersistence,
-    DataSource
+    RebaseData
 } from "@rebasepro/types";
 
 import { useNavigationURLs } from "./navigation/useNavigationURLs";
@@ -32,7 +32,7 @@ export type BuildNavigationContextProps<EC extends EntityCollection, USER extend
     views?: CMSView[] | CMSViewsBuilder;
     adminViews?: CMSView[] | CMSViewsBuilder;
     userConfigPersistence?: UserConfigurationPersistence;
-    dataSource: DataSource;
+    data: RebaseData;
     plugins?: RebasePlugin[];
     navigationGroupMappings?: NavigationGroupMapping[];
     disabled?: boolean;
@@ -54,7 +54,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         viewsOrder,
         plugins,
         userConfigPersistence,
-        dataSource,
+        data,
         disabled,
         navigationGroupMappings
     } = props;
@@ -262,9 +262,9 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
             const [resolvedCollections = [], resolvedViews, resolvedAdminViews = []] = await Promise.all(
                 [
-                    resolveCollections(collectionsProp, authController, dataSource, plugins),
-                    resolveCMSViews(viewsProp, authController, dataSource, plugins),
-                    resolveCMSViews(adminViewsProp, authController, dataSource)
+                    resolveCollections(collectionsProp, authController, data, plugins),
+                    resolveCMSViews(viewsProp, authController, data, plugins),
+                    resolveCMSViews(adminViewsProp, authController, data)
                 ]
             );
 

@@ -1,12 +1,12 @@
-import { DataSource, EntityCollection } from "@rebasepro/types";
+import { DataDriver, EntityCollection } from "@rebasepro/types";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { collectionRegistry } from "./collections/registry";
 import { loadCollectionsFromDirectory } from "./collections/loader";
 import { getTableName, isTable, Relations } from "drizzle-orm";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { PostgresDataSource } from "./services/postgresDataSource";
+import { PostgresDataDriver } from "./services/postgresDataDriver";
 import { RealtimeService } from "./services/realtimeService";
-import { DatasourceRegistry, DEFAULT_DATASOURCE_ID, DefaultDatasourceRegistry } from "./services/datasource-registry";
+import { DriverRegistry, DEFAULT_DRIVER_ID, DefaultDriverRegistry } from "./services/driver-registry";
 import { DatabasePoolManager } from "./services/databasePoolManager";
 import { Server } from "http";
 import { createPostgresWebSocket } from "./websocket";
@@ -61,10 +61,10 @@ export interface AuthConfig {
 }
 
 /**
- * Configuration for a PostgreSQL datasource.
- * Use with `createPostgresDelegate()` to create a DataSource.
+ * Configuration for a PostgreSQL driver.
+ * Use with `createPostgresDelegate()` to create a DataDriver.
  */
-export interface PostgresDatasourceConfig {
+export interface PostgresDriverConfig {
     /** Drizzle database connection */
     connection: NodePgDatabase;
     /** Database schema */
@@ -82,11 +82,11 @@ export interface PostgresDatasourceConfig {
 }
 
 /**
- * Configuration for a single datasource.
+ * Configuration for a single driver.
  *
  * You can provide either:
- * - A `DataSource` directly (for any database type)
- * - A `PostgresDatasourceConfig` (convenience for PostgreSQL)
+ * - A `DataDriver` directly (for any database type)
+ * - A `PostgresDriverConfig` (convenience for PostgreSQL)
  *
  * @example
  * // PostgreSQL (using config object)
@@ -95,7 +95,7 @@ export interface PostgresDatasourceConfig {
  * // Any database (using delegate directly)
  * myFirestoreDelegate
  */
-export type DatasourceConfig = DataSource | PostgresDatasourceConfig;
+export type DriverConfig = DataDriver | PostgresDriverConfig;
 
 export interface RebaseBackendConfig {
     collections?: EntityCollection[];
@@ -107,19 +107,19 @@ export interface RebaseBackendConfig {
     basePath?: string;
 
     /**
-     * Datasource configuration. Supports two formats:
+     * Driver configuration. Supports two formats:
      *
-     * **Single datasource (most common):**
+     * **Single driver (most common):**
      * ```typescript
-     * datasource: {
+     * driver: {
      *     connection: db,
      *     schema: { tables, enums, relations }
      * }
      * ```
      *
-     * **Multiple datasources:**
+     * **Multiple drivers:**
      * ```typescript
-     * datasource: {
+     * driver: {
      *     "(default)": { connection: db, schema: { tables } },
      *     "analytics": { connection: analyticsDb, schema: { analyticsTables } }
      * }
@@ -127,16 +127,16 @@ export interface RebaseBackendConfig {
      *
      * **Using delegates directly (for non-PostgreSQL):**
      * ```typescript
-     * datasource: {
+     * driver: {
      *     "(default)": postgresDelegate,
      *     "firestore": firestoreDelegate
      * }
      * ```
      *
-     * Collections use `datasource` property to specify which to use.
-     * Collections without `datasource` use "(default)".
+     * Collections use `driver` property to specify which to use.
+     * Collections without `driver` use "(default)".
      */
-    datasource: DatasourceConfig | Record<string, DatasourceConfig>;
+    driver: DriverConfig | Record<string, DriverConfig>;
 
     logging?: {
         level?: "error" | "warn" | "info" | "debug";
@@ -168,25 +168,25 @@ export interface RebaseBackendConfig {
 
 export interface RebaseBackendInstance {
     /**
-     * Registry for accessing multiple datasources by ID.
-     * Use `datasourceRegistry.getOrDefault(databaseId)` to get a datasource.
+     * Registry for accessing multiple drivers by ID.
+     * Use `driverRegistry.getOrDefault(databaseId)` to get a driver.
      */
-    datasourceRegistry: DatasourceRegistry;
+    driverRegistry: DriverRegistry;
 
     /**
-     * Default datasource delegate (convenience accessor).
-     * Equivalent to `datasourceRegistry.getDefault()`.
+     * Default driver delegate (convenience accessor).
+     * Equivalent to `driverRegistry.getDefault()`.
      */
-    dataSource: DataSource;
+    driver: DataDriver;
 
     /**
-     * Realtime services keyed by datasource ID.
-     * Use `realtimeServices[databaseId]` to get the realtime service for a datasource.
+     * Realtime services keyed by driver ID.
+     * Use `realtimeServices[databaseId]` to get the realtime service for a driver.
      */
     realtimeServices: Record<string, RealtimeService>;
 
     /**
-     * Default realtime service (convenience accessor for "(default)" datasource).
+     * Default realtime service (convenience accessor for "(default)" driver).
      */
     realtimeService: RealtimeService;
 
@@ -226,8 +226,8 @@ export async function initializeRebaseBackend(config: RebaseBackendConfig): Prom
         // Return a mocked instance so the server still starts and serves the 503 errors
         return {
             __failed: true,
-            datasourceRegistry: DefaultDatasourceRegistry.create({}),
-            dataSource: {} as unknown as DataSource,
+            driverRegistry: DefaultDriverRegistry.create({}),
+            driver: {} as unknown as DataDriver,
             realtimeServices: {},
             realtimeService: {} as unknown as RealtimeService,
         } as unknown as RebaseBackendInstance;
@@ -252,51 +252,51 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         console.log(`📁 Auto-discovered ${activeCollections.length} collections from ${config.collectionsDir}`);
     }
 
-    // ============ Parse datasource configuration ============
+    // ============ Parse driver configuration ============
 
-    let rawDatasourceConfigs: Record<string, DatasourceConfig>;
+    let rawDriverConfigs: Record<string, DriverConfig>;
 
-    if (isDatasourceConfig(config.datasource)) {
-        // Single datasource (most common)
-        rawDatasourceConfigs = { [DEFAULT_DATASOURCE_ID]: config.datasource };
+    if (isDriverConfig(config.driver)) {
+        // Single driver (most common)
+        rawDriverConfigs = { [DEFAULT_DRIVER_ID]: config.driver };
     } else {
-        // Record of datasources
-        rawDatasourceConfigs = config.datasource;
+        // Record of drivers
+        rawDriverConfigs = config.driver;
     }
 
-    // ============ Initialize datasources ============
+    // ============ Initialize drivers ============
 
     const realtimeServices: Record<string, RealtimeService> = {};
-    const delegates: Record<string, DataSource> = {};
+    const delegates: Record<string, DataDriver> = {};
 
-    for (const [datasourceId, dsConfig] of Object.entries(rawDatasourceConfigs)) {
-        console.log(`📦 Initializing datasource: "${datasourceId}"`);
+    for (const [driverId, dsConfig] of Object.entries(rawDriverConfigs)) {
+        console.log(`📦 Initializing driver: "${driverId}"`);
 
-        // Resolve the DataSource from the config
+        // Resolve the DataDriver from the config
         const {
             delegate,
             db,
             schema,
             adminConnectionString
-        } = resolveDatasourceConfig(dsConfig);
+        } = resolveDriverConfig(dsConfig);
 
         if (delegate) {
             // Direct delegate - just use it
-            delegates[datasourceId] = delegate;
+            delegates[driverId] = delegate;
 
             // For non-Postgres delegates, we don't have a RealtimeService
             // They handle their own real-time (e.g., Firestore)
         } else if (db && schema) {
             // PostgreSQL config - create delegate
 
-            // Register tables for this datasource
+            // Register tables for this driver
             Object.values(schema.tables).forEach((table) => {
                 if (isTable(table)) {
                     const tableName = getTableName(table);
                     const matchingCollection = activeCollections.find(
                         c => c.dbPath === tableName && (
-                            c.datasource === datasourceId ||
-                            (!c.datasource && datasourceId === DEFAULT_DATASOURCE_ID)
+                            c.driver === driverId ||
+                            (!c.driver && driverId === DEFAULT_DRIVER_ID)
                         )
                     );
                     collectionRegistry.registerTable(table, matchingCollection?.dbPath ?? tableName);
@@ -306,33 +306,33 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             if (schema.enums) collectionRegistry.registerEnums(schema.enums);
             if (schema.relations) collectionRegistry.registerRelations(schema.relations);
 
-            // Create realtime service and datasource delegate
+            // Create realtime service and driver delegate
             const realtimeService = new RealtimeService(db);
             const poolManager = adminConnectionString ? new DatabasePoolManager(adminConnectionString) : undefined;
-            const dataSource = new PostgresDataSource(db, realtimeService, undefined, poolManager);
-            realtimeService.setDataSource(dataSource);
+            const driver = new PostgresDataDriver(db, realtimeService, undefined, poolManager);
+            realtimeService.setDataDriver(driver);
 
-            realtimeServices[datasourceId] = realtimeService;
-            delegates[datasourceId] = dataSource;
+            realtimeServices[driverId] = realtimeService;
+            delegates[driverId] = driver;
         } else {
-            console.warn(`⚠️ Skipping datasource "${datasourceId}" - invalid configuration`);
+            console.warn(`⚠️ Skipping driver "${driverId}" - invalid configuration`);
         }
     }
 
     // Create the registry
-    const datasourceRegistry = DefaultDatasourceRegistry.create(delegates);
+    const driverRegistry = DefaultDriverRegistry.create(delegates);
 
-    console.log(`✅ Initialized ${Object.keys(delegates).length} datasource(s): ${Object.keys(delegates).join(", ")}`);
+    console.log(`✅ Initialized ${Object.keys(delegates).length} driver(s): ${Object.keys(delegates).join(", ")}`);
 
     // Register collections
     activeCollections.forEach(collection => collectionRegistry.register(collection));
 
-    // ============ Get default datasource for auth ============
+    // ============ Get default driver for auth ============
     // Auth requires PostgreSQL, so we need to find the default db connection
     let defaultDb: NodePgDatabase | undefined;
-    const defaultConfig = rawDatasourceConfigs[DEFAULT_DATASOURCE_ID];
+    const defaultConfig = rawDriverConfigs[DEFAULT_DRIVER_ID];
     if (defaultConfig) {
-        const resolved = resolveDatasourceConfig(defaultConfig);
+        const resolved = resolveDriverConfig(defaultConfig);
         defaultDb = resolved.db;
     }
 
@@ -344,8 +344,8 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
     if (config.auth) {
         if (!defaultDb) {
             console.warn(
-                "⚠️ Auth requires a PostgreSQL database. No default PostgreSQL datasource found. " +
-                "Auth will not be initialized. Make sure your default datasource uses PostgresDatasourceConfig."
+                "⚠️ Auth requires a PostgreSQL database. No default PostgreSQL driver found. " +
+                "Auth will not be initialized. Make sure your default driver uses PostgresDriverConfig."
             );
         } else {
             console.log("🔐 Configuring authentication...");
@@ -444,22 +444,22 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
     }
 
     // ============ Create WebSocket with auth support ============
-    // Use the default realtime service and datasource delegate
-    const defaultRealtimeService = realtimeServices[DEFAULT_DATASOURCE_ID];
-    const defaultDataSourceDelegate = datasourceRegistry.getDefault();
+    // Use the default realtime service and driver delegate
+    const defaultRealtimeService = realtimeServices[DEFAULT_DRIVER_ID];
+    const defaultDataDriverDelegate = driverRegistry.getDefault();
 
     createPostgresWebSocket(
         config.server,
         defaultRealtimeService,
-        defaultDataSourceDelegate as PostgresDataSource,
+        defaultDataDriverDelegate as PostgresDataDriver,
         config.auth
     );
 
     console.log("✅ Rebase Backend Initialized");
 
     return {
-        datasourceRegistry,
-        dataSource: defaultDataSourceDelegate,
+        driverRegistry,
+        driver: defaultDataDriverDelegate,
         realtimeServices,
         realtimeService: defaultRealtimeService,
         userService,
@@ -471,13 +471,13 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
 }
 
 /**
- * Type guard to check if an object is a DataSource
+ * Type guard to check if an object is a DataDriver
  */
-function isDataSourceDelegate(obj: unknown): obj is DataSource {
+function isDataDriverDelegate(obj: unknown): obj is DataDriver {
     if (typeof obj !== "object" || obj === null) {
         return false;
     }
-    const delegate = obj as DataSource;
+    const delegate = obj as DataDriver;
     return (
         typeof delegate.key === "string" &&
         typeof delegate.fetchCollection === "function" &&
@@ -488,13 +488,13 @@ function isDataSourceDelegate(obj: unknown): obj is DataSource {
 }
 
 /**
- * Type guard to check if an object is a PostgresDatasourceConfig (new format)
+ * Type guard to check if an object is a PostgresDriverConfig (new format)
  */
-function isPostgresDatasourceConfig(obj: unknown): obj is PostgresDatasourceConfig {
+function isPostgresDriverConfig(obj: unknown): obj is PostgresDriverConfig {
     if (typeof obj !== "object" || obj === null) {
         return false;
     }
-    const config = obj as PostgresDatasourceConfig;
+    const config = obj as PostgresDriverConfig;
     return (
         config.connection !== undefined &&
         typeof config.schema === "object" &&
@@ -504,30 +504,30 @@ function isPostgresDatasourceConfig(obj: unknown): obj is PostgresDatasourceConf
 }
 
 /**
- * Type guard to check if a value is a single DatasourceConfig
- * (either a DataSource or PostgresDatasourceConfig)
- * vs a Record<string, DatasourceConfig>
+ * Type guard to check if a value is a single DriverConfig
+ * (either a DataDriver or PostgresDriverConfig)
+ * vs a Record<string, DriverConfig>
  */
-function isDatasourceConfig(obj: unknown): obj is DatasourceConfig {
-    return isDataSourceDelegate(obj) || isPostgresDatasourceConfig(obj);
+function isDriverConfig(obj: unknown): obj is DriverConfig {
+    return isDataDriverDelegate(obj) || isPostgresDriverConfig(obj);
 }
 
 /**
- * Resolve a DatasourceConfig into its components
+ * Resolve a DriverConfig into its components
  */
-function resolveDatasourceConfig(config: DatasourceConfig): {
-    delegate?: DataSource;
+function resolveDriverConfig(config: DriverConfig): {
+    delegate?: DataDriver;
     db?: NodePgDatabase;
-    schema?: PostgresDatasourceConfig["schema"];
+    schema?: PostgresDriverConfig["schema"];
     adminConnectionString?: string;
 } {
-    // If it's a DataSource directly
-    if (isDataSourceDelegate(config)) {
+    // If it's a DataDriver directly
+    if (isDataDriverDelegate(config)) {
         return { delegate: config };
     }
 
-    // If it's a PostgresDatasourceConfig
-    if (isPostgresDatasourceConfig(config)) {
+    // If it's a PostgresDriverConfig
+    if (isPostgresDriverConfig(config)) {
         return {
             db: config.connection,
             schema: config.schema,
@@ -585,7 +585,7 @@ export async function initializeRebaseAPI(
     const apiServer = await RebaseApiServer.create({
         collections,
         collectionsDir: config.collectionsDir,
-        dataSource: backend.dataSource,
+        driver: backend.driver,
         basePath: config.basePath || "/api",
         enableGraphQL: config.enableGraphQL ?? true,
         enableREST: config.enableREST ?? true,

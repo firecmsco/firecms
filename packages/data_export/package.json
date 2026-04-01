@@ -22,10 +22,10 @@
     },
     "exports": {
         ".": {
+            "types": "./dist/index.d.ts",
             "development": "./src/index.ts",
             "import": "./dist/index.es.js",
-            "require": "./dist/index.umd.js",
-            "types": "./dist/index.d.ts"
+            "require": "./dist/index.umd.js"
         },
         "./package.json": "./package.json"
     },

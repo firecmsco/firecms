@@ -673,7 +673,7 @@ export interface PropertyDisabledConfig {
 /**
  * We use this type to define mapping between string or number values in
  * the data source to a label (such in a select dropdown).
- * The key in this Record is the value saved in the datasource, and the value in
+ * The key in this Record is the value saved in the driver, and the value in
  * this record is the label displayed in the UI.
  * You can add additional customization by assigning a {@link EnumValueConfig} for the
  * label instead of a simple string (for enabling or disabling options and
@@ -865,7 +865,7 @@ export type StorageConfig = {
 
     /**
      * When set to true, this flag indicates that the download URL of the file
-     * will be saved in the datasource, instead of the storage path.
+     * will be saved in the driver, instead of the storage path.
      *
      * Note that the generated URL may use a token that, if disabled, may
      * make the URL unusable and lose the original reference to Cloud Storage,

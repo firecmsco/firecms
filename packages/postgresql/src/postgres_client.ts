@@ -11,7 +11,7 @@ import {
     TableColumnInfo
 } from "@rebasepro/types";
 
-export interface PostgresDataSourceConfig {
+export interface PostgresDataDriverConfig {
     websocketUrl: string;
     /** Optional auth token getter for WebSocket authentication */
     getAuthToken?: () => Promise<string>;
@@ -31,7 +31,7 @@ export class ApiError extends Error {
 }
 
 
-export class PostgresDataSourceClient {
+export class PostgresDataDriverClient {
     private websocketUrl: string;
     private ws: WebSocket | null = null;
     private subscriptions = new Map<string, {
@@ -94,7 +94,7 @@ export class PostgresDataSourceClient {
     private isAuthenticated = false;
     private authPromise: Promise<void> | null = null;
 
-    constructor(config: PostgresDataSourceConfig) {
+    constructor(config: PostgresDataDriverConfig) {
         this.websocketUrl = config.websocketUrl;
         this.getAuthToken = config.getAuthToken;
         this.initWebSocket();

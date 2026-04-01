@@ -2,7 +2,7 @@
  * PostgreSQL Backend Factory
  * 
  * This module provides factory functions for creating PostgreSQL backend instances.
- * It abstracts the creation of datasources, realtime services, and collection registries.
+ * It abstracts the creation of drivers, realtime services, and collection registries.
  * 
  * Future database implementations (MongoDB, MySQL, etc.) would have their own factory modules.
  */
@@ -10,11 +10,11 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { getTableName, isTable, Relations } from "drizzle-orm";
-import { DataSource, EntityCollection } from "@rebasepro/types";
+import { DataDriver, EntityCollection } from "@rebasepro/types";
 
 import { EntityService } from "./db/entityService";
 import { RealtimeService, PostgresRealtimeProvider } from "./services/realtimeService";
-import { PostgresDataSource } from "./services/postgresDataSource";
+import { PostgresDataDriver } from "./services/postgresDataDriver";
 import { BackendCollectionRegistry, PostgresCollectionRegistry } from "./collections/BackendCollectionRegistry";
 import {
     BackendInstance,
@@ -71,8 +71,8 @@ export interface PostgresBackendConfig extends BackendConfig {
 export interface PostgresBackendInstance extends BackendInstance {
     /** The Drizzle database connection */
     db: NodePgDatabase;
-    /** PostgreSQL DataSource for use with Rebase */
-    dataSource: DataSource;
+    /** PostgreSQL DataDriver for use with Rebase */
+    driver: DataDriver;
     /** Entity service for direct database operations */
     entityService: EntityService;
 }
@@ -89,7 +89,7 @@ export interface PostgresBackendInstance extends BackendInstance {
  * - EntityService (implements EntityRepository)
  * - RealtimeService (implements RealtimeProvider)
  * - BackendCollectionRegistry (implements CollectionRegistryInterface)
- * - PostgresDataSource (for Rebase integration)
+ * - PostgresDataDriver (for Rebase integration)
  * 
  * @example
  * ```typescript
@@ -140,8 +140,8 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
     // Create services
     const entityService = new EntityService(db);
     const realtimeService = new RealtimeService(db);
-    const dataSource = new PostgresDataSource(db, realtimeService);
-    realtimeService.setDataSource(dataSource);
+    const driver = new PostgresDataDriver(db, realtimeService);
+    realtimeService.setDataDriver(driver);
     const postgresConnection = new PostgresConnection(db);
 
     return {
@@ -153,15 +153,15 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
 
         // PostgreSQL-specific accessors
         db,
-        dataSource,
+        driver,
         entityService
     };
 }
 
 /**
- * Create a PostgreSQL DataSource.
+ * Create a PostgreSQL DataDriver.
  * 
- * This is a convenience function when you only need the DataSource
+ * This is a convenience function when you only need the DataDriver
  * without the full backend instance.
  * 
  * @example
@@ -174,9 +174,9 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
 export function createPostgresDelegate(
     db: NodePgDatabase,
     realtimeService?: RealtimeService
-): PostgresDataSource {
+): PostgresDataDriver {
     const realtime = realtimeService ?? new RealtimeService(db);
-    return new PostgresDataSource(db, realtime);
+    return new PostgresDataDriver(db, realtime);
 }
 
 /**

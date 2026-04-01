@@ -64,6 +64,24 @@
       "@rebasepro/user_management": [
         "../../packages/user_management/src"
       ],
+      "@rebasepro/studio": [
+        "../../packages/studio/src"
+      ],
+      "@rebasepro/common": [
+        "../../packages/common/src"
+      ],
+      "@rebasepro/formex": [
+        "../../packages/formex/src"
+      ],
+      "@rebasepro/data_import_export": [
+        "../../packages/data_import_export/src"
+      ],
+      "@rebasepro/media_manager": [
+        "../../packages/media_manager/src"
+      ],
+      "@rebasepro/schema_inference": [
+        "../../packages/schema_inference/src"
+      ],
       "shared": [
         "../shared"
       ]

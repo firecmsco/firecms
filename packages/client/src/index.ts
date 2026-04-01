@@ -16,17 +16,19 @@ export interface CreateRebaseClientOptions extends RebaseClientConfig {
 export type RebaseClient<DB = any> = {
     auth: ReturnType<typeof createAuth>;
     admin: ReturnType<typeof createAdmin>;
-    collection<K extends keyof DB>(slug: Extract<K, string>): CollectionClient<
-        DB[K] extends { Row: infer R } ? R : any,
-        DB[K] extends { Insert: infer I } ? I : any,
-        DB[K] extends { Update: infer U } ? U : any
-    >;
-} & {
-    [K in keyof DB]: CollectionClient<
-        DB[K] extends { Row: infer R } ? R : any,
-        DB[K] extends { Insert: infer I } ? I : any,
-        DB[K] extends { Update: infer U } ? U : any
-    >;
+    data: {
+        collection<K extends keyof DB>(slug: Extract<K, string>): CollectionClient<
+            DB[K] extends { Row: infer R } ? R : any,
+            DB[K] extends { Insert: infer I } ? I : any,
+            DB[K] extends { Update: infer U } ? U : any
+        >;
+    } & {
+        [K in keyof DB]: CollectionClient<
+            DB[K] extends { Row: infer R } ? R : any,
+            DB[K] extends { Insert: infer I } ? I : any,
+            DB[K] extends { Update: infer U } ? U : any
+        >;
+    };
 };
 
 export function createRebaseClient<DB = any>(options: CreateRebaseClientOptions): RebaseClient<DB> {
@@ -54,23 +56,28 @@ export function createRebaseClient<DB = any>(options: CreateRebaseClientOptions)
     const target = {
         auth,
         admin,
-        collection<K extends keyof DB>(slug: Extract<K, string>) {
-            if (!collectionClients.has(slug)) {
-                collectionClients.set(slug, createCollectionClient(transport, slug));
+        data: new Proxy(
+            {
+                collection<K extends keyof DB>(slug: Extract<K, string>) {
+                    if (!collectionClients.has(slug)) {
+                        collectionClients.set(slug, createCollectionClient(transport, slug));
+                    }
+                    return collectionClients.get(slug);
+                }
+            },
+            {
+                get(dataTarget, prop: string | symbol) {
+                    if (prop in dataTarget) {
+                        return (dataTarget as any)[prop];
+                    }
+                    if (typeof prop === "string" && prop !== "then") {
+                        return (dataTarget as any).collection(prop);
+                    }
+                    return undefined;
+                }
             }
-            return collectionClients.get(slug);
-        }
-    } as RebaseClient<DB>;
+        )
+    } as any;
 
-    return new Proxy(target, {
-        get(target, prop: string | symbol) {
-            if (prop in target) {
-                return (target as any)[prop];
-            }
-            if (typeof prop === "string" && prop !== "then") {
-                return target.collection(prop as Extract<keyof DB, string>);
-            }
-            return undefined;
-        }
-    });
+    return target;
 }

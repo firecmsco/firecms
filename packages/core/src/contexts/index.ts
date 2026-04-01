@@ -3,7 +3,7 @@ export * from "./ModeController";
 export * from "./AdminModeController";
 export * from "./EffectiveRoleController";
 export * from "./AuthControllerContext";
-export * from "./DataSourceContext";
+export * from "./DataDriverContext";
 export * from "./NavigationContext";
 export * from "./CustomizationControllerContext";
 export * from "./SideEntityControllerContext";

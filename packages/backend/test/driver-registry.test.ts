@@ -1,14 +1,14 @@
 import {
-    DatasourceRegistry,
-    DefaultDatasourceRegistry,
-    DEFAULT_DATASOURCE_ID
-} from "../src/services/datasource-registry";
-import { DataSource } from "@rebasepro/types";
+    DriverRegistry,
+    DefaultDriverRegistry,
+    DEFAULT_DRIVER_ID
+} from "../src/services/driver-registry";
+import { DataDriver } from "@rebasepro/types";
 
 /**
- * Mock DataSource for testing
+ * Mock DataDriver for testing
  */
-function createMockDataSourceDelegate(key: string): DataSource {
+function createMockDataDriverDelegate(key: string): DataDriver {
     return {
         key,
         initialised: true,
@@ -20,24 +20,24 @@ function createMockDataSourceDelegate(key: string): DataSource {
     };
 }
 
-describe("DatasourceRegistry", () => {
-    describe("DEFAULT_DATASOURCE_ID", () => {
+describe("DriverRegistry", () => {
+    describe("DEFAULT_DRIVER_ID", () => {
         it("should be '(default)'", () => {
-            expect(DEFAULT_DATASOURCE_ID).toBe("(default)");
+            expect(DEFAULT_DRIVER_ID).toBe("(default)");
         });
     });
 
-    describe("DefaultDatasourceRegistry", () => {
+    describe("DefaultDriverRegistry", () => {
         describe("constructor and basic operations", () => {
             it("should create an empty registry", () => {
-                const registry = new DefaultDatasourceRegistry();
+                const registry = new DefaultDriverRegistry();
                 expect(registry.size()).toBe(0);
                 expect(registry.list()).toEqual([]);
             });
 
-            it("should register a datasource", () => {
-                const registry = new DefaultDatasourceRegistry();
-                const mockDelegate = createMockDataSourceDelegate("postgres");
+            it("should register a driver", () => {
+                const registry = new DefaultDriverRegistry();
+                const mockDelegate = createMockDataDriverDelegate("postgres");
 
                 registry.register("test-db", mockDelegate);
 
@@ -46,9 +46,9 @@ describe("DatasourceRegistry", () => {
                 expect(registry.list()).toContain("test-db");
             });
 
-            it("should get a registered datasource", () => {
-                const registry = new DefaultDatasourceRegistry();
-                const mockDelegate = createMockDataSourceDelegate("postgres");
+            it("should get a registered driver", () => {
+                const registry = new DefaultDriverRegistry();
+                const mockDelegate = createMockDataDriverDelegate("postgres");
 
                 registry.register("my-db", mockDelegate);
 
@@ -56,56 +56,56 @@ describe("DatasourceRegistry", () => {
                 expect(retrieved).toBe(mockDelegate);
             });
 
-            it("should return undefined for non-existent datasource", () => {
-                const registry = new DefaultDatasourceRegistry();
+            it("should return undefined for non-existent driver", () => {
+                const registry = new DefaultDriverRegistry();
                 expect(registry.get("non-existent")).toBeUndefined();
             });
         });
 
-        describe("default datasource handling", () => {
-            it("should get default datasource with get(undefined)", () => {
-                const registry = new DefaultDatasourceRegistry();
-                const mockDelegate = createMockDataSourceDelegate("postgres");
+        describe("default driver handling", () => {
+            it("should get default driver with get(undefined)", () => {
+                const registry = new DefaultDriverRegistry();
+                const mockDelegate = createMockDataDriverDelegate("postgres");
 
-                registry.register(DEFAULT_DATASOURCE_ID, mockDelegate);
+                registry.register(DEFAULT_DRIVER_ID, mockDelegate);
 
                 expect(registry.get(undefined)).toBe(mockDelegate);
                 expect(registry.get(null)).toBe(mockDelegate);
             });
 
-            it("should get default datasource with getDefault()", () => {
-                const registry = new DefaultDatasourceRegistry();
-                const mockDelegate = createMockDataSourceDelegate("postgres");
+            it("should get default driver with getDefault()", () => {
+                const registry = new DefaultDriverRegistry();
+                const mockDelegate = createMockDataDriverDelegate("postgres");
 
-                registry.register(DEFAULT_DATASOURCE_ID, mockDelegate);
+                registry.register(DEFAULT_DRIVER_ID, mockDelegate);
 
                 expect(registry.getDefault()).toBe(mockDelegate);
             });
 
-            it("should throw error when no default datasource exists", () => {
-                const registry = new DefaultDatasourceRegistry();
+            it("should throw error when no default driver exists", () => {
+                const registry = new DefaultDriverRegistry();
 
                 expect(() => registry.getDefault()).toThrow(
-                    `[DatasourceRegistry] No default datasource registered.`
+                    `[DriverRegistry] No default driver registered.`
                 );
             });
         });
 
         describe("getOrDefault", () => {
-            let registry: DefaultDatasourceRegistry;
-            let defaultDelegate: DataSource;
-            let analyticsDelegate: DataSource;
+            let registry: DefaultDriverRegistry;
+            let defaultDelegate: DataDriver;
+            let analyticsDelegate: DataDriver;
 
             beforeEach(() => {
-                registry = new DefaultDatasourceRegistry();
-                defaultDelegate = createMockDataSourceDelegate("default-postgres");
-                analyticsDelegate = createMockDataSourceDelegate("analytics-postgres");
+                registry = new DefaultDriverRegistry();
+                defaultDelegate = createMockDataDriverDelegate("default-postgres");
+                analyticsDelegate = createMockDataDriverDelegate("analytics-postgres");
 
-                registry.register(DEFAULT_DATASOURCE_ID, defaultDelegate);
+                registry.register(DEFAULT_DRIVER_ID, defaultDelegate);
                 registry.register("analytics", analyticsDelegate);
             });
 
-            it("should return specific datasource when found", () => {
+            it("should return specific driver when found", () => {
                 expect(registry.getOrDefault("analytics")).toBe(analyticsDelegate);
             });
 
@@ -123,24 +123,24 @@ describe("DatasourceRegistry", () => {
 
                 expect(registry.getOrDefault("non-existent")).toBe(defaultDelegate);
                 expect(consoleSpy).toHaveBeenCalledWith(
-                    expect.stringContaining('Datasource "non-existent" not found')
+                    expect.stringContaining('Driver "non-existent" not found')
                 );
 
                 consoleSpy.mockRestore();
             });
 
             it("should throw when fallback fails (no default)", () => {
-                const emptyRegistry = new DefaultDatasourceRegistry();
+                const emptyRegistry = new DefaultDriverRegistry();
 
                 expect(() => emptyRegistry.getOrDefault("anything")).toThrow();
             });
         });
 
-        describe("overwriting datasources", () => {
-            it("should overwrite existing datasource with same id", () => {
-                const registry = new DefaultDatasourceRegistry();
-                const original = createMockDataSourceDelegate("original");
-                const replacement = createMockDataSourceDelegate("replacement");
+        describe("overwriting drivers", () => {
+            it("should overwrite existing driver with same id", () => {
+                const registry = new DefaultDriverRegistry();
+                const original = createMockDataDriverDelegate("original");
+                const replacement = createMockDataDriverDelegate("replacement");
 
                 const consoleSpy = jest.spyOn(console, "warn").mockImplementation();
 
@@ -149,7 +149,7 @@ describe("DatasourceRegistry", () => {
 
                 expect(registry.get("my-db")).toBe(replacement);
                 expect(consoleSpy).toHaveBeenCalledWith(
-                    expect.stringContaining('Overwriting datasource with id "my-db"')
+                    expect.stringContaining('Overwriting driver with id "my-db"')
                 );
 
                 consoleSpy.mockRestore();
@@ -157,54 +157,54 @@ describe("DatasourceRegistry", () => {
         });
 
         describe("list and size", () => {
-            it("should list all registered datasources", () => {
-                const registry = new DefaultDatasourceRegistry();
+            it("should list all registered drivers", () => {
+                const registry = new DefaultDriverRegistry();
 
-                registry.register("db-1", createMockDataSourceDelegate("pg1"));
-                registry.register("db-2", createMockDataSourceDelegate("pg2"));
-                registry.register(DEFAULT_DATASOURCE_ID, createMockDataSourceDelegate("default"));
+                registry.register("db-1", createMockDataDriverDelegate("pg1"));
+                registry.register("db-2", createMockDataDriverDelegate("pg2"));
+                registry.register(DEFAULT_DRIVER_ID, createMockDataDriverDelegate("default"));
 
                 const list = registry.list();
                 expect(list).toHaveLength(3);
                 expect(list).toContain("db-1");
                 expect(list).toContain("db-2");
-                expect(list).toContain(DEFAULT_DATASOURCE_ID);
+                expect(list).toContain(DEFAULT_DRIVER_ID);
             });
 
             it("should return correct size", () => {
-                const registry = new DefaultDatasourceRegistry();
+                const registry = new DefaultDriverRegistry();
 
                 expect(registry.size()).toBe(0);
 
-                registry.register("db-1", createMockDataSourceDelegate("pg1"));
+                registry.register("db-1", createMockDataDriverDelegate("pg1"));
                 expect(registry.size()).toBe(1);
 
-                registry.register("db-2", createMockDataSourceDelegate("pg2"));
+                registry.register("db-2", createMockDataDriverDelegate("pg2"));
                 expect(registry.size()).toBe(2);
             });
         });
     });
 
-    describe("DefaultDatasourceRegistry.create() factory", () => {
-        describe("with single DataSource", () => {
+    describe("DefaultDriverRegistry.create() factory", () => {
+        describe("with single DataDriver", () => {
             it('should register single delegate as "(default)"', () => {
-                const mockDelegate = createMockDataSourceDelegate("postgres");
+                const mockDelegate = createMockDataDriverDelegate("postgres");
 
-                const registry = DefaultDatasourceRegistry.create(mockDelegate);
+                const registry = DefaultDriverRegistry.create(mockDelegate);
 
-                expect(registry.has(DEFAULT_DATASOURCE_ID)).toBe(true);
+                expect(registry.has(DEFAULT_DRIVER_ID)).toBe(true);
                 expect(registry.getDefault()).toBe(mockDelegate);
                 expect(registry.size()).toBe(1);
             });
         });
 
-        describe("with map of DataSourceDelegates", () => {
+        describe("with map of DataDriverDelegates", () => {
             it("should register all delegates from map", () => {
-                const defaultDelegate = createMockDataSourceDelegate("default-pg");
-                const analyticsDelegate = createMockDataSourceDelegate("analytics-pg");
+                const defaultDelegate = createMockDataDriverDelegate("default-pg");
+                const analyticsDelegate = createMockDataDriverDelegate("analytics-pg");
 
-                const registry = DefaultDatasourceRegistry.create({
-                    [DEFAULT_DATASOURCE_ID]: defaultDelegate,
+                const registry = DefaultDriverRegistry.create({
+                    [DEFAULT_DRIVER_ID]: defaultDelegate,
                     "analytics": analyticsDelegate
                 });
 
@@ -214,28 +214,28 @@ describe("DatasourceRegistry", () => {
             });
 
             it("should use first entry as default if no explicit default provided", () => {
-                const db1 = createMockDataSourceDelegate("db1");
-                const db2 = createMockDataSourceDelegate("db2");
+                const db1 = createMockDataDriverDelegate("db1");
+                const db2 = createMockDataDriverDelegate("db2");
 
                 const consoleSpy = jest.spyOn(console, "warn").mockImplementation();
 
-                const registry = DefaultDatasourceRegistry.create({
+                const registry = DefaultDriverRegistry.create({
                     "primary": db1,
                     "secondary": db2
                 });
 
                 // Should have registered both + created default pointing to first
                 expect(registry.size()).toBe(3); // primary, secondary, (default)
-                expect(registry.has(DEFAULT_DATASOURCE_ID)).toBe(true);
+                expect(registry.has(DEFAULT_DRIVER_ID)).toBe(true);
                 expect(consoleSpy).toHaveBeenCalledWith(
-                    expect.stringContaining('No "(default)" datasource provided')
+                    expect.stringContaining('No "(default)" driver provided')
                 );
 
                 consoleSpy.mockRestore();
             });
 
             it("should handle empty map gracefully", () => {
-                const registry = DefaultDatasourceRegistry.create({});
+                const registry = DefaultDriverRegistry.create({});
 
                 expect(registry.size()).toBe(0);
                 expect(() => registry.getDefault()).toThrow();
@@ -243,36 +243,36 @@ describe("DatasourceRegistry", () => {
         });
     });
 
-    describe("type detection (isDataSourceDelegate)", () => {
-        it("should correctly identify a DataSource", () => {
-            const mockDelegate = createMockDataSourceDelegate("postgres");
+    describe("type detection (isDataDriverDelegate)", () => {
+        it("should correctly identify a DataDriver", () => {
+            const mockDelegate = createMockDataDriverDelegate("postgres");
 
             // The factory should recognize it as a single delegate
-            const registry = DefaultDatasourceRegistry.create(mockDelegate);
+            const registry = DefaultDriverRegistry.create(mockDelegate);
             expect(registry.size()).toBe(1);
-            expect(registry.has(DEFAULT_DATASOURCE_ID)).toBe(true);
+            expect(registry.has(DEFAULT_DRIVER_ID)).toBe(true);
         });
 
-        it("should correctly identify a map of DataSourceDelegates", () => {
+        it("should correctly identify a map of DataDriverDelegates", () => {
             const delegates = {
-                [DEFAULT_DATASOURCE_ID]: createMockDataSourceDelegate("pg1"),
-                "other": createMockDataSourceDelegate("pg2")
+                [DEFAULT_DRIVER_ID]: createMockDataDriverDelegate("pg1"),
+                "other": createMockDataDriverDelegate("pg2")
             };
 
             // The factory should recognize it as a map
-            const registry = DefaultDatasourceRegistry.create(delegates);
+            const registry = DefaultDriverRegistry.create(delegates);
             expect(registry.size()).toBe(2);
         });
 
         it("should not mistakenly identify a map as a single delegate", () => {
-            // A map doesn't have the required DataSource methods
+            // A map doesn't have the required DataDriver methods
             const map = {
                 key: "not-a-delegate", // This looks like the key property but...
-                db1: createMockDataSourceDelegate("pg1")
+                db1: createMockDataDriverDelegate("pg1")
             };
 
             // This should be treated as a map (and show a warning because 'key' isn't a valid delegate)
-            const registry = DefaultDatasourceRegistry.create(map as any);
+            const registry = DefaultDriverRegistry.create(map as any);
             // 'key' entry will be ignored since it's not a valid delegate
             expect(registry.has("db1")).toBe(true);
         });

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Entity, EntityCollection, FilterValues, RebaseContext, User } from "@rebasepro/types";
-import { useDataSource } from "./useDataSource";
+import { Entity, EntityCollection, FilterValues, User } from "@rebasepro/types";
+import { useData } from "./useData";
 import { useCMSUrlController } from "../navigation/contexts";
-import { useRebaseContext } from "../useRebaseContext";
 
 /**
  * @group Hooks and utilities
@@ -69,16 +68,35 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
         itemCount,
         searchString
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
-
-    const dataSource = useDataSource(collection);
+    const dataClient = useData();
     const navigationController = useCMSUrlController();
 
     const path = navigationController.resolveDatabasePathsFrom(inputPath);
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
+    // Map to PostgREST format for orderBy
+    const orderByParams = sortByProperty ? `${String(sortByProperty)}:${currentSort}` : undefined;
 
-    const context: RebaseContext<USER> = useRebaseContext();
+    // Convert filterValues to PostgREST where clause
+    const whereMap: Record<string, string> = {};
+    if (filterValues) {
+        Object.entries(filterValues).forEach(([key, value]) => {
+            if (value && Array.isArray(value)) {
+                const [op, val] = value;
+                const postgrestOp = op === "==" ? "eq" : op === "!=" ? "neq" : op === ">" ? "gt" : op === ">=" ? "gte" : op === "<" ? "lt" : op === "<=" ? "lte" : op === "in" ? "in" : op === "not-in" ? "nin" : op === "array-contains" ? "cs" : op === "array-contains-any" ? "csa" : "eq";
+                
+                let stringVal: string;
+                if (Array.isArray(val)) {
+                    stringVal = `(${val.join(",")})`;
+                } else {
+                    stringVal = String(val);
+                }
+                whereMap[key] = `${postgrestOp}.${stringVal}`;
+            }
+        });
+    }
+    const whereParams = Object.keys(whereMap).length > 0 ? whereMap : undefined;
 
     const [data, setData] = useState<Entity<M>[]>([]);
 
@@ -90,14 +108,14 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
 
         setDataLoading(true);
 
-        const onEntitiesUpdate = async (entities: Entity<M>[]) => {
+        const onEntitiesUpdate = async (res: { data: Entity<M>[], meta: { hasMore: boolean } }) => {
+            const entities = res.data;
             setDataLoading(false);
             setDataLoadingError(undefined);
             setData(entities.map(e => ({
                 ...e,
-                // values: sanitizeData(e.values, resolvedCollection.properties)
             })));
-            setNoMoreToLoad(!itemCount || entities.length < itemCount);
+            setNoMoreToLoad(!res.meta.hasMore);
         };
 
         const onError = (error: Error) => {
@@ -107,29 +125,21 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
             setDataLoadingError(error);
         };
 
-        if (dataSource.listenCollection) {
-            return dataSource.listenCollection<M>({
-                path: path,
-                collection,
-                onUpdate: onEntitiesUpdate,
-                onError,
-                searchString,
-                filter: filterValues,
+        const accessor = dataClient.collection(path);
+        
+        if (accessor.listen) {
+            return accessor.listen({
+                where: whereParams,
                 limit: itemCount,
-                startAfter: undefined,
-                orderBy: sortByProperty,
-                order: currentSort
-            });
+                orderBy: orderByParams,
+                searchString
+            }, onEntitiesUpdate, onError);
         } else {
-            dataSource.fetchCollection<M>({
-                path: path,
-                collection,
-                searchString,
-                filter: filterValues,
+            accessor.find({
+                where: whereParams,
                 limit: itemCount,
-                startAfter: undefined,
-                orderBy: sortByProperty,
-                order: currentSort
+                orderBy: orderByParams,
+                searchString
             })
                 .then(onEntitiesUpdate)
                 .catch(onError);

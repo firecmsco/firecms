@@ -3,7 +3,7 @@ import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues, Tab
 import { RebaseContext } from "../rebase_context";
 
 /**
- * @group Datasource
+ * @internal
  */
 export interface FetchEntityProps<M extends Record<string, any> = any> {
     path: string;
@@ -13,7 +13,7 @@ export interface FetchEntityProps<M extends Record<string, any> = any> {
 }
 
 /**
- * @group Datasource
+ * @internal
  */
 export type ListenEntityProps<M extends Record<string, any> = any> =
     FetchEntityProps<M>
@@ -23,7 +23,7 @@ export type ListenEntityProps<M extends Record<string, any> = any> =
     }
 
 /**
- * @group Datasource
+ * @internal
  */
 export interface FetchCollectionProps<M extends Record<string, any> = any> {
     path: string;
@@ -37,7 +37,7 @@ export interface FetchCollectionProps<M extends Record<string, any> = any> {
 }
 
 /**
- * @group Datasource
+ * @internal
  */
 export type ListenCollectionProps<M extends Record<string, any> = any> =
     FetchCollectionProps<M> &
@@ -47,7 +47,7 @@ export type ListenCollectionProps<M extends Record<string, any> = any> =
     };
 
 /**
- * @group Datasource
+ * @internal
  */
 export interface SaveEntityProps<M extends Record<string, any> = any> {
     path: string;
@@ -59,7 +59,7 @@ export interface SaveEntityProps<M extends Record<string, any> = any> {
 }
 
 /**
- * @group Datasource
+ * @internal
  */
 export interface DeleteEntityProps<M extends Record<string, any> = any> {
     entity: Entity<M>;
@@ -75,18 +75,19 @@ export type FilterCombinationValidProps = {
 };
 
 /**
- * Component in charge of communicating with the data source.
- * @group Datasource
+ * Internal driver interface for communicating with the data layer.
+ * This is NOT the public API — use `RebaseData` / `context.data` instead.
+ * @internal
  */
-export interface DataSource {
+export interface DataDriver {
 
     /**
-     * Key that identifies this data source
+     * Key that identifies this driver
      */
     key?: string;
 
     /**
-     * If the data source has been initialised
+     * If the driver has been initialised
      */
     initialised?: boolean;
 
@@ -94,7 +95,6 @@ export interface DataSource {
      * Fetch data from a collection
      * @param props
      * @return Promise of entities
-     * @see useCollectionFetch if you need this functionality implemented as a hook
      */
     fetchCollection<M extends Record<string, any> = any>(props: FetchCollectionProps<M>): Promise<Entity<M>[]>;
 
@@ -103,7 +103,6 @@ export interface DataSource {
      * `fetchCollection` will be used instead, with no real time updates.
      * @param props
      * @return Function to cancel subscription
-     * @see useCollectionFetch if you need this functionality implemented as a hook
      */
     listenCollection?<M extends Record<string, any> = any>(props: ListenCollectionProps<M>): () => void;
 
@@ -164,7 +163,7 @@ export interface DataSource {
     }): boolean;
 
     /**
-     * Get the object to generate the current time in the datasource
+     * Get the object to generate the current time in the driver
      */
     currentTime?: () => unknown;
 
@@ -181,22 +180,22 @@ export interface DataSource {
     }) => Promise<boolean>;
 
     /**
-     * Execute raw SQL (if supported by the datasource)
+     * Execute raw SQL (if supported by the driver)
      */
     executeSql?(sql: string, options?: { database?: string, role?: string }): Promise<Record<string, unknown>[]>;
 
     /**
-     * Fetch the available databases (if supported by the datasource)
+     * Fetch the available databases (if supported by the driver)
      */
     fetchAvailableDatabases?(): Promise<string[]>;
 
     /**
-     * Fetch the available roles (if supported by the datasource)
+     * Fetch the available roles (if supported by the driver)
      */
     fetchAvailableRoles?(): Promise<string[]>;
 
     /**
-     * Fetch the current database name (if supported by the datasource)
+     * Fetch the current database name (if supported by the driver)
      */
     fetchCurrentDatabase?(): Promise<string | undefined>;
 
@@ -211,7 +210,7 @@ export interface DataSource {
     fetchTableColumns?(tableName: string): Promise<TableColumnInfo[]>;
 
     /**
-     * Flag to indicate if the datasource delegate has requested the initialization of the text search index
+     * Flag to indicate if the driver has requested the initialization of the text search index
      */
     needsInitTextSearch?: boolean;
 

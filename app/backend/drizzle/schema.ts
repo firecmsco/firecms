@@ -65,7 +65,7 @@ export const testEntities = pgTable("test_entities", {
 });
 
 export const projectUsers = pgTable("project_users", {
-	projectId: varchar("project_id").default(nextval(\'project_users_project_id_seq\'::regclass)).primaryKey().notNull(),
+	projectId: varchar("project_id").default(sql`nextval('project_users_project_id_seq'::regclass)`).primaryKey().notNull(),
 	id: varchar().notNull(),
 	email: varchar().notNull(),
 	role: projectUsersRole(),

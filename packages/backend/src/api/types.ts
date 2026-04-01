@@ -4,7 +4,7 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 
 /**
  * Extended request type for API endpoints.
- * Extends AuthenticatedRequest which provides `user` and `dataSource`.
+ * Extends AuthenticatedRequest which provides `user` and `driver`.
  */
 export interface RebaseRequest extends AuthenticatedRequest {}
 

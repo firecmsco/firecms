@@ -23,7 +23,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     /**
      * You can set an alias that will be used internally instead of the `path`.
      * The `alias` value will be used to determine the URL of the collection,
-     * while `path` will still be used in the datasource.
+     * while `path` will still be used in the driver.
      * Note that you can use this value in reference properties too.
      */
     slug: string;
@@ -55,34 +55,34 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     dbPath: string;
 
     /**
-     * Which datasource handles this collection.
+     * Which driver handles this collection.
      * Use this to route collections to different backends:
      * - `"postgres"` - Route to PostgreSQL backend
      * - `"firestore"` - Route to Firestore (client-side)
      * - `"mongodb"` - Route to MongoDB backend
-     * - Custom IDs for your own datasource implementations
+     * - Custom IDs for your own driver implementations
      *
-     * If not specified, the default datasource `"(default)"` is used.
+     * If not specified, the default driver `"(default)"` is used.
      *
      * @example
-     * // Simple - no datasource needed for default
+     * // Simple - no driver needed for default
      * { slug: "products" }
      *
      * // Firestore collection (client-side real-time)
-     * { slug: "analytics", datasource: "firestore" }
+     * { slug: "analytics", driver: "firestore" }
      *
-     * // Multiple databases within a datasource
-     * { slug: "orders", datasource: "postgres", databaseId: "orders_db" }
+     * // Multiple databases within a driver
+     * { slug: "orders", driver: "postgres", databaseId: "orders_db" }
      */
-    datasource?: string;
+    driver?: string;
 
     /**
-     * Which database within the datasource.
+     * Which database within the driver.
      * - For Firestore: The Firestore database ID (e.g., for multi-database projects)
      * - For PostgreSQL: Schema or database name
      * - For MongoDB: Database name
      *
-     * If not specified, the default database of the datasource is used.
+     * If not specified, the default database of the driver is used.
      */
     databaseId?: string;
 

@@ -7,9 +7,11 @@ import { RebasePlugin } from "./plugins";
 import { EntityAction } from "./entity_actions";
 import { User } from "../users";
 import {
-    AuthController, CMSAnalyticsEvent, CMSView, DataSource, StorageSource,
-    UserConfigurationPersistence, CollectionRegistryController, CMSUrlController, NavigationStateController
+    AuthController, CMSAnalyticsEvent, CMSView, DataDriver, StorageSource,
+    UserConfigurationPersistence, CollectionRegistryController, CMSUrlController, NavigationStateController,
+    DatabaseAdmin
 } from "../controllers";
+import { RebaseData } from "../controllers/data";
 import { RebaseContext } from "../rebase_context";
 import { UserManagementDelegate } from "./user_management_delegate";
 
@@ -24,33 +26,36 @@ export interface EffectiveRoleController {
 
 /**
  * Use this callback to build entity collections dynamically.
- * You can use the user to decide which collections to show.
- * You can also use the data source to fetch additional data to build the
- * collections.
+ * You can use the user to decide which collections to show, or how to render them.
+ * You can also use the data API to fetch additional data to build the
+ * collections (e.g., for enums).
+ *
+ * Note: The underlying schema of the collections built here must map to your
+ * strictly typed static backend schema. You cannot define new database columns
+ * or arbitrary schemas here that aren't represented in your backend constraints.
+ *
  * Note: you can use any type of synchronous or asynchronous code here,
- * including fetching data from external sources, like using the Firestore
- * APIs directly, or a REST API.
+ * including fetching data from external sources, like using a REST API.
  * @group Models
  */
 export type EntityCollectionsBuilder<EC extends EntityCollection = EntityCollection> = (params: {
     user: User | null,
     authController: AuthController,
-    dataSource: DataSource
+    data: RebaseData
 }) => EC[] | Promise<EC[]>;
 
 /**
  * Use this callback to build custom views dynamically.
  * You can use the user to decide which views to show.
- * You can also use the data source to fetch additional data to build the
+ * You can also use the data API to fetch additional data to build the
  * views. Note: you can use any type of synchronous or asynchronous code here,
- * including fetching data from external sources, like using the Firestore
- * APIs directly, or a REST API.
+ * including fetching data from external sources, like using a REST API.
  * @group Models
  */
 export type CMSViewsBuilder = (params: {
     user: User | null,
     authController: AuthController,
-    dataSource: DataSource
+    data: RebaseData
 }) => CMSView[] | Promise<CMSView[]>;
 
 /**
@@ -139,9 +144,17 @@ export type RebaseProps<USER extends User> = {
     locale?: Locale;
 
     /**
-     * Connector to your database
+     * Internal data driver used by the CMS engine.
+     * The public `data` API is built from this automatically.
+     * @internal
      */
-    dataSource: DataSource;
+    driver: DataDriver;
+
+    /**
+     * Administrative database operations (SQL, schema discovery).
+     * Only needed when the studio/admin features are enabled.
+     */
+    databaseAdmin?: DatabaseAdmin;
 
     /**
      * Connector to your file upload/fetch implementation

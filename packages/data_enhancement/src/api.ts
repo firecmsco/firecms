@@ -5,7 +5,7 @@ import {
     InputProperty,
     SamplePromptsResult
 } from "./types/data_enhancement_controller";
-import { DataSource, EntityValues } from "@rebasepro/core";
+import { EntityValues } from "@rebasepro/core";
 import { flatMapEntityValues } from "./utils/values";
 
 // const DEFAULT_SERVER = "http://localhost:5001/rebase-dev-2da42/europe-west3/api"; // Local
@@ -22,7 +22,7 @@ export async function enhanceDataAPIStream<M extends object>(props: {
     values: EntityValues<M>,
     path: string,
     properties: Record<string, InputProperty>,
-    dataSource: DataSource,
+
     instructions?: string,
     firebaseToken: string,
     onUpdate: (suggestions: Record<string, any>) => void;

@@ -6,12 +6,12 @@ Object.assign(global, { TextDecoder, TextEncoder });
 
 import { renderHook, waitFor } from "@testing-library/react";
 import { useResolvedViews } from "../../src/hooks/navigation/useResolvedViews";
-import { AuthController, CMSView, DataSource } from "@rebasepro/types";
+import { AuthController, CMSView, DataDriver } from "@rebasepro/types";
 import { jest } from "@jest/globals";
 
 describe("useResolvedViews", () => {
 
-    const mockDataSource: DataSource = {} as DataSource;
+    const mockDataDriver: DataDriver = {} as DataDriver;
 
     it("should resolve views array and set loading to false", async () => {
         // ... (auth controller and collections setup identical to useResolvedCollections test, but testing views) ...
@@ -27,7 +27,7 @@ describe("useResolvedViews", () => {
         const { result } = renderHook(() => useResolvedViews({
             authController: mockAuthController,
             views: mockViews,
-            dataSource: mockDataSource,
+            driver: mockDataDriver,
         }));
 
         expect(result.current.loading).toBe(true);
@@ -50,7 +50,7 @@ describe("useResolvedViews", () => {
         const { result, rerender } = renderHook(() => useResolvedViews({
             authController: mockAuthController,
             views: [],
-            dataSource: mockDataSource,
+            driver: mockDataDriver,
         }));
 
         expect(result.current.loading).toBe(true);
@@ -82,7 +82,7 @@ describe("useResolvedViews", () => {
             authController: mockAuthController,
             views: undefined,
             userManagement: userManagementActive,
-            dataSource: mockDataSource,
+            driver: mockDataDriver,
         }));
 
         await waitFor(() => {

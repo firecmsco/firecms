@@ -110,7 +110,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
         /**
          * Controller holding the logic for the table
-         * {@link useDataSourceTableController}
+         * {@link useDataTableController}
          * {@link EntityTableController}
          */
         tableController: EntityTableController<M>;

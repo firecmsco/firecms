@@ -1,4 +1,5 @@
-import { DataSource, Entity, EntityCollection, useDataSource } from "@rebasepro/core";
+import { Entity, EntityCollection, useData } from "@rebasepro/core";
+import { RebaseData } from "@rebasepro/types";
 import { Button, CenteredView, CircularProgress, Typography, } from "@rebasepro/ui";
 import { useEffect, useRef, useState } from "react";
 import { ImportConfig } from "../types";
@@ -18,7 +19,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
         }) {
 
     const [errorSaving, setErrorSaving] = useState<Error | undefined>(undefined);
-    const dataSource = useDataSource();
+    const dataClient = useData();
 
     const savingRef = useRef<boolean>(false);
 
@@ -32,7 +33,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
         savingRef.current = true;
 
         saveDataBatch(
-            dataSource,
+            dataClient,
             collection,
             path,
             importConfig.entities,
@@ -92,7 +93,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
 
 }
 
-function saveDataBatch(dataSource: DataSource,
+function saveDataBatch(dataClient: RebaseData,
     collection: EntityCollection,
     path: string,
     data: Partial<Entity<any>>[],
@@ -104,17 +105,14 @@ function saveDataBatch(dataSource: DataSource,
 
     const batch = data.slice(offset, offset + batchSize);
     return Promise.all(batch.map(d =>
-        dataSource.saveEntity({
-            path: path,
-            values: d.values,
-            entityId: d.id,
-            collection,
-            status: "new"
-        })))
+        dataClient.collection(path).create(
+            d.values,
+            d.id
+        )))
         .then(() => {
             if (offset + batchSize < data.length) {
                 onProgressUpdate(offset + batchSize);
-                return saveDataBatch(dataSource, collection, path, data, offset + batchSize, batchSize, onProgressUpdate);
+                return saveDataBatch(dataClient, collection, path, data, offset + batchSize, batchSize, onProgressUpdate);
             }
             onProgressUpdate(data.length);
             return Promise.resolve();

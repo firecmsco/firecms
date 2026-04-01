@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Entity, EntityCollection, FilterValues } from "@rebasepro/types";
-import { useDataSource, useRebaseContext } from "../../hooks";
+import { useData, useRebaseContext } from "../../hooks";
 
 const DEFAULT_PAGE_SIZE = 20;
 
@@ -77,15 +77,15 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
 }: UseBoardDataControllerProps<M>): BoardDataController<M, COLUMN> {
 
     const context = useRebaseContext();
-    const dataSource = useDataSource(collection);
+    const dataClient = useData();
     // v4: use fullPath directly instead of resolveIdsFrom
     const resolvedPath = fullPath;
 
     // Stable refs for objects that shouldn't trigger re-subscriptions
-    const dataSourceRef = useRef(dataSource);
+    const dataClientRef = useRef(dataClient);
     const collectionRef = useRef(collection);
     const contextRef = useRef(context);
-    dataSourceRef.current = dataSource;
+    dataClientRef.current = dataClient;
     collectionRef.current = collection;
     contextRef.current = context;
 
@@ -160,7 +160,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         // Skip if we're in the middle of cleanup
         if (isCleaningUpRef.current) return;
 
-        const currentDataSource = dataSourceRef.current;
+        const currentDataClient = dataClientRef.current;
         const currentCollection = collectionRef.current;
         const currentContext = contextRef.current;
         const currentFilterValues = filterValuesRef.current;
@@ -169,11 +169,27 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         const currentSearchString = searchStringRef.current;
         const currentResolvedPath = resolvedPathRef.current;
 
-        // Build filter for this column
-        const columnFilter: FilterValues<string> = {
-            ...currentFilterValues,
-            [currentColumnProperty]: ["==", column]
-        };
+        // Build where map for this column
+        const whereMap: Record<string, string> = {};
+        if (currentFilterValues) {
+            Object.entries(currentFilterValues).forEach(([key, value]) => {
+                if (value && Array.isArray(value)) {
+                    const [op, val] = value;
+                    const postgrestOp = op === "==" ? "eq" : op === "!=" ? "neq" : op === ">" ? "gt" : op === ">=" ? "gte" : op === "<" ? "lt" : op === "<=" ? "lte" : op === "in" ? "in" : op === "not-in" ? "nin" : op === "array-contains" ? "cs" : op === "array-contains-any" ? "csa" : "eq";
+                    
+                    let stringVal: string;
+                    if (Array.isArray(val)) {
+                        stringVal = `(${val.join(",")})`;
+                    } else {
+                        stringVal = String(val);
+                    }
+                    whereMap[key] = `${postgrestOp}.${stringVal}`;
+                }
+            });
+        }
+        whereMap[currentColumnProperty] = `eq.${column}`;
+        
+        const orderByParam = currentOrderProperty ? `${currentOrderProperty}:asc` : undefined;
 
         // Mark column as loading
         setColumnData(prev => ({
@@ -245,32 +261,21 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         };
 
         // Set up listener or fetch
-        if (currentDataSource.listenCollection) {
-            const unsubscribe = currentDataSource.listenCollection<M>({
-                path: currentResolvedPath,
-                collection: currentCollection,
-                onUpdate,
-                onError,
-                searchString: currentSearchString,
-                filter: columnFilter,
+        const accessor = currentDataClient.collection(currentResolvedPath);
+        if (accessor.listen) {
+            const unsubscribe = accessor.listen({
+                where: whereMap,
                 limit: itemCount,
-                startAfter: undefined,
-                orderBy: currentOrderProperty,
-                order: currentOrderProperty ? "asc" : undefined
-            });
+                orderBy: orderByParam
+            }, res => onUpdate(res.data), onError);
             unsubscribersRef.current[column] = unsubscribe;
         } else {
-            currentDataSource.fetchCollection<M>({
-                path: currentResolvedPath,
-                collection: currentCollection,
-                searchString: currentSearchString,
-                filter: columnFilter,
+            accessor.find({
+                where: whereMap,
                 limit: itemCount,
-                startAfter: undefined,
-                orderBy: currentOrderProperty,
-                order: currentOrderProperty ? "asc" : undefined
+                orderBy: orderByParam
             })
-                .then(onUpdate)
+                .then(res => onUpdate(res.data))
                 .catch(onError);
         }
     }, []); // No dependencies - uses refs for all values
@@ -291,7 +296,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
             }
         });
 
-        const currentDataSource = dataSourceRef.current;
+        const currentDataClient = dataClientRef.current;
         const currentCollection = collectionRef.current;
         const currentFilterValues = filterValuesRef.current;
         const currentColumnProperty = columnPropertyRef.current;
@@ -309,16 +314,30 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                 subscribeToColumn(column, itemCount);
 
                 // Count query for column (for display in column header)
-                if (currentDataSource.countEntities) {
-                    const columnFilter: FilterValues<string> = {
-                        ...currentFilterValues,
-                        [currentColumnProperty]: ["==", column]
-                    };
-                    currentDataSource.countEntities({
-                        path: currentResolvedPath,
-                        collection: currentCollection,
-                        filter: columnFilter,
-                        searchString: currentSearchString
+                const accessor = currentDataClient.collection(currentResolvedPath);
+                if (accessor.count) {
+                    
+                    const whereMap: Record<string, string> = {};
+                    if (currentFilterValues) {
+                        Object.entries(currentFilterValues).forEach(([key, value]) => {
+                            if (value && Array.isArray(value)) {
+                                const [op, val] = value;
+                                const postgrestOp = op === "==" ? "eq" : op === "!=" ? "neq" : op === ">" ? "gt" : op === ">=" ? "gte" : op === "<" ? "lt" : op === "<=" ? "lte" : op === "in" ? "in" : op === "not-in" ? "nin" : op === "array-contains" ? "cs" : op === "array-contains-any" ? "csa" : "eq";
+                                
+                                let stringVal: string;
+                                if (Array.isArray(val)) {
+                                    stringVal = `(${val.join(",")})`;
+                                } else {
+                                    stringVal = String(val);
+                                }
+                                whereMap[key] = `${postgrestOp}.${stringVal}`;
+                            }
+                        });
+                    }
+                    whereMap[currentColumnProperty] = `eq.${column}`;
+
+                    accessor.count({
+                        where: whereMap
                     }).then(count => {
                         if (isCleaningUpRef.current) return;
                         setColumnData(prev => ({

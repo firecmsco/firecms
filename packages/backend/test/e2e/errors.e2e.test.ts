@@ -9,7 +9,7 @@ jest.mock("graphql-http/lib/use/express", () => ({
 jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next()));
 
 describe("Global Error Handling E2E", () => {
-    let mockDataSource: any;
+    let mockDataDriver: any;
     let mockCollections: any[];
     let server: RebaseApiServer;
     let app: any;
@@ -28,7 +28,7 @@ describe("Global Error Handling E2E", () => {
             }
         ];
 
-        mockDataSource = {
+        mockDataDriver = {
             key: "mock-data-source",
             fetchCollection: jest.fn().mockImplementation(() => {
                 throw new Error("Unexpected database explosion");
@@ -48,7 +48,7 @@ describe("Global Error Handling E2E", () => {
         };
 
         server = await RebaseApiServer.create({
-            dataSource: mockDataSource as any,
+            driver: mockDataDriver as any,
             collections: mockCollections,
             enableGraphQL: false,
             enableREST: true

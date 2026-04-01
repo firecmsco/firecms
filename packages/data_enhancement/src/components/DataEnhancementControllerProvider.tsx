@@ -7,13 +7,12 @@ import {
     InputProperty
 } from "../types/data_enhancement_controller";
 import {
-    DataSource,
+    DataDriver,
     Entity,
     EntityCollection, getValueInPath,
     PluginFormActionProps,
     useAuthController,
     useCustomizationController,
-    useDataSource,
     useCMSUrlController,
     useSnackbarController
 } from "@rebasepro/core";
@@ -104,7 +103,7 @@ export function DataEnhancementControllerProvider({
 
     }, [getConfigForPath, updateConfig]);
 
-    const dataSource = useDataSource(collection);
+
     const cmsUrlController = useCMSUrlController();
 
     const clearSuggestion = useCallback((propertyKey: string) => {
@@ -253,7 +252,7 @@ export function DataEnhancementControllerProvider({
                     path: resolvedPath,
                     entityName: collection.singularName ?? collection.name,
                     entityDescription: collection.description,
-                    dataSource,
+
                     firebaseToken,
                     onUpdate: (suggestions) => {
                         console.debug("de onUpdate", suggestions);
@@ -327,26 +326,4 @@ export function DataEnhancementControllerProvider({
     );
 }
 
-const ENTITIES_COUNT = 1;
 
-async function getOtherEntities(collection: EntityCollection, dataSource: DataSource, path: string, entityId: string | number): Promise<Entity<any>[]> {
-    const fetchedDocs = await dataSource.fetchCollection({
-        path: path,
-        collection,
-        filter: { __name__: [">", entityId] },
-        orderBy: "__name__",
-        order: "asc",
-        limit: ENTITIES_COUNT
-    });
-    if (fetchedDocs.length < ENTITIES_COUNT) {
-        fetchedDocs.push(...await dataSource.fetchCollection({
-            path: path,
-            collection,
-            filter: { __name__: ["<", entityId] },
-            orderBy: "__name__",
-            order: "asc",
-            limit: ENTITIES_COUNT - fetchedDocs.length
-        }))
-    }
-    return fetchedDocs;
-}

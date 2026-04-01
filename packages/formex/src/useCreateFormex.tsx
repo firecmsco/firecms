@@ -115,7 +115,7 @@ export function useCreateFormex<T extends object>({
     );
 
     const setFieldError = useCallback((key: string, error: string | undefined) => {
-        setErrors((prevErrors) => {
+        setErrors((prevErrors: Record<string, string>) => {
             const newErrors = { ...prevErrors };
             if (error) {
                 newErrors[key] = error;
@@ -128,7 +128,7 @@ export function useCreateFormex<T extends object>({
 
     const setFieldTouched = useCallback(
         (key: string, touched: boolean, shouldValidate?: boolean) => {
-            setTouchedState((prev) => ({
+            setTouchedState((prev: Record<string, boolean>) => ({
                 ...prev,
                 [key]: touched,
             }));
@@ -168,7 +168,7 @@ export function useCreateFormex<T extends object>({
             e?.preventDefault();
             e?.stopPropagation();
             setIsSubmitting(true);
-            setSubmitCount((prev) => prev + 1);
+            setSubmitCount((prev: number) => prev + 1);
             const validationErrors = await validation?.(valuesRef.current);
             if (validationErrors && Object.keys(validationErrors).length > 0) {
                 setErrors(validationErrors);
@@ -177,7 +177,7 @@ export function useCreateFormex<T extends object>({
                 await onSubmit?.(valuesRef.current, controllerRef.current);
             }
             setIsSubmitting(false);
-            setVersion((prev) => prev + 1);
+            setVersion((prev: number) => prev + 1);
         },
         [onSubmit, validation]
     );
@@ -196,7 +196,7 @@ export function useCreateFormex<T extends object>({
         setTouchedState(touchedProp ?? initialTouched ?? {});
         setDirty(false);
         setSubmitCount(submitCountProp ?? 0);
-        setVersion((prev) => prev + 1);
+        setVersion((prev: number) => prev + 1);
         onReset?.(controllerRef.current);
         // Reset history with refs
         historyRef.current = [valuesProp ?? initialValuesRef.current];

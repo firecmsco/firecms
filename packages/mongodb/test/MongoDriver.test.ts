@@ -1,19 +1,19 @@
 /**
- * MongoDataSource Tests
+ * MongoDataDriver Tests
  * 
- * Tests for the DataSource implementation that integrates with Rebase.
+ * Tests for the DataDriver implementation that integrates with Rebase.
  */
 
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { MongoClient, Db, ObjectId } from "mongodb";
-import { MongoDataSource } from "../src/services/MongoDataSource";
+import { MongoDataDriver } from "../src/services/MongoDataDriver";
 import { EntityCollection } from "@rebasepro/types";
 
-describe("MongoDataSource", () => {
+describe("MongoDataDriver", () => {
     let mongoServer: MongoMemoryServer;
     let client: MongoClient;
     let db: Db;
-    let delegate: MongoDataSource;
+    let delegate: MongoDataDriver;
 
     const mockCollection: EntityCollection = {
         name: "users",
@@ -30,7 +30,7 @@ describe("MongoDataSource", () => {
         client = new MongoClient(uri);
         await client.connect();
         db = client.db("test");
-        delegate = new MongoDataSource(db);
+        delegate = new MongoDataDriver(db);
     });
 
     afterAll(async () => {

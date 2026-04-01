@@ -19,7 +19,7 @@ import {
 import {
     EntityCollectionRowActions,
     EntityCollectionTable,
-    useDataSourceTableController
+    useDataTableController
 } from "../EntityCollectionTable";
 import { CollectionTableToolbar } from "../EntityCollectionTable/internal/CollectionTableToolbar";
 
@@ -36,7 +36,7 @@ import {
     saveEntityWithCallbacks,
     useAuthController,
     useCustomizationController,
-    useDataSource,
+    useData,
     useRebaseContext,
     useLargeLayout,
     useCollectionRegistryController,
@@ -120,7 +120,7 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
 } & EntityCollection<M>;
 
 /**
- * This component is in charge of binding a datasource path with an {@link EntityCollection}
+ * This component is in charge of binding a driver path with an {@link EntityCollection}
  * where it's configuration is defined. It includes an infinite scrolling table
  * and a 'Add' new entities button,
  *
@@ -135,7 +135,7 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
  * If you need a lower level implementation with more granular options, you
  * can use {@link EntityCollectionTable}.
  *
- * If you need a generic table that is not bound to the datasource or entities and
+ * If you need a generic table that is not bound to the driver or entities and
  * properties at all, you can check {@link VirtualTable}
  *
  * @param path
@@ -161,7 +161,7 @@ export const EntityCollectionView = React.memo(
         const cmsUrlController = useCMSUrlController();
         const breadcrumbs = useBreadcrumbsController();
         const path = pathProp ?? collectionProp.dbPath;
-        const dataSource = useDataSource(collectionProp);
+        const dataClient = useData();
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
@@ -310,7 +310,7 @@ export const EntityCollectionView = React.memo(
             setSelectedEntities
         } = usedSelectionController;
 
-        const tableController = useDataSourceTableController<M>({
+        const tableController = useDataTableController<M>({
             path,
             collection,
             lastDeleteTimestamp,
@@ -446,13 +446,27 @@ export const EntityCollectionView = React.memo(
         const createEnabled = canCreate(collection, path);
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
-            ({
+            async ({
                 name,
                 value,
                 property,
                 entityId
-            }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
-            [path]);
+            }) => {
+                const accessor = dataClient.collection(path);
+                const res = await accessor.find({
+                    where: {
+                        [name]: `eq.${value}`
+                    },
+                    limit: 1
+                });
+                
+                const conflictingEntities = res.data;
+                const isUnique = conflictingEntities.length === 0 || 
+                               (conflictingEntities.length === 1 && conflictingEntities[0].id === entityId);
+                               
+                return isUnique;
+            },
+            [path, dataClient]);
 
         const onValueChange: OnCellValueChange<any, any> = ({
             value,
@@ -476,7 +490,7 @@ export const EntityCollectionView = React.memo(
             return saveEntityWithCallbacks({
                 ...saveProps,
                 collection,
-                dataSource,
+                data: dataClient,
                 context,
                 afterSave: () => {
                     setError(undefined);
@@ -1054,7 +1068,7 @@ function EntitiesCount({
     onCountChange?: (count: number) => void,
 }) {
 
-    const dataSource = useDataSource(collection);
+    const dataClient = useData();
     const navigation = useCollectionRegistryController();
     const [count, setCount] = useState<number | undefined>(undefined);
     const [error, setError] = useState<Error | undefined>(undefined);
@@ -1065,15 +1079,35 @@ function EntitiesCount({
     const resolvedPath = path;
 
     useEffect(() => {
-        if (dataSource.countEntities)
-            dataSource.countEntities({
-                path: resolvedPath,
-                collection,
-                filter,
-                orderBy: sortByProperty,
-                order: currentSort
+        const accessor = dataClient.collection(resolvedPath);
+        if (accessor.count) {
+            // Convert filterValues to PostgREST where clause
+            const whereMap: Record<string, string> = {};
+            if (filter) {
+                Object.entries(filter).forEach(([key, value]) => {
+                    if (value && Array.isArray(value)) {
+                        const [op, val] = value;
+                        const postgrestOp = op === "==" ? "eq" : op === "!=" ? "neq" : op === ">" ? "gt" : op === ">=" ? "gte" : op === "<" ? "lt" : op === "<=" ? "lte" : op === "in" ? "in" : op === "not-in" ? "nin" : op === "array-contains" ? "cs" : op === "array-contains-any" ? "csa" : "eq";
+                        
+                        let stringVal: string;
+                        if (Array.isArray(val)) {
+                            stringVal = `(${val.join(",")})`;
+                        } else {
+                            stringVal = String(val);
+                        }
+                        whereMap[key] = `${postgrestOp}.${stringVal}`;
+                    }
+                });
+            }
+            const whereParams = Object.keys(whereMap).length > 0 ? whereMap : undefined;
+            const orderByParams = sortByProperty ? `${String(sortByProperty)}:${currentSort}` : undefined;
+
+            accessor.count({
+                where: whereParams,
+                orderBy: orderByParams
             }).then(setCount).catch(setError);
-    }, [path, dataSource.countEntities, resolvedPath, collection, filter, sortByProperty, currentSort]);
+        }
+    }, [path, resolvedPath, collection, filter, sortByProperty, currentSort, dataClient]);
 
     useEffect(() => {
         if (onCountChange && count !== undefined) {

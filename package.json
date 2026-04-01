@@ -42,7 +42,8 @@
     "legacy_examples/example_cloud",
     "legacy_examples/example",
     "legacy_examples/example_next",
-    "legacy_examples/example_pro"
+    "legacy_examples/example_pro",
+    "packages/sdk_generator"
   ],
   "scripts": {
     "dev": "cd app && run-s dev",
@@ -54,7 +55,7 @@
     "deploy:canary": "lerna run build && cd saas && run-s build && run-s deploy:canary",
     "web": "cd website && run-s dev",
     "deploy:web": "cd website && run-s deploy",
-    "build": "lerna run build",
+    "build": "pnpm --filter './packages/*' -r run build && pnpm --filter './app' --filter './app_userland' -r run build",
     "build:stream": "lerna run build --stream --loglevel=info",
     "clean": "lerna run clean",
     "release": "git push origin main:release",

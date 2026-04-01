@@ -6,13 +6,13 @@ Object.assign(global, { TextDecoder, TextEncoder });
 
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { useBuildNavigationStateController } from "../../src/hooks/navigation/useBuildNavigationStateController";
-import { AuthController, CollectionRegistryController, DataSource, EntityCollection } from "@rebasepro/types";
+import { AuthController, CollectionRegistryController, DataDriver, EntityCollection } from "@rebasepro/types";
 import { CollectionRegistry } from "@rebasepro/common";
 import { jest } from "@jest/globals";
 
 describe("useBuildNavigationStateController", () => {
 
-    const mockDataSource: DataSource = {} as DataSource;
+    const mockDataDriver: DataDriver = {} as DataDriver;
 
     const mockCollectionRegistry = new CollectionRegistry();
     jest.spyOn(mockCollectionRegistry, "registerMultiple").mockReturnValue(true);
@@ -41,7 +41,7 @@ describe("useBuildNavigationStateController", () => {
             authController: mockAuthController,
             collections: [],
             views: undefined,
-            dataSource: mockDataSource,
+            driver: mockDataDriver,
             collectionRegistryController: mockCollectionRegistryController,
             cmsUrlController: mockCmsUrlController
         }));
@@ -75,7 +75,7 @@ describe("useBuildNavigationStateController", () => {
             authController: mockAuthController,
             collections: [],
             views: undefined,
-            dataSource: mockDataSource,
+            driver: mockDataDriver,
             collectionRegistryController: mockCollectionRegistryController,
             cmsUrlController: mockCmsUrlController
         }));
@@ -111,7 +111,7 @@ describe("useBuildNavigationStateController", () => {
             authController: mockAuthController,
             collections: badBuilder,
             views: undefined,
-            dataSource: mockDataSource,
+            driver: mockDataDriver,
             collectionRegistryController: mockCollectionRegistryController,
             cmsUrlController: mockCmsUrlController
         }));

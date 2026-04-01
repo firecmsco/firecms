@@ -1,26 +1,26 @@
 import { Router, Response, NextFunction } from "express";
-import { DataSource, Entity, EntityCollection, FetchCollectionProps } from "@rebasepro/types";
+import { DataDriver, Entity, EntityCollection, FetchCollectionProps } from "@rebasepro/types";
 import { ApiResponse, QueryOptions, RebaseRequest } from "../types";
 import { ApiError, asyncHandler } from "../errors";
 import { buildPropertyCallbacks } from "@rebasepro/common";
 import { parseQueryOptions } from "./query-parser";
 
 /**
- * Lightweight REST API generator that leverages existing Rebase DataSource
+ * Lightweight REST API generator that leverages existing Rebase DataDriver
  */
 export class RestApiGenerator {
     private collections: EntityCollection[];
     private router: Router;
-    private dataSource: DataSource;
+    private driver: DataDriver;
 
-    constructor(collections: EntityCollection[], dataSource: DataSource) {
+    constructor(collections: EntityCollection[], driver: DataDriver) {
         this.collections = collections;
-        this.dataSource = dataSource;
+        this.driver = driver;
         this.router = Router();
     }
 
     /**
-     * Generate REST routes using existing DataSource
+     * Generate REST routes using existing DataDriver
      */
     generateRoutes(): Router {
         this.collections.forEach(collection => {
@@ -35,7 +35,7 @@ export class RestApiGenerator {
     private createCollectionRoutes(collection: EntityCollection): void {
         const basePath = `/${collection.slug}`;
 
-        // The DataSource handles callback execution (beforeSave, afterRead, etc) internally.
+        // The DataDriver handles callback execution (beforeSave, afterRead, etc) internally.
         const resolvedCollection = collection;
 
         // GET /collection - List entities (fetch raw data without Entity wrapper)
@@ -43,13 +43,13 @@ export class RestApiGenerator {
             const queryOptions = parseQueryOptions(req.query);
 
             // Get data source from request (injected by Auth middleware) or fallback to instance default
-            const dataSource = req.dataSource || this.dataSource;
+            const driver = req.driver || this.driver;
 
             // Fetch raw data directly from EntityService without Entity wrapper
-            const entities = await this.fetchRawCollection(dataSource, resolvedCollection, queryOptions);
+            const entities = await this.fetchRawCollection(driver, resolvedCollection, queryOptions);
 
             // Get count if needed
-            const total = await this.countRawEntities(dataSource, resolvedCollection, queryOptions);
+            const total = await this.countRawEntities(driver, resolvedCollection, queryOptions);
 
             res.json({
                 data: entities,
@@ -67,10 +67,10 @@ export class RestApiGenerator {
             const { id } = req.params;
 
             // Get data source from request (injected by Auth middleware) or fallback to instance default
-            const dataSource = req.dataSource || this.dataSource;
+            const driver = req.driver || this.driver;
 
             // Fetch raw data directly from EntityService without Entity wrapper
-            const entity = await this.fetchRawEntity(dataSource, resolvedCollection, String(id));
+            const entity = await this.fetchRawEntity(driver, resolvedCollection, String(id));
 
             if (!entity) {
                 throw ApiError.notFound("Entity not found");
@@ -83,11 +83,11 @@ export class RestApiGenerator {
         this.router.post(basePath, asyncHandler(async (req: RebaseRequest, res: Response, next: NextFunction): Promise<void> => {
             try {
                 // Get data source from request (injected by Auth middleware) or fallback to instance default
-                const dataSource = req.dataSource || this.dataSource;
+                const driver = req.driver || this.driver;
 
                 const path = collection.dbPath || collection.slug;
-                // Use existing saveEntity from DataSource
-                const entity = await dataSource.saveEntity({
+                // Use existing saveEntity from DataDriver
+                const entity = await driver.saveEntity({
                     path,
                     values: req.body,
                     collection: resolvedCollection,
@@ -108,10 +108,10 @@ export class RestApiGenerator {
                 const { id } = req.params;
 
                 // Get data source from request (injected by Auth middleware) or fallback to instance default
-                const dataSource = req.dataSource || this.dataSource;
+                const driver = req.driver || this.driver;
 
                 // Check if entity exists first
-                const existingEntity = await dataSource.fetchEntity({
+                const existingEntity = await driver.fetchEntity({
                     path: collection.dbPath || collection.slug,
                     entityId: String(id),
                     collection: resolvedCollection
@@ -121,8 +121,8 @@ export class RestApiGenerator {
                     throw ApiError.notFound("Entity not found");
                 }
 
-                // Use existing saveEntity from DataSource
-                const entity = await dataSource.saveEntity({
+                // Use existing saveEntity from DataDriver
+                const entity = await driver.saveEntity({
                     path: collection.dbPath || collection.slug,
                     entityId: String(id),
                     values: req.body,
@@ -143,10 +143,10 @@ export class RestApiGenerator {
             const { id } = req.params;
 
             // Get data source from request (injected by Auth middleware) or fallback to instance default
-            const dataSource = req.dataSource || this.dataSource;
+            const driver = req.driver || this.driver;
 
             // Check if entity exists first
-            const existingEntity = await dataSource.fetchEntity({
+            const existingEntity = await driver.fetchEntity({
                 path: collection.dbPath || collection.slug,
                 entityId: String(id),
                 collection: resolvedCollection
@@ -156,8 +156,8 @@ export class RestApiGenerator {
                 throw ApiError.notFound("Entity not found");
             }
 
-            // Use existing deleteEntity from DataSource (expects the full entity)
-            await dataSource.deleteEntity({
+            // Use existing deleteEntity from DataDriver (expects the full entity)
+            await driver.deleteEntity({
                 entity: existingEntity,
                 collection: resolvedCollection
             });
@@ -223,9 +223,9 @@ export class RestApiGenerator {
     /**
      * Fetch raw collection data without Entity wrapper
      */
-    private async fetchRawCollection(dataSource: DataSource, collection: EntityCollection, queryOptions: QueryOptions) {
-        // Use existing fetchCollection from DataSource
-        const entities = await dataSource.fetchCollection({
+    private async fetchRawCollection(driver: DataDriver, collection: EntityCollection, queryOptions: QueryOptions) {
+        // Use existing fetchCollection from DataDriver
+        const entities = await driver.fetchCollection({
             path: collection.dbPath || collection.slug,
             collection,
             filter: queryOptions.where as FetchCollectionProps["filter"],
@@ -242,8 +242,8 @@ export class RestApiGenerator {
     /**
      * Count raw entities for a collection
      */
-    private async countRawEntities(dataSource: DataSource, collection: EntityCollection, queryOptions: QueryOptions): Promise<number> {
-        return dataSource.countEntities ? await dataSource.countEntities({
+    private async countRawEntities(driver: DataDriver, collection: EntityCollection, queryOptions: QueryOptions): Promise<number> {
+        return driver.countEntities ? await driver.countEntities({
             path: collection.dbPath || collection.slug,
             collection,
             filter: queryOptions.where as FetchCollectionProps["filter"]
@@ -253,9 +253,9 @@ export class RestApiGenerator {
     /**
      * Fetch single entity raw data without Entity wrapper
      */
-    private async fetchRawEntity(dataSource: DataSource, collection: EntityCollection, entityId: string) {
-        // Use existing fetchEntity from DataSource
-        const entity = await dataSource.fetchEntity({
+    private async fetchRawEntity(driver: DataDriver, collection: EntityCollection, entityId: string) {
+        // Use existing fetchEntity from DataDriver
+        const entity = await driver.fetchEntity({
             path: collection.dbPath || collection.slug,
             entityId,
             collection

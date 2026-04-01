@@ -14,8 +14,8 @@
     ],
     "exports": {
         ".": {
-            "development": "./src/index.ts",
             "types": "./dist/index.d.ts",
+            "development": "./src/index.ts",
             "import": "./dist/index.es.js",
             "require": "./dist/index.umd.js"
         }

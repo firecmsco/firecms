@@ -3,13 +3,13 @@ import { createHandler } from "graphql-http/lib/use/express";
 import cors from "cors";
 import { GraphQLSchemaGenerator } from "./graphql/graphql-schema-generator";
 import { RestApiGenerator } from "./rest/api-generator";
-import { DataSource, EntityCollection } from "@rebasepro/types";
+import { DataDriver, EntityCollection } from "@rebasepro/types";
 import { ApiConfig, RebaseRequest } from "./types";
 import * as fs from "fs";
 import * as path from "path";
 import { loadCollectionsFromDirectory } from "../collections/loader";
 import { createSchemaEditorRoutes } from "./schema-editor-routes";
-import { PostgresDataSource } from "../services/postgresDataSource";
+import { PostgresDataDriver } from "../services/postgresDataDriver";
 import { createAuthMiddleware, requireAuth, requireAdmin } from "../auth/middleware";
 import { errorHandler } from "./errors";
 import { generateOpenApiSpec } from "./openapi-generator";
@@ -21,9 +21,9 @@ export class RebaseApiServer {
     private app: Express;
     private router: Router;
     private config: ApiConfig;
-    private dataSource: DataSource;
+    private driver: DataDriver;
 
-    private constructor(config: ApiConfig & { dataSource: DataSource }) {
+    private constructor(config: ApiConfig & { driver: DataDriver }) {
         this.config = {
             basePath: "/api",
             enableGraphQL: true,
@@ -35,7 +35,7 @@ export class RebaseApiServer {
             ...config
         };
 
-        this.dataSource = config.dataSource;
+        this.driver = config.driver;
 
         this.app = express();
         this.router = Router();
@@ -46,7 +46,7 @@ export class RebaseApiServer {
     /**
      * Factory method to create an asynchronously initialized ApiServer instance
      */
-    public static async create(config: ApiConfig & { dataSource: DataSource }): Promise<RebaseApiServer> {
+    public static async create(config: ApiConfig & { driver: DataDriver }): Promise<RebaseApiServer> {
         // Auto-discover collections if a directory is provided and collections aren't explicitly passed
         if (config.collectionsDir && (!config.collections || config.collections.length === 0)) {
             config.collections = await loadCollectionsFromDirectory(config.collectionsDir);
@@ -76,7 +76,7 @@ export class RebaseApiServer {
 
         // Auth middleware - delegates to canonical createAuthMiddleware()
         this.router.use(createAuthMiddleware({
-            dataSource: this.dataSource,
+            driver: this.driver,
             requireAuth: this.config.requireAuth ?? true
         }));
     }
@@ -93,7 +93,7 @@ export class RebaseApiServer {
                 status: "healthy",
                 timestamp: new Date().toISOString(),
                 collections: this.config.collections?.map(c => c.slug) || [],
-                dataSource: this.dataSource.key
+                driver: this.driver.key
             });
         });
 
@@ -117,16 +117,16 @@ export class RebaseApiServer {
             res.json({ data: collectionsMetadata });
         });
 
-        // GraphQL endpoint - uses existing DataSource
+        // GraphQL endpoint - uses existing DataDriver
         if (this.config.enableGraphQL) {
-            const schemaGenerator = new GraphQLSchemaGenerator(this.config.collections || [], this.dataSource);
+            const schemaGenerator = new GraphQLSchemaGenerator(this.config.collections || [], this.driver);
             const schema = schemaGenerator.generateSchema();
 
             const graphQLHandler = createHandler({
                 schema,
                 context: (req: unknown) => ({
                     user: (req as RebaseRequest).user,
-                    dataSource: (req as RebaseRequest).dataSource || this.dataSource
+                    driver: (req as RebaseRequest).driver || this.driver
                 })
             }) as unknown as RequestHandler;
 
@@ -162,7 +162,7 @@ export class RebaseApiServer {
         }
 
         if (this.config.enableREST) {
-            const restGenerator = new RestApiGenerator(this.config.collections || [], this.dataSource);
+            const restGenerator = new RestApiGenerator(this.config.collections || [], this.driver);
             const restRoutes = restGenerator.generateRoutes();
             this.router.use(basePath, restRoutes);
         }

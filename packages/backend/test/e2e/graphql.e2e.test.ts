@@ -7,7 +7,7 @@ import { RebaseApiServer } from "../../src/api/server";
 jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next()));
 
 describe("GraphQL E2E Tests", () => {
-    let mockDataSource: any;
+    let mockDataDriver: any;
     let mockCollections: any[];
     let server: RebaseApiServer;
     let app: any;
@@ -28,7 +28,7 @@ describe("GraphQL E2E Tests", () => {
             }
         ];
 
-        mockDataSource = {
+        mockDataDriver = {
             key: "mock-data-source",
             fetchCollection: jest.fn().mockResolvedValue([{
                 id: "b1",
@@ -54,7 +54,7 @@ describe("GraphQL E2E Tests", () => {
         };
 
         server = await RebaseApiServer.create({
-            dataSource: mockDataSource as any,
+            driver: mockDataDriver as any,
             collections: mockCollections,
             enableGraphQL: true,
             enableREST: false,
@@ -85,7 +85,7 @@ describe("GraphQL E2E Tests", () => {
             title: "Dune",
             pages: 412
         });
-        expect(mockDataSource.fetchEntity).toHaveBeenCalledWith(
+        expect(mockDataDriver.fetchEntity).toHaveBeenCalledWith(
             expect.objectContaining({ entityId: "b1" })
         );
     });
@@ -112,7 +112,7 @@ describe("GraphQL E2E Tests", () => {
             title: "Dune",
             pages: 412
         });
-        expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+        expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
             expect.objectContaining({ limit: 5 })
         );
     });
@@ -130,7 +130,7 @@ describe("GraphQL E2E Tests", () => {
             .post("/api/graphql")
             .send({ query });
 
-        expect(mockDataSource.fetchCollection).toHaveBeenCalledWith(
+        expect(mockDataDriver.fetchCollection).toHaveBeenCalledWith(
             expect.objectContaining({
                 filter: { pages: [">", 400] }
             })
@@ -157,7 +157,7 @@ describe("GraphQL E2E Tests", () => {
         expect(res.body.data.createBook.id).toBe("new-b1");
         expect(res.body.data.createBook.title).toBe("Foundation");
 
-        expect(mockDataSource.saveEntity).toHaveBeenCalledWith(
+        expect(mockDataDriver.saveEntity).toHaveBeenCalledWith(
             expect.objectContaining({
                 status: "new",
                 values: { title: "Foundation", pages: 255 }
@@ -183,7 +183,7 @@ describe("GraphQL E2E Tests", () => {
         expect(res.status).toBe(200);
         expect(res.body.data.updateBook.title).toBe("Dune Messiah");
 
-        expect(mockDataSource.saveEntity).toHaveBeenCalledWith(
+        expect(mockDataDriver.saveEntity).toHaveBeenCalledWith(
             expect.objectContaining({
                 entityId: "b1",
                 status: "existing",
@@ -205,12 +205,12 @@ describe("GraphQL E2E Tests", () => {
 
         expect(res.status).toBe(200);
         expect(res.body.data.deleteBook).toBe(true);
-        expect(mockDataSource.deleteEntity).toHaveBeenCalled();
+        expect(mockDataDriver.deleteEntity).toHaveBeenCalled();
     });
 
     describe("Error Handling", () => {
         it("should return null or error when querying a non-existent entity", async () => {
-            mockDataSource.fetchEntity.mockResolvedValueOnce(null);
+            mockDataDriver.fetchEntity.mockResolvedValueOnce(null);
 
             const query = `
                 query {
@@ -232,7 +232,7 @@ describe("GraphQL E2E Tests", () => {
 
         it("should return error when updating a non-existent entity", async () => {
             // fetchEntity returns null when checking if it exists before update
-            mockDataSource.fetchEntity.mockResolvedValueOnce(null);
+            mockDataDriver.fetchEntity.mockResolvedValueOnce(null);
 
             const mutation = `
                 mutation {
@@ -252,7 +252,7 @@ describe("GraphQL E2E Tests", () => {
         });
 
         it("should return false when deleting a non-existent entity", async () => {
-            mockDataSource.fetchEntity.mockResolvedValueOnce(null);
+            mockDataDriver.fetchEntity.mockResolvedValueOnce(null);
 
             const mutation = `
                 mutation {

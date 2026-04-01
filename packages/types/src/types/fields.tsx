@@ -101,7 +101,7 @@ export interface FieldProps<
 
     /**
      * Flag to indicate that the underlying value has been updated in the
-     * datasource
+     * driver
      */
     underlyingValueHasChanged?: boolean;
 

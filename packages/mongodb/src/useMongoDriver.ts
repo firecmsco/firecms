@@ -2,7 +2,7 @@ import { useCallback } from "react";
 
 import { App, BSON } from "realm-web";
 import {
-    DataSource,
+    DataDriver,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -24,7 +24,7 @@ type ChangeEvent = any;
 /**
  *
  */
-export interface UseMongoDataSourceProps {
+export interface UseMongoDriverProps {
     app: App,
     cluster: string,
     database: string,
@@ -46,15 +46,15 @@ const rebaseToMongoDB: Record<WhereFilterOp, string> = {
 };
 
 /**
- * Use this hook to build a {@link DataSource} based on Firestore
+ * Use this hook to build a {@link DataDriver} based on Firestore
  * @param firebaseApp
  *
  */
-export function useMongoDataSource({
+export function useMongoDriver({
     app,
     cluster,
     database,
-}: UseMongoDataSourceProps): DataSource {
+}: UseMongoDriverProps): DataDriver {
 
     const buildQuery = useCallback((
         filter: FilterValues<any> | undefined,
@@ -102,7 +102,7 @@ export function useMongoDataSource({
     ): Promise<Entity<M>[]> => {
 
         if (!app?.currentUser)
-            throw Error("useMongoDataSource app not initialised");
+            throw Error("useMongoDriver app not initialised");
 
         const mdb = app.currentUser.mongoClient(cluster);
         const mongoCollection = mdb.db(database).collection(path);
@@ -138,7 +138,7 @@ export function useMongoDataSource({
         collection
     }: FetchEntityProps<M>
     ): Promise<Entity<M> | undefined> => {
-        if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
+        if (!app?.currentUser) throw Error("useMongoDriver app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
         const mongoCollection = mdb.db(database).collection(path);
         const doc = await mongoCollection
@@ -157,7 +157,7 @@ export function useMongoDataSource({
             collection,
             status
         }: SaveEntityProps<M>): Promise<Entity<M>> => {
-        if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
+        if (!app?.currentUser) throw Error("useMongoDriver app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
         const mongoCollection = mdb.db(database).collection(path);
         const mongoValues = values;
@@ -225,7 +225,7 @@ export function useMongoDataSource({
         }: ListenCollectionProps<M>
     ): () => void => {
 
-        if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
+        if (!app?.currentUser) throw Error("useMongoDriver app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
         const mongoCollection = mdb.db(database).collection(path);
 
@@ -328,7 +328,7 @@ export function useMongoDataSource({
             entity
         }: DeleteEntityProps<M>
     ): Promise<void> => {
-        if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
+        if (!app?.currentUser) throw Error("useMongoDriver app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
         const mongoCollection = mdb.db(database).collection(entity.path);
         const res = await mongoCollection
@@ -347,7 +347,7 @@ export function useMongoDataSource({
         collection: EntityCollection<any>
         onCountUpdate?: (count: number) => void
     }): Promise<number> => {
-        if (!app?.currentUser) throw Error("useMongoDataSource app not initialised");
+        if (!app?.currentUser) throw Error("useMongoDriver app not initialised");
         const mdb = app.currentUser.mongoClient(cluster);
         const mongoCollection = mdb.db(database).collection(props.path);
         return mongoCollection.count();

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import {
     AuthController,
-    DataSource,
+    DataDriver,
     DeleteEntityProps,
     Entity,
     EntityCollection,
@@ -20,21 +20,21 @@ import {
 import { updateDateAutoValues } from "@rebasepro/common";
 
 /**
- * Use this hook to build a {@link DataSource} based on Firestore
+ * Use this hook to build a {@link DataDriver} based on Firestore
  * @param firebaseApp
  * @group Firebase
  */
-export function useBuildDataSource({
+export function useBuildDataDriver({
     delegate,
     propertyConfigs,
     collectionRegistryController,
     authController
 }: {
-    delegate: DataSource,
+    delegate: DataDriver,
     propertyConfigs?: Record<string, PropertyConfig>;
     collectionRegistryController: CollectionRegistryController;
     authController: AuthController;
-}): DataSource {
+}): DataDriver {
 
     return {
 
@@ -63,7 +63,7 @@ export function useBuildDataSource({
             order,
         }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> => {
-            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
+            const usedDelegate = collection?.overrides?.driver ?? delegate;
             return usedDelegate.fetchCollection<M>({
                 path,
                 filter,
@@ -109,10 +109,10 @@ export function useBuildDataSource({
             ): () => void => {
 
                 const collection = collectionProp ?? collectionRegistryController.getCollection(path);
-                const usedDelegate = collection?.overrides?.dataSource ?? delegate;
+                const usedDelegate = collection?.overrides?.driver ?? delegate;
 
                 if (!usedDelegate.listenCollection)
-                    throw Error("useBuildDataSource delegate not initialised");
+                    throw Error("useBuildDataDriver delegate not initialised");
 
                 return usedDelegate.listenCollection<M>({
                     path,
@@ -142,7 +142,7 @@ export function useBuildDataSource({
             collection
         }: FetchEntityProps<M>
         ): Promise<Entity<M> | undefined> => {
-            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
+            const usedDelegate = collection?.overrides?.driver ?? delegate;
             return usedDelegate.fetchEntity({
                 path,
                 entityId,
@@ -169,10 +169,10 @@ export function useBuildDataSource({
                     onUpdate,
                     onError
                 }: ListenEntityProps<M>): () => void => {
-                const usedDelegate = collection?.overrides?.dataSource ?? delegate;
+                const usedDelegate = collection?.overrides?.driver ?? delegate;
 
                 if (!usedDelegate.listenEntity)
-                    throw Error("useBuildDataSource delegate not initialised");
+                    throw Error("useBuildDataDriver delegate not initialised");
 
                 return usedDelegate.listenEntity<M>({
                     path,
@@ -204,7 +204,7 @@ export function useBuildDataSource({
             }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
             const collection = collectionProp ?? collectionRegistryController.getCollection(path);
-            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
+            const usedDelegate = collection?.overrides?.driver ?? delegate;
 
             const properties: Properties | undefined = collection?.properties;
 
@@ -274,7 +274,7 @@ export function useBuildDataSource({
                 collection
             }: DeleteEntityProps<M>
         ): Promise<void> => {
-            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
+            const usedDelegate = collection?.overrides?.driver ?? delegate;
             return usedDelegate.deleteEntity({
                 entity,
                 collection,
@@ -298,7 +298,7 @@ export function useBuildDataSource({
             entityId?: string | number,
             collection?: EntityCollection
         ): Promise<boolean> => {
-            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
+            const usedDelegate = collection?.overrides?.driver ?? delegate;
             return usedDelegate.checkUniqueField(path, name, value, entityId, collection);
         }, [delegate.checkUniqueField]),
 
@@ -316,7 +316,7 @@ export function useBuildDataSource({
             orderBy?: string,
             order?: "desc" | "asc",
         }): Promise<number> => {
-            const usedDelegate = collection?.overrides?.dataSource ?? delegate;
+            const usedDelegate = collection?.overrides?.driver ?? delegate;
             return usedDelegate.countEntities!({
                 path,
                 filter,
@@ -355,7 +355,7 @@ export function useBuildDataSource({
             collection: EntityCollection,
             parentCollectionIds?: string[]
         }): Promise<boolean> => {
-            const usedDelegate = props.collection?.overrides?.dataSource ?? delegate;
+            const usedDelegate = props.collection?.overrides?.driver ?? delegate;
             if (!usedDelegate.initTextSearch)
                 return false;
             return usedDelegate.initTextSearch(props)

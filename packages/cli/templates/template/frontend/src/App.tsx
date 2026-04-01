@@ -28,7 +28,7 @@ import {
     useBuildModeController,
     useBuildNavigationStateController
 } from "@rebasepro/core";
-import { usePostgresClientDataSource } from "@rebasepro/postgresql";
+import { usePostgresClientDriver } from "@rebasepro/postgresql";
 import { collections } from "virtual:rebase-collections";
 import { Route, Outlet } from "react-router-dom";
 
@@ -56,7 +56,7 @@ export function App() {
         currentUser: authController.user
     });
 
-    const postgresDelegate = usePostgresClientDataSource({
+    const postgresDelegate = usePostgresClientDriver({
         websocketUrl: API_URL.replace(/^http/, "ws"),
         getAuthToken: authController.initialLoading ? undefined : authController.getAuthToken
     });
@@ -75,7 +75,7 @@ export function App() {
     const navigationStateController = useBuildNavigationStateController({
         collections: collectionsBuilder,
         authController,
-        dataSource: postgresDelegate,
+        driver: postgresDelegate,
         collectionRegistryController,
         cmsUrlController,
         userManagement
@@ -90,7 +90,7 @@ export function App() {
                     navigationStateController={navigationStateController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
-                    dataSource={postgresDelegate}
+                    driver={postgresDelegate}
                     storageSource={storageSource}
                 >
                     {({ loading }) => {

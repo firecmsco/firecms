@@ -119,7 +119,7 @@ describe("EntityReference Preservation - Integration Tests", () => {
     describe("updateDateAutoValues with EntityReference", () => {
 
         it("should preserve EntityReference when updating date auto values", () => {
-            // This simulates useBuildDataSource.ts line 227-234
+            // This simulates useBuildDataDriver.ts line 227-234
 
             const inputValues = {
                 title: "My Document",
@@ -221,7 +221,7 @@ describe("EntityReference Preservation - Integration Tests", () => {
             };
             const mergedValues = mergeDeep(formValues, cachedChanges);
 
-            // Step 3: Update auto dates (simulates useBuildDataSource)
+            // Step 3: Update auto dates (simulates useBuildDataDriver)
             const properties = {
                 title: { type: "string" as const },
                 author: {

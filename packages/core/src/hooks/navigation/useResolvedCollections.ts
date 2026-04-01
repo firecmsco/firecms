@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
     AuthController,
     CollectionRegistryController,
-    DataSource,
+    RebaseData,
     EntityCollection,
     EntityCollectionsBuilder,
     RebasePlugin,
@@ -17,7 +17,7 @@ import { areCollectionListsEqual } from "./utils";
 export type UseResolvedCollectionsProps<EC extends EntityCollection, USER extends User> = {
     authController: AuthController<USER>;
     collections?: EC[] | EntityCollectionsBuilder<EC>;
-    dataSource: DataSource;
+    data: RebaseData;
     plugins?: RebasePlugin[];
     disabled?: boolean;
     collectionRegistryController: CollectionRegistryController<EC> & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> };
@@ -34,7 +34,7 @@ export type UseResolvedCollectionsResult = {
  * Hook that resolves collection props (which may be async builders or arrays)
  * into concrete EntityCollection[], and registers them with the CollectionRegistry.
  *
- * Uses refs for potentially-unstable dependencies (dataSource, authController,
+ * Uses refs for potentially-unstable dependencies (driver, authController,
  * plugins) to avoid re-triggering effects when their object identity changes.
  */
 export function useResolvedCollections<EC extends EntityCollection, USER extends User>(
@@ -44,7 +44,7 @@ export function useResolvedCollections<EC extends EntityCollection, USER extends
     const {
         authController,
         collections: collectionsProp,
-        dataSource,
+        data,
         plugins,
         disabled,
         collectionRegistryController
@@ -63,8 +63,8 @@ export function useResolvedCollections<EC extends EntityCollection, USER extends
 
     // Use refs for values that may be new objects each render but shouldn't
     // re-trigger the effect. The effect reads them at execution time.
-    const dataSourceRef = useRef(dataSource);
-    dataSourceRef.current = dataSource;
+    const dataRef = useRef(data);
+    dataRef.current = data;
     const authControllerRef = useRef(authController);
     authControllerRef.current = authController;
     const pluginsRef = useRef(plugins);
@@ -86,7 +86,7 @@ export function useResolvedCollections<EC extends EntityCollection, USER extends
                 const resolved = await resolveCollections(
                     collectionsProp,
                     authControllerRef.current,
-                    dataSourceRef.current,
+                    dataRef.current,
                     pluginsRef.current
                 );
 

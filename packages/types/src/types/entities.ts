@@ -5,7 +5,7 @@
 export type EntityStatus = "new" | "existing" | "copy";
 
 /**
- * Representation of an entity fetched from the datasource
+ * Representation of an entity fetched from the driver
  * @group Models
  */
 export interface Entity<M extends object = object> {
@@ -27,14 +27,14 @@ export interface Entity<M extends object = object> {
     values: EntityValues<M>;
 
     /**
-     * Which datasource this entity belongs to (e.g., 'postgres', 'firestore').
-     * If not specified, the default datasource is assumed.
+     * Which driver this entity belongs to (e.g., 'postgres', 'firestore').
+     * If not specified, the default driver is assumed.
      */
-    datasource?: string;
+    driver?: string;
 
     /**
-     * Which database within the datasource (e.g., for Firestore multi-database).
-     * If not specified, the default database of the datasource is used.
+     * Which database within the driver (e.g., for Firestore multi-database).
+     * If not specified, the default database of the driver is used.
      */
     databaseId?: string;
 }
@@ -54,9 +54,9 @@ export interface EntityReferenceProps {
     id: string;
     /** Path of the collection (relative to the root of the database) */
     path: string;
-    /** Which datasource (e.g., 'postgres', 'firestore'). Defaults to "(default)" */
-    datasource?: string;
-    /** Which database within the datasource. Defaults to "(default)" */
+    /** Which driver (e.g., 'postgres', 'firestore'). Defaults to "(default)" */
+    driver?: string;
+    /** Which database within the driver. Defaults to "(default)" */
     databaseId?: string;
 }
 
@@ -64,14 +64,14 @@ export interface EntityReferenceProps {
  * Class used to create a reference to an entity in a different path.
  * 
  * @example
- * // Simple reference (most common case - single datasource, single db)
+ * // Simple reference (most common case - single driver, single db)
  * new EntityReference({ id: "123", path: "users" })
  * 
- * // Reference to a different datasource (e.g., Firestore)
- * new EntityReference({ id: "123", path: "analytics", datasource: "firestore" })
+ * // Reference to a different driver (e.g., Firestore)
+ * new EntityReference({ id: "123", path: "analytics", driver: "firestore" })
  * 
- * // Reference to a specific database within a datasource
- * new EntityReference({ id: "123", path: "orders", datasource: "postgres", databaseId: "orders_db" })
+ * // Reference to a specific database within a driver
+ * new EntityReference({ id: "123", path: "orders", driver: "postgres", databaseId: "orders_db" })
  */
 export class EntityReference {
 
@@ -87,13 +87,13 @@ export class EntityReference {
     readonly path: string;
 
     /**
-     * Which datasource (e.g., 'postgres', 'firestore').
+     * Which driver (e.g., 'postgres', 'firestore').
      * Defaults to "(default)" if not specified.
      */
-    readonly datasource?: string;
+    readonly driver?: string;
 
     /**
-     * Which database within the datasource.
+     * Which database within the driver.
      * Defaults to "(default)" if not specified.
      */
     readonly databaseId?: string;
@@ -105,13 +105,13 @@ export class EntityReference {
      * // Simple reference (most common case)
      * new EntityReference({ id: "123", path: "users" })
      * 
-     * // With datasource
-     * new EntityReference({ id: "123", path: "analytics", datasource: "firestore" })
+     * // With driver
+     * new EntityReference({ id: "123", path: "analytics", driver: "firestore" })
      */
     constructor(props: EntityReferenceProps) {
         this.id = props.id;
         this.path = props.path;
-        this.datasource = props.datasource;
+        this.driver = props.driver;
         this.databaseId = props.databaseId;
     }
 
@@ -120,15 +120,15 @@ export class EntityReference {
     }
 
     /**
-     * Get the full path including datasource and database prefixes if specified.
-     * For the common case (single datasource, single db), this just returns pathWithId.
+     * Get the full path including driver and database prefixes if specified.
+     * For the common case (single driver, single db), this just returns pathWithId.
      */
     get fullPath() {
         const parts: string[] = [];
 
-        // Add datasource prefix if not default
-        if (this.datasource && this.datasource !== "(default)") {
-            parts.push(this.datasource);
+        // Add driver prefix if not default
+        if (this.driver && this.driver !== "(default)") {
+            parts.push(this.driver);
         }
 
         // Add database prefix if specified

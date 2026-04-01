@@ -32,7 +32,7 @@ function customReplacer(key: string): any {
             __type: "EntityReference",
             id: value.id,
             path: value.path,
-            datasource: value.datasource,
+            driver: value.driver,
             databaseId: value.databaseId
         };
     }
@@ -77,7 +77,7 @@ function customReviver(key: string, value: any): any {
                 return new EntityReference({
                     id: value.id,
                     path: value.path,
-                    datasource: value.datasource,
+                    driver: value.driver,
                     databaseId: value.databaseId
                 });
             case "EntityRelation":

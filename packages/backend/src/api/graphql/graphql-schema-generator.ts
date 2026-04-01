@@ -10,25 +10,25 @@ import {
     GraphQLFieldConfig,
     GraphQLInputObjectType,
 } from "graphql";
-import { DataSource, EntityCollection, Property } from "@rebasepro/types";
+import { DataDriver, EntityCollection, Property } from "@rebasepro/types";
 
 /**
- * Lightweight GraphQL schema generator that leverages existing DataSource
+ * Lightweight GraphQL schema generator that leverages existing DataDriver
  * No duplication - uses your existing data layer and services
  */
 export class GraphQLSchemaGenerator {
     private collections: EntityCollection[];
-    private dataSource: DataSource;
+    private driver: DataDriver;
     private typeRegistry = new Map<string, GraphQLObjectType>();
     private inputTypeRegistry = new Map<string, GraphQLInputObjectType>();
 
-    constructor(collections: EntityCollection[], dataSource: DataSource) {
+    constructor(collections: EntityCollection[], driver: DataDriver) {
         this.collections = collections;
-        this.dataSource = dataSource;
+        this.driver = driver;
     }
 
     /**
-     * Generate complete GraphQL schema using existing DataSource
+     * Generate complete GraphQL schema using existing DataDriver
      */
     generateSchema(): GraphQLSchema {
         // Create all types first
@@ -158,7 +158,7 @@ export class GraphQLSchemaGenerator {
     }
 
     /**
-     * Create Query type using existing DataSource methods
+     * Create Query type using existing DataDriver methods
      */
     private createQueryType(): GraphQLObjectType {
         const fields: Record<string, GraphQLFieldConfig<any, any>> = {};
@@ -175,8 +175,8 @@ export class GraphQLSchemaGenerator {
                 args: {
                     id: { type: new GraphQLNonNull(GraphQLString) }
                 },
-                resolve: async (_, args, context: { dataSource: DataSource }) => {
-                    const ds = context.dataSource || this.dataSource;
+                resolve: async (_, args, context: { driver: DataDriver }) => {
+                    const ds = context.driver || this.driver;
                     const entity = await ds.fetchEntity({
                         path: collection.dbPath || collection.slug,
                         entityId: args.id,
@@ -195,8 +195,8 @@ export class GraphQLSchemaGenerator {
                     where: { type: GraphQLString },
                     orderBy: { type: GraphQLString }
                 },
-                resolve: async (_, args, context: { dataSource: DataSource }) => {
-                    const ds = context.dataSource || this.dataSource;
+                resolve: async (_, args, context: { driver: DataDriver }) => {
+                    const ds = context.driver || this.driver;
                     const filter = args.where ? JSON.parse(args.where) : undefined;
                     const entities = await ds.fetchCollection({
                         path: collection.dbPath || collection.slug,
@@ -217,7 +217,7 @@ export class GraphQLSchemaGenerator {
     }
 
     /**
-     * Create Mutation type using existing DataSource methods
+     * Create Mutation type using existing DataDriver methods
      */
     private createMutationType(): GraphQLObjectType {
         const fields: Record<string, GraphQLFieldConfig<any, any>> = {};
@@ -235,8 +235,8 @@ export class GraphQLSchemaGenerator {
                 args: {
                     input: { type: new GraphQLNonNull(inputType) }
                 },
-                resolve: async (_, args, context: { dataSource: DataSource }) => {
-                    const ds = context.dataSource || this.dataSource;
+                resolve: async (_, args, context: { driver: DataDriver }) => {
+                    const ds = context.driver || this.driver;
                     const path = collection.dbPath || collection.slug;
                     const entity = await ds.saveEntity({
                         path,
@@ -255,8 +255,8 @@ export class GraphQLSchemaGenerator {
                     id: { type: new GraphQLNonNull(GraphQLString) },
                     input: { type: new GraphQLNonNull(inputType) }
                 },
-                resolve: async (_, args, context: { dataSource: DataSource }) => {
-                    const ds = context.dataSource || this.dataSource;
+                resolve: async (_, args, context: { driver: DataDriver }) => {
+                    const ds = context.driver || this.driver;
                     const entity = await ds.saveEntity({
                         path: collection.dbPath || collection.slug,
                         entityId: args.id,
@@ -274,9 +274,9 @@ export class GraphQLSchemaGenerator {
                 args: {
                     id: { type: new GraphQLNonNull(GraphQLString) }
                 },
-                resolve: async (_, args, context: { dataSource: DataSource }) => {
+                resolve: async (_, args, context: { driver: DataDriver }) => {
                     try {
-                        const ds = context.dataSource || this.dataSource;
+                        const ds = context.driver || this.driver;
                         const existingEntity = await ds.fetchEntity({
                             path: collection.dbPath || collection.slug,
                             entityId: args.id,

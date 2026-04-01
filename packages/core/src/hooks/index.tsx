@@ -1,4 +1,4 @@
-export * from "./data/useDataSource";
+export * from "./data/useData";
 export * from "./data/useCollectionFetch";
 export * from "./data/useEntityFetch";
 export * from "./data/useRelationSelector";

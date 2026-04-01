@@ -24,7 +24,7 @@ import {
     ResizablePanels,
     Chip
 } from "@rebasepro/ui";
-import { useDataSource, useSnackbarController, useCollectionRegistryController, useSideEntityController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView, IconForView, useTranslation } from "@rebasepro/core";
+import { useRebaseContext, useSnackbarController, useCollectionRegistryController, useSideEntityController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView, IconForView, useTranslation } from "@rebasepro/core";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
 import { parseFirst } from "pgsql-ast-parser";
@@ -73,7 +73,7 @@ const STORAGE_KEY_TABS = "rebase_sql_tabs";
 const STORAGE_KEY_ACTIVE_TAB = "rebase_sql_active_tab";
 
 export const SQLEditor = () => {
-    const dataSource = useDataSource();
+    const { databaseAdmin } = useRebaseContext();
     const snackbarController = useSnackbarController();
     const collectionRegistry = useCollectionRegistryController();
     const sideEntityController = useSideEntityController();
@@ -101,7 +101,7 @@ export const SQLEditor = () => {
     useEffect(() => {
         let mounted = true;
         const fetchConnectionConfig = async () => {
-            if (!dataSource.fetchAvailableDatabases || !dataSource.fetchAvailableRoles) {
+            if (!databaseAdmin?.fetchAvailableDatabases || !databaseAdmin?.fetchAvailableRoles) {
                 setConnectionConfigError(t("studio_sql_sql_not_supported"));
                 setIsLoadingConfig(false);
                 return;
@@ -109,9 +109,9 @@ export const SQLEditor = () => {
 
             try {
                 const [dbs, roles, currentDbFromApi] = await Promise.all([
-                    dataSource.fetchAvailableDatabases(),
-                    dataSource.fetchAvailableRoles(),
-                    typeof dataSource.fetchCurrentDatabase === "function" ? dataSource.fetchCurrentDatabase() : Promise.resolve(undefined)
+                    databaseAdmin.fetchAvailableDatabases(),
+                    databaseAdmin.fetchAvailableRoles(),
+                    typeof databaseAdmin?.fetchCurrentDatabase === "function" ? databaseAdmin.fetchCurrentDatabase() : Promise.resolve(undefined)
                 ]);
 
                 if (mounted) {
@@ -149,7 +149,7 @@ export const SQLEditor = () => {
         fetchConnectionConfig();
 
         return () => { mounted = false; };
-    }, [dataSource]);
+    }, [databaseAdmin]);
 
     const handleDatabaseChange = (db: string) => {
         setSelectedDatabase(db);
@@ -164,7 +164,7 @@ export const SQLEditor = () => {
     };
 
     const fetchSchema = useCallback(async () => {
-        if (!dataSource.executeSql) {
+        if (!databaseAdmin?.executeSql) {
             setSchemaError(t("studio_sql_sql_not_supported"));
             setIsSchemaLoading(false);
             return;
@@ -197,7 +197,7 @@ export const SQLEditor = () => {
                     c.table_schema, c.table_name, c.ordinal_position;
             `;
             // Pass the selected database so schema introspection targets the right DB.
-            const result = await dataSource.executeSql(sql, { database: selectedDatabase });
+            const result = await databaseAdmin!.executeSql!(sql, { database: selectedDatabase });
 
             const processGrouped = (data: Record<string, unknown>[]) => {
                 const grouped = data.reduce((acc: Record<string, TableInfo[]>, curr: Record<string, unknown>) => {
@@ -241,7 +241,7 @@ export const SQLEditor = () => {
         } finally {
             setIsSchemaLoading(false);
         }
-    }, [dataSource, selectedDatabase]);
+    }, [databaseAdmin, selectedDatabase]);
 
     useEffect(() => {
         // Fetch schema after config finishes loading, and re-fetch when the selected database changes.
@@ -399,8 +399,8 @@ export const SQLEditor = () => {
         const updateSql = `UPDATE "${tableName}" SET "${dbColumnName}" = ${formatValue(newValue)} WHERE ${whereConditions};`;
 
         try {
-            if (dataSource.executeSql) {
-                await dataSource.executeSql(updateSql, { database: selectedDatabase, role: selectedRole });
+            if (databaseAdmin?.executeSql) {
+                await databaseAdmin.executeSql(updateSql, { database: selectedDatabase, role: selectedRole });
 
                 const newResults = [...(activeTab.results || [])];
                 if (newResults[rowIndex]) {
@@ -419,7 +419,7 @@ export const SQLEditor = () => {
                 message: t("studio_sql_update_failed", { message: e instanceof Error ? e.message : String(e) })
             });
         }
-    }, [editingCell, schemas, activeTab.lastExecutedSql, activeTab.results, dataSource, updateActiveTab, snackbarController, selectedDatabase, selectedRole]);
+    }, [editingCell, schemas, activeTab.lastExecutedSql, activeTab.results, databaseAdmin, updateActiveTab, snackbarController, selectedDatabase, selectedRole]);
 
     const [columnWidths, setColumnWidths] = useState<Record<string, Record<string, number>>>(() => {
         const saved = localStorage.getItem("rebase_sql_column_widths");
@@ -539,8 +539,8 @@ export const SQLEditor = () => {
         updateActiveTab({ loading: true, error: null, results: null });
         const start = performance.now();
         try {
-            if (dataSource.executeSql) {
-                const result = await dataSource.executeSql(explainSql, { database: selectedDatabase, role: selectedRole });
+            if (databaseAdmin?.executeSql) {
+                const result = await databaseAdmin.executeSql(explainSql, { database: selectedDatabase, role: selectedRole });
                 updateActiveTab({ results: result, execTime: Math.round(performance.now() - start) });
             }
         } catch (e: unknown) {
@@ -561,8 +561,8 @@ export const SQLEditor = () => {
         const start = performance.now();
 
         try {
-            if (dataSource.executeSql) {
-                const result = await dataSource.executeSql(sqlToRun, { database: selectedDatabase, role: selectedRole });
+            if (databaseAdmin?.executeSql) {
+                const result = await databaseAdmin.executeSql(sqlToRun, { database: selectedDatabase, role: selectedRole });
                 updateActiveTab({
                     results: result,
                     execTime: Math.round(performance.now() - start),
@@ -581,7 +581,7 @@ export const SQLEditor = () => {
         } finally {
             updateActiveTab({ loading: false });
         }
-    }, [activeTab.sql, autoLimit, dataSource, history, updateActiveTab]);
+    }, [activeTab.sql, autoLimit, databaseAdmin, history, updateActiveTab]);
 
     const handleRun = useCallback(async (selectedText?: string) => {
         const sqlTarget = selectedText || activeTab.sql;

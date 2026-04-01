@@ -1,4 +1,4 @@
-import { DataSource, StorageSource } from "@rebasepro/core";
+import { DataDriver, StorageSource } from "@rebasepro/core";
 
 /**
  * Configuration for a thumbnail size.
@@ -42,9 +42,9 @@ export interface MediaManagerConfig {
 
     /**
      * Data source delegate for metadata persistence.
-     * Typically useFirestoreDataSource() or similar.
+     * Typically useFirestoreDriver() or similar.
      */
-    dataSource: DataSource;
+    driver: DataDriver;
 
     /**
      * Path in storage where media files will be uploaded.

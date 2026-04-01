@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDataSource } from "../../hooks";
+import { useData } from "./useData";
 import { Entity, EntityCollection, EntityRelation, FilterValues } from "@rebasepro/types";
 import { RelationItem } from "../../components/RelationSelector";
 
@@ -61,7 +61,7 @@ export function useRelationSelector<M extends Record<string, any> = any>(
     }: UseRelationSelectorProps<M>
 ): RelationSelectorController {
 
-    const dataSource = useDataSource(collection);
+    const dataClient = useData();
 
     const [items, setItems] = useState<RelationItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -120,43 +120,85 @@ export function useRelationSelector<M extends Record<string, any> = any>(
         }
     }, []);
 
-    // Perform data fetch
     const fetchData = useCallback((searchString: string | undefined, loadMore: boolean = false) => {
         cleanupSubscription();
         setError(undefined);
         setIsLoading(true);
 
-        const unsubscribe = dataSource.listenCollection!<M>({
-            path,
-            collection,
-            onUpdate: (entities) => {
-                const newItems = entities.map((e) => entityToRelationItem(e));
-
-                if (loadMore) {
-                    setItems(prev => [...prev, ...newItems]);
-                } else {
-                    setItems(newItems);
+        // Convert forceFilter to PostgREST where clause
+        const whereMap: Record<string, string> = {};
+        if (forceFilter) {
+            Object.entries(forceFilter).forEach(([key, value]) => {
+                if (value && Array.isArray(value)) {
+                    const [op, val] = value;
+                    const postgrestOp = op === "==" ? "eq" : op === "!=" ? "neq" : op === ">" ? "gt" : op === ">=" ? "gte" : op === "<" ? "lt" : op === "<=" ? "lte" : op === "in" ? "in" : op === "not-in" ? "nin" : op === "array-contains" ? "cs" : op === "array-contains-any" ? "csa" : "eq";
+                    
+                    let stringVal: string;
+                    if (Array.isArray(val)) {
+                        stringVal = `(${val.join(",")})`;
+                    } else {
+                        stringVal = String(val);
+                    }
+                    whereMap[key] = `${postgrestOp}.${stringVal}`;
                 }
+            });
+        }
+        const whereParams = Object.keys(whereMap).length > 0 ? whereMap : undefined;
 
-                // Set hasMore based on whether we got a full page of results
-                setHasMore(entities.length === pageSize);
-                setLastEntity(entities[entities.length - 1]);
-                setIsLoading(false);
-            },
-            onError: (fetchError) => {
-                console.error("useRelationSelector: Error fetching data:", fetchError);
-                setError(fetchError);
-                setIsLoading(false);
-            },
-            searchString,
-            filter: forceFilter,
-            limit: pageSize,
-            startAfter: loadMore ? lastEntity : undefined,
-            order: "asc"
-        });
+        const offset = loadMore ? items.length : 0;
+        
+        const onEntitiesUpdate = (res: { data: Entity<M>[], meta: { hasMore: boolean } }) => {
+            const newItems = res.data.map((e) => entityToRelationItem(e));
 
-        unsubscribeRef.current = unsubscribe;
-    }, [dataSource, path, collection, forceFilter, pageSize, entityToRelationItem, cleanupSubscription, lastEntity]);
+            if (loadMore) {
+                setItems(prev => {
+                    const existingIds = new Set(prev.map(i => i.id));
+                    const uniqueNewItems = newItems.filter(i => !existingIds.has(i.id));
+                    return [...prev, ...uniqueNewItems];
+                });
+            } else {
+                setItems(newItems);
+            }
+
+            setHasMore(res.meta.hasMore);
+            setIsLoading(false);
+        };
+
+        const onErrorUpdate = (fetchError: Error) => {
+            console.error("useRelationSelector: Error fetching data:", fetchError);
+            setError(fetchError);
+            setIsLoading(false);
+        };
+
+        const accessor = dataClient.collection(path);
+        
+        let unsubscribe: (() => void) | undefined;
+        
+        // Use find because pagination state (offset) is easier to track statically,
+        // and relation selectors usually don't strictly need real-time listing if they're paginated
+        // However, if we do want to use listen:
+        if (accessor.listen && offset === 0 && !searchString) {
+            unsubscribe = accessor.listen({
+                where: whereParams,
+                limit: pageSize,
+                orderBy: undefined, // default asc
+                searchString
+            }, onEntitiesUpdate, onErrorUpdate);
+        } else {
+            accessor.find({
+                where: whereParams,
+                limit: pageSize,
+                offset: offset,
+                orderBy: undefined,
+                searchString
+            })
+                .then(onEntitiesUpdate)
+                .catch(onErrorUpdate);
+            unsubscribe = () => {};
+        }
+
+        unsubscribeRef.current = unsubscribe || null;
+    }, [dataClient, path, forceFilter, pageSize, entityToRelationItem, cleanupSubscription, items.length]);
 
     // Search function with debouncing
     const search = useCallback((searchString: string) => {

@@ -60,8 +60,8 @@ export function generateSDK(
    });
 
    // Both syntax styles are fully typed!
-   const { data: users } = await rebase.users.find();
-   const { data: posts } = await rebase.collection('posts').find();
+   const { data: users } = await rebase.data.users.find();
+   const { data: posts } = await rebase.data.collection('posts').find();
    \`\`\`
 `
         });

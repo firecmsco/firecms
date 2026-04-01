@@ -12,7 +12,6 @@ export function createHistoryEntry<T = any>({
 }: NewHistoryEntryParams<T>) {
 
     const uid = context.user?.uid ?? context.authController?.user?.uid;
-    const dataSource = context.dataSource;
     const changedFields = previousValues ? findChangedFields(previousValues as object, values as object) : null;
 
     const entry: HistoryEntry<T> = {
@@ -24,12 +23,7 @@ export function createHistoryEntry<T = any>({
             updated_by: uid ?? null,
         }
     };
-    dataSource.saveEntity({
-        path: path + "/" + entityId + "/__history",
-        values: entry,
-        status: "new",
-        collection
-    }).then(() => {
+    context.data.collection(path + "/" + entityId + "/__history").create(entry).then(() => {
         console.debug("History saved for", path, entityId);
     });
 }

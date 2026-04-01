@@ -1,14 +1,14 @@
 
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { RebaseApiServer } from '../src/api/server';
-import { DataSource, User } from '@rebasepro/types';
+import { DataDriver, User } from '@rebasepro/types';
 import { ApiConfig } from '../src/api/types';
 import http from 'http';
 import { AddressInfo } from 'net';
 
-// Mock DataSource
+// Mock DataDriver
 const mockWithAuth = jest.fn();
-const mockDataSource: DataSource & { withAuth: any } = {
+const mockDataDriver: DataDriver & { withAuth: any } = {
     key: 'test-postgres',
     fetchCollection: jest.fn().mockImplementation(async () => {
         return [{ id: 'default-entity', values: { name: 'Default' } }];
@@ -20,15 +20,15 @@ const mockDataSource: DataSource & { withAuth: any } = {
     withAuth: mockWithAuth
 } as any;
 
-const mockScopedDataSource = {
-    ...mockDataSource,
+const mockScopedDataDriver = {
+    ...mockDataDriver,
     fetchCollection: jest.fn().mockImplementation(async () => {
         return [{ id: 'scoped-entity', values: { name: 'Scoped' } }];
     }),
     withAuth: undefined // Scoped delegate doesn't need withAuth
 };
 
-mockWithAuth.mockResolvedValue(mockScopedDataSource);
+mockWithAuth.mockResolvedValue(mockScopedDataDriver);
 
 describe('RebaseApiServer RLS Integration', () => {
     let server: RebaseApiServer;
@@ -52,7 +52,7 @@ describe('RebaseApiServer RLS Integration', () => {
             },
             enableREST: true
         };
-        server = await RebaseApiServer.create({ ...config, dataSource: mockDataSource });
+        server = await RebaseApiServer.create({ ...config, driver: mockDataDriver });
     });
 
     afterEach(async () => {
@@ -71,7 +71,7 @@ describe('RebaseApiServer RLS Integration', () => {
         });
     };
 
-    it('should use default datasource when no auth is provided', async () => {
+    it('should use default driver when no auth is provided', async () => {
         // setup validator to return null (no auth)
         (config.auth!.validator as any).mockResolvedValue(null);
         await startServer();
@@ -80,12 +80,12 @@ describe('RebaseApiServer RLS Integration', () => {
         const data = await response.json();
 
         expect(mockWithAuth).not.toHaveBeenCalled();
-        expect(mockDataSource.fetchCollection).toHaveBeenCalled();
-        expect(mockScopedDataSource.fetchCollection).not.toHaveBeenCalled();
+        expect(mockDataDriver.fetchCollection).toHaveBeenCalled();
+        expect(mockScopedDataDriver.fetchCollection).not.toHaveBeenCalled();
         expect(data.data[0].name).toBe('Default');
     });
 
-    it('should use scoped datasource when auth is provided and withAuth exists', async () => {
+    it('should use scoped driver when auth is provided and withAuth exists', async () => {
         const user: User = { uid: 'test-user', email: 'test@example.com' };
         // setup validator to return user
         (config.auth!.validator as any).mockResolvedValue(user);
@@ -95,12 +95,12 @@ describe('RebaseApiServer RLS Integration', () => {
         const data = await response.json();
 
         expect(mockWithAuth).toHaveBeenCalledWith(expect.objectContaining({ uid: 'test-user', email: 'test@example.com' }));
-        expect(mockDataSource.fetchCollection).not.toHaveBeenCalled();
-        expect(mockScopedDataSource.fetchCollection).toHaveBeenCalled();
+        expect(mockDataDriver.fetchCollection).not.toHaveBeenCalled();
+        expect(mockScopedDataDriver.fetchCollection).toHaveBeenCalled();
         expect(data.data[0].name).toBe('Scoped');
     });
 
-    it('should fallback to default datasource if withAuth fails', async () => {
+    it('should fallback to default driver if withAuth fails', async () => {
         const user: User = { uid: 'test-user', email: 'test@example.com' };
         (config.auth!.validator as any).mockResolvedValue(user);
         mockWithAuth.mockRejectedValue(new Error("Auth failed"));
@@ -114,7 +114,7 @@ describe('RebaseApiServer RLS Integration', () => {
         const data = await response.json();
 
         expect(mockWithAuth).toHaveBeenCalled();
-        expect(mockDataSource.fetchCollection).toHaveBeenCalled();
+        expect(mockDataDriver.fetchCollection).toHaveBeenCalled();
         expect(data.data[0].name).toBe('Default');
 
         consoleSpy.mockRestore();

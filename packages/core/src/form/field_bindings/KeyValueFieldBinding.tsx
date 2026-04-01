@@ -178,7 +178,7 @@ function MapEditView<T extends Record<string, any>>({
                     const newValue = { ...(value ?? {}) } as T;
                     if (typeof initialValue === "object" && fieldKey in initialValue) {
                         // @ts-ignore
-                        newValue[fieldKey] = undefined; // set to undefined to remove from the object, the datasource will remove it from the backend
+                        newValue[fieldKey] = undefined; // set to undefined to remove from the object, the driver will remove it from the backend
                     } else {
                         // @ts-ignore
                         delete newValue[fieldKey];

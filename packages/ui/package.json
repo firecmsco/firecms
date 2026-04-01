@@ -33,10 +33,10 @@
     ],
     "exports": {
         ".": {
+            "types": "./dist/index.d.ts",
             "development": "./src/index.ts",
             "import": "./dist/index.es.js",
-            "require": "./dist/index.umd.js",
-            "types": "./dist/index.d.ts"
+            "require": "./dist/index.umd.js"
         },
         "./package.json": "./package.json",
         "./index.css": "./dist/index.css",
@@ -44,7 +44,7 @@
     },
     "scripts": {
         "watch": "vite build --watch",
-        "build": "rm -rf ./dist && vite build && tsc --emitDeclarationOnly",
+        "build": "rm -rf ./dist && vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
         "prepublishOnly": "run-s build",
         "test:lint": "eslint \"src/**\" --quiet",
         "test": "jest --passWithNoTests",

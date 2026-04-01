@@ -77,7 +77,7 @@ export function getDefaultValueFortype(type: DataType) {
 
 /**
  * Update the automatic values in an entity before save
- * @group Datasource
+ * @group Driver
  */
 export function updateDateAutoValues<M extends Record<string, any>>({
     inputValues,
@@ -115,7 +115,7 @@ export function updateDateAutoValues<M extends Record<string, any>>({
  * Add missing required fields, expected in the collection, to the values of an entity
  * @param values
  * @param properties
- * @group Datasource
+ * @group Driver
  */
 export function sanitizeData<M extends Record<string, any>>
     (
@@ -137,7 +137,7 @@ export function getReferenceFrom<M extends Record<string, any>>(entity: Entity<M
     return new EntityReference({
         id: entity.id,
         path: entity.path,
-        datasource: entity.datasource,
+        driver: entity.driver,
         databaseId: entity.databaseId
     });
 }

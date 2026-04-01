@@ -1,6 +1,6 @@
 import { RealtimeService } from "./services/realtimeService";
-import { PostgresDataSource } from "./services/postgresDataSource";
-import { DataSource, DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps, TableColumnInfo } from "@rebasepro/types";
+import { PostgresDataDriver } from "./services/postgresDataDriver";
+import { DataDriver, DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps, TableColumnInfo } from "@rebasepro/types";
 import { WebSocketServer, WebSocket } from "ws";
 import { Server } from "http";
 import { inspect } from "util";
@@ -18,7 +18,7 @@ const clientSessions = new Map<string, ClientSession>();
 export function createPostgresWebSocket(
     server: Server,
     realtimeService: RealtimeService,
-    dataSource: PostgresDataSource,
+    driver: PostgresDataDriver,
     authConfig?: AuthConfig
 ) {
     const wss = new WebSocketServer({ server });
@@ -100,20 +100,20 @@ export function createPostgresWebSocket(
                 // Helper to get correctly scoped delegate for the current request
                 const getScopedDelegate = async () => {
                     const session = clientSessions.get(clientId);
-                    if (session?.user && "withAuth" in dataSource && typeof (dataSource as unknown as Record<string, unknown>).withAuth === "function") {
+                    if (session?.user && "withAuth" in driver && typeof (driver as unknown as Record<string, unknown>).withAuth === "function") {
                         try {
                             // Map AccessTokenPayload back to User interface for withAuth (roles are already string IDs from JWT)
                             const userForAuth: Record<string, unknown> = {
                                 uid: session.user.userId,
                                 roles: session.user.roles ?? []
                             };
-                            return await (dataSource as unknown as { withAuth: (user: Record<string, unknown>) => Promise<DataSource> }).withAuth(userForAuth);
+                            return await (driver as unknown as { withAuth: (user: Record<string, unknown>) => Promise<DataDriver> }).withAuth(userForAuth);
                         } catch (e) {
                             console.error("Failed to create authenticated delegate for WS request", e);
-                            return dataSource;
+                            return driver;
                         }
                     }
-                    return dataSource;
+                    return driver;
                 };
 
                 switch (type) {

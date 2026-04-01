@@ -4,12 +4,12 @@ import { CollectionSize, Entity, EntityCollection, FilterValues } from "@rebasep
 import {
     EntityCollectionRowActions,
     EntityCollectionTable,
-    useDataSourceTableController
+    useDataTableController
 } from "../EntityCollectionTable";
 import {
     useAuthController,
     useCustomizationController,
-    useDataSource,
+    useData,
     useLargeLayout,
     useCMSUrlController,
     useSideEntityController,
@@ -109,7 +109,7 @@ export function EntitySelectionTable<M extends Record<string, any>>(
 
     const path = cmsUrlController.resolveDatabasePathsFrom(pathInput);
 
-    const dataSource = useDataSource(collection);
+    const dataClient = useData();
 
     const [entitiesDisplayedFirst, setEntitiesDisplayedFirst] = useState<Entity<any>[]>([]);
 
@@ -148,14 +148,11 @@ export function EntitySelectionTable<M extends Record<string, any>>(
         if (selectedEntityIds && collection) {
             Promise.all(
                 selectedEntityIds.map((entityId) =>
-                    dataSource.fetchEntity({
-                        path,
-                        entityId,
-                        collection
-                    })))
+                    dataClient.collection(path).findById(entityId))
+                )
                 .then((entities) => {
                     if (!unmounted) {
-                        const result = entities.filter(e => e !== undefined) as Entity<any>[];
+                        const result = entities.filter((e): e is Entity<any> => !!e);
                         selectionController.setSelectedEntities(result);
                         setEntitiesDisplayedFirst(result);
                     }
@@ -167,7 +164,7 @@ export function EntitySelectionTable<M extends Record<string, any>>(
         return () => {
             unmounted = true;
         };
-    }, [dataSource, path, selectedEntityIdsProp, collection, selectionController.setSelectedEntities]);
+    }, [dataClient, path, selectedEntityIdsProp, collection, selectionController.setSelectedEntities]);
 
     const onClear = () => {
         analyticsController.onAnalyticsEvent?.("reference_selection_clear", {
@@ -251,7 +248,7 @@ export function EntitySelectionTable<M extends Record<string, any>>(
 
     const displayedColumnIds = useColumnIds(collection, false);
 
-    const tableController = useDataSourceTableController<M>({
+    const tableController = useDataTableController<M>({
         path,
         collection,
         entitiesDisplayedFirst,

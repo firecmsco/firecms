@@ -21,7 +21,7 @@ import {
 } from "@rebasepro/ui";
 import { Entity, EntityRelation, FilterValues, Relation } from "@rebasepro/types";
 import { EntityPreviewData } from "./EntityPreview";
-import { useDataSource, useRelationSelector } from "../hooks";
+import { useData, useRelationSelector } from "../hooks";
 import { EmptyValue } from "../preview";
 
 export interface RelationItem {
@@ -83,7 +83,7 @@ export const RelationSelector = React.forwardRef<
     ) => {
 
         const collection = relation.target();
-        const dataSource = useDataSource(collection);
+        const dataClient = useData();
         const multiple = relation.cardinality === "many";
 
         const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -116,11 +116,7 @@ export const RelationSelector = React.forwardRef<
             const relationsArray = Array.isArray(val) ? val : [val];
             const promises = relationsArray.map(async (rel) => {
                 try {
-                    const entity = await dataSource.fetchEntity({
-                        path: rel.path,
-                        entityId: rel.id,
-                        collection
-                    });
+                    const entity = await dataClient.collection(rel.path).findById(rel.id);
                     if (entity) return entityToRelationItem(entity, rel);
                 } catch (e) {
                     console.warn("RelationSelector: could not fetch entity for relation", rel, e);
@@ -132,7 +128,7 @@ export const RelationSelector = React.forwardRef<
                 } as RelationItem;
             });
             return Promise.all(promises);
-        }, [dataSource, collection, entityToRelationItem]);
+        }, [dataClient, collection, entityToRelationItem]);
 
         useEffect(() => {
             let active = true;

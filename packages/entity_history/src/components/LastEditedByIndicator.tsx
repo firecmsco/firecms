@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Entity, useDataSource, User } from "@rebasepro/core";
+import { Entity, useData, User } from "@rebasepro/core";
 import { useHistoryController } from "../HistoryControllerProvider";
 
 function getRelativeTimeString(date: Date): string {
@@ -31,33 +31,34 @@ export function LastEditedByIndicator({
     collection: any;
 }) {
     const { getUser } = useHistoryController();
-    const dataSource = useDataSource();
+    const dataClient = useData();
     const [latestEntry, setLatestEntry] = useState<Entity | undefined>();
 
     useEffect(() => {
         if (!path || !entityId) return;
 
         const historyPath = `${path}/${entityId}/__history`;
-        const unsubscribe = dataSource.listenCollection?.({
-            path: historyPath,
-            collection,
-            orderBy: "__metadata.updated_on",
-            order: "desc",
-            limit: 1,
-            onUpdate: (entities) => {
-                setLatestEntry(entities[0]);
+        const accessor = dataClient.collection(historyPath);
+        
+        const unsubscribe = accessor.listen?.(
+            {
+                orderBy: "__metadata.updated_on:desc",
+                limit: 1
             },
-            onError: (error) => {
+            (res) => {
+                setLatestEntry(res.data[0]);
+            },
+            (error) => {
                 console.error("Error fetching latest history entry:", error);
             }
-        });
+        );
 
         return () => {
             if (typeof unsubscribe === "function") {
                 unsubscribe();
             }
         };
-    }, [path, entityId, dataSource]);
+    }, [path, entityId, dataClient]);
 
     const metadata = latestEntry?.values ? (latestEntry.values as any).__metadata : undefined;
     const uid = metadata?.updated_by;

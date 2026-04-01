@@ -18,7 +18,7 @@ import {
     DeleteIcon,
     IconButton
 } from "@rebasepro/ui";
-import { useDataSource, useSnackbarController, useCollectionRegistryController, ErrorView, useTranslation } from "@rebasepro/core";
+import { useRebaseContext, useSnackbarController, useCollectionRegistryController, ErrorView, useTranslation } from "@rebasepro/core";
 import { PolicyEditor } from "./PolicyEditor";
 
 export interface PostgresPolicy {
@@ -40,7 +40,7 @@ export interface TableRLSStatus {
 }
 
 export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
-    const dataSource = useDataSource();
+    const { databaseAdmin } = useRebaseContext();
     const snackbarController = useSnackbarController();
     const collectionRegistry = useCollectionRegistryController();
     const { t } = useTranslation();
@@ -71,7 +71,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
     }, [sidebarSize]);
 
     const fetchRLSData = useCallback(async () => {
-        if (!dataSource.executeSql) {
+        if (!databaseAdmin?.executeSql) {
             setError(t("studio_sql_sql_not_supported"));
             setIsLoading(false);
             return;
@@ -90,7 +90,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                 WHERE schemaname NOT IN ('information_schema', 'pg_catalog')
                 ORDER BY schemaname, tablename;
             `;
-            const tablesResult = await dataSource.executeSql(tablesSql);
+            const tablesResult = await databaseAdmin!.executeSql!(tablesSql);
 
             // 2. Fetch all policies
             const policiesSql = `
@@ -106,7 +106,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                 FROM pg_policies
                 WHERE schemaname NOT IN ('information_schema', 'pg_catalog');
             `;
-            const policiesResult = await dataSource.executeSql(policiesSql);
+            const policiesResult = await databaseAdmin!.executeSql!(policiesSql);
 
             const extractRows = (result: unknown): Record<string, unknown>[] => {
                 if (result && typeof result === "object" && "rows" in result && Array.isArray((result as { rows: Record<string, unknown>[] }).rows)) {
@@ -177,7 +177,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
         } finally {
             setIsLoading(false);
         }
-    }, [dataSource, selectedTable]);
+    }, [databaseAdmin, selectedTable]);
 
     useEffect(() => {
         setEditingPolicy(null);
@@ -442,7 +442,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                     const action = activeTableData.rlsEnabled ? "DISABLE" : "ENABLE";
                                                     if (!confirm(`Are you sure you want to ${action.toLowerCase()} Row Level Security on "${table}"?`)) return;
                                                     try {
-                                                        await dataSource.executeSql!(`ALTER TABLE "${table}" ${action} ROW LEVEL SECURITY`);
+                                                        await databaseAdmin!.executeSql!(`ALTER TABLE "${table}" ${action} ROW LEVEL SECURITY`);
                                                         snackbarController.open({ type: "success", message: `RLS ${action.toLowerCase()}d on ${table}` });
                                                         fetchRLSData();
                                                     } catch (e: unknown) {
@@ -549,7 +549,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                                         const table = activeTableData!.tableName;
                                                                         if (!confirm(`Drop policy "${policy.policyname}" from table "${table}"?`)) return;
                                                                         try {
-                                                                            await dataSource.executeSql!(`DROP POLICY "${policy.policyname}" ON "${table}"`);
+                                                                            await databaseAdmin!.executeSql!(`DROP POLICY "${policy.policyname}" ON "${table}"`);
                                                                             snackbarController.open({ type: "success", message: `Policy "${policy.policyname}" dropped` });
                                                                             fetchRLSData();
                                                                         } catch (e: unknown) {

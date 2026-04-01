@@ -23,7 +23,7 @@ import {
     saveEntityWithCallbacks,
     useAuthController,
     useCustomizationController,
-    useDataSource,
+    useData,
     useRebaseContext,
     useCollectionRegistryController,
     useSideEntityController,
@@ -182,7 +182,7 @@ export function EntityForm<M extends Record<string, any>>({
             });
     }, false, 2000);
 
-    const dataSource = useDataSource(collection);
+    const dataClient = useData();
     const snackbarController = useSnackbarController();
     const customizationController = useCustomizationController();
     const context = useRebaseContext();
@@ -398,7 +398,7 @@ export function EntityForm<M extends Record<string, any>>({
             previousValues,
             collection,
             status,
-            dataSource,
+            data: dataClient,
             context,
             afterSave,
             afterSaveError
@@ -528,11 +528,23 @@ export function EntityForm<M extends Record<string, any>>({
 
     const modified = formex.dirty;
 
-    const uniqueFieldValidator: CustomFieldValidator = useCallback(({
+    const uniqueFieldValidator: CustomFieldValidator = useCallback(async ({
         name,
         value
-    }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
-        [dataSource, path, entityId]);
+    }) => {
+        try {
+            const accessor = dataClient.collection(path);
+            const { data } = await accessor.find({
+                where: { [name]: `eq.${value}` },
+                limit: 2
+            });
+            const otherEntities = entityId ? data.filter(e => e.id !== entityId) : data;
+            return otherEntities.length === 0;
+        } catch (e: any) {
+            console.error("Error checking unique field", e);
+            return true;
+        }
+    }, [dataClient, path, entityId]);
 
     const validationSchema = useMemo(() => getYupEntitySchema(
         entityId,
@@ -549,7 +561,7 @@ export function EntityForm<M extends Record<string, any>>({
             Object.entries(underlyingChanges).forEach(([key, value]) => {
                 const formValue = formex.values[key];
                 if (!equal(value, formValue) && !formex.touched[key]) {
-                    console.debug("Updated value from the datasource:", key, value);
+                    console.debug("Updated value from the driver:", key, value);
                     formex.setFieldValue(key, value !== undefined ? value : null);
                 }
             });

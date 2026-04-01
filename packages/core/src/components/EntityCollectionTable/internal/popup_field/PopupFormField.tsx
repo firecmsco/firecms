@@ -18,7 +18,7 @@ import { useWindowSize } from "./useWindowSize";
 import { getPropertyInPath } from "../../../../util";
 import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@rebasepro/ui";
 import { PropertyFieldBinding, yupToFormErrors } from "../../../../form";
-import { useAuthController, useCustomizationController, useDataSource, useRebaseContext } from "../../../../hooks";
+import { useAuthController, useCustomizationController, useData, useRebaseContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
 import { isReadOnly } from "@rebasepro/common";
 
@@ -59,17 +59,13 @@ export function PopupFormFieldLoading<M extends Record<string, any>>({
     onCellValueChange,
     container
 }: PopupFormFieldProps<M>) {
-    const dataSource = useDataSource();
+    const dataClient = useData();
     const [entity, setEntity] = useState<Entity<M> | undefined>(undefined);
     useEffect(() => {
         if (entityId && inputCollection) {
-            dataSource.fetchEntity({
-                path,
-                entityId,
-                collection: inputCollection
-            }).then(setEntity);
+            dataClient.collection(path).findById(entityId).then(setEntity);
         }
-    }, [entityId, inputCollection, dataSource, path]);
+    }, [entityId, inputCollection, dataClient, path]);
 
     if (!entity) return null;
     return <PopupFormFieldInternal {...{

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import { DataSource } from "@rebasepro/types";
+import { DataDriver } from "@rebasepro/types";
 import { verifyAccessToken, AccessTokenPayload } from "./jwt";
 
 /**
@@ -7,8 +7,8 @@ import { verifyAccessToken, AccessTokenPayload } from "./jwt";
  */
 export interface AuthenticatedRequest extends Request {
     user?: AccessTokenPayload;
-    /** RLS-scoped DataSource when withAuth() is available */
-    dataSource?: DataSource;
+    /** RLS-scoped DataDriver when withAuth() is available */
+    driver?: DataDriver;
 }
 
 /**
@@ -23,8 +23,8 @@ export type AuthResult = boolean | null | undefined | { userId?: string; uid?: s
  * Options for creating an auth middleware via createAuthMiddleware()
  */
 export interface AuthMiddlewareOptions {
-    /** DataSource to scope via withAuth() for RLS */
-    dataSource: DataSource;
+    /** DataDriver to scope via withAuth() for RLS */
+    driver: DataDriver;
     /** If true, return 401 when no valid token is present (default: false) */
     requireAuth?: boolean;
     /** Optional custom validator (for non-JWT auth, e.g. Firebase Auth) */
@@ -138,35 +138,35 @@ export function extractUserFromToken(token: string): AccessTokenPayload | null {
 }
 
 /**
- * Helper to scope a DataSource via withAuth() for RLS.
- * Returns the scoped datasource, or falls back to the original on error.
+ * Helper to scope a DataDriver via withAuth() for RLS.
+ * Returns the scoped driver, or falls back to the original on error.
  */
-async function scopeDataSource(
-    dataSource: DataSource,
+async function scopeDataDriver(
+    driver: DataDriver,
     user: { uid: string; roles?: string[] }
-): Promise<DataSource> {
-    if ("withAuth" in dataSource && typeof (dataSource as Record<string, unknown>).withAuth === "function") {
+): Promise<DataDriver> {
+    if ("withAuth" in driver && typeof (driver as Record<string, unknown>).withAuth === "function") {
         try {
-            return await (dataSource as unknown as { withAuth: (user: Record<string, unknown>) => Promise<DataSource> }).withAuth(user);
+            return await (driver as unknown as { withAuth: (user: Record<string, unknown>) => Promise<DataDriver> }).withAuth(user);
         } catch (e) {
             console.error("Failed to initialize scoped data source", e);
-            return dataSource;
+            return driver;
         }
     }
-    return dataSource;
+    return driver;
 }
 
 /**
  * Create a configurable auth middleware that handles:
  * 1. Token extraction (via custom validator or JWT Bearer token)
- * 2. RLS-scoped DataSource via withAuth()
+ * 2. RLS-scoped DataDriver via withAuth()
  * 3. Optional enforcement (401 when requireAuth is true and no user)
  *
  * This is the single source of truth for HTTP auth in Rebase.
  * Use this instead of manually parsing tokens in route handlers.
  */
 export function createAuthMiddleware(options: AuthMiddlewareOptions): RequestHandler {
-    const { dataSource, requireAuth: enforceAuth = false, validator } = options;
+    const { driver, requireAuth: enforceAuth = false, validator } = options;
 
     return async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
         if (validator) {
@@ -180,16 +180,16 @@ export function createAuthMiddleware(options: AuthMiddlewareOptions): RequestHan
                         const roles = authResult.roles || [];
                         req.user = { userId: id, roles };
                         const user = { uid: id, roles, ...authResult };
-                        req.dataSource = await scopeDataSource(dataSource, user);
+                        req.driver = await scopeDataDriver(driver, user);
                     } else {
-                        req.dataSource = dataSource;
+                        req.driver = driver;
                     }
                 } else if (authResult === true) {
                     req.user = { userId: "default", roles: [] };
-                    req.dataSource = dataSource;
+                    req.driver = driver;
                 } else {
-                    // Not authenticated - dataSource stays unscoped
-                    req.dataSource = dataSource;
+                    // Not authenticated - driver stays unscoped
+                    req.driver = driver;
                 }
             } catch (error) {
                 res.status(401).json({ error: { message: "Unauthorized", code: "UNAUTHORIZED" } });
@@ -206,16 +206,16 @@ export function createAuthMiddleware(options: AuthMiddlewareOptions): RequestHan
                     if (payload) {
                         req.user = payload;
                         const user = { uid: payload.userId, roles: payload.roles };
-                        req.dataSource = await scopeDataSource(dataSource, user);
+                        req.driver = await scopeDataDriver(driver, user);
                     } else {
-                        req.dataSource = dataSource;
+                        req.driver = driver;
                     }
                 } else {
-                    req.dataSource = dataSource;
+                    req.driver = driver;
                 }
             } catch (error) {
                 console.error("Default auth validation error", error);
-                req.dataSource = dataSource;
+                req.driver = driver;
             }
         }
 

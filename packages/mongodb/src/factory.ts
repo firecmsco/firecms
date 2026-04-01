@@ -2,15 +2,15 @@
  * MongoDB Backend Factory
  *
  * This module provides factory functions for creating MongoDB backend instances.
- * It abstracts the creation of datasources, realtime services, and entity services.
+ * It abstracts the creation of drivers, realtime services, and entity services.
  */
 
 import { Db, MongoClient } from "mongodb";
-import { DataSource, EntityCollection } from "@rebasepro/types";
+import { DataDriver, EntityCollection } from "@rebasepro/types";
 
 import { MongoEntityService } from "./db/MongoEntityService";
 import { MongoRealtimeService } from "./services/MongoRealtimeService";
-import { MongoDataSource } from "./services/MongoDataSource";
+import { MongoDriver } from "./services/MongoDriver";
 import { MongoDBConnection } from "./connection";
 import { BackendConfig, BackendInstance, CollectionRegistryInterface, EntityRepository, RealtimeProvider, DatabaseConnection } from "@rebasepro/types";
 
@@ -35,8 +35,8 @@ export interface MongoBackendInstance extends BackendInstance {
     db: Db;
     /** The MongoDB client */
     client: MongoClient;
-    /** MongoDB DataSource for use with Rebase */
-    dataSource: DataSource;
+    /** MongoDB DataDriver for use with Rebase */
+    driver: DataDriver;
     /** Entity service for direct database operations */
     entityService: MongoEntityService;
     /** Realtime service for subscriptions */
@@ -87,7 +87,7 @@ export class MongoCollectionRegistry implements CollectionRegistryInterface {
  * - MongoEntityService (implements EntityRepository)
  * - MongoRealtimeService (implements RealtimeProvider)
  * - MongoCollectionRegistry (implements CollectionRegistryInterface)
- * - MongoDataSource (for Rebase integration)
+ * - MongoDriver (for Rebase integration)
  *
  * @example
  * ```typescript
@@ -122,7 +122,7 @@ export function createMongoBackend(config: MongoBackendConfig): MongoBackendInst
     // Create services
     const entityService = new MongoEntityService(db);
     const realtimeService = new MongoRealtimeService(db);
-    const dataSource = new MongoDataSource(db, realtimeService);
+    const driver = new MongoDriver(db, realtimeService);
     const mongoConnection = new MongoDBConnection(db, client);
 
     return {
@@ -135,16 +135,16 @@ export function createMongoBackend(config: MongoBackendConfig): MongoBackendInst
         // MongoDB-specific accessors
         db,
         client,
-        dataSource,
+        driver,
         entityService,
         realtimeService
     };
 }
 
 /**
- * Create a MongoDB DataSource.
+ * Create a MongoDB DataDriver.
  *
- * This is a convenience function when you only need the DataSource
+ * This is a convenience function when you only need the DataDriver
  * without the full backend instance.
  *
  * @example
@@ -157,9 +157,9 @@ export function createMongoBackend(config: MongoBackendConfig): MongoBackendInst
 export function createMongoDelegate(
     db: Db,
     realtimeService?: MongoRealtimeService
-): MongoDataSource {
+): MongoDriver {
     const realtime = realtimeService ?? new MongoRealtimeService(db);
-    return new MongoDataSource(db, realtime);
+    return new MongoDriver(db, realtime);
 }
 
 /**
@@ -205,9 +205,9 @@ export function isMongoBackendConfig(config: BackendConfig): config is MongoBack
 }
 
 /**
- * Check if a datasource config is for MongoDB.
+ * Check if a driver config is for MongoDB.
  */
-export function isMongoDatasourceConfig(obj: unknown): obj is { type: "mongodb"; connection: Db; client: MongoClient } {
+export function isMongoDriverConfig(obj: unknown): obj is { type: "mongodb"; connection: Db; client: MongoClient } {
     return typeof obj === "object" &&
         obj !== null &&
         "type" in obj &&

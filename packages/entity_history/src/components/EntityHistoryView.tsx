@@ -6,7 +6,7 @@ import {
     EntityView,
     ErrorBoundary,
     useAuthController,
-    useDataSource,
+    useData,
     useSnackbarController
 } from "@rebasepro/core";
 import { cls, HistoryIcon, IconButton, Label, Tooltip, Typography } from "@rebasepro/ui";
@@ -22,7 +22,7 @@ export function EntityHistoryView({
     const snackbarController = useSnackbarController();
     const dirty = formContext?.formex.dirty;
 
-    const dataSource = useDataSource();
+    const dataClient = useData();
     const pathAndId = entity ? entity?.path + "/" + entity?.id : undefined;
 
     const [revertVersionDialog, setRevertVersionDialog] = useState<Entity | undefined>(undefined);
@@ -42,30 +42,29 @@ export function EntityHistoryView({
         if (!pathAndId) return;
 
         setIsLoading(true); // Set loading true when fetching starts
-        const listener = dataSource.listenCollection?.({
-            path: pathAndId + "/__history",
-            collection: collection,
-            order: "desc",
-            orderBy: "__metadata.updated_on",
-            limit: limit,
-            startAfter: undefined,
-            onUpdate: (entities) => {
-                setRevisions(entities);
-                setHasMore(entities.length === limit && entities.length >= PAGE_SIZE); // Ensure we fetched a full page to consider hasMore
+        const accessor = dataClient.collection(pathAndId + "/__history");
+        const listener = accessor.listen?.(
+            {
+                orderBy: "__metadata.updated_on:desc",
+                limit: limit
+            },
+            (res) => {
+                setRevisions(res.data);
+                setHasMore(res.data.length === limit && res.data.length >= PAGE_SIZE); // Ensure we fetched a full page to consider hasMore
                 setIsLoading(false);
             },
-            onError: (error) => {
+            (error) => {
                 console.error("Error fetching history:", error);
                 setIsLoading(false);
                 setHasMore(false); // Stop trying if there's an error
             }
-        });
+        );
         return () => {
             if (typeof listener === "function") {
                 listener();
             }
         };
-    }, [pathAndId, limit, dataSource]);
+    }, [pathAndId, limit, dataClient]);
 
     // Setup intersection observer for infinite scroll
     useEffect(() => {
@@ -132,20 +131,8 @@ export function EntityHistoryView({
                 updated_by: authController.user?.uid ?? null,
             }
         };
-        const saveReverted = dataSource.saveEntity({
-            path: entity.path,
-            entityId: entity.id,
-            values: revertValues,
-            collection,
-            status: "existing"
-        });
-        const saveRevertedHistory = dataSource.saveEntity({
-            path: revertVersion.path,
-            entityId: revertVersion.id,
-            values: revertValues,
-            collection,
-            status: "existing"
-        });
+        const saveReverted = dataClient.collection(entity.path).update(entity.id, revertValues);
+        const saveRevertedHistory = dataClient.collection(revertVersion.path).update(revertVersion.id, revertValues);
         return Promise.all([saveReverted, saveRevertedHistory])
             .then(() => {
                 formContext.formex.resetForm({

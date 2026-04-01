@@ -24,9 +24,9 @@ export * from "./db/entityService";
 export * from "./websocket";
 
 // Services
-export * from "./services/postgresDataSource";
+export * from "./services/postgresDataDriver";
 export * from "./services/realtimeService";
-export * from "./services/datasource-registry";
+export * from "./services/driver-registry";
 
 // Collections
 export * from "./collections/registry";
