@@ -1,0 +1,58 @@
+---
+title: Eine Entity von einer Kollektion in eine andere kopieren
+slug: de/docs/recipes/copy_entity
+sidebar_label: Von einer anderen Kollektion kopieren
+description: Implementieren Sie benutzerdefinierte Funktionalität zum Kopieren von Entities zwischen Kollektionen in Firestore mit FireCMS. Sie lernen, einen Kopier-Button zu Ihren Kollektionsansichten hinzuzufügen, um Daten über verschiedene Firestore-Standorte zu replizieren.
+---
+
+![Product selection](/img/product_selection.webp)
+
+In diesem Tutorial zeigen wir, wie Sie Ihrer Kollektion einen Button hinzufügen,
+der es ermöglicht, **Entities aus einer anderen Kollektion zu kopieren**.
+
+Es ist sehr üblich in NoSQL-Datenbanken wie Firestore, denormalisierte
+Daten in verschiedenen Kollektionen zu halten. Das heißt, die gleichen Informationen an mehreren
+Standorten zu speichern, anstatt in normalisierten Datenbanken, wo Informationen idealerweise
+nur einmal gespeichert werden sollten.
+
+### Ihre Kollektionen deklarieren
+
+Zu Illustrationszwecken erstellen wir zwei einfache `products`-Kollektionen,
+von und nach denen wir kopieren werden:
+
+
+
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../../samples/samples_v3/recipes/copy_entity/simple_product_collection?raw';
+import CopyButton from '../../../samples/samples_v3/recipes/copy_entity/copy_button?raw';
+import CopyButtonUse from '../../../samples/samples_v3/recipes/copy_entity/copy_button_use?raw';
+import FullCode from '../../../samples/samples_v3/recipes/copy_entity/full?raw';
+
+<Code code={MyComponentSource} lang="tsx" />
+
+### Eine benutzerdefinierte Aktion zu Ihrer Kollektion hinzufügen
+
+Im nächsten Schritt fügen wir unserer Zielkollektion einen benutzerdefinierten Button hinzu.
+Dieser Button öffnet einen Referenzdialog und ermöglicht Benutzern die Auswahl einer Entity in
+der Quelle.
+
+Dieses Beispiel verwendet einige von FireCMS bereitgestellte Hooks für die Entwicklung
+benutzerdefinierter Komponenten.
+
+
+
+<Code code={CopyButton} lang="tsx" />
+
+### Die benutzerdefinierte Kopieraktion hinzufügen
+
+Sobald Ihre Komponente fertig ist, können Sie sie in die `Actions` Ihrer Kollektion einbinden:
+
+
+
+<Code code={CopyButtonUse} lang="tsx" />
+
+## Vollständiger Code
+
+
+
+<Code code={FullCode} lang="tsx" />

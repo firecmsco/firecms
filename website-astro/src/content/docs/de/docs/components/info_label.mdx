@@ -1,0 +1,25 @@
+---
+title: Info-Label (InfoLabel)
+slug: de/docs/components/info_label
+sidebar_label: InfoLabel
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+InfoLabel ist eine vielseitige Komponente, die zur Anzeige von Informationen oder Warnmeldungen in verschiedenen Kontexten verwendet wird. Sie nutzt die Flexibilität von TailwindCSS für das Styling und bietet vordefinierte Farbmodi für eine schnelle Anpassung.
+
+## Verwendung
+
+Um `InfoLabel` zu verwenden, importieren Sie es in Ihre Komponente und geben Sie die anzuzeigenden untergeordneten Elemente (children) an. Optional können Sie auch die Eigenschaft `mode` festlegen, um das Erscheinungsbild je nach Kontext zu ändern (`info` oder `warn`).
+
+## Einfaches Info-Label
+
+Ein einfaches Beispiel, das zeigt, wie die InfoLabel-Komponente verwendet wird, um eine informative Nachricht anzuzeigen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/info_label/info_label_basic.tsx"/>
+
+## Warn-Label
+
+Veranschaulicht, wie die InfoLabel-Komponente verwendet wird, um eine Warnmeldung anzuzeigen, indem der Modus auf `warn` gesetzt wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/info_label/info_label_warn.tsx"/>

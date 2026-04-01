@@ -2,6 +2,7 @@ import React, { RefObject, useCallback, useEffect, useState } from "react";
 import equal from "react-fast-compare";
 
 import { VirtualTableColumn, VirtualTableSort, VirtualTableWhereFilterOp } from "./VirtualTableProps";
+import { useTranslation } from "../../hooks";
 import { ErrorBoundary } from "../ErrorBoundary";
 import {
     ArrowUpwardIcon,
@@ -213,6 +214,8 @@ function FilterForm<M>({
     setHidden
 }: FilterFormProps<M>) {
 
+    const { t } = useTranslation();
+
     const id = column.key;
 
     const [filterInternal, setFilterInternal] = useState<[VirtualTableWhereFilterOp, any] | undefined>(filter);
@@ -258,16 +261,15 @@ function FilterForm<M>({
             {filterField && <div className="m-4 w-[400px]">
                 {filterField}
             </div>}
-            <div className="flex justify-end m-4">
-                <Button
-                    className="mr-4"
-                    disabled={!filterIsSet}
-                    variant={"text"}
-                    type="reset"
-                    aria-label="filter clear"
-                    onClick={reset}>Clear</Button>
-                <Button
-                    type="submit">Filter</Button>
+            <div className="flex justify-end p-4 pt-0 gap-2">
+                <Button variant={"text"}
+                        size={"small"}
+                        aria-label="filter clear"
+                        onClick={reset}>{t("clear")}</Button>
+
+                <Button variant={"outlined"}
+                        size={"small"}
+                        type="submit">{t("filter")}</Button>
             </div>
         </form>
     );

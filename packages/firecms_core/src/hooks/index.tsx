@@ -31,3 +31,4 @@ export * from "./useBuildLocalConfigurationPersistence";
 export * from "./useBuildModeController";
 
 export * from "./useValidateAuthenticator";
+export * from "./useTranslation";

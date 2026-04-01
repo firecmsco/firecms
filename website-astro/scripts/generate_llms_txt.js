@@ -213,8 +213,12 @@ async function buildSlugMap(directoryPath, slugMap) {
 
         let result = "";
         let processedCount = 0;
+        // Slugs to exclude from llms.txt output
+        const excludeSlugs = new Set(["docs/changelog"]);
+
         // Iterate over sidebar slugs and append content in order
         for (const slug of sidebarSlugs) {
+            if (excludeSlugs.has(slug)) continue;
             const entry = slugMap[slug];
             if (entry) {
                 const {

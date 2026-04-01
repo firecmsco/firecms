@@ -1,0 +1,25 @@
+---
+title: Lade-Schaltfläche (LoadingButton)
+slug: de/docs/components/loading_button
+sidebar_label: LoadingButton
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Die Loading Button-Komponente wird verwendet, um eine aktionsfähige Schaltfläche mit integriertem Lade-Feedback anzuzeigen. Dies ist nützlich, um Benutzern sofortiges Feedback zu ihren Aktionen zu geben, die asynchrone Vorgänge erfordern.
+
+## Verwendung
+
+Um `LoadingButton` zu verwenden, importieren Sie es mit den erforderlichen Props. Sie können `loading`, `disabled`, `onClick`, `startIcon` und andere Button-Props übergeben.
+
+## Einfacher Loading Button
+
+Ein einfacher Loading Button, der den Ladezustand und das Standarderscheinungsbild zeigt.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/loading_button/loading_button_basic.tsx"/>
+
+## Loading Button mit Start-Icon
+
+Ein Loading-Button-Beispiel, das ein Start-Icon enthält, welches angezeigt wird, wenn sich die Schaltfläche nicht im Ladezustand befindet.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/loading_button/loading_button_with_icon.tsx"/>

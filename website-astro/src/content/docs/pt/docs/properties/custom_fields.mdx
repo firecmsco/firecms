@@ -1,0 +1,207 @@
+---
+title: Campos personalizados
+slug: pt/docs/properties/custom_fields
+sidebar_label: Campos personalizados
+description: "Aprenda como construir campos personalizados para o FireCMS: contrato do componente, props personalizadas, acesso ao contexto da entidade, composição de outras propriedades, manipulação de arrays, validação, performance e exemplos avançados."
+---
+
+Os campos personalizados permitem que você controle completamente como o valor de uma propriedade é editado e exibido em um formulário. Em vez do renderizador integrado para um `dataType`, você fornece um componente React. Esse componente recebe um rico conjunto de props (`FieldProps`) para que possa:
+
+- Ler e atualizar o valor atual (`value`, `setValue`)
+- Atualizar qualquer outra propriedade no mesmo formulário (`setFieldValue` ou `context.setFieldValue`)
+- Acessar todos os valores atuais da entidade + utilitários do formulário (`context`)
+- Respeitar o estado do formulário (`isSubmitting`, `disabled`, `showError`, `error`, `touched`)
+- Adaptar o layout (`size`, `partOfArray`, `minimalistView`, `autoFocus`)
+- Usar `customProps` definidas pelo desenvolvedor
+
+
+<video style={{
+    maxWidth: "100%",
+    width: "640px",
+    margin: "32px 0px 32px",
+    alignSelf: "center"
+}}
+       loop autoPlay muted>
+    <source src="/img/custom_fields_dark.mp4" type="video/mp4"/>
+</video>
+
+## Quando criar um campo personalizado?
+
+Use um campo personalizado quando precisar de um (ou mais) dos seguintes:
+- Um estilo visual não coberto pelos integrados (color picker, input de tags, slider, gráficos, campos assistidos por IA, etc.)
+- UI composta que combina múltiplas propriedades (ex. seletor de mapa lat/lng que escreve em dois campos numéricos)
+- Integrações (upload para API externa, busca de sugestões, geocodificação, etc.)
+
+Se você precisa apenas de validação ou transformação simples, prefira primeiro as opções de `validation` no nível da propriedade por simplicidade.
+Se você precisa de comportamento dinâmico dependente de outros valores, considere usar os [campos condicionais](./conditional_fields.md).
+
+
+## Exemplo de campo personalizado
+
+Um campo de texto personalizado com cor de fundo fornecida via `customProps`:
+
+```tsx
+import React from "react";
+import { FieldHelperText, FieldProps, useModeController } from "@firecms/core";
+import { TextField } from "@firecms/ui";
+
+interface CustomColorTextFieldProps {
+    color: string;
+}
+
+export default function CustomColorTextField({
+    property,
+    value,
+    setValue,
+    customProps,
+    includeDescription,
+    showError,
+    error,
+    isSubmitting,
+    context
+}: FieldProps<string, CustomColorTextFieldProps>) {
+
+    const { mode } = useModeController();
+    const backgroundColor = customProps?.color ?? (mode === "light" ? "#eef4ff" : "#16325f");
+
+    return (
+        <>
+            <TextField
+                inputStyle={{ backgroundColor }}
+                error={!!error}
+                disabled={isSubmitting}
+                label={error ?? property.name}
+                value={value ?? ""}
+                onChange={(evt: any) => setValue(evt.target.value)}
+            />
+            <FieldHelperText
+                includeDescription={includeDescription}
+                showError={showError}
+                error={error}
+                property={property}
+            />
+        </>
+    );
+}
+```
+
+Uso em uma coleção:
+
+```tsx
+export const blogCollection = buildCollection({
+    id: "blog",
+    path: "blog",
+    name: "Blog entry",
+    properties: {
+        // ... outras propriedades
+        gold_text: {
+            name: "Gold text",
+            description: "This field is using a custom component defined by the developer",
+            dataType: "string",
+            Field: CustomColorTextField,
+            customProps: {
+                color: "gold"
+            }
+        }
+    }
+});
+```
+
+## Contrato do componente (FieldProps)
+
+Seu componente deve, no mínimo:
+1. Ler o `value` atual (pode ser `undefined` ou `null` se vazio)
+2. Chamar `setValue(newValue)` quando o usuário o alterar
+
+Boas práticas recomendadas:
+- Respeite `disabled` / `isSubmitting`
+- Mostre o rótulo e o erro (use sua própria UI ou `<FieldHelperText>` / integrados)
+- Evite efeitos colaterais pesados a cada keystroke (faça debounce nas chamadas de rede)
+
+Interface completa: [`FieldProps`](../api/interfaces/FieldProps).
+
+## Passar props personalizadas
+
+Forneça um objeto `customProps` na definição da propriedade. O objeto é fortemente tipado através do segundo genérico de `FieldProps<T, CustomProps>`.
+
+## Acessar o restante da entidade (contexto do formulário)
+
+`context` dá acesso em tempo real a:
+- Todos os valores atuais (`context.values`)
+- `context.setFieldValue(key, value)` para atualizar qualquer outro campo
+- `context.save(values)` para disparar um salvamento programaticamente (raramente necessário em campos)
+- Metadados: `entityId`, `status` (novo/existente/cópia), `collection`, `openEntityMode`, `disabled`
+
+Isso habilita lógica entre campos (ex. geração automática de slug quando o título muda) ou desabilitação condicional.
+
+## Renderizar (ou compor) outras propriedades dentro de um campo personalizado
+
+Se o seu campo personalizado deseja incluir a UI de outra propriedade, use `PropertyFieldBinding`:
+
+```tsx
+import { PropertyFieldBinding } from "@firecms/core";
+
+<PropertyFieldBinding
+  propertyKey="subtitle"
+  property={collection.properties.subtitle}
+  context={context}
+  includeDescription
+/>
+```
+
+## Manipulação de arrays e dados aninhados
+
+Quando seu campo personalizado está dentro de um array:
+- `partOfArray` é `true`
+- Você pode receber um índice em um contexto pai ao construir editores de arrays aninhados
+
+Para valores aninhados (ex. editar `address.street` dentro de um campo composto), chame `setFieldValue("address.street", value)`.
+
+## Estratégias de validação
+
+Prefira validação declarativa na configuração da propriedade quando possível.
+
+Padrões comuns:
+- Trim on blur mas preserve a digitação do usuário: mantenha a entrada bruta no estado local, chame `setValue` com o valor limpo no blur.
+- Validação assíncrona (ex. unicidade): faça debounce da verificação, defina um erro local transitório, não bloqueie a digitação.
+
+## Dicas de performance
+
+- Faça debounce de chamadas de rede ou cálculos custosos em vez de executá-los a cada keystroke.
+- Memoize componentes filhos pesados com base nas props relevantes.
+- Evite armazenar objetos derivados grandes no estado; derive-os na renderização ou memoize-os.
+
+## Exemplo avançado: Editor de slug composto
+
+Gera automaticamente um slug a partir do título, mas permite substituição manual.
+
+```tsx
+function SlugField({ value, setValue, context, property, showError, error }: FieldProps<string>) {
+    const title = context.values.title as string | undefined;
+
+    React.useEffect(() => {
+        if (!value && title) {
+            const auto = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+            setValue(auto);
+        }
+    }, [title]);
+
+    return (
+        <TextField
+            label={property.name}
+            value={value ?? ""}
+            error={!!error}
+            onChange={(e: any) => setValue(e.target.value)}
+            helperText={showError ? error : "Will auto-generate from Title if left empty"}
+        />
+    );
+}
+```
+
+## Resolução de problemas
+
+- **Valor não atualiza**: Certifique-se de chamar `setValue` (não mute `value` diretamente) e de não obscurecer o `value` no estado local sem sincronizar.
+- **Erro nunca aparece**: Lembre-se de que `showError` controla a exibição visual; `error` pode existir enquanto `showError` é false.
+- **Atualizações entre campos ignoradas**: Use a chave de propriedade exata (ex. `address.street`, índices de array como `items[0].price`).
+- **O campo re-renderiza com muita frequência**: Envolva lógica pesada em `useMemo` / `useCallback`, evite criar novos objetos a cada renderização.
+- **Precisa do modo somente leitura**: Respeite `disabled` das props ou `context.disabled`.

@@ -8,6 +8,7 @@ import {
     CMSView,
     Drawer,
     FireCMS,
+    FireCMSi18nProvider,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -209,8 +210,9 @@ export function App() {
     }
 
     return (
-        <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
+        <FireCMSi18nProvider>
+            <SnackbarProvider>
+                <ModeControllerProvider value={modeController}>
 
                 <FireCMS
                     apiKey={import.meta.env.VITE_FIRECMS_API_KEY}
@@ -255,7 +257,8 @@ export function App() {
                         return component;
                     }}
                 </FireCMS>
-            </ModeControllerProvider>
-        </SnackbarProvider>
+                </ModeControllerProvider>
+            </SnackbarProvider>
+        </FireCMSi18nProvider>
     );
 }

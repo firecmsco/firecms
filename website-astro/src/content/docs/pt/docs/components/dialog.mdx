@@ -1,0 +1,42 @@
+---
+slug: pt/docs/components/dialog
+title: Diálogo (Dialog)
+sidebar_label: Dialog
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Componentes Dialog são usados para apresentar conteúdo em uma camada acima do conteúdo principal do aplicativo, e frequentemente solicitam uma resposta do usuário. São um componente crítico para diálogos modais, lightboxes, pop-ups de notificação e popups de conteúdo personalizado.
+
+## Uso
+
+Para usar o `Dialog`, importe-o dos seus componentes e passe as props necessárias incluindo `open`, `onOpenChange` e o conteúdo do diálogo como filhos. Opcionalmente, você pode personalizar sua aparência com as props `className`, `fullWidth`, `fullHeight`, `fullScreen`, `scrollable`, `maxWidth`, `modal` e `onOpenAutoFocus`.
+
+:::caution
+Você precisa fornecer um `DialogTitle` no seu componente `Dialog` para garantir que o diálogo seja acessível.
+Você verá um aviso no console se esquecer de fornecer um `DialogTitle`.
+:::
+
+## Dialog básico
+
+Um exemplo básico de uso do componente dialog para mostrar um pop-up simples.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_basic.tsx"/>
+
+## Dialog em tela cheia
+
+Um exemplo de um diálogo que cobre a tela inteira.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_full_screen.tsx"/>
+
+## Dialog com rolagem
+
+Ilustra como tornar o conteúdo de um diálogo com rolagem.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_scrollable.tsx"/>
+
+## Dialog com largura personalizada
+
+Demonstra o uso da prop `maxWidth` para personalizar a largura do diálogo.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/dialog/dialog_custom_width.tsx"/>

@@ -1,0 +1,240 @@
+---
+title: Benutzerverwaltung
+slug: de/docs/pro/user_management
+description: Fügen Sie rollenbasierte Zugriffskontrolle zu Ihrem Firebase-Admin-Panel mit dem FireCMS-Benutzerverwaltungs-Plugin hinzu. Verwalten Sie Benutzer, Rollen und Berechtigungen in Firestore.
+---
+
+![user_management.png](/img/user_management.png)
+
+Kontrollieren Sie, wer auf Ihr **Firebase-Admin-Panel** zugreifen kann und was sie tun dürfen. Das Benutzerverwaltungs-Plugin bietet ein vollständiges **rollenbasiertes Zugriffskontrollsystem (RBAC)** für Ihr FireCMS-Projekt.
+
+:::tip[Warum das Benutzerverwaltungs-Plugin verwenden?]
+Authentifizierung und Berechtigungen von Grund auf zu erstellen ist zeitaufwändig und fehleranfällig. Dieses Plugin bietet:
+- **Benutzer-CRUD**: CMS-Benutzer direkt in der UI erstellen, bearbeiten und löschen
+- **Rollendefinitionen**: Granulare Berechtigungen definieren (Admin, Redakteur, Betrachter oder benutzerdefiniert)
+- **Pro-Kollektion-Berechtigungen**: Steuern, wer in jeder Kollektion lesen, erstellen, bearbeiten oder löschen kann
+- **Firestore-Integration**: Alle Benutzer-/Rollendaten sicher in Ihrer **Firestore**-Datenbank gespeichert
+:::
+
+
+## Installation
+
+Stellen Sie zunächst sicher, dass Sie die erforderlichen Abhängigkeiten installiert haben.
+Um das Plugin zu verwenden, müssen Sie FireCMS und Firebase in Ihrem Projekt eingerichtet haben.
+
+```sh
+yarn add @firecms/user_management
+```
+
+
+## Konfiguration
+
+Das Plugin erfordert mehrere Konfigurationen, einschließlich Pfaden zum Speichern von Benutzer- und Rollendaten.
+
+Die Standardkonfiguration des Plugins wird unter dem Pfad `__FIRECMS/config` in Ihrer Datenbank gespeichert.
+Sie können diesen Pfad jedoch nach Bedarf anpassen.
+
+Wenn Sie Firestore verwenden, stellen Sie sicher, dass die Firestore-Regeln so eingerichtet sind, dass das Plugin die angegebenen Pfade lesen und schreiben kann.
+Wir empfehlen, diese Regeln zu Ihren Firestore-Sicherheitsregeln hinzuzufügen, um Benutzern mit den richtigen Rollen Zugriff auf die Benutzerverwaltungsdaten zu gewähren.
+
+```
+match /{document=**} {
+  allow read: if isFireCMSUser();
+  allow write: if isFireCMSUser();
+}
+
+function isFireCMSUser(){
+  return exists(/databases/$(database)/documents/__FIRECMS/config/users/$(request.auth.token.email));
+}
+```
+
+
+### Benutzerverwaltungsparameter
+
+Folgende Parameter können konfiguriert werden:
+
+- **firebaseApp**: Die Firebase-App für die Benutzerverwaltung.
+- **usersPath**: Pfad in Firestore, in dem Benutzerkonfigurationen gespeichert werden. Standard ist `__FIRECMS/config/users`.
+- **rolesPath**: Pfad in Firestore, in dem Rollenkonfigurationen gespeichert werden. Standard ist `__FIRECMS/config/roles`.
+- **allowDefaultRolesCreation**: Wenn keine Rollen in der Datenbank vorhanden sind, eine Schaltfläche zum Erstellen von Standardrollen anzeigen. Standard ist `true`.
+
+### Hook-Verwendung
+
+Der Haupt-Hook zur Initialisierung der Plugin-Funktionalität ist `useBuildUserManagement`. Hier ein Beispiel:
+
+```jsx
+
+import {useBuildUserManagement} from "@firecms/user_management";
+
+const userManagement = useBuildUserManagement({
+    dataSourceDelegate: firestoreDelegate,
+    usersPath: "__FIRECMS/config/users",
+    rolesPath: "__FIRECMS/config/roles",
+    allowDefaultRolesCreation: true,
+});
+```
+
+## Das Plugin einrichten
+
+Um die Benutzerverwaltung in FireCMS zu integrieren, verwenden Sie die Funktion `useUserManagementPlugin` und übergeben Sie
+das resultierende Plugin in die FireCMS-Konfiguration. Normalerweise tun Sie dies in Ihrer Haupt-App-Komponente.
+
+
+### Beispielkonfiguration
+
+```jsx
+import {FireCMS} from "@firecms/core";
+
+import {useBuildUserManagement, useUserManagementPlugin, userManagementAdminViews} from "@firecms/user_management";
+
+function App() {
+
+    // .. Rest Ihrer Konfiguration, einschließlich `authController` und `firestoreDelegate`
+
+    const userManagementPlugin = useUserManagementPlugin({ userManagement });
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        usersPath: "__FIRECMS/config/users",
+        rolesPath: "__FIRECMS/config/roles",
+        allowDefaultRolesCreation: true,
+        includeCollectionConfigPermissions: true,
+    });
+
+    const {
+        authLoading,
+        canAccessMainView,
+        notAllowedError
+    } = useValidateAuthenticator({
+        disabled: userManagement.loading,
+        authController,
+        authenticator: userManagement.authenticator,
+        dataSourceDelegate: firestoreDelegate,
+        storageSource
+    });
+
+    const plugins = [userManagementPlugin];
+
+    const navigationController = useBuildNavigationController({
+        collections,
+        views,
+        adminViews: userManagementAdminViews,
+        collectionPermissions: userManagement.collectionPermissions, // Optional, verbindet Kollektionsberechtigungen mit der Benutzerverwaltung
+        authController,
+        dataSourceDelegate: firestoreDelegate,
+        plugins
+    });
+
+  return (
+      // ..Komponenten und Provider
+    <FireCMS
+        // ...andere Konfigurationen
+        navigationController={navigationController}
+    />
+  );
+}
+
+export default App;
+```
+
+## Benutzerverwaltungsansichten hinzufügen
+
+Neben dem Plugin müssen Sie die Benutzerverwaltungsansichten zu Ihrem FireCMS-Projekt hinzufügen.
+Sie werden als Array aus dem `@firecms/user_management`-Paket exportiert.
+Sie können sie zur Konfiguration des `useBuildNavigationController`-Hooks im `adminViews`-Array hinzufügen.
+
+```jsx
+import {userManagementAdminViews} from "@firecms/user_management";
+
+const navigationController = useBuildNavigationController({
+    collections,
+    views,
+    adminViews: userManagementAdminViews,
+    collectionPermissions: userManagement.collectionPermissions,
+    authController,
+    dataSourceDelegate: firestoreDelegate
+});
+````
+
+## Benutzer authentifizieren
+
+Das Plugin bietet eine `authenticator`-Funktion, mit der Sie Benutzer basierend auf ihren Rollen authentifizieren können.
+Sie können diese Funktion an den `useValidateAuthenticator`-Hook übergeben, um Benutzer zu authentifizieren und festzustellen, ob sie auf die Hauptansicht zugreifen können.
+
+```jsx
+const {
+    authLoading,
+    canAccessMainView,
+    notAllowedError
+} = useValidateAuthenticator({
+    disabled: userManagement.loading,
+    authController,
+    authenticator: userManagement.authenticator,
+    dataSourceDelegate: firestoreDelegate,
+    storageSource
+});
+```
+
+Das Ergebnis des `useValidateAuthenticator`-Hooks kann verwendet werden, um die Hauptansicht oder eine Fehlermeldung zurückzugeben,
+wenn der Benutzer keinen Zugriff hat. Beachten Sie, dass Sie jeden Teil der Benutzerverwaltungskonfiguration überschreiben können,
+um den Authentifizierungsprozess anzupassen.
+
+
+## Kollektionsberechtigungen integrieren
+
+Das `UserManagement`-Objekt enthält eine `collectionPermissions`-Funktion, die überprüft, welche Operationen ein
+Benutzer basierend auf seinen Rollen und der Kollektionskonfiguration ausführen kann.
+Die Berechtigungen basieren auf Ihrer Benutzer- und Rollenkonfiguration in Firestore.
+
+Sie können diese Funktion an den `useBuildNavigationController`-Hook übergeben, um Kollektionsberechtigungen
+in Ihr FireCMS-Projekt zu integrieren.
+
+Beachten Sie, dass wenn Sie Berechtigungen auf eine Kollektion anwenden, diese die in der Kollektionskonfiguration gesetzten Berechtigungen überschreiben.
+
+```jsx
+const navigationController = useBuildNavigationController({
+    collections,
+    collectionPermissions: userManagement.collectionPermissions,
+    authController,
+    dataSourceDelegate: firestoreDelegate
+});
+```
+
+## Fehlerbehandlung
+
+Das Plugin bietet Fehlerbehandlung über die Eigenschaften `rolesError` und `usersError` im `UserManagement`-Objekt. Diese können zum Erkennen und Anzeigen von Fehlermeldungen beim Laden von Rollen oder Benutzern verwendet werden.
+
+```jsx
+if (userManagement.rolesError) {
+    console.error("Rollenfehler: ", userManagement.rolesError);
+    // Rollenfehler behandeln
+}
+
+if (userManagement.usersError) {
+    console.error("Benutzerfehler: ", userManagement.usersError);
+    // Benutzerfehler behandeln
+}
+```
+
+## Das Plugin in Ihrer Anwendung verwenden
+
+Sobald Sie das Plugin eingerichtet haben, haben Sie einen Provider erstellt, den Sie zur Verwaltung von Benutzern und Rollen in
+Ihrer Anwendung verwenden können. Sie können über den `useUserManagement`-Hook auf die Benutzerverwaltungsfunktionen und -daten zugreifen.
+
+Das vom `useUserManagement`-Hook zurückgegebene `userManagement`-Objekt enthält folgende Eigenschaften:
+
+- **`loading`**: Gibt an, ob Daten geladen werden. Boolean-Wert.
+- **`users`**: Array von Benutzerobjekten. Enthält die verwalteten Benutzer.
+- **`saveUser`**: Funktion zum Speichern eines Benutzers. Nimmt ein `user`-Objekt und gibt ein Promise zurück, das mit dem gespeicherten Benutzer auflöst.
+- **`deleteUser`**: Funktion zum Löschen eines Benutzers. Nimmt ein `user`-Objekt und gibt ein Promise zurück, das auflöst, wenn der Benutzer gelöscht wurde.
+- **`roles`**: Array von Rollenobjekten. Enthält die im System verfügbaren Rollen.
+- **`saveRole`**: Funktion zum Speichern einer Rolle. Nimmt ein `role`-Objekt und gibt ein Promise zurück, das auflöst, wenn die Rolle gespeichert wurde.
+- **`deleteRole`**: Funktion zum Löschen einer Rolle. Nimmt ein `role`-Objekt und gibt ein Promise zurück, das auflöst, wenn die Rolle gelöscht wurde.
+- **`isAdmin`**: Optional. Boolean, um zu prüfen, ob der angemeldete Benutzer ein Admin ist.
+- **`allowDefaultRolesCreation`**: Optional. Eine Schaltfläche zum Erstellen von Standardrollen einbeziehen, falls keine Rollen im System vorhanden sind. Boolean-Wert.
+- **`includeCollectionConfigPermissions`**: Optional. Die Kollektionskonfigurationsberechtigungen in das Benutzerverwaltungssystem einbeziehen. Boolean-Wert.
+- **`collectionPermissions`**: Ein Berechtigungs-Builder, der definiert, welche Operationen ein Benutzer in einer Kollektion ausführen kann. Der generierte Berechtigungs-Builder sollte auf den Benutzerrollen und der Kollektionskonfiguration basieren.
+- **`defineRolesFor`**: Funktion zur Definition der Rollen für einen bestimmten Benutzer. In der Regel möchten Sie dies in Ihren Auth-Controller einbinden. Nimmt ein `user`-Objekt und gibt ein Promise zurück, das mit einem Array von Rollen oder undefined auflöst.
+- **`authenticator`**: Optional. Authentifizierungs-Callback, der aus der aktuellen Konfiguration der Benutzerverwaltung erstellt wurde. Er erlaubt nur Benutzern mit den erforderlichen Rollen den Zugriff.
+- **`rolesError`**: Optional. Enthält alle Fehler, die beim Laden von Rollen aufgetreten sind.
+- **`usersError`**: Optional. Enthält alle Fehler, die beim Laden von Benutzern aufgetreten sind.

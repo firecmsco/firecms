@@ -1,0 +1,20 @@
+export const entityHistoryTranslationsIt = {
+    history: "Cronologia",
+    entity_history_only_existing: "La cronologia è disponibile solo per le entità esistenti",
+    entity_history_reverted: "Versione ripristinata",
+    entity_history_error_reverting: "Errore durante il ripristino dell'entità",
+    entity_history_no_history: "Nessuna cronologia disponibile",
+    entity_history_when_save: "Quando salvi un'entità, viene creata una nuova versione e memorizzata nella cronologia.",
+    entity_history_revert_tooltip: "Ripristina a questa versione",
+    entity_history_please_save: "Salva o annulla le modifiche prima del ripristino",
+    loading_more: "Caricamento in corso...",
+    entity_history_no_more: "Nessuna ulteriore cronologia disponibile",
+    entity_history_revert_dialog_title: "Vuoi ripristinare i dati a questa versione?",
+    entity_history_previous_value: "Valore precedente",
+    entity_history_see_details: "Vedi i dettagli per questa revisione",
+    entity_history_just_now: "proprio adesso",
+    entity_history_minutes_ago: "{{minutes}} min fa",
+    entity_history_hours_ago: "{{hours}} h fa",
+    entity_history_days_ago: "{{days}} g fa",
+    user_picture: "Immagine utente"
+};

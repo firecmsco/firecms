@@ -1,0 +1,232 @@
+---
+title: Benutzerdefinierte Felder
+slug: de/docs/properties/custom_fields
+sidebar_label: Benutzerdefinierte Felder
+description: "Erfahren Sie, wie Sie leistungsstarke benutzerdefinierte FireCMS-Felder erstellen: Komponentenvertrag, Übergabe benutzerdefinierter Props, Zugriff auf Entity-Kontext, Zusammenstellung anderer Eigenschaften, Handhabung von Arrays, Validierung, Performance und erweiterte Beispiele."
+---
+
+Benutzerdefinierte Felder ermöglichen es Ihnen, vollständig zu steuern, wie ein Eigenschaftswert in einem Formular bearbeitet und angezeigt wird. Anstelle des integrierten Renderers für einen `dataType` stellen Sie eine React-Komponente bereit. Diese Komponente erhält einen umfangreichen Satz von Props (`FieldProps`), damit sie:
+
+- Den aktuellen Wert lesen und aktualisieren kann (`value`, `setValue`)
+- Jede andere Eigenschaft im selben Formular aktualisieren kann (`setFieldValue` oder `context.setFieldValue`)
+- Auf alle aktuellen Entity-Werte + Formular-Utilities zugreifen kann (`context`)
+- Den Formularzustand respektieren kann (`isSubmitting`, `disabled`, `showError`, `error`, `touched`)
+- Das Layout anpassen kann (`size`, `partOfArray`, `minimalistView`, `autoFocus`)
+- Entwicklerdefinierte `customProps` verwenden kann
+
+<video style={{
+    maxWidth: "100%",
+    width: "640px",
+    margin: "32px 0px 32px",
+    alignSelf: "center"
+}}
+       loop autoPlay muted>
+    <source src="/img/custom_fields_dark.mp4" type="video/mp4"/>
+</video>
+
+## Wann sollten Sie ein benutzerdefiniertes Feld erstellen?
+Verwenden Sie ein benutzerdefiniertes Feld, wenn Sie eines (oder mehrere) der Folgenden benötigen:
+- Einen visuellen Stil, der von integrierten Komponenten nicht abgedeckt wird (Farbwähler, Tag-Eingaben, Schieberegler, Diagramme, KI-gestützte Felder, etc.)
+- Zusammengesetzte UI, die mehrere Eigenschaften kombiniert (z. B. Lat/Lng-Kartenauswahl, die in zwei numerische Felder schreibt)
+- Integrationen (Upload zu einer externen API, Abrufen von Vorschlägen, Geocoding, etc.)
+
+Wenn Sie nur Validierung oder einfache Transformation benötigen, bevorzugen Sie zunächst Validierungsoptionen auf Eigenschaftsebene, um die Dinge einfach zu halten.
+Wenn Sie dynamisches Verhalten abhängig von anderen Werten benötigen, ziehen Sie stattdessen [bedingte Felder](./conditional_fields.md) in Betracht.
+
+
+## Beispiel für ein benutzerdefiniertes Feld
+Ein benutzerdefiniertes Textfeld mit einer über `customProps` bereitgestellten Hintergrundfarbe (scrollen Sie nach unten für den vollständigen Prop-Vertrag und fortgeschrittene Techniken):
+
+```tsx
+import React from "react";
+import { FieldHelperText, FieldProps, useModeController } from "@firecms/core";
+import { TextField } from "@firecms/ui";
+
+interface CustomColorTextFieldProps {
+    color: string;
+}
+
+export default function CustomColorTextField({
+    property,
+    value,
+    setValue,
+    customProps,
+    includeDescription,
+    showError,
+    error,
+    isSubmitting,
+    context
+}: FieldProps<string, CustomColorTextFieldProps>) {
+
+    const { mode } = useModeController();
+    const backgroundColor = customProps?.color ?? (mode === "light" ? "#eef4ff" : "#16325f");
+
+    return (
+        <>
+            <TextField
+                inputStyle={{ backgroundColor }}
+                error={!!error}
+                disabled={isSubmitting}
+                label={error ?? property.name}
+                value={value ?? ""}
+                onChange={(evt: any) => setValue(evt.target.value)}
+            />
+            <FieldHelperText
+                includeDescription={includeDescription}
+                showError={showError}
+                error={error}
+                property={property}
+            />
+        </>
+    );
+}
+```
+
+Verwendung in einer Kollektion:
+
+```tsx
+export const blogCollection = buildCollection({
+    id: "blog",
+    path: "blog",
+    name: "Blog entry",
+    properties: {
+        // ... andere Eigenschaften
+        gold_text: {
+            name: "Gold text",
+            description: "Dieses Feld verwendet eine benutzerdefinierte Komponente, die vom Entwickler definiert wurde",
+            dataType: "string",
+            Field: CustomColorTextField,
+            customProps: {
+                color: "gold"
+            }
+        }
+    }
+});
+```
+
+## Komponentenvertrag (FieldProps)
+Ihre Komponente muss mindestens:
+1. Den aktuellen `value` lesen (er kann `undefined` oder `null` für leer sein)
+2. `setValue(newValue)` aufrufen, wenn der Benutzer ihn ändert
+
+Empfohlene gute Praktiken:
+- `disabled` / `isSubmitting` respektieren
+- Das Label und den Fehler anzeigen (verwenden Sie Ihre eigene UI oder `<FieldHelperText>` / integrierte Komponenten)
+- Schwere Seiteneffekte bei jedem Tastendruck vermeiden (Netzwerkaufrufe entprellen)
+
+Vollständige Schnittstelle: [`FieldProps`](../api/interfaces/FieldProps) (enthält detaillierte Kommentare).
+
+## Benutzerdefinierte Props übergeben
+Geben Sie ein `customProps`-Objekt in der Eigenschaftsdefinition an. Das Objekt ist stark typisiert über den zweiten Generic von `FieldProps<T, CustomProps>`.
+
+
+## Auf den Rest der Entity zugreifen (Formularkontext)
+`context` gibt Ihnen Live-Zugriff auf:
+- Alle aktuellen Werte (`context.values`)
+- `context.setFieldValue(key, value)` zum Aktualisieren eines anderen Felds
+- `context.save(values)` zum programmatischen Auslösen eines Speichvorgangs (selten in Feldern benötigt)
+- Metadaten: `entityId`, `status` (neu/vorhanden/Kopie), `collection`, `openEntityMode`, `disabled`
+
+Dies ermöglicht feldübergreifende Logik (z. B. automatisch Slug erzeugen, wenn sich der Titel ändert) oder bedingtes Deaktivieren.
+
+## Andere Eigenschaften in einem benutzerdefinierten Feld rendern (oder zusammensetzen)
+Wenn Ihr benutzerdefiniertes Feld die UI einer anderen Eigenschaft einbeziehen möchte, verwenden Sie `PropertyFieldBinding`.
+Dies erhält Validierung und Konsistenz:
+
+```tsx
+import { PropertyFieldBinding } from "@firecms/core";
+
+<PropertyFieldBinding
+  propertyKey="subtitle"
+  property={collection.properties.subtitle}
+  context={context}
+  includeDescription
+/>
+```
+
+Dies ist ideal für zusammengesetzte Widgets, die mehrere zugrunde liegende Werte orchestrieren.
+Zum Beispiel ist das integrierte Standard-Widget für `map` nur ein Wrapper um die definierten Eigenschaften
+
+## Arrays & verschachtelte Daten handhaben
+Wenn sich Ihr benutzerdefiniertes Feld innerhalb eines Arrays befindet:
+- `partOfArray` ist `true`
+- Sie können einen Index in einem übergeordneten Kontext erhalten, wenn Sie verschachtelte Array-Editoren erstellen
+
+Für verschachtelte Werte (z. B. `address.street` in einem zusammengesetzten Feld bearbeiten) rufen Sie `setFieldValue("address.street", value)` auf.
+
+## Validierungsstrategien
+Bevorzugen Sie deklarative Validierung in der Eigenschaftskonfiguration, wenn möglich. Sie können dennoch clientseitige
+Guards im Feld implementieren (z. B. ungültige Tastendrücke ignorieren), aber erlauben Sie der zentralen Validierung, Fehler anzuzeigen.
+
+Häufige Muster:
+- Beim Verlassen trimmen, aber Benutzereingaben beibehalten: Roh-Eingabe im lokalen Zustand halten, `setValue` mit bereinigtem Wert beim Verlassen aufrufen.
+- Asynchrone Validierung (z. B. Eindeutigkeit): Prüfung entprellen, einen vorübergehenden lokalen Fehler setzen, Tippen nicht blockieren.
+
+## Performance-Tipps
+- Netzwerk- oder aufwändige Berechnungen entprellen (`useEffect` + `setTimeout` oder ein Utility) anstatt bei jedem Tastendruck.
+- Schwere Kindkomponenten basierend auf relevanten Props memoizen.
+- Vermeiden Sie das Speichern großer abgeleiteter Objekte im Zustand; leiten Sie sie beim Rendern ab oder memoizen Sie.
+
+## Erweitertes Beispiel: Zusammengesetzter Slug-Editor
+Generiert automatisch einen Slug aus dem Titel, erlaubt aber manuelle Überschreibung.
+
+```tsx
+function SlugField({ value, setValue, context, property, showError, error }: FieldProps<string>) {
+    const title = context.values.title as string | undefined;
+
+    React.useEffect(() => {
+        if (!value && title) {
+            const auto = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+            setValue(auto);
+        }
+    }, [title]);
+
+    return (
+        <TextField
+            label={property.name}
+            value={value ?? ""}
+            error={!!error}
+            onChange={(e: any) => setValue(e.target.value)}
+            helperText={showError ? error : "Wird automatisch aus dem Titel generiert, wenn leer"}
+        />
+    );
+}
+```
+
+## PropertyFieldBinding in einem zusammengesetzten Feld verwenden
+
+```tsx
+function GeoPointField({ context }: FieldProps<any>) {
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      <PropertyFieldBinding
+        propertyKey="lat"
+        property={context.collection?.properties.lat}
+        context={context}
+        minimalistView
+      />
+      <PropertyFieldBinding
+        propertyKey="lng"
+        property={context.collection?.properties.lng}
+        context={context}
+        minimalistView
+      />
+      {/* Könnte eine Kartenauswahl hinzufügen, die context.setFieldValue("lat", newLat) aufruft */}
+    </div>
+  );
+}
+```
+
+## Fehlerbehebung & Fallstricke
+- Wert wird nicht aktualisiert: Stellen Sie sicher, dass Sie `setValue` aufrufen (nicht `value` direkt mutieren) und dass Sie den `value` nicht im lokalen Zustand überschatten, ohne zu synchronisieren.
+- Fehler wird nie angezeigt: Denken Sie daran, dass `showError` die visuelle Anzeige steuert; `error` kann existieren, während `showError` false ist.
+- Feldübergreifende Updates werden ignoriert: Verwenden Sie den genauen Eigenschaftsschlüssel (z. B. `address.street`, Array-Indizes wie `items[0].price`).
+- Feld wird zu oft neu gerendert: Schließen Sie schwere Logik in `useMemo` / `useCallback` ein, vermeiden Sie die Erstellung neuer Objekte bei jedem Render.
+- Nur-Lese-Modus benötigt: Respektieren Sie `disabled` aus Props oder `context.disabled`.
+
+## Nächste Schritte
+- Weitere Anpassungsmöglichkeiten erkunden: [Benutzerdefinierte Vorschauen](./custom_previews.md)
+- Logik über viele Eigenschaften hinweg wiederverwenden: eine gemeinsame Feldkomponente erstellen und verschiedene `customProps` übergeben.
+- Open-Source-freundlich? Erwägen Sie, ein wiederverwendbares Feld zur Community beizutragen.
+
+Durch die Nutzung benutzerdefinierter Felder können Sie reichhaltige Bearbeitungserlebnisse schaffen, die eng mit der Domain Ihres Produkts abgestimmt sind, während Validierung, Zustand und Persistenz in FireCMS zentralisiert bleiben.

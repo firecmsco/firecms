@@ -1,4 +1,4 @@
-import { EntityCollection, isEmptyObject, useSnackbarController } from "@firecms/core";
+import { EntityCollection, isEmptyObject, useSnackbarController, useTranslation } from "@firecms/core";
 import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, DialogTitle, Tab, Tabs, Typography } from "@firecms/ui";
 import React, { useState } from "react";
 import JSON5 from "json5";
@@ -13,17 +13,18 @@ export function GetCodeDialog({
 }: { onOpenChange: (open: boolean) => void, collection: any, open: any }) {
 
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
     const [format, setFormat] = useState<"ts" | "json">("json");
 
     const collectionData = collectionToCode({ ...collection });
 
     const tsCode = collection
         ? "import { EntityCollection } from \"@firecms/core\";\n\nconst " + (collection?.name ? camelCase(collection.name) : "my") + "Collection:EntityCollection = " + JSON5.stringify(collectionData, null, "\t")
-        : "No collection selected";
+        : t("no_collection_selected");
 
     const jsonCode = collection
         ? JSON.stringify(collectionData, null, 2)
-        : "No collection selected";
+        : t("no_collection_selected");
 
     const code = format === "ts" ? tsCode : jsonCode;
 
@@ -31,7 +32,7 @@ export function GetCodeDialog({
         onOpenChange={onOpenChange}
         maxWidth={"4xl"}>
         <div className="flex items-center justify-between pr-6">
-            <DialogTitle variant={"h6"}>Code for {collection.name}</DialogTitle>
+            <DialogTitle variant={"h6"}>{t("code_for_collection")} {collection.name}</DialogTitle>
             <Tabs value={format} onValueChange={(v) => setFormat(v as "ts" | "json")}>
                 <Tab value="ts">TypeScript</Tab>
                 <Tab value="json">JSON</Tab>
@@ -41,13 +42,13 @@ export function GetCodeDialog({
 
             <Typography variant={"body2"} className={"mb-4"}>
                 {format === "json"
-                    ? "Use this config to define the collection in JSON format."
+                    ? t("use_config_define_json")
                     : <>
-                        If you want to customise the collection in code, you can add this collection code to your CMS
-                        app configuration.
-                        More info in the <a
+                        {t("customise_collection_code")}
+                        <br/>
+                        <a
                             rel="noopener noreferrer"
-                            href={"https://firecms.co/docs/cloud/quickstart"}>docs</a>.
+                            href={"https://firecms.co/docs/cloud/quickstart"}>{t("more_info")}</a>
                     </>}
             </Typography>
             <Highlight
@@ -84,14 +85,14 @@ export function GetCodeDialog({
                     e.preventDefault();
                     snackbarController.open({
                         type: "success",
-                        message: "Copied"
+                        message: t("copied")
                     })
                     return navigator.clipboard.writeText(code);
                 }}>
                 <ContentCopyIcon size={"small"} />
-                Copy to clipboard
+                {t("copy")}
             </Button>
-            <Button onClick={() => onOpenChange(false)}>Close</Button>
+            <Button onClick={() => onOpenChange(false)}>{t("cancel")}</Button>
         </DialogActions>
     </Dialog>;
 }

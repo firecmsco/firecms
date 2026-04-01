@@ -1,0 +1,31 @@
+---
+slug: pt/docs/components/multi_select
+title: MultiSelect
+sidebar_label: MultiSelect
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+MultiSelect permite que os usuários selecionem múltiplas opções de uma lista suspensa. Suporta estados de abertura e fechamento, renderização de valor personalizada e navegação por teclado entre outros recursos.
+
+## Uso
+
+Para usar o `MultiSelect`, importe-o junto com seu componente de item. Você pode passar props como `value`, `onMultiValueChange`, `size`, `label`, `disabled` e muitas outras para personalizar seu comportamento e aparência.
+
+## MultiSelect básico
+
+Um exemplo simples demonstrando o uso básico do componente `MultiSelect`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/multi_select/multi_select_basic.tsx"/>
+
+## Renderização de valor personalizada
+
+Este exemplo mostra como personalizar a renderização de valores selecionados.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/multi_select/multi_select_custom_render.tsx"/>
+
+## Lidando com o estado desabilitado
+
+Um exemplo para demonstrar um componente `MultiSelect` em estado desabilitado.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/multi_select/multi_select_disabled.tsx"/>

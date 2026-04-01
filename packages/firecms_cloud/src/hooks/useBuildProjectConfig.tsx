@@ -56,6 +56,9 @@ export type ProjectConfig = {
 
     blocked: boolean;
 
+    defaultLocale?: string;
+    updateDefaultLocale: (locale: string) => Promise<void>;
+
     creationType?: "new" | "existing";
 
     appCheck?: AppCheckOptions;
@@ -113,6 +116,8 @@ export function useBuildProjectConfig({
 
     const [appCheck, setAppCheck] = useState<AppCheckOptions | undefined>();
     const [serializedAppCheck, setSerializedAppCheck] = useState<SerializedAppCheckOptions | null>(null);
+
+    const [defaultLocale, setDefaultLocale] = useState<string | undefined>();
 
     const [customizationRevision, setCustomizationRevision] = useState<string | undefined>();
     const [creationType, setCreationType] = useState<"new" | "existing" | undefined>();
@@ -208,6 +213,13 @@ export function useBuildProjectConfig({
         return setDoc(doc(firestore, configPath), { survey_data: surveyData }, { merge: true });
     }, [configPath]);
 
+    const updateDefaultLocale = useCallback(async (locale: string): Promise<void> => {
+        if (!backendFirebaseApp) throw Error("useBuildProjectConfig Firebase not initialised");
+        const firestore = getFirestore(backendFirebaseApp);
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        return setDoc(doc(firestore, configPath), { default_locale: locale }, { merge: true });
+    }, [configPath]);
+
     useEffect(() => {
         if (!projectId || !backendFirebaseApp) {
             setClientConfigLoading(false);
@@ -246,6 +258,7 @@ export function useBuildProjectConfig({
                     setCustomizationRevision(currentCustomizationRevision);
                     setCreationType(snapshot.get("creation_type"));
                     setBlocked(snapshot.get("blocked"));
+                    setDefaultLocale(snapshot.get("default_locale"));
 
                     const updatedSerializedAppCheck = snapshot.get("app_check");
                     if (updatedSerializedAppCheck) {
@@ -334,6 +347,8 @@ export function useBuildProjectConfig({
         secondaryColor,
         updatePrimaryColor,
         updateSecondaryColor,
+        defaultLocale,
+        updateDefaultLocale,
         blocked,
         updateAppCheck,
         appCheck,

@@ -1,0 +1,140 @@
+---
+title: Adapter für benutzerdefinierte Datentypen
+slug: de/docs/recipes/data_type_adapter
+sidebar_label: Adapter für benutzerdefinierte Datentypen
+description: Wie man einen benutzerdefinierten Adapter für einen Datentyp in FireCMS erstellt
+---
+
+:::info
+Um diese Funktion zu nutzen, müssen Sie ein FireCMS-Repository initialisieren. Sie können dies tun, indem Sie dem
+[Anpassungs-Quickstart](../cloud/quickstart)-Leitfaden folgen.
+:::
+
+FireCMS ermöglicht es Ihnen, die Art und Weise anzupassen, wie Daten im CMS angezeigt und bearbeitet werden. Standardmäßig basieren die von FireCMS erstellten Ansichten auf dem in Ihren Kollektionseigenschaften definierten Datentyp:
+
+```json5
+{
+    name: "Created on",
+    dataType: "date",
+}
+```
+> In diesem Beispiel werden alle Felder, die sich auf "created on" beziehen, als Datumsauswahl angezeigt, einschließlich Tabellen-, Formular-, Detail- und Filteransichten.
+
+Sie möchten jedoch möglicherweise einen anderen Datentyp im CMS als den in Ihrem Datenmodell verwendeten verwenden. Zum Beispiel möchten Sie den Datumswert als Unix-Zeitstempel in Ihrer Datenbank speichern, ihn aber im CMS als Datum anzeigen.
+
+Um dies zu erreichen, können Sie [Callbacks](../collections/callbacks) verwenden, um die Daten von Ihrem Modell in das Format zu konvertieren, das Sie im CMS anzeigen möchten.
+
+Lassen Sie uns ein einfaches Beispiel verwenden, um dies zu veranschaulichen. Stellen Sie sich vor, Sie haben eine Exercises-Kollektion und möchten das Erstellungsdatum jeder Übung im CMS anzeigen. In Ihrer Datenbank speichern Sie das Erstellungsdatum als Unix-Zeitstempel. Sie möchten dieses Datum als menschenlesbares Datum im CMS anzeigen.
+
+```typescript
+export type Exercise = {
+    name: string;
+    createdOn: Date;
+}
+```
+
+### Datentypen beim Lesen aus der Datenbank konvertieren
+
+Sie können den `onFetch`-Callback verwenden, um den Datentyp beim Lesen aus der Datenbank zu konvertieren. Zum Beispiel können Sie einen Unix-Zeitstempel in ein Datum konvertieren:
+
+```typescript
+import {EntityCallbacks, EntityOnFetchProps} from "@firecms/core";
+
+const exerciseCallbacks: EntityCallbacks = {
+    onFetch({
+                collection,
+                context,
+                entity,
+                path
+            }: EntityOnFetchProps) {
+        const values = entity.values;
+        if (values.createdOn) {
+            values.createdOn = new Date(values.createdOn);
+        }
+        return entity;
+    }
+};
+```
+
+### Datentypen beim Speichern in der Datenbank konvertieren
+
+Sie können den `onPreSave`-Callback verwenden, um den Datentyp beim Speichern in der Datenbank zu konvertieren. In diesem Fall können Sie ein Datum in einen Unix-Zeitstempel konvertieren:
+
+```typescript
+import {EntityCallbacks} from "@firecms/core";
+
+const exerciseCallbacks: EntityCallbacks = {
+    onPreSave: ({
+                    collection,
+                    path,
+                    entityId,
+                    values,
+                    status,
+                    context
+                }) => {
+        if (values.createdOn) {
+            values.createdOn = values.createdOn.getTime();
+        }
+        return values;
+    }
+};
+```
+
+### Alles zusammenfügen
+
+Sie können die `exerciseCallbacks` in Ihrer Kollektionsdefinition verwenden:
+
+```typescript
+import {buildCollection, EntityCallbacks, EntityCollection, EntityOnFetchProps} from "@firecms/core";
+
+const exerciseCallbacks: EntityCallbacks = {
+    onFetch({
+                collection,
+                context,
+                entity,
+                path
+            }: EntityOnFetchProps) {
+        const values = entity.values;
+        if (values.createdOn) {
+            values.createdOn = new Date(values.createdOn);
+        }
+        return entity;
+    },
+    onPreSave: ({
+                    collection,
+                    path,
+                    entityId,
+                    values,
+                    status,
+                    context
+                }) => {
+        if (values.createdOn) {
+            values.createdOn = values.createdOn.getTime();
+        }
+        return values;
+    }
+};
+
+// Um diese Kollektion mit Callbacks zu verwenden, fügen Sie sie den Kollektionsdefinitionen in der Hauptapp-Konfiguration hinzu
+export const exerciseCollection: EntityCollection = buildCollection({
+    name: "Exercises",
+    path: "exercises",
+    callbacks: exerciseCallbacks,
+    properties: {
+        name: {
+            title: "Name",
+            dataType: "string",
+            validation: {
+                required: true
+            }
+        },
+        createdOn: {
+            title: "Created on",
+            dataType: "date", // dies ist der Datentyp, der die erstellten Ansichten definiert
+            validation: {
+                required: true
+            }
+        }
+    }
+});
+```

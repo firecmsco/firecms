@@ -1,0 +1,247 @@
+---
+title: Benutzerdefinierte Speicherlösungen in FireCMS definieren
+slug: de/docs/self/custom_storage
+sidebar_label: Benutzerdefinierte Speicherlösungen
+description: Implementieren Sie benutzerdefinierte Speicherlösungen wie Amazon S3 in FireCMS mit dieser Schritt-für-Schritt-Anleitung.
+---
+
+FireCMS bietet Flexibilität bei der Integration benutzerdefinierter Speicherlösungen.
+Obwohl es mit integrierter Unterstützung für Firebase Storage geliefert wird, möchten Sie möglicherweise Ihre
+eigenen Speicherlösungen definieren, um Datei-Uploads, -Downloads und Metadatenverwaltung zu handhaben.
+Diese Anleitung hilft Ihnen, eine benutzerdefinierte Speicherlösung einzurichten.
+
+## Eine benutzerdefinierte Speicherquelle erstellen
+
+Eine benutzerdefinierte Speicherquelle in FireCMS wird durch die Implementierung der `StorageSource`-Schnittstelle definiert.
+Hier ist ein Template zur Erstellung einer benutzerdefinierten Speicherquelle.
+
+Hinweis: Dies ist ein Beispiel, wie Sie S3 direkt aus einer benutzerdefinierten Speicherquelle implementieren und verwenden können.
+Dies ist NICHT der bevorzugte Weg zur Verwendung von S3, da es davon abraten würde, es direkt aus dem Frontend zu konsumieren,
+da Sie den API-Schlüssel und das Secret im Frontend einbinden müssten, was nicht sicher ist.
+Stattdessen könnten Sie [Amplify/Storage](https://docs.amplify.aws/react/build-a-backend/storage/) oder eine benutzerdefinierte IAM-Auth verwenden.
+
+
+Nachfolgend finden Sie ein Template zur Erstellung einer benutzerdefinierten Speicherquelle:
+
+```tsx
+import {StorageSource, UploadFileProps, UploadFileResult, DownloadConfig} from "@firecms/core";
+import {S3Client, PutObjectCommand, GetObjectCommand} from "@aws-sdk/client-s3";
+import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
+
+export interface S3StorageSourceProps {
+  apiKey: string;
+  apiSecret: string;
+  region: string;
+  defaultBucket?: string;
+}
+
+function initializeCustomClient({apiKey, apiSecret, region, defaultBucket}: S3StorageSourceProps) {
+  const s3Client = new S3Client({region, credentials: {accessKeyId: apiKey, secretAccessKey: apiSecret}});
+
+  return {
+    uploadFile: async (destinationPath: string, file: File, bucket?: string, metadata?: any) => {
+      await s3Client.send(new PutObjectCommand({
+        Bucket: bucket || defaultBucket,
+        Key: destinationPath,
+        Body: file,
+        ContentType: metadata?.contentType,
+        Metadata: metadata
+      }));
+      return {
+        path: destinationPath,
+        bucket: bucket || defaultBucket || ""
+      }
+    },
+    getFile: async (path: string, bucket?: string) => {
+      return await s3Client.send(new GetObjectCommand({
+        Bucket: bucket || defaultBucket || "",
+        Key: path
+      }));
+    },
+    getDownloadURL: async (path: string, bucket?: string) => {
+      const command = new GetObjectCommand({Bucket: bucket || defaultBucket, Key: path});
+      return await getSignedUrl(s3Client, command, {expiresIn: 3600});
+    },
+    getMetadata: async (path: string, bucket?: string) => {
+      const s3Object = await s3Client.send(new GetObjectCommand({
+        Bucket: bucket || defaultBucket,
+        Key: path
+      }));
+      return {
+        bucket: (bucket || defaultBucket) ?? "",
+        fullPath: path,
+        name: path,
+        size: s3Object.ContentLength || 0,
+        contentType: s3Object.ContentType || "",
+        customMetadata: s3Object.Metadata || {}
+      }
+    }
+  };
+}
+
+export function useCustomStorageSource(props: S3StorageSourceProps): StorageSource {
+  // Ihren Speicher-Client basierend auf den bereitgestellten Props initialisieren
+  // Zum Beispiel könnte es ein Client für Amazon S3, Google Cloud Storage, etc. sein.
+  const customClient = initializeCustomClient(props);
+
+  return {
+    async uploadFile({file, fileName, path, metadata, bucket}: UploadFileProps): Promise<UploadFileResult> {
+      const usedFilename = fileName ?? file.name;
+      const destinationPath = `${path}/${usedFilename}`;
+      // Logik zum Hochladen von Dateien mit Ihrem Speicher-Client
+      return await customClient.uploadFile(destinationPath, file, bucket, metadata);
+    },
+
+    async getFile(path: string, bucket?: string): Promise<File | null> {
+      const targetBucket = bucket ?? props.defaultBucket;
+      try {
+        // Logik zum Abrufen der Datei mit Ihrem Speicher-Client
+        const fileData = await customClient.getFile(path, targetBucket);
+        if (fileData && fileData.Body) {
+          const byteArray = await fileData.Body.transformToByteArray();
+          const blob = new Blob([byteArray], {type: fileData.ContentType});
+          return new File([blob], path);
+        } else {
+          return null;
+        }
+      } catch (e) {
+        return null; // Datei nicht gefunden
+      }
+    },
+
+    async getDownloadURL(path: string, bucket?: string): Promise<DownloadConfig> {
+      const targetBucket = bucket || props.defaultBucket;
+      try {
+        // Logik zum Abrufen der Download-URL mit Ihrem Speicher-Client
+        const url = await customClient.getDownloadURL(path, targetBucket);
+        const metadata = await customClient.getMetadata(path, targetBucket);
+        return {url, metadata};
+      } catch (e) {
+        return {url: null, fileNotFound: true};
+      }
+    }
+  };
+}
+```
+
+## Die benutzerdefinierte Speicherquelle verwenden
+
+Nach der Erstellung der benutzerdefinierten Speicherquelle können Sie sie in Ihrer FireCMS-Anwendung verwenden, indem Sie sie in Ihrer Komponente initialisieren und an die `FireCMS`-Komponente übergeben.
+
+### Verwendungsbeispiel
+
+Hier ist ein Beispiel, wie die benutzerdefinierte Speicherquelle in Ihrer FireCMS-Anwendung verwendet wird:
+
+```tsx
+import React from "react";
+import "typeface-rubik";
+import "@fontsource/jetbrains-mono";
+import {
+  FireCMS,
+  ModeControllerProvider,
+  Scaffold,
+  AppBar,
+  Drawer,
+  NavigationRoutes,
+  SideDialogs,
+  SnackbarProvider,
+  useBuildLocalConfigurationPersistence,
+  useBuildModeController,
+  useBuildNavigationController,
+  useValidateAuthenticator,
+  CenteredView,
+  CircularProgressCenter
+} from "@firecms/core";
+import { productsCollection } from "./collections/products_collection";
+import { useCustomStorageSource, CustomStorageSourceProps } from "./hooks/useCustomStorageSource";
+
+const customStorageConfig: CustomStorageSourceProps = {
+  apiKey: "ihr-api-schlüssel",
+  apiSecret: "ihr-api-secret",
+  region: "ihre-region",
+  defaultBucket: "ihr-bucket-name"
+  // ... weitere notwendige Eigenschaften
+};
+
+const CustomStorageApp: React.FC = () => {
+  const name = "Meine benutzerdefinierte Speicher FireCMS App";
+
+  const modeController = useBuildModeController();
+  const userConfigPersistence = useBuildLocalConfigurationPersistence();
+  const storageSource = useCustomStorageSource(customStorageConfig);
+
+  // const authController = useFirebaseAuthController(); // Ihr Auth-Controller
+  // const dataSourceDelegate = {}; // Ihre Datenquellen-Delegat-Implementierung
+
+  const navigationController = useBuildNavigationController({
+    collections: [productsCollection],
+    // authController,
+    // dataSourceDelegate
+  });
+
+  return (
+    <SnackbarProvider>
+      <ModeControllerProvider value={modeController}>
+        <FireCMS
+          navigationController={navigationController}
+          userConfigPersistence={userConfigPersistence}
+          storageSource={storageSource}
+          // authController={authController}
+          // dataSourceDelegate={dataSourceDelegate}
+        >
+          {({ context, loading }) => {
+            if (loading || authLoading) {
+              return <CircularProgressCenter size="large" />;
+            }
+
+            if (!canAccessMainView) {
+              return <CenteredView>{notAllowedError}</CenteredView>;
+            }
+
+            return (
+              <Scaffold>
+                <AppBar title={"Meine App"} />
+                <Drawer />
+                <NavigationRoutes />
+                <SideDialogs />
+              </Scaffold>
+            );
+          }}
+        </FireCMS>
+      </ModeControllerProvider>
+    </SnackbarProvider>
+  );
+};
+
+export default CustomStorageApp;
+```
+
+Da dieses Beispiel AWS S3 verwendet, müssen Sie auch CORS in dem Bucket aktivieren,
+wie in der [AWS-Dokumentation - Cross-Origin Resource Sharing (CORS) konfigurieren](https://docs.aws.amazon.com/AmazonS3/latest/userguide/enabling-cors-examples.html?icmpid=docs_amazons3_console) beschrieben.
+
+```json
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+            "GET",
+            "PUT",
+            "POST",
+            "DELETE"
+        ],
+        "AllowedOrigins": [
+            "*"
+        ],
+        "ExposeHeaders": [
+            "x-amz-server-side-encryption",
+            "x-amz-request-id",
+            "x-amz-id-2"
+        ],
+        "MaxAgeSeconds": 3000
+    }
+]
+```
+
+Diese Dokumentation bietet eine klare Anleitung zur Definition benutzerdefinierter Speicherlösungen in FireCMS. Folgen Sie dem Template, um andere Speicherdienste entsprechend Ihren Anforderungen zu integrieren.

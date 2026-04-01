@@ -21,7 +21,8 @@ import {
     DEFAULT_FIELD_CONFIGS,
     getIconForWidget,
     EnumValueConfig,
-    isPropertyBuilder
+    isPropertyBuilder,
+    useTranslation
 } from "@firecms/core";
 import { PropertyWithId } from "../../PropertyEditView";
 import { getPropertyPaths } from "./property_paths";
@@ -448,6 +449,8 @@ function ConditionGroupRow({
     collectionProperties,
     showErrors
 }: ConditionGroupRowProps) {
+    const { t } = useTranslation();
+
     const handleLogicChange = (logic: LogicOperator) => {
         onGroupChange({ ...group, logic });
     };
@@ -490,8 +493,8 @@ function ConditionGroupRow({
                             disabled={disabled}
                             size="small"
                             inputClassName="min-w-[100px]">
-                            <SelectItem value="and">All of these</SelectItem>
-                            <SelectItem value="or">Any of these</SelectItem>
+                            <SelectItem value="and">{t("all_of_these")}</SelectItem>
+                            <SelectItem value="or">{t("any_of_these")}</SelectItem>
                         </Select>
                     )}
                 </div>
@@ -743,6 +746,8 @@ export interface ConditionsEditorProps {
 }
 
 export function ConditionsEditor({ disabled, collectionProperties }: ConditionsEditorProps) {
+    const { t } = useTranslation();
+
     const { values, setFieldValue, submitCount } = useFormex<PropertyWithId>();
 
     // Get property paths from collection properties (includes nested maps)

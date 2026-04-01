@@ -12,6 +12,7 @@ import {
     ViewColumnIcon,
     ViewKanbanIcon
 } from "@firecms/ui";
+import { useTranslation } from "../../hooks/useTranslation";
 
 export type KanbanPropertyOption = {
     key: string;
@@ -72,6 +73,8 @@ export function ViewModeToggle({
     onKanbanPropertyChange
 }: ViewModeToggleProps) {
 
+    const { t } = useTranslation();
+
     if (!onViewModeChange) {
         return null;
     }
@@ -84,9 +87,9 @@ export function ViewModeToggle({
     };
 
     const getViewModeName = () => {
-        if (viewMode === "kanban") return "Board";
-        if (viewMode === "cards") return "Cards";
-        return "List";
+        if (viewMode === "kanban") return t("board");
+        if (viewMode === "cards") return t("cards");
+        return t("list");
     };
 
     const showSizeSelector = size && onSizeChanged && (viewMode === "table" || viewMode === "cards");
@@ -100,17 +103,17 @@ export function ViewModeToggle({
         const allOptions: ToggleButtonOption<ViewMode>[] = [
             {
                 value: "table",
-                label: "List",
+                label: t("list"),
                 icon: <ListIcon size="small" />
             },
             {
                 value: "cards",
-                label: "Cards",
+                label: t("cards"),
                 icon: <AppsIcon size="small" />
             },
             {
                 value: "kanban",
-                label: "Board",
+                label: t("board"),
                 icon: <ViewKanbanIcon size="small" />
             }
         ];
@@ -150,7 +153,7 @@ export function ViewModeToggle({
                     <div className="flex flex-row items-center justify-between gap-2">
                         <div className="flex items-center gap-2 text-sm text-surface-600 dark:text-surface-300">
                             <ViewColumnIcon size="small" />
-                            <span>Size</span>
+                            <span>{t("size_label")}</span>
                         </div>
                         <Select
                             value={size}
@@ -173,7 +176,7 @@ export function ViewModeToggle({
                     <div className="flex flex-row items-center justify-between gap-2">
                         <div className="flex items-center gap-2 text-sm text-surface-600 dark:text-surface-300">
                             <ViewKanbanIcon size="small" />
-                            <span>Group by</span>
+                            <span>{t("group_by")}</span>
                         </div>
                         <Select
                             value={selectedKanbanProperty}

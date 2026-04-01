@@ -1,0 +1,31 @@
+---
+title: Esqueleto (Skeleton)
+slug: es/docs/components/skeleton
+sidebar_label: Esqueleto
+---
+
+El componente `Skeleton` (Esqueleto) se utiliza como marcador de posición mientras se carga el contenido. Proporciona una representación visual simple del componente que se está cargando, generalmente como un bloque gris o de color claro.
+
+## Uso
+
+Para usar `Skeleton`, impórtalo desde tus componentes y pasa las props `width` (ancho), `height` (alto) y `className` (clase CSS) para personalizar su apariencia.
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Esqueleto básico
+
+Un esqueleto simple con ancho y alto predeterminados.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/skeleton/skeleton_basic.tsx"/>
+
+## Esqueleto de tamaño personalizado
+
+Un componente de esqueleto que muestra un ancho y alto personalizados.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/skeleton/skeleton_custom_size.tsx"/>
+
+## Esqueleto con clases personalizadas
+
+Demuestra el uso de la prop `className` para aplicar estilos personalizados.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/skeleton/skeleton_custom_class.tsx"/>

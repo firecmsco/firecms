@@ -1,0 +1,116 @@
+---
+title: Cronologia Entità
+slug: it/docs/pro/entity_history
+---
+
+Questo plugin aggiunge una vista cronologia alle tue entità in FireCMS. Ti permette di tracciare le modifiche apportate alle entità nel tempo, mostrando chi ha fatto la modifica e quando.
+
+## Installazione
+
+```bash
+npm install @firecms/entity_history
+# o
+yarn add @firecms/entity_history
+```
+
+## Funzionalità
+
+- Aggiunge una scheda "Cronologia" alle viste di dettaglio delle entità.
+- Visualizza un registro delle modifiche per ogni entità.
+- Può essere abilitato globalmente o per singola collezione.
+- Permette la personalizzazione della visualizzazione degli utenti nel registro.
+
+## Uso base
+
+```tsx
+import React from "react";
+import { FireCMS } from "@firecms/core";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
+
+export default function App() {
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController: authController
+    });
+
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        // Abilita la cronologia per tutte le collezioni per impostazione predefinita
+        defaultEnabled: true,
+
+        // Fornisci una funzione per risolvere i dettagli utente da un UID
+        getUser: userManagement.getUser
+    });
+
+    const plugins = [entityHistoryPlugin];
+
+    const navigationController = useBuildNavigationController({
+        // ... resto della configurazione
+        plugins
+    });
+
+    return (
+            <FireCMS
+                navigationController={navigationController}
+            >
+              {({ context, loading }) => {
+                  // ... i tuoi componenti
+              }}
+            </FireCMS>
+    );
+}
+```
+
+Per abilitare la cronologia in una specifica collezione:
+
+```tsx
+const productsCollection = buildCollection({
+    name: "Products",
+    path: "products",
+    properties: { /* ... */ },
+    history: true // Abilita la cronologia per questa collezione
+});
+```
+
+## Opzioni di configurazione
+
+| Opzione | Tipo | Descrizione |
+|---------|------|-------------|
+| `defaultEnabled` | `boolean` | Se `true`, la vista cronologia sarà abilitata per tutte le collezioni. |
+| `getUser` | `(userId: string) => User \| null` | Funzione opzionale per ottenere l'oggetto utente da un ID utente. |
+
+## Creazione programmatica della cronologia
+
+```tsx
+import { createHistoryEntry } from "@firecms/entity_history";
+
+const handleDataImport = async (context: FireCMSContext, importedData: any[]) => {
+    for (const item of importedData) {
+        await context.dataSource.saveEntity({
+            path: "products",
+            entityId: item.id,
+            values: item,
+            status: "new"
+        });
+
+        createHistoryEntry({
+            context: context,
+            previousValues: undefined,
+            values: item,
+            path: "products",
+            entityId: item.id
+        });
+    }
+};
+```
+
+### Struttura della voce di cronologia
+
+Ogni voce di cronologia viene memorizzata automaticamente in una sotto-collezione `__history` sotto l'entità e include:
+
+- Tutti i valori dell'entità al momento della modifica
+- Oggetto `__metadata` contenente:
+  - `previous_values`: Lo stato precedente dell'entità
+  - `changed_fields`: Array dei percorsi dei campi modificati
+  - `updated_on`: Timestamp della modifica
+  - `updated_by`: ID utente di chi ha fatto la modifica

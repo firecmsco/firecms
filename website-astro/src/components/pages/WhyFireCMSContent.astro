@@ -1,0 +1,194 @@
+---
+// src/components/pages/WhyFireCMSContent.astro
+import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
+
+const { lang, t } = Astro.props;
+---
+
+<main>
+    <!-- Hero (compact, harmonized) -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+        <!-- Background accents and subtle grid -->
+        <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
+        <div class="pointer-events-none absolute inset-0 -z-10">
+            <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+        </div>
+
+        <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+            <div class="inline-flex items-center py-1.5 px-3 mb-6 sm:mb-7 text-sm rounded-full bg-surface-800/40 text-surface-400 ring-1 ring-inset ring-white/10 mx-auto" role="status">
+                <span class="text-sm font-medium">{t('why.hero.badge')}</span>
+            </div>
+            <h1 class="mb-8 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+                {t('why.hero.title')}
+            </h1>
+            <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
+                {t('why.hero.subtitle')}
+            </p>
+        </div>
+    </section>
+
+    <!-- Explore Why FireCMS -->
+    <section class="bg-black pt-16 sm:pt-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-2xl text-center mb-14">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">{t('why.explore.title')}</h2>
+                <p class="mt-4 text-lg leading-8 text-surface-400">{t('why.explore.subtitle')}</p>
+            </div>
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <a href={lang === 'en' ? "/developers" : `/${lang}/developers`} class="relative block overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800 hover:bg-surface-900 transition-colors">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.explore.developers.title')}</h3>
+                    <p class="text-surface-400">{t('why.explore.developers.desc')}</p>
+                </a>
+                <a href={lang === 'en' ? "/startups" : `/${lang}/startups`} class="relative block overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800 hover:bg-surface-900 transition-colors">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/rocket.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.explore.startups.title')}</h3>
+                    <p class="text-surface-400">{t('why.explore.startups.desc')}</p>
+                </a>
+                <a href={lang === 'en' ? "/agencies" : `/${lang}/agencies`} class="relative block overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800 hover:bg-surface-900 transition-colors">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/briefcase.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.explore.agencies.title')}</h3>
+                    <p class="text-surface-400">{t('why.explore.agencies.desc')}</p>
+                </a>
+                <a href={lang === 'en' ? "/security" : `/${lang}/security`} class="relative block overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800 hover:bg-surface-900 transition-colors">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.explore.security.title')}</h3>
+                    <p class="text-surface-400">{t('why.explore.security.desc')}</p>
+                </a>
+                <a href={lang === 'en' ? "/ui" : `/${lang}/ui`} class="relative block overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800 hover:bg-surface-900 transition-colors">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/palette.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.explore.ui.title')}</h3>
+                    <p class="text-surface-400">{t('why.explore.ui.desc')}</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data ownership & security -->
+    <section class="bg-black py-16 sm:py-24 my-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 items-start">
+                <div class="lg:col-span-5">
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">{t('why.ownership.title')}</h2>
+                    <p class="text-lg text-surface-400 mb-6">{t('why.ownership.subtitle')}</p>
+                    <ul class="space-y-3 text-surface-300">
+                        <li class="flex gap-3"><span class="text-primary">•</span> {t('why.ownership.f1')}</li>
+                        <li class="flex gap-3"><span class="text-primary">•</span> {t('why.ownership.f2')}</li>
+                        <li class="flex gap-3"><span class="text-primary">•</span> {t('why.ownership.f3')}</li>
+                    </ul>
+                </div>
+                <div class="lg:col-span-7">
+                    <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+                            <div>
+                                <div class="mx-auto h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center mb-3"><span class="text-primary font-semibold">1</span></div>
+                                <h3 class="text-white font-semibold">{t('why.ownership.step1.title')}</h3>
+                                <p class="text-surface-400 text-sm">{t('why.ownership.step1.desc')}</p>
+                            </div>
+                            <div>
+                                <div class="mx-auto h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center mb-3"><span class="text-primary font-semibold">2</span></div>
+                                <h3 class="text-white font-semibold">{t('why.ownership.step2.title')}</h3>
+                                <p class="text-surface-400 text-sm">{t('why.ownership.step2.desc')}</p>
+                            </div>
+                            <div>
+                                <div class="mx-auto h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center mb-3"><span class="text-primary font-semibold">3</span></div>
+                                <h3 class="text-white font-semibold">{t('why.ownership.step3.title')}</h3>
+                                <p class="text-surface-400 text-sm">{t('why.ownership.step3.desc')}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- What makes FireCMS different -->
+    <section class="bg-black py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-2xl text-center mb-14">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">{t('why.different.title')}</h2>
+                <p class="mt-4 text-lg leading-8 text-surface-400">{t('why.different.subtitle')}</p>
+            </div>
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/zap.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f1.title')}</h3>
+                    <p class="text-surface-400">{t('why.different.f1.desc')}</p>
+                </div>
+                <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/puzzle.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f2.title')}</h3>
+                    <p class="text-surface-400">{t('why.different.f2.desc')}</p>
+                </div>
+                <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/lock.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f3.title')}</h3>
+                    <p class="text-surface-400">{t('why.different.f3.desc')}</p>
+                </div>
+                <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sparkles.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f4.title')}</h3>
+                    <p class="text-surface-400">{t('why.different.f4.desc')}</p>
+                </div>
+                <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/cloud-cog.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f5.title')}</h3>
+                    <p class="text-surface-400">{t('why.different.f5.desc')}</p>
+                </div>
+                <div class="relative overflow-hidden rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-code.svg" alt="" class="h-8 w-8 mb-4 text-primary filter invert"/>
+                    <h3 class="text-xl font-semibold text-white mb-2">{t('why.different.f6.title')}</h3>
+                    <p class="text-surface-400">{t('why.different.f6.desc')}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- When to choose FireCMS -->
+    <section class="bg-black py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-3xl text-center mb-10">
+                <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">{t('why.when.title')}</h2>
+                <p class="mt-4 text-lg leading-8 text-surface-400">{t('why.when.subtitle')}</p>
+            </div>
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
+                    <h3 class="text-white font-semibold mb-2">{t('why.when.yes.title')}</h3>
+                    <ul class="text-surface-300 space-y-2 text-sm">
+                        <li>• {t('why.when.yes.f1')}</li>
+                        <li>• {t('why.when.yes.f2')}</li>
+                        <li>• {t('why.when.yes.f3')}</li>
+                        <li>• {t('why.when.yes.f4')}</li>
+                    </ul>
+                </div>
+                <div class="rounded-2xl bg-surface-900/50 p-7 ring-1 ring-inset ring-surface-800">
+                    <h3 class="text-white font-semibold mb-2">{t('why.when.no.title')}</h3>
+                    <ul class="text-surface-300 space-y-2 text-sm">
+                        <li>• {t('why.when.no.f1')}</li>
+                        <li>• {t('why.when.no.f2')}</li>
+                        <li>• {t('why.when.no.f3')}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="bg-black py-16 sm:py-24">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">{t('why.cta.title')}</h2>
+            <div class="flex items-center justify-center gap-x-6">
+                <a href="https://app.firecms.co" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+                    {t('why.cta.start')}
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 text-white filter invert" />
+                </a>
+                <a href={lang === 'en' ? "/developers" : `/${lang}/developers`} class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+                    {t('why.cta.explore')}
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 text-white filter invert" />
+                </a>
+            </div>
+        </div>
+    </section>
+</main>

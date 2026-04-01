@@ -1,0 +1,42 @@
+---
+title: Copiare un'entità da una collezione a un'altra
+slug: it/docs/recipes/copy_entity
+sidebar_label: Copia da un'altra collezione
+description: Implementa funzionalità per copiare entità tra collezioni in Firestore usando FireCMS.
+---
+
+![Product selection](/img/product_selection.webp)
+
+In questo tutorial ti mostreremo come aggiungere un pulsante alla tua collezione che ti permetterà di **copiare entità da un'altra collezione**.
+
+È molto comune nei database NoSQL, come Firestore, mantenere dati denormalizzati in diverse collezioni. Cioè, mantenere le stesse informazioni in più posizioni, invece che nei database normalizzati dove le informazioni dovrebbero idealmente essere memorizzate solo una volta.
+
+### Dichiara le tue collezioni
+
+Per scopi illustrativi, creiamo due semplici collezioni `products`, da cui e verso cui copieremo:
+
+
+
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../samples/samples_v3/recipes/copy_entity/simple_product_collection?raw';
+import CopyButton from '../../samples/samples_v3/recipes/copy_entity/copy_button?raw';
+import CopyButtonUse from '../../samples/samples_v3/recipes/copy_entity/copy_button_use?raw';
+import FullCode from '../../samples/samples_v3/recipes/copy_entity/full?raw';
+
+<Code code={MyComponentSource} lang="tsx" />
+
+### Aggiungi un'azione personalizzata alla tua collezione
+
+Per il passo successivo aggiungeremo un pulsante personalizzato alla nostra collezione di destinazione. Questo pulsante aprirà un dialogo di riferimento e consentirà agli utenti di selezionare un'entità nella sorgente.
+
+<Code code={CopyButton} lang="tsx" />
+
+### Aggiungi l'azione di copia personalizzata
+
+Dopo che il tuo componente è pronto, puoi collegarlo nelle `Actions` della tua collezione:
+
+<Code code={CopyButtonUse} lang="tsx" />
+
+## Codice completo
+
+<Code code={FullCode} lang="tsx" />

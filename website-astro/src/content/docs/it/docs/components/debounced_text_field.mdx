@@ -1,0 +1,21 @@
+---
+slug: it/docs/components/debounced_text_field
+title: DebouncedTextField
+sidebar_label: DebouncedTextField
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+`DebouncedTextField` è una variazione del componente standard `TextField` progettata per ritardare l'invocazione del
+callback `onChange`. Questo ritardo aiuta a ridurre il numero di chiamate `onChange` per input che possono avere
+aggiornamenti frequenti, come durante la digitazione.
+
+## Utilizzo
+
+Per usare `DebouncedTextField`, importalo dai tuoi componenti. Supporta tutte le prop del `TextField` incluse `value`, `onChange` e altre.
+
+## DebouncedTextField di base
+
+Questo esempio mostra un utilizzo base del `DebouncedTextField`, dimostrando come può essere usato per gestire le modifiche di valore con un meccanismo di ritardo per ridurre il numero di aggiornamenti.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/debounced_text_field/debounced_text_field_basic.tsx"/>

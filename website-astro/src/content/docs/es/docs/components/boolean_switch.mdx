@@ -1,0 +1,37 @@
+---
+title: BooleanSwitch
+slug: es/docs/components/boolean_switch
+sidebar_label: BooleanSwitch
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+BooleanSwitch es un componente para alternar entre `true`, `false` o un estado indeterminado. Ofrece una elección binaria o un tercer estado opcional, que a menudo indica la ausencia de preferencia.
+
+## Uso
+
+Importa el componente `BooleanSwitch` de `@firecms/ui` y proporciona el `value` y, opcionalmente, un callback con `onValueChange` para manejar los cambios de estado.
+
+## Interruptor por defecto
+
+Ejemplo de un interruptor simple que alterna entre `true` y `false`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/boolean_switch/boolean_switch_default.tsx"/>
+
+## Estado indeterminado
+
+Ejemplo de un interruptor que alterna entre `true`, `false` y `null` (indeterminado).
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/boolean_switch/boolean_switch_indeterminate.tsx"/>
+
+## Variantes de tamaño
+
+El componente `BooleanSwitch` puede tener diferentes tamaños, controlados por la prop `size`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/boolean_switch/boolean_switch_size.tsx"/>
+
+## Estado deshabilitado
+
+Un `BooleanSwitch` deshabilitado no permite la interacción del usuario y se muestra visualmente diferente.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/boolean_switch/boolean_switch_disabled.tsx"/>

@@ -5,6 +5,7 @@ import { PreviewSize, PropertyPreview } from "../../preview";
 
 import { cls, DescriptionIcon, IconButton, paperMixin, RemoveIcon, Tooltip } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
+import { useTranslation } from "../../hooks/useTranslation";
 
 interface StorageItemPreviewProps {
     name: string;
@@ -27,7 +28,7 @@ export function StorageItemPreview({
                                        placeholder,
                                        className
                                    }: StorageItemPreviewProps) {
-
+    const { t } = useTranslation();
     return (
         <div className={cls(
             "relative border-box flex items-center justify-center",
@@ -41,7 +42,7 @@ export function StorageItemPreview({
 
                     <Tooltip
                         asChild={true}
-                        title="Remove">
+                        title={t("remove")}>
                         <IconButton
                             size={"small"}
                             onClick={(event) => {

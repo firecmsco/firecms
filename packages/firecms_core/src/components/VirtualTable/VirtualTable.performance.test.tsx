@@ -3,6 +3,7 @@
  * @jest-environment jsdom
  */
 import React from 'react';
+/* eslint-disable i18next/no-literal-string */
 import { render, act } from '@testing-library/react';
 import { VirtualTable } from './VirtualTable';
 import { VirtualTableProps } from './VirtualTableProps';

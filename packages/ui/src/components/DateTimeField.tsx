@@ -51,7 +51,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
     const [focused, setFocused] = useState(false);
     const [internalValue, setInternalValue] = useState<string>("");
     const [isTyping, setIsTyping] = useState(false);
-    const invalidValue = value !== undefined && value !== null && !(value instanceof Date);
+    const invalidValue = value !== undefined && value !== null && (!(value instanceof Date) || isNaN((value as Date).getTime()));
 
     useInjectStyles("DateTimeField", inputStyles);
 
@@ -84,7 +84,12 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
         };
 
         const formatter = new Intl.DateTimeFormat("en-CA", options);
-        const parts = formatter.formatToParts(dateValue);
+        let parts: Intl.DateTimeFormatPart[];
+        try {
+            parts = formatter.formatToParts(dateValue);
+        } catch {
+            return "";
+        }
 
         const getPart = (type: string) => parts.find(p => p.type === type)?.value ?? "";
 

@@ -252,7 +252,7 @@ export interface NavigationEntry {
     collection?: EntityCollection;
     view?: CMSView;
     description?: string;
-    group: string;
+    group: string | null;
 }
 
 export type NavigationResult = {
@@ -261,7 +261,7 @@ export type NavigationResult = {
 
     navigationEntries: NavigationEntry[],
 
-    groups: string[],
+    groups: (string | null)[],
 
     onNavigationEntriesUpdate: (entries: NavigationGroupMapping[]) => void;
 };

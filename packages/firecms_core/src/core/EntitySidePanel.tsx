@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 
 import { EntityCollection, EntitySidePanelProps } from "../types";
-import { useNavigationController, useSideEntityController } from "../hooks";
+import { useNavigationController, useSideEntityController, useTranslation } from "../hooks";
 
 import { ErrorBoundary } from "../components";
 import { EntityEditView, OnUpdateParams } from "./EntityEditView";
@@ -41,6 +41,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     const sideEntityController = useSideEntityController();
     const navigationController = useNavigationController();
     const sideDialogsController = useSideDialogContext();
+    const { t } = useTranslation();
 
     const onClose = () => {
         if (props.onClose) {
@@ -99,10 +100,10 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
 
     const onValuesModified = useCallback((modified: boolean) => {
         setBlockedNavigationMessage(modified
-            ? <> You have unsaved changes in this <b>{collection?.singularName ?? collection?.name}</b>.</>
+            ? t("unsaved_changes", { collectionName: collection?.singularName ?? collection?.name ?? "" })
             : undefined)
         setBlocked(modified);
-    }, [collection?.name, setBlocked, setBlockedNavigationMessage]);
+    }, [collection?.name, setBlocked, setBlockedNavigationMessage, t]);
 
     if (!props || !collection) {
         return <div className={"w-full"} />;

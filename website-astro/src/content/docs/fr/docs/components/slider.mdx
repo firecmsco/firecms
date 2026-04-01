@@ -1,0 +1,43 @@
+---
+title: Slider
+slug: fr/docs/components/slider
+sidebar_label: Slider
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Les sliders permettent aux utilisateurs de saisir une valeur en faisant glisser un curseur le long d'une piste. Ce composant est hautement personnalisable avec diverses options d'orientation, de pas, de plage et plus encore.
+
+## Utilisation
+
+Pour utiliser le `Slider`, importez-le depuis votre bibliothèque de composants et configurez-le en utilisant des props comme `min`, `max`, `step`, `value` et autres.
+
+## Slider de base
+
+Un exemple basique du composant Slider avec les paramètres par défaut.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_basic.tsx"/>
+
+## Slider de plage
+
+Un exemple de slider de plage avec deux curseurs qui permettent aux utilisateurs de sélectionner une plage de valeurs.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_range.tsx"/>
+
+## Petit slider
+
+Une version plus petite du composant Slider avec une taille réduite.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_small.tsx"/>
+
+## Slider désactivé
+
+Illustration de l'utilisation de la prop `disabled` pour créer un Slider non interactif.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_disabled.tsx"/>
+
+## Slider inversé
+
+Un exemple de slider inversé où la valeur diminue de gauche à droite.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_inverted.tsx"/>

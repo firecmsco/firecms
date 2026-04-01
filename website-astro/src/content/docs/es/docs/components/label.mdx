@@ -1,0 +1,27 @@
+---
+title: Etiqueta (Label)
+slug: es/docs/components/label
+sidebar_label: Etiqueta
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+El componente `Label` (Etiqueta) es un componente simple y versátil que se utiliza para mostrar contenido de texto con un estilo de etiqueta.
+Usualmente lo usas para mostrar una etiqueta para un campo de entrada, como una casilla de verificación (checkbox) o un botón de radio.
+
+## Uso
+
+Para usar el componente `Label`, impórtalo desde tus componentes. Puedes pasar una prop `border` (borde) para agregar un borde alrededor de la etiqueta.
+También puedes pasar cualquiera de las props de `label` de HTML, como `htmlFor`, `className` (clase CSS) y `style` (estilo).
+
+## Etiqueta con una casilla de verificación
+
+Ejemplo sencillo de uso del componente `Label` para crear una superficie básica para contenido.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/label/label_checkbox.tsx"/>
+
+## Etiqueta con un botón de opción (radio button)
+
+Este es un ejemplo de uso del componente `Label` con un botón de radio.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/label/label_radio_group.tsx"/>

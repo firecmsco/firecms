@@ -1,0 +1,226 @@
+---
+title: Champs personnalisés
+slug: fr/docs/properties/custom_fields
+sidebar_label: Champs personnalisés
+description: "Apprenez à créer des champs FireCMS personnalisés puissants : contrat de composant, transmission de props personnalisées, accès au contexte d'entité, composition d'autres propriétés, gestion des tableaux, validation, performance et exemples avancés."
+---
+
+Les champs personnalisés vous permettent de contrôler totalement la façon dont la valeur d'une propriété est éditée et affichée dans un formulaire. Au lieu du rendu intégré pour un `dataType`, vous fournissez un composant React. Ce composant reçoit un ensemble riche de props (`FieldProps`) pour qu'il puisse :
+
+- Lire et mettre à jour la valeur actuelle (`value`, `setValue`)
+- Mettre à jour n'importe quelle autre propriété dans le même formulaire (`setFieldValue` ou `context.setFieldValue`)
+- Accéder à toutes les valeurs d'entité actuelles + utilitaires de formulaire (`context`)
+- Respecter l'état du formulaire (`isSubmitting`, `disabled`, `showError`, `error`, `touched`)
+- Adapter la mise en page (`size`, `partOfArray`, `minimalistView`, `autoFocus`)
+- Utiliser les `customProps` définis par le développeur
+
+<video style={{
+    maxWidth: "100%",
+    width: "640px",
+    margin: "32px 0px 32px",
+    alignSelf: "center"
+}}
+       loop autoPlay muted>
+    <source src="/img/custom_fields_dark.mp4" type="video/mp4"/>
+</video>
+
+## Quand devez-vous créer un champ personnalisé ?
+Utilisez un champ personnalisé lorsque vous avez besoin d'un (ou plusieurs) des éléments suivants :
+- Un style visuel non couvert par les composants intégrés (sélecteurs de couleurs, entrées de tags, sliders, graphiques, champs assistés par IA, etc.)
+- Interface composite combinant plusieurs propriétés (ex. sélecteur de carte lat/lng écrivant dans deux champs numériques)
+- Intégrations (téléversement vers une API externe, récupération de suggestions, géocodage, etc.)
+
+Si vous avez seulement besoin de validation ou de transformation simple, préférez d'abord les options `validation` au niveau de la propriété pour garder les choses simples. Si vous avez besoin d'un comportement dynamique dépendant d'autres valeurs, envisagez d'utiliser les [champs conditionnels](./conditional_fields.md) à la place.
+
+
+## Exemple de champ personnalisé
+Un champ de texte personnalisé avec une couleur de fond fournie via `customProps` :
+
+```tsx
+import React from "react";
+import { FieldHelperText, FieldProps, useModeController } from "@firecms/core";
+import { TextField } from "@firecms/ui";
+
+interface CustomColorTextFieldProps {
+    color: string;
+}
+
+export default function CustomColorTextField({
+    property,
+    value,
+    setValue,
+    customProps,
+    includeDescription,
+    showError,
+    error,
+    isSubmitting,
+    context
+}: FieldProps<string, CustomColorTextFieldProps>) {
+
+    const { mode } = useModeController();
+    const backgroundColor = customProps?.color ?? (mode === "light" ? "#eef4ff" : "#16325f");
+
+    return (
+        <>
+            <TextField
+                inputStyle={{ backgroundColor }}
+                error={!!error}
+                disabled={isSubmitting}
+                label={error ?? property.name}
+                value={value ?? ""}
+                onChange={(evt: any) => setValue(evt.target.value)}
+            />
+            <FieldHelperText
+                includeDescription={includeDescription}
+                showError={showError}
+                error={error}
+                property={property}
+            />
+        </>
+    );
+}
+```
+
+Utilisation dans une collection :
+
+```tsx
+export const blogCollection = buildCollection({
+    id: "blog",
+    path: "blog",
+    name: "Blog entry",
+    properties: {
+        // ... autres propriétés
+        gold_text: {
+            name: "Gold text",
+            description: "This field is using a custom component defined by the developer",
+            dataType: "string",
+            Field: CustomColorTextField,
+            customProps: {
+                color: "gold"
+            }
+        }
+    }
+});
+```
+
+## Contrat du composant (FieldProps)
+Votre composant doit au minimum :
+1. Lire la `value` actuelle (elle peut être `undefined` ou `null` pour une valeur vide)
+2. Appeler `setValue(newValue)` quand l'utilisateur la change
+
+Bonnes pratiques recommandées :
+- Respecter `disabled` / `isSubmitting`
+- Afficher le libellé et l'erreur (utilisez votre propre UI ou `<FieldHelperText>` / les composants intégrés)
+- Éviter les effets de bord lourds à chaque frappe (déferer les appels réseau)
+
+Interface complète : [`FieldProps`](../api/interfaces/FieldProps) (inclut des commentaires détaillés).
+
+## Passage de props personnalisées
+Fournissez un objet `customProps` dans la définition de la propriété. L'objet est fortement typé via le second générique de `FieldProps<T, CustomProps>`.
+
+
+## Accès au reste de l'entité (contexte du formulaire)
+`context` vous donne un accès en direct à :
+- Toutes les valeurs actuelles (`context.values`)
+- `context.setFieldValue(key, value)` pour mettre à jour n'importe quel autre champ
+- `context.save(values)` pour déclencher une sauvegarde programmatiquement (rarement nécessaire dans les champs)
+- Métadonnées : `entityId`, `status` (nouveau/existant/copie), `collection`, `openEntityMode`, `disabled`
+
+Cela permet une logique inter-champs (ex. auto-remplir le slug quand le titre change) ou une désactivation conditionnelle.
+
+## Rendu (ou composition) d'autres propriétés dans un champ personnalisé
+Si votre champ personnalisé veut inclure l'UI d'une autre propriété, utilisez `PropertyFieldBinding`. Cela maintient la validation et la cohérence :
+
+```tsx
+import { PropertyFieldBinding } from "@firecms/core";
+
+<PropertyFieldBinding
+  propertyKey="subtitle"
+  property={collection.properties.subtitle}
+  context={context}
+  includeDescription
+/>
+```
+
+C'est idéal pour les widgets composites qui orchestrent plusieurs valeurs sous-jacentes.
+
+## Gestion des tableaux et des données imbriquées
+Quand votre champ personnalisé est dans un tableau :
+- `partOfArray` est `true`
+- Vous pouvez recevoir un index dans un contexte parent lors de la construction d'éditeurs de tableaux imbriqués
+
+Pour les valeurs imbriquées (ex. éditer `address.street` dans un champ composite), appelez `setFieldValue("address.street", value)`.
+
+## Stratégies de validation
+Préférez la validation déclarative dans la configuration de propriété quand c'est possible.
+
+Modèles courants :
+- Couper en blur mais préserver la frappe : conserver l'entrée brute dans l'état local, appeler `setValue` avec la valeur nettoyée en blur.
+- Validation asynchrone (ex. unicité) : différer la vérification, définir une erreur locale transitoire, ne pas bloquer la frappe.
+
+## Conseils de performance
+- Différer les calculs réseau ou coûteux (`useEffect` + `setTimeout` ou un utilitaire) au lieu de calculer à chaque frappe.
+- Mémoriser les composants enfants lourds basés sur les props pertinentes.
+- Éviter de stocker de grands objets dérivés dans l'état ; les dériver au rendu ou les mémoriser.
+
+## Exemple avancé : Éditeur de slug composite
+Génère automatiquement un slug à partir du titre, mais permet une modification manuelle.
+
+```tsx
+function SlugField({ value, setValue, context, property, showError, error }: FieldProps<string>) {
+    const title = context.values.title as string | undefined;
+
+    React.useEffect(() => {
+        if (!value && title) {
+            const auto = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+            setValue(auto);
+        }
+    }, [title]);
+
+    return (
+        <TextField
+            label={property.name}
+            value={value ?? ""}
+            error={!!error}
+            onChange={(e: any) => setValue(e.target.value)}
+            helperText={showError ? error : "Will auto-generate from Title if left empty"}
+        />
+    );
+}
+```
+
+## Utilisation de PropertyFieldBinding dans un champ composite
+
+```tsx
+function GeoPointField({ context }: FieldProps<any>) {
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      <PropertyFieldBinding
+        propertyKey="lat"
+        property={context.collection?.properties.lat}
+        context={context}
+        minimalistView
+      />
+      <PropertyFieldBinding
+        propertyKey="lng"
+        property={context.collection?.properties.lng}
+        context={context}
+        minimalistView
+      />
+    </div>
+  );
+}
+```
+
+## Dépannage et pièges
+- **Valeur ne se mettant pas à jour** : Assurez-vous d'appeler `setValue` (ne pas muter `value` directement) et que vous ne masquez pas la `value` dans l'état local sans synchronisation.
+- **L'erreur ne s'affiche jamais** : Rappelez-vous que `showError` contrôle l'affichage visuel ; `error` peut exister alors que `showError` est false.
+- **Les mises à jour inter-champs sont ignorées** : Utilisez la clé de propriété exacte (ex. `address.street`, index de tableau comme `items[0].price`).
+- **Le champ se re-rend trop souvent** : Enveloppez la logique lourde dans `useMemo` / `useCallback`, évitez de créer de nouveaux objets à chaque rendu.
+- **Besoin du mode lecture seule** : Respectez `disabled` des props ou `context.disabled`.
+
+## Prochaines étapes
+- Explorer d'autres personnalisations : [Aperçus personnalisés](./custom_previews.md)
+- Réutiliser la logique à travers de nombreuses propriétés : créez un composant de champ partagé et passez différents `customProps`.
+
+En exploitant les champs personnalisés, vous pouvez créer des expériences de création riches étroitement alignées sur le domaine de votre produit tout en gardant la validation, l'état et la persistance centralisés dans FireCMS.

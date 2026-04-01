@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FilterValues } from "../types";
 import { getReferenceFrom } from "../util";
 import { PreviewSize, ReferencePreview } from "../preview";
-import { useNavigationController, useReferenceDialog } from "../hooks";
+import { useNavigationController, useReferenceDialog, useTranslation } from "../hooks";
 import { Button, cls } from "@firecms/ui";
 
 export type ReferenceWidgetProps<M extends Record<string, any>> = {
@@ -50,6 +50,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                                                    includeEntityLink
                                                                }: ReferenceWidgetProps<M>) {
 
+    const { t } = useTranslation();
     const navigationController = useNavigationController();
 
     const collection: EntityCollection | undefined = useMemo(() => {
@@ -145,7 +146,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
         {!value && <div className="justify-center text-left">
             <Button disabled={disabled}
                     onClick={onEntryClick}>
-                Edit {name}
+                {t("edit_name", { name: name ?? "" })}
             </Button>
         </div>}
 

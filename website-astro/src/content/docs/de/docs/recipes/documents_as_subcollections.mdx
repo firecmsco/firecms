@@ -1,0 +1,69 @@
+---
+title: Dynamische Root-Kollektionen
+slug: de/docs/recipes/documents_as_subcollections
+sidebar_label: Dynamische Root-Kollektionen
+description: Erfahren Sie, wie Sie in FireCMS Navigation und Kollektionen dynamisch aus Datenbankdokumenten generieren.
+---
+
+Lassen Sie uns ein komplexeres Beispiel aufbauen, bei dem die Hauptnavigation **dynamisch geladen** wird
+aus der Datenbank. Wir werden die `units`-Kollektion als diejenige verwenden, die die
+restliche Navigation generiert.
+
+Für dieses Beispiel haben wir `Units` und `Lessons` als die Hauptinhaltstypen —
+stellen Sie sich vor, wir modellieren die Struktur eines Kurses.
+
+In der Units-Kollektion erstellen wir ein Dokument für jede Einheit:
+
+![dynamic_navigation_collection](/img/recipes/dynamic_navigation_collection.png)
+
+Und jedes dieser Dokumente generiert ein neues Navigationselement. In diesem Fall
+haben wir 3 Navigationselemente, eines für jede Einheit:
+
+![dynamic_navigation_home](/img/recipes/dynamic_navigation_home.png)
+
+
+### Die Hauptkollektion deklarieren
+
+Definieren wir die `units`-Kollektion als Hauptkollektion:
+
+:::note
+Wir werden einige Callbacks zu Entity-Save und -Delete implementieren, um
+die Navigation zu aktualisieren, wenn Daten geändert werden.
+Das verhindert, dass der Benutzer die App neu laden muss, um die Änderungen zu sehen.
+Wie cool ist das?
+:::
+
+
+import { Code } from '@astrojs/starlight/components';
+import UnitCollection from '../../../samples/samples_v3/recipes/document_as_subcollection/unit_collection?raw';
+import CollectionBuilder from '../../../samples/samples_v3/recipes/document_as_subcollection/collection_builder?raw';
+import FullCode from '../../../samples/samples_v3/recipes/document_as_subcollection/full?raw';
+
+<Code code={UnitCollection} lang="tsx" />
+
+
+### Dynamischer Kollektions-Builder
+
+Normalerweise übergeben Sie in FireCMS eine statische Liste von Kollektionen an die Haupt-CMS-
+Komponente, aber in diesem Fall müssen wir die Kollektionen dynamisch basierend
+auf den Daten in der Datenbank erstellen.
+
+FireCMS ermöglicht es Ihnen, eine Funktion zu übergeben, die eine Liste von Kollektionen an die
+`collections`-Eigenschaft der `FireCMSApp`-Komponente zurückgibt.
+
+<Code code={CollectionBuilder} lang="tsx" />
+
+:::tip
+Kollektionen können bequem asynchron geladen werden.
+:::
+
+Dieser Code ruft die Daten ab, die in der `units`-Kollektion generiert werden
+und erstellt eine neue Kollektion für jedes der Dokumente.
+
+
+## Vollständiger Code
+
+Alles zusammengefügt erhalten wir eine einfache App, die es uns ermöglicht, neue Einheiten
+und Lektionen zu erstellen und zwischen ihnen zu navigieren:
+
+<Code code={FullCode} lang="tsx" />

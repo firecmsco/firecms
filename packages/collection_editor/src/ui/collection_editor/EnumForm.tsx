@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import equal from "react-fast-compare"
 
-import { ArrayContainer, ArrayEntryParams, EnumValueConfig, EnumValues, FieldCaption, } from "@firecms/core";
+import { ArrayContainer, ArrayEntryParams, EnumValueConfig, EnumValues, FieldCaption,     useTranslation
+} from "@firecms/core";
 import {
     FindInPageIcon,
     Badge,
@@ -44,6 +45,8 @@ export function EnumForm({
     allowDataInference,
     getData
 }: EnumFormProps) {
+    const { t } = useTranslation();
+
 
     const formex = useCreateFormex<{
         enumValues: EnumValueConfig[]
@@ -347,6 +350,7 @@ function EnumEntryDialog({
     enumValuesPath: string;
     onClose: () => void;
 }) {
+    const { t } = useTranslation();
 
     const {
         errors,
@@ -363,7 +367,7 @@ function EnumEntryDialog({
         open={open}
         onOpenChange={(open) => !open ? onClose() : undefined}
     >
-        <DialogTitle hidden>Enum form dialog</DialogTitle>
+        <DialogTitle hidden>{t("enum_form_dialog")}</DialogTitle>
         <DialogContent>
             {index !== undefined &&
                 <div className="flex flex-col gap-4">

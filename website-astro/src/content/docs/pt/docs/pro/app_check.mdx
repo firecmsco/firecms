@@ -1,0 +1,101 @@
+---
+title: App Check
+slug: pt/docs/pro/app_check
+description: Integre o Firebase App Check com o FireCMS para proteger seu backend contra abusos usando os provedores reCAPTCHA.
+---
+
+Você pode integrar o Firebase App Check à sua aplicação para proteger os recursos do seu backend contra abusos, como fraude de faturamento ou phishing. O Firebase App Check funciona junto com outros serviços Firebase, como Firebase Authentication, para ajudar a proteger os recursos do backend.
+
+O FireCMS fornece uma maneira simples de integrar o Firebase App Check à sua aplicação.
+
+:::important
+Lembre-se de adicionar o domínio onde você vai implantar sua aplicação à lista de domínios permitidos na configuração do provedor AppCheck.
+:::
+
+Para versões self-hosted, você pode habilitar o Firebase App Check na sua aplicação fornecendo as props `options` e `firebaseApp` no hook `useAppCheck`.
+
+O hook `useAppCheck` é usado para inicializar o Firebase App Check e monitorar seu estado. Ele gerencia o processo de inicialização assíncrono, fornece o estado de carregamento e captura eventuais erros.
+
+### Parâmetros
+
+- `firebaseApp` (opcional): Uma instância de `FirebaseApp` para usar na inicialização do App Check.
+- `options` (opcional): Opções de configuração para o App Check.
+    - `provider`: O provedor que você deseja usar.
+    - `isTokenAutoRefreshEnabled`: Se o token deve ser renovado automaticamente.
+    - `debugToken`: Um token de depuração para usar.
+    - `forceRefresh`: Se deve forçar uma renovação do token.
+
+### Valor retornado
+
+Retorna um objeto que inclui:
+- `loading`: Booleano indicando se a inicialização está em andamento.
+- `appCheckVerified` (opcional): Booleano indicando se a aplicação foi verificada pelo App Check.
+- `error` (opcional): Qualquer erro ocorrido durante a inicialização.
+
+### Exemplo
+
+```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
+
+const {
+    loading,
+    error,
+    appCheckVerified
+} = useAppCheck({
+    options: {
+        provider: new ReCaptchaEnterpriseProvider(process.env.VITE_RECAPTCHA_SITE_KEY as string),
+        isTokenAutoRefreshEnabled: true,
+    }
+});
+```
+
+
+## Provedores
+
+### ReCaptchaEnterpriseProvider
+
+Para configurar o ReCaptchaEnterpriseProvider, você precisa criar uma nova chave de site reCAPTCHA Enterprise.
+Siga as instruções na [documentação do Firebase](https://firebase.google.com/docs/app-check/web/recaptcha-enterprise-provider).
+
+:::important
+Certifique-se de ter adicionado o domínio `app.firecms.co` à lista de domínios permitidos no console reCAPTCHA Enterprise.
+:::
+
+```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaEnterpriseProvider} from "@firebase/app-check";
+
+const {
+    loading,
+    error,
+    appCheckVerified
+} = useAppCheck({
+    options: {
+        provider: new ReCaptchaEnterpriseProvider("your-site-key"),
+        isTokenAutoRefreshEnabled: true,
+    }
+});
+```
+
+### ReCaptchaV3Provider
+
+```tsx
+import {useAppCheck} from "@firecms/firebase";
+import {ReCaptchaV3Provider} from "@firebase/app-check";
+
+const {
+    loading,
+    error,
+    appCheckVerified
+} = useAppCheck({
+    options: {
+        provider: new ReCaptchaV3Provider("your-site-key"),
+        isTokenAutoRefreshEnabled: true,
+    }
+});
+```
+
+### Provedor personalizado
+
+Você também pode criar um provedor personalizado implementando a interface `AppCheckProvider`.

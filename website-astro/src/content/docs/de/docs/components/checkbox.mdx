@@ -1,0 +1,37 @@
+---
+title: Kontrollkästchen
+slug: de/docs/components/checkbox
+sidebar_label: Checkbox
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Kontrollkästchen (Checkboxes) werden für die Auswahl aus mehreren Optionen verwendet. Sie können zwischen aktiviert, deaktiviert und einem Zwischenzustand umgeschaltet werden.
+
+## Verwendung
+
+Um die `Checkbox` zu verwenden, importieren Sie sie aus Ihren Komponenten und übergeben Sie die Eigenschaften `checked`, `onCheckedChange` und optional `disabled`, `size` und `color`.
+
+## Einfaches Kontrollkästchen
+
+Ein einfaches Kontrollkästchen mit minimaler Konfiguration.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_basic.tsx"/>
+
+## Kontrollkästchen mit unbestimmtem Zustand
+
+Ein Kontrollkästchen, das den unbestimmten Zustand (indeterminate) demonstriert, der typischerweise für "Alles auswählen"-Szenarien verwendet wird, bei denen nicht alle Unterauswahlen getroffen wurden.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_indeterminate.tsx"/>
+
+## Größen von Kontrollkästchen
+
+Veranschaulicht die Verwendung verschiedener Größen für die Checkbox-Komponente.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_sizes.tsx"/>
+
+## Farben von Kontrollkästchen
+
+Demonstriert die Verwendung der Eigenschaft `color` zur Anpassung des Aussehens der Checkbox.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/checkbox/checkbox_colors.tsx"/>

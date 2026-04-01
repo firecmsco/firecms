@@ -1,0 +1,120 @@
+---
+import { getLangFromUrl, getUnlocalizedPath } from '../i18n/utils';
+import { languages } from '../i18n/ui';
+
+const currentLang = getLangFromUrl(Astro.url);
+const currentUnlocalizedPath = getUnlocalizedPath(Astro.url);
+
+export interface Props {
+    iconOnly?: boolean;
+}
+
+const { iconOnly = false } = Astro.props;
+---
+
+{iconOnly ? (
+    <div class="relative w-9 h-9 flex items-center justify-center rounded-md hover:bg-white/10 transition-colors cursor-pointer" title="Change language">
+        <svg class="w-4 h-4 text-surface-300 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+        </svg>
+        <starlight-lang-select>
+            <select
+                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    aria-label="Change language"
+            >
+                {Object.entries(languages).map(([code, label]) => (
+                        <option
+                                value={code === "en" ? currentUnlocalizedPath : `/${code}${currentUnlocalizedPath}`}
+                                selected={code === currentLang}
+                        >
+                            {label}
+                        </option>
+                ))}
+            </select>
+        </starlight-lang-select>
+    </div>
+) : (
+<div class="inline-flex relative">
+    <starlight-lang-select>
+        <div class="relative items-center">
+            <svg class="absolute left-2.5 top-1/2 -mt-2 w-4 h-4 text-surface-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+            </svg>
+            <select
+                    aria-label="Change language"
+                    class="appearance-none bg-black border border-surface-800 text-surface-400 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full outline-none pl-9 pr-8 py-2 hover:bg-surface-900 transition-colors cursor-pointer"
+            >
+                {Object.entries(languages).map(([code, label]) => (
+                        <option
+                                value={code === "en" ? currentUnlocalizedPath : `/${code}${currentUnlocalizedPath}`}
+                                selected={code === currentLang}
+                        >
+                            {label}
+                        </option>
+                ))}
+            </select>
+            <svg class="absolute right-2.5 top-1/2 -mt-2 w-4 h-4 text-surface-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </div>
+    </starlight-lang-select>
+</div>
+)}
+
+<script>
+    class StarlightLanguageSelect extends HTMLElement {
+        constructor() {
+            super();
+            const select = this.querySelector('select');
+            if (!select) return;
+
+            // Sync select to the current URL path on init (handles Firebase Hosting
+            // auto-redirects based on Accept-Language that may conflict with user choice)
+            this._syncToCurrentPath(select);
+
+            select.addEventListener('change', (e) => {
+                if (e.currentTarget instanceof HTMLSelectElement) {
+                    const targetPath = e.currentTarget.value;
+                    // Persist the user's explicit language preference
+                    try {
+                        const knownLangs = ['es', 'de', 'fr', 'it', 'pt'];
+                        const firstSegment = targetPath.split('/').filter(Boolean)[0];
+                        const lang = knownLangs.includes(firstSegment) ? firstSegment : 'en';
+                        localStorage.setItem('preferred-lang', lang);
+                    } catch (_) {}
+                    window.location.pathname = targetPath;
+                }
+            });
+
+            // On bfcache restore, sync to current URL instead of resetting to
+            // server-rendered markup value (which reflects Firebase's auto-detection,
+            // not the user's explicit choice)
+            window.addEventListener('pageshow', (event) => {
+                if (!event.persisted) return;
+                this._syncToCurrentPath(select);
+            });
+        }
+
+        _syncToCurrentPath(select: HTMLSelectElement) {
+            const currentPath = window.location.pathname;
+            // Find the option whose value best matches the current path
+            let bestIndex = 0;
+            let bestMatch = 0;
+            for (let i = 0; i < select.options.length; i++) {
+                const optVal = select.options[i].value;
+                // Exact match
+                if (optVal === currentPath) {
+                    bestIndex = i;
+                    break;
+                }
+                // Prefix match (e.g. option "/pt/" matches "/pt/docs/...")
+                if (currentPath.startsWith(optVal) && optVal.length > bestMatch) {
+                    bestMatch = optVal.length;
+                    bestIndex = i;
+                }
+            }
+            select.selectedIndex = bestIndex;
+        }
+    }
+    customElements.define('starlight-lang-select', StarlightLanguageSelect);
+</script>

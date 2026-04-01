@@ -1,0 +1,31 @@
+---
+title: Menú (Menu)
+slug: es/docs/components/menu
+sidebar_label: Menú
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+El componente `Menu` (Menú) proporciona una funcionalidad de menú desplegable flexible. Aprovecha `@radix-ui/react-dropdown-menu` para las características de accesibilidad y personalización. El componente `Menu` y su subcomponente, `MenuItem`, se pueden estilizar fácilmente e incorporar a tu interfaz de usuario para diversas necesidades, como menús de navegación, menús de opciones y más.
+
+## Uso
+
+El componente `Menu` requiere un elemento `trigger` (disparador) para alternar la visibilidad del menú y puede aceptar cualquier ReactNode como sus hijos (children), que normalmente incluye componentes `MenuItem` para las opciones del menú.
+
+## Menú básico
+
+Un ejemplo sencillo de uso del componente `Menu` para crear un menú desplegable.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_basic.tsx"/>
+
+## Menú controlado
+
+Puedes controlar la visibilidad del componente `Menu` pasando las props `open` (abierto) y `onOpenChange` (al cambiar apertura).
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_controlled.tsx"/>
+
+## Elementos de menú compactos (Dense Menu Items)
+
+Mostrando cómo hacer que los componentes `MenuItem` sean compactos (dense) para una apariencia de menú más comprimida.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_dense_items.tsx"/>

@@ -42,7 +42,8 @@ export type CustomizationController = {
     dateTimeFormat?: string;
 
     /**
-     * Locale of the CMS, currently only affecting dates
+     * Locale of the CMS.
+     * Affects date formatting.
      */
     locale?: Locale;
 

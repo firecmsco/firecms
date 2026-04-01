@@ -1,0 +1,183 @@
+---
+title: Historial de Entidades
+slug: es/docs/pro/entity_history
+---
+
+Este plugin añade una vista de historial a tus entidades en FireCMS. Te permite rastrear los cambios realizados en las entidades a lo largo del tiempo, mostrando quién realizó el cambio y cuándo.
+
+## Instalación
+
+```bash
+npm install @firecms/entity_history
+# o
+yarn add @firecms/entity_history
+```
+
+## Características
+
+-   Añade una pestaña "Historial" a las vistas de detalle de entidades.
+-   Muestra un registro de cambios para cada entidad.
+-   Puede habilitarse globalmente o por colección.
+-   Permite personalizar la visualización del usuario en el registro de historial.
+
+## Uso Básico
+
+Para usar el plugin, importa `useEntityHistoryPlugin` y añádelo al array de plugins de tu `FirebaseCMSApp`.
+
+Si utilizas el plugin de gestión de usuarios, puedes proporcionar una función para resolver los detalles del usuario a partir de su UID.
+También puedes pasar tu propia función `getUser` personalizada para obtener los detalles del usuario.
+
+```tsx
+import React from "react";
+import { FireCMS } from "@firecms/core";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
+
+export default function App() {
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController: authController
+    });
+
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        // Habilitar historial para todas las colecciones por defecto
+        // Esto puede anularse estableciendo `history: false` en una colección específica
+        defaultEnabled: true,
+
+        // Proporcionar una función para resolver los detalles del usuario desde su UID
+        getUser: userManagement.getUser
+    });
+
+    const plugins = [entityHistoryPlugin];
+
+    const navigationController = useBuildNavigationController({
+        // ... resto de tu configuración
+        plugins
+    });
+
+    return (
+            <FireCMS
+                navigationController={navigationController}
+                /*... resto de tu configuración */
+            >
+              {({ context, loading }) => {
+                  // ... tus componentes
+              }}
+            </FireCMS>
+    );
+}
+```
+
+Por defecto, la función de historial no está habilitada para ninguna colección. Debes habilitarla explícitamente en la configuración de tu colección:
+
+```tsx
+import { buildCollection } from "@firecms/core";
+
+const productsCollection = buildCollection({
+    name: "Productos",
+    path: "products",
+    properties: {
+        name: {
+            name: "Nombre",
+            dataType: "string"
+        }
+        // ...otras propiedades
+    },
+    history: true // Habilitar historial para esta colección
+});
+```
+
+
+## Opciones de Configuración
+
+| Opción           | Tipo                                | Descripción                                                                                                                               |
+| ---------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultEnabled` | `boolean`                           | Si es `true`, la vista de historial estará habilitada para todas las colecciones por defecto. Cada colección puede anular esto estableciendo su propiedad `history`. |
+| `getUser`        | `(userId: string) => User \| null` | Función opcional para obtener el objeto de usuario (nombre, foto, etc.) a partir de un ID de usuario para mostrarlo en el registro de historial. |
+
+## Configuración de Colecciones
+
+Para habilitar o deshabilitar el historial en una colección específica, establece la propiedad `history` en la configuración de la colección:
+
+```tsx
+const sampleCollection = buildCollection({
+    // ...
+    history: true // o false
+});
+```
+
+## Notas Adicionales
+
+-   El plugin depende de callbacks para registrar los cambios en las entidades. Asegúrate de que tu lógica de persistencia de datos activa correctamente estos callbacks.
+-   La función `getUser` es crucial para mostrar información de usuario significativa en el registro de historial. Si no se proporciona, solo se mostrarán los IDs de usuario.
+
+## Creación de Historial Programática
+
+Para casos de uso avanzados donde necesitas crear entradas de historial de forma programática (fuera de los callbacks de guardado normales), puedes usar la función `createHistoryEntry`:
+
+```tsx
+import { createHistoryEntry, NewHistoryEntryParams } from "@firecms/entity_history";
+
+// Ejemplo: Crear una entrada de historial al importar datos
+const handleDataImport = async (context: FireCMSContext, importedData: any[]) => {
+    for (const item of importedData) {
+        // Guardar la entidad primero
+        await context.dataSource.saveEntity({
+            path: "products",
+            entityId: item.id,
+            values: item,
+            status: "new"
+        });
+
+        // Crear una entrada de historial para la acción de importación
+        createHistoryEntry({
+            context: context,
+            previousValues: undefined, // Sin valores previos para entidades nuevas
+            values: item,
+            path: "products",
+            entityId: item.id
+        });
+    }
+};
+
+// Ejemplo: Crear una entrada de historial para una operación de actualización personalizada
+const handleCustomUpdate = async (context: FireCMSContext, entityId: string, oldValues: any, newValues: any) => {
+    // Realiza aquí tu lógica de actualización personalizada
+    await context.dataSource.saveEntity({
+        path: "products",
+        entityId: entityId,
+        values: newValues,
+        status: "existing"
+    });
+
+    // Crear una entrada de historial para rastrear el cambio
+    createHistoryEntry({
+        context: context,
+        previousValues: oldValues,
+        values: newValues,
+        path: "products",
+        entityId: entityId
+    });
+};
+```
+
+### Parámetros
+
+| Parámetro        | Tipo                      | Descripción                                                                                                                                       |
+| ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `context`        | `FireCMSContext<User>`    | El objeto de contexto de FireCMS que contiene la fuente de datos y el controlador de autenticación                                                |
+| `previousValues` | `Partial<any>` (opcional) | Los valores previos de la entidad. Si no se proporciona, la entrada de historial se marcará como una creación y no como una actualización         |
+| `values`         | `Partial<any>`            | Los valores actuales/nuevos de la entidad                                                                                                         |
+| `path`           | `string`                  | La ruta de la colección donde se almacena la entidad                                                                                              |
+| `entityId`       | `string`                  | El identificador único de la entidad                                                                                                              |
+
+### Estructura de la Entrada de Historial
+
+Cada entrada de historial se almacena automáticamente en una subcolección `__history` bajo la entidad e incluye:
+
+- Todos los valores de la entidad en el momento del cambio
+- Objeto `__metadata` que contiene:
+  - `previous_values`: El estado anterior de la entidad (si se proporcionó)
+  - `changed_fields`: Array de rutas de campos que se modificaron
+  - `updated_on`: Marca de tiempo de cuándo se produjo el cambio
+  - `updated_by`: ID de usuario de quién realizó el cambio (si estaba autenticado)

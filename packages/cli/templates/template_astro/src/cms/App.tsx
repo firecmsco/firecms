@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 
 import "@/styles/index.css"
-import "typeface-rubik";
+import "@fontsource/rubik";
 import "@fontsource/jetbrains-mono";
 
 import {
@@ -37,7 +37,7 @@ import { productsCollection } from "./collections/products";
 import { blogCollection } from "./collections/blog";
 import { CustomLoginView } from "./components/CustomLoginView";
 import { ExampleCMSView } from "./views/ExampleCMSView";
-import { TestEditorView } from "./views/TestEditorView";
+
 import { usersCollection } from "./collections/users_collection";
 
 export function App() {
@@ -73,13 +73,6 @@ export function App() {
             group: "Custom views",
             description: "This is an example of an additional view that is defined by the user",
             view: <ExampleCMSView />
-        },
-        {
-            path: "editor_test",
-            name: "The FireCMS editor",
-            description: "This view showcases a custom advanced editor",
-            group: "Custom views",
-            view: <TestEditorView />
         }
     ]), []);
 

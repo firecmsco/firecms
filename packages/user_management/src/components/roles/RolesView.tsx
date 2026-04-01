@@ -1,12 +1,15 @@
 import React, { useCallback, useState } from "react";
 
-import { Role, useNavigationController } from "@firecms/core";
+import { Role, useNavigationController, useTranslation
+} from "@firecms/core";
 import { AddIcon, Button, Container, Typography } from "@firecms/ui";
 import { RolesTable } from "./RolesTable";
 import { RolesDetailsForm } from "./RolesDetailsForm";
 
 export const RolesView = React.memo(
     function RolesView({ children }: { children?: React.ReactNode }) {
+    const { t } = useTranslation();
+
 
         const { collections } = useNavigationController();
         const [dialogOpen, setDialogOpen] = useState(false);
@@ -30,15 +33,11 @@ export const RolesView = React.memo(
                 <div className="flex items-center mt-12">
                     <Typography gutterBottom variant="h4"
                                 className="flex-grow"
-                                component="h4">
-                        Roles
-                    </Typography>
+                                component="h4">{t("roles")}</Typography>
                     <Button
                         size={"large"}
                         startIcon={<AddIcon/>}
-                        onClick={() => setDialogOpen(true)}>
-                        Add role
-                    </Button>
+                        onClick={() => setDialogOpen(true)}>{t("add_role")}</Button>
                 </div>
 
                 <RolesTable onRoleClicked={onRoleClicked} editable={true}/>

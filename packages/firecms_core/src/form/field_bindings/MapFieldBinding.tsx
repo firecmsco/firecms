@@ -7,6 +7,7 @@ import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { FormEntry } from "../components/FormEntry";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { cls, ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
+import { useTranslation } from "../../hooks";
 
 /**
  * Field that renders the children property fields
@@ -91,7 +92,7 @@ export function MapFieldBinding({
             }
         </div>
 
-        {/*{pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value)}*/}
+        {/*{pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value, t)}*/}
 
     </>
         ;
@@ -128,7 +129,7 @@ export function MapFieldBinding({
     );
 }
 
-const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue: (value: any) => void, value: any) => {
+const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue: (value: any) => void, value: any, t: any) => {
 
     const keys = Object.keys(properties)
         .filter((key) => !value || !(key in value));
@@ -143,7 +144,7 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
     if (!keys.length) return <></>;
 
     return <div className={"m-4"}>
-        <InputLabel>Add property</InputLabel>
+        <InputLabel>{t("add_property")}</InputLabel>
         <Select
             value={""}
             size={"large"}

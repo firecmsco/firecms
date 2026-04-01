@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { EntityCollection } from "@firecms/core";
+import { EntityCollection, useTranslation } from "@firecms/core";
 import { MarkdownElement, parseMarkdown } from "../utils/parser";
 import { CodeBlock } from "./CodeBlock";
 import {
@@ -42,7 +42,7 @@ export function SystemMessage({
     onFeedback?: (reason?: FeedbackSlug, feedbackMessage?: string) => void,
     onUpdatedMessage?: (message: string) => void,
 }) {
-
+    const { t } = useTranslation();
     const [parsedElements, setParsedElements] = useState<MarkdownElement[] | null>();
 
     useEffect(() => {
@@ -97,14 +97,14 @@ export function SystemMessage({
         {loading && <Skeleton className={"max-w-4xl mt-1 mb-4"}/>}
 
         <div className={"mt-2 flex flex-row gap-1"}>
-            {canRegenerate && <Tooltip title={"Regenerate"}
+            {canRegenerate && <Tooltip title={t("datatalk_regenerate")}
                                        asChild={true}>
                 <IconButton size={"smallest"} disabled={loading} onClick={onRegenerate}>
                     <LoopIcon size={"smallest"}/>
                 </IconButton>
             </Tooltip>}
 
-            <Tooltip title={"Copy"}
+            <Tooltip title={t("datatalk_copy")}
                      asChild={true}>
                 <MessageCopyIcon text={text ?? ""} disabled={loading}/>
             </Tooltip>
@@ -151,12 +151,13 @@ function BadMessageIcon({
     disabled?: boolean,
     onFeedback?: (reason?: FeedbackSlug, feedback?: string) => void,
 }) {
+    const { t } = useTranslation();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selected, setSelected] = useState<FeedbackSlug | null>(null);
     const [feedbackText, setFeedbackText] = useState<string>("");
     return <>
 
-        <Tooltip title={dialogOpen ? undefined : "Bad response"}
+        <Tooltip title={dialogOpen ? undefined : t("datatalk_bad_response")}
                  asChild={true}>
             <IconButton size={"smallest"}
                         disabled={disabled}
@@ -174,28 +175,28 @@ function BadMessageIcon({
                 e.preventDefault();
             }}>
 
-            <DialogTitle variant={"h6"}>What was wrong with the response?</DialogTitle>
+            <DialogTitle variant={"h6"}>{t("datatalk_what_was_wrong")}</DialogTitle>
 
             <DialogContent className={"flex flex-col gap-4"}>
 
                 <div className={"flex flex-row gap-2 flex-wrap"}>
-                    <FeedbackLabel title={"Not helpful"}
+                    <FeedbackLabel title={t("datatalk_not_helpful")}
                                    value={"not_helpful"}
                                    selected={selected}
                                    setSelected={setSelected}/>
-                    <FeedbackLabel title={"Not factually correct"}
+                    <FeedbackLabel title={t("datatalk_not_factually_correct")}
                                    value={"not_factually_correct"}
                                    selected={selected}
                                    setSelected={setSelected}/>
-                    <FeedbackLabel title={"Incorrect code"}
+                    <FeedbackLabel title={t("datatalk_incorrect_code")}
                                    value={"incorrect_code"}
                                    selected={selected}
                                    setSelected={setSelected}/>
-                    <FeedbackLabel title={"Unsafe or problematic"}
+                    <FeedbackLabel title={t("datatalk_unsafe_or_problematic")}
                                    value={"unsafe_or_problematic"}
                                    selected={selected}
                                    setSelected={setSelected}/>
-                    <FeedbackLabel title={"Other"}
+                    <FeedbackLabel title={t("datatalk_other")}
                                    value={"other"}
                                    selected={selected}
                                    setSelected={setSelected}/>
@@ -203,13 +204,13 @@ function BadMessageIcon({
                 <TextField size={"small"}
                            value={feedbackText}
                            onChange={(e) => setFeedbackText(e.target.value)}
-                           placeholder={"Feel free to add specific details"}></TextField>
+                           placeholder={t("datatalk_feedback_details")}></TextField>
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => {
                     setDialogOpen(false);
                     onFeedback?.(selected, feedbackText);
-                }}>Submit</Button>
+                }}>{t("submit")}</Button>
             </DialogActions>
 
             <IconButton className={"absolute top-4 right-4"}

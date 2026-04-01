@@ -1,0 +1,149 @@
+---
+title: Adaptador para tipos de datos personalizados
+slug: es/docs/recipes/data_type_adapter
+sidebar_label: Adaptador para tipos de datos personalizados
+description: Cómo crear un adaptador personalizado para un tipo de datos en FireCMS
+---
+
+:::info
+Para usar esta funcionalidad, necesitas inicializar un repositorio de FireCMS. Puedes hacerlo siguiendo la
+guía de [Inicio Rápido de Personalización](../cloud/quickstart).
+:::
+
+FireCMS te permite personalizar la forma en que se muestran y editan los datos en el CMS. Por defecto, las vistas creadas por
+FireCMS se basan en el tipo de datos definido en las propiedades de tu colección:
+
+```json5
+{
+    name: "Creado el",
+    dataType: "date",
+}
+```
+> En este ejemplo, todos los campos relacionados con "creado el" se mostrarán como un selector de fecha, incluyendo tablas,
+> formularios, vistas de detalle y de filtro.
+
+Sin embargo, puede que desees usar un tipo de datos diferente en el CMS al que usas en tu modelo de datos. Por ejemplo, puede
+que desees guardar el valor de fecha como un timestamp Unix en tu base de datos, pero mostrarlo como una fecha en el CMS.
+
+Para lograr esto, puedes usar [callbacks](../collections/callbacks) para convertir los datos de tu modelo al formato
+que deseas mostrar en el CMS.
+
+Usemos un ejemplo simple para ilustrarlo. Imagina que tienes una colección de ejercicios, y deseas mostrar la
+fecha de creación de cada ejercicio en el CMS. En tu base de datos, almacenas la fecha de creación como un timestamp Unix. Quieres
+mostrar esta fecha como una fecha legible en el CMS.
+
+```typescript
+export type Exercise = {
+    name: string;
+    createdOn: Date;
+}
+```
+
+### Convertir tipos de datos al leer de la base de datos
+
+Puedes usar el callback `onFetch` para convertir el tipo de datos al leer de la base de datos. Por ejemplo, puedes convertir
+un timestamp Unix a una fecha:
+
+```typescript
+import {EntityCallbacks, EntityOnFetchProps} from "@firecms/core";
+
+const exerciseCallbacks: EntityCallbacks = {
+    onFetch({
+                collection,
+                context,
+                entity,
+                path
+            }: EntityOnFetchProps) {
+        const values = entity.values;
+        if (values.createdOn) {
+            values.createdOn = new Date(values.createdOn);
+        }
+        return entity;
+    }
+};
+```
+
+### Convertir tipos de datos al guardar en la base de datos
+
+Puedes usar el callback `onPreSave` para convertir el tipo de datos al guardar en la base de datos. En este caso,
+puedes convertir una fecha a un timestamp Unix:
+
+```typescript
+import {EntityCallbacks} from "@firecms/core";
+
+const exerciseCallbacks: EntityCallbacks = {
+    onPreSave: ({
+                    collection,
+                    path,
+                    entityId,
+                    values,
+                    status,
+                    context
+                }) => {
+        if (values.createdOn) {
+            values.createdOn = values.createdOn.getTime();
+        }
+        return values;
+    }
+};
+```
+
+### Poniéndolo todo junto
+
+Puedes usar los `exerciseCallbacks` en la definición de tu colección:
+
+```typescript
+import {buildCollection, EntityCallbacks, EntityCollection, EntityOnFetchProps} from "@firecms/core";
+
+const exerciseCallbacks: EntityCallbacks = {
+    onFetch({
+                collection,
+                context,
+                entity,
+                path
+            }: EntityOnFetchProps) {
+        const values = entity.values;
+        if (values.createdOn) {
+            values.createdOn = new Date(values.createdOn);
+        }
+        return entity;
+    },
+    onPreSave: ({
+                    collection,
+                    path,
+                    entityId,
+                    values,
+                    status,
+                    context
+                }) => {
+        if (values.createdOn) {
+            values.createdOn = values.createdOn.getTime();
+        }
+        return values;
+    }
+};
+
+// para usar esta colección con callbacks, añádela a las definiciones de colecciones en la configuración principal de la app
+export const exerciseCollection: EntityCollection = buildCollection({
+    name: "Ejercicios",
+    path: "exercises",
+    callbacks: exerciseCallbacks,
+    properties: {
+        name: {
+            title: "Nombre",
+            dataType: "string",
+            validation: {
+                required: true
+            }
+        },
+        createdOn: {
+            title: "Creado el",
+            dataType: "date", // este es el tipo de datos que definirá las vistas creadas
+            validation: {
+                required: true
+            }
+        }
+    }
+});
+```
+

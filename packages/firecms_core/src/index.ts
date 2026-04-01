@@ -7,3 +7,7 @@ export * from "./hooks";
 export * from "./components";
 export * from "./util";
 export * from "./contexts";
+export * from "./i18n/FireCMSi18nProvider";
+export * from "./locales/en";
+export * from "./locales/es";
+export * from "./editor";

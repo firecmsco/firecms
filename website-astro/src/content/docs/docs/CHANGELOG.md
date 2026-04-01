@@ -2,6 +2,43 @@
 slug: docs/changelog
 title: Changelog
 ---
+## [3.2.0] - 2026-03-31
+
+- **Editor Rewrite**:
+  - Completely reimplemented the rich text editor with new ProseMirror hooks, plugins, node views, and schema.
+  - Added **table support** with markdown parsing, slash command insertion, and a table bubble UI.
+  - Added **image bubble** for editing image alt/title attributes and enhanced image upload capabilities.
+  - Added a **markdown editing mode** toggle alongside the rich text mode.
+  - Improved slash command menu with better HTML parsing and prevented event bubbling.
+  - Improved paste behavior, image handling, and placeholder display.
+  - Fixed link selector in editor.
+  - Fixed serialization and parsing of markdown images and links with special characters in URLs and titles.
+  - Streamlined markdown image serialization and improved editor content updates.
+- **Editor Package Consolidation**:
+  - Removed the standalone `@firecms/editor` package, migrating all editor components into `@firecms/core`.
+  - Redistributed locale files to `@firecms/core` and `@firecms/collection_editor`.
+- **Internationalization (i18n)**:
+  - Added full i18next integration with translations across the platform.
+  - Added Portuguese, German, French, Spanish, Italian, and Hindi translations.
+  - Added language mismatch detection script for translation coverage.
+  - Added comprehensive translations for project settings, subscription management, AppCheck, security rules, and text search features.
+- **CLI**:
+  - Added **Astro template** to the FireCMS CLI for creating Astro-based projects.
+  - Fixed core template Vite config file.
+- **Storage**:
+  - Added **upload progress indicators** for file uploads.
+- **Collection Improvements**:
+  - Introduced a dedicated `CollectionDataErrorBanner` for displaying collection data loading errors, including Firestore index suggestions.
+  - Synchronized table filters and sorting with URL parameters.
+  - Enhanced URL encoding and decoding for navigation.
+  - Added scrollable Tabs with scroll indicator icons.
+- **Fixes**:
+  - Fixed Firestore transaction `set` operation to overwrite documents instead of merging.
+  - Fixed filter sync issues in collections.
+  - Preserved string type when encoding filter values in URL.
+  - Improved date field robustness.
+  - Removed URL parameter parsing for filters and sorting from `useDataSourceTableController`.
+
 ## [3.1.0] - 2026-02-20
 
 - **AI Integration**:
@@ -123,7 +160,7 @@ title: Changelog
 
 - **User Management in FireCMS Core**: Added user management capabilities directly to FireCMS Core, expanding self-hosted options.
 - **User Fields as String Values**: Fully implemented support for user fields as string values, improving flexibility in user data handling.
-- **TipTap V3 Migration**: Migrated markdown editor to TipTap V3 for improved performance and features.
+- **Editor Migration**: Migrated markdown editor for improved performance and features.
 - **Tailwind 4 Retrofit**: Multiple adaptations to support Tailwind 4 retrofit, modernizing the styling infrastructure.
 - **Login Enhancements**:
   - Implemented Cloud email login
@@ -175,7 +212,7 @@ title: Changelog
   - Fixed Google Cloud login issue
   - Fixed error returning from subscription view
   - Fixed storing recent project
-  - Fixed TipTap imports
+  - Fixed editor imports
   - Fixed passing gclid correctly to app
   - Website CLS (Cumulative Layout Shift) fix
 - **CLI**: Added npm instructions to CLI
@@ -402,7 +439,7 @@ const userManagement = useBuildUserManagement({
 ## [3.0.0-beta.10] - 2024-07-10
 
 - Fixed issues with wrong licenses.
-- Resolved TipTap dependencies.
+- Resolved editor dependencies.
 - Addressed various minor styling updates across the web.
 - Moved body CSS from default imports to individual files for better modularity.
 - Implemented several web updates, including select style fixes and dialog title adjustments for text search.

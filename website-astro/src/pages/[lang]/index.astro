@@ -1,0 +1,32 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import LandingContent from "../../components/LandingContent.astro";
+import { languages } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+    const supportedLangs = Object.keys(languages).filter(l => l !== 'en');
+    return supportedLangs.map((lang) => {
+        return { params: { lang } };
+    });
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+const title = t('seo.title');
+const description = t('seo.description');
+const keywords = t('seo.keywords');
+
+const faqItems = [
+    { question: t('faq.q1.q'), answer: t('faq.q1.a') },
+    { question: t('faq.q2.q'), answer: t('faq.q2.a') },
+    { question: t('faq.q3.q'), answer: t('faq.q3.a') },
+    { question: t('faq.q4.q'), answer: t('faq.q4.a') },
+    { question: t('faq.q5.q'), answer: t('faq.q5.a') },
+];
+---
+
+<Layout title={title} description={description} keywords={keywords} lang={lang} faqItems={faqItems}>
+    <LandingContent lang={lang} t={t} />
+</Layout>

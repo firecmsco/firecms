@@ -1,0 +1,143 @@
+---
+title: Configuration de l'application
+slug: fr/docs/cloud/app_config
+description: Un guide complet pour configurer FireCMS, un CMS personnalisable. Il fournit des instructions détaillées sur la façon d'initialiser un nouveau projet, de personnaliser le CMS avec des propriétés réutilisables, des champs, des collections, des vues d'entités et des vues CMS.
+---
+
+La configuration de l'application est l'objet de configuration principal de FireCMS Cloud. Elle est définie
+par l'interface `FireCMSAppConfig`. Pour personnaliser le CMS, vous devez
+créer un projet sur [app.firecms.co](https://app.firecms.co) et
+initialiser un nouveau projet en code avec `npx create-firecms-app` ou `yarn create firecms-app`.
+
+Une fois ces étapes effectuées, vous pouvez utiliser l'export `FireCMSAppConfig` pour ajouter
+vos propres personnalisations, comme des propriétés ou champs réutilisables personnalisés, des collections,
+des vues d'entités, des vues CMS, etc.
+
+
+### Options de personnalisation
+
+Voici toutes les options de personnalisation disponibles :
+
+* `collections` : Liste des collections mappées dans le CMS.
+    Chaque entrée correspond à une collection dans la base de données racine.
+    Chacune des entrées de navigation dans ce champ
+    génère une entrée dans le menu principal.
+    Voir [Collections](../collections) pour plus d'informations.
+
+* `modifyCollection` : Fonction pour modifier une collection avant qu'elle soit ajoutée au CMS. Si vous définissez des collections
+    dans l'interface, vous pouvez utiliser cette fonction pour les modifier. Ce callback est appelé pour chaque collection.
+
+* `views` : Vues supplémentaires personnalisées créées par le développeur, ajoutées à la navigation principale.
+    Voir [Vues de niveau supérieur personnalisées](../top_level_views) pour plus d'informations.
+
+* `propertyConfigs` : Liste des configs de propriétés personnalisées à utiliser dans le CMS.
+    Vous pouvez utiliser la clé pour référencer le champ personnalisé dans la prop `propertyConfig` d'une propriété dans une collection.
+    Voir [Configs de propriétés](../properties/reusing_properties) pour plus d'informations.
+
+* `entityViews` : Liste de vues personnalisées supplémentaires pour les entités.
+    Vous pouvez utiliser la clé pour référencer la vue personnalisée dans la prop `entityViews` d'une collection.
+    Vous pouvez également définir une vue d'entité depuis l'interface.
+    Voir [Vues d'entité](../collections/entity_views) pour plus d'informations.
+
+* `HomePage` : Utilisez ce composant pour remplacer la page d'accueil.
+* `fireCMSAppBarComponentProps` : Props supplémentaires passées à l'AppBar personnalisé.
+* `firestoreIndexesBuilder` : Utilisez ce constructeur pour indiquer quels index sont disponibles dans votre base de données Firestore.
+    Ceci est utilisé pour permettre le filtrage et le tri par plusieurs champs dans le CMS.
+* `onFirebaseInit` : Callback optionnel après l'initialisation de Firebase.
+    Utile pour utiliser l'émulateur local ou récupérer la configuration utilisée.
+* `dateTimeFormat` : Format des dates dans le CMS.
+    Par défaut `'MMMM dd, yyyy, HH:mm:ss'`.
+* `locale` : Locale du CMS, affectant actuellement uniquement les dates.
+* `textSearchController` : Utilisez ce contrôleur pour retourner les résultats de recherche textuelle sous forme d'IDs de documents, qui sont ensuite récupérés depuis Firestore.
+* `autoOpenDrawer` : Fonctionnalité expérimentale pour ouvrir le tiroir automatiquement au survol.
+* `appCheck` : Configuration de Firebase App Check.
+    - `provider` : Le fournisseur à utiliser pour App Check.
+    - `isTokenAutoRefreshEnabled` : Si le token doit être automatiquement renouvelé.
+    - `debugToken` : Token de débogage pour App Check.
+    - `forceRefresh` : Si le token doit être renouvelé de force.
+
+### Exemple
+
+Une configuration d'application est générée automatiquement lorsque vous initialisez un nouveau projet, mais voici un
+exemple de la façon dont vous pouvez la personnaliser :
+
+```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+
+const appConfig: FireCMSAppConfig = {
+
+    version: "1",
+
+    // Les collections sont les entrées de navigation principales dans le CMS
+    collections: async ({ authController, dataSource }) => {
+        // Exemple de récupération de données depuis la base de données pour construire des collections dynamiques
+        const firstProducts = await dataSource.fetchCollection({
+            path: "products",
+            limit: 5
+        });
+
+        return ([
+           // ...vos collections
+        ]);
+    },
+
+    // Vues de niveau supérieur, non liées à une collection
+    views: [
+        {
+            path: "sales_report",
+            name: "Rapport de ventes",
+            icon: "extension",
+            view: <SalesReportView/>
+        },
+    ],
+
+    // modifyCollection vous permet de modifier les collections avant qu'elles soient ajoutées au CMS
+    modifyCollection: ({ collection }) => {
+        if (collection.id === "products") {
+            return {
+                ...collection,
+                name: "Produits modifiés",
+                entityActions: [
+                    {
+                        name: "Mon action personnalisée",
+                        onClick: ({ entity }) => {
+                            console.log("Entité", entity);
+                        }
+                    }
+                ]
+            }
+        }
+        return collection;
+    },
+
+    // propriétés pouvant être réutilisées dans différentes collections
+    propertyConfigs: [
+        {
+            name: "Chaîne traduite",
+            key: "translated_string",
+            property: {
+                dataType: "map",
+                properties: {
+                    en: {
+                        dataType: "string",
+                        name: "Anglais"
+                    },
+                    es: {
+                        dataType: "string",
+                        name: "Español"
+                    },
+                },
+            },
+        }
+    ],
+
+    // vues pouvant être assignées aux entités
+    entityViews: [{
+        key: "test",
+        name: "Test",
+        Builder: SampleEntityView
+    }]
+}
+
+export default appConfig;
+```

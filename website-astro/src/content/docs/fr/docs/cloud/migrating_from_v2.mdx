@@ -1,0 +1,219 @@
+---
+title: Migration de FireCMS 2.0 vers FireCMS Cloud
+slug: fr/docs/cloud/migrating_from_v2
+sidebar_label: Migration de FireCMS 2.0 vers FireCMS Cloud
+description: Passez au CMS Firebase moderne basé sur React. Migrez votre panneau d'administration vers FireCMS Cloud pour de meilleures performances et fonctionnalités.
+---
+
+:::important
+Ce guide de migration s'applique pour la migration de FireCMS 2.0 vers FireCMS Cloud
+:::
+
+FireCMS 3.0 est une version majeure qui introduit beaucoup de changements. Cette page
+décrit les principaux changements et comment migrer depuis FireCMS 2.0.
+
+
+## Créer un projet sur app.firecms.co
+
+FireCMS Cloud nécessite la création d'un projet sur [app.firecms.co](https://app.firecms.co).
+
+La nouvelle version repose sur un backend qui vous permet de gérer vos
+collections et schémas. Les utilisateurs finaux peuvent maintenant modifier les collections,
+donc nous utilisons un service centralisé pour stocker la configuration.
+
+En faisant cela, vous **n'aurez pas besoin de spécifier les informations d'identification de votre projet Firebase**,
+car le service pourra accéder à votre projet directement. Vous n'aurez besoin de
+spécifier que l'**ID du projet**.
+
+## Initialiser un projet FireCMS Cloud dans un nouveau dossier
+
+Il est conseillé de créer un nouveau projet de zéro et ensuite de migrer vos collections et vues vers
+le nouveau dossier.
+
+Pour ce faire, exécutez
+```
+npx create-firecms-app
+```
+et créez un nouveau projet dans un nouveau dossier.
+
+Le CLI initialisera un projet vide avec le nouveau format, et tous les fichiers de configuration
+prêts, vous n'avez donc pas à vous en préoccuper.
+
+
+## Migrer les collections vers le nouveau format
+
+Malgré le nouveau format, FireCMS vise à permettre aux utilisateurs de migrer des applications existantes avec des
+changements minimaux. Les collections peuvent maintenant être stockées aussi bien dans le backend FireCMS que définies en
+code comme jusqu'ici.
+
+De plus, vous pouvez avoir des collections définies aux deux endroits, et décider si les collections définies en code
+peuvent être modifiées par l'utilisateur ou non.
+
+Veuillez noter que les propriétés définies en code ne seront pas modifiables par l'utilisateur, sauf si vous
+les marquez explicitement comme `editable: true`.
+
+## package.json
+
+Pour référence, le fichier `package.json` d'un nouveau projet FireCMS Cloud ressemble à ceci :
+
+```json
+{
+  "name": "my-firecms-project",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5001",
+    "build": "vite build",
+    "serve": "vite preview --port 5001",
+    "deploy": "run-s build && firecms deploy --project=your-project-id"
+  },
+  "dependencies": {
+    "@firecms/cloud": "^3.0.0",
+    "firebase": "^12.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@originjs/vite-plugin-federation": "^1.4.1",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/react": "^18.2.71",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.6"
+  }
+}
+```
+
+
+## Nouveau format
+
+Puisqu'il est maintenant possible de déployer FireCMS dans notre service hébergé, la sortie
+de votre projet doit être dans un format spécifique.
+
+Le fichier `index.ts` doit exporter un objet `FireCMSAppConfig`, défini comme suit :
+
+```typescript
+import {CMSView, CMSViewsBuilder, EntityCollection, EntityCollectionsBuilder, EntityCustomView, PropertyConfig} from "./index.ts";
+export type FireCMSAppConfig = {
+
+    /**
+     * Version du schéma de personnalisation.
+     */
+    version: "1";
+
+    /**
+     * Liste des collections mappées dans le CMS.
+     */
+    collections?: EntityCollection[] | EntityCollectionsBuilder;
+
+    /**
+     * Vues supplémentaires personnalisées créées par le développeur.
+     */
+    views?: CMSView[] | CMSViewsBuilder;
+
+    /**
+     * Liste des champs de formulaire personnalisés à utiliser dans le CMS.
+     */
+    propertyConfigs?: PropertyConfig[];
+
+    /**
+     * Liste des vues personnalisées supplémentaires pour les entités.
+     */
+    entityViews?: EntityCustomView[];
+
+}
+```
+
+## Configuration des collections
+
+Les collections ont subi des changements minimaux. Si vous n'avez pas de composants personnalisés définis, il devrait être
+facile d'adapter vos collections au nouveau format.
+
+- Vous devez définir un `id` pour chaque collection, qui peut généralement être le même que le `path`.
+
+- La prop `views` a été renommée en `entityViews`, car elles s'appliquent aux entités.
+
+- Pour `AdditionalFieldDelegate`, la prop `id` a été renommée en `key`.
+
+Pour migrer vos collections, exportez-les simplement dans votre fichier `index.ts` :
+
+```typescript
+import { FireCMSAppConfig } from "@firecms/cloud";
+const appConfig: FireCMSAppConfig = {
+    version: "1",
+    collections: async (props) => {
+        return ([
+            productsCollection
+        ]);
+    },
+    propertyConfigs: [
+        colorPropertyConfig
+    ],
+    entityViews: [{
+        key: "test",
+        name: "Test",
+        Builder: SampleEntityView
+    }]
+}
+```
+
+## Migration des composants personnalisés (MUI)
+
+FireCMS 3.0 est basé sur `tailwindcss` au lieu de `mui`.
+
+Mui était excellent pour les versions initiales de FireCMS, mais c'était un grand goulet d'étranglement de performances
+et il était difficile à personnaliser.
+
+La nouvelle version de FireCMS a intégré près de 50 nouveaux composants implémentés avec tailwindcss, qui
+imitent bien les composants material-ui. Vous êtes encouragé à migrer vos composants personnalisés
+vers le nouveau format.
+
+Cependant, si vous souhaitez continuer à utiliser mui : vous pouvez toujours utiliser les anciens composants, mais vous devrez
+installer le package `mui` manuellement.
+
+```bash
+npm install @mui/material @emotion/react @emotion/styled
+```
+
+ou
+
+```bash
+yarn add @mui/material @emotion/react @emotion/styled
+```
+
+Si vous avez besoin des icônes MUI, exécutez :
+
+```bash
+npm install @mui/icons-material
+```
+
+ou
+
+```bash
+yarn add @mui/icons-material
+```
+
+### Composants sans équivalent :
+- `Box` : Le composant box est juste un wrapper utilisé par mui pour appliquer des styles. Vous pouvez utiliser un `div` à la place.
+Conseil : ChatGPT est excellent pour convertir les composants Box en div avec des classes tailwind.
+- `Link` : Utilisez `a` à la place.
+- `FormControl`
+
+### Composants qui changent de comportement :
+- `Menu` et `MenuItem` : Les éléments de menu n'ont plus d'id. Vous pouvez ajouter une prop `onClick` par élément de menu.
+- `Select` n'utilise plus `labelId`. Ajoutez simplement le label comme composant dans `label`.
+  - `SelectChangeEvent` est maintenant `ChangeEvent<HTMLSelectElement>`
+- La taille (`size`) de `CircularProgress` est une chaîne de caractères au lieu d'un nombre. Vous pouvez utiliser `size="small"` ou `size="large"`.
+
+### Déploiement
+
+FireCMS 3.0 est maintenant déployé dans notre propre service, accessible via [app.firecms.co](https://app.firecms.co).
+
+Vous pouvez toujours le déployer dans votre propre projet Firebase. Le même build que vous générez pour exécuter le
+CMS localement peut être déployé sur Firebase hosting, ou tout autre service d'hébergement.

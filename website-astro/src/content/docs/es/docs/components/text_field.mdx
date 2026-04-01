@@ -1,0 +1,51 @@
+---
+title: Campo de texto (Text Field)
+slug: es/docs/components/text_field
+sidebar_label: Campo de texto
+description: Aprende a usar los componentes Text Field para permitir que los usuarios ingresen, editen y muestren texto en tu aplicación. Incluye ejemplos de campos de texto básicos, de varias líneas y adornados, así como de varios tamaños.
+---
+
+# Componente Campo de texto (Text Field)
+
+Los campos de texto son elementos de interfaz de usuario (UI) versátiles que permiten a los usuarios ingresar, editar y mostrar texto dentro de una aplicación.
+Juegan un papel crucial en la interacción del usuario, proporcionando una manera sencilla para que los usuarios ingresen datos, den
+sugerencias, completen formularios e interactúen con varias interfaces que requieren la entrada de texto. Los campos de texto se pueden usar para
+entradas cortas como nombres de usuario o contraseñas, así como para entradas de texto más largas como comentarios, mensajes o
+descripciones detalladas.
+
+En el contexto de FireCMS UI, los principios de diseño y los componentes se basan en gran medida en las pautas de Material Design de Google. Esto significa que
+los campos de texto en FireCMS se benefician de un lenguaje de diseño consistente y fácil de usar, garantizando una
+apariencia cohesiva en diferentes aplicaciones web. Al aprovechar estos componentes, los desarrolladores pueden crear rápidamente
+formularios y áreas de entrada interactivas y visualmente atractivas que mejoren la experiencia del usuario y mantengan la coherencia del diseño.
+
+## Uso
+
+Para usar el `TextField`, impórtalo desde el directorio de componentes (components) y pasa el `value` (valor), `onChange`, y otras props necesarias para que se ajusten a tu caso de uso.
+
+
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Campo de texto básico
+
+Un campo de texto básico con configuración mínima:
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_basic.tsx"/>
+
+## Campo de texto multilínea
+
+Puedes crear un campo de texto de varias líneas estableciendo la prop `multiline` en `true`. Esto es útil para entradas de texto más largas como comentarios o descripciones.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_multiline.tsx"/>
+
+## Tamaños (Sizes)
+
+El componente `TextField` viene en varios tamaños para adaptarse a diferentes necesidades de diseño. Puedes ajustar el tamaño usando la prop `size`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_sizes.tsx"/>
+
+## Adornos (Adornments)
+
+Puedes agregar adornos (adornments) al principio o al final de un campo de texto para proporcionar un contexto o funcionalidad adicional.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_adornment.tsx"/>

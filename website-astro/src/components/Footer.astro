@@ -1,43 +1,60 @@
 ---
+import { getCollection } from "astro:content";
 import SectionBackgroundAccents from "./SectionBackgroundAccents.astro";
+import LanguageSelect from "./LanguageSelect.astro";
+import { useTranslatedPath, useTranslations } from "../i18n/utils";
+
+const { lang = "en" } = Astro.props;
+const tp = useTranslatedPath(lang as any);
+const t = useTranslations(lang as any);
+
+const comparisons = await getCollection('comparisons');
+const compareLinks = (comparisons || []).map(c => ({
+    label: c.data.title,
+    url: tp(`/compare/${c.id}`)
+}));
 
 const footerNavs = [
     {
-        title: "Company",
+        title: t("footer.company") || "Company",
         links: [
-            { label: "Contact", url: "/contact" },
-            { label: "Blog", url: "/blog" },
-            { label: "About", url: "/about" },
-            { label: "Why FireCMS", url: "/why-firecms" },
-            { label: "Book a Call", url: "https://calendar.app.google/QipmvFoUznse8KnNA", external: true },
+            { label: t("nav.contact") || "Contact", url: tp("/contact") },
+            { label: t("nav.blog") || "Blog", url: "/blog" },
+            { label: t("nav.about") || "About", url: tp("/about") },
+            { label: t("nav.why") || "Why FireCMS", url: tp("/why-firecms") },
+            { label: t("nav.book") || "Book a Call", url: "https://calendar.app.google/QipmvFoUznse8KnNA", external: true },
         ],
     },
     {
-        title: "Solutions",
+        title: t("footer.solutions") || "Solutions",
         links: [
-            { label: "Startups", url: "/startups" },
-            { label: "Agencies", url: "/agencies" },
-            { label: "Developers", url: "/developers" },
+            { label: t("nav.startups") || "Startups", url: tp("/startups") },
+            { label: t("nav.agencies") || "Agencies", url: tp("/agencies") },
+            { label: t("nav.developers") || "Developers", url: tp("/developers") },
         ],
     },
     {
-        title: "Product",
+        title: t("footer.product") || "Product",
         links: [
-            { label: "Demo", url: "https://demo.firecms.co", external: true },
-            { label: "Features", url: "/features" },
-            { label: "UI Components", url: "/ui" },
-            { label: "Pricing", url: "/pricing" },
-            { label: "Compare versions", url: "/compare" },
-            { label: "Security", url: "/security" },
+            { label: t("nav.demo") || "Demo", url: "https://demo.firecms.co", external: true },
+            { label: t("nav.features") || "Features", url: tp("/features") },
+            { label: t("nav.ui_components") || "UI Components", url: tp("/ui") },
+            { label: t("nav.pricing") || "Pricing", url: tp("/pricing") },
+            { label: t("nav.compare") || "Compare versions", url: tp("/compare") },
+            { label: t("nav.security") || "Security", url: tp("/security") },
             { label: "llms.txt", url: "/llms.txt", external: true },
         ],
     },
     {
-        title: "Legal",
+        title: t("nav.compare") || "Compare",
+        links: compareLinks,
+    },
+    {
+        title: t("footer.legal") || "Legal",
         links: [
-            { label: "Privacy Policy", url: "/policy/privacy_policy" },
-            { label: "Terms of Service", url: "/policy/terms_conditions" },
-            { label: "Cookie Policy", url: "/policy/cookies_policy" },
+            { label: t("nav.privacy") || "Privacy Policy", url: "/policy/privacy_policy" },
+            { label: t("nav.terms") || "Terms of Service", url: "/policy/terms_conditions" },
+            { label: t("nav.cookies") || "Cookie Policy", url: "/policy/cookies_policy" },
         ],
     },
 ];
@@ -56,7 +73,7 @@ const footerNavs = [
                     The Headless CMS Framework for Firebase
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-4">
+            <div class="grid grid-cols-2 gap-8 sm:gap-6 lg:grid-cols-5">
                 {footerNavs.map((nav) => (
                     <div>
                         <p class="mb-6 text-sm font-semibold uppercase text-white">{nav.title}</p>
@@ -82,7 +99,8 @@ const footerNavs = [
         <div class="mt-8 pt-8 ">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <span class="text-sm sm:text-center text-surface-400">© 2026 FireCMS. All Rights Reserved.</span>
-                <div class="flex gap-6 mt-4 sm:mt-0">
+                <div class="flex gap-6 mt-4 sm:mt-0 items-center">
+                    <LanguageSelect />
                     <a href="https://github.com/firecmsco" target="_blank" rel="noopener noreferrer"
                        data-track
                        id="footer-github"

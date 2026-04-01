@@ -4,6 +4,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CircularProgress, cls } from "@firecms/ui";
 import { BoardItem, BoardItemViewProps } from "./board_types";
+import { useTranslation } from "../../hooks";
 
 interface BoardSortableListProps<M extends Record<string, any>> {
     columnId: string;
@@ -26,6 +27,7 @@ export function BoardSortableList<M extends Record<string, any>>({
     hasMore = false,
     onLoadMore,
 }: BoardSortableListProps<M>) {
+    const { t } = useTranslation();
     const {
         setNodeRef,
     } = useDroppable({
@@ -97,7 +99,7 @@ export function BoardSortableList<M extends Record<string, any>>({
             {items.length === 0 && !loading ? (
                 <div className="flex-1 flex items-center justify-center">
                     <span className="text-xs text-surface-400 dark:text-surface-500">
-                        No items
+                        {t("no_items")}
                     </span>
                 </div>
             ) : (

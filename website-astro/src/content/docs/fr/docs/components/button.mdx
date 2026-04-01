@@ -1,0 +1,67 @@
+---
+title: Button
+slug: fr/docs/components/button
+sidebar_label: Button
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Les boutons sont des éléments d'interface interactifs qui permettent aux utilisateurs de déclencher des actions ou événements spécifiques dans une application. Ils jouent un rôle crucial dans les interfaces utilisateur, offrant un signal visuel pour les actions initiées par l'utilisateur. Les boutons peuvent être utilisés dans divers contextes, notamment des formulaires pour la soumission, des dialogues pour la confirmation, et des barres d'outils pour un accès rapide aux fonctions et fonctionnalités.
+
+## Taille
+
+La prop `size` peut être utilisée pour changer la taille du bouton.
+
+Les boutons sont disponibles en trois tailles : `small`, `medium`, `large`, `xl` et `2xl`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/button_size.tsx"/>
+
+## Variante
+
+La prop `variant` change le style du bouton. Les valeurs possibles sont `filled`, `outlined` et `text`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/variant_button.tsx"/>
+
+## Couleur
+
+La prop `color` définit le thème de couleur du bouton. Les valeurs possibles sont `primary`, `secondary`, `text`, `error` et `neutral`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/button_color.tsx"/>
+
+## Désactivé
+
+Définir `disabled` à `true` désactive le bouton, empêchant les interactions.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/disabled_button.tsx"/>
+
+## Icône de début
+
+La prop `startIcon` vous permet d'inclure une icône avant le contenu du bouton.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/start_icon_button.tsx"/>
+
+## Pleine largeur
+
+La prop `fullWidth` fait que le bouton s'étend pour occuper toute la largeur de son conteneur.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/full_width_button.tsx"/>
+
+## Classe personnalisée
+
+La prop `className` vous permet de passer des classes CSS personnalisées au composant bouton.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/button/custom_class_name_button.tsx"/>
+
+## Props du composant Button
+
+- `variant` : Définit la variante de style du bouton. Options : `"filled"`, `"outlined"` ou `"text"`. Défaut : `"filled"`.
+- `disabled` : Désactive le bouton, empêchant l'interaction utilisateur. Défaut : `false`.
+- `color` : Définit le thème de couleur du bouton. Options : `"primary"`, `"secondary"`, `"neutral"`, `"text"` ou `"error"`.
+- `size` : Spécifie la taille du bouton. Options : `"small"`, `"medium"`, `"large"`, `"xl"` ou `"2xl"`. Défaut : `"medium"`.
+- `startIcon` : Ajoute une icône au début du contenu du bouton.
+- `fullWidth` : Quand `true`, le bouton s'étend pour remplir la largeur de son conteneur. Défaut : `false`.
+- `className` : Classes supplémentaires à appliquer à l'élément bouton.
+- `onClick` : Fonction handler appelée quand le bouton est cliqué.
+- `children` : Définit le contenu du bouton, généralement du texte ou des éléments.
+- `component` : Composant personnalisé à utiliser pour le rendu du bouton.
+- `type` : L'attribut type du bouton, typiquement `"button"`, `"submit"` ou `"reset"`. Défaut : `"button"`.

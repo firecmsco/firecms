@@ -1,0 +1,43 @@
+---
+slug: it/docs/components/slider
+title: Cursore (Slider)
+sidebar_label: Slider
+---
+
+Gli Slider consentono agli utenti di inserire un valore trascinando una maniglia lungo una traccia. Questo componente è altamente personalizzabile con varie opzioni per orientamento, passo, intervallo e altro.
+
+## Utilizzo
+
+Per usare lo `Slider`, importalo dalla tua libreria di componenti e configuralo usando prop come `min`, `max`, `step`, `value` e altre.
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Slider di base
+
+Un esempio base del componente Slider con impostazioni predefinite.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_basic.tsx"/>
+
+## Slider a intervallo
+
+Un esempio di uno slider a intervallo con due maniglie che consentono agli utenti di selezionare un intervallo di valori.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_range.tsx"/>
+
+## Slider piccolo
+
+Una versione più piccola del componente Slider con dimensioni ridotte.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_small.tsx"/>
+
+## Slider disabilitato
+
+Illustrazione di come usare la prop `disabled` per creare uno Slider non interattivo.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_disabled.tsx"/>
+
+## Slider invertito
+
+Un esempio di uno slider invertito dove il valore diminuisce da sinistra a destra.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/slider/slider_inverted.tsx"/>

@@ -1,0 +1,66 @@
+---
+title: Select
+slug: it/docs/components/select
+sidebar_label: Select
+---
+
+Select è un componente form che fornisce un menu a discesa per consentire agli utenti di scegliere tra diverse opzioni. Supporta selezioni singole e multiple, stili personalizzabili e integrazione con librerie di form.
+
+## Utilizzo
+
+Per usare il componente `Select` nella tua applicazione web, inizia importandolo insieme a `SelectItem` per le singole
+opzioni e `SelectGroup` se hai bisogno di raggruppare opzioni correlate. Il componente `Select` è altamente
+personalizzabile per soddisfare i requisiti specifici della tua interfaccia utente. Ciò ti consente di controllarne l'aspetto,
+come dimensione, forma e colore, per adattarsi al design generale dell'applicazione. Inoltre, puoi modificarne il comportamento,
+incluso come gestisce le interazioni utente, se supporta selezioni multiple e come visualizza gli elementi selezionati.
+Questo livello di personalizzazione lo rende uno strumento versatile per creare menu a discesa intuitivi e responsivi
+che migliorano l'esperienza utente.
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Select di base
+
+Un utilizzo di base del componente select con configurazione minima.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_basic.tsx"/>
+
+## Select personalizzato
+
+Un componente select con stili e funzionalità personalizzate.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_custom.tsx"/>
+
+## Select con gruppi
+
+Dimostra come raggruppare le opzioni sotto etichette usando `SelectGroup`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/select/select_group.tsx"/>
+
+## Props del componente Select
+
+Il componente `Select` di FireCMS UI è altamente personalizzabile tramite varie prop. Di seguito è riportato un elenco completo delle prop disponibili:
+
+- `open`: Controlla se il dropdown del select è aperto. Default `false`.
+- `name`: L'attributo name per l'elemento input del select.
+- `id`: L'attributo id per l'elemento input del select.
+- `onOpenChange`: Callback quando lo stato aperto cambia.
+- `value`: Il/i valore/i corrente/i del componente select, che può essere una `string` o un array di `string` per selezioni multiple.
+- `className`: Classi aggiuntive da applicare all'elemento root.
+- `inputClassName`: Classi aggiuntive da applicare all'elemento input.
+- `onChange`: Funzione handler chiamata quando il valore del select cambia.
+- `onValueChange`: Callback quando il valore cambia.
+- `onMultiValueChange`: Callback quando il valore cambia in un select multiplo.
+- `placeholder`: Il testo segnaposto visualizzato quando nessun valore è selezionato.
+- `renderValue`: Funzione di rendering personalizzata per il valore selezionato.
+- `renderValues`: Funzione di rendering personalizzata per i valori selezionati nel select multiplo.
+- `size`: La dimensione del componente select, può essere `"small"` o `"medium"`. Default `"medium"`.
+- `label`: L'etichetta visualizzata sopra il campo select, può essere un `ReactNode` o una `string`.
+- `disabled`: Disabilita il componente select. Default `false`.
+- `error`: Imposta il componente select in uno stato di errore. Default `false`.
+- `position`: Posizione del dropdown relativa al trigger, può essere `"item-aligned"` o `"popper"`. Default `"item-aligned"`.
+- `endAdornment`: Elemento da posizionare alla fine dell'input del select.
+- `multiple`: Abilita la modalità di selezione multipla. Default `false`.
+- `inputRef`: Oggetto ref per l'elemento input del select.
+- `padding`: Aggiunge padding all'input del select. Default `true`.
+- `invisible`: Nasconde il componente select ma lo mantiene nel DOM.
+- `children`: Contenuto da renderizzare come opzioni all'interno del componente select.

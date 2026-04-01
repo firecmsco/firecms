@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { Entity, ResolvedProperties } from "@firecms/core";
+import { Entity, ResolvedProperties, useTranslation } from "@firecms/core";
 import {
     BooleanSwitchWithLabel,
     Button,
@@ -33,6 +33,7 @@ export function BasicExportAction({
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
 
     const [open, setOpen] = React.useState(false);
+    const { t } = useTranslation();
 
     const handleClickOpen = useCallback(() => {
         setOpen(true);
@@ -59,7 +60,7 @@ export function BasicExportAction({
 
     return <>
 
-        <Tooltip title={"Export"}
+        <Tooltip title={t("export")}
                  asChild={true}>
             <IconButton
                 size={"small"}
@@ -74,11 +75,11 @@ export function BasicExportAction({
             onOpenChange={setOpen}
             maxWidth={"xl"}>
 
-            <DialogTitle variant={"h6"}>Export data</DialogTitle>
+            <DialogTitle variant={"h6"}>{t("export_data")}</DialogTitle>
 
             <DialogContent className={"flex flex-col gap-4 my-4"}>
 
-                <div>Download the the content of this table as a CSV</div>
+                <div>{t("download_table_csv")}</div>
 
                 <div className={"flex flex-row gap-4"}>
                     <div className={"p-4 flex flex-col"}>
@@ -88,7 +89,7 @@ export function BasicExportAction({
                                    onChange={() => setExportType("csv")}
                                    className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-csv"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">CSV</label>
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">{t("csv")}</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-json" type="radio" value="json" name="exportType"
@@ -96,7 +97,7 @@ export function BasicExportAction({
                                    onChange={() => setExportType("json")}
                                    className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-json"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">JSON</label>
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">{t("json")}</label>
                         </div>
                     </div>
 
@@ -107,9 +108,7 @@ export function BasicExportAction({
                                    onChange={() => setDateExportType("timestamp")}
                                    className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-timestamp"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
-                                as
-                                timestamps ({dateRef.current.getTime()})</label>
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">{t("dates_as_timestamps")} ({dateRef.current.getTime()})</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-string" type="radio" value="string" name="dateExportType"
@@ -117,9 +116,7 @@ export function BasicExportAction({
                                    onChange={() => setDateExportType("string")}
                                    className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")}/>
                             <label htmlFor="radio-string"
-                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">Dates
-                                as
-                                strings ({dateRef.current.toISOString()})</label>
+                                   className="p-2 text-sm font-medium text-surface-900 dark:text-surface-accent-300">{t("dates_as_strings")} ({dateRef.current.toISOString()})</label>
                         </div>
                     </div>
                 </div>
@@ -129,7 +126,7 @@ export function BasicExportAction({
                     disabled={exportType !== "csv"}
                     value={flattenArrays}
                     onValueChange={setFlattenArrays}
-                    label={"Flatten arrays"}/>
+                    label={t("flatten_arrays")}/>
 
             </DialogContent>
 
@@ -137,11 +134,11 @@ export function BasicExportAction({
 
                 <Button onClick={handleClose}
                         variant={"text"}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 <Button onClick={onOkClicked}>
-                    Download
+                    {t("download")}
                 </Button>
 
             </DialogActions>

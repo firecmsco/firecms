@@ -1,4 +1,4 @@
-import { useCustomizationController } from "@firecms/core";
+import { useCustomizationController, useTranslation } from "@firecms/core";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
 import React from "react";
 
@@ -9,11 +9,12 @@ export function EntityCustomViewsSelectDialog({
     const {
         entityViews,
     } = useCustomizationController();
+    const { t } = useTranslation();
 
     return <Dialog
         maxWidth={"md"}
         open={open}>
-        <DialogTitle>Select custom view</DialogTitle>
+        <DialogTitle>{t("select_custom_view")}</DialogTitle>
         <DialogContent className={"flex flex-col gap-4"}>
             {entityViews?.map((view) => {
                 return <Button
@@ -27,13 +28,12 @@ export function EntityCustomViewsSelectDialog({
             })}
             {(entityViews ?? []).length === 0 &&
                 <Typography variant={"body2"}>
-                    No custom views defined. Define your custom views in the customization settings, before using this
-                    dialog.
+                    {t("no_custom_views_defined")}
                 </Typography>
             }
         </DialogContent>
         <DialogActions>
-            <Button onClick={() => onClose()}>Cancel</Button>
+            <Button onClick={() => onClose()}>{t("cancel")}</Button>
         </DialogActions>
     </Dialog>
 }

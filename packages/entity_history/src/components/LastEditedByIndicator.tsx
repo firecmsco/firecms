@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Entity, useDataSource, User } from "@firecms/core";
+import { Entity, useDataSource, User, useTranslation } from "@firecms/core";
 import { useHistoryController } from "../HistoryControllerProvider";
 
-function getRelativeTimeString(date: Date): string {
+function getRelativeTimeString(date: Date, t: any): string {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffSeconds = Math.floor(diffMs / 1000);
@@ -10,10 +10,10 @@ function getRelativeTimeString(date: Date): string {
     const diffHours = Math.floor(diffMinutes / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffSeconds < 60) return "just now";
-    if (diffMinutes < 60) return `${diffMinutes}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 30) return `${diffDays}d ago`;
+    if (diffSeconds < 60) return t("entity_history_just_now");
+    if (diffMinutes < 60) return t("entity_history_minutes_ago", { minutes: diffMinutes });
+    if (diffHours < 24) return t("entity_history_hours_ago", { hours: diffHours });
+    if (diffDays < 30) return t("entity_history_days_ago", { days: diffDays });
     return date.toLocaleDateString();
 }
 
@@ -30,6 +30,7 @@ export function LastEditedByIndicator({
     entityId: string;
     collection: any;
 }) {
+    const { t } = useTranslation();
     const { getUser } = useHistoryController();
     const dataSource = useDataSource();
     const [latestEntry, setLatestEntry] = useState<Entity | undefined>();
@@ -67,7 +68,7 @@ export function LastEditedByIndicator({
 
     const user: User | null | undefined = uid ? getUser?.(uid) : undefined;
     const date = editedOn instanceof Date ? editedOn : (editedOn?.toDate ? editedOn.toDate() : null);
-    const timeString = date ? getRelativeTimeString(date) : null;
+    const timeString = date ? getRelativeTimeString(date, t) : null;
 
     const displayName = user?.displayName ?? user?.email ?? uid;
     const photoURL = user?.photoURL;

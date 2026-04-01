@@ -6,6 +6,7 @@ import {
     CircularProgressCenter,
     Drawer,
     FireCMS,
+    FireCMSi18nProvider,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -118,8 +119,9 @@ function App() {
     }
 
     return (
-        <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
+        <FireCMSi18nProvider>
+            <SnackbarProvider>
+                <ModeControllerProvider value={modeController}>
                 <FireCMS
                     navigationController={navigationController}
                     authController={authController}
@@ -152,8 +154,9 @@ function App() {
                         </Scaffold>;
                     }}
                 </FireCMS>
-            </ModeControllerProvider>
-        </SnackbarProvider>
+                </ModeControllerProvider>
+            </SnackbarProvider>
+        </FireCMSi18nProvider>
     );
 
 }

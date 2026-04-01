@@ -1,5 +1,5 @@
 import React from "react";
-import { IconForView, useApp } from "@firecms/core";
+import { IconForView, useApp, useTranslation } from "@firecms/core";
 import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip, } from "@firecms/ui";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_VIEWS_CONFIG } from "../utils";
@@ -17,6 +17,8 @@ export function AdminDrawerMenu({
         drawerOpen,
         closeDrawer
     } = useApp();
+
+    const { t } = useTranslation();
 
     const navigate = useNavigate();
 
@@ -50,7 +52,7 @@ export function AdminDrawerMenu({
             }}
             key={`navigation_${index}`}>
             {<IconForView collectionOrView={view}/>}
-            {view.name}
+            {t(view.name as any)}
         </MenuItem>)}
 
     </Menu>;

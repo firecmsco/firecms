@@ -4,7 +4,7 @@ import { resolveCollection } from "../util";
 import { cls, defaultBorderMixin, IconButton, OpenInNewIcon, Typography } from "@firecms/ui";
 import { CustomizationController } from "../types/customization_controller";
 import { useCustomizationController } from "../hooks/useCustomizationController";
-import { useAuthController } from "../hooks";
+import { useAuthController, useTranslation } from "../hooks";
 import { PropertyCollectionView } from "./PropertyCollectionView";
 
 /**
@@ -26,6 +26,7 @@ export function EntityView<M extends Record<string, any>>(
     }: EntityViewProps<M>) {
 
     const authController = useAuthController();
+    const { t } = useTranslation();
     const customizationController: CustomizationController = useCustomizationController();
     const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection<M>({
         collection,
@@ -48,7 +49,7 @@ export function EntityView<M extends Record<string, any>>(
                                     color={"secondary"}
                                     component={"span"}
                                     className="break-words">
-                            Id
+                            {t("id")}
                         </Typography>
                     </div>
                     <div className="col-span-8">

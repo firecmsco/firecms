@@ -13,6 +13,7 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { getHashValue } from "../util";
+import { useTranslation } from "../hooks";
 import {
     AddIcon,
     Button,
@@ -235,6 +236,7 @@ export function ArrayItemOptions({
     canAddElements?: boolean;
     addInIndex?: (index: number) => void;
 }) {
+    const { t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
     const iconRef = useRef<HTMLDivElement>(null);
     useOutsideAlerter(iconRef, () => {
@@ -296,7 +298,7 @@ export function ArrayItemOptions({
                         }}
                     >
                         <RemoveIcon size={"small"}/>
-                        Remove
+                        {t("remove")}
                     </MenuItem>
                     <MenuItem
                         dense
@@ -306,7 +308,7 @@ export function ArrayItemOptions({
                         }}
                     >
                         <ContentCopyIcon size={"small"}/>
-                        Copy
+                        {t("copy")}
                     </MenuItem>
                     {addInIndex && (
                         <MenuItem
@@ -317,7 +319,7 @@ export function ArrayItemOptions({
                             }}
                         >
                             <KeyboardArrowUpIcon size={"small"}/>
-                            Add on top
+                            {t("add_on_top")}
                         </MenuItem>
                     )}
                     {addInIndex && (
@@ -329,7 +331,7 @@ export function ArrayItemOptions({
                             }}
                         >
                             <KeyboardArrowDownIcon size={"small"}/>
-                            Add below
+                            {t("add_below")}
                         </MenuItem>
                     )}
                 </Menu>

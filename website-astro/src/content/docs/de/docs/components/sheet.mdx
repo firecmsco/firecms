@@ -1,0 +1,31 @@
+---
+title: Blatt (Sheet)
+slug: de/docs/components/sheet
+sidebar_label: Sheet
+---
+
+Die `Sheet`-Komponente wird verwendet, um gleitende Panels von den Rändern des Bildschirms aus anzuzeigen. Sie können von oben, unten, links oder rechts geöffnet werden und können entweder undurchsichtig oder transparent sein.
+
+## Verwendung
+
+Um `Sheet` zu verwenden, importieren Sie es aus Ihren Komponenten und übergeben Sie die Eigenschaften `open`, `side`, `transparent` und `onOpenChange`.
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Einfaches Sheet
+
+Ein einfaches Sheet (Blatt), das von rechts hereingleitet.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_basic.tsx"/>
+
+## Sheet von oben
+
+Dieses Beispiel demonstriert ein Sheet, das von oben hereingleitet.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_top.tsx"/>
+
+## Transparentes Sheet
+
+Dieses Sheet ist so konfiguriert, dass es transparent ist.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_transparent.tsx"/>

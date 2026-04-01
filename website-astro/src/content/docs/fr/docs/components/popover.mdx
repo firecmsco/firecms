@@ -1,0 +1,37 @@
+---
+title: Popover
+slug: fr/docs/components/popover
+sidebar_label: Popover
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Le composant Popover vous permet de faire flotter un panneau de contenu ancré à un autre élément, parfait pour les menus contextuels, les cartes de survol, les infobulles et bien plus encore.
+
+## Utilisation
+
+Pour utiliser le `Popover`, importez-le depuis vos composants et passez les props requises `trigger` et optionnelles `open`, `onOpenChange`, `side`, `sideOffset`, `align`, `alignOffset` et d'autres.
+
+## Popover de base
+
+Un popover simple qui s'affiche en cliquant sur l'élément déclencheur.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_basic.tsx"/>
+
+## Popover avec alignement
+
+Montrant comment aligner le contenu du popover par rapport à l'élément déclencheur.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_align.tsx"/>
+
+## Popover contrôlé
+
+Démontre l'utilisation des props `open` et `onOpenChange` pour un comportement contrôlé.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_controlled.tsx"/>
+
+## Utilisation avec un style personnalisé
+
+Illustration du style personnalisé appliqué au contenu du popover.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/popover/popover_styled.tsx"/>

@@ -1,0 +1,250 @@
+---
+title: FireCMS gestalten
+slug: de/docs/self/styling_firecms
+description: FireCMS ermöglicht es dir, das Aussehen deines Admin-Panels anzupassen. Du kannst Theme, Farben und Typografie an deine Marke anpassen.
+---
+
+FireCMS ermöglicht es dir, das Aussehen und die Haptik deines Admin-Panels anzupassen. Du kannst
+Theme, Farben und Typografie an deine Marke anpassen.
+
+FireCMS verwendet [Tailwind CSS v4](https://tailwindcss.com/) für das Styling. Die gesamte Konfiguration
+erfolgt direkt in CSS über den `@theme`-Block — für die meisten Anpassungen wird keine `tailwind.config.js` benötigt.
+
+### CSS einrichten
+
+Deine `index.css`-Datei sollte so aussehen:
+
+```css
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@plugin "@tailwindcss/typography";
+
+@source "../index.html";
+@source "../src/**/*.{js,ts,jsx,tsx}";
+@source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+
+body {
+    @apply w-full min-h-screen bg-surface-50 dark:bg-surface-900 flex flex-col items-center justify-center;
+}
+```
+
+Wichtige Punkte:
+- `@import 'tailwindcss'` ersetzt die alten `@tailwind base/components/utilities`-Direktiven.
+- `@import "@firecms/ui/index.css" layer(base)` importiert das FireCMS UI-Theme in den CSS-`base`-Layer.
+- `@custom-variant dark` richtet die Dark-Mode-Variante über den `[data-theme=dark]`-Selektor ein.
+- `@plugin` ersetzt das alte Plugins-Array in `tailwind.config.js`.
+- `@source` ersetzt das `content`-Array in `tailwind.config.js` und teilt Tailwind mit, wo nach Klassennamen gesucht werden soll.
+
+Die originale [`index.css`](https://github.com/firecmsco/firecms/blob/main/packages/ui/src/index.css)
+im `@firecms/ui`-Paket kann als Referenz verwendet werden.
+
+### Farben anpassen
+
+#### Primär- und Sekundärfarben
+
+FireCMS UI verwendet eine Primärfarbe und eine Sekundärfarbe. Du kannst diese in deiner `index.css`
+überschreiben, indem du die CSS-Custom-Properties **nach** dem Import der FireCMS UI-Stile neu zuweist:
+
+```css
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+Das sind die Standardwerte, die du an deine Marke anpassen kannst.
+
+#### Erweiterte Farbanpassung mit `@theme`
+
+In Tailwind v4 werden Farben und andere Design-Tokens direkt in CSS über den `@theme`-Block definiert.
+FireCMS UI liefert alle seine Tokens auf diese Weise. Wenn du die vollständige Farbpalette überschreiben
+möchtest, füge einen `@theme`-Block in deine `index.css` ein:
+
+```css
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+
+    /* Feldfarben */
+    --color-field-disabled: rgb(224 224 226);
+    --color-field-disabled-dark: rgb(35 35 37);
+
+    /* Textfarben */
+    --color-text-primary: rgba(0, 0, 0, 0.87);
+    --color-text-secondary: rgba(0, 0, 0, 0.52);
+    --color-text-disabled: rgba(0, 0, 0, 0.38);
+    --color-text-primary-dark: #ffffff;
+    --color-text-secondary-dark: rgba(255, 255, 255, 0.6);
+    --color-text-disabled-dark: rgba(255, 255, 255, 0.48);
+
+    /* Oberflächenfarben */
+    --color-surface-50: #f8f8fc;
+    --color-surface-100: #e7e7eb;
+    --color-surface-200: #cfcfd6;
+    --color-surface-300: #b7b7bf;
+    --color-surface-400: #a0a0a9;
+    --color-surface-500: #87878f;
+    --color-surface-600: #6b6b74;
+    --color-surface-700: #454552;
+    --color-surface-800: #292934;
+    --color-surface-900: #18181c;
+    --color-surface-950: #101013;
+
+    /* Oberflächen-Akzentfarben */
+    --color-surface-accent-50: #f8fafc;
+    --color-surface-accent-100: #f1f5f9;
+    --color-surface-accent-200: #e2e8f0;
+    --color-surface-accent-300: #cbd5e1;
+    --color-surface-accent-400: #94a3b8;
+    --color-surface-accent-500: #64748b;
+    --color-surface-accent-600: #475569;
+    --color-surface-accent-700: #334155;
+    --color-surface-accent-800: #1e293b;
+    --color-surface-accent-900: #0f172a;
+    --color-surface-accent-950: #020617;
+}
+```
+
+FireCMS definiert Farben für alle Oberflächen (standardmäßig ein helles Grau), Oberflächen-Akzente
+(standardmäßig ein bläuliches Grau), Typografiefarben (primary, secondary und disabled) sowie die
+Feldfarben (Hintergrund, Hover usw.).
+
+### Typografie anpassen
+
+FireCMS verwendet standardmäßig die Schriftart `Rubik`, sowohl für Überschriften als auch für
+Fließtext. Für Code-Blöcke wird `JetBrains Mono` verwendet.
+
+#### Neue Schriftarten hinzufügen
+
+Wenn du eine neue Schriftart hinzufügen möchtest, kannst du sie über `npm` oder `yarn` installieren.
+
+Beispielsweise für die Schriftart `Noto Serif`:
+
+```bash
+npm install @fontsource/noto-serif
+```
+
+oder
+
+```bash
+yarn add @fontsource/noto-serif
+```
+
+und in deiner `App.tsx` importieren:
+```tsx
+import "@fontsource/noto-serif";
+```
+
+In Tailwind v4 werden Schriftfamilien im `@theme`-Block definiert. FireCMS UI definiert 3 Schriftfamilien:
+`--font-sans`, `--font-headers` und `--font-mono`. Du kannst sie direkt in deiner `index.css` überschreiben:
+
+```css
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+    --font-sans: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    --font-headers: 'Noto Serif', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Space Mono', 'Lucida Console', monospace;
+}
+```
+
+#### Typografiestile anpassen
+
+Jeder Typografiestil ist in `@firecms/ui/index.css` definiert und kann überschrieben werden. Die
+`@apply`-Direktive ermöglicht es, Tailwind-Utilities auf eine Klasse anzuwenden.
+
+Füge diese Klassen zu deiner `index.css` hinzu, um die Standards zu überschreiben:
+
+```css
+.typography-h1 {
+    @apply text-6xl font-headers font-light tracking-tight;
+}
+
+.typography-h2 {
+    @apply text-5xl font-headers font-light tracking-tight;
+}
+
+.typography-h3 {
+    @apply text-4xl font-headers font-normal tracking-tight;
+}
+
+.typography-h4 {
+    @apply text-3xl font-headers font-normal tracking-tight;
+}
+
+.typography-h5 {
+    @apply text-2xl font-headers font-normal;
+}
+
+.typography-h6 {
+    @apply text-xl font-headers font-medium;
+}
+
+.typography-subtitle1 {
+    @apply text-lg font-headers font-medium;
+}
+
+.typography-subtitle2 {
+    @apply text-base font-headers font-medium;
+}
+
+.typography-body1 {
+}
+
+.typography-body2 {
+    @apply text-sm;
+}
+
+.typography-caption {
+    @apply text-xs;
+}
+
+.typography-label {
+    @apply text-sm font-medium;
+}
+
+.typography-button {
+    @apply text-sm font-semibold uppercase;
+}
+```
+
+### Verwendest du noch Tailwind v3?
+
+Wenn dein Projekt noch Tailwind CSS v3 verwendet, findest du in der
+[`tailwind.config.js`](https://github.com/firecmsco/firecms/blob/main/packages/ui/tailwind.config.js)
+des `@firecms/ui`-Pakets, die aus Gründen der Rückwärtskompatibilität weiterhin ausgeliefert wird.
+Du kannst sie als Preset verwenden:
+
+```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+
+export default {
+    presets: [fireCMSConfig],
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}"
+    ]
+};
+```
+
+### Vermisst du eine Anpassungsmöglichkeit?
+
+Wenn du weitere Aspekte von FireCMS anpassen möchtest, [teile es uns bitte mit](https://discord.gg/fxy7xsQm3m).

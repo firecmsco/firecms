@@ -1,0 +1,303 @@
+---
+title: Internationalisierung (i18n)
+slug: de/docs/self/i18n
+description: Erfahren Sie, wie Sie die UI-Sprache festlegen, vorhandene Strings überschreiben und neue Übersetzungen in Ihrer selbst gehosteten FireCMS-Anwendung hinzufügen.
+---
+
+FireCMS enthält ein eingebautes Internationalisierungssystem basierend auf
+[i18next](https://www.i18next.com/) und
+[react-i18next](https://react.i18next.com/).
+Standardmäßig werden folgende Sprachen unterstützt:
+
+| Code | Sprache |
+|------|------------|
+| `en` | Englisch (Standard) |
+| `es` | Spanisch |
+| `de` | Deutsch |
+| `fr` | Französisch |
+| `it` | Italienisch |
+| `hi` | Hindi |
+
+Alle Sprachumschaltungen, die Persistenz zwischen Sitzungen und die Zeichenketten-Suche werden
+automatisch durch `FireCMSi18nProvider` verwaltet, das Sie an der Wurzel
+Ihres FireCMS-Komponentenbaums einhängen.
+
+---
+
+## Grundlegende Einrichtung
+
+Umschließen Sie Ihren `FireCMS`-Baum mit `FireCMSi18nProvider`. Ein vollständiges Verdrahtungsbeispiel finden Sie
+auf der Seite [Sample PRO-Projekt](../pro/sample_pro) — das folgende Snippet
+konzentriert sich nur auf den i18n-Teil:
+
+```tsx
+import {
+    FireCMS,
+    FireCMSi18nProvider,
+    ModeControllerProvider,
+    Scaffold, AppBar, Drawer, NavigationRoutes, SideDialogs,
+    SnackbarProvider,
+    // … weitere Importe
+} from "@firecms/core";
+
+export function MyCMSApp() {
+    // … Controllers einrichten (Auth, Navigation, Storage, etc.)
+
+    return (
+        <SnackbarProvider>
+            <FireCMSi18nProvider locale="de">
+                <ModeControllerProvider value={modeController}>
+                    <FireCMS
+                        navigationController={navigationController}
+                        authController={authController}
+                        dataSourceDelegate={firestoreDelegate}
+                        storageSource={storageSource}
+                    >
+                        {({ context, loading }) => {
+                            if (loading) return <CircularProgressCenter size="large" />;
+                            return (
+                                <Scaffold>
+                                    <AppBar title="Mein CMS" />
+                                    <Drawer />
+                                    <NavigationRoutes />
+                                    <SideDialogs />
+                                </Scaffold>
+                            );
+                        }}
+                    </FireCMS>
+                </ModeControllerProvider>
+            </FireCMSi18nProvider>
+        </SnackbarProvider>
+    );
+}
+```
+
+Die `locale`-Eigenschaft akzeptiert jeden [BCP-47-Sprachcode](https://www.ietf.org/rfc/bcp/bcp47.txt)
+(`"en"`, `"de"`, `"fr"`, …).
+
+### Benutzerpräferenz wird gespeichert
+
+Wenn ein Benutzer die Sprache über die FireCMS-UI ändert, wird die Wahl in
+`localStorage` unter dem Schlüssel `firecms_locale` gespeichert.
+Beim nächsten Besuch hat die gespeicherte Präferenz Vorrang vor der `locale`-Eigenschaft —
+es sei denn, Sie löschen sie manuell.
+
+---
+
+## Integrierte Strings überschreiben
+
+Sie können jeden FireCMS-UI-String ersetzen, ohne den Bibliotheks-Quellcode zu berühren.
+Verwenden Sie die `translations`-Eigenschaft auf `FireCMSi18nProvider`:
+
+```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
+import type { FireCMSTranslations } from "@firecms/core";
+
+// Geben Sie nur die Schlüssel an, die Sie ändern möchten — alles andere behält seine Standardwerte.
+const myTranslations: { [locale: string]: Partial<FireCMSTranslations> } = {
+    en: {
+        save: "Publish",
+        discard: "Throw away",
+        delete: "Remove",
+    },
+    de: {
+        save: "Veröffentlichen",
+        discard: "Verwerfen",
+        delete: "Entfernen",
+    },
+};
+
+// In Ihrem Komponentenbaum:
+<FireCMSi18nProvider locale="de" translations={myTranslations}>
+    {/* … */}
+</FireCMSi18nProvider>
+```
+
+Überschreibungen werden **tief zusammengeführt** mit den integrierten Strings — Schlüssel, die Sie nicht
+angeben, behalten ihre Standardwerte. Überschreibungen werden erneut angewendet, wenn sich die
+`translations`-Eigenschaftsreferenz ändert.
+
+---
+
+## Eine völlig neue Sprache hinzufügen
+
+Wenn Ihre Zielsprache oben nicht aufgeführt ist, erstellen Sie ein Objekt, das
+`DeepPartial<FireCMSTranslations>` erfüllt (Sie müssen nicht jeden Schlüssel bereitstellen —
+fehlende Schlüssel fallen automatisch auf Englisch zurück) und übergeben Sie es unter einem neuen
+Sprachcode:
+
+```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
+
+const ptTranslations = {
+    save: "Guardar",
+    create: "Criar",
+    discard: "Descartar",
+    cancel: "Cancelar",
+    delete: "Eliminar",
+    edit: "Editar",
+    copy: "Copiar",
+    search: "Pesquisar",
+    filter: "Filtro",
+    loading: "A carregar...",
+    // … fügen Sie so viele Schlüssel hinzu, wie Sie benötigen; der Rest fällt auf Englisch zurück
+};
+
+<FireCMSi18nProvider
+    locale="pt"                              // die neue Sprache aktivieren
+    translations={{ pt: ptTranslations }}   // Strings bereitstellen
+>
+    {/* … */}
+</FireCMSi18nProvider>
+```
+
+:::note
+Wenn ein Schlüssel in Ihrer benutzerdefinierten Sprache fehlt, verwendet FireCMS automatisch den
+englischen (`en`) Wert als Fallback.
+:::
+
+---
+
+## Props-Referenz
+
+| Prop | Typ | Standard | Beschreibung |
+|------|------|---------|-------------|
+| `locale` | `string` | `"en"` | BCP-47-Sprachcode für die aktive Sprache. |
+| `translations` | `Record<string, DeepPartial<FireCMSTranslations>>` | — | Sprachspezifische String-Überschreibungen / -Ergänzungen. |
+
+:::note
+`FireCMSi18nProvider` erstellt eine eigene **isolierte** i18next-Instanz — es wird
+keine andere i18next-Konfiguration in Ihrer App beeinflussen.
+:::
+
+---
+
+## Vollständige Liste überstzbarer Schlüssel
+
+Alle übersetzbaren Strings sind in der `FireCMSTranslations`-Schnittstelle definiert,
+die aus `@firecms/core` exportiert wird.
+Nachfolgend finden Sie eine kategorisierte Zusammenfassung der am häufigsten angepassten Schlüssel:
+
+### Formularaktionen
+
+| Schlüssel | Standard (en) |
+|-----|-------------|
+| `save` | Save |
+| `create` | Create |
+| `save_and_close` | Save and close |
+| `create_and_close` | Create and close |
+| `create_copy` | Create copy |
+| `discard` | Discard |
+| `clear` | Clear |
+| `cancel` | Cancel |
+
+### Entity-Aktionen
+
+| Schlüssel | Standard (en) |
+|-----|-------------|
+| `edit` | Edit |
+| `copy` | Copy |
+| `delete` | Delete |
+| `delete_selected` | Delete |
+
+### Kollektionstabelle
+
+| Schlüssel | Standard (en) |
+|-----|-------------|
+| `search` | Search |
+| `filter` | Filter |
+| `no_items` | No items |
+| `no_entries_found` | No entries found |
+| `create_your_first_entry` | Create your first entry |
+| `add` | Add |
+| `remove` | Remove |
+
+### Dialoge
+
+| Schlüssel | Standard (en) |
+|-----|-------------|
+| `delete_confirmation_title` | Delete? |
+| `delete_confirmation_body` | This will delete the entity. Are you sure? |
+| `unsaved_changes_title` | Unsaved changes |
+| `unsaved_changes_body` | You have unsaved changes. Do you want to discard them? |
+| `discard_changes` | Discard changes |
+| `keep_editing` | Keep editing |
+
+### Navigation & Layout
+
+| Schlüssel | Standard (en) |
+|-----|-------------|
+| `open_menu` | Open menu |
+| `close_drawer` | Close drawer |
+| `home` | Home |
+| `admin` | Admin |
+| `log_out` | Log out |
+
+### Fehlerzustände
+
+| Schlüssel | Standard (en) |
+|-----|-------------|
+| `error` | Error |
+| `error_uploading_file` | Error uploading file |
+| `error_deleting` | Error deleting |
+| `internal_error` | Internal ERROR |
+| `page_not_found` | Page not found |
+| `back_to_home` | Back to home |
+
+### Authentifizierung
+
+| Schlüssel | Standard (en) |
+|-----|-------------|
+| `auth_sign_in` | Sign In |
+| `auth_sign_up` | Sign Up |
+| `auth_password` | Password |
+| `auth_reset_password` | Reset password |
+| `auth_wrong_password` | Wrong password. Please try again. |
+| `auth_user_not_found` | User not found |
+
+### Datenimport / -export
+
+| Schlüssel | Standard (en) |
+|-----|-------------|
+| `import` | Import |
+| `import_data` | Import data |
+| `export` | Export |
+| `export_data` | Export data |
+| `download` | Download |
+
+Die **vollständige** Liste der Schlüssel mit ihren TypeScript-Definitionen finden Sie in der
+[`FireCMSTranslations`-Quelldatei](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/translations.ts)
+und der [englischen Basis-Locale](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/locales/en.ts)
+auf GitHub.
+
+---
+
+## Sprachen zur Laufzeit dynamisch wechseln
+
+Sie können die aktive Sprache zur Laufzeit ändern, indem Sie die `locale`-Eigenschaft aktualisieren.
+FireCMS wechselt automatisch, **es sei denn**, der Benutzer hat bereits eine
+persönliche Präferenz in `localStorage` gespeichert.
+
+Um die gespeicherte Präferenz zu löschen und eine Sprachänderung zu erzwingen:
+
+```ts
+import { FIRECMS_LOCALE_STORAGE_KEY } from "@firecms/core";
+
+// Benutzerpräferenz löschen, dann die neue Sprache über die `locale`-Eigenschaft setzen
+localStorage.removeItem(FIRECMS_LOCALE_STORAGE_KEY);
+```
+
+---
+
+## Eine neue Sprache beitragen
+
+Wenn Sie eine vollständige Übersetzung für eine neue Sprache hinzufügen und diese mit der
+Community teilen möchten, sind Pull Requests willkommen!
+
+1. Fügen Sie eine neue Datei `packages/firecms_core/src/locales/<code>.ts` hinzu, nach der
+   Struktur der vorhandenen [`en.ts`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/locales/en.ts).
+2. Registrieren Sie sie innerhalb von
+   [`FireCMSi18nProvider.tsx`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/i18n/FireCMSi18nProvider.tsx).
+3. Öffnen Sie einen Pull Request — vielen Dank! 🎉
+
+Haben Sie Fragen? Treten Sie der [Discord-Community](https://discord.gg/fxy7xsQm3m) bei.

@@ -1,0 +1,76 @@
+---
+title: Migration von v3.0 zu v3.1
+slug: de/docs/self/migrating_from_v3_to_v3_1
+sidebar_label: Migration von v3.0 zu v3.1
+---
+
+Diese Migrationsanleitung gilt für **selbst gehostete Versionen** von FireCMS, einschließlich **Community** und **PRO** Editionen.
+FireCMS v3.1 führt wichtige Updates ein, die Konfigurationsänderungen erfordern.
+
+## Vor dem Start
+
+- Stellen Sie sicher, dass Sie derzeit auf **FireCMS v3.0.x** sind
+- Sichern Sie Ihr Projekt oder comitten Sie Ihren aktuellen Stand in die Versionskontrolle
+- Stellen Sie sicher, dass Sie **Node.js 18+** verwenden
+
+## FireCMS-Pakete aktualisieren
+
+Aktualisieren Sie alle `@firecms/*`-Pakete auf Version **3.1**:
+
+```bash
+npm i @firecms/core@3.1.0 @firecms/ui@3.1.0 @firecms/firebase@3.1.0 @firecms/collection_editor@3.1.0 @firecms/collection_editor_firebase@3.1.0 @firecms/data_enhancement@3.1.0 @firecms/data_export@3.1.0 @firecms/data_import@3.1.0 @firecms/schema_inference@3.1.0 @firecms/user_management@3.1.0
+```
+
+Stellen Sie sicher, dass alle `@firecms/*`-Pakete in Ihrer `package.json` aufgeführt sind. Das Mischen von v3.0- und v3.1-Paketen führt zu Problemen.
+
+---
+
+## TailwindCSS v4 Migration
+
+Die bedeutendste Änderung in v3.1 ist die Migration von **TailwindCSS v3 auf v4**.
+
+:::caution
+Dies ist eine **Breaking Change**. Ihr Projekt funktioniert erst korrekt, wenn Sie alle Schritte in diesem Abschnitt abgeschlossen haben.
+:::
+
+### Abhängigkeiten aktualisieren
+
+TailwindCSS v4 und das Vite-Plugin installieren:
+
+```bash
+npm i tailwindcss@4 @tailwindcss/vite
+```
+
+### Das Vite-Plugin hinzufügen
+
+Aktualisieren Sie Ihre `vite.config.ts`, um das neue TailwindCSS v4-Plugin einzuschließen:
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+    plugins: [
+        react(),
+        tailwindcss()
+    ],
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    build: {
+        outDir: "./build",
+        target: "ESNEXT",
+    }
+});
+```
+
+### CSS-Datei aktualisieren
+
+Ersetzen Sie den Inhalt Ihrer `index.css`:
+
+```css
+@import "@firecms/ui/index.css";
+```
+
+Entfernen Sie die `tailwind.config.js`-Datei (wird nicht mehr benötigt mit TailwindCSS v4).

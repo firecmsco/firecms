@@ -1,0 +1,31 @@
+---
+title: Menü (Menu)
+slug: de/docs/components/menu
+sidebar_label: Menu
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Die `Menu`-Komponente bietet eine flexible Dropdown-Menü-Funktionalität. Sie nutzt `@radix-ui/react-dropdown-menu` für Barrierefreiheit und Anpassungsfunktionen. Die `Menu`-Komponente und ihre Unterkomponente `MenuItem` können leicht gestylt und in Ihre Benutzeroberfläche für verschiedene Anforderungen wie Navigationsmenüs, Optionsmenüs und mehr integriert werden.
+
+## Verwendung
+
+Die `Menu`-Komponente erfordert ein `trigger`-Element, um die Sichtbarkeit des Menüs umzuschalten, und kann jeden ReactNode als untergeordnete Elemente akzeptieren (typischerweise `MenuItem`-Komponenten für die Menüoptionen).
+
+## Einfaches Menü
+
+Ein einfaches Beispiel, das zeigt, wie die `Menu`-Komponente zum Erstellen eines Dropdown-Menüs verwendet wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_basic.tsx"/>
+
+## Gesteuertes Menü
+
+Sie können die Sichtbarkeit der `Menu`-Komponente steuern, indem Sie die Props `open` und `onOpenChange` übergeben.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_controlled.tsx"/>
+
+## Dichte Menüelemente
+
+Zeigt, wie die `MenuItem`-Komponenten für ein kompakteres Menü-Erscheinungsbild dichter (`dense`) gemacht werden.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_dense_items.tsx"/>

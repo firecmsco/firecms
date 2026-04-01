@@ -17,6 +17,7 @@ import {
 } from "@firecms/ui";
 import { toArray } from "../../util/arrays";
 import { ErrorBoundary } from "../ErrorBoundary";
+import { useTranslation } from "../../hooks/useTranslation";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -45,9 +46,9 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
 }: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
-
     const customizationController = useCustomizationController();
     const plugins = customizationController.plugins ?? [];
+    const { t } = useTranslation();
 
     const authController = useAuthController();
 
@@ -63,7 +64,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 startIcon={<AddIcon size={"small"} />}
                 variant="filled"
                 color="primary">
-                Add {collection.singularName ?? collection.name}
+                {t("add")} {collection.singularName ?? collection.name}
             </Button>
             : <Button
                 id={`add_entity_${path}`}
@@ -98,7 +99,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             </IconButton>;
         multipleDeleteButton =
             <Tooltip
-                title={multipleDeleteEnabled ? "Delete" : "You have selected at least one entity you cannot delete"}>
+                title={multipleDeleteEnabled ? t("delete_selected") : t("cannot_delete_selected")}>
                 {button}
             </Tooltip>
     }

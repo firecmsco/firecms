@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Checkbox, Label, MailIcon, Typography } from "@firecms/ui";
-import { ErrorView, FireCMSLogo } from "@firecms/core";
+import { ErrorView, FireCMSLogo, LanguageToggle, useTranslation } from "@firecms/core";
 import { GoogleLoginButton } from "./GoogleLoginButton";
 import { FireCMSBackend } from "../../types";
 import { LoginButton } from "@firecms/firebase";
@@ -31,6 +31,7 @@ export function FireCMSCloudLoginView({
                                           includeTermsAndNewsLetter,
                                           onAnalyticsEvent
                                       }: FireCMSCloudLoginViewProps) {
+    const { t } = useTranslation();
 
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false);
@@ -52,19 +53,19 @@ export function FireCMSCloudLoginView({
 
             if (fireCMSBackend.authProviderError.code === "auth/user-not-found")
                 errorView =
-                    <ErrorView error={"User not found"}/>;
+                    <ErrorView error={t("auth_user_not_found")}/>;
             else if (fireCMSBackend.authProviderError.code === "auth/wrong-password")
                 errorView =
-                    <ErrorView error={"Wrong password. Please try again."}/>;
+                    <ErrorView error={t("auth_wrong_password")}/>;
             else if (fireCMSBackend.authProviderError.code === "auth/user-disabled")
                 errorView =
-                    <ErrorView error={"User disabled. Please contact support."}/>;
+                    <ErrorView error={t("auth_user_disabled")}/>;
             else if (fireCMSBackend.authProviderError.code === "auth/account-exists-with-different-credential")
                 errorView =
-                    <ErrorView error={"Account exists with different sign in method"}/>;
+                    <ErrorView error={t("auth_account_exists_with_different_credential")}/>;
             else if (fireCMSBackend.authProviderError.code === "auth/email-already-in-use")
                 errorView =
-                    <ErrorView error={"The email is already in use"}/>;
+                    <ErrorView error={t("auth_email_already_in_use")}/>;
             else
                 errorView =
                     <ErrorView error={fireCMSBackend.authProviderError}/>;
@@ -115,7 +116,7 @@ export function FireCMSCloudLoginView({
 
                         {fireCMSBackend.permissionsNotGrantedError &&
                             <ErrorView
-                                error={"You need to grant additional permissions in order to manage your Google Cloud projects"}/>}
+                                error={t("auth_google_permissions_required")}/>}
 
                         {buildErrorView()}
 
@@ -133,33 +134,32 @@ export function FireCMSCloudLoginView({
                 className="hidden lg:flex lg:w-1/2 bg-primary text-white flex-col justify-center items-center p-12 m-0">
                 <div className="max-w-md">
                     <Typography variant="h5" className="font-mono uppercase mb-8 text-white ">
-                        Build Your Firebase Admin Panel in Minutes
+                        {t("build_admin_panel_in_minutes")}
                     </Typography>
                     <ul className="space-y-3 text-left list-disc list-inside marker:text-white">
                         <li>
                             <Typography variant="body1" className="text-blue-50 inline">
-                                Go live instantly: Create <b>production-ready back-offices</b> without the frontend
-                                hassle.
+                                {t("go_live_instantly")} <b>{t("create_production_ready_back_offices")}</b> {t("without_the_frontend_hassle")}
                             </Typography>
                         </li>
                         <li>
                             <Typography variant="body1" className="text-blue-50 inline">
-                                <b>Automatic setup</b> from your existing Firestore data.
+                                <b>{t("automatic_setup")}</b> {t("from_your_existing_firestore_data")}
                             </Typography>
                         </li>
                         <li>
                             <Typography variant="body1" className="text-blue-50 inline">
-                                Seamless <b>real-time</b> Firebase integration.
+                                {t("seamless_real_time_firebase_integration")}
                             </Typography>
                         </li>
                         <li>
                             <Typography variant="body1" className="text-blue-50 inline">
-                                Intuitive <b>spreadsheet-like UI</b> your whole team can use.
+                                {t("intuitive_spreadsheet_like_ui")} {t("your_whole_team_can_use")}
                             </Typography>
                         </li>
                         <li>
                             <Typography variant="body1" className="text-blue-50 inline">
-                                <b>Focus on your app</b>, not the admin panel.
+                                <b>{t("focus_on_your_app")}</b> {t("not_the_admin_panel")}
                             </Typography>
                         </li>
                     </ul>
@@ -168,7 +168,12 @@ export function FireCMSCloudLoginView({
 
             {/* Login Content - Right Side */}
             <div
-                className="flex flex-col items-center justify-center w-full lg:w-1/2 h-full min-h-screen lg:min-h-0 p-8 m-0">
+                className="flex flex-col items-center justify-center w-full lg:w-1/2 h-full min-h-screen lg:min-h-0 p-8 m-0 relative">
+                
+                <div className="absolute top-4 right-4 flex gap-2">
+                    <LanguageToggle />
+                </div>
+
                 {includeLogo && (
                     <div className="m-4" style={{
                         width: "160px",
@@ -200,8 +205,7 @@ export function FireCMSCloudLoginView({
                                 />
                                 <Label htmlFor="newsletter-checkbox">
                                     <Typography variant={"caption"} color={"primary"}>
-                                        Join our newsletter. No spam, only important
-                                        updates!
+                                        {t("join_our_newsletter")}
                                     </Typography>
                                 </Label>
                             </div>
@@ -214,15 +218,15 @@ export function FireCMSCloudLoginView({
                                 />
                                 <Label htmlFor="terms-checkbox">
                                     <Typography variant={"caption"} color={"primary"}>
-                                        By signing in you agree to our <a
+                                        {t("by_signing_in_you_agree_to_our")} <a
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         href={"https://firecms.co/policy/terms_conditions"}>
-                                        Terms and Conditions</a> and our <a
+                                        {t("terms_and_conditions")}</a> {t("and_our")} <a
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         href={"https://firecms.co/policy/privacy_policy"}>
-                                        Privacy policy</a>
+                                        {t("privacy_policy")}</a>
                                     </Typography>
                                 </Label>
                             </div>}
@@ -244,7 +248,7 @@ export function FireCMSCloudLoginView({
 
                     {!passwordLoginSelected && <LoginButton
                         disabled={!termsAccepted && includeTermsAndNewsLetter}
-                        text={"Email/password"}
+                        text={t("email_password")}
                         icon={<MailIcon size={24}/>}
                         onClick={() => {
                             onAnalyticsEvent?.("password_method_selected");
@@ -261,15 +265,11 @@ export function FireCMSCloudLoginView({
                     {buildErrorView()}
 
                     {includeGoogleDisclosure && <Typography variant={"caption"} className={"mt-4"}>
-                        FireCMS Cloud use and transfer to any other app of
-                        information
-                        received from Google APIs will adhere to <a
+                        {t("firecms_cloud_google_disclosure")} <a
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={"https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes"}>Google
-                        API Services
-                        User Data Policy</a>, including the Limited Use
-                        requirements.
+                        href={"https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes"}>
+                        {t("google_api_services_user_data_policy")}</a>, {t("including_the_limited_use_requirements")}
                     </Typography>}
                 </div>
             </div>

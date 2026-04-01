@@ -13,6 +13,7 @@ import {
     AppsIcon,
     Icon
 } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 import { useMediaManager } from "../MediaManagerProvider";
 import { MediaAssetCard } from "./MediaAssetCard";
 import { MediaAssetDetails } from "./MediaAssetDetails";
@@ -35,6 +36,7 @@ export function MediaLibraryView({
     const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const { t } = useTranslation();
 
     const handleSearch = useCallback((query?: string) => {
         controller.searchAssets(query ?? "");
@@ -64,14 +66,14 @@ export function MediaLibraryView({
                     <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                         <div className="flex items-center gap-3">
                             <Typography variant="h5" className="font-semibold">
-                                Media Library
+                                {t("media_library")}
                             </Typography>
                             {controller.totalCount !== undefined && (
                                 <Typography
                                     variant="caption"
                                     className="bg-surface-accent-100 dark:bg-surface-accent-800 px-2 py-0.5 rounded-full"
                                 >
-                                    {controller.totalCount} assets
+                                    {t("media_assets_count", { count: controller.totalCount.toString() })}
                                 </Typography>
                             )}
                         </div>
@@ -79,13 +81,13 @@ export function MediaLibraryView({
                         <div className="flex items-center gap-2 w-full sm:w-auto">
                             <SearchBar
                                 onTextSearch={handleSearch}
-                                placeholder="Search assets..."
+                                placeholder={t("media_search_assets")}
                                 className="flex-1 sm:w-64"
                             />
 
                             <div
                                 className="flex items-center gap-1 border-l border-surface-accent-200 dark:border-surface-accent-700 pl-2 ml-2">
-                                <Tooltip title="Grid view">
+                                <Tooltip title={t("media_grid_view")}>
                                     <IconButton
                                         onClick={() => setViewMode("grid")}
                                         className={cls(
@@ -95,7 +97,7 @@ export function MediaLibraryView({
                                         <AppsIcon size="small"/>
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="List view">
+                                <Tooltip title={t("media_list_view")}>
                                     <IconButton
                                         onClick={() => setViewMode("list")}
                                         className={cls(
@@ -107,7 +109,7 @@ export function MediaLibraryView({
                                 </Tooltip>
                             </div>
 
-                            <Tooltip title="Refresh">
+                            <Tooltip title={t("media_refresh")}>
                                 <IconButton onClick={handleRefresh} disabled={controller.loading}>
                                     <RefreshIcon size="small"/>
                                 </IconButton>
@@ -118,7 +120,7 @@ export function MediaLibraryView({
                                 onClick={handleUploadClick}
                             >
                                 <AddIcon size="small"/>
-                                Upload
+                                {t("media_upload")}
                             </Button>
                         </div>
                     </div>
@@ -135,20 +137,20 @@ export function MediaLibraryView({
                     ) : controller.error ? (
                         <div className="flex flex-col items-center justify-center h-64 gap-4">
                             <Typography className="text-red-500">
-                                Error loading assets: {controller.error.message}
+                                {t("media_error_loading", { message: controller.error.message })}
                             </Typography>
                             <Button onClick={handleRefresh}>
-                                Try Again
+                                {t("media_try_again")}
                             </Button>
                         </div>
                     ) : controller.assets.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-64 gap-4">
                             <Typography className="text-surface-accent-500">
-                                No media assets yet
+                                {t("media_no_assets")}
                             </Typography>
                             <Button onClick={handleUploadClick}>
                                 <AddIcon size="small"/>
-                                Upload your first file
+                                {t("media_upload_first_file")}
                             </Button>
                         </div>
                     ) : (

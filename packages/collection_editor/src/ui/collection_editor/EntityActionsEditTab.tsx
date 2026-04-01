@@ -4,7 +4,8 @@ import {
     EntityAction,
     EntityCollection,
     resolveEntityAction,
-    useCustomizationController
+    useCustomizationController,
+    useTranslation
 } from "@firecms/core";
 import {
     AddIcon,
@@ -34,6 +35,7 @@ export function EntityActionsEditTab({
 }) {
 
     const { entityActions: contextEntityActions } = useCustomizationController();
+    const { t } = useTranslation();
 
     const [addEntityActionDialogOpen, setAddEntityActionDialogOpen] = React.useState<boolean>(false);
     const [actionToDelete, setActionToDelete] = React.useState<string | undefined>();
@@ -53,7 +55,7 @@ export function EntityActionsEditTab({
         <div className={"flex flex-col gap-16"}>
             <div className={"flex-grow flex flex-col gap-4 items-start"}>
                 <Typography variant={"h6"}>
-                    Custom actions
+                    {t("custom_actions")}
                 </Typography>
 
                 {totalEntityActions === 0 &&
@@ -62,8 +64,8 @@ export function EntityActionsEditTab({
                         href={"https://firecms.co/docs/custom_actions"}
                         component={"a"}
                         rel="noopener noreferrer"
-                        target="_blank">More info</Button>}>
-                        Define your own custom actions by uploading them with the CLI.
+                        target="_blank">{t("more_info")}</Button>}>
+                        {t("define_custom_actions_cli")}
                     </Alert>
                 }
 
@@ -81,7 +83,7 @@ export function EntityActionsEditTab({
                                         </TableCell>
                                         <TableCell
                                             align="right">
-                                            <Tooltip title={"Remove"}
+                                            <Tooltip title={t("remove")}
                                                 asChild={true}>
                                                 <IconButton size="small"
                                                     onClick={(e) => {
@@ -104,8 +106,7 @@ export function EntityActionsEditTab({
                                                 {action.name}
                                             </Typography>
                                             <Typography variant={"caption"} className={"flex-grow"}>
-                                                This action is defined in code with
-                                                key <code>{action.key}</code>
+                                                {t("action_defined_in_code")} <code>{action.key}</code>
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -118,7 +119,7 @@ export function EntityActionsEditTab({
                                 setAddEntityActionDialogOpen(true);
                             }}
                             startIcon={<AddIcon />}>
-                            Add custom entity action
+                            {t("add_custom_entity_action")}
                         </Button>
                     </Paper>
 
@@ -150,10 +151,8 @@ export function EntityActionsEditTab({
                         setActionToDelete(undefined);
                     }}
                     onCancel={() => setActionToDelete(undefined)}
-                    title={<>Remove this action?</>}
-                    body={<>This will <b>not
-                        delete any data</b>, only
-                        the action in the CMS</>} />}
+                    title={<>{t("remove_this_action")}</>}
+                    body={<>{t("remove_action_warning")}</>} />}
 
             <EntityActionsSelectDialog
                 open={addEntityActionDialogOpen}

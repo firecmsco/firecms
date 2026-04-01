@@ -1,0 +1,58 @@
+---
+title: Copiando uma entidade de uma coleção para outra
+slug: pt/docs/recipes/copy_entity
+sidebar_label: Copiando de outra coleção
+description: Implemente funcionalidade personalizada para copiar entidades entre coleções no Firestore usando FireCMS com este tutorial prático. Aprenda como introduzir um botão de cópia nas suas views de coleção, habilitando a replicação de dados em diferentes locais do Firestore.
+---
+
+![Product selection](/img/product_selection.webp)
+
+Neste tutorial vamos mostrar como você pode adicionar um botão à sua coleção,
+que permitirá **copiar entidades de outra coleção**.
+
+É muito comum em bancos de dados NoSQL, como o Firestore, manter dados desnormalizados
+em diferentes coleções. Ou seja, manter as mesmas informações em múltiplos
+locais, em vez de bancos de dados normalizados onde as informações devem ser idealmente
+armazenadas apenas uma vez.
+
+### Declarar suas coleções
+
+Para fins ilustrativos, vamos criar duas coleções simples de `products`,
+das quais vamos copiar de e para:
+
+
+
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../samples/samples_v3/recipes/copy_entity/simple_product_collection?raw';
+import CopyButton from '../../samples/samples_v3/recipes/copy_entity/copy_button?raw';
+import CopyButtonUse from '../../samples/samples_v3/recipes/copy_entity/copy_button_use?raw';
+import FullCode from '../../samples/samples_v3/recipes/copy_entity/full?raw';
+
+<Code code={MyComponentSource} lang="tsx" />
+
+### Adicionar uma ação personalizada à sua coleção
+
+No próximo passo vamos adicionar um botão personalizado à nossa coleção destino.
+Este botão abrirá um diálogo de referência e permitirá que os usuários selecionem uma entidade na
+origem.
+
+Este exemplo usa alguns hooks fornecidos pelo FireCMS para desenvolver
+componentes personalizados.
+
+
+
+<Code code={CopyButton} lang="tsx" />
+
+### Adicionar a ação de cópia personalizada
+
+Depois que seu componente estiver pronto, você pode conectá-lo às `Actions` das suas coleções:
+
+
+
+<Code code={CopyButtonUse} lang="tsx" />
+
+## Código completo
+
+
+
+<Code code={FullCode} lang="tsx" />

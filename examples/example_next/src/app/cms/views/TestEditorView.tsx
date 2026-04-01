@@ -1,5 +1,5 @@
 import { Container } from "@firecms/ui";
-import { FireCMSEditor, type JSONContent } from "@firecms/editor";
+import { FireCMSEditor, type JSONContent } from "@firecms/core";
 import { useEffect, useState } from "react";
 import { CircularProgressCenter, useAuthController, useStorageSource } from "@firecms/core";
 import { useEditorAIController } from "@firecms/data_enhancement";

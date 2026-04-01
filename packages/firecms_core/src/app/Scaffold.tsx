@@ -4,6 +4,7 @@ import equal from "react-fast-compare"
 import { useLargeLayout } from "../hooks";
 import { ErrorBoundary } from "../components";
 import { AppContext } from "./useApp";
+import { useTranslation } from "../hooks/useTranslation";
 
 export const DRAWER_WIDTH = 280;
 
@@ -163,6 +164,7 @@ function DrawerWrapper(props: {
     onMouseLeave: () => void
 }) {
 
+    const { t } = useTranslation();
     const width = !props.displayed ? 0 : (props.open ? DRAWER_WIDTH : 72);
     const innerDrawer = <div
         className={"relative h-full no-scrollbar overflow-y-auto overflow-x-hidden"}
@@ -173,7 +175,7 @@ function DrawerWrapper(props: {
     >
 
         {!props.open && props.displayed && (
-            <Tooltip title="Open menu"
+            <Tooltip title={t("open_menu")}
                 side="right"
                 sideOffset={12}
                 asChild={true}>
@@ -181,7 +183,7 @@ function DrawerWrapper(props: {
                     className="ml-2 fixed top-1 left-2 sm:top-2 sm:left-2 !bg-surface-50 dark:!bg-surface-900 rounded-full w-fit z-20">
                     <IconButton
                         color="inherit"
-                        aria-label="Open menu"
+                        aria-label={t("open_menu")}
                         onClick={() => props.setDrawerOpen(true)}
                         size="large"
                     >
@@ -195,7 +197,7 @@ function DrawerWrapper(props: {
             className={`z-20 absolute right-0 top-4 ${props.open ? "opacity-100" : "opacity-0 invisible"
                 } transition-opacity duration-200 ease-in-out`}>
             <IconButton
-                aria-label="Close drawer"
+                aria-label={t("close_drawer")}
                 onClick={() => props.setDrawerOpen(false)}
             >
                 <ChevronLeftIcon />
@@ -215,7 +217,7 @@ function DrawerWrapper(props: {
         return <>
             <IconButton
                 color="inherit"
-                aria-label="Open drawer"
+                aria-label={t("open_menu")}
                 onClick={() => props.setDrawerOpen(true)}
                 size="large"
                 className="absolute sm:top-2 sm:left-4 top-1 left-2"
@@ -226,7 +228,7 @@ function DrawerWrapper(props: {
                 transparent={true}
                 open={props.open}
                 onOpenChange={props.setDrawerOpen}
-                title={"Navigation drawer"}
+                title={t("navigation_drawer")}
                 overlayClassName={"bg-white bg-opacity-80 bg-white/80"}
             >
                 {innerDrawer}

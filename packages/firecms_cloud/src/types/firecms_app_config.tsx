@@ -120,4 +120,10 @@ export type FireCMSAppConfig = {
      */
     appCheck?: AppCheckOptions;
 
+    /**
+     * Pass custom translations to the CMS.
+     * You can provide a dictionary of languages and their translation keys.
+     */
+    translations?: Record<string, Record<string, string>>;
+
 }

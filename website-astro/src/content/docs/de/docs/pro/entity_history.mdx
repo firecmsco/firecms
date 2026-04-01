@@ -1,0 +1,183 @@
+---
+title: Entity-Verlauf
+slug: de/docs/pro/entity_history
+---
+
+Dieses Plugin fügt eine Verlaufsansicht zu Ihren Entities in FireCMS hinzu. Es ermöglicht Ihnen, Änderungen an Entities im Laufe der Zeit zu verfolgen und zeigt, wer die Änderung wann vorgenommen hat.
+
+## Installation
+
+```bash
+npm install @firecms/entity_history
+# oder
+yarn add @firecms/entity_history
+```
+
+## Funktionen
+
+-   Fügt einen „Verlauf"-Reiter zu Entity-Detailansichten hinzu.
+-   Zeigt ein Protokoll der Änderungen für jede Entity an.
+-   Kann global oder pro Kollektion aktiviert werden.
+-   Ermöglicht die Anpassung der Benutzeranzeige im Verlaufsprotokoll.
+
+## Grundlegende Verwendung
+
+Um das Plugin zu verwenden, importieren Sie `useEntityHistoryPlugin` und fügen Sie es zum `plugins`-Array Ihrer `FirebaseCMSApp` hinzu.
+
+Wenn Sie das Benutzerverwaltungs-Plugin verwenden, können Sie eine Funktion bereitstellen, um Benutzerdetails von einer UID aufzulösen.
+Sie können auch Ihre eigene benutzerdefinierte `getUser`-Funktion übergeben, um Benutzerdetails abzurufen.
+
+```tsx
+import React from "react";
+import { FireCMS } from "@firecms/core";
+import { useEntityHistoryPlugin } from "@firecms/entity_history";
+
+export default function App() {
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController: authController
+    });
+
+    const entityHistoryPlugin = useEntityHistoryPlugin({
+        // Verlauf standardmäßig für alle Kollektionen aktivieren
+        // Dies kann überschrieben werden, indem `history: false` in einer bestimmten Kollektion gesetzt wird
+        defaultEnabled: true,
+
+        // Funktion bereitstellen, um Benutzerdetails von einer UID aufzulösen
+        getUser: userManagement.getUser
+    });
+
+    const plugins = [entityHistoryPlugin];
+
+    const navigationController = useBuildNavigationController({
+        // ... Rest Ihrer Konfiguration
+        plugins
+    });
+
+    return (
+            <FireCMS
+                navigationController={navigationController}
+                {/*... Rest Ihrer Konfiguration */}
+            >
+              {({ context, loading }) => {
+                  // ... Ihre Komponenten
+              }}
+            </FireCMS>
+    );
+}
+```
+
+Standardmäßig ist die Verlaufsfunktion für keine Kollektion aktiviert. Sie müssen sie explizit in der Kollektionskonfiguration aktivieren:
+
+```tsx
+import { buildCollection } from "@firecms/core";
+
+const productsCollection = buildCollection({
+    name: "Products",
+    path: "products",
+    properties: {
+        name: {
+            name: "Name",
+            dataType: "string"
+        }
+        // ...weitere Eigenschaften
+    },
+    history: true // Verlauf für diese Kollektion aktivieren
+});
+```
+
+
+## Konfigurationsoptionen
+
+| Option           | Typ                                | Beschreibung                                                                                                                               |
+| ---------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultEnabled` | `boolean`                           | Wenn `true`, wird die Verlaufsansicht standardmäßig für alle Kollektionen aktiviert. Jede Kollektion kann dies durch Setzen ihrer `history`-Eigenschaft überschreiben. |
+| `getUser`        | `(userId: string) => User \| null` | Optionale Funktion zum Abrufen des Benutzerobjekts (Anzeigename, Foto usw.) von einer Benutzer-ID zur Anzeige im Verlaufsprotokoll.                        |
+
+## Kollektionskonfiguration
+
+Um den Verlauf für eine bestimmte Kollektion zu aktivieren oder zu deaktivieren, setzen Sie die `history`-Eigenschaft in der Kollektionskonfiguration:
+
+```tsx
+const sampleCollection = buildCollection({
+    // ...
+    history: true // oder false
+});
+```
+
+## Zusätzliche Hinweise
+
+-   Das Plugin basiert auf Callbacks zur Aufzeichnung von Entity-Änderungen. Stellen Sie sicher, dass Ihre Datenpersistenzlogik diese Callbacks korrekt auslöst.
+-   Die `getUser`-Funktion ist entscheidend für die Anzeige aussagekräftiger Benutzerinformationen im Verlaufsprotokoll. Wenn sie nicht bereitgestellt wird, werden möglicherweise nur Benutzer-IDs angezeigt.
+
+## Programmatische Verlaufseinträge erstellen
+
+Für erweiterte Anwendungsfälle, bei denen Sie Verlaufseinträge programmatisch erstellen müssen (außerhalb der normalen Speicher-Callbacks), können Sie die Funktion `createHistoryEntry` verwenden:
+
+```tsx
+import { createHistoryEntry, NewHistoryEntryParams } from "@firecms/entity_history";
+
+// Beispiel: Verlaufseintrag beim Importieren von Daten erstellen
+const handleDataImport = async (context: FireCMSContext, importedData: any[]) => {
+    for (const item of importedData) {
+        // Entity zuerst speichern
+        await context.dataSource.saveEntity({
+            path: "products",
+            entityId: item.id,
+            values: item,
+            status: "new"
+        });
+
+        // Verlaufseintrag für die Importaktion erstellen
+        createHistoryEntry({
+            context: context,
+            previousValues: undefined, // Keine vorherigen Werte für neue Entities
+            values: item,
+            path: "products",
+            entityId: item.id
+        });
+    }
+};
+
+// Beispiel: Verlaufseintrag für eine benutzerdefinierte Aktualisierungsoperation erstellen
+const handleCustomUpdate = async (context: FireCMSContext, entityId: string, oldValues: any, newValues: any) => {
+    // Ihre benutzerdefinierte Aktualisierungslogik hier ausführen
+    await context.dataSource.saveEntity({
+        path: "products",
+        entityId: entityId,
+        values: newValues,
+        status: "existing"
+    });
+
+    // Verlaufseintrag erstellen, um die Änderung zu verfolgen
+    createHistoryEntry({
+        context: context,
+        previousValues: oldValues,
+        values: newValues,
+        path: "products",
+        entityId: entityId
+    });
+};
+```
+
+### Parameter
+
+| Parameter        | Typ                      | Beschreibung                                                                                                                                       |
+| ---------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `context`        | `FireCMSContext<User>`    | Das FireCMS-Kontextobjekt mit der Datenquelle und dem Auth-Controller                                                                        |
+| `previousValues` | `Partial<any>` (optional) | Die vorherigen Werte der Entity. Wenn nicht angegeben, wird der Verlaufseintrag als Erstellung anstatt als Aktualisierung markiert                       |
+| `values`         | `Partial<any>`            | Die aktuellen/neuen Werte der Entity                                                                                                              |
+| `path`           | `string`                  | Der Kollektionspfad, in dem die Entity gespeichert ist                                                                                                    |
+| `entityId`       | `string`                  | Der eindeutige Bezeichner der Entity                                                                                                               |
+
+### Verlaufseintrag-Struktur
+
+Jeder Verlaufseintrag wird automatisch in einer Unterkollektion `__history` unter der Entity gespeichert und enthält:
+
+- Alle Entity-Werte zum Zeitpunkt der Änderung
+- `__metadata`-Objekt mit:
+  - `previous_values`: Der vorherige Zustand der Entity (sofern angegeben)
+  - `changed_fields`: Array der geänderten Feldpfade
+  - `updated_on`: Zeitstempel der Änderung
+  - `updated_by`: Benutzer-ID der Person, die die Änderung vorgenommen hat (sofern authentifiziert)

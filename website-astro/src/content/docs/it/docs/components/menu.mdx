@@ -1,0 +1,31 @@
+---
+slug: it/docs/components/menu
+title: Menu
+sidebar_label: Menu
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Il componente `Menu` fornisce una funzionalità flessibile di menu a discesa. Sfrutta `@radix-ui/react-dropdown-menu` per funzionalità di accessibilità e personalizzazione. Il componente `Menu` e il suo sottocomponente `MenuItem` possono essere facilmente stilizzati e incorporati nella tua interfaccia per varie esigenze come menu di navigazione, menu opzioni e altro.
+
+## Utilizzo
+
+Il componente `Menu` richiede un elemento `trigger` per alternare la visibilità del menu e può accettare qualsiasi ReactNode come figli, che tipicamente include componenti `MenuItem` per le opzioni del menu.
+
+## Menu di base
+
+Un esempio semplice di utilizzo del componente `Menu` per creare un menu a discesa.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_basic.tsx"/>
+
+## Menu controllato
+
+Puoi controllare la visibilità del componente `Menu` passando le prop `open` e `onOpenChange`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_controlled.tsx"/>
+
+## Elementi menu compatti
+
+Mostra come rendere i componenti `MenuItem` compatti per un aspetto del menu più condensato.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/menu/menu_dense_items.tsx"/>

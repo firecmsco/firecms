@@ -1,16 +1,22 @@
 import { useCallback, useMemo } from "react";
-import { EntityCollection, FireCMSPlugin, mergeCallbacks, User } from "@firecms/core";
+import { EntityCollection, FireCMSPlugin, mergeCallbacks, User, useTranslation } from "@firecms/core";
 import { EntityHistoryView } from "./components/EntityHistoryView";
 import { HistoryIcon } from "@firecms/ui";
 import { entityHistoryCallbacks } from "./entity_history_callbacks";
 import { HistoryControllerProvider } from "./HistoryControllerProvider";
 import { LastEditedByFormAction } from "./components/LastEditedByPluginComponents";
+import { entityHistoryTranslationsEn } from "./locales/en";
+import { entityHistoryTranslationsEs } from "./locales/es";
+import { entityHistoryTranslationsDe } from "./locales/de";
+import { entityHistoryTranslationsFr } from "./locales/fr";
+import { entityHistoryTranslationsIt } from "./locales/it";
+import { entityHistoryTranslationsHi } from "./locales/hi";
+import { entityHistoryTranslationsPt } from "./locales/pt";
 
 /**
  * This plugin adds a history view to the entity side panel.
  */
 export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCMSPlugin<any, any, any, EntityHistoryPluginProps> {
-
     const { defaultEnabled = false } = props ?? {};
 
     const modifyCollection = useCallback((collection: EntityCollection) => {
@@ -47,6 +53,15 @@ export function useEntityHistoryPlugin(props?: EntityHistoryPluginProps): FireCM
         },
         collection: {
             modifyCollection
+        },
+        i18n: {
+            en: entityHistoryTranslationsEn,
+            es: entityHistoryTranslationsEs,
+            de: entityHistoryTranslationsDe,
+            fr: entityHistoryTranslationsFr,
+            it: entityHistoryTranslationsIt,
+            hi: entityHistoryTranslationsHi,
+            pt: entityHistoryTranslationsPt
         }
     } satisfies FireCMSPlugin), [props]);
 }

@@ -11,3 +11,4 @@ export {
     type SchemaContext,
     type SchemaProperty
 } from "./utils/schemaContext";
+export * from "./useDataTalkPlugin";

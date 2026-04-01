@@ -14,6 +14,8 @@ import { FirebaseApp } from "@firebase/app";
 import { Session } from "./types";
 import { getDataTalkSamplePrompts } from "./api";
 import { SchemaContext } from "./utils/schemaContext";
+import { datatalkTranslationsEn } from "./locales/en";
+import { datatalkTranslationsEs } from "./locales/es";
 
 export type DataTalkConfig = {
     loading: boolean;

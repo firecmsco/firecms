@@ -15,7 +15,7 @@ import {
     DialogActions,
     DialogContent
 } from "@firecms/ui";
-import { useSnackbarController, useStorageSource } from "@firecms/core";
+import { useSnackbarController, useStorageSource, useTranslation } from "@firecms/core";
 import { MediaAsset } from "../types";
 
 export interface MediaAssetDetailsProps {
@@ -40,6 +40,7 @@ export function MediaAssetDetails({
     const [deleting, setDeleting] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [tagInput, setTagInput] = useState("");
+    const { t } = useTranslation();
 
     const { values, setFieldValue, dirty } = useCreateFormex<Partial<MediaAsset>>({
         initialValues: {
@@ -56,12 +57,12 @@ export function MediaAssetDetails({
             await onUpdate(asset.id, values);
             snackbarController.open({
                 type: "success",
-                message: "Asset updated successfully"
+                message: t("media_asset_updated")
             });
         } catch (error) {
             snackbarController.open({
                 type: "error",
-                message: `Error updating asset: ${error instanceof Error ? error.message : String(error)}`
+                message: t("media_error_updating", { message: error instanceof Error ? error.message : String(error) })
             });
         } finally {
             setSaving(false);
@@ -74,13 +75,13 @@ export function MediaAssetDetails({
             await onDelete(asset.id);
             snackbarController.open({
                 type: "success",
-                message: "Asset deleted successfully"
+                message: t("media_asset_deleted")
             });
             onClose();
         } catch (error) {
             snackbarController.open({
                 type: "error",
-                message: `Error deleting asset: ${error instanceof Error ? error.message : String(error)}`
+                message: t("media_error_deleting", { message: error instanceof Error ? error.message : String(error) })
             });
         } finally {
             setDeleting(false);
@@ -97,7 +98,7 @@ export function MediaAssetDetails({
         } catch (error) {
             snackbarController.open({
                 type: "error",
-                message: "Error getting download URL"
+                message: t("media_error_getting_url")
             });
         }
     }, [asset, storageSource, snackbarController]);
@@ -178,7 +179,7 @@ export function MediaAssetDetails({
                         />
                     ) : (
                         <div className="text-surface-accent-400">
-                            Preview not available
+                            {t("media_preview_not_available")}
                         </div>
                     )}
                 </div>
@@ -190,7 +191,7 @@ export function MediaAssetDetails({
                         {asset.dimensions && (
                             <div>
                                 <Typography variant="caption" className="text-surface-accent-500">
-                                    Dimensions
+                                    {t("media_dimensions")}
                                 </Typography>
                                 <Typography variant="body2">
                                     {asset.dimensions.width} × {asset.dimensions.height} px
@@ -199,7 +200,7 @@ export function MediaAssetDetails({
                         )}
                         <div>
                             <Typography variant="caption" className="text-surface-accent-500">
-                                Size
+                                {t("media_size")}
                             </Typography>
                             <Typography variant="body2">
                                 {formatSize(asset.size)}
@@ -207,7 +208,7 @@ export function MediaAssetDetails({
                         </div>
                         <div>
                             <Typography variant="caption" className="text-surface-accent-500">
-                                Type
+                                {t("media_type")}
                             </Typography>
                             <Typography variant="body2">
                                 {asset.mimeType}
@@ -215,7 +216,7 @@ export function MediaAssetDetails({
                         </div>
                         <div>
                             <Typography variant="caption" className="text-surface-accent-500">
-                                Created
+                                {t("media_created")}
                             </Typography>
                             <Typography variant="body2">
                                 {formatDate(asset.createdAt)}
@@ -227,14 +228,14 @@ export function MediaAssetDetails({
 
                     {/* Editable Fields */}
                     <TextField
-                        label="File Name"
+                        label={t("media_file_name")}
                         value={asset.fileName}
                         disabled
                         size="small"
                     />
 
                     <TextField
-                        label="Title"
+                        label={t("media_title")}
                         value={values.title ?? ""}
                         onChange={(e) => setFieldValue("title", e.target.value)}
                         size="small"
@@ -242,18 +243,18 @@ export function MediaAssetDetails({
 
                     <div>
                         <TextField
-                            label="Alt Text"
+                            label={t("media_alt_text")}
                             value={values.altText ?? ""}
                             onChange={(e) => setFieldValue("altText", e.target.value)}
                             size="small"
                         />
                         <Typography variant="caption" className="text-surface-accent-500 mt-1">
-                            Recommended for SEO
+                            {t("media_recommended_seo")}
                         </Typography>
                     </div>
 
                     <TextField
-                        label="Caption"
+                        label={t("media_caption")}
                         value={values.caption ?? ""}
                         onChange={(e) => setFieldValue("caption", e.target.value)}
                         size="small"
@@ -263,7 +264,7 @@ export function MediaAssetDetails({
                     {/* Tags */}
                     <div>
                         <Typography variant="caption" className="text-surface-accent-500 mb-1 block">
-                            Tags
+                            {t("media_tags")}
                         </Typography>
                         <div className="flex flex-wrap gap-1 mb-2">
                             {values.tags?.map((tag: string) => (
@@ -279,7 +280,7 @@ export function MediaAssetDetails({
                         </div>
                         <div className="flex gap-2">
                             <TextField
-                                placeholder="Add a tag..."
+                                placeholder={t("media_add_tag")}
                                 value={tagInput}
                                 onChange={(e) => setTagInput(e.target.value)}
                                 size="small"
@@ -297,7 +298,7 @@ export function MediaAssetDetails({
                                 onClick={handleAddTag}
                                 disabled={!tagInput.trim()}
                             >
-                                Add
+                                {t("media_add")}
                             </Button>
                         </div>
                     </div>
@@ -311,7 +312,7 @@ export function MediaAssetDetails({
                         disabled={!dirty || saving}
                         className="w-full"
                     >
-                        {saving ? <CircularProgress size="small" /> : "Save Changes"}
+                        {saving ? <CircularProgress size="small" /> : t("media_save_changes")}
                     </Button>
                 </div>
             </div>
@@ -323,11 +324,10 @@ export function MediaAssetDetails({
             >
                 <DialogContent>
                     <Typography variant="subtitle1" className="font-medium mb-2">
-                        Delete Asset?
+                        {t("media_delete_asset")}
                     </Typography>
                     <Typography className="text-surface-accent-600 dark:text-surface-accent-400">
-                        Are you sure you want to delete "{asset.title || asset.fileName}"?
-                        This action cannot be undone.
+                        {t("media_delete_confirmation", { name: asset.title || asset.fileName })}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
@@ -336,7 +336,7 @@ export function MediaAssetDetails({
                         onClick={() => setDeleteDialogOpen(false)}
                         disabled={deleting}
                     >
-                        Cancel
+                        {t("cancel")}
                     </Button>
                     <Button
                         variant="filled"
@@ -344,7 +344,7 @@ export function MediaAssetDetails({
                         onClick={handleDelete}
                         disabled={deleting}
                     >
-                        {deleting ? <CircularProgress size="small" /> : "Delete"}
+                        {deleting ? <CircularProgress size="small" /> : t("delete")}
                     </Button>
                 </DialogActions>
             </Dialog>

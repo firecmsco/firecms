@@ -1,0 +1,45 @@
+---
+title: Ein Slug zu Ihren Dokumenten hinzufügen
+slug: de/docs/recipes/autoupdate_slug
+sidebar_label: Ein Slug zu Ihren Dokumenten hinzufügen
+description: Erfahren Sie, wie Sie in Firestore automatisch Slugs für Ihre Dokumente mit FireCMS generieren können. Dieses Tutorial führt Sie durch den Prozess des Hinzufügens eines Slug-Feldes zu Ihrer Kollektion, der Konfiguration eines benutzerdefinierten Feldes zur Erzeugung von Slugs basierend auf dem Titel eines Dokuments und der Sicherstellung einer Eindeutigkeit der Slugs in Ihrer Firestore-Datenbank.
+---
+
+Beim Aufbau eines CMS ist es üblich, Slugs für Dokumente zu generieren
+basierend auf einem bestimmten Feld, wie dem Titel. Dies ist nützlich für die Erstellung
+SEO-freundlicher URLs und die Verbesserung der Auffindbarkeit Ihrer Inhalte.
+
+In diesem Tutorial zeigen wir Ihnen, wie Sie automatisch Slugs für Ihre
+Dokumente mit FireCMS generieren. Es ist sehr einfach, einen Callback hinzuzufügen, der
+vor dem Speichern Ihres Dokuments ausgeführt wird, und der Ihnen ermöglicht, den Slug basierend
+auf dem Titelfeld zu generieren.
+
+### Ihre Kollektion deklarieren
+
+Zu Illustrationszwecken erstellen wir eine einfache `pages`-Kollektion mit nur einem Titelfeld, zu dem wir
+einen Slug hinzufügen werden:
+
+
+import { Code } from '@astrojs/starlight/components';
+import AddSlugSource from '../../../samples/samples_v3/recipes/autoupdate_slug/add_slug_property?raw';
+import SlugCallbacksSource from '../../../samples/samples_v3/recipes/autoupdate_slug/slug_callbacks?raw';
+import FullCode from '../../../samples/samples_v3/recipes/autoupdate_slug/full?raw';
+
+<Code code={AddSlugSource} lang="tsx" />
+
+### Den Pre-Save-Callback hinzufügen
+
+Um Ihren Dokumenten einen Slug hinzuzufügen, können Sie den von FireCMS bereitgestellten `onPreSave`-Callback verwenden.
+Dieser Callback wird vor dem Speichern des Dokuments ausgeführt und ermöglicht es Ihnen, das Dokument zu ändern, bevor
+es in die Datenbank geschrieben wird.
+
+<Code code={SlugCallbacksSource} lang="tsx" />
+
+
+### Vollständiger Code
+
+Hier ist der vollständige Code für dieses Beispiel:
+
+<Code code={FullCode} lang="tsx" />
+
+

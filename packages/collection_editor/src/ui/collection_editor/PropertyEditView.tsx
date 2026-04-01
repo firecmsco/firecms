@@ -15,6 +15,7 @@ import {
     PropertyConfig,
     PropertyConfigBadge,
     PropertyConfigId,
+    useTranslation,
 } from "@firecms/core";
 import {
     Button,
@@ -127,6 +128,8 @@ export const PropertyForm = React.memo(
             name: ""
         } as PropertyWithId;
 
+        const { t } = useTranslation();
+
         const disabled = (Boolean(property && !editableProperty(property)) || !collectionEditable);
 
         const lastSubmittedProperty = useRef<OnPropertyChangedParams | undefined>(property ? {
@@ -176,18 +179,18 @@ export const PropertyForm = React.memo(
                 const errors: Record<string, any> = {};
                 if (includeIdAndName) {
                     if (!values.name) {
-                        errors.name = "Required";
+                        errors.name = t("required");
                     } else {
-                        const nameError = validateName(values.name);
+                        const nameError = validateName(values.name, t);
                         if (nameError)
                             errors.name = nameError;
                     }
                     if (!values.id) {
-                        errors.id = "Required";
+                        errors.id = t("required");
                     } else {
                         // Exclude the current property key when editing to avoid false duplicate error
                         const keysToCheck = existingPropertyKeys?.filter(key => key !== propertyKey);
-                        const idError = validateId(values.id, keysToCheck);
+                        const idError = validateId(values.id, keysToCheck, t);
                         if (idError)
                             errors.id = idError;
                     }
@@ -196,21 +199,21 @@ export const PropertyForm = React.memo(
                 if (values.dataType === "string") {
                     if (values.validation?.matches && !isValidRegExp(values.validation?.matches.toString())) {
                         errors.validation = {
-                            matches: "Invalid regular expression"
+                            matches: t("invalid_regular_expression")
                         }
                     }
                 }
                 if (values.dataType === "reference" && !values.path) {
-                    errors.path = "You must specify a target collection for the field";
+                    errors.path = t("must_specify_target_collection");
                 }
                 if (values.propertyConfig === "repeat") {
                     if (!(values as any).of) {
-                        errors.of = "You need to specify a repeat field";
+                        errors.of = t("need_specify_repeat_field");
                     }
                 }
                 if (values.propertyConfig === "block") {
                     if (!(values as any).oneOf) {
-                        errors.oneOf = "You need to specify the properties of this block";
+                        errors.oneOf = t("need_specify_block_properties");
                     }
                 }
 
@@ -238,7 +241,7 @@ export const PropertyForm = React.memo(
                     for (const type of conditionTypes) {
                         const rule = conditions[type];
                         if (rule && isIncompleteRule(rule)) {
-                            conditionErrors[type] = "Incomplete condition - please select a field";
+                            conditionErrors[type] = t("incomplete_condition");
                         }
                     }
 
@@ -247,7 +250,7 @@ export const PropertyForm = React.memo(
                         const rule = conditions[enumType];
                         if (rule && typeof rule === "object" && rule.if) {
                             if (isIncompleteRule(rule)) {
-                                conditionErrors[enumType] = "Incomplete condition - please select a field";
+                                conditionErrors[enumType] = t("incomplete_condition");
                             }
                         }
                     }
@@ -313,6 +316,8 @@ export function PropertyFormDialog({
     onOkClicked?: () => void;
     onCancel?: () => void;
 }) {
+    const { t } = useTranslation();
+
     const formexRef = useRef<FormexController<PropertyWithId>>(undefined);
     const getController = (helpers: FormexController<PropertyWithId>) => {
         formexRef.current = helpers;
@@ -330,7 +335,7 @@ export function PropertyFormDialog({
                 e.stopPropagation();
                 formexRef.current?.handleSubmit(e)
             }}>
-            <DialogTitle hidden>Property edit view</DialogTitle>
+            <DialogTitle hidden>{t("property_edit_view")}</DialogTitle>
             <DialogContent>
 
                 <PropertyForm {...formProps}
@@ -406,6 +411,8 @@ function PropertyEditFormFields({
     collectionEditable: boolean;
     collectionProperties?: Properties;
 } & FormexController<PropertyWithId>) {
+
+    const { t } = useTranslation();
 
     const [selectOpen, setSelectOpen] = useState(autoOpenTypeSelect);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -582,7 +589,7 @@ function PropertyEditFormFields({
                     {selectedWidgetError &&
                         <Typography variant="caption"
                             className={"ml-3.5"}
-                            color={"error"}>Required</Typography>}
+                            color={"error"}>{t("required")}</Typography>}
 
                     {/*<Typography variant="caption" className={"ml-3.5"}>Define your own custom properties and*/}
                     {/*    components</Typography>*/}
@@ -626,11 +633,9 @@ function PropertyEditFormFields({
                 <ConfirmationDialog open={deleteDialogOpen}
                     onAccept={() => onDelete(values?.id, propertyNamespace)}
                     onCancel={() => setDeleteDialogOpen(false)}
-                    title={<div>Delete this property?</div>}
+                    title={<div>{t("delete_this_property")}</div>}
                     body={
-                        <div> This will <b>not delete any
-                            data</b>, only modify the
-                            collection.</div>
+                        <div>{t("delete_property_warning")}</div>
                     } />}
 
         </>
@@ -639,53 +644,53 @@ function PropertyEditFormFields({
 
 const idRegEx = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
-function validateId(value?: string, existingPropertyKeys?: string[]) {
+function validateId(value: string | undefined, existingPropertyKeys: string[] | undefined, t: any) {
 
     let error;
     if (!value) {
-        error = "You must specify an id for the field";
+        error = t("error_must_specify_id");
     }
     if (value && !value.match(idRegEx)) {
-        error = "The id can only contain letters, numbers and underscores (_), and not start with a number";
+        error = t("error_id_format");
     }
     if (value && existingPropertyKeys && existingPropertyKeys.includes(value)) {
-        error = "There is another field with this ID already";
+        error = t("error_id_already_exists");
     }
     return error;
 }
 
-function validateName(value: string) {
+function validateName(value: string, t: any) {
     let error;
     if (!value) {
-        error = "You must specify a title for the field";
+        error = t("error_must_specify_title");
     }
     return error;
 }
 
 const WIDGET_TYPE_MAP: Record<PropertyConfigId, string> = {
-    text_field: "Text",
-    multiline: "Text",
-    markdown: "Text",
-    url: "Text",
-    email: "Text",
-    switch: "Boolean",
-    user_select: "Users",
-    select: "Select",
-    multi_select: "Select",
-    number_input: "Number",
-    number_select: "Select",
-    multi_number_select: "Select",
-    file_upload: "File",
-    multi_file_upload: "File",
-    reference: "Reference",
-    reference_as_string: "Text",
-    multi_references: "Reference",
-    date_time: "Date",
-    group: "Group",
-    key_value: "Group",
-    repeat: "Array",
-    custom_array: "Array",
-    block: "Group"
+    text_field: "widget_group_text",
+    multiline: "widget_group_text",
+    markdown: "widget_group_text",
+    url: "widget_group_text",
+    email: "widget_group_text",
+    switch: "widget_group_boolean",
+    user_select: "widget_group_users",
+    select: "widget_group_select",
+    multi_select: "widget_group_select",
+    number_input: "widget_group_number",
+    number_select: "widget_group_select",
+    multi_number_select: "widget_group_select",
+    file_upload: "widget_group_file",
+    multi_file_upload: "widget_group_file",
+    reference: "widget_group_reference",
+    reference_as_string: "widget_group_text",
+    multi_references: "widget_group_reference",
+    date_time: "widget_group_date",
+    group: "widget_group_group",
+    key_value: "widget_group_group",
+    repeat: "widget_group_array",
+    custom_array: "widget_group_array",
+    block: "widget_group_group"
 };
 
 function WidgetSelectView({
@@ -712,6 +717,8 @@ function WidgetSelectView({
     inArray?: boolean
 }) {
 
+    const { t } = useTranslation();
+
     const allSupportedFields = Object.entries(supportedFields).concat(Object.entries(propertyConfigs));
 
     const displayedWidgets = (inArray
@@ -734,27 +741,27 @@ function WidgetSelectView({
     const computedFieldConfig = baseFieldConfig && propertyConfig ? mergeDeep(baseFieldConfig, propertyConfig) : propertyConfig;
 
     const groups: string[] = [...new Set(Object.keys(displayedWidgets).map(key => {
-        const group = WIDGET_TYPE_MAP[key as PropertyConfigId];
-        if (group) {
-            return group;
+        const groupKey = WIDGET_TYPE_MAP[key as PropertyConfigId];
+        if (groupKey) {
+            return t(groupKey as any);
         }
-        return "Custom/Other"
+        return t("custom_or_other")
     }))];
 
     return <>
-        <div
-            onClick={() => {
-                if (!disabled) {
-                    onOpenChange(!open, Boolean(value));
-                }
-            }}
-            className={cls(
-                "select-none rounded-md text-sm p-4",
-                fieldBackgroundMixin,
-                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                "relative flex items-center",
-            )}>
-            {!value && <em>Select a property widget</em>}
+            <div
+                onClick={() => {
+                    if (!disabled) {
+                        onOpenChange(!open, Boolean(value));
+                    }
+                }}
+                className={cls(
+                    "select-none rounded-md text-sm p-4",
+                    fieldBackgroundMixin,
+                    disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
+                    "relative flex items-center",
+                )}>
+                {!value && <em>{t("select_property_widget")}</em>}
             {value && computedFieldConfig && <div
                 className={cls(
                     "flex items-center")}>
@@ -774,7 +781,7 @@ function WidgetSelectView({
             onOpenChange={(open) => onOpenChange(open, Boolean(value))}
             maxWidth={"4xl"}>
             <DialogTitle>
-                Select a property widget
+                {t("select_property_widget")}
             </DialogTitle>
             <DialogContent>
                 <div>
@@ -784,7 +791,8 @@ function WidgetSelectView({
                             <div className={"grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mt-4"}>
                                 {Object.entries(displayedWidgets).map(([key, propertyConfig]) => {
                                     const groupKey = WIDGET_TYPE_MAP[key as PropertyConfigId];
-                                    if (groupKey === group) {
+                                    const translatedGroup = groupKey ? t(groupKey as any) : t("custom_or_other");
+                                    if (translatedGroup === group) {
                                         return <WidgetSelectViewItem
                                             key={key}
                                             initialProperty={initialProperty}
@@ -831,6 +839,7 @@ export function WidgetSelectViewItem({
     propertyConfig,
     existing
 }: PropertySelectItemProps) {
+    const { t } = useTranslation();
     const baseProperty = propertyConfig.property;
     const shouldWarnChangingDataType = existing && !isPropertyBuilder(baseProperty) && baseProperty.dataType !== initialProperty?.dataType;
 
@@ -847,7 +856,7 @@ export function WidgetSelectViewItem({
             <div>
                 <div className={"flex flex-row gap-2 items-center"}>
                     {shouldWarnChangingDataType && <Tooltip
-                        title={"This widget uses a different data type than the initially selected widget. This can cause errors with existing data."}>
+                        title={t("error_changing_data_type")}>
                         <WarningIcon size="smallest" className={"w-4"} />
                     </Tooltip>}
                     <Typography

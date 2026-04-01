@@ -1,0 +1,38 @@
+---
+title: Hinweis (Alert)
+slug: de/docs/components/alert
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Hinweise (Alerts) werden verwendet, um Benutzern einen Status oder Feedback mitzuteilen. Sie weisen häufig auf Erfolge, Informationen, Warnungen oder Fehler hin.
+
+## Farbe
+
+Die Eigenschaft `color` wird verwendet, um die Schweregradstufe des Hinweises zu definieren.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_color.tsx"/>
+
+## Größe
+
+Die Eigenschaft `size` wird verwendet, um die Größe des Hinweises zu definieren.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_size.tsx"/>
+
+## Ausblendbar
+
+Hinweise können ausblendbar (dismissable) sein, wenn eine `onDismiss`-Callback-Funktion bereitgestellt wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/dismissable_alert.tsx"/>
+
+## Aktions-Schaltfläche
+
+Fügen Sie mit der Eigenschaft `action` ein interaktives Element in den Hinweis ein.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_action_button.tsx"/>
+
+## Benutzerdefiniertes Styling
+
+Übergeben Sie benutzerdefinierte CSS-Klassen oder -Stile mit den Eigenschaften `className` und `style`, um den Hinweis anzupassen.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/custom_style_alert.tsx"/>

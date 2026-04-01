@@ -1,0 +1,34 @@
+---
+title: Ajouter un slug à vos documents
+slug: fr/docs/recipes/autoupdate_slug
+sidebar_label: Ajouter un slug à vos documents
+description: Apprenez à générer automatiquement des slugs pour vos documents dans Firestore en utilisant FireCMS. Ce tutoriel vous guide à travers l'ajout d'un champ slug à votre collection, la configuration d'un champ personnalisé pour générer des slugs basés sur le titre d'un document, et l'assurance que les slugs sont uniques dans votre base de données Firestore.
+---
+
+Lors de la construction d'un CMS, il est courant de vouloir générer des slugs pour vos documents basés sur un champ spécifique, comme le titre. Ceci est utile pour créer des URLs SEO-friendly et améliorer la découvrabilité de votre contenu.
+
+Dans ce tutoriel, nous vous montrerons comment générer automatiquement des slugs pour vos documents en utilisant FireCMS. C'est très simple d'ajouter un callback qui sera exécuté avant la sauvegarde de votre document, vous permettant de générer le slug basé sur le champ titre.
+
+### Déclarer votre collection
+
+À des fins d'illustration, créons une collection `pages` simple, avec juste un champ titre, auquel nous allons ajouter un slug :
+
+import { Code } from '@astrojs/starlight/components';
+import AddSlugSource from '../../samples/samples_v3/recipes/autoupdate_slug/add_slug_property?raw';
+import SlugCallbacksSource from '../../samples/samples_v3/recipes/autoupdate_slug/slug_callbacks?raw';
+import FullCode from '../../samples/samples_v3/recipes/autoupdate_slug/full?raw';
+
+<Code code={AddSlugSource} lang="tsx" />
+
+### Ajouter le callback pré-sauvegarde
+
+Pour ajouter un slug à vos documents, vous pouvez utiliser le callback `onPreSave` fourni par FireCMS. Ce callback sera exécuté avant la sauvegarde du document, vous permettant de modifier le document avant qu'il soit écrit dans la base de données.
+
+<Code code={SlugCallbacksSource} lang="tsx" />
+
+
+### Code complet
+
+Voici le code complet pour cet exemple :
+
+<Code code={FullCode} lang="tsx" />

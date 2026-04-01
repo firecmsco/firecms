@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from "react";
 import * as Yup from "yup";
 
-import { EntityCollection, FieldCaption, Role, toSnakeCase, useAuthController, User, } from "@firecms/core";
+import { EntityCollection, FieldCaption, Role, toSnakeCase, useAuthController, User, useTranslation
+} from "@firecms/core";
 import {
     Button,
     Checkbox,
@@ -26,15 +27,15 @@ import {
 import { useUserManagement } from "../../hooks";
 import { Formex, getIn, useCreateFormex } from "@firecms/formex";
 
-export const RoleYupSchema = Yup.object().shape({
-    id: Yup.string().required("Required"),
-    name: Yup.string().required("Required")
+export const getRoleYupSchema = (t: any) => Yup.object().shape({
+    id: Yup.string().required(t("required")),
+    name: Yup.string().required(t("required"))
 });
 
-function canRoleBeEdited(loggedUser: User) {
+function canRoleBeEdited(loggedUser: User, t: any) {
     const loggedUserIsAdmin = loggedUser.roles?.map(r => r.id).includes("admin");
     if (!loggedUserIsAdmin) {
-        throw new Error("Only admins can edit roles");
+        throw new Error(t("only_admins_edit_roles"));
     }
 
     return true;
@@ -53,7 +54,7 @@ export function RolesDetailsForm({
     handleClose: () => void,
     collections?: EntityCollection[]
 }) {
-
+    const { t } = useTranslation();
     const { saveRole } = useUserManagement();
     const isNewRole = !role;
     const {
@@ -64,10 +65,10 @@ export function RolesDetailsForm({
 
     const onRoleUpdated = useCallback((role: Role) => {
         setSavingError(undefined);
-        if (!loggedInUser) throw new Error("User not found");
-        canRoleBeEdited(loggedInUser);
+        if (!loggedInUser) throw new Error(t("error_user_not_found"));
+        canRoleBeEdited(loggedInUser, t);
         return saveRole(role);
-    }, [saveRole, loggedInUser]);
+    }, [saveRole, loggedInUser, t]);
 
     const formex = useCreateFormex({
         initialValues: role ?? {
@@ -91,7 +92,7 @@ export function RolesDetailsForm({
             }
         },
         validation: (values) => {
-            return RoleYupSchema.validate(values, { abortEarly: false })
+            return getRoleYupSchema(t).validate(values, { abortEarly: false })
                 .then(() => ({}))
                 .catch((e) => {
                     const errors: Record<string, string> = {};
@@ -143,9 +144,7 @@ export function RolesDetailsForm({
                           position: "relative",
                           height: "100%"
                       }}>
-                    <DialogTitle variant={"h4"} gutterBottom={false}>
-                        Role
-                    </DialogTitle>
+                    <DialogTitle variant={"h4"} gutterBottom={false}>{t("role")}</DialogTitle>
                     <DialogContent className="flex-grow">
 
                         <div className={"grid grid-cols-12 gap-4"}>
@@ -159,10 +158,10 @@ export function RolesDetailsForm({
                                     disabled={isAdmin || !editable}
                                     onChange={handleChange}
                                     aria-describedby="name-helper-text"
-                                    label="Name"
+                                    label={t("name")}
                                 />
                                 <FieldCaption>
-                                    {touched.name && Boolean(errors.name) ? errors.name : "Name of this role"}
+                                    {touched.name && Boolean(errors.name) ? errors.name : t("name_of_this_role")}
                                 </FieldCaption>
                             </div>
 
@@ -178,10 +177,10 @@ export function RolesDetailsForm({
                                         setFieldTouched("id", true)
                                     }}
                                     aria-describedby="id-helper-text"
-                                    label="ID"
+                                    label={t("id")}
                                 />
                                 <FieldCaption>
-                                    {touched.id && Boolean(errors.id) ? errors.id : "ID of this role"}
+                                    {touched.id && Boolean(errors.id) ? errors.id : t("id_of_this_role")}
                                 </FieldCaption>
                             </div>
 
@@ -190,22 +189,10 @@ export function RolesDetailsForm({
                                     <Table className={"w-full rounded-md"}>
                                         <TableHeader className={"rounded-md"}>
                                             <TableCell></TableCell>
-                                            <TableCell
-                                                align="center">Create
-                                                entities
-                                            </TableCell>
-                                            <TableCell
-                                                align="center">Read
-                                                entities
-                                            </TableCell>
-                                            <TableCell
-                                                align="center">Update
-                                                entities
-                                            </TableCell>
-                                            <TableCell
-                                                align="center">Delete
-                                                entities
-                                            </TableCell>
+                                            <TableCell align="center">{t("create_entities")}</TableCell>
+                                            <TableCell align="center">{t("read_entities")}</TableCell>
+                                            <TableCell align="center">{t("update_entities")}</TableCell>
+                                            <TableCell align="center">{t("delete_entities")}</TableCell>
                                             <TableCell
                                                 align="center">
                                             </TableCell>
@@ -215,13 +202,12 @@ export function RolesDetailsForm({
                                             <TableRow>
                                                 <TableCell
                                                     scope="row">
-                                                    <strong>All
-                                                        collections</strong>
+                                                    <strong>{t("all_collections")}</strong>
                                                 </TableCell>
                                                 <TableCell
                                                     align="center">
                                                     <Tooltip
-                                                        title="Create entities in collections">
+                                                        title={t("create_entities_in_collections")}>
                                                         <Checkbox
                                                             disabled={isAdmin || !editable}
                                                             checked={(isAdmin || defaultCreate) ?? false}
@@ -233,7 +219,7 @@ export function RolesDetailsForm({
                                                 <TableCell
                                                     align="center">
                                                     <Tooltip
-                                                        title="Access all data in every collection">
+                                                        title={t("access_all_data_in_every_collection")}>
                                                         <Checkbox
                                                             disabled={isAdmin || !editable}
                                                             checked={(isAdmin || defaultRead) ?? false}
@@ -244,7 +230,7 @@ export function RolesDetailsForm({
                                                 <TableCell
                                                     align="center">
                                                     <Tooltip
-                                                        title="Update data in any collection">
+                                                        title={t("update_data_in_any_collection")}>
                                                         <Checkbox
                                                             disabled={isAdmin || !editable}
                                                             checked={(isAdmin || defaultEdit) ?? false}
@@ -255,7 +241,7 @@ export function RolesDetailsForm({
                                                 <TableCell
                                                     align="center">
                                                     <Tooltip
-                                                        title="Delete data in any collection">
+                                                        title={t("delete_data_in_any_collection")}>
                                                         <Checkbox
                                                             disabled={isAdmin || !editable}
                                                             checked={(isAdmin || defaultDelete) ?? false}
@@ -306,7 +292,7 @@ export function RolesDetailsForm({
                                                     <TableCell
                                                         align="center">
                                                         <Tooltip
-                                                            title="Allow all permissions in this collections">
+                                                            title={t("allow_all_permissions_in_this_collections")}>
                                                             <Button
                                                                 className={"color-inherit"}
                                                                 onClick={() => {
@@ -317,8 +303,8 @@ export function RolesDetailsForm({
                                                                 }}
                                                                 disabled={isAdmin || !editable}
                                                                 variant={"text"}>
-                                                                All
-                                                            </Button>
+                                                                {t("all")}
+                                                                </Button>
 
                                                         </Tooltip>
                                                     </TableCell>
@@ -328,10 +314,7 @@ export function RolesDetailsForm({
                                     </Table>
                                 </Paper>
                                 <FieldCaption>
-                                    You can customise the permissions
-                                    that the users related to this
-                                    role can perform in the entities
-                                    of each collection
+                                    {t("customise_permissions_description")}
                                 </FieldCaption>
                             </div>
 
@@ -342,21 +325,21 @@ export function RolesDetailsForm({
                                     fullWidth={true}
                                     id="createCollections"
                                     name="createCollections"
-                                    label="Create collections"
+                                    label={t("create_collections")}
                                     position={"item-aligned"}
                                     disabled={isAdmin || !editable}
                                     onChange={(event) => setFieldValue("config.createCollections", event.target.value === "true")}
                                     value={isAdmin || values.config?.createCollections ? "true" : "false"}
-                                    renderValue={(value: any) => value === "true" ? "Yes" : "No"}
+                                    renderValue={(value: any) => value === "true" ? t("yes") : t("no")}
                                 >
                                     <SelectItem
-                                        value={"true"}> Yes </SelectItem>
+                                        value={"true"}> {t("yes")} </SelectItem>
                                     <SelectItem
-                                        value={"false"}> No </SelectItem>
+                                        value={"false"}> {t("no")} </SelectItem>
                                 </Select>
 
                                 <FieldCaption>
-                                    {touched.config && Boolean(errors.config) ? errors.config : "Can the user create collections"}
+                                    {touched.config && Boolean(errors.config) ? errors.config : t("can_user_create_collections")}
                                 </FieldCaption>
                             </div>
 
@@ -367,24 +350,23 @@ export function RolesDetailsForm({
                                     error={touched.config && Boolean(errors.config)}
                                     id="editCollections"
                                     name="editCollections"
-                                    label="Edit collections"
+                                    label={t("edit_collections")}
                                     disabled={isAdmin || !editable}
                                     position={"item-aligned"}
                                     onChange={(event) => setFieldValue("config.editCollections", event.target.value === "own" ? "own" : event.target.value === "true")}
                                     value={isAdmin ? "true" : (values.config?.editCollections === "own" ? "own" : (values.config?.editCollections ? "true" : "false"))}
-                                    renderValue={(value: any) => value === "own" ? "Own" : (value === "true" ? "Yes" : "No")}
+                                    renderValue={(value: any) => value === "own" ? t("own") : (value === "true" ? t("yes") : t("no"))}
                                 >
                                     <SelectItem
-                                        value={"true"}> Yes </SelectItem>
+                                        value={"true"}> {t("yes")} </SelectItem>
                                     <SelectItem
-                                        value={"false"}> No </SelectItem>
+                                        value={"false"}> {t("no")} </SelectItem>
                                     <SelectItem
-                                        value={"own"}> Only
-                                        his/her own </SelectItem>
+                                        value={"own"}> {t("only_own_collections")} </SelectItem>
                                 </Select>
 
                                 <FieldCaption>
-                                    {touched.config && Boolean(errors.config) ? errors.config : "Can the user edit collections"}
+                                    {touched.config && Boolean(errors.config) ? errors.config : t("can_user_edit_collections")}
                                 </FieldCaption>
                             </div>
 
@@ -395,24 +377,23 @@ export function RolesDetailsForm({
                                     error={touched.config && Boolean(errors.config)}
                                     id="deleteCollections"
                                     name="deleteCollections"
-                                    label="Delete collections"
+                                    label={t("delete_collections")}
                                     disabled={isAdmin || !editable}
                                     position={"item-aligned"}
                                     onChange={(event) => setFieldValue("config.deleteCollections", event.target.value === "own" ? "own" : event.target.value === "true")}
                                     value={isAdmin ? "true" : (values.config?.deleteCollections === "own" ? "own" : (values.config?.deleteCollections ? "true" : "false"))}
-                                    renderValue={(value: any) => value === "own" ? "Own" : (value === "true" ? "Yes" : "No")}
+                                    renderValue={(value: any) => value === "own" ? t("own") : (value === "true" ? t("yes") : t("no"))}
                                 >
                                     <SelectItem
-                                        value={"true"}> Yes </SelectItem>
+                                        value={"true"}> {t("yes")} </SelectItem>
                                     <SelectItem
-                                        value={"false"}> No </SelectItem>
+                                        value={"false"}> {t("no")} </SelectItem>
                                     <SelectItem
-                                        value={"own"}> Only
-                                        his/her own </SelectItem>
+                                        value={"own"}> {t("only_own_collections")} </SelectItem>
                                 </Select>
 
                                 <FieldCaption>
-                                    {touched.config && Boolean(errors.config) ? errors.config : "Can the user delete collections"}
+                                    {touched.config && Boolean(errors.config) ? errors.config : t("can_user_delete_collections")}
                                 </FieldCaption>
 
                             </div>
@@ -422,21 +403,19 @@ export function RolesDetailsForm({
 
                     <DialogActions position={"sticky"}>
                         {savingError && <Typography className={"text-red-500 dark:text-red-500"}>
-                            {savingError.message ?? "There was an error saving this role"}
+                            {savingError.message ?? t("error_saving_role")}
                         </Typography>}
                         <Button variant={"text"}
                                 onClick={() => {
                                     handleClose();
-                                }}>
-                            Cancel
-                        </Button>
+                                }}>{t("cancel")}</Button>
                         <LoadingButton
                             variant="filled"
                             type="submit"
                             disabled={!dirty}
                             loading={isSubmitting}
                         >
-                            {isNewRole ? "Create role" : "Update"}
+                            {isNewRole ? t("create_role") : t("update")}
                         </LoadingButton>
                     </DialogActions>
                 </form>

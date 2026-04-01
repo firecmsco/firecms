@@ -1,4 +1,4 @@
-import { FireCMSEditor } from "@firecms/editor";
+import { FireCMSEditor } from "@firecms/core";
 
 export function FireCMSEditorDemo() {
 
@@ -18,7 +18,7 @@ const defaultEditorContent = `
 ![](https://firebasestorage.googleapis.com/v0/b/firecms-demo-27150.appspot.com/o/firecms_logo_192.png?alt=media&token=aac5bda6-0e3e-4a43-822c-970ebb1bb08d)
 # Edit me!
 
-> The [FireCMS editor](https://firecms.co/) is a Notion-style WYSIWYG editor built with [Tiptap](https://tiptap.dev/).
+> The [FireCMS editor](https://firecms.co/) is a Notion-style WYSIWYG editor.
 
 ## Features
 

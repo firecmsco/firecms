@@ -1,11 +1,12 @@
 import { FileUpload, UploadIcon } from "@firecms/ui";
 import { convertFileToJson } from "../utils/file_to_json";
-import { useSnackbarController } from "@firecms/core";
+import { useSnackbarController, useTranslation } from "@firecms/core";
 
 export function ImportFileUpload({ onDataAdded }: {
     onDataAdded: (data: object[], propertiesOrder?: string[]) => void
 }) {
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
     return <FileUpload
         accept={{
             "text/*": [".csv", ".xls", ".xlsx"],
@@ -20,7 +21,7 @@ export function ImportFileUpload({ onDataAdded }: {
         preventDropOnDocument={true}
         size={"small"}
         maxFiles={1}
-        uploadDescription={<><UploadIcon/>Drag and drop a file here or click to upload</>}
+        uploadDescription={<><UploadIcon/>{t("drag_and_drop_file")}</>}
         onFilesAdded={(files: File[]) => {
             if (files.length > 0) {
                 convertFileToJson(files[0])

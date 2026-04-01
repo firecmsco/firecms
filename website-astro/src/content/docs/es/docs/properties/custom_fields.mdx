@@ -1,0 +1,231 @@
+---
+title: Campos personalizados
+slug: es/docs/properties/custom_fields
+sidebar_label: Campos personalizados
+description: "Aprende a construir potentes campos personalizados en FireCMS: contrato de componentes, paso de props personalizados, acceso al contexto de la entidad, composición de otras propiedades, manejo de arreglos (arrays), validación, rendimiento y ejemplos avanzados."
+---
+
+Los campos personalizados (custom fields) te permiten controlar completamente cómo se edita y muestra el valor de una propiedad en un formulario. En lugar del renderizador incorporado para un `dataType`, proporcionas un componente React. Ese componente recibe un rico conjunto de propiedades o props (`FieldProps`) para que pueda:
+
+- Leer y actualizar el valor actual (`value`, `setValue`)
+- Actualizar cualquier otra propiedad en el mismo formulario (`setFieldValue` o `context.setFieldValue`)
+- Acceder a todos los valores actuales de la entidad + utilidades del formulario (`context`)
+- Respetar el estado del formulario (`isSubmitting`, `disabled`, `showError`, `error`, `touched`)
+- Adaptar el diseño o layout (`size`, `partOfArray`, `minimalistView`, `autoFocus`)
+- Usar `customProps` (props personalizados) definidos por el desarrollador
+
+<video style={{
+    maxWidth: "100%",
+    width: "640px",
+    margin: "32px 0px 32px",
+    alignSelf: "center"
+}}
+       loop autoPlay muted>
+    <source src="/img/custom_fields_dark.mp4" type="video/mp4"/>
+</video>
+
+## ¿Cuándo deberías crear un campo personalizado?
+Usa un campo personalizado cuando necesites una (o más) de las siguientes opciones:
+- Un estilo visual no cubierto por los integrados (selectores de color, entradas de etiquetas, controles deslizantes, gráficos, campos asistidos por IA, etc.)
+- Interfaz de usuario compuesta que combina varias propiedades (ej. selector de mapa lat/lng que escribe en dos campos numéricos)
+- Integraciones (subir a una API externa, obtener sugerencias, geocodificación, etc.)
+
+Si solo necesitas validación o una transformación simple, prefiere primero las opciones de validación a nivel de propiedad `validation` para mantener las cosas simples.
+Si necesitas un comportamiento dinámico que dependa de otros valores, considera usar [campos condicionales](./conditional_fields.md) en su lugar.
+
+
+## Ejemplo de campo personalizado
+Un campo de texto personalizado con un color de fondo suministrado a través de `customProps` (desplázate hacia abajo para ver el contrato interactivo completo y técnicas avanzadas):
+
+```tsx
+import React from "react";
+import { FieldHelperText, FieldProps, useModeController } from "@firecms/core";
+import { TextField } from "@firecms/ui";
+
+interface CustomColorTextFieldProps {
+    color: string;
+}
+
+export default function CustomColorTextField({
+    property,
+    value,
+    setValue,
+    customProps,
+    includeDescription,
+    showError,
+    error,
+    isSubmitting,
+    context
+}: FieldProps<string, CustomColorTextFieldProps>) {
+
+    const { mode } = useModeController();
+    const backgroundColor = customProps?.color ?? (mode === "light" ? "#eef4ff" : "#16325f");
+
+    return (
+        <>
+            <TextField
+                inputStyle={{ backgroundColor }}
+                error={!!error}
+                disabled={isSubmitting}
+                label={error ?? property.name}
+                value={value ?? ""}
+                onChange={(evt: any) => setValue(evt.target.value)}
+            />
+            <FieldHelperText
+                includeDescription={includeDescription}
+                showError={showError}
+                error={error}
+                property={property}
+            />
+        </>
+    );
+}
+```
+
+Uso en una colección:
+
+```tsx
+export const blogCollection = buildCollection({
+    id: "blog",
+    path: "blog",
+    name: "Blog entry",
+    properties: {
+        // ... otras propiedades
+        gold_text: {
+            name: "Texto dorado",
+            description: "Este campo está usando un componente personalizado definido por el desarrollador",
+            dataType: "string",
+            Field: CustomColorTextField,
+            customProps: {
+                color: "gold"
+            }
+        }
+    }
+});
+```
+
+## Contrato de componente (FieldProps)
+Tu componente debe, como mínimo:
+1. Leer el valor actual `value` (puede ser `undefined` o `null` si está vacío)
+2. Llamar a `setValue(newValue)` cuando el usuario lo cambia
+
+Buenas prácticas recomendadas:
+- Respetar `disabled` / `isSubmitting`
+- Mostrar la etiqueta y el error (usa tu propia UI o `<FieldHelperText>` / componentes integrados)
+- Evitar efectos secundarios pesados (heavy side effects) en cada pulsación de tecla (mitigar llamadas de red con debounce)
+
+Interfaz completa: [`FieldProps`](../api/interfaces/FieldProps) (incluye comentarios detallados).
+
+## Pasar props personalizados (customProps)
+Proporciona un objeto `customProps` en la definición de la propiedad. El objeto está fuertemente tipado a través del segundo genérico de `FieldProps<T, CustomProps>`.
+
+
+## Acceder al resto de la entidad (contexto del formulario)
+`context` te da acceso en vivo a:
+- Todos los valores actuales (`context.values`)
+- `context.setFieldValue(key, value)` para actualizar cualquier otro campo
+- `context.save(values)` para desencadenar un guardado programáticamente (rara vez es necesario en los campos)
+- Metadatos: `entityId`, `status` (new/existing/copy), `collection`, `openEntityMode`, `disabled`
+
+Esto permite lógica cruzada entre campos (e.g. autocompletar el slug cuando el título (title) cambia) o deshabilitación condicional.
+
+## Renderizar (o componer) otras propiedades dentro de un campo personalizado
+Si tu campo personalizado desea incluir la UI de otra propiedad, usa `PropertyFieldBinding`.
+Esto mantiene la validación y consistencia:
+
+```tsx
+import { PropertyFieldBinding } from "@firecms/core";
+
+<PropertyFieldBinding
+  propertyKey="subtitle"
+  property={collection.properties.subtitle}
+  context={context}
+  includeDescription
+/>
+```
+
+Esto es ideal para widgets compuestos que orquestan valores subyacentes múltiples.
+Por ejemplo, el widget predeterminado incorporado `map` (mapa) es solo un envoltorio (wrapper) alrededor de las propiedades definidas.
+
+## Manejo de arrays (arreglos) y datos anidados
+Cuando tu campo personalizado está dentro de un array:
+- `partOfArray` es `true`
+- Puedes recibir un índice (index) en un contexto principal al construir editores de array anidados
+
+Para valores anidados (por ejemplo, editando `address.street` dentro de un campo compuesto), llama a `setFieldValue("address.street", value)`.
+
+## Estrategias de validación
+Prefiere la validación declarativa en la configuración de la propiedad cuando sea posible. Todavía puedes implementar guardias en el lado del cliente (client-side guards) en el campo (por ejemplo, ignorar pulsaciones de teclas no válidas), pero permite que la validación central muestre los errores.
+
+Patrones comunes:
+- Recortar (trim) al desenfocar (blur) pero preservar lo que el usuario escribe: mantén la entrada en bruto (raw input) en el estado local, llama a `setValue` con el valor limpio (cleaned value) en blur.
+- Validación asíncrona (por ejemplo, unicidad): hacer 'debounce' a la comprobación, establecer un error local transitorio, no bloquear la escritura.
+
+## Consejos de rendimiento (Performance tips)
+- Utiliza 'debounce' en las operaciones de red o en cálculos costosos (`useEffect` + `setTimeout` o una utilidad) en lugar de hacerlo por cada pulsación de tecla (per-keystroke).
+- Memoriza (Memo) los componentes hijos pesados basándote en props relevantes.
+- Evita almacenar grandes objetos derivados en el estado (state); derivarlos en el render o memorizarlos.
+
+## Ejemplo avanzado: Editor compuesto de slug (Composite slug editor)
+Genera automáticamente un slug a partir del título, pero permite la anulación manual.
+
+```tsx
+function SlugField({ value, setValue, context, property, showError, error }: FieldProps<string>) {
+    const title = context.values.title as string | undefined;
+
+    React.useEffect(() => {
+        if (!value && title) {
+            const auto = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+            setValue(auto);
+        }
+    }, [title]);
+
+    return (
+        <TextField
+            label={property.name}
+            value={value ?? ""}
+            error={!!error}
+            onChange={(e: any) => setValue(e.target.value)}
+            helperText={showError ? error : "Will auto-generate from Title if left empty"}
+        />
+    );
+}
+```
+
+## Usando PropertyFieldBinding dentro de un campo compuesto
+
+```tsx
+function GeoPointField({ context }: FieldProps<any>) {
+  return (
+    <div style={{ display: "flex", gap: 8 }}>
+      <PropertyFieldBinding
+        propertyKey="lat"
+        property={context.collection?.properties.lat}
+        context={context}
+        minimalistView
+      />
+      <PropertyFieldBinding
+        propertyKey="lng"
+        property={context.collection?.properties.lng}
+        context={context}
+        minimalistView
+      />
+      {/* Podría agregarse un selector de mapas que llame context.setFieldValue("lat", newLat) */}
+    </div>
+  );
+}
+```
+
+## Solución de problemas y trampas (Troubleshooting & gotchas)
+- El valor no se actualiza: asegúrate de llamar a `setValue` (no mutar `value` directamente) y de no oscurecer (shadowing) el `value` en el estado local sin sincronizar.
+- El error nunca se muestra: recuerda que `showError` controla la visualización (visual display); `error` puede existir mientras que `showError` sea falso.
+- Actualizaciones entre campos ignoradas: usa la clave de propiedad exacta (por ejemplo, `address.street`, índices de arrays como `items[0].price`).
+- El campo se vuelve a renderizar demasiadas veces (re-renders): envuelve lógica pesada (heavy logic) en `useMemo` / `useCallback`, evita crear nuevos objetos cada vez que se hace un render.
+- Necesita modo de solo lectura (read-only): respeta `disabled` que viene de las props o de `context.disabled`.
+
+## Próximos pasos
+- Explorar otras personalizaciones: [Vistas previas personalizadas (Custom previews)](./custom_previews.md)
+- Reutilizar lógica a través de múltiples propiedades: crea un componente de campo compartido y pasa distintos `customProps`.
+- ¿Amigable con el código abierto (Open source)? Considera contribuir con un campo reutilizable a la comunidad.
+
+Aprovechando los campos personalizados, puedes crear experiencias de autoría (authoring experiences) enriquecedoras, estrechamente alineadas con el dominio de tu producto, mientras mantienes la validación, el estado (state) y la persistencia centralizados en FireCMS.

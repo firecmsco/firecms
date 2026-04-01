@@ -1,6 +1,7 @@
 import pluginJs from "@eslint/js";
 import pluginReact from "eslint-plugin-react";
 import tseslint from "typescript-eslint";
+import i18next from "eslint-plugin-i18next";
 
 /** @type {import("eslint").Linter.Config[]} */
 export default [
@@ -10,6 +11,9 @@ export default [
     {
 
         files: ["**/*.{js,jsx,mjs,cjs,ts,tsx}"],
+        plugins: {
+            "i18next": i18next
+        },
 
         languageOptions: {
             parserOptions: {
@@ -33,6 +37,10 @@ export default [
 
         rules: {
             "no-undef": "off",
+            "i18next/no-literal-string": ["warn", {
+                "markupOnly": true,
+                "onlyAttribute": ["label", "title", "placeholder", "aria-label", "tooltip"]
+            }],
             "react/jsx-tag-spacing": ["warn", {
                 "beforeSelfClosing": "never"
             }],

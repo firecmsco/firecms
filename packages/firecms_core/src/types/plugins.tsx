@@ -29,6 +29,14 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
     loading?: boolean;
 
     /**
+     * Override any FireCMS UI string, or provide translations for additional
+     * locales, specific for this plugin.
+     * Keys can be existing `FireCMSTranslations` keys, or new keys if using
+     * module augmentation.
+     */
+    i18n?: Record<string, Record<string, string>>;
+
+    /**
      * You can use this prop to add higher order components to the CMS.
      * The components will be added to the root of the CMS, so any component
      * rendered underneath by this plugin will have access to the context

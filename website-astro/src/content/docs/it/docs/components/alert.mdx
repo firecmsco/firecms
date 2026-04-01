@@ -1,0 +1,38 @@
+---
+title: Alert
+slug: it/docs/components/alert
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Gli alert vengono utilizzati per comunicare uno stato o un feedback agli utenti. Indicano spesso successo, informazioni, avvisi o errori.
+
+## Colore
+
+La prop `color` viene utilizzata per definire il livello di gravità dell'alert.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_color.tsx"/>
+
+## Dimensione
+
+La prop `size` viene utilizzata per definire la dimensione dell'alert.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_size.tsx"/>
+
+## Congedabile
+
+Gli alert possono essere congedati quando viene fornita la funzione di callback `onDismiss`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/dismissable_alert.tsx"/>
+
+## Pulsante azione
+
+Includi un elemento interattivo all'interno dell'alert usando la prop `action`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_action_button.tsx"/>
+
+## Stile personalizzato
+
+Passa classi CSS o stili personalizzati con le prop `className` e `style` per personalizzare l'alert.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/custom_style_alert.tsx"/>

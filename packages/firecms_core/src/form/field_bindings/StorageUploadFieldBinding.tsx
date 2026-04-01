@@ -41,6 +41,7 @@ import {
     Typography
 } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useTranslation } from "../../hooks/useTranslation";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = fieldBackgroundDisabledMixin;
@@ -135,7 +136,6 @@ export function StorageUploadFieldBinding({
                 error={error}
                 disabled={disabled}
                 property={property} />
-
         </>
     );
 }
@@ -387,6 +387,7 @@ export function StorageUpload({
     storage,
     storagePathBuilder,
 }: StorageUploadProps) {
+    const { t } = useTranslation();
 
     if (multipleFilesSupported) {
         const arrayProperty = property as ResolvedArrayProperty<string[]>;
@@ -461,8 +462,8 @@ export function StorageUpload({
     }, [value, multipleFilesSupported, onChange, setInternalValue]);
 
     const helpText = multipleFilesSupported
-        ? "Drag 'n' drop some files here, or click to select files. Drag to reorder."
-        : "Drag 'n' drop a file here, or click to select one";
+        ? t("drag_drop_multiple")
+        : t("drag_drop_single");
 
     const renderProperty: ResolvedStringProperty = multipleFilesSupported
         ? (property as ResolvedArrayProperty<string[]>).of as ResolvedStringProperty

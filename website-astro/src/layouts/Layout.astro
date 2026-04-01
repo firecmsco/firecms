@@ -4,10 +4,18 @@ export interface BreadcrumbItem {
     url: string;
 }
 
+export interface FaqItem {
+    question: string;
+    answer: string;
+}
+
 export interface Props {
     title?: string;
     description?: string;
+    keywords?: string;
     breadcrumbs?: BreadcrumbItem[];
+    faqItems?: FaqItem[];
+    lang?: string;
 }
 
 import { ViewTransitions } from "astro:transitions";
@@ -15,16 +23,38 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import CookieBanner from "../components/CookieBanner.astro";
+import { languages } from '../i18n/ui';
+import { getUnlocalizedPath } from '../i18n/utils';
 
 const {
     title = "FireCMS - The Headless CMS for Firebase and MongoDB",
     description = "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB with AI-powered features, visual schema builder, and beautiful data management interface.",
-    breadcrumbs
+    keywords = "headless CMS, Firebase CMS, Firestore CMS, React admin panel, no-code backend, AI-powered CMS, visual schema builder, data management, back-office application, content management system, Firestore admin, Firebase back office, database UI",
+    breadcrumbs,
+    faqItems,
+    lang = "en"
 } = Astro.props;
 
 const canonicalBase = "https://firecms.co";
 const path = Astro.url.pathname;
-const canonical = path === "/" ? canonicalBase : `${canonicalBase}${path}`;
+
+const unlocalizedPath = getUnlocalizedPath(Astro.url);
+
+// If the page is in the API docs (which aren't translated), canonical points to the English original.
+// Otherwise, it points to itself.
+const isUntranslatedApi = unlocalizedPath.startsWith("/docs/api");
+const canonicalPath = isUntranslatedApi ? unlocalizedPath : path;
+
+const canonical = canonicalPath === "/" ? canonicalBase : `${canonicalBase}${canonicalPath}`;
+
+// Build hreflang alternate URLs for all supported languages
+const supportedLangs = Object.keys(languages) as Array<keyof typeof languages>;
+const hreflangLinks = supportedLangs.map(code => ({
+    lang: code,
+    href: code === 'en'
+        ? `${canonicalBase}${unlocalizedPath}`
+        : `${canonicalBase}/${code}${unlocalizedPath}`
+}));
 
 // Generate breadcrumb structured data
 const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
@@ -37,21 +67,43 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
         "item": item.url
     }))
 } : null;
+
+// Generate FAQPage structured data
+const faqSchema = faqItems && faqItems.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map(({ question, answer }) => ({
+        "@type": "Question",
+        "name": question,
+        "acceptedAnswer": {
+            "@type": "Answer",
+            "text": answer
+        }
+    }))
+} : null;
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang={lang ?? "en"} data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <title>{title}</title>
     <link rel="shortcut icon" href="/favicon.svg" type="image/x-icon">
     <link rel="canonical" href={canonical}>
+    <!-- Preload primary body font to reduce LCP font-swap delay -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+          href="https://fonts.gstatic.com/s/rubik/v14/iJWKBXyIfDnIV7nBrXyw023e.woff2">
     <meta name="description" content={description}>
-    <meta name="keywords"
-          content="headless CMS, Firebase CMS, Firestore CMS, React admin panel, no-code backend, AI-powered CMS, visual schema builder, data management, back-office application, content management system, Firestore admin, Firestore admin, Firebase back office, database UI">
+    <meta name="keywords" content={keywords}>
     <meta name="robots" content="index, follow">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="sitemap" href="/sitemap-index.xml"/>
+
+    <!-- Hreflang alternate tags for i18n SEO -->
+    {hreflangLinks.map(link => (
+        <link rel="alternate" hreflang={link.lang} href={link.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={`${canonicalBase}${unlocalizedPath}`} />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -73,63 +125,67 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
     <meta name="twitter:image" content="https://firecms.co/img/twitter_teaser.png">
 
     <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@graph": [
-                {
-                    "@type": "WebSite",
-                    "name": "FireCMS",
-                    "url": "https://firecms.co",
-                    "description": "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB.",
-                    "publisher": {
-                        "@id": "https://firecms.co/#organization"
-                    }
-                },
-                {
-                    "@type": "Organization",
-                    "@id": "https://firecms.co/#organization",
-                    "name": "FireCMS",
-                    "url": "https://firecms.co",
-                    "logo": {
-                        "@type": "ImageObject",
-                        "url": "https://firecms.co/img/logo_small.png",
-                        "width": 512,
-                        "height": 512
-                    },
-                    "sameAs": [
-                        "https://x.com/firecmsco",
-                        "https://github.com/firecmsco/firecms",
-                        "https://www.linkedin.com/company/firecms"
-                    ]
-                },
-                {
-                    "@type": "SoftwareApplication",
-                    "name": "FireCMS",
-                    "applicationCategory": "DeveloperApplication",
-                    "operatingSystem": "Web",
-                    "description": "Build powerful back-office applications in minutes with FireCMS. A headless CMS framework for Firebase and MongoDB with AI-powered features, visual schema builder, and beautiful data management interface.",
-                    "url": "https://firecms.co",
-                    "screenshot": "https://firecms.co/img/teaser.png",
-                    "offers": {
-                        "@type": "Offer",
-                        "price": "0",
-                        "priceCurrency": "USD",
-                        "availability": "https://schema.org/InStock"
-                    },
-                    "softwareVersion": "3.1",
-                    "applicationSubCategory": "Content Management System",
-                    "keywords": "headless CMS, Firebase CMS, MongoDB CMS, React admin panel, no-code backend, AI-powered CMS",
-                    "publisher": {
-                        "@id": "https://firecms.co/#organization"
-                    }
+    <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "name": "FireCMS",
+                "url": "https://firecms.co",
+                "inLanguage": lang,
+                "description": description,
+                "publisher": {
+                    "@id": "https://firecms.co/#organization"
                 }
-            ]
-        }
-    </script>
+            },
+            {
+                "@type": "Organization",
+                "@id": "https://firecms.co/#organization",
+                "name": "FireCMS",
+                "url": "https://firecms.co",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://firecms.co/img/logo_small.png",
+                    "width": 512,
+                    "height": 512
+                },
+                "sameAs": [
+                    "https://x.com/firecmsco",
+                    "https://github.com/firecmsco/firecms",
+                    "https://www.linkedin.com/company/firecms"
+                ]
+            },
+            {
+                "@type": "SoftwareApplication",
+                "name": "FireCMS",
+                "applicationCategory": "DeveloperApplication",
+                "operatingSystem": "Web",
+                "inLanguage": lang,
+                "description": description,
+                "url": canonical,
+                "screenshot": "https://firecms.co/img/teaser.png",
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD",
+                    "availability": "https://schema.org/InStock"
+                },
+                "softwareVersion": "3.1",
+                "applicationSubCategory": "Content Management System",
+                "keywords": keywords,
+                "publisher": {
+                    "@id": "https://firecms.co/#organization"
+                }
+            }
+        ]
+    })} />
 
     {breadcrumbSchema && (
         <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    )}
+
+    {faqSchema && (
+        <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
     )}
 
     <!-- DNS Prefetch -->
@@ -186,9 +242,54 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
             }
         });
 
-        // Initialize Google Ads tag for conversion linker
-        window.gtag("config", "AW-17381868760");
 
+
+    </script>
+
+    <!-- Language auto-detection & preference enforcement -->
+    <script is:inline>
+        (function () {
+            try {
+                var knownLangs = ['es', 'de', 'fr', 'it', 'pt'];
+                var pathname = window.location.pathname;
+                var segments = pathname.split('/').filter(Boolean);
+                var currentLang = knownLangs.indexOf(segments[0]) !== -1 ? segments[0] : 'en';
+
+                // Compute the unlocalized path (strip any lang prefix)
+                var unlocalizedPath = knownLangs.indexOf(segments[0]) !== -1
+                    ? '/' + segments.slice(1).join('/')
+                    : pathname;
+                if (!unlocalizedPath || unlocalizedPath === '/') unlocalizedPath = '/';
+
+                var stored = null;
+                try { stored = localStorage.getItem('preferred-lang'); } catch (_) {}
+
+                var targetLang;
+                if (stored) {
+                    // User has an explicit preference — respect it
+                    targetLang = stored;
+                } else {
+                    // First visit: detect from browser language
+                    var browserLangs = (navigator.languages || [navigator.language || 'en']);
+                    targetLang = 'en';
+                    for (var i = 0; i < browserLangs.length; i++) {
+                        var code = browserLangs[i].toLowerCase().split('-')[0];
+                        if (knownLangs.indexOf(code) !== -1) {
+                            targetLang = code;
+                            break;
+                        }
+                    }
+                }
+
+                // Redirect if we're not on the right language path
+                if (targetLang !== currentLang) {
+                    var targetPath = targetLang === 'en'
+                        ? (unlocalizedPath || '/')
+                        : '/' + targetLang + (unlocalizedPath === '/' ? '' : unlocalizedPath);
+                    window.location.replace(targetPath);
+                }
+            } catch (_) {}
+        })();
     </script>
 
     <!-- View Transitions -->
@@ -197,9 +298,9 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
 </head>
 
 <body class="font-sans bg-black text-surface-300 antialiased" style="color-scheme: dark;">
-<Header/>
+<Header lang={lang}/>
 <slot/>
-<Footer/>
+<Footer lang={lang}/>
 <CookieBanner/>
 <script src="../scripts/tracking-params.js"/>
 <script src="../scripts/enhance-app-links.js"/>

@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { CenteredView, Typography } from "@firecms/ui";
+import { AuthController } from "../types";
 import { CustomizationController, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
-import { AuthControllerContext } from "../contexts";
+import { AuthControllerContext, ModeControllerProvider } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
-import { useCustomizationController, useFireCMSContext } from "../hooks";
+import { useCustomizationController, useFireCMSContext, useTranslation, ModeController } from "../hooks";
+import { useBuildModeController } from "../hooks/useBuildModeController";
 import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { ErrorView } from "../components";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
@@ -59,6 +61,10 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         console.warn("The `plugins` prop is deprecated in the FireCMS component. You should pass your plugins to `useBuildNavigationController` instead.");
     }
 
+    const { t, i18n } = useTranslation();
+
+    const modeController = useBuildModeController();
+
     const plugins = navigationController.plugins ?? _pluginsProp;
     const userManagement = plugins?.find(p => p.userManagement)?.userManagement
         ?? _userManagement
@@ -106,6 +112,24 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
         authController
     });
 
+    // Inject plugin translations into the existing i18next instance
+    useEffect(() => {
+        if (!i18n) return;
+        plugins?.forEach(plugin => {
+            if (plugin.i18n) {
+                Object.keys(plugin.i18n).forEach(locale => {
+                    i18n.addResourceBundle(
+                        locale,
+                        "firecms_core",
+                        plugin.i18n![locale],
+                        true,  // deep merge
+                        true   // overwrite
+                    );
+                });
+            }
+        });
+    }, [i18n, plugins]);
+
     if (accessResponse?.message) {
         console.warn(accessResponse.message);
     }
@@ -133,12 +157,15 @@ export function FireCMS<USER extends User>(props: FireCMSProps<USER>) {
     if (accessResponse?.blocked) {
         return (
             <CenteredView maxWidth={"md"} fullScreen={true} className={"flex flex-col gap-2"}>
+                {/* eslint-disable-next-line i18next/no-literal-string */}
                 <Typography variant={"h4"} gutterBottom>
-                    License needed
+                    {t("license_needed")}
                 </Typography>
                 <Typography>
-                    You need a valid license to use FireCMS PRO. Please reach out at <a
-                    href={"mailto:hello@firecms.co"}>hello@firecms.co</a> for more information.
+                    {(() => {
+                        const parts = t("license_description", { email: "%%EMAIL%%" }).split("%%EMAIL%%");
+                        return <>{parts[0]}<a href={"mailto:hello@firecms.co"}>hello@firecms.co</a>{parts[1]}</>;
+                    })()}
                 </Typography>
                 {accessResponse?.message &&
                     <Typography>{accessResponse?.message}</Typography>}

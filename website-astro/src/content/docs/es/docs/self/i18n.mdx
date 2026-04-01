@@ -1,0 +1,306 @@
+---
+title: Internacionalización (i18n)
+slug: es/docs/self/i18n
+description: Aprende a configurar el idioma de la interfaz, sobrescribir cadenas existentes y añadir nuevas traducciones en tu aplicación FireCMS auto-hospedada.
+---
+
+FireCMS incluye un sistema de internacionalización integrado basado en
+[i18next](https://www.i18next.com/) y
+[react-i18next](https://react.i18next.com/).
+Los siguientes idiomas son compatibles desde el primer momento:
+
+| Código | Idioma |
+|--------|--------|
+| `en` | Inglés (predeterminado) |
+| `es` | Español |
+| `de` | Alemán |
+| `fr` | Francés |
+| `it` | Italiano |
+| `hi` | Hindi |
+
+El cambio de idioma, la persistencia entre sesiones y la resolución de cadenas
+son gestionados automáticamente por `FireCMSi18nProvider`, que se monta en la
+raíz del árbol de componentes de FireCMS.
+
+---
+
+## Configuración básica
+
+Envuelve tu árbol `FireCMS` con `FireCMSi18nProvider`. Puedes ver un ejemplo
+completo de conexión en la página [Ejemplo de proyecto PRO](../pro/sample_pro) —
+el fragmento a continuación se centra únicamente en la parte de i18n:
+
+```tsx
+import {
+    FireCMS,
+    FireCMSi18nProvider,
+    ModeControllerProvider,
+    Scaffold, AppBar, Drawer, NavigationRoutes, SideDialogs,
+    SnackbarProvider,
+    // … otras importaciones
+} from "@firecms/core";
+
+export function MiAplicaciónCMS() {
+    // … configura los controladores (auth, navegación, almacenamiento, etc.)
+
+    return (
+        <SnackbarProvider>
+            <FireCMSi18nProvider locale="es">
+                <ModeControllerProvider value={modeController}>
+                    <FireCMS
+                        navigationController={navigationController}
+                        authController={authController}
+                        dataSourceDelegate={firestoreDelegate}
+                        storageSource={storageSource}
+                    >
+                        {({ context, loading }) => {
+                            if (loading) return <CircularProgressCenter size="large" />;
+                            return (
+                                <Scaffold>
+                                    <AppBar title="Mi CMS" />
+                                    <Drawer />
+                                    <NavigationRoutes />
+                                    <SideDialogs />
+                                </Scaffold>
+                            );
+                        }}
+                    </FireCMS>
+                </ModeControllerProvider>
+            </FireCMSi18nProvider>
+        </SnackbarProvider>
+    );
+}
+```
+
+La prop `locale` acepta cualquier
+[etiqueta de idioma BCP-47](https://www.ietf.org/rfc/bcp/bcp47.txt)
+(`"en"`, `"es"`, `"de"`, …).
+
+### La preferencia del usuario se persiste
+
+Cuando un usuario cambia el idioma a través de la interfaz de FireCMS, la
+elección se guarda en `localStorage` bajo la clave `firecms_locale`.
+En la siguiente visita, la preferencia almacenada tiene prioridad sobre la prop
+`locale` — a menos que la borres manualmente.
+
+---
+
+## Sobrescribir cadenas integradas
+
+Puedes reemplazar cualquier cadena de la interfaz de FireCMS sin modificar el
+código fuente de la librería. Usa la prop `translations` en `FireCMSi18nProvider`:
+
+```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
+import type { FireCMSTranslations } from "@firecms/core";
+
+// Solo incluye las claves que quieras cambiar — el resto mantiene sus valores predeterminados.
+const misTraduciones: { [locale: string]: Partial<FireCMSTranslations> } = {
+    en: {
+        save: "Publish",
+        discard: "Throw away",
+        delete: "Remove",
+    },
+    es: {
+        save: "Publicar",
+        discard: "Descartar",
+    },
+};
+
+// Dentro de tu árbol de componentes:
+<FireCMSi18nProvider locale="es" translations={misTraduciones}>
+    {/* … */}
+</FireCMSi18nProvider>
+```
+
+Las sobrescrituras se **fusionan profundamente** sobre las cadenas integradas —
+las claves que no proporciones mantienen sus valores predeterminados. Las
+sobrescrituras se vuelven a aplicar cada vez que cambia la referencia de la prop
+`translations`.
+
+---
+
+## Añadir una traducción completamente nueva
+
+Si tu idioma objetivo no está en la lista anterior, crea un objeto que cumpla
+`DeepPartial<FireCMSTranslations>` (no tienes que proporcionar todas las claves —
+las que falten vuelven automáticamente al inglés) y pásalo bajo un nuevo código
+de idioma:
+
+```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
+
+const ptTranslations = {
+    save: "Guardar",
+    create: "Criar",
+    discard: "Descartar",
+    cancel: "Cancelar",
+    delete: "Eliminar",
+    edit: "Editar",
+    copy: "Copiar",
+    search: "Pesquisar",
+    filter: "Filtro",
+    loading: "A carregar...",
+    // … añade las claves que necesites; el resto usará el inglés por defecto
+};
+
+<FireCMSi18nProvider
+    locale="pt"                              // activa el nuevo idioma
+    translations={{ pt: ptTranslations }}   // proporciona sus cadenas
+>
+    {/* … */}
+</FireCMSi18nProvider>
+```
+
+:::note
+Cuando falta una clave en tu idioma personalizado, FireCMS usa automáticamente
+el valor en inglés (`en`) como fallback.
+:::
+
+---
+
+## Referencia de props
+
+| Prop | Tipo | Predeterminado | Descripción |
+|------|------|----------------|-------------|
+| `locale` | `string` | `"en"` | Etiqueta BCP-47 del idioma activo. |
+| `translations` | `Record<string, DeepPartial<FireCMSTranslations>>` | — | Sobrescrituras/adiciones de cadenas por idioma. |
+
+:::note
+`FireCMSi18nProvider` crea su propia instancia **aislada** de i18next — no
+interferirá con ninguna otra configuración de i18next que tengas en tu
+aplicación.
+:::
+
+---
+
+## Lista completa de claves traducibles
+
+Todas las cadenas traducibles están definidas en la interfaz `FireCMSTranslations`
+exportada desde `@firecms/core`.
+A continuación se muestra un resumen categorizado de las claves más comúnmente
+personalizadas:
+
+### Acciones de formulario
+
+| Clave | Predeterminado (en) |
+|-------|---------------------|
+| `save` | Save |
+| `create` | Create |
+| `save_and_close` | Save and close |
+| `create_and_close` | Create and close |
+| `create_copy` | Create copy |
+| `discard` | Discard |
+| `clear` | Clear |
+| `cancel` | Cancel |
+
+### Acciones de entidad
+
+| Clave | Predeterminado (en) |
+|-------|---------------------|
+| `edit` | Edit |
+| `copy` | Copy |
+| `delete` | Delete |
+| `delete_selected` | Delete |
+
+### Tabla de colección
+
+| Clave | Predeterminado (en) |
+|-------|---------------------|
+| `search` | Search |
+| `filter` | Filter |
+| `no_items` | No items |
+| `no_entries_found` | No entries found |
+| `create_your_first_entry` | Create your first entry |
+| `add` | Add |
+| `remove` | Remove |
+
+### Diálogos
+
+| Clave | Predeterminado (en) |
+|-------|---------------------|
+| `delete_confirmation_title` | Delete? |
+| `delete_confirmation_body` | This will delete the entity. Are you sure? |
+| `unsaved_changes_title` | Unsaved changes |
+| `unsaved_changes_body` | You have unsaved changes. Do you want to discard them? |
+| `discard_changes` | Discard changes |
+| `keep_editing` | Keep editing |
+
+### Navegación & diseño
+
+| Clave | Predeterminado (en) |
+|-------|---------------------|
+| `open_menu` | Open menu |
+| `close_drawer` | Close drawer |
+| `home` | Home |
+| `admin` | Admin |
+| `log_out` | Log out |
+
+### Estados de error
+
+| Clave | Predeterminado (en) |
+|-------|---------------------|
+| `error` | Error |
+| `error_uploading_file` | Error uploading file |
+| `error_deleting` | Error deleting |
+| `internal_error` | Internal ERROR |
+| `page_not_found` | Page not found |
+| `back_to_home` | Back to home |
+
+### Autenticación
+
+| Clave | Predeterminado (en) |
+|-------|---------------------|
+| `auth_sign_in` | Sign In |
+| `auth_sign_up` | Sign Up |
+| `auth_password` | Password |
+| `auth_reset_password` | Reset password |
+| `auth_wrong_password` | Wrong password. Please try again. |
+| `auth_user_not_found` | User not found |
+
+### Importación / exportación de datos
+
+| Clave | Predeterminado (en) |
+|-------|---------------------|
+| `import` | Import |
+| `import_data` | Import data |
+| `export` | Export |
+| `export_data` | Export data |
+| `download` | Download |
+
+Para la lista **completa** de claves con sus definiciones TypeScript, consulta el
+[archivo fuente de `FireCMSTranslations`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/translations.ts)
+y el [locale base en inglés](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/locales/en.ts)
+en GitHub.
+
+---
+
+## Cambiar el idioma dinámicamente en tiempo de ejecución
+
+Puedes cambiar el idioma activo en tiempo de ejecución actualizando la prop
+`locale`. FireCMS cambiará automáticamente **a menos que** el usuario ya haya
+guardado una preferencia personal en `localStorage`.
+
+Para borrar la preferencia almacenada y forzar un cambio de idioma:
+
+```ts
+import { FIRECMS_LOCALE_STORAGE_KEY } from "@firecms/core";
+
+// Borra la preferencia del usuario, luego cambia el idioma mediante la prop `locale`
+localStorage.removeItem(FIRECMS_LOCALE_STORAGE_KEY);
+```
+
+---
+
+## Contribuir con un nuevo idioma
+
+Si añades una traducción completa para un nuevo idioma y quieres compartirla con
+la comunidad, ¡aceptamos pull requests!
+
+1. Añade un nuevo archivo `packages/firecms_core/src/locales/<código>.ts` siguiendo la
+   estructura del existente [`en.ts`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/locales/en.ts).
+2. Regístralo dentro de
+   [`FireCMSi18nProvider.tsx`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/i18n/FireCMSi18nProvider.tsx).
+3. Abre un pull request — ¡gracias! 🎉
+
+¿Tienes preguntas? Únete a la [comunidad de Discord](https://discord.gg/fxy7xsQm3m).

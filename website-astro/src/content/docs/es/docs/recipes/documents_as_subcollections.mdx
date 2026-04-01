@@ -1,0 +1,69 @@
+---
+title: Colecciones raíz dinámicas
+slug: es/docs/recipes/documents_as_subcollections
+sidebar_label: Colecciones raíz dinámicas
+description: Aprende a generar dinámicamente navegación y colecciones a partir de documentos de la base de datos en FireCMS.
+---
+
+Vamos a construir un ejemplo más complejo donde la navegación principal se **carga dinámicamente** desde
+la base de datos. Usaremos la colección `units` como la que genera el
+resto de la navegación.
+
+Para este ejemplo tendremos `Units` y `Lessons` como los principales tipos de contenido,
+imagina que estamos modelando la estructura de un curso.
+
+En la colección de unidades crearemos un documento para cada unidad:
+
+![dynamic_navigation_collection](/img/recipes/dynamic_navigation_collection.png)
+
+Y cada uno de esos documentos generará un nuevo elemento de navegación. En este caso
+tendremos 3 elementos de navegación, uno para cada unidad:
+
+![dynamic_navigation_home](/img/recipes/dynamic_navigation_home.png)
+
+
+### Declara la colección principal
+
+Definamos la colección `units` como la principal:
+
+:::note
+Vamos a implementar un par de callbacks al guardar y eliminar entidades para
+actualizar la navegación cuando los datos cambian.
+Esto evita que el usuario tenga que refrescar la app para ver los cambios.
+¡Qué genial es eso!
+:::
+
+
+import { Code } from '@astrojs/starlight/components';
+import UnitCollection from '../../samples/samples_v3/recipes/document_as_subcollection/unit_collection?raw';
+import CollectionBuilder from '../../samples/samples_v3/recipes/document_as_subcollection/collection_builder?raw';
+import FullCode from '../../samples/samples_v3/recipes/document_as_subcollection/full?raw';
+
+<Code code={UnitCollection} lang="tsx" />
+
+
+### Constructor de colecciones dinámico
+
+Típicamente en FireCMS pasas una lista estática de colecciones al componente principal del CMS,
+pero en este caso necesitamos construir las colecciones dinámicamente basándose
+en los datos de la base de datos.
+
+FireCMS te permite pasar una función que devuelve una lista de colecciones a la
+prop `collections` del componente `FireCMSApp`.
+
+<Code code={CollectionBuilder} lang="tsx" />
+
+:::tip
+Las colecciones pueden cargarse convenientemente de forma asíncrona.
+:::
+
+Este código obtiene los datos que se están generando en la colección `units`
+y crea una nueva colección para cada uno de los documentos.
+
+
+## Código completo
+
+Conectándolo todo obtenemos una app simple que nos permite crear nuevas unidades
+y lecciones y navegar entre ellas:
+
+<Code code={FullCode} lang="tsx" />

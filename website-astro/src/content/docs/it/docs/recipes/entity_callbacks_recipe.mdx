@@ -1,0 +1,117 @@
+---
+slug: it/docs/recipes/entity_callbacks
+title: Come usare i callback delle entità
+sidebar_label: Usare i callback delle entità
+description: Impara come usare i callback delle entità in FireCMS per aggiungere metadati alle tue entità o implementare regole di logica personalizzata.
+---
+
+![Entity Callbacks](/img/recipes/entity_callbacks.png)
+
+In questo tutorial creeremo una semplice collezione contenente auto. Poi useremo i Callback delle Entità per tracciare le modifiche nelle entità, aggiungendo il timestamp dell'ultimo aggiornamento e l'utente che ha fatto la modifica.
+
+### Cosa sono i callback delle entità?
+
+I callback delle entità sono funzioni che vengono attivate in diverse fasi del ciclo di vita di un'entità in un database. Sono particolarmente utili per:
+- **Validazione dati**: Validano i dati prima che vengano salvati nel database.
+- **Trasformazione dati**: Trasformano i dati prima che vengano salvati o dopo essere stati recuperati.
+- **Tracciamento modifiche**: Aggiungono metadati a un'entità, come il timestamp dell'ultimo aggiornamento e l'utente che ha fatto la modifica.
+- **Implementazione logica personalizzata**: Implementano regole di logica personalizzata, ad esempio impedire la cancellazione di entità non create dall'utente.
+- **Auditing**: Mantengono un registro di audit delle modifiche ai dati.
+
+### Crea una collezione
+
+Per scopi illustrativi, creiamo una semplice collezione `cars`:
+
+```tsx
+interface Car {
+  brand_name: string;
+  model_name: string;
+  fuel_type: "diesel" | "gas";
+  horse_power: number;
+  price_in_dollars: number;
+  modified_at?: Date;
+  modified_by?: string;
+}
+
+export const carsCollection = buildCollection<Car>({
+  id: "cars",
+  name: "Cars",
+  path: "car",
+  callbacks: carsCallbacks,
+  singularName: "Car",
+  properties: {
+    brand_name: buildProperty({
+      dataType: "string",
+      name: "Brand Name",
+      validation: { required: true },
+      enumValues: [
+        { id: "alfa-romero", label: "Alfa Romero" },
+        { id: "audi", label: "Audi" },
+        { id: "bmw", label: "Bmw" },
+        { label: "Mercedes Benz", id: "mercedes-benz" },
+        { id: "porsche", label: "Porsche" }
+      ]
+    }),
+    model_name: buildProperty({ dataType: "string", name: "Model Name", validation: { required: true } }),
+    fuel_type: buildProperty({
+      validation: { required: true },
+      dataType: "string",
+      enumValues: [
+        { label: "Diesel", id: "diesel" },
+        { id: "gas", label: "Gas" },
+        { id: "electric", label: "Electric" }
+      ],
+      name: "Fuel type"
+    }),
+    horse_power: buildProperty({ validation: { required: true }, name: "Horse Power", dataType: "number" }),
+    price_in_dollars: buildProperty({ dataType: "number", validation: { required: true }, name: "Price in Dollars" }),
+    modified_at: buildProperty({ dataType: "date", name: "Modified At", validation: { required: false }, readOnly: true }),
+    modified_by: buildProperty({ dataType: "string", name: "Modified By", validation: { required: false }, readOnly: true })
+  }
+});
+```
+
+### Crea i callback delle entità
+
+I callback disponibili sono:
+- `onFetch`: Chiamato quando un'entità viene recuperata dal database.
+- `onPreSave`: Chiamato prima che un'entità venga salvata.
+- `onSaveSuccess`: Chiamato dopo il salvataggio riuscito.
+- `onSaveFailure`: Chiamato quando si verifica un errore nel salvataggio.
+- `onPreDelete`: Chiamato prima dell'eliminazione.
+- `onDelete`: Chiamato dopo l'eliminazione riuscita.
+- `onIdUpdate`: Chiamato quando un valore nel form cambia.
+
+```tsx
+const carsCallbacks = buildEntityCallbacks<Car>({
+  onPreSave: (entitySaveProps) => {
+    console.log("Callback onPreSave<Car>");
+    // Impostiamo modified_at con il timestamp corrente
+    entitySaveProps.values.modified_at = new Date();
+    // Impostiamo modified_by con l'utente che ha fatto la modifica
+    entitySaveProps.values.modified_by = entitySaveProps.context.authController.user?.displayName ?? "Utente Sconosciuto";
+    return entitySaveProps.values;
+  }
+});
+```
+
+![entity_callbacks_example](/img/recipes/entity_callbacks.png)
+
+Ora implementiamo un'altra funzionalità: blocchiamo l'eliminazione delle auto che non hai creato tu stesso:
+
+```tsx
+const carsCallbacks = buildEntityCallbacks<Car>({
+  onPreDelete: (entityDeleteProps) => {
+    console.log("Callback onPreDelete<Car>");
+    if (entityDeleteProps.context.authController.user?.displayName !== entityDeleteProps.entity.modified_by) {
+      throw new Error("Non puoi eliminare un'auto che non hai creato tu stesso");
+    }
+  }
+});
+```
+
+![entity_callbacks_delete_example](/img/recipes/entity_callbacks_delete.png)
+
+## Codice completo
+
+Codice completo disponibile nel [repository FireCMS](https://github.com/marianmoldovan/firecms-entity-callbacks-cars)

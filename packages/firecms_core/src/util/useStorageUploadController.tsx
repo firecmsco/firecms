@@ -207,43 +207,37 @@ export function useStorageUploadController<M extends object>({
                 console.error("Error processing file with custom code. Attempting to continue uploading.", e);
             }
         }
+        let newInternalValue: StorageFieldItem[] = [...internalValue];
 
-        let newInternalValue: StorageFieldItem[];
-
-        if (multipleFilesSupported) {
-            newInternalValue = [...internalValue,
-                ...(await Promise.all(acceptedFiles.map(async file => {
-                    if ((imageResize || legacyCompression) && isImageFile(file)) {
-                        file = await resizeImage(file, imageResize, legacyCompression);
-                    }
-
-                    return {
-                        id: getRandomId(),
-                        file,
-                        fileName: await fileNameBuilder(file),
-                        metadata,
-                        size
-                    } as StorageFieldItem;
-                })))];
-        } else {
-            let file = acceptedFiles[0];
+        for (let file of acceptedFiles) {
             if ((imageResize || legacyCompression) && isImageFile(file)) {
                 file = await resizeImage(file, imageResize, legacyCompression);
             }
 
-            newInternalValue = [{
-                id: getRandomId(),
-                file,
-                fileName: await fileNameBuilder(file),
-                metadata,
-                size
-            }];
+            if (multipleFilesSupported) {
+                newInternalValue.push({
+                    id: getRandomId(),
+                    file,
+                    fileName: await fileNameBuilder(file),
+                    metadata,
+                    size
+                } as StorageFieldItem);
+            } else {
+                newInternalValue = [{
+                    id: getRandomId(),
+                    file,
+                    fileName: await fileNameBuilder(file),
+                    metadata,
+                    size
+                }];
+                break; // Only keep the first file
+            }
         }
 
         // Remove either storage path or file duplicates
         newInternalValue = removeDuplicates(newInternalValue);
         setInternalValue(newInternalValue);
-    }, [disabled, fileNameBuilder, internalValue, metadata, multipleFilesSupported, size, imageResize, legacyCompression]);
+    }, [disabled, fileNameBuilder, internalValue, metadata, multipleFilesSupported, size, imageResize, legacyCompression, processFile]);
 
     return {
         internalValue,
@@ -300,7 +294,7 @@ function getRandomId() {
 /**
  * Check if a file is an image type supported for resizing
  */
-function isImageFile(file: File): boolean {
+export function isImageFile(file: File): boolean {
     return file.type === "image/jpeg" ||
         file.type === "image/png" ||
         file.type === "image/webp";
@@ -310,7 +304,7 @@ function isImageFile(file: File): boolean {
  * Resize and compress an image using compressorjs.
  * Supports both the new imageResize API and legacy imageCompression for backward compatibility.
  */
-async function resizeImage(
+export async function resizeImage(
     file: File,
     imageResize?: StorageConfig["imageResize"],
     legacyCompression?: ImageResize

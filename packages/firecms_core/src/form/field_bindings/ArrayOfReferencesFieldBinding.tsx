@@ -4,8 +4,7 @@ import { ReferencePreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
-
-import { useNavigationController, useReferenceDialog } from "../../hooks";
+import { useNavigationController, useReferenceDialog, useTranslation } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
@@ -48,6 +47,7 @@ export function ArrayOfReferencesFieldBinding({
         setValue
     });
 
+    const { t } = useTranslation();
     const navigationController = useNavigationController();
     const collection: EntityCollection | undefined = useMemo(() => {
         return ofProperty.path ? navigationController.getCollection(ofProperty.path) : undefined;
@@ -84,7 +84,7 @@ export function ArrayOfReferencesFieldBinding({
                                     }: ArrayEntryParams) => {
         const entryValue = value && value.length > index ? value[index] : undefined;
         if (!entryValue)
-            return <div>Internal ERROR</div>;
+            return <div>{t("internal_error")}</div>;
         return (
             <ReferencePreview
                 key={internalId}
@@ -132,7 +132,7 @@ export function ArrayOfReferencesFieldBinding({
                 disabled={isSubmitting}
                 onClick={onEntryClick}>
                 <EditIcon size={"small"}/>
-                Edit {property.name}
+                {t("edit_name", { name: property.name ?? "" })}
             </Button>
         </div>}
     </>;

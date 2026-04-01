@@ -1,0 +1,128 @@
+---
+title: Campos de seleção
+slug: pt/docs/properties/fields/selects
+---
+
+### Campo de seleção simples
+
+![Field](/img/fields/Select.png)
+
+Pode usar um campo de seleção simples quando deseja permitir a seleção de um
+único valor entre um conjunto limitado de opções. Cada entrada terá uma chave e um
+rótulo. Pode também personalizar a cor de cada entrada ou desabilitar certas opções.
+
+Defina a prop `enumValues` para uma configuração válida em uma propriedade string. Pode
+definir esses valores como um array
+de [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig)
+ou simplesmente como um objeto com pares chave/valor:
+
+```typescript jsx
+import { buildProperty } from "@firecms/core";
+
+buildProperty({
+    dataType: "string",
+    name: "Category",
+    enumValues: {
+        art_design_books: "Art and design books",
+        backpacks: "Backpacks and bags",
+        bath: "Bath",
+        bicycle: "Bicycle",
+        books: "Books"
+    }
+});
+```
+
+ou
+
+```typescript jsx
+import { buildProperty } from "@firecms/core";
+
+buildProperty({
+    dataType: "string",
+    name: "Currency",
+    enumValues: [
+        { id: "EUR", label: "Euros", color: "blueDark" },
+        { id: "DOL", label: "Dollars", color: "greenLight" }
+    ]
+});
+```
+
+O tipo de dado é [`string`](../config/string) ou [`number`](../config/number).
+
+Internamente o componente usado
+é [`SelectFieldBinding`](../../api/functions/SelectFieldBinding).
+
+
+### Campo de seleção múltipla
+
+![Field](/img/fields/Multi_select.png)
+
+Pode usar um campo de seleção múltipla quando deseja permitir a seleção de
+zero ou mais valores entre um conjunto limitado de opções. Cada entrada terá uma chave
+e um rótulo. Pode também personalizar a cor de cada entrada ou desabilitar certas opções.
+
+Defina a prop `enumValues` para uma configuração válida em uma propriedade string. Pode
+definir esses valores como um array
+de [`EnumValueConfig`](../../api/type-aliases/EnumValueConfig)
+ou simplesmente como um objeto com pares chave/valor:
+
+```typescript jsx
+import { buildProperty } from "@firecms/core";
+
+buildProperty({
+    name: "Available locales",
+    dataType: "array",
+    of: {
+        dataType: "string",
+        enumValues: {
+            "es": "Spanish",
+            "en": "English",
+            "fr": {
+                id: "fr",
+                label: "French",
+                disabled: true
+            }
+        }
+    },
+    defaultValue: ["es"]
+});
+```
+
+O tipo de dado é [`array`](../config/array) com propriedades string ou number
+como a prop `of`, usando valores enum.
+
+Internamente o componente usado
+é [`SelectFieldBinding`](../../api/functions/SelectFieldBinding).
+
+### Personalizar as cores
+
+Pode escolher as cores entre uma lista de valores predefinidos:
+
+
+
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../../../../../../../packages/ui/src/util/chip_colors?raw';
+
+<Code code={MyComponentSource} lang="tsx" />
+
+E pode também definir cores personalizadas usando a sintaxe HTML `#AAAAAA`:
+
+```typescript jsx
+import { buildProperty } from "@firecms/core";
+
+buildProperty({
+    dataType: "string",
+    name: "Currency",
+    enumValues: [
+        { id: "EUR", label: "Euros", color: "blueDark" },
+        {
+            id: "DOL",
+            label: "Dollars",
+            color: {
+                color: "#FFFFFF",
+                text: "#333333",
+            }
+        }
+    ]
+});
+```

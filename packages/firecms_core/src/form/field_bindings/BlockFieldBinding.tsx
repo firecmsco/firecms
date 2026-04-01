@@ -11,6 +11,7 @@ import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
 import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { ArrayContainer, ArrayEntryParams } from "../../components";
+import { useTranslation } from "../../hooks/useTranslation";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -37,6 +38,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                                                         }: FieldProps<T>) {
 
     const minimalistView = minimalistViewProp || property.minimalistView;
+    const { t } = useTranslation();
 
     if (!property.oneOf)
         throw Error("ArrayOneOfField misconfiguration. Property `oneOf` not set");
@@ -84,7 +86,7 @@ export function BlockFieldBinding<T extends Array<any>>({
     const body = <ArrayContainer value={value}
                                  className={"flex flex-col gap-3"}
                                  droppableId={propertyKey}
-                                 addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
+                                 addLabel={property.name ? t("add_to_field", { fieldName: property.name }) : t("add_entry")}
                                  buildEntry={buildEntry}
                                  onInternalIdAdded={setLastAddedId}
                                  disabled={isSubmitting || Boolean(property.disabled)}
@@ -167,6 +169,7 @@ function BlockEntry({
     const [typeInternal, setTypeInternal] = useState<string | undefined>(type ?? undefined);
 
     const formex = useFormex();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!type) {
@@ -227,7 +230,7 @@ function BlockEntry({
                             <Select
                                 className="mb-2"
                                 placeholder={<Typography variant={"caption"}
-                                                         className={"px-4 py-2 font-medium"}>Type</Typography>}
+                                                         className={"px-4 py-2 font-medium"}>{t("type")}</Typography>}
                                 size={"medium"}
                                 fullWidth={true}
                                 position={"item-aligned"}

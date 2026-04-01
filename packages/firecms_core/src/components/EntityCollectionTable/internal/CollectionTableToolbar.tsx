@@ -6,7 +6,7 @@ import {
     defaultBorderMixin,
     SearchBar
 } from "@firecms/ui";
-import { useLargeLayout } from "../../../hooks";
+import { useLargeLayout, useTranslation } from "../../../hooks";
 
 interface CollectionTableToolbarProps {
     loading: boolean;
@@ -33,6 +33,7 @@ export function CollectionTableToolbar({
     viewModeToggle
 }: CollectionTableToolbarProps) {
 
+    const { t } = useTranslation();
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     const largeLayout = useLargeLayout();
 
@@ -78,6 +79,7 @@ export function CollectionTableToolbar({
                         disabled={Boolean(onTextSearchClick)}
                         onClick={onTextSearchClick}
                         onTextSearch={onTextSearchClick ? undefined : onTextSearch}
+                        placeholder={t("search")}
                         expandable={true} />}
 
                 {actions}

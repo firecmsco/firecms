@@ -1,0 +1,29 @@
+---
+// src/pages/[lang]/compare.astro
+import Layout from "../../layouts/Layout.astro";
+import CompareContent from "../../components/pages/CompareContent.astro";
+import { languages } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+    const supportedLangs = Object.keys(languages).filter(l => l !== 'en');
+    return supportedLangs.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Compare", url: "https://firecms.co/compare" }
+];
+---
+
+<Layout
+        title={t('seo.compare.title')}
+        description={t('seo.compare.description')}
+        breadcrumbs={breadcrumbs}
+        lang={lang}
+>
+    <CompareContent lang={lang} t={t} />
+</Layout>

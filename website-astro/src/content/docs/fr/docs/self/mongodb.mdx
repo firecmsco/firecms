@@ -1,0 +1,243 @@
+---
+title: Intégration de MongoDB Atlas avec FireCMS
+slug: fr/docs/self/mongodb
+sidebar_label: Intégration MongoDB
+description: Guide complet pour utiliser MongoDB Atlas comme base de données et fournisseur d'authentification avec FireCMS.
+---
+
+Ce guide détaille les étapes nécessaires pour intégrer MongoDB Atlas comme système d'authentification et base de données principale pour votre application FireCMS.
+Mongo Atlas ne prend pas en charge le stockage de fichiers, vous pouvez donc optionnellement utiliser Firebase à cette fin, ou tout autre fournisseur de stockage.
+
+## Configuration du projet
+
+Commencez par générer un nouveau projet en utilisant le template de démarrage FireCMS PRO.
+
+```bash
+npx create-firecms-app --pro
+```
+
+ou
+
+```bash
+yarn create firecms-app --pro
+```
+
+## Configuration de MongoDB Atlas
+
+Commencez par configurer votre projet MongoDB Atlas et obtenez les paramètres de configuration requis.
+Ces paramètres incluent `appId`, `appUrl`, `baseUrl`, `clientApiBaseUrl`, `dataApiBaseUrl`, `dataExplorerLink`
+et `dataSourceName`.
+
+```js
+const atlasConfig = {
+  appId: "your-app-id",
+  appUrl: "https://services.cloud.mongodb.com/groups/your-group-id/apps/your-app-id",
+  baseUrl: "https://services.cloud.mongodb.com",
+  clientApiBaseUrl: "https://your-region.gcp.services.cloud.mongodb.com",
+  dataApiBaseUrl: "https://your-region.gcp.data.mongodb-api.com",
+  dataExplorerLink: "https://cloud.mongodb.com/links/your-group-id/explorer/Cluster0/database/collection/find",
+  dataSourceName: "mongodb-atlas"
+};
+```
+
+## Configuration Firebase (Optionnel)
+
+Si vous souhaitez utiliser Firebase pour le stockage de fichiers, configurez Firebase comme suit :
+
+```js
+const firebaseConfig = {
+  apiKey: "your-api-key",
+  authDomain: "your-auth-domain",
+  databaseURL: "your-database-url",
+  projectId: "your-project-id",
+  storageBucket: "your-storage-bucket",
+  messagingSenderId: "your-messaging-sender-id",
+  appId: "your-app-id"
+};
+```
+
+## Implémenter MongoDB dans FireCMS
+
+Créons un nouveau composant `MongoDBApp` qui intègre MongoDB Atlas (et optionnellement Firebase).
+
+### Initialisation
+
+Initialisez Firebase et MongoDB dans votre composant :
+
+```jsx
+import React from "react";
+import {
+  AppBar,
+  CircularProgressCenter,
+  FireCMS,
+  ModeControllerProvider,
+  NavigationRoutes,
+  Scaffold,
+  SideDialogs,
+  SnackbarProvider,
+  useBuildLocalConfigurationPersistence,
+  useBuildModeController,
+  useBuildNavigationController,
+  useValidateAuthenticator
+} from "@firecms/core";
+import {
+  useFirebaseStorageSource,
+  useInitialiseFirebase,
+} from "@firecms/firebase";
+import { productsCollection } from "./collections/products_collection";
+import { CenteredView } from "@firecms/ui";
+import {
+  MongoAuthController,
+  MongoLoginView,
+  useInitRealmMongodb,
+  useMongoDBAuthController,
+  useMongoDBDelegate
+} from "@firecms/mongodb";
+
+const MongoDBApp = () => {
+  const name = "My FireCMS App";
+
+  // Initialiser Firebase
+  const { firebaseApp, firebaseConfigLoading, configError } = useInitialiseFirebase({ firebaseConfig });
+
+  // Initialiser MongoDB
+  const { app } = useInitRealmMongodb(atlasConfig);
+
+  // ...
+};
+
+export default MongoDBApp;
+```
+
+### Contrôleurs et persistance
+
+Ensuite, configurez le contrôleur de mode, la persistance de configuration utilisateur et le contrôleur d'authentification MongoDB.
+
+```jsx
+const modeController = useBuildModeController();
+const userConfigPersistence = useBuildLocalConfigurationPersistence();
+
+const authController: MongoAuthController = useMongoDBAuthController({ app });
+const mongoDataSourceDelegate = useMongoDBDelegate({
+  app,
+  cluster: "mongodb-atlas",
+  database: "todo"
+});
+```
+
+### Source de stockage Firebase
+
+Si vous prévoyez d'utiliser Firebase pour le stockage de fichiers, initialisez `storageSource`.
+
+```jsx
+const storageSource = useFirebaseStorageSource({ firebaseApp });
+```
+
+### Validation de l'authentificateur
+
+Définissez la logique de validation pour votre authentificateur.
+
+```jsx
+const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
+  authController,
+  authenticator: () => true, // Remplacez par votre logique
+  dataSourceDelegate: mongoDataSourceDelegate,
+  storageSource
+});
+```
+
+### Contrôleur de navigation
+
+Configurez le contrôleur de navigation avec vos collections.
+
+```jsx
+const navigationController = useBuildNavigationController({
+  collections: [productsCollection],
+  authController,
+  dataSourceDelegate: mongoDataSourceDelegate
+});
+```
+
+### Rendu de l'application
+
+Finalement, connectez tout ensemble dans le retour de votre composant.
+
+```jsx
+const MongoDBApp = () => {
+  const name = "My FireCMS App";
+
+  const { firebaseApp, firebaseConfigLoading, configError } = useInitialiseFirebase({ firebaseConfig });
+  const { app } = useInitRealmMongodb(atlasConfig);
+
+  const modeController = useBuildModeController();
+  const userConfigPersistence = useBuildLocalConfigurationPersistence();
+  const authController: MongoAuthController = useMongoDBAuthController({ app });
+  const mongoDataSourceDelegate = useMongoDBDelegate({
+    app,
+    cluster: "mongodb-atlas",
+    database: "todo"
+  });
+  const storageSource = useFirebaseStorageSource({ firebaseApp });
+  const { authLoading, canAccessMainView, notAllowedError } = useValidateAuthenticator({
+    authController,
+    authenticator: () => true, // Remplacez par votre logique
+    dataSourceDelegate: mongoDataSourceDelegate,
+    storageSource
+  });
+  const navigationController = useBuildNavigationController({
+    collections: [productsCollection],
+    authController,
+    dataSourceDelegate: mongoDataSourceDelegate
+  });
+
+  if (firebaseConfigLoading || !firebaseApp) {
+    return <CircularProgressCenter />;
+  }
+
+  if (configError) {
+    return <CenteredView>{configError}</CenteredView>;
+  }
+
+  return (
+    <SnackbarProvider>
+      <ModeControllerProvider value={modeController}>
+        <FireCMS
+          navigationController={navigationController}
+          authController={authController}
+          userConfigPersistence={userConfigPersistence}
+          dataSourceDelegate={mongoDataSourceDelegate}
+          storageSource={storageSource}
+        >
+          {({ context, loading }) => {
+            if (loading || authLoading) {
+              return <CircularProgressCenter size="large" />;
+            }
+
+            if (!canAccessMainView) {
+              return (
+                <MongoLoginView
+                  allowSkipLogin={false}
+                  authController={authController}
+                  registrationEnabled={true}
+                  notAllowedError={notAllowedError}
+                />
+              );
+            }
+
+            return (
+              <Scaffold autoOpenDrawer={false}>
+                <AppBar title={name} />
+                <Drawer />
+                <NavigationRoutes />
+                <SideDialogs />
+              </Scaffold>
+            );
+          }}
+        </FireCMS>
+      </ModeControllerProvider>
+    </SnackbarProvider>
+  );
+};
+
+export default MongoDBApp;
+```

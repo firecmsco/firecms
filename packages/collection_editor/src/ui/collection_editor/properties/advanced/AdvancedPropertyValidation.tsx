@@ -2,10 +2,13 @@ import React from "react";
 
 import { Field, FormexFieldProps } from "@firecms/formex";
 import { SwitchControl } from "../../SwitchControl";
+import { useTranslation } from "@firecms/core";
 
 export function AdvancedPropertyValidation({ disabled }: {
     disabled: boolean
 }) {
+
+    const { t } = useTranslation();
 
     const columnWidth = "columnWidth";
     const hideFromCollection = "hideFromCollection";
@@ -18,11 +21,11 @@ export function AdvancedPropertyValidation({ disabled }: {
                 <Field type="checkbox" name={hideFromCollection}>
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
-                            label={"Hide from collection"}
+                            label={t("hide_from_collection")}
                             size={"medium"}
                             disabled={disabled}
                             form={form}
-                            tooltip={"Hide this field from the collection view. It will still be visible in the form view"}
+                            tooltip={t("hide_from_collection_tooltip")}
                             field={field}/>
                     }}
                 </Field>
@@ -33,10 +36,10 @@ export function AdvancedPropertyValidation({ disabled }: {
                        type="checkbox">
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
-                            label={"Read only"}
+                            label={t("read_only")}
                             size={"medium"}
                             disabled={disabled}
-                            tooltip={"Is this a read only field. Display only as a preview"}
+                            tooltip={t("read_only_tooltip")}
                             form={form}
                             field={field}/>
                     }}

@@ -1,0 +1,138 @@
+---
+title: App-Konfiguration
+slug: de/docs/cloud/app_config
+description: Eine umfassende Anleitung zur Konfiguration von FireCMS. Detaillierte Anweisungen zur Initialisierung eines neuen Projekts, zur Anpassung des CMS mit wiederverwendbaren Eigenschaften, Feldern, Kollektionen, Entity-Ansichten und CMS-Ansichten sowie eine Erklärung aller verfügbaren Anpassungsoptionen.
+---
+
+Die App-Konfiguration ist das Hauptkonfigurationsobjekt von FireCMS Cloud. Sie wird durch die Schnittstelle `FireCMSAppConfig` definiert. Um den CMS anzupassen, müssen Sie ein Projekt auf [app.firecms.co](https://app.firecms.co) erstellen und ein neues Projekt im Code mit `npx create-firecms-app` oder `yarn create firecms-app` initialisieren.
+
+Nachdem diese Schritte abgeschlossen sind, können Sie den `FireCMSAppConfig`-Export verwenden, um Ihre eigenen Anpassungen hinzuzufügen, wie benutzerdefinierte wiederverwendbare Eigenschaften oder Felder, Kollektionen, Entity-Ansichten, CMS-Ansichten usw.
+
+
+### Anpassungsoptionen
+
+Schauen wir uns alle verfügbaren Anpassungsoptionen an:
+
+* `collections`: Liste der im CMS zugeordneten Kollektionen.
+    Jeder Eintrag bezieht sich auf eine Kollektion in der Root-Datenbank.
+    Jeder der Navigationseinträge in diesem Feld
+    generiert einen Eintrag im Hauptmenü.
+    Weitere Informationen finden Sie unter [Kollektionen](../collections).
+
+* `modifyCollection`: Funktion zur Änderung einer Kollektion, bevor sie dem CMS hinzugefügt wird. Wenn Sie Kollektionen
+    in der UI definieren, können Sie diese Funktion verwenden, um sie zu ändern. Dieser Callback wird für jede Kollektion aufgerufen.
+
+* `views`: Benutzerdefinierte zusätzliche Ansichten, die vom Entwickler erstellt und der Hauptnavigation hinzugefügt wurden.
+    Weitere Informationen finden Sie unter [Benutzerdefinierte Top-Level-Ansichten](../top_level_views).
+
+* `propertyConfigs`: Liste benutzerdefinierter Property-Konfigurationen für den CMS.
+    Sie können den Schlüssel verwenden, um auf das benutzerdefinierte Feld in der `propertyConfig`-Eigenschaft einer Kollektion zu verweisen.
+    Weitere Informationen finden Sie unter [Property-Konfigurationen](../properties/reusing_properties).
+
+* `entityViews`: Liste zusätzlicher benutzerdefinierter Ansichten für Entities.
+    Sie können den Schlüssel verwenden, um auf die benutzerdefinierte Ansicht in der `entityViews`-Eigenschaft einer Kollektion zu verweisen.
+    Sie können eine Entity-Ansicht auch über die UI definieren.
+    Weitere Informationen finden Sie unter [Entity-Ansichten](../collections/entity_views).
+
+* `HomePage`: Verwenden Sie diese Komponente, um die Startseite zu überschreiben.
+* `fireCMSAppBarComponentProps`: Zusätzliche Props, die an die benutzerdefinierte AppBar übergeben werden.
+* `firestoreIndexesBuilder`: Verwenden Sie diesen Builder, um anzugeben, welche Indizes in Ihrer Firestore-Datenbank verfügbar sind.
+    Dies wird verwendet, um Filtern und Sortieren nach mehreren Feldern im CMS zu ermöglichen.
+* `onFirebaseInit`: Optionaler Callback nach der Initialisierung von Firebase.
+    Nützlich für die Verwendung des lokalen Emulators oder zum Abrufen der verwendeten Konfiguration.
+* `dateTimeFormat`: Format der Datumsangaben im CMS.
+    Standard ist 'MMMM dd, yyyy, HH:mm:ss'.
+* `locale`: Gebietsschema des CMS, wirkt sich derzeit nur auf Datumsangaben aus.
+* `textSearchController`: Verwenden Sie diesen Controller, um Textsuchergebnisse als Dokument-IDs zurückzugeben, die dann von Firestore abgerufen werden.
+* `autoOpenDrawer`: Experimentelle Funktion zum automatischen Öffnen des Drawers beim Überfahren mit der Maus.
+* `appCheck`: Firebase App Check-Konfiguration.
+    - `provider`: Der zu verwendende Anbieter für App Check.
+    - `isTokenAutoRefreshEnabled`: Ob das Token automatisch aktualisiert werden soll.
+    - `debugToken`: Debug-Token für App Check.
+    - `forceRefresh`: Ob das Token erzwungen aktualisiert werden soll.
+
+### Beispiel
+
+Eine App-Konfiguration wird automatisch für Sie generiert, wenn Sie ein neues Projekt initialisieren. Hier ist jedoch ein
+Beispiel, wie Sie sie anpassen können:
+
+```tsx
+import {FireCMSAppConfig} from "@firecms/cloud";
+
+const appConfig: FireCMSAppConfig = {
+
+    version: "1",
+
+    // Kollektionen sind die Hauptnavigationseinträge im CMS
+    collections: async ({ authController, dataSource }) => {
+        // Beispiel für das Abrufen einiger Daten aus der Datenbank zur Erstellung dynamischer Kollektionen
+        const firstProducts = await dataSource.fetchCollection({
+            path: "products",
+            limit: 5
+        });
+
+        return ([
+           // ...Ihre Kollektionen
+        ]);
+    },
+
+    // Top-Level-Ansichten, nicht an eine Kollektion gebunden
+    views: [
+        {
+            path: "sales_report",
+            name: "Verkaufsbericht",
+            icon: "extension",
+            view: <SalesReportView/>
+        },
+    ],
+
+    // Modify collection ermöglicht die Änderung von Kollektionen, bevor sie dem CMS hinzugefügt werden
+    modifyCollection: ({ collection }) => {
+        if (collection.id === "products") {
+            return {
+                ...collection,
+                name: "Produkte geändert",
+                entityActions: [
+                    {
+                        name: "Meine benutzerdefinierte Aktion",
+                        onClick: ({ entity }) => {
+                            console.log("Entity", entity);
+                        }
+                    }
+                ]
+            }
+        }
+        return collection;
+    },
+
+    // Eigenschaften, die in verschiedenen Kollektionen wiederverwendet werden können
+    propertyConfigs: [
+        {
+            name: "Übersetzter String",
+            key: "translated_string",
+            property: {
+                dataType: "map",
+                properties: {
+                    en: {
+                        dataType: "string",
+                        name: "Englisch"
+                    },
+                    de: {
+                        dataType: "string",
+                        name: "Deutsch"
+                    },
+                },
+            },
+        }
+    ],
+
+    // Ansichten, die Entities zugewiesen werden können
+    entityViews: [{
+        key: "test",
+        name: "Test",
+        Builder: SampleEntityView
+    }]
+}
+
+export default appConfig;
+```

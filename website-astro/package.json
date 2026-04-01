@@ -23,7 +23,6 @@
     "@firebase/app-check": "^0.11.0",
     "@firecms/core": "file:../packages/firecms_core",
     "@firecms/data_enhancement": "file:../packages/data_enhancement",
-    "@firecms/editor": "file:../packages/editor",
     "@firecms/firebase": "file:../packages/firebase_firecms",
     "@firecms/neat": "^0.4.0",
     "@firecms/ui": "file:../packages/ui",
@@ -50,6 +49,7 @@
     "yaml": "^2.8.3"
   },
   "devDependencies": {
+    "@google/genai": "^1.46.0",
     "@types/react-syntax-highlighter": "^15.5.13",
     "typedoc": "^0.28.14",
     "typedoc-plugin-markdown": "^4.9.0"

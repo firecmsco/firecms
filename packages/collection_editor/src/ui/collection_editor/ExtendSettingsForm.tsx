@@ -1,7 +1,8 @@
 import React from "react";
 import {
     EntityCollection,
-    User
+    User,
+    useTranslation
 } from "@firecms/core";
 import {
     Button,
@@ -44,16 +45,18 @@ export function ExtendSettingsForm({
         submitCount
     } = useFormex<EntityCollection>();
 
+    const { t } = useTranslation();
+
     return (
         <div className={"overflow-auto my-auto"}>
             <Container maxWidth={"4xl"} className={"flex flex-col gap-8 p-8 m-auto"}>
 
                 <div>
                     <Typography variant={"h5"} className={"flex-grow"}>
-                        Extend
+                        {t("extend_title")}
                     </Typography>
                     <Typography variant={"body2"} color={"secondary"}>
-                        Add subcollections, custom views, and entity actions to this collection.
+                        {t("extend_description")}
                     </Typography>
                 </div>
 
@@ -75,12 +78,10 @@ export function ExtendSettingsForm({
                 {isMergedCollection && onResetToCode && (
                     <div className={cls("flex flex-col gap-4 mt-8 border-t pt-8", defaultBorderMixin)}>
                         <Typography variant={"body2"} color={"secondary"}>
-                            This collection is defined in code.
-                            The changes done in this editor will override the properties defined in code.
-                            You can delete the overridden values to revert to the state defined in code.
+                            {t("collection_defined_in_code")}
                         </Typography>
                         <Button color={"neutral"} onClick={onResetToCode}>
-                            Reset to code
+                            {t("reset_to_code")}
                         </Button>
                     </div>
                 )}

@@ -1,4 +1,4 @@
-import { DataSource, Entity, EntityCollection, useDataSource } from "@firecms/core";
+import { DataSource, Entity, EntityCollection, useDataSource, useTranslation } from "@firecms/core";
 import { Button, CenteredView, CircularProgress, Typography, } from "@firecms/ui";
 import { useEffect, useRef, useState } from "react";
 import { ImportConfig } from "../types";
@@ -16,7 +16,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
      collection: C,
      onImportSuccess: (collection: C) => void
  }) {
-
+    const { t } = useTranslation();
     const [errorSaving, setErrorSaving] = useState<Error | undefined>(undefined);
     const dataSource = useDataSource();
 
@@ -56,7 +56,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
         return (
             <CenteredView className={"flex flex-col gap-4 items-center"}>
                 <Typography variant={"h6"}>
-                    Error saving data
+                    {t("error_saving_data")}
                 </Typography>
 
                 <Typography variant={"body2"} color={"error"}>
@@ -65,7 +65,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
                 <Button
                     onClick={save}
                     >
-                    Retry
+                    {t("retry")}
                 </Button>
             </CenteredView>
         );
@@ -76,15 +76,15 @@ export function ImportSaveInProgress<C extends EntityCollection>
             <CircularProgress/>
 
             <Typography variant={"h6"}>
-                Saving data
+                {t("saving_data")}
             </Typography>
 
             <Typography variant={"body2"}>
-                {processedEntities}/{importConfig.entities.length} entities saved
+                {processedEntities}/{importConfig.entities.length} {t("entities_saved")}
             </Typography>
 
             <Typography variant={"caption"}>
-                Do not close this tab or the import will be interrupted.
+                {t("do_not_close_tab")}
             </Typography>
 
         </div>

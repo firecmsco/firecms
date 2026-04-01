@@ -13,7 +13,8 @@ import {
     useDataSource,
     useFireCMSContext,
     useNavigationController,
-    User
+    User,
+    useTranslation
 } from "@firecms/core";
 import {
     Alert,
@@ -58,6 +59,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
 
     const authController = useAuthController();
+    const { t } = useTranslation();
     const context = useFireCMSContext<USER>();
     const dataSource = useDataSource();
     const navigationController = useNavigationController();
@@ -184,7 +186,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
     return <>
 
-        <Tooltip title={"Export"}
+        <Tooltip title={t("export")}
             asChild={true}>
             <IconButton
                 size={"small"}
@@ -199,17 +201,16 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
             onOpenChange={setOpen}
             maxWidth={"xl"}>
 
-            <DialogTitle variant={"h6"}>Export data</DialogTitle>
+            <DialogTitle variant={"h6"}>{t("export_data")}</DialogTitle>
 
             <DialogContent className={"flex flex-col gap-4 my-4"}>
 
-                <div>Download the the content of this table as a CSV</div>
+                <div>{t("download_table_csv")}</div>
 
                 {collectionEntitiesCount !== undefined && collectionEntitiesCount > DOCS_LIMIT &&
                     <Alert color={"warning"}>
                         <div>
-                            This collections has a large number
-                            of documents ({collectionEntitiesCount}).
+                            {t("large_number_of_documents", { count: collectionEntitiesCount.toString() })}
                         </div>
                     </Alert>}
 
@@ -221,7 +222,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                 onChange={() => setExportType("csv")}
                                 className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-csv"
-                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">CSV</label>
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("csv")}</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-json" type="radio" value="json" name="exportType"
@@ -229,7 +230,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                 onChange={() => setExportType("json")}
                                 className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-json"
-                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">JSON</label>
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("json")}</label>
                         </div>
                     </div>
 
@@ -240,9 +241,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                 onChange={() => setDateExportType("timestamp")}
                                 className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-timestamp"
-                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">Dates
-                                as
-                                timestamps ({dateRef.current.getTime()})</label>
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("dates_as_timestamps")} ({dateRef.current.getTime()})</label>
                         </div>
                         <div className="flex items-center">
                             <input id="radio-string" type="radio" value="string" name="dateExportType"
@@ -250,9 +249,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                                 onChange={() => setDateExportType("string")}
                                 className={cls("w-4 bg-surface-100 border-surface-300 dark:bg-surface-700 dark:border-surface-600")} />
                             <label htmlFor="radio-string"
-                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">Dates
-                                as
-                                strings ({dateRef.current.toISOString()})</label>
+                                className="p-2 text-sm font-medium text-surface-900 dark:text-surface-300">{t("dates_as_strings")} ({dateRef.current.toISOString()})</label>
                         </div>
                     </div>
                 </div>
@@ -262,13 +259,13 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                     disabled={exportType !== "csv"}
                     value={flattenArrays}
                     onValueChange={setFlattenArrays}
-                    label={"Flatten arrays"} />
+                    label={t("flatten_arrays")} />
 
                 <BooleanSwitchWithLabel
                     size={"small"}
                     value={includeUndefinedValues}
                     onValueChange={setIncludeUndefinedValues}
-                    label={"Include undefined values"} />
+                    label={t("include_undefined_values")} />
 
                 {!canExport && notAllowedView}
 
@@ -280,12 +277,12 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
                 <Button onClick={handleClose}
                     variant={"text"}>
-                    Cancel
+                    {t("cancel")}
                 </Button>
 
                 <Button onClick={onOkClicked}
                     disabled={dataLoading || !canExport}>
-                    Download
+                    {t("download")}
                 </Button>
 
             </DialogActions>

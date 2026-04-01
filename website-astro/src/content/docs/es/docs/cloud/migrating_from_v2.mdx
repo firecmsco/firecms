@@ -1,0 +1,238 @@
+---
+title: Migrando de FireCMS 2.0 a FireCMS Cloud
+slug: es/docs/cloud/migrating_from_v2
+sidebar_label: Migrar de FireCMS 2.0 a FireCMS Cloud
+description: Actualízate al moderno **CMS de Firebase basado en React**. Migra tu panel de administración a FireCMS Cloud para obtener un mejor rendimiento y más funciones.
+---
+
+:::important
+Esta guía de migración se aplica para migrar de FireCMS 2.0 a FireCMS Cloud
+:::
+
+FireCMS 3.0 es una versión principal que introduce muchos cambios. Esta página
+describe los cambios principales y cómo migrar desde FireCMS 2.0.
+
+
+## Crear un proyecto en app.firecms.co
+
+FireCMS Cloud requiere la creación de un proyecto en [app.firecms.co](https://app.firecms.co).
+
+La nueva versión se basa en un backend que te permite gestionar tus
+colecciones y esquemas. Los usuarios finales ahora pueden modificar colecciones,
+por lo que utilizamos un servicio centralizado para almacenar la configuración.
+
+Al hacer esto **no necesitarás especificar las credenciales de tu proyecto de Firebase**,
+ya que el servicio podrá acceder a tu proyecto directamente. Solo necesitarás
+especificar el **id de proyecto** (`project id`).
+
+## Inicializar un proyecto de FireCMS Cloud en una nueva carpeta
+
+Es aconsejable crear un nuevo proyecto desde cero y luego migrar tus colecciones y vistas a
+la nueva carpeta.
+
+Para hacerlo, ejecuta
+```
+npx create-firecms-app
+```
+y crea un nuevo proyecto en una nueva carpeta.
+
+La CLI inicializará un proyecto vacío con el nuevo formato y todos los archivos de configuración
+listos para que no tengas que preocuparte por ello.
+
+
+## Migrando colecciones al nuevo formato
+
+A pesar del nuevo formato, FireCMS tiene como objetivo permitir a los usuarios migrar las aplicaciones existentes con
+cambios mínimos. Las colecciones ahora se pueden almacenar tanto en el backend de FireCMS como definirse en
+código como hasta ahora.
+
+Además, puedes tener colecciones definidas en ambos lugares y decidir si las colecciones definidas por código
+pueden ser modificadas por el usuario o no.
+
+Ten en cuenta que las propiedades definidas en código no serán editables por el usuario, a menos que
+las marques explícitamente como `editable: true`.
+
+## package.json
+
+Como referencia, el archivo `package.json` de un nuevo proyecto de FireCMS Cloud se ve así:
+
+```json
+{
+  "name": "my-firecms-project",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5001",
+    "build": "vite build",
+    "serve": "vite preview --port 5001",
+    "deploy": "run-s build && firecms deploy --project=tu-id-de-proyecto"
+  },
+  "dependencies": {
+    "@firecms/cloud": "^3.0.0",
+    "firebase": "^12.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@originjs/vite-plugin-federation": "^1.4.1",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/react": "^18.2.71",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.6"
+  }
+}
+```
+
+
+## Nuevo formato
+
+Dado que ahora es posible desplegar FireCMS en nuestro servicio alojado, la salida
+de tu proyecto debe tener un formato específico.
+
+El archivo `index.ts` debe exportar un objeto `FireCMSAppConfig`, que se define de la siguiente manera:
+
+```typescript
+import {CMSView, CMSViewsBuilder, EntityCollection, EntityCollectionsBuilder, EntityCustomView, PropertyConfig} from "./index.ts";
+export type FireCMSAppConfig = {
+
+    /**
+     * Versión del esquema de personalización.
+     */
+    version: "1";
+
+    /**
+     * Lista de las colecciones mapeadas en el CMS.
+     * Cada entrada se relaciona con una colección en la base de datos raíz.
+     * Cada una de las entradas de navegación en este campo
+     * genera una entrada en el menú principal.
+     */
+    collections?: EntityCollection[] | EntityCollectionsBuilder;
+
+    /**
+     * Vistas adicionales personalizadas creadas por el desarrollador, añadidas a la
+     * navegación principal.
+     */
+    views?: CMSView[] | CMSViewsBuilder;
+
+    /**
+     * Lista de campos de formulario personalizados que se usarán en el CMS.
+     * Puedes usar la clave para referenciar el campo personalizado en
+     * la propiedad `propertyConfig` de una propiedad en una colección.
+     */
+    propertyConfigs?: PropertyConfig[];
+
+    /**
+     * Lista de vistas personalizadas adicionales para entidades.
+     * Puedes usar la clave para referenciar la vista personalizada en
+     * la propiedad `entityViews` de una colección.
+     *
+     * También puedes definir una vista de entidad desde la UI.
+     */
+    entityViews?: EntityCustomView[];
+
+}
+```
+
+Vamos a desglosar los diferentes campos:
+
+## Configuración de colección
+
+Las colecciones han sufrido cambios mínimos. Si no tienes ningún componente personalizado definido, debería ser
+fácil adaptar tus colecciones al nuevo formato.
+
+- Necesitas definir un `id` para cada colección, que normalmente puede ser el mismo que el `path`.
+
+- La propiedad `views` ha sido renombrada a `entityViews`, ya que se aplican a las entidades.
+
+- Para `AdditionalFieldDelegate` la propiedad `id` ha sido renombrada a `key`.
+
+Para migrar tus colecciones, simplemente expórtalas en tu archivo `index.ts`:
+
+```typescript
+import { FireCMSAppConfig } from "@firecms/cloud";
+const appConfig: FireCMSAppConfig = {
+    version: "1",
+    collections: async (props) => {
+        return ([
+            productsCollection
+        ]);
+    },
+    propertyConfigs: [
+        colorPropertyConfig
+    ],
+    entityViews: [{
+        key: "test",
+        name: "Prueba",
+        Builder: SampleEntityView
+    }]
+}
+```
+
+- La propiedad `views` ha sido renombrada a `entityViews`, ya que se aplican a las entidades.
+- La propiedad `path` de las vistas (views) ha sido renombrada a `key`, por consistencia con el resto de la librería.
+
+
+## Migrando componentes personalizados (MUI)
+
+FireCMS 3.0 se basa en `tailwindcss` en lugar de `mui`.
+
+Mui fue genial para las versiones iniciales de FireCMS, pero se estaba convirtiendo en un gran cuello de botella de rendimiento
+y era difícil de personalizar.
+
+La nueva versión de FireCMS tiene incorporados casi 50 nuevos componentes implementados con tailwindcss, que
+imitan de buena manera los componentes de material-ui. Te animamos a migrar tus componentes personalizados
+al nuevo formato.
+
+Sin embargo, si deseas seguir usando mui: todavía puedes usar los componentes antiguos, pero necesitarás
+instalar el paquete `mui` manualmente.
+
+```bash
+npm install @mui/material @emotion/react @emotion/styled
+```
+
+o
+
+```bash
+yarn add @mui/material @emotion/react @emotion/styled
+```
+
+Si necesitas los íconos de MUI, ejecuta:
+
+```bash
+npm install @mui/icons-material
+```
+
+o
+
+```bash
+yarn add @mui/icons-material
+```
+
+### Componentes que no tienen equivalente:
+- `Box`: El componente box es solo un envoltorio usado por mui para aplicar estilos. Puedes usar un `div` en su lugar.
+Consejo: ChatGPT es excelente para convertir componentes Box a div con clases de tailwind.
+- `Link`: Usa `a` en su lugar.
+- `FormControl`
+
+### Componentes que cambian de comportamiento:
+- `Menu` y `MenuItem`: Los elementos del menú (Menu items) ya no tienen un id. Puedes añadir una propiedad `onClick` por elemento del menú.
+- `Select` ya no usa `labelId`. Simplemente añade la etiqueta como un componente en `label`.
+  - `SelectChangeEvent` ahora es `ChangeEvent<HTMLSelectElement>`
+- El tamaño de `CircularProgress` es una cadena en lugar de un número. Puedes usar `size="small"` o `size="large"`.
+
+### Despliegue
+
+FireCMS 3.0 ahora se despliega en nuestro propio servicio, y es accesible a través de [app.firecms.co](https://app.firecms.co).
+
+Aún puedes desplegarlo en tu propio proyecto de Firebase. La misma compilación que generas para ejecutar el
+CMS localmente se puede desplegar en Firebase hosting, o en cualquier otro servicio de alojamiento.
+
+
+

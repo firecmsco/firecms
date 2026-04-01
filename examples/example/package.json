@@ -10,7 +10,6 @@
     "@firecms/data_export": "^3.1.0",
     "@firecms/data_import": "^3.1.0",
     "@firecms/data_import_export": "^3.1.0",
-    "@firecms/editor": "^3.0.1",
     "@firecms/schema_inference": "^3.0.1",
     "@firecms/ui": "^3.0.1",
     "@firecms/user_management": "^3.1.0",

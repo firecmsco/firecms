@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { getIn, useFormex } from "@firecms/formex";
-import { EnumValueConfig, resolveEnumValues, useSnackbarController } from "@firecms/core";
+import { EnumValueConfig, resolveEnumValues, useSnackbarController, useTranslation } from "@firecms/core";
 import { Select, SelectItem } from "@firecms/ui";
 import { EnumForm } from "../EnumForm";
 import { StringPropertyValidation } from "./validation/StringPropertyValidation";
@@ -32,6 +32,7 @@ export function EnumPropertyField({
         setFieldValue
     } = useFormex<PropertyWithId>();
 
+    const { t } = useTranslation();
     const snackbarContext = useSnackbarController();
 
     const enumValuesPath = multiselect ? "of.enumValues" : "enumValues";
@@ -55,7 +56,7 @@ export function EnumPropertyField({
                 setFieldValue("defaultValue", undefined);
                 snackbarContext.open({
                     type: "warning",
-                    message: "Default value was cleared"
+                    message: t("default_value_was_cleared")
                 })
             }
         }
@@ -74,7 +75,7 @@ export function EnumPropertyField({
                     disabled={disabled}
                     allowDataInference={allowDataInference}
                     onError={(hasError) => {
-                        setFieldError(enumValuesPath, hasError ? "This enum property is missing some values" : undefined);
+                        setFieldError(enumValuesPath, hasError ? t("enum_missing_values") : undefined);
                     }}
                     getData={getData && fullPropertyPath
                         ? () => getData()
@@ -105,7 +106,7 @@ export function EnumPropertyField({
                         setFieldValue("defaultValue", value);
                     }}
                     size={"large"}
-                    label={"Default value"}
+                    label={t("default_value")}
                     value={defaultValue ?? ""}>
                     {enumValues
                         .filter((enumValue) => Boolean(enumValue?.id))

@@ -1,0 +1,31 @@
+---
+title: Mehrfachauswahl (MultiSelect)
+slug: de/docs/components/multi_select
+sidebar_label: MultiSelect
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Mit MultiSelect können Benutzer mehrere Optionen aus einer Dropdown-Liste auswählen. Es unterstützt Öffnen- und Schließen-Zustände, benutzerdefiniertes Wert-Rendering und Tastaturnavigation neben anderen Funktionen.
+
+## Verwendung
+
+Um `MultiSelect` zu verwenden, importieren Sie es zusammen mit seiner Item-Komponente. Sie können Eigenschaften wie `value`, `onMultiValueChange`, `size`, `label`, `disabled` und viele mehr übergeben, um Verhalten und Erscheinungsbild anzupassen.
+
+## Einfaches MultiSelect
+
+Ein einfaches Beispiel, das die grundlegende Verwendung der `MultiSelect`-Komponente demonstriert.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/multi_select/multi_select_basic.tsx"/>
+
+## Benutzerdefiniertes Wert-Rendering
+
+Dieses Beispiel zeigt, wie das Rendern ausgewählter Werte angepasst wird.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/multi_select/multi_select_custom_render.tsx"/>
+
+## Umgang mit dem deaktivierten Zustand
+
+Ein Beispiel zur Demonstration einer `MultiSelect`-Komponente im deaktivierten Zustand.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/multi_select/multi_select_disabled.tsx"/>

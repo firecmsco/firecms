@@ -1,0 +1,29 @@
+---
+title: Sheet
+slug: fr/docs/components/sheet
+sidebar_label: Sheet
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Le composant Sheet est un panneau qui glisse depuis le bord de l'écran. Il est utile pour des menus latéraux, des tiroirs de navigation ou des panneaux de contenu secondaires.
+
+Pour utiliser le `Sheet`, importez-le depuis vos composants et passez les props `open`, `side`, `transparent` et `onOpenChange`.
+
+## Sheet de base
+
+Un sheet simple qui glisse depuis la droite.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_basic.tsx"/>
+
+## Sheet depuis le haut
+
+Cet exemple démontre un sheet qui glisse depuis le haut.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_top.tsx"/>
+
+## Sheet transparent
+
+Ce sheet est configuré pour être transparent.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_transparent.tsx"/>

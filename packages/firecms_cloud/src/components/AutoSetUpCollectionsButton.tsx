@@ -1,8 +1,9 @@
 import React from "react";
 import { AIIcon, ConfirmationDialog, useSnackbarController } from "@firecms/core";
-import { LoadingButton } from "@firecms/ui";
+import { LoadingButton, Typography } from "@firecms/ui";
 import { ProjectsApi } from "../api/projects";
 import { useCollectionsConfigController } from "@firecms/collection_editor";
+import { useTranslation } from "@firecms/core";
 
 export function AutoSetUpCollectionsButton({
     projectsApi,
@@ -35,12 +36,13 @@ export function AutoSetUpCollectionsButton({
     const [setUpRequested, setSetupRequested] = React.useState(false);
     const snackbarController = useSnackbarController();
     const [loadingAutomaticallyCreate, setLoadingAutomaticallyCreate] = React.useState(false);
+    const { t } = useTranslation();
 
     const doCollectionSetup = () => {
         onClick?.();
         setLoadingAutomaticallyCreate(true);
         snackbarController.open({
-            message: "This can take a minute or two",
+            message: t("this_can_take_a_minute"),
             type: "info"
         });
         projectsApi.initialCollectionsSetup(projectId)
@@ -49,13 +51,13 @@ export function AutoSetUpCollectionsButton({
                 if (!collections || collections.length === 0) {
                     onNoCollections?.();
                     snackbarController.open({
-                        message: "No collections found to set up",
+                        message: t("no_collections_found_to_setup"),
                         type: "info"
                     });
                 } else {
                     onSuccess?.();
                     snackbarController.open({
-                        message: <>Your collections have been set up!<br />{collections.map(c => c.name).join(", ")}</>,
+                        message: <>{t("collections_have_been_setup")}<br />{collections.map(c => c.name).join(", ")}</>,
                         type: "success"
                     });
                 }
@@ -64,7 +66,7 @@ export function AutoSetUpCollectionsButton({
                 onError?.();
                 console.error("Error setting up collections", error);
                 snackbarController.open({
-                    message: "Error setting up collections",
+                    message: t("error_setting_up_collections"),
                     type: "error"
                 });
             })
@@ -86,7 +88,7 @@ export function AutoSetUpCollectionsButton({
                 }
             }}>
             <AIIcon size={"smallest"} />
-            Automatically set up collections
+            {t("auto_setup_collections_button")}
         </LoadingButton>
 
         <ConfirmationDialog
@@ -96,8 +98,12 @@ export function AutoSetUpCollectionsButton({
                 doCollectionSetup();
             }}
             onCancel={() => setSetupRequested(false)}
-            title={<>Automatically set up collections?</>}
-            body={<>This will automatically create collection configs for collections that are <b>NOT</b> already
-                mapped</>} />
+            title={<>{t("auto_setup_collections_title")}</>}
+            body={<Typography variant="body2">{t("auto_setup_collections_desc").split("NOT").map((part: string, i: number, arr: string[]) => (
+                <React.Fragment key={i}>
+                    {part}
+                    {i < arr.length - 1 && <b>NOT</b>}
+                </React.Fragment>
+            ))}</Typography>} />
     </>;
 }

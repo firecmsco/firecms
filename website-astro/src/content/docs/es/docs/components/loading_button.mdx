@@ -1,0 +1,25 @@
+---
+title: Botón de carga (LoadingButton)
+slug: es/docs/components/loading_button
+sidebar_label: Botón de carga
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+El componente Loading Button (Botón de carga) se utiliza para mostrar un botón procesable con retroalimentación de carga integrada. Esto es útil para proporcionar a los usuarios información inmediata sobre sus acciones que requieren operaciones asíncronas.
+
+## Uso
+
+Para usar el `LoadingButton`, impórtalo junto con las props necesarias. Puedes pasar `loading` (cargando), `disabled` (deshabilitado), `onClick` (al hacer clic), `startIcon` (icono inicial) y otras props de botón.
+
+## Botón de carga básico
+
+Un botón de carga simple que muestra el estado de carga y la apariencia predeterminada.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/loading_button/loading_button_basic.tsx"/>
+
+## Botón de carga con icono inicial
+
+Un ejemplo de botón de carga que incluye un icono de inicio (start icon) que se muestra cuando el botón no está en estado de carga.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/loading_button/loading_button_with_icon.tsx"/>

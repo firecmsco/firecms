@@ -1,0 +1,151 @@
+---
+title: Gestion des utilisateurs
+slug: fr/docs/pro/user_management
+description: Ajoutez un contrôle d'accès basé sur les rôles à votre panneau d'administration Firebase avec le plugin de gestion des utilisateurs FireCMS. Gérez les utilisateurs, les rôles et les permissions dans Firestore.
+---
+
+FireCMS PRO inclut un système de gestion des utilisateurs complet qui vous permet de contrôler qui peut accéder à votre pannel d'administration et ce qu'ils peuvent faire. Vous pouvez définir des rôles avec des permissions spécifiques et les assigner aux utilisateurs.
+
+Nous suggérons d'ajouter ces règles à vos règles de sécurité Firestore, qui permettront aux utilisateurs ayant les bons rôles d'accéder aux données de gestion des utilisateurs.
+
+```
+match /{document=**} {
+  allow read: if isFireCMSUser();
+  allow write: if isFireCMSUser();
+}
+
+function isFireCMSUser(){
+  return exists(/databases/$(database)/documents/__FIRECMS/config/users/$(request.auth.token.email));
+}
+```
+
+
+### Paramètres de gestion des utilisateurs
+
+Voici les paramètres que vous pouvez configurer :
+
+- **firebaseApp** : L'application Firebase à utiliser pour la gestion des utilisateurs.
+- **usersPath** : Chemin dans Firestore où les configurations des utilisateurs sont stockées. Par défaut `__FIRECMS/config/users`.
+- **rolesPath** : Chemin dans Firestore où les configurations des rôles sont stockées. Par défaut `__FIRECMS/config/roles`.
+- **allowDefaultRolesCreation** : Si aucun rôle n'est dans la base de données, afficher un bouton pour créer des rôles par défaut. Par défaut `true`.
+
+### Utilisation du hook
+
+Le hook principal pour initialiser la fonctionnalité du plugin est `useBuildUserManagement`. Voici un exemple d'utilisation :
+
+```jsx
+import {useBuildUserManagement} from "@firecms/user_management";
+
+const userManagement = useBuildUserManagement({
+    dataSourceDelegate: firestoreDelegate,
+    usersPath: "__FIRECMS/config/users",
+    rolesPath: "__FIRECMS/config/roles",
+    allowDefaultRolesCreation: true,
+});
+```
+
+## Configuration du plugin
+
+Pour intégrer la gestion des utilisateurs dans FireCMS, utilisez la fonction `useUserManagementPlugin` et passez le plugin résultant dans la configuration FireCMS. Vous voudrez généralement le faire dans votre composant principal App.
+
+### Exemple de configuration
+
+```jsx
+import {FireCMS} from "@firecms/core";
+import {useBuildUserManagement, useUserManagementPlugin, userManagementAdminViews} from "@firecms/user_management";
+
+function App() {
+    // ... reste de votre configuration, incluant `authController` et `firestoreDelegate`
+
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        usersPath: "__FIRECMS/config/users",
+        rolesPath: "__FIRECMS/config/roles",
+        allowDefaultRolesCreation: true,
+        includeCollectionConfigPermissions: true,
+    });
+
+    const userManagementPlugin = useUserManagementPlugin({ userManagement });
+
+    const {
+        authLoading,
+        canAccessMainView,
+        notAllowedError
+    } = useValidateAuthenticator({
+        disabled: userManagement.loading,
+        authController,
+        authenticator: userManagement.authenticator,
+        dataSourceDelegate: firestoreDelegate,
+        storageSource
+    });
+
+    const plugins = [userManagementPlugin];
+
+    const navigationController = useBuildNavigationController({
+        collections,
+        views,
+        adminViews: userManagementAdminViews,
+        collectionPermissions: userManagement.collectionPermissions,
+        authController,
+        dataSourceDelegate: firestoreDelegate,
+        plugins
+    });
+
+  return (
+    <FireCMS
+        navigationController={navigationController}
+        // ...autres configurations
+    />
+  );
+}
+
+export default App;
+```
+
+## Ajout des vues de gestion des utilisateurs
+
+En plus du plugin, vous devrez ajouter les vues de gestion des utilisateurs à votre projet FireCMS. Elles sont exportées sous forme de tableau depuis le package `@firecms/user_management`. Vous pouvez les ajouter à la configuration de votre hook `useBuildNavigationController`, dans le tableau `adminViews`.
+
+```jsx
+import {userManagementAdminViews} from "@firecms/user_management";
+
+const navigationController = useBuildNavigationController({
+    collections,
+    views,
+    adminViews: userManagementAdminViews,
+    collectionPermissions: userManagement.collectionPermissions,
+    authController,
+    dataSourceDelegate: firestoreDelegate
+});
+```
+
+## Authentification des utilisateurs
+
+Le plugin fournit une fonction `authenticator` que vous pouvez utiliser pour authentifier les utilisateurs en fonction de leurs rôles. Vous pouvez passer cette fonction au hook `useValidateAuthenticator` pour authentifier les utilisateurs et déterminer s'ils peuvent accéder à la vue principale.
+
+```jsx
+const {
+    authLoading,
+    canAccessMainView,
+    notAllowedError
+} = useValidateAuthenticator({
+    disabled: userManagement.loading,
+    authController,
+    authenticator: userManagement.authenticator,
+    dataSourceDelegate: firestoreDelegate,
+    storageSource
+});
+```
+
+## Intégration des permissions de collection
+
+L'objet `UserManagement` inclut une fonction `collectionPermissions` qui vérifie quelles opérations un utilisateur peut effectuer basées sur ses rôles et la configuration de la collection. Vous pouvez passer cette fonction au hook `useBuildNavigationController` pour intégrer les permissions de collection dans votre projet FireCMS.
+
+```jsx
+const navigationController = useBuildNavigationController({
+    collections,
+    collectionPermissions: userManagement.collectionPermissions,
+    authController,
+    dataSourceDelegate: firestoreDelegate
+});
+```

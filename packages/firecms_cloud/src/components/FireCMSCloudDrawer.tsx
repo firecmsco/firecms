@@ -45,7 +45,7 @@ export function FireCMSCloudDrawer() {
     // Collapsible groups state - using "drawer" namespace for independent state from home page
     const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groups, "drawer");
 
-    const buildHeaderActions = (group: string) => {
+    const buildHeaderActions = (group: string | null) => {
         const reservedGroup = group && RESERVED_GROUPS.includes(group);
         const canCreateCollections = collectionEditorController.configPermissions({ user }).createCollections && !reservedGroup;
 
@@ -62,7 +62,7 @@ export function FireCMSCloudDrawer() {
                         e.stopPropagation();
                         collectionEditorController?.createCollection({
                             initialValues: {
-                                group,
+                                group: group ?? undefined,
                             },
                             parentCollectionIds: [],
                             redirect: true,

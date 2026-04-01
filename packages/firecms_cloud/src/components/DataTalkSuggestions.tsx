@@ -1,23 +1,23 @@
 import { Collapse, ForumIcon, Label, Typography } from "@firecms/ui";
 import { useNavigate } from "react-router";
-import { useNavigationController } from "@firecms/core";
+import { useNavigationController, useTranslation } from "@firecms/core";
+import { useDataTalk } from "@firecms/datatalk";
 
 export function DataTalkSuggestions({
-                                        suggestions,
-                                        onAnalyticsEvent
-                                    }: {
-    suggestions?: string[],
+    onAnalyticsEvent
+}: {
     onAnalyticsEvent?: (event: string, data?: object) => void;
-
 }) {
     const navigate = useNavigate();
     const navigation = useNavigationController();
+    const { t } = useTranslation();
     const hasCollections = (navigation.collections ?? []).length > 0;
+    const { rootPromptsSuggestions: suggestions } = useDataTalk();
 
     return <Collapse in={(suggestions ?? []).length > 0 && hasCollections} className={"mt-4"}>
 
         <Typography variant={"body2"} color={"secondary"} className={"ml-2 flex items-center gap-2"}>
-            <ForumIcon size="smallest"/> Query and update your data in natural language with <b>DATATALK</b>
+            <ForumIcon size="smallest"/> {t("query_and_update_with_datatalk")} <b>DATATALK</b>
         </Typography>
 
         <div className={"flex flex-row gap-2 my-4"}>

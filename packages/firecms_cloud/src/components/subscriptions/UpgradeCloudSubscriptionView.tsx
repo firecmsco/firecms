@@ -3,6 +3,7 @@ import { Alert, LoadingButton, RocketLaunchIcon } from "@firecms/ui";
 import { ProductPrice, ProductWithPrices } from "../../types";
 import { useSubscriptionsForUserController } from "../../hooks";
 import { CurrencyPriceSelect } from "./CurrencyPriceSelect";
+import { useTranslation } from "@firecms/core";
 
 function getDefaultCurrency(productPrice: ProductPrice) {
     return productPrice.currency;
@@ -21,6 +22,7 @@ export function UpgradeCloudSubscriptionView({
 }) {
 
     const [error, setError] = useState<Error>();
+    const { t } = useTranslation();
 
     const {
         subscribeCloud,
@@ -87,7 +89,7 @@ export function UpgradeCloudSubscriptionView({
                 onClick={doSubscribe}
                 color={"primary"}
                 startIcon={<RocketLaunchIcon/>}>
-                Create a subscription
+                {t("settings_create_subscription")}
             </LoadingButton>
 
         </div>

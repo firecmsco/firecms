@@ -1,6 +1,8 @@
 ---
 import BrowserFrame from "./BrowserFrame.astro";
 import PhoneFrame from "./PhoneFrame.astro";
+
+const { lang, t } = Astro.props;
 ---
 
 <div id="usage-examples-container" class="relative flex flex-col items-center justify-center bg-black mt-16">
@@ -93,12 +95,12 @@ import PhoneFrame from "./PhoneFrame.astro";
         <li class="flex items-end gap-3">
             <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check-circle-2.svg" alt=""
                  class="h-5 w-5 filter invert mt-1"/>
-            Customize every aspect of the CMS UI
+            {t('usage_examples.f1')}
         </li>
         <li class="flex items-end gap-3">
             <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/square-pen.svg" alt=""
                  class="h-5 w-5 filter invert mt-1"/>
-            Build custom fields and editors with React
+            {t('usage_examples.f2')}
         </li>
     </ul>
     <div style="height: 160px;"></div>

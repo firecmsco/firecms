@@ -1,0 +1,58 @@
+---
+title: Copiar una entidad de una colección a otra
+slug: es/docs/recipes/copy_entity
+sidebar_label: Copiar de otra colección
+description: Implementa funcionalidad personalizada para copiar entidades entre colecciones en Firestore usando FireCMS con este tutorial práctico.
+---
+
+![Product selection](/img/product_selection.webp)
+
+En este tutorial mostraremos cómo puedes añadir un botón a tu colección,
+que permitirá **copiar entidades desde otra colección**.
+
+Es muy común en bases de datos NoSQL, como Firestore, mantener datos desnormalizados
+en diferentes colecciones. Es decir, mantener la misma información en múltiples
+ubicaciones, en lugar de bases de datos normalizadas donde la información idealmente debería
+almacenarse solo una vez.
+
+### Declara tus colecciones
+
+Para fines ilustrativos, creemos dos colecciones `products` simples,
+desde y hacia las cuales copiaremos:
+
+
+
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../samples/samples_v3/recipes/copy_entity/simple_product_collection?raw';
+import CopyButton from '../../samples/samples_v3/recipes/copy_entity/copy_button?raw';
+import CopyButtonUse from '../../samples/samples_v3/recipes/copy_entity/copy_button_use?raw';
+import FullCode from '../../samples/samples_v3/recipes/copy_entity/full?raw';
+
+<Code code={MyComponentSource} lang="tsx" />
+
+### Añadir una acción personalizada a tu colección
+
+Para el siguiente paso añadiremos un botón personalizado a nuestra colección destino.
+Este botón abrirá un diálogo de referencia y permitirá a los usuarios seleccionar una entidad en
+la fuente.
+
+Este ejemplo usa algunos hooks proporcionados por FireCMS para desarrollar
+componentes personalizados.
+
+
+
+<Code code={CopyButton} lang="tsx" />
+
+### Añadir la acción de copia personalizada
+
+Después de que tu componente esté listo, puedes conectarlo a las `Actions` de tu colección:
+
+
+
+<Code code={CopyButtonUse} lang="tsx" />
+
+## Código completo
+
+
+
+<Code code={FullCode} lang="tsx" />

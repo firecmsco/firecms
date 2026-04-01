@@ -1,0 +1,53 @@
+---
+title: MongoDB Atlas mit FireCMS integrieren
+slug: de/docs/self/mongodb
+sidebar_label: MongoDB-Integration
+description: Vollständige Anleitung zur Verwendung von MongoDB Atlas als Datenbank und Authentifizierungsanbieter mit FireCMS.
+---
+
+Diese Anleitung beschreibt die Schritte zur Integration von MongoDB Atlas als Authentifizierungssystem und primäre Datenbank für Ihre FireCMS-Anwendung.
+
+## Projekteinrichtung
+
+Erstellen Sie ein neues Projekt mit der FireCMS PRO-Vorlage:
+
+```bash
+npx create-firecms-app --pro
+```
+
+## MongoDB Atlas-Konfiguration
+
+Richten Sie Ihr MongoDB Atlas-Projekt ein und erhalten Sie die erforderlichen Konfigurationsparameter:
+`appId`, `appUrl`, `baseUrl`, `clientApiBaseUrl`, `dataApiBaseUrl`, `dataExplorerLink` und `dataSourceName`.
+
+```js
+const atlasConfig = {
+  appId: "your-app-id",
+  appUrl: "https://services.cloud.mongodb.com/groups/your-group-id/apps/your-app-id",
+  baseUrl: "https://services.cloud.mongodb.com",
+  clientApiBaseUrl: "https://your-region.gcp.services.cloud.mongodb.com",
+  dataApiBaseUrl: "https://your-region.gcp.data.mongodb-api.com",
+  dataExplorerLink: "https://cloud.mongodb.com/links/your-group-id/explorer/Cluster0/database/collection/find",
+  dataSourceName: "mongodb-atlas"
+};
+```
+
+## Firebase-Konfiguration (Optional)
+
+Wenn Sie Firebase für die Dateispeicherung verwenden möchten:
+
+```js
+const firebaseConfig = {
+  apiKey: "your-api-key",
+  authDomain: "your-auth-domain",
+  projectId: "your-project-id",
+  storageBucket: "your-storage-bucket",
+  messagingSenderId: "your-messaging-sender-id",
+  appId: "your-app-id"
+};
+```
+
+## MongoDB in FireCMS implementieren
+
+Besuchen Sie die offizielle Dokumentation für vollständige Implementierungsdetails und Codebeispiele.
+Vollständige Codebeispiele finden Sie unter [/docs/self/mongodb](/docs/self/mongodb).

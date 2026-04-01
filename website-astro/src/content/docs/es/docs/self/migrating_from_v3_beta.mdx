@@ -1,0 +1,229 @@
+---
+title: Migración desde versiones beta anteriores
+slug: es/docs/self/migrating_from_v3_beta
+sidebar_label: Migración desde versiones beta anteriores
+description: Guía de migración paso a paso desde las versiones beta de FireCMS v3 a la versión estable, cubriendo cambios en PRO y Cloud.
+---
+
+## FireCMS PRO
+
+Si estás migrando desde versiones beta anteriores de FireCMS PRO, necesitarás hacer algunas actualizaciones en tu proyecto.
+Los componentes principales han cambiado su composición. En lugar de tener un único componente `Scaffold` con toda la configuración,
+ahora tienes adicionalmente un componente `AppBar` y un componente `Drawer`.
+
+Más información sobre los componentes principales se puede encontrar en la sección [Componentes Principales](/docs/self/main_components).
+
+### Controlador de autenticación de gestión de usuarios
+
+Para las versiones autoalojadas, ha habido un cambio en la API de los controladores de gestión de datos. El
+`authController` ahora se pasa al controlador de Gestión de Usuarios, en lugar de al revés. El `userManagementController`
+puede usarse como un controlador de autenticación, pero con toda la lógica añadida para la gestión de usuarios.
+
+❌ Código antes:
+```typescript
+    /**
+     * Controlador a cargo de la gestión de usuarios
+     */
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate
+    });
+
+    /**
+     * Controlador para gestionar la autenticación
+     */
+    const authController: FirebaseAuthController = useFirebaseAuthController({
+        firebaseApp,
+        signInOptions,
+        loading: userManagement.loading,
+        defineRolesFor: userManagement.defineRolesFor
+    });
+```
+
+✅ Código después:
+
+```typescript
+    /**
+     * Controlador para gestionar la autenticación
+     */
+    const authController: FirebaseAuthController = useFirebaseAuthController({
+        firebaseApp,
+        signInOptions
+    });
+
+    /**
+     * Controlador a cargo de la gestión de usuarios
+     */
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+        authController
+    });
+```
+
+El controlador `userManagement` ahora también califica como `authController`, por lo que puedes usarlo como tal, pero no es
+necesario hacerlo.
+
+
+### Estilos
+
+También necesitarás importar los estilos predeterminados de FireCMS en tu proyecto. Puedes hacerlo añadiendo la siguiente importación a tu archivo `index.css`:
+
+```css
+@import "@firecms/ui/index.css";
+```
+
+Tu archivo `index.css` debería verse así:
+
+```css
+@import "@firecms/ui/index.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+### Dependencias
+
+Las fuentes predeterminadas ahora se importan en el proyecto del cliente (para que puedan reemplazarse si es necesario).
+Necesitas añadir estas importaciones:
+```
+    "typeface-rubik": "^1.1.13",
+    "@fontsource/jetbrains-mono": "^5.0.20",
+```
+
+
+
+## FireCMS Cloud
+
+Si estás migrando desde versiones beta anteriores de FireCMS Cloud, necesitarás hacer algunas actualizaciones en tu proyecto.
+
+### Dependencias
+
+El paquete principal ha sido renombrado de `firecms` a `@firecms/cloud` desde la versión `3.0.0-beta.4`.
+También puedes eliminar el paquete `@firecms/cli`, ya que se instala implícitamente con `@firecms/cloud`.
+
+Este es un `package.json` de ejemplo con la nueva configuración:
+```
+{
+  "name": "my-firecms-project",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5001",
+    "build": "vite build",
+    "serve": "vite preview --port 5001",
+    "deploy": "run-s build && firecms deploy --project=YOUR_PROJECT_ID"
+  },
+  "dependencies": {
+    "@firecms/cloud": "^3.0.0-beta",
+    "firebase": "^12.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@originjs/vite-plugin-federation": "^1.4.1",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/react": "^18.2.71",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.6"
+  }
+}
+```
+
+### Importaciones
+
+Necesitas actualizar tus importaciones para usar el nuevo nombre de paquete. Por ejemplo, si tienes un archivo que importa `firecms`:
+
+```javascript
+import { FireCMS } from "firecms";
+```
+
+Necesitas actualizarlo para usar el nuevo nombre de paquete:
+
+```javascript
+import { FireCMS } from "@firecms/core";
+```
+
+### Configuración de Vite
+
+También necesitas actualizar tu archivo `vite.config.js` para incluir el nuevo nombre de paquete y la configuración:
+
+```javascript
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import federation from "@originjs/vite-plugin-federation"
+
+// https://vitejs.dev/config/
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    plugins: [
+        react(),
+        federation({
+            name: "remote_app",
+            filename: "remoteEntry.js",
+            exposes: {
+                "./config": "./src/index"
+            },
+            shared: [
+                "react",
+                "react-dom",
+                "@firecms/cloud",
+                "@firecms/core",
+                "@firecms/firebase",
+                "@firecms/ui",
+                "@firebase/firestore",
+                "@firebase/app",
+                "@firebase/functions",
+                "@firebase/auth",
+                "@firebase/storage",
+                "@firebase/analytics",
+                "@firebase/remote-config",
+                "@firebase/app-check"
+            ]
+        })
+    ],
+    build: {
+        modulePreload: false,
+        target: "ESNEXT",
+        cssCodeSplit: false,
+    }
+})
+```
+
+### Tailwind CSS
+
+- Necesitas añadir el plugin de tipografía de tailwind a tu proyecto. Puedes hacerlo instalando el paquete `@tailwindcss/typography`:
+
+  ```bash
+  yarn add -D @tailwindcss/typography
+  ```
+
+- También debes asegurarte de estar usando al menos la versión `3.4.3` del paquete `tailwindcss`, y la versión `8.4.38` de `postcss`.
+
+- El preset ahora viene del paquete `@firecms/ui`. Puedes actualizar tu archivo `tailwind.config.cjs` para incluir el nuevo preset:
+
+  ```javascript
+  import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+
+  export default {
+      presets: [fireCMSConfig],
+      content: [
+          "./index.html",
+          "./src/**/*.{js,ts,jsx,tsx}",
+          "./node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}",
+      ],
+  };
+  ```
+

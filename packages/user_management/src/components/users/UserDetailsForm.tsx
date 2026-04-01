@@ -3,35 +3,40 @@ import * as Yup from "yup";
 import {
     Button,
     CheckIcon,
+    Chip,
+    CopyIcon,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    IconButton,
     LoadingButton,
     MultiSelect,
     MultiSelectItem,
     TextField,
+    Tooltip,
 } from "@firecms/ui";
-import { FieldCaption, Role, useAuthController, User, useSnackbarController } from "@firecms/core";
+import { FieldCaption, Role, useAuthController, User, useSnackbarController, useTranslation
+} from "@firecms/core";
 import { Formex, useCreateFormex } from "@firecms/formex";
 
 import { areRolesEqual } from "../../utils";
 import { useUserManagement } from "../../hooks";
 import { RoleChip } from "../roles";
 
-export const UserYupSchema = Yup.object().shape({
-    displayName: Yup.string().required("Required"),
-    email: Yup.string().email().required("Required"),
+export const getUserYupSchema = (t: any) => Yup.object().shape({
+    displayName: Yup.string().required(t("required")),
+    email: Yup.string().email().required(t("required")),
     roles: Yup.array().min(1)
 });
 
-function canUserBeEdited(loggedUser: User, user: User, users: User[], roles: Role[], prevUser?: User) {
+function canUserBeEdited(loggedUser: User, user: User, users: User[], roles: Role[], t: any, prevUser?: User) {
     const admins = users.filter(u => u.roles?.map(r => r.id).includes("admin"));
     const loggedUserIsAdmin = loggedUser.roles?.map(r => r.id).includes("admin");
     const didRolesChange = !prevUser || !areRolesEqual(prevUser.roles ?? [], user.roles ?? []);
 
     if (didRolesChange && !loggedUserIsAdmin) {
-        throw new Error("Only admins can change roles");
+        throw new Error(t("only_admins_change_roles"));
     }
 
     // was the admin role removed
@@ -39,7 +44,7 @@ function canUserBeEdited(loggedUser: User, user: User, users: User[], roles: Rol
 
     // avoid removing the last admin
     if (adminRoleRemoved && admins.length === 1) {
-        throw new Error("There must be at least one admin");
+        throw new Error(t("must_be_at_least_one_admin"));
     }
     return true;
 }
@@ -53,7 +58,7 @@ export function UserDetailsForm({
     user?: User,
     handleClose: () => void
 }) {
-
+    const { t } = useTranslation();
     const snackbarController = useSnackbarController();
     const {
         user: loggedInUser
@@ -67,15 +72,15 @@ export function UserDetailsForm({
 
     const onUserUpdated = useCallback((savedUser: User): Promise<User> => {
         if (!loggedInUser) {
-            throw new Error("Logged user not found");
+            throw new Error(t("logged_user_not_found"));
         }
         try {
-            canUserBeEdited(loggedInUser, savedUser, users, roles, userProp);
+            canUserBeEdited(loggedInUser, savedUser, users, roles, t, userProp);
             return saveUser(savedUser);
         } catch (e: any) {
             return Promise.reject(e);
         }
-    }, [roles, saveUser, userProp, users, loggedInUser]);
+    }, [roles, saveUser, userProp, users, loggedInUser, t]);
 
     const formex = useCreateFormex({
         initialValues: userProp ?? {
@@ -84,7 +89,7 @@ export function UserDetailsForm({
             roles: roles.filter(r => r.id === "editor")
         } as User,
         validation: (values) => {
-            return UserYupSchema.validate(values, { abortEarly: false })
+            return getUserYupSchema(t).validate(values, { abortEarly: false })
                 .then(() => {
                     return {};
                 }).catch((e) => {
@@ -141,12 +146,34 @@ export function UserDetailsForm({
                         height: "100%"
                     }}>
 
-                    <DialogTitle variant={"h4"} gutterBottom={false}>
-                        User
-                    </DialogTitle>
+                    <DialogTitle variant={"h4"} gutterBottom={false}>{t("user")}</DialogTitle>
                     <DialogContent className="h-full flex-grow">
 
                         <div className={"grid grid-cols-12 gap-4"}>
+
+                            {!isNewUser && userProp?.uid && (
+                                <div className={"col-span-12"}>
+                                    <div className={"flex items-center gap-2"}>
+                                        <span className={"text-sm text-surface-accent-600 dark:text-surface-accent-400"}>{t("user_id")}</span>
+                                        <Chip size={"small"}>
+                                            {userProp.uid}
+                                        </Chip>
+                                        <Tooltip title={t("copy")}>
+                                            <IconButton
+                                                size={"small"}
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(userProp.uid);
+                                                    snackbarController.open({
+                                                        type: "success",
+                                                        message: t("copied")
+                                                    });
+                                                }}>
+                                                <CopyIcon size={"small"}/>
+                                            </IconButton>
+                                        </Tooltip>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className={"col-span-12"}>
                                 <TextField
@@ -156,10 +183,10 @@ export function UserDetailsForm({
                                     value={values.displayName ?? ""}
                                     onChange={handleChange}
                                     aria-describedby="name-helper-text"
-                                    label="Name"
+                                    label={t("name")}
                                 />
                                 <FieldCaption>
-                                    {submitCount > 0 && Boolean(errors.displayName) ? errors.displayName : "Name of this user"}
+                                    {submitCount > 0 && Boolean(errors.displayName) ? errors.displayName : t("name_of_this_user")}
                                 </FieldCaption>
                             </div>
                             <div className={"col-span-12"}>
@@ -170,16 +197,16 @@ export function UserDetailsForm({
                                     value={values.email ?? ""}
                                     onChange={handleChange}
                                     aria-describedby="email-helper-text"
-                                    label="Email"
+                                    label={t("email")}
                                 />
                                 <FieldCaption>
-                                    {submitCount > 0 && Boolean(errors.email) ? errors.email : "Email of this user"}
+                                    {submitCount > 0 && Boolean(errors.email) ? errors.email : t("email_of_this_user")}
                                 </FieldCaption>
                             </div>
                             <div className={"col-span-12"}>
                                 <MultiSelect
                                     className={"w-full"}
-                                    label="Roles"
+                                    label={t("roles")}
                                     value={values.roles?.map(r => r.id) ?? []}
                                     onValueChange={(value: string[]) => setFieldValue("roles", value.map(id => roles.find(r => r.id === id) as Role))}
                                     // renderValue={(value: string) => {
@@ -207,9 +234,7 @@ export function UserDetailsForm({
                         <Button variant={"text"}
                                 onClick={() => {
                                     handleClose();
-                                }}>
-                            Cancel
-                        </Button>
+                                }}>{t("cancel")}</Button>
 
                         <LoadingButton
                             variant="filled"
@@ -217,7 +242,7 @@ export function UserDetailsForm({
                             disabled={!dirty}
                             loading={isSubmitting}
                         >
-                            {isNewUser ? "Create user" : "Update"}
+                            {isNewUser ? t("create_user") : t("update")}
                         </LoadingButton>
                     </DialogActions>
                 </form>

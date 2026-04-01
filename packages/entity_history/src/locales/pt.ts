@@ -1,0 +1,20 @@
+export const entityHistoryTranslationsPt = {
+    history: "Histórico",
+    entity_history_only_existing: "O histórico está disponível apenas para entidades existentes",
+    entity_history_reverted: "Versão revertida",
+    entity_history_error_reverting: "Erro ao reverter entidade",
+    entity_history_no_history: "Sem histórico disponível",
+    entity_history_when_save: "Quando guarda uma entidade, é criada uma nova versão e armazenada no histórico.",
+    entity_history_revert_tooltip: "Reverter para esta versão",
+    entity_history_please_save: "Por favor guarde ou descarte as suas alterações antes de reverter",
+    loading_more: "A carregar mais...",
+    entity_history_no_more: "Sem mais histórico disponível",
+    entity_history_revert_dialog_title: "Reverter dados para esta versão?",
+    entity_history_previous_value: "Valor anterior",
+    entity_history_see_details: "Ver detalhes desta revisão",
+    entity_history_just_now: "agora mesmo",
+    entity_history_minutes_ago: "há {{minutes}}m",
+    entity_history_hours_ago: "há {{hours}}h",
+    entity_history_days_ago: "há {{days}}d",
+    user_picture: "Foto do utilizador"
+};

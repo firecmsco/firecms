@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { CollectionSize, Entity, EntityCollection, EntityTableController, SelectionController } from "../../types";
 import { EntityCard } from "./EntityCard";
 import { CircularProgress, cls, Typography } from "@firecms/ui";
-import { useAuthController, useCustomizationController } from "../../hooks";
+import { useAuthController, useCustomizationController, useTranslation } from "../../hooks";
 
 export type EntityCollectionCardViewProps<M extends Record<string, any> = any> = {
     collection: EntityCollection<M>;
@@ -72,6 +72,7 @@ export function EntityCollectionCardView<M extends Record<string, any> = any>({
     initialScroll,
     size = "m"
 }: EntityCollectionCardViewProps<M>) {
+    const { t } = useTranslation();
     const authController = useAuthController();
     const customizationController = useCustomizationController();
 
@@ -178,7 +179,7 @@ export function EntityCollectionCardView<M extends Record<string, any> = any>({
             <div className="flex-1 flex items-center justify-center p-8">
                 {emptyComponent ?? (
                     <Typography variant="label" color="secondary">
-                        No entries found
+                        {t("no_entries_found")}
                     </Typography>
                 )}
             </div>
@@ -225,7 +226,7 @@ export function EntityCollectionCardView<M extends Record<string, any> = any>({
                     )}
                     {!dataLoading && noMoreToLoad && data.length > 0 && (
                         <Typography variant="caption" color="secondary">
-                            All {data.length} entries loaded
+                            {t("all_entries_loaded", { count: data.length.toString() })}
                         </Typography>
                     )}
                 </div>

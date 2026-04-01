@@ -1,0 +1,174 @@
+---
+title: Migrazione da v3.0 a v3.1
+slug: it/docs/self/migrating_from_v3_to_v3_1
+sidebar_label: Migrazione da v3.0 a v3.1
+---
+
+Questa guida di migrazione si applica alle versioni **self-hosted** di FireCMS, incluse le edizioni **Community** e **PRO**. FireCMS v3.1 introduce aggiornamenti importanti che richiedono modifiche alla configurazione e offre nuove funzionalità.
+
+## Prima di iniziare
+
+- Assicurati di essere attualmente su **FireCMS v3.0.x**
+- Fai un backup del tuo progetto o fai commit dello stato attuale nel controllo versione
+- Assicurati di usare **Node.js 18+**
+
+## Aggiorna i pacchetti FireCMS
+
+Aggiorna tutti i pacchetti `@firecms/*` alla versione **3.1**:
+
+```bash
+npm i @firecms/core@3.1.0 @firecms/ui@3.1.0 @firecms/firebase@3.1.0 @firecms/collection_editor@3.1.0 @firecms/collection_editor_firebase@3.1.0 @firecms/data_enhancement@3.1.0 @firecms/data_export@3.1.0 @firecms/data_import@3.1.0 @firecms/schema_inference@3.1.0 @firecms/user_management@3.1.0
+```
+
+Assicurati di includere **tutti** i pacchetti `@firecms/*` elencati nel tuo `package.json`. Mescolare i pacchetti v3.0 e v3.1 causerà problemi.
+
+---
+
+## Migrazione TailwindCSS v4
+
+Il cambiamento più significativo in v3.1 è la migrazione da **TailwindCSS v3 a v4**.
+
+:::caution
+Questo è un **breaking change**. Il tuo progetto non funzionerà correttamente finché non completi tutti i passaggi di questa sezione.
+:::
+
+### Aggiorna le dipendenze
+
+```bash
+npm i tailwindcss@4 @tailwindcss/vite
+```
+
+### Aggiungi il plugin Vite
+
+Aggiorna il tuo `vite.config.ts` per includere il nuovo plugin TailwindCSS v4:
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    build: {
+        outDir: "./build",
+        target: "ESNEXT",
+        sourcemap: true
+    },
+    optimizeDeps: { include: ["react/jsx-runtime"] },
+    plugins: [
+        react({}),
+        tailwindcss()
+    ]
+})
+```
+
+### Modifica variabili colore
+
+**Prima (v3.0):**
+```css
+:root {
+    --fcms-primary: #0070F4;
+    --fcms-primary-dark: #0061e6;
+    --fcms-primary-bg: #0061e610;
+    --fcms-secondary: #FF5B79;
+}
+```
+
+**Dopo (v3.1):**
+```css
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+:::warning
+Se salti questo passaggio, i colori del tuo tema personalizzato **non verranno applicati**. Le variabili `--fcms-primary-dark` e `--fcms-primary-bg` non sono più necessarie — vengono calcolate automaticamente da `--color-primary`.
+:::
+
+### Struttura aggiornata di index.css
+
+```css
+@import "tailwindcss";
+@import "@firecms/ui/index.css";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (:is(.dark &));
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+
+body {
+    @apply w-full min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center;
+}
+```
+
+### Rimuovi i file di configurazione obsoleti
+
+Rimuovi i seguenti file dal tuo progetto:
+- `tailwind.config.js`
+- `postcss.config.js`
+
+---
+
+## Nuove modalità di visualizzazione delle collezioni
+
+### Vista Cards
+
+La **vista Cards** visualizza le tue entità come schede visive.
+
+### Vista Kanban/Board
+
+La **vista Kanban** (chiamata anche vista Board) consente di organizzare le entità in colonne basate su una proprietà enum. È ideale per:
+- Gestione del flusso di lavoro (es. Bozza → Revisione → Pubblicato)
+- Tracciamento delle attività (es. Da fare → In corso → Fatto)
+
+---
+
+## Correzioni di bug e miglioramenti
+
+- Comportamento migliorato del tasto Escape nell'editor
+- Piccole modifiche UI e aggiornamento visivo delle finestre di dialogo
+- Migrazione dell'editor per migliori prestazioni dell'editor markdown
+- Modifiche inline per la modifica delle proprietà nell'editor collezioni
+- Aggiunto `enableLocalChangesBackup` per controllare la copia locale delle entità non salvate
+- Nuove funzionalità di ridimensionamento immagini
+
+---
+
+## Funzionalità AI per Self-Hosted (PRO)
+
+### Generazione AI delle Collezioni
+
+```typescript
+const collectionEditorPlugin = useCollectionEditorPlugin({
+    collectionConfigController,
+    collectionInference: buildCollectionInference(firebaseApp),
+    getData: (path, parentPaths) => getFirestoreDataInPath(firebaseApp, path, parentPaths, 200),
+    generateCollection: buildCollectionGenerationCallback({
+        getAuthToken: authController.getAuthToken
+    })
+});
+```
+
+---
+
+## Risoluzione dei problemi
+
+### `Cannot find namespace 'JSX'`
+Aggiorna le annotazioni del tipo di ritorno da `JSX.Element` a `React.ReactElement`.
+
+### Stili non applicati dopo la migrazione
+- Verifica che il tuo `index.css` includa le direttive `@source`
+- Assicurati di aver rimosso i vecchi file di configurazione
+- Svuota `node_modules` e reinstalla: `rm -rf node_modules && npm install`
+
+### Errori di build dopo l'aggiornamento dei pacchetti
+Assicurati che **tutti** i pacchetti `@firecms/*` siano sulla stessa versione.

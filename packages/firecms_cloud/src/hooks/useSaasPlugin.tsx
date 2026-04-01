@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { AIIcon, EntityCollection, FireCMSPlugin, InternalUserManagement, useAuthController, useNavigationController } from "@firecms/core";
+import { AIIcon, EntityCollection, FireCMSPlugin, InternalUserManagement, useAuthController, useNavigationController, useTranslation } from "@firecms/core";
 import { CollectionsConfigController, mergeCollections, useCollectionEditorController } from "@firecms/collection_editor";
 import { AddIcon, ArticleIcon, Button, Card, cls, HistoryIcon, Typography } from "@firecms/ui";
 import { ProjectConfig } from "./useBuildProjectConfig";
@@ -17,7 +17,6 @@ export function useSaasPlugin({
     projectConfig,
     collectionConfigController,
     appConfig,
-    dataTalkSuggestions,
     userManagement,
     introMode,
     fireCMSBackend,
@@ -29,7 +28,6 @@ export function useSaasPlugin({
     appConfig?: FireCMSAppConfig;
     userManagement: InternalUserManagement;
     collectionConfigController: CollectionsConfigController;
-    dataTalkSuggestions?: string[];
     introMode?: "new_project" | "existing_project";
     fireCMSBackend: FireCMSBackend;
     onAnalyticsEvent?: (event: string, data?: object) => void;
@@ -50,7 +48,6 @@ export function useSaasPlugin({
 
     const additionalChildrenEnd = <>
         <DataTalkSuggestions
-            suggestions={dataTalkSuggestions}
             onAnalyticsEvent={onAnalyticsEvent} />
         <RootCollectionSuggestions introMode={introMode}
             onAnalyticsEvent={onAnalyticsEvent}
@@ -178,6 +175,7 @@ export function IntroWidget({
     const navigation = useNavigationController();
     const collectionEditorController = useCollectionEditorController();
     const authController = useAuthController();
+    const { t } = useTranslation();
 
     if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
@@ -199,14 +197,14 @@ export function IntroWidget({
         : true;
 
     const subtitle = introMode === "existing_project"
-        ? "Your admin panel is ready. Let's bring in your data."
-        : "Your admin panel is ready. Here's how to get started.";
+        ? t("admin_panel_ready_bring_data")
+        : t("admin_panel_ready_get_started");
 
     return (
         <div className={"mt-8 flex flex-col gap-6 p-2"}>
             <div>
                 <Typography variant={"h4"} className="mb-2">
-                    Welcome to FireCMS Cloud
+                    {t("welcome_to_firecms")}
                 </Typography>
                 <Typography color={"secondary"}>
                     {subtitle}
@@ -218,8 +216,8 @@ export function IntroWidget({
                 {introMode === "existing_project" && (
                     <IntroCard
                         icon={<AIIcon size={"small"} className={"text-primary"}/>}
-                        title={"Auto-detect collections"}
-                        description={"Let AI scan your database and automatically generate collection schemas."}
+                        title={t("auto_detect_collections")}
+                        description={t("auto_detect_collections_desc")}
                     >
                         <AutoSetUpCollectionsButton
                             projectId={projectConfig.projectId}
@@ -235,8 +233,8 @@ export function IntroWidget({
 
                 <IntroCard
                     icon={<AddIcon size={"small"} className={"text-secondary"}/>}
-                    title={"Create a collection"}
-                    description={"Manually define your first collection from scratch using the visual editor."}
+                    title={t("create_a_collection")}
+                    description={t("create_collection_desc")}
                 >
                     <Button
                         variant={"outlined"}
@@ -251,14 +249,14 @@ export function IntroWidget({
                             });
                         }}
                     >
-                        Create collection
+                        {t("new_collection")}
                     </Button>
                 </IntroCard>
 
                 <IntroCard
                     icon={<ArticleIcon size={"small"} className={"text-secondary"}/>}
-                    title={"Read the docs"}
-                    description={"Learn how to customize fields, views, actions and more."}
+                    title={t("read_the_docs")}
+                    description={t("read_the_docs_desc")}
                 >
                     <Button
                         variant={"text"}
@@ -269,19 +267,19 @@ export function IntroWidget({
                         target={"_blank"}
                         onClick={() => onAnalyticsEvent?.("intro_docs_click")}
                     >
-                        Explore docs
+                        {t("explore_docs")}
                     </Button>
                 </IntroCard>
 
             </div>
 
             <Typography variant={"caption"} color={"disabled"}>
-                Want to customize with code? Run{" "}
+                {t("want_to_customize_with_code")}{" "}
                 <code
                     className={"select-all font-mono bg-surface-100 dark:bg-surface-800 px-1.5 py-0.5 rounded text-xs"}>
                     npx create-firecms-app
                 </code>{" "}
-                to scaffold a local project.
+                {t("to_scaffold_a_local_project")}
             </Typography>
         </div>
     );

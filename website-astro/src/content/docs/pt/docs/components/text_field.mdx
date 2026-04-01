@@ -1,0 +1,51 @@
+---
+slug: pt/docs/components/text_field
+title: Campo de texto
+sidebar_label: Text Field
+---
+
+# Componente de campo de texto
+
+Campos de texto são elementos de UI versáteis que permitem aos usuários inserir, editar e exibir texto dentro de uma aplicação.
+Desempenham um papel crucial na interação do usuário, fornecendo uma maneira direta para os usuários inserirem dados, fornecerem
+feedback, preencher formulários e interagir com várias interfaces que requerem entrada de texto. Campos de texto podem ser usados para
+entradas curtas como nomes de usuário ou senhas, bem como para entradas de texto mais longas como comentários, mensagens ou
+descrições detalhadas.
+
+No contexto do FireCMS UI, os princípios de design e componentes são baseados livremente nas diretrizes do Material Design do Google. Isso significa que
+os campos de texto no FireCMS se beneficiam de uma linguagem de design consistente e amigável, garantindo uma
+aparência coesa em diferentes aplicações web. Ao aproveitar esses componentes, os desenvolvedores podem construir rapidamente
+formulários e áreas de entrada interativas e visualmente atraentes que melhoram a experiência do usuário e mantêm a consistência do design.
+
+## Uso
+
+Para usar o `TextField`, importe-o do seu diretório de componentes e passe `value`, `onChange` e outras props necessárias para atender ao seu caso de uso.
+
+
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Campo de texto básico
+
+
+Um campo de texto básico com configuração mínima:
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_basic.tsx"/>
+
+## Campo de texto multilinha
+
+Você pode criar um campo de texto multilinha definindo a prop `multiline` como `true`. Isso é útil para entradas de texto mais longas como comentários ou descrições.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_multiline.tsx"/>
+
+## Sizes
+
+O componente `TextField` vem em vários tamanhos para se adequar a diferentes necessidades de layout. Você pode ajustar o tamanho usando a prop `size`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_sizes.tsx"/>
+
+## Adornos
+
+Você pode adicionar adornos ao início ou fim de um campo de texto para fornecer contexto ou funcionalidade adicional.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/text_field/text_field_adornment.tsx"/>

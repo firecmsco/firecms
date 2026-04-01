@@ -1,0 +1,25 @@
+---
+slug: pt/docs/components/loading_button
+title: LoadingButton
+sidebar_label: LoadingButton
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+O componente Loading Button é utilizado para exibir um botão acionável com feedback de carregamento integrado. Isso é útil para fornecer aos usuários feedback imediato sobre suas ações que requerem operações assíncronas.
+
+## Uso
+
+Para usar o `LoadingButton`, importe-o junto com as props necessárias. Você pode passar `loading`, `disabled`, `onClick`, `startIcon` e outras props de botão.
+
+## LoadingButton básico
+
+Um botão de carregamento simples mostrando o estado de carregamento e aparência padrão.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/loading_button/loading_button_basic.tsx"/>
+
+## LoadingButton com ícone inicial
+
+Um exemplo de botão de carregamento que inclui um ícone inicial exibido quando o botão não está em estado de carregamento.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/loading_button/loading_button_with_icon.tsx"/>

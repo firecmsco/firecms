@@ -1,0 +1,31 @@
+---
+slug: pt/docs/components/markdown
+title: Markdown
+sidebar_label: Markdown
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+O componente Markdown permite renderizar conteúdo Markdown com suporte para tamanhos e classes personalizadas para estilo personalizado. Utiliza a biblioteca `markdown-it` para conversão e suporta conteúdo HTML dentro do markdown.
+
+## Uso
+
+Para usar o componente `Markdown`, importe-o de @firecms/ui e passe a prop `source` com o conteúdo markdown que deseja exibir. Opcionalmente, você pode especificar as props `size` e `className` para ajustar a aparência.
+
+## Markdown básico
+
+Um exemplo simples de renderização de markdown.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/markdown/markdown_basic.tsx"/>
+
+## Tamanhos do Markdown
+
+Demonstra como ajustar o tamanho do texto markdown usando a prop `size`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/markdown/markdown_sizes.tsx"/>
+
+## Markdown com estilo personalizado
+
+Ilustrando o uso da prop `className` para aplicar estilos personalizados ao componente markdown.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/markdown/markdown_custom.tsx"/>

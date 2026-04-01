@@ -1,0 +1,31 @@
+---
+slug: pt/docs/components/expandable_panel
+title: ExpandablePanel
+sidebar_label: ExpandablePanel
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+`ExpandablePanel` é um componente versátil que permite que o conteúdo seja recolhível, melhorando a organização da interface ao ocultar conteúdo que não é imediatamente relevante para o usuário. Este componente pode operar em modo controlado ou não controlado, com recursos adicionais como um modo invisível para uma interface mais sutil e um modo de campo opcional para alinhar com o estilo dos campos de formulário.
+
+## Uso
+
+Para usar o `ExpandablePanel`, importe-o dos seus componentes e forneça as props necessárias incluindo `title`, `children` e props de controle como `expanded`, `onExpandedChange` e props de estilo como `titleClassName`, `className`.
+
+## ExpandablePanel básico
+
+Um exemplo mostrando o uso básico do componente `ExpandablePanel`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_basic.tsx"/>
+
+## ExpandablePanel como campo
+
+Esta variante mostra o `ExpandablePanel` utilizado como campo em um formulário, demonstrando a combinação da propriedade `asField`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_field.tsx"/>
+
+## ExpandablePanel invisível
+
+Um exemplo de `ExpandablePanel` onde as bordas do painel são invisíveis para uma integração mais suave com a interface circundante.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/expandable_panel/expandable_panel_invisible.tsx"/>

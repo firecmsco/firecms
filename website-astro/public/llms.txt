@@ -977,7 +977,7 @@ These features are already available in your FireCMS Cloud project — no update
 - **Timezone support for dates** — correct timezone handling, no more midnight auto-conversion
 - **Enum conditions** — dynamically filter enum values based on other properties
 - **Collapsible drawer groups** — cleaner sidebar navigation
-- **TipTap V3** — improved rich-text editor
+- **Rich-text Editor** — improved rich-text editor
 - **Image resizing** — built-in image resizing on upload
 
 For custom code projects, updating also unlocks:
@@ -1179,7 +1179,7 @@ const BooksCollection: EntityCollection = {
 
 Build your own **Firebase admin panel** and **headless CMS** with full control over your infrastructure. FireCMS self-hosted versions let you deploy a powerful **React-based back-office** on your own servers, with complete data ownership.
 
-:::tip When to choose self-hosted?
+:::tip[When to choose self-hosted?]
 - **Data sovereignty**: Your data never leaves your infrastructure
 - **Custom backends**: Use **MongoDB**, custom APIs, or any database
 - **Deep customization**: Full access to extend every part of the CMS
@@ -1334,7 +1334,7 @@ Then we are going to install **FireCMS PRO**. Note that we will not be adding al
 Then install FireCMS and its dependencies:
 
 ```bash
-yarn add firebase@^10 @firecms/core@^3.0.0-beta @firecms/firebase@^3.0.0-beta @firecms/editor@^3.0.0-beta react-router@^6 react-router-dom@^6 @tailwindcss/typography typeface-rubik @fontsource/jetbrains-mono
+yarn add firebase@^10 @firecms/core@^3.0.0-beta @firecms/firebase@^3.0.0-beta react-router@^6 react-router-dom@^6 @tailwindcss/typography typeface-rubik @fontsource/jetbrains-mono
 ```
 
 Now let's import the tailwind config of FireCMS. Add the **FireCMS preset** `tailwind.config.js`, as well as the content paths to FireCMS source code, so the right tailwind classes are picked.
@@ -2451,44 +2451,24 @@ export const articlesCollection = buildCollection({
 FireCMS allows you to customize the look and feel of your admin panel. You can
 customize the theme, colors, and typography to match your brand.
 
-FireCMS uses tailwindcss for styling. FireCMS UI provides a default **preset** that
-can be extended or completely replaced.
+FireCMS uses [Tailwind CSS v4](https://tailwindcss.com/) for styling. All configuration
+is done directly in CSS using the `@theme` block — no `tailwind.config.js` is required
+for most customizations.
 
-#### Customizing the theme
+#### Setting up your CSS
 
-Your default `tailwind.config.js` file should look like this:
-
-```javascript
-
-export default {
-    presets: [fireCMSConfig],
-    content: [
-        "./index.html",
-        "./src/**/*.{js,ts,jsx,tsx}",
-        "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}"
-    ]
-};
-```
-
-You may want to check the original [`tailwind.config.js`](https://github.com/firecmsco/firecms/blob/main/packages/ui/tailwind.config.js)
-file in the `@firecms/ui` package.
-
-You can extend the default theme by adding your customizations, including all supported
-tailwindcss features.
-
-#### Customizing colors
-
-##### Primary and secondary colors
-
-FireCMS UI uses a primary color and a secondary color. You can customize these colors
-in your `index.css` file:
+Your `index.css` file should look like this:
 
 ```css
-@import "@firecms/ui/index.css";
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@plugin "@tailwindcss/typography";
+
+@source "../index.html";
+@source "../src/**/*.{js,ts,jsx,tsx}";
+@source "../../../node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}";
 
 :root {
     --color-primary: #0070F4;
@@ -2500,79 +2480,93 @@ body {
 }
 ```
 
-These are the default values but you can change them to match your brand.
+Key points:
+- `@import 'tailwindcss'` replaces the old `@tailwind base/components/utilities` directives.
+- `@import "@firecms/ui/index.css" layer(base)` imports the FireCMS UI theme into the CSS `base` layer.
+- `@custom-variant dark` sets up the dark mode variant using the `[data-theme=dark]` selector.
+- `@plugin` replaces the old plugins array in `tailwind.config.js`.
+- `@source` replaces the `content` array in `tailwind.config.js`, telling Tailwind where to scan for class names.
 
-Just like in the previous section, feel free to take a look at the original
-[`index.css`](https://github.com/firecmsco/firecms/blob/main/packages/ui/src/index.css) file in the `@firecms/ui` package.
+You may want to check the original [`index.css`](https://github.com/firecmsco/firecms/blob/main/packages/ui/src/index.css)
+file in the `@firecms/ui` package.
 
-##### Customizing colors in the tailwind config
+#### Customizing colors
 
-If you need a more complex color customization, you can modify the `tailwind.config.js` file, to override the default
-color used by FireCMS.
+##### Primary and secondary colors
 
-FireCMS defines colors for all the surfaces (a light gray by default), surfaces accents (a bluish gray by default),
-typography colors (primary, secondary and disabled) as well as the field colors (background, hover, etc).
+FireCMS UI uses a primary color and a secondary color. You can override these in your `index.css`
+by reassigning the CSS custom properties **after** importing the FireCMS UI styles:
 
-All these colors can be overridden in the `tailwind.config.js` file. This is an example of a config file that overrides
-the default colors:
+```css
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-```javascript
-
-export default {
-    presets: [fireCMSConfig],
-    content: [
-        "./index.html",
-        "./src/**/*.{js,ts,jsx,tsx}",
-        "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}"
-    ],
-    theme: {
-        extend: {
-            colors: {
-                "primary": "var(--color-primary)",
-                "secondary": "var(--color-secondary)",
-                "field": {
-                    "disabled": "rgb(224 224 226)",
-                    "disabled-dark": "rgb(35 35 37)"
-                },
-                "text": {
-                    "primary": "rgba(0, 0, 0, 0.87)",
-                    "secondary": "rgba(0, 0, 0, 0.55)",
-                    "disabled": "rgba(0, 0, 0, 0.38)",
-                    "primary-dark": "#ffffff",
-                    "secondary-dark": "rgba(255, 255, 255, 0.60)",
-                    "disabled-dark": "rgba(255, 255, 255, 0.48)"
-                },
-                "surface": {
-                    "50": "#f8f8fc",
-                    "100": "#E7E7EB",
-                    "200": "#CFCFD6",
-                    "300": "#B7B7BF",
-                    "400": "#A0A0A9",
-                    "500": "#87878F",
-                    "600": "#6B6B74",
-                    "700": "#454552",
-                    "800": "#292934",
-                    "900": "#18181C",
-                    "950": "#101013"
-                },
-                "surface-accent": {
-                    "50": "#f8fafc",
-                    "100": "#f1f5f9",
-                    "200": "#e2e8f0",
-                    "300": "#cbd5e1",
-                    "400": "#94a3b8",
-                    "500": "#64748b",
-                    "600": "#475569",
-                    "700": "#334155",
-                    "800": "#1e293b",
-                    "900": "#0f172a",
-                    "950": "#020617"
-                }
-            }
-        }
-    }
-};
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
 ```
+
+These are the default values, but you can change them to match your brand.
+
+##### Advanced color customization using `@theme`
+
+In Tailwind v4, colors and other design tokens are defined directly in CSS using the `@theme` block.
+FireCMS UI ships all its tokens this way. If you need to override the full color palette, add an
+`@theme` override block in your `index.css`:
+
+```css
+@import 'tailwindcss';
+@import "@firecms/ui/index.css" layer(base);
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+
+    /* Field Colors */
+    --color-field-disabled: rgb(224 224 226);
+    --color-field-disabled-dark: rgb(35 35 37);
+
+    /* Text Colors */
+    --color-text-primary: rgba(0, 0, 0, 0.87);
+    --color-text-secondary: rgba(0, 0, 0, 0.52);
+    --color-text-disabled: rgba(0, 0, 0, 0.38);
+    --color-text-primary-dark: #ffffff;
+    --color-text-secondary-dark: rgba(255, 255, 255, 0.6);
+    --color-text-disabled-dark: rgba(255, 255, 255, 0.48);
+
+    /* Surface Colors */
+    --color-surface-50: #f8f8fc;
+    --color-surface-100: #e7e7eb;
+    --color-surface-200: #cfcfd6;
+    --color-surface-300: #b7b7bf;
+    --color-surface-400: #a0a0a9;
+    --color-surface-500: #87878f;
+    --color-surface-600: #6b6b74;
+    --color-surface-700: #454552;
+    --color-surface-800: #292934;
+    --color-surface-900: #18181c;
+    --color-surface-950: #101013;
+
+    /* Surface Accent Colors */
+    --color-surface-accent-50: #f8fafc;
+    --color-surface-accent-100: #f1f5f9;
+    --color-surface-accent-200: #e2e8f0;
+    --color-surface-accent-300: #cbd5e1;
+    --color-surface-accent-400: #94a3b8;
+    --color-surface-accent-500: #64748b;
+    --color-surface-accent-600: #475569;
+    --color-surface-accent-700: #334155;
+    --color-surface-accent-800: #1e293b;
+    --color-surface-accent-900: #0f172a;
+    --color-surface-accent-950: #020617;
+}
+```
+
+FireCMS defines colors for all surfaces (a light gray by default), surface accents (a bluish gray by default),
+typography colors (primary, secondary and disabled) as well as the field colors (background, hover, etc).
 
 #### Customizing typography
 
@@ -2580,6 +2574,7 @@ FireCMS uses the `Rubik` font by default, both for headings and body text. It al
 for code blocks.
 
 ##### Adding new fonts
+
 If you would like to add a new font, you can install it using `npm` or `yarn`.
 
 For example, to add the `Noto Serif` font:
@@ -2603,100 +2598,300 @@ export default {
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
         "./node_modules/@firecms/**/*.{js,ts,jsx,tsx}"
-    ],
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: [
-          "Roboto",
-          "Helvetica",
-          "Arial",
-          "sans-serif"
-        ],
-        headers: [
-          "Noto Serif",
-          "Roboto",
-          "Helvetica",
-          "Arial",
-          "sans-serif"
-        ],
-        mono: [
-          "JetBrains Mono",
-          "Space Mono",
-          "Lucida Console",
-          "monospace"
-        ]
-      }
-    }
-  }
+    ]
 };
-```
-
-##### Customizing typography styles
-
-Each typography style is defined in the `index.css`, and can be customized. These are the default styles, but you can
-change them to match your brand. The `@apply` directive is a tailwindcss feature that allows you to apply a set of
-utilities to a class.
-
-Feel free to add any of this classes to your `index.css` file, to override the default styles:
-
-```css
-.typography-h1 {
-    @apply text-6xl font-headers font-light;
-}
-
-.typography-h2 {
-    @apply text-5xl font-headers font-light;
-}
-
-.typography-h3 {
-    @apply text-4xl font-headers font-normal;
-}
-
-.typography-h4 {
-    @apply text-3xl font-headers font-normal;
-}
-
-.typography-h5 {
-    @apply text-2xl font-headers font-normal;
-}
-
-.typography-h6 {
-    @apply text-xl font-headers font-medium;
-}
-
-.typography-subtitle1 {
-    @apply text-lg font-headers font-medium;
-}
-
-.typography-subtitle2 {
-    @apply text-base font-headers font-medium;
-}
-
-.typography-body1 {
-}
-
-.typography-body2 {
-    @apply text-sm;
-}
-
-.typography-caption {
-    @apply text-xs;
-}
-
-.typography-label {
-    @apply text-sm font-medium;
-}
-
-.typography-button {
-    @apply text-sm font-semibold uppercase;
-}
 ```
 
 #### Do you miss any customization?
 
 If you need to customize any other aspect of FireCMS, please [let us know](https://discord.gg/fxy7xsQm3m).
 
+## Internationalisation (i18n)
+
+FireCMS ships with a built-in internationalisation system powered by
+[i18next](https://www.i18next.com/) and
+[react-i18next](https://react.i18next.com/).
+Out of the box the following languages are supported:
+
+| Code | Language |
+|------|----------|
+| `en` | English (default) |
+| `es` | Spanish |
+| `de` | German |
+| `fr` | French |
+| `it` | Italian |
+| `hi` | Hindi |
+
+All language switching, persistence between sessions, and string lookup are
+handled automatically by `FireCMSi18nProvider`, which you mount at the root of
+your FireCMS component tree.
+
+---
+
+### Basic setup
+
+Wrap your `FireCMS` tree with `FireCMSi18nProvider`. You can see a full wiring
+example in the [Sample PRO Project](https://firecms.co/docs/pro/sample_pro) page — the snippet
+below focuses only on the i18n part:
+
+```tsx
+
+export function MyCMSApp() {
+    // … set up controllers (auth, navigation, storage, etc.)
+
+    return (
+        <SnackbarProvider>
+            <FireCMSi18nProvider locale="es">
+                <ModeControllerProvider value={modeController}>
+                    <FireCMS
+                        navigationController={navigationController}
+                        authController={authController}
+                        dataSourceDelegate={firestoreDelegate}
+                        storageSource={storageSource}
+                    >
+                        {({ context, loading }) => {
+                            if (loading) return <CircularProgressCenter size="large" />;
+                            return (
+                                <Scaffold>
+                                    <AppBar title="My CMS" />
+                                    <Drawer />
+                                    <NavigationRoutes />
+                                    <SideDialogs />
+                                </Scaffold>
+                            );
+                        }}
+                    </FireCMS>
+                </ModeControllerProvider>
+            </FireCMSi18nProvider>
+        </SnackbarProvider>
+    );
+}
+```
+
+The `locale` prop accepts any [BCP-47 language tag](https://www.ietf.org/rfc/bcp/bcp47.txt)
+(`"en"`, `"es"`, `"de"`, …).
+
+#### User preference is persisted
+
+When a user changes the language through the FireCMS UI, the choice is saved to
+`localStorage` under the key `firecms_locale`.
+On the next visit the stored preference takes priority over the `locale` prop —
+unless you clear it manually.
+
+---
+
+### Overriding built-in strings
+
+You can replace any FireCMS UI string without touching the library source code.
+Use the `translations` prop on `FireCMSi18nProvider`:
+
+```tsx
+
+// Only include the keys you want to change — everything else keeps its default.
+const myTranslations: { [locale: string]: Partial<FireCMSTranslations> } = {
+    en: {
+        save: "Publish",
+        discard: "Throw away",
+        delete: "Remove",
+    },
+    es: {
+        save: "Publicar",
+        discard: "Descartar",
+    },
+};
+
+// Inside your component tree:
+<FireCMSi18nProvider locale="en" translations={myTranslations}>
+    {/* … */}
+</FireCMSi18nProvider>
+```
+
+Overrides are **deep-merged** on top of the built-in strings — keys you don't
+provide keep their default values. Overrides are re-applied whenever the
+`translations` prop reference changes.
+
+---
+
+### Adding a completely new locale
+
+If your target language is not listed above, create an object that satisfies
+`DeepPartial<FireCMSTranslations>` (you don't have to provide every key —
+missing keys fall back to English automatically) and pass it under a new locale
+code:
+
+```tsx
+
+const ptTranslations = {
+    save: "Guardar",
+    create: "Criar",
+    discard: "Descartar",
+    cancel: "Cancelar",
+    delete: "Eliminar",
+    edit: "Editar",
+    copy: "Copiar",
+    search: "Pesquisar",
+    filter: "Filtro",
+    loading: "A carregar...",
+    // … add as many keys as you need; the rest default to English
+};
+
+<FireCMSi18nProvider
+    locale="pt"                              // activate the new locale
+    translations={{ pt: ptTranslations }}   // provide its strings
+>
+    {/* … */}
+</FireCMSi18nProvider>
+```
+
+:::note
+When a key is missing in your custom locale, FireCMS automatically uses the
+English (`en`) value as a fallback.
+:::
+
+---
+
+### Props reference
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `locale` | `string` | `"en"` | BCP-47 language tag for the active language. |
+| `translations` | `Record<string, DeepPartial<FireCMSTranslations>>` | — | Per-locale string overrides / additions. |
+
+:::note
+`FireCMSi18nProvider` creates its own **isolated** i18next instance — it will
+not interfere with any other i18next configuration you may have in your app.
+:::
+
+---
+
+### Full list of translatable keys
+
+All translatable strings are defined in the `FireCMSTranslations` interface
+exported from `@firecms/core`.
+Below is a categorised summary of the most commonly customised keys:
+
+#### Form actions
+
+| Key | Default (en) |
+|-----|-------------|
+| `save` | Save |
+| `create` | Create |
+| `save_and_close` | Save and close |
+| `create_and_close` | Create and close |
+| `create_copy` | Create copy |
+| `discard` | Discard |
+| `clear` | Clear |
+| `cancel` | Cancel |
+
+#### Entity actions
+
+| Key | Default (en) |
+|-----|-------------|
+| `edit` | Edit |
+| `copy` | Copy |
+| `delete` | Delete |
+| `delete_selected` | Delete |
+
+#### Collection table
+
+| Key | Default (en) |
+|-----|-------------|
+| `search` | Search |
+| `filter` | Filter |
+| `no_items` | No items |
+| `no_entries_found` | No entries found |
+| `create_your_first_entry` | Create your first entry |
+| `add` | Add |
+| `remove` | Remove |
+
+#### Dialogs
+
+| Key | Default (en) |
+|-----|-------------|
+| `delete_confirmation_title` | Delete? |
+| `delete_confirmation_body` | This will delete the entity. Are you sure? |
+| `unsaved_changes_title` | Unsaved changes |
+| `unsaved_changes_body` | You have unsaved changes. Do you want to discard them? |
+| `discard_changes` | Discard changes |
+| `keep_editing` | Keep editing |
+
+#### Navigation & layout
+
+| Key | Default (en) |
+|-----|-------------|
+| `open_menu` | Open menu |
+| `close_drawer` | Close drawer |
+| `home` | Home |
+| `admin` | Admin |
+| `log_out` | Log out |
+
+#### Error states
+
+| Key | Default (en) |
+|-----|-------------|
+| `error` | Error |
+| `error_uploading_file` | Error uploading file |
+| `error_deleting` | Error deleting |
+| `internal_error` | Internal ERROR |
+| `page_not_found` | Page not found |
+| `back_to_home` | Back to home |
+
+#### Authentication
+
+| Key | Default (en) |
+|-----|-------------|
+| `auth_sign_in` | Sign In |
+| `auth_sign_up` | Sign Up |
+| `auth_password` | Password |
+| `auth_reset_password` | Reset password |
+| `auth_wrong_password` | Wrong password. Please try again. |
+| `auth_user_not_found` | User not found |
+
+#### Data import / export
+
+| Key | Default (en) |
+|-----|-------------|
+| `import` | Import |
+| `import_data` | Import data |
+| `export` | Export |
+| `export_data` | Export data |
+| `download` | Download |
+
+For the **complete** list of keys with their TypeScript definitions, see the
+[`FireCMSTranslations` source file](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/types/translations.ts)
+and the [English baseline locale](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/locales/en.ts)
+on GitHub.
+
+---
+
+### Dynamically switching languages at runtime
+
+You can change the active language at runtime by updating the `locale` prop.
+FireCMS will switch automatically **unless** the user has already stored a
+personal preference in `localStorage`.
+
+To clear the stored preference and force a language change:
+
+```ts
+
+// Clear user preference, then set the new locale via the `locale` prop
+localStorage.removeItem(FIRECMS_LOCALE_STORAGE_KEY);
+```
+
+---
+
+### Contribute a new language
+
+If you add a full translation for a new language and would like to share it with
+the community, we welcome pull requests!
+
+1. Add a new file `packages/firecms_core/src/locales/<code>.ts` following the
+   structure of the existing [`en.ts`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/locales/en.ts).
+2. Register it inside
+   [`FireCMSi18nProvider.tsx`](https://github.com/firecmsco/firecms/blob/main/packages/firecms_core/src/i18n/FireCMSi18nProvider.tsx).
+3. Open a pull request — thank you! 🎉
+
+Have questions? Join the [Discord community](https://discord.gg/fxy7xsQm3m).
 
 ## Self-Hosted Deployment
 
@@ -2884,128 +3079,6 @@ const {
 #### Custom provider
 
 You can also create a custom provider by implementing the `AppCheckProvider` interface.
-
-## Firebase setup
-
-FireCMS connects directly to your **Firebase** project to provide a powerful **admin panel** for your **Firestore database**. Before you can use FireCMS as a **headless CMS** or **back-office** for your app, you need to configure your Firebase project.
-
-This guide covers the essential setup steps:
-1. **Firestore** - Your primary database
-2. **Authentication** - Control who can access the admin panel
-3. **Storage** - For file uploads and media management
-4. **Security Rules** - Protect your data
-
-#### Firestore
-
-You need to enable **Firestore** in it. You can initialise the security rules
-in test mode to allow reads and writes, but you are encouraged to write rules
-that are suited for your domain.
-
-Keep in mind that rules should be defined for each collection and should be
-defined in a way that is suited for your domain.
-
-Please check the [Firestore documentation](https://firebase.google.com/docs/firestore/security/get-started)
-for more information.
-
-:::important
-In a default Firestore project, it is likely that your Firestore rules
-will not allow you to read or write to the database. Continue reading to
-learn how to set up your rules.
-:::
-
-For example, a simple rule that allows any authenticated user to read and write
-to any collection would be:
-
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if request.auth != null;
-    }
-  }
-}
-```
-
-but ideally you will want to make it more restricitve. For the products demo to work, your rules should look like this:
-
-```
-rules_version = '2';
-service cloud.firestore {
-
-    // everything is private by default
-    match /{document=**} {
-      allow read: if false;
-      allow write: if false;
-    }
-    
-    // allow every read to products collection but write only to authenticated users
-    match /databases/{database}/documents {
-        match /products/{id=**} {
-          allow read: if true;
-          allow write: if request.auth != null;
-        }
-    }
-    
-    // allow users to modify only their own user document
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-}
-
-```
-
-#### Web app
-
-In the project settings, you need to create a **Web app** within your
-project, from which you can get your Firebase config as a Javascript object.
-That is the object that you need to pass to the CMS.
-
-![firebase_setup](/img/firebase_setup_app.png)
-
-:::tip[Firebase Hosting]
-Note that you can also link your new webapp to **Firebase Hosting** which will
-allow you to deploy it with very little effort. You can create the
-Firebase Hosting site at a later stage and link it to your webapp.
-:::
-
-#### Authentication
-
-You will most likely want to enable authentication in order to pass the login
-screen
-
-:::important
-Vite uses the default url `http://127.0.0.1:5173` for the development server.
-Firebase Auth will require to add this url to the authorized domains in the
-Firebase console.
-Alternatively, you can use the url `http://localhost:5173`.
-:::
-
-![firebase_setup](/img/firebase_setup_auth.png)
-
-#### Storage
-
-In case you want to use the different storage fields provided by the CMS, you
-need to enable **Firebase Storage**. The default bucket will be used to
-save your stored files.
-
-:::note
-If you are experiencing any CORS issues, you can enable CORS in your bucket
-settings as specified in: https://firebase.google.com/docs/storage/web/download-files#cors_configuration
-Create a file with the content:
-
-```
-[
-  {
-    "origin": ["*"],
-    "method": ["GET"],
-    "maxAgeSeconds": 3600
-  }
-]
-```
-
-and upload it with: `gsutil cors set cors.json gs://<your-cloud-storage-bucket>`.
-:::
 
 ## Integrating MongoDB Atlas with FireCMS
 
@@ -3246,7 +3319,7 @@ If you are using a starter template, you can set it in the `.env` file.
 
 Control who can access your **Firebase admin panel** and what they can do. The User Management Plugin provides a complete **role-based access control (RBAC)** system for your FireCMS project.
 
-:::tip Why use the User Management Plugin?
+:::tip[Why use the User Management Plugin?]
 Building authentication and permissions from scratch is time-consuming and error-prone. This plugin gives you:
 - **User CRUD**: Create, edit, and delete CMS users directly in the UI
 - **Role definitions**: Define granular permissions (Admin, Editor, Viewer, or custom)
@@ -4053,7 +4126,7 @@ export function App() {
 
 Export your **Firestore** data directly from your **admin panel**. The Data Export Plugin adds one-click JSON and CSV export to any FireCMS collection.
 
-:::tip Common use cases
+:::tip[Common use cases]
 - **Backups**: Create regular snapshots of your data
 - **Migrations**: Move data between environments or databases
 - **Reporting**: Feed data into spreadsheets or BI tools
@@ -4887,6 +4960,742 @@ type `ExtraData`.
 **setRoles**: A method to set roles for the logged-in user. Takes an array of `Role` objects as a parameter.
 
 
+## Security Best Practices for Self-Hosted FireCMS
+
+FireCMS is a **frontend-only React application**. It has no built-in server component that enforces security. This means that **all security must be implemented and enforced on your backend**. FireCMS client-side permissions (the `permissions` callback on collections) control the UI/UX — they hide buttons and disable forms — but they can be bypassed by any user with access to browser developer tools.
+
+This guide covers everything you need to know to secure your self-hosted FireCMS deployment when using **MongoDB**, **custom authentication**, and **custom file storage** — without Firebase.
+
+:::caution[Golden Rule]
+**Never trust the client.** Every operation that reads, writes, or deletes data must be validated and authorized on your server. Client-side checks are for user experience only.
+:::
+
+---
+
+### Architecture Overview
+
+A secure self-hosted FireCMS deployment has the following architecture:
+
+```
+┌─────────────────┐       HTTPS        ┌──────────────────┐
+│  FireCMS React  │ ──────────────────▶ │  Your API Server │
+│   (Browser)     │ ◀────────────────── │  (Express/Nest)  │
+└─────────────────┘                     └──────┬───────────┘
+                                               │
+                        ┌──────────────────────┤
+                        │                      │
+                 ┌──────▼──────┐       ┌───────▼──────┐
+                 │   MongoDB   │       │ File Storage │
+                 │  (Database) │       │  (S3/Minio)  │
+                 └─────────────┘       └──────────────┘
+```
+
+Key points:
+- The browser **never** talks directly to MongoDB or your storage backend.
+- Your API server is the single entry point that authenticates every request, authorizes the action, validates inputs, and then interacts with the database and storage.
+
+---
+
+### 1. Implementing a Secure AuthController
+
+The `AuthController` interface manages the user's authentication state in the browser. When using a custom backend, your implementation should be a React hook that communicates with your own API.
+
+#### Interface Recap
+
+```typescript
+type AuthController<USER extends User = any> = {
+  user: USER | null;
+  initialLoading?: boolean;
+  authLoading: boolean;
+  signOut: () => Promise<void>;
+  authError?: any;
+  getAuthToken: () => Promise<string>;
+  loginSkipped: boolean;
+  extra: any;
+  setExtra: (extra: any) => void;
+};
+```
+
+#### Best Practices
+
+##### Token Management (`getAuthToken`)
+
+Your `getAuthToken` implementation is the cornerstone of the entire security model — every request your `DataSourceDelegate` and `StorageSource` make will call it to attach credentials.
+
+```typescript
+
+interface CustomUser extends User {
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
+  providerId: string;
+  isAnonymous: boolean;
+}
+
+export function useCustomAuthController(): AuthController<CustomUser> {
+  const [user, setUser] = useState<CustomUser | null>(null);
+  const [authLoading, setAuthLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [extra, setExtra] = useState<any>(null);
+
+  // On mount, check for an existing session
+  useEffect(() => {
+    checkSession().finally(() => setInitialLoading(false));
+  }, []);
+
+  const checkSession = useCallback(async () => {
+    try {
+      const res = await fetch("/api/auth/me", { credentials: "include" });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+        setAccessToken(data.accessToken);
+      }
+    } catch {
+      // No valid session
+    }
+  }, []);
+
+  const getAuthToken = useCallback(async (): Promise<string> => {
+    if (!accessToken) throw new Error("Not authenticated");
+
+    // Optional: check expiry and refresh
+    // const decoded = decodeJwt(accessToken);
+    // if (decoded.exp * 1000 < Date.now()) { ... refresh ... }
+
+    return accessToken;
+  }, [accessToken]);
+
+  const signOut = useCallback(async () => {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include"
+    });
+    setUser(null);
+    setAccessToken(null);
+  }, []);
+
+  return {
+    user,
+    authLoading,
+    initialLoading,
+    signOut,
+    getAuthToken,
+    loginSkipped: false,
+    extra,
+    setExtra,
+  };
+}
+```
+
+**Key Security Points:**
+
+| Concern | Recommendation |
+|---|---|
+| **Token storage** | Store JWTs in `httpOnly`, `Secure`, `SameSite=Strict` cookies when possible. If you must use in-memory tokens, never store them in `localStorage` or `sessionStorage`. |
+| **Token expiry** | Use short-lived access tokens (5–15 minutes) with a refresh token flow. |
+| **Token refresh** | Implement transparent token refresh in `getAuthToken` before expiry. |
+| **Session invalidation** | `signOut` must call your server to invalidate the refresh token / session. A client-side-only logout is not secure. |
+| **Initial loading** | Use `initialLoading` to silently check for an existing session on app mount. |
+
+##### Authenticator Function
+
+The `Authenticator` callback allows you to control **which authenticated users can access FireCMS**. Use it to load the user's role from your database and attach it to the auth controller.
+
+```typescript
+
+const myAuthenticator: Authenticator<CustomUser> = async ({
+  user,
+  authController,
+  dataSourceDelegate
+}) => {
+  if (!user?.email) return false;
+
+  try {
+    // Fetch the user profile from your backend (not MongoDB directly!)
+    const users = await dataSourceDelegate.fetchCollection({
+      path: "cms_users",
+      filter: { email: ["==", user.email] }
+    });
+
+    if (users.length === 0) return false;
+
+    const profile = users[0].values;
+    authController.setExtra({ role: profile.role });
+    return true;
+  } catch (error) {
+    console.error("Authentication error:", error);
+    return false;
+  }
+};
+```
+
+:::tip
+This callback runs on the client. **Your API server must still independently verify that the requesting user has the claimed role** on every request. The `Authenticator` is for UI gating only.
+:::
+
+---
+
+### 2. Securing Your DataSourceDelegate (MongoDB)
+
+The `DataSourceDelegate` is the interface FireCMS uses to read and write data. When backed by MongoDB, your implementation should **proxy every call through your authenticated API server**.
+
+#### Never Expose MongoDB to the Browser
+
+This is the most critical rule. Do not use the MongoDB driver, Realm SDK, or any direct database connection in the browser.
+
+```typescript
+// ❌ DANGEROUS — direct MongoDB access from the browser
+
+const client = new MongoClient("mongodb+srv://user:password@cluster...");
+
+// ✅ CORRECT — proxy through your authenticated API
+const response = await fetch("/api/data/products", {
+  headers: { Authorization: `Bearer ${await authController.getAuthToken()}` }
+});
+```
+
+#### Example: Secure DataSourceDelegate
+
+```typescript
+
+export function useSecureMongoDelegate(
+  getAuthToken: () => Promise<string>
+): DataSourceDelegate {
+
+  async function authenticatedFetch(url: string, options: RequestInit = {}) {
+    const token = await getAuthToken();
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    if (res.status === 401 || res.status === 403) {
+      throw new Error("Unauthorized");
+    }
+    if (!res.ok) {
+      throw new Error(`API error: ${res.status}`);
+    }
+    return res.json();
+  }
+
+  return {
+    key: "secure-mongo",
+    initialised: true,
+
+    async fetchCollection<M extends Record<string, any>>({
+      path, filter, limit, startAfter, orderBy, order, searchString
+    }: FetchCollectionDelegateProps<M>): Promise<Entity<M>[]> {
+      const params = new URLSearchParams();
+      if (limit) params.set("limit", String(limit));
+      if (orderBy) params.set("orderBy", orderBy);
+      if (order) params.set("order", order);
+      if (searchString) params.set("q", searchString);
+      if (filter) params.set("filter", JSON.stringify(filter));
+      if (startAfter) params.set("startAfter", JSON.stringify(startAfter));
+
+      return authenticatedFetch(`/api/data/${path}?${params}`);
+    },
+
+    async fetchEntity<M extends Record<string, any>>({
+      path, entityId
+    }: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
+      return authenticatedFetch(`/api/data/${path}/${entityId}`);
+    },
+
+    async saveEntity<M extends Record<string, any>>({
+      path, entityId, values, status
+    }: SaveEntityDelegateProps<M>): Promise<Entity<M>> {
+      const method = status === "new" ? "POST" : "PUT";
+      const url = entityId
+        ? `/api/data/${path}/${entityId}`
+        : `/api/data/${path}`;
+      return authenticatedFetch(url, {
+        method,
+        body: JSON.stringify({ values })
+      });
+    },
+
+    async deleteEntity<M extends Record<string, any>>({
+      entity
+    }: DeleteEntityProps<M>): Promise<void> {
+      await authenticatedFetch(`/api/data/${entity.path}/${entity.id}`, {
+        method: "DELETE"
+      });
+    },
+
+    async checkUniqueField(
+      path: string, name: string, value: any, entityId?: string
+    ): Promise<boolean> {
+      const result = await authenticatedFetch(
+        `/api/data/${path}/check-unique`,
+        {
+          method: "POST",
+          body: JSON.stringify({ field: name, value, entityId })
+        }
+      );
+      return result.unique;
+    },
+
+    generateEntityId(): string {
+      // Generate a client-side ID; the server should validate / regenerate
+      return crypto.randomUUID();
+    },
+
+    delegateToCMSModel: (data: any) => data,
+    cmsToDelegateModel: (data: any) => data,
+  };
+}
+```
+
+#### Server-Side Security Checklist
+
+Your API server (e.g. Express, Fastify, NestJS) must enforce the following on **every** request:
+
+##### Authentication
+
+```typescript
+// Express middleware example
+
+function authenticate(req, res, next) {
+  const token = req.headers.authorization?.replace("Bearer ", "");
+  if (!token) return res.status(401).json({ error: "Missing token" });
+
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch {
+    return res.status(401).json({ error: "Invalid token" });
+  }
+}
+```
+
+##### Authorization
+
+```typescript
+// Check the user's role before executing any CRUD operation
+function authorize(requiredRole: string) {
+  return (req, res, next) => {
+    const user = req.user;
+    if (!user) return res.status(401).json({ error: "Not authenticated" });
+
+    // Look up the user's role in your database — don't trust the token's role claim alone
+    // unless the token is server-signed and verified above
+    if (user.role !== "admin" && user.role !== requiredRole) {
+      return res.status(403).json({ error: "Insufficient permissions" });
+    }
+    next();
+  };
+}
+
+app.delete("/api/data/:path/:id", authenticate, authorize("admin"), async (req, res) => {
+  // Only admins can delete
+});
+```
+
+##### Input Validation & NoSQL Injection Prevention
+
+MongoDB is vulnerable to NoSQL injection when user input is passed directly to query operators.
+
+```typescript
+// ❌ VULNERABLE — user input goes directly into the query
+app.get("/api/data/:collection", async (req, res) => {
+  const filter = JSON.parse(req.query.filter); // attacker can inject {$gt: ""}
+  const docs = await db.collection(req.params.collection).find(filter).toArray();
+  res.json(docs);
+});
+
+// ✅ SECURE — sanitize and whitelist
+
+app.get("/api/data/:collection", authenticate, async (req, res) => {
+  // 1. Whitelist allowed collections
+  const allowedCollections = ["products", "orders", "categories"];
+  if (!allowedCollections.includes(req.params.collection)) {
+    return res.status(400).json({ error: "Invalid collection" });
+  }
+
+  // 2. Sanitize the filter to remove any MongoDB operators
+  let filter = {};
+  if (req.query.filter) {
+    filter = mongo.sanitize(JSON.parse(req.query.filter));
+  }
+
+  // 3. Enforce limits
+  const limit = Math.min(parseInt(req.query.limit) || 25, 100);
+
+  const docs = await db
+    .collection(req.params.collection)
+    .find(filter)
+    .limit(limit)
+    .toArray();
+
+  res.json(docs);
+});
+```
+
+**Key Validations:**
+
+| Check | Why |
+|---|---|
+| **Whitelist collections** | Prevent access to system collections (`admin`, `local`) or internal collections |
+| **Sanitize filter operators** | Block `$where`, `$gt`, `$regex`, and other operators that can be injected |
+| **Limit result size** | Prevent denial-of-service via unbounded queries |
+| **Validate `orderBy` fields** | Only allow sorting on indexed/known fields |
+| **Validate `entityId` format** | Ensure IDs match expected format (e.g. UUID or ObjectId pattern) |
+| **Validate `values` on save** | Run schema validation (e.g. Zod, Joi) on the server before writing |
+
+---
+
+### 3. Securing Your StorageSource
+
+The `StorageSource` interface handles file uploads and downloads. When using custom storage (S3, MinIO, GCS, or a local filesystem), the key principle is: **never expose storage credentials to the browser**.
+
+#### Interface Recap
+
+```typescript
+interface StorageSource {
+  uploadFile: (props: UploadFileProps) => Promise<UploadFileResult>;
+  getDownloadURL: (pathOrUrl: string, bucket?: string) => Promise<DownloadConfig>;
+  getFile: (path: string, bucket?: string) => Promise<File | null>;
+  deleteFile: (path: string, bucket?: string) => Promise<void>;
+  list: (path: string, options?: { ... }) => Promise<StorageListResult>;
+}
+```
+
+#### Use Pre-Signed URLs for Uploads
+
+Instead of passing S3/GCS credentials to the browser, have your server generate short-lived pre-signed URLs:
+
+```typescript
+
+export function useSecureStorageSource(
+  getAuthToken: () => Promise<string>
+): StorageSource {
+
+  async function authenticatedFetch(url: string, options: RequestInit = {}) {
+    const token = await getAuthToken();
+    return fetch(url, {
+      ...options,
+      headers: { ...options.headers, Authorization: `Bearer ${token}` }
+    });
+  }
+
+  return {
+    async uploadFile({ file, fileName, path }: UploadFileProps): Promise<UploadFileResult> {
+      const usedFileName = fileName ?? file.name;
+      const destinationPath = `${path}/${usedFileName}`;
+
+      // 1. Get a pre-signed upload URL from your server
+      const res = await authenticatedFetch("/api/storage/upload-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          path: destinationPath,
+          contentType: file.type,
+          size: file.size
+        })
+      });
+      const { uploadUrl, storageUrl } = await res.json();
+
+      // 2. Upload directly to storage using the pre-signed URL
+      await fetch(uploadUrl, {
+        method: "PUT",
+        body: file,
+        headers: { "Content-Type": file.type }
+      });
+
+      return {
+        path: destinationPath,
+        bucket: "your-bucket",
+        storageUrl
+      };
+    },
+
+    async getDownloadURL(pathOrUrl: string): Promise<DownloadConfig> {
+      const res = await authenticatedFetch(
+        `/api/storage/download-url?path=${encodeURIComponent(pathOrUrl)}`
+      );
+      if (!res.ok) return { url: null, fileNotFound: true };
+      const data = await res.json();
+      return { url: data.url, metadata: data.metadata };
+    },
+
+    async getFile(path: string): Promise<File | null> {
+      const { url } = await this.getDownloadURL(path);
+      if (!url) return null;
+      const res = await fetch(url);
+      const blob = await res.blob();
+      return new File([blob], path.split("/").pop() || "file");
+    },
+
+    async deleteFile(path: string): Promise<void> {
+      await authenticatedFetch(`/api/storage/files?path=${encodeURIComponent(path)}`, {
+        method: "DELETE"
+      });
+    },
+
+    async list(path: string, options?: { maxResults?: number; pageToken?: string }) {
+      const params = new URLSearchParams({ path });
+      if (options?.maxResults) params.set("maxResults", String(options.maxResults));
+      if (options?.pageToken) params.set("pageToken", options.pageToken);
+      const res = await authenticatedFetch(`/api/storage/list?${params}`);
+      return res.json();
+    }
+  };
+}
+```
+
+#### Server-Side Storage Security
+
+Your storage API endpoint must enforce:
+
+| Concern | Recommendation |
+|---|---|
+| **File type validation** | Whitelist allowed MIME types (e.g. `image/jpeg`, `application/pdf`). Reject executables. |
+| **File size limits** | Enforce maximum file sizes (e.g. 10 MB for images, 50 MB for documents). |
+| **Path traversal prevention** | Sanitize the `path` parameter. Reject `..`, absolute paths, or null bytes. Never let clients dictate where files are stored without validation. |
+| **Pre-signed URL expiry** | Keep upload/download URLs short-lived (5–15 minutes). |
+| **Virus scanning** | For user-uploaded content, consider integrating ClamAV or a cloud-based scanning service. |
+| **Access scoping** | Each pre-signed URL should grant access to exactly one file. Use the user's identity to scope which paths they can access. |
+
+##### Server-Side Path Validation Example
+
+```typescript
+function validateStoragePath(path: string): boolean {
+  // Block path traversal
+  if (path.includes("..") || path.startsWith("/")) return false;
+
+  // Block null bytes
+  if (path.includes("\0")) return false;
+
+  // Whitelist allowed path prefixes
+  const allowedPrefixes = ["uploads/", "images/", "documents/"];
+  return allowedPrefixes.some(prefix => path.startsWith(prefix));
+}
+
+function validateFileType(contentType: string): boolean {
+  const allowedTypes = [
+    "image/jpeg", "image/png", "image/gif", "image/webp",
+    "application/pdf",
+    "video/mp4"
+  ];
+  return allowedTypes.includes(contentType);
+}
+
+app.post("/api/storage/upload-url", authenticate, (req, res) => {
+  const { path, contentType, size } = req.body;
+
+  if (!validateStoragePath(path)) {
+    return res.status(400).json({ error: "Invalid path" });
+  }
+  if (!validateFileType(contentType)) {
+    return res.status(400).json({ error: "File type not allowed" });
+  }
+  if (size > 10 * 1024 * 1024) { // 10 MB
+    return res.status(400).json({ error: "File too large" });
+  }
+
+  // Generate and return pre-signed URL...
+});
+```
+
+---
+
+### 4. Permissions and Role-Based Access Control
+
+FireCMS has a built-in `Permissions` system and a `PermissionsBuilder` callback that you can use on each collection. **These are UI-level controls** — they determine which buttons are shown and which forms are editable.
+
+#### Client-Side Permissions (UI Only)
+
+```typescript
+
+export const productsCollection = buildCollection({
+  name: "Products",
+  path: "products",
+  permissions: ({ authController }) => {
+    const role = authController.extra?.role;
+    return {
+      read:   true,
+      create: role === "admin" || role === "editor",
+      edit:   role === "admin" || role === "editor",
+      delete: role === "admin"
+    };
+  },
+  properties: {
+    // ...
+  }
+});
+```
+
+#### Mirror Permissions on the Server
+
+Your API must enforce the **exact same rules**:
+
+```typescript
+// permissions.ts — shared logic (or replicated server-side)
+type Role = "admin" | "editor" | "viewer";
+
+const collectionPermissions: Record<string, Record<Role, {
+  read: boolean;
+  create: boolean;
+  edit: boolean;
+  delete: boolean;
+}>> = {
+  products: {
+    admin:  { read: true, create: true, edit: true, delete: true },
+    editor: { read: true, create: true, edit: true, delete: false },
+    viewer: { read: true, create: false, edit: false, delete: false },
+  },
+  // ... other collections
+};
+
+function checkPermission(
+  collection: string,
+  action: "read" | "create" | "edit" | "delete",
+  role: Role
+): boolean {
+  return collectionPermissions[collection]?.[role]?.[action] ?? false;
+}
+
+// Express middleware
+function requirePermission(action: "read" | "create" | "edit" | "delete") {
+  return (req, res, next) => {
+    const collection = req.params.path;
+    const role = req.user.role;
+    if (!checkPermission(collection, action, role)) {
+      return res.status(403).json({ error: "Insufficient permissions" });
+    }
+    next();
+  };
+}
+
+app.get("/api/data/:path", authenticate, requirePermission("read"), handler);
+app.post("/api/data/:path", authenticate, requirePermission("create"), handler);
+app.put("/api/data/:path/:id", authenticate, requirePermission("edit"), handler);
+app.delete("/api/data/:path/:id", authenticate, requirePermission("delete"), handler);
+```
+
+:::important
+If a user can modify their own role in the database (e.g. setting `role: "admin"` on their own user document), your permission system is broken. **Always restrict writes to user/role collections to admin-only operations.**
+:::
+
+---
+
+### 5. General Security Best Practices
+
+#### Transport Security
+
+- **Always use HTTPS** in production. Use TLS 1.2+ with strong cipher suites.
+- Set `Strict-Transport-Security` (HSTS) headers.
+- Redirect all HTTP traffic to HTTPS.
+
+#### CORS Configuration
+
+Configure CORS on your API server to allow only your FireCMS domain:
+
+```typescript
+
+app.use(cors({
+  origin: "https://your-admin-panel.example.com",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+```
+
+:::caution
+**Never use `origin: "*"`** in production, especially when `credentials: true` is set. This allows any website to make authenticated requests to your API.
+:::
+
+#### Rate Limiting
+
+Protect your API from brute-force attacks and abuse:
+
+```typescript
+
+// General API rate limit
+app.use("/api/", rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 500
+}));
+
+// Stricter limit for auth endpoints
+app.use("/api/auth/", rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20
+}));
+```
+
+#### Content Security Policy
+
+Set CSP headers to prevent XSS attacks:
+
+```
+Content-Security-Policy:
+  default-src 'self';
+  script-src 'self';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' https://your-storage.example.com;
+  connect-src 'self' https://your-api.example.com;
+```
+
+#### Secrets Management
+
+| ❌ Don't | ✅ Do |
+|---|---|
+| Hardcode API keys in frontend code | Use environment variables on the server |
+| Commit `.env` files to Git | Use a secrets manager (Vault, AWS Secrets Manager, Doppler) |
+| Share MongoDB connection strings with the client | Keep all database connections server-side only |
+| Use the same JWT secret across environments | Use unique secrets per environment |
+
+#### MongoDB-Specific Security
+
+- **Enable authentication** on your MongoDB cluster. Never run without auth.
+- **Use a dedicated database user** for your API with the minimum required permissions.
+- **Enable TLS** for connections between your API and MongoDB.
+- **Network access control**: restrict which IPs can connect to your MongoDB cluster.
+- **Enable audit logging** if your MongoDB plan supports it.
+
+#### Dependency Security
+
+- Run `npm audit` regularly and address vulnerabilities.
+- Pin major dependency versions in `package.json`.
+- Use `npm audit fix` or tools like [Snyk](https://snyk.io) or [Socket](https://socket.dev) for continuous monitoring.
+
+---
+
+### Summary Checklist
+
+| Area | Requirement | Status |
+|---|---|---|
+| **Auth** | JWT/session tokens are server-signed and validated | ☐ |
+| **Auth** | Tokens are short-lived with refresh flow | ☐ |
+| **Auth** | `signOut` invalidates server-side session | ☐ |
+| **Auth** | Tokens stored in httpOnly cookies (preferred) | ☐ |
+| **Data** | All CRUD goes through authenticated API | ☐ |
+| **Data** | MongoDB never exposed to browser | ☐ |
+| **Data** | Server validates and sanitizes all inputs | ☐ |
+| **Data** | NoSQL injection prevention in place | ☐ |
+| **Data** | Collection access is whitelisted | ☐ |
+| **Data** | Result size limits enforced | ☐ |
+| **Storage** | Pre-signed URLs used for uploads/downloads | ☐ |
+| **Storage** | File type and size validated server-side | ☐ |
+| **Storage** | Path traversal prevented | ☐ |
+| **Permissions** | Client-side permissions mirror server-side rules | ☐ |
+| **Permissions** | Role assignment restricted to admins | ☐ |
+| **General** | HTTPS enforced | ☐ |
+| **General** | CORS restricted to CMS domain | ☐ |
+| **General** | Rate limiting on all API endpoints | ☐ |
+| **General** | CSP headers configured | ☐ |
+| **General** | No secrets in frontend code | ☐ |
+| **General** | MongoDB auth and TLS enabled | ☐ |
+| **General** | Dependencies audited regularly | ☐ |
+
 ## Migrating from v3.0 to v3.1
 
 This migration guide applies to **self-hosted versions** of FireCMS, including both **Community** and **PRO** editions.
@@ -5055,7 +5864,7 @@ FireCMS v3.1 includes numerous bug fixes and improvements:
 - Enhanced suggestion menu behavior
 - Small UI adjustments and visual update to dialogs
 - Removed font-mono from map preview
-- TipTap V3 migration for improved markdown editor performance
+- Editor migration for improved markdown editor performance
 
 #### Collection Editor
 - Added inline editing for property editing
@@ -5542,7 +6351,7 @@ If you're building a **headless CMS** or **back-office** for your **Firebase** p
 - **Who can do what** (create, read, update, delete permissions)
 - **Custom logic** (callbacks on save, computed fields, side effects)
 
-:::tip Why use FireCMS collections?
+:::tip[Why use FireCMS collections?]
 Unlike traditional CMSs that impose a rigid data model, FireCMS collections map directly to your existing **Firestore** structure. This means you can add a powerful **React-based admin UI** to any Firebase project without migrating your data or changing your schema.
 :::
 
@@ -6093,7 +6902,7 @@ const tasksCollection = buildCollection({
 
 The `orderProperty` uses fractional indexing to maintain order without rewriting every document on each reorder.
 
-:::caution Firestore Index Required
+:::caution[Firestore Index Required]
 When using Kanban view with Firestore, you'll need a composite index on your column property. Firestore will prompt you with the exact index link when you first load the view.
 :::
 
@@ -15480,803 +16289,4 @@ Use the CLI to deploy your custom code with a single command:
 firecms deploy
 ```
 
-
-## Changelog
-### [3.1.0] - 2026-02-20
-
-- **AI Integration**:
-  - Introduced AI-driven collection generation and data enhancement features.
-  - Added new AI icon and integrated AI capabilities into the collection editor.
-- **Kanban View**:
-  - Added full support for Kanban boards with customizable columns.
-  - Implemented drag-and-drop column reordering and optimistic updates.
-  - Added Kanban configuration options including column colors.
-
-- **Collection Features**:
-  - Added `display` view to collection editor.
-  - Implemented drag-and-drop column reordering in data tables with persistence.
-  - Enhanced collection inference with optional filter and sort parameters.
-- **UI/UX Improvements**:
-  - Added View Mode Toggle (List, Grid, Table) for better data visualization control.
-  - Implemented collapsible drawer navigation groups.
-  - Added full-screen blocking modal support for Cookie Banner.
-  - Harmonized button colors and restyled Tab components.
-  - Replaced `AutorenewIcon` with `FindInPageIcon` for better clarity.
-  - Enabled smooth scrolling behavior.
-- **Storage**:
-  - Added support for fully-qualified storage URLs.
-  - Added `includeBucketUrl` and `imageResize` options for file uploads.
-- **User Management**:
-  - Added `updateUserFields` method for direct Firestore updates.
-- **Fixes**:
-  - Updated Firebase dependency to v12.7.0.
-  - Security updates for Next.js (CVE-2025-66478).
-  - Fixed date autovalues validation bugs.
-  - Fixed issues with object merging and local changes.
-  - Improved Text Search integration with Typesense.
-  - Fixed layout and styling in FormEnhanceAction.
-
-### [3.0.0] - 2025-12-01
-
-- **Editor Enhancements**:
-  - Improved escape key behavior in editor slash command
-  - Enhanced suggestion menu behavior
-  - Improved path suggestions handling in collection editor components
-  - Refactored root collection suggestions
-- **UI/UX Improvements**:
-  - Added `prettifyIdentifier` function to format identifiers and improve readability
-  - Refactored key formatting to use prettifyIdentifier
-  - Small UI adjustments across the application
-  - Small visual update to dialogs
-  - Removed font-mono from map preview
-- **Collection Editor**:
-  - Added inline editing prop editing to collection editor
-  - Fixes for collection editor property saving
-  - Applied consistent behavior to `editable` props in collections and properties
-- **API Updates**:
-  - Updated API server URLs to use new endpoints
-- **Dependencies**:
-  - Many dependency updates
-  - Added PostCSS configuration with Tailwind CSS and Autoprefixer
-- **User Management**:
-  - Refactored user management to consistently use `saas_uid` and `firebase_uid`
-  - Updated button styles in EnableAuthView for consistency
-  - Refactored user forms to improve layout and state management
-- **Project Configuration**:
-  - Updated project configuration handling to account for trial status
-  - Added initial loading screen
-- **Fixes**:
-  - Fixed home DND issues
-  - Fixed local changes preview in row actions
-  - Fixed local changes diff
-  - Fixed dates losing focus while typing and when selecting null values in date filters
-  - Fixed select enum filters UI glitch
-  - Fixed full screen entity views with encoded characters in their ID
-- **Storage & Images**:
-  - Added new image resizing capabilities
-  - Replaced internal compressing library with compressor.js
-  - Improved error message when Firebase Storage is likely not enabled
-- **Data Enhancement**:
-  - Adjusted data enhancement cosmetics
-- **Form Handling**:
-  - Displaying pre-save errors in table view
-  - Improved error focus when saving form with errors and feedback
-  - Debouncing on values change in Formex
-  - Added `initialTouched` to Formex controller
-  - Changed how dirty values are persisted in local storage
-- **Local Changes**:
-  - Added `enableLocalChangesBackup` to collections, allowing users to disable the local copy of unsaved entities in the browser
-  - Changed local changes to be able to be applied manually
-  - Clearing unsaved changes indicator if the feature is not enabled in collections
-- **Entity History**:
-  - Added a cleaner type to the entity history plugin
-
-### [3.0.0-rc.4] - 2025-11-25
-
-- Refactored user forms to improve layout and state management
-- Updated project configuration handling to account for trial status
-- Many dependency updates
-
-### [3.0.0-rc.3] - 2025-11-07
-
-- Displaying pre-save errors in table view
-- Fixed home DND issues
-- Added new image resizing capabilities and replaced internal compressing library with compressor.js
-- Improved error message when Firebase Storage is likely not enabled
-- Small visual update to dialogs
-- Added inline editing prop editing to collection editor
-- Fixes for collection editor property saving and applying consistent behavior to `editable` props in collections and properties
-- Fixed select enum filters UI glitch
-- Fixed dates losing focus while typing and when selecting null values in date filters
-- Fixed local changes preview in row actions
-- Removed font-mono from map preview
-- Fixed local changes diff
-- Added a cleaner type to the entity history plugin
-- Changed local changes to be able to be applied manually
-- Added `enableLocalChangesBackup` to collections, allowing users to disable the local copy of unsaved entities in the browser
-- Debouncing on values change in Formex and added `initialTouched` to Formex controller
-- Changed how dirty values are persisted in local storage
-- Improved error focus when saving form with errors and feedback
-
-### [3.0.0-rc.2] - 2025-10-16
-
-- **User Management in FireCMS Core**: Added user management capabilities directly to FireCMS Core, expanding self-hosted options.
-- **User Fields as String Values**: Fully implemented support for user fields as string values, improving flexibility in user data handling.
-- **TipTap V3 Migration**: Migrated markdown editor to TipTap V3 for improved performance and features.
-- **Tailwind 4 Retrofit**: Multiple adaptations to support Tailwind 4 retrofit, modernizing the styling infrastructure.
-- **Login Enhancements**:
-  - Implemented Cloud email login
-  - Added email and password authentication to Cloud SaaS
-  - Added login analytic events
-  - Fixed demo login layout
-- **Website Updates**:
-  - Added Astro landing site (WIP)
-  - Website migration updates
-  - Migrated images
-  - Inline website CSS
-  - Web design updates
-  - Security page tweaks
-- **Home Page Improvements**:
-  - Storing home page collapsed state in local storage
-  - Attempted fix for group renaming on home page
-  - Reverted some drag-and-drop changes
-- **Fixes**:
-  - Fixed editor SSR (Server-Side Rendering) support
-  - Fixed importing references with secondary databases
-  - Fixed support for secondary database references
-  - Fixed SaaS permission view
-  - Fixed filter input for numbers when value is 0
-  - Better error management for doctor (diagnostic tool)
-- **UI/UX**:
-  - Removed forced parent collection button
-- **Dependencies**: Updated template dependencies
-- **Documentation**: 
-  - Improved documentation for custom icons in collections
-  - Added authentication documentation
-  - Added security information section
-
-### [3.0.0-rc.1] - 2025-09-25
-
-- **Firebase 12 Upgrade**: Updated to Firebase 12 for improved performance and features.
-- **History Plugin Enhancements**: 
-  - Added previous values tracking to history plugin
-  - Added programmatic creation of history entries
-- **Reference Properties Improvements**:
-  - Added reference as string field configuration
-  - Fixed additional columns not showing in reference selection
-  - Fixed reference properties not rendering correctly with no path but with a custom Field
-- **UI Updates**:
-  - Updated default SaaS icon
-  - Button color updates
-  - Collapsing home sections
-  - Small web updates and removed Algolia DocSearch
-- **Fixes**:
-  - Fixed Google Cloud login issue
-  - Fixed error returning from subscription view
-  - Fixed storing recent project
-  - Fixed TipTap imports
-  - Fixed passing gclid correctly to app
-  - Website CLS (Cumulative Layout Shift) fix
-- **CLI**: Added npm instructions to CLI
-- **Dependencies**: Various dependency updates and cleanup
-- **Documentation**: Corrected typo in custom_previews.md
-- **Import/Export**: Cleaned up imports
-- **Roles Management**: Added ability to set roles programmatically in code
-
-### [3.0.0-beta.15] - 2025-08-18
-
-- **Survey Feature**: Added initial user survey with analytics tracking to improve user experience and gather feedback.
-- **Entity Actions Improvements**:
-  - Added entity actions registry for better organization
-  - Added form context to entity actions
-  - Entity actions now available in full screen mode
-  - Improved entity actions page
-- **Subscription Management**:
-  - Added Stripe portal link for easy subscription management
-  - Improved subscription view in project settings
-  - Added ability to change payment method
-  - Added analytics events for subscription success or failure
-  - Price updates
-- **Home Page Enhancements**:
-  - Added drag and drop functionality to home page sections
-  - Added back default empty view in home page
-  - Implemented group drop behavior
-  - Added ability to rename groups
-  - Collections can now be edited within the entity edit view
-  - Fixed home page search re-rendering issue
-- **UI/UX Improvements**:
-  - Changed default buttons from primary to neutral color
-  - Added smallest switch size
-  - Updated hero background gradient
-  - Minor styling updates
-  - Added currency toggle in pricing page
-  - Made collection icons smaller
-  - Landing page mobile optimizations
-  - Added small animation to login views
-  - Updated logo
-  - Small drawer visual updates
-- **Analytics**:
-  - Added campaign tracking to analytics
-  - Added landing analytics events
-  - Added analytics events for surveys
-- **Component Updates**:
-  - Changed Alert class props
-  - Added `viewportClassName` to Select component
-  - File upload visual update
-  - Allow use of React components as icons
-  - Added `previous values` to history plugin
-  - Allow disabling focus in dialog
-- **Performance & Bug Fixes**:
-  - Fixed loading button size
-  - Fixed entities getting dirty on creation due to markdown field
-  - Fixed filtering for null values bug
-  - Fixed useMemo with changing arguments error
-  - Fixed id paths bug
-  - Fixed merged collections order
-  - DND (drag and drop) performance optimizations and bugfixes
-  - Fixed collection groups path handling
-- **Custom Fields**: Improved custom fields page
-- **Reference Dialog Fix**: Fixed reference dialog sorting issue when filters are applied in main collection
-- **Product Demo**: Improved product sync demo action
-- **Web Updates**: 
-  - Web design updates
-  - Web mobile optimizations
-  - Enhanced getPath function
-  - Added data attributes to Button component
-- **Documentation**: Improved llms.txt generation pipeline
-- **Docusaurus**: Version update
-
-### [3.0.0-beta.14] - 2025-04-17
-
-- **JSON View Toggle**: Added toggle in collections editor view for accessing raw JSON data.
-- **UI Consistency**: Improved UI consistency for select and multiselect components.
-- **Form Improvements**: Enhanced popup form field resizing and boundary handling.
-- **Entity History Plugin**: Added history tracking functionality to FireCMS Cloud and FireCMS PRO.
-- **Fixes**:
-  - Fixed text overflow in entity titles
-  - Fixed errors displayed incorrectly in array of maps
-  - Fixed truncating buttons
-  - Fixed read-only entities getting obscured by bottom bar
-  - Fixed overlay text color in dark mode
-  - Fixed errors not being cleared on collection editor
-  - Fixed mergeDeep to handle null cases correctly
-  - Fixed scroll resetting x-axis on pagination
-  - Added back table cell error indication
-- **Drag and Drop**: Replaced `@hello-pangea/dnd` with `@dnd-kit` for better performance and flexibility.
-
-### [3.0.0-beta.13] - 2025-04-11
-
-- **JSON Preview**: Added JSON preview tab to entities, providing a raw data view. Can be disabled with `disableJsonTab` prop.
-- **TextField Enhancements**: Added `maxRows` and `minRows` props to TextField component for better control of multiline inputs.
-- **AuthController in PropertyBuilder**: Added `authController` to PropertyBuilder callback, allowing access to authentication context.
-- **Storage Improvements**: Added `processFile` to storage properties for pre-processing files before upload.
-- **Secondary Forms**: Secondary forms are now always rendered, even if disabled, for better consistency.
-- **UI Improvements**:
-  - Adjusted small and smallest field sizes for better visual hierarchy
-  - Updated Button neutral color styling
-  - Improved layout for long entity IDs
-  - Various minor layout tweaks
-- **Fixes**:
-  - Fixed array reference field with incorrect add button
-  - Fixed subcollections not resolving path correctly
-  - Fixed complex subcollection with alias navigation bug
-  - Fixed export functionality when flatten arrays is false (double quotes are now escaped correctly)
-  - Fixed CollectionDetailsForm enum select issues
-  - Fixed entity creation bug
-  - Fixed URL update for entities with default selected view
-  - Fixed values not resetting correctly
-  - Fixed read-only entity views missing tabs
-  - Fixed camel case related bug
-- **Demo**: Added MultiSelect component demonstration
-
-### [3.0.0-beta.12] - 2025-03-13
-
-- **Full-screen entity views**: You can now open entities in a full-screen view. This is useful when you want to
-focus on the entity you are editing. You can enable this feature by setting the `openEntityMode` prop to `full_screen`
-in the collection view. The default mode continues to be `side_panel`. There has been a big navigation revamp to
-accommodate all the new use cases.
-- **Scroll preservation**: When you open an entity in a full-screen view, the scroll position of the collection view is preserved.
-- **Drafts saved locally**: Drafts are now saved locally in the browser. This means that if you accidentally close the browser or navigate away, your changes will still be there when you come back.
-- URL state preservation: The state of filters and sorting is now preserved in the URL.
-- **Undo/redo functionality**: Added ability to undo and redo changes when editing entities.
-- Added `alwaysApplyDefaultValues` flag to collections. This flag allows you to enforce the default values when updating
-entities, not just when creating them.
-- Secondary forms now preserve their width when in side panel mode. You can create full secondary forms 
-that live in their own tab. Secondary forms are built as custom components and can include any components, including
-field bindings.
-- Added system color mode besides dark and light modes. The button is now a dropdown instead of a toggle.
-- Form improvements including fixed initial state reset after save and detached entity form actions.
-- Warning when leaving unsaved forms to prevent accidental data loss.
-- You can now override default entity actions by providing an action with one of the keys `edit`, `copy` or `delete`
-  in the `entityActions` prop.
-- Fix: String properties with storage now take preference in previews.
-- Fix for URL encoding for collections.
-- Fixed dialog actions scrolling when they shouldn't.
-- Fix for navigating to new entities from side panel.
-
-### [3.0.0-beta.11] - 2024-12-13
-
-- New Next.js template for FireCMS PRO. You can now create a new project with the PRO template using the CLI.
-- [BREAKING] Removed `userRoles` from AuthController. You can now access the `roles` prop in the user object directly
-- [BREAKING] Many FireCMS UI sizes have been adjusted for better consistency. This will affect you only if you are using
-  custom components.
-    - `smallest` or `tiny` have been renamed to `small`.
-    - `small` has been renamed to `medium`.
-    - `medium` has been renamed to `large`.
-- [BREAKING] For self-hosted versions, there has been a change in the API for the data management controllers. The
-  `authController` is now passed to the User Management controller, instead of the other way around. The
-  `userManagementController` can be used as an auth controller, but with all the added logic for user management.
-
-❌ Code before:
-
-```typescript
-    /**
- * Controller in charge of user management
- */
-const userManagement = useBuildUserManagement({
-        dataSourceDelegate: firestoreDelegate
-    });
-
-/**
- * Controller for managing authentication
- */
-const authController: FirebaseAuthController = useFirebaseAuthController({
-    firebaseApp,
-    signInOptions,
-    loading: userManagement.loading,
-    defineRolesFor: userManagement.defineRolesFor
-});
-```
-
-✅ Code after:
-
-```typescript
-    /**
- * Controller for managing authentication
- */
-const authController: FirebaseAuthController = useFirebaseAuthController({
-        firebaseApp,
-        signInOptions
-    });
-
-/**
- * Controller in charge of user management
- */
-const userManagement = useBuildUserManagement({
-    dataSourceDelegate: firestoreDelegate,
-    authController
-});
-```
-
-- Added many "use client" directives to UI components.
-- Fixed issues in collection editor code dialog.
-- Updated web styles and integrated improvements in Docusaurus.
-- Enhanced styling for empty references and minor design tweaks.
-- Continued work in progress on Editor custom components.
-- Reintroduced dark primary color variant for better theme options.
-- Minor web updates for improved aesthetics and functionality.
-- Fixed a bug where the Editor was not saving false values.
-- Replaced all instances of gray and slate colors with more unified `surface` and `surface-accent` colors for UI
-  consistency.
-- Added Avatar component fallback and integrated ESLint configuration into templates.
-- Enhanced error handling in forms and improved cloud error messages.
-- Refactored user management logic for better code organization.
-- Improved the handling of boolean switch properties in configurations.
-- Introduced state management for children in ArrayContainer.
-- Added a recipe for slug creation, improving URL handling and SEO.
-- Fixed crash issues in repeat fields for subproperties and addressed various minor styling and functionality bugs.
-- Made improvements to heatmap responsiveness (HMR fixes).
-- Refactored text search functionalities for better efficiency and added relevant documentation.
-- Fixed issues with number input fields blocking scroll and replaced date picker with native HTML date input for
-  consistency.
-- If you are using the `Select` component, you don't need to provide a `renderValue` function anymore. The component
-  will handle it automatically.
-- Custom preview properties are now rendered if the value is undefined.
-- Fixed for Cloud version refreshing navigation too often.
-- Fix for local search not working when returning to a collection.
-- Fix for bug when selecting a read only entity.
-- Fixed selection bug in collection groups for entities sharing id.
-- Reference previews now take into account arrays of images for the preview image.
-
-### [3.0.0-beta.10] - 2024-07-10
-
-- Fixed issues with wrong licenses.
-- Resolved TipTap dependencies.
-- Addressed various minor styling updates across the web.
-- Moved body CSS from default imports to individual files for better modularity.
-- Implemented several web updates, including select style fixes and dialog title adjustments for text search.
-- Updated the collection editor property select view and improved widget selection layout.
-- Applied AppBar tweaks to enhance behavior on mobile devices.
-- Improved console outputs and cleaned up miscellaneous code segments.
-- Enhanced UI with the addition of a Slider component and updated related documentation.
-- Replaced entity edit icon with a pencil for clarity.
-- Updated dependencies and refined project management with a license check feature.
-- Improved Formex handling of number inputs and fixed DateTimeField export in Next.js.
-- Added API key generation and project selection capabilities.
-- Introduced a past-due warning message and improvements in collection and subcollection data handling.
-- Provided better error handling and layout consistency in the application.
-
-### [3.0.0-beta.9] - 2024-07-10
-
-- **NEW MARKDOWN EDITOR**: The markdown editor has been completely revamped. It now supports a live preview, and a much
-  improved editing experience. It now includes a slash menu you can access by typing `/` in the editor. Also a new
-  toolbar with buttons for common markdown operations. The new editor also includes an AI auto-complete feature, that
-  suggests markdown elements as you type, and displays the generated markdown in real time, and highlighted.
-- Additional fields are also now displayed in the entity side dialog.
-- Import/export is now broken into 2 separate plugins.
-- Packages now are not minified, leaving that responsibility to the client bundler.
-- Added max size field in the collection editor for files.
-- Improved error handling of wrong file uploads.
-- Improving error when opening a non accessible entity in the side view.
-- Select component tweaks and removed `multiple` prop.
-- New `MultiSelect` component with a much improved UX.
-- Introduced AppCheck directly in FireCMS Cloud.
-- Added MongoDB support for FireCMS PRO.
-- Multiple fixes in the user management plugin for PRO projects.
-- Updated react-router dependencies.
-- Improved customization, you can now define the styles for each typography entry, including font size, typography...
-- Improved home page search, now using fuse.js
-- Fix for missing index and wrong keys in array of maps with property builder.
-- Fix for drag handle position in editor.
-- Renamed `partOfBlock` to `minimalistView` in field props.
-- It is now possible to define preview properties at the collection level.
-- Updated references styling.
-- Tooltips have been revamped to use less divs.
-- Fix for data enhancement plugin position.
-- Fix for how you can override the data source for specific collections.
-- You can now also define a different database other than `(default)` in the data source.
-- User Management plugin now saves users with the email as key, instead of a random value.
-- Fix for side panels adjusting to the right size when window changes size.
-- Some drawer styling updates.
-- `RepeatFieldBinding` can now use unresolved array properties.
-
-### [3.0.0-beta.8] - 2024-07-10
-
-- Fix for excessive re-renders in the form view.
-- You can now use `PropertyFieldBinding` components in your custom entity views, and they will be treated as regular
-  fields.
-- For additional entity views, you can now preserve the bottom actions bar, with the prop `includeActions`.
-- For map properties, if they are not required, the value might me `undefined`, but if a child property has a value,
-  validation will be triggered for all children.
-- Fix for data maps not getting traversed correctly with null value.
-- CLI pro template now supports creating web app config.
-- Fix for collection editor data inference for enums.
-- Small Sheet styling improvement.
-- Fixed local search loading issue with cached data.
-- Small visual fix for IDs.
-- AppCheck updates.
-- Fixed inconsistent opening of reference preview side dialogs.
-- Fixed icons for image previews.
-- Navigating to home URL when logging out.
-- Added `previewUrl` prop in storage options (#639).
-- Fixed XLSX security issue CVE-2024-22363 (#654).
-- Fix for the removal of keys in KeyValue fields.
-- Added large size for boolean switches.
-- Updated eslint to the latest version and config.
-- Types fix for `removePropsIfExisting`.
-- Fix for video drag bug in array fields.
-- Added option to ask for password reset, in PRO login view
-- Allowing null default values for properties.
-- Added count to array field bindings.
-- Fixed default values in nested maps in arrays.
-- Resolving entity collection path with the one coming from the entity, not the view config.
-- Small fix for logo image.
-- Fixed conditional fields not updating correctly.
-- Hide new user button if `disabledSignupScreen`.
-- Improved docs navigation bar styling.
-- Allowing maps to be completely undefined.
-- Disabled add button in collection groups.
-- Big entity refactor, custom views are now under the formex provider.
-- CLI fix for not logged in users.
-- Fix for datamaps not getting traversed correctly with null values.
-- Scaffold prop updates.
-
-### [3.0.0-beta.7] - 2024-06-18
-
-- Renamed the `cn` utility class to `cls`, while keeping `cn` available with a deprecation warning.
-- Added Menubar documentation and missing skeleton docs.
-- Corrected properties order type to allow subcollections.
-- New UI section added to the landing page.
-- Improved saving and closing dialog flow.
-- Allow hiding IDs and entity links in references and previews.
-- Removed some CSS transitions.
-- Allow hiding the color mode toggle.
-- Added JSON view example.
-- Changed virtual table to use size in pixels.
-- Some design updates for better user experience.
-- Added back collection group column with parent IDs.
-- Improved empty results output.
-- Added sample prompts and suggestions for DataTalk.
-- Enhanced side entity view, dynamically calculated based on collection property depth.
-- Fixed mergeDeep types.
-- Fixed issue with exporting non-existing properties defined in `propertiesOrder`.
-- Fixed PRO template issues without Cloud projects.
-- Improved handling for enum values with value 0.
-
-### [3.0.0-beta.6] - 2024-04-23
-
-- Added AppCheck to every FireCMS variant.
-- Various fixes for datasource delegate.
-- Fix in saving cleaned data.
-- Cloud new user roles creation issue fixed.
-- Error message display issue in table cells fixed.
-- Subcollections updating issue fixed.
-- Import/export analytics and related data mapping conversions updated.
-- Updated and improved handling of user roles and permissions.
-- Enhanced the handling of service account files and project creation using SA.
-- Updated the behavior of unindexed queries.
-- User management connection to demo removed.
-- Dependency updates to mitigate security issues.
-- Exposing additional methods from data inference for better customization.
-- Pro template updates for improved UI/UX.
-- Updated documentation for collections and user management.
-
-### [3.0.0-beta.5] - 2024-04-01
-
-- [BREAKING] The main component for FireCMS Cloud has been renamed from `FireCMSApp` to `FireCMSCloudApp`. Please update
-  your imports accordingly.
-- Fixes related to the CLI. You can now install the CLI globally with `npm install -g @firecms/cli`.
-
-### [3.0.0-beta.4] - 2024-03-27
-
-- [BREAKING] The package name for FireCMS Cloud has changed from `firecms` to `@firecms/cloud`. This is done
-  to avoid conflicts with the main FireCMS package. If you are using FireCMS Cloud, you will need to update your
-  imports.
-- [BREAKING] If you are importing the tailwind configuration, you can now find the import at:
-  `import fireCMSConfig from "@firecms/ui/tailwind.config.js";`
-- [BREAKING] In that case, you also need to add `@tailwindcss/typography` to your dev dependencies.
-- [BREAKING] You need to update your `vite.config.js` and replace the package name in the federated configuration:
-    ```javascript
-    import { defineConfig } from "vite"
-    import react from "@vitejs/plugin-react"
-    import federation from "@originjs/vite-plugin-federation"
-    
-    // https://vitejs.dev/config/
-    export default defineConfig({
-        esbuild: {
-            logOverride: { "this-is-undefined-in-esm": "silent" }
-        },
-        plugins: [
-            react(),
-            federation({
-                name: "remote_app",
-                filename: "remoteEntry.js",
-                exposes: {
-                    "./config": "./src/index"
-                },
-                shared: ["react", "react-dom", "@firecms/cloud", "@firecms/core", "@firecms/firebase", "@firecms/ui"]
-            })
-        ],
-        build: {
-            modulePreload: false,
-            target: "ESNEXT",
-            cssCodeSplit: false,
-        }
-    })
-    ```
-- Minor performance improvements and bug fixes.
-- Enhanced filtering and sorting capability for indexed fields.
-- Extended StorageSource to support custom `bucketUrl`.
-- Cleanup for navigation controller generics and Markdown prose classes.
-- Addressed User Management saving issues and renamed Cloud template.
-- Fixed ReferenceWidget.tsx rerenders.
-- Fixed homepage new collection button issue.
-- Fixed CLI templates path.
-- Roles integrated into AuthController.
-- Small change to plugins API.
-- Added user details to navigation bar dropdown.
-- Dependencies updated.
-- Entity view preview and title refactor.
-- Kanban board work in progress.
-- Fix for new radix empty select values.
-- Fixes for undefined properties in arrays and editor.
-- Additional parameters added in auth controllers.
-- Navigation cards refactor and Plugin API cleanup.
-- Fix for importing data with non-string IDs.
-- Documentation: Added recipe for managing entity callbacks.
-- Web updates and CLI fix for yarn.
-
-### [3.0.0-beta.3] - 2024-02-21
-
-- Fix for importing data in subcollections.
-- Code reordering.
-- Removed minification. Changed EntityReference type checks.
-- Editor image upload updates.
-- Cosmetic.
-- Moved tailwind.config.js editor plugin.
-- Removed callbacks in side navigation views, prevents bug.
-- PRO template fix.
-- PRO Login view cleanup.
-
-### [3.0.0-beta.2] - 2024-02-21
-
-- Added Formex package to handle forms across the platform. Formex is an in-house
-  form management library with a similar API to Formik, but with better performance,
-  and much more lightweight.
-- Enhanced onboarding process for new users.
-- Fixed data import issues for new collections.
-- Tweaked SaaS onboarding for better user experience.
-- Implemented regexp validation for input fields.
-- Improved login error feedback.
-- Extracted navigation controller for better manageability.
-- Updated styles for consistency.
-- Updated Vite and dependencies for performance and security.
-- Refactored user and role forms to use Formex.
-- Fixed table header forms and collection editor issues.
-- Addressed incorrect JSON import problems.
-- Removed Formik, enhancing form management with Formex.
-- Made minor HTML nesting and debounce fixes.
-- Fixed array container menu and multiline input bugs.
-- Migrated Tailwind configuration to lib for easier management.
-- Adjusted Sentry configuration for error reporting.
-- Fix for subcollections edit view showing empty.
-- Fixes for block and group properties in editor saving multiple entries when editing an existing sub property.
-
-### [3.0.0-beta.1] - 2024-02-01
-
-The first beta release of FireCMS v3.0.0.
-Check all the new features and improvements in the [documentation](https://firecms.co/docs/what_is_new_v3)
-and the [migration guide](https://firecms.co/docs/cloud/migrating_from_v2).
-
-### [2.2.0] - 2023-11-09
-
-- Fix for missing subcollection links.
-- New email and password login flow
-- Removed add button in collection group
-- Export fixes
-- Fix for collections search
-
-### [2.1.0] - 2023-09-12
-
-- [BREAKING] The logic to verify valid filter combinations has been moved to the `DataSource` interface.
-  This improves the ability to customize the data source and allows for more complex filters.
-  This change will only affect you if you have implemented a custom data source. You will need to
-  add a `isFilterCombinationValid` method to your data source.
-- [BREAKING] The prop `filterCombinations` has been removed from the `EntityCollection` component.
-  This is now handled by the data source. If you need to allow multiple filters, you can use the
-  new `FireStoreIndexesBuilder` callback. Check
-  the [documentation](https://firecms.co/docs/collections/multiple_filters)
-  for more information.
-- You can now use nested `spreadChildren` in map properties, allowing to show arbitrary
-  nested structures as single columns in the collection view.
-- The collection count value is now updated with filters applied.
-- Fix for csv export not working when underlying data is invalid.
-- Fix for bug of collection search returning a single result.
-- Fix for reference fields breaking with incorrect values.
-
-### [2.0.5] - 2023-07-11
-
-- Default value for string properties is now `null` instead of `""`.
-- Fix for changing text search controller not updating as a dependency.
-- Fix for setting a unique field using a reference, which was
-  generating an invalid query in Firestore.
-
-### [2.0.4] - 2023-06-15
-
-- Fix for `forceFilter` not being applied correctly in reference views.
-- Fix for nullable enum validation config.
-
-### [2.0.3] - 2023-06-15
-
-- Fix for form resetting values when saving.
-
-### [2.0.2] - 2023-06-14
-
-- Replaced `flexsearch` with `js-search`. Their imports are too messed up.
-- Fix for form assigning wrong ids
--
-
-### [2.0.1] - 2023-06-12
-
-- Fix for block entries not generating the correct default value when adding a new entry. This was causing
-  a bug when the child property is an array, like in the blog example.
-- Added the `formAutoSave` to collections. This removes the buttons from the form and automatically saves
-  the entity when there are changes or the user leaves the form.
-- You can now access the `formContext` from collection views, allowing you to access the current entity
-  being edited, modify values and `save`.
-
-### [2.0.0] - 2023-06-07
-
-- You can use a callback to define the default view of an entity now.
-- Fix when opening entities from a custom view, that also uses subcollections.
-
-### [2.0.0-rc.2] - 2023-06-05
-
-- `@mui/x-date-pickers` dependency reverted to `^5.0.0`
-- Assigned default values to every property now, based on the property type.
-  e.g. boolean properties will have a default value of `false`, maps to `{}`,
-  and most other properties to `null`.
-- Removed empty space for hidden properties in the entity side dialog.
-
-### [2.0.0-rc.1] - 2023-05-31
-
-- Added arbitrary key-value fields with the prop `keyValue` in map properties
-- `@mui/x-date-pickers` dependency updated (you may need to bump your version
-  to 6.5.0)
-- Some enhancements to the `EntityCollectionTable` component, referring to
-  values being updated in the background. Also correct debouncing for
-  table fields.
-
-### [2.0.0-beta.7] - 2023-05-23
-
-- Added support for collection groups
-- [BREAKING] The `countEntities` function in the data source now takes an
-  object instead of a string as parameter. This will only affect you if you
-  have built a custom component using that function.
-- Added string url previews to fields
-- Fix for geopoints not being serialized correctly when saving.
-
-### [2.0.0-beta.6] - 2023-05-11
-
-- Fix for Typescript types not being exported correctly and giving errors
-  when using the library with the quickstart.
-- Fix for error messages not showing up correctly in new text inputs.
-- Fix for flexsearch import causing crash using webpack
-
-### [2.0.0-beta.5] - 2023-04-28
-
-- Updated fields Look and Feel. Text fields are now custom, not the ones
-  provided by Material UI. This allows for more customization, less code, and
-  better performance.
-- Fixed login view not centered
-- Fixed popup field selection and drag and drop bug
-- Fix for skip login field
-- HTML now rendered correctly in markdown previews
-- Fix for `read` permission not being applied correctly.
-- Fix for not centered empty view state in collections
-
-### [2.0.0-beta.4] - 2023-03-30
-
-- Fixed table header bug
-- Added search bar in home page
-- Added favourites and recent collections view in home page.
-- Fix for some deeply nested property builders in arrays
-- Added `autoOpenDrawer` prop, allowing to open the drawer automatically when
-  hovering the menu.
-- Allow choosing which custom view or subcollection is opened by default,
-  with the `defaultSelectedView` prop. Thanks to @SeeringPhil for the PR!
-- Renamed `builder` to `Builder` in collection custom views for consistency.
-
-### [2.0.0-beta.3] - 2023-03-21
-
-- Fixed bug regarding custom selection controllers.
-- Fix for default value not being set in array properties.
-- Enabled Firebase App Check. Thanks to @sengerts for the PR!
-- Added copy function to array views. Thanks to @guustmc for the PR!
-- The entity side dialog is now wider by default.
-- Small improvements to block properties. Now the first type is selected by
-  default.
-- Fixed additional ordering added when multiple filter applied, which created a
-  bug.
-  Thanks to @juanleondev for the PR!
-- Renamed `ReferenceSelectionView` to `ReferenceSelectionInner`
-- Added reference filters
-- Fixed delay of table update when deleting an entity
-- You can now change the value of any property within a custom field.
-
-### [2.0.0-beta.2] - 2023-01-30
-
-- Fixed bug where collection actions were getting their internal state reset.
-- Improved preview of files that are not images, videos, or audio files.
-- Form optimizations
-- Fix for reference dialog not clearing selection
-- Fix for multiple error snackbar, when there is an error uploading a file.
-- Fix for missing highlight when closing side dialog.
-- Fix for delayed data update when changing filters.
-- Internal refactoring of the `EntityCollectionTable` component.
-- [BREAKING] In the component `EntityCollectionTable`, the prop `ActionsBuilder`
-  has been replaced with `actions`.
-
-### [2.0.0-beta.1] - 2023-01-18
-
-This is the first beta release of FireCMS v2.0.0.
-While still in beta, we consider this version stable enough to be used in
-production.
-
-> All changes related to V2 alpha are currently bundled in these documents:
-> - [What's new in version 2.0.0](https://firecms.co/docs/new_in_v2)
-> - [Migration guide from version 1.x to 2.0.0](https://firecms.co/docs/migrating_from_v1)
-
-> The changelog for 1.0.0 versions and previous versions can be
-> found [here](https://firecms.co/docs/1.0.0/changelog)
 

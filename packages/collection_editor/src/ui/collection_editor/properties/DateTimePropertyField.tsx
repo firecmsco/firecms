@@ -1,6 +1,6 @@
 import React from "react";
 import { getIn, useFormex } from "@firecms/formex";
-import { FieldCaption, NumberProperty, StringProperty } from "@firecms/core";
+import { FieldCaption, NumberProperty, StringProperty, useTranslation } from "@firecms/core";
 import { Select, SelectItem } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
@@ -69,6 +69,8 @@ export function DateTimePropertyField({ disabled }: {
         setFieldValue
     } = useFormex<StringProperty | NumberProperty>();
 
+    const { t } = useTranslation();
+
     const modePath = "mode";
     const modeValue: string | undefined = getIn(values, modePath);
     const modeError: string | undefined = getIn(touched, modePath) && getIn(errors, modePath);
@@ -90,21 +92,21 @@ export function DateTimePropertyField({ disabled }: {
                         error={Boolean(modeError)}
                         size={"large"}
                         onValueChange={(v) => setFieldValue(modePath, v)}
-                        label={"Mode"}
+                        label={t("mode_label")}
                         fullWidth={true}
                         renderValue={(v) => {
                             switch (v) {
                                 case "date_time":
-                                    return "Date/Time";
+                                    return t("date_time_mode");
                                 case "date":
-                                    return "Date";
+                                    return t("date_mode");
                                 default:
                                     return "";
                             }
                         }}
                         disabled={disabled}>
-                        <SelectItem value={"date_time"}> Date/Time </SelectItem>
-                        <SelectItem value={"date"}> Date </SelectItem>
+                        <SelectItem value={"date_time"}> {t("date_time_mode")} </SelectItem>
+                        <SelectItem value={"date"}> {t("date_mode")} </SelectItem>
                     </Select>
                     <FieldCaption error={Boolean(modeError)}>
                         {modeError}
@@ -120,21 +122,21 @@ export function DateTimePropertyField({ disabled }: {
                         renderValue={(v) => {
                             switch (v) {
                                 case "on_create":
-                                    return "On create";
+                                    return t("auto_on_create");
                                 case "on_update":
-                                    return "On any update";
+                                    return t("auto_on_update");
                                 default:
-                                    return "None";
+                                    return t("auto_none");
                             }
                         }}
                         error={Boolean(autoValueError)}
-                        label={"Automatic value"}>
-                        <SelectItem value={"none"}> None </SelectItem>
-                        <SelectItem value={"on_create"}> On create </SelectItem>
-                        <SelectItem value={"on_update"}> On any update </SelectItem>
+                        label={t("automatic_value")}>
+                        <SelectItem value={"none"}> {t("auto_none")} </SelectItem>
+                        <SelectItem value={"on_create"}> {t("auto_on_create")} </SelectItem>
+                        <SelectItem value={"on_update"}> {t("auto_on_update")} </SelectItem>
                     </Select>
                     <FieldCaption error={Boolean(autoValueError)}>
-                        {autoValueError ?? "Update this field automatically when creating or updating the entity"}
+                        {autoValueError ?? t("auto_value_description")}
                     </FieldCaption>
                 </div>
                 <div>
@@ -145,13 +147,13 @@ export function DateTimePropertyField({ disabled }: {
                         value={timezoneValue ?? "__local__"}
                         onValueChange={(v) => setFieldValue(timezonePath, v === "__local__" ? undefined : v)}
                         renderValue={(v) => {
-                            if (!v || v === "__local__") return "Local timezone";
+                            if (!v || v === "__local__") return t("local_timezone");
                             const tz = TIMEZONES.find(t => t.value === v);
                             return tz?.label ?? v;
                         }}
                         error={Boolean(timezoneError)}
-                        label={"Timezone"}>
-                        <SelectItem value={"__local__"}> Local timezone </SelectItem>
+                        label={t("timezone_label")}>
+                        <SelectItem value={"__local__"}> {t("local_timezone")} </SelectItem>
                         {TIMEZONES.map((tz) => (
                             <SelectItem key={tz.value} value={tz.value}>
                                 {tz.label}
@@ -159,7 +161,7 @@ export function DateTimePropertyField({ disabled }: {
                         ))}
                     </Select>
                     <FieldCaption error={Boolean(timezoneError)}>
-                        {timezoneError ?? "Timezone for displaying and inputting dates. Values are always stored in UTC."}
+                        {timezoneError ?? t("timezone_description")}
                     </FieldCaption>
                 </div>
 

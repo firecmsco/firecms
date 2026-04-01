@@ -1,0 +1,75 @@
+---
+slug: pt/docs/self/migrating_from_v2_to_v3
+title: Migração do FireCMS 2.0 para o FireCMS 3.0
+sidebar_label: Migração do FireCMS 2.0 para o FireCMS 3.0
+description: Migração para o FireCMS 3.0, a partir do FireCMS 2.0
+---
+
+O FireCMS 3.0 é uma versão principal que introduz muitas alterações. Esta página descreve as principais mudanças e como migrar do FireCMS 2.0.
+
+O FireCMS Community e PRO são as versões self-hosted do FireCMS. Permite hospedar seu próprio backend e usar o FireCMS sem restrições.
+É a versão mais similar ao FireCMS 2.0, mas com muitas melhorias e novas funcionalidades.
+
+## Migração para o FireCMS PRO
+
+A maioria dos conceitos é a mesma do FireCMS 2.0, mas existem algumas alterações que você precisa conhecer.
+Recomendamos iniciar um novo projeto com:
+
+```bash
+npx create-firecms-app --pro
+```
+
+ou
+
+```bash
+yarn create firecms-app --pro
+```
+
+## Atualização das importações
+
+A principal mudança é nas importações. Você precisa atualizá-las no seu projeto.
+Antes, você importava tudo de `firecms` (ou até `@camberi/firecms`). Agora precisa importar de pacotes diferentes:
+- Todos os componentes de UI estão agora em `@firecms/ui`.
+- O core do FireCMS está em `@firecms/core`.
+- Todo código relacionado ao Firebase está em `@firecms/firebase`.
+
+## Configuração das coleções
+
+As coleções tiveram alterações mínimas:
+
+- Você precisa definir um `id` para cada coleção, que tipicamente pode ser igual ao `path`.
+- A prop `views` foi renomeada para `entityViews`.
+- Para `AdditionalFieldDelegate`: a prop `id` foi renomeada para `key`, e `builder` para `Builder`.
+
+## Autenticador
+
+O autenticador agora retorna um `dataSourceDelegate` em vez de um `dataSource`.
+
+## Outros
+
+- `useNavigationContext` foi renomeado para `useNavigationController`.
+- `FieldDescription` foi renomeado para `FieldCaption`.
+- `PropertyPreview` não precisa mais de uma prop `entity`.
+
+## Migração dos componentes personalizados (MUI)
+
+O FireCMS 3.0 é baseado em `tailwindcss` em vez de `mui`.
+
+Você pode tentar substituir as importações de `@mui/material` por `@firecms/ui` e verá que muitas coisas funcionam diretamente.
+
+### Ícones
+
+```tsx
+import { AddIcon } from "@firecms/ui";
+```
+
+A prop `fontSize` se chama `size` no FireCMS.
+
+### Componentes sem equivalente:
+- `Box`: Use um `div` com classes tailwind.
+- `Link`: Use `a` em vez disso.
+
+### Componentes que mudam de comportamento:
+- `Menu` e `MenuItem`: Os itens de menu não têm mais um id.
+- `Select` não usa mais `labelId`.
+- `CircularProgress`: o tamanho agora é uma string (`size="small"` ou `size="large"`).

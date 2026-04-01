@@ -1,0 +1,27 @@
+---
+slug: it/docs/components/badge
+title: Badge
+sidebar_label: Badge
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+I Badge sono piccoli componenti di conteggio e etichettatura utilizzati per aggiungere informazioni aggiuntive a qualsiasi contenuto. Sono comunemente usati per mostrare conteggi di non letti, indicatori di stato o semplicemente come elementi decorativi.
+
+## Badge di base
+
+Impostando la prop `invisible` su `true`, puoi nascondere il badge, rendendolo non visibile agli utenti.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_invisible.tsx"/>
+
+## Varianti di colore
+
+La prop `color` determina il colore del badge. I valori possibili sono `primary`, `secondary` e `error`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_color.tsx"/>
+
+## Usage with Icons and Buttons
+
+I Badge possono avvolgere icone o pulsanti per fornire indicatori di stato.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/badge/badge_icon.tsx"/>

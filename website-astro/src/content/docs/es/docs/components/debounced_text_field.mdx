@@ -1,0 +1,20 @@
+---
+title: Campo de texto con retardo (DebouncedTextField)
+slug: es/docs/components/debounced_text_field
+sidebar_label: Campo de texto con retardo
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+`DebouncedTextField` (Campo de texto con retardo) es una variación del componente `TextField` (Campo de texto) estándar diseñado para retrasar la invocación del callback `onChange` (al cambiar). Este retraso ayuda a reducir la cantidad de llamadas a `onChange` para entradas que pueden tener
+actualizaciones frecuentes, como al escribir.
+
+## Uso
+
+Para usar `DebouncedTextField`, impórtalo desde tus componentes. Admite todas las props de `TextField` incluyendo `value` (valor), `onChange` (al cambiar) entre otras.
+
+## Campo de texto con retardo básico
+
+Este ejemplo muestra un uso básico del `DebouncedTextField`, demostrando cómo se puede usar para manejar cambios de valor con un mecanismo de aplazamiento (defer) para reducir el número de actualizaciones.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/debounced_text_field/debounced_text_field_basic.tsx"/>

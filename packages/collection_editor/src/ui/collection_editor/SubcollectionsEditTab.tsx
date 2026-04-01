@@ -5,7 +5,8 @@ import {
     EntityCustomView,
     resolveEntityView,
     useCustomizationController,
-    User
+    User,
+    useTranslation
 } from "@firecms/core";
 import {
     AddIcon,
@@ -48,6 +49,7 @@ export function SubcollectionsEditTab({
 }) {
 
     const { entityViews: contextEntityViews } = useCustomizationController();
+    const { t } = useTranslation();
 
     const [subcollectionToDelete, setSubcollectionToDelete] = React.useState<string | undefined>();
     const [addEntityViewDialogOpen, setAddEntityViewDialogOpen] = React.useState<boolean>(false);
@@ -75,7 +77,7 @@ export function SubcollectionsEditTab({
 
             <div className={"flex-grow flex flex-col gap-4 items-start"}>
                 <Typography variant={"h6"}>
-                    Subcollections of {values.name}
+                    {t("subcollections_of")} {values.name}
                 </Typography>
 
                 <Paper className={"flex flex-col gap-4 p-2 w-full"}>
@@ -95,7 +97,7 @@ export function SubcollectionsEditTab({
                                     </TableCell>
                                     <TableCell
                                         align="right">
-                                        <Tooltip title={"Remove"}
+                                        <Tooltip title={t("remove")}
                                             asChild={true}>
                                             <IconButton size="small"
                                                 onClick={(e) => {
@@ -120,7 +122,7 @@ export function SubcollectionsEditTab({
                             });
                         }}
                         startIcon={<AddIcon />}>
-                        Add subcollection
+                        {t("add_subcollection")}
                     </Button>
 
                 </Paper>
@@ -129,7 +131,7 @@ export function SubcollectionsEditTab({
 
             <div className={"flex-grow  flex flex-col gap-4 items-start"}>
                 <Typography variant={"h6"}>
-                    Custom views
+                    {t("custom_views")}
                 </Typography>
 
                 {totalEntityViews === 0 &&
@@ -138,8 +140,8 @@ export function SubcollectionsEditTab({
                         href={"https://firecms.co/docs/cloud/quickstart"}
                         component={"a"}
                         rel="noopener noreferrer"
-                        target="_blank">More info</Button>}>
-                        Define your own custom views by uploading them with the CLI.
+                        target="_blank">{t("more_info")}</Button>}>
+                        {t("define_custom_views_cli")}
                     </Alert>
                 }
 
@@ -157,7 +159,7 @@ export function SubcollectionsEditTab({
                                         </TableCell>
                                         <TableCell
                                             align="right">
-                                            <Tooltip title={"Remove"}
+                                            <Tooltip title={t("remove")}
                                                 asChild={true}>
                                                 <IconButton size="small"
                                                     onClick={(e) => {
@@ -180,8 +182,7 @@ export function SubcollectionsEditTab({
                                                 {view.name}
                                             </Typography>
                                             <Typography variant={"caption"} className={"flex-grow"}>
-                                                This view is defined in code with
-                                                key <code>{view.key}</code>
+                                                {t("view_defined_in_code")} <code>{view.key}</code>
                                             </Typography>
                                         </TableCell>
                                     </TableRow>
@@ -194,7 +195,7 @@ export function SubcollectionsEditTab({
                                 setAddEntityViewDialogOpen(true);
                             }}
                             startIcon={<AddIcon />}>
-                            Add custom entity view
+                            {t("add_custom_entity_view")}
                         </Button>
                     </Paper>
 
@@ -233,10 +234,8 @@ export function SubcollectionsEditTab({
                         });
                     }}
                     onCancel={() => setSubcollectionToDelete(undefined)}
-                    title={<>Delete this subcollection?</>}
-                    body={<> This will <b>not
-                        delete any data</b>, only
-                        the collection in the CMS</>} />}
+                    title={<>{t("delete_this_subcollection")}</>}
+                    body={<>{t("remove_collection_warning")}</>} />}
             {viewToDelete &&
                 <ConfirmationDialog open={Boolean(viewToDelete)}
                     onAccept={() => {
@@ -244,10 +243,8 @@ export function SubcollectionsEditTab({
                         setViewToDelete(undefined);
                     }}
                     onCancel={() => setViewToDelete(undefined)}
-                    title={<>Remove this view?</>}
-                    body={<>This will <b>not
-                        delete any data</b>, only
-                        the view in the CMS</>} />}
+                    title={<>{t("remove_this_view")}</>}
+                    body={<>{t("remove_view_warning")}</>} />}
 
             <CollectionEditorDialog
                 open={Boolean(currentDialog)}

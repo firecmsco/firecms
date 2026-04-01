@@ -9,6 +9,7 @@ import {
     CircularProgressCenter,
     Drawer,
     FireCMS,
+    FireCMSi18nProvider,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -167,8 +168,9 @@ function ProSample() {
         return <>{configError}</>;
     }
     return (
-        <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
+        <FireCMSi18nProvider>
+            <SnackbarProvider>
+                <ModeControllerProvider value={modeController}>
                 <FireCMS
                     navigationController={navigationController}
                     authController={authController}
@@ -201,8 +203,9 @@ function ProSample() {
                         </Scaffold>;
                     }}
                 </FireCMS>
-            </ModeControllerProvider>
-        </SnackbarProvider>
+                </ModeControllerProvider>
+            </SnackbarProvider>
+        </FireCMSi18nProvider>
     );
 
 }

@@ -1,0 +1,31 @@
+---
+title: Tarjeta (Card)
+slug: es/docs/components/card
+sidebar_label: Tarjeta
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Las tarjetas (cards) son superficies que muestran contenido y acciones sobre un solo tema. Deben ser fáciles de escanear en busca de información relevante y procesable. Las tarjetas se pueden usar para una amplia variedad de propósitos, que incluyen mostrar información, como acciones en las que se puede hacer clic o como elementos interactivos de la interfaz de usuario (UI).
+
+## Uso
+
+Importa el `Card` de `@firecms/ui` y envuelve el contenido que deseas mostrar en la tarjeta. También puedes hacer que se pueda hacer clic en la tarjeta proporcionando un controlador `onClick`.
+
+## Tarjeta básica
+
+Representa el uso básico de una tarjeta para mostrar contenido.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/card/card_basic.tsx"/>
+
+## Tarjeta clicable
+
+Muestra una tarjeta que tiene un evento onClick, lo que hace que se comporte de manera similar a un botón.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/card/card_clickable.tsx"/>
+
+## Estilo personalizado
+
+Demuestra cómo se pueden aplicar clases o estilos adicionales a la tarjeta para una apariencia personalizada.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/card/card_custom_style.tsx"/>

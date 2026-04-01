@@ -1,5 +1,5 @@
 import React from "react";
-import { prettifyIdentifier, useAuthController, useNavigationController } from "@firecms/core";
+import { prettifyIdentifier, useAuthController, useNavigationController, useTranslation } from "@firecms/core";
 import { AddIcon, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
@@ -20,6 +20,7 @@ export function RootCollectionSuggestions({
     const authController = useAuthController();
     const fireCMSBackend = useFireCMSBackend();
     const projectConfig = useProjectConfig();
+    const { t } = useTranslation();
 
     const collectionEditorController = useCollectionEditorController();
     const canCreateCollections = collectionEditorController.configPermissions
@@ -41,7 +42,7 @@ export function RootCollectionSuggestions({
             className={"flex flex-col gap-2 p-2 my-4"}>
 
             <Typography variant={"body2"} color={"secondary"} className={"flex items-center gap-2"}>
-                <StorageIcon size="smallest" /> Add your <b>database collections</b> to FireCMS
+                <StorageIcon size="smallest" /> {t("add_your")} <b>{t("database_collections")}</b> {t("to_firecms")}
             </Typography>
 
             <div
@@ -85,7 +86,7 @@ export function RootCollectionSuggestions({
                     );
                 })}
                 {!loading && filteredSuggestions?.length === 0 &&
-                    <Typography variant={"caption"} className={"ml-2"}>No unmapped collections in the database</Typography>
+                    <Typography variant={"caption"} className={"ml-2"}>{t("no_unmapped_collections")}</Typography>
                 }
             </div>
         </div>

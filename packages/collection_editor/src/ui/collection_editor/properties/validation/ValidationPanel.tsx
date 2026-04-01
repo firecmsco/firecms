@@ -1,10 +1,13 @@
 import { PropsWithChildren } from "react";
 
 import { ExpandablePanel, RuleIcon, Typography } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 
 export function ValidationPanel({
                                     children
                                 }: PropsWithChildren<{}>) {
+
+    const { t } = useTranslation();
 
     return (
         <ExpandablePanel
@@ -16,7 +19,7 @@ export function ValidationPanel({
                     <RuleIcon/>
                     <Typography variant={"subtitle2"}
                                 className="ml-4">
-                        Validation
+                        {t("validation")}
                     </Typography>
                 </div>
             }>

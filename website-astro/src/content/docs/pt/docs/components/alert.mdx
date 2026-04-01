@@ -1,0 +1,38 @@
+---
+slug: pt/docs/components/alert
+title: Alerta
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Os alertas são usados para comunicar um estado ou feedback aos usuários. Frequentemente indicam sucesso, informação, aviso ou erros.
+
+## Cor
+
+A prop `color` é usada para definir o nível de severidade do alerta.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_color.tsx"/>
+
+## Tamanho
+
+A prop `size` é usada para definir o tamanho do alerta.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_size.tsx"/>
+
+## Dispensável
+
+Os alertas podem ser dispensáveis quando recebem a função de callback `onDismiss`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/dismissable_alert.tsx"/>
+
+## Botão de ação
+
+Inclua um elemento interativo dentro do alerta usando a prop `action`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/alert_action_button.tsx"/>
+
+## Estilo personalizado
+
+Passe classes CSS ou estilos personalizados com as props `className` e `style` para personalizar o alerta.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/alert/custom_style_alert.tsx"/>

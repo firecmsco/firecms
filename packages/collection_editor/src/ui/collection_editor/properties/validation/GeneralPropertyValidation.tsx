@@ -3,6 +3,7 @@ import React from "react";
 import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
 import { DebouncedTextField } from "@firecms/ui";
 import { SwitchControl } from "../../SwitchControl";
+import { useTranslation } from "@firecms/core";
 
 export function GeneralPropertyValidation({ disabled }: {
     required?: boolean;
@@ -10,6 +11,7 @@ export function GeneralPropertyValidation({ disabled }: {
 }) {
 
     const { values, handleChange } = useFormex();
+    const { t } = useTranslation();
 
     const validationRequired = "validation.required";
     const validationRequiredMessage = "validation.requiredMessage";
@@ -24,8 +26,8 @@ export function GeneralPropertyValidation({ disabled }: {
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
                             disabled={disabled}
-                            label={"Required"}
-                            tooltip={"You won't be able to save this entity if this value is not set"}
+                            label={t("required")}
+                            tooltip={t("required_tooltip")}
                             form={form}
                             field={field}/>
                     }}
@@ -39,8 +41,8 @@ export function GeneralPropertyValidation({ disabled }: {
                     {({ field, form }: FormexFieldProps) => {
                         return <SwitchControl
                             disabled={disabled}
-                            label={"Unique"}
-                            tooltip={"There cannot be multiple entities with the same value"}
+                            label={t("unique")}
+                            tooltip={t("unique_tooltip")}
                             form={form}
                             field={field}/>
                     }}
@@ -51,7 +53,7 @@ export function GeneralPropertyValidation({ disabled }: {
                 <DebouncedTextField
                     disabled={disabled}
                     value={getIn(values, validationRequiredMessage)}
-                    label={"Required message"}
+                    label={t("required_message")}
                     name={validationRequiredMessage}
                     size="small"
                     onChange={handleChange}/>

@@ -16,6 +16,7 @@ import {
 } from "@firecms/ui";
 import { ImportConfig } from "../types";
 import { getIn, setIn } from "@firecms/formex";
+import { useTranslation } from "@firecms/core";
 
 export interface DataPropertyMappingProps {
     importConfig: ImportConfig;
@@ -33,6 +34,7 @@ export function DataNewPropertiesMapping({
                                              destinationProperties,
                                              buildPropertyView
                                          }: DataPropertyMappingProps) {
+    const { t } = useTranslation();
 
     const headersMapping = importConfig.headersMapping;
     const headingsOrder = importConfig.headingsOrder;
@@ -53,12 +55,12 @@ export function DataNewPropertiesMapping({
             }}>
                 <TableHeader>
                     <TableCell header={true} style={{ width: "20%" }}>
-                        Column in file
+                        {t("column_in_file")}
                     </TableCell>
                     <TableCell header={true}>
                     </TableCell>
                     <TableCell header={true} style={{ width: "75%" }}>
-                        Map to Property
+                        {t("map_to_property")}
                     </TableCell>
                 </TableHeader>
                 <TableBody>
@@ -100,22 +102,22 @@ export function DataNewPropertiesMapping({
                 </TableBody>
             </Table>
 
-            <ExpandablePanel title="Default values" initiallyExpanded={false} innerClassName={"p-4 mt-4"}>
+            <ExpandablePanel title={t("default_values")} initiallyExpanded={false} innerClassName={"p-4 mt-4"}>
 
                 <div className={"text-sm text-surface-accent-500 dark:text-surface-accent-300 font-medium ml-3.5 mb-1"}>
-                    You can select a default value for unmapped columns and empty values:
+                    {t("default_values_description")}
                 </div>
                 <Table style={{
                     tableLayout: "fixed"
                 }}>
                     <TableHeader>
                         <TableCell header={true} style={{ width: "30%" }}>
-                            Property
+                            {t("property")}
                         </TableCell>
                         <TableCell header={true}>
                         </TableCell>
                         <TableCell header={true} style={{ width: "65%" }}>
-                            Default value
+                            {t("default_value")}
                         </TableCell>
                     </TableHeader>
                     <TableBody>
@@ -174,6 +176,7 @@ function IdSelectField({
     headersMapping: Record<string, string | null>;
     onChange: (value: string | null) => void
 }) {
+    const { t } = useTranslation();
     return <div>
         <Select
             size={"medium"}
@@ -183,14 +186,14 @@ function IdSelectField({
                 const value = event.target.value;
                 onChange(value === "__none__" ? null : value);
             }}
-            placeholder={"Autogenerate ID"}
+            placeholder={t("autogenerate_id")}
             renderValue={(value) => {
                 return <Typography variant={"body2"}>
-                    {value !== "__none__" ? value : "Autogenerate ID"}
+                    {value !== "__none__" ? value : t("autogenerate_id")}
                 </Typography>;
             }}
-            label={"Column that will be used as ID for each document"}>
-            <SelectItem value={"__none__"}>Autogenerate ID</SelectItem>
+            label={t("id_column_description")}>
+            <SelectItem value={"__none__"}>{t("autogenerate_id")}</SelectItem>
             {Object.entries(headersMapping).map(([key, value]) => {
                 return <SelectItem key={key} value={key}>{key}</SelectItem>;
             })}
@@ -203,16 +206,17 @@ function DefaultValuesField({
                                 onValueChange,
                                 defaultValue
                             }: { property: Property, onValueChange: (value: any) => void, defaultValue?: any }) {
+    const { t } = useTranslation();
     if (property.dataType === "string") {
         return <TextField size={"medium"}
-                          placeholder={"Default value"}
+                          placeholder={t("default_value")}
                           value={defaultValue ?? ""}
                           onChange={(event) => onValueChange(event.target.value)}/>;
     } else if (property.dataType === "number") {
         return <TextField size={"medium"}
                           type={"number"}
                           value={defaultValue ?? ""}
-                          placeholder={"Default value"}
+                          placeholder={t("default_value")}
                           onChange={(event) => onValueChange(event.target.value)}/>;
     } else if (property.dataType === "boolean") {
         return <BooleanSwitchWithLabel
@@ -221,10 +225,10 @@ function DefaultValuesField({
             size={"small"}
             onValueChange={(v: boolean | null) => onValueChange(v === null ? undefined : v)}
             label={defaultValue === undefined
-                ? "Do not set value"
+                ? t("do_not_set_value")
                 : defaultValue === true
-                    ? "Set value to true"
-                    : "Set value to false"}
+                    ? t("set_value_to_true")
+                    : t("set_value_to_false")}
         />
     } else if (property.dataType === "date") {
         return <DateTimeField

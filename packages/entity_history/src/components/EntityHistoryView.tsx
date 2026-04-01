@@ -7,7 +7,8 @@ import {
     ErrorBoundary,
     useAuthController,
     useDataSource,
-    useSnackbarController
+    useSnackbarController,
+    useTranslation
 } from "@firecms/core";
 import { cls, HistoryIcon, IconButton, Label, Tooltip, Typography } from "@firecms/ui";
 import { EntityHistoryEntry } from "./EntityHistoryEntry";
@@ -20,6 +21,7 @@ export function EntityHistoryView({
 
     const authController = useAuthController();
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
     const dirty = formContext?.formex.dirty;
 
     const dataSource = useDataSource();
@@ -114,7 +116,7 @@ export function EntityHistoryView({
 
     if (!entity) {
         return <div className="flex items-center justify-center h-full">
-            <Label>History is only available for existing entities</Label>
+            <Label>{t("entity_history_only_existing")}</Label>
         </div>
     }
 
@@ -152,14 +154,14 @@ export function EntityHistoryView({
                     });
                     setRevertVersionDialog(undefined);
                     snackbarController.open({
-                        message: "Reverted version",
+                        message: t("entity_history_reverted"),
                         type: "info"
                     });
                 }
             ).catch((error) => {
                 console.error("Error reverting entity:", error);
                 snackbarController.open({
-                    message: "Error reverting entity",
+                    message: t("entity_history_error_reverting"),
                     type: "error"
                 });
             });
@@ -172,15 +174,15 @@ export function EntityHistoryView({
         <div className="flex flex-col gap-2 max-w-6xl mx-auto w-full">
 
             <Typography variant={"h5"} className={"mt-24 ml-4"}>
-                History
+                {t("history")}
             </Typography>
 
             {revisions.length === 0 && <>
                 <Label className={"ml-4 mt-8"}>
-                    No history available
+                    {t("entity_history_no_history")}
                 </Label>
                 <Typography variant={"caption"} className={"ml-4"}>
-                    When you save an entity, a new version is created and stored in the history.
+                    {t("entity_history_when_save")}
                 </Typography>
             </>}
 
@@ -194,13 +196,13 @@ export function EntityHistoryView({
                                         previewKeys={previewKeys}
                                         previousValues={previousValues}
                                         actions={
-                                            <Tooltip title={"Revert to this version"}
+                                            <Tooltip title={t("entity_history_revert_tooltip")}
                                                      className={"m-2 grow-0 self-start"}>
                                                 <IconButton
                                                     onClick={() => {
                                                         if (dirty) {
                                                             snackbarController.open({
-                                                                message: "Please save or discard your changes before reverting",
+                                                                message: t("entity_history_please_save"),
                                                                 type: "warning"
                                                             });
                                                         } else {
@@ -220,8 +222,8 @@ export function EntityHistoryView({
                     ref={loadMoreRef}
                     className="py-4 text-center"
                 >
-                    {isLoading && <Label>Loading more...</Label>}
-                    {!hasMore && revisions.length > PAGE_SIZE && <Label>No more history available</Label>}
+                    {isLoading && <Label>{t("loading_more")}</Label>}
+                    {!hasMore && revisions.length > PAGE_SIZE && <Label>{t("entity_history_no_more")}</Label>}
                 </div>
             )}
         </div>
@@ -235,7 +237,7 @@ export function EntityHistoryView({
                                 onCancel={function (): void {
                                     setRevertVersionDialog(undefined);
                                 }}
-                                title={<Typography variant={"subtitle2"}>Revert data to this version?</Typography>}
+                                title={<Typography variant={"subtitle2"}>{t("entity_history_revert_dialog_title")}</Typography>}
                                 body={revertVersionDialog ?
                                     <EntityView entity={revertVersionDialog}
                                                 collection={collection}

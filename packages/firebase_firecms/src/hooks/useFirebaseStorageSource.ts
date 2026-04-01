@@ -34,7 +34,8 @@ export function useFirebaseStorageSource({
                        fileName,
                        path,
                        metadata,
-                       bucket
+                       bucket,
+                       onProgress
                    }: UploadFileProps)
             : Promise<any> {
             try {
@@ -77,6 +78,7 @@ export function useFirebaseStorageSource({
                             if (progress > lastProgress) {
                                 lastProgress = progress;
                                 setProgressTimeout();
+                                onProgress?.(progress);
                             }
                         },
                         (error) => {

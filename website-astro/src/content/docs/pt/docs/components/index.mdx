@@ -1,0 +1,105 @@
+---
+slug: pt/docs/components
+title: FireCMS UI
+sidebar_label: Introdução
+---
+
+:::tip
+Todos os componentes são exportados do pacote `@firecms/ui`. São os mesmos componentes usados internamente no **FireCMS**.
+:::
+
+**FireCMS UI** é um conjunto de componentes de alta qualidade que você pode usar para construir suas próprias views personalizadas. Você pode
+use esses componentes para construir suas próprias views do FireCMS, ou em qualquer outra aplicação React. Você só precisa instalar
+o `tailwindcss` e o pacote `@firecms/ui`.
+
+:::note[Por que construir este kit UI?]
+O FireCMS usava o MUI até a versão 3.0. O MUI fornece componentes prontos para usar com APIs intuitivas, mas também
+traz muita complexidade e sobrecarga. Queríamos construir um kit de UI mais simples e flexível que pudesse ser usado
+em qualquer projeto React, não apenas no FireCMS.
+Também queríamos facilitar a transição do MUI para nosso novo kit de UI, então mantivemos a API o mais similar possível.
+O resultado é um conjunto de componentes fáceis de usar, fáceis de personalizar, **muito mais performáticos** e com um tamanho de bundle menor.
+:::
+
+Os componentes são construídos principalmente usando primitivas **Radix UI** e **tailwindcss**. Isso significa que você pode personalizá-los facilmente
+usando classes tailwindcss ou substituir os estilos usando CSS.
+
+:::note
+Se você tiver alguma dúvida, fique à vontade para nos contatar no nosso [canal do Discord](https://discord.gg/fxy7xsQm3m).
+:::
+
+A lista de componentes inclui:
+
+
+import ClientUIComponentsShowcase from "../../../../../components/ClientUIComponentsShowcase.tsx";
+
+<ClientUIComponentsShowcase client:only="react" docsUrl="https://firecms.co" linksInNewTab={true} />
+
+
+e mais (veja a barra lateral para a lista completa).
+
+
+
+## Instalação
+
+Se você está usando o FireCMS, não precisa instalar este pacote, pois ele já está incluído, e
+configurado para você.
+
+Para usar os componentes no seu projeto, você precisa instalar o pacote `@firecms/ui`:
+
+```bash
+yarn add @firecms/ui
+```
+ou
+```bash
+npm install @firecms/ui
+```
+
+Você também precisa instalar o `tailwindcss`:
+
+```bash
+npm install tailwindcss @tailwindcss/typography
+```
+
+ou
+
+```bash
+yarn add tailwindcss @tailwindcss/typography
+```
+
+E inicialize no seu projeto:
+
+```bash
+npx tailwindcss init
+```
+
+E adicione o preset do FireCMS no seu `tailwind.config.js`:
+
+```javascript
+import fireCMSConfig from "@firecms/ui/tailwind.config.js";
+
+export default {
+    presets: [fireCMSConfig],
+    content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}"
+    ]
+};
+```
+(Talvez seja necessário ajustar os caminhos no array `content` para corresponder à estrutura do seu projeto)
+
+Finalmente, você precisa definir suas cores primária e secundária no seu arquivo `index.css`:
+
+```css
+@import "@firecms/ui/index.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+

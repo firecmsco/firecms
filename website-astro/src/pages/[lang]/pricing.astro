@@ -1,0 +1,49 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PricingContent from "../../components/pages/PricingContent.astro";
+import { languages } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+    const supportedLangs = Object.keys(languages).filter(l => l !== 'en');
+    return supportedLangs.map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+
+// TODO: translate SEO breadcrumbs
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "Pricing", url: "https://firecms.co/pricing" }
+];
+
+const faqItems = [
+    {
+        question: t('pricing.faq.q1.q'),
+        answer: `${t('pricing.faq.q1.a1')} ${t('pricing.faq.q1.a2')}`
+    },
+    {
+        question: t('pricing.faq.q2.q'),
+        answer: `${t('pricing.faq.q2.a1')} ${t('pricing.faq.q2.a2')}`
+    },
+    {
+        question: t('pricing.faq.q3.q'),
+        answer: t('pricing.faq.q3.a')
+    },
+    {
+        question: t('pricing.faq.q4.q'),
+        answer: t('pricing.faq.q4.a')
+    },
+];
+---
+
+<Layout
+        title={t('seo.pricing.title')}
+        description={t('seo.pricing.description')}
+        breadcrumbs={breadcrumbs}
+        faqItems={faqItems}
+        lang={lang}
+>
+    <PricingContent lang={lang} t={t} />
+</Layout>

@@ -12,8 +12,9 @@ import {
     useStorageSource
 } from "../../index";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
-import { FireCMSEditor, FireCMSEditorProps } from "@firecms/editor";
+import { FireCMSEditor, FireCMSEditorProps } from "../../editor";
 import { resolveProperty, resolveStorageFilenameString, resolveStoragePathString } from "../../util";
+import { isImageFile, resizeImage } from "../../util/useStorageUploadController";
 
 interface MarkdownEditorFieldProps {
     highlight?: { from: number, to: number };
@@ -55,12 +56,12 @@ export function MarkdownEditorFieldBinding({
         }
         internalValue.current = content;
         setValue(content);
-    }, [setValue]);
+    }, [setValue, value]);
 
     useEffect(() => {
         if (internalValue.current !== value) {
             internalValue.current = value;
-            setFieldVersion(fieldVersion + 1);
+            setFieldVersion(v => v + 1);
         }
     }, [value]);
 
@@ -112,33 +113,46 @@ export function MarkdownEditorFieldBinding({
     // Extract markdown config from property - can be boolean or object
     const markdownConfig = typeof property.markdown === 'object' ? property.markdown : undefined;
 
+    const handleImageUpload = async (file: File) => {
+        const imageResize = storage?.imageResize;
+        const legacyCompression = storage?.imageCompression;
+        if ((imageResize || legacyCompression) && isImageFile(file)) {
+            file = await resizeImage(file, imageResize, legacyCompression);
+        }
+
+        const storagePath = storagePathBuilder(file);
+        const fileName = await fileNameBuilder(file);
+        const result = await storageSource.uploadFile({
+            file,
+            fileName,
+            path: storagePath,
+        });
+        const downloadConfig = await storageSource.getDownloadURL(result.path);
+        const url = downloadConfig.url;
+        if (!url) {
+            throw new Error("Error uploading image");
+        }
+        return url;
+    };
+
     const editor = <FireCMSEditor
+        key={context.formex.version + fieldVersion}
         content={value}
         onMarkdownContentChange={onContentChange}
         version={context.formex.version + fieldVersion}
         highlight={highlight}
         disabled={disabled}
         markdownConfig={markdownConfig}
-        handleImageUpload={async (file: File) => {
-            const storagePath = storagePathBuilder(file);
-            const fileName = await fileNameBuilder(file);
-            const result = await storageSource.uploadFile({
-                file,
-                fileName,
-                path: storagePath,
-            });
-            const downloadConfig = await storageSource.getDownloadURL(result.path);
-            const url = downloadConfig.url;
-            if (!url) {
-                throw new Error("Error uploading image");
-            }
-            return url;
-        }}
+        handleImageUpload={handleImageUpload}
         {...editorProps}
     />;
 
     if (minimalistView)
-        return editor;
+        return (
+            <>
+                {editor}
+            </>
+        );
 
     return (
         <>

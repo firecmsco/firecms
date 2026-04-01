@@ -9,6 +9,7 @@ import {
     CloudUploadIcon,
     CircularProgress
 } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 
 export interface MediaUploadDialogProps {
     open: boolean;
@@ -33,6 +34,7 @@ export function MediaUploadDialog({
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const { t } = useTranslation();
 
     const validateFiles = useCallback((files: File[]): { valid: File[]; errors: string[] } => {
         const valid: File[] = [];
@@ -40,7 +42,7 @@ export function MediaUploadDialog({
 
         for (const file of files) {
             if (maxFileSize && file.size > maxFileSize) {
-                errors.push(`${file.name}: File too large (max ${formatSize(maxFileSize)})`);
+                errors.push(t("media_file_too_large", { name: file.name, size: formatSize(maxFileSize) }));
                 continue;
             }
             if (acceptedMimeTypes && !acceptedMimeTypes.some(type => {
@@ -49,7 +51,7 @@ export function MediaUploadDialog({
                 }
                 return file.type === type;
             })) {
-                errors.push(`${file.name}: File type not allowed`);
+                errors.push(t("media_file_type_not_allowed", { name: file.name }));
                 continue;
             }
             valid.push(file);
@@ -112,7 +114,7 @@ export function MediaUploadDialog({
             setSelectedFiles([]);
             onClose();
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Upload failed");
+            setError(err instanceof Error ? err.message : t("media_upload_failed"));
         } finally {
             setUploading(false);
         }
@@ -141,7 +143,7 @@ export function MediaUploadDialog({
             <DialogContent className="p-0">
                 <div className="p-4 border-b border-surface-accent-200 dark:border-surface-accent-700">
                     <Typography variant="h6">
-                        Upload Files
+                        {t("media_upload_files")}
                     </Typography>
                 </div>
 
@@ -171,10 +173,10 @@ export function MediaUploadDialog({
                         />
                         <div className="text-center">
                             <Typography variant="body1" className="font-medium">
-                                Drop files here or click to browse
+                                {t("media_drop_files")}
                             </Typography>
                             <Typography variant="caption" className="text-surface-accent-500">
-                                Maximum file size: {formatSize(maxFileSize)}
+                                {t("media_max_file_size", { size: formatSize(maxFileSize) })}
                             </Typography>
                         </div>
                         <input
@@ -198,7 +200,7 @@ export function MediaUploadDialog({
                     {selectedFiles.length > 0 && (
                         <div className="mt-4 space-y-2">
                             <Typography variant="caption" className="text-surface-accent-500">
-                                Selected files ({selectedFiles.length})
+                                {t("media_selected_files_count", { count: selectedFiles.length.toString() })}
                             </Typography>
                             <div className="max-h-40 overflow-auto space-y-1">
                                 {selectedFiles.map((file, index) => (
@@ -226,7 +228,7 @@ export function MediaUploadDialog({
                                             }}
                                             disabled={uploading}
                                         >
-                                            Remove
+                                            {t("media_remove")}
                                         </Button>
                                     </div>
                                 ))}
@@ -242,7 +244,7 @@ export function MediaUploadDialog({
                     onClick={handleClose}
                     disabled={uploading}
                 >
-                    Cancel
+                    {t("cancel")}
                 </Button>
                 <Button
                     variant="filled"
@@ -252,10 +254,10 @@ export function MediaUploadDialog({
                     {uploading ? (
                         <>
                             <CircularProgress size="smallest" />
-                            Uploading...
+                            {t("media_uploading")}
                         </>
                     ) : (
-                        `Upload ${selectedFiles.length > 0 ? `(${selectedFiles.length})` : ""}`
+                        `${t("media_upload")} ${selectedFiles.length > 0 ? `(${selectedFiles.length})` : ""}`
                     )}
                 </Button>
             </DialogActions>

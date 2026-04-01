@@ -8,7 +8,8 @@ import {
     ConfirmationDialog, Role,
     useAuthController,
     useCustomizationController, User,
-    useSnackbarController
+    useSnackbarController,
+    useTranslation
 } from "@firecms/core";
 import {
     Avatar,
@@ -31,6 +32,7 @@ import { PersistedUser } from "../../types";
 export function UsersTable({ onUserClicked }: {
     onUserClicked: (user: User) => void;
 }) {
+    const { t } = useTranslation();
 
     const {
         users,
@@ -55,10 +57,10 @@ export function UsersTable({ onUserClicked }: {
 
                 <TableHeader>
                     <TableCell className="w-12"></TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Roles</TableCell>
-                    <TableCell>Created on</TableCell>
+                    <TableCell>{t("email")}</TableCell>
+                    <TableCell>{t("name")}</TableCell>
+                    <TableCell>{t("roles")}</TableCell>
+                    <TableCell>{t("created_on")}</TableCell>
                     <TableCell className="w-12"></TableCell>
                 </TableHeader>
                 <TableBody>
@@ -102,7 +104,7 @@ export function UsersTable({ onUserClicked }: {
                                 <TableCell className={"w-12"}>
                                     <Tooltip
                                         asChild={true}
-                                        title={"Delete this user"}>
+                                        title={t("delete_this_user")}>
                                         <IconButton
                                             size={"smallest"}
                                             onClick={(event) => {
@@ -121,7 +123,7 @@ export function UsersTable({ onUserClicked }: {
                         <TableCell colspan={6}>
                             <CenteredView className={"flex flex-col gap-4 my-8 items-center"}>
                                 <Typography variant={"label"}>
-                                    There are no users yet
+                                    {t("no_users_yet")}
                                 </Typography>
                                 <Button
                                     onClick={() => {
@@ -151,8 +153,7 @@ export function UsersTable({ onUserClicked }: {
                                                 })
                                             });
                                     }}>
-
-                                    Add the logged user as an admin
+                                    {t("add_logged_user_as_admin")}
                                 </Button>
                             </CenteredView>
                         </TableCell>
@@ -185,7 +186,7 @@ export function UsersTable({ onUserClicked }: {
                 onCancel={() => {
                     setUserToBeDeleted(undefined);
                 }}
-                title={<>Delete?</>}
-                body={<>Are you sure you want to delete this user?</>} />
+                title={<>{t("delete_confirmation_title")}</>}
+                body={<>{t("delete_user_confirmation")}</>} />
         </div>);
 }

@@ -1,0 +1,32 @@
+---
+title: Grupo de botones de opción (Radio Group)
+slug: es/docs/components/radio_group
+sidebar_label: Grupo de botones de opción
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Radio Group (Grupo de botones de opción) permite a los usuarios seleccionar una opción de un conjunto. Es útil para escenarios de selección exclusiva en los que solo se permite una opción.
+Cada elemento del grupo de botones de opción está representado por un componente `RadioGroupItem` y, por lo general, está envuelto por un componente `Label` (Etiqueta).
+
+## Uso
+
+Para usar `RadioGroup` y `RadioGroupItem`, impórtalos de tus componentes y estructura tus opciones usando el `RadioGroup` como contenedor y `RadioGroupItem` para cada opción.
+
+## Grupo de botones de opción básico
+
+Un ejemplo básico de un grupo de botones de opción, lo que permite una selección sencilla.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/radio_group/radio_group_basic.tsx"/>
+
+## Personalización de la apariencia de los elementos
+
+Este ejemplo demuestra cómo personalizar la apariencia de elementos de grupo de botones de opción individuales.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/radio_group/radio_group_custom.tsx"/>
+
+## Grupo de botones de opción deshabilitado
+
+Cómo deshabilitar todo el grupo de opciones o elementos individuales dentro de él.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/radio_group/radio_group_disabled.tsx"/>

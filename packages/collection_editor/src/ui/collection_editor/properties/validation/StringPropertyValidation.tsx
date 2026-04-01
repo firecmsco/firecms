@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Field, FormexFieldProps, getIn, useFormex } from "@firecms/formex";
-import { FieldCaption, serializeRegExp } from "@firecms/core";
+import { FieldCaption, serializeRegExp, useTranslation } from "@firecms/core";
 import { DebouncedTextField, } from "@firecms/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 import { SwitchControl } from "../../SwitchControl";
@@ -34,6 +34,8 @@ export function StringPropertyValidation({
         errors
     } = useFormex();
 
+    const { t } = useTranslation();
+
     const validationLength = "validation.length";
     const validationMin = "validation.min";
     const validationMax = "validation.max";
@@ -58,7 +60,7 @@ export function StringPropertyValidation({
                            type="checkbox">
                         {({ field, form }: FormexFieldProps) => {
                             return <SwitchControl
-                                label={"Lowercase"}
+                                label={t("lowercase")}
                                 disabled={disabled}
                                 form={form}
                                 field={field}/>
@@ -71,7 +73,7 @@ export function StringPropertyValidation({
                            type="checkbox">
                         {({ field, form }: FormexFieldProps) => {
                             return <SwitchControl
-                                label={"Uppercase"}
+                                label={t("uppercase")}
                                 disabled={disabled}
                                 form={form}
                                 field={field}/>
@@ -84,7 +86,7 @@ export function StringPropertyValidation({
                            type="checkbox">
                         {({ field, form }: FormexFieldProps) => {
                             return <SwitchControl
-                                label={"Trim"}
+                                label={t("trim")}
                                 disabled={disabled}
                                 form={form}
                                 field={field}/>
@@ -98,7 +100,7 @@ export function StringPropertyValidation({
                 {length && <div className={"col-span-4"}>
                     <DebouncedTextField
                         value={getIn(values, validationLength)}
-                        label={"Exact length"}
+                        label={t("exact_length")}
                         name={validationLength}
                         type="number"
                         size="small"
@@ -109,7 +111,7 @@ export function StringPropertyValidation({
 
                 {min && <div className={"col-span-4"}>
                     <DebouncedTextField value={getIn(values, validationMin)}
-                                        label={"Min length"}
+                                        label={t("min_length")}
                                         name={validationMin}
                                         type="number"
                                         size="small"
@@ -120,7 +122,7 @@ export function StringPropertyValidation({
 
                 {max && <div className={"col-span-4"}>
                     <DebouncedTextField value={getIn(values, validationMax)}
-                                        label={"Max length"}
+                                        label={t("max_length")}
                                         name={validationMax}
                                         type="number"
                                         size="small"
@@ -134,13 +136,13 @@ export function StringPropertyValidation({
             {matches && <div className={"col-span-12"}>
                 <Field name={validationMatches}
                        as={DebouncedTextField}
-                       label={"Matches regex"}
+                       label={t("matches_regex")}
                        size="small"
                        disabled={disabled}
                        value={matchesStringValue}
                        error={Boolean(matchesError)}/>
                 <FieldCaption error={Boolean(matchesError)}>
-                    {matchesError ? "Not a valid regexp" : "e.g. /^\\d+$/ for digits only"}
+                    {matchesError ? t("not_valid_regexp") : t("regex_helper")}
                 </FieldCaption>
             </div>}
 

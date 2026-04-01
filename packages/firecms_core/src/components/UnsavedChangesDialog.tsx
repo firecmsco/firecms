@@ -1,4 +1,6 @@
+import React from "react";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@firecms/ui";
+import { useTranslation } from "../hooks/useTranslation";
 
 export interface UnsavedChangesDialogProps {
     open: boolean;
@@ -15,7 +17,7 @@ export function UnsavedChangesDialog({
                                          body,
                                          title
                                      }: UnsavedChangesDialogProps) {
-
+    const { t } = useTranslation();
     return (
         <Dialog
             onEscapeKeyDown={() => {
@@ -29,15 +31,15 @@ export function UnsavedChangesDialog({
                 {body}
 
                 <Typography>
-                    Are you sure you want to leave this page?
+                    {t("are_you_sure_leave")}
                 </Typography>
 
             </DialogContent>
             <DialogActions>
                 <Button variant="text"
-                        onClick={handleCancel} autoFocus> Cancel </Button>
+                        onClick={handleCancel} autoFocus> {t("cancel")} </Button>
                 <Button
-                    onClick={handleOk}> Ok </Button>
+                    onClick={handleOk}> {t("ok")} </Button>
             </DialogActions>
         </Dialog>
     );

@@ -42,3 +42,4 @@ export * from "./FieldCaption";
 export * from "./EntityPreview";
 
 export * from "./AIIcon";
+export * from "./LanguageToggle";

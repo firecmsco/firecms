@@ -1,0 +1,162 @@
+---
+title: Migration von v3.0 auf v3.1 (Cloud)
+slug: de/docs/cloud/migrating_from_v3_to_v3_1
+sidebar_label: Von v3.0 auf v3.1 migrieren
+description: Aktualisieren Sie Ihren benutzerdefinierten FireCMS Cloud-Code auf v3.1 — Tailwind CSS v4, React 19 und neue Kollektionsansichten.
+---
+
+Diese Migrationsanleitung gilt für **FireCMS Cloud**-Projekte, die benutzerdefinierten Code über die CLI
+(`firecms deploy`) bereitstellen.
+
+## Muss ich etwas tun?
+
+**Alle FireCMS Cloud-Benutzer erhalten jede neue Funktion automatisch** — Das Kanban-Board, die Kartenansicht (Cards),
+die KI-gestützte Kollektionsgenerierung und mehr sind bereits in Ihrem Projekt live. Kein Update erforderlich.
+
+Wenn Sie **benutzerdefinierten Code** über die CLI (`firecms deploy`) bereitstellen, funktioniert Ihr vorhandener Build
+weiterhin exactly wie zuvor. Wir empfehlen jedoch dringend, Ihre lokalen Abhängigkeiten auf
+Tailwind CSS v4 und React 19 zu aktualisieren. React 18 ist heute noch kompatibel, wird aber **in einer
+zukünftigen Version als veraltet markiert**, daher spart Ihnen eine Aktualisierung jetzt später Aufwand.
+
+---
+
+## Empfohlene Aktualisierungen
+
+### FireCMS-Pakete aktualisieren
+
+Aktualisieren Sie alle `@firecms/*`-Pakete in Ihrer `package.json` auf Version **3.1**:
+
+```bash
+npm i @firecms/cloud@3.1.0
+```
+
+---
+
+### Zu Tailwind CSS v4 migrieren
+
+FireCMS 3.1 enthält Unterstützung für **Tailwind CSS v4**. Obwohl Ihre bestehende Tailwind v3-Konfiguration weiterhin
+funktioniert, empfehlen wir für schnellere Builds und eine einfachere Konfiguration ein Update.
+
+#### 1. Tailwind CSS v4 und das Vite-Plugin installieren
+
+```bash
+npm i tailwindcss@4 @tailwindcss/vite
+```
+
+#### 2. Ihre `vite.config.ts` aktualisieren
+
+Fügen Sie das neue Vite-Plugin für Tailwind CSS hinzu:
+
+```typescript
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+    esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
+    },
+    build: {
+        outDir: "./build",
+        target: "ESNEXT",
+        sourcemap: true
+    },
+    optimizeDeps: { include: ["react/jsx-runtime"] },
+    plugins: [
+        react({}),
+        tailwindcss()
+    ]
+})
+```
+
+#### 3. Ihre `index.css` aktualisieren
+
+Ersetzen Sie Ihr vorhandenes CSS durch das neue v4-Format:
+
+```css
+@import "tailwindcss";
+@import "@firecms/ui/index.css";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+@source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
+
+@custom-variant dark (:is(.dark &));
+
+:root {
+    --color-primary: #0070F4;
+    --color-secondary: #FF5B79;
+}
+```
+
+:::note
+Die alten CSS-Variablennamen (`--fcms-primary`, `--fcms-primary-dark`, `--fcms-primary-bg`) wurden
+ersetzt. Verwenden Sie stattdessen `--color-primary` und `--color-secondary` — dunkle und Hintergrundvarianten werden
+jetzt automatisch berechnet.
+:::
+
+#### 4. Alte Konfigurationsdateien bereinigen
+
+Löschen Sie diese Dateien aus Ihrem Projekt — sie werden nicht mehr benötigt:
+- `tailwind.config.js`
+- `postcss.config.js`
+
+---
+
+### Auf React 19 aktualisieren
+
+FireCMS 3.1 unterstützt **React 19** und behält gleichzeitig die Kompatibilität mit React 18.3 bei.
+Wir empfehlen jetzt ein Update — **die Unterstützung für React 18 wird in einer zukünftigen Version entfernt**.
+
+```bash
+npm i react@19 react-dom@19
+npm i -D @types/react@19 @types/react-dom@19
+```
+
+:::tip
+Wenn nach dem Update TypeScript-Fehler wie `Cannot find namespace 'JSX'` auftreten, ersetzen Sie
+explizite `JSX.Element`-Rückgabetypen durch `React.ReactElement` oder entfernen Sie die Rückgabetypannotation vollständig.
+:::
+
+---
+
+## Neuheiten in v3.1
+
+Diese Funktionen sind bereits in Ihrem FireCMS Cloud-Projekt verfügbar — kein Update erforderlich:
+
+- **Kanban-Board-Ansicht** — Drag-and-Drop-Entities gruppiert nach Enum-Eigenschaften
+- **Kartenansicht (Cards)** — visuelles Kartenlayout für inhaltsreiche Kollektionen
+- **KI-gestützte Kollektionsgenerierung** — Schemas aus natürlicher Sprache generieren
+- **Drag-and-Drop-Spaltenreihenfolge** — Tabellenspalten durch Ziehen neu anordnen, Reihenfolge wird automatisch gespeichert
+- **Kollektionen duplizieren** — eine bestehende Kollektion klonen, um eine neue mit demselben Schema zu erstellen
+- **Verbesserungen am Entity-Verlauf** — frühere Werte, Indikator „zuletzt bearbeitet von", Umschalter pro Kollektion
+- **Neue Filter-UI** — neu gestaltete Filteransicht für ein saubereres Erlebnis
+- **Zeitzonen-Unterstützung für Datumsangaben** — korrekte Zeitzonenbehandlung, keine automatischen Mitternachts-Konvertierungen mehr
+- **Bedingungen bei Enums** — Enum-Werte dynamisch basierend auf anderen Eigenschaften filtern
+- **Einklappbare Gruppen im Drawer** — sauberere Seitenleistennavigation
+- **Neuer Editor** — verbesserter Rich-Text-Editor
+- **Bildverkleinerung** — integrierte Bildverkleinerung beim Upload
+
+Für benutzerdefinierte Code-Projekte schaltet das Update auch folgendes frei:
+
+- **Tailwind CSS v4** — schnellere Builds, einfachere Konfiguration
+- **React 19** — die neuesten React-Funktionen und -Leistung
+
+Sehen Sie das [Änderungsprotokoll](/docs/changelog) für die vollständige Liste der Änderungen.
+
+---
+
+## Fehlerbehebung
+
+### Build-Fehler nach dem Aktualisieren von Paketen
+Stellen Sie sicher, dass **alle** `@firecms/*`-Pakete dieselbe Version haben. Das Mischen von v3.0- und v3.1-Paketen führt zu
+Typinkompatibilitäten und Laufzeitfehlern.
+
+### Stile werden nach der Migration zu Tailwind v4 nicht angewendet
+- Überprüfen Sie, ob Ihre `index.css` die `@source`-Direktiven für Ihre Projektdateien und `node_modules/@firecms` enthält
+- Stellen Sie sicher, dass Sie die alten `tailwind.config.js` und `postcss.config.js` gelöscht haben
+- Löschen Sie Ihren `node_modules`-Ordner und installieren Sie neu: `rm -rf node_modules && npm install`
+
+### `Cannot find namespace 'JSX'`
+Aktualisieren Sie Rückgabetypannotationen von `JSX.Element` zu `React.ReactElement` oder entfernen Sie den
+expliziten Rückgabetyp und lassen Sie TypeScript ihn ableiten.

@@ -1,0 +1,37 @@
+---
+slug: it/docs/components/search_bar
+title: Barra di ricerca
+sidebar_label: SearchBar
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Il componente `SearchBar` è progettato per implementare funzionalità di ricerca. Supporta funzionalità come debounce dell'input di ricerca, dimensioni input espandibili e stato di caricamento.
+
+## Utilizzo
+
+Per usare la `SearchBar`, importala dai tuoi componenti e passa le prop necessarie come `onTextSearch`, `placeholder`, `expandable`, `large`, `autoFocus`, `disabled`, `loading` e `inputRef`.
+
+## SearchBar di base
+
+L'utilizzo base della `SearchBar` con configurazione minima.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_basic.tsx"/>
+
+## SearchBar con stato di caricamento
+
+Una dimostrazione della `SearchBar` che mostra un indicatore di caricamento.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_loading.tsx"/>
+
+## SearchBar espandibile
+
+Questo esempio mostra come rendere la `SearchBar` espandibile al focus.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_expandable.tsx"/>
+
+## SearchBar grande
+
+Mostra una variante più grande della `SearchBar`.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/search_bar/search_bar_large.tsx"/>

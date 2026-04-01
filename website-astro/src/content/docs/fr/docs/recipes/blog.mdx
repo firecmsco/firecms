@@ -1,0 +1,257 @@
+---
+slug: fr/docs/recipes/building_a_blog
+title: Construire un blog avec FireCMS Cloud
+sidebar_label: Construire un blog
+description: Construisez un blog headless avec FireCMS et Firebase. Apprenez à créer des blocs de contenu dynamiques, des galeries d'images et des aperçus en direct en utilisant React et Firestore.
+image: /img/blog_example.webp
+---
+
+![blog_example](/img/blog_example.webp)
+
+:::note
+Dans ce tutoriel, nous supposons que vous avez configuré un projet Firebase et une instance FireCMS avec du code personnalisé. Si ce n'est pas le cas, consultez la section [Démarrage rapide](../../cloud/quickstart).
+:::
+
+Nous n'avons pas besoin d'expliquer les avantages d'utiliser un CMS headless plutôt qu'une approche de blog traditionnelle comme WordPress, mais en voici quelques-uns :
+- C'est plus facile et plus rapide à développer, car il n'y a pas de couplage entre le frontend et le backend.
+- Comme votre frontend est indépendant, vous êtes libre de le modifier comme vous le souhaitez, de même pour le backend.
+- Il convient aux applications omnicanales — vous pouvez utiliser le même backend et le même CMS avec plusieurs applications et sites web.
+- Des équipes plus petites et spécialisées
+- Scalabilité
+- Moins de coûts
+- Flexibilité et simplicité
+
+:::tip[Frontend]
+Quand vous avez terminé d'implémenter les étapes de ce tutoriel, vous voudrez peut-être voir comment construire une simple application frontend **next.js** (ou tout autre framework frontend). Nous suggérons next.js car il utilise React, ce qui facilitera les choses. Nous fournissons déjà de nombreux composants React dont vous pourriez avoir besoin dans votre application frontend.
+:::
+
+## Construisons un blog avec FireCMS
+
+Nous allons construire une collection qui héberge des articles de blog. Chacun des articles de blog inclura un **tableau dynamique d'éléments**.
+
+FireCMS dispose d'une fonctionnalité intégrée qui vous permet de construire des tableaux dynamiques. La propriété de tableau peut être configurée avec la prop `oneOf`, pour contenir des objets qui contiennent un type spécifique de valeur. C'est parfait pour construire notre structure de données d'entrée de blog !
+
+Voici les types que nous utiliserons :
+- Nous définissons le type de la collection de blog :
+```tsx
+type BlogEntry = {
+    name: string,
+    header_image: string,
+    created_on: Date,
+    status: string,
+    content: (BlogEntryImages | BlogEntryText | BlogEntryProducts)[];
+}
+```
+
+- Et chacun des types du tableau `content` :
+
+```tsx
+type BlogEntryImages = {
+    type: "images";
+    value: string[];
+}
+
+type BlogEntryText = {
+    type: "text";
+    value: string;
+}
+
+type BlogEntryProducts = {
+    type: "products";
+    value: object[];
+}
+```
+
+### Créer la collection
+
+:::tip
+Vous pouvez créer cette même collection en utilisant un template dans le tableau de bord FireCMS.
+:::
+
+Commençons par initialiser notre collection, sans aucune propriété :
+
+```tsx
+export const blogCollection = buildCollection<BlogEntry>({
+    name: "Blog entry",
+    path: "blog",
+    properties: {}
+});
+```
+
+### Propriétés de base
+
+Ensuite, nous allons ajouter quelques propriétés simples pour nos entrées.
+
+- Nous voulons avoir un titre, qui doit toujours être défini, donc nous définissons la prop `required` dans la validation à true :
+
+```tsx
+buildProperty({
+    name: "Title",
+    validation: { required: true },
+    dataType: "string"
+})
+```
+
+- Une image qui sera en haut de l'article de blog :
+
+```tsx
+buildProperty({
+    name: "Header image",
+    dataType: "string",
+    storage: {
+        storagePath: "images",
+        acceptedFiles: ["image/*"],
+        metadata: {
+            cacheControl: "max-age=1000000"
+        }
+    }
+})
+```
+
+- Et una date "created on" qui est **générée automatiquement** quand le document est créé.
+
+```tsx
+buildProperty( {
+    name: "Created on",
+    dataType: "date",
+    autoValue: "on_create"
+})
+```
+
+### Champ de statut conditionnel
+
+Maintenant, nous voulons ajouter une propriété de chaîne `status` qui aura deux valeurs possibles : `published` et `draft`. Nous voulons seulement permettre l'état `published` quand le reste des champs est correct.
+
+Dans ce cas, nous allons garder les choses simples et vérifier uniquement si l'image d'en-tête est définie :
+
+```tsx
+buildProperty(({ values }) => ({
+    name: "Status",
+    validation: { required: true },
+    dataType: "string",
+    columnWidth: 140,
+    enumValues: {
+        published: {
+            id: "published",
+            label: "Published",
+            disabled: !values.header_image,
+        },
+        draft: "Draft"
+    }
+}))
+```
+
+### Contenu de l'entrée de blog
+
+Le contenu de nos entrées de blog doit être **dynamique**, afin que les gestionnaires de contenu puissent créer des entrées complexes avec différents composants.
+
+Le contenu sera un tableau d'objets, qui auront un attribut `type` (qui fonctionnera comme discriminateur) et un attribut `value`.
+
+Nous définirons 3 types :
+- `images` : un tableau d'images
+- `text` : un champ texte Markdown
+- `products` : un tableau de références vers une autre collection, `products` dans ce cas.
+
+Nous utilisons la prop `oneOf` dans les propriétés de tableau qui est conçue exactement pour ce cas d'utilisation :
+
+```tsx
+buildProperty({
+    name: "Content",
+    description: "Example of a complex array with multiple properties as children",
+    validation: { required: true },
+    dataType: "array",
+    columnWidth: 400,
+    oneOf: {
+        typeField: "type",
+        valueField: "value",
+        properties: {
+            images: buildProperty({
+                name: "Images",
+                dataType: "array",
+                of: buildProperty({
+                    dataType: "string",
+                    storage: {
+                        storagePath: "images",
+                        acceptedFiles: ["image/*"],
+                        metadata: {
+                            cacheControl: "max-age=1000000"
+                        }
+                    }
+                }),
+                description: "This fields allows uploading multiple images at once and reordering"
+            }),
+            text: buildProperty({
+                dataType: "string",
+                name: "Text",
+                markdown: true
+            }),
+            products: buildProperty({
+                name: "Products",
+                dataType: "array",
+                of: {
+                    dataType: "reference",
+                    path: "products"
+                }
+            })
+        }
+    }
+})
+```
+
+### Création d'une vue d'aperçu
+
+Utilisons une autre fonctionnalité de FireCMS : les **vues personnalisées pour les entités** !
+
+FireCMS vous permet d'ajouter des vues supplémentaires à vos vues d'entités, qui sont définies comme des composants React. Les props que vous recevez pour construire ce composant sont la collection d'entités, l'entité originale et les valeurs modifiées.
+
+Dans ce cas, nous allons créer quelques composants React pour représenter notre entrée de blog comme le ferait l'application frontend. C'est le même code que vous pourriez utiliser dans n'importe quel framework SSR utilisant React, comme `next.js`.
+
+Quand vous avez créé votre composant, il y a 2 façons de l'ajouter :
+
+#### L'enregistrer dans le CMS
+
+La méthode préférée est de l'enregistrer dans le CMS, afin qu'il soit disponible dans le sélecteur de vue de la collection.
+
+```tsx
+import { FireCMSAppConfig } from "@firecms/cloud";
+const appConfig: FireCMSAppConfig = {
+    version: "1",
+    collections: [],
+    entityViews: [
+        {
+            key: "blog_preview",
+            name: "Preview",
+            Builder: BlogEntryPreview
+        }
+    ],
+}
+```
+
+#### L'enregistrer dans la collection
+
+Si vous définissez votre collection en code, vous pouvez également l'enregistrer dans la collection elle-même :
+
+```tsx
+import {buildCollection} from "@firecms/core";
+export const blogCollection = buildCollection<BlogEntry>({
+    name: "Blog entry",
+    path: "blog",
+    entityViews: [
+        {
+            key: "blog_preview",
+            name: "Preview",
+            Builder: BlogEntryPreview
+        }
+    ],
+    properties: {
+        // ...
+    }
+});
+```
+
+## Code complet :
+
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../samples/samples_v3/recipes/blog/blog_collection?raw';
+
+<Code code={MyComponentSource} lang="tsx" />

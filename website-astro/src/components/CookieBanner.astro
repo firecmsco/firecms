@@ -1,5 +1,10 @@
 ---
 // Cookie Banner Component - Blocking Modal
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const tp = useTranslatedPath(lang);
 ---
 
 <style>
@@ -57,14 +62,11 @@
             <div class="relative z-10 bg-white dark:bg-surface-900 rounded-2xl shadow-[0_25px_50px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.05)_inset] w-full max-w-[420px] overflow-hidden border border-surface-200 dark:border-surface-800">
                 <div class="p-6">
                     <div class="mb-5">
-                        <h2 class="text-lg font-bold text-surface-900 dark:text-white mb-3">Cookie Preferences</h2>
+                        <h2 class="text-lg font-bold text-surface-900 dark:text-white mb-3">{t('cookie.title')}</h2>
                         <p class="text-sm leading-relaxed text-surface-800 dark:text-surface-200 m-0">
-                            <strong class="font-semibold text-surface-900 dark:text-white">We use cookies</strong> to
-                            enhance your browsing experience and analyze our traffic.
-                            By clicking "Accept", you consent to
-                            <a href="/policy/cookies_policy" target="_blank"
-                               class="text-primary-light hover:text-primary underline transition-colors">our use of
-                                cookies</a>.
+                            {t('cookie.desc.1')}
+                            <a href={tp("/policy/cookies_policy")} target="_blank"
+                               class="text-primary-light hover:text-primary underline transition-colors">{t('cookie.desc.2')}</a>
                         </p>
                     </div>
                     <div class="flex flex-row gap-3">
@@ -72,13 +74,13 @@
                                 id="cookie-decline"
                                 type="button"
                                 class="w-full h-auto border-none px-5 py-3 rounded-lg bg-surface-200 dark:bg-surface-800 text-surface-900 dark:text-surface-100 text-sm leading-none cursor-pointer font-semibold hover:bg-surface-300 dark:hover:bg-surface-700 transition-colors duration-200">
-                            Decline
+                            {t('cookie.decline')}
                         </button>
                         <button
                                 id="cookie-accept"
                                 type="button"
                                 class="w-full h-auto border-none px-5 py-3 rounded-lg bg-black dark:bg-white text-white dark:text-black text-sm leading-none cursor-pointer font-semibold hover:opacity-90 transition-opacity duration-200">
-                            Accept
+                            {t('cookie.accept')}
                         </button>
                     </div>
                 </div>

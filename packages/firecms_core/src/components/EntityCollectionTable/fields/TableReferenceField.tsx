@@ -10,6 +10,7 @@ import { useCustomizationController, useNavigationController, useReferenceDialog
 import { ErrorView } from "../../ErrorView";
 import { cls, EditIcon } from "@firecms/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
+import { useTranslation } from "../../../hooks";
 
 type TableReferenceFieldProps = {
     name: string;
@@ -62,6 +63,8 @@ export const TableReferenceFieldInternal = React.memo(
             includeEntityLink
         } = props;
 
+        const { t } = useTranslation();
+
         const onSingleEntitySelected = useCallback((entity: Entity<any>) => {
             updateValue(entity ? getReferenceFrom(entity) : null);
         }, [updateValue]);
@@ -111,7 +114,7 @@ export const TableReferenceFieldInternal = React.memo(
                 return <EntityPreviewContainer
                     onClick={disabled ? undefined : handleOpen}
                     size={getPreviewSizeFrom(size)}>
-                    <ErrorView title="Value is not a reference." error={"Click to edit"}/>
+                    <ErrorView title={t("value_is_not_reference")} error={t("click_to_edit")}/>
                 </EntityPreviewContainer>;
         };
 
@@ -136,11 +139,11 @@ export const TableReferenceFieldInternal = React.memo(
                     }
                 </>;
             else
-                return <ErrorView error={"Data is not an array of references"}/>;
+                return <ErrorView error={t("data_is_not_array_of_references")}/>;
         };
 
         if (!collection)
-            return <ErrorView error={"The specified collection does not exist"}/>;
+            return <ErrorView error={t("collection_does_not_exist")}/>;
 
         return (
             <div className="w-full group">

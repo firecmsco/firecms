@@ -1,0 +1,32 @@
+---
+slug: pt/docs/components/radio_group
+title: Grupo de botões de rádio
+sidebar_label: Radio Group
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Radio Group permite que os usuários selecionem uma opção de um conjunto. É útil para cenários de seleção exclusiva onde apenas uma escolha é permitida.
+Cada item do grupo de rádio é representado por um componente `RadioGroupItem` e tipicamente envolvido por um componente `Label`.
+
+## Uso
+
+Para usar o `RadioGroup` e o `RadioGroupItem`, importe-os dos seus componentes e estruture suas opções usando o `RadioGroup` como contêiner e o `RadioGroupItem` para cada opção.
+
+## Grupo de rádio básico
+
+Um exemplo básico de um grupo de rádio, permitindo seleção simples.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/radio_group/radio_group_basic.tsx"/>
+
+## Personalizando a aparência dos itens do grupo de rádio
+
+Este exemplo demonstra como personalizar a aparência de itens individuais do grupo de rádio.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/radio_group/radio_group_custom.tsx"/>
+
+## Grupo de rádio desabilitado
+
+Como desabilitar o grupo de rádio inteiro ou itens individuais dentro dele.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/radio_group/radio_group_disabled.tsx"/>

@@ -1,0 +1,42 @@
+---
+title: Copier une entité d'une collection à une autre
+slug: fr/docs/recipes/copy_entity
+sidebar_label: Copier depuis une autre collection
+description: Implémentez une fonctionnalité personnalisée pour copier des entités entre collections dans Firestore en utilisant FireCMS. Vous apprendrez comment ajouter un bouton de copie à vos vues de collection, permettant la réplication de données à différents emplacements Firestore.
+---
+
+![Sélection de produit](/img/product_selection.webp)
+
+Dans ce tutoriel, nous allons montrer comment vous pouvez ajouter un bouton à votre collection qui vous permettra de **copier des entités depuis une autre collection**.
+
+Il est très courant dans les bases de données NoSQL, comme Firestore, de conserver des données dénormalisées dans différentes collections. C'est-à-dire conserver la même information à plusieurs endroits, au lieu des bases de données normalisées où l'information devrait idéalement être stockée une seule fois.
+
+### Déclarer vos collections
+
+À des fins d'illustration, créons deux collections `products` simples, depuis et vers lesquelles nous copierons :
+
+import { Code } from '@astrojs/starlight/components';
+import MyComponentSource from '../../samples/samples_v3/recipes/copy_entity/simple_product_collection?raw';
+import CopyButton from '../../samples/samples_v3/recipes/copy_entity/copy_button?raw';
+import CopyButtonUse from '../../samples/samples_v3/recipes/copy_entity/copy_button_use?raw';
+import FullCode from '../../samples/samples_v3/recipes/copy_entity/full?raw';
+
+<Code code={MyComponentSource} lang="tsx" />
+
+### Ajouter une action personnalisée à votre collection
+
+Pour l'étape suivante, nous allons ajouter un bouton personnalisé à notre collection cible. Ce bouton ouvrira un dialogue de référence et permettra aux utilisateurs de sélectionner une entité dans la source.
+
+Cet exemple utilise quelques hooks fournis par FireCMS pour développer des composants personnalisés.
+
+<Code code={CopyButton} lang="tsx" />
+
+### Ajouter l'action de copie personnalisée
+
+Une fois votre composant prêt, vous pouvez le brancher dans les `Actions` de vos collections :
+
+<Code code={CopyButtonUse} lang="tsx" />
+
+## Code complet
+
+<Code code={FullCode} lang="tsx" />

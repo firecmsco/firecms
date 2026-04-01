@@ -4,7 +4,8 @@ import {
     IconForView,
     NavigationGroup,
     SmallNavigationCard,
-    useNavigationController
+    useNavigationController,
+    useTranslation
 } from "@firecms/core";
 import { Paywall, SubscriptionPlanWidget } from "./subscriptions";
 import { ADMIN_VIEWS_CONFIG } from "../utils";
@@ -25,6 +26,8 @@ export function FireCMSCloudHomePage() {
         isTrialOver,
     } = useProjectConfig();
 
+    const { t } = useTranslation();
+
     const showSubscriptionWidget = (navigation.collections ?? []).length > 0;
 
     if (isTrialOver) {
@@ -44,7 +47,7 @@ export function FireCMSCloudHomePage() {
                     {ADMIN_VIEWS_CONFIG.map((view) => <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
                         key={`nav_${view.path}`}>
                         <SmallNavigationCard
-                            name={view.name}
+                            name={t(view.name as any)}
                             url={view.path}
                             icon={<IconForView collectionOrView={view}
                                 className={"text-surface-400 dark:text-surface-600"} />} />

@@ -6,6 +6,7 @@ import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { cls, DescriptionIcon, OpenInNewIcon, Tooltip, Typography } from "@firecms/ui";
 import { EmptyValue } from "./EmptyValue";
+import { useTranslation } from "../../hooks/useTranslation";
 
 /**
  * @group Preview components
@@ -26,6 +27,8 @@ export function UrlComponentPreview({
     interactive?: boolean,
     fill?: boolean
 }): React.ReactElement {
+
+    const { t } = useTranslation();
 
     if (!previewType) {
         if (!url || !url.trim()) return <EmptyValue />;
@@ -51,8 +54,7 @@ export function UrlComponentPreview({
         return <audio controls
             className={"max-w-100%"}
             src={url}>
-            Your browser does not support the
-            <code>audio</code> element.
+            {t("browser_does_not_support_audio")}
         </audio>;
     } else if (previewType === "video") {
         return <VideoPreview size={size} src={url} interactive={interactive} />;

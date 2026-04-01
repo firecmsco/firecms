@@ -19,6 +19,7 @@ import {
 } from "@firecms/ui";
 import { FormexController } from "@firecms/formex";
 import { useFireCMSContext, useSideEntityController } from "../hooks";
+import { useTranslation } from "../hooks/useTranslation";
 
 export interface EntityFormActionsProps {
     fullPath: string;
@@ -56,6 +57,7 @@ export function EntityFormActions({
 
     const context = useFireCMSContext();
     const sideEntityController = useSideEntityController();
+    const { t } = useTranslation();
 
     return layout === "bottom"
         ? buildBottomActions({
@@ -72,7 +74,8 @@ export function EntityFormActions({
             openEntityMode,
             navigateBack,
             formContext,
-            formex
+            formex,
+            t
         })
         : buildSideActions({
             fullPath,
@@ -88,7 +91,8 @@ export function EntityFormActions({
             openEntityMode,
             navigateBack,
             formContext,
-            formex
+            formex,
+            t
         });
 }
 
@@ -108,6 +112,7 @@ type ActionsViewProps<M extends object> = {
     navigateBack: () => void;
     formContext: FormContext,
     formex: FormexController<any>;
+    t: (key: any, vars?: Record<string, string>) => string;
 };
 
 function buildBottomActions<M extends object>({
@@ -125,7 +130,8 @@ function buildBottomActions<M extends object>({
                                                   openEntityMode,
                                                   navigateBack,
                                                   formContext,
-                                                  formex
+                                                  formex,
+                                                  t
                                               }: ActionsViewProps<M>) {
 
     const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
@@ -165,16 +171,16 @@ function buildBottomActions<M extends object>({
         <Button variant="text" disabled={disabled || formex.isSubmitting}
                 color={"primary"}
                 type="reset">
-            {status === "existing" ? "Discard" : "Clear"}
+            {status === "existing" ? t("discard") : t("clear")}
         </Button>
         <Button variant={"filled"}
                 color="primary"
                 type="submit"
                 disabled={disabled || formex.isSubmitting}
                 startIcon={hasErrors ? <ErrorIcon/> : undefined}>
-            {status === "existing" && "Save"}
-            {status === "copy" && "Create copy"}
-            {status === "new" && "Create"}
+            {status === "existing" && t("save")}
+            {status === "copy" && t("create_copy")}
+            {status === "new" && t("create")}
         </Button>
 
     </DialogActions>;
@@ -193,7 +199,8 @@ function buildSideActions<M extends object>({
                                                 disabled,
                                                 status,
                                                 pluginActions,
-                                                formex
+                                                formex,
+                                                t
                                             }: ActionsViewProps<M>) {
 
     const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
@@ -207,12 +214,12 @@ function buildSideActions<M extends object>({
                        size={"large"}
                        startIcon={hasErrors ? <ErrorIcon/> : undefined}
                        disabled={disabled || formex.isSubmitting}>
-            {status === "existing" && "Save"}
-            {status === "copy" && "Create copy"}
-            {status === "new" && "Create"}
+            {status === "existing" && t("save")}
+            {status === "copy" && t("create_copy")}
+            {status === "new" && t("create")}
         </LoadingButton>
         <Button fullWidth={true} variant="text" disabled={disabled || formex.isSubmitting} type="reset">
-            {status === "existing" ? "Discard" : "Clear"}
+            {status === "existing" ? t("discard") : t("clear")}
         </Button>
 
         {pluginActions}

@@ -1,5 +1,5 @@
 import { Container } from "@firecms/ui";
-import { FireCMSEditor, type JSONContent } from "@firecms/editor";
+import { FireCMSEditor, type JSONContent } from "@firecms/core";
 import { useEffect, useState } from "react";
 import { CircularProgressCenter, useAuthController, useStorageSource } from "@firecms/core";
 import { useEditorAIController } from "@firecms/data_enhancement";
@@ -40,8 +40,8 @@ export function TestEditorView() {
                 //     // window.localStorage.setItem("editor-content", JSON.stringify(content));
                 // }}
                 onMarkdownContentChange={(content) => {
-                    // console.log("markdown content")
-                    // console.log(content);
+                    console.log("markdown content");
+                    console.log(content);
                     window.localStorage.setItem("editor-content", content);
                 }}
                 aiController={editorAIController}

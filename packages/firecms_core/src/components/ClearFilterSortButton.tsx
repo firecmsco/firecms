@@ -1,5 +1,6 @@
 import { FilterListOffIcon, Button, Tooltip } from "@firecms/ui";
 import { EntityTableController } from "../types";
+import { useTranslation } from "../hooks";
 
 export function ClearFilterSortButton({
     tableController,
@@ -8,6 +9,8 @@ export function ClearFilterSortButton({
     enabled: boolean;
     tableController: EntityTableController
 }) {
+    const { t } = useTranslation();
+
     if (!enabled) {
         return null;
     }
@@ -18,11 +21,11 @@ export function ClearFilterSortButton({
     if ((filterIsSet || sortIsSet) && (tableController.clearFilter || tableController.setSortBy)) {
         let label;
         if (filterIsSet && sortIsSet) {
-            label = "Clear filter/sort";
+            label = t("clear_filter_sort");
         } else if (filterIsSet) {
-            label = "Clear filter";
+            label = t("clear_filter");
         } else {
-            label = "Clear sort";
+            label = t("clear_sort");
         }
         return (
             <Tooltip title={label}>

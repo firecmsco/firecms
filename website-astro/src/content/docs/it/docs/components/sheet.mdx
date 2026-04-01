@@ -1,0 +1,31 @@
+---
+slug: it/docs/components/sheet
+title: Foglio (Sheet)
+sidebar_label: Sheet
+---
+
+Il componente `Sheet` è usato per mostrare pannelli scorrevoli dai bordi dello schermo. Può essere aperto dall'alto, dal basso, da sinistra o da destra, e può essere opaco o trasparente.
+
+## Utilizzo
+
+Per usare lo `Sheet`, importalo dai tuoi componenti e passa le prop `open`, `side`, `transparent` e `onOpenChange`.
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+## Sheet di base
+
+Uno sheet semplice che scorre da destra.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_basic.tsx"/>
+
+## Sheet with Top Side
+
+Questo esempio dimostra uno sheet che scorre dall'alto.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_top.tsx"/>
+
+## Sheet trasparente
+
+Questo sheet è configurato per essere trasparente.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/sheet/sheet_transparent.tsx"/>

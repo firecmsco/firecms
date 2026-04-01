@@ -34,8 +34,7 @@ src/
 │   ├── components/
 │   │   └── CustomLoginView.tsx
 │   └── views/
-│       ├── ExampleCMSView.tsx
-│       └── TestEditorView.tsx
+│       └── ExampleCMSView.tsx
 ├── common/                 # Shared config and types
 │   ├── firebase_config.ts
 │   └── types.ts

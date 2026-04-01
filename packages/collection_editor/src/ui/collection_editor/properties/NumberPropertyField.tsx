@@ -3,12 +3,14 @@ import { NumberPropertyValidation } from "./validation/NumberPropertyValidation"
 import { ValidationPanel } from "./validation/ValidationPanel";
 import { TextField } from "@firecms/ui";
 import { getIn, useFormex } from "@firecms/formex";
+import { useTranslation } from "@firecms/core";
 
 export function NumberPropertyField({ disabled }: {
     disabled: boolean;
 }) {
 
     const { values, setFieldValue } = useFormex();
+    const { t } = useTranslation();
 
     return (
         <>
@@ -29,7 +31,7 @@ export function NumberPropertyField({ disabled }: {
                            onChange={(e: any) => {
                                setFieldValue("defaultValue", e.target.value === "" ? undefined : parseFloat(e.target.value));
                            }}
-                           label={"Default value"}
+                           label={t("default_value")}
                            value={getIn(values, "defaultValue") ?? ""}/>
 
             </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { FireCMSPlugin, useAuthController, useNavigationController, User } from "@firecms/core";
+import { FireCMSPlugin, useAuthController, useNavigationController, User, useTranslation } from "@firecms/core";
 import { ConfigControllerProvider } from "./ConfigControllerProvider";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { EditorCollectionAction } from "./ui/EditorCollectionAction";
@@ -18,6 +18,13 @@ import { NewCollectionCard } from "./ui/NewCollectionCard";
 import { EditorEntityAction } from "./ui/EditorEntityAction";
 import { KanbanSetupAction } from "./ui/KanbanSetupAction";
 import { AddKanbanColumnAction } from "./ui/AddKanbanColumnAction";
+import { collectionEditorTranslationsEn } from "./locales/en";
+import { collectionEditorTranslationsEs } from "./locales/es";
+import { collectionEditorTranslationsDe } from "./locales/de";
+import { collectionEditorTranslationsFr } from "./locales/fr";
+import { collectionEditorTranslationsIt } from "./locales/it";
+import { collectionEditorTranslationsHi } from "./locales/hi";
+import { collectionEditorTranslationsPt } from "./locales/pt";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, USER extends User = User> {
 
@@ -130,6 +137,15 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         },
         form: {
             ActionsTop: EditorEntityAction,
+        },
+        i18n: {
+            en: collectionEditorTranslationsEn,
+            es: collectionEditorTranslationsEs,
+            de: collectionEditorTranslationsDe,
+            fr: collectionEditorTranslationsFr,
+            it: collectionEditorTranslationsIt,
+            hi: collectionEditorTranslationsHi,
+            pt: collectionEditorTranslationsPt
         }
     };
 }
@@ -141,6 +157,7 @@ export function IntroWidget() {
         throw Error("Navigation not ready in FireCMSHomePage");
 
     const authController = useAuthController();
+    const { t } = useTranslation();
 
     const collectionEditorController = useCollectionEditorController();
     const canCreateCollections = collectionEditorController.configPermissions
@@ -156,10 +173,9 @@ export function IntroWidget() {
     return (
         <Paper
             className={"my-4 px-4 py-6 flex flex-col  bg-white dark:bg-surface-accent-800 gap-2"}>
-            <Typography variant={"subtitle2"} className={"uppercase"}>No collections found</Typography>
+            <Typography variant={"subtitle2"} className={"uppercase"}>{t("no_collections_found")}</Typography>
             <Typography>
-                Start building collections in FireCMS easily. Map them to your existing
-                database data, import from files, or use our templates.
+                {t("start_building_collections")}
             </Typography>
             {canCreateCollections && <Button
                 onClick={collectionEditorController && canCreateCollections
@@ -169,10 +185,10 @@ export function IntroWidget() {
                         sourceClick: "new_collection_card"
                     })
                     : undefined}>
-                <AddIcon />Create your first collection
+                <AddIcon />{t("create_first_collection")}
             </Button>}
             <Typography color={"secondary"}>
-                You can also define collections programmatically.
+                {t("define_collections_programmatically")}
             </Typography>
         </Paper>
     );

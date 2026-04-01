@@ -30,6 +30,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { NavigationCardBinding } from "./NavigationCardBinding";
 import { NavigationEntry } from "../../types";
 import { cls, defaultBorderMixin } from "@firecms/ui";
+import { useTranslation } from "../../hooks";
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) =>
     defaultAnimateLayoutChanges({
@@ -669,6 +670,7 @@ export function NewGroupDropZone({
     disabled: boolean;
     setIsHovering: (v: boolean) => void;
 }) {
+    const { t } = useTranslation();
     const {
         setNodeRef,
         isOver
@@ -709,7 +711,7 @@ export function NewGroupDropZone({
             )}>
             <div className="text-center p-4">
                 <span className="block font-medium text-sm">
-                    Drop here to create a new group
+                    {t("drop_here_create_group")}
                 </span>
             </div>
         </div>

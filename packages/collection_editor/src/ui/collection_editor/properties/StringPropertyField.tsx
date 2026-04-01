@@ -4,6 +4,7 @@ import { ValidationPanel } from "./validation/ValidationPanel";
 import { getIn, useFormex } from "@firecms/formex";
 
 import { TextField } from "@firecms/ui";
+import { useTranslation } from "@firecms/core";
 
 export function StringPropertyField({
                                         widgetId,
@@ -16,6 +17,7 @@ export function StringPropertyField({
 }) {
 
     const { values, setFieldValue } = useFormex();
+    const { t } = useTranslation();
 
     return (
         <>
@@ -65,7 +67,7 @@ export function StringPropertyField({
                            onChange={(e: any) => {
                                setFieldValue("defaultValue", e.target.value === "" ? undefined : e.target.value);
                            }}
-                           label={"Default value"}
+                           label={t("default_value")}
                            value={getIn(values, "defaultValue") ?? ""}/>
 
             </div>

@@ -1,0 +1,246 @@
+---
+title: Exemple PRO
+slug: fr/docs/pro/sample_pro
+sidebar_label: Exemple
+---
+
+Parcourons le code généré par le CLI FireCMS après la création d'un projet PRO. FireCMS est fondamentalement une bibliothèque React, donc le code généré est une application React. Le code est structuré de façon à ce que vous puissiez facilement le comprendre et le modifier pour répondre à vos besoins.
+
+
+### Configuration Firebase
+
+La première étape consiste à initialiser Firebase en utilisant la configuration fournie. Ceci est nécessaire pour toutes les opérations liées à Firebase dans l'application.
+
+Vous pouvez trouver le `firebaseConfig` après avoir créé une nouvelle webapp dans la console Firebase.
+```jsx
+const {
+    firebaseApp,
+    firebaseConfigLoading,
+    configError
+} = useInitialiseFirebase({
+    firebaseConfig
+});
+```
+Cet extrait configure Firebase, vérifie le statut de chargement et gère les erreurs de configuration.
+
+### Source de données et source de stockage
+
+Vos utilisateurs devront interagir avec des données et des fichiers, vous devez donc configurer des sources de données et de stockage. FireCMS fournit un délégué Firestore et une source de stockage Firebase pour ces opérations.
+
+```jsx
+const firestoreDelegate = useFirestoreDelegate({
+    firebaseApp
+});
+const storageSource = useFirebaseStorageSource({
+    firebaseApp
+});
+```
+
+Vous êtes libre de définir votre propre source de données et source de stockage, mais ce sont celles par défaut fournies par FireCMS.
+
+### Plugin de configuration de collection
+
+Le plugin d'éditeur de collection vous permet d'inclure une interface pour modifier les configurations de collection. Vous pouvez choisir où la configuration est stockée et passer la configuration au plugin. Nous incluons un contrôleur qui sauvegarde la configuration dans votre base de données Firestore. Le chemin par défaut est `__FIRECMS/config/collections`.
+
+```jsx
+const collectionConfigController = useFirestoreCollectionsConfigController({
+    firebaseApp
+});
+```
+
+Vous êtes libre de définir vos collections en code ou d'utiliser l'interface pour les définir. Vous pouvez également permettre la modification dans l'interface des collections définies en code, puis fusionner les collections définies en code avec celles définies dans l'interface.
+```jsx
+const collectionsBuilder = useCallback(() => {
+    // Ici nous définissons une collection d'exemple en code.
+    const collections = [
+        productsCollection
+        // Vos collections ici
+    ];
+    // Vous pouvez fusionner les collections définies dans l'éditeur de collection (UI) avec vos propres collections
+    return mergeCollections(collections, collectionConfigController.collections ?? []);
+}, [collectionConfigController.collections]);
+```
+
+Pour ajouter le plugin d'éditeur de collection, vous devez l'inclure dans la liste des plugins passés au composant `FireCMS`.
+```jsx
+const collectionEditorPlugin = useCollectionEditorPlugin({
+    collectionConfigController
+});
+```
+
+### Gestion de l'autorisation
+
+La gestion de l'authentification et des permissions des utilisateurs est cruciale pour la sécurité et le contrôle d'accès approprié. FireCMS fournit une interface `Authenticator` que vous pouvez implémenter pour définir votre propre logique d'authentification.
+
+Vous pouvez valider l'accès de l'utilisateur à la vue principale en fonction de son statut d'authentification et de ses permissions.
+```jsx
+    const myAuthenticator: Authenticator<FirebaseUserWrapper> = useCallback(async ({
+                                                                                       user,
+                                                                                       authController
+                                                                                   }) => {
+
+        if (user?.email?.includes("flanders")) {
+            // Vous pouvez lancer une erreur pour empêcher l'accès
+            throw Error("Stupid Flanders!");
+        }
+
+        const idTokenResult = await user?.firebaseUser?.getIdTokenResult();
+        const userIsAdmin = idTokenResult?.claims.admin || user?.email?.endsWith("@firecms.co");
+
+        console.log("Allowing access to", user);
+
+        // dans ce cas nous autorisons l'accès à chaque utilisateur
+        return true;
+    }, []);
+
+    const {
+        authLoading,
+        canAccessMainView,
+        notAllowedError
+    } = useValidateAuthenticator({
+        authController,
+        authenticator: myAuthenticator,
+        dataSourceDelegate: firestoreDelegate,
+        storageSource
+    });
+```
+
+#### Gestion des utilisateurs
+
+FireCMS PRO inclut un système de gestion des utilisateurs qui vous permet de définir des rôles et des permissions pour les utilisateurs. L'interface `UserManagement` fournit des méthodes pour définir des rôles et des permissions, ainsi qu'un état de chargement à gérer. Nous incluons un contrôleur qui stocke les rôles et permissions des utilisateurs dans Firestore.
+
+```jsx
+    const userManagement = useBuildUserManagement({
+        dataSourceDelegate: firestoreDelegate,
+    });
+```
+
+puis construisez le plugin de gestion des utilisateurs et incluez-le dans la liste des plugins passés au composant `FireCMS`.
+
+```jsx
+    const userManagementPlugin = useUserManagementPlugin({ userManagement });
+```
+
+Vous pouvez déléguer toute la logique d'authentification au système de gestion des utilisateurs, en utilisant l'`authenticator` fourni par le contrôleur `UserManagement`.
+
+```jsx
+    const {
+        authLoading,
+        canAccessMainView,
+        notAllowedError
+    } = useValidateAuthenticator({
+        authController,
+        disabled: userManagement.loading,
+        authenticator: userManagement.authenticator,
+        dataSourceDelegate: firestoreDelegate,
+        storageSource
+    });
+```
+
+### Le contrôleur Auth
+
+L'`AuthController` est le contrôleur en charge de la gestion de l'authentification. Il fournit des méthodes pour se connecter, se déconnecter et obtenir l'utilisateur actuel. Vous pouvez également définir des rôles pour les utilisateurs. Vous pouvez accéder à ce contrôleur depuis vos composants en utilisant le hook `useAuthController`.
+
+```jsx
+const authController: FirebaseAuthController = useFirebaseAuthController({
+    firebaseApp,
+    signInOptions: ["google.com", "password"],
+    loading: userManagement.loading,
+    defineRolesFor: userManagement.defineRolesFor
+});
+```
+
+### Contrôleur de mode et persistance de configuration utilisateur
+
+Le réglage des préférences d'interface, comme le mode de thème, améliore l'expérience utilisateur.
+
+```jsx
+const modeController = useBuildModeController();
+const userConfigPersistence = useBuildLocalConfigurationPersistence();
+```
+Ces contrôleurs permettent le basculement du mode de thème et le stockage local des préférences utilisateur.
+
+### Contrôleur de navigation
+
+Le contrôleur de navigation interne gère la navigation de l'application, en tirant parti des collections et de la configuration des permissions. Ici, vous pouvez définir vos collections, vues et vues d'administration.
+
+```jsx
+    const collectionsBuilder = useCallback(() => {
+        const collections = [
+            productsCollection
+        ];
+        return mergeCollections(collections, collectionConfigController.collections ?? []);
+    }, [collectionConfigController.collections]);
+
+    const views: CMSView[] = useMemo(() => ([{
+        path: "example",
+        name: "Example CMS view",
+        view: <ExampleCMSView/>
+    }]), []);
+
+    const navigationController = useBuildNavigationController({
+        collections: collectionsBuilder,
+        views,
+        authController,
+        dataSourceDelegate: firestoreDelegate,
+        adminViews: userManagementAdminViews,
+        collectionPermissions: userManagement.collectionPermissions
+    });
+```
+
+## Assemblage du tout
+
+Une fois que vous avez tous les contrôleurs configurés, vous pouvez les passer au composant `FireCMS`, avec les plugins que vous souhaitez utiliser. Le composant `FireCMS` gérera le reste et affichera la vue principale ou la vue de connexion en fonction du statut d'authentification de l'utilisateur.
+
+```jsx
+    return (
+        <SnackbarProvider>
+            <ModeControllerProvider value={modeController}>
+                <FireCMS
+                    navigationController={navigationController}
+                    authController={authController}
+                    userConfigPersistence={userConfigPersistence}
+                    dataSourceDelegate={firestoreDelegate}
+                    storageSource={storageSource}
+                    plugins={[dataEnhancementPlugin, importPlugin, exportPlugin, userManagementPlugin, collectionEditorPlugin]}
+                >
+                    {({
+                          context,
+                          loading
+                      }) => {
+
+                        let component;
+                        if (loading || authLoading) {
+                            component = <CircularProgressCenter size={"large"}/>;
+                        } else {
+                            if (!canAccessMainView) {
+                                component = (
+                                    <FirebaseLoginView
+                                        allowSkipLogin={false}
+                                        signInOptions={signInOptions}
+                                        firebaseApp={firebaseApp}
+                                        authController={authController}
+                                        notAllowedError={notAllowedError}/>
+                                );
+                            } else {
+                                component = (
+                                    <Scaffold autoOpenDrawer={false}>
+                                        <AppBar title={"My amazing CMS"}/>
+                                        <Drawer/>
+                                        <NavigationRoutes/>
+                                        <SideDialogs/>
+                                    </Scaffold>
+                                );
+                            }
+                        }
+
+                        return component;
+                    }}
+                </FireCMS>
+            </ModeControllerProvider>
+        </SnackbarProvider>
+    );
+```
+
+
+Trouvez plus de détails sur les composants principaux dans la section [Composants principaux](../../self/main_components).

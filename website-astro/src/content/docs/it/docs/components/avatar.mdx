@@ -1,0 +1,27 @@
+---
+slug: it/docs/components/avatar
+title: Avatar
+sidebar_label: Avatar
+---
+
+import CodeSampleWithSource from "../../../../../components/CodeSampleWithSource.astro";
+
+Gli Avatar sono segnaposto visivi per rappresentare utenti o entità. Possono contenere immagini o iniziali e sono comunemente usati in intestazioni, liste e ovunque vengano presentate informazioni sull'utente.
+
+## Avatar con immagine
+
+La prop `src` specifica l'URL dell'immagine per l'avatar.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/avatar/avatar_image.tsx"/>
+
+## Avatar con testo
+
+Quando la prop `src` non viene fornita, l'avatar può mostrare del testo come le iniziali dell'utente.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/avatar/avatar_text.tsx"/>
+
+## Stile personalizzato
+
+La prop `className` ti consente di passare classi CSS personalizzate al componente avatar.
+
+<CodeSampleWithSource path="/src/content/docs/samples/components/avatar/custom_style_avatar.tsx"/>

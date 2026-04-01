@@ -1110,6 +1110,7 @@ export type StorageConfig = {
      */
     imageResize?: ImageResize;
 
+
     /**
      * Specific metadata set in your uploaded file.
      * For the default Firebase implementation, the values passed here are of type

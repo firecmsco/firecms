@@ -1,4 +1,4 @@
-import { PluginHomePageAdditionalCardsProps, useAuthController } from "@firecms/core";
+import { PluginHomePageAdditionalCardsProps, useAuthController, useTranslation } from "@firecms/core";
 import { AddIcon, Card, cls, Typography } from "@firecms/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 
@@ -11,6 +11,8 @@ export function NewCollectionCard({
         throw Error("Navigation not ready in FireCMSHomePage");
 
     const authController = useAuthController();
+
+    const { t } = useTranslation();
 
     const collectionEditorController = useCollectionEditorController();
     const canCreateCollections = collectionEditorController.configPermissions
@@ -35,11 +37,12 @@ export function NewCollectionCard({
                 <AddIcon color="primary" size={"large"}/>
                 <Typography color="primary"
                             variant={"caption"}
-                            className={"font-medium"}>{"Add new collection".toUpperCase()}</Typography>
+                            className={"font-medium"}>{t("add_new_collection").toUpperCase()}</Typography>
 
                 {!canCreateCollections &&
-                    <Typography variant={"caption"}>You don&apos;t have permissions to create
-                        collections</Typography>
+                    <Typography variant={"caption"}>
+                        {t("no_permissions_create_collection")}
+                    </Typography>
                 }
             </div>
 
