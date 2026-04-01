@@ -160,7 +160,7 @@ title: Changelog
 
 - **User Management in FireCMS Core**: Added user management capabilities directly to FireCMS Core, expanding self-hosted options.
 - **User Fields as String Values**: Fully implemented support for user fields as string values, improving flexibility in user data handling.
-- **TipTap V3 Migration**: Migrated markdown editor to TipTap V3 for improved performance and features.
+- **Editor Migration**: Migrated markdown editor for improved performance and features.
 - **Tailwind 4 Retrofit**: Multiple adaptations to support Tailwind 4 retrofit, modernizing the styling infrastructure.
 - **Login Enhancements**:
   - Implemented Cloud email login
@@ -212,7 +212,7 @@ title: Changelog
   - Fixed Google Cloud login issue
   - Fixed error returning from subscription view
   - Fixed storing recent project
-  - Fixed TipTap imports
+  - Fixed editor imports
   - Fixed passing gclid correctly to app
   - Website CLS (Cumulative Layout Shift) fix
 - **CLI**: Added npm instructions to CLI
@@ -439,7 +439,7 @@ const userManagement = useBuildUserManagement({
 ## [3.0.0-beta.10] - 2024-07-10
 
 - Fixed issues with wrong licenses.
-- Resolved TipTap dependencies.
+- Resolved editor dependencies.
 - Addressed various minor styling updates across the web.
 - Moved body CSS from default imports to individual files for better modularity.
 - Implemented several web updates, including select style fixes and dialog title adjustments for text search.

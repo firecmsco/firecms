@@ -977,7 +977,7 @@ These features are already available in your FireCMS Cloud project — no update
 - **Timezone support for dates** — correct timezone handling, no more midnight auto-conversion
 - **Enum conditions** — dynamically filter enum values based on other properties
 - **Collapsible drawer groups** — cleaner sidebar navigation
-- **TipTap V3** — improved rich-text editor
+- **Rich-text Editor** — improved rich-text editor
 - **Image resizing** — built-in image resizing on upload
 
 For custom code projects, updating also unlocks:
@@ -5864,7 +5864,7 @@ FireCMS v3.1 includes numerous bug fixes and improvements:
 - Enhanced suggestion menu behavior
 - Small UI adjustments and visual update to dialogs
 - Removed font-mono from map preview
-- TipTap V3 migration for improved markdown editor performance
+- Editor migration for improved markdown editor performance
 
 #### Collection Editor
 - Added inline editing for property editing
