@@ -13,7 +13,7 @@ title: "RebasePlugin"
 
 > **RebasePlugin**\<`PROPS`, `FORM_PROPS`, `EC`, `COL_ACTIONS_PROPS`, `COL_ACTIONS_START__PROPS`\> = `object`
 
-Defined in: [types/plugins.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 Interface used to define plugins for Rebase.
 NOTE: This is a work in progress and the API is not stable yet.
@@ -46,7 +46,7 @@ NOTE: This is a work in progress and the API is not stable yet.
 
 > `optional` **collection**: `object`
 
-Defined in: [types/plugins.tsx:187](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:254](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 #### injectCollections()?
 
@@ -86,14 +86,21 @@ Use this method to modify a single collection before it is rendered.
 
 > `optional` **collectionView**: `object`
 
-Defined in: [types/plugins.tsx:107](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:112](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 #### AddColumnComponent?
 
-> `optional` **AddColumnComponent**: `React.ComponentType`\<\{ `collection`: `EC`; `fullPath`: `string`; `parentCollectionIds`: `string`[]; `tableController`: [`EntityTableController`](EntityTableController); \}\>
+> `optional` **AddColumnComponent**: `React.ComponentType`\<\{ `collection`: `EC`; `parentCollectionIds`: `string`[]; `path`: `string`; `tableController`: [`EntityTableController`](EntityTableController); \}\>
 
 If you add this callback to your plugin, an add button will be added to the collection table.
 TODO: Only the first plugin that defines this callback will be used, at the moment.
+
+#### AddKanbanColumnComponent?
+
+> `optional` **AddKanbanColumnComponent**: `React.ComponentType`\<\{ `collection`: `EC`; `columnProperty`: `string`; `fullPath`: `string`; `parentCollectionIds`: `string`[]; \}\>
+
+Component to render an "Add Column" button at the end of the Kanban board.
+Used to allow adding new enum values to the column property.
 
 #### blockSearch()?
 
@@ -125,7 +132,7 @@ TODO: Only the first plugin that defines this callback will be used, at the mome
 
 #### CollectionActions?
 
-> `optional` **CollectionActions**: `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_PROPS`\> \| `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_PROPS`\>[]
+> `optional` **CollectionActions**: `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`Record`\<`string`, `unknown`\>, [`User`](User), `EC`\> & `COL_ACTIONS_PROPS`\> \| `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`Record`\<`string`, `unknown`\>, [`User`](User), `EC`\> & `COL_ACTIONS_PROPS`\>[]
 
 Use this component to add custom actions to the entity collections
 toolbar.
@@ -136,19 +143,101 @@ toolbar.
 
 #### CollectionActionsStart?
 
-> `optional` **CollectionActionsStart**: `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_START__PROPS`\> \| `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`any`, `any`, `EC`\> & `COL_ACTIONS_START__PROPS`\>[]
+> `optional` **CollectionActionsStart**: `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`Record`\<`string`, `unknown`\>, [`User`](User), `EC`\> & `COL_ACTIONS_START__PROPS`\> \| `React.ComponentType`\<[`CollectionActionsProps`](../interfaces/CollectionActionsProps)\<`Record`\<`string`, `unknown`\>, [`User`](User), `EC`\> & `COL_ACTIONS_START__PROPS`\>[]
 
 #### collectionActionsStartProps?
 
 > `optional` **collectionActionsStartProps**: `COL_ACTIONS_START__PROPS`
 
+#### CollectionError?
+
+> `optional` **CollectionError**: `React.ComponentType`\<\{ `collection`: `EC`; `error`: `Error`; `parentCollectionIds?`: `string`[]; `path`: `string`; \}\>
+
+Custom component to render when a collection loading error occurs.
+If provided, this replaces the default error view in all collection view modes
+(table, card, kanban).
+Return `null` from the component to fall back to the default error view.
+
 #### HeaderAction?
 
-> `optional` **HeaderAction**: `React.ComponentType`\<\{ `collection`: `EC`; `fullPath`: `string`; `onHover`: `boolean`; `parentCollectionIds`: `string`[]; `property`: [`ResolvedProperty`](ResolvedProperty); `propertyKey`: `string`; `tableController`: [`EntityTableController`](EntityTableController); \}\>
+> `optional` **HeaderAction**: `React.ComponentType`\<\{ `collection`: `EC`; `onHover`: `boolean`; `parentCollectionIds`: `string`[]; `path`: `string`; `property`: [`Property`](Property); `propertyKey`: `string`; `tableController`: [`EntityTableController`](EntityTableController); \}\>
 
 Use this method to inject widgets to the entity collections header
 
 ##### Param
+
+#### KanbanSetupComponent?
+
+> `optional` **KanbanSetupComponent**: `React.ComponentType`\<\{ `collection`: `EC`; `fullPath`: `string`; `parentCollectionIds`: `string`[]; \}\>
+
+Component to render when Kanban view is missing configuration.
+Used to provide a CTA to open the collection editor to configure Kanban.
+
+#### onColumnsReorder()?
+
+> `optional` **onColumnsReorder**: (`props`) => `void`
+
+Callback called when columns are reordered via drag and drop.
+Used by plugins to persist the new column order.
+
+##### Parameters
+
+###### props
+
+###### collection
+
+`EC`
+
+###### fullPath
+
+`string`
+
+###### newPropertiesOrder
+
+`string`[]
+
+###### parentCollectionIds
+
+`string`[]
+
+##### Returns
+
+`void`
+
+#### onKanbanColumnsReorder()?
+
+> `optional` **onKanbanColumnsReorder**: (`props`) => `void`
+
+Callback called when Kanban board columns are reordered via drag and drop.
+Used by plugins to persist the new Kanban column order.
+
+##### Parameters
+
+###### props
+
+###### collection
+
+`EC`
+
+###### fullPath
+
+`string`
+
+###### kanbanColumnProperty
+
+`string`
+
+###### newColumnsOrder
+
+`string`[]
+
+###### parentCollectionIds
+
+`string`[]
+
+##### Returns
+
+`void`
 
 #### onTextSearchClick()?
 
@@ -212,39 +301,45 @@ Use this method to inject widgets to the entity collections header
 
 > `optional` **form**: `object`
 
-Defined in: [types/plugins.tsx:166](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:228](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 #### Actions?
 
-> `optional` **Actions**: `React.ComponentType`\<[`PluginFormActionProps`](../interfaces/PluginFormActionProps)\<`any`, `EC`\>\>
+> `optional` **Actions**: `React.ComponentType`\<[`PluginFormActionProps`](../interfaces/PluginFormActionProps)\<[`User`](User), `EC`\>\>
 
 Add custom actions to the default ones ("Save", "Discard"...)
 
 #### ActionsTop?
 
-> `optional` **ActionsTop**: `React.ComponentType`\<[`PluginFormActionProps`](../interfaces/PluginFormActionProps)\<`any`, `EC`\>\>
+> `optional` **ActionsTop**: `React.ComponentType`\<[`PluginFormActionProps`](../interfaces/PluginFormActionProps)\<[`User`](User), `EC`\>\>
 
 Add custom actions to the top of the form
 
+#### BeforeTitle?
+
+> `optional` **BeforeTitle**: `React.ComponentType`\<[`PluginFormActionProps`](../interfaces/PluginFormActionProps)\<[`User`](User), `EC`\>\>
+
+Add custom content above the entity title in the form view
+
 #### fieldBuilder()?
 
-> `optional` **fieldBuilder**: \<`T`\>(`props`) => `React.ComponentType`\<[`FieldProps`](../interfaces/FieldProps)\<`T`\>\> \| `null`
+> `optional` **fieldBuilder**: \<`T`\>(`props`) => `React.ComponentType`\<[`FieldProps`](../interfaces/FieldProps)\<`any`\>\> \| `null`
 
 ##### Type Parameters
 
 ###### T
 
-`T` *extends* [`CMSType`](CMSType) = [`CMSType`](CMSType)
+`T`
 
 ##### Parameters
 
 ###### props
 
-[`PluginFieldBuilderParams`](PluginFieldBuilderParams)\<`T`, `any`, `EC`\>
+[`PluginFieldBuilderParams`](PluginFieldBuilderParams)\<`Record`\<`string`, `unknown`\>, `EC`\>
 
 ##### Returns
 
-`React.ComponentType`\<[`FieldProps`](../interfaces/FieldProps)\<`T`\>\> \| `null`
+`React.ComponentType`\<[`FieldProps`](../interfaces/FieldProps)\<`any`\>\> \| `null`
 
 #### fieldBuilderEnabled()?
 
@@ -254,13 +349,13 @@ Add custom actions to the top of the form
 
 ###### T
 
-`T` *extends* [`CMSType`](CMSType) = [`CMSType`](CMSType)
+`T`
 
 ##### Parameters
 
 ###### props
 
-[`PluginFieldBuilderParams`](PluginFieldBuilderParams)\<`T`\>
+[`PluginFieldBuilderParams`](PluginFieldBuilderParams)
 
 ##### Returns
 
@@ -272,7 +367,7 @@ Add custom actions to the top of the form
 
 ##### provider.Component
 
-> **Component**: `React.ComponentType`\<`PropsWithChildren`\<`FORM_PROPS` & [`PluginFormActionProps`](../interfaces/PluginFormActionProps)\<`any`, `EC`\>\>\>
+> **Component**: `React.ComponentType`\<`PropsWithChildren`\<`FORM_PROPS` & [`PluginFormActionProps`](../interfaces/PluginFormActionProps)\<[`User`](User), `EC`\>\>\>
 
 ##### provider.props?
 
@@ -284,7 +379,7 @@ Add custom actions to the top of the form
 
 > `optional` **homePage**: `object`
 
-Defined in: [types/plugins.tsx:49](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:54](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 #### additionalActions?
 
@@ -325,7 +420,7 @@ in the home page.
 
 #### extraProps?
 
-> `optional` **extraProps**: `any`
+> `optional` **extraProps**: `Record`\<`string`, `unknown`\>
 
 Additional props passed to `CollectionActions`
 
@@ -380,7 +475,7 @@ group => navigationEntriesOrder (path)
 
 > **key**: `string`
 
-Defined in: [types/plugins.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 Key of the plugin. This is used to identify the plugin in the CMS.
 
@@ -390,7 +485,7 @@ Key of the plugin. This is used to identify the plugin in the CMS.
 
 > `optional` **loading**: `boolean`
 
-Defined in: [types/plugins.tsx:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 If this flag is set to true, no content will be shown in the CMS
 until the plugin is fully loaded.
@@ -401,7 +496,7 @@ until the plugin is fully loaded.
 
 > `optional` **provider**: `object`
 
-Defined in: [types/plugins.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 You can use this prop to add higher order components to the CMS.
 The components will be added to the root of the CMS, so any component
@@ -424,6 +519,17 @@ you can use the hooks provided by the CMS.
 
 ### userManagement?
 
-> `optional` **userManagement**: [`InternalUserManagement`](InternalUserManagement)
+> `optional` **userManagement**: [`UserManagementDelegate`](../interfaces/UserManagementDelegate)
 
-Defined in: [types/plugins.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:46](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+
+***
+
+### views?
+
+> `optional` **views**: [`CMSView`](../interfaces/CMSView)[]
+
+Defined in: [types/src/types/plugins.tsx:52](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+
+Views to be automatically added to the navigation.
+These views will be merged with the views provided to useBuildNavigationController.

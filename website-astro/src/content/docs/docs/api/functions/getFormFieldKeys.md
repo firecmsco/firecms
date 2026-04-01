@@ -13,7 +13,7 @@ title: "getFormFieldKeys"
 
 > **getFormFieldKeys**(`collection`): `string`[]
 
-Defined in: [components/common/useColumnsIds.tsx:103](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useColumnsIds.tsx)
+Defined in: [core/src/components/common/useColumnsIds.tsx:187](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useColumnsIds.tsx)
 
 ## Parameters
 

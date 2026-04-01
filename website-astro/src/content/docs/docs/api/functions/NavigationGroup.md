@@ -13,7 +13,7 @@ title: "NavigationGroup"
 
 > **NavigationGroup**(`__namedParameters`): `Element`
 
-Defined in: [components/HomePage/NavigationGroup.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationGroup.tsx)
+Defined in: [core/src/components/HomePage/NavigationGroup.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationGroup.tsx)
 
 ## Parameters
 

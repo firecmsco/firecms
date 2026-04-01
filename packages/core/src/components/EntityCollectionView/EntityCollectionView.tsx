@@ -42,7 +42,8 @@ import {
     useCollectionRegistryController,
     useCMSUrlController,
     useSideEntityController,
-    usePermissions
+    usePermissions,
+    useTranslation
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
@@ -67,7 +68,6 @@ import {
 import { setIn } from "@rebasepro/formex";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
 import {
-    COLLECTION_GROUP_PARENT_ID,
     copyEntityAction,
     deleteEntityAction,
     editEntityAction,
@@ -155,6 +155,7 @@ export const EntityCollectionView = React.memo(
     }: EntityCollectionViewProps<M>
     ) {
 
+        const { t } = useTranslation();
         const context = useRebaseContext();
         const collectionRegistry = useCollectionRegistryController();
         const cmsUrlController = useCMSUrlController();
@@ -336,7 +337,7 @@ export const EntityCollectionView = React.memo(
                 addRecentId(collection.slug, clickedEntity.id);
             }
 
-            const entityPath = collection?.collectionGroup ? clickedEntity.path : (path ?? clickedEntity.path);
+            const entityPath = path ?? clickedEntity.path;
             navigateToEntity({
                 navigation: cmsUrlController,
                 path: entityPath,
@@ -635,34 +636,9 @@ export const EntityCollectionView = React.memo(
                 };
             }) ?? [];
 
-            const collectionGroupParentCollections: AdditionalFieldDelegate<M, any>[] = collection.collectionGroup
-                ? [{
-                    key: COLLECTION_GROUP_PARENT_ID,
-                    name: "Parent entities",
-                    width: 260,
-                    dependencies: [],
-                    Builder: ({ entity }) => {
-                        const collectionsWithPath = collectionRegistry.getParentReferencesFromPath(entity.path);
-                        return (
-                            <div className={"flex flex-col gap-2 w-full"}>
-                                {collectionsWithPath.map((reference) => {
-                                    return (
-                                        <ReferencePreview
-                                            key={reference.path + "/" + reference.id}
-                                            reference={reference}
-                                            size={"small"} />
-                                    );
-                                })}
-                            </div>
-                        );
-                    }
-                }]
-                : [];
-
             return [
                 ...(collection.additionalFields ?? []),
-                ...subcollectionColumns,
-                ...collectionGroupParentCollections
+                ...subcollectionColumns
             ];
         }, [collection, path, sideEntityController]);
 
@@ -897,16 +873,16 @@ export const EntityCollectionView = React.memo(
                         deletedEntities={deletedEntities}
                         emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                             ? <div className="flex flex-col items-center justify-center">
-                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Typography variant={"subtitle2"}>{t("so_empty")}</Typography>
                                 <Button
                                     onClick={onNewClick}
                                     className="mt-4"
                                 >
                                     <AddIcon />
-                                    Create your first entry
+                                    {t("create_your_first_entry")}
                                 </Button>
                             </div>
-                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                            : <Typography variant={"label"}>{t("no_results_filter_sort")}</Typography>
                         }
                     />
                 ) : viewMode === "cards" ? (
@@ -923,16 +899,16 @@ export const EntityCollectionView = React.memo(
                         size={cardSize}
                         emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                             ? <div className="flex flex-col items-center justify-center">
-                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Typography variant={"subtitle2"}>{t("so_empty")}</Typography>
                                 <Button
                                     onClick={onNewClick}
                                     className="mt-4"
                                 >
                                     <AddIcon />
-                                    Create your first entry
+                                    {t("create_your_first_entry")}
                                 </Button>
                             </div>
-                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                            : <Typography variant={"label"}>{t("no_results_filter_sort")}</Typography>
                         }
                     />
                 ) : (
@@ -960,16 +936,16 @@ export const EntityCollectionView = React.memo(
                         textSearchLoading={textSearchLoading}
                         emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                             ? <div className="flex flex-col items-center justify-center">
-                                <Typography variant={"subtitle2"}>So empty...</Typography>
+                                <Typography variant={"subtitle2"}>{t("so_empty")}</Typography>
                                 <Button
                                     onClick={onNewClick}
                                     className="mt-4"
                                 >
                                     <AddIcon />
-                                    Create your first entry
+                                    {t("create_your_first_entry")}
                                 </Button>
                             </div>
-                            : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
+                            : <Typography variant={"label"}>{t("no_results_filter_sort")}</Typography>
                         }
                         hoverRow={hoverRow}
                         inlineEditing={checkInlineEditing()}
@@ -1133,6 +1109,7 @@ function EntityIdHeaderWidget({
     idPath: string
 }) {
 
+    const { t } = useTranslation();
     const cmsUrlController = useCMSUrlController();
     const [openPopup, setOpenPopup] = React.useState(false);
     const [searchString, setSearchString] = React.useState("");
@@ -1142,7 +1119,7 @@ function EntityIdHeaderWidget({
     const openEntityMode = collection?.openEntityMode ?? DEFAULT_ENTITY_OPEN_MODE;
 
     return (
-        <Tooltip title={!openPopup ? "Find by ID" : undefined} asChild={false}>
+        <Tooltip title={!openPopup ? t("find_by_id") : undefined} asChild={false}>
             <Popover
                 open={openPopup}
                 onOpenChange={setOpenPopup}
@@ -1178,7 +1155,7 @@ function EntityIdHeaderWidget({
                         <div className="flex p-2 w-full gap-2">
                             <input
                                 autoFocus={openPopup}
-                                placeholder={"Find entity by ID"}
+                                placeholder={t("find_entity_by_id")}
                                 // size={"small"}
                                 onChange={(e) => {
                                     setSearchString(e.target.value);

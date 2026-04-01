@@ -11,23 +11,15 @@ title: "isReferenceProperty"
 
 # Function: isReferenceProperty()
 
-> **isReferenceProperty**(`authController`, `propertyOrBuilder`, `fields`): `boolean` \| `null`
+> **isReferenceProperty**(`property`): `boolean` \| `null`
 
-Defined in: [util/property\_utils.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
+Defined in: [core/src/util/property\_utils.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
 
 ## Parameters
 
-### authController
+### property
 
-[`AuthController`](../type-aliases/AuthController)
-
-### propertyOrBuilder
-
-[`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)
-
-### fields
-
-`Record`\<`string`, [`PropertyConfig`](../type-aliases/PropertyConfig)\>
+[`Property`](../type-aliases/Property)
 
 ## Returns
 

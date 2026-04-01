@@ -13,7 +13,7 @@ title: "EntityPreview"
 
 > **EntityPreview**(`__namedParameters`): `Element`
 
-Defined in: [components/EntityPreview.tsx:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:281](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 This view is used to display a preview of an entity.
 It is used by default in reference fields and whenever a reference is displayed.

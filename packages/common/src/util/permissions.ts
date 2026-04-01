@@ -220,7 +220,6 @@ export function canCreateEntity<M extends Record<string, any>, USER extends User
         path: string,
         entity: Entity<M> | null
     ): boolean {
-    if (collection.collectionGroup) return false;
     return checkOperation(collection, authController, entity, "insert");
 }
 

@@ -13,13 +13,13 @@ title: "StorageUploadFieldBinding"
 
 > **StorageUploadFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/StorageUploadFieldBinding.tsx:54](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/StorageUploadFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/StorageUploadFieldBinding.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/StorageUploadFieldBinding.tsx)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`StorageUploadFieldProps`
+[`FieldProps`](../interfaces/FieldProps)\<[`StringProperty`](../interfaces/StringProperty) \| [`ArrayProperty`](../interfaces/ArrayProperty)\>
 
 ## Returns
 

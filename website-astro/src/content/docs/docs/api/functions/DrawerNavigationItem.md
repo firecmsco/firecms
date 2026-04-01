@@ -13,7 +13,7 @@ title: "DrawerNavigationItem"
 
 > **DrawerNavigationItem**(`__namedParameters`): `Element`
 
-Defined in: [core/DrawerNavigationItem.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/DrawerNavigationItem.tsx)
+Defined in: [core/src/core/DrawerNavigationItem.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/DrawerNavigationItem.tsx)
 
 ## Parameters
 

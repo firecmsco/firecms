@@ -11,9 +11,9 @@ title: "useDataSourceTableController"
 
 # Function: useDataSourceTableController()
 
-> **useDataSourceTableController**\<`M`, `USER`\>(`fullPath`): [`EntityTableController`](../type-aliases/EntityTableController)\<`M`\>
+> **useDataSourceTableController**\<`M`, `USER`\>(`path`): [`EntityTableController`](../type-aliases/EntityTableController)\<`M`\>
 
-Defined in: [components/common/useDataSourceTableController.tsx:67](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useDataSourceTableController.tsx)
+Defined in: [core/src/components/common/useDataSourceTableController.tsx:68](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useDataSourceTableController.tsx)
 
 Use this hook to build a controller for the [EntityCollectionTable](EntityCollectionTable).
 This controller is bound to data in a path in your specified datasource.
@@ -33,7 +33,7 @@ if you would like to display different data.
 
 ## Parameters
 
-### fullPath
+### path
 
 [`DataSourceTableControllerProps`](../type-aliases/DataSourceTableControllerProps)\<`M`\>
 

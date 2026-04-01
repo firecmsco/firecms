@@ -13,13 +13,13 @@ title: "ArrayOneOfPreview"
 
 > **ArrayOneOfPreview**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [preview/property\_previews/ArrayOneOfPreview.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOneOfPreview.tsx)
+Defined in: [core/src/preview/property\_previews/ArrayOneOfPreview.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOneOfPreview.tsx)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`any`[]\>
+[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<[`ArrayProperty`](../interfaces/ArrayProperty)\>
 
 ## Returns
 

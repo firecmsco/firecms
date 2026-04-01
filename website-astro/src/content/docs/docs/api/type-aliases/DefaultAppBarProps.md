@@ -13,7 +13,7 @@ title: "DefaultAppBarProps"
 
 > **DefaultAppBarProps**\<`ADDITIONAL_PROPS`\> = `object` & `ADDITIONAL_PROPS`
 
-Defined in: [core/DefaultAppBar.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/DefaultAppBar.tsx)
+Defined in: [core/src/core/DefaultAppBar.tsx:27](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/DefaultAppBar.tsx)
 
 ## Type Declaration
 

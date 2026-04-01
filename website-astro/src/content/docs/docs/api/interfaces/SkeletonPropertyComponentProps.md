@@ -11,15 +11,15 @@ title: "SkeletonPropertyComponentProps"
 
 # Interface: SkeletonPropertyComponentProps
 
-Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
+Defined in: [core/src/preview/property\_previews/SkeletonPropertyComponent.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
 
 ## Properties
 
 ### property
 
-> **property**: [`ResolvedProperty`](../type-aliases/ResolvedProperty)
+> **property**: [`Property`](../type-aliases/Property)
 
-Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
+Defined in: [core/src/preview/property\_previews/SkeletonPropertyComponent.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:14](https:
 
 > **size**: [`PreviewSize`](../type-aliases/PreviewSize)
 
-Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
+Defined in: [core/src/preview/property\_previews/SkeletonPropertyComponent.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)

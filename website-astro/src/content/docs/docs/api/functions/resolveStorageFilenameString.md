@@ -13,7 +13,7 @@ title: "resolveStorageFilenameString"
 
 > **resolveStorageFilenameString**\<`M`\>(`__namedParameters`): `Promise`\<`string`\>
 
-Defined in: [util/storage.ts:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/storage.ts)
+Defined in: [common/src/util/storage.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/storage.ts)
 
 ## Type Parameters
 

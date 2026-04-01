@@ -13,4 +13,4 @@ title: "iconsSearch"
 
 > `const` **iconsSearch**: `Fuse`\<\{ `key`: `string`; `synonyms`: `any`; \}\>
 
-Defined in: [util/icon\_list.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icon_list.ts)
+Defined in: [core/src/util/icon\_list.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icon_list.ts)

@@ -1,67 +1,75 @@
 ---
 slug: docs/pro/sdk_generator
-title: JavaScript SDK Generator
-description: Generate a type-safe JavaScript SDK from your Rebase collection definitions. Get auto-complete, typed CRUD methods, and PostgREST-style filtering — all from a single CLI command.
+title: TypeScript SDK Generator
+description: Generate a type-safe TypeScript SDK from your Rebase collection definitions. Get perfect auto-complete, typed CRUD methods, authentication, and admin management.
 ---
 
-Generate a **type-safe JavaScript SDK** directly from your collection definitions. The SDK gives you auto-completed, collection-namespaced CRUD methods — similar to the Supabase and Payload client libraries — without writing any boilerplate.
+Generate a **type-safe TypeScript SDK** directly from your collection definitions. The SDK gives you auto-completed, collection-namespaced CRUD methods — similar to the Supabase client library — without writing any boilerplate. It includes built-in **authentication**, **session management**, and **admin user/role management**.
 
-:::tip Why use the SDK generator?
-- **Zero boilerplate** — One CLI command produces a fully typed client
-- **IDE auto-complete** — JSDoc typedefs generated from your collection properties
+:::tip Why use the hybrid SDK?
+- **Zero boilerplate** — Install a standard npm package, generate your static types, and you're good to go.
+- **IDE auto-complete** — Perfect Typescript interfaces generated from your collections.
+- **Built-in auth** — Sign in, sign up, token refresh, and session management out of the box
+- **Admin management** — User and role CRUD with server-enforced access control
 - **Consistent with your schema** — Re-run the generator whenever your collections change
-- **Framework-agnostic** — Plain JavaScript with no runtime dependencies
 :::
 
 ## Quick start
 
-### 1. Install the CLI
+### 1. Install the runtime client package
+
+Install the core client library in your application:
 
 ```bash
-npm install -g @rebasepro/cli
+npm install @rebasepro/client
 ```
 
-### 2. Generate the SDK
+### 2. Generate the types
 
-Point the generator at your collection definitions:
+Use the Rebase CLI to scan your collection definitions and generate your `database.types.ts` type definition:
 
 ```bash
-rebase generate-sdk --collections ./src/collections --output ./src/generated/sdk
+npx @rebasepro/cli generate-sdk --collections ./src/collections --output ./src/generated
 ```
 
-This scans every exported `EntityCollection` in the given directory and produces a ready-to-use SDK in the output folder.
+This scans every exported `EntityCollection` in the given directory and produces a single `database.types.ts` file in the output folder.
 
 ### 3. Use the SDK
 
-```js
-import { createRebaseClient } from './generated/sdk/index.js';
+Import the client factory and inject your generated types:
 
-const rebase = createRebaseClient({
+```typescript
+import { createRebaseClient } from '@rebasepro/client';
+import type { Database } from './generated/database.types';
+
+const rebase = createRebaseClient<Database>({
     baseUrl: 'http://localhost:3001',
-    token: 'your-jwt-token',
 });
 
-// List records with filtering
-const { data, meta } = await rebase.posts.find({
+// Sign in
+const { user } = await rebase.auth.signInWithEmail('user@example.com', 'password');
+
+// List records with filtering (FULLY TYPED!)
+const { data, meta } = await rebase.collection('posts').find({
     limit: 10,
     where: { status: 'eq.published' },
     orderBy: 'created_at:desc',
 });
 
-// Get a single record
+// Or use the dynamic proxy syntax!
 const post = await rebase.posts.findById(1);
 
 // Create
-const newPost = await rebase.posts.create({
+const newPost = await rebase.collection('posts').create({
     title: 'Hello World',
     content: 'My first post',
 });
 
 // Update
-await rebase.posts.update(1, { title: 'Updated Title' });
+await rebase.collection('posts').update(1, { title: 'Updated Title' });
 
 // Delete
-await rebase.posts.delete(1);
+await rebase.collection('posts').delete(1);
 ```
 
 ## CLI options
@@ -69,97 +77,74 @@ await rebase.posts.delete(1);
 | Option | Default | Description |
 |---|---|---|
 | `--collections` | `./collections` | Path to the directory containing your `EntityCollection` exports |
-| `--output` | `./generated/sdk` | Output directory for the generated SDK files |
+| `--output` | `./generated` | Output directory for the generated `database.types.ts` file |
 | `--no-readme` | — | Skip generating the `README.md` usage guide |
 
 ### Example with all options
 
 ```bash
-rebase generate-sdk \
+npx @rebasepro/cli generate-sdk \
     --collections ./app/shared/collections \
-    --output ./app/frontend/src/sdk \
+    --output ./app/frontend/src/types \
     --no-readme
 ```
 
-## Generated files
+## Authentication
 
-The generator produces the following files:
+The SDK includes a complete authentication module with automatic token management, session persistence, and auth state listeners.
 
-| File | Purpose |
-|---|---|
-| `client.js` | HTTP transport, `createTransport`, `buildQueryString`, `RebaseApiError` |
-| `{collection}.js` | Per-collection module with typed factory function and JSDoc typedefs |
-| `index.js` | Unified `createRebaseClient` factory that wires all collections |
-| `README.md` | Auto-generated usage guide (optional) |
+### Sign in with email
 
-## CRUD API reference
-
-Every collection namespace exposes the same five methods:
-
-### `find(params?)`
-
-List records with optional filtering, pagination, and sorting.
-
-```js
-const result = await rebase.posts.find({
-    limit: 20,
-    page: 2,
-    where: { status: 'eq.published', author_id: 'eq.5' },
-    orderBy: 'created_at:desc',
-    include: ['author', 'tags'],
-});
-// result.data   → array of records
-// result.meta   → { total, limit, offset, hasMore }
+```typescript
+const { user } = await rebase.auth.signInWithEmail('user@example.com', 'password');
+console.log('Welcome', user.displayName);
 ```
 
-**Parameters:**
+### Auth state listeners
 
-| Param | Type | Description |
-|---|---|---|
-| `limit` | `number` | Max records to return (default: 20) |
-| `offset` | `number` | Records to skip |
-| `page` | `number` | Page number (1-indexed, alternative to offset) |
-| `where` | `Record<string, string>` | PostgREST-style filters (see below) |
-| `orderBy` | `string` | Sort field and direction, e.g. `"created_at:desc"` |
-| `include` | `string[]` | Relations to include in the response |
+Listen for sign-in, sign-out, and token refresh events:
 
-### `findById(id)`
-
-Fetch a single record by primary key.
-
-```js
-const post = await rebase.posts.findById(42);
-```
-
-### `create(data)`
-
-Insert a new record.
-
-```js
-const newPost = await rebase.posts.create({
-    title: 'New Post',
-    content: 'Content here...',
-    status: 'draft',
+```typescript
+const unsubscribe = rebase.auth.onAuthStateChange((event, session) => {
+    switch (event) {
+        case 'SIGNED_IN':
+            console.log('User signed in:', session?.user);
+            break;
+        case 'SIGNED_OUT':
+            console.log('User signed out');
+            break;
+    }
 });
 ```
 
-### `update(id, data)`
+### Auto-refresh behavior
 
-Update an existing record. Only the provided fields are changed.
+Tokens are refreshed automatically **2 minutes before expiry**. No user action is needed. If the refresh fails (e.g., refresh token revoked), the user is signed out automatically.
 
-```js
-const updated = await rebase.posts.update(42, {
-    title: 'Updated Title',
+On 401 responses from collection endpoints, the SDK transparently attempts a token refresh and retries the request once.
+
+## Admin management
+
+The SDK includes admin methods for managing users and roles. All write operations require the authenticated user to have the `admin` role — this is enforced on the backend.
+
+### User management
+
+```typescript
+// List all users
+const { users } = await rebase.admin.listUsers();
+
+// Create a user
+const { user } = await rebase.admin.createUser({
+    email: 'newuser@example.com',
+    displayName: 'New User',
+    password: 'tempPassword123',
+    roles: ['editor'],
 });
 ```
 
-### `delete(id)`
-
-Delete a record by primary key.
-
-```js
-await rebase.posts.delete(42);
-```
+:::caution
+Admin operations require the authenticated user to have the `admin` role. The backend enforces this — unauthorized requests return a **403 error** as a `RebaseApiError`.
+:::
 
 ## Filtering with `where`
 
@@ -178,137 +163,10 @@ The `where` parameter uses **PostgREST-style operators** for type-safe filtering
 | `cs` | Array contains | `{ tags: 'cs.news' }` |
 | `csa` | Array contains any | `{ tags: 'csa.(news,tech)' }` |
 
-Combine multiple filters by adding more keys to the `where` object:
+## Regenerating the Types
 
-```js
-const result = await rebase.products.find({
-    where: {
-        category: 'eq.electronics',
-        price: 'lte.999',
-        in_stock: 'eq.true',
-    },
-});
-```
-
-## Authentication
-
-### Setting a token at initialization
-
-```js
-const rebase = createRebaseClient({
-    baseUrl: 'https://api.example.com',
-    token: 'eyJhbGciOiJIUzI1NiIs...',
-});
-```
-
-### Refreshing the token at runtime
-
-```js
-// After a token refresh
-rebase.setToken('new-jwt-token');
-```
-
-### Custom fetch implementation
-
-You can provide your own `fetch` for custom behavior (e.g., retry logic, logging):
-
-```js
-const rebase = createRebaseClient({
-    baseUrl: 'https://api.example.com',
-    fetch: myCustomFetch,
-});
-```
-
-## Error handling
-
-All API errors throw a `RebaseApiError` with structured fields:
-
-```js
-import { RebaseApiError } from './generated/sdk/index.js';
-
-try {
-    await rebase.posts.findById(999);
-} catch (err) {
-    if (err instanceof RebaseApiError) {
-        console.error(err.status);   // HTTP status code (e.g. 404)
-        console.error(err.message);  // Human-readable message
-        console.error(err.code);     // Machine-readable error code
-        console.error(err.details);  // Additional error details
-    }
-}
-```
-
-## Type generation
-
-The SDK generates **JSDoc `@typedef` blocks** for each collection, giving you IDE auto-complete without TypeScript:
-
-- **`{Collection}`** — The entity shape returned by the API
-- **`{Collection}CreateInput`** — Fields accepted when creating a record (auto-generated IDs are excluded)
-- **`{Collection}UpdateInput`** — All fields optional for partial updates
-
-### Property type mapping
-
-| Rebase Type | JS Type |
-|---|---|
-| `string` | `string` |
-| `string` (with enum) | Union of enum values |
-| `number` | `number` |
-| `boolean` | `boolean` |
-| `date` | `string` (ISO 8601) |
-| `geopoint` | `{ latitude: number, longitude: number }` |
-| `reference` | `string \| number` |
-| `map` (with properties) | Inline object type |
-| `map` (without properties) | `Object` |
-| `array` (with `of`) | `Array<elementType>` |
-| `array` (without `of`) | `Array<*>` |
-
-### Relation handling
-
-Relations defined in your collections are automatically resolved:
-
-- **Owning (many-to-one)** relations generate a foreign key column (e.g., `author_id`) in the type definitions
-- The `include` parameter in `find()` lists available relation names for eager loading
-- Relation names are documented in each collection module's JSDoc
-
-## Including relations
-
-Use the `include` parameter to eagerly load related data:
-
-```js
-const { data } = await rebase.posts.find({
-    include: ['author', 'tags'],
-});
-
-// Each post now has author and tags data included
-console.log(data[0].author.name);
-```
-
-## Tree-shaking support
-
-Individual collection clients are re-exported for applications that only need a subset:
-
-```js
-// Import only what you need
-import { createPostsClient } from './generated/sdk/posts.js';
-import { createTransport } from './generated/sdk/client.js';
-
-const transport = createTransport({
-    baseUrl: 'http://localhost:3001',
-    token: 'jwt',
-});
-
-const posts = createPostsClient(transport);
-const { data } = await posts.find({ limit: 5 });
-```
-
-## Regenerating the SDK
-
-The generated files include a **"Do not edit manually"** header. Whenever you modify your collection definitions — add a property, change a relation, rename a collection — simply re-run the generator:
+The generated `database.types.ts` is meant to be overwritten. Whenever you modify your collection definitions — add a property, change a relation, rename a collection — simply re-run the generator:
 
 ```bash
-rebase generate-sdk --collections ./src/collections --output ./src/generated/sdk
+npx @rebasepro/cli generate-sdk --collections ./src/collections --output ./src/generated
 ```
-
-:::caution
-The generator **overwrites** the entire output directory. Do not place hand-written files in the SDK output folder.
-:::

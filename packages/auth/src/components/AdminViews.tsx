@@ -741,7 +741,7 @@ function CollectionPermissionsMatrix({ roleId, isAdmin }: { roleId: string; isAd
         );
     }
 
-    const topLevel = collections.filter(c => !c.collectionGroup);
+    const topLevel = collections;
 
     return (
         <div className="mt-6">

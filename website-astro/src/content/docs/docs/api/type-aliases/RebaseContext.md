@@ -11,85 +11,49 @@ title: "RebaseContext"
 
 # Type Alias: RebaseContext\<USER, AuthControllerType\>
 
-> **RebaseContext**\<`USER`, `AuthControllerType`\> = `object`
+> **RebaseContext**\<`USER`, `AuthControllerType`\> = [`RebaseCallContext`](RebaseCallContext)\<`USER`\> & `object`
 
-Defined in: [types/rebase\_context.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
+Defined in: [types/src/rebase\_context.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/types/src/rebase_context.tsx)
 
 Context that includes the internal controllers and contexts used by the app.
 Some controllers and context included in this context can be accessed
 directly from their respective hooks.
 
-## See
-
-useRebaseContext
-
-## Type Parameters
-
-### USER
-
-`USER` *extends* [`User`](User) = [`User`](User)
-
-### AuthControllerType
-
-`AuthControllerType` *extends* [`AuthController`](AuthController)\<`USER`\> = [`AuthController`](AuthController)\<`USER`\>
-
-## Properties
+## Type Declaration
 
 ### analyticsController?
 
 > `optional` **analyticsController**: [`AnalyticsController`](AnalyticsController)
 
-Defined in: [types/rebase\_context.tsx:82](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
-
 Callback to send analytics events
 
-***
+### authController?
 
-### authController
-
-> **authController**: `AuthControllerType`
-
-Defined in: [types/rebase\_context.tsx:62](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
+> `optional` **authController**: `AuthControllerType`
 
 Used auth controller
 
-***
+### customizationController?
 
-### customizationController
-
-> **customizationController**: [`CustomizationController`](CustomizationController)
-
-Defined in: [types/rebase\_context.tsx:67](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
+> `optional` **customizationController**: [`CustomizationController`](CustomizationController)
 
 This controller holds the customization options for the CMS.
 
-***
+### dialogsController?
 
-### dataSource
-
-> **dataSource**: [`DataSource`](../interfaces/DataSource)
-
-Defined in: [types/rebase\_context.tsx:27](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
-
-Connector to your database, e.g. your Firestore database
-
-***
-
-### dialogsController
-
-> **dialogsController**: `DialogsController`
-
-Defined in: [types/rebase\_context.tsx:57](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
+> `optional` **dialogsController**: [`DialogsController`](../interfaces/DialogsController)
 
 Controller used to open regular dialogs
 
-***
+### effectiveRoleController?
 
-### navigation
+> `optional` **effectiveRoleController**: [`EffectiveRoleController`](../interfaces/EffectiveRoleController)
 
-> **navigation**: [`NavigationController`](NavigationController)
+Controller to simulate different roles when dev mode is active.
 
-Defined in: [types/rebase\_context.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
+### navigation?
+
+> `optional` **navigation**: [`NavigationController`](NavigationController)
 
 Context that includes the resolved navigation and utility methods and
 attributes.
@@ -98,25 +62,17 @@ attributes.
 
 useNavigation
 
-***
+### sideDialogsController?
 
-### sideDialogsController
-
-> **sideDialogsController**: [`SideDialogsController`](../interfaces/SideDialogsController)
-
-Defined in: [types/rebase\_context.tsx:52](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
+> `optional` **sideDialogsController**: [`SideDialogsController`](../interfaces/SideDialogsController)
 
 Controller used to open side dialogs
 This is the controller used internally by side entity dialogs
 or reference dialogs.
 
-***
+### sideEntityController?
 
-### sideEntityController
-
-> **sideEntityController**: [`SideEntityController`](../interfaces/SideEntityController)
-
-Defined in: [types/rebase\_context.tsx:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
+> `optional` **sideEntityController**: [`SideEntityController`](../interfaces/SideEntityController)
 
 Controller to open the side dialog displaying entity forms
 
@@ -124,43 +80,21 @@ Controller to open the side dialog displaying entity forms
 
 useSideEntityController
 
-***
+### snackbarController?
 
-### snackbarController
-
-> **snackbarController**: [`SnackbarController`](../interfaces/SnackbarController)
-
-Defined in: [types/rebase\_context.tsx:72](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
+> `optional` **snackbarController**: [`SnackbarController`](../interfaces/SnackbarController)
 
 Use this controller to display snackbars
-
-***
-
-### storageSource
-
-> **storageSource**: [`StorageSource`](../interfaces/StorageSource)
-
-Defined in: [types/rebase\_context.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
-
-Used storage implementation
-
-***
 
 ### userConfigPersistence?
 
 > `optional` **userConfigPersistence**: [`UserConfigurationPersistence`](../interfaces/UserConfigurationPersistence)
 
-Defined in: [types/rebase\_context.tsx:77](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
-
 Use this controller to access data stored in the browser for the user
 
-***
+### userManagement?
 
-### userManagement
-
-> **userManagement**: [`InternalUserManagement`](InternalUserManagement)\<`USER`\>
-
-Defined in: [types/rebase\_context.tsx:98](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase_context.tsx)
+> `optional` **userManagement**: [`UserManagementDelegate`](../interfaces/UserManagementDelegate)\<`USER`\>
 
 This section is used to manage users in the CMS.
 It is used to show user information in various places of the CMS,
@@ -174,3 +108,17 @@ or to show more information about the user.
 
 If you are using the Rebase user management plugin, this
 section will be implemented automatically.
+
+## Type Parameters
+
+### USER
+
+`USER` *extends* [`User`](User) = [`User`](User)
+
+### AuthControllerType
+
+`AuthControllerType` *extends* [`AuthController`](AuthController)\<`USER`\> = [`AuthController`](AuthController)\<`USER`\>
+
+## See
+
+useRebaseContext

@@ -13,7 +13,7 @@ title: "useCustomizationController"
 
 > **useCustomizationController**(): [`CustomizationController`](../type-aliases/CustomizationController)
 
-Defined in: [hooks/useCustomizationController.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useCustomizationController.tsx)
+Defined in: [core/src/hooks/useCustomizationController.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useCustomizationController.tsx)
 
 Use this hook to retrieve the customization controller.
 This hook includes all the customization options that can be used

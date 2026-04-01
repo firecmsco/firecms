@@ -11,20 +11,20 @@ title: "removePropsIfExisting"
 
 # Function: removePropsIfExisting()
 
-> **removePropsIfExisting**(`source`, `comparison`): `any`
+> **removePropsIfExisting**(`source`, `comparison`): `unknown`[] \| `Record`\<`string`, `unknown`\>
 
-Defined in: [util/objects.ts:194](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:345](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Parameters
 
 ### source
 
-`any`
+`unknown`[] | `Record`\<`string`, `unknown`\>
 
 ### comparison
 
-`any`
+`unknown`[] | `Record`\<`string`, `unknown`\>
 
 ## Returns
 
-`any`
+`unknown`[] \| `Record`\<`string`, `unknown`\>

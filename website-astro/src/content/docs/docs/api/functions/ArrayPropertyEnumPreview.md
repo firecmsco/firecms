@@ -13,13 +13,13 @@ title: "ArrayPropertyEnumPreview"
 
 > **ArrayPropertyEnumPreview**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [preview/property\_previews/ArrayPropertyEnumPreview.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayPropertyEnumPreview.tsx)
+Defined in: [core/src/preview/property\_previews/ArrayPropertyEnumPreview.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayPropertyEnumPreview.tsx)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`string`[] \| `number`[]\>
+[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<[`ArrayProperty`](../interfaces/ArrayProperty)\>
 
 ## Returns
 

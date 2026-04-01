@@ -2,6 +2,7 @@ import React from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 import { ErrorBoundary, RebaseLogo } from "../components";
+import { LanguageToggle } from "../components/LanguageToggle";
 import {
     Avatar,
     BrightnessMediumIcon,
@@ -16,7 +17,7 @@ import {
     Typography,
     SettingsIcon
 } from "@rebasepro/ui";
-import { useAuthController, useLargeLayout, useModeController, useCMSUrlController, useAdminModeController } from "../hooks";
+import { useAuthController, useLargeLayout, useModeController, useCMSUrlController, useAdminModeController, useTranslation } from "../hooks";
 import { User } from "@rebasepro/types";
 import { useApp } from "../app/useApp";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
@@ -95,6 +96,7 @@ export const DefaultAppBar = function DefaultAppBar({
     const largeLayout = useLargeLayout();
 
     const user = userProp ?? authController.user;
+    const { t } = useTranslation();
 
     let avatarComponent: React.ReactElement | null;
 
@@ -224,6 +226,8 @@ export const DefaultAppBar = function DefaultAppBar({
                 </div>
             )}
 
+            <LanguageToggle />
+
             {includeModeToggle &&
                 <Menu
                     trigger={<IconButton
@@ -234,10 +238,10 @@ export const DefaultAppBar = function DefaultAppBar({
                             ? <DarkModeIcon />
                             : <LightModeIcon />}
                     </IconButton>}>
-                    <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"} /> Dark</MenuItem>
-                    <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"} /> Light </MenuItem>
+                    <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"} /> {t("dark_mode")}</MenuItem>
+                    <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"} /> {t("light_mode")} </MenuItem>
                     <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon
-                        size={"smallest"} />System</MenuItem>
+                        size={"smallest"} />{t("system_mode")}</MenuItem>
                 </Menu>}
 
             <Menu trigger={avatarComponent}>
@@ -255,7 +259,7 @@ export const DefaultAppBar = function DefaultAppBar({
                 {!dropDownActions && <>
                     <MenuItem onClick={() => navigate("/settings")}>
                         <SettingsIcon />
-                        Account Settings
+                        {t("project_settings")}
                     </MenuItem>
                     <MenuItem onClick={async () => {
                         await authController.signOut();
@@ -263,7 +267,7 @@ export const DefaultAppBar = function DefaultAppBar({
                         navigate("/");
                     }}>
                         <LogoutIcon />
-                        Log Out
+                        {t("log_out")}
                     </MenuItem>
                 </>}
 

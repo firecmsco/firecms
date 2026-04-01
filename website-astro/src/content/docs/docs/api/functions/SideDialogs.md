@@ -13,7 +13,7 @@ title: "SideDialogs"
 
 > **SideDialogs**(): `Element`
 
-Defined in: [core/SideDialogs.tsx:49](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
+Defined in: [core/src/core/SideDialogs.tsx:50](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
 
 This is the component in charge of rendering the side dialogs used
 for editing entities. Use the [useSideEntityController](useSideEntityController) to open

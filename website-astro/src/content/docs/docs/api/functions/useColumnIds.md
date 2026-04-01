@@ -13,7 +13,7 @@ title: "useColumnIds"
 
 > **useColumnIds**\<`M`\>(`collection`, `includeSubcollections`): `PropertyColumnConfig`[]
 
-Defined in: [components/common/useColumnsIds.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useColumnsIds.tsx)
+Defined in: [core/src/components/common/useColumnsIds.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useColumnsIds.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [components/common/useColumnsIds.tsx:8](https://github.com/rebaseco/
 
 ### collection
 
-[`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+[`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
 
 ### includeSubcollections
 

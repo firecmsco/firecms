@@ -13,7 +13,7 @@ title: "IconViewProps"
 
 > **IconViewProps** = `object`
 
-Defined in: [util/icons.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
+Defined in: [core/src/util/icons.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [util/icons.tsx:31](https://github.com/rebaseco/rebase/blob/main/pac
 
 > `optional` **group**: `string`
 
-Defined in: [util/icons.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
+Defined in: [core/src/util/icons.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [util/icons.tsx:35](https://github.com/rebaseco/rebase/blob/main/pac
 
 > `optional` **icon**: `string` \| `React.ReactNode`
 
-Defined in: [util/icons.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
+Defined in: [core/src/util/icons.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ***
 
@@ -37,15 +37,7 @@ Defined in: [util/icons.tsx:36](https://github.com/rebaseco/rebase/blob/main/pac
 
 > **name**: `string`
 
-Defined in: [util/icons.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
-
-***
-
-### path
-
-> **path**: `string`
-
-Defined in: [util/icons.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
+Defined in: [core/src/util/icons.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ***
 
@@ -53,4 +45,12 @@ Defined in: [util/icons.tsx:32](https://github.com/rebaseco/rebase/blob/main/pac
 
 > `optional` **singularName**: `string`
 
-Defined in: [util/icons.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
+Defined in: [core/src/util/icons.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
+
+***
+
+### slug
+
+> **slug**: `string`
+
+Defined in: [core/src/util/icons.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)

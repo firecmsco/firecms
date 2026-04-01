@@ -11,9 +11,9 @@ title: "buildProperties"
 
 # Function: buildProperties()
 
-> **buildProperties**\<`M`\>(`properties`): [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+> **buildProperties**\<`M`\>(`properties`): [`Properties`](../type-aliases/Properties)
 
-Defined in: [util/builders.ts:65](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/builders.ts)
+Defined in: [common/src/util/builders.ts:62](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/builders.ts)
 
 Identity function we use to defeat the type system of Typescript and preserve
 the properties keys.
@@ -28,8 +28,8 @@ the properties keys.
 
 ### properties
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`Properties`](../type-aliases/Properties)
 
 ## Returns
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`Properties`](../type-aliases/Properties)

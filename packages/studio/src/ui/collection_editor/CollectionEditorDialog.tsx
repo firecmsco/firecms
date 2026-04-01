@@ -402,7 +402,6 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         if (!collectionInference) return undefined;
         return collectionInference?.(
             collection.dbPath,
-            collection.collectionGroup ?? false,
             parentPaths ?? [],
             collection.databaseId
         );

@@ -171,12 +171,8 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
         // Set timestamp - only once
         window.gtag("js", new Date());
 
-        // Initialize GA4 with cross-domain tracking to app.rebase.pro
-        window.gtag("config", "G-NL75PPNYXD", {
-            linker: {
-                domains: ["app.rebase.pro"]
-            }
-        });
+        // Initialize GA4
+        window.gtag("config", "G-NL75PPNYXD");
 
         // Initialize Google Ads tag for conversion linker
         window.gtag("config", "AW-17381868760");
@@ -194,7 +190,6 @@ const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
 <Footer/>
 <CookieBanner/>
 <script src="../scripts/tracking-params.js"/>
-<script src="../scripts/enhance-app-links.js"/>
 <script src="../scripts/analytics.ts"/>
 <script src="../page-effects.ts"/>
 </body>

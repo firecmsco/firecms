@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuthController, useCustomizationController, useRebaseContext, useLargeLayout } from "../../hooks";
+import { useAuthController, useCustomizationController, useRebaseContext, useLargeLayout, useTranslation } from "../../hooks";
 import { CollectionActionsProps, EntityCollection, EntityTableController, Properties, SelectionController } from "@rebasepro/types";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { ClearFilterSortButton } from "../ClearFilterSortButton";
@@ -36,6 +36,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
     const customizationController = useCustomizationController();
     const plugins = customizationController.plugins ?? [];
     const largeLayout = useLargeLayout();
+    const { t } = useTranslation();
 
     // Filters dialog state
     const [filtersDialogOpen, setFiltersDialogOpen] = useState(false);
@@ -60,7 +61,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
 
     // Filters button
     const filtersButton = resolvedProperties && tableController.setFilterValues && (
-        <Tooltip title="Filters"
+        <Tooltip title={t("filters")}
             key={"filters_tooltip"}>
             <Badge
                 color="primary"
@@ -74,7 +75,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
                         startIcon={<FilterListIcon size="small" />}
                         className={cls(activeFilterCount > 0 && "text-primary")}
                     >
-                        Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+                        {t("filters")}{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
                     </Button>
                 ) : (
                     <IconButton

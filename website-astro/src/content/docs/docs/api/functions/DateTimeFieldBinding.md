@@ -13,7 +13,7 @@ title: "DateTimeFieldBinding"
 
 > **DateTimeFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/DateTimeFieldBinding.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/DateTimeFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/DateTimeFieldBinding.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/DateTimeFieldBinding.tsx)
 
 Field that allows selecting a date
 

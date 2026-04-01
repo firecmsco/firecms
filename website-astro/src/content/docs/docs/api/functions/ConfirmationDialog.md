@@ -13,7 +13,7 @@ title: "ConfirmationDialog"
 
 > **ConfirmationDialog**(`__namedParameters`): `Element`
 
-Defined in: [components/ConfirmationDialog.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ConfirmationDialog.tsx)
+Defined in: [core/src/components/ConfirmationDialog.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ConfirmationDialog.tsx)
 
 ## Parameters
 

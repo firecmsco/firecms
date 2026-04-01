@@ -13,7 +13,7 @@ title: "NotFoundPage"
 
 > **NotFoundPage**(): `Element`
 
-Defined in: [components/NotFoundPage.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/NotFoundPage.tsx)
+Defined in: [core/src/components/NotFoundPage.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/NotFoundPage.tsx)
 
 ## Returns
 

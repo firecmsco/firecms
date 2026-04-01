@@ -13,7 +13,7 @@ title: "DeleteEntityWithCallbacksProps"
 
 > **DeleteEntityWithCallbacksProps**\<`M`, `USER`\> = [`DeleteEntityProps`](../interfaces/DeleteEntityProps)\<`M`\> & `object`
 
-Defined in: [hooks/data/delete.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/delete.ts)
+Defined in: [core/src/hooks/data/delete.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/delete.ts)
 
 ## Type Declaration
 
@@ -48,42 +48,6 @@ Defined in: [hooks/data/delete.ts:15](https://github.com/rebaseco/rebase/blob/ma
 ##### entity
 
 [`Entity`](../interfaces/Entity)\<`M`\>
-
-#### Returns
-
-`void`
-
-### onDeleteSuccessHookError()?
-
-> `optional` **onDeleteSuccessHookError**: (`entity`, `e`) => `void`
-
-#### Parameters
-
-##### entity
-
-[`Entity`](../interfaces/Entity)\<`M`\>
-
-##### e
-
-`Error`
-
-#### Returns
-
-`void`
-
-### onPreDeleteHookError()?
-
-> `optional` **onPreDeleteHookError**: (`entity`, `e`) => `void`
-
-#### Parameters
-
-##### entity
-
-[`Entity`](../interfaces/Entity)\<`M`\>
-
-##### e
-
-`Error`
 
 #### Returns
 

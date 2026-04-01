@@ -11,26 +11,16 @@ title: "isPropertyBuilder"
 
 # Function: isPropertyBuilder()
 
-> **isPropertyBuilder**\<`T`, `M`\>(`propertyOrBuilder?`): `propertyOrBuilder is PropertyBuilder<T, M>`
+> **isPropertyBuilder**(`property?`): `boolean`
 
-Defined in: [util/entities.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
-
-## Type Parameters
-
-### T
-
-`T` *extends* [`CMSType`](../type-aliases/CMSType)
-
-### M
-
-`M` *extends* `Record`\<`string`, `any`\>
+Defined in: [common/src/util/entities.ts:31](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
 
 ## Parameters
 
-### propertyOrBuilder?
+### property?
 
-[`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)\<`T`, `M`\> | [`Property`](../type-aliases/Property)\<`T`\> | [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\>
+[`Property`](../type-aliases/Property)
 
 ## Returns
 
-`propertyOrBuilder is PropertyBuilder<T, M>`
+`boolean`

@@ -1,4 +1,4 @@
-import { CollectionActionsProps, useAuthController, useCollectionRegistryController } from "@rebasepro/core";
+import { CollectionActionsProps, useAuthController, useCollectionRegistryController, useTranslation } from "@rebasepro/core";
 import { IconButton, SettingsIcon, Tooltip, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
@@ -14,6 +14,7 @@ export function EditorCollectionAction({
     const authController = useAuthController();
     const collectionRegistry = useCollectionRegistryController();
     const collectionEditorController = useCollectionEditorController();
+    const { t } = useTranslation();
 
     const parentCollection = parentCollectionIds.length > 0 ? collectionRegistry.getCollection(parentCollectionIds[parentCollectionIds.length - 1]) : undefined;
 
@@ -25,8 +26,8 @@ export function EditorCollectionAction({
         : true);
 
     const tooltipTitle = collectionEditorController.configController?.readOnly
-        ? (collectionEditorController.configController.readOnlyReason || "Collection editing is disabled")
-        : (canEditCollection ? "Edit collection" : "You don't have permissions to edit this collection");
+        ? (collectionEditorController.configController.readOnlyReason || t("studio_editor_collection_disabled"))
+        : (canEditCollection ? t("studio_editor_collection_edit") : t("studio_editor_collection_no_permission"));
 
     const editorButton = <Tooltip
         asChild={true}

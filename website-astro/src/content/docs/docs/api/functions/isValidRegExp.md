@@ -13,7 +13,7 @@ title: "isValidRegExp"
 
 > **isValidRegExp**(`input`): `boolean`
 
-Defined in: [util/regexp.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/regexp.ts)
+Defined in: [common/src/util/regexp.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/regexp.ts)
 
 ## Parameters
 

@@ -13,13 +13,13 @@ title: "ArrayOfStorageComponentsPreview"
 
 > **ArrayOfStorageComponentsPreview**(`__namedParameters`): `Element`
 
-Defined in: [preview/property\_previews/ArrayOfStorageComponentsPreview.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOfStorageComponentsPreview.tsx)
+Defined in: [core/src/preview/property\_previews/ArrayOfStorageComponentsPreview.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOfStorageComponentsPreview.tsx)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`any`[]\>
+[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<[`ArrayProperty`](../interfaces/ArrayProperty)\>
 
 ## Returns
 

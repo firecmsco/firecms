@@ -13,7 +13,7 @@ title: "DefaultSelectedViewParams"
 
 > **DefaultSelectedViewParams** = `object`
 
-Defined in: [types/collections.ts:620](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:723](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Used in the [EntityCollection#defaultSelectedView](../interfaces/EntityCollection.md#defaultselectedview) to define the default
 
@@ -21,9 +21,9 @@ Used in the [EntityCollection#defaultSelectedView](../interfaces/EntityCollectio
 
 ### entityId?
 
-> `optional` **entityId**: `string`
+> `optional` **entityId**: `string` \| `number`
 
-Defined in: [types/collections.ts:622](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:725](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -31,4 +31,4 @@ Defined in: [types/collections.ts:622](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **status**: [`EntityStatus`](EntityStatus)
 
-Defined in: [types/collections.ts:621](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:724](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)

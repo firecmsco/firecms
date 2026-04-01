@@ -11,9 +11,9 @@ title: "useCollapsedGroups"
 
 # Function: useCollapsedGroups()
 
-> **useCollapsedGroups**(`groupNames`): `object`
+> **useCollapsedGroups**(`groupNames`, `namespace`): `object`
 
-Defined in: [hooks/useCollapsedGroups.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useCollapsedGroups.ts)
+Defined in: [core/src/hooks/useCollapsedGroups.ts:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useCollapsedGroups.ts)
 
 Custom hook for managing collapsed/expanded state of navigation groups
 with localStorage persistence. Automatically cleans up stale group entries
@@ -24,6 +24,14 @@ when groups are removed from the navigation.
 ### groupNames
 
 `string`[]
+
+Array of group names to track
+
+### namespace
+
+`string` = `"default"`
+
+Namespace for localStorage key (e.g., "home", "drawer") to allow independent state
 
 ## Returns
 

@@ -13,4 +13,4 @@ title: "ModeControllerContext"
 
 > `const` **ModeControllerContext**: `Context`\<[`ModeController`](../interfaces/ModeController)\>
 
-Defined in: [contexts/ModeController.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/ModeController.tsx)
+Defined in: [core/src/contexts/ModeController.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/ModeController.tsx)

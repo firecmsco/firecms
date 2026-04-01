@@ -10,7 +10,7 @@ description: Deployment rules and restrictions for the Rebase backend and all se
 - `gcloud functions deploy`
 - `gcloud run deploy`
 - Any command that pushes code, functions, or configuration to a live GCP project
-- Any command targeting `rebase-backend`, `production`, or `prod` environments
+- Any command targeting `rebase-578f2`, `production`, or `prod` environments
 - Any command using service account keys to modify live infrastructure
 
 ## What you CAN do

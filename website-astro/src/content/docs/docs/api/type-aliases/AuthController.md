@@ -13,7 +13,7 @@ title: "AuthController"
 
 > **AuthController**\<`USER`, `ExtraData`\> = `object`
 
-Defined in: [types/auth.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 Controller for retrieving the logged user or performing auth related operations.
 Note that if you are implementing your AuthController, you probably will want
@@ -27,15 +27,15 @@ to do it as the result of a hook.
 
 ### ExtraData
 
-`ExtraData` = `any`
+`ExtraData` = `unknown`
 
 ## Properties
 
 ### authError?
 
-> `optional` **authError**: `any`
+> `optional` **authError**: `unknown`
 
-Defined in: [types/auth.tsx:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 Error initializing the authentication
 
@@ -45,7 +45,7 @@ Error initializing the authentication
 
 > **authLoading**: `boolean`
 
-Defined in: [types/auth.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 Loading flag. It is used to display a loading screen when the user is
 logging in or out.
@@ -54,9 +54,9 @@ logging in or out.
 
 ### authProviderError?
 
-> `optional` **authProviderError**: `any`
+> `optional` **authProviderError**: `unknown`
 
-Defined in: [types/auth.tsx:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:45](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 Error dispatched by the auth provider
 
@@ -66,7 +66,7 @@ Error dispatched by the auth provider
 
 > **extra**: `ExtraData`
 
-Defined in: [types/auth.tsx:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:57](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [types/auth.tsx:58](https://github.com/rebaseco/rebase/blob/main/pac
 
 > **getAuthToken**: () => `Promise`\<`string`\>
 
-Defined in: [types/auth.tsx:51](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:50](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 You can use this method to retrieve the auth token for the current user.
 
@@ -88,7 +88,7 @@ You can use this method to retrieve the auth token for the current user.
 
 > `optional` **initialLoading**: `boolean`
 
-Defined in: [types/auth.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 Initial loading flag. It is used not to display the login screen
 when the app first loads, and it has not been checked whether the user
@@ -100,7 +100,7 @@ is logged in or not.
 
 > **loginSkipped**: `boolean`
 
-Defined in: [types/auth.tsx:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:55](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 Has the user skipped the login process
 
@@ -110,7 +110,7 @@ Has the user skipped the login process
 
 > **setExtra**: (`extra`) => `void`
 
-Defined in: [types/auth.tsx:60](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:59](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 #### Parameters
 
@@ -128,7 +128,7 @@ Defined in: [types/auth.tsx:60](https://github.com/rebaseco/rebase/blob/main/pac
 
 > `optional` **setUser**: (`user`) => `void`
 
-Defined in: [types/auth.tsx:62](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:62](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 #### Parameters
 
@@ -146,7 +146,7 @@ Defined in: [types/auth.tsx:62](https://github.com/rebaseco/rebase/blob/main/pac
 
 > `optional` **setUserRoles**: (`roles`) => `void`
 
-Defined in: [types/auth.tsx:64](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:64](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 #### Parameters
 
@@ -164,7 +164,7 @@ Defined in: [types/auth.tsx:64](https://github.com/rebaseco/rebase/blob/main/pac
 
 > **signOut**: () => `Promise`\<`void`\>
 
-Defined in: [types/auth.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 Sign out
 
@@ -178,7 +178,7 @@ Sign out
 
 > **user**: `USER` \| `null`
 
-Defined in: [types/auth.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 The user currently logged in
 The values can be: the user object, null if they skipped login

@@ -1,0 +1,143 @@
+export const collectionEditorTranslationsEn = {
+    // Storage & File Upload
+    file_upload_config: "File upload config",
+    file_type_images: "Images",
+    file_type_videos: "Videos",
+    file_type_audio: "Audio files",
+    file_type_applications: "Files (pdf, zip, csv, excel...)",
+    file_type_text: "Text files",
+    only: "Only",
+    all_file_types_allowed: "All file types allowed",
+    allowed_file_types: "Allowed file types",
+    file_name_label: "File name",
+    storage_path_label: "Storage path",
+    storage_placeholders_description: "You can use the following placeholders in the file name and storage path values:",
+    storage_placeholder_file: "{file} - Full name of the uploaded file",
+    storage_placeholder_file_name: "{file.name} - Name of the uploaded file without extension",
+    storage_placeholder_file_ext: "{file.ext} - Extension of the uploaded file",
+    storage_placeholder_entity_id: "{entityId} - ID of the entity",
+    storage_placeholder_property_key: "{propertyKey} - ID of this field",
+    storage_placeholder_path: "{path} - Path of this entity",
+    storage_placeholder_rand: "{rand} - Random value used to avoid name collisions",
+    include_bucket_url: "Include bucket URL (gs://...) in saved value",
+    include_bucket_url_description: "Turn this setting on if you want to save a fully-qualified storage URL (e.g. gs://my-bucket/path/to/file) instead of just the storage path. You can only change this prop upon creation.",
+    save_url_instead_of_path: "Save URL instead of storage path",
+    save_url_description: "Turn this setting on, if you prefer to save the download URL of the uploaded file instead of the storage path. You can only change this prop upon creation.",
+    max_size_bytes: "Max size (in bytes)",
+    image_resize_configuration: "Image Resize Configuration",
+    image_resize_description: "Automatically resize and optimize images before upload (JPEG, PNG, WebP only)",
+    max_width_px: "Max width (px)",
+    max_height_px: "Max height (px)",
+    resize_mode: "Resize mode",
+    resize_contain: "Contain",
+    resize_contain_description: "Contain (fit within bounds)",
+    resize_cover: "Cover",
+    resize_cover_description: "Cover (fill bounds, may crop)",
+    output_format: "Output format",
+    format_original: "Original",
+    format_original_description: "Original (keep same format)",
+    format_webp_description: "WebP (best compression)",
+    quality_label: "Quality (0-100)",
+    quality_hint: "Higher quality = larger file size. Recommended: 80-90 for photos, 90-100 for graphics",
+
+    // URL Property
+    preview_type: "Preview type",
+    preview_image: "Image",
+    preview_video: "Video",
+    preview_audio: "Audio",
+    display_url: "Display URL",
+
+    // Boolean Property
+    default_value_not_set: "Default value not set",
+    default_value_is: "Default value is {{value}}",
+
+    // Enum Property
+    default_value_was_cleared: "Default value was cleared",
+    enum_missing_values: "This enum property is missing some values",
+
+    // DateTime Property
+    mode_label: "Mode",
+    date_time_mode: "Date/Time",
+    date_mode: "Date",
+    automatic_value: "Automatic value",
+    auto_on_create: "On create",
+    auto_on_update: "On any update",
+    auto_none: "None",
+    auto_value_description: "Update this field automatically when creating or updating the entity",
+    timezone_label: "Timezone",
+    local_timezone: "Local timezone",
+    timezone_description: "Timezone for displaying and inputting dates. Values are always stored in UTC.",
+
+    // Reference Property
+    target_collection: "Target collection",
+    views_group: "Views",
+
+    // Map Property
+    add_property_to: "Add property to {{name}}",
+    add_first_property_to_group: "Add the first property to this group",
+    spread_children_as_columns: "Spread children as columns",
+    spread_children_description: "Set this flag to true if you want to display the children of this group as individual columns. This will only work for top level groups.",
+
+    // Markdown Property
+    paste_behavior: "Paste behavior",
+    strip_html_on_paste: "Strip HTML on paste",
+    strip_html_description: "Remove HTML tags and inline styles when pasting content from external sources",
+    convert_pasted_to_markdown: "Convert pasted text to markdown",
+    convert_pasted_description: "Convert rich text (from Google Docs, Word, etc.) to clean markdown format",
+    markdown_url_note: "When using Markdown, the URL of the uploaded files are always saved in the text value (not the path).",
+
+    // Advanced Property
+    hide_from_collection: "Hide from collection",
+    hide_from_collection_tooltip: "Hide this field from the collection view. It will still be visible in the form view",
+    read_only: "Read only",
+    read_only_tooltip: "Is this a read only field. Display only as a preview",
+
+    // Dialog & Tabs
+    tab_general: "General",
+    tab_display: "Display",
+    tab_properties: "Properties",
+    tab_extend: "Extend",
+    unsaved_changes_in_collection: "There are unsaved changes in this collection",
+    error_persisting_collection: "Error persisting collection: {{error}}",
+    details_in_console: "Details in the console",
+    error_inferring_collection: "Error inferring collection: {{error}}",
+    collection_deleted: "Collection deleted",
+    data_imported_successfully_msg: "Data imported successfully",
+    must_specify_path: "You must specify a path in the database for this collection",
+    collection_path_already_exists: "There is already a collection with the specified path. If you want to have multiple collections referring to the same database path, make sure they have different ids",
+    collection_path_odd_segments: "Collection paths must have an odd number of segments: {{path}}",
+    collection_uses_path_as_id: "There is already a collection that uses this value as a path",
+    collection_uses_this_id: "There is already a collection which uses this id",
+    delete_stored_config: "Delete the stored config?",
+    delete_stored_config_body: "This will not delete any data, only the stored config, and reset to the code state.",
+    order_label: "Order",
+
+    // Collection Properties Editor
+    select_property_to_edit: "Select a property to edit it",
+    add_first_property: "Now you can add your first property",
+    add_new_property: "Add new property",
+    no_permission_add_properties: "You don't have permission to add new properties",
+    get_code_for_collection: "Get the code for this collection",
+    add_properties_from_data: "Add new properties based on data",
+    collection_name_placeholder: "Collection name",
+    created_by: "Created by {{name}}",
+    property_defined_as_builder: "This property is defined as a property builder in code",
+
+    // Extend Settings
+    extend_title: "Extend",
+    extend_description: "Add subcollections, custom views, and entity actions to this collection.",
+    collection_defined_in_code: "This collection is defined in code. The changes done in this editor will override the properties defined in code. You can delete the overridden values to revert to the state defined in code.",
+    reset_to_code: "Reset to code",
+
+    // Widget Type Groups
+    widget_group_text: "Text",
+    widget_group_boolean: "Boolean",
+    widget_group_users: "Users",
+    widget_group_select: "Select",
+    widget_group_number: "Number",
+    widget_group_file: "File",
+    widget_group_reference: "Reference",
+    widget_group_date: "Date",
+    widget_group_group: "Group",
+    widget_group_array: "Array"
+};

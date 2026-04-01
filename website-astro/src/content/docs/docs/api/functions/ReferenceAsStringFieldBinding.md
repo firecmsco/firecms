@@ -13,7 +13,7 @@ title: "ReferenceAsStringFieldBinding"
 
 > **ReferenceAsStringFieldBinding**(`props`): `Element`
 
-Defined in: [form/field\_bindings/ReferenceAsStringFieldBinding.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/ReferenceAsStringFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/ReferenceAsStringFieldBinding.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/ReferenceAsStringFieldBinding.tsx)
 
 Field that opens a reference selection dialog and stores the entity ID as a string.
 
@@ -24,7 +24,7 @@ and tables to the specified properties.
 
 ### props
 
-[`FieldProps`](../interfaces/FieldProps)\<`string`\>
+[`FieldProps`](../interfaces/FieldProps)\<[`StringProperty`](../interfaces/StringProperty)\>
 
 ## Returns
 

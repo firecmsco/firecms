@@ -9,12 +9,28 @@ import { createPostsClient } from './posts.js';
 import { createTagsClient } from './tags.js';
 import { createPrivateNotesClient } from './private_notes.js';
 import { createTestEntitiesClient } from './test_entities.js';
+import { createAuth, createMemoryStorage } from './auth.js';
+import { createAdmin } from './admin.js';
 
 /**
- * Create a Rebase client with typed collection accessors.
+ * @typedef {Object} CreateRebaseClientConfig
+ * @property {string} baseUrl
+ * @property {string} [token] - Static token (manual mode, skips auth auto-refresh)
+ * @property {string} [apiPath]
+ * @property {typeof globalThis.fetch} [fetch]
+ * @property {Object} [auth] - Auth module options
+ * @property {import('./auth.js').AuthStorage} [auth.storage] - Custom storage adapter
+ * @property {boolean} [auth.autoRefresh] - Auto-refresh tokens (default: true)
+ * @property {boolean} [auth.persistSession] - Persist session to storage (default: true)
+ */
+
+/**
+ * Create a Rebase client with typed collection accessors, authentication, and admin management.
  *
- * @param {import('./client.js').RebaseClientConfig} config
+ * @param {CreateRebaseClientConfig} config
  * @returns {{
+ *   auth: Object,
+ *   admin: Object,
  *   authors: ReturnType<typeof createAuthorsClient>,
  *   profiles: ReturnType<typeof createProfilesClient>,
  *   posts: ReturnType<typeof createPostsClient>,
@@ -29,8 +45,10 @@ import { createTestEntitiesClient } from './test_entities.js';
  *
  * const rebase = createRebaseClient({
  *     baseUrl: 'http://localhost:3001',
- *     token: 'eyJ...'
  * });
+ *
+ * // Sign in
+ * const { user } = await rebase.auth.signInWithEmail('user@example.com', 'password');
  *
  * // List with filtering
  * const { data, meta } = await rebase.posts.find({
@@ -50,14 +68,32 @@ import { createTestEntitiesClient } from './test_entities.js';
  *
  * // Delete
  * await rebase.posts.delete(1);
- *
- * // Swap token after auth refresh
- * rebase.setToken('new-jwt-token');
  */
 export function createRebaseClient(config) {
     const transport = createTransport(config);
 
+    // Initialize auth module
+    const auth = createAuth(transport, config.auth || {});
+
+    // Wire 401 retry: when transport gets 401, try refreshing via auth
+    config.onUnauthorized = async () => {
+        try {
+            await auth.refreshSession();
+            return true;
+        } catch (e) {
+            await auth.signOut();
+            return false;
+        }
+    };
+
+    // Initialize admin module
+    const admin = createAdmin(transport);
+
     return {
+        /** Authentication lifecycle — sign in, sign up, sign out, sessions */
+        auth,
+        /** User and role management (admin-only operations) */
+        admin,
         /** @type {ReturnType<typeof createAuthorsClient>} */
         authors: createAuthorsClient(transport),
         /** @type {ReturnType<typeof createProfilesClient>} */
@@ -85,3 +121,5 @@ export { createTestEntitiesClient } from './test_entities.js';
 
 // Re-export utilities
 export { RebaseApiError, buildQueryString } from './client.js';
+export { createAuth, createMemoryStorage } from './auth.js';
+export { createAdmin } from './admin.js';

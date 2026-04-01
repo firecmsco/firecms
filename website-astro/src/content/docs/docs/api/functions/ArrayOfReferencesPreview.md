@@ -13,13 +13,13 @@ title: "ArrayOfReferencesPreview"
 
 > **ArrayOfReferencesPreview**(`__namedParameters`): `Element`
 
-Defined in: [preview/property\_previews/ArrayOfReferencesPreview.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOfReferencesPreview.tsx)
+Defined in: [core/src/preview/property\_previews/ArrayOfReferencesPreview.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOfReferencesPreview.tsx)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`any`[]\>
+[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<[`ArrayProperty`](../interfaces/ArrayProperty)\>
 
 ## Returns
 

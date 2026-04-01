@@ -18,3 +18,4 @@ export * from "./export_import";
 export * from "./modify_collections";
 export * from "./websockets";
 export * from "./backend";
+export * from "./translations";

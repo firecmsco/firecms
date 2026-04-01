@@ -11,7 +11,7 @@ title: "NavigateOptions"
 
 # Interface: NavigateOptions
 
-Defined in: [types/navigation.ts:163](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:183](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/navigation.ts:163](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **flushSync**: `boolean`
 
-Defined in: [types/navigation.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:188](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/navigation.ts:168](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **preventScrollReset**: `boolean`
 
-Defined in: [types/navigation.ts:166](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:186](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/navigation.ts:166](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **relative**: `"path"` \| `"route"`
 
-Defined in: [types/navigation.ts:167](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:187](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -43,15 +43,15 @@ Defined in: [types/navigation.ts:167](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **replace**: `boolean`
 
-Defined in: [types/navigation.ts:164](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:184](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
 ### state?
 
-> `optional` **state**: `any`
+> `optional` **state**: `unknown`
 
-Defined in: [types/navigation.ts:165](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:185](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -59,4 +59,4 @@ Defined in: [types/navigation.ts:165](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **viewTransition**: `boolean`
 
-Defined in: [types/navigation.ts:169](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:189](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)

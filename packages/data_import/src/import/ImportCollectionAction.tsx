@@ -101,9 +101,6 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
     const propertiesAndLevel = Object.entries(properties)
         .flatMap(([key, property]) => getPropertiesAndLevel(key, property, 0));
     const propertiesOrder = (collection.propertiesOrder ?? Object.keys(collection.properties)) as Extract<keyof M, string>[];
-    if (collection.collectionGroup) {
-        return null;
-    }
 
     return <>
 

@@ -11,15 +11,15 @@ title: "flattenObject"
 
 # Function: flattenObject()
 
-> **flattenObject**(`obj`, `parentKey`): `any`
+> **flattenObject**(`obj`, `parentKey`): `object`
 
-Defined in: [util/flatten\_object.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/flatten_object.ts)
+Defined in: [common/src/util/flatten\_object.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/flatten_object.ts)
 
 ## Parameters
 
 ### obj
 
-`any`
+`Record`\<`string`, `unknown`\>
 
 ### parentKey
 
@@ -27,4 +27,4 @@ Defined in: [util/flatten\_object.ts:1](https://github.com/rebaseco/rebase/blob/
 
 ## Returns
 
-`any`
+`object`

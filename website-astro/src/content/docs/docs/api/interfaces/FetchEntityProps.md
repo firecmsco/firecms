@@ -11,7 +11,7 @@ title: "FetchEntityProps"
 
 # Interface: FetchEntityProps\<M\>
 
-Defined in: [types/datasource.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [types/datasource.ts:9](https://github.com/rebaseco/rebase/blob/main
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
 
-Defined in: [types/datasource.ts:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -33,15 +33,15 @@ Defined in: [types/datasource.ts:13](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **databaseId**: `string`
 
-Defined in: [types/datasource.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
 ### entityId
 
-> **entityId**: `string`
+> **entityId**: `string` \| `number`
 
-Defined in: [types/datasource.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [types/datasource.ts:11](https://github.com/rebaseco/rebase/blob/mai
 
 > **path**: `string`
 
-Defined in: [types/datasource.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)

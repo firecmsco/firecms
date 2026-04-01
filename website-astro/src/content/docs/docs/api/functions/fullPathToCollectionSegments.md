@@ -13,7 +13,7 @@ title: "fullPathToCollectionSegments"
 
 > **fullPathToCollectionSegments**(`path`): `string`[]
 
-Defined in: [util/paths.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/paths.ts)
+Defined in: [common/src/util/paths.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/paths.ts)
 
 Extract the collection path routes
 `products/B44RG6APH/locales` => [`products`, `locales`]

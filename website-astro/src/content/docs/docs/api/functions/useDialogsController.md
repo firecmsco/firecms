@@ -11,9 +11,9 @@ title: "useDialogsController"
 
 # Function: useDialogsController()
 
-> **useDialogsController**(): `DialogsController`
+> **useDialogsController**(): [`DialogsController`](../interfaces/DialogsController)
 
-Defined in: [hooks/useDialogsController.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useDialogsController.tsx)
+Defined in: [core/src/hooks/useDialogsController.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useDialogsController.tsx)
 
 Use this hook to open a dialog imperatively.
 Alternatively, you can use dialogs declaratively using the `Dialog` component.
@@ -23,4 +23,4 @@ Consider that in order to use this hook you need to have a parent
 
 ## Returns
 
-`DialogsController`
+[`DialogsController`](../interfaces/DialogsController)

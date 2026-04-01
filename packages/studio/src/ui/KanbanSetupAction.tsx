@@ -1,5 +1,5 @@
 import React from "react";
-import { EntityCollection } from "@rebasepro/core";
+import { EntityCollection, useTranslation } from "@rebasepro/core";
 import { Button } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 
@@ -17,6 +17,7 @@ export function KanbanSetupAction({
     parentCollectionIds: string[];
 }) {
     const collectionEditorController = useCollectionEditorController();
+    const { t } = useTranslation();
 
     const handleConfigureClick = () => {
         collectionEditorController.editCollection({
@@ -32,7 +33,7 @@ export function KanbanSetupAction({
             variant="filled"
             onClick={handleConfigureClick}
         >
-            Configure Kanban
+            {t("studio_kanban_configure")}
         </Button>
     );
 }

@@ -2,7 +2,8 @@ import {
     ConfirmationDialog,
     PluginHomePageActionsProps,
     useAuthController,
-    useSnackbarController
+    useSnackbarController,
+    useTranslation
 } from "@rebasepro/core";
 import { ContentCopyIcon, DeleteIcon, IconButton, Menu, MenuItem, MoreVertIcon, SettingsIcon, } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
@@ -18,6 +19,7 @@ export function HomePageEditorCollectionAction({
     const authController = useAuthController();
     const configController = useCollectionsConfigController();
     const collectionEditorController = useCollectionEditorController();
+    const { t } = useTranslation();
 
     const permissions = collectionEditorController?.configPermissions
         ? collectionEditorController.configPermissions({
@@ -54,7 +56,7 @@ export function HomePageEditorCollectionAction({
         configController?.deleteCollection({ id: collection.slug }).then(() => {
             setDeleteRequested(false);
             snackbarController.open({
-                message: "Collection deleted",
+                message: t("studio_home_collection_deleted"),
                 type: "success"
             });
         });
@@ -78,7 +80,7 @@ export function HomePageEditorCollectionAction({
                                 onDuplicateCollectionClicked();
                             }}>
                             <ContentCopyIcon />
-                            Duplicate
+                            {t("studio_home_duplicate_collection")}
                         </MenuItem>
                     }
                     <MenuItem
@@ -89,7 +91,7 @@ export function HomePageEditorCollectionAction({
                             setDeleteRequested(true);
                         }}>
                         <DeleteIcon />
-                        Delete
+                        {t("studio_home_delete")}
                     </MenuItem>
 
                 </Menu>
@@ -110,10 +112,8 @@ export function HomePageEditorCollectionAction({
             open={deleteRequested}
             onAccept={deleteCollection}
             onCancel={() => setDeleteRequested(false)}
-            title={<>Delete this collection?</>}
-            body={<> This will <b>not
-                delete any data</b>, only
-                the collection in the CMS</>} />
+            title={<>{t("studio_home_confirm_delete_title")}</>}
+            body={<>{t("studio_home_confirm_delete_no_data")}</>} />
     </>;
 
 }

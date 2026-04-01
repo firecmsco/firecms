@@ -13,4 +13,4 @@ title: "PropertyTableCell"
 
 > `const` **PropertyTableCell**: `FunctionComponent`\<[`PropertyTableCellProps`](../interfaces/PropertyTableCellProps)\<`any`\>\>
 
-Defined in: [components/EntityCollectionTable/PropertyTableCell.tsx:70](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:79](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)

@@ -13,7 +13,7 @@ title: "canDeleteEntity"
 
 > **canDeleteEntity**\<`M`, `USER`\>(`collection`, `authController`, `path`, `entity`): `boolean`
 
-Defined in: [util/permissions.ts:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/permissions.ts)
+Defined in: [common/src/util/permissions.ts:226](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/permissions.ts)
 
 ## Type Parameters
 

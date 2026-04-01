@@ -5,7 +5,6 @@ import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/comm
 import { PropertyColumnConfig } from "../EntityCollectionTable/EntityCollectionTableProps";
 import { getSubcollections } from "@rebasepro/common";
 
-export const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
 export function useColumnIds<M extends Record<string, any>>(collection: EntityCollection<M>, includeSubcollections: boolean): PropertyColumnConfig[] {
     return useMemo(() => {
@@ -112,13 +111,6 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: EntityColl
             }
         }
 
-        // Check collection group parent
-        if (collection.collectionGroup && key === COLLECTION_GROUP_PARENT_ID) {
-            return [{
-                key,
-                disabled: true
-            }];
-        }
 
         return [null];
     }).filter(Boolean) as PropertyColumnConfig[];
@@ -173,9 +165,6 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: E
         columnIds.push(...subCollectionIds.filter((subColId) => !columnIds.includes(subColId)));
     }
 
-    if (collection.collectionGroup) {
-        columnIds.push(COLLECTION_GROUP_PARENT_ID);
-    }
 
     return hideAndExpandKeys(collection, columnIds);
 }

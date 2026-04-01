@@ -13,7 +13,7 @@ title: "printChanged"
 
 > **printChanged**(`props`, `prev`, `path`, `depth`, `maxDepth`): `void`
 
-Defined in: [util/useTraceUpdate.tsx:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useTraceUpdate.tsx)
+Defined in: [core/src/util/useTraceUpdate.tsx:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useTraceUpdate.tsx)
 
 ## Parameters
 

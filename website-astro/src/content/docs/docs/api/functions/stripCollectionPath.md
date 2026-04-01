@@ -13,7 +13,7 @@ title: "stripCollectionPath"
 
 > **stripCollectionPath**(`path`): `string`
 
-Defined in: [util/paths.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/paths.ts)
+Defined in: [common/src/util/paths.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/paths.ts)
 
 Remove the entity ids from a given path
 `products/B44RG6APH/locales` => `products::locales`

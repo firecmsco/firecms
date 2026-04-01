@@ -11,7 +11,7 @@ title: "PropertiesToColumnsParams"
 
 # Interface: PropertiesToColumnsParams\<M\>
 
-Defined in: [components/EntityCollectionTable/column\_utils.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
 
 ## Type Parameters
 
@@ -23,9 +23,9 @@ Defined in: [components/EntityCollectionTable/column\_utils.tsx:20](https://gith
 
 ### AdditionalHeaderWidget?
 
-> `optional` **AdditionalHeaderWidget**: `ComponentType`\<\{ `onHover`: `boolean`; `property`: [`ResolvedProperty`](../type-aliases/ResolvedProperty); `propertyKey`: `string`; \}\>
+> `optional` **AdditionalHeaderWidget**: `ComponentType`\<\{ `onHover`: `boolean`; `property`: [`Property`](../type-aliases/Property); `propertyKey`: `string`; \}\>
 
-Defined in: [components/EntityCollectionTable/column\_utils.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
 
 ***
 
@@ -33,15 +33,15 @@ Defined in: [components/EntityCollectionTable/column\_utils.tsx:24](https://gith
 
 > `optional` **forceFilter**: `Partial`\<`Record`\<keyof `M` *extends* `string` ? keyof `any` : `never`, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
 
-Defined in: [components/EntityCollectionTable/column\_utils.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
 
 ***
 
 ### properties
 
-> **properties**: [`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+> **properties**: [`Properties`](../type-aliases/Properties)
 
-Defined in: [components/EntityCollectionTable/column\_utils.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [components/EntityCollectionTable/column\_utils.tsx:21](https://gith
 
 > `optional` **sortable**: `boolean`
 
-Defined in: [components/EntityCollectionTable/column\_utils.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)

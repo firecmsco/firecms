@@ -13,7 +13,7 @@ title: "navigateToEntity"
 
 > **navigateToEntity**(`__namedParameters`): `void`
 
-Defined in: [util/navigation\_utils.ts:174](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/navigation_utils.ts)
+Defined in: [common/src/util/navigation\_utils.ts:172](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_utils.ts)
 
 ## Parameters
 
@@ -29,15 +29,11 @@ Defined in: [util/navigation\_utils.ts:174](https://github.com/rebaseco/rebase/b
 
 #### entityId?
 
-`string`
-
-#### fullIdPath?
-
-`string`
+`string` \| `number`
 
 #### navigation
 
-[`NavigationController`](../type-aliases/NavigationController)
+[`CMSUrlController`](../type-aliases/CMSUrlController)
 
 #### onClose?
 

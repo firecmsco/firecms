@@ -13,7 +13,7 @@ title: "BooleanPreview"
 
 > **BooleanPreview**(`__namedParameters`): `ReactElement`
 
-Defined in: [preview/components/BooleanPreview.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/BooleanPreview.tsx)
+Defined in: [core/src/preview/components/BooleanPreview.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/BooleanPreview.tsx)
 
 ## Parameters
 
@@ -21,7 +21,7 @@ Defined in: [preview/components/BooleanPreview.tsx:9](https://github.com/rebasec
 
 #### property
 
-[`ArrayProperty`](../interfaces/ArrayProperty)\<`any`, `any`\> \| [`MapProperty`](../interfaces/MapProperty)\<`any`\> \| `AnyProperty`
+[`Property`](../type-aliases/Property)
 
 #### size
 

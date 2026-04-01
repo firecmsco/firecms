@@ -5,7 +5,8 @@ import {
     useCollapsedGroups,
     useCustomizationController,
     useRebaseContext,
-    useNavigationStateController
+    useNavigationStateController,
+    useTranslation
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import {
@@ -54,6 +55,7 @@ export function ContentHomePage({
     const customizationController = useCustomizationController();
     const navigationController = useNavigationStateController();
     const breadcrumbs = useBreadcrumbsController();
+    const { t } = useTranslation();
 
     useEffect(() => {
         breadcrumbs.set({ breadcrumbs: [] });
@@ -377,7 +379,7 @@ export function ContentHomePage({
                 >
                     <SearchBar
                         onTextSearch={updateSearch}
-                        placeholder="Search collections"
+                        placeholder={t("search_collections")}
                         autoFocus
                         innerClassName="w-full"
                         className="w-full grow"

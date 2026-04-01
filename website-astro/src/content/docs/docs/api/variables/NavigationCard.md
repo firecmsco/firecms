@@ -13,4 +13,4 @@ title: "NavigationCard"
 
 > `const` **NavigationCard**: `NamedExoticComponent`\<[`NavigationCardProps`](../type-aliases/NavigationCardProps)\>
 
-Defined in: [components/HomePage/NavigationCard.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
+Defined in: [core/src/components/HomePage/NavigationCard.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)

@@ -9,16 +9,12 @@ title: "Properties"
 
 [@rebasepro/core](../README) / Properties
 
-# Type Alias: Properties\<M\>
+# Type Alias: Properties
 
-> **Properties**\<`M`\> = `{ [k in keyof M]: Property<M[keyof M]> }`
+> **Properties** = `object`
 
-Defined in: [types/properties.ts:241](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:63](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
-Record of properties of an entity or a map property
+## Index Signature
 
-## Type Parameters
-
-### M
-
-`M` *extends* `Record`\<`string`, `any`\> = `any`
+\[`key`: `string`\]: [`Property`](Property)

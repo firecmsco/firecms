@@ -1,4 +1,4 @@
-import { EntityTableController, getDefaultPropertiesOrder, useAuthController } from "@rebasepro/core";
+import { EntityTableController, getDefaultPropertiesOrder, useAuthController, useTranslation } from "@rebasepro/core";
 import { AddIcon, Tooltip } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { PersistedCollection } from "../types/persisted_collection";
@@ -17,6 +17,7 @@ export function PropertyAddColumnComponent({
 
     const authController = useAuthController();
     const collectionEditorController = useCollectionEditorController();
+    const { t } = useTranslation();
     const canEditCollection = collectionEditorController.configPermissions
         ? collectionEditorController.configPermissions({
             user: authController.user,
@@ -27,7 +28,7 @@ export function PropertyAddColumnComponent({
     return (
         <Tooltip
             asChild={true}
-            title={canEditCollection ? "Add new property" : "You don't have permission to add new properties"}>
+            title={canEditCollection ? t("studio_property_add_column") : t("studio_property_add_column_no_permission")}>
             <div
                 className={"p-0.5 w-20 h-full flex items-center justify-center cursor-pointer bg-surface-100/40 bg-surface-100/40 hover:bg-surface-100 dark:bg-surface-950 dark:bg-opacity-40 dark:bg-surface-950/40 dark:hover:bg-surface-950"}
                 // className={onHover ? "bg-white dark:bg-surface-950" : undefined}

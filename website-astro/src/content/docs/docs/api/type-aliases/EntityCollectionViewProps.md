@@ -13,7 +13,7 @@ title: "EntityCollectionViewProps"
 
 > **EntityCollectionViewProps**\<`M`\> = `object` & [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
 
-Defined in: [components/EntityCollectionView/EntityCollectionView.tsx:91](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionView.tsx:94](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionView.tsx)
 
 ## Type Declaration
 
@@ -21,18 +21,11 @@ Defined in: [components/EntityCollectionView/EntityCollectionView.tsx:91](https:
 
 > `optional` **className**: `string`
 
-### fullIdPath?
+### idPath?
 
-> `optional` **fullIdPath**: `string`
+> `optional` **idPath**: `string`
 
 Full path using navigation ids.
-
-### fullPath?
-
-> `optional` **fullPath**: `string`
-
-Complete path where this collection is located.
-It defaults to the collection path if not provided.
 
 ### isSubCollection?
 
@@ -45,6 +38,13 @@ Whether this is a subcollection or not.
 > `optional` **parentCollectionIds**: `string`[]
 
 If this is a subcollection, specify the parent collection ids.
+
+### path?
+
+> `optional` **path**: `string`
+
+Complete path where this collection is located.
+It defaults to the collection path if not provided.
 
 ### updateUrl?
 

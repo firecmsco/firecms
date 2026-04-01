@@ -11,16 +11,16 @@ title: "removeNulls"
 
 # Function: removeNulls()
 
-> **removeNulls**(`value`): `any`
+> **removeNulls**(`value`): `unknown`
 
-Defined in: [util/objects.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:314](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Parameters
 
 ### value
 
-`any`
+`unknown`
 
 ## Returns
 
-`any`
+`unknown`

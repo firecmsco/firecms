@@ -11,7 +11,7 @@ title: "DownloadMetadata"
 
 # Interface: DownloadMetadata
 
-Defined in: [types/storage.ts:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 The full set of object metadata, including read-only properties.
 
@@ -21,7 +21,7 @@ The full set of object metadata, including read-only properties.
 
 > **bucket**: `string`
 
-Defined in: [types/storage.ts:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:57](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 The bucket this object is contained in.
 
@@ -31,7 +31,7 @@ The bucket this object is contained in.
 
 > **contentType**: `string`
 
-Defined in: [types/storage.ts:66](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:75](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Type of the uploaded file
 e.g. "image/jpeg"
@@ -42,7 +42,7 @@ e.g. "image/jpeg"
 
 > **customMetadata**: `Record`\<`string`, `unknown`\>
 
-Defined in: [types/storage.ts:68](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:77](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [types/storage.ts:68](https://github.com/rebaseco/rebase/blob/main/p
 
 > **fullPath**: `string`
 
-Defined in: [types/storage.ts:52](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:61](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 The full path of this object.
 
@@ -60,10 +60,10 @@ The full path of this object.
 
 > **name**: `string`
 
-Defined in: [types/storage.ts:57](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:66](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 The short name of this object, which is the last component of the full path.
-For example, if fullPath is 'full/path/image.png', name is 'image.png'.
+For example, if path is 'full/path/image.png', name is 'image.png'.
 
 ***
 
@@ -71,6 +71,6 @@ For example, if fullPath is 'full/path/image.png', name is 'image.png'.
 
 > **size**: `number`
 
-Defined in: [types/storage.ts:61](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:70](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 The size of this object, in bytes.

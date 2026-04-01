@@ -13,7 +13,7 @@ title: "removeInitialSlash"
 
 > **removeInitialSlash**(`s`): `string`
 
-Defined in: [util/navigation\_utils.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/navigation_utils.ts)
+Defined in: [common/src/util/navigation\_utils.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_utils.ts)
 
 ## Parameters
 

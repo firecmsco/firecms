@@ -11,16 +11,16 @@ title: "removeFunctions"
 
 # Function: removeFunctions()
 
-> **removeFunctions**(`o`): `any`
+> **removeFunctions**(`o`): `unknown`
 
-Defined in: [util/objects.ts:112](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:246](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Parameters
 
 ### o
 
-`object` | `undefined`
+`unknown`
 
 ## Returns
 
-`any`
+`unknown`

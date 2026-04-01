@@ -9,17 +9,13 @@ title: "PluginFieldBuilderParams"
 
 [@rebasepro/core](../README) / PluginFieldBuilderParams
 
-# Type Alias: PluginFieldBuilderParams\<T, M, EC\>
+# Type Alias: PluginFieldBuilderParams\<M, EC\>
 
-> **PluginFieldBuilderParams**\<`T`, `M`, `EC`\> = `object`
+> **PluginFieldBuilderParams**\<`M`, `EC`\> = `object`
 
-Defined in: [types/plugins.tsx:244](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:311](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ## Type Parameters
-
-### T
-
-`T` *extends* [`CMSType`](CMSType) = [`CMSType`](CMSType)
 
 ### M
 
@@ -35,15 +31,15 @@ Defined in: [types/plugins.tsx:244](https://github.com/rebaseco/rebase/blob/main
 
 > `optional` **collection**: `EC`
 
-Defined in: [types/plugins.tsx:251](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:318](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
 ### Field
 
-> **Field**: `React.ComponentType`\<[`FieldProps`](../interfaces/FieldProps)\<`T`, `any`, `M`\>\>
+> **Field**: `React.ComponentType`\<[`FieldProps`](../interfaces/FieldProps)\<[`Property`](Property), `unknown`, `M`\>\>
 
-Defined in: [types/plugins.tsx:248](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:315](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -51,7 +47,7 @@ Defined in: [types/plugins.tsx:248](https://github.com/rebaseco/rebase/blob/main
 
 > **fieldConfigId**: `string`
 
-Defined in: [types/plugins.tsx:245](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:312](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -59,7 +55,7 @@ Defined in: [types/plugins.tsx:245](https://github.com/rebaseco/rebase/blob/main
 
 > `optional` **path**: `string`
 
-Defined in: [types/plugins.tsx:250](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:317](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -67,15 +63,15 @@ Defined in: [types/plugins.tsx:250](https://github.com/rebaseco/rebase/blob/main
 
 > **plugin**: [`RebasePlugin`](RebasePlugin)
 
-Defined in: [types/plugins.tsx:249](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:316](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
 ### property
 
-> **property**: [`Property`](Property)\<`T`\> \| [`ResolvedProperty`](ResolvedProperty)\<`T`\>
+> **property**: [`Property`](Property)
 
-Defined in: [types/plugins.tsx:247](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:314](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -83,4 +79,4 @@ Defined in: [types/plugins.tsx:247](https://github.com/rebaseco/rebase/blob/main
 
 > **propertyKey**: `string`
 
-Defined in: [types/plugins.tsx:246](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:313](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)

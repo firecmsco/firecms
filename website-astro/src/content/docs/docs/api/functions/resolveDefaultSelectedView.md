@@ -13,7 +13,7 @@ title: "resolveDefaultSelectedView"
 
 > **resolveDefaultSelectedView**(`defaultSelectedView`, `params`): `string` \| `undefined`
 
-Defined in: [util/collections.ts:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/collections.ts)
+Defined in: [common/src/util/collections.ts:84](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/collections.ts)
 
 ## Parameters
 

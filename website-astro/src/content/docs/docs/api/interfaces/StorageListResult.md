@@ -11,7 +11,7 @@ title: "StorageListResult"
 
 # Interface: StorageListResult
 
-Defined in: [types/storage.ts:130](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:139](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Result returned by list().
 
@@ -21,7 +21,7 @@ Result returned by list().
 
 > **items**: [`StorageReference`](StorageReference)[]
 
-Defined in: [types/storage.ts:144](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:153](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Objects in this directory.
 You can call getMetadata() and getDownloadUrl() on them.
@@ -32,7 +32,7 @@ You can call getMetadata() and getDownloadUrl() on them.
 
 > `optional` **nextPageToken**: `string`
 
-Defined in: [types/storage.ts:148](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:157](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 If set, there might be more results for this list. Use this token to resume the list.
 
@@ -42,7 +42,7 @@ If set, there might be more results for this list. Use this token to resume the 
 
 > **prefixes**: [`StorageReference`](StorageReference)[]
 
-Defined in: [types/storage.ts:139](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:148](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 References to prefixes (sub-folders). You can call list() on them to
 get its contents.

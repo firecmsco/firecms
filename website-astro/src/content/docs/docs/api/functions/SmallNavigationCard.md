@@ -13,7 +13,7 @@ title: "SmallNavigationCard"
 
 > **SmallNavigationCard**(`__namedParameters`): `Element`
 
-Defined in: [components/HomePage/SmallNavigationCard.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/SmallNavigationCard.tsx)
+Defined in: [core/src/components/HomePage/SmallNavigationCard.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/SmallNavigationCard.tsx)
 
 ## Parameters
 

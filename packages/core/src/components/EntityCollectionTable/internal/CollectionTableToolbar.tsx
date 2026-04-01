@@ -7,7 +7,7 @@ import {
     SearchBar
 } from "@rebasepro/ui";
 import { CollectionSize } from "@rebasepro/types";
-import { useLargeLayout } from "../../../hooks";
+import { useLargeLayout, useTranslation } from "../../../hooks";
 
 interface CollectionTableToolbarProps {
     loading: boolean;
@@ -36,6 +36,7 @@ export function CollectionTableToolbar({
 
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     const largeLayout = useLargeLayout();
+    const { t } = useTranslation();
 
     const searchLoading = React.useRef<boolean>(false);
 
@@ -76,6 +77,7 @@ export function CollectionTableToolbar({
                         size={"small"}
                         inputRef={searchInputRef}
                         loading={textSearchLoading}
+                        placeholder={t("search")}
                         disabled={Boolean(onTextSearchClick)}
                         onClick={onTextSearchClick}
                         onTextSearch={onTextSearchClick ? undefined : onTextSearch}

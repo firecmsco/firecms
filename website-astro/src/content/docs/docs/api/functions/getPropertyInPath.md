@@ -11,24 +11,18 @@ title: "getPropertyInPath"
 
 # Function: getPropertyInPath()
 
-> **getPropertyInPath**\<`M`\>(`properties`, `path`): [`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)\<`any`, `M`\> \| `undefined`
+> **getPropertyInPath**(`properties`, `path`): [`Property`](../type-aliases/Property) \| `undefined`
 
-Defined in: [util/property\_utils.tsx:77](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
+Defined in: [core/src/util/property\_utils.tsx:59](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
 
 Get a property in a property tree from a path like
 `address.street`
-
-## Type Parameters
-
-### M
-
-`M` *extends* `Record`\<`string`, `any`\>
 
 ## Parameters
 
 ### properties
 
-[`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`any`\> | [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`Properties`](../type-aliases/Properties)
 
 ### path
 
@@ -36,4 +30,4 @@ Get a property in a property tree from a path like
 
 ## Returns
 
-[`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)\<`any`, `M`\> \| `undefined`
+[`Property`](../type-aliases/Property) \| `undefined`

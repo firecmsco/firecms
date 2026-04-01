@@ -8,6 +8,7 @@
  * @property {string} [token] - JWT access token for authenticated requests
  * @property {string} [apiPath] - Base path for the REST API (default: "/api")
  * @property {typeof globalThis.fetch} [fetch] - Custom fetch implementation
+ * @property {function(): Promise<boolean>} [onUnauthorized] - Called on 401, return true to retry
  */
 
 /**
@@ -117,6 +118,30 @@ function createTransport(config) {
 
         const body = await res.json().catch(() => ({}));
 
+        // 401 retry — delegate to onUnauthorized (e.g. auth module refreshes token)
+        if (res.status === 401 && config.onUnauthorized) {
+            const retried = await config.onUnauthorized();
+            if (retried) {
+                const retryHeaders = {
+                    "Content-Type": "application/json",
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                    ...(init?.headers || {}),
+                };
+                const retryRes = await fetchFn(url, { ...init, headers: retryHeaders });
+                if (retryRes.status === 204) return undefined;
+                const retryBody = await retryRes.json().catch(() => ({}));
+                if (!retryRes.ok) {
+                    throw new RebaseApiError(
+                        retryRes.status,
+                        retryBody?.error?.message || retryBody?.message || retryRes.statusText,
+                        retryBody?.error?.code || retryBody?.code,
+                        retryBody?.error?.details || retryBody?.details,
+                    );
+                }
+                return retryBody;
+            }
+        }
+
         if (!res.ok) {
             throw new RebaseApiError(
                 res.status,
@@ -133,6 +158,12 @@ function createTransport(config) {
         request,
         /** Update the auth token at runtime (e.g. after refresh) */
         setToken(newToken) { token = newToken; },
+        /** @returns {string} The base URL without trailing slash */
+        get baseUrl() { return config.baseUrl.replace(/\/$/, ""); },
+        /** @returns {string} The API path prefix */
+        get apiPath() { return apiPath; },
+        /** @returns {typeof globalThis.fetch} The fetch implementation */
+        get fetchFn() { return fetchFn; },
     };
 }
 

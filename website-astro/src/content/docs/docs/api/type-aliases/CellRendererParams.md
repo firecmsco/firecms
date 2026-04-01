@@ -13,7 +13,7 @@ title: "CellRendererParams"
 
 > **CellRendererParams**\<`T`\> = `object`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:167](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:175](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:167](https://github.c
 
 > **column**: [`VirtualTableColumn`](../interfaces/VirtualTableColumn)
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:168](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:176](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:168](https://github.c
 
 > **columnIndex**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:170](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:178](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -43,7 +43,31 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:170](https://github.c
 
 > **columns**: [`VirtualTableColumn`](../interfaces/VirtualTableColumn)[]
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:169](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:177](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+
+***
+
+### frozen?
+
+> `optional` **frozen**: `boolean`
+
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:189](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+
+***
+
+### isDraggable?
+
+> `optional` **isDraggable**: `boolean`
+
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:188](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+
+***
+
+### isDragging?
+
+> `optional` **isDragging**: `boolean`
+
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:187](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -51,7 +75,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:169](https://github.c
 
 > `optional` **isScrolling**: `boolean`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:174](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:182](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -59,7 +83,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:174](https://github.c
 
 > `optional` **rowData**: `T`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:171](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:179](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -67,7 +91,41 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:171](https://github.c
 
 > **rowIndex**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:172](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:180](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+
+***
+
+### sortableAttributes?
+
+> `optional` **sortableAttributes**: `Record`\<`string`, `any`\>
+
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:186](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+
+***
+
+### sortableNodeRef()?
+
+> `optional` **sortableNodeRef**: (`node`) => `void`
+
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:184](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+
+#### Parameters
+
+##### node
+
+`HTMLElement` | `null`
+
+#### Returns
+
+`void`
+
+***
+
+### sortableStyle?
+
+> `optional` **sortableStyle**: `React.CSSProperties`
+
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:185](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -75,4 +133,4 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:172](https://github.c
 
 > **width**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:173](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:181](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)

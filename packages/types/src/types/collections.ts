@@ -139,11 +139,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      */
     securityRules?: SecurityRule[];
 
-    /**
-     * If this collection is a top level navigation entry, you can set this
-     * property to `true` to indicate that this collection is a collection group.
-     */
-    collectionGroup?: boolean;
+
 
     /**
      * Icon key to use in this collection.
@@ -203,14 +199,12 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      *     - If you have subcollections, you get a column for each subcollection,
      *       with the path (or alias) as the subcollection, prefixed with
      *       `subcollection:`. e.g. `subcollection:orders`.
-     *     - If you are using a collection group, you will also have an
-     *       additional `collectionGroupParent` column.
      * You can use this prop to hide some properties from the table view.
      * Note that if you set this prop, other ways to hide fields, like
      * `hidden` in the property definition,will be ignored.
      * `propertiesOrder` has precedence over `hidden`.
      */
-    propertiesOrder?: (Extract<keyof M, string> | string | `subcollection:${string}` | "collectionGroupParent")[];
+    propertiesOrder?: (Extract<keyof M, string> | string | `subcollection:${string}`)[];
 
     /**
      * If enabled, content is loaded in batches. If `false` all entities in the

@@ -13,7 +13,7 @@ title: "ResolvedNavigationEntry"
 
 > **ResolvedNavigationEntry**\<`M`\> = [`ResolvedNavigationEntity`](../interfaces/ResolvedNavigationEntity)\<`M`\> \| [`ResolvedNavigationCollection`](../interfaces/ResolvedNavigationCollection)\<`M`\> \| `ResolvedNavigationEntityCustom`\<`M`\>
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ## Type Parameters
 

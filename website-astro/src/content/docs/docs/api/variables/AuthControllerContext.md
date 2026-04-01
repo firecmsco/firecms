@@ -13,4 +13,4 @@ title: "AuthControllerContext"
 
 > `const` **AuthControllerContext**: `Context`\<[`AuthController`](../type-aliases/AuthController)\<`any`, `any`\>\>
 
-Defined in: [contexts/AuthControllerContext.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/AuthControllerContext.tsx)
+Defined in: [core/src/contexts/AuthControllerContext.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/AuthControllerContext.tsx)

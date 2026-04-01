@@ -11,15 +11,15 @@ title: "pick"
 
 # Variable: pick()
 
-> `const` **pick**: \<`T`\>(`obj`, ...`args`) => `T`
+> `const` **pick**: \<`T`\>(`obj`, ...`args`) => `Partial`\<`T`\>
 
-Defined in: [util/objects.ts:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:98](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Type Parameters
 
 ### T
 
-`T`
+`T` *extends* `Record`\<`string`, `unknown`\>
 
 ## Parameters
 
@@ -29,8 +29,8 @@ Defined in: [util/objects.ts:4](https://github.com/rebaseco/rebase/blob/main/pac
 
 ### args
 
-...`any`[]
+...keyof `T`[]
 
 ## Returns
 
-`T`
+`Partial`\<`T`\>

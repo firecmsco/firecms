@@ -13,7 +13,7 @@ title: "VirtualTable"
 
 > `const` **VirtualTable**: `NamedExoticComponent`\<[`VirtualTableProps`](../interfaces/VirtualTableProps)\<`any`\>\>
 
-Defined in: [components/VirtualTable/VirtualTable.tsx:90](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTable.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTable.tsx:105](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTable.tsx)
 
 This is a Table component that allows displaying arbitrary data, not
 necessarily related to entities or properties. It is the component

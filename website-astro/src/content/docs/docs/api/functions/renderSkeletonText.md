@@ -13,7 +13,7 @@ title: "renderSkeletonText"
 
 > **renderSkeletonText**(`index?`, `width?`): `Element`
 
-Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:272](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
+Defined in: [core/src/preview/property\_previews/SkeletonPropertyComponent.tsx:264](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
 
 ## Parameters
 

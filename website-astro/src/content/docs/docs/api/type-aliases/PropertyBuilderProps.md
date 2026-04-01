@@ -13,7 +13,7 @@ title: "PropertyBuilderProps"
 
 > **PropertyBuilderProps**\<`M`\> = `object`
 
-Defined in: [types/properties.ts:248](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:638](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ## Type Parameters
 
@@ -27,19 +27,15 @@ Defined in: [types/properties.ts:248](https://github.com/rebaseco/rebase/blob/ma
 
 > **authController**: [`AuthController`](AuthController)
 
-Defined in: [types/properties.ts:278](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
-
-Controller to manage authentication
+Defined in: [types/src/types/properties.ts:645](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
 ### entityId?
 
-> `optional` **entityId**: `string`
+> `optional` **entityId**: `string` \| `number`
 
-Defined in: [types/properties.ts:273](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
-
-Entity ID
+Defined in: [types/src/types/properties.ts:644](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -47,9 +43,7 @@ Entity ID
 
 > `optional` **index**: `number`
 
-Defined in: [types/properties.ts:265](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
-
-Index of this property (only for arrays)
+Defined in: [types/src/types/properties.ts:642](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -57,9 +51,7 @@ Index of this property (only for arrays)
 
 > **path**: `string`
 
-Defined in: [types/properties.ts:269](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
-
-Path of the entity in the data source
+Defined in: [types/src/types/properties.ts:643](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -67,19 +59,15 @@ Path of the entity in the data source
 
 > `optional` **previousValues**: `Partial`\<`M`\>
 
-Defined in: [types/properties.ts:257](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
-
-Previous values of the entity before being saved
+Defined in: [types/src/types/properties.ts:640](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
 ### propertyValue?
 
-> `optional` **propertyValue**: `any`
+> `optional` **propertyValue**: `unknown`
 
-Defined in: [types/properties.ts:261](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
-
-Current value of this property
+Defined in: [types/src/types/properties.ts:641](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -87,6 +75,4 @@ Current value of this property
 
 > **values**: `Partial`\<`M`\>
 
-Defined in: [types/properties.ts:253](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
-
-Current values of the entity
+Defined in: [types/src/types/properties.ts:639](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)

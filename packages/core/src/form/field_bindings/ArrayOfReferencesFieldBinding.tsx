@@ -6,7 +6,7 @@ import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty } from "../../util";
 import { getReferenceFrom } from "@rebasepro/common";
 
-import { useEntitySelectionDialog, useCollectionRegistryController } from "../../hooks";
+import { useEntitySelectionDialog, useCollectionRegistryController, useTranslation } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@rebasepro/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
@@ -34,6 +34,7 @@ export function ArrayOfReferencesFieldBinding({
 }: ArrayOfReferencesFieldProps) {
 
     const minimalistView = minimalistViewProp || property.minimalistView;
+    const { t } = useTranslation();
 
     const ofProperty = property.of as Property;
     if (ofProperty.type !== "reference") {
@@ -122,7 +123,7 @@ export function ArrayOfReferencesFieldBinding({
                 disabled={isSubmitting}
                 buildEntry={buildEntry}
                 canAddElements={false}
-                addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
+                addLabel={property.name ? t("add_reference_to", { name: property.name }) : t("add_reference")}
                 newDefaultEntry={property.of && "defaultValue" in property.of ? property.of?.defaultValue : null}
                 onValueChange={(value) => setFieldValue(propertyKey, value)}
             />
@@ -133,7 +134,7 @@ export function ArrayOfReferencesFieldBinding({
                 disabled={isSubmitting}
                 onClick={onEntryClick}>
                 <EditIcon size={"small"} />
-                Edit {property.name}
+                {t("edit")} {property.name}
             </Button>
         </div>}
     </>;

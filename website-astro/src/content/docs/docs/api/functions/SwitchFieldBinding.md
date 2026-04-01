@@ -13,7 +13,7 @@ title: "SwitchFieldBinding"
 
 > **SwitchFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/SwitchFieldBinding.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/SwitchFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/SwitchFieldBinding.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/SwitchFieldBinding.tsx)
 
 Simple boolean switch biding to a boolean property.
 
@@ -24,7 +24,7 @@ and tables to the specified properties.
 
 ### \_\_namedParameters
 
-`SwitchFieldProps`
+[`FieldProps`](../interfaces/FieldProps)\<[`BooleanProperty`](../interfaces/BooleanProperty)\>
 
 ## Returns
 

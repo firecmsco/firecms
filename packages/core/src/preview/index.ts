@@ -12,7 +12,6 @@ export * from "./property_previews/ArrayPropertyPreview";
 export * from "./property_previews/ArrayOneOfPreview";
 export * from "./property_previews/SkeletonPropertyComponent";
 
-export * from "./components/AsyncPreviewComponent";
 export * from "./components/DatePreview";
 export * from "./components/UrlComponentPreview";
 export * from "./components/StorageThumbnail";

@@ -13,13 +13,13 @@ title: "EntityCollectionTable"
 
 > **EntityCollectionTable**\<`M`, `USER`\>(`__namedParameters`): `Element`
 
-Defined in: [components/EntityCollectionTable/EntityCollectionTable.tsx:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTable.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTable.tsx:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTable.tsx)
 
 This component is in charge of rendering a collection table with a high
 degree of customization.
 
 This component is used internally by [EntityCollectionView](../variables/EntityCollectionView) and
-[useReferenceDialog](useReferenceDialog)
+useReferenceDialog
 
 Please note that you only need to use this component if you are building
 a custom view. If you just need to create a default view you can do it

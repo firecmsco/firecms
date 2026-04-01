@@ -13,6 +13,6 @@ title: "LabelWithIcon"
 
 > `const` **LabelWithIcon**: `ForwardRefExoticComponent`\<`LabelWithIconProps` & `RefAttributes`\<`HTMLDivElement`\>\>
 
-Defined in: [form/components/LabelWithIcon.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/components/LabelWithIcon.tsx)
+Defined in: [core/src/form/components/LabelWithIcon.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/components/LabelWithIcon.tsx)
 
 Render the label of with an icon and the title of a property

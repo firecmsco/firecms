@@ -11,7 +11,7 @@ title: "UploadFileProps"
 
 # Interface: UploadFileProps
 
-Defined in: [types/storage.ts:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:4](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/storage.ts:4](https://github.com/rebaseco/rebase/blob/main/pa
 
 > `optional` **bucket**: `string`
 
-Defined in: [types/storage.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/storage.ts:9](https://github.com/rebaseco/rebase/blob/main/pa
 
 > **file**: `File`
 
-Defined in: [types/storage.ts:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:5](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
@@ -35,15 +35,15 @@ Defined in: [types/storage.ts:5](https://github.com/rebaseco/rebase/blob/main/pa
 
 > `optional` **fileName**: `string`
 
-Defined in: [types/storage.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
 ### metadata?
 
-> `optional` **metadata**: `any`
+> `optional` **metadata**: `Record`\<`string`, `unknown`\>
 
-Defined in: [types/storage.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
@@ -51,4 +51,4 @@ Defined in: [types/storage.ts:8](https://github.com/rebaseco/rebase/blob/main/pa
 
 > `optional` **path**: `string`
 
-Defined in: [types/storage.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)

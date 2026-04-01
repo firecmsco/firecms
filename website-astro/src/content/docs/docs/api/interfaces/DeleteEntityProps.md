@@ -11,7 +11,7 @@ title: "DeleteEntityProps"
 
 # Interface: DeleteEntityProps\<M\>
 
-Defined in: [types/datasource.ts:65](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:64](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ## Type Parameters
 
@@ -23,9 +23,9 @@ Defined in: [types/datasource.ts:65](https://github.com/rebaseco/rebase/blob/mai
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
 
-Defined in: [types/datasource.ts:67](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:66](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [types/datasource.ts:67](https://github.com/rebaseco/rebase/blob/mai
 
 > **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [types/datasource.ts:66](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:65](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)

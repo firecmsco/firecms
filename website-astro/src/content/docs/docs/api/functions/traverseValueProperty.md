@@ -11,24 +11,24 @@ title: "traverseValueProperty"
 
 # Function: traverseValueProperty()
 
-> **traverseValueProperty**(`inputValue`, `property`, `operation`): `any`
+> **traverseValueProperty**(`inputValue`, `property`, `operation`): `unknown`
 
-Defined in: [util/entities.ts:167](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
+Defined in: [common/src/util/entities.ts:172](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
 
 ## Parameters
 
 ### inputValue
 
-`any`
+`unknown`
 
 ### property
 
-[`ArrayProperty`](../interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](../interfaces/MapProperty)\<`any`\> | `AnyProperty`
+[`Property`](../type-aliases/Property)
 
 ### operation
 
-(`value`, `property`) => `any`
+(`value`, `property`) => `unknown`
 
 ## Returns
 
-`any`
+`unknown`

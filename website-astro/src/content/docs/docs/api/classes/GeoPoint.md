@@ -11,7 +11,7 @@ title: "GeoPoint"
 
 # Class: GeoPoint
 
-Defined in: [types/entities.ts:73](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:184](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ## Constructors
 
@@ -19,7 +19,7 @@ Defined in: [types/entities.ts:73](https://github.com/rebaseco/rebase/blob/main/
 
 > **new GeoPoint**(`latitude`, `longitude`): `GeoPoint`
 
-Defined in: [types/entities.ts:84](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:195](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 #### Parameters
 
@@ -41,7 +41,7 @@ Defined in: [types/entities.ts:84](https://github.com/rebaseco/rebase/blob/main/
 
 > `readonly` **latitude**: `number`
 
-Defined in: [types/entities.ts:78](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:189](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 The latitude of this GeoPoint instance.
 
@@ -51,6 +51,6 @@ The latitude of this GeoPoint instance.
 
 > `readonly` **longitude**: `number`
 
-Defined in: [types/entities.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:193](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 The longitude of this GeoPoint instance.

@@ -13,7 +13,7 @@ title: "StorageThumbnailInternal"
 
 > **StorageThumbnailInternal**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [preview/components/StorageThumbnail.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/StorageThumbnail.tsx)
+Defined in: [core/src/preview/components/StorageThumbnail.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/StorageThumbnail.tsx)
 
 ## Parameters
 

@@ -13,7 +13,7 @@ title: "useDebouncedCallback"
 
 > **useDebouncedCallback**\<`T`\>(`value`, `callback`, `immediate`, `timeoutMs`): `void`
 
-Defined in: [util/useDebouncedCallback.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useDebouncedCallback.ts)
+Defined in: [core/src/util/useDebouncedCallback.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useDebouncedCallback.ts)
 
 ## Type Parameters
 

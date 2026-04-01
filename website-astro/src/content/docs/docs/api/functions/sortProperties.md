@@ -11,9 +11,9 @@ title: "sortProperties"
 
 # Function: sortProperties()
 
-> **sortProperties**\<`M`\>(`properties`, `propertiesOrder?`): [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+> **sortProperties**\<`M`\>(`properties`, `propertiesOrder?`): [`Properties`](../type-aliases/Properties)
 
-Defined in: [util/collections.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/collections.ts)
+Defined in: [common/src/util/collections.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/collections.ts)
 
 ## Type Parameters
 
@@ -25,12 +25,12 @@ Defined in: [util/collections.ts:11](https://github.com/rebaseco/rebase/blob/mai
 
 ### properties
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`Properties`](../type-aliases/Properties)
 
 ### propertiesOrder?
 
-keyof `M`[]
+`string`[]
 
 ## Returns
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`Properties`](../type-aliases/Properties)

@@ -13,7 +13,7 @@ title: "NavigationBlocker"
 
 > **NavigationBlocker** = `object`
 
-Defined in: [types/navigation.ts:173](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:193](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/navigation.ts:173](https://github.com/rebaseco/rebase/blob/ma
 
 > **isBlocked**: (`path`) => `boolean`
 
-Defined in: [types/navigation.ts:175](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:195](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 #### Parameters
 
@@ -39,7 +39,7 @@ Defined in: [types/navigation.ts:175](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **proceed**: () => `void`
 
-Defined in: [types/navigation.ts:176](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:196](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 #### Returns
 
@@ -51,7 +51,7 @@ Defined in: [types/navigation.ts:176](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **reset**: () => `void`
 
-Defined in: [types/navigation.ts:177](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:197](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 #### Returns
 
@@ -63,7 +63,7 @@ Defined in: [types/navigation.ts:177](https://github.com/rebaseco/rebase/blob/ma
 
 > **updateBlockListener**: (`path`, `block`, `basePath?`) => () => `void`
 
-Defined in: [types/navigation.ts:174](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:194](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 #### Parameters
 

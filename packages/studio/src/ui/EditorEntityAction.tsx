@@ -1,4 +1,4 @@
-import { PluginFormActionProps, useAuthController, useCollectionRegistryController } from "@rebasepro/core";
+import { PluginFormActionProps, useAuthController, useCollectionRegistryController, useTranslation } from "@rebasepro/core";
 import { IconButton, SettingsIcon, Tooltip, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
@@ -14,6 +14,7 @@ export function EditorEntityAction({
     const authController = useAuthController();
     const collectionRegistry = useCollectionRegistryController();
     const collectionEditorController = useCollectionEditorController();
+    const { t } = useTranslation();
 
     const parentCollection = parentCollectionIds.length > 0 ? collectionRegistry.getCollection(parentCollectionIds[parentCollectionIds.length - 1]) : undefined;
 
@@ -28,7 +29,7 @@ export function EditorEntityAction({
 
     const editorButton = <Tooltip
         asChild={true}
-        title={canEditCollection ? (isDirty ? "You need to save the document before changing the schema" : "Edit schema for this form") : "You don't have permissions to edit this collection"}>
+        title={canEditCollection ? (isDirty ? t("studio_editor_entity_save_first") : t("studio_editor_entity_edit_schema")) : t("studio_editor_entity_no_permission")}>
         <IconButton
             color={"primary"}
             disabled={!canEditCollection || isDirty}

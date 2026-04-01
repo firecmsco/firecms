@@ -43,7 +43,6 @@ export default defineConfig({
             "@rebasepro/ui": path.resolve(__dirname, "../../packages/ui/src"),
             "@rebasepro/ui/index.css": path.resolve(__dirname, "../../packages/ui/index.css"),
             "@rebasepro/formex": path.resolve(__dirname, "../../packages/formex/src"),
-            "@rebasepro/editor": path.resolve(__dirname, "../../packages/editor/src"),
             "@rebasepro/datatalk": path.resolve(__dirname, "../../packages/datatalk/src"),
             "@rebasepro/postgresql": path.resolve(__dirname, "../../packages/postgresql/src"),
             "@rebasepro/firebase": path.resolve(__dirname, "../../packages/firebase/src"),

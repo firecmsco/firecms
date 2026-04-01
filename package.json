@@ -35,7 +35,6 @@
     "packages/user_management",
     "packages/formex",
     "packages/media_manager",
-    "packages/editor",
     "app",
     "app/frontend",
     "app/backend",

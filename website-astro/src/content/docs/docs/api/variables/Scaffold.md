@@ -13,7 +13,7 @@ title: "Scaffold"
 
 > `const` **Scaffold**: `NamedExoticComponent`\<`PropsWithChildren`\<[`ScaffoldProps`](../interfaces/ScaffoldProps)\>\>
 
-Defined in: [app/Scaffold.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
+Defined in: [core/src/app/Scaffold.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
 
 This view acts as a scaffold for Rebase.
 

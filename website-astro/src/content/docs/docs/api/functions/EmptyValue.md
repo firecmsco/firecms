@@ -11,9 +11,17 @@ title: "EmptyValue"
 
 # Function: EmptyValue()
 
-> **EmptyValue**(): `Element`
+> **EmptyValue**(`__namedParameters`): `Element`
 
-Defined in: [preview/components/EmptyValue.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EmptyValue.tsx)
+Defined in: [core/src/preview/components/EmptyValue.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EmptyValue.tsx)
+
+## Parameters
+
+### \_\_namedParameters
+
+#### className?
+
+`string`
 
 ## Returns
 

@@ -20,6 +20,7 @@ import {
     RebaseRoute,
     ModeControllerProvider,
     NotFoundPage,
+    RebaseI18nProvider,
     RolesView,
     Scaffold,
     SideDialogs,
@@ -136,6 +137,7 @@ export function App() {
     });
 
     return (
+        <RebaseI18nProvider>
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
                 <AdminModeControllerProvider value={adminModeController}>
@@ -198,5 +200,6 @@ export function App() {
                 </AdminModeControllerProvider>
             </ModeControllerProvider>
         </SnackbarProvider>
+        </RebaseI18nProvider>
     );
 }

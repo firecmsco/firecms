@@ -13,4 +13,4 @@ title: "DEFAULT_GROUP_NAME"
 
 > `const` **DEFAULT\_GROUP\_NAME**: `"Views"` = `"Views"`
 
-Defined in: [components/HomePage/DefaultHomePage.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/DefaultHomePage.tsx)
+Defined in: [core/src/components/HomePage/ContentHomePage.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/ContentHomePage.tsx)

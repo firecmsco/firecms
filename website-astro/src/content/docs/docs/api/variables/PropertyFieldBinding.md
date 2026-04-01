@@ -11,9 +11,9 @@ title: "PropertyFieldBinding"
 
 # Variable: PropertyFieldBinding()
 
-> `const` **PropertyFieldBinding**: \<`T`, `M`\>(`propertyKey`) => `ReactElement`\<[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`T`, `M`\>\>
+> `const` **PropertyFieldBinding**: \<`M`\>(`propertyKey`) => `ReactElement`\<[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`M`\>\>
 
-Defined in: [form/PropertyFieldBinding.tsx:50](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/PropertyFieldBinding.tsx)
+Defined in: [core/src/form/PropertyFieldBinding.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/PropertyFieldBinding.tsx)
 
 This component renders a form field creating the corresponding configuration
 from a property. For example if bound to a string property, it will generate
@@ -30,10 +30,6 @@ the validation in the `EntityCollection` definition.
 
 ## Type Parameters
 
-### T
-
-`T` *extends* [`CMSType`](../type-aliases/CMSType) = [`CMSType`](../type-aliases/CMSType)
-
 ### M
 
 `M` *extends* `Record`\<`string`, `any`\> = `any`
@@ -42,10 +38,10 @@ the validation in the `EntityCollection` definition.
 
 ### propertyKey
 
-[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`T`, `M`\>
+[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`M`\>
 
 You can use nested names such as `address.street` or `friends[2]`
 
 ## Returns
 
-`ReactElement`\<[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`T`, `M`\>\>
+`ReactElement`\<[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`M`\>\>

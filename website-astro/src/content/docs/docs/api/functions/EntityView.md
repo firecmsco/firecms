@@ -13,7 +13,7 @@ title: "EntityView"
 
 > **EntityView**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [components/EntityView.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
+Defined in: [core/src/components/EntityView.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
 
 ## Type Parameters
 

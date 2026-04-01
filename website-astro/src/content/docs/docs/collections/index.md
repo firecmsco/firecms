@@ -241,7 +241,6 @@ to `false` in the collection configuration.
     - For additional field, use the field key.
     - If you have subcollections, you get a column for each subcollection, with the path (or alias) as the
       subcollection, prefixed with `subcollection:`. E.g., `subcollection:orders`.
-    - If you are using a collection group, you will also have an additional `collectionGroupParent` column.
     - Note that if you set this prop, other ways to hide fields, like `hidden` in the property definition, will be
       ignored. `propertiesOrder` has precedence over `hidden`.
 
@@ -253,8 +252,6 @@ to `false` in the collection configuration.
   `full_screen`.
 - **`formAutoSave`**: If set to true, the form will be auto-saved when the user changes the value of a field. Defaults
   to false. You can't use this prop if you are using a `customId`.
-- **`collectionGroup`**: If this collection is a top-level navigation entry, you can set this property to `true` to
-  indicate that this collection is a collection group.
 - **`alias`**: You can set an alias that will be used internally instead of the `path`. The `alias` value will be used
   to determine the URL of the collection while `path` will still be used in the datasource. Note that you can use this
   value in reference properties too.

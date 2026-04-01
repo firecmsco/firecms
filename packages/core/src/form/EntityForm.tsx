@@ -27,7 +27,8 @@ import {
     useRebaseContext,
     useCollectionRegistryController,
     useSideEntityController,
-    useSnackbarController
+    useSnackbarController,
+    useTranslation
 } from "../hooks";
 import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, Typography } from "@rebasepro/ui";
 import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@rebasepro/formex";
@@ -149,7 +150,7 @@ export function EntityForm<M extends Record<string, any>>({
     showEntityPath = true,
     children
 }: EntityFormProps<M>) {
-
+    const { t } = useTranslation();
     const sideEntityController = useSideEntityController();
     const collectionRegistryController = useCollectionRegistryController();
 
@@ -320,7 +321,7 @@ export function EntityForm<M extends Record<string, any>>({
     const beforeSaveHookError = useCallback((e: Error) => {
         snackbarController.open({
             type: "error",
-            message: "Error before saving: " + e?.message
+            message: `${t("error_before_saving")}: ${e?.message}`
         });
         console.error(e);
     }, [snackbarController]);
@@ -328,7 +329,7 @@ export function EntityForm<M extends Record<string, any>>({
     const afterSaveHookError = useCallback((e: Error) => {
         snackbarController.open({
             type: "error",
-            message: "Error after saving (entity is saved): " + e?.message
+            message: `${t("error_after_saving")}: ${e?.message}`
         });
         console.error(e);
     }, [snackbarController]);
@@ -350,7 +351,7 @@ export function EntityForm<M extends Record<string, any>>({
         if (!autoSave)
             snackbarController.open({
                 type: "success",
-                message: `${collection.singularName ?? collection.name}: Saved correctly`
+                message: `${collection.singularName ?? collection.name}: ${t("saved_correctly")}`
             });
         onEntityChange?.(updatedEntity);
         updateStatus("existing");
@@ -370,7 +371,7 @@ export function EntityForm<M extends Record<string, any>>({
     const afterSaveError = useCallback((e: Error) => {
         snackbarController.open({
             type: "error",
-            title: "Error saving entity",
+            title: t("error_saving_entity"),
             message: e?.message
         });
         console.error("Error saving entity", path, entityId, e);
@@ -659,7 +660,7 @@ export function EntityForm<M extends Record<string, any>>({
 
                 {!entity?.values && initialStatus === "existing" &&
                     <Alert color={"warning"} size={"small"} outerClassName={"w-full mb-4 text-xs"}>
-                        This entity does not exist in the database
+                        {t("entity_does_not_exist")}
                     </Alert>}
 
                 {showEntityPath && <Alert color={"base"} outerClassName={"w-full"} size={"small"}>
@@ -673,7 +674,7 @@ export function EntityForm<M extends Record<string, any>>({
             {children}
 
             {initialEntityId && !entity && initialStatus !== "new" && <Alert color={"info"} size={"small"}>
-                This entity does not exist in the database
+                {t("entity_does_not_exist")}
             </Alert>}
 
             {formContext && <>
@@ -739,12 +740,12 @@ export function EntityForm<M extends Record<string, any>>({
                                 />}
 
                             {formex.dirty
-                                ? <Tooltip title={"This form has been modified"}>
+                                ? <Tooltip title={t("form_modified")}>
                                     <Chip size={"small"} className={"py-1"} colorScheme={"orangeDarker"}>
                                         <EditIcon size={"smallest"} />
                                     </Chip>
                                 </Tooltip>
-                                : <Tooltip title={"The current form is in sync with the database"}>
+                                : <Tooltip title={t("form_in_sync")}>
                                     <Chip size={"small"} className={"py-1"}>
                                         <CheckIcon size={"smallest"} />
                                     </Chip>

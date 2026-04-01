@@ -13,7 +13,7 @@ title: "FileType"
 
 > **FileType** = `"image/*"` \| `"video/*"` \| `"audio/*"` \| `"application/*"` \| `"text/*"` \| `"font/*"` \| `string`
 
-Defined in: [types/properties.ts:907](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:954](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 MIME types for storage fields
 

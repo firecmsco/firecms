@@ -11,9 +11,9 @@ title: "getValueInPath"
 
 # Function: getValueInPath()
 
-> **getValueInPath**(`o`, `path`): `any`
+> **getValueInPath**(`o`, `path`): `unknown`
 
-Defined in: [util/objects.ts:74](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:208](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Parameters
 
@@ -27,4 +27,4 @@ Defined in: [util/objects.ts:74](https://github.com/rebaseco/rebase/blob/main/pa
 
 ## Returns
 
-`any`
+`unknown`

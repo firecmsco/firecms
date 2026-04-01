@@ -16,6 +16,7 @@ import {
     DialogContent,
     DialogActions
 } from "@rebasepro/ui";
+import { useTranslation } from "@rebasepro/core";
 import { MonacoEditor } from "../SQLEditor/MonacoEditor";
 import { PostgresPolicy } from "./RLSEditor";
 
@@ -120,6 +121,7 @@ export const PolicyEditor = ({
     onCancel
 }: PolicyEditorProps) => {
 
+    const { t } = useTranslation();
     const [name, setName] = useState("");
     const [helpOpen, setHelpOpen] = useState(false);
     const [behavior, setBehavior] = useState<"PERMISSIVE" | "RESTRICTIVE">("PERMISSIVE");
@@ -187,10 +189,10 @@ export const PolicyEditor = ({
                 <div className="flex items-center gap-3">
                     <div>
                         <Typography variant="subtitle1" className="">
-                            {policy ? "Edit Policy" : "Create New Policy"}
+                            {policy ? t("studio_policy_edit") : t("studio_policy_create")}
                         </Typography>
                         <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark mt-1">
-                            Defining access rules for <span className="font-mono text-primary bg-primary-bg dark:bg-primary-bg-dark px-1 py-0.5 rounded">{schema}.{table}</span>
+                            {t("studio_policy_defining_rules")} <span className="font-mono text-primary bg-primary-bg dark:bg-primary-bg-dark px-1 py-0.5 rounded">{schema}.{table}</span>
                         </Typography>
                     </div>
                     <IconButton size="small" onClick={() => setHelpOpen(true)}>
@@ -199,10 +201,10 @@ export const PolicyEditor = ({
                 </div>
                 <div className="flex gap-2">
                     <Button size="small" variant="text" color="neutral" onClick={onCancel}>
-                        Cancel
+                        {t("studio_policy_cancel")}
                     </Button>
                     <Button size="small" variant="filled" color="primary" onClick={handleSave} disabled={!name}>
-                        Save Policy
+                        {t("studio_policy_save")}
                     </Button>
                 </div>
             </div>
@@ -214,13 +216,13 @@ export const PolicyEditor = ({
                     {/* Presets - only for new policies */}
                     {!policy && (
                     <div className="flex flex-col gap-1.5 bg-primary/5 dark:bg-primary-bg-dark/20 p-3 sm:p-4 rounded-lg border border-primary/10 dark:border-primary/20">
-                        <Typography variant="caption" className="text-primary dark:text-primary-light uppercase tracking-wider">Start from a template (Optional)</Typography>
+                        <Typography variant="caption" className="text-primary dark:text-primary-light uppercase tracking-wider">{t("studio_policy_template")}</Typography>
                         <Select
                             size="small"
                             value={selectedPreset}
                             onValueChange={handlePresetChange}
                             position="item-aligned"
-                            placeholder="Select a template..."
+                            placeholder={t("studio_policy_select_template")}
                             className="bg-white dark:bg-surface-950"
                         >
                             {POLICY_PRESETS.map((preset) => (
@@ -238,12 +240,12 @@ export const PolicyEditor = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         {/* Policy Name */}
                         <div className="flex flex-col gap-1.5">
-                            <Typography variant="caption" className="uppercase tracking-wider text-text-secondary">Policy Name</Typography>
+                            <Typography variant="caption" className="uppercase tracking-wider text-text-secondary">{t("studio_policy_name")}</Typography>
                             <TextField
                                 // @ts-ignore
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder="Give your policy a descriptive name"
+                                placeholder={t("studio_policy_name_placeholder")}
                                 className="w-full"
                             />
                         </div>
@@ -251,7 +253,7 @@ export const PolicyEditor = ({
                         {/* Behavior */}
                         <div className="flex flex-col gap-1.5">
                             <Typography variant="caption" className="uppercase tracking-wider text-text-secondary">
-                                Policy Behavior <code className="text-[10px] bg-surface-200 dark:bg-surface-800 text-text-secondary dark:text-text-secondary-dark px-1 py-0.5 rounded ml-1">AS</code>
+                                {t("studio_policy_behavior")} <code className="text-[10px] bg-surface-200 dark:bg-surface-800 text-text-secondary dark:text-text-secondary-dark px-1 py-0.5 rounded ml-1">AS</code>
                             </Typography>
                             <Select
                                 value={behavior}
@@ -260,14 +262,14 @@ export const PolicyEditor = ({
                             >
                                 <SelectItem value="PERMISSIVE">
                                     <div className="flex flex-col text-left">
-                                        <span className="">Permissive</span>
-                                        <span className="text-xs text-text-secondary dark:text-text-secondary-dark">Combined using "OR"</span>
+                                        <span className="">{t("studio_policy_permissive")}</span>
+                                        <span className="text-xs text-text-secondary dark:text-text-secondary-dark">{t("studio_policy_permissive_desc")}</span>
                                     </div>
                                 </SelectItem>
                                 <SelectItem value="RESTRICTIVE">
                                     <div className="flex flex-col text-left">
-                                        <span className="">Restrictive</span>
-                                        <span className="text-xs text-text-secondary dark:text-text-secondary-dark">Combined using "AND"</span>
+                                        <span className="">{t("studio_policy_restrictive")}</span>
+                                        <span className="text-xs text-text-secondary dark:text-text-secondary-dark">{t("studio_policy_restrictive_desc")}</span>
                                     </div>
                                 </SelectItem>
                             </Select>
@@ -277,7 +279,7 @@ export const PolicyEditor = ({
                     {/* Command */}
                     <div className="flex flex-col gap-1.5">
                         <Typography variant="caption" className="uppercase tracking-wider text-text-secondary">
-                            Policy Command <code className="text-[10px] bg-surface-200 dark:bg-surface-800 text-text-secondary dark:text-text-secondary-dark px-1 py-0.5 rounded ml-1">FOR</code>
+                            {t("studio_policy_command")} <code className="text-[10px] bg-surface-200 dark:bg-surface-800 text-text-secondary dark:text-text-secondary-dark px-1 py-0.5 rounded ml-1">FOR</code>
                         </Typography>
                         <div className="flex flex-wrap gap-1.5">
                             {COMMAND_OPTIONS.map(cmd => (
@@ -298,13 +300,13 @@ export const PolicyEditor = ({
                     {/* Roles */}
                     <div className="flex flex-col gap-1.5">
                         <Typography variant="caption" className="uppercase tracking-wider text-text-secondary">
-                            Target Roles <code className="text-[10px] bg-surface-200 dark:bg-surface-800 text-text-secondary dark:text-text-secondary-dark px-1 py-0.5 rounded ml-1">TO</code>
+                            {t("studio_policy_target_roles")} <code className="text-[10px] bg-surface-200 dark:bg-surface-800 text-text-secondary dark:text-text-secondary-dark px-1 py-0.5 rounded ml-1">TO</code>
                         </Typography>
                         <MultiSelect
                             size="small"
                             value={roles}
                             onValueChange={setRoles}
-                            placeholder="Select roles (defaults to public)"
+                            placeholder={t("studio_policy_roles_placeholder")}
                         >
                             {ROLE_OPTIONS.map(role => (
                                 <MultiSelectItem key={role} value={role}>
@@ -321,8 +323,8 @@ export const PolicyEditor = ({
                     {command !== "INSERT" && (
                         <div className="flex flex-col gap-1.5">
                             <div className="flex flex-col gap-0.5">
-                                <Typography variant="caption" className="uppercase tracking-wider text-text-secondary">USING expression</Typography>
-                                <Typography variant="caption" className="text-text-secondary opacity-70">Applies to existing rows (SELECT, UPDATE, DELETE)</Typography>
+                                <Typography variant="caption" className="uppercase tracking-wider text-text-secondary">{t("studio_policy_using_expr")}</Typography>
+                                <Typography variant="caption" className="text-text-secondary opacity-70">{t("studio_policy_using_expr_desc")}</Typography>
                             </div>
                             <div className={cls("h-32 border rounded-md overflow-hidden bg-white dark:bg-[#1e1e1e]", defaultBorderMixin)}>
                                 <MonacoEditor
@@ -339,8 +341,8 @@ export const PolicyEditor = ({
                     {showCheck && (
                         <div className="flex flex-col gap-1.5 mt-2">
                             <div className="flex flex-col gap-0.5">
-                                <Typography variant="caption" className="uppercase tracking-wider text-text-secondary">WITH CHECK expression</Typography>
-                                <Typography variant="caption" className="text-text-secondary opacity-70">Applies to new or modified rows (INSERT, UPDATE)</Typography>
+                                <Typography variant="caption" className="uppercase tracking-wider text-text-secondary">{t("studio_policy_check_expr")}</Typography>
+                                <Typography variant="caption" className="text-text-secondary opacity-70">{t("studio_policy_check_expr_desc")}</Typography>
                             </div>
                             <div className={cls("h-32 border rounded-md overflow-hidden bg-white dark:bg-[#1e1e1e]", defaultBorderMixin)}>
                                 <MonacoEditor
@@ -360,62 +362,62 @@ export const PolicyEditor = ({
             <Dialog open={helpOpen} onOpenChange={setHelpOpen} maxWidth="3xl">
                 <DialogContent className="p-4 sm:p-6 lg:p-8 flex flex-col gap-6">
                     <div>
-                        <Typography variant="h5" className="mb-2">Row Level Security (RLS) Guide</Typography>
+                        <Typography variant="h5" className="mb-2">{t("studio_policy_help_title")}</Typography>
                         <Typography className="text-text-secondary dark:text-text-secondary-dark">
-                            Row Level Security (RLS) allows you to restrict which rows a user can access or modify based on their authentication status or roles.
+                            {t("studio_policy_help_intro")}
                         </Typography>
                     </div>
                     
                     <div className="flex flex-col gap-4">
                         <Paper className={cls("p-4 sm:p-5 flex flex-col gap-1", defaultBorderMixin)}>
-                            <Typography variant="subtitle2" className="text-primary dark:text-primary-light font-medium">1. Select a Template</Typography>
+                            <Typography variant="subtitle2" className="text-primary dark:text-primary-light font-medium">{t("studio_policy_help_step1_title")}</Typography>
                             <Typography variant="body2" className="text-text-secondary dark:text-text-secondary-dark">
-                                If you're new to RLS, the easiest way to start is by selecting a predefined template from the dropdown. It will automatically configure the policy for common use cases like "Users can update their own rows".
+                                {t("studio_policy_help_step1_desc")}
                             </Typography>
                         </Paper>
                         
                         <Paper className={cls("p-4 sm:p-5 flex flex-col gap-1", defaultBorderMixin)}>
-                            <Typography variant="subtitle2" className="text-primary dark:text-primary-light font-medium">2. Target Roles</Typography>
+                            <Typography variant="subtitle2" className="text-primary dark:text-primary-light font-medium">{t("studio_policy_help_step2_title")}</Typography>
                             <Typography variant="body2" className="text-text-secondary dark:text-text-secondary-dark mb-1">
-                                Choose which users the policy applies to:
+                                {t("studio_policy_help_step2_desc")}
                             </Typography>
                             <ul className="list-disc pl-5 space-y-1 text-sm text-text-secondary dark:text-text-secondary-dark">
-                                <li><strong>public</strong>: Applies to everyone (logged in or not).</li>
-                                <li><strong>authenticated</strong>: Only applies to users who are logged in.</li>
-                                <li><strong>anon</strong>: Only applies to users who are NOT logged in.</li>
+                                <li><strong>public</strong>: {t("studio_policy_help_role_public")}</li>
+                                <li><strong>authenticated</strong>: {t("studio_policy_help_role_authenticated")}</li>
+                                <li><strong>anon</strong>: {t("studio_policy_help_role_anon")}</li>
                             </ul>
                         </Paper>
 
                         <Paper className={cls("p-4 sm:p-5 flex flex-col gap-1", defaultBorderMixin)}>
-                            <Typography variant="subtitle2" className="text-primary dark:text-primary-light font-medium">3. USING Expression</Typography>
+                            <Typography variant="subtitle2" className="text-primary dark:text-primary-light font-medium">{t("studio_policy_help_step3_title")}</Typography>
                             <Typography variant="body2" className="text-text-secondary dark:text-text-secondary-dark mb-1">
-                                A SQL condition that must evaluate to true for <strong>existing rows</strong> to be visible or updatable (SELECT, UPDATE, DELETE).
+                                {t("studio_policy_help_step3_desc")}
                             </Typography>
                             <div className={cls("bg-surface-100 dark:bg-surface-800 px-3 py-2 rounded-md font-mono text-sm my-2", defaultBorderMixin)}>
                                 Example: auth.uid() = user_id
                             </div>
                             <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark">
-                                Ensures users can only see rows where they are the owner.
+                                {t("studio_policy_help_step3_example")}
                             </Typography>
                         </Paper>
 
                         <Paper className={cls("p-4 sm:p-5 flex flex-col gap-1", defaultBorderMixin)}>
-                            <Typography variant="subtitle2" className="text-primary dark:text-primary-light font-medium">4. WITH CHECK Expression</Typography>
+                            <Typography variant="subtitle2" className="text-primary dark:text-primary-light font-medium">{t("studio_policy_help_step4_title")}</Typography>
                             <Typography variant="body2" className="text-text-secondary dark:text-text-secondary-dark mb-1">
-                                A SQL condition that must evaluate to true for <strong>new or modified rows</strong> to be saved (INSERT, UPDATE).
+                                {t("studio_policy_help_step4_desc")}
                             </Typography>
                             <div className={cls("bg-surface-100 dark:bg-surface-800 px-3 py-2 rounded-md font-mono text-sm my-2", defaultBorderMixin)}>
                                 Example: auth.uid() = user_id
                             </div>
                             <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark">
-                                Usually the same as the USING expression when users are only allowed to insert/edit their own data.
+                                {t("studio_policy_help_step4_example")}
                             </Typography>
                         </Paper>
 
                         <Paper className={cls("p-4 sm:p-5 flex flex-col gap-2 bg-primary/5 dark:bg-primary-bg-dark/10", defaultBorderMixin)}>
-                            <Typography variant="subtitle2" className="text-primary dark:text-primary-light font-medium">Rebase Auth Variables</Typography>
+                            <Typography variant="subtitle2" className="text-primary dark:text-primary-light font-medium">{t("studio_policy_help_auth_vars_title")}</Typography>
                             <Typography variant="body2" className="text-text-secondary dark:text-text-secondary-dark">
-                                Rebase provides native Supabase-style helper functions that you can use in your expressions:
+                                {t("studio_policy_help_auth_vars_desc")}
                             </Typography>
                             <ul className="list-disc pl-5 space-y-2 text-sm text-text-secondary dark:text-text-secondary-dark font-normal">
                                 <li>
@@ -436,7 +438,7 @@ export const PolicyEditor = ({
 
                     <div className={cls("mt-2 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-primary/5 dark:bg-primary-bg-dark/10 p-4 rounded-xl border border-primary/10 dark:border-primary/20", defaultBorderMixin)}>
                         <Typography variant="body2" className="text-primary dark:text-primary-light mb-4 sm:mb-0 max-w-md">
-                            To learn more about Postgres policies, check out the official documentation.
+                            {t("studio_policy_help_docs_cta")}
                         </Typography>
                         <Button 
                             component="a" 
@@ -447,12 +449,12 @@ export const PolicyEditor = ({
                             size="small"
                             className="whitespace-nowrap flex-shrink-0"
                         >
-                            Read Docs
+                            {t("studio_policy_help_read_docs")}
                         </Button>
                     </div>
                 </DialogContent>
                 <DialogActions className="p-4 sm:px-6 sm:pb-6 pt-0 border-t-0">
-                    <Button onClick={() => setHelpOpen(false)} variant="filled" color="primary">Got it!</Button>
+                    <Button onClick={() => setHelpOpen(false)} variant="filled" color="primary">{t("studio_policy_help_got_it")}</Button>
                 </DialogActions>
             </Dialog>
         </div >

@@ -13,7 +13,7 @@ title: "ArrayOfReferencesFieldBinding"
 
 > **ArrayOfReferencesFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/ArrayOfReferencesFieldBinding.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/ArrayOfReferencesFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/ArrayOfReferencesFieldBinding.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/ArrayOfReferencesFieldBinding.tsx)
 
 This field allows selecting multiple references.
 

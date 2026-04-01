@@ -11,7 +11,7 @@ title: "EntityFetchProps"
 
 # Interface: EntityFetchProps\<M, USER\>
 
-Defined in: [hooks/data/useEntityFetch.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [core/src/hooks/data/useEntityFetch.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ## Type Parameters
 
@@ -29,7 +29,7 @@ Defined in: [hooks/data/useEntityFetch.tsx:10](https://github.com/rebaseco/rebas
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`, `USER`\>
 
-Defined in: [hooks/data/useEntityFetch.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [core/src/hooks/data/useEntityFetch.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ***
 
@@ -37,15 +37,15 @@ Defined in: [hooks/data/useEntityFetch.tsx:14](https://github.com/rebaseco/rebas
 
 > `optional` **databaseId**: `string`
 
-Defined in: [hooks/data/useEntityFetch.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [core/src/hooks/data/useEntityFetch.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ***
 
 ### entityId?
 
-> `optional` **entityId**: `string`
+> `optional` **entityId**: `string` \| `number`
 
-Defined in: [hooks/data/useEntityFetch.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [core/src/hooks/data/useEntityFetch.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [hooks/data/useEntityFetch.tsx:12](https://github.com/rebaseco/rebas
 
 > **path**: `string`
 
-Defined in: [hooks/data/useEntityFetch.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [core/src/hooks/data/useEntityFetch.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ***
 
@@ -61,4 +61,4 @@ Defined in: [hooks/data/useEntityFetch.tsx:11](https://github.com/rebaseco/rebas
 
 > `optional` **useCache**: `boolean`
 
-Defined in: [hooks/data/useEntityFetch.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [core/src/hooks/data/useEntityFetch.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)

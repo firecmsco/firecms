@@ -13,7 +13,7 @@ title: "ReferencePreviewProps"
 
 > **ReferencePreviewProps** = `object`
 
-Defined in: [preview/components/ReferencePreview.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
+Defined in: [core/src/preview/components/ReferencePreview.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [preview/components/ReferencePreview.tsx:10](https://github.com/reba
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [preview/components/ReferencePreview.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
+Defined in: [core/src/preview/components/ReferencePreview.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [preview/components/ReferencePreview.tsx:11](https://github.com/reba
 
 > `optional` **hover**: `boolean`
 
-Defined in: [preview/components/ReferencePreview.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
+Defined in: [core/src/preview/components/ReferencePreview.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [preview/components/ReferencePreview.tsx:16](https://github.com/reba
 
 > `optional` **includeEntityLink**: `boolean`
 
-Defined in: [preview/components/ReferencePreview.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
+Defined in: [core/src/preview/components/ReferencePreview.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [preview/components/ReferencePreview.tsx:17](https://github.com/reba
 
 > `optional` **includeId**: `boolean`
 
-Defined in: [preview/components/ReferencePreview.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
+Defined in: [core/src/preview/components/ReferencePreview.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [preview/components/ReferencePreview.tsx:18](https://github.com/reba
 
 > `optional` **onClick**: (`e`) => `void`
 
-Defined in: [preview/components/ReferencePreview.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
+Defined in: [core/src/preview/components/ReferencePreview.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
 
 #### Parameters
 
@@ -71,7 +71,7 @@ Defined in: [preview/components/ReferencePreview.tsx:15](https://github.com/reba
 
 > `optional` **previewProperties**: `string`[]
 
-Defined in: [preview/components/ReferencePreview.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
+Defined in: [core/src/preview/components/ReferencePreview.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
 
 ***
 
@@ -79,7 +79,7 @@ Defined in: [preview/components/ReferencePreview.tsx:14](https://github.com/reba
 
 > **reference**: [`EntityReference`](../classes/EntityReference)
 
-Defined in: [preview/components/ReferencePreview.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
+Defined in: [core/src/preview/components/ReferencePreview.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
 
 ***
 
@@ -87,4 +87,4 @@ Defined in: [preview/components/ReferencePreview.tsx:12](https://github.com/reba
 
 > `optional` **size**: [`PreviewSize`](PreviewSize)
 
-Defined in: [preview/components/ReferencePreview.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
+Defined in: [core/src/preview/components/ReferencePreview.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)

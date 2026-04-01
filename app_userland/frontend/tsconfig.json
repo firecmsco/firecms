@@ -40,9 +40,6 @@
       "@rebasepro/ui": [
         "../../packages/ui/src"
       ],
-      "@rebasepro/editor": [
-        "../../packages/editor/src"
-      ],
       "@rebasepro/datatalk": [
         "../../packages/datatalk/src"
       ],

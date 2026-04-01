@@ -13,7 +13,7 @@ title: "RebaseRouter"
 
 > **RebaseRouter**(`__namedParameters`): `Element`
 
-Defined in: [core/RebaseRouter.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/RebaseRouter.tsx)
+Defined in: [core/src/core/RebaseRouter.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/RebaseRouter.tsx)
 
 ## Parameters
 
@@ -25,7 +25,7 @@ Defined in: [core/RebaseRouter.tsx:4](https://github.com/rebaseco/rebase/blob/ma
 
 #### children
 
-`ReactNode`
+`any`
 
 ## Returns
 

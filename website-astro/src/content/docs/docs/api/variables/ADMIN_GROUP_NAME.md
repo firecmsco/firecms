@@ -13,4 +13,4 @@ title: "ADMIN_GROUP_NAME"
 
 > `const` **ADMIN\_GROUP\_NAME**: `"Admin"` = `"Admin"`
 
-Defined in: [components/HomePage/DefaultHomePage.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/DefaultHomePage.tsx)
+Defined in: [core/src/components/HomePage/ContentHomePage.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/ContentHomePage.tsx)

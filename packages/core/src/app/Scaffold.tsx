@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useCallback } from "react";
 import { ChevronLeftIcon, cls, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@rebasepro/ui";
 import { deepEqual as equal } from "fast-equals"
 
-import { useLargeLayout, useAdminModeController } from "../hooks";
+import { useLargeLayout, useAdminModeController, useTranslation } from "../hooks";
 import { ErrorBoundary } from "../components";
 import { AppContext } from "./useApp";
 
@@ -177,6 +177,7 @@ function DrawerWrapper(props: {
 
     const isFloating = props.hovered && !props.open;
     const darkBg = props.isStudioDark ? "dark:bg-surface-950" : "dark:bg-surface-900";
+    const { t } = useTranslation();
 
     const innerDrawer = <div
         className={cls("h-full no-scrollbar overflow-y-auto overflow-x-hidden", defaultBorderMixin,
@@ -202,7 +203,7 @@ function DrawerWrapper(props: {
         return <>
             <IconButton
                 color="inherit"
-                aria-label="Open drawer"
+                aria-label={t("open_menu")}
                 onClick={() => props.setDrawerOpen(true)}
                 className="absolute sm:top-2 sm:left-4 top-1 left-2"
             >
@@ -212,7 +213,7 @@ function DrawerWrapper(props: {
                 transparent={true}
                 open={props.open}
                 onOpenChange={props.setDrawerOpen}
-                title={"Navigation drawer"}
+                title={t("navigation_drawer")}
                 overlayClassName={"bg-white/80 dark:bg-surface-900/80"}
             >
                 {innerDrawer}

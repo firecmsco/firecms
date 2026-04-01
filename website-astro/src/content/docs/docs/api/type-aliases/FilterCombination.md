@@ -13,7 +13,7 @@ title: "FilterCombination"
 
 > **FilterCombination**\<`Key`\> = `Partial`\<`Record`\<`Key`, `"asc"` \| `"desc"`\>\>
 
-Defined in: [types/collections.ts:467](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:571](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Used to indicate valid filter combinations (e.g. created in Firestore)
 If the user selects a specific filter/sort combination, the CMS checks if it's

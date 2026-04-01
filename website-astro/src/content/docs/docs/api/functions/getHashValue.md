@@ -11,9 +11,9 @@ title: "getHashValue"
 
 # Function: getHashValue()
 
-> **getHashValue**\<`T`\>(`v`): `any`
+> **getHashValue**\<`T`\>(`v`): `string` \| `null`
 
-Defined in: [util/objects.ts:130](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:272](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Type Parameters
 
@@ -29,4 +29,4 @@ Defined in: [util/objects.ts:130](https://github.com/rebaseco/rebase/blob/main/p
 
 ## Returns
 
-`any`
+`string` \| `null`

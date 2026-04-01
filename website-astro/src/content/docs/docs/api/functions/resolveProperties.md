@@ -11,9 +11,9 @@ title: "resolveProperties"
 
 # Function: resolveProperties()
 
-> **resolveProperties**\<`M`\>(`properties`): [`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+> **resolveProperties**\<`M`\>(`properties`): [`Properties`](../type-aliases/Properties)
 
-Defined in: [util/resolutions.ts:366](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/resolutions.ts)
+Defined in: [common/src/util/resolutions.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 Resolve enums and arrays for properties
 
@@ -33,11 +33,7 @@ Resolve enums and arrays for properties
 
 #### entityId?
 
-`string`
-
-#### fromBuilder?
-
-`boolean`
+`string` \| `number`
 
 #### ignoreMissingFields?
 
@@ -57,7 +53,7 @@ Resolve enums and arrays for properties
 
 #### properties
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`Properties`](../type-aliases/Properties)
 
 #### propertyConfigs?
 
@@ -73,4 +69,4 @@ Resolve enums and arrays for properties
 
 ## Returns
 
-[`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+[`Properties`](../type-aliases/Properties)

@@ -49,3 +49,5 @@ export * from "./useBackendStorageSource";
 export * from "./usePermissions";
 
 export * from "./ApiConfigContext";
+
+export * from "./useTranslation";

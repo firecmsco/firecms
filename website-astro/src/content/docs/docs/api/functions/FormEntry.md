@@ -13,7 +13,7 @@ title: "FormEntry"
 
 > **FormEntry**(`__namedParameters`): `Element`
 
-Defined in: [form/components/FormEntry.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/components/FormEntry.tsx)
+Defined in: [core/src/form/components/FormEntry.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/components/FormEntry.tsx)
 
 ## Parameters
 

@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useState } from "react";
 import { cls, EditIcon, IconButton, Typography, ExpandablePanel } from "@rebasepro/ui";
+import { useTranslation } from "../../hooks";
 
 export function NavigationGroup({
     children,
@@ -22,8 +23,9 @@ export function NavigationGroup({
     onToggleCollapsed?: () => void;
 }>) {
 
+    const { t } = useTranslation();
     const [isHovered, setIsHovered] = useState(false);
-    const currentGroupName = group ?? "Views";
+    const currentGroupName = group ?? t("views_group");
 
     // Show caret only when not in preview and there is a toggle handler
     const showCaret = !isPreview && !!onToggleCollapsed;

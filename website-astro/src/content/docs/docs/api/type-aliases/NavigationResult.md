@@ -13,7 +13,7 @@ title: "NavigationResult"
 
 > **NavigationResult** = `object`
 
-Defined in: [types/navigation.ts:258](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:307](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/navigation.ts:258](https://github.com/rebaseco/rebase/blob/ma
 
 > **allowDragAndDrop**: `boolean`
 
-Defined in: [types/navigation.ts:260](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:309](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [types/navigation.ts:260](https://github.com/rebaseco/rebase/blob/ma
 
 > **groups**: `string`[]
 
-Defined in: [types/navigation.ts:264](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:313](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [types/navigation.ts:264](https://github.com/rebaseco/rebase/blob/ma
 
 > **navigationEntries**: [`NavigationEntry`](../interfaces/NavigationEntry)[]
 
-Defined in: [types/navigation.ts:262](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:311](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [types/navigation.ts:262](https://github.com/rebaseco/rebase/blob/ma
 
 > **onNavigationEntriesUpdate**: (`entries`) => `void`
 
-Defined in: [types/navigation.ts:266](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:315](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 #### Parameters
 

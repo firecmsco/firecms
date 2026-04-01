@@ -13,7 +13,7 @@ title: "resolveCollectionPathIds"
 
 > **resolveCollectionPathIds**(`path`, `allCollections`): `string`
 
-Defined in: [util/navigation\_utils.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/navigation_utils.ts)
+Defined in: [common/src/util/navigation\_utils.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_utils.ts)
 
 ## Parameters
 

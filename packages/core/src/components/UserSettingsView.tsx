@@ -10,7 +10,7 @@ import {
     IconButton,
     DeleteIcon,
 } from "@rebasepro/ui";
-import { useAuthController } from "../hooks";
+import { useAuthController, useTranslation } from "../hooks";
 
 interface SessionInfo {
     id: string;
@@ -32,6 +32,7 @@ interface ExtendedAuthController {
 export function UserSettingsView() {
     const authController = useAuthController() as unknown as ExtendedAuthController;
     const user = authController.user;
+    const { t } = useTranslation();
 
     const [activeTab, setActiveTab] = useState<"profile" | "sessions">("profile");
 
@@ -130,11 +131,11 @@ export function UserSettingsView() {
 
     return (
         <div className="flex-grow max-w-4xl w-full mx-auto p-4 sm:p-6 md:p-12">
-            <Typography variant="h4" className="mb-8">Account Settings</Typography>
+            <Typography variant="h4" className="mb-8">{t("account_settings")}</Typography>
 
             <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "profile" | "sessions")} className="mb-8">
-                <Tab value="profile">Profile</Tab>
-                <Tab value="sessions">Sessions</Tab>
+                <Tab value="profile">{t("profile")}</Tab>
+                <Tab value="sessions">{t("sessions")}</Tab>
             </Tabs>
 
             {activeTab === "profile" && (
@@ -145,19 +146,19 @@ export function UserSettingsView() {
                         </Avatar>
                     </div>
                     <TextField
-                        label="Display Name"
+                        label={t("display_name")}
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                     />
                     <TextField
-                        label="Photo URL"
+                        label={t("photo_url")}
                         value={photoURL}
                         onChange={(e) => setPhotoURL(e.target.value)}
                     />
                     {profileError && <Typography color="error">{profileError}</Typography>}
                     <div className="mt-4">
                         <Button variant="filled" onClick={handleSaveProfile} disabled={savingProfile}>
-                            {savingProfile ? "Saving..." : "Save Profile"}
+                            {savingProfile ? t("saving") : t("save_profile")}
                         </Button>
                     </div>
                 </div>
@@ -170,7 +171,7 @@ export function UserSettingsView() {
                     ) : sessionsError ? (
                         <Typography color="error">{sessionsError}</Typography>
                     ) : sessions.length === 0 ? (
-                        <Typography>No active sessions found.</Typography>
+                        <Typography>{t("no_active_sessions")}</Typography>
                     ) : (
                         <div className="flex flex-col gap-4">
                             <div className="flex justify-end mb-2">
@@ -180,7 +181,7 @@ export function UserSettingsView() {
                                     onClick={handleRevokeAll}
                                     disabled={revokingAll}
                                 >
-                                    {revokingAll ? "Revoking..." : "Revoke All Sessions"}
+                                    {revokingAll ? t("revoking") : t("revoke_all_sessions")}
                                 </Button>
                             </div>
                             {sessions.map(session => (
@@ -188,11 +189,11 @@ export function UserSettingsView() {
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-2 mb-1">
                                             <Typography variant="body1">
-                                                {session.userAgent || "Unknown Device"}
+                                                {session.userAgent || t("unknown_device")}
                                             </Typography>
                                             {session.isCurrentSession && (
                                                 <span className="px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider bg-primary-100 text-primary-800 dark:bg-primary-900/50 dark:text-primary-200 rounded-full">
-                                                    Current
+                                                    {t("current")}
                                                 </span>
                                             )}
                                         </div>

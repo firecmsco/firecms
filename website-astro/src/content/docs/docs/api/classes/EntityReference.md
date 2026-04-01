@@ -11,45 +11,82 @@ title: "EntityReference"
 
 # Class: EntityReference
 
-Defined in: [types/entities.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:76](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
-Class used to create a reference to an entity in a different path
+Class used to create a reference to an entity in a different path.
+
+## Example
+
+```ts
+// Simple reference (most common case - single datasource, single db)
+new EntityReference({ id: "123", path: "users" })
+
+// Reference to a different datasource (e.g., Firestore)
+new EntityReference({ id: "123", path: "analytics", datasource: "firestore" })
+
+// Reference to a specific database within a datasource
+new EntityReference({ id: "123", path: "orders", datasource: "postgres", databaseId: "orders_db" })
+```
 
 ## Constructors
 
 ### Constructor
 
-> **new EntityReference**(`id`, `path`, `databaseId?`): `EntityReference`
+> **new EntityReference**(`props`): `EntityReference`
 
-Defined in: [types/entities.ts:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:111](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+
+Create a reference to an entity.
 
 #### Parameters
 
-##### id
+##### props
 
-`string`
-
-##### path
-
-`string`
-
-##### databaseId?
-
-`string`
+[`EntityReferenceProps`](../interfaces/EntityReferenceProps)
 
 #### Returns
 
 `EntityReference`
 
+#### Example
+
+```ts
+// Simple reference (most common case)
+new EntityReference({ id: "123", path: "users" })
+
+// With datasource
+new EntityReference({ id: "123", path: "analytics", datasource: "firestore" })
+```
+
 ## Properties
+
+### \_\_type
+
+> `readonly` **\_\_type**: `"reference"` = `"reference"`
+
+Defined in: [types/src/types/entities.ts:78](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+
+***
 
 ### databaseId?
 
 > `readonly` `optional` **databaseId**: `string`
 
-Defined in: [types/entities.ts:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:99](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
-Optional database ID where the entity is stored (if multiple databases are used)
+Which database within the datasource.
+Defaults to "(default)" if not specified.
+
+***
+
+### datasource?
+
+> `readonly` `optional` **datasource**: `string`
+
+Defined in: [types/src/types/entities.ts:93](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+
+Which datasource (e.g., 'postgres', 'firestore').
+Defaults to "(default)" if not specified.
 
 ***
 
@@ -57,7 +94,7 @@ Optional database ID where the entity is stored (if multiple databases are used)
 
 > `readonly` **id**: `string`
 
-Defined in: [types/entities.ts:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ID of the entity
 
@@ -67,12 +104,29 @@ ID of the entity
 
 > `readonly` **path**: `string`
 
-Defined in: [types/entities.ts:51](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:87](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 A string representing the path of the referenced document (relative
 to the root of the database).
 
 ## Accessors
+
+### fullPath
+
+#### Get Signature
+
+> **get** **fullPath**(): `string`
+
+Defined in: [types/src/types/entities.ts:126](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+
+Get the full path including datasource and database prefixes if specified.
+For the common case (single datasource, single db), this just returns pathWithId.
+
+##### Returns
+
+`string`
+
+***
 
 ### pathWithId
 
@@ -80,7 +134,7 @@ to the root of the database).
 
 > **get** **pathWithId**(): `string`
 
-Defined in: [types/entities.ts:64](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:118](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ##### Returns
 
@@ -92,7 +146,7 @@ Defined in: [types/entities.ts:64](https://github.com/rebaseco/rebase/blob/main/
 
 > **isEntityReference**(): `boolean`
 
-Defined in: [types/entities.ts:68](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:145](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 #### Returns
 

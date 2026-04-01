@@ -11,7 +11,7 @@ title: "useClipboardReturnType"
 
 # Interface: useClipboardReturnType
 
-Defined in: [hooks/useClipboard.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [hooks/useClipboard.tsx:34](https://github.com/rebaseco/rebase/blob/
 
 > **clearClipboard**: () => `void`
 
-Defined in: [hooks/useClipboard.tsx:63](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:63](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 Clears the user clipboard.
 
@@ -33,7 +33,7 @@ Clears the user clipboard.
 
 > **clipboard**: `string`
 
-Defined in: [hooks/useClipboard.tsx:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 Current selected clipboard content.
 
@@ -43,7 +43,7 @@ Current selected clipboard content.
 
 > **copy**: (`text?`) => `void`
 
-Defined in: [hooks/useClipboard.tsx:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 Use it to perform the copy operation
 
@@ -63,7 +63,7 @@ Use it to perform the copy operation
 
 > **cut**: () => `void`
 
-Defined in: [hooks/useClipboard.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 Use it to perform the cut operation
 
@@ -77,7 +77,7 @@ Use it to perform the cut operation
 
 > **isCoppied**: `boolean`
 
-Defined in: [hooks/useClipboard.tsx:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 Indicates wheater the content was successfully copied or not.
 
@@ -87,7 +87,7 @@ Indicates wheater the content was successfully copied or not.
 
 > **isSupported**: () => `boolean`
 
-Defined in: [hooks/useClipboard.tsx:68](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:68](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 Check to see if the browser supports the new `navigator.clipboard` API.
 
@@ -101,6 +101,6 @@ Check to see if the browser supports the new `navigator.clipboard` API.
 
 > **ref**: `MutableRefObject`\<`any`\>
 
-Defined in: [hooks/useClipboard.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 Use ref to pull the text content from.

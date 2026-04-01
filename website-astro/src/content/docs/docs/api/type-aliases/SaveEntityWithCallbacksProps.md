@@ -13,37 +13,9 @@ title: "SaveEntityWithCallbacksProps"
 
 > **SaveEntityWithCallbacksProps**\<`M`\> = [`SaveEntityProps`](../interfaces/SaveEntityProps)\<`M`\> & `object`
 
-Defined in: [hooks/data/save.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/save.ts)
+Defined in: [core/src/hooks/data/save.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/save.ts)
 
 ## Type Declaration
-
-### onPreSaveHookError()?
-
-> `optional` **onPreSaveHookError**: (`e`) => `void`
-
-#### Parameters
-
-##### e
-
-`Error`
-
-#### Returns
-
-`void`
-
-### afterSaveError()?
-
-> `optional` **afterSaveError**: (`e`) => `void`
-
-#### Parameters
-
-##### e
-
-`Error`
-
-#### Returns
-
-`void`
 
 ### afterSave()?
 
@@ -59,9 +31,9 @@ Defined in: [hooks/data/save.ts:8](https://github.com/rebaseco/rebase/blob/main/
 
 `void`
 
-### onSaveSuccessHookError()?
+### afterSaveError()?
 
-> `optional` **onSaveSuccessHookError**: (`e`) => `void`
+> `optional` **afterSaveError**: (`e`) => `void`
 
 #### Parameters
 

@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, LoadingButton } from "@rebasepro/ui";
+import { useTranslation } from "../hooks";
 
 export function ConfirmationDialog({
     open,
@@ -17,6 +18,7 @@ export function ConfirmationDialog({
     title: React.ReactNode,
     body?: React.ReactNode,
 }) {
+    const { t } = useTranslation();
     return (
         <Dialog
             open={open}
@@ -31,14 +33,14 @@ export function ConfirmationDialog({
                 <Button
                     variant={"text"}
                     onClick={onCancel}
-                    autoFocus>Cancel</Button>
+                    autoFocus>{t("cancel")}</Button>
 
                 <LoadingButton
                     type="submit"
                     loading={loading}
                     onClick={onAccept}
                     autoFocus>
-                    Ok
+                    {t("ok")}
                 </LoadingButton>
             </DialogActions>
         </Dialog>

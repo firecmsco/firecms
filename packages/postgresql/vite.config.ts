@@ -30,7 +30,6 @@ export default defineConfig(() => ({
     resolve: {
         alias: {
             "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
-            "@rebasepro/editor": path.resolve(__dirname, "../editor/src"),
             "@rebasepro/formex": path.resolve(__dirname, "../formex/src"),
             "@rebasepro/core": path.resolve(__dirname, "../core/src"),
             "@rebasepro/types": path.resolve(__dirname, "../types/src")

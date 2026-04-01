@@ -13,13 +13,13 @@ title: "getColumnKeysForProperty"
 
 > **getColumnKeysForProperty**(`property`, `key`, `disabled?`): `PropertyColumnConfig`[]
 
-Defined in: [components/common/useColumnsIds.tsx:88](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useColumnsIds.tsx)
+Defined in: [core/src/components/common/useColumnsIds.tsx:172](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useColumnsIds.tsx)
 
 ## Parameters
 
 ### property
 
-[`ResolvedProperty`](../type-aliases/ResolvedProperty)
+[`Property`](../type-aliases/Property)
 
 ### key
 

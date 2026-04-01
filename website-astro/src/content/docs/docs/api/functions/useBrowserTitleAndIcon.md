@@ -13,7 +13,7 @@ title: "useBrowserTitleAndIcon"
 
 > **useBrowserTitleAndIcon**(`name`, `logo?`): `void`
 
-Defined in: [hooks/useBrowserTitleAndIcon.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useBrowserTitleAndIcon.tsx)
+Defined in: [core/src/hooks/useBrowserTitleAndIcon.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useBrowserTitleAndIcon.tsx)
 
 Internal hook to handle the browser title and icon
 

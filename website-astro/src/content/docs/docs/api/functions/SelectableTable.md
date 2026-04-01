@@ -13,13 +13,13 @@ title: "SelectableTable"
 
 > **SelectableTable**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [components/SelectableTable/SelectableTable.tsx:122](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SelectableTable/SelectableTable.tsx)
+Defined in: [core/src/components/SelectableTable/SelectableTable.tsx:128](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SelectableTable/SelectableTable.tsx)
 
 This component is in charge of rendering a collection table with a high
 degree of customization.
 
 This component is used internally by [EntityCollectionView](../variables/EntityCollectionView) and
-[useReferenceDialog](useReferenceDialog)
+useReferenceDialog
 
 Please note that you only need to use this component if you are building
 a custom view. If you just need to create a default view you can do it

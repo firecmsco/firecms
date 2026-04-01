@@ -13,7 +13,7 @@ title: "ListenEntityProps"
 
 > **ListenEntityProps**\<`M`\> = [`FetchEntityProps`](../interfaces/FetchEntityProps)\<`M`\> & `object`
 
-Defined in: [types/datasource.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ## Type Declaration
 
@@ -39,7 +39,7 @@ Defined in: [types/datasource.ts:19](https://github.com/rebaseco/rebase/blob/mai
 
 ##### entity
 
-[`Entity`](../interfaces/Entity)\<`M`\>
+[`Entity`](../interfaces/Entity)\<`M`\> | `null`
 
 #### Returns
 

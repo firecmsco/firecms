@@ -13,7 +13,7 @@ title: "ArrayEntryBuilder"
 
 > **ArrayEntryBuilder** = (`params`) => `React.ReactNode`
 
-Defined in: [components/ArrayContainer.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
+Defined in: [core/src/components/ArrayContainer.tsx:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ## Parameters
 

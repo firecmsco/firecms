@@ -13,13 +13,13 @@ title: "isReadOnly"
 
 > **isReadOnly**(`property`): `boolean`
 
-Defined in: [util/entities.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
+Defined in: [common/src/util/entities.ts:14](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
 
 ## Parameters
 
 ### property
 
-`any`
+[`Property`](../type-aliases/Property)
 
 ## Returns
 

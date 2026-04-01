@@ -178,13 +178,14 @@ export async function generateSdkCommand(args: GenerateSDKArgs): Promise<void> {
     console.log(chalk.green.bold("  ✓ SDK generated successfully!"));
     console.log("");
     console.log(chalk.gray("  Usage:"));
-    console.log(chalk.gray(`    import { createRebaseClient } from './${path.relative(cwd, resolvedOutput)}/index.js';`));
+    console.log(chalk.gray(`    import { createRebaseClient } from '@rebasepro/client';`));
+    console.log(chalk.gray(`    import type { Database } from './${path.relative(cwd, path.join(resolvedOutput, "database.types"))}';`));
     console.log("");
-    console.log(chalk.gray("    const rebase = createRebaseClient({"));
+    console.log(chalk.gray("    const rebase = createRebaseClient<Database>({"));
     console.log(chalk.gray("        baseUrl: 'http://localhost:3001',"));
-    console.log(chalk.gray("        token: 'your-jwt-token',"));
+    console.log(chalk.gray("        // token: 'your-jwt-token',"));
     console.log(chalk.gray("    });"));
     console.log("");
-    console.log(chalk.gray(`    const { data } = await rebase.${collections[0]?.slug || "collection"}.find();`));
+    console.log(chalk.gray(`    const { data } = await rebase.collection('${collections[0]?.slug || "my_collection"}').find();`));
     console.log("");
 }

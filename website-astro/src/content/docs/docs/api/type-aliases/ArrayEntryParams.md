@@ -13,7 +13,7 @@ title: "ArrayEntryParams"
 
 > **ArrayEntryParams** = `object`
 
-Defined in: [components/ArrayContainer.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
+Defined in: [core/src/components/ArrayContainer.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [components/ArrayContainer.tsx:32](https://github.com/rebaseco/rebas
 
 > **index**: `number`
 
-Defined in: [components/ArrayContainer.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
+Defined in: [core/src/components/ArrayContainer.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [components/ArrayContainer.tsx:33](https://github.com/rebaseco/rebas
 
 > **internalId**: `number`
 
-Defined in: [components/ArrayContainer.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
+Defined in: [core/src/components/ArrayContainer.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [components/ArrayContainer.tsx:34](https://github.com/rebaseco/rebas
 
 > **isDragging**: `boolean`
 
-Defined in: [components/ArrayContainer.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
+Defined in: [core/src/components/ArrayContainer.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [components/ArrayContainer.tsx:35](https://github.com/rebaseco/rebas
 
 > `optional` **storedProps**: `object`
 
-Defined in: [components/ArrayContainer.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
+Defined in: [core/src/components/ArrayContainer.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [components/ArrayContainer.tsx:36](https://github.com/rebaseco/rebas
 
 > **storeProps**: (`props`) => `void`
 
-Defined in: [components/ArrayContainer.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
+Defined in: [core/src/components/ArrayContainer.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 #### Parameters
 

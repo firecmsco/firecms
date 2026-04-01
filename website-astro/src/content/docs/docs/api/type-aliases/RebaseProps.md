@@ -13,7 +13,7 @@ title: "RebaseProps"
 
 > **RebaseProps**\<`USER`\> = `object`
 
-Defined in: [types/rebase.tsx:52](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:59](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 ## Type Parameters
 
@@ -27,9 +27,21 @@ Defined in: [types/rebase.tsx:52](https://github.com/rebaseco/rebase/blob/main/p
 
 > `optional` **apiKey**: `string`
 
-Defined in: [types/rebase.tsx:75](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:82](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 If you have a custom API key, you can use it here.
+
+***
+
+### apiUrl?
+
+> `optional` **apiUrl**: `string`
+
+Defined in: [types/src/types/rebase.tsx:89](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
+
+Base URL for the backend API (e.g. "http://localhost:3001").
+When provided, this is available via `useApiConfig()` to any hook
+in the tree, reducing repetitive `apiUrl` threading.
 
 ***
 
@@ -37,7 +49,7 @@ If you have a custom API key, you can use it here.
 
 > **authController**: [`AuthController`](AuthController)\<`USER`\>
 
-Defined in: [types/rebase.tsx:131](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:154](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Delegate for implementing your auth operations.
 
@@ -47,7 +59,7 @@ Delegate for implementing your auth operations.
 
 > **children**: (`props`) => `React.ReactNode`
 
-Defined in: [types/rebase.tsx:59](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:66](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Use this function to return the components you want to render under
 Rebase
@@ -76,11 +88,31 @@ want to show a loading indicator if this flag is `true`
 
 ***
 
+### cmsUrlController
+
+> **cmsUrlController**: [`CMSUrlController`](CMSUrlController)
+
+Defined in: [types/src/types/rebase.tsx:106](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
+
+This controller is in charge of resolving the URL configurations map and building paths
+
+***
+
+### collectionRegistryController
+
+> **collectionRegistryController**: [`CollectionRegistryController`](CollectionRegistryController)
+
+Defined in: [types/src/types/rebase.tsx:101](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
+
+This controller is in charge of resolving the collection and entity paths.
+
+***
+
 ### components?
 
 > `optional` **components**: `object`
 
-Defined in: [types/rebase.tsx:172](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:195](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 #### missingReference?
 
@@ -94,7 +126,7 @@ Component to render when a reference is missing
 
 > **dataSource**: [`DataSource`](../interfaces/DataSource)
 
-Defined in: [types/rebase.tsx:121](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:144](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Connector to your database
 
@@ -104,10 +136,20 @@ Connector to your database
 
 > `optional` **dateTimeFormat**: `string`
 
-Defined in: [types/rebase.tsx:111](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:134](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Format of the dates in the CMS.
 Defaults to 'MMMM dd, yyyy, HH:mm:ss'
+
+***
+
+### effectiveRoleController?
+
+> `optional` **effectiveRoleController**: [`EffectiveRoleController`](../interfaces/EffectiveRoleController)
+
+Defined in: [types/src/types/rebase.tsx:209](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
+
+Controller to simulate different roles when dev mode is active.
 
 ***
 
@@ -115,7 +157,7 @@ Defaults to 'MMMM dd, yyyy, HH:mm:ss'
 
 > `optional` **entityActions**: [`EntityAction`](EntityAction)[]
 
-Defined in: [types/rebase.tsx:105](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:128](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 List of actions that can be performed on entities.
 These actions are displayed in the entity view and in the collection view.
@@ -128,7 +170,7 @@ by specifying the `key` of the action.
 
 > `optional` **entityLinkBuilder**: [`EntityLinkBuilder`](EntityLinkBuilder)
 
-Defined in: [types/rebase.tsx:156](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:179](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Optional link builder you can add to generate a button in your entity forms.
 The function must return a URL that gets opened when the button is clicked
@@ -139,7 +181,7 @@ The function must return a URL that gets opened when the button is clicked
 
 > `optional` **entityViews**: [`EntityCustomView`](EntityCustomView)[]
 
-Defined in: [types/rebase.tsx:97](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:120](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 List of additional custom views for entities.
 You can use the key to reference the custom view in
@@ -153,20 +195,19 @@ You can also define an entity view from the UI.
 
 > `optional` **locale**: [`Locale`](Locale)
 
-Defined in: [types/rebase.tsx:116](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:139](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Locale of the CMS, currently only affecting dates
 
 ***
 
-### navigationController
+### navigationStateController
 
-> **navigationController**: [`NavigationController`](NavigationController)
+> **navigationStateController**: [`NavigationStateController`](NavigationStateController)
 
-Defined in: [types/rebase.tsx:88](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:111](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
-This controller is in charge of the navigation of the CMS.
-It is in charge of resolving the collection and entity paths.
+This controller is in charge of resolving the navigation views and state
 
 ***
 
@@ -174,7 +215,7 @@ It is in charge of resolving the collection and entity paths.
 
 > `optional` **onAnalyticsEvent**: (`event`, `data?`) => `void`
 
-Defined in: [types/rebase.tsx:150](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:173](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Callback used to get analytics events from the CMS
 
@@ -198,7 +239,7 @@ Callback used to get analytics events from the CMS
 
 > `optional` **plugins**: [`RebasePlugin`](RebasePlugin)\<`any`, `any`, `any`\>[]
 
-Defined in: [types/rebase.tsx:145](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:168](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Use plugins to modify the behaviour of the CMS.
 DEPRECATED: use the `plugins` prop in the `useBuildNavigationController` instead.
@@ -212,7 +253,7 @@ This prop will work as a fallback for the `plugins` prop in the `useBuildNavigat
 
 > `optional` **propertyConfigs**: `Record`\<`string`, [`PropertyConfig`](PropertyConfig)\>
 
-Defined in: [types/rebase.tsx:82](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:96](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Record of custom form fields to be used in the CMS.
 You can use the key to reference the custom field in
@@ -224,7 +265,7 @@ the `propertyConfig` prop of a property in a collection.
 
 > **storageSource**: [`StorageSource`](../interfaces/StorageSource)
 
-Defined in: [types/rebase.tsx:126](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:149](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Connector to your file upload/fetch implementation
 
@@ -234,7 +275,7 @@ Connector to your file upload/fetch implementation
 
 > `optional` **userConfigPersistence**: [`UserConfigurationPersistence`](../interfaces/UserConfigurationPersistence)
 
-Defined in: [types/rebase.tsx:137](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:160](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Use this controller to access the configuration that is stored locally,
 and not defined in code
@@ -243,9 +284,9 @@ and not defined in code
 
 ### userManagement?
 
-> `optional` **userManagement**: [`InternalUserManagement`](InternalUserManagement)
+> `optional` **userManagement**: [`UserManagementDelegate`](../interfaces/UserManagementDelegate)
 
-Defined in: [types/rebase.tsx:170](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:193](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 You can use this props to provide your own user management implementation.
 Note that this will not affect the UI, but it will be used to show user information

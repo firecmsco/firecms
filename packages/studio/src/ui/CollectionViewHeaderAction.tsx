@@ -1,4 +1,4 @@
-import { EntityTableController, Property } from "@rebasepro/core";
+import { EntityTableController, Property, useTranslation } from "@rebasepro/core";
 import { IconButton, SettingsIcon, Tooltip } from "@rebasepro/ui";
 import React from "react";
 import { useCollectionEditorController } from "../useCollectionEditorController";
@@ -23,11 +23,12 @@ export function CollectionViewHeaderAction({
 }) {
 
     const collectionEditorController = useCollectionEditorController();
+    const { t } = useTranslation();
 
     return (
         <Tooltip
             asChild={true}
-            title={"Edit"}>
+            title={t("studio_collection_view_edit")}>
             <IconButton
                 className={onHover ? "bg-white dark:bg-surface-950" : "hidden"}
                 onClick={() => {

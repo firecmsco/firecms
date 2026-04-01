@@ -13,7 +13,7 @@ title: "UserPreview"
 
 > **UserPreview**(`__namedParameters`): `Element`
 
-Defined in: [preview/components/UserPreview.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/UserPreview.tsx)
+Defined in: [core/src/preview/components/UserPreview.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/UserPreview.tsx)
 
 Preview component for displaying user information.
 This is a simple wrapper around UserDisplay.
@@ -22,7 +22,7 @@ This is a simple wrapper around UserDisplay.
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`string`\>
+[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<[`StringProperty`](../interfaces/StringProperty)\>
 
 ## Returns
 

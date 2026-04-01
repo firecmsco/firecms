@@ -13,4 +13,4 @@ title: "copyEntityAction"
 
 > `const` **copyEntityAction**: [`EntityAction`](../type-aliases/EntityAction)
 
-Defined in: [components/common/default\_entity\_actions.tsx:64](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/default_entity_actions.tsx)
+Defined in: [core/src/components/common/default\_entity\_actions.tsx:61](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/default_entity_actions.tsx)

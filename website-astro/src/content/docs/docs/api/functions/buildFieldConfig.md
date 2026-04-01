@@ -11,25 +11,19 @@ title: "buildFieldConfig"
 
 # Function: buildFieldConfig()
 
-> **buildFieldConfig**\<`T`\>(`propertyConfig`): [`PropertyConfig`](../type-aliases/PropertyConfig)\<`T`\>
+> **buildFieldConfig**(`propertyConfig`): [`PropertyConfig`](../type-aliases/PropertyConfig)
 
-Defined in: [util/builders.ts:137](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/builders.ts)
+Defined in: [common/src/util/builders.ts:134](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/builders.ts)
 
 Identity function we use to defeat the type system of Typescript and build
 additional field delegates views with all its properties
-
-## Type Parameters
-
-### T
-
-`T` *extends* [`CMSType`](../type-aliases/CMSType) = [`CMSType`](../type-aliases/CMSType)
 
 ## Parameters
 
 ### propertyConfig
 
-[`PropertyConfig`](../type-aliases/PropertyConfig)\<`T`\>
+[`PropertyConfig`](../type-aliases/PropertyConfig)
 
 ## Returns
 
-[`PropertyConfig`](../type-aliases/PropertyConfig)\<`T`\>
+[`PropertyConfig`](../type-aliases/PropertyConfig)

@@ -7,7 +7,8 @@ import {
     useCustomizationController,
     useDataSource,
     useRebaseContext,
-    useSnackbarController
+    useSnackbarController,
+    useTranslation
 } from "../hooks";
 import { EntityView } from "./EntityView";
 
@@ -38,6 +39,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const dataSource = useDataSource(collection);
     const customizationController = useCustomizationController();
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
 
     const context = useRebaseContext();
@@ -58,7 +60,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const onDeleteFailure = useCallback((entity: Entity<any>, e: Error) => {
         snackbarController.open({
             type: "error",
-            title: "Error deleting",
+            title: t("error_deleting"),
             message: e?.message
         });
 
@@ -95,17 +97,17 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
                     if (results.every(Boolean)) {
                         snackbarController.open({
                             type: "success",
-                            message: `${collection.name}: multiple deleted`
+                            message: t("multiple_deleted", { collection: collection.name })
                         });
                     } else if (results.some(Boolean)) {
                         snackbarController.open({
                             type: "warning",
-                            message: `${collection.name}: Some of the entities have been deleted, but not all`
+                            message: t("some_entities_deleted", { collection: collection.name })
                         });
                     } else {
                         snackbarController.open({
                             type: "error",
-                            message: `${collection.name}: Error deleting entities`
+                            message: t("error_deleting_entities", { collection: collection.name })
                         });
                     }
                     onClose();
@@ -119,7 +121,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
                             onEntityDelete(path, entityOrEntities as Entity<M>);
                         snackbarController.open({
                             type: "success",
-                            message: `${collection.singularName ?? collection.name} deleted`
+                            message: t("deleted", { name: collection.singularName ?? collection.name })
                         });
                         onClose();
                     }
@@ -130,7 +132,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
     let content: React.ReactNode;
     if (entityOrEntities && multipleEntities) {
-        content = <>Multiple entities</>;
+        content = <>{t("multiple_entities")}</>;
     } else {
         const entity = entityOrEntities as Entity<M> | undefined;
         content = entity
@@ -142,8 +144,8 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     }
 
     const dialogTitle = multipleEntities
-        ? <><b>{collection.name}</b>: Confirm multiple delete?</>
-        : `Would you like to delete this ${collection.singularName ?? collection.name}?`;
+        ? <><b>{collection.name}</b>: {t("confirm_multiple_delete")}</>
+        : t("delete_entity_confirm_title", { entityName: collection.singularName ?? collection.name });
 
     return (
         <Dialog
@@ -165,14 +167,14 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
                 <Button onClick={handleCancel}
                     disabled={loading}
                     variant="text">
-                    Cancel
+                    {t("cancel")}
                 </Button>
                 <Button
                     autoFocus
                     disabled={loading}
                     onClick={handleOk}
                     variant="filled">
-                    Ok
+                    {t("ok")}
                 </Button>
             </DialogActions>
 

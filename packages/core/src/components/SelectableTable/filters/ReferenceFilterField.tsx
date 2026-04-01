@@ -5,6 +5,7 @@ import { ReferencePreview } from "../../../preview";
 import { useCollectionRegistryController, useEntitySelectionDialog } from "../../../hooks";
 import { Button, Checkbox, Label, Select, SelectItem } from "@rebasepro/ui";
 import { getReferenceFrom } from "@rebasepro/common";
+import { useTranslation } from "../../../hooks";
 
 interface ReferenceFilterFieldProps {
     name: string,
@@ -43,6 +44,7 @@ export function ReferenceFilterField({
     previewProperties,
     setHidden
 }: ReferenceFilterFieldProps) {
+    const { t } = useTranslation();
 
     const possibleOperations: (keyof typeof operationLabels)[] = isArray
         ? ["array-contains"]
@@ -176,7 +178,7 @@ export function ReferenceFilterField({
 
                         size={"medium"}
                         className="h-full w-full">
-                        {multiple ? "Select references" : "Select reference"}
+                        {multiple ? t("select_references") : t("select_reference")}
                     </Button>
                 }
 
@@ -192,7 +194,7 @@ export function ReferenceFilterField({
                                 updateFilter(operation, null);
                             else updateFilter(operation, undefined);
                         }} />
-                    Filter for null values
+                    {t("filter_for_null_values")}
                 </Label>}
 
             </div>

@@ -111,10 +111,6 @@ export default defineConfig({
                             slug: "docs/collections/dynamic_collections"
                         },
                         {
-                            label: "Collection Groups",
-                            slug: "docs/collections/collection_groups"
-                        },
-                        {
                             label: "Entity Actions",
                             slug: "docs/collections/entity_actions"
                         },

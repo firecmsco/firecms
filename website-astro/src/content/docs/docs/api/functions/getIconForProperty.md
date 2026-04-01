@@ -13,17 +13,17 @@ title: "getIconForProperty"
 
 > **getIconForProperty**(`property`, `size`, `fields`): `ReactNode`
 
-Defined in: [util/property\_utils.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
+Defined in: [core/src/util/property\_utils.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
 
 ## Parameters
 
 ### property
 
-`any`
+[`Property`](../type-aliases/Property)
 
 ### size
 
-`"small"` | `"medium"` | `"large"`
+`number` | `"small"` | `"medium"` | `"large"` | `"smallest"`
 
 ### fields
 

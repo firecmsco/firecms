@@ -13,7 +13,7 @@ title: "ReadOnlyFieldBinding"
 
 > **ReadOnlyFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/ReadOnlyFieldBinding.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/ReadOnlyFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/ReadOnlyFieldBinding.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/ReadOnlyFieldBinding.tsx)
 
 Simply render the non-editable preview of a field
 
@@ -24,7 +24,7 @@ and tables to the specified properties.
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<`any`\>
+[`FieldProps`](../interfaces/FieldProps)\<[`Property`](../type-aliases/Property)\>
 
 ## Returns
 

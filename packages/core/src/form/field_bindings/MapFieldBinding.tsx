@@ -1,5 +1,6 @@
 import React from "react";
 import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps } from "@rebasepro/types";
+import { useTranslation } from "../../hooks";
 
 import { ErrorBoundary } from "../../components";
 import { getIconForProperty } from "../../util";
@@ -33,6 +34,7 @@ export function MapFieldBinding({
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
     const expanded = property.expanded === undefined ? true : property.expanded;
     const minimalistView = minimalistViewProp || property.minimalistView;
+    const { t } = useTranslation();
 
     if (!property.properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
@@ -119,7 +121,7 @@ export function MapFieldBinding({
 
             <FieldHelperText includeDescription={includeDescription}
                 showError={showError ?? false}
-                error={error && !partOfArray ? (typeof error === "string" ? error : "A property of this map has an error") : undefined}
+                error={error && !partOfArray ? (typeof error === "string" ? error : t("a_property_of_this_map_has_error")) : undefined}
                 disabled={disabled}
                 property={property} />
 

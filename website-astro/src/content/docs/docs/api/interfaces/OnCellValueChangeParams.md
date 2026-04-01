@@ -11,7 +11,7 @@ title: "OnCellValueChangeParams"
 
 # Interface: OnCellValueChangeParams\<T, D\>
 
-Defined in: [components/common/types.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 Props passed in a callback when the content of a cell in a table has been edited
 
@@ -31,7 +31,7 @@ Props passed in a callback when the content of a cell in a table has been edited
 
 > `optional` **data**: `D`
 
-Defined in: [components/common/types.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [components/common/types.tsx:37](https://github.com/rebaseco/rebase/
 
 > **onValueUpdated**: () => `void`
 
-Defined in: [components/common/types.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 #### Returns
 
@@ -51,7 +51,7 @@ Defined in: [components/common/types.tsx:38](https://github.com/rebaseco/rebase/
 
 > **propertyKey**: `string`
 
-Defined in: [components/common/types.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [components/common/types.tsx:36](https://github.com/rebaseco/rebase/
 
 > **setError**: (`e`) => `void`
 
-Defined in: [components/common/types.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 #### Parameters
 
@@ -77,4 +77,4 @@ Defined in: [components/common/types.tsx:39](https://github.com/rebaseco/rebase/
 
 > **value**: `T`
 
-Defined in: [components/common/types.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)

@@ -13,7 +13,7 @@ title: "ImagePreview"
 
 > **ImagePreview**(`__namedParameters`): `Element`
 
-Defined in: [preview/components/ImagePreview.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ImagePreview.tsx)
+Defined in: [core/src/preview/components/ImagePreview.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ImagePreview.tsx)
 
 ## Parameters
 

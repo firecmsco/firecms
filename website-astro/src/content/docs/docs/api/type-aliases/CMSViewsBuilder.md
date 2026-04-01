@@ -13,7 +13,7 @@ title: "CMSViewsBuilder"
 
 > **CMSViewsBuilder** = (`params`) => [`CMSView`](../interfaces/CMSView)[] \| `Promise`\<[`CMSView`](../interfaces/CMSView)[]\>
 
-Defined in: [types/rebase.tsx:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:50](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Use this callback to build custom views dynamically.
 You can use the user to decide which views to show.

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { User, useSnackbarController, useAuthController } from "../../index";
+import { User, useSnackbarController, useAuthController, useTranslation } from "../../index";
 import {
     AddIcon,
     Button,
@@ -37,6 +37,7 @@ export function UsersView({ userManagement }: {
     const { users, roles, saveUser, deleteUser, loading, bootstrapAdmin } = userManagement;
     const snackbarController = useSnackbarController();
     const { user: loggedInUser } = useAuthController();
+    const { t } = useTranslation();
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User | undefined>();
@@ -54,11 +55,11 @@ export function UsersView({ userManagement }: {
         setBootstrapping(true);
         try {
             await bootstrapAdmin();
-            snackbarController.open({ type: "success", message: "You are now an admin! Refreshing..." });
+            snackbarController.open({ type: "success", message: t("bootstrap_admin_success") });
             // Reload to get new roles
             window.location.reload();
         } catch (error: unknown) {
-            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Failed to bootstrap admin" });
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : t("failed_to_bootstrap_admin") });
         } finally {
             setBootstrapping(false);
         }
@@ -85,11 +86,11 @@ export function UsersView({ userManagement }: {
         setDeleteInProgress(true);
         try {
             await deleteUser(userToDelete);
-            snackbarController.open({ type: "success", message: "User deleted successfully" });
+            snackbarController.open({ type: "success", message: t("user_deleted_successfully") });
             setDeleteConfirmOpen(false);
             setUserToDelete(undefined);
         } catch (error: unknown) {
-            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Error deleting user" });
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : t("error_deleting_user") });
         } finally {
             setDeleteInProgress(false);
         }
@@ -106,24 +107,24 @@ export function UsersView({ userManagement }: {
                 <div className="bg-yellow-100 dark:bg-yellow-900 border border-yellow-400 dark:border-yellow-700 rounded p-4 flex items-center justify-between">
                     <div>
                         <Typography variant="label" className="text-yellow-800 dark:text-yellow-200">
-                            No admin users exist. You can make yourself an admin.
+                            {t("no_users_or_roles_defined")}
                         </Typography>
                     </div>
                     <Button
                         onClick={handleBootstrap}
                         disabled={bootstrapping}
                     >
-                        {bootstrapping ? <CircularProgress size="small" /> : "Make me admin"}
+                        {bootstrapping ? <CircularProgress size="small" /> : t("add_logged_user_as_admin")}
                     </Button>
                 </div>
             )}
 
             <div className="flex items-center mt-12">
                 <Typography gutterBottom variant="h4" className="grow" component="h4">
-                    Users
+                    {t("users")}
                 </Typography>
                 <Button startIcon={<AddIcon />} onClick={handleAddUser} disabled={!saveUser}>
-                    Add user
+                    {t("add_user")}
                 </Button>
             </div>
 
@@ -131,16 +132,16 @@ export function UsersView({ userManagement }: {
                 <Table className="w-full">
                     <TableHeader>
                         <TableCell header className="truncate w-16"></TableCell>
-                        <TableCell header>Email</TableCell>
-                        <TableCell header>Name</TableCell>
-                        <TableCell header>Roles</TableCell>
+                        <TableCell header>{t("email")}</TableCell>
+                        <TableCell header>{t("name")}</TableCell>
+                        <TableCell header>{t("roles")}</TableCell>
                     </TableHeader>
                     <TableBody>
                         {users.map(user => (
                             <TableRow key={user.uid} onClick={() => saveUser && handleEditUser(user)}>
                                 <TableCell style={{ width: "64px" }}>
                                     {deleteUser && (
-                                        <Tooltip asChild title="Delete this user">
+                                        <Tooltip asChild title={t("delete_this_user")}>
                                             <IconButton
                                                 size="small"
                                                 onClick={(e) => {
@@ -171,7 +172,7 @@ export function UsersView({ userManagement }: {
                                 <TableCell colspan={4}>
                                     <CenteredView className="flex flex-col gap-4 my-8 items-center">
                                         <Typography variant="label">
-                                            There are no users yet
+                                            {t("no_users_yet")}
                                         </Typography>
                                     </CenteredView>
                                 </TableCell>
@@ -199,8 +200,8 @@ export function UsersView({ userManagement }: {
                 loading={deleteInProgress}
                 onAccept={handleDelete}
                 onCancel={() => { setDeleteConfirmOpen(false); setUserToDelete(undefined); }}
-                title={<>Delete?</>}
-                body={<>Are you sure you want to delete this user?</>}
+                title={<>{t("delete_confirmation_title")}</>}
+                body={<>{t("delete_user_confirmation")}</>}
             />
         </Container>
     );
@@ -223,6 +224,7 @@ function UserDetailsForm({
     handleClose: () => void;
 }) {
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
     const isNewUser = !userProp;
 
     const [displayName, setDisplayName] = useState(userProp?.displayName || "");
@@ -281,7 +283,7 @@ function UserDetailsForm({
                 style={{ display: "flex", flexDirection: "column", position: "relative", height: "100%" }}>
 
                 <DialogTitle variant="h4" gutterBottom={false}>
-                    User
+                    {t("user")}
                 </DialogTitle>
 
                 <DialogContent className="h-full grow">
@@ -293,7 +295,7 @@ function UserDetailsForm({
                                 error={submitCount > 0 && Boolean(errors.displayName)}
                                 value={displayName}
                                 onChange={(e) => setDisplayName(e.target.value)}
-                                label="Name"
+                                label={t("name")}
                             />
                             {submitCount > 0 && errors.displayName && (
                                 <Typography variant="caption" color="error">{errors.displayName}</Typography>
@@ -307,7 +309,7 @@ function UserDetailsForm({
                                 name="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                label="Email"
+                                label={t("email")}
                                 disabled={!isNewUser}
                             />
                             {submitCount > 0 && errors.email && (
@@ -319,7 +321,7 @@ function UserDetailsForm({
                             <div className="col-span-12">
                                 <MultiSelect
                                     className="w-full"
-                                    label="Roles"
+                                    label={t("roles")}
                                     value={selectedRoleIds}
                                     onValueChange={(value: string[]) => setSelectedRoleIds(value)}
                                 >
@@ -336,7 +338,7 @@ function UserDetailsForm({
 
                 <DialogActions>
                     <Button variant="text" onClick={handleClose}>
-                        Cancel
+                        {t("cancel")}
                     </Button>
                     <LoadingButton
                         variant="filled"
@@ -344,7 +346,7 @@ function UserDetailsForm({
                         disabled={!dirty}
                         loading={isSubmitting}
                     >
-                        {isNewUser ? "Create user" : "Update"}
+                        {isNewUser ? t("create_user") : t("update")}
                     </LoadingButton>
                 </DialogActions>
             </form>

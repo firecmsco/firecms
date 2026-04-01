@@ -13,7 +13,7 @@ title: "MapFieldBinding"
 
 > **MapFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/MapFieldBinding.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/MapFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/MapFieldBinding.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/MapFieldBinding.tsx)
 
 Field that renders the children property fields
 
@@ -24,7 +24,7 @@ and tables to the specified properties.
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<`Record`\<`string`, `any`\>\>
+[`FieldProps`](../interfaces/FieldProps)\<[`MapProperty`](../interfaces/MapProperty)\>
 
 ## Returns
 

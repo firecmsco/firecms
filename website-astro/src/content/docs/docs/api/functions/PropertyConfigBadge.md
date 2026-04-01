@@ -13,7 +13,7 @@ title: "PropertyConfigBadge"
 
 > **PropertyConfigBadge**(`__namedParameters`): `ReactNode`
 
-Defined in: [components/PropertyConfigBadge.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/PropertyConfigBadge.tsx)
+Defined in: [core/src/components/PropertyConfigBadge.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/PropertyConfigBadge.tsx)
 
 ## Parameters
 
@@ -26,6 +26,10 @@ Defined in: [components/PropertyConfigBadge.tsx:5](https://github.com/rebaseco/r
 #### propertyConfig
 
 [`PropertyConfig`](../type-aliases/PropertyConfig) \| `undefined`
+
+#### size?
+
+`"small"` \| `"medium"` \| `"extraSmall"` = `"medium"`
 
 ## Returns
 

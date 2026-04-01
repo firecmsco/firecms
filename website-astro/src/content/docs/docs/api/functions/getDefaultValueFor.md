@@ -13,13 +13,13 @@ title: "getDefaultValueFor"
 
 > **getDefaultValueFor**(`property?`): \{ \} \| `null` \| `undefined`
 
-Defined in: [util/entities.ts:50](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
+Defined in: [common/src/util/entities.ts:46](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
 
 ## Parameters
 
 ### property?
 
-[`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)
+[`Property`](../type-aliases/Property)
 
 ## Returns
 

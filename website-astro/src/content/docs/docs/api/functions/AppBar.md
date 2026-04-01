@@ -13,7 +13,7 @@ title: "AppBar"
 
 > **AppBar**(`__namedParameters`): `Element`
 
-Defined in: [app/AppBar.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/AppBar.tsx)
+Defined in: [core/src/app/AppBar.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/AppBar.tsx)
 
 This component renders the main app bar of Rebase.
 

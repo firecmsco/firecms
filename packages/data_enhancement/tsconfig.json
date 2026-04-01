@@ -37,9 +37,6 @@
       "@rebasepro/types": [
         "../types/src"
       ],
-      "@rebasepro/editor": [
-        "../editor/src"
-      ],
       "@rebasepro/ui": [
         "../ui/src"
       ]

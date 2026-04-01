@@ -13,7 +13,7 @@ title: "iconSynonyms"
 
 > `const` **iconSynonyms**: `object`
 
-Defined in: [util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icon_synonyms.ts)
+Defined in: [core/src/util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icon_synonyms.ts)
 
 ## Type Declaration
 
@@ -95,7 +95,7 @@ Defined in: [util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/m
 
 ### add\_alert
 
-> **add\_alert**: `string` = `"+ active alarm announcement bell callout chime information new notifications notify plus reminder ring sound symbol"`
+> **add\_alert**: `string` = `"+ active alarm announcement bell callout chime information new notifications notify plus reminder ring-3 sound symbol"`
 
 ### add\_box
 
@@ -1251,7 +1251,7 @@ Defined in: [util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/m
 
 ### circle\_notifications
 
-> **circle\_notifications**: `string` = `"active alarm alert bell chime notify reminder ring sound"`
+> **circle\_notifications**: `string` = `"active alarm alert bell chime notify reminder ring-3 sound"`
 
 ### class
 
@@ -1631,11 +1631,11 @@ Defined in: [util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/m
 
 ### data\_saver\_off
 
-> **data\_saver\_off**: `string` = `"analytics bars chart diagram donut infographic measure metrics ring statistics tracking"`
+> **data\_saver\_off**: `string` = `"analytics bars chart diagram donut infographic measure metrics ring-3 statistics tracking"`
 
 ### data\_saver\_on
 
-> **data\_saver\_on**: `string` = `"+ add analytics chart diagram infographic measure metrics new plus ring statistics symbol tracking"`
+> **data\_saver\_on**: `string` = `"+ add analytics chart diagram infographic measure metrics new plus ring-3 statistics symbol tracking"`
 
 ### data\_thresholding
 
@@ -2079,7 +2079,7 @@ Defined in: [util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/m
 
 ### edit\_notifications
 
-> **edit\_notifications**: `string` = `"active alarm alert bell chime compose create draft editing input new notify pencil reminder ring sound write writing"`
+> **edit\_notifications**: `string` = `"active alarm alert bell chime compose create draft editing input new notify pencil reminder ring-3 sound write writing"`
 
 ### edit\_off
 
@@ -2503,7 +2503,7 @@ Defined in: [util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/m
 
 ### filter\_tilt\_shift
 
-> **filter\_tilt\_shift**: `string` = `"blur center editing effect focus images photography pictures"`
+> **filter\_tilt\_shift**: `string` = `"blur-xs center editing effect focus images photography pictures"`
 
 ### filter\_vintage
 
@@ -4447,15 +4447,15 @@ Defined in: [util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/m
 
 ### notification\_add
 
-> **notification\_add**: `string` = `"+ active alarm alert bell chime notifications notify plus reminder ring sound symbol"`
+> **notification\_add**: `string` = `"+ active alarm alert bell chime notifications notify plus reminder ring-3 sound symbol"`
 
 ### notification\_important
 
-> **notification\_important**: `string` = `"! active alarm alert announcement attention bell caution chime danger error exclamation feedback mark notifications notify problem reminder ring sound symbol warning"`
+> **notification\_important**: `string` = `"! active alarm alert announcement attention bell caution chime danger error exclamation feedback mark notifications notify problem reminder ring-3 sound symbol warning"`
 
 ### notifications
 
-> **notifications**: `string` = `"active alarm alert bell chime notify reminder ring sound"`
+> **notifications**: `string` = `"active alarm alert bell chime notify reminder ring-3 sound"`
 
 ### notifications\_active
 
@@ -4463,15 +4463,15 @@ Defined in: [util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/m
 
 ### notifications\_none
 
-> **notifications\_none**: `string` = `"alarm alert bell notify reminder ring sound"`
+> **notifications\_none**: `string` = `"alarm alert bell notify reminder ring-3 sound"`
 
 ### notifications\_off
 
-> **notifications\_off**: `string` = `"active alarm alert bell chime disabled enabled notify offline reminder ring slash sound"`
+> **notifications\_off**: `string` = `"active alarm alert bell chime disabled enabled notify offline reminder ring-3 slash sound"`
 
 ### notifications\_paused
 
-> **notifications\_paused**: `string` = `"--- active alarm aleet alert bell chime ignore notify pause quiet reminder ring sleep snooze sound zzz"`
+> **notifications\_paused**: `string` = `"--- active alarm aleet alert bell chime ignore notify pause quiet reminder ring-3 sleep snooze sound zzz"`
 
 ### offline\_bolt
 

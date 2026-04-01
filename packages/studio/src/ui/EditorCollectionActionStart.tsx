@@ -1,6 +1,6 @@
 import { deepEqual as equal } from "fast-equals"
 
-import { CollectionActionsProps, mergeDeep, useAuthController, useSnackbarController } from "@rebasepro/core";
+import { CollectionActionsProps, mergeDeep, useAuthController, useSnackbarController, useTranslation } from "@rebasepro/core";
 import { Button, SaveIcon, Tooltip, UndoIcon, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
@@ -18,6 +18,7 @@ export function EditorCollectionActionStart({
     const collectionEditorController = useCollectionEditorController();
     const configController = useCollectionsConfigController();
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
 
     const canEditCollection = collectionEditorController.configPermissions
         ? collectionEditorController.configPermissions({
@@ -32,7 +33,7 @@ export function EditorCollectionActionStart({
         saveDefaultFilterButton = <>
             <Tooltip
                 asChild={true}
-                title={tableController.sortBy || tableController.filterValues ? "Save default filter and sort" : "Clear default filter and sort"}>
+                title={tableController.sortBy || tableController.filterValues ? t("studio_editor_collection_start_save_filter") : t("studio_editor_collection_start_clear_filter")}>
                 <Button
                     size={"small"}
                     variant={"text"}
@@ -48,7 +49,7 @@ export function EditorCollectionActionStart({
                         }).then(() => {
                             snackbarController.open({
                                 type: "success",
-                                message: "Default config saved"
+                                message: t("studio_editor_collection_start_saved")
                             });
                         })}>
                     <SaveIcon />
@@ -56,7 +57,7 @@ export function EditorCollectionActionStart({
             </Tooltip>
 
             {(collection.filter || collection.sort) && <Tooltip
-                title={"Reset to default filter and sort"}>
+                title={t("studio_editor_collection_start_reset_filter")}>
                 <Button
                     size={"small"}
                     variant={"text"}

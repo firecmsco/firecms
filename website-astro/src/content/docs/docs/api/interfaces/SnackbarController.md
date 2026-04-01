@@ -11,7 +11,7 @@ title: "SnackbarController"
 
 # Interface: SnackbarController
 
-Defined in: [hooks/useSnackbarController.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSnackbarController.tsx)
+Defined in: [types/src/controllers/snackbar.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/snackbar.ts)
 
 Controller to display snackbars
 
@@ -21,7 +21,7 @@ Controller to display snackbars
 
 > **close**: () => `void`
 
-Defined in: [hooks/useSnackbarController.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSnackbarController.tsx)
+Defined in: [types/src/controllers/snackbar.ts:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/snackbar.ts)
 
 Close the currently open snackbar
 
@@ -35,7 +35,7 @@ Close the currently open snackbar
 
 > **open**: (`props`) => `void`
 
-Defined in: [hooks/useSnackbarController.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSnackbarController.tsx)
+Defined in: [types/src/controllers/snackbar.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/snackbar.ts)
 
 Display a new snackbar. You need to specify the type and message.
 You can optionally specify a title

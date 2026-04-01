@@ -1,0 +1,21 @@
+export const dataEnhancementTranslationsHi = {
+    autofill: "ऑटोफ़िल",
+    autofill_current_content: "वर्तमान सामग्री के आधार पर ऑटोफ़िल करें",
+    set_id_first: "पहले एक ID सेट करना आवश्यक है",
+    provide_instructions: "डेटा एन्हांसमेंट के लिए निर्देश प्रदान करें",
+    fill_missing_fields: "अनुपस्थित फ़ील्ड भरें",
+    translate_missing_content: "अनुपस्थित सामग्री अनुवाद करें",
+    add_2_paragraphs_to: "सामग्री में 2 पैराग्राफ जोड़ें",
+    use_openai_generate_content: "सामग्री स्वचालित रूप से जनरेट करने के लिए Google Vertex AI या OpenAI का उपयोग करें।",
+    autofill_this_field: "इस फ़ील्ड को ऑटोफ़िल करें",
+    autofill_property: "ऑटोफ़िल प्रॉपर्टी",
+    input_data_before_enhancing: "एन्हांस करने से पहले कुछ डेटा दर्ज करें",
+    input_data_before_enhancing_property: "इस प्रॉपर्टी को एन्हांस करने से पहले आपको अन्य प्रॉपर्टीज़ में डेटा दर्ज करना होगा।",
+    based_on_rest_of_entity: "एंटिटी के बाकी भाग के आधार पर",
+    this_field: "यह फ़ील्ड",
+    subscription_needed: "इस फ़ंक्शन का उपयोग करने के लिए एक वैध सब्सक्रिप्शन आवश्यक है।",
+    login_to_enhance: "डेटा एन्हांस करने के लिए लॉग इन करना आवश्यक है",
+    no_fields_updated: "कोई फ़ील्ड अपडेट नहीं हुई",
+    ask_ai_to_write: "AI से लिखने के लिए कहें",
+    instructions: "निर्देश"
+};

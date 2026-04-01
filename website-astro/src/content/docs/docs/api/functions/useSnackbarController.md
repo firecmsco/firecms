@@ -13,7 +13,7 @@ title: "useSnackbarController"
 
 > **useSnackbarController**(): `object`
 
-Defined in: [hooks/useSnackbarController.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSnackbarController.tsx)
+Defined in: [core/src/hooks/useSnackbarController.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSnackbarController.tsx)
 
 Hook to retrieve the SnackbarContext.
 
@@ -47,6 +47,10 @@ Consider that in order to use this hook you need to have a parent
 ###### message
 
 `ReactNode`
+
+###### title?
+
+`string`
 
 ###### type
 

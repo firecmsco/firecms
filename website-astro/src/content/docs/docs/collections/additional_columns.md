@@ -52,33 +52,3 @@ const usersCollection = buildCollection<User>({
     ]
 });
 ```
-
-#### Advanced example
-
-```tsx
-import {
-    buildCollection,
-    AdditionalFieldDelegate,
-    AsyncPreviewComponent
-} from "@rebasepro/core";
-
-export const productAdditionalField: AdditionalFieldDelegate<Product> = {
-    key: "spanish_title",
-    name: "Spanish title",
-    Builder: ({ entity, context }) =>
-        <AsyncPreviewComponent builder={
-            context.dataSource.fetchEntity({
-                path: entity.path,
-                entityId: entity.id,
-                collection: localeSchema
-            }).then((entity) => entity.values.name)
-        }/>
-};
-```
-
-:::tip
-`AsyncPreviewComponent` is a utility component provided by Rebase that
-allows you to render the result of an async computation (such as fetching data
-from a subcollection, like in this case). It will display a skeleton loading
-indicator in the meantime.
-:::

@@ -20,7 +20,7 @@ import {
     Typography
 } from "@rebasepro/ui";
 import { getIconForProperty } from "../../util";
-import { useCustomizationController } from "../../hooks";
+import { useCustomizationController, useTranslation } from "../../hooks";
 import { getIn } from "@rebasepro/formex";
 import { getDefaultValueFortype } from "@rebasepro/common";
 
@@ -110,6 +110,7 @@ function MapEditView<T extends Record<string, any>>({
             type: gettype(initialValue?.[key]) ?? "string"
         }])
     );
+    const { t } = useTranslation();
 
     useEffect(() => {
         const currentKeys = internalState.map(([id, { key }]) => key);
@@ -231,7 +232,7 @@ function MapEditView<T extends Record<string, any>>({
                 }]]);
             }
             }>
-            {fieldName ? `Add to ${fieldName}` : "Add"}
+            {fieldName ? t("add_to_field", { fieldName }) : t("add")}
         </Button>
 
     </div>;
@@ -262,6 +263,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
 }) {
 
     const { locale } = useCustomizationController();
+    const { t } = useTranslation();
 
     function buildInput(entryValue: any, fieldKey: string, type: DataType) {
         if (type === "string" || type === "number") {
@@ -326,7 +328,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 <ArrayContainer value={entryValue}
                     newDefaultEntry={""}
                     droppableId={rowId.toString()}
-                    addLabel={fieldKey ? `Add to ${fieldKey}` : "Add"}
+                    addLabel={fieldKey ? t("add_to_field", { fieldName: fieldKey }) : t("add")}
                     size={"small"}
                     disabled={disabled || !fieldKey}
                     canAddElements={true}

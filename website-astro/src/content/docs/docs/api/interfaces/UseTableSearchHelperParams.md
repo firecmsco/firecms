@@ -11,7 +11,7 @@ title: "UseTableSearchHelperParams"
 
 # Interface: UseTableSearchHelperParams\<M\>
 
-Defined in: [components/common/useTableSearchHelper.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
+Defined in: [core/src/components/common/useTableSearchHelper.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
 
 ## Type Parameters
 
@@ -25,15 +25,7 @@ Defined in: [components/common/useTableSearchHelper.ts:6](https://github.com/reb
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [components/common/useTableSearchHelper.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
-
-***
-
-### fullPath
-
-> **fullPath**: `string`
-
-Defined in: [components/common/useTableSearchHelper.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
+Defined in: [core/src/components/common/useTableSearchHelper.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
 
 ***
 
@@ -41,4 +33,12 @@ Defined in: [components/common/useTableSearchHelper.ts:8](https://github.com/reb
 
 > `optional` **parentCollectionIds**: `string`[]
 
-Defined in: [components/common/useTableSearchHelper.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
+Defined in: [core/src/components/common/useTableSearchHelper.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
+
+***
+
+### path
+
+> **path**: `string`
+
+Defined in: [core/src/components/common/useTableSearchHelper.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)

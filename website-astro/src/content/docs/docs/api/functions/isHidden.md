@@ -13,13 +13,13 @@ title: "isHidden"
 
 > **isHidden**(`property`): `boolean`
 
-Defined in: [util/entities.ts:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
+Defined in: [common/src/util/entities.ts:27](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
 
 ## Parameters
 
 ### property
 
-[`ArrayProperty`](../interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](../interfaces/MapProperty)\<`any`\> | `AnyProperty` | [`ResolvedProperty`](../type-aliases/ResolvedProperty)
+[`Property`](../type-aliases/Property)
 
 ## Returns
 

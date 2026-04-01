@@ -19,7 +19,6 @@
     "packages/firebase",
     "packages/mongodb",
     "packages/cli",
-    "packages/editor",
     "packages/create_rebase_app",
     "packages/collection_editor",
     "packages/collection_editor_firebase",

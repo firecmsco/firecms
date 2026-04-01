@@ -11,7 +11,7 @@ title: "SaveEntityProps"
 
 # Interface: SaveEntityProps\<M\>
 
-Defined in: [types/datasource.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:52](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ## Type Parameters
 
@@ -23,17 +23,17 @@ Defined in: [types/datasource.ts:53](https://github.com/rebaseco/rebase/blob/mai
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
 
-Defined in: [types/datasource.ts:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:57](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
 ### entityId?
 
-> `optional` **entityId**: `string`
+> `optional` **entityId**: `string` \| `number`
 
-Defined in: [types/datasource.ts:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:55](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [types/datasource.ts:56](https://github.com/rebaseco/rebase/blob/mai
 
 > **path**: `string`
 
-Defined in: [types/datasource.ts:54](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [types/datasource.ts:54](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **previousValues**: `Partial`\<`M`\>
 
-Defined in: [types/datasource.ts:57](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:56](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [types/datasource.ts:57](https://github.com/rebaseco/rebase/blob/mai
 
 > **status**: [`EntityStatus`](../type-aliases/EntityStatus)
 
-Defined in: [types/datasource.ts:59](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:58](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -65,4 +65,4 @@ Defined in: [types/datasource.ts:59](https://github.com/rebaseco/rebase/blob/mai
 
 > **values**: `Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
 
-Defined in: [types/datasource.ts:55](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:54](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)

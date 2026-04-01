@@ -11,9 +11,9 @@ title: "getIcon"
 
 # Function: getIcon()
 
-> **getIcon**(`iconKey?`, `className?`, `color?`, `size?`): `ReactElement`\<`any`, `string` \| `JSXElementConstructor`\<`any`\>\> \| `undefined`
+> **getIcon**(`iconKey?`, `className?`, `color?`, `size?`): `ReactElement`\<`unknown`, `string` \| `JSXElementConstructor`\<`any`\>\> \| `undefined`
 
-Defined in: [util/icons.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
+Defined in: [core/src/util/icons.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icons.tsx)
 
 ## Parameters
 
@@ -35,4 +35,4 @@ Defined in: [util/icons.tsx:7](https://github.com/rebaseco/rebase/blob/main/pack
 
 ## Returns
 
-`ReactElement`\<`any`, `string` \| `JSXElementConstructor`\<`any`\>\> \| `undefined`
+`ReactElement`\<`unknown`, `string` \| `JSXElementConstructor`\<`any`\>\> \| `undefined`

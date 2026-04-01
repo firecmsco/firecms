@@ -9,7 +9,7 @@
         "build": "astro build",
         "preview": "astro preview",
         "astro": "astro",
-        "deploy": "run-s build && firebase deploy --only hosting --project rebase-backend",
+        "deploy": "run-s build && firebase deploy --only hosting --project rebase-578f2",
         "generate-llms": "node scripts/generate_llms_txt.js",
         "genAPI": "typedoc && node scripts/add_api_frontmatter.js"
     },

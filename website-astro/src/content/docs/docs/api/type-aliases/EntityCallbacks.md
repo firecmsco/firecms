@@ -13,7 +13,7 @@ title: "EntityCallbacks"
 
 > **EntityCallbacks**\<`M`, `USER`\> = `object`
 
-Defined in: [types/entity\_callbacks.ts:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 This interface defines all the callbacks that can be used when an entity
 is being created, updated or deleted.
@@ -31,19 +31,19 @@ Useful for adding your own logic or blocking the execution of the operation.
 
 ## Methods
 
-### onDelete()?
+### afterDelete()?
 
-> `optional` **onDelete**(`entityDeleteProps`): `void`
+> `optional` **afterDelete**(`props`): `void`
 
-Defined in: [types/entity\_callbacks.ts:59](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:60](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Callback used after the entity is deleted.
 
 #### Parameters
 
-##### entityDeleteProps
+##### props
 
-[`EntityBeforeDeleteProps`](../interfaces/EntityBeforeDeleteProps)\<`M`, `USER`\>
+[`EntityAfterDeleteProps`](../interfaces/EntityAfterDeleteProps)\<`M`, `USER`\>
 
 #### Returns
 
@@ -53,15 +53,15 @@ Callback used after the entity is deleted.
 
 ### afterRead()?
 
-> `optional` **afterRead**(`entityFetchProps`): [`Entity`](../interfaces/Entity)\<`M`\> \| `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
+> `optional` **afterRead**(`props`): [`Entity`](../interfaces/Entity)\<`M`\> \| `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
 
-Defined in: [types/entity\_callbacks.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Callback used after fetching data
 
 #### Parameters
 
-##### entityFetchProps
+##### props
 
 [`EntityAfterReadProps`](../interfaces/EntityAfterReadProps)\<`M`, `USER`\>
 
@@ -71,41 +71,59 @@ Callback used after fetching data
 
 ***
 
-### onIdUpdate()?
+### afterSave()?
 
-> `optional` **onIdUpdate**(`idUpdateProps`): `string` \| `Promise`\<`string`\>
+> `optional` **afterSave**(`props`): `void` \| `Promise`\<`void`\>
 
-Defined in: [types/entity\_callbacks.ts:68](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
-Callback fired when any value in the form changes. You can use it
-to define the ID of a `new` entity based on the current values.
-The returned string will be used as the ID of the entity.
+Callback used when save is successful
 
 #### Parameters
 
-##### idUpdateProps
+##### props
 
-[`EntityIdUpdateProps`](../interfaces/EntityIdUpdateProps)\<`M`\>
+[`EntityAfterSaveProps`](../interfaces/EntityAfterSaveProps)\<`M`, `USER`\>
 
 #### Returns
 
-`string` \| `Promise`\<`string`\>
+`void` \| `Promise`\<`void`\>
+
+***
+
+### afterSaveError()?
+
+> `optional` **afterSaveError**(`props`): `void` \| `Promise`\<`void`\>
+
+Defined in: [types/src/types/entity\_callbacks.ts:43](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+
+Callback used when saving fails
+
+#### Parameters
+
+##### props
+
+[`EntityAfterSaveErrorProps`](EntityAfterSaveErrorProps)\<`M`, `USER`\>
+
+#### Returns
+
+`void` \| `Promise`\<`void`\>
 
 ***
 
 ### beforeDelete()?
 
-> `optional` **beforeDelete**(`entityDeleteProps`): `void`
+> `optional` **beforeDelete**(`props`): `void`
 
-Defined in: [types/entity\_callbacks.ts:52](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
-Callback used after the entity is deleted.
+Callback used before the entity is deleted.
 If you throw an error in this method the process stops, and an
 error snackbar gets displayed.
 
 #### Parameters
 
-##### entityDeleteProps
+##### props
 
 [`EntityBeforeDeleteProps`](../interfaces/EntityBeforeDeleteProps)\<`M`, `USER`\>
 
@@ -117,60 +135,21 @@ error snackbar gets displayed.
 
 ### beforeSave()?
 
-> `optional` **beforeSave**(`entitySaveProps`): `Partial`\<`M`\> \| `Promise`\<`Partial`\<`M`\>\>
+> `optional` **beforeSave**(`props`): `Partial`\<`M`\> \| `Promise`\<`Partial`\<`M`\>\>
 
-Defined in: [types/entity\_callbacks.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Callback used before saving, you need to return the values that will get
 saved. If you throw an error in this method the process stops, and an
 error snackbar gets displayed.
+This runs after schema validation.
 
 #### Parameters
 
-##### entitySaveProps
+##### props
 
 [`EntityBeforeSaveProps`](EntityBeforeSaveProps)\<`M`, `USER`\>
 
 #### Returns
 
 `Partial`\<`M`\> \| `Promise`\<`Partial`\<`M`\>\>
-
-***
-
-### afterSaveError()?
-
-> `optional` **afterSaveError**(`entitySaveProps`): `void` \| `Promise`\<`void`\>
-
-Defined in: [types/entity\_callbacks.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
-
-Callback used when saving fails
-
-#### Parameters
-
-##### entitySaveProps
-
-[`EntityAfterSaveErrorProps`](EntityAfterSaveErrorProps)\<`M`, `USER`\>
-
-#### Returns
-
-`void` \| `Promise`\<`void`\>
-
-***
-
-### afterSave()?
-
-> `optional` **afterSave**(`entitySaveProps`): `void` \| `Promise`\<`void`\>
-
-Defined in: [types/entity\_callbacks.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entity_callbacks.ts)
-
-Callback used when save is successful
-
-#### Parameters
-
-##### entitySaveProps
-
-[`EntityAfterSaveProps`](../interfaces/EntityAfterSaveProps)\<`M`, `USER`\>
-
-#### Returns
-
-`void` \| `Promise`\<`void`\>

@@ -9,18 +9,18 @@ title: "FieldProps"
 
 [@rebasepro/core](../README) / FieldProps
 
-# Interface: FieldProps\<T, CustomProps, M\>
+# Interface: FieldProps\<P, CustomProps, M\>
 
-Defined in: [types/fields.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 When building a custom field you need to create a React component that takes
 this interface as props.
 
 ## Type Parameters
 
-### T
+### P
 
-`T` *extends* [`CMSType`](../type-aliases/CMSType) = `any`
+`P` *extends* [`Property`](../type-aliases/Property) = [`Property`](../type-aliases/Property)
 
 ### CustomProps
 
@@ -36,7 +36,7 @@ this interface as props.
 
 > `optional` **autoFocus**: `boolean`
 
-Defined in: [types/fields.tsx:93](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:127](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Should this field autofocus on mount
 
@@ -46,7 +46,7 @@ Should this field autofocus on mount
 
 > **context**: [`FormContext`](FormContext)\<`M`\>
 
-Defined in: [types/fields.tsx:103](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:137](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Additional values related to the state of the form or the entity
 
@@ -56,7 +56,7 @@ Additional values related to the state of the form or the entity
 
 > **customProps**: `CustomProps`
 
-Defined in: [types/fields.tsx:98](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:132](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Additional properties set by the developer
 
@@ -66,7 +66,7 @@ Additional properties set by the developer
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [types/fields.tsx:108](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:142](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Flag to indicate if this field should be disabled
 
@@ -74,9 +74,9 @@ Flag to indicate if this field should be disabled
 
 ### error?
 
-> `optional` **error**: `any`
+> `optional` **error**: `string`
 
-Defined in: [types/fields.tsx:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:85](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Is there an error in this field. The error field has the same shape as
 the field, replacing values with a string containing the error.
@@ -88,7 +88,7 @@ It takes the value `null` if there is no error
 
 > `optional` **includeDescription**: `boolean`
 
-Defined in: [types/fields.tsx:71](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:100](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Should this field include a description
 
@@ -98,7 +98,7 @@ Should this field include a description
 
 > `optional` **isSubmitting**: `boolean`
 
-Defined in: [types/fields.tsx:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:70](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Is the form currently submitting
 
@@ -108,7 +108,7 @@ Is the form currently submitting
 
 > `optional` **minimalistView**: `boolean`
 
-Defined in: [types/fields.tsx:88](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:122](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Display the child properties directly, without being wrapped in an
 extendable panel. Note that this will also hide the title of this property.
@@ -119,7 +119,7 @@ extendable panel. Note that this will also hide the title of this property.
 
 > `optional` **onPropertyChange**: (`property`) => `void`
 
-Defined in: [types/fields.tsx:122](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:156](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Some properties might change internal state (like expanding a panel).
 This function should be called when the internal state changes.
@@ -129,7 +129,7 @@ This is used to preserve state in array containers.
 
 ##### property
 
-`Partial`\<[`ArrayProperty`](ArrayProperty)\<`any`, `any`\> \| [`MapProperty`](MapProperty)\<`any`\> \| `AnyProperty`\>
+`Partial`\<[`Property`](../type-aliases/Property)\>
 
 #### Returns
 
@@ -141,19 +141,29 @@ This is used to preserve state in array containers.
 
 > `optional` **partOfArray**: `boolean`
 
-Defined in: [types/fields.tsx:82](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:111](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Is this field part of an array
 
 ***
 
+### partOfBlock?
+
+> `optional` **partOfBlock**: `boolean`
+
+Defined in: [types/src/types/fields.tsx:116](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
+
+Is this field part of a block
+
+***
+
 ### property
 
-> **property**: [`Property`](../type-aliases/Property)\<`T`\> \| [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\>
+> **property**: `P`
 
-Defined in: [types/fields.tsx:66](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:95](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
-Property related to this field
+Property related to this field, now strongly typed to P
 
 ***
 
@@ -161,7 +171,7 @@ Property related to this field
 
 > **propertyKey**: `string`
 
-Defined in: [types/fields.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Key of the property
 E.g. "user.name" for a property with path "user.name"
@@ -172,7 +182,7 @@ E.g. "user.name" for a property with path "user.name"
 
 > **setFieldValue**: (`propertyKey`, `value`, `shouldValidate?`) => `void`
 
-Defined in: [types/fields.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:65](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Set value of a different field directly
 
@@ -184,7 +194,7 @@ Set value of a different field directly
 
 ##### value
 
-[`CMSType`](../type-aliases/CMSType) | `null`
+`unknown`
 
 ##### shouldValidate?
 
@@ -200,7 +210,7 @@ Set value of a different field directly
 
 > **setValue**: (`value`, `shouldValidate?`) => `void`
 
-Defined in: [types/fields.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:57](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Set value of field directly
 
@@ -208,7 +218,7 @@ Set value of field directly
 
 ##### value
 
-`T` | `null`
+[`InferPropertyType`](../type-aliases/InferPropertyType)\<`P`\> | `null`
 
 ##### shouldValidate?
 
@@ -224,7 +234,7 @@ Set value of field directly
 
 > `optional` **showError**: `boolean`
 
-Defined in: [types/fields.tsx:49](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:78](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Should this field show the error indicator.
 Note that there might be an error (like an empty field that should be
@@ -237,7 +247,7 @@ saving.
 
 > `optional` **size**: `"small"` \| `"medium"` \| `"large"`
 
-Defined in: [types/fields.tsx:113](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:147](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Size of the field
 
@@ -247,7 +257,7 @@ Size of the field
 
 > `optional` **touched**: `boolean`
 
-Defined in: [types/fields.tsx:61](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:90](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Has this field been touched
 
@@ -257,7 +267,7 @@ Has this field been touched
 
 > `optional` **underlyingValueHasChanged**: `boolean`
 
-Defined in: [types/fields.tsx:77](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:106](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Flag to indicate that the underlying value has been updated in the
 datasource
@@ -266,8 +276,8 @@ datasource
 
 ### value
 
-> **value**: `T`
+> **value**: [`InferPropertyType`](../type-aliases/InferPropertyType)\<`P`\>
 
-Defined in: [types/fields.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:52](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
-Current value of this field
+Current value of this field, inferred from the property type P

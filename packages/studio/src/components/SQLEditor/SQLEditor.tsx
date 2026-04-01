@@ -24,7 +24,7 @@ import {
     ResizablePanels,
     Chip
 } from "@rebasepro/ui";
-import { useDataSource, useSnackbarController, useCollectionRegistryController, useSideEntityController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView, IconForView } from "@rebasepro/core";
+import { useDataSource, useSnackbarController, useCollectionRegistryController, useSideEntityController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView, IconForView, useTranslation } from "@rebasepro/core";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
 import { parseFirst } from "pgsql-ast-parser";
@@ -77,6 +77,7 @@ export const SQLEditor = () => {
     const snackbarController = useSnackbarController();
     const collectionRegistry = useCollectionRegistryController();
     const sideEntityController = useSideEntityController();
+    const { t } = useTranslation();
 
     // Schema state
     const [schemas, setSchemas] = useState<Record<string, TableInfo[]>>({});
@@ -101,7 +102,7 @@ export const SQLEditor = () => {
         let mounted = true;
         const fetchConnectionConfig = async () => {
             if (!dataSource.fetchAvailableDatabases || !dataSource.fetchAvailableRoles) {
-                setConnectionConfigError("Active data source does not support fetching specific databases or roles.");
+                setConnectionConfigError(t("studio_sql_sql_not_supported"));
                 setIsLoadingConfig(false);
                 return;
             }
@@ -136,7 +137,7 @@ export const SQLEditor = () => {
                 console.error("Failed to fetch databases or roles:", err);
                 if (mounted) {
                     const message = err instanceof Error ? err.message : String(err);
-                    setConnectionConfigError("Failed to fetch connection options: " + message);
+                    setConnectionConfigError(t("studio_sql_fetch_error", { message }));
                 }
             } finally {
                 if (mounted) {
@@ -164,7 +165,7 @@ export const SQLEditor = () => {
 
     const fetchSchema = useCallback(async () => {
         if (!dataSource.executeSql) {
-            setSchemaError("SQL execution not supported by this data source");
+            setSchemaError(t("studio_sql_sql_not_supported"));
             setIsSchemaLoading(false);
             return;
         }
@@ -222,12 +223,12 @@ export const SQLEditor = () => {
                 if (result && typeof result === "object" && "rows" in result && Array.isArray((result as { rows: Record<string, unknown>[] }).rows)) {
                     processGrouped((result as { rows: Record<string, unknown>[] }).rows);
                 } else {
-                    setSchemaError(`Unexpected data format: ${typeof result}`);
+                    setSchemaError(t("studio_sql_unexpected_format", { type: typeof result }));
                     setSchemas({});
                 }
             } else if (result.length === 0) {
                 setSchemas({});
-                setSchemaError("No tables found in this database.");
+                setSchemaError(t("studio_sql_no_tables"));
             } else {
                 processGrouped(result);
             }
@@ -236,7 +237,7 @@ export const SQLEditor = () => {
         } catch (e: unknown) {
             console.error("Schema fetch error:", e);
             const message = e instanceof Error ? e.message : String(e);
-            setSchemaError("Failed to fetch schema: " + message);
+            setSchemaError(t("studio_sql_schema_fetch_error", { message }));
         } finally {
             setIsSchemaLoading(false);
         }
@@ -316,7 +317,7 @@ export const SQLEditor = () => {
         if (!activeTab.lastExecutedSql) {
             snackbarController.open({
                 type: "error",
-                message: "Cannot edit rows: The underlying query is missing."
+                message: t("studio_sql_cannot_edit_missing_query")
             });
             return;
         }
@@ -326,7 +327,7 @@ export const SQLEditor = () => {
         if (resolution.error || !resolution.primaryKeys || resolution.primaryKeys.length === 0) {
             snackbarController.open({
                 type: "error",
-                message: resolution.error || "Could not resolve table/primary key"
+                message: resolution.error || t("studio_sql_cannot_resolve_table")
             });
             return;
         }
@@ -338,7 +339,7 @@ export const SQLEditor = () => {
         if (missingPKs.length > 0) {
             snackbarController.open({
                 type: "error",
-                message: `Row is missing primary key column(s): ${missingPKs.map(pk => `"${pk.resultColumn}"`).join(", ")}. Cannot safely update.`
+                message: t("studio_sql_missing_pk", { columns: missingPKs.map(pk => `"${pk.resultColumn}"`).join(", ") })
             });
             return;
         }
@@ -409,13 +410,13 @@ export const SQLEditor = () => {
 
                 snackbarController.open({
                     type: "success",
-                    message: "Row updated successfully."
+                    message: t("studio_sql_row_updated")
                 });
             }
         } catch (e: unknown) {
             snackbarController.open({
                 type: "error",
-                message: `Failed to update: ${e instanceof Error ? e.message : String(e)}`
+                message: t("studio_sql_update_failed", { message: e instanceof Error ? e.message : String(e) })
             });
         }
     }, [editingCell, schemas, activeTab.lastExecutedSql, activeTab.results, dataSource, updateActiveTab, snackbarController, selectedDatabase, selectedRole]);
@@ -544,7 +545,7 @@ export const SQLEditor = () => {
             }
         } catch (e: unknown) {
             const message = e instanceof Error ? e.message : String(e);
-            updateActiveTab({ error: message || "An error occurred while explaining the query." });
+            updateActiveTab({ error: message || t("studio_sql_error_explaining") });
         } finally {
             updateActiveTab({ loading: false });
         }
@@ -572,11 +573,11 @@ export const SQLEditor = () => {
                     saveHistory([...history, activeTab.sql]);
                 }
             } else {
-                updateActiveTab({ error: "SQL execution is not supported by the current data source." });
+                updateActiveTab({ error: t("studio_sql_execution_not_supported") });
             }
         } catch (e: unknown) {
             const message = e instanceof Error ? e.message : String(e);
-            updateActiveTab({ error: message || "An error occurred while executing the query." });
+            updateActiveTab({ error: message || t("studio_sql_error_executing") });
         } finally {
             updateActiveTab({ loading: false });
         }
@@ -638,7 +639,7 @@ export const SQLEditor = () => {
         setIsSaveDialogOpen(false);
         snackbarController.open({
             type: "success",
-            message: `Snippet "${newSnippetName}" saved.`
+            message: t("studio_sql_snippet_saved", { name: newSnippetName })
         });
     };
 
@@ -695,12 +696,12 @@ export const SQLEditor = () => {
         navigator.clipboard.writeText(markdown).then(() => {
             snackbarController.open({
                 type: "success",
-                message: "Results copied as Markdown!"
+                message: t("studio_sql_markdown_copied")
             });
         }).catch(() => {
             snackbarController.open({
                 type: "error",
-                message: "Failed to copy Markdown to clipboard."
+                message: t("studio_sql_markdown_copy_failed")
             });
         });
     };
@@ -711,7 +712,7 @@ export const SQLEditor = () => {
                 <div className="flex-grow flex items-center justify-center">
                     <div className="text-center">
                         <CircularProgress size="medium" />
-                        <Typography variant="body2" className="mt-4 text-text-secondary dark:text-text-secondary-dark font-mono tracking-tight animate-pulse">EXECUTING QUERY...</Typography>
+                        <Typography variant="body2" className="mt-4 text-text-secondary dark:text-text-secondary-dark font-mono tracking-tight animate-pulse">{t("studio_sql_executing_query")}</Typography>
                     </div>
                 </div>
             );
@@ -720,7 +721,7 @@ export const SQLEditor = () => {
         if (error) {
             return (
                 <div className="flex-grow flex items-center justify-center p-6 overflow-auto">
-                    <ErrorView title="Query Error" error={error} />
+                    <ErrorView title={t("studio_sql_query_error")} error={error} />
                 </div>
             );
         }
@@ -730,7 +731,7 @@ export const SQLEditor = () => {
                 <div className="flex-grow flex items-center justify-center text-text-disabled dark:text-text-disabled-dark">
                     <div className="text-center">
                         <svg className="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
-                        <Typography variant="body2">Run a query to see results</Typography>
+                        <Typography variant="body2">{t("studio_sql_run_query_placeholder")}</Typography>
                     </div>
                 </div>
             );
@@ -743,7 +744,7 @@ export const SQLEditor = () => {
                 if (plan) {
                     return (
                         <div className="flex-grow overflow-auto p-4 bg-surface-50 dark:bg-surface-900 flex flex-col items-start">
-                            <Typography variant="caption" className="font-bold text-text-secondary mb-4 tracking-wider uppercase">Visual Execution Plan</Typography>
+                            <Typography variant="caption" className="font-bold text-text-secondary mb-4 tracking-wider uppercase">{t("studio_sql_visual_execution_plan")}</Typography>
                             <div className="pb-12">
                                 <ExplainVisualizer plan={plan} />
                             </div>
@@ -758,8 +759,8 @@ export const SQLEditor = () => {
         if (results.length === 0) {
             return (
                 <div className="flex-grow p-6 flex flex-col items-center justify-center">
-                    <Typography variant="body2" className="text-text-secondary dark:text-text-secondary-dark font-mono border-b border-surface-200 dark:border-surface-800 pb-2 mb-2">SUCCESS</Typography>
-                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark">Query executed successfully but returned no results.</Typography>
+                    <Typography variant="body2" className="text-text-secondary dark:text-text-secondary-dark font-mono border-b border-surface-200 dark:border-surface-800 pb-2 mb-2">{t("studio_sql_success")}</Typography>
+                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark">{t("studio_sql_no_results")}</Typography>
                 </div>
             );
         }
@@ -809,8 +810,8 @@ export const SQLEditor = () => {
                 {/* CMS Collection Badges Bar */}
                 {actionableCollections.length > 0 && (
                     <div className={cls("px-4 py-1.5 border-b flex items-center gap-2 shrink-0 bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
-                        <Tooltip title="Tables in this query that are mapped as CMS collections">
-                            <Typography variant="caption" className="text-[10px] font-bold uppercase tracking-widest text-text-disabled dark:text-text-disabled-dark mr-1 shrink-0 cursor-help">CMS:</Typography>
+                        <Tooltip title={t("studio_sql_cms_collections_tooltip")}>
+                            <Typography variant="caption" className="text-[10px] font-bold uppercase tracking-widest text-text-disabled dark:text-text-disabled-dark mr-1 shrink-0 cursor-help">{t("studio_sql_cms")}</Typography>
                         </Tooltip>
                         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
                             {actionableCollections.map(mc => (
@@ -844,7 +845,7 @@ export const SQLEditor = () => {
                                     const ra = rowActions[0];
                                     return (
                                         <div className="h-full flex items-center justify-center">
-                                            <Tooltip title={`Edit ${ra.collection.collection.name} #${ra.entityId}`}>
+                                            <Tooltip title={t("studio_sql_edit_entity", { name: ra.collection.collection.name, id: String(ra.entityId) })}>
                                                 <button
                                                     className="p-1 text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors rounded"
                                                     onClick={(e) => {
@@ -889,7 +890,7 @@ export const SQLEditor = () => {
                                                         });
                                                     }}
                                                 >
-                                                    Edit {ra.collection.collection.name} #{ra.entityId}
+                                                    {t("studio_sql_edit_entity", { name: ra.collection.collection.name, id: String(ra.entityId) })}
                                                 </MenuItem>
                                             ))}
                                         </Menu>
@@ -937,11 +938,11 @@ export const SQLEditor = () => {
                 <div className={cls("p-2 px-4 border-t bg-surface-50 dark:bg-surface-900 flex justify-between items-center shrink-0", defaultBorderMixin)}>
                     <div className="flex space-x-4">
                         <div className="flex items-center text-[11px]">
-                            <span className="font-bold text-text-disabled dark:text-text-disabled-dark mr-2 uppercase tracking-tighter">Rows:</span>
+                            <span className="font-bold text-text-disabled dark:text-text-disabled-dark mr-2 uppercase tracking-tighter">{t("studio_sql_rows")}</span>
                             <span className="font-mono text-text-secondary dark:text-text-secondary-dark">{results.length}</span>
                         </div>
                         <div className="flex items-center text-[11px]">
-                            <span className="font-bold text-text-disabled dark:text-text-disabled-dark mr-2 uppercase tracking-tighter">Time:</span>
+                            <span className="font-bold text-text-disabled dark:text-text-disabled-dark mr-2 uppercase tracking-tighter">{t("studio_sql_time")}</span>
                             <span className="font-mono text-text-secondary dark:text-text-secondary-dark">{execTime}ms</span>
                         </div>
                     </div>
@@ -952,7 +953,7 @@ export const SQLEditor = () => {
                             className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark whitespace-nowrap"
                             onClick={handleExportMarkdown}
                         >
-                            Copy Markdown
+                            {t("studio_sql_copy_markdown")}
                         </Button>
                         <Button
                             size="small"
@@ -960,7 +961,7 @@ export const SQLEditor = () => {
                             className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark whitespace-nowrap"
                             onClick={handleExportJSON}
                         >
-                            Export JSON
+                            {t("studio_sql_export_json")}
                         </Button>
                         <Button
                             size="small"
@@ -968,7 +969,7 @@ export const SQLEditor = () => {
                             className="text-[10px] uppercase font-bold text-text-secondary dark:text-text-secondary-dark whitespace-nowrap"
                             onClick={handleExportCSV}
                         >
-                            Export CSV
+                            {t("studio_sql_export_csv")}
                         </Button>
                     </div>
                 </div>
@@ -1059,7 +1060,7 @@ export const SQLEditor = () => {
                                 </div>
                             </div>
                             <div className="flex shrink-0 items-center justify-end pr-2 gap-1.5">
-                                <Tooltip title="Format SQL">
+                                <Tooltip title={t("studio_sql_format_sql")}>
                                     <button onClick={handlePrettify} className="p-2 text-text-secondary hover:text-text-primary transition-colors focus:outline-none flex items-center justify-center">
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" /></svg>
                                     </button>
@@ -1071,13 +1072,13 @@ export const SQLEditor = () => {
                                     onClick={handleExplain}
                                     disabled={loading}
                                 >
-                                    Explain
+                                    {t("studio_sql_explain")}
                                 </Button>
 
                                 <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
 
                                 <div className="flex items-center space-x-2 px-2 cursor-pointer" onClick={() => setAutoLimit(!autoLimit)}>
-                                    <Typography variant="caption" className="text-[11px] text-text-secondary cursor-pointer select-none">Limit 1000</Typography>
+                                    <Typography variant="caption" className="text-[11px] text-text-secondary cursor-pointer select-none">{t("studio_sql_limit_1000")}</Typography>
                                     <input
                                         type="checkbox"
                                         checked={autoLimit}
@@ -1089,14 +1090,14 @@ export const SQLEditor = () => {
 
                                 <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
 
-                                <Tooltip title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}>
+                                <Tooltip title={isFavorite ? t("studio_sql_remove_from_favorites") : t("studio_sql_add_to_favorites")}>
                                     <IconButton
                                         size="small"
                                         onClick={() => {
                                             if (!activeSnippet) {
                                                 snackbarController.open({
                                                     type: "info",
-                                                    message: "Please save the snippet first before favoriting."
+                                                    message: t("studio_sql_save_first_to_favorite")
                                                 });
                                                 return;
                                             }
@@ -1112,7 +1113,7 @@ export const SQLEditor = () => {
                                     size="small"
                                     onClick={() => setIsSaveDialogOpen(true)}
                                 >
-                                    Save
+                                    {t("studio_sql_save")}
                                 </Button>
 
                                 <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1"></div>
@@ -1121,13 +1122,13 @@ export const SQLEditor = () => {
                                     trigger={
                                         <button className="flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors bg-surface-100 hover:bg-surface-200 dark:bg-surface-800 dark:hover:bg-surface-700 rounded border border-transparent mr-2">
                                             <svg className="w-3.5 h-3.5 text-text-disabled dark:text-text-disabled-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
-                                            <span className="max-w-[80px] truncate">{isLoadingConfig ? "..." : (selectedDatabase || "Select DB")}</span>
+                                            <span className="max-w-[80px] truncate">{isLoadingConfig ? "..." : (selectedDatabase || t("studio_sql_select_db"))}</span>
                                         </button>
                                     }
                                 >
                                     <div className="max-h-64 overflow-y-auto">
                                         <div className="px-3 py-1.5 border-b border-surface-200 dark:border-surface-800 mb-1">
-                                            <Typography variant="caption" className="font-bold uppercase tracking-wider text-[9px] text-text-disabled dark:text-text-disabled-dark">Database</Typography>
+                                            <Typography variant="caption" className="font-bold uppercase tracking-wider text-[9px] text-text-disabled dark:text-text-disabled-dark">{t("studio_sql_database")}</Typography>
                                         </div>
                                         {isLoadingConfig ? (
                                             <div className="flex items-center justify-center p-4">
@@ -1146,11 +1147,11 @@ export const SQLEditor = () => {
                                                 ))}
 
                                                 <div className="px-3 py-1.5 border-y border-surface-200 dark:border-surface-800 mb-1 mt-1">
-                                                    <Typography variant="caption" className="font-bold uppercase tracking-wider text-[9px] text-text-disabled dark:text-text-disabled-dark">Role</Typography>
+                                                    <Typography variant="caption" className="font-bold uppercase tracking-wider text-[9px] text-text-disabled dark:text-text-disabled-dark">{t("studio_sql_role")}</Typography>
                                                 </div>
                                                 {availableRoles.map(role => (
                                                     <MenuItem key={role} dense onClick={() => handleRoleChange(role)} className={cls("text-xs", selectedRole === role && "text-primary dark:text-primary-dark")}>
-                                                        {role}{role === "postgres" ? " (Admin)" : ""}
+                                                        {role}{role === "postgres" ? " " + t("studio_sql_admin") : ""}
                                                     </MenuItem>
                                                 ))}
                                             </>
@@ -1165,7 +1166,7 @@ export const SQLEditor = () => {
                                     color="primary"
                                 >
                                     {loading ? <CircularProgress size="smallest" className="mr-2" /> : <svg className="w-3.5 h-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>}
-                                    Run
+                                    {t("studio_sql_run")}
                                 </Button>
                             </div>
                         </div>
@@ -1188,7 +1189,7 @@ export const SQLEditor = () => {
                             secondPanel={
                                 <div className="h-full w-full flex flex-col bg-surface-50 dark:bg-surface-950 overflow-hidden min-h-0">
                                     <div className={cls("p-2 px-4 bg-surface-100 dark:bg-surface-900 border-b shrink-0 flex items-center", defaultBorderMixin)}>
-                                        <Typography variant="caption" className="font-bold text-text-disabled dark:text-text-disabled-dark uppercase tracking-widest text-[10px]">Query Results</Typography>
+                                        <Typography variant="caption" className="font-bold text-text-disabled dark:text-text-disabled-dark uppercase tracking-widest text-[10px]">{t("studio_sql_query_results")}</Typography>
                                     </div>
                                     <div className="flex-grow flex flex-col min-h-0 overflow-hidden">
                                         {renderResults()}
@@ -1202,13 +1203,13 @@ export const SQLEditor = () => {
             />
 
             <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
-                <DialogTitle>Save SQL Snippet</DialogTitle>
+                <DialogTitle>{t("studio_sql_save_snippet")}</DialogTitle>
                 <DialogContent>
                     <div className="py-4 flex flex-col gap-4">
                         <TextField
-                            label="Snippet Name"
+                            label={t("studio_sql_snippet_name")}
                             autoFocus
-                            placeholder="e.g., Get All Users"
+                            placeholder={t("studio_sql_snippet_name_placeholder")}
                             value={newSnippetName}
                             onChange={(e) => setNewSnippetName(e.target.value)}
                             onKeyDown={(e) => {
@@ -1218,20 +1219,20 @@ export const SQLEditor = () => {
                                 }
                             }}
                         />
-                        <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark block">This will be saved to your local storage.</Typography>
+                        <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark block">{t("studio_sql_snippet_saved_local")}</Typography>
                     </div>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="text" onClick={() => setIsSaveDialogOpen(false)}>Cancel</Button>
-                    <Button onClick={handleSaveSnippet} color="primary" disabled={!newSnippetName.trim()}>Save</Button>
+                    <Button variant="text" onClick={() => setIsSaveDialogOpen(false)}>{t("studio_sql_cancel")}</Button>
+                    <Button onClick={handleSaveSnippet} color="primary" disabled={!newSnippetName.trim()}>{t("studio_sql_save")}</Button>
                 </DialogActions>
             </Dialog>
             {/* Confirmation Dialog */}
             <ConfirmationDialog
                 open={isConfirmDialogOpen}
                 onCancel={() => setIsConfirmDialogOpen(false)}
-                title="Dangerous Operation Detected"
-                body="The query you are about to run contains potentially destructive operations (DELETE, DROP, TRUNCATE, or UPDATE without WHERE). Are you sure you want to proceed?"
+                title={t("studio_sql_dangerous_operation")}
+                body={t("studio_sql_dangerous_operation_body")}
                 onAccept={() => {
                     if (pendingAction) pendingAction();
                     setIsConfirmDialogOpen(false);

@@ -13,7 +13,7 @@ title: "CustomizationController"
 
 > **CustomizationController** = `object`
 
-Defined in: [types/customization\_controller.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/customization_controller.tsx)
+Defined in: [types/src/controllers/customization\_controller.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/customization_controller.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/customization\_controller.tsx:9](https://github.com/rebaseco/
 
 > `optional` **components**: `object`
 
-Defined in: [types/customization\_controller.tsx:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/customization_controller.tsx)
+Defined in: [types/src/controllers/customization\_controller.tsx:51](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/customization_controller.tsx)
 
 #### missingReference?
 
@@ -35,7 +35,7 @@ Component to render when a reference is missing
 
 > `optional` **dateTimeFormat**: `string`
 
-Defined in: [types/customization\_controller.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/customization_controller.tsx)
+Defined in: [types/src/controllers/customization\_controller.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/customization_controller.tsx)
 
 Format of the dates in the CMS.
 Defaults to 'MMMM dd, yyyy, HH:mm:ss'
@@ -44,9 +44,9 @@ Defaults to 'MMMM dd, yyyy, HH:mm:ss'
 
 ### entityActions?
 
-> `optional` **entityActions**: [`EntityAction`](EntityAction)\<`any`, `any`\>[]
+> `optional` **entityActions**: [`EntityAction`](EntityAction)[]
 
-Defined in: [types/customization\_controller.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/customization_controller.tsx)
+Defined in: [types/src/controllers/customization\_controller.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/customization_controller.tsx)
 
 List of actions that can be performed on entities.
 These actions are displayed in the entity view and in the collection view.
@@ -59,7 +59,7 @@ by specifying the `key` of the action.
 
 > `optional` **entityLinkBuilder**: [`EntityLinkBuilder`](EntityLinkBuilder)
 
-Defined in: [types/customization\_controller.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/customization_controller.tsx)
+Defined in: [types/src/controllers/customization\_controller.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/customization_controller.tsx)
 
 Builder for generating utility links for entities
 
@@ -69,7 +69,7 @@ Builder for generating utility links for entities
 
 > `optional` **entityViews**: [`EntityCustomView`](EntityCustomView)[]
 
-Defined in: [types/customization\_controller.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/customization_controller.tsx)
+Defined in: [types/src/controllers/customization\_controller.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/customization_controller.tsx)
 
 List of additional custom views for entities.
 You can use the key to reference the custom view in
@@ -83,7 +83,7 @@ You can also define an entity view from the UI.
 
 > `optional` **locale**: [`Locale`](Locale)
 
-Defined in: [types/customization\_controller.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/customization_controller.tsx)
+Defined in: [types/src/controllers/customization\_controller.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/customization_controller.tsx)
 
 Locale of the CMS, currently only affecting dates
 
@@ -91,9 +91,9 @@ Locale of the CMS, currently only affecting dates
 
 ### plugins?
 
-> `optional` **plugins**: [`RebasePlugin`](RebasePlugin)\<`any`, `any`, `any`\>[]
+> `optional` **plugins**: [`RebasePlugin`](RebasePlugin)[]
 
-Defined in: [types/customization\_controller.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/customization_controller.tsx)
+Defined in: [types/src/controllers/customization\_controller.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/customization_controller.tsx)
 
 Use plugins to modify the behaviour of the CMS.
 
@@ -103,7 +103,7 @@ Use plugins to modify the behaviour of the CMS.
 
 > **propertyConfigs**: `Record`\<`string`, [`PropertyConfig`](PropertyConfig)\>
 
-Defined in: [types/customization\_controller.tsx:54](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/customization_controller.tsx)
+Defined in: [types/src/controllers/customization\_controller.tsx:49](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/customization_controller.tsx)
 
 Record of custom form fields to be used in the CMS.
 You can use the key to reference the custom field in

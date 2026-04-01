@@ -11,16 +11,16 @@ title: "getDefaultFieldId"
 
 # Function: getDefaultFieldId()
 
-> **getDefaultFieldId**(`property`): `"select"` \| `"group"` \| `"switch"` \| `"url"` \| `"email"` \| `"block"` \| `"file_upload"` \| `"repeat"` \| `"date_time"` \| `"reference"` \| `"text_field"` \| `"multiline"` \| `"markdown"` \| `"user_select"` \| `"multi_select"` \| `"number_input"` \| `"number_select"` \| `"multi_number_select"` \| `"multi_file_upload"` \| `"key_value"` \| `"reference_as_string"` \| `"multi_references"` \| `"custom_array"` \| `undefined`
+> **getDefaultFieldId**(`property`): `"select"` \| `"group"` \| `"switch"` \| `"url"` \| `"email"` \| `"block"` \| `"file_upload"` \| `"repeat"` \| `"date_time"` \| `"reference"` \| `"relation"` \| `"text_field"` \| `"multiline"` \| `"markdown"` \| `"multi_select"` \| `"user_select"` \| `"number_input"` \| `"number_select"` \| `"multi_number_select"` \| `"multi_file_upload"` \| `"reference_as_string"` \| `"multi_references"` \| `"key_value"` \| `"custom_array"` \| `undefined`
 
-Defined in: [core/field\_configs.tsx:361](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/field_configs.tsx)
+Defined in: [core/src/core/field\_configs.tsx:368](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/field_configs.tsx)
 
 ## Parameters
 
 ### property
 
-[`ArrayProperty`](../interfaces/ArrayProperty)\<`any`, `any`\> | [`MapProperty`](../interfaces/MapProperty)\<`any`\> | `AnyProperty` | [`ResolvedProperty`](../type-aliases/ResolvedProperty)
+[`Property`](../type-aliases/Property)
 
 ## Returns
 
-`"select"` \| `"group"` \| `"switch"` \| `"url"` \| `"email"` \| `"block"` \| `"file_upload"` \| `"repeat"` \| `"date_time"` \| `"reference"` \| `"text_field"` \| `"multiline"` \| `"markdown"` \| `"user_select"` \| `"multi_select"` \| `"number_input"` \| `"number_select"` \| `"multi_number_select"` \| `"multi_file_upload"` \| `"key_value"` \| `"reference_as_string"` \| `"multi_references"` \| `"custom_array"` \| `undefined`
+`"select"` \| `"group"` \| `"switch"` \| `"url"` \| `"email"` \| `"block"` \| `"file_upload"` \| `"repeat"` \| `"date_time"` \| `"reference"` \| `"relation"` \| `"text_field"` \| `"multiline"` \| `"markdown"` \| `"multi_select"` \| `"user_select"` \| `"number_input"` \| `"number_select"` \| `"multi_number_select"` \| `"multi_file_upload"` \| `"reference_as_string"` \| `"multi_references"` \| `"key_value"` \| `"custom_array"` \| `undefined`

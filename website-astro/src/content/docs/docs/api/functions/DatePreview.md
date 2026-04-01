@@ -13,15 +13,13 @@ title: "DatePreview"
 
 > **DatePreview**(`__namedParameters`): `ReactElement`
 
-Defined in: [preview/components/DatePreview.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/DatePreview.tsx)
+Defined in: [core/src/preview/components/DatePreview.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/DatePreview.tsx)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-#### date
-
-`Date`
+[`DatePreviewProps`](../interfaces/DatePreviewProps)
 
 ## Returns
 

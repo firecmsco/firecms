@@ -13,7 +13,7 @@ title: "EntityCollectionRowActions"
 
 > **EntityCollectionRowActions**(`entity`): `Element`
 
-Defined in: [components/EntityCollectionTable/EntityCollectionRowActions.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionRowActions.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionRowActions.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionRowActions.tsx)
 
 ## Parameters
 
@@ -35,14 +35,6 @@ Defined in: [components/EntityCollectionTable/EntityCollectionRowActions.tsx:33]
 
 `boolean`
 
-#### fullIdPath?
-
-`string`
-
-#### fullPath?
-
-`string`
-
 #### hideId?
 
 `boolean`
@@ -50,6 +42,14 @@ Defined in: [components/EntityCollectionTable/EntityCollectionRowActions.tsx:33]
 #### highlightEntity?
 
 (`entity`) => `void`
+
+#### isDraggable?
+
+`boolean`
+
+#### isDragging?
+
+`boolean`
 
 #### isSelected?
 
@@ -63,6 +63,10 @@ Defined in: [components/EntityCollectionTable/EntityCollectionRowActions.tsx:33]
 
 `"side_panel"` \| `"full_screen"`
 
+#### path?
+
+`string`
+
 #### selectionController?
 
 [`SelectionController`](../type-aliases/SelectionController)
@@ -74,6 +78,18 @@ Defined in: [components/EntityCollectionTable/EntityCollectionRowActions.tsx:33]
 #### size
 
 [`CollectionSize`](../type-aliases/CollectionSize)
+
+#### sortableAttributes?
+
+`Record`\<`string`, `any`\>
+
+#### sortableNodeRef?
+
+(`node`) => `void`
+
+#### sortableStyle?
+
+`CSSProperties`
 
 #### unhighlightEntity?
 

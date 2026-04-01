@@ -7,7 +7,7 @@ import { getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@rebasepro/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
-import { useAuthController } from "../../hooks";
+import { useAuthController, useTranslation } from "../../hooks";
 
 /**
  * Generic array field that allows reordering and renders the child property
@@ -34,7 +34,7 @@ export function RepeatFieldBinding({
 }: FieldProps<ArrayProperty>) {
 
     const authController = useAuthController();
-
+    const { t } = useTranslation();
     if (property.type !== "array" || !property.of || Array.isArray(property.of)) {
         throw Error("RepeatFieldBinding misconfiguration. Property `type` is not `array`");
     }
@@ -91,7 +91,7 @@ export function RepeatFieldBinding({
     const canAddElements = !property.disabled && !isSubmitting && !disabled && (property.canAddElements || property.canAddElements === undefined);
     const sortable = property.sortable === undefined ? true : property.sortable;
     const arrayContainer = <ArrayContainer droppableId={propertyKey}
-        addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
+        addLabel={property.name ? t("add_to_field", { fieldName: property.name }) : t("add_entry")}
         value={value ?? []}
         buildEntry={buildEntry}
         onInternalIdAdded={setLastAddedId}

@@ -13,7 +13,7 @@ title: "getEntityImagePreviewPropertyKey"
 
 > **getEntityImagePreviewPropertyKey**\<`M`\>(`collection`): `string` \| `undefined`
 
-Defined in: [util/references.ts:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/references.ts)
+Defined in: [common/src/util/references.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/references.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [util/references.ts:45](https://github.com/rebaseco/rebase/blob/main
 
 ### collection
 
-[`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+[`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
 
 ## Returns
 

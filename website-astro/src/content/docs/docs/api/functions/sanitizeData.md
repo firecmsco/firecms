@@ -11,9 +11,9 @@ title: "sanitizeData"
 
 # Function: sanitizeData()
 
-> **sanitizeData**\<`M`\>(`values`, `properties`): `any`
+> **sanitizeData**\<`M`\>(`values`, `properties`): `Record`\<`string`, `unknown`\>
 
-Defined in: [util/entities.ts:130](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
+Defined in: [common/src/util/entities.ts:120](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
 
 Add missing required fields, expected in the collection, to the values of an entity
 
@@ -31,8 +31,8 @@ Add missing required fields, expected in the collection, to the values of an ent
 
 ### properties
 
-[`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+[`Properties`](../type-aliases/Properties)
 
 ## Returns
 
-`any`
+`Record`\<`string`, `unknown`\>

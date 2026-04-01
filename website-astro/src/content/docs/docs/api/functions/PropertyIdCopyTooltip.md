@@ -13,7 +13,7 @@ title: "PropertyIdCopyTooltip"
 
 > **PropertyIdCopyTooltip**(`__namedParameters`): `Element`
 
-Defined in: [components/PropertyIdCopyTooltip.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/PropertyIdCopyTooltip.tsx)
+Defined in: [core/src/components/PropertyIdCopyTooltip.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/PropertyIdCopyTooltip.tsx)
 
 ## Parameters
 
@@ -21,7 +21,7 @@ Defined in: [components/PropertyIdCopyTooltip.tsx:4](https://github.com/rebaseco
 
 #### children
 
-`ReactNode`
+`any`
 
 #### className?
 

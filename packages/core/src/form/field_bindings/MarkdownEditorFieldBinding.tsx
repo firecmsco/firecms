@@ -10,7 +10,7 @@ import {
     useStorageSource
 } from "../../index";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@rebasepro/ui";
-import { RebaseEditor, RebaseEditorProps } from "@rebasepro/editor";
+import { RebaseEditor, RebaseEditorProps } from "../../editor";
 import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@rebasepro/common";
 
 interface MarkdownEditorFieldProps {

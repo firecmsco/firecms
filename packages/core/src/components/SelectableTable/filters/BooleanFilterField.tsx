@@ -1,6 +1,7 @@
 import React from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import { BooleanSwitchWithLabel } from "@rebasepro/ui";
+import { useTranslation } from "../../../hooks";
 
 interface BooleanFieldProps {
     name: string,
@@ -15,6 +16,7 @@ export function BooleanFilterField({
     value,
     setValue
 }: BooleanFieldProps) {
+    const { t } = useTranslation();
 
     function updateFilter(val?: boolean) {
         if (val !== undefined) {
@@ -39,10 +41,10 @@ export function BooleanFilterField({
                 allowIndeterminate={true}
                 onValueChange={(v: boolean | null) => updateFilter(v === null ? undefined : v)}
                 label={!valueSet
-                    ? "No filter"
+                    ? t("no_filter")
                     : valueSetToTrue
-                        ? `${title} is true`
-                        : `${title} is false`}
+                        ? `${title} ${t("is_true")}`
+                        : `${title} ${t("is_false")}`}
             />
         </div>
     );

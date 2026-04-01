@@ -13,13 +13,13 @@ title: "ArrayPropertyPreview"
 
 > **ArrayPropertyPreview**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [preview/property\_previews/ArrayPropertyPreview.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayPropertyPreview.tsx)
+Defined in: [core/src/preview/property\_previews/ArrayPropertyPreview.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayPropertyPreview.tsx)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<`any`[]\>
+[`PropertyPreviewProps`](../interfaces/PropertyPreviewProps)\<[`ArrayProperty`](../interfaces/ArrayProperty)\>
 
 ## Returns
 

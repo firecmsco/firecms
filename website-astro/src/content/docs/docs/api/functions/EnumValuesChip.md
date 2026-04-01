@@ -13,7 +13,7 @@ title: "EnumValuesChip"
 
 > **EnumValuesChip**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [preview/components/EnumValuesChip.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [core/src/preview/components/EnumValuesChip.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ## Parameters
 

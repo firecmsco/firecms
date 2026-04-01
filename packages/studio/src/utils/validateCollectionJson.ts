@@ -176,7 +176,6 @@ function validateOptionalFields(
 
     // Boolean fields
     const booleanFields = [
-        "collectionGroup",
 
         "selectionEnabled",
         "inlineEditing",

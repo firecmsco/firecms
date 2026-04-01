@@ -11,16 +11,16 @@ title: "isObject"
 
 # Function: isObject()
 
-> **isObject**(`item`): `any`
+> **isObject**(`item`): `item is Record<string, unknown>`
 
-Defined in: [util/objects.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:105](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Parameters
 
 ### item
 
-`any`
+`unknown`
 
 ## Returns
 
-`any`
+`item is Record<string, unknown>`

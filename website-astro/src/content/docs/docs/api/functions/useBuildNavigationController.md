@@ -13,7 +13,7 @@ title: "useBuildNavigationController"
 
 > **useBuildNavigationController**\<`EC`, `USER`\>(`props`): [`NavigationController`](../type-aliases/NavigationController)
 
-Defined in: [hooks/useBuildNavigationController.tsx:106](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useBuildNavigationController.tsx)
+Defined in: [core/src/hooks/useBuildNavigationController.tsx:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useBuildNavigationController.tsx)
 
 ## Type Parameters
 

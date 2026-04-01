@@ -13,7 +13,7 @@ title: "resolveNavigationFrom"
 
 > **resolveNavigationFrom**\<`M`, `USER`\>(`path`): `Promise`\<[`ResolvedNavigationEntry`](../type-aliases/ResolvedNavigationEntry)\<`M`\>[]\>
 
-Defined in: [hooks/useResolvedNavigationFrom.tsx:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 Use this function to retrieve an array of navigation entries (resolved
 collection, entity or entity custom_view) for the given path. You need to pass the app context

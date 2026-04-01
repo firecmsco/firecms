@@ -13,7 +13,7 @@ title: "updateDateAutoValues"
 
 > **updateDateAutoValues**\<`M`\>(`__namedParameters`): `M`
 
-Defined in: [util/entities.ts:86](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
+Defined in: [common/src/util/entities.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
 
 Update the automatic values in an entity before save
 
@@ -33,11 +33,7 @@ Update the automatic values in an entity before save
 
 #### properties
 
-[`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
-
-#### setDateToMidnight
-
-(`input?`) => `any`
+[`Properties`](../type-aliases/Properties)
 
 #### status
 
@@ -45,7 +41,7 @@ Update the automatic values in an entity before save
 
 #### timestampNowValue
 
-`any`
+`unknown`
 
 ## Returns
 

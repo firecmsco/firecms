@@ -13,7 +13,7 @@ title: "useClipboard"
 
 > **useClipboard**(`options?`): [`useClipboardReturnType`](../interfaces/useClipboardReturnType)
 
-Defined in: [hooks/useClipboard.tsx:71](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:71](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 ## Parameters
 

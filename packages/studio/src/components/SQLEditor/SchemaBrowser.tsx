@@ -9,7 +9,7 @@ import {
     MenuItem
 } from "@rebasepro/ui";
 import { TableInfo } from "./SQLEditor";
-import { ErrorView } from "@rebasepro/core";
+import { ErrorView, useTranslation } from "@rebasepro/core";
 
 export const SchemaBrowser = ({
     onTableClick,
@@ -26,6 +26,7 @@ export const SchemaBrowser = ({
 }) => {
     const [expandedSchemas, setExpandedSchemas] = useState<Record<string, boolean>>({ public: true });
     const [expandedTables, setExpandedTables] = useState<Record<string, boolean>>({});
+    const { t } = useTranslation();
 
     if (isSchemaLoading) return <div className="p-4 flex justify-center"><CircularProgress size="small" /></div>;
     if (schemaError) return (
@@ -37,7 +38,7 @@ export const SchemaBrowser = ({
     return (
         <div className="flex flex-col h-full overflow-hidden">
             <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
-                <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-secondary dark:text-text-secondary-dark">Database Schema</Typography>
+                <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-secondary dark:text-text-secondary-dark">{t("studio_schema_tables")}</Typography>
                 <IconButton size="small" onClick={onRetrySchema} title="Refresh schema">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                 </IconButton>
@@ -46,7 +47,7 @@ export const SchemaBrowser = ({
             <div className="flex-grow overflow-y-auto no-scrollbar p-1">
                 {Object.keys(schemas).length === 0 ? (
                     <div className="p-4 text-center">
-                        <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark italic">No tables found</Typography>
+                        <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark italic">{t("studio_schema_no_tables")}</Typography>
                     </div>
                 ) : Object.entries(schemas).map(([schemaName, tables]) => (
                     <div key={schemaName} className="mb-2">

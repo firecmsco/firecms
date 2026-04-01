@@ -18,7 +18,7 @@ import {
     DeleteIcon,
     IconButton
 } from "@rebasepro/ui";
-import { useDataSource, useSnackbarController, useCollectionRegistryController, ErrorView } from "@rebasepro/core";
+import { useDataSource, useSnackbarController, useCollectionRegistryController, ErrorView, useTranslation } from "@rebasepro/core";
 import { PolicyEditor } from "./PolicyEditor";
 
 export interface PostgresPolicy {
@@ -43,6 +43,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
     const dataSource = useDataSource();
     const snackbarController = useSnackbarController();
     const collectionRegistry = useCollectionRegistryController();
+    const { t } = useTranslation();
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -71,7 +72,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
 
     const fetchRLSData = useCallback(async () => {
         if (!dataSource.executeSql) {
-            setError("SQL execution not supported by this data source");
+            setError(t("studio_sql_sql_not_supported"));
             setIsLoading(false);
             return;
         }
@@ -287,7 +288,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                 RLS Studio
                             </Typography>
                             <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark mt-1 block">
-                                Row Level Security Policies
+                                {t("studio_rls_description")}
                             </Typography>
                         </div>
 
@@ -296,7 +297,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                 <div className="flex justify-center p-4"><CircularProgress size="small" /></div>
                             ) : Object.keys(groupedTables).length === 0 ? (
                                 <div className="p-4 text-center">
-                                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark italic">No tables found</Typography>
+                                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark italic">{t("studio_rls_no_tables")}</Typography>
                                 </div>
                             ) : (
                                 Object.entries(groupedTables).map(([schemaName, schemaTables]) => (
@@ -328,11 +329,11 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                             <span className="truncate">{table.tableName}</span>
                                                             <div className="flex items-center gap-1.5 shrink-0 ml-2">
                                                                 {table.rlsEnabled ? (
-                                                                    <Tooltip title="RLS Enabled">
+                                                                    <Tooltip title={t("studio_rls_enabled")}>
                                                                         <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
                                                                     </Tooltip>
                                                                 ) : (
-                                                                    <Tooltip title="RLS Disabled (Warning)">
+                                                                    <Tooltip title={t("studio_rls_disabled")}>
                                                                         <div className="w-1.5 h-1.5 rounded-full bg-orange-400 opacity-50" />
                                                                     </Tooltip>
                                                                 )}
@@ -356,7 +357,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                         {/* Toolbar Header matching SQLEditor style */}
                         <div className={cls("h-[44px] shrink-0 flex items-center justify-between px-4 border-b bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
                             <Typography variant="subtitle2" className="font-mono text-text-secondary dark:text-text-secondary-dark">
-                                {activeTableData ? `${activeTableData.schemaName}.${activeTableData.tableName}` : "Select a table"}
+                                {activeTableData ? `${activeTableData.schemaName}.${activeTableData.tableName}` : t("studio_rls_select_table")}
                             </Typography>
                             <Button
                                 size="small"
@@ -370,11 +371,11 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                         </div>
                         {error ? (
                             <div className="p-6 h-full flex items-center justify-center">
-                                <ErrorView title="Failed to fetch RLS policies" error={error} onRetry={fetchRLSData} />
+                                <ErrorView title={t("studio_rls_error")} error={error} onRetry={fetchRLSData} />
                             </div>
                         ) : !activeTableData ? (
                             <div className="flex-grow flex items-center justify-center text-text-disabled h-full">
-                                <Typography variant="body2">Select a table to view its security policies</Typography>
+                                <Typography variant="body2">{t("studio_rls_select_table")}</Typography>
                             </div>
                         ) : editingPolicy ? (
                             <PolicyEditor
@@ -427,9 +428,9 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                         <Typography variant="h5" className="flex items-center gap-3">
                                             {activeTableData.tableName}
                                             {activeTableData.rlsEnabled ? (
-                                                <Chip size="small" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800">RLS Enabled</Chip>
+                                                <Chip size="small" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800">{t("studio_rls_enabled")}</Chip>
                                             ) : (
-                                                <Chip size="small" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800">RLS Disabled</Chip>
+                                                <Chip size="small" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800">{t("studio_rls_disabled")}</Chip>
                                             )}
                                         </Typography>
                                         <div className="flex gap-2">
@@ -449,7 +450,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                     }
                                                 }}
                                             >
-                                                {activeTableData.rlsEnabled ? "Disable RLS" : "Enable RLS"}
+                                                {activeTableData.rlsEnabled ? t("studio_rls_disable_rls") : t("studio_rls_enable_rls")}
                                             </Button>
                                             <Button
                                                 variant="filled"
@@ -458,7 +459,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                 disabled={!activeCollection}
                                                 onClick={() => setEditingPolicy("new")}
                                             >
-                                                Create Policy
+                                                {t("studio_rls_create_policy")}
                                             </Button>
                                         </div>
                                     </div>
@@ -502,14 +503,14 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                 className="shrink-0 whitespace-nowrap"
                                                 disabled={!activeCollection}
                                             >
-                                                Create Policy
+                                                {t("studio_rls_create_policy")}
                                             </Button>
                                         </div>
                                     )}
 
                                     {activeTableData && mergedPolicies && mergedPolicies.length > 0 && (
                                         <div className="mt-8 flex flex-col gap-3">
-                                            <Typography variant="subtitle2" className="text-text-secondary dark:text-text-secondary-dark uppercase tracking-wider mb-1">Active Policies</Typography>
+                                            <Typography variant="subtitle2" className="text-text-secondary dark:text-text-secondary-dark uppercase tracking-wider mb-1">{t("studio_rls_policies")}</Typography>
                                             {mergedPolicies.map(policy => (
                                                 <Paper key={policy.policyname} className={cls("p-3 sm:px-4 sm:py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border rounded-lg", defaultBorderMixin)}>
                                                     <div className="flex flex-col gap-2 min-w-0">
@@ -538,10 +539,10 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                     </div>
                                                     <div className="flex gap-2 shrink-0">
                                                         <Button size="small" variant="text" color="primary" onClick={() => setEditingPolicy(policy)} disabled={!activeCollection}>
-                                                            Edit
+                                                            {t("studio_rls_edit")}
                                                         </Button>
                                                         {policy.status !== "code_only" && (
-                                                            <Tooltip title={"Delete this policy"} asChild={true}>
+                                                            <Tooltip title={t("studio_rls_delete")} asChild={true}>
                                                                 <IconButton
                                                                     size="small"
                                                                     onClick={async () => {

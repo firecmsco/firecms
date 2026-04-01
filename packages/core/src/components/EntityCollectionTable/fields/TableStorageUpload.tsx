@@ -5,7 +5,7 @@ import { ArrayProperty, Entity, PreviewSize, StorageConfig, StringProperty } fro
 import { useDropzone } from "react-dropzone";
 import { PropertyPreview } from "../../../preview";
 import { ErrorBoundary } from "../../ErrorBoundary";
-import { useSnackbarController, useStorageSource } from "../../../hooks";
+import { useSnackbarController, useStorageSource, useTranslation } from "../../../hooks";
 import { getThumbnailMeasure } from "../../../preview/util";
 import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../../../form/components/StorageUploadProgress";
@@ -159,6 +159,7 @@ function StorageUpload({
     const hasValue = Boolean(internalValue);
 
     const snackbarContext = useSnackbarController();
+    const { t } = useTranslation();
 
     const {
         open,
@@ -181,12 +182,12 @@ function StorageUpload({
                     if (error.code === "file-too-large") {
                         snackbarContext.open({
                             type: "error",
-                            message: `Error uploading file: File is larger than ${storage.maxSize} bytes`
+                            message: t("error_uploading_file_size", { maxSize: String(storage.maxSize) })
                         });
                     } else if (error.code === "file-invalid-type") {
                         snackbarContext.open({
                             type: "error",
-                            message: "Error uploading file: File type is not supported"
+                            message: t("error_uploading_file_type")
                         });
                     }
                 }
@@ -198,8 +199,8 @@ function StorageUpload({
     const { ...rootProps } = getRootProps();
 
     const helpText = multipleFilesSupported
-        ? "Drag 'n' drop some files here, or click here to edit"
-        : "Drag 'n' drop a file here, or click here edit";
+        ? t("drag_drop_files")
+        : t("drag_drop_file");
 
     const renderProperty = multipleFilesSupported
         ? (property as ArrayProperty).of as StringProperty

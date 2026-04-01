@@ -11,7 +11,7 @@ title: "DownloadConfig"
 
 # Interface: DownloadConfig
 
-Defined in: [types/storage.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:38](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/storage.ts:29](https://github.com/rebaseco/rebase/blob/main/p
 
 > `optional` **fileNotFound**: `boolean`
 
-Defined in: [types/storage.ts:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:46](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/storage.ts:37](https://github.com/rebaseco/rebase/blob/main/p
 
 > `optional` **metadata**: [`DownloadMetadata`](DownloadMetadata)
 
-Defined in: [types/storage.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:44](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
@@ -35,6 +35,6 @@ Defined in: [types/storage.ts:35](https://github.com/rebaseco/rebase/blob/main/p
 
 > **url**: `string` \| `null`
 
-Defined in: [types/storage.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Temporal url that can be used to download the file

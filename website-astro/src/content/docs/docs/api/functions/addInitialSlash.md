@@ -13,7 +13,7 @@ title: "addInitialSlash"
 
 > **addInitialSlash**(`s`): `string`
 
-Defined in: [util/navigation\_utils.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/navigation_utils.ts)
+Defined in: [common/src/util/navigation\_utils.ts:20](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_utils.ts)
 
 ## Parameters
 

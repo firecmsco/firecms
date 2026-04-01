@@ -13,7 +13,7 @@ title: "getReferenceFrom"
 
 > **getReferenceFrom**\<`M`\>(`entity`): [`EntityReference`](../classes/EntityReference)
 
-Defined in: [util/entities.ts:144](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
+Defined in: [common/src/util/entities.ts:134](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
 
 ## Type Parameters
 

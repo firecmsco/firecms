@@ -13,7 +13,7 @@ title: "NavigationCardProps"
 
 > **NavigationCardProps** = `object`
 
-Defined in: [components/HomePage/NavigationCard.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
+Defined in: [core/src/components/HomePage/NavigationCard.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [components/HomePage/NavigationCard.tsx:4](https://github.com/rebase
 
 > **actions**: `React.ReactNode`
 
-Defined in: [components/HomePage/NavigationCard.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
+Defined in: [core/src/components/HomePage/NavigationCard.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [components/HomePage/NavigationCard.tsx:7](https://github.com/rebase
 
 > `optional` **description**: `string`
 
-Defined in: [components/HomePage/NavigationCard.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
+Defined in: [core/src/components/HomePage/NavigationCard.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [components/HomePage/NavigationCard.tsx:6](https://github.com/rebase
 
 > **icon**: `React.ReactNode`
 
-Defined in: [components/HomePage/NavigationCard.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
+Defined in: [core/src/components/HomePage/NavigationCard.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [components/HomePage/NavigationCard.tsx:8](https://github.com/rebase
 
 > **name**: `string`
 
-Defined in: [components/HomePage/NavigationCard.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
+Defined in: [core/src/components/HomePage/NavigationCard.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [components/HomePage/NavigationCard.tsx:5](https://github.com/rebase
 
 > `optional` **onClick**: () => `void`
 
-Defined in: [components/HomePage/NavigationCard.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
+Defined in: [core/src/components/HomePage/NavigationCard.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
 
 #### Returns
 
@@ -65,4 +65,4 @@ Defined in: [components/HomePage/NavigationCard.tsx:9](https://github.com/rebase
 
 > `optional` **shrink**: `boolean`
 
-Defined in: [components/HomePage/NavigationCard.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)
+Defined in: [core/src/components/HomePage/NavigationCard.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/NavigationCard.tsx)

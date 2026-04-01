@@ -11,15 +11,9 @@ title: "getArrayResolvedProperties"
 
 # Function: getArrayResolvedProperties()
 
-> **getArrayResolvedProperties**\<`M`\>(`__namedParameters`): [`ResolvedProperty`](../type-aliases/ResolvedProperty)[]
+> **getArrayResolvedProperties**(`__namedParameters`): [`Property`](../type-aliases/Property)[]
 
-Defined in: [util/resolutions.ts:225](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/resolutions.ts)
-
-## Type Parameters
-
-### M
-
-`M`
+Defined in: [common/src/util/resolutions.ts:279](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 ## Parameters
 
@@ -31,11 +25,7 @@ Defined in: [util/resolutions.ts:225](https://github.com/rebaseco/rebase/blob/ma
 
 #### entityId?
 
-`string`
-
-#### fromBuilder?
-
-`boolean`
+`string` \| `number`
 
 #### ignoreMissingFields
 
@@ -51,11 +41,11 @@ Defined in: [util/resolutions.ts:225](https://github.com/rebaseco/rebase/blob/ma
 
 #### previousValues?
 
-`Partial`\<`M`\>
+`object`
 
 #### property
 
-[`ResolvedArrayProperty`](../type-aliases/ResolvedArrayProperty)\<`T`, `ArrayT`\> \| [`ArrayProperty`](../interfaces/ArrayProperty)\<`any`, `any`\>
+[`ArrayProperty`](../interfaces/ArrayProperty)
 
 #### propertyConfigs?
 
@@ -67,12 +57,12 @@ Defined in: [util/resolutions.ts:225](https://github.com/rebaseco/rebase/blob/ma
 
 #### propertyValue
 
-`any`
+`unknown`
 
 #### values?
 
-`Partial`\<`M`\>
+`object`
 
 ## Returns
 
-[`ResolvedProperty`](../type-aliases/ResolvedProperty)[]
+[`Property`](../type-aliases/Property)[]

@@ -3,6 +3,7 @@ import React, { CSSProperties, useMemo } from "react";
 import { ContentCopyIcon, IconButton, OpenInNewIcon, Tooltip } from "@rebasepro/ui";
 import { PreviewSize } from "@rebasepro/types";
 import { getThumbnailMeasure } from "../util";
+import { useTranslation } from "../../hooks";
 
 /**
  * @group Preview components
@@ -26,6 +27,7 @@ export function ImagePreview({
 }: ImagePreviewProps) {
 
     const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
+    const { t } = useTranslation();
 
     // Fill mode - image fills its container completely
     if (fill) {
@@ -75,7 +77,7 @@ export function ImagePreview({
             <div className={"flex flex-row gap-2 absolute bottom-[-4px] right-[-4px] invisible group-hover:visible"}>
                 {navigator && <Tooltip
                     asChild={true}
-                    title="Copy url to clipboard" side={"bottom"}>
+                    title={t("copy_url_to_clipboard")} side={"bottom"}>
                     <IconButton
                         variant={"filled"}
                         size={"smallest"}
@@ -89,7 +91,7 @@ export function ImagePreview({
                     </IconButton>
                 </Tooltip>}
 
-                <Tooltip title="Open image in new tab" side={"bottom"}>
+                <Tooltip title={t("open_image_in_new_tab")} side={"bottom"}>
                     <IconButton
                         className="invisible group-hover:visible"
                         variant={"filled"}

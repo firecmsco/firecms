@@ -11,7 +11,7 @@ title: "Entity"
 
 # Interface: Entity\<M\>
 
-Defined in: [types/entities.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Representation of an entity fetched from the datasource
 
@@ -19,7 +19,7 @@ Representation of an entity fetched from the datasource
 
 ### M
 
-`M` *extends* `object` = `any`
+`M` *extends* `object` = `object`
 
 ## Properties
 
@@ -27,15 +27,29 @@ Representation of an entity fetched from the datasource
 
 > `optional` **databaseId**: `string`
 
-Defined in: [types/entities.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:39](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+
+Which database within the datasource (e.g., for Firestore multi-database).
+If not specified, the default database of the datasource is used.
+
+***
+
+### datasource?
+
+> `optional` **datasource**: `string`
+
+Defined in: [types/src/types/entities.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+
+Which datasource this entity belongs to (e.g., 'postgres', 'firestore').
+If not specified, the default datasource is assumed.
 
 ***
 
 ### id
 
-> **id**: `string`
+> **id**: `string` \| `number`
 
-Defined in: [types/entities.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ID of the entity
 
@@ -45,7 +59,7 @@ ID of the entity
 
 > **path**: `string`
 
-Defined in: [types/entities.ts:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:22](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 A string representing the path of the referenced document (relative
 to the root of the database).
@@ -56,6 +70,6 @@ to the root of the database).
 
 > **values**: `M`
 
-Defined in: [types/entities.ts:27](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:27](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Current values

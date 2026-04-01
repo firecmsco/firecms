@@ -13,7 +13,7 @@ title: "EntityCollectionsBuilder"
 
 > **EntityCollectionsBuilder**\<`EC`\> = (`params`) => `EC`[] \| `Promise`\<`EC`[]\>
 
-Defined in: [types/rebase.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/rebase.tsx)
+Defined in: [types/src/types/rebase.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/rebase.tsx)
 
 Use this callback to build entity collections dynamically.
 You can use the user to decide which collections to show.

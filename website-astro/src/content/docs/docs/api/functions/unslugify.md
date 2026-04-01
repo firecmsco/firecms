@@ -13,7 +13,7 @@ title: "unslugify"
 
 > **unslugify**(`slug?`): `string`
 
-Defined in: [util/strings.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/strings.ts)
+Defined in: [common/src/util/strings.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/strings.ts)
 
 ## Parameters
 

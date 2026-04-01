@@ -1,4 +1,4 @@
-import { ErrorView, prettifyIdentifier, useCollectionRegistryController } from "@rebasepro/core";
+import { ErrorView, prettifyIdentifier, useCollectionRegistryController, useTranslation } from "@rebasepro/core";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { Button } from "@rebasepro/ui";
 
@@ -9,8 +9,9 @@ export function MissingReferenceWidget({ path: pathProp }: {
     const path = getLastSegment(pathProp);
     const parentCollectionIds = registry.getParentCollectionIds(pathProp);
     const collectionEditor = useCollectionEditorController();
+    const { t } = useTranslation();
     return <div className={"p-1 flex flex-col items-center"}>
-        <ErrorView error={"No collection for path: " + path} />
+        <ErrorView error={t("studio_missing_reference_error", { path })} />
         <Button className={"mx-2"}
             size={"small"}
             onClick={() => {
@@ -21,7 +22,7 @@ export function MissingReferenceWidget({ path: pathProp }: {
                     sourceClick: "missing_reference"
                 });
             }}>
-            Create
+            {t("studio_missing_reference_create")}
         </Button>
     </div>;
 }

@@ -11,6 +11,7 @@ import {
     TextField
 } from "@rebasepro/ui";
 import { EnumValueConfig } from "@rebasepro/types";
+import { useTranslation } from "../../../hooks";
 
 interface StringNumberFilterFieldProps {
     name: string,
@@ -47,6 +48,7 @@ export function StringNumberFilterField({
     enumValues,
     title
 }: StringNumberFilterFieldProps) {
+    const { t } = useTranslation();
 
     const possibleOperations: (keyof typeof operationLabels)[] = isArray
         ? ["array-contains"]
@@ -159,7 +161,7 @@ export function StringNumberFilterField({
                         </IconButton>}
                         renderValue={(enumKey) => {
                             if (enumKey === null)
-                                return "Filter for null values";
+                                return t("filter_for_null_values");
                             if (enumKey === undefined)
                                 return null;
 

@@ -13,7 +13,7 @@ title: "useSelectableTableController"
 
 > **useSelectableTableController**(): [`EntityCollectionTableController`](../type-aliases/EntityCollectionTableController)\<`any`\>
 
-Defined in: [components/SelectableTable/SelectableTableContext.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SelectableTable/SelectableTableContext.tsx)
+Defined in: [core/src/components/SelectableTable/SelectableTableContext.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SelectableTable/SelectableTableContext.tsx)
 
 ## Returns
 

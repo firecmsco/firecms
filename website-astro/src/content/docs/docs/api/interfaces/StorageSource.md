@@ -11,7 +11,7 @@ title: "StorageSource"
 
 # Interface: StorageSource
 
-Defined in: [types/storage.ts:74](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:83](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/storage.ts:74](https://github.com/rebaseco/rebase/blob/main/p
 
 > **deleteFile**: (`path`, `bucket?`) => `Promise`\<`void`\>
 
-Defined in: [types/storage.ts:111](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:120](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Delete a file.
 
@@ -43,7 +43,7 @@ Delete a file.
 
 > **getDownloadURL**: (`pathOrUrl`, `bucket?`) => `Promise`\<[`DownloadConfig`](DownloadConfig)\>
 
-Defined in: [types/storage.ts:96](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:105](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Convert a storage path or URL into a download configuration
 
@@ -67,7 +67,7 @@ Convert a storage path or URL into a download configuration
 
 > **getFile**: (`path`, `bucket?`) => `Promise`\<`File` \| `null`\>
 
-Defined in: [types/storage.ts:104](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:113](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Get a file from a storage path.
 It returns null if the file does not exist.
@@ -92,7 +92,7 @@ It returns null if the file does not exist.
 
 > **list**: (`path`, `options?`) => `Promise`\<[`StorageListResult`](StorageListResult)\>
 
-Defined in: [types/storage.ts:118](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:127](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 List the contents of a path.
 
@@ -126,7 +126,7 @@ List the contents of a path.
 
 > **uploadFile**: (`file`) => `Promise`\<[`UploadFileResult`](UploadFileResult)\>
 
-Defined in: [types/storage.ts:83](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/storage.ts)
+Defined in: [types/src/controllers/storage.ts:92](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Upload a file, specifying a name and a path
 

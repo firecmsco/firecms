@@ -9,9 +9,17 @@ import { createRebaseClient } from './index.js';
 
 const rebase = createRebaseClient({
     baseUrl: 'http://localhost:3001',
-    token: 'your-jwt-token',
 });
 ```
+
+| File | Purpose |
+|---|---|
+| `client.js` | HTTP transport, error handling, query builder |
+| `auth.js` | Authentication lifecycle, session management, token refresh |
+| `admin.js` | User and role management (admin-only) |
+| `{collection}.js` | Per-collection CRUD module with JSDoc types |
+| `index.js` | Unified `createRebaseClient` factory |
+| `README.md` | Auto-generated usage guide |
 
 ## Available Collections
 
@@ -69,13 +77,134 @@ Use PostgREST-style operators in the `where` parameter:
 
 ## Authentication
 
-```js
-// Set token at creation
-const rebase = createRebaseClient({ baseUrl: '...', token: 'jwt-here' });
+The SDK includes a full authentication module with automatic token management.
 
-// Update token after auth refresh
-rebase.setToken('new-jwt-token');
+### Sign in
+
+```js
+const { user } = await rebase.auth.signInWithEmail('user@example.com', 'password');
 ```
+
+### Register
+
+```js
+const { user } = await rebase.auth.signUp('new@example.com', 'securePass123', 'Jane Doe');
+```
+
+### Google sign-in
+
+```js
+// Get idToken from Google Sign-In (e.g., @react-oauth/google)
+const { user } = await rebase.auth.signInWithGoogle(idToken);
+```
+
+### Sign out
+
+```js
+await rebase.auth.signOut();
+```
+
+### Get current session
+
+```js
+const session = rebase.auth.getSession();
+if (session) {
+    console.log('Logged in as', session.user.email);
+}
+```
+
+### Auth state listeners
+
+```js
+const unsubscribe = rebase.auth.onAuthStateChange((event, session) => {
+    switch (event) {
+        case 'SIGNED_IN':
+            console.log('User signed in:', session.user);
+            break;
+        case 'SIGNED_OUT':
+            console.log('User signed out');
+            break;
+        case 'TOKEN_REFRESHED':
+            console.log('Token refreshed silently');
+            break;
+    }
+});
+
+// Later: stop listening
+unsubscribe();
+```
+
+### Password reset
+
+```js
+// Step 1: Request reset email
+await rebase.auth.resetPasswordForEmail('user@example.com');
+
+// Step 2: User clicks link in email, extract token from URL
+await rebase.auth.resetPassword(token, 'newSecurePassword');
+```
+
+### Session management
+
+```js
+const sessions = await rebase.auth.getSessions();
+await rebase.auth.revokeSession(sessionId);
+await rebase.auth.revokeAllSessions(); // logs out all devices
+```
+
+Tokens are refreshed automatically 2 minutes before expiry. If refresh fails, the user is signed out.
+
+### Node.js / server-side usage
+
+```js
+import { createRebaseClient, createMemoryStorage } from './sdk/index.js';
+
+const rebase = createRebaseClient({
+    baseUrl: 'https://api.example.com',
+    auth: {
+        storage: createMemoryStorage(),
+        persistSession: false,
+    },
+});
+```
+
+### Manual token mode (backwards compatible)
+
+```js
+const rebase = createRebaseClient({
+    baseUrl: 'https://api.example.com',
+    token: process.env.REBASE_API_TOKEN,
+});
+// Static token used as-is — no auth module auto-refresh
+```
+
+## Admin Management
+
+```js
+// List all users (requires admin role)
+const { users } = await rebase.admin.listUsers();
+
+// Create a user
+const { user } = await rebase.admin.createUser({
+    email: 'newuser@example.com',
+    displayName: 'New User',
+    password: 'tempPassword123',
+    roles: ['editor'],
+});
+
+// Update user roles
+await rebase.admin.updateUser(userId, { roles: ['admin'] });
+
+// Delete a user
+await rebase.admin.deleteUser(userId);
+
+// Manage roles
+const { roles } = await rebase.admin.listRoles();
+await rebase.admin.createRole({ id: 'moderator', name: 'Moderator' });
+await rebase.admin.deleteRole('moderator');
+```
+
+> **Note:** Admin operations require the authenticated user to have the `admin` role. The backend enforces this — unauthorized requests return a 403 error.
 
 ## Error Handling
 

@@ -11,9 +11,9 @@ title: "saveEntityWithCallbacks"
 
 # Function: saveEntityWithCallbacks()
 
-> **saveEntityWithCallbacks**\<`M`, `USER`\>(`collection`): `Promise`\<`void`\>
+> **saveEntityWithCallbacks**\<`M`\>(`collection`): `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
 
-Defined in: [hooks/data/save.ts:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/save.ts)
+Defined in: [core/src/hooks/data/save.ts:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/save.ts)
 
 This function is in charge of saving an entity to the datasource.
 It will run all the save callbacks specified in the collection.
@@ -30,10 +30,6 @@ in the datasource ([useDataSource](useDataSource)).
 
 `M` *extends* `Record`\<`string`, `any`\>
 
-### USER
-
-`USER` *extends* [`User`](../type-aliases/User)
-
 ## Parameters
 
 ### collection
@@ -42,7 +38,7 @@ in the datasource ([useDataSource](useDataSource)).
 
 ## Returns
 
-`Promise`\<`void`\>
+`Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
 
 ## See
 

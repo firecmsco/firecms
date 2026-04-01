@@ -13,7 +13,7 @@ title: "AdditionalFieldDelegateProps"
 
 > **AdditionalFieldDelegateProps**\<`M`, `USER`\> = `object`
 
-Defined in: [types/collections.ts:475](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:579](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ## Type Parameters
 
@@ -31,7 +31,7 @@ Defined in: [types/collections.ts:475](https://github.com/rebaseco/rebase/blob/m
 
 > **context**: [`RebaseContext`](RebaseContext)\<`USER`\>
 
-Defined in: [types/collections.ts:477](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:581](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -39,4 +39,4 @@ Defined in: [types/collections.ts:477](https://github.com/rebaseco/rebase/blob/m
 
 > **entity**: [`Entity`](../interfaces/Entity)\<`M`\>
 
-Defined in: [types/collections.ts:476](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:580](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)

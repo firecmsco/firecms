@@ -13,11 +13,15 @@ title: "UrlComponentPreview"
 
 > **UrlComponentPreview**(`__namedParameters`): `ReactElement`
 
-Defined in: [preview/components/UrlComponentPreview.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/UrlComponentPreview.tsx)
+Defined in: [core/src/preview/components/UrlComponentPreview.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/UrlComponentPreview.tsx)
 
 ## Parameters
 
 ### \_\_namedParameters
+
+#### fill?
+
+`boolean`
 
 #### hint?
 

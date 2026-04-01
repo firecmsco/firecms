@@ -3,6 +3,7 @@ import { cls, ExpandMoreIcon, Typography } from "@rebasepro/ui";
 import { NavigationEntry } from "@rebasepro/types";
 import { IconForView } from "../util";
 import { DrawerNavigationItem } from "./DrawerNavigationItem";
+import { useTranslation } from "../hooks";
 
 export interface DrawerNavigationGroupProps {
     /**
@@ -58,6 +59,7 @@ export function DrawerNavigationGroup({
     headerActions,
     onItemClick
 }: DrawerNavigationGroupProps) {
+    const { t } = useTranslation();
     return (
         <div
             className={"my-2 mx-2 flex flex-col"}
@@ -82,7 +84,7 @@ export function DrawerNavigationGroup({
                     color={"secondary"}
                     className="font-medium flex-grow line-clamp-1"
                 >
-                    {(group || "Views").toUpperCase()}
+                    {(group || t("views_group")).toUpperCase()}
                 </Typography>
                 {headerActions && (
                     <div onClick={(e) => e.stopPropagation()}>

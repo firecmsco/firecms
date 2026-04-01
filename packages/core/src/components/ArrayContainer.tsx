@@ -28,6 +28,7 @@ import {
     Tooltip,
     useOutsideAlerter
 } from "@rebasepro/ui";
+import { useTranslation } from "../hooks";
 
 export type ArrayEntryParams = {
     index: number;
@@ -237,6 +238,7 @@ export function ArrayItemOptions({
 }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const iconRef = useRef<HTMLDivElement>(null);
+    const { t } = useTranslation();
     useOutsideAlerter(iconRef, () => {
         if (menuOpen) setMenuOpen(false);
     });
@@ -296,7 +298,7 @@ export function ArrayItemOptions({
                         }}
                     >
                         <RemoveIcon size={"small"} />
-                        Remove
+                        {t("remove")}
                     </MenuItem>
                     <MenuItem
                         dense
@@ -306,7 +308,7 @@ export function ArrayItemOptions({
                         }}
                     >
                         <ContentCopyIcon size={"small"} />
-                        Copy
+                        {t("copy")}
                     </MenuItem>
                     {addInIndex && (
                         <MenuItem
@@ -317,7 +319,7 @@ export function ArrayItemOptions({
                             }}
                         >
                             <KeyboardArrowUpIcon size={"small"} />
-                            Add on top
+                            {t("add_on_top")}
                         </MenuItem>
                     )}
                     {addInIndex && (
@@ -329,7 +331,7 @@ export function ArrayItemOptions({
                             }}
                         >
                             <KeyboardArrowDownIcon size={"small"} />
-                            Add below
+                            {t("add_below")}
                         </MenuItem>
                     )}
                 </Menu>

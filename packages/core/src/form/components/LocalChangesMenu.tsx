@@ -16,7 +16,7 @@ import {
     WarningIcon
 } from "@rebasepro/ui";
 import { FormexController } from "@rebasepro/formex";
-import { useSnackbarController } from "../../hooks";
+import { useSnackbarController, useTranslation } from "../../hooks";
 import { mergeDeep } from "@rebasepro/common";
 import { flattenKeys, removeEntityFromCache } from "../../util/entity_cache";
 import { Properties } from "@rebasepro/types";
@@ -39,6 +39,7 @@ export function LocalChangesMenu<M extends Record<string, any>>({
 }: LocalChangesMenuProps<M>) {
 
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
     const [previewDialogOpen, setPreviewDialogOpen] = useState(false);
     const [open, setOpen] = useState(false);
 
@@ -62,7 +63,7 @@ export function LocalChangesMenu<M extends Record<string, any>>({
         formex.setValues(mergedValues);
         snackbarController.open({
             type: "info",
-            message: "Local changes applied to the form"
+            message: t("local_changes_applied")
         });
         handleCloseMenu();
         onClearLocalChanges?.();
@@ -72,7 +73,7 @@ export function LocalChangesMenu<M extends Record<string, any>>({
         removeEntityFromCache(cacheKey);
         snackbarController.open({
             type: "info",
-            message: "Local changes discarded"
+            message: t("local_changes_discarded")
         });
         handleCloseMenu();
         onClearLocalChanges?.();
@@ -90,7 +91,7 @@ export function LocalChangesMenu<M extends Record<string, any>>({
                         onClick={handleOpenMenu}
                     >
                         <WarningIcon size={"smallest"} className={"mr-1 text-yellow-600 dark:text-yellow-400"} />
-                        Unsaved Local changes
+                        {t("unsaved_local_changes")}
                         <KeyboardArrowDownIcon size={"smallest"} />
                     </Button>
                 }
@@ -98,12 +99,11 @@ export function LocalChangesMenu<M extends Record<string, any>>({
                 onOpenChange={setOpen}
             >
                 <div className={"max-w-xs px-4 py-4 text-sm text-gray-700 dark:text-gray-300"}>
-                    This document was edited locally and has unsaved changes. These local changes will be lost if you
-                    don't apply them.
+                    {t("unsaved_local_changes_description")}
                 </div>
-                <MenuItem dense onClick={handlePreview}><VisibilityIcon size={"small"} />Preview Changes</MenuItem>
-                <MenuItem dense onClick={handleApply}><CheckIcon size={"small"} />Apply Changes</MenuItem>
-                <MenuItem dense onClick={handleDiscard}><CancelIcon size={"small"} />Discard Local Changes</MenuItem>
+                <MenuItem dense onClick={handlePreview}><VisibilityIcon size={"small"} />{t("preview_changes")}</MenuItem>
+                <MenuItem dense onClick={handleApply}><CheckIcon size={"small"} />{t("apply_changes")}</MenuItem>
+                <MenuItem dense onClick={handleDiscard}><CancelIcon size={"small"} />{t("discard_local_changes")}</MenuItem>
             </Menu>
 
             <Dialog
@@ -111,10 +111,10 @@ export function LocalChangesMenu<M extends Record<string, any>>({
                 onOpenChange={setPreviewDialogOpen}
                 maxWidth={"4xl"}
             >
-                <DialogTitle variant={"h6"}>Preview Local Changes</DialogTitle>
+                <DialogTitle variant={"h6"}>{t("preview_local_changes")}</DialogTitle>
                 <DialogContent className={"my-4"}>
                     <Typography variant={"body2"} className={"mb-4"}>
-                        These are the local changes that will be applied to the form.
+                        {t("preview_local_changes_description")}
                     </Typography>
                     <div className={`border rounded-lg ${defaultBorderMixin}`} style={{
                         maxHeight: 520,
@@ -127,7 +127,7 @@ export function LocalChangesMenu<M extends Record<string, any>>({
                     </div>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setPreviewDialogOpen(false)}>Close</Button>
+                    <Button onClick={() => setPreviewDialogOpen(false)}>{t("close")}</Button>
                     <Button
                         variant={"filled"}
                         onClick={() => {
@@ -135,7 +135,7 @@ export function LocalChangesMenu<M extends Record<string, any>>({
                             setPreviewDialogOpen(false);
                         }}
                     >
-                        Apply changes
+                        {t("apply_changes")}
                     </Button>
                 </DialogActions>
             </Dialog>

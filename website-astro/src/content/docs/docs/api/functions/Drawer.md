@@ -13,7 +13,7 @@ title: "Drawer"
 
 > **Drawer**(`__namedParameters`): `Element`
 
-Defined in: [app/Drawer.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Drawer.tsx)
+Defined in: [core/src/app/Drawer.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Drawer.tsx)
 
 This component is in charge of rendering the drawer.
 If you add this component under your [Scaffold](../variables/Scaffold), it will be rendered
@@ -33,9 +33,21 @@ For custom drawers, you can use the [useApp](useApp) to open and close the drawe
 
 `string`
 
+#### logo?
+
+`string`
+
+#### logoDestination?
+
+`string`
+
 #### style?
 
 `CSSProperties`
+
+#### title?
+
+`ReactNode`
 
 ## Returns
 

@@ -11,7 +11,7 @@ title: "PluginFormActionProps"
 
 # Interface: PluginFormActionProps\<USER, EC\>
 
-Defined in: [types/plugins.tsx:232](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:299](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ## Type Parameters
 
@@ -29,7 +29,7 @@ Defined in: [types/plugins.tsx:232](https://github.com/rebaseco/rebase/blob/main
 
 > **collection**: `EC`
 
-Defined in: [types/plugins.tsx:237](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:304](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [types/plugins.tsx:237](https://github.com/rebaseco/rebase/blob/main
 
 > **context**: [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
-Defined in: [types/plugins.tsx:240](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:307](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -45,15 +45,15 @@ Defined in: [types/plugins.tsx:240](https://github.com/rebaseco/rebase/blob/main
 
 > **disabled**: `boolean`
 
-Defined in: [types/plugins.tsx:238](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:305](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
 ### entityId?
 
-> `optional` **entityId**: `string`
+> `optional` **entityId**: `string` \| `number`
 
-Defined in: [types/plugins.tsx:233](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:300](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [types/plugins.tsx:233](https://github.com/rebaseco/rebase/blob/main
 
 > `optional` **formContext**: [`FormContext`](FormContext)\<`any`\>
 
-Defined in: [types/plugins.tsx:239](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:306](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [types/plugins.tsx:239](https://github.com/rebaseco/rebase/blob/main
 
 > **openEntityMode**: `"side_panel"` \| `"full_screen"`
 
-Defined in: [types/plugins.tsx:241](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:308](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [types/plugins.tsx:241](https://github.com/rebaseco/rebase/blob/main
 
 > **parentCollectionIds**: `string`[]
 
-Defined in: [types/plugins.tsx:235](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:302](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -85,7 +85,7 @@ Defined in: [types/plugins.tsx:235](https://github.com/rebaseco/rebase/blob/main
 
 > **path**: `string`
 
-Defined in: [types/plugins.tsx:234](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:301](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -93,4 +93,4 @@ Defined in: [types/plugins.tsx:234](https://github.com/rebaseco/rebase/blob/main
 
 > **status**: [`EntityStatus`](../type-aliases/EntityStatus)
 
-Defined in: [types/plugins.tsx:236](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:303](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)

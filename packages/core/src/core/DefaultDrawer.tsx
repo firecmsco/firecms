@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController, useAdminModeController, useEffectiveRoleController } from "../hooks";
+import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController, useAdminModeController, useEffectiveRoleController, useTranslation } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@rebasepro/types";
@@ -225,10 +225,12 @@ export function DrawerToggle({
     const isFloating = isHovered;
     const showFullContent = isExpanded || isHovered;
 
+    const { t } = useTranslation();
+
     return (
         <div className="shrink-0 mt-auto px-2 py-2">
             <Tooltip
-                title={isExpanded ? "Collapse" : "Expand"}
+                title={isExpanded ? t("collapse") : t("expand")}
                 side="right"
                 sideOffset={12}
                 asChild={true}
@@ -257,7 +259,7 @@ export function DrawerToggle({
                             variant="body2"
                             className="text-surface-500 dark:text-surface-400 select-none whitespace-nowrap"
                         >
-                            {isExpanded ? "Collapse" : "Expand"}
+                            {isExpanded ? t("collapse") : t("expand")}
                         </Typography>
                     </div>
                 </div>

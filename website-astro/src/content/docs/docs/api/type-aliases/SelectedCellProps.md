@@ -13,13 +13,13 @@ title: "SelectedCellProps"
 
 > **SelectedCellProps**\<`M`\> = `object`
 
-Defined in: [types/collections.ts:657](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:760](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ## Type Parameters
 
 ### M
 
-`M` *extends* `Record`\<`string`, `any`\>
+`M` *extends* `Record`\<`string`, `any`\> = `any`
 
 ## Properties
 
@@ -27,15 +27,15 @@ Defined in: [types/collections.ts:657](https://github.com/rebaseco/rebase/blob/m
 
 > **cellRect**: `DOMRect`
 
-Defined in: [types/collections.ts:659](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:762](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
 ### entityId
 
-> **entityId**: `string`
+> **entityId**: `string` \| `number`
 
-Defined in: [types/collections.ts:663](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:766](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/collections.ts:663](https://github.com/rebaseco/rebase/blob/m
 
 > **entityPath**: `string`
 
-Defined in: [types/collections.ts:662](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:765](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/collections.ts:662](https://github.com/rebaseco/rebase/blob/m
 
 > **height**: `number`
 
-Defined in: [types/collections.ts:661](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:764](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [types/collections.ts:661](https://github.com/rebaseco/rebase/blob/m
 
 > **propertyKey**: `Extract`\<keyof `M`, `string`\>
 
-Defined in: [types/collections.ts:658](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:761](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -67,4 +67,4 @@ Defined in: [types/collections.ts:658](https://github.com/rebaseco/rebase/blob/m
 
 > **width**: `number`
 
-Defined in: [types/collections.ts:660](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:763](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)

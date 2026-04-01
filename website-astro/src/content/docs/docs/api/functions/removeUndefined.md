@@ -11,15 +11,15 @@ title: "removeUndefined"
 
 # Function: removeUndefined()
 
-> **removeUndefined**(`value`, `removeEmptyStrings?`): `any`
+> **removeUndefined**(`value`, `removeEmptyStrings?`): `unknown`
 
-Defined in: [util/objects.ts:143](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:285](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Parameters
 
 ### value
 
-`any`
+`unknown`
 
 ### removeEmptyStrings?
 
@@ -27,4 +27,4 @@ Defined in: [util/objects.ts:143](https://github.com/rebaseco/rebase/blob/main/p
 
 ## Returns
 
-`any`
+`unknown`

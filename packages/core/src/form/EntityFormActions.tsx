@@ -18,7 +18,7 @@ import {
     LoadingButton,
     Typography
 } from "@rebasepro/ui";
-import { useRebaseContext, useSideEntityController } from "../hooks";
+import { useRebaseContext, useSideEntityController, useTranslation } from "../hooks";
 import { FormexController } from "@rebasepro/formex";
 
 export function EntityFormActions({
@@ -38,6 +38,7 @@ export function EntityFormActions({
 
     const context = useRebaseContext();
     const sideEntityController = useSideEntityController();
+    const { t } = useTranslation();
 
     return layout === "bottom"
         ? buildBottomActions({
@@ -53,7 +54,8 @@ export function EntityFormActions({
             openEntityMode,
             navigateBack,
             formContext,
-            formex
+            formex,
+            t
         })
         : buildSideActions({
             path,
@@ -68,7 +70,8 @@ export function EntityFormActions({
             openEntityMode,
             navigateBack,
             formContext,
-            formex
+            formex,
+            t
         });
 }
 
@@ -87,6 +90,7 @@ type ActionsViewProps<M extends object> = {
     navigateBack: () => void;
     formContext: FormContext,
     formex: FormexController<any>;
+    t: (key: string) => string;
 };
 
 function buildBottomActions<M extends object>({
@@ -103,7 +107,8 @@ function buildBottomActions<M extends object>({
     openEntityMode,
     navigateBack,
     formContext,
-    formex
+    formex,
+    t
 }: ActionsViewProps<M>) {
 
     const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
@@ -142,16 +147,16 @@ function buildBottomActions<M extends object>({
         <Button variant="text" disabled={disabled || formex.isSubmitting}
             color={"primary"}
             type="reset">
-            {status === "existing" ? "Discard" : "Clear"}
+            {status === "existing" ? t("discard") : t("clear")}
         </Button>
         <Button variant={"filled"}
             color="primary"
             type="submit"
             disabled={disabled || formex.isSubmitting}
             startIcon={hasErrors ? <ErrorIcon /> : undefined}>
-            {status === "existing" && "Save"}
-            {status === "copy" && "Create copy"}
-            {status === "new" && "Create"}
+            {status === "existing" && t("save")}
+            {status === "copy" && t("create_copy")}
+            {status === "new" && t("create")}
         </Button>
 
     </DialogActions>;
@@ -169,7 +174,8 @@ function buildSideActions<M extends object>({
     disabled,
     status,
     pluginActions,
-    formex
+    formex,
+    t
 }: ActionsViewProps<M>) {
 
     const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
@@ -182,12 +188,12 @@ function buildSideActions<M extends object>({
             type="submit"
             startIcon={hasErrors ? <ErrorIcon /> : undefined}
             disabled={disabled || formex.isSubmitting}>
-            {status === "existing" && "Save"}
-            {status === "copy" && "Create copy"}
-            {status === "new" && "Create"}
+            {status === "existing" && t("save")}
+            {status === "copy" && t("create_copy")}
+            {status === "new" && t("create")}
         </LoadingButton>
         <Button fullWidth={true} variant="text" disabled={disabled || formex.isSubmitting} type="reset">
-            {status === "existing" ? "Discard" : "Clear"}
+            {status === "existing" ? t("discard") : t("clear")}
         </Button>
 
         {pluginActions}

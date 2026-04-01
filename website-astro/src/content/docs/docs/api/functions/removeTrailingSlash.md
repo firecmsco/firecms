@@ -13,7 +13,7 @@ title: "removeTrailingSlash"
 
 > **removeTrailingSlash**(`s`): `string`
 
-Defined in: [util/navigation\_utils.ts:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/navigation_utils.ts)
+Defined in: [common/src/util/navigation\_utils.ts:14](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_utils.ts)
 
 ## Parameters
 

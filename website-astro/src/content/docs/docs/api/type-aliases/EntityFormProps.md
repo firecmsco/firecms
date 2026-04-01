@@ -13,7 +13,7 @@ title: "EntityFormProps"
 
 > **EntityFormProps**\<`M`\> = `object`
 
-Defined in: [form/EntityForm.tsx:67](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [form/EntityForm.tsx:67](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **Builder**: `React.ComponentType`\<[`EntityCustomViewParams`](../interfaces/EntityCustomViewParams)\<`M`\>\>
 
-Defined in: [form/EntityForm.tsx:102](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [form/EntityForm.tsx:102](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **children**: `React.ReactNode`
 
-Defined in: [form/EntityForm.tsx:104](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [form/EntityForm.tsx:104](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **className**: `string`
 
-Defined in: [form/EntityForm.tsx:80](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [form/EntityForm.tsx:80](https://github.com/rebaseco/rebase/blob/mai
 
 > **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
 
-Defined in: [form/EntityForm.tsx:70](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [form/EntityForm.tsx:70](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **databaseId**: `string`
 
-Defined in: [form/EntityForm.tsx:73](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [form/EntityForm.tsx:73](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [form/EntityForm.tsx:89](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:27](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 If true, the form will be disabled and no actions will be available
 
@@ -77,23 +77,23 @@ If true, the form will be disabled and no actions will be available
 
 > `optional` **entity**: [`Entity`](../interfaces/Entity)\<`M`\>
 
-Defined in: [form/EntityForm.tsx:72](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
 ### EntityFormActionsComponent?
 
-> `optional` **EntityFormActionsComponent**: `React.FC`\<`EntityFormActionsProps`\>
+> `optional` **EntityFormActionsComponent**: `React.FC`\<[`EntityFormActionsProps`](../interfaces/EntityFormActionsProps)\>
 
-Defined in: [form/EntityForm.tsx:100](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
 ### entityId?
 
-> `optional` **entityId**: `string`
+> `optional` **entityId**: `string` \| `number`
 
-Defined in: [form/EntityForm.tsx:71](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -101,7 +101,7 @@ Defined in: [form/EntityForm.tsx:71](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **forceActionsAtTheBottom**: `boolean`
 
-Defined in: [form/EntityForm.tsx:79](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -109,7 +109,7 @@ Defined in: [form/EntityForm.tsx:79](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **formex**: `FormexController`\<`M`\>
 
-Defined in: [form/EntityForm.tsx:84](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -117,7 +117,7 @@ Defined in: [form/EntityForm.tsx:84](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **fullIdPath**: `string`
 
-Defined in: [form/EntityForm.tsx:69](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -125,7 +125,7 @@ Defined in: [form/EntityForm.tsx:69](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **initialDirtyValues**: `Partial`\<`M`\>
 
-Defined in: [form/EntityForm.tsx:77](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -133,7 +133,7 @@ Defined in: [form/EntityForm.tsx:77](https://github.com/rebaseco/rebase/blob/mai
 
 > **initialStatus**: [`EntityStatus`](EntityStatus)
 
-Defined in: [form/EntityForm.tsx:81](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -141,7 +141,7 @@ Defined in: [form/EntityForm.tsx:81](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **onEntityChange**: (`entity`) => `void`
 
-Defined in: [form/EntityForm.tsx:83](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 #### Parameters
 
@@ -159,7 +159,7 @@ Defined in: [form/EntityForm.tsx:83](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **onFormContextReady**: (`formContext`) => `void`
 
-Defined in: [form/EntityForm.tsx:78](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 #### Parameters
 
@@ -177,13 +177,13 @@ Defined in: [form/EntityForm.tsx:78](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **onIdChange**: (`id`) => `void`
 
-Defined in: [form/EntityForm.tsx:74](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 #### Parameters
 
 ##### id
 
-`string`
+`string` | `number`
 
 #### Returns
 
@@ -195,13 +195,13 @@ Defined in: [form/EntityForm.tsx:74](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **onSaved**: (`params`) => `void`
 
-Defined in: [form/EntityForm.tsx:76](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 #### Parameters
 
 ##### params
 
-`OnUpdateParams`
+[`OnUpdateParams`](OnUpdateParams)
 
 #### Returns
 
@@ -213,7 +213,7 @@ Defined in: [form/EntityForm.tsx:76](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **onStatusChange**: (`status`) => `void`
 
-Defined in: [form/EntityForm.tsx:82](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 #### Parameters
 
@@ -231,7 +231,7 @@ Defined in: [form/EntityForm.tsx:82](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **onValuesModified**: (`modified`, `values`) => `void`
 
-Defined in: [form/EntityForm.tsx:75](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 #### Parameters
 
@@ -253,7 +253,7 @@ Defined in: [form/EntityForm.tsx:75](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **openEntityMode**: `"side_panel"` \| `"full_screen"`
 
-Defined in: [form/EntityForm.tsx:85](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -261,7 +261,7 @@ Defined in: [form/EntityForm.tsx:85](https://github.com/rebaseco/rebase/blob/mai
 
 > **path**: `string`
 
-Defined in: [form/EntityForm.tsx:68](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 ***
 
@@ -269,7 +269,7 @@ Defined in: [form/EntityForm.tsx:68](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **showDefaultActions**: `boolean`
 
-Defined in: [form/EntityForm.tsx:93](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 Include the copy and delete actions in the form
 
@@ -279,6 +279,6 @@ Include the copy and delete actions in the form
 
 > `optional` **showEntityPath**: `boolean`
 
-Defined in: [form/EntityForm.tsx:98](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/EntityForm.tsx)
+Defined in: [types/src/components/EntityFormProps.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormProps.tsx)
 
 Display the entity path in the form

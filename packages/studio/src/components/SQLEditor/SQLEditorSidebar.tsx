@@ -6,6 +6,7 @@ import {
     Tabs,
     Tab
 } from "@rebasepro/ui";
+import { useTranslation } from "@rebasepro/core";
 import { SchemaBrowser } from "./SchemaBrowser";
 import { TableInfo } from "./SQLEditor";
 
@@ -41,13 +42,14 @@ export const SQLEditorSidebar = ({
     onRetrySchema
 }: SQLEditorSidebarProps) => {
     const [activeTab, setActiveTab] = useState<"schema" | "snippets" | "history">("schema");
+    const { t } = useTranslation();
 
     return (
         <div className={cls("flex flex-col h-full w-full bg-white dark:bg-surface-950 border-r", defaultBorderMixin)}>
             <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "schema" | "snippets" | "history")} variant="underline">
-                <Tab value="schema">Schema</Tab>
-                <Tab value="snippets">Snippets</Tab>
-                <Tab value="history">History</Tab>
+                <Tab value="schema">{t("studio_sql_sidebar_schema")}</Tab>
+                <Tab value="snippets">{t("studio_sql_sidebar_snippets")}</Tab>
+                <Tab value="history">{t("studio_sql_sidebar_history")}</Tab>
             </Tabs>
 
             <div className="flex-grow overflow-hidden relative">
@@ -68,12 +70,12 @@ export const SQLEditorSidebar = ({
                     return (
                         <div className="flex flex-col h-full">
                             <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
-                                <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">Saved Snippets</Typography>
+                                <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">{t("studio_sql_sidebar_snippets")}</Typography>
                             </div>
                             <div className="flex-grow overflow-y-auto p-2 space-y-2 no-scrollbar">
                                 {snippets.length === 0 ? (
                                     <div className="p-4 text-center">
-                                        <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark">No saved snippets yet.</Typography>
+                                        <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark">{t("studio_sql_sidebar_no_snippets")}</Typography>
                                     </div>
                                 ) : (
                                     <>
@@ -146,12 +148,12 @@ export const SQLEditorSidebar = ({
                 {activeTab === "history" && (
                     <div className="flex flex-col h-full">
                         <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
-                            <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">Execution History</Typography>
+                            <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">{t("studio_sql_sidebar_history")}</Typography>
                         </div>
                         <div className="flex-grow overflow-y-auto p-1 space-y-1 no-scrollbar">
                             {history.length === 0 ? (
                                 <div className="p-4 text-center">
-                                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark">No history available.</Typography>
+                                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark">{t("studio_sql_sidebar_no_history")}</Typography>
                                 </div>
                             ) : (
                                 [...history].reverse().map((sql, i) => (

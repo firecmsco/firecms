@@ -13,7 +13,7 @@ title: "resolvedSelectedEntityView"
 
 > **resolvedSelectedEntityView**\<`M`\>(`customViews`, `customizationController`, `selectedTab?`, `canEdit?`): `object`
 
-Defined in: [util/resolutions.ts:453](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/resolutions.ts)
+Defined in: [common/src/util/resolutions.ts:350](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 ## Type Parameters
 

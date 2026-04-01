@@ -11,7 +11,7 @@ title: "VirtualTableColumn"
 
 # Interface: VirtualTableColumn\<CustomProps\>
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:181](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:196](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ## See
 
@@ -29,7 +29,7 @@ Table
 
 > `optional` **AdditionalHeaderWidget**: (`props`) => `ReactNode`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:242](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:257](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Additional children to be rendered in the header when hovering
 
@@ -51,7 +51,7 @@ Additional children to be rendered in the header when hovering
 
 > `optional` **align**: `"center"` \| `"left"` \| `"right"`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:222](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:237](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Alignment of the column cell
 
@@ -61,7 +61,7 @@ Alignment of the column cell
 
 > `optional` **custom**: `CustomProps`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:237](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:252](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Custom props passed to the cell renderer
 
@@ -71,7 +71,7 @@ Custom props passed to the cell renderer
 
 > `optional` **filter**: `boolean`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:216](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:231](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -79,7 +79,7 @@ Defined in: [components/VirtualTable/VirtualTableProps.tsx:216](https://github.c
 
 > `optional` **frozen**: `boolean`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:201](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:216](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 This column is frozen to the left
 
@@ -89,7 +89,7 @@ This column is frozen to the left
 
 > `optional` **headerAlign**: `"center"` \| `"left"` \| `"right"`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:206](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:221](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 How is the
 
@@ -99,7 +99,7 @@ How is the
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:211](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:226](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Icon displayed in the header
 
@@ -109,7 +109,7 @@ Icon displayed in the header
 
 > **key**: `string`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:186](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:201](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Data key for the cell value, could be "a.b.c"
 
@@ -119,7 +119,7 @@ Data key for the cell value, could be "a.b.c"
 
 > `optional` **resizable**: `boolean`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:232](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:247](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Can it be resized
 
@@ -129,7 +129,7 @@ Can it be resized
 
 > `optional` **sortable**: `boolean`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:227](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:242](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Whether the column is sortable, defaults to false
 
@@ -139,7 +139,7 @@ Whether the column is sortable, defaults to false
 
 > `optional` **title**: `string`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:196](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:211](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 Label displayed in the header
 
@@ -149,6 +149,6 @@ Label displayed in the header
 
 > **width**: `number`
 
-Defined in: [components/VirtualTable/VirtualTableProps.tsx:191](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:206](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 The width of the column, gutter width is not included

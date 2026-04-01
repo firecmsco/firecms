@@ -12,7 +12,6 @@ const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
 
 export default defineConfig(() => ({
     optimizeDeps: {
-        exclude: ["@rebasepro/ui", "@rebasepro/common", "@rebasepro/types", "@rebasepro/editor", "@rebasepro/formex"]
     },
     server: {
         fs: {
@@ -40,7 +39,6 @@ export default defineConfig(() => ({
             "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
             "@rebasepro/common": path.resolve(__dirname, "../common/src"),
             "@rebasepro/types": path.resolve(__dirname, "../types/src"),
-            "@rebasepro/editor": path.resolve(__dirname, "../editor/src"),
             "@rebasepro/formex": path.resolve(__dirname, "../formex/src")
         }
     },

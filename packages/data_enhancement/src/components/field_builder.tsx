@@ -26,7 +26,7 @@ import { SUPPORTED_FIELDS_ENHANCEMENT } from "../utils/fields";
 import { EnhanceTextFieldBinding } from "./fields/EnhanceTextField";
 import { EnhancedDataResult, EnhanceParams } from "../types/data_enhancement_controller";
 import { countStringCharacters } from "../utils/strings_counter";
-import { EditorAIController } from "@rebasepro/editor";
+import { EditorAIController } from "@rebasepro/core";
 
 export function fieldBuilder<P extends Property = Property>
     (params: PluginFieldBuilderParams<P>): React.ComponentType<FieldProps<P>> | null {

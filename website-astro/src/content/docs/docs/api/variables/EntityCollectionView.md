@@ -13,7 +13,7 @@ title: "EntityCollectionView"
 
 > `const` **EntityCollectionView**: `FunctionComponent`\<[`EntityCollectionViewProps`](../type-aliases/EntityCollectionViewProps)\<`any`\>\>
 
-Defined in: [components/EntityCollectionView/EntityCollectionView.tsx:143](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionView.tsx:146](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionView.tsx)
 
 This component is in charge of binding a datasource path with an [EntityCollection](../interfaces/EntityCollection)
 where it's configuration is defined. It includes an infinite scrolling table

@@ -80,14 +80,6 @@ describe("Permissions Evaluator", () => {
         expect(canReadCollection(collection, mockAuthController)).toBe(true);
     });
 
-    test("4. Collection group ALWAYS blocks create, any other operation fine", () => {
-        const collection = { ...createMockCollection(), collectionGroup: true };
-        expect(canCreateEntity(collection, mockAuthController, "test", null)).toBe(false);
-        expect(canReadCollection(collection, mockAuthController)).toBe(true);
-        expect(canEditEntity(collection, mockAuthController, "test", null)).toBe(true);
-        expect(canDeleteEntity(collection, mockAuthController, "test", null)).toBe(true);
-    });
-
     // ─── Section 2: Operation Filtering ──────────────────────────────────────────
 
     test("5. Only rules for matching operation are applied", () => {

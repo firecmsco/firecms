@@ -7,7 +7,8 @@ import {
     resolveEnumValues,
     toSnakeCase,
     useAuthController,
-    useCustomizationController
+    useCustomizationController,
+    useTranslation
 } from "@rebasepro/core";
 import {
     AddIcon,
@@ -45,6 +46,7 @@ export function AddKanbanColumnAction({
     const configController = useCollectionsConfigController();
     const authController = useAuthController();
     const customizationController = useCustomizationController();
+    const { t } = useTranslation();
 
     // Get current enum values
     const currentEnumValues = useMemo(() => {
@@ -153,21 +155,20 @@ export function AddKanbanColumnAction({
                     <AddIcon />
                 </IconButton>
                 <Typography variant="caption" color="secondary" className="mt-2">
-                    Add Column
+                    {t("studio_add_kanban_column")}
                 </Typography>
             </div>
 
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogContent className="max-w-md">
                     <Typography variant="h6" className="mb-4">
-                        Add New Column
+                        {t("studio_add_kanban_column_title")}
                     </Typography>
                     <Typography variant="body2" color="secondary" className="mb-4">
-                        Add a new option to the "{columnProperty}" property.
-                        This will create a new column in the Kanban board.
+                        {t("studio_add_kanban_column_desc", { property: columnProperty })}
                     </Typography>
                     <TextField
-                        label="Column Name"
+                        label={t("studio_add_kanban_column_name")}
                         value={newValueLabel}
                         onChange={(e) => setNewValueLabel(e.target.value)}
                         onKeyDown={handleKeyDown}
@@ -181,13 +182,13 @@ export function AddKanbanColumnAction({
                         onClick={() => setDialogOpen(false)}
                         disabled={saving}
                     >
-                        Cancel
+                        {t("studio_add_kanban_column_cancel")}
                     </Button>
                     <Button
                         onClick={handleAddColumn}
                         disabled={saving || !newValueLabel.trim()}
                     >
-                        {saving ? "Adding..." : "Add Column"}
+                        {saving ? t("studio_add_kanban_column_adding") : t("studio_add_kanban_column_add")}
                     </Button>
                 </DialogActions>
             </Dialog>

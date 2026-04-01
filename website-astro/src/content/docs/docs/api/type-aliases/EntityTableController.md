@@ -13,7 +13,7 @@ title: "EntityTableController"
 
 > **EntityTableController**\<`M`\> = `object`
 
-Defined in: [types/collections.ts:627](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:730](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 You can use this controller to control the table view of a collection.
 
@@ -29,7 +29,7 @@ You can use this controller to control the table view of a collection.
 
 > `optional` **checkFilterCombination**: (`filterValues`, `sortBy?`) => `boolean`
 
-Defined in: [types/collections.ts:649](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:752](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Parameters
 
@@ -51,7 +51,7 @@ Defined in: [types/collections.ts:649](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **clearFilter**: () => `void`
 
-Defined in: [types/collections.ts:638](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:741](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Returns
 
@@ -63,7 +63,7 @@ Defined in: [types/collections.ts:638](https://github.com/rebaseco/rebase/blob/m
 
 > **data**: [`Entity`](../interfaces/Entity)\<`M`\>[]
 
-Defined in: [types/collections.ts:628](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:731](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -71,7 +71,7 @@ Defined in: [types/collections.ts:628](https://github.com/rebaseco/rebase/blob/m
 
 > **dataLoading**: `boolean`
 
-Defined in: [types/collections.ts:629](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:732](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -79,7 +79,7 @@ Defined in: [types/collections.ts:629](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **dataLoadingError**: `Error`
 
-Defined in: [types/collections.ts:631](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:734](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -87,7 +87,7 @@ Defined in: [types/collections.ts:631](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **filterValues**: [`FilterValues`](FilterValues)\<`Extract`\<keyof `M`, `string`\>\>
 
-Defined in: [types/collections.ts:632](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:735](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -95,7 +95,7 @@ Defined in: [types/collections.ts:632](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **initialScroll**: `number`
 
-Defined in: [types/collections.ts:641](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:744](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -103,7 +103,7 @@ Defined in: [types/collections.ts:641](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **itemCount**: `number`
 
-Defined in: [types/collections.ts:639](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:742](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -111,7 +111,7 @@ Defined in: [types/collections.ts:639](https://github.com/rebaseco/rebase/blob/m
 
 > **noMoreToLoad**: `boolean`
 
-Defined in: [types/collections.ts:630](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:733](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -119,7 +119,7 @@ Defined in: [types/collections.ts:630](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **onAddColumn**: (`column`) => `void`
 
-Defined in: [types/collections.ts:654](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:757](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Parameters
 
@@ -137,7 +137,7 @@ Defined in: [types/collections.ts:654](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **onScroll**: (`props`) => `void`
 
-Defined in: [types/collections.ts:642](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:745](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Parameters
 
@@ -165,7 +165,7 @@ Defined in: [types/collections.ts:642](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **pageSize**: `number`
 
-Defined in: [types/collections.ts:648](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:751](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -173,7 +173,7 @@ Defined in: [types/collections.ts:648](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **paginationEnabled**: `boolean`
 
-Defined in: [types/collections.ts:647](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:750](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -181,7 +181,7 @@ Defined in: [types/collections.ts:647](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **popupCell**: [`SelectedCellProps`](SelectedCellProps)\<`M`\>
 
-Defined in: [types/collections.ts:651](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:754](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -189,7 +189,7 @@ Defined in: [types/collections.ts:651](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **searchString**: `string`
 
-Defined in: [types/collections.ts:636](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:739](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -197,7 +197,7 @@ Defined in: [types/collections.ts:636](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **setFilterValues**: (`filterValues`) => `void`
 
-Defined in: [types/collections.ts:633](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:736](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Parameters
 
@@ -215,7 +215,7 @@ Defined in: [types/collections.ts:633](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **setItemCount**: (`itemCount`) => `void`
 
-Defined in: [types/collections.ts:640](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:743](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Parameters
 
@@ -233,7 +233,7 @@ Defined in: [types/collections.ts:640](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **setPopupCell**: (`popupCell?`) => `void`
 
-Defined in: [types/collections.ts:652](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:755](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Parameters
 
@@ -251,7 +251,7 @@ Defined in: [types/collections.ts:652](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **setSearchString**: (`searchString?`) => `void`
 
-Defined in: [types/collections.ts:637](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:740](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Parameters
 
@@ -269,7 +269,7 @@ Defined in: [types/collections.ts:637](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **setSortBy**: (`sortBy?`) => `void`
 
-Defined in: [types/collections.ts:635](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:738](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Parameters
 
@@ -287,4 +287,4 @@ Defined in: [types/collections.ts:635](https://github.com/rebaseco/rebase/blob/m
 
 > `optional` **sortBy**: \[`Extract`\<keyof `M`, `string`\>, `"asc"` \| `"desc"`\]
 
-Defined in: [types/collections.ts:634](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:737](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)

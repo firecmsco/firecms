@@ -13,7 +13,7 @@ title: "getDefaultValuesFor"
 
 > **getDefaultValuesFor**\<`M`\>(`properties`): `Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
 
-Defined in: [util/entities.ts:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entities.ts)
+Defined in: [common/src/util/entities.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [util/entities.ts:39](https://github.com/rebaseco/rebase/blob/main/p
 
 ### properties
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\> | [`ResolvedProperties`](../type-aliases/ResolvedProperties)\<`M`\>
+[`Properties`](../type-aliases/Properties)
 
 ## Returns
 

@@ -9,18 +9,14 @@ title: "PropertyFieldBindingProps"
 
 [@rebasepro/core](../README) / PropertyFieldBindingProps
 
-# Interface: PropertyFieldBindingProps\<T, M\>
+# Interface: PropertyFieldBindingProps\<M\>
 
-Defined in: [types/fields.tsx:188](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:222](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 In case you need to render a field bound to a Property inside your
 custom field you can use [PropertyFieldBinding](../variables/PropertyFieldBinding) with these props.
 
 ## Type Parameters
-
-### T
-
-`T` *extends* [`CMSType`](../type-aliases/CMSType)
 
 ### M
 
@@ -32,7 +28,7 @@ custom field you can use [PropertyFieldBinding](../variables/PropertyFieldBindin
 
 > `optional` **autoFocus**: `boolean`
 
-Defined in: [types/fields.tsx:233](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:272](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Should the field take focus when rendered. When opening the popup view
 in table mode, it makes sense to put the focus on the only field rendered.
@@ -43,7 +39,7 @@ in table mode, it makes sense to put the focus on the only field rendered.
 
 > **context**: [`FormContext`](FormContext)\<`M`\>
 
-Defined in: [types/fields.tsx:205](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:239](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 The context where this field is being rendered. You get a context as a
 prop when creating a custom field.
@@ -54,7 +50,7 @@ prop when creating a custom field.
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [types/fields.tsx:238](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:277](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Should this field be disabled
 
@@ -64,7 +60,7 @@ Should this field be disabled
 
 > `optional` **includeDescription**: `boolean`
 
-Defined in: [types/fields.tsx:210](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:244](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Should the description be included in this field
 
@@ -74,7 +70,7 @@ Should the description be included in this field
 
 > `optional` **index**: `number`
 
-Defined in: [types/fields.tsx:244](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:283](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Index of the field in the array.
 Only used when the field is part of an array.
@@ -85,7 +81,7 @@ Only used when the field is part of an array.
 
 > `optional` **minimalistView**: `boolean`
 
-Defined in: [types/fields.tsx:227](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:266](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Display the child properties directly, without being wrapped in an
 extendable panel. Note that this will also hide the title of this property.
@@ -96,7 +92,7 @@ extendable panel. Note that this will also hide the title of this property.
 
 > `optional` **onPropertyChange**: (`property`) => `void`
 
-Defined in: [types/fields.tsx:258](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:297](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Some properties might change internal state (like expanding a panel).
 This function should be called when the internal state changes.
@@ -106,7 +102,7 @@ This is used to preserve state in array containers.
 
 ##### property
 
-`Partial`\<[`ArrayProperty`](ArrayProperty)\<`any`, `any`\> \| [`MapProperty`](MapProperty)\<`any`\> \| `AnyProperty`\>
+`Partial`\<[`Property`](../type-aliases/Property)\>
 
 #### Returns
 
@@ -118,17 +114,27 @@ This is used to preserve state in array containers.
 
 > `optional` **partOfArray**: `boolean`
 
-Defined in: [types/fields.tsx:221](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:255](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Is this field part of an array
 
 ***
 
+### partOfBlock?
+
+> `optional` **partOfBlock**: `boolean`
+
+Defined in: [types/src/types/fields.tsx:260](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
+
+Is this field part of a block
+
+***
+
 ### property
 
-> **property**: [`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)\<`T`\> \| [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\>
+> **property**: [`Property`](../type-aliases/Property)
 
-Defined in: [types/fields.tsx:199](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:233](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 The CMS property you are binding this field to
 
@@ -138,7 +144,7 @@ The CMS property you are binding this field to
 
 > **propertyKey**: `string`
 
-Defined in: [types/fields.tsx:194](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:228](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 The key/path of the property, such as `age`. You can use nested and array
 indexed such as `address.street` or `people[3]`
@@ -149,7 +155,7 @@ indexed such as `address.street` or `people[3]`
 
 > `optional` **size**: `"small"` \| `"medium"` \| `"large"`
 
-Defined in: [types/fields.tsx:249](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:288](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 The size of the field
 
@@ -159,7 +165,7 @@ The size of the field
 
 > `optional` **underlyingValueHasChanged**: `boolean`
 
-Defined in: [types/fields.tsx:216](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/fields.tsx)
+Defined in: [types/src/types/fields.tsx:250](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/fields.tsx)
 
 Has the value of this property been updated in the database while this
 field is being edited

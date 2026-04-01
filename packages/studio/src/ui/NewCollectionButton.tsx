@@ -1,10 +1,11 @@
 import { AddIcon, Button } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
-import { useAdminModeController } from "@rebasepro/core";
+import { useAdminModeController, useTranslation } from "@rebasepro/core";
 
 export function NewCollectionButton() {
     const adminModeController = useAdminModeController();
     const collectionEditorController = useCollectionEditorController();
+    const { t } = useTranslation();
 
     if (adminModeController.mode === "studio") {
         return null;
@@ -19,7 +20,7 @@ export function NewCollectionButton() {
                 sourceClick: "new_collection_button"
             })}>
             <AddIcon />
-            New collection
+            {t("studio_new_collection")}
         </Button>
     </div>
 }

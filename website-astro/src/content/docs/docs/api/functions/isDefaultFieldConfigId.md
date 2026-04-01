@@ -11,9 +11,9 @@ title: "isDefaultFieldConfigId"
 
 # Function: isDefaultFieldConfigId()
 
-> **isDefaultFieldConfigId**(`id`): `boolean`
+> **isDefaultFieldConfigId**(`id`): `id is DefaultFieldConfig`
 
-Defined in: [core/field\_configs.tsx:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/field_configs.tsx)
+Defined in: [common/src/util/fields.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/fields.ts)
 
 ## Parameters
 
@@ -23,4 +23,4 @@ Defined in: [core/field\_configs.tsx:46](https://github.com/rebaseco/rebase/blob
 
 ## Returns
 
-`boolean`
+`id is DefaultFieldConfig`

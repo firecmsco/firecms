@@ -9,14 +9,8 @@ title: "Property"
 
 [@rebasepro/core](../README) / Property
 
-# Type Alias: Property\<T\>
+# Type Alias: Property
 
-> **Property**\<`T`\> = `T` *extends* `string` ? [`StringProperty`](../interfaces/StringProperty) : `T` *extends* `number` ? [`NumberProperty`](../interfaces/NumberProperty) : `T` *extends* `boolean` ? [`BooleanProperty`](../interfaces/BooleanProperty) : `T` *extends* `Date` ? [`DateProperty`](../interfaces/DateProperty) : `T` *extends* [`GeoPoint`](../classes/GeoPoint) ? [`GeopointProperty`](../interfaces/GeopointProperty) : `T` *extends* [`EntityReference`](../classes/EntityReference) ? [`ReferenceProperty`](../interfaces/ReferenceProperty) : `T` *extends* [`CMSType`](CMSType)[] ? [`ArrayProperty`](../interfaces/ArrayProperty)\<`T`\> : `T` *extends* `Record`\<`string`, `any`\> ? [`MapProperty`](../interfaces/MapProperty)\<`T`\> : `AnyProperty`
+> **Property** = [`StringProperty`](../interfaces/StringProperty) \| [`NumberProperty`](../interfaces/NumberProperty) \| [`BooleanProperty`](../interfaces/BooleanProperty) \| [`DateProperty`](../interfaces/DateProperty) \| [`GeopointProperty`](../interfaces/GeopointProperty) \| [`ReferenceProperty`](../interfaces/ReferenceProperty) \| [`RelationProperty`](../interfaces/RelationProperty) \| [`ArrayProperty`](../interfaces/ArrayProperty) \| [`MapProperty`](../interfaces/MapProperty)
 
-Defined in: [types/properties.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
-
-## Type Parameters
-
-### T
-
-`T` *extends* [`CMSType`](CMSType) = `any`
+Defined in: [types/src/types/properties.ts:52](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)

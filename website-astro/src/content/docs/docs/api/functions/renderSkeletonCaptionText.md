@@ -13,7 +13,7 @@ title: "renderSkeletonCaptionText"
 
 > **renderSkeletonCaptionText**(`index?`): `Element`
 
-Defined in: [preview/property\_previews/SkeletonPropertyComponent.tsx:276](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
+Defined in: [core/src/preview/property\_previews/SkeletonPropertyComponent.tsx:268](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
 
 ## Parameters
 

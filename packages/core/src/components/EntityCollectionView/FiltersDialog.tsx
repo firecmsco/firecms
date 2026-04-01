@@ -21,6 +21,7 @@ import { DateTimeFilterField } from "../SelectableTable/filters/DateTimeFilterFi
 import { ReferenceFilterField } from "../SelectableTable/filters/ReferenceFilterField";
 import { VirtualTableWhereFilterOp } from "../VirtualTable";
 import { enumToObjectEntries } from "@rebasepro/common";
+import { useTranslation } from "../../hooks";
 
 export interface FiltersDialogProps {
     open: boolean;
@@ -43,6 +44,7 @@ export function FiltersDialog({
     setFilterValues,
     forceFilter
 }: FiltersDialogProps) {
+    const { t } = useTranslation();
     // Local state for filters being edited
     const [localFilters, setLocalFilters] = useState<FilterValues<any>>(filterValues ?? {});
 
@@ -173,7 +175,7 @@ export function FiltersDialog({
             containerClassName={isAnyFieldHidden ? "hidden" : undefined}
         >
             <DialogTitle className="flex items-center gap-2">
-                <Typography variant="h6">Filters</Typography>
+                <Typography variant="h6">{t("filters")}</Typography>
                 {activeFilterCount > 0 && (
                     <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-primary text-white">
                         {activeFilterCount}
@@ -184,7 +186,7 @@ export function FiltersDialog({
             <DialogContent >
                 {filterableProperties.length === 0 ? (
                     <Typography color="secondary" className="py-8 text-center">
-                        No filterable properties available
+                        {t("no_filterable_properties")}
                     </Typography>
                 ) : (
                     <table className="w-full border-collapse">
@@ -228,20 +230,20 @@ export function FiltersDialog({
                     onClick={handleClearAll}
                     disabled={activeFilterCount === 0}
                 >
-                    Clear all
+                    {t("clear_all")}
                 </Button>
                 <div className="flex-grow" />
                 <Button
                     variant="text"
                     onClick={() => onOpenChange(false)}
                 >
-                    Cancel
+                    {t("cancel")}
                 </Button>
                 <Button
                     variant="filled"
                     onClick={handleApply}
                 >
-                    Apply filters
+                    {t("apply_filters")}
                 </Button>
             </DialogActions>
         </Dialog>

@@ -13,7 +13,7 @@ title: "OnColumnResizeParams"
 
 > **OnColumnResizeParams** = `object`
 
-Defined in: [components/common/types.tsx:61](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:61](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [components/common/types.tsx:61](https://github.com/rebaseco/rebase/
 
 > **key**: `string`
 
-Defined in: [components/common/types.tsx:61](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:61](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 ***
 
@@ -29,4 +29,4 @@ Defined in: [components/common/types.tsx:61](https://github.com/rebaseco/rebase/
 
 > **width**: `number`
 
-Defined in: [components/common/types.tsx:61](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:61](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)

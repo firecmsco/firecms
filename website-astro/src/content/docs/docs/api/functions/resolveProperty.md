@@ -11,17 +11,11 @@ title: "resolveProperty"
 
 # Function: resolveProperty()
 
-> **resolveProperty**\<`T`, `M`\>(`propertyOrBuilder`): [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\> \| `null`
+> **resolveProperty**\<`M`\>(`props`): [`Property`](../type-aliases/Property) \| `null`
 
-Defined in: [util/resolutions.ts:104](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/resolutions.ts)
-
-Resolve property builders, enums and arrays.
+Defined in: [common/src/util/resolutions.ts:41](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 ## Type Parameters
-
-### T
-
-`T` *extends* [`CMSType`](../type-aliases/CMSType) = [`CMSType`](../type-aliases/CMSType)
 
 ### M
 
@@ -29,52 +23,10 @@ Resolve property builders, enums and arrays.
 
 ## Parameters
 
-### propertyOrBuilder
+### props
 
-#### authController
-
-[`AuthController`](../type-aliases/AuthController)
-
-#### entityId?
-
-`string`
-
-#### fromBuilder?
-
-`boolean` = `false`
-
-#### ignoreMissingFields?
-
-`boolean` = `false`
-
-#### index?
-
-`number`
-
-#### path?
-
-`string`
-
-#### previousValues?
-
-`Partial`\<`M`\>
-
-#### propertyConfigs?
-
-`Record`\<`string`, [`PropertyConfig`](../type-aliases/PropertyConfig)\<`any`\>\>
-
-#### propertyKey?
-
-`string`
-
-#### propertyOrBuilder
-
-[`PropertyOrBuilder`](../type-aliases/PropertyOrBuilder)\<`T`, `M`\> \| [`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\>
-
-#### values?
-
-`Partial`\<`M`\>
+[`ResolvePropertyProps`](../type-aliases/ResolvePropertyProps)\<`M`\>
 
 ## Returns
 
-[`ResolvedProperty`](../type-aliases/ResolvedProperty)\<`T`\> \| `null`
+[`Property`](../type-aliases/Property) \| `null`

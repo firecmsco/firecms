@@ -13,7 +13,7 @@ title: "useLargeLayout"
 
 > **useLargeLayout**(): `boolean`
 
-Defined in: [hooks/useLargeLayout.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useLargeLayout.tsx)
+Defined in: [core/src/hooks/useLargeLayout.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useLargeLayout.tsx)
 
 ## Returns
 

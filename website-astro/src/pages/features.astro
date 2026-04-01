@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
 import SpotlightCard from "../components/SpotlightCard.astro";
-import { DataTalkDemo } from "../components/DataTalkDemo";
 import { SchemaEditorDemo } from "../components/SchemaEditorDemo";
 import UsageExamples from "../components/UsageExamples.astro";
 
@@ -13,25 +12,6 @@ const description = "From the end-user to the developer, Rebase is designed to m
 const breadcrumbs = [
     { name: "Home", url: "https://rebase.pro" },
     { name: "Features", url: "https://rebase.pro/features" }
-];
-
-const dataTalkExchanges = [
-    {
-        query: "Show me all products with price greater than 100",
-        responseText: "Here are the products filtered by price:",
-        showProductsTable: true
-    },
-    {
-        query: "Update all out of stock items to mark them as unavailable",
-        responseText: "I'll help you update those items:",
-        code: `export default async () => {\n  const products = await db.query(\n    \"SELECT * FROM products WHERE stock = 0\"\n  );\n  await db.query(\n    \"UPDATE products SET available = false WHERE stock = 0\"\n  );\n  return { updated: products.length };\n}`
-    },
-    {
-        query: "Find users who signed up in the last 30 days",
-        responseText: "Here's how to find recent users:",
-        code: `const thirtyDaysAgo = new Date();\nthirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);\n\nawait db.query(\n  \"SELECT * FROM users WHERE created_at > $1\",\n  [thirtyDaysAgo]\n)`,
-        showUsersTable: true
-    }
 ];
 ---
 
@@ -231,22 +211,6 @@ const dataTalkExchanges = [
                         </video>
                     </div>
                 </div>
-
-                <!-- DataTalk: lateral media + text -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                    <!-- Demo left -->
-                    <div class="lg:col-span-8">
-                        <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-950">
-                            <DataTalkDemo exchanges={dataTalkExchanges} height="600px" client:load/>
-                        </div>
-                    </div>
-                    <!-- Text right -->
-                    <div class="lg:col-span-4">
-                        <h3 class="text-2xl font-semibold text-white mb-3">DataTalk</h3>
-                        <p class="text-surface-400 leading-7">Ask questions like “Products over $100 updated last week” and
-                            apply filters or batch updates—Rebase understands your schema.</p>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -266,11 +230,9 @@ const dataTalkExchanges = [
                         <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
                              class="h-5 w-5 text-white filter invert"/>
                     </a>
-                    <a href="https://app.rebase.pro"
-                       target="_blank"
-                       rel="noopener noreferrer"
+                    <a href="/docs"
                        class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
-                        Try Rebase Cloud
+                        Start a project
                         <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt=""
                              class="h-4 w-4 text-white filter invert"/>
                     </a>

@@ -1,5 +1,5 @@
 import { autocompleteStream } from "../api";
-import { EditorAIController } from "@rebasepro/editor";
+import { EditorAIController } from "@rebasepro/core";
 
 export function useEditorAIController({ getAuthToken }: { getAuthToken?: () => Promise<string> }): EditorAIController {
     const autocomplete = async (textBefore: string, textAfter: string, onUpdate: (delta: string) => void) => {

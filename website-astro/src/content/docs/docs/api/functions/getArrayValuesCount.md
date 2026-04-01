@@ -13,13 +13,13 @@ title: "getArrayValuesCount"
 
 > **getArrayValuesCount**(`array`): [`ArrayValuesCount`](../type-aliases/ArrayValuesCount)
 
-Defined in: [util/flatten\_object.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/flatten_object.ts)
+Defined in: [common/src/util/flatten\_object.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/flatten_object.ts)
 
 ## Parameters
 
 ### array
 
-`any`[]
+`Record`\<`string`, `unknown`\>[]
 
 ## Returns
 

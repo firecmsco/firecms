@@ -11,9 +11,9 @@ title: "resolvePropertyEnum"
 
 # Function: resolvePropertyEnum()
 
-> **resolvePropertyEnum**(`property`, `fromBuilder?`): [`ResolvedStringProperty`](../type-aliases/ResolvedStringProperty) \| [`ResolvedNumberProperty`](../type-aliases/ResolvedNumberProperty)
+> **resolvePropertyEnum**(`property`): [`StringProperty`](../interfaces/StringProperty) \| [`NumberProperty`](../interfaces/NumberProperty)
 
-Defined in: [util/resolutions.ts:406](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/resolutions.ts)
+Defined in: [common/src/util/resolutions.ts:153](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 Resolve enum aliases for a string or number property
 
@@ -23,10 +23,6 @@ Resolve enum aliases for a string or number property
 
 [`StringProperty`](../interfaces/StringProperty) | [`NumberProperty`](../interfaces/NumberProperty)
 
-### fromBuilder?
-
-`boolean`
-
 ## Returns
 
-[`ResolvedStringProperty`](../type-aliases/ResolvedStringProperty) \| [`ResolvedNumberProperty`](../type-aliases/ResolvedNumberProperty)
+[`StringProperty`](../interfaces/StringProperty) \| [`NumberProperty`](../interfaces/NumberProperty)

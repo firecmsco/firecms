@@ -13,7 +13,7 @@ title: "removeInPath"
 
 > **removeInPath**(`o`, `path`): `object` \| `undefined`
 
-Defined in: [util/objects.ts:100](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:234](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Parameters
 

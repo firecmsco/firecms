@@ -13,7 +13,7 @@ title: "useValidateAuthenticator"
 
 > **useValidateAuthenticator**\<`USER`\>(`authController`): `object`
 
-Defined in: [hooks/useValidateAuthenticator.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useValidateAuthenticator.tsx)
+Defined in: [core/src/hooks/useValidateAuthenticator.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useValidateAuthenticator.tsx)
 
 This hook is used internally for validating an authenticator.
 

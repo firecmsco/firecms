@@ -13,7 +13,7 @@ title: "getDefaultPropertiesOrder"
 
 > **getDefaultPropertiesOrder**(`collection`): `string`[]
 
-Defined in: [util/property\_utils.tsx:138](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
+Defined in: [core/src/util/property\_utils.tsx:149](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
 
 ## Parameters
 

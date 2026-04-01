@@ -1,4 +1,4 @@
-import { PluginHomePageAdditionalCardsProps, useAuthController } from "@rebasepro/core";
+import { PluginHomePageAdditionalCardsProps, useAuthController, useTranslation } from "@rebasepro/core";
 import { AddIcon, Card, cls, Typography } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 
@@ -13,6 +13,7 @@ export function NewCollectionCard({
     const authController = useAuthController();
 
     const collectionEditorController = useCollectionEditorController();
+    const { t } = useTranslation();
     const canCreateCollections = collectionEditorController.configPermissions
         ? collectionEditorController.configPermissions({
             user: authController.user,
@@ -35,11 +36,10 @@ export function NewCollectionCard({
                 <AddIcon color="primary" />
                 <Typography color="primary"
                     variant={"caption"}
-                    className={"font-medium"}>{"Add new collection".toUpperCase()}</Typography>
+                    className={"font-medium"}>{t("studio_new_collection_add").toUpperCase()}</Typography>
 
                 {!canCreateCollections &&
-                    <Typography variant={"caption"}>You don&apos;t have permissions to create
-                        collections</Typography>
+                    <Typography variant={"caption"}>{t("studio_new_collection_no_permission")}</Typography>
                 }
             </div>
 

@@ -13,7 +13,7 @@ title: "hydrateRegExp"
 
 > **hydrateRegExp**(`input?`): `RegExp` \| `undefined`
 
-Defined in: [util/regexp.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/regexp.ts)
+Defined in: [common/src/util/regexp.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/regexp.ts)
 
 Get a RegExp out of a serialized string
 

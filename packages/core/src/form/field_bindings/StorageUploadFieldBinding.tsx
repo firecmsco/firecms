@@ -6,7 +6,7 @@ import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
 import { isReadOnly } from "@rebasepro/common";
 import { getIconForProperty } from "../../util";
-import { useAuthController, useSnackbarController, useStorageSource } from "../../hooks";
+import { useAuthController, useSnackbarController, useStorageSource, useTranslation } from "../../hooks";
 import {
     closestCenter,
     DndContext,
@@ -445,9 +445,10 @@ export function StorageUpload({
         setInternalValue(newValue);
     }, [value, multipleFilesSupported, onChange, setInternalValue]);
 
+    const { t } = useTranslation();
     const helpText = multipleFilesSupported
-        ? "Drag 'n' drop some files here, or click to select files. Drag to reorder."
-        : "Drag 'n' drop a file here, or click to select one";
+        ? t("drag_drop_multiple")
+        : t("drag_drop_single");
 
     const renderProperty: StringProperty = multipleFilesSupported
         ? (property as ArrayProperty).of as StringProperty

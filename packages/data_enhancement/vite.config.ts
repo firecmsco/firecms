@@ -30,7 +30,6 @@ export default defineConfig(() => ({
             "@rebasepro/core": path.resolve(__dirname, "../core/src"),
             "@rebasepro/types": path.resolve(__dirname, "../types/src"),
             "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
-            "@rebasepro/editor": path.resolve(__dirname, "../editor/src"),
         }
     },
     plugins: [react({

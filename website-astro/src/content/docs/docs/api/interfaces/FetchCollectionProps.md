@@ -11,7 +11,7 @@ title: "FetchCollectionProps"
 
 # Interface: FetchCollectionProps\<M\>
 
-Defined in: [types/datasource.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:28](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ## Type Parameters
 
@@ -23,9 +23,9 @@ Defined in: [types/datasource.ts:29](https://github.com/rebaseco/rebase/blob/mai
 
 ### collection?
 
-> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\> \| [`ResolvedEntityCollection`](../type-aliases/ResolvedEntityCollection)\<`M`\>
+> `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
 
-Defined in: [types/datasource.ts:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:30](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [types/datasource.ts:31](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **filter**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
 
-Defined in: [types/datasource.ts:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:31](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [types/datasource.ts:32](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **limit**: `number`
 
-Defined in: [types/datasource.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:32](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [types/datasource.ts:33](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **order**: `"desc"` \| `"asc"`
 
-Defined in: [types/datasource.ts:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [types/datasource.ts:37](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **orderBy**: `string`
 
-Defined in: [types/datasource.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -65,7 +65,7 @@ Defined in: [types/datasource.ts:35](https://github.com/rebaseco/rebase/blob/mai
 
 > **path**: `string`
 
-Defined in: [types/datasource.ts:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -73,12 +73,12 @@ Defined in: [types/datasource.ts:30](https://github.com/rebaseco/rebase/blob/mai
 
 > `optional` **searchString**: `string`
 
-Defined in: [types/datasource.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
 ### startAfter?
 
-> `optional` **startAfter**: `any`
+> `optional` **startAfter**: `unknown`
 
-Defined in: [types/datasource.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)

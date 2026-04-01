@@ -11,7 +11,7 @@ title: "Vector"
 
 # Class: Vector
 
-Defined in: [types/entities.ts:90](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:201](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ## Constructors
 
@@ -19,7 +19,7 @@ Defined in: [types/entities.ts:90](https://github.com/rebaseco/rebase/blob/main/
 
 > **new Vector**(`value`): `Vector`
 
-Defined in: [types/entities.ts:93](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:204](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
 #### Parameters
 
@@ -37,4 +37,4 @@ Defined in: [types/entities.ts:93](https://github.com/rebaseco/rebase/blob/main/
 
 > `readonly` **value**: `number`[]
 
-Defined in: [types/entities.ts:91](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:202](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)

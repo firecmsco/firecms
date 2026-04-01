@@ -5,6 +5,7 @@ import { PropertyPreview } from "../../preview";
 
 import { cls, DescriptionIcon, IconButton, paperMixin, RemoveIcon, Tooltip } from "@rebasepro/ui";
 import { ErrorBoundary } from "../../components";
+import { useTranslation } from "../../hooks";
 
 interface StorageItemPreviewProps {
     name: string;
@@ -27,6 +28,7 @@ export function StorageItemPreview({
     placeholder,
     className
 }: StorageItemPreviewProps) {
+    const { t } = useTranslation();
 
     return (
         <div className={cls(
@@ -41,7 +43,7 @@ export function StorageItemPreview({
 
                     <Tooltip
                         asChild={true}
-                        title="Remove">
+                        title={t("remove")}>
                         <IconButton
                             size={"small"}
                             onClick={(event) => {

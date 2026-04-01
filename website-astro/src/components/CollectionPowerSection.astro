@@ -51,7 +51,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
       Full-width diagram — no max-w constraint, just side padding
       3 column layout
     */}
-    <div id="cp-diagram" class="relative hidden lg:flex items-center justify-center gap-6 xl:gap-10 w-full max-w-[1400px] mx-auto min-h-[600px] my-10 animate-on-scroll fade-in-up delay-100 px-6">
+    <div id="cp-diagram" class="relative hidden lg:flex items-center justify-center gap-4 xl:gap-6 w-full max-w-[1400px] mx-auto min-h-[600px] my-10 animate-on-scroll fade-in-up delay-100 px-6">
 
         {/* ── Dynamic SVG connector lines — drawn by client script ── */}
         <svg id="cp-connectors" class="absolute inset-0 w-full h-full pointer-events-none z-10">
@@ -150,9 +150,9 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
         </script>
 
         {/* ══════════ LEFT CARDS ══════════ */}
-        <div class="flex flex-col justify-center gap-6 w-[320px] xl:w-[350px] shrink-1 z-20">
-            {/* CMS Table — matches real VirtualTable styling */}
-            <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl -ml-4 xl:-ml-8 xl:-mt-10">
+        <div class="flex flex-col items-end justify-center gap-6 flex-1 min-w-0 z-20">
+            {/* Admin views — matches real VirtualTable styling */}
+            <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl relative z-10 w-[360px] xl:w-[400px] mr-2 xl:mr-4">
                 {/* Toolbar — collection name + search + add */}
                 <div class="flex items-center justify-between px-3 py-2 border-b border-surface-700/40">
                     <span class="text-sm text-white font-medium">Products</span>
@@ -178,7 +178,8 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                 {[
                     { id: "x7kQ2p", name: "Wireless Headphones", cat: "Electronics",   catColor: "bg-blue-950 text-blue-300",   price: "€129", stock: true  },
                     { id: "mR9vLw", name: "Silk Scarf",          cat: "Fashion",       catColor: "bg-pink-950 text-pink-300",   price: "€99",  stock: false },
-                    { id: "j4NcBs", name: "Watering Can",        cat: "Home & Garden", catColor: "bg-green-950 text-green-300", price: "€34",  stock: true  },
+                    { id: "p4tN8x", name: "Mechanical Keyboard", cat: "Electronics",   catColor: "bg-blue-950 text-blue-300",   price: "€149", stock: true  },
+                    { id: "b2vF1z", name: "Ceramic Mug",         cat: "Home",          catColor: "bg-green-950 text-green-300", price: "€24",  stock: true  },
                 ].map((row) => (
                     <div class="flex text-sm border-b border-surface-800/40 last:border-0 hover:bg-surface-800/30 cursor-pointer">
                         <div class="px-3 py-3 w-[72px] text-surface-500 font-mono text-xs text-center truncate">{row.id}</div>
@@ -198,7 +199,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             </div>
 
             {/* Entity Form — matches real EntityForm styling */}
-            <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl ml-6 xl:ml-10 w-[290px] xl:w-[310px]">
+            <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl w-[320px] xl:w-[350px] mr-6 xl:mr-10">
                 {/* Form content — no card header, title inline like real product */}
                 <div class="px-5 pt-5 pb-4 space-y-4">
                     {/* Title + sync indicator */}
@@ -275,9 +276,10 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                 <p class="text-xs text-surface-500 font-mono">→ generates all of the following</p>
                 <div class="flex flex-wrap justify-center gap-2">
                     {[
-                        { icon: "table-2",           label: "CMS Table" },
+                        { icon: "table-2",           label: "Admin views" },
                         { icon: "layout-panel-left", label: "Entity Form" },
                         { icon: "database",          label: "DB Schema" },
+                        { icon: "code-2",            label: "Typed SDK" },
                         { icon: "globe",             label: "REST API" },
                         { icon: "git-branch",        label: "GraphQL" },
                     ].map(item => (
@@ -291,9 +293,9 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
         </div>
 
         {/* ══════════ RIGHT CARDS ══════════ */}
-        <div class="flex flex-col justify-center gap-5 w-[270px] xl:w-[310px] shrink-1 z-20">
+        <div class="flex flex-col items-start justify-center gap-5 flex-1 min-w-0 z-20">
             {/* DB Schema — offset up */}
-            <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl xl:-mt-10">
+            <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl xl:-mt-10 w-[270px] xl:w-[310px] ml-2 xl:ml-6">
                 <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
                     <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
                     <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">DB Schema</span>
@@ -314,44 +316,75 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                 </div>
             </div>
 
-            {/* REST API — smaller, compact */}
-            <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl w-[230px] xl:w-[250px] scale-[0.95]">
+            {/* Typed SDK */}
+            <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl w-[350px] xl:w-[420px] ml-4 xl:ml-8 relative z-10">
                 <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/globe.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
-                    <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">REST API</span>
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code-2.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                    <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">Typed SDK</span>
+                    <span class="ml-auto text-[10px] font-bold text-blue-400 font-mono">TS</span>
                 </div>
-                <div class="divide-y divide-surface-800/50">
-                    {[
-                        { method: "GET",    color: "bg-blue-950 text-blue-300 border-blue-800/40",       path: "/api/products" },
-                        { method: "POST",   color: "bg-green-950 text-green-300 border-green-800/40",    path: "/api/products" },
-                        { method: "POST",   color: "bg-green-950 text-green-300 border-green-800/40",    path: "/api/productts" },
-                        { method: "POST",   color: "bg-red-950 text-red-300 border-red-800/40",          path: "/api/info" },
-                        { method: "GET",    color: "bg-blue-950 text-blue-300 border-blue-800/40",       path: "/index" },
-                    ].map(ep => (
-                        <div class="flex items-center gap-2 px-4 py-2.5">
-                            <span class={`flex-shrink-0 text-[9px] font-bold border px-1.5 py-0.5 rounded font-mono ${ep.color}`}>{ep.method}</span>
-                            <span class="font-mono text-[11px] text-surface-300 truncate">{ep.path}</span>
-                        </div>
-                    ))}
+                <div class="p-4 font-mono text-[11px] leading-relaxed text-surface-400">
+                    <pre set:html={`<span class="text-primary-light">import</span> <span class="text-white">{ createClient }</span> <span class="text-primary-light">from</span> <span class="text-green-400">"@rebasepro/client"</span>;
+
+<span class="text-primary-light">const</span> <span class="text-white">client</span> <span class="text-primary-light">=</span> <span class="text-blue-300">createClient</span>();
+
+<span class="text-surface-500">// Fully typed queries</span>
+<span class="text-primary-light">const</span> <span class="text-white">{ data }</span> <span class="text-primary-light">=</span> <span class="text-primary-light">await</span> <span class="text-white">client</span>.products.<span class="text-blue-300">list</span>({
+  <span class="text-blue-300">where</span>: {
+    <span class="text-blue-300">category</span>: <span class="text-green-400">"Electronics"</span>,
+    <span class="text-blue-300">in_stock</span>: <span class="text-primary-light">true</span>
+  }
+});
+
+<span class="text-surface-500">// Type-safe inserts</span>
+<span class="text-primary-light">await</span> <span class="text-white">client</span>.products.<span class="text-blue-300">create</span>({
+  <span class="text-blue-300">name</span>: <span class="text-green-400">"Camera"</span>,
+  <span class="text-blue-300">price</span>: <span class="text-amber-500">299</span>,
+  <span class="text-blue-300">category</span>: <span class="text-green-400">"Electronics"</span>
+});`}></pre>
                 </div>
             </div>
 
-            {/* GraphQL — offset right/down */}
-            <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl">
-                <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/git-branch.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
-                    <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">GraphQL</span>
-                    <span class="ml-auto text-[10px] font-bold text-pink-400 font-mono">GQL</span>
+            {/* API Column — REST and GraphQL Side by Side */}
+            <div class="flex flex-row gap-4 items-start w-full ml-0 xl:ml-6">
+                {/* REST API */}
+                <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl w-[185px] xl:w-[200px] shrink-0">
+                    <div class="flex items-center gap-2 px-3 py-2.5 border-b border-surface-800 bg-surface-900/60">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/globe.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">REST API</span>
+                    </div>
+                    <div class="divide-y divide-surface-800/50">
+                        {[
+                            { method: "GET",    color: "bg-blue-950 text-blue-300 border-blue-800/40",       path: "/api/products" },
+                            { method: "POST",   color: "bg-green-950 text-green-300 border-green-800/40",    path: "/api/products" },
+                            { method: "PATCH",  color: "bg-amber-950 text-amber-300 border-amber-800/40",    path: "/api/products/:id" },
+                            { method: "DELETE", color: "bg-red-950 text-red-300 border-red-800/40",          path: "/api/products/:id" },
+                        ].map(ep => (
+                            <div class="flex items-center justify-between px-3 py-2.5">
+                                <span class={`flex-shrink-0 text-[8px] font-bold border px-1.5 py-0.5 rounded font-mono ${ep.color}`}>{ep.method}</span>
+                                <span class="font-mono text-[9px] text-surface-400 truncate text-right">{ep.path}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div class="p-4 font-mono text-[11px] leading-relaxed text-surface-400">
-                    <pre set:html={`<span class="text-primary-light">type</span> <span class="text-white">Product</span> {
+
+                {/* GraphQL */}
+                <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl flex-1 max-w-[260px]">
+                    <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/git-branch.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">GraphQL</span>
+                        <span class="ml-auto text-[10px] font-bold text-pink-400 font-mono">GQL</span>
+                    </div>
+                    <div class="p-4 font-mono text-[10px] leading-relaxed text-surface-400 overflow-x-auto">
+                        <pre set:html={`<span class="text-primary-light">type</span> <span class="text-white">Product</span> {
   <span class="text-blue-300">id</span>:        <span class="text-green-400">ID!</span>
   <span class="text-blue-300">name</span>:      <span class="text-green-400">String!</span>
   <span class="text-blue-300">category</span>:  <span class="text-green-400">ProductCategory!</span>
-  <span class="text-blue-300">fashion</span>:   <span class="text-green-400">String!</span>
-  <span class="text-blue-300">price</span>:     <span class="text-green-400">String!</span>
-  <span class="text-blue-300">image_url</span>: <span class="text-green-400">Boolean!</span>
+  <span class="text-blue-300">price</span>:     <span class="text-green-400">Float</span>
+  <span class="text-blue-300">in_stock</span>:  <span class="text-green-400">Boolean</span>
+  <span class="text-blue-300">image_url</span>: <span class="text-green-400">String</span>
 }`}></pre>
+                    </div>
                 </div>
             </div>
         </div>
@@ -366,7 +399,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             </div>
             <pre class="bg-surface-950 p-5 font-mono text-[11px] leading-relaxed text-surface-300 overflow-x-auto" set:html={codeHtml}></pre>
         </div>
-        <p class="text-center text-xs text-surface-500 font-mono">→ generates CMS table · forms · DB schema · REST API · GraphQL</p>
+        <p class="text-center text-xs text-surface-500 font-mono">→ generates Admin views · forms · DB schema · REST API · GraphQL · Typed SDK</p>
     </div>
 
 </section>

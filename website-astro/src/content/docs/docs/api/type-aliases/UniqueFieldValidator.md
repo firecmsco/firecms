@@ -13,7 +13,7 @@ title: "UniqueFieldValidator"
 
 > **UniqueFieldValidator** = (`props`) => `Promise`\<`boolean`\>
 
-Defined in: [components/common/types.tsx:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 ## Parameters
 
@@ -21,7 +21,7 @@ Defined in: [components/common/types.tsx:45](https://github.com/rebaseco/rebase/
 
 #### entityId?
 
-`string`
+`string` \| `number`
 
 #### name
 
@@ -29,7 +29,7 @@ Defined in: [components/common/types.tsx:45](https://github.com/rebaseco/rebase/
 
 #### property
 
-[`ResolvedProperty`](ResolvedProperty)
+[`Property`](Property)
 
 #### value
 

@@ -13,7 +13,7 @@ title: "toKebabCase"
 
 > **toKebabCase**(`str`): `string`
 
-Defined in: [util/strings.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/strings.ts)
+Defined in: [common/src/util/strings.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/strings.ts)
 
 ## Parameters
 

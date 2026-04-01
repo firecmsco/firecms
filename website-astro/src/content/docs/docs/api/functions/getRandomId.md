@@ -13,7 +13,7 @@ title: "getRandomId"
 
 > **getRandomId**(): `number`
 
-Defined in: [components/ArrayContainer.tsx:550](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
+Defined in: [core/src/components/ArrayContainer.tsx:549](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ArrayContainer.tsx)
 
 ## Returns
 

@@ -11,28 +11,23 @@ title: "getPropertiesWithPropertiesOrder"
 
 # Function: getPropertiesWithPropertiesOrder()
 
-> **getPropertiesWithPropertiesOrder**\<`M`\>(`properties`, `propertiesOrder?`): [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+> **getPropertiesWithPropertiesOrder**(`properties`, `propertiesOrder?`): [`Properties`](../type-aliases/Properties)
 
-Defined in: [util/property\_utils.tsx:120](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
+Defined in: [core/src/util/property\_utils.tsx:106](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
 
-Get properties exclusively indexed by their order
-
-## Type Parameters
-
-### M
-
-`M` *extends* `Record`\<`string`, `any`\>
+Get properties sorted by their order, but include ALL properties.
+Nested keys (like "data.mode") in propertiesOrder are ignored - they're for column ordering.
 
 ## Parameters
 
 ### properties
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`Properties`](../type-aliases/Properties)
 
 ### propertiesOrder?
 
-`Extract`\<keyof `M`, `string`\>[]
+`string`[]
 
 ## Returns
 
-[`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`M`\>
+[`Properties`](../type-aliases/Properties)

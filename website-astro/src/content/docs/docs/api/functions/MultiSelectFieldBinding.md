@@ -13,7 +13,7 @@ title: "MultiSelectFieldBinding"
 
 > **MultiSelectFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [form/field\_bindings/MultiSelectFieldBinding.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/MultiSelectFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/MultiSelectFieldBinding.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/MultiSelectFieldBinding.tsx)
 
 This fields renders a dropdown with multiple selection.
 
@@ -24,7 +24,7 @@ and tables to the specified properties.
 
 ### \_\_namedParameters
 
-[`FieldProps`](../interfaces/FieldProps)\<[`EnumType`](../type-aliases/EnumType)[], `any`, `any`\>
+[`FieldProps`](../interfaces/FieldProps)\<[`ArrayProperty`](../interfaces/ArrayProperty), `any`, `any`\>
 
 ## Returns
 

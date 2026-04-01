@@ -15,3 +15,7 @@ export * from "./routes";
 export { useUnsavedChangesDialog } from "./hooks/useUnsavedChangesDialog";
 export type { UnsavedChangesDialogProps } from "./components/UnsavedChangesDialog";
 export { UnsavedChangesDialog } from "./components/UnsavedChangesDialog";
+export * from "./i18n/RebaseI18nProvider";
+export * from "./locales/en";
+export * from "./locales/es";
+export * from "./editor";

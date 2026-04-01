@@ -11,20 +11,33 @@ title: "DrawerLogo"
 
 # Function: DrawerLogo()
 
-> **DrawerLogo**(`logo`): `Element`
+> **DrawerLogo**(`__namedParameters`): `Element`
 
-Defined in: [core/DefaultDrawer.tsx:156](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/DefaultDrawer.tsx)
-
-This is the logo displayed in the drawer
-It expands when the drawer is open.
+Defined in: [core/src/core/DefaultDrawer.tsx:155](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/DefaultDrawer.tsx)
 
 ## Parameters
 
-### logo
+### \_\_namedParameters
+
+#### drawerHovered
+
+`boolean`
+
+#### drawerOpen
+
+`boolean`
 
 #### logo?
 
 `string`
+
+#### logoDestination?
+
+`string`
+
+#### title?
+
+`ReactNode`
 
 ## Returns
 

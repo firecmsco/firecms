@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useAuthController, useCustomizationController, useRebaseContext, useLargeLayout } from "../../hooks";
+import { useAuthController, useCustomizationController, useRebaseContext, useLargeLayout, useTranslation } from "../../hooks";
 import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController, ViewMode } from "@rebasepro/types";
 import {
     AddIcon,
@@ -47,6 +47,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     const { canCreate, canDelete } = usePermissions();
 
     const largeLayout = useLargeLayout();
+    const { t } = useTranslation();
 
     const selectedEntities = selectionController.selectedEntities;
 
@@ -93,7 +94,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             </IconButton>;
         multipleDeleteButton =
             <Tooltip
-                title={multipleDeleteEnabled ? "Delete" : "You have selected at least one entity you cannot delete"}>
+                title={multipleDeleteEnabled ? t("delete") : t("delete_not_allowed")}>
                 {button}
             </Tooltip>
     }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSnackbarController, useCollectionRegistryController } from "../../index";
+import { useSnackbarController, useCollectionRegistryController, useTranslation } from "../../index";
 import { Role, SecurityRule, UserManagementDelegate } from "@rebasepro/types";
 import {
     AddIcon,
@@ -36,6 +36,7 @@ import { ConfirmationDialog } from "../ConfirmationDialog";
 export function RolesView({ userManagement }: { userManagement: UserManagementDelegate }) {
     const { roles, saveRole, deleteRole, loading, allowDefaultRolesCreation } = userManagement;
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedRole, setSelectedRole] = useState<Role | undefined>();
@@ -63,11 +64,11 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
         setDeleteInProgress(true);
         try {
             await deleteRole(roleToDelete);
-            snackbarController.open({ type: "success", message: "Role deleted successfully" });
+            snackbarController.open({ type: "success", message: t("role_deleted_successfully") });
             setDeleteConfirmOpen(false);
             setRoleToDelete(undefined);
         } catch (error: unknown) {
-            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Error deleting role" });
+            snackbarController.open({ type: "error", message: error instanceof Error ? error.message : t("error_deleting_role") });
         } finally {
             setDeleteInProgress(false);
         }
@@ -91,10 +92,10 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
         <Container className="w-full flex flex-col py-4 gap-4" maxWidth={"6xl"}>
             <div className="flex items-center mt-12">
                 <Typography gutterBottom variant="h4" className="grow" component="h4">
-                    Roles
+                    {t("roles")}
                 </Typography>
                 <Button startIcon={<AddIcon />} onClick={handleAddRole} disabled={!saveRole}>
-                    Add role
+                    {t("add_role")}
                 </Button>
             </div>
 
@@ -102,8 +103,8 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
                 <Table className="w-full">
                     <TableHeader>
                         <TableCell header className="w-16"></TableCell>
-                        <TableCell header>Role</TableCell>
-                        <TableCell header className="items-center">Is Admin</TableCell>
+                        <TableCell header>{t("role")}</TableCell>
+                        <TableCell header className="items-center">{t("is_admin")}</TableCell>
                     </TableHeader>
                     <TableBody>
                         {roles && roles.map((role: Role) => {
@@ -112,7 +113,7 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
                                 <TableRow key={role.id} onClick={() => saveRole && handleEditRole(role)}>
                                     <TableCell style={{ width: "64px" }}>
                                         {!role.isAdmin && deleteRole && (
-                                            <Tooltip asChild title="Delete this role">
+                                            <Tooltip asChild title={t("delete_this_role")}>
                                                 <IconButton
                                                     size="small"
                                                     onClick={(e) => {
@@ -139,12 +140,12 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
                             <TableRow>
                                 <TableCell colspan={4}>
                                     <CenteredView className="flex flex-col gap-4 my-8 items-center">
-                                        <Typography variant="label">
-                                            You don't have any roles yet.
+                                         <Typography variant="label">
+                                            {t("no_roles_yet")}
                                         </Typography>
                                         {allowDefaultRolesCreation && saveRole && (
                                             <Button onClick={createDefaultRoles}>
-                                                Create default roles
+                                                {t("create_default_roles")}
                                             </Button>
                                         )}
                                     </CenteredView>
@@ -172,8 +173,8 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
                 loading={deleteInProgress}
                 onAccept={handleDelete}
                 onCancel={() => { setDeleteConfirmOpen(false); setRoleToDelete(undefined); }}
-                title={<>Delete?</>}
-                body={<>Are you sure you want to delete this role?</>}
+                title={<>{t("delete_confirmation_title")}</>}
+                body={<>{t("delete_role_confirmation")}</>}
             />
         </Container>
     );
@@ -194,6 +195,7 @@ function RoleDetailsForm({
     handleClose: () => void;
 }) {
     const snackbarController = useSnackbarController();
+    const { t } = useTranslation();
     const isNewRole = !roleProp;
 
     const [roleId, setRoleId] = useState(roleProp?.id || "");
@@ -239,7 +241,7 @@ function RoleDetailsForm({
                 style={{ display: "flex", flexDirection: "column", position: "relative", height: "100%" }}>
 
                 <DialogTitle variant="h4" gutterBottom={false}>
-                    Role
+                    {t("role")}
                 </DialogTitle>
 
                 <DialogContent className="h-full grow overflow-y-auto">
@@ -251,7 +253,7 @@ function RoleDetailsForm({
                                 error={submitCount > 0 && Boolean(errors.id)}
                                 value={roleId}
                                 onChange={(e) => setRoleId(e.target.value)}
-                                label="Role ID"
+                                label={t("role_id")}
                                 disabled={!isNewRole}
                             />
                             {submitCount > 0 && errors.id && (
@@ -266,7 +268,7 @@ function RoleDetailsForm({
                                 error={submitCount > 0 && Boolean(errors.name)}
                                 value={roleName}
                                 onChange={(e) => setRoleName(e.target.value)}
-                                label="Role Name"
+                                label={t("role_name")}
                             />
                             {submitCount > 0 && errors.name && (
                                 <Typography variant="caption" color="error">{errors.name}</Typography>
@@ -279,7 +281,7 @@ function RoleDetailsForm({
                                     checked={isAdmin}
                                     onCheckedChange={(checked) => setIsAdmin(Boolean(checked))}
                                 />
-                                <span className="font-medium">Is Admin</span>
+                                <span className="font-medium">{t("is_admin")}</span>
                             </label>
                         </div>
 
@@ -291,7 +293,7 @@ function RoleDetailsForm({
 
                 <DialogActions>
                     <Button variant="text" onClick={handleClose}>
-                        Cancel
+                        {t("cancel")}
                     </Button>
                     <LoadingButton
                         variant="filled"
@@ -299,7 +301,7 @@ function RoleDetailsForm({
                         disabled={!isNewRole && !isAdmin}
                         loading={isSubmitting}
                     >
-                        {isNewRole ? "Create role" : "Update"}
+                        {isNewRole ? t("create_role") : t("update")}
                     </LoadingButton>
                 </DialogActions>
             </form>
@@ -311,10 +313,10 @@ function RoleDetailsForm({
 // CollectionPermissionsMatrix
 // ============================================
 const CRUD_OPS = [
-    { op: "select" as const, label: "Read" },
-    { op: "insert" as const, label: "Create" },
-    { op: "update" as const, label: "Edit" },
-    { op: "delete" as const, label: "Delete" },
+    { op: "select" as const, label: "read" },
+    { op: "insert" as const, label: "create" },
+    { op: "update" as const, label: "edit" },
+    { op: "delete" as const, label: "delete" },
 ];
 
 function hasRoleAccess(
@@ -351,28 +353,29 @@ function PermCell({ granted }: { granted: boolean }) {
 
 function CollectionPermissionsMatrix({ roleId, isAdmin }: { roleId: string; isAdmin: boolean }) {
     const { collections } = useCollectionRegistryController();
+    const { t } = useTranslation();
 
     if (!collections || collections.length === 0) {
         return (
             <div className="mt-4">
-                <Typography variant="label" className="text-surface-400">No collections configured</Typography>
+                <Typography variant="label" className="text-surface-400">{t("no_collections_configured")}</Typography>
             </div>
         );
     }
 
-    const topLevel = collections.filter(c => !c.collectionGroup);
+    const topLevel = collections;
 
     return (
         <div className="mt-4">
             <Typography variant="label" className="mb-2 block text-surface-500 dark:text-surface-400 uppercase tracking-wide text-xs">
-                Collection permissions
+                {t("collection_permissions")}
             </Typography>
             <div className={`rounded-lg overflow-hidden border w-full ${defaultBorderMixin}`}>
                 <Table className="w-full">
                     <TableHeader>
-                        <TableCell header>Collection</TableCell>
+                        <TableCell header>{t("collection")}</TableCell>
                         {CRUD_OPS.map(({ op, label }) => (
-                            <TableCell key={op} header align="center" className="w-20">{label}</TableCell>
+                            <TableCell key={op} header align="center" className="w-20">{t(label)}</TableCell>
                         ))}
                     </TableHeader>
                     <TableBody>
@@ -384,8 +387,8 @@ function CollectionPermissionsMatrix({ roleId, isAdmin }: { roleId: string; isAd
                                         <div className="flex items-center gap-1.5">
                                             <span className="font-medium">{collection.name}</span>
                                             {noRules && !isAdmin && (
-                                                <Tooltip title="No security rules defined — all operations unrestricted">
-                                                    <Chip size="smallest" colorScheme="grayLight">no rules</Chip>
+                                                <Tooltip title={t("no_security_rules_defined")}>
+                                                    <Chip size="smallest" colorScheme="grayLight">{t("no_rules")}</Chip>
                                                 </Tooltip>
                                             )}
                                         </div>

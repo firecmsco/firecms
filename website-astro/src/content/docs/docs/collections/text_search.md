@@ -37,8 +37,8 @@ This means:
 - **Fast and efficient** — Postgres full-text search is well-optimized
 - **Supports partial matching** — finds results even with partial terms
 
-:::tip Performance Tip
-For larger datasets, consider adding a GIN index on your searchable text columns to improve search performance:
+:::tip
+**Performance Tip:** For larger datasets, consider adding a GIN index on your searchable text columns to improve search performance:
 ```sql
 CREATE INDEX idx_products_search ON products USING GIN (to_tsvector('english', name || ' ' || description));
 ```

@@ -16,7 +16,6 @@ import {
 } from "@rebasepro/core";
 import {
     collection as collectionClause,
-    collectionGroup as collectionGroupClause,
     CollectionReference,
     deleteDoc,
     deleteField,
@@ -119,13 +118,12 @@ export function useFirestoreDataSource({
         order: "desc" | "asc" | undefined,
         startAfter: any[] | undefined,
         limit: number | undefined,
-        collectionGroup = false,
         databaseId?: string) => {
 
         if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
-        const collectionReference: Query = collectionGroup ? collectionGroupClause(firestore, path) : collectionClause(firestore, path);
+        const collectionReference: Query = collectionClause(firestore, path);
 
         const queryParams: QueryConstraint[] = [];
         if (filter) {
@@ -318,7 +316,6 @@ export function useFirestoreDataSource({
         }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> => {
 
-            const isCollectionGroup = collection?.collectionGroup ?? false;
             const databaseId = collection?.databaseId;
 
             const resolvedPath = path;
@@ -329,10 +326,9 @@ export function useFirestoreDataSource({
                 filter,
                 startAfter,
                 orderBy,
-                order,
-                isCollectionGroup
+                order
             });
-            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter as any[] | undefined, limit, isCollectionGroup, databaseId);
+            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter as any[] | undefined, limit, databaseId);
 
             const snapshot = await getDocs(query);
             return snapshot.docs.map((doc) => createEntityFromDocument(doc, databaseId));
@@ -384,7 +380,6 @@ export function useFirestoreDataSource({
                 throw Error("useFirestoreDataSource Firebase not initialised");
             }
 
-            const isCollectionGroup = collection?.collectionGroup ?? false;
             const databaseId = collection?.databaseId;
 
             if (searchString) {
@@ -401,7 +396,7 @@ export function useFirestoreDataSource({
                 path,
                 resolvedPath
             });
-            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter as any[] | undefined, limit, isCollectionGroup, databaseId);
+            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter as any[] | undefined, limit, databaseId);
             return onSnapshot(query,
                 {
                     next: (snapshot) => {
@@ -571,10 +566,9 @@ export function useFirestoreDataSource({
             collection,
         }: FetchCollectionProps<any>): Promise<number> => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
-            const isCollectionGroup = collection?.collectionGroup ?? false;
             const databaseId = collection?.databaseId;
             const resolvedPath = path;
-            const query = buildQuery(resolvedPath, filter, orderBy, order, undefined, undefined, isCollectionGroup, databaseId);
+            const query = buildQuery(resolvedPath, filter, orderBy, order, undefined, undefined, databaseId);
             const snapshot = await getCountFromServer(query);
             return snapshot.data().count;
         }, [firebaseApp]),

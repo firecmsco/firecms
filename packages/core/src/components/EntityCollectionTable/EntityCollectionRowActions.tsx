@@ -2,7 +2,7 @@ import React, { MouseEvent, useCallback } from "react";
 
 import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "@rebasepro/types";
 import { Badge, Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip } from "@rebasepro/ui";
-import { useRebaseContext, useLargeLayout } from "../../hooks";
+import { useRebaseContext, useLargeLayout, useTranslation } from "../../hooks";
 import { getEntityFromCache } from "../../util/entity_cache";
 import { getLocalChangesBackup } from "@rebasepro/common";
 
@@ -68,6 +68,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
     const largeLayout = useLargeLayout();
 
     const context = useRebaseContext();
+    const { t } = useTranslation();
 
     const onCheckedChange = useCallback((checked: boolean) => {
         selectionController?.toggleEntitySelection(entity, checked);
@@ -104,7 +105,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
                     {uncollapsedActions.map((action, index) => {
                         const isEditAction = action.key === "edit";
-                        const tooltip = isEditAction && hasDraft ? "Local unsaved changes" : action.name;
+                        const tooltip = isEditAction && hasDraft ? t("unsaved_local_changes") : action.name;
 
                         let iconButton = <IconButton
                             onClick={(event: MouseEvent) => {

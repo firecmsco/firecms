@@ -13,4 +13,4 @@ title: "EntityPreviewContainer"
 
 > `const` **EntityPreviewContainer**: `ForwardRefExoticComponent`\<[`EntityPreviewContainerProps`](../type-aliases/EntityPreviewContainerProps) & `RefAttributes`\<`HTMLDivElement`\>\>
 
-Defined in: [components/EntityPreview.tsx:203](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:328](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)

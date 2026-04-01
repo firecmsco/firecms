@@ -11,7 +11,7 @@ title: "NavigationEntry"
 
 # Interface: NavigationEntry
 
-Defined in: [types/navigation.ts:246](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:295](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/navigation.ts:246](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`any`, `any`\>
 
-Defined in: [types/navigation.ts:252](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:301](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/navigation.ts:252](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **description**: `string`
 
-Defined in: [types/navigation.ts:254](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:303](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/navigation.ts:254](https://github.com/rebaseco/rebase/blob/ma
 
 > **group**: `string`
 
-Defined in: [types/navigation.ts:255](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:304](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/navigation.ts:255](https://github.com/rebaseco/rebase/blob/ma
 
 > **id**: `string`
 
-Defined in: [types/navigation.ts:247](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:296](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -51,15 +51,15 @@ Defined in: [types/navigation.ts:247](https://github.com/rebaseco/rebase/blob/ma
 
 > **name**: `string`
 
-Defined in: [types/navigation.ts:249](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:298](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
-### path
+### slug
 
-> **path**: `string`
+> **slug**: `string`
 
-Defined in: [types/navigation.ts:250](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:299](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [types/navigation.ts:250](https://github.com/rebaseco/rebase/blob/ma
 
 > **type**: `"view"` \| `"collection"` \| `"admin"`
 
-Defined in: [types/navigation.ts:251](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:300](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [types/navigation.ts:251](https://github.com/rebaseco/rebase/blob/ma
 
 > **url**: `string`
 
-Defined in: [types/navigation.ts:248](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:297](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -83,4 +83,4 @@ Defined in: [types/navigation.ts:248](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **view**: [`CMSView`](CMSView)
 
-Defined in: [types/navigation.ts:253](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:302](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)

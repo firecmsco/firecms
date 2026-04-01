@@ -11,7 +11,7 @@ title: "ScaffoldProps"
 
 # Interface: ScaffoldProps
 
-Defined in: [app/Scaffold.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
+Defined in: [core/src/app/Scaffold.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [app/Scaffold.tsx:13](https://github.com/rebaseco/rebase/blob/main/p
 
 > `optional` **autoOpenDrawer**: `boolean`
 
-Defined in: [app/Scaffold.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
+Defined in: [core/src/app/Scaffold.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
 
 Open the drawer on hover
 
@@ -29,7 +29,7 @@ Open the drawer on hover
 
 > `optional` **className**: `string`
 
-Defined in: [app/Scaffold.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
+Defined in: [core/src/app/Scaffold.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [app/Scaffold.tsx:31](https://github.com/rebaseco/rebase/blob/main/p
 
 > `optional` **logo**: `string`
 
-Defined in: [app/Scaffold.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
+Defined in: [core/src/app/Scaffold.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
 
 Logo to be displayed in the top bar and drawer.
 Note that this has no effect if you are using a custom AppBar or Drawer.
@@ -48,7 +48,7 @@ Note that this has no effect if you are using a custom AppBar or Drawer.
 
 > `optional` **padding**: `boolean`
 
-Defined in: [app/Scaffold.tsx:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
+Defined in: [core/src/app/Scaffold.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
 
 If true, the main content will be padded in large layouts. Defaults to true.
 
@@ -58,4 +58,4 @@ If true, the main content will be padded in large layouts. Defaults to true.
 
 > `optional` **style**: `CSSProperties`
 
-Defined in: [app/Scaffold.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
+Defined in: [core/src/app/Scaffold.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)

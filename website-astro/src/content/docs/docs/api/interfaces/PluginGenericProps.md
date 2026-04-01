@@ -11,7 +11,7 @@ title: "PluginGenericProps"
 
 # Interface: PluginGenericProps\<USER\>
 
-Defined in: [types/plugins.tsx:254](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:321](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ## Type Parameters
 
@@ -25,4 +25,4 @@ Defined in: [types/plugins.tsx:254](https://github.com/rebaseco/rebase/blob/main
 
 > **context**: [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
-Defined in: [types/plugins.tsx:255](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:322](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)

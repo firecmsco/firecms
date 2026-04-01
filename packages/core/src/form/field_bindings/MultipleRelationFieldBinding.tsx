@@ -5,7 +5,7 @@ import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty } from "../../util";
 import { getRelationFrom, resolveRelationProperty } from "@rebasepro/common";
 
-import { useEntitySelectionDialog } from "../../hooks";
+import { useEntitySelectionDialog, useTranslation } from "../../hooks";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@rebasepro/ui";
 import { RelationPreview } from "../../preview";
 
@@ -31,6 +31,7 @@ export function MultipleRelationFieldBinding({
 }: FieldProps<RelationProperty>) {
 
     const value = Array.isArray(valueProp) ? valueProp : [];
+    const { t } = useTranslation();
 
     if (property.type !== "relation") {
         throw Error("RelationFieldBinding expected a property containing a relation");
@@ -112,7 +113,7 @@ export function MultipleRelationFieldBinding({
                 disabled={isSubmitting}
                 buildEntry={buildEntry}
                 canAddElements={false}
-                addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
+                addLabel={property.name ? t("add_reference_to", { name: property.name }) : t("add_reference")}
                 newDefaultEntry={null}
                 onValueChange={(value) => setFieldValue(propertyKey, value)}
             />
@@ -124,7 +125,7 @@ export function MultipleRelationFieldBinding({
                 disabled={isSubmitting}
                 onClick={onEntryClick}>
                 <EditIcon size={"small"} />
-                Edit {property.name}
+                {t("edit")} {property.name}
             </Button>
         </div>}
     </>;

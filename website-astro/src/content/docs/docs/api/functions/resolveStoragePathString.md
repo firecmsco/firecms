@@ -13,7 +13,7 @@ title: "resolveStoragePathString"
 
 > **resolveStoragePathString**\<`M`\>(`__namedParameters`): `string`
 
-Defined in: [util/storage.ts:76](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/storage.ts)
+Defined in: [common/src/util/storage.ts:67](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/storage.ts)
 
 ## Type Parameters
 

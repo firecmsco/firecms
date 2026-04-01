@@ -13,7 +13,7 @@ title: "ReferencePreview"
 
 > **ReferencePreview**(`props`): `Element`
 
-Defined in: [preview/components/ReferencePreview.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
+Defined in: [core/src/preview/components/ReferencePreview.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ReferencePreview.tsx)
 
 ## Parameters
 

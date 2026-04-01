@@ -9,27 +9,45 @@ title: "MapProperty"
 
 [@rebasepro/core](../README) / MapProperty
 
-# Interface: MapProperty\<T\>
+# Interface: MapProperty
 
-Defined in: [types/properties.ts:526](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:580](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ## Extends
 
-- [`BaseProperty`](BaseProperty)\<`T`\>
-
-## Type Parameters
-
-### T
-
-`T` *extends* `Record`\<`string`, [`CMSType`](../type-aliases/CMSType)\> = `Record`\<`string`, [`CMSType`](../type-aliases/CMSType)\>
+- [`BaseProperty`](BaseProperty)
 
 ## Properties
+
+### callbacks?
+
+> `optional` **callbacks**: [`PropertyCallbacks`](../type-aliases/PropertyCallbacks)\<`any`, `any`, [`User`](../type-aliases/User)\>
+
+Defined in: [types/src/types/properties.ts:212](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+
+Callbacks/Hooks for this property field to transform and sanitize data during its lifecycle.
+
+#### Inherited from
+
+[`BaseProperty`](BaseProperty).[`callbacks`](BaseProperty.md#callbacks)
+
+***
+
+### columnType?
+
+> `optional` **columnType**: `"json"` \| `"jsonb"`
+
+Defined in: [types/src/types/properties.ts:585](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+
+Optional database column type. Defaults to `jsonb`.
+
+***
 
 ### columnWidth?
 
 > `optional` **columnWidth**: `number`
 
-Defined in: [types/properties.ts:101](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:128](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Width in pixels of this column in the collection view. If not set
 the width is inferred based on the other configurations
@@ -40,11 +58,35 @@ the width is inferred based on the other configurations
 
 ***
 
+### conditions?
+
+> `optional` **conditions**: [`PropertyConditions`](PropertyConditions)
+
+Defined in: [types/src/types/properties.ts:207](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+
+Declarative conditions for dynamic property behavior using JSON Logic.
+
+An alternative to PropertyBuilder functions that can be:
+- Stored in the database as JSON
+- Edited via the collection editor UI
+- Evaluated at runtime like property builders
+
+#### See
+
+ - PropertyConditions for available condition options
+ - https://jsonlogic.com/ for JSON Logic syntax
+
+#### Inherited from
+
+[`BaseProperty`](BaseProperty).[`conditions`](BaseProperty.md#conditions)
+
+***
+
 ### customProps?
 
 > `optional` **customProps**: `any`
 
-Defined in: [types/properties.ts:148](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:170](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Additional props that are passed to the components defined in `field`
 or in `preview`.
@@ -55,25 +97,11 @@ or in `preview`.
 
 ***
 
-### dataType
-
-> **dataType**: `"map"`
-
-Defined in: [types/properties.ts:528](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
-
-Datatype of the property
-
-#### Overrides
-
-[`BaseProperty`](BaseProperty).[`dataType`](BaseProperty.md#datatype)
-
-***
-
 ### defaultValue?
 
-> `optional` **defaultValue**: `T` \| `null`
+> `optional` **defaultValue**: `unknown`
 
-Defined in: [types/properties.ts:153](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:158](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 This value will be set by default for new entities.
 
@@ -87,7 +115,7 @@ This value will be set by default for new entities.
 
 > `optional` **description**: `string`
 
-Defined in: [types/properties.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:114](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Property description, always displayed under the field
 
@@ -101,7 +129,7 @@ Property description, always displayed under the field
 
 > `optional` **disabled**: `boolean` \| [`PropertyDisabledConfig`](PropertyDisabledConfig)
 
-Defined in: [types/properties.ts:121](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:148](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Is this field disabled.
 When set to true, it gets rendered as a
@@ -115,18 +143,30 @@ disabled or hide the field completely)
 
 ***
 
-### editable?
+### dynamicProps()?
 
-> `optional` **editable**: `boolean`
+> `optional` **dynamicProps**: (`props`) => `Partial`\<[`Property`](../type-aliases/Property)\>
 
-Defined in: [types/properties.ts:159](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:194](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
-Should this property be editable. If set to true, the user will be able to modify the property and
-save the new config. The saved config will then become the source of truth.
+Use this to define dynamic properties that change based on certain conditions
+or on the entity's values. For example, you can make a field read-only if
+another field has a certain value.
+This function receives the same props as a `PropertyBuilder` and should return a partial `Property` object.
+
+#### Parameters
+
+##### props
+
+[`PropertyBuilderProps`](../type-aliases/PropertyBuilderProps)
+
+#### Returns
+
+`Partial`\<[`Property`](../type-aliases/Property)\>
 
 #### Inherited from
 
-[`BaseProperty`](BaseProperty).[`editable`](BaseProperty.md#editable)
+[`BaseProperty`](BaseProperty).[`dynamicProps`](BaseProperty.md#dynamicprops)
 
 ***
 
@@ -134,7 +174,7 @@ save the new config. The saved config will then become the source of truth.
 
 > `optional` **expanded**: `boolean`
 
-Defined in: [types/properties.ts:578](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:627](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Should the field be initially expanded. Defaults to `true`
 
@@ -142,9 +182,9 @@ Should the field be initially expanded. Defaults to `true`
 
 ### Field?
 
-> `optional` **Field**: `ComponentType`\<[`FieldProps`](FieldProps)\<`T`, `any`, `any`\>\>
+> `optional` **Field**: `ComponentType`\<[`FieldProps`](FieldProps)\<`any`, `any`, `any`\>\>
 
-Defined in: [types/properties.ts:135](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:179](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 If you need to render a custom field, you can create a component that
 takes `FieldProps` as props. You receive the value, a function to
@@ -162,7 +202,7 @@ in the component.
 
 > `optional` **hideFromCollection**: `boolean`
 
-Defined in: [types/properties.ts:106](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:133](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Do not show this property in the collection view
 
@@ -176,24 +216,10 @@ Do not show this property in the collection view
 
 > `optional` **keyValue**: `boolean`
 
-Defined in: [types/properties.ts:584](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:632](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Render this map as a key-value table that allows to use
 arbitrary keys. You don't need to define the properties in this case.
-
-***
-
-### longDescription?
-
-> `optional` **longDescription**: `string`
-
-Defined in: [types/properties.ts:95](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
-
-Longer description of a field, displayed under a popover
-
-#### Inherited from
-
-[`BaseProperty`](BaseProperty).[`longDescription`](BaseProperty.md#longdescription)
 
 ***
 
@@ -201,18 +227,18 @@ Longer description of a field, displayed under a popover
 
 > `optional` **minimalistView**: `boolean`
 
-Defined in: [types/properties.ts:573](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:623](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Display the child properties directly, without being wrapped in an
 extendable panel. Note that this will also hide the title of this property.
 
 ***
 
-### name?
+### name
 
-> `optional` **name**: `string`
+> **name**: `string`
 
-Defined in: [types/properties.ts:77](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:109](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Property name (e.g. Product)
 
@@ -226,7 +252,7 @@ Property name (e.g. Product)
 
 > `optional` **pickOnlySomeKeys**: `boolean`
 
-Defined in: [types/properties.ts:561](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:613](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Allow the user to add only some keys in this map.
 By default, all properties of the map have the corresponding field in
@@ -238,9 +264,9 @@ needed
 
 ### Preview?
 
-> `optional` **Preview**: `ComponentType`\<[`PropertyPreviewProps`](PropertyPreviewProps)\<`T`, `any`\>\>
+> `optional` **Preview**: `ComponentType`\<[`PropertyPreviewProps`](PropertyPreviewProps)\<`any`, `any`\>\>
 
-Defined in: [types/properties.ts:142](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:186](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Configure how a property is displayed as a preview, e.g. in the collection
 view. You can customize it by passing custom props that are received
@@ -254,9 +280,9 @@ in the component.
 
 ### previewProperties?
 
-> `optional` **previewProperties**: `Partial`\<`Extract`\<keyof `T`, `string`\>\>[]
+> `optional` **previewProperties**: `string`[]
 
-Defined in: [types/properties.ts:552](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:605](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Properties that are displayed when rendered as a preview
 
@@ -264,9 +290,9 @@ Properties that are displayed when rendered as a preview
 
 ### properties?
 
-> `optional` **properties**: [`PropertiesOrBuilders`](../type-aliases/PropertiesOrBuilders)\<`T`\>
+> `optional` **properties**: [`Properties`](../type-aliases/Properties)
 
-Defined in: [types/properties.ts:533](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:589](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Record of properties included in this map.
 
@@ -274,9 +300,9 @@ Record of properties included in this map.
 
 ### propertiesOrder?
 
-> `optional` **propertiesOrder**: `Extract`\<keyof `T`, `string`\>[]
+> `optional` **propertiesOrder**: `string`[]
 
-Defined in: [types/properties.ts:540](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:595](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Order in which the properties are displayed.
 If you are specifying your collection as code, the order is the same as the
@@ -288,7 +314,7 @@ one you define in `properties`, and you don't need to specify this prop.
 
 > `optional` **propertyConfig**: `string`
 
-Defined in: [types/properties.ts:90](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:122](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 You can use this prop to reuse a property that has been defined
 in the top level of the CMS in the prop `fields`.
@@ -305,7 +331,7 @@ overwritten by the current property config.
 
 > `optional` **readOnly**: `boolean`
 
-Defined in: [types/properties.ts:112](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:139](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Is this a read only property. When set to true, it gets rendered as a
 preview.
@@ -320,10 +346,18 @@ preview.
 
 > `optional` **spreadChildren**: `boolean`
 
-Defined in: [types/properties.ts:567](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:618](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Display the child properties as independent columns in the collection
 view
+
+***
+
+### type
+
+> **type**: `"map"`
+
+Defined in: [types/src/types/properties.ts:581](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -331,7 +365,7 @@ view
 
 > `optional` **validation**: [`PropertyValidationSchema`](PropertyValidationSchema)
 
-Defined in: [types/properties.ts:547](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:601](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Rules for validating this property.
 NOTE: If you don't set `required` in the map property, an empty object
@@ -347,7 +381,7 @@ will be considered valid, even if you set `required` in the properties.
 
 > `optional` **widthPercentage**: `number`
 
-Defined in: [types/properties.ts:165](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:164](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 A number between 0 and 100 that indicates the width of the field in the form view.
 It defaults to 100, but you can set it to 50 to have two fields in the same row.

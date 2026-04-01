@@ -13,7 +13,7 @@ title: "FilterCombinationValidProps"
 
 > **FilterCombinationValidProps** = `object`
 
-Defined in: [types/datasource.ts:239](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:69](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ## Properties
 
@@ -21,7 +21,15 @@ Defined in: [types/datasource.ts:239](https://github.com/rebaseco/rebase/blob/ma
 
 > **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`any`\>
 
-Defined in: [types/datasource.ts:241](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:72](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
+
+***
+
+### databaseId?
+
+> `optional` **databaseId**: `string`
+
+Defined in: [types/src/controllers/datasource.ts:71](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -29,7 +37,7 @@ Defined in: [types/datasource.ts:241](https://github.com/rebaseco/rebase/blob/ma
 
 > **filterValues**: [`FilterValues`](FilterValues)\<`any`\>
 
-Defined in: [types/datasource.ts:242](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:73](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -37,7 +45,7 @@ Defined in: [types/datasource.ts:242](https://github.com/rebaseco/rebase/blob/ma
 
 > **path**: `string`
 
-Defined in: [types/datasource.ts:240](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:70](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
 
 ***
 
@@ -45,4 +53,4 @@ Defined in: [types/datasource.ts:240](https://github.com/rebaseco/rebase/blob/ma
 
 > `optional` **sortBy**: \[`string`, `"asc"` \| `"desc"`\]
 
-Defined in: [types/datasource.ts:243](https://github.com/rebaseco/rebase/blob/main/packages/core/src/types/datasource.ts)
+Defined in: [types/src/controllers/datasource.ts:74](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
