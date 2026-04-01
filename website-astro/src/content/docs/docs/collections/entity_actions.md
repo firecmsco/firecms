@@ -62,13 +62,11 @@ export const productsCollection = buildCollection<Product>({
 
 ### Defining actions globally
 
-You can define entity actions globally by passing them to the `Rebase` component if you are self-hosting,
-or in the `RebaseAppConfig` if you are using Rebase Cloud.
+You can define entity actions globally by passing them to the `Rebase` component:
 
 ```tsx
 import { ShareIcon } from "@rebasepro/ui";
 
-// Self-hosted
 <Rebase
     entityActions={[{
         key: "share",
@@ -80,23 +78,6 @@ import { ShareIcon } from "@rebasepro/ui";
     }]}
     {...otherProps}
 />
-```
-
-```tsx
-import { ShareIcon } from "@rebasepro/ui";
-
-// Rebase Cloud
-const appConfig: RebaseAppConfig = {
-    entityActions: [{
-        key: "share",
-        name: "Share",
-        icon: <ShareIcon/>,
-        onClick: ({ entity, context }) => {
-            // Your share logic here
-        }
-    }],
-    // ...other config
-};
 ```
 
 #### EntityAction

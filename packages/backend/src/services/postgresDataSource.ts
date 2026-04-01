@@ -30,7 +30,7 @@ export class PostgresDataSource implements DataSource {
 
     /**
      * When true, realtime notifications are deferred until after the
-     * wrapping transaction commits.  Set by `withAuth` → `wrapMethod`.
+     * wrapping transaction commits.  Set by `withAuth` → `withTransaction`.
      */
     _deferNotifications = false;
     _pendingNotifications: Array<{
@@ -140,17 +140,9 @@ export class PostgresDataSource implements DataSource {
 
         const subscriptionId = this.generateSubscriptionId();
 
-        console.log("🔄 [DataSource] Setting up collection subscription:", subscriptionId);
-        console.log("🔄 [DataSource] Collection path:", path);
-
-        // Create a wrapper callback that logs and calls the original callback
+        // Type-adapter wrapper: RealtimeService expects a union callback signature
         const callbackWrapper = (entities: Entity<M>[]) => {
-            console.log("🔄 [DataSource] Received collection update for path:", path);
-            console.log("🔄 [DataSource] Updated entities count:", entities.length);
-            console.log("🔄 [DataSource] Updated entity IDs:", entities.map(e => e.id));
-            console.log("🔄 [DataSource] Calling onUpdate callback...");
             onUpdate(entities);
-            console.log("🔄 [DataSource] onUpdate callback completed");
         };
 
         // Store the subscription in RealtimeService properly using the new public method
@@ -172,9 +164,6 @@ export class PostgresDataSource implements DataSource {
         // Store the callback for this subscription
         this.realtimeService.addSubscriptionCallback(subscriptionId, callbackWrapper as (data: Entity | Entity[] | null) => void);
 
-        console.log("🔄 [DataSource] Subscription registered with RealtimeService");
-        console.log("🔄 [DataSource] Total subscriptions:", this.realtimeService.subscriptions.size);
-
         // Send initial data immediately
         this.fetchCollection({
             path: path,
@@ -186,21 +175,14 @@ export class PostgresDataSource implements DataSource {
             searchString,
             order
         }).then(entities => {
-            console.log("🔄 [DataSource] Initial data fetched for subscription:", subscriptionId);
-            console.log("🔄 [DataSource] Initial entities count:", entities.length);
             callbackWrapper(entities);
         }).catch(error => {
-            console.error("🔄 [DataSource] Error fetching initial data:", error);
             if (onError) onError(error);
         });
 
-        console.log("🔄 [DataSource] Collection subscription setup complete:", subscriptionId);
-
         return () => {
-            console.log("🔄 [DataSource] Unsubscribing from collection:", subscriptionId);
             this.realtimeService.removeSubscriptionCallback(subscriptionId);
             this.realtimeService.subscriptions.delete(subscriptionId);
-            console.log("🔄 [DataSource] Unsubscription complete");
         };
     }
 
@@ -252,11 +234,7 @@ export class PostgresDataSource implements DataSource {
     }: ListenEntityProps<M>): () => void {
 
         const subscriptionId = this.generateSubscriptionId();
-        console.log("🔄 [DataSource] Setting up ENTITY subscription:", subscriptionId);
-
-        // Create a wrapper callback that logs and calls the original callback
         const callbackWrapper = (entity: Entity<M> | null) => {
-            console.log("🔄 [DataSource] Received entity update for path:", path, "ID:", entityId);
             if (entity)
                 onUpdate(entity);
         };
@@ -287,7 +265,6 @@ export class PostgresDataSource implements DataSource {
 
         // Return the unsubscribe function
         return () => {
-            console.log("🔄 [DataSource] Unsubscribing from entity:", subscriptionId);
             this.realtimeService.removeSubscriptionCallback(subscriptionId);
             this.realtimeService.subscriptions.delete(subscriptionId);
         };
@@ -343,9 +320,6 @@ export class PostgresDataSource implements DataSource {
                 if (result) updatedValues = mergeDeep(updatedValues, result);
             }
 
-            console.log("💾 [DataSource] updatedValues after beforeSave callback:", updatedValues);
-        } else {
-            console.warn("⚠️ [DataSource] No beforeSave callback found for collection", path);
         }
 
         try {
@@ -453,8 +427,6 @@ export class PostgresDataSource implements DataSource {
         collection
     }: DeleteEntityProps<M>): Promise<void> {
 
-        console.log("🗑️ [DataSource] Starting delete for entity:", entity.id, "in path:", entity.path);
-
         // Resolve from backend registry to restore callbacks lost during WebSocket serialization
         const { collection: resolvedCollection, callbacks, propertyCallbacks } = this.resolveCollectionCallbacks(collection, entity.path);
 
@@ -510,8 +482,6 @@ export class PostgresDataSource implements DataSource {
             }
         }
 
-        console.log("🗑️ [DataSource] Entity deleted from database, now notifying real-time subscribers");
-
         // Notify real-time subscribers (deferred if inside a transaction)
         if (this._deferNotifications) {
             this._pendingNotifications.push({
@@ -529,7 +499,6 @@ export class PostgresDataSource implements DataSource {
             );
         }
 
-        console.log("🗑️ [DataSource] Real-time notification sent for deletion");
     }
 
     async checkUniqueField(
@@ -714,32 +683,33 @@ export class PostgresDataSource implements DataSource {
         column_default: string | null;
         character_maximum_length: number | null;
     }[]> {
-        // Sanitize table name to prevent SQL injection
+        // Sanitize table name as defense-in-depth (parameterized below)
         const safeName = tableName.replace(/[^a-zA-Z0-9_]/g, "");
 
-        const columns = await this.executeSql(`
+        const result = await this.db.execute(drizzleSql`
             SELECT column_name, data_type, udt_name, is_nullable, column_default, character_maximum_length
             FROM information_schema.columns
             WHERE table_schema = 'public'
-              AND table_name = '${safeName}'
-            ORDER BY ordinal_position;
+              AND table_name = ${safeName}
+            ORDER BY ordinal_position
         `);
+        const columns = result.rows as Record<string, unknown>[];
 
         // Also fetch enum values for any USER-DEFINED columns
-        const enumColumns = columns.filter((c: Record<string, unknown>) => c.data_type === "USER-DEFINED");
+        const enumColumns = columns.filter((c) => c.data_type === "USER-DEFINED");
         if (enumColumns.length > 0) {
             for (const col of enumColumns) {
                 try {
-                    const enumValues = await this.executeSql(`
+                    const enumResult = await this.db.execute(drizzleSql`
                         SELECT e.enumlabel
                         FROM pg_type t
                         JOIN pg_enum e ON t.oid = e.enumtypid
-                        WHERE t.typname = '${(col as Record<string, unknown>).udt_name}'
-                        ORDER BY e.enumsortorder;
+                        WHERE t.typname = ${col.udt_name as string}
+                        ORDER BY e.enumsortorder
                     `);
-                    (col as Record<string, unknown>).enum_values = enumValues.map((e: Record<string, unknown>) => e.enumlabel);
+                    col.enum_values = (enumResult.rows as Record<string, unknown>[]).map(e => e.enumlabel);
                 } catch {
-                    (col as Record<string, unknown>).enum_values = [];
+                    col.enum_values = [];
                 }
             }
         }
@@ -809,7 +779,6 @@ export class AuthenticatedPostgresDataSource implements DataSource {
             const txEntityService = new EntityService(tx);
             const txDelegate = new PostgresDataSource(tx, this.delegate.realtimeService, this.user, this.delegate.poolManager);
             
-            // @ts-ignore
             txDelegate.entityService = txEntityService;
             txDelegate._deferNotifications = true;
             txDelegate._pendingNotifications = pendingNotifications;
@@ -837,8 +806,11 @@ export class AuthenticatedPostgresDataSource implements DataSource {
         return this.withTransaction((delegate) => delegate.fetchCollection(props));
     }
 
-    listenCollection<M extends Record<string, any>>(props: ListenCollectionProps<M>): () => void {
-        const unsubscribe = this.delegate.listenCollection(props);
+    /**
+     * Injects the authenticated user's context into the most recently
+     * registered realtime subscription so RLS-aware polling can apply.
+     */
+    private injectAuthContext(unsubscribe: () => void): () => void {
         const authContext = { userId: this.user?.uid || "anonymous", roles: this.user?.roles ?? [] };
         const entries = Array.from(this.delegate.realtimeService.subscriptions.entries());
         const lastEntry = entries[entries.length - 1];
@@ -846,6 +818,10 @@ export class AuthenticatedPostgresDataSource implements DataSource {
             lastEntry[1].authContext = authContext;
         }
         return unsubscribe;
+    }
+
+    listenCollection<M extends Record<string, any>>(props: ListenCollectionProps<M>): () => void {
+        return this.injectAuthContext(this.delegate.listenCollection(props));
     }
 
     async fetchEntity<M extends Record<string, any>>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
@@ -853,14 +829,7 @@ export class AuthenticatedPostgresDataSource implements DataSource {
     }
 
     listenEntity<M extends Record<string, any>>(props: ListenEntityProps<M>): () => void {
-        const unsubscribe = this.delegate.listenEntity(props);
-        const authContext = { userId: this.user?.uid || "anonymous", roles: this.user?.roles ?? [] };
-        const entries = Array.from(this.delegate.realtimeService.subscriptions.entries());
-        const lastEntry = entries[entries.length - 1];
-        if (lastEntry && lastEntry[1].clientId === "datasource") {
-            lastEntry[1].authContext = authContext;
-        }
-        return unsubscribe;
+        return this.injectAuthContext(this.delegate.listenEntity(props));
     }
 
     async saveEntity<M extends Record<string, any>>(props: SaveEntityProps<M>): Promise<Entity<M>> {
@@ -885,6 +854,11 @@ export class AuthenticatedPostgresDataSource implements DataSource {
         return this.withTransaction((delegate) => delegate.countEntities(props));
     }
 
+    /**
+     * Intentionally delegates to the base delegate WITHOUT RLS wrapping.
+     * executeSql is an admin-only feature; access control should be enforced
+     * at the API route level, not via database-level RLS.
+     */
     async executeSql(sqlText: string, options?: { database?: string, role?: string }): Promise<Record<string, unknown>[]> {
         return this.delegate.executeSql(sqlText, options);
     }

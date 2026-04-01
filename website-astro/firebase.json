@@ -1,18 +1,13 @@
 {
   "hosting": {
     "public": "dist",
-    "site": "rebase-landing-2",
+    "site": "rebase-578f2",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
     "redirects": [
-      {
-        "source": "/pro",
-        "destination": "/pricing",
-        "type": 301
-      },
       {
         "source": "/f/backend_extension",
         "destination": "/features",

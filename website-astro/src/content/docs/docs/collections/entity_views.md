@@ -2,7 +2,7 @@
 slug: docs/collections/entity_views
 title: Entity views
 sidebar_label: Entity views
-description: Rebase allows you to add custom view per entity. Whether you're creating previews, web page visualizations, dashboards, form alterations, or any distinctive view, Rebase's Entity Custom Views cater to your unique requirements. Simply define your custom React component and integrate it within your entity collection schema as an 'EntityCustomView'. For broader applications, register the view in the entity view registry through `RebaseAppConfig` to make it accessible across different collections. These custom entity views are fundamental elements, offering a granule layer of customization and enhancing your CMS's extensibility for diverse implementations.
+description: Add custom views per entity in Rebase. Create previews, dashboards, secondary forms, or any custom view. Define views directly in your collection or register them globally via the entity view registry for reuse across collections.
 ---
 
 ![Custom entity view](/img/entity_view.png)
@@ -152,39 +152,7 @@ const blogCollection = buildCollection({
 
 You might have an entity view that you want to reuse in different collections.
 
-#### Rebase Cloud
-
-In Rebase Cloud, you can add it to the entity view registry in your
-main `RebaseAppConfig` export:
-
-```tsx
-import { RebaseAppConfig } from "@rebasepro/core";
-
-const appConfig: RebaseAppConfig = {
-    version: "1",
-    collections: async (props) => {
-        return ([
-            // ... your collections here
-        ]);
-    },
-    entityViews: [{
-        key: "test-view",
-        name: "Test",
-        Builder: ({
-                      collection,
-                      entity,
-                      modifiedValues
-                  }) => <div>Your view</div>
-    }]
-}
-
-export default appConfig;
-```
-
-#### Rebase PRO
-
-In Rebase PRO, you can add it to the entity view registry in your main
-`Rebase` component:
+You can add it to the entity view registry in the `Rebase` component:
 
 ```tsx
 //...

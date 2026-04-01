@@ -6,7 +6,7 @@ import { EntityService } from '../src/db/entityService';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { sql } from 'drizzle-orm';
 
-// Mock dependencie
+// Mock dependencies
 const mockDb = {
     transaction: jest.fn(),
     execute: jest.fn(),
@@ -52,29 +52,14 @@ describe('PostgresDataSource', () => {
             const user = { uid: 'test-user', email: 'test@example.com' };
             const authDelegate = await delegate.withAuth(user);
 
-            // Mock transaction execution
-            (mockDb.transaction as any).mockImplementation(async (cb: any) => {
-                const mockTx = {
-                    execute: jest.fn(),
-                    select: jest.fn().mockReturnThis(),
-                    from: jest.fn().mockReturnThis(),
-                };
-                return cb(mockTx);
+            const mockTx = { execute: jest.fn() };
+            (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => {
+                return await cb(mockTx);
             });
 
-            // Call a method on the authenticated delegate
-            // We need to mock the internal EntityService call or the method itself
-            // Since we can't easily mock the internal EntityService of the new delegate without more invasive mocking,
-            // we will verify that the transaction was called and set_config was executed.
+            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
-            // However, since we are mocking the db.transaction, the actual method logic inside might fail if we don't mock everything deeply.
-            // Let's rely on the fact that db.transaction is called.
-
-            try {
-                await authDelegate.fetchCollection({ path: 'test_collection', collection: { slug: 'test', properties: {} } as any });
-            } catch (e) {
-                // Ignore errors from missing deep mocks, just check transaction start
-            }
+            await authDelegate.fetchCollection({ path: 'test_collection', collection: { slug: 'test', properties: {} } as any });
 
             expect(mockDb.transaction).toHaveBeenCalled();
         });
@@ -83,68 +68,37 @@ describe('PostgresDataSource', () => {
             const user = { uid: 'test-user-123', email: 'test@example.com' };
             const authDelegate = await delegate.withAuth(user);
 
-            let txExecutor: any;
-            (mockDb.transaction as any).mockImplementation(async (cb: any) => {
-                const mockTx = {
-                    execute: jest.fn(),
-                    select: jest.fn().mockReturnThis(),
-                    from: jest.fn().mockReturnThis(),
-                };
-                txExecutor = mockTx;
-                // We throw here to stop execution before it hits unmocked entity service logic
-                throw new Error("Stop execution");
-                // return cb(mockTx);
+            const mockTx = { execute: jest.fn() } as any;
+            (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => {
+                return await cb(mockTx);
             });
 
-            try {
-                await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any });
-            } catch (e: any) {
-                if (e.message !== "Stop execution") throw e;
-            }
+            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
-            // We actually need to capture the callback passed to transaction and run it
+            await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any });
+
             expect(mockDb.transaction).toHaveBeenCalled();
-
-            // To properly test the sql`` execution, we simulates the internal callback execution
-            const transactionCallback = (mockDb.transaction as any).mock.calls[0][0];
-
-            const mockTx = {
-                execute: jest.fn(),
-            } as any;
-
-            try {
-                await transactionCallback(mockTx);
-            } catch (e) {
-                // ignore downstream errors
-            }
-
             expect(mockTx.execute).toHaveBeenCalled();
-            // We can check if the SQL contains the user ID
             const sqlCall = mockTx.execute.mock.calls[0][0];
-            // The SQL object in drizzle is complex, but we can inspect it roughly or rely on the code review
-            // Ideally testing with a real DB is better, but this unit-tests the logic flow.
+            const callString = JSON.stringify(sqlCall);
+            expect(callString).toContain("set_config");
+            expect(callString).toContain("test-user-123");
         });
 
         it('should set app.user_roles handling array of strings correctly', async () => {
             const user = { uid: 'test-user-123', email: 'test@example.com', roles: ['admin', 'editor'] } as any;
             const authDelegate = await delegate.withAuth(user);
 
-            let txExecutor: any;
-            (mockDb.transaction as any).mockImplementation(async (cb: any) => {
-                txExecutor = { execute: jest.fn(), select: jest.fn().mockReturnThis(), from: jest.fn().mockReturnThis() };
-                throw new Error("Stop execution");
+            const mockTx = { execute: jest.fn() } as any;
+            (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => {
+                return await cb(mockTx);
             });
 
-            try { await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any }); } catch (e: any) {}
+            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
-            const transactionCallback = (mockDb.transaction as any).mock.calls[0][0];
-            const mockTx = { execute: jest.fn() } as any;
-
-            try { await transactionCallback(mockTx); } catch (e) {}
+            await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any });
 
             expect(mockTx.execute).toHaveBeenCalledTimes(1);
-            
-            // The single execute call sets user_id, user_roles, and jwt together
             const sqlCall = mockTx.execute.mock.calls[0][0];
             const callString = JSON.stringify(sqlCall);
             expect(callString).toContain("set_config");
@@ -155,16 +109,14 @@ describe('PostgresDataSource', () => {
             const user = { uid: 'test-user-123', email: 'test@example.com', roles: [{ id: 'admin' }, { id: 'editor' }] } as any;
             const authDelegate = await delegate.withAuth(user);
 
-            (mockDb.transaction as any).mockImplementation(async (cb: any) => {
-                throw new Error("Stop execution");
+            const mockTx = { execute: jest.fn() } as any;
+            (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => {
+                return await cb(mockTx);
             });
 
-            try { await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any }); } catch (e: any) {}
+            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
-            const transactionCallback = (mockDb.transaction as any).mock.calls[0][0];
-            const mockTx = { execute: jest.fn() } as any;
-
-            try { await transactionCallback(mockTx); } catch (e) {}
+            await authDelegate.fetchCollection({ path: 'test', collection: { slug: 'test', properties: {} } as any });
 
             expect(mockTx.execute).toHaveBeenCalledTimes(1);
             const sqlCall = mockTx.execute.mock.calls[0][0];
@@ -461,19 +413,17 @@ describe('PostgresDataSource', () => {
             const maliciousUser = { uid: "admin'; DROP TABLE users; --", email: 'hacker@evil.com' } as any;
             const authDelegate = await delegate.withAuth(maliciousUser);
 
-            (mockDb.transaction as any).mockImplementation(async (cb: any) => {
-                throw new Error("Stop");
+            const mockTx = { execute: jest.fn() } as any;
+            (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => {
+                return await cb(mockTx);
             });
 
-            try { await authDelegate.fetchCollection({ path: 'x', collection: { slug: 'x', properties: {} } as any }); } catch (e) {}
+            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
 
-            const txCallback = (mockDb.transaction as any).mock.calls[0][0];
-            const mockTx = { execute: jest.fn() } as any;
-            try { await txCallback(mockTx); } catch (e) {}
+            await authDelegate.fetchCollection({ path: 'x', collection: { slug: 'x', properties: {} } as any });
 
             // The SQL template tag should have the userId as a parameter value, not embedded in the SQL string
             const sqlObj = mockTx.execute.mock.calls[0][0];
-            // Drizzle parameterized queries store values separately from SQL chunks
             const serialized = JSON.stringify(sqlObj);
             expect(serialized).toContain("set_config");
             // The malicious string should appear as a bound parameter, not as raw SQL
@@ -486,12 +436,14 @@ describe('PostgresDataSource', () => {
             const user = { uid: 'u1', roles: ['role"with"quotes', 'role,with,commas', 'rôle-spécial'] } as any;
             const authDelegate = await delegate.withAuth(user);
 
-            (mockDb.transaction as any).mockImplementation(async (cb: any) => { throw new Error("Stop"); });
-            try { await authDelegate.fetchCollection({ path: 'x', collection: { slug: 'x', properties: {} } as any }); } catch (e) {}
-
-            const txCallback = (mockDb.transaction as any).mock.calls[0][0];
             const mockTx = { execute: jest.fn() } as any;
-            try { await txCallback(mockTx); } catch (e) {}
+            (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => {
+                return await cb(mockTx);
+            });
+
+            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+
+            await authDelegate.fetchCollection({ path: 'x', collection: { slug: 'x', properties: {} } as any });
 
             const serialized = JSON.stringify(mockTx.execute.mock.calls[0][0]);
             // The JWT should be valid JSON.stringify output containing the roles
@@ -503,12 +455,14 @@ describe('PostgresDataSource', () => {
             const user = { uid: 'u1', roles: [{ name: 'viewer' }, 42, null] } as any;
             const authDelegate = await delegate.withAuth(user);
 
-            (mockDb.transaction as any).mockImplementation(async (cb: any) => { throw new Error("Stop"); });
-            try { await authDelegate.fetchCollection({ path: 'x', collection: { slug: 'x', properties: {} } as any }); } catch (e) {}
-
-            const txCallback = (mockDb.transaction as any).mock.calls[0][0];
             const mockTx = { execute: jest.fn() } as any;
-            try { await txCallback(mockTx); } catch (e) {}
+            (mockDb.transaction as jest.Mock).mockImplementation(async (cb) => {
+                return await cb(mockTx);
+            });
+
+            jest.spyOn(PostgresDataSource.prototype, 'fetchCollection').mockResolvedValueOnce([]);
+
+            await authDelegate.fetchCollection({ path: 'x', collection: { slug: 'x', properties: {} } as any });
 
             const serialized = JSON.stringify(mockTx.execute.mock.calls[0][0]);
             // Objects without id → String({name:'viewer'}) = "[object Object]", 42 → "42", null → "null"

@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["ES2022"],
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "jsx": "preserve",
+    "paths": {
+      "@rebasepro/types": [
+        "../../packages/types/src"
+      ],
+      "@rebasepro/backend": [
+        "../../packages/backend/src"
+      ],
+      "@rebasepro/common": [
+        "../../packages/common/src"
+      ],
+      "shared": [
+        "../shared"
+      ]
+    }
+  },
+  "include": ["src/**/*", "../shared/**/*", "drizzle.config.ts"]
+}

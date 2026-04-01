@@ -6,19 +6,19 @@ title: Collection Editor UI
 ![collection_editor.png](/img/collection_editor.png)
 
 This document describes how to use the **Collection Editor UI Plugin** with **Rebase** to manage and configure your
-Firestore collections. The Collection Editor UI Plugin provides an interface for creating, editing, and organizing
+database collections. The Collection Editor UI Plugin provides an interface for creating, editing, and organizing
 collections, with support for customizable permissions and configuration options.
 
 Typically, collections in Rebase are defined in code, and passed as a prop to the `NavigationController` on
 initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing 
-a more user-friendly and flexible way to organize and configure your Firestore collections.
+a more user-friendly and flexible way to organize and configure your database collections.
 
 In this document, we will cover how to set up and use this plugin in your Rebase application.
 
 ## Installation
 
 First, ensure you have installed the necessary dependencies. To use the Collection Editor UI Plugin, you need to have
-Rebase and Firebase set up in your project.
+Rebase set up in your project.
 
 ```sh
 yarn add @rebasepro/collection_editor
@@ -35,36 +35,46 @@ and custom views.
 
 ### Default Configuration
 
-The Collection Editor UI Plugin integrates with your Firestore backend to store and manage collection configurations. By
+The Collection Editor UI Plugin integrates with your backend to store and manage collection configurations. By
 default, configurations are managed internally, but you can customize paths and behaviors as needed.
 
-### Firestore Security Rules
+### Database Security
 
-Ensure that your Firestore security rules allow the plugin to read and write to the configuration paths. Below is an
-example of security rules that permit authenticated users to access the collection configurations:
+Ensure that your database security policies (e.g., Postgres RLS policies) allow the plugin to read and write to the configuration paths. Below is an
+example of RLS policies that permit authenticated users to access the collection configurations:
 
-```txt
-match /{document=**} {
-  allow read: if isRebaseUser();
-  allow write: if isRebaseUser();
-}
+```sql
+-- Allow authenticated users to read collection configurations
+CREATE POLICY "Allow read access to collection configs"
+ON "__rebase_config"
+FOR SELECT
+TO authenticated
+USING (true);
 
-function isRebaseUser(){
-  return exists(/databases/$(database)/documents/__REBASE/config/collections/$(request.auth.uid));
-}
+-- Allow admin users to write collection configurations
+CREATE POLICY "Allow write access for admins"
+ON "__rebase_config"
+FOR ALL
+TO authenticated
+USING (
+  EXISTS (
+    SELECT 1 FROM "__rebase_users"
+    WHERE uid = auth.uid() AND role = 'admin'
+  )
+);
 ```
 
 ## Collection Configuration Plugin
 
 The Collection Editor UI Plugin allows you to include a UI for editing collection configurations. You can choose where
 the configuration is stored and pass the configuration to the plugin. The plugin includes a controller that saves the
-configuration in your Firestore database. The default path is `__REBASE/config/collections`.
+configuration in your database. The default path is `__REBASE/config/collections`.
 
 The controller includes methods you can use in your components to manage the collection configuration.
 
 ```jsx
-const collectionConfigController = useFirestoreCollectionsConfigController({
-    firebaseApp
+const collectionConfigController = useCollectionsConfigController({
+    dataSource: postgresDelegate
 });
 ```
 
@@ -133,15 +143,9 @@ resulting plugin into the Rebase configuration. This is typically done in your m
 
 ```jsx
 import React, { useCallback } from "react";
-import { Rebase, useBuildNavigationController } from "@rebasepro/core";
-import { mergeCollections, useCollectionEditorPlugin } from "@rebasepro/collection_editor";
-import { useFirestoreCollectionsConfigController } from "@rebasepro/collection_editor_firebase";
-import {
-    useFirebaseAuthController,
-    useFirestoreDataSource,
-    useInitialiseFirebase,
-    useValidateAuthenticator
-} from "@rebasepro/firebase";
+import { Rebase, useBuildNavigationController, useAuthController } from "@rebasepro/core";
+import { mergeCollections, useCollectionEditorPlugin, useCollectionsConfigController } from "@rebasepro/collection_editor";
+import { usePostgresDataSource } from "@rebasepro/postgresql";
 import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@rebasepro/user_management";
 import { productsCollection } from "./collections/products_collection";
 import { customPermissionsBuilder } from "./config/permissions";
@@ -149,25 +153,16 @@ import { CustomCollectionView } from "./views/CustomCollectionView";
 import { CollectionIcon } from "./components/CollectionIcon";
 
 function App() {
-    const {
-        firebaseApp,
-        firebaseConfigLoading,
-        configError
-    } = useInitialiseFirebase({
-        firebaseConfig
+    const postgresDelegate = usePostgresDataSource({
+        // your database configuration
     });
 
-    const firestoreDelegate = useFirestoreDataSource({
-        firebaseApp
-    });
-
-    const authController = useFirebaseAuthController({
-        firebaseApp,
+    const authController = useAuthController({
         signInOptions: ["google.com", "password"]
     });
 
-    const collectionConfigController = useFirestoreCollectionsConfigController({
-        firebaseApp
+    const collectionConfigController = useCollectionsConfigController({
+        dataSource: postgresDelegate
     });
 
     const collectionEditorPlugin = useCollectionEditorPlugin({
@@ -181,7 +176,7 @@ function App() {
     });
 
     const userManagement = useBuildUserManagement({
-        dataSource: firestoreDelegate,
+        dataSource: postgresDelegate,
         authController: authController
     });
 
@@ -208,7 +203,7 @@ function App() {
         adminViews: userManagementAdminViews,
         collectionPermissions: collectionEditorPlugin.collectionPermissions,
         authController,
-        dataSource: firestoreDelegate,
+        dataSource: postgresDelegate,
         plugins
     });
 
@@ -220,23 +215,14 @@ function App() {
         disabled: collectionEditorPlugin.loading,
         authController: authController,
         authenticator: customAuthenticator,
-        dataSource: firestoreDelegate,
-        storageSource
+        dataSource: postgresDelegate
     });
-
-    if (firebaseConfigLoading) {
-        return <LoadingIndicator/>;
-    }
-
-    if (configError) {
-        return <ErrorDisplay error={configError}/>;
-    }
 
     return (
         <Rebase
             navigationController={navigationController}
             authController={authController}
-            dataSource={firestoreDelegate}
+            dataSource={postgresDelegate}
         >
             {({
                   context,
@@ -281,7 +267,7 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
 <Rebase
     navigationController={navigationController}
     authController={authController}
-    dataSource={firestoreDelegate}
+    dataSource={postgresDelegate}
     plugins={[userManagementPlugin, collectionEditorPlugin]}
 >
     {/* Your application components */}
@@ -307,8 +293,7 @@ const {
     disabled: collectionEditorPlugin.loading,
     authController: authController,
     authenticator: customAuthenticator,
-    dataSource: firestoreDelegate,
-    storageSource: storageSource
+    dataSource: postgresDelegate
 });
 
 if (authLoading) {
@@ -337,7 +322,7 @@ const navigationController = useBuildNavigationController({
     adminViews: userManagementAdminViews,
     collectionPermissions: collectionEditorPlugin.collectionPermissions,
     authController,
-    dataSource: firestoreDelegate
+    dataSource: postgresDelegate
 });
 ```
 
@@ -363,7 +348,7 @@ if (collectionEditorPlugin.collectionErrors) {
 ## Using the Plugin within Your Application
 
 Once you have set up the Collection Editor UI Plugin, you will have access to tools and functions for managing your
-Firestore collections. You can access the collection management functions and data through the
+database collections. You can access the collection management functions and data through the
 `useCollectionEditorPlugin` hook.
 
 ### Collection Editor Object
@@ -469,41 +454,28 @@ import {
   useBuildLocalConfigurationPersistence,
   useBuildModeController,
   useBuildNavigationController,
-  useValidateAuthenticator
+  useValidateAuthenticator,
+  useAuthController
 } from "@rebasepro/core";
-import {
-  FirebaseAuthController,
-  FirebaseLoginView,
-  FirebaseSignInProvider,
-  useFirebaseAuthController,
-  useFirebaseStorageSource,
-  useFirestoreDataSource,
-  useInitialiseFirebase
-} from "@rebasepro/firebase";
-import { useFirestoreCollectionsConfigController } from "@rebasepro/collection_editor_firebase";
-import { mergeCollections, useCollectionEditorPlugin } from "@rebasepro/collection_editor";
+import { usePostgresDataSource } from "@rebasepro/postgresql";
+import { useCollectionsConfigController, mergeCollections, useCollectionEditorPlugin } from "@rebasepro/collection_editor";
 
-import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
 
 export function App() {
 
   const title = "My CMS app";
 
-  const {
-    firebaseApp,
-    firebaseConfigLoading,
-    configError
-  } = useInitialiseFirebase({
-    firebaseConfig
+  const postgresDelegate = usePostgresDataSource({
+    // your database configuration
   });
 
   /**
-   * Controller used to save the collection configuration in Firestore.
+   * Controller used to save the collection configuration in the database.
    * Note that this is optional and you can define your collections in code.
    */
-  const collectionConfigController = useFirestoreCollectionsConfigController({
-    firebaseApp
+  const collectionConfigController = useCollectionsConfigController({
+    dataSource: postgresDelegate
   });
 
   const collectionsBuilder = useCallback(() => {
@@ -516,7 +488,7 @@ export function App() {
     return mergeCollections(collections, collectionConfigController.collections ?? []);
   }, [collectionConfigController.collections]);
 
-  const signInOptions: FirebaseSignInProvider[] = ["google.com", "password"];
+  const signInOptions = ["google.com", "password"];
 
   /**
    * Controller used to manage the dark or light color mode
@@ -524,24 +496,9 @@ export function App() {
   const modeController = useBuildModeController();
 
   /**
-   * Delegate used for fetching and saving data in Firestore
-   */
-  const firestoreDelegate = useFirestoreDataSource({
-    firebaseApp
-  })
-
-  /**
-   * Controller used for saving and fetching files in storage
-   */
-  const storageSource = useFirebaseStorageSource({
-    firebaseApp
-  });
-
-  /**
    * Controller for managing authentication
    */
-  const authController: FirebaseAuthController = useFirebaseAuthController({
-    firebaseApp,
+  const authController = useAuthController({
     signInOptions,
   });
 
@@ -559,27 +516,18 @@ export function App() {
     notAllowedError
   } = useValidateAuthenticator({
     authController,
-    dataSource: firestoreDelegate,
-    storageSource
+    dataSource: postgresDelegate
   });
 
   const navigationController = useBuildNavigationController({
     collections: collectionsBuilder,
     authController,
-    dataSource: firestoreDelegate
+    dataSource: postgresDelegate
   });
 
   const collectionEditorPlugin = useCollectionEditorPlugin({
     collectionConfigController
   });
-
-  if (firebaseConfigLoading || !firebaseApp) {
-    return <CircularProgressCenter/>;
-  }
-
-  if (configError) {
-    return <>{configError}</>;
-  }
 
   return (
           <SnackbarProvider>
@@ -590,8 +538,7 @@ export function App() {
                       navigationController={navigationController}
                       authController={authController}
                       userConfigPersistence={userConfigPersistence}
-                      dataSource={firestoreDelegate}
-                      storageSource={storageSource}
+                      dataSource={postgresDelegate}
                       plugins={[
                         collectionEditorPlugin
                       ]}
@@ -607,10 +554,9 @@ export function App() {
                   } else {
                     if (!canAccessMainView) {
                       component = (
-                              <FirebaseLoginView
+                              <LoginView
                                       allowSkipLogin={false}
                                       signInOptions={signInOptions}
-                                      firebaseApp={firebaseApp}
                                       authController={authController}
                                       notAllowedError={notAllowedError}/>
                       );
@@ -636,4 +582,3 @@ export function App() {
   );
 }
 ```
-

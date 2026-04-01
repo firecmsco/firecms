@@ -171,13 +171,13 @@ For large collections using Kanban view, consider adding a database index on you
 
 ---
 
-## Configuration in Rebase Cloud
+## Configuration in the Collection Editor
 
-If you're using Rebase Cloud, you can configure view modes through the UI without writing code:
+You can also configure view modes through the Collection Editor UI without writing code:
 
 1. Open your collection settings
 2. Go to the **Display** tab
 3. Select your **Default collection view** (Table, Cards, or Kanban)
 4. For Kanban, choose the **Kanban Column Property** and optionally an **Order Property**
 
-![Kanban Settings in Rebase Cloud](/img/blog/kanban_settings.png)
+![Kanban Settings](/img/blog/kanban_settings.png)

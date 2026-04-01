@@ -46,165 +46,36 @@ export default defineConfig({
             sidebar: [
                 {
                     label: "Getting Started",
-                    slug: "docs/index"
-                },
-                {
-                    label: "☁️ Rebase Cloud",
                     collapsed: false,
                     items: [
                         {
                             label: "Introduction",
-                            slug: "docs/cloud/index"
+                            slug: "docs/index"
                         },
                         {
                             label: "Quickstart",
-                            slug: "docs/cloud/quickstart"
-                        },
-                        {
-                            label: "App Configuration",
-                            slug: "docs/cloud/app_config"
-                        },
-                        {
-                            label: "Deployment",
-                            slug: "docs/cloud/deployment"
-                        },
-                        {
-                            label: "App Check",
-                            slug: "docs/cloud/app_check"
-                        },
-                        {
-                            label: "Creating Service Account",
-                            slug: "docs/cloud/creating_service_account"
-                        },
-                        {
-                            label: "Migrating from v2",
-                            slug: "docs/cloud/migrating_from_v2"
-                        },
-                        {
-                            label: "Migrating from v3.0 to v3.1",
-                            slug: "docs/cloud/migrating_from_v3_to_v3_1"
-                        },
-                        {
-                            label: "Eject Collections",
-                            slug: "docs/cloud/eject_collections"
-                        },
-                    ],
-                },
-                {
-                    label: "Self-hosted",
-                    collapsed: false,
-                    items: [
-                        {
-                            label: "Overview",
                             slug: "docs/self"
                         },
-
-
                         {
-                            label: "Template Walkthrough",
-                            slug: "docs/pro/template_walkthrough",
-                            badge: {
-                                text: "PRO",
-                                variant: "tip"
-                            }
+                            label: "Database Setup",
+                            slug: "docs/database_setup"
                         },
                         {
-                            label: "Main Components",
-                            slug: "docs/self/main_components"
+                            label: "Template Walkthrough",
+                            slug: "docs/pro/template_walkthrough"
                         },
                         {
                             label: "Authentication",
                             slug: "docs/self/auth_self_hosted"
                         },
                         {
-                            label: "Styling Rebase",
-                            slug: "docs/self/styling_rebase"
-                        },
-                        {
                             label: "Deployment",
                             slug: "docs/self/deployment"
-                        },
-                        {
-                            label: "App Check",
-                            slug: "docs/pro/app_check"
-                        },
-                        {
-                            label: "Database Setup",
-                            slug: "docs/firebase_setup"
-                        },
-
-                        {
-                            label: "Licensing",
-                            slug: "docs/pro/licensing",
-                            badge: {
-                                text: "PRO",
-                                variant: "tip"
-                            }
-                        },
-                        {
-                            label: "User Management",
-                            slug: "docs/pro/user_management",
-                            badge: {
-                                text: "PRO",
-                                variant: "tip"
-                            }
-                        },
-                        {
-                            label: "Collection Editor",
-                            slug: "docs/pro/collection_editor",
-                            badge: {
-                                text: "PRO",
-                                variant: "tip"
-                            }
-                        },
-                        {
-                            label: "Data Export",
-                            slug: "docs/pro/data_export",
-                            badge: {
-                                text: "PRO",
-                                variant: "tip"
-                            }
-                        },
-                        {
-                            label: "Data Import",
-                            slug: "docs/pro/data_import",
-                            badge: {
-                                text: "PRO",
-                                variant: "tip"
-                            }
-                        },
-                        {
-                            label: "Entity History",
-                            slug: "docs/pro/entity_history",
-                            badge: {
-                                text: "PRO",
-                                variant: "tip"
-                            }
-                        },
-                        {
-                            label: "Custom Storage",
-                            slug: "docs/self/custom_storage"
-                        },
-                        {
-                            label: "Controllers",
-                            slug: "docs/self/controllers"
-                        },
-                        {
-                            label: "Migrating from v3.0 to v3.1",
-                            slug: "docs/self/migrating_from_v3_to_v3_1"
-                        },
-                        {
-                            label: "Migrating from v3 Beta",
-                            slug: "docs/self/migrating_from_v3_beta"
-                        },
-                        {
-                            label: "Migrating from v2 to v3",
-                            slug: "docs/self/migrating_from_v2_to_v3"
                         },
                     ],
                 },
                 {
-                    label: "Collections",
+                    label: "Core Concepts",
                     collapsed: false,
                     items: [
                         {
@@ -228,10 +99,6 @@ export default defineConfig({
                             slug: "docs/collections/permissions"
                         },
                         {
-                            label: "Exporting Data",
-                            slug: "docs/collections/exporting_data"
-                        },
-                        {
                             label: "Additional Columns",
                             slug: "docs/collections/additional_columns"
                         },
@@ -244,16 +111,20 @@ export default defineConfig({
                             slug: "docs/collections/dynamic_collections"
                         },
                         {
-                            label: "Collection Actions",
-                            slug: "docs/collections/collection_actions"
-                        },
-                        {
                             label: "Collection Groups",
                             slug: "docs/collections/collection_groups"
                         },
                         {
                             label: "Entity Actions",
                             slug: "docs/collections/entity_actions"
+                        },
+                        {
+                            label: "Collection Actions",
+                            slug: "docs/collections/collection_actions"
+                        },
+                        {
+                            label: "Exporting Data",
+                            slug: "docs/collections/exporting_data"
                         },
                     ],
                 },
@@ -371,7 +242,58 @@ export default defineConfig({
                         },
                     ],
                 },
-
+                {
+                    label: "Features",
+                    collapsed: false,
+                    items: [
+                        {
+                            label: "Collection Editor",
+                            slug: "docs/pro/collection_editor"
+                        },
+                        {
+                            label: "Data Import",
+                            slug: "docs/pro/data_import"
+                        },
+                        {
+                            label: "Data Export",
+                            slug: "docs/pro/data_export"
+                        },
+                        {
+                            label: "Entity History",
+                            slug: "docs/pro/entity_history"
+                        },
+                        {
+                            label: "User Management",
+                            slug: "docs/pro/user_management"
+                        },
+                        {
+                            label: "SDK Generator",
+                            slug: "docs/pro/sdk_generator"
+                        },
+                    ],
+                },
+                {
+                    label: "Customization",
+                    collapsed: true,
+                    items: [
+                        {
+                            label: "Main Components",
+                            slug: "docs/self/main_components"
+                        },
+                        {
+                            label: "Styling Rebase",
+                            slug: "docs/self/styling_rebase"
+                        },
+                        {
+                            label: "Custom Storage",
+                            slug: "docs/self/custom_storage"
+                        },
+                        {
+                            label: "Controllers",
+                            slug: "docs/self/controllers"
+                        },
+                    ],
+                },
                 {
                     label: "Provided Hooks",
                     collapsed: true,
@@ -412,7 +334,7 @@ export default defineConfig({
                 },
                 {
                     label: "Recipes",
-                    collapsed: false,
+                    collapsed: true,
                     items: [
                         {
                             label: "Data Type Adapter",
@@ -423,16 +345,6 @@ export default defineConfig({
                             slug: "docs/recipes/entity_callbacks"
                         },
                     ],
-                },
-
-
-                {
-                    label: "What's New in v3",
-                    slug: "docs/what_is_new_v3"
-                },
-                {
-                    label: "Changelog",
-                    slug: "docs/changelog",
                 },
             ],
             components: {

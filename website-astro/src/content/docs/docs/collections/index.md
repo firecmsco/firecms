@@ -149,31 +149,17 @@ const productsCollection = buildCollection<Product>({
   })
 });
 ```
-
-In Rebase Cloud, this collection can then be used by including it in the `collections` prop of your main export,
-a `RebaseAppConfig`
-object.
-
-In Rebase PRO, `collections` are passed directly to the `useBuildNavigationController` hook.
+Collections are passed directly to the `useBuildNavigationController` hook in your `App.tsx`.
 
 ### Modifying a collection defined in the UI
 
-If you just need to add some code to a collection defined in the UI, you can use the `modifyCollection` function in
-your `RebaseAppConfig` object.
-
-This applies to **Rebase Cloud** only.
+If you need to add code-level customizations to a collection created via the Collection Editor UI, you can use the `modifyCollection` callback.
 
 ```tsx
-import { RebaseAppConfig } from "@rebasepro/core";
-
-const appConfig: RebaseAppConfig = {
-    version: "1",
-    collections: async (props) => {
-        return ([
-            // ... full-code defined collections here
-        ]);
-    },
-    modifyCollection: ({ collection }) => {
+const collectionsBuilder = useCallback(() => {
+    const codeCollections = [productsCollection];
+    const merged = mergeCollections(codeCollections, collectionConfigController.collections ?? []);
+    return merged.map(collection => {
         if (collection.id === "products") {
             return {
                 ...collection,
@@ -186,16 +172,13 @@ const appConfig: RebaseAppConfig = {
                         }
                     }
                 ]
-            }
+            };
         }
         return collection;
-    }
-}
-
-export default appConfig;
+    });
+}, [collectionConfigController.collections]);
 ```
 
-You can use all the props available in the `Collection` interface.
 
 ## Subcollections
 

@@ -5,11 +5,11 @@ sidebar_label: String
 description: Configuration for string properties in Rebase, including storage, markdown, enums, and validation options.
 ---
 
-The **string property** is the most versatile field type in Rebase. Use it for everything from simple text inputs to file uploads, rich text editors, and dropdowns. When building an **admin panel** for your **Firebase** app, string properties let you create:
+The **string property** is the most versatile field type in Rebase. Use it for everything from simple text inputs to file uploads, rich text editors, and dropdowns. When building an **admin panel** for your **Postgres** database, string properties let you create:
 
 - **Text fields**: Names, titles, descriptions
 - **Select dropdowns**: Status fields, categories, options
-- **File uploads**: Images, documents (stored in **Firebase Storage**)
+- **File uploads**: Images, documents (stored in your **storage backend**)
 - **Markdown editors**: Rich content with formatting
 - **Email/URL fields**: Validated input types
 
@@ -27,7 +27,7 @@ const nameProperty = buildProperty({
 ### `storage`
 
 You can specify a `StorageMeta` configuration. It is used to
-indicate that this string refers to a path in Google Cloud Storage.
+indicate that this string refers to a path in your Cloud Storage bucket.
 
 * `mediaType` Media type of this reference, used for displaying the
   preview.
@@ -57,11 +57,10 @@ indicate that this string refers to a path in Google Cloud Storage.
   - `{path}` - Path of this entity
 * `includeBucketUrl` When set to `true`, Rebase will store a fully-qualified
   storage URL instead of just the storage path.
-  For Firebase Storage this is a `gs://...` URL, e.g.
-  `gs://my-bucket/path/to/file.png`.
+  For example, a `gs://...` URL like `gs://my-bucket/path/to/file.png`.
   Defaults to `false`.
 * `storeUrl` When set to `true`, this flag indicates that the download
-  URL of the file will be saved in Firestore instead of the Cloud
+  URL of the file will be saved in the database instead of the Cloud
   storage path. Note that the generated URL may use a token that, if
   disabled, may make the URL unusable and lose the original reference to
   Cloud Storage, so it is not encouraged to use this flag. Defaults to
@@ -160,7 +159,7 @@ const emailProperty = buildProperty({
 
 This property is used to indicate that the string is a **user ID**, and
 it will be rendered as a user picker. Note that the user ID needs to be the
-one used in your authentication provider, e.g. Firebase Auth.
+one used in your authentication provider.
 You can also use a property builder to specify the user path dynamically
 based on other values of the entity.
 

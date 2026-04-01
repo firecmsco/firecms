@@ -3,7 +3,7 @@ slug: docs/properties/fields/date_time
 title: Date/time fields
 ---
 
-Use the date/time fields to allow users to set dates, saved as Firestore timestamps.
+Use the date/time fields to allow users to set dates, saved as Postgres timestamps.
 
 You can choose between using dates or date/time fields. 
 Also you can create read-only fields that get updated automatically when 

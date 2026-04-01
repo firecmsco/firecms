@@ -154,28 +154,7 @@ const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
 
 ### Where to use the `collectionsBuilder`
 
-In the **Cloud version** of Rebase, simply add the `collectionsBuilder` to the `collections` prop of your main app
-config.
-
-```tsx
-
-const collectionsBuilder: EntityCollectionsBuilder = async ({
-                                                                user,
-                                                                authController,
-                                                                dataSource
-                                                            }) => {
-    return {
-        collections: [] // your collections here
-    };
-};
-
-export const appConfig: RebaseAppConfig = {
-    version: "1",
-    collections: collectionsBuilder
-};
-```
-
-In the **PRO version** of Rebase, you can use the `collectionsBuilder` in the `useBuildNavigationController` hook.
+Use the `collectionsBuilder` in the `useBuildNavigationController` hook:
 
 ```tsx
 const navigationController = useBuildNavigationController({

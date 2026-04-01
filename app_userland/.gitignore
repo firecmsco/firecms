@@ -1,0 +1,30 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+build/
+
+# environment
+.env.local
+.env.*.local
+
+# editor
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# uploads
+uploads/*
+!uploads/.gitkeep
+
+# Playwright
+playwright-report/
+test-results/
+playwright/.cache
+blob-report/

@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import arg from "arg";
 import { createRebaseApp } from "./commands/init";
+import { generateSdkCommand } from "./commands/generate_sdk";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -49,6 +50,24 @@ export async function entry(args: string[]) {
 
     if (command === "init") {
         await createRebaseApp(args);
+    } else if (command === "generate-sdk") {
+        const sdkArgs = arg(
+            {
+                "--collections-dir": String,
+                "--output": String,
+                "-c": "--collections-dir",
+                "-o": "--output",
+            },
+            {
+                argv: args.slice(3), // slice past "node rebase generate-sdk"
+                permissive: true,
+            }
+        );
+        await generateSdkCommand({
+            collectionsDir: sdkArgs["--collections-dir"] || "./shared/collections",
+            output: sdkArgs["--output"] || "./generated/sdk",
+            cwd: process.cwd(),
+        });
     } else {
         console.log(chalk.red(`Unknown command: ${command}`));
         console.log("");
@@ -64,7 +83,12 @@ ${chalk.green.bold("Usage")}
   rebase ${chalk.blue("<command>")} [options]
 
 ${chalk.green.bold("Commands")}
-  ${chalk.blue.bold("init")}      Create a new Rebase project
+  ${chalk.blue.bold("init")}              Create a new Rebase project
+  ${chalk.blue.bold("generate-sdk")}      Generate a typed JS SDK from your collections
+
+${chalk.green.bold("generate-sdk Options")}
+  ${chalk.blue("--collections-dir, -c")}  Path to collections directory (default: ./shared/collections)
+  ${chalk.blue("--output, -o")}           Output directory for the SDK (default: ./generated/sdk)
 
 ${chalk.green.bold("Options")}
   ${chalk.blue("--version, -v")}   Show version number

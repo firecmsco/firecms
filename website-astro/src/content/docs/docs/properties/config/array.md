@@ -9,8 +9,7 @@ description: Configuration for array properties in Rebase, including typed array
 
 The property of this array.
 
-You can specify any property (except another Array property, since
-Firestore does not support it)
+You can specify any property (except another Array property).
 You can leave this field empty only if you are providing a custom field or
 provide a `oneOf` field otherwise an error will be thrown.
 

@@ -63,42 +63,10 @@ Note that you can use any of the existing builders or properties as a base for
 your custom property. What you define in your property will be used as a base
 for the resulting property (the user is still able to customize it).
 
-### Rebase Cloud
+### Example
 
-Let's define a custom property that consists of a translations map object with different string values:
-
-```typescript
-
-export const appConfig: RebaseAppConfig = {
-    version: "1",
-    collections: [
-        // ...
-    ],
-    propertyConfigs: [
-        {
-            name: "Translated string",
-            key: "translated_string",
-            property: {
-                dataType: "map",
-                properties: {
-                    en: {
-                        dataType: "string",
-                        name: "English"
-                    },
-                    es: {
-                        dataType: "string",
-                        name: "Español"
-                    },
-                },
-            },
-        }
-    ]
-};
-```
-
-### Rebase PRO
-
-In Rebase PRO, you can define the `propertyConfigs` in the `Rebase` component:
+Let's define a custom property that consists of a translations map object with different string values.
+Define the `propertyConfigs` in the `Rebase` component:
 
 ```tsx
 <Rebase
@@ -124,5 +92,3 @@ In Rebase PRO, you can define the `propertyConfigs` in the `Rebase` component:
     ]}
 />
 ```
-
-

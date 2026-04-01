@@ -4,12 +4,12 @@ title: File upload
 ---
 
 Use the file upload fields to allow users to upload images, documents or any
-files to your storage solution (Firebase storage by default). This field is in
+files to your storage solution. This field is in
 charge of uploading the file and saving the storage path as the value
 of your property.
 
 :::note
-You can save the URL of the uploaded file, instead of the Storage pah,
+You can save the URL of the uploaded file, instead of the Storage path,
 by setting the `storeUrl`.
 :::
 
@@ -37,7 +37,7 @@ The complete list of params you can use when uploading files:
 * `storagePath` You can specify a storage path callback if you need to
   customize the path where it is stored.
 * `storeUrl` When set to `true`, this flag indicates that the download
-  URL of the file will be saved in Firestore instead of the Cloud
+  URL of the file will be saved in the database instead of the Cloud
   storage path. Note that the generated URL may use a token that, if
   disabled, may make the URL unusable and lose the original reference to
   Cloud Storage, so it is not encouraged to use this flag. Defaults to

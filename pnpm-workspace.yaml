@@ -2,6 +2,8 @@ packages:
   - 'packages/*'
   - 'app'
   - 'app/*'
+  - 'app_userland'
+  - 'app_userland/*'
   - 'e2e'
 #  - 'examples/*'
 #  - 'saas'

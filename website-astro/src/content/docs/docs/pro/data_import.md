@@ -45,7 +45,6 @@ Use the `useImportPlugin` hook to create the import plugin and include it in the
 ```jsx
 import React from "react";
 import { CircularProgressCenter, Rebase, useBuildModeController } from "@rebasepro/core";
-import { useFirebaseStorageSource } from "@rebasepro/firebase";
 import { useImportPlugin } from "@rebasepro/data_import";
 
 export function App() {

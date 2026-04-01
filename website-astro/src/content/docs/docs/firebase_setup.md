@@ -1,5 +1,5 @@
 ---
-slug: docs/firebase_setup
+slug: docs/database_setup
 title: Database Setup
 sidebar_label: Database Setup
 description: Step-by-step guide to setting up your PostgreSQL database for Rebase, including database creation, environment configuration, migrations, and Row Level Security.

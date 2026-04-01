@@ -1,0 +1,48 @@
+{
+  "name": "@rebasepro/sdk_generator",
+  "version": "0.0.1",
+  "description": "Generate a typed JS SDK from Rebase collection definitions",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "source": "src/index.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "jest --config jest.config.cjs",
+    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.json",
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+  },
+  "keywords": [
+    "sdk",
+    "codegen",
+    "rebase",
+    "rest-api"
+  ],
+  "author": "rebase.pro",
+  "license": "MIT",
+  "peerDependencies": {
+    "@rebasepro/types": "0.0.1",
+    "@rebasepro/common": "0.0.1"
+  },
+  "devDependencies": {
+    "@rebasepro/types": "0.0.1",
+    "@rebasepro/common": "0.0.1",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.19.17",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "gitHead": "d935eefa5aa8d1009a2398cfac2c1e4ee9aeb6b6"
+}

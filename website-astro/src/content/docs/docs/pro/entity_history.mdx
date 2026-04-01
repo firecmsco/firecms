@@ -22,7 +22,7 @@ yarn add @rebasepro/entity_history
 
 ## Basic Usage
 
-To use the plugin, import `useEntityHistoryPlugin` and add it to your `FirebaseCMSApp` plugins array.
+To use the plugin, import `useEntityHistoryPlugin` and add it to your plugins array.
 
 If you are using the user management plugin, you can provide a function to resolve user details from a UID.
 You can also pass your own custom `getUser` function to fetch user details.
@@ -35,7 +35,7 @@ import { useEntityHistoryPlugin } from "@rebasepro/entity_history";
 export default function App() {
 
     const userManagement = useBuildUserManagement({
-        dataSource: firestoreDelegate,
+        dataSource: postgresDelegate,
         authController: authController
     });
 
@@ -173,7 +173,7 @@ const handleCustomUpdate = async (context: RebaseContext, entityId: string, oldV
 
 ### History Entry Structure
 
-Each history entry is automatically stored in a subcollection `__history` under the entity and includes:
+Each history entry is automatically stored in a `__history` table linked to the entity and includes:
 
 - All entity values at the time of the change
 - `__metadata` object containing:

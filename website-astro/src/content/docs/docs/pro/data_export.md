@@ -1,12 +1,12 @@
 ---
 slug: docs/pro/data_export
 title: Data Export
-description: Export your Firestore collections to JSON or CSV with the Rebase Data Export plugin. Ideal for backups, migrations, and data analysis.
+description: Export your Postgres collections to JSON or CSV with the Rebase Data Export plugin. Ideal for backups, migrations, and data analysis.
 ---
 
 ![data_export.png](/img/data_export.png)
 
-Export your **Firestore** data directly from your **admin panel**. The Data Export Plugin adds one-click JSON and CSV export to any Rebase collection.
+Export your **Postgres** data directly from your **admin panel**. The Data Export Plugin adds one-click JSON and CSV export to any Rebase collection.
 
 :::tip Common use cases
 - **Backups**: Create regular snapshots of your data
@@ -175,4 +175,3 @@ export type ExportAllowedParams = {
     collection: EntityCollection;
 };
 ```
-
