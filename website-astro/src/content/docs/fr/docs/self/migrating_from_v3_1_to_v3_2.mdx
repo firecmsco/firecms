@@ -1,0 +1,139 @@
+---
+slug: docs/self/migrating_from_v3_1_to_v3_2
+title: Migration de v3.1 à v3.2
+sidebar_label: Migration de v3.1 à v3.2
+---
+
+Ce guide de migration s'applique aux **versions auto-hébergées (self-hosted)** de FireCMS, incluant les éditions **Community** et **PRO**.
+FireCMS v3.2 apporte une refonte complète de l'éditeur de texte, un support complet de l'internationalisation et plusieurs améliorations importantes.
+
+## Avant de commencer
+
+- Assurez-vous d'être actuellement sur **FireCMS v3.1.x**
+- Sauvegardez votre projet ou commitez votre état actuel dans votre système de contrôle de version
+- Assurez-vous d'utiliser **Node.js 18+**
+
+## Mettre à jour les paquets FireCMS
+
+Mettez à jour tous les paquets `@firecms/*` vers la version **3.2** :
+
+```bash
+npm i @firecms/core@3.2.0 @firecms/ui@3.2.0 @firecms/firebase@3.2.0 @firecms/collection_editor@3.2.0 @firecms/collection_editor_firebase@3.2.0 @firecms/data_enhancement@3.2.0 @firecms/data_export@3.2.0 @firecms/data_import@3.2.0 @firecms/datatalk@3.2.0 @firecms/schema_inference@3.2.0 @firecms/user_management@3.2.0
+```
+
+Assurez-vous d'inclure **tous** les paquets `@firecms/*` listés dans votre `package.json`. Mélanger les versions des paquets causera des erreurs d'exécution.
+
+---
+
+## Consolidation du paquet d'éditeur (Changement critique)
+
+Le paquet autonome `@firecms/editor` a été déprécié et supprimé. Tous les composants de l'éditeur ont été migrés directement dans `@firecms/core`.
+
+:::caution
+Il s'agit d'un **changement critique**. Vous devez mettre à jour vos dépendances et vos imports.
+:::
+
+### 1. Supprimer l'ancien paquet
+
+Supprimez `@firecms/editor` de votre projet :
+
+```bash
+npm uninstall @firecms/editor
+```
+
+### 2. Mettre à jour les imports
+
+Mettez à jour tous les imports dans votre code qui faisaient auparavant référence à `@firecms/editor` pour les importer de `@firecms/core` à la place :
+
+**Avant (v3.1):**
+```typescript
+import { MarkdownField } from "@firecms/editor";
+```
+
+**Après (v3.2):**
+```typescript
+import { MarkdownField } from "@firecms/core";
+```
+
+---
+
+## Refonte de l'éditeur de texte enrichi
+
+L'éditeur de texte enrichi a été complètement réimplémenté en utilisant ProseMirror pour offrir une expérience d'édition plus robuste et riche en fonctionnalités.
+
+### Fonctionnalités clés de l'éditeur :
+- **Support des tableaux** : Support complet des tableaux avec analyse Markdown, insertion par commande slash (`/`), et une interface utilisateur dédiée aux tableaux (bulle).
+- **Gestion des images** : Une nouvelle bulle d'image permet de modifier les attributs alt/titre des images et offre des capacités de téléchargement améliorées.
+- **Mode Markdown** : Un nouveau bouton permet de basculer facilement entre le mode texte enrichi et le mode d'édition Markdown brut.
+- **Amélioration des commandes slash** : Le menu de commande slash (`/`) dispose désormais d'une meilleure analyse HTML et stabilité.
+- **Amélioration du collage** : Comportement de collage nettement amélioré pour le texte et les images.
+
+---
+
+## Internationalisation (i18n)
+
+FireCMS intègre désormais complètement i18next avec une couverture de traduction exhaustive sur l'ensemble de la plateforme.
+
+### Ajouter le fournisseur i18n
+
+Pour activer l'internationalisation, vous **devez** envelopper votre application avec le nouveau `FireCMSi18nProvider` exporté depuis `@firecms/core`. Ce fournisseur est maintenant requis et fournit les paramètres régionaux actifs et les traductions à tous les composants FireCMS.
+
+```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
+
+// ...
+
+return (
+    <FireCMSi18nProvider>
+        <FireCMS
+            // votre configuration
+        />
+    </FireCMSi18nProvider>
+);
+```
+
+Les langues prises en charge par défaut incluent désormais :
+- Anglais
+- Portugais
+- Allemand
+- Français
+- Espagnol
+- Italien
+- Hindi
+
+Les traductions ont été étendues pour couvrir les paramètres du projet, la gestion des abonnements, AppCheck, les règles de sécurité et les fonctionnalités de recherche textuelle.
+
+---
+
+## Filtres de tableaux synchronisés par URL
+
+Les filtres de tableau et le tri sont désormais **synchronisés avec les paramètres d'URL**.
+
+Lorsque vous appliquez des filtres ou un tri à un tableau de collection, l'URL se met automatiquement à jour. Cela vous permet de :
+- Mettre en favori des vues filtrées spécifiques de vos données.
+- Partager des états de table exacts (y compris les filtres actifs et l'ordre de tri) avec votre équipe via des URL.
+- Naviguer en avant et en arrière dans l'historique de votre navigateur tout en conservant l'état de la table correct.
+
+---
+
+## Autres fonctionnalités et améliorations
+
+### Mises à jour du CLI
+- **Modèle Astro** : Le CLI FireCMS inclut désormais un nouveau modèle Astro pour créer des projets basés sur Astro de manière transparente.
+
+### Stockage
+- **Progression du téléchargement** : Ajout d'indicateurs de progression de téléchargement pour les fichiers, améliorant la visibilité lors du téléchargement de médias volumineux.
+
+### Gestion des collections
+- **Bannière d'erreur** : Introduction d'un composant dédié `CollectionDataErrorBanner` affichant les erreurs de chargement de données des collections et fournissant des suggestions d'index Firestore utiles.
+- **Composant Tabs (Onglets)** : Ajout d'onglets défilants avec des icônes indicatrices de défilement pour une meilleure expérience utilisateur sur les petits écrans ou lors de configurations avec de nombreux onglets.
+
+---
+
+## Dépannage
+
+### Erreurs de compilation liées à `@firecms/editor`
+Assurez-vous d'avoir complètement supprimé le paquet `@firecms/editor` de votre `node_modules` et `package.json`. Vous devrez peut-être supprimer `node_modules` et votre fichier lock, puis exécuter `npm install` à nouveau. Vérifiez tous les fichiers pour détecter d'éventuels restes d'imports `@firecms/editor`.
+
+### Erreurs de discordance de type
+Assurez-vous que **tous** les paquets `@firecms/*` dans votre `package.json` sont **exactement** à la version `3.2.0`. Le mélange de paquets v3.1 et v3.2 est la cause la plus fréquente d'erreurs de compilation.

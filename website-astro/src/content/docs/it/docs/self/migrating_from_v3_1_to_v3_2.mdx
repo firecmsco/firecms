@@ -1,0 +1,139 @@
+---
+slug: docs/self/migrating_from_v3_1_to_v3_2
+title: Migrazione da v3.1 a v3.2
+sidebar_label: Migrazione da v3.1 a v3.2
+---
+
+Questa guida alla migrazione si applica alle **versioni self-hosted** di FireCMS, includendo sia l'edizione **Community** che **PRO**.
+FireCMS v3.2 introduce una riscrittura completa dell'editor di testo, un supporto completo per l'internazionalizzazione e molti miglioramenti importanti.
+
+## Prima di iniziare
+
+- Assicurati di essere attualmente su **FireCMS v3.1.x**
+- Esegui un backup del tuo progetto o invia lo stato attuale al tuo sistema di controllo versione (git)
+- Assicurati di utilizzare **Node.js 18+**
+
+## Aggiorna i pacchetti FireCMS
+
+Aggiorna tutti i pacchetti `@firecms/*` alla versione **3.2**:
+
+```bash
+npm i @firecms/core@3.2.0 @firecms/ui@3.2.0 @firecms/firebase@3.2.0 @firecms/collection_editor@3.2.0 @firecms/collection_editor_firebase@3.2.0 @firecms/data_enhancement@3.2.0 @firecms/data_export@3.2.0 @firecms/data_import@3.2.0 @firecms/datatalk@3.2.0 @firecms/schema_inference@3.2.0 @firecms/user_management@3.2.0
+```
+
+Assicurati di includere **tutti** i pacchetti `@firecms/*` elencati nel tuo `package.json`. Mischiare versioni vecchie e nuove dei pacchetti causerà errori runtime.
+
+---
+
+## Consolidamento del pacchetto editor (Modifica Incompatibile)
+
+Il pacchetto indipendente `@firecms/editor` è stato deprecato e rimosso. Tutti i componenti dell'editor sono stati spostati direttamente all'interno di `@firecms/core`.
+
+:::caution
+Questa è una **modifica incompatibile**. È necessario aggiornare le dipendenze e gli import nel codice.
+:::
+
+### 1. Rimuovere il vecchio pacchetto
+
+Rimuovi `@firecms/editor` dal tuo progetto:
+
+```bash
+npm uninstall @firecms/editor
+```
+
+### 2. Aggiornare gli import
+
+Aggiorna eventuali import nel tuo codice che prima facevano riferimento a `@firecms/editor` per importarli invece da `@firecms/core`:
+
+**Prima (v3.1):**
+```typescript
+import { MarkdownField } from "@firecms/editor";
+```
+
+**Dopo (v3.2):**
+```typescript
+import { MarkdownField } from "@firecms/core";
+```
+
+---
+
+## Riscrittura del Rich Text Editor
+
+Il rich text editor è stato completamente re-implementato utilizzando ProseMirror per offrire un'esperienza di editing più robusta e ricca di funzionalità.
+
+### Nuove funzionalità dell'editor:
+- **Supporto tabelle**: Supporto completo per le tabelle con parsing markdown, inserimento tramite slash command (`/`) e un'interfaccia a bolla dedicata alle tabelle.
+- **Gestione Immagini**: Una nuova bolla immagine consente di modificare gli attributi alt/title dell'immagine e offre capacità di caricamento migliorate.
+- **Modalità Markdown**: Un nuovo interruttore consente di passare facilmente dalla modalità rich text puro alla modalità di modifica markdown grezzo.
+- **Slash Commands migliorati**: Il menu dei comandi slash (`/`) ora presenta un parsing HTML molto più preciso e stabile.
+- **Miglioramento del copia e incolla**: Comportamento del "pasta" (incolla) notevolmente migliorato per testi e immagini.
+
+---
+
+## Internazionalizzazione (i18n)
+
+FireCMS offre ora un'integrazione completa con i18next con una copertura di traduzione dettagliata su tutta la piattaforma.
+
+### Aggiungere il provider i18n
+
+Per abilitare l'internazionalizzazione, **devi** avvolgere la tua applicazione nel nuovo `FireCMSi18nProvider` esportato da `@firecms/core`. Questo provider è ora obbligatorio e fornisce la lingua attiva e le traduzioni a tutti i componenti FireCMS.
+
+```tsx
+import { FireCMSi18nProvider } from "@firecms/core";
+
+// ...
+
+return (
+    <FireCMSi18nProvider>
+        <FireCMS
+            // la tua configurazione
+        />
+    </FireCMSi18nProvider>
+);
+```
+
+Le lingue supportate nativamente ora includono:
+- Inglese
+- Portoghese
+- Tedesco
+- Francese
+- Spagnolo
+- Italiano
+- Hindi
+
+Le traduzioni sono state estese per coprire le impostazioni di progetto, la gestione degli abbonamenti, AppCheck, regole di sicurezza e le funzionalità di ricerca testuale.
+
+---
+
+## Filtri di tabella sincronizzati con l'URL
+
+Ora i filtri di tabella e le opzioni di ordine sono **sincronizzati con i parametri dell'URL**.
+
+Quando applichi filtri o un ordine (sort) alla tabella di una collezione, l'URL si aggiorna automaticamente. Questo ti consente di:
+- Salvare nei preferiti viste specifiche e filtrate dei tuoi dati.
+- Condividere l'esatto stato della tabella (inclusi i filtri attivi e l'ordine) con il tuo team inviando semplicemente l'URL.
+- Navigare avanti e indietro nella cronologia del browser mantenendo correttamente lo stato della tabella.
+
+---
+
+## Altre Funzionalità e Miglioramenti
+
+### Novità del CLI
+- **Template Astro**: Il CLI FireCMS ora include un nuovo template per creare progetti basati su Astro in modo immediato.
+
+### Storage (Archiviazione)
+- **Progresso di caricamento**: Aggiunti indicatori di progresso per i file in caricamento, migliorando l'esperienza utente quando si gestiscono lunghi caricamenti.
+
+### Miglioramenti delle Collezioni
+- **Banner di errore**: Introdotto un componente `CollectionDataErrorBanner` per visualizzare più chiaramente gli errori di caricamento e suggerire le regole/indici Firestore più utili.
+- **Componente Tabs**: Le schede ora dispongono di scorrimento orizzontale e icone per indicare l'overflow in presenza di molte categorie e schermi piccoli.
+
+---
+
+## Risoluzione dei Problemi
+
+### Errori di build legati a `@firecms/editor`
+Assicurati di aver rimosso del tutto il pacchetto `@firecms/editor` da `node_modules` e dal `package.json`. Potrebbe essere necessario cancellare `node_modules` e il file lock, quindi lanciare di nuovo `npm install`. Controlla ogni file per assicurarti che non persistano vecchi import verso `@firecms/editor`.
+
+### Errori di corruzione o mismatch dei tipi
+Assicurati che **tutti** i pacchetti `@firecms/*` siano allineati **esattamente** alla versione `3.2.0`. Mescolare i pacchetti v3.1 e v3.2 causa frequentemente errori di sintesi e di build.

@@ -213,6 +213,10 @@ export default defineConfig({
                             slug: "docs/self/security_best_practices"
                         },
                         {
+                            label: "Migrating from v3.1 to v3.2",
+                            slug: "docs/self/migrating_from_v3_1_to_v3_2"
+                        },
+                        {
                             label: "Migrating from v3.0 to v3.1",
                             slug: "docs/self/migrating_from_v3_to_v3_1"
                         },
