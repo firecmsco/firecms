@@ -687,5 +687,19 @@ export const hi: FireCMSTranslations = {
     text_search_own_implementation: "आपने अपना स्वयं का पाठ खोज नियंत्रक लागू किया है। आप अपने संग्रह के लिए पाठ खोज सक्षम कर सकते हैं।",
     text_search_enable_for_collection: "इस संग्रह के लिए सक्षम करें",
     text_search_enable_for_project: "प्रोजेक्ट के लिए सक्षम करें",
-    text_search_enabled_snackbar: "स्थानीय पाठ खोज सक्षम की गई"
+    text_search_enabled_snackbar: "स्थानीय पाठ खोज सक्षम की गई",
+
+    // ─── GCP Marketplace ─────────────────────────────────────────
+    marketplace_managed_by_gcp: "GCP Marketplace के माध्यम से प्रबंधित",
+    marketplace_billing_note: "आपकी सदस्यता Google Cloud Marketplace के माध्यम से प्रबंधित है। योजना परिवर्तन, बिलिंग और रद्दीकरण GCP कंसोल में संभाले जाते हैं।",
+    marketplace_manage_in_gcp_console: "GCP कंसोल में प्रबंधित करें",
+    marketplace_plan_changes_note: "अपनी योजना बदलने या रद्द करने के लिए, अपने GCP Marketplace ऑर्डर पर जाएं।",
+    marketplace_welcome_title: "GCP Marketplace से स्वागत है!",
+    marketplace_welcome_subtitle: "आपकी Google Cloud Marketplace सदस्यता सक्रिय है। इसे लिंक करने के लिए एक मौजूदा प्रोजेक्ट चुनें या एक नया बनाएं।",
+    marketplace_select_or_create_project: "प्रोजेक्ट चुनें या बनाएं",
+    marketplace_link_project: "प्रोजेक्ट लिंक करें",
+    marketplace_linking: "प्रोजेक्ट लिंक हो रहा है…",
+    marketplace_link_success: "प्रोजेक्ट सफलतापूर्वक लिंक हो गया! रीडायरेक्ट हो रहा है…",
+    marketplace_link_error: "प्रोजेक्ट लिंक करने में त्रुटि। कृपया पुनः प्रयास करें।",
+    marketplace_no_account_id: "कोई GCP Marketplace खाता ID नहीं मिली। कृपया GCP Marketplace से शुरू करें।",
 };

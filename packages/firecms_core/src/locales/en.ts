@@ -700,4 +700,18 @@ export const en: FireCMSTranslations = {
     settings_appcheck_refresh_note: "You might need to refresh the page to see the changes, after saving.",
     settings_appcheck_updated: "AppCheck updated",
     settings_appcheck_error: "Error updating AppCheck",
+
+    // ─── GCP Marketplace ─────────────────────────────────────────
+    marketplace_managed_by_gcp: "Managed via GCP Marketplace",
+    marketplace_billing_note: "Your subscription is managed through Google Cloud Marketplace. Plan changes, billing, and cancellation are handled in the GCP Console.",
+    marketplace_manage_in_gcp_console: "Manage in GCP Console",
+    marketplace_plan_changes_note: "To change your plan or cancel, visit your GCP Marketplace orders.",
+    marketplace_welcome_title: "Welcome from GCP Marketplace!",
+    marketplace_welcome_subtitle: "Your Google Cloud Marketplace subscription is active. Select an existing project or create a new one to link it.",
+    marketplace_select_or_create_project: "Select or create a project",
+    marketplace_link_project: "Link project",
+    marketplace_linking: "Linking project…",
+    marketplace_link_success: "Project linked successfully! Redirecting…",
+    marketplace_link_error: "Error linking project. Please try again.",
+    marketplace_no_account_id: "No GCP Marketplace account ID found. Please start from the GCP Marketplace.",
 };

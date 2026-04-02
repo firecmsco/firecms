@@ -687,5 +687,19 @@ export const it: FireCMSTranslations = {
     text_search_own_implementation: "Hai implementato il tuo controller di ricerca testuale. Puoi abilitare la ricerca testuale per la tua collezione.",
     text_search_enable_for_collection: "Abilita per questa collezione",
     text_search_enable_for_project: "Abilita per il progetto",
-    text_search_enabled_snackbar: "Ricerca testuale locale abilitata"
+    text_search_enabled_snackbar: "Ricerca testuale locale abilitata",
+
+    // ─── GCP Marketplace ─────────────────────────────────────────
+    marketplace_managed_by_gcp: "Gestito tramite GCP Marketplace",
+    marketplace_billing_note: "Il tuo abbonamento è gestito tramite Google Cloud Marketplace. Le modifiche al piano, la fatturazione e la cancellazione vengono gestite nella console GCP.",
+    marketplace_manage_in_gcp_console: "Gestisci nella console GCP",
+    marketplace_plan_changes_note: "Per modificare il piano o annullare, visita i tuoi ordini GCP Marketplace.",
+    marketplace_welcome_title: "Benvenuto da GCP Marketplace!",
+    marketplace_welcome_subtitle: "Il tuo abbonamento Google Cloud Marketplace è attivo. Seleziona un progetto esistente o creane uno nuovo per collegarlo.",
+    marketplace_select_or_create_project: "Seleziona o crea un progetto",
+    marketplace_link_project: "Collega progetto",
+    marketplace_linking: "Collegamento del progetto in corso…",
+    marketplace_link_success: "Progetto collegato con successo! Reindirizzamento…",
+    marketplace_link_error: "Errore durante il collegamento del progetto. Riprova.",
+    marketplace_no_account_id: "Nessun ID account GCP Marketplace trovato. Inizia dal GCP Marketplace.",
 };

@@ -11,4 +11,6 @@ export type FireCMSProject = {
     subscription_plan: ProjectSubscriptionPlan,
     subscription_data: ProjectSubscriptionData,
     trial_valid_until: Date;
+    subscription_source?: "stripe" | "gcp_marketplace";
+    gcp_marketplace_entitlement_id?: string;
 }

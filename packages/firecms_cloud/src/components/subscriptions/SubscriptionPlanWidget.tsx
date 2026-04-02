@@ -14,10 +14,14 @@ export function SubscriptionPlanWidget({ }: SubscriptionPlanWidgetProps) {
         subscriptionData,
         isTrialOver,
         trialValidUntil,
+        isGCPMarketplace,
     } = useProjectConfig();
 
     const subscriptionsController = useSubscriptionsForUserController();
     const [dialogOpen, setDialogOpen] = React.useState(false);
+
+    // GCP Marketplace projects don't use Stripe billing — skip all alerts
+    if (isGCPMarketplace) return null;
 
     if (subscriptionData?.subscription_status === "past_due") {
         const pastDueSubscriptions = (subscriptionsController.activeSubscriptions ?? []).filter(s => s.status === "past_due" && s.metadata.projectId === projectId);

@@ -48,6 +48,42 @@ export function Paywall({ trialOver }: {
     trialOver: boolean
 }) {
 
+    const { isGCPMarketplace } = useProjectConfig();
+
+    if (isGCPMarketplace) {
+        return <CenteredView className={"overflow-auto my-auto"}>
+            <Container
+                maxWidth={"xl"}
+                className={"flex flex-col gap-4 p-8 m-auto"}>
+
+                <FireCMSLogo width={"64px"}/>
+
+                <Typography variant={"h3"}>
+                    Subscription managed via GCP Marketplace
+                </Typography>
+
+                <Typography variant={"body1"}>
+                    Your subscription is managed through Google Cloud Marketplace.
+                    Please visit the GCP Console to manage your plan and billing.
+                </Typography>
+
+                <div className={"flex flex-row gap-4 mt-8"}>
+                    <LoadingButton
+                        component={"a"}
+                        variant={"filled"}
+                        color={"primary"}
+                        href={"https://console.cloud.google.com/marketplace/orders"}
+                        target="_blank"
+                        rel="noreferrer"
+                        startIcon={<RocketLaunchIcon/>}>
+                        Manage in GCP Console
+                    </LoadingButton>
+                </div>
+
+            </Container>
+        </CenteredView>;
+    }
+
     return <CenteredView className={"overflow-auto my-auto"}>
         <Container
             maxWidth={"xl"}

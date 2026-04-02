@@ -13,7 +13,8 @@ export function ProjectSubscriptionPlans() {
     const {
         subscriptionPlan,
         projectId,
-        trialValidUntil
+        trialValidUntil,
+        isGCPMarketplace
     } = useProjectConfig();
 
     const { t } = useTranslation();
@@ -40,50 +41,52 @@ export function ProjectSubscriptionPlans() {
     const trialIsActive = Boolean(trialValidUntil && trialValidUntil > new Date());
 
     const activePlusSubscription = projectSubscriptions.find(s => s.product.metadata?.type === "cloud_plus" && s.status === "active");
-    const isSubscribed = Boolean(activePlusSubscription);
+    const isSubscribed = Boolean(activePlusSubscription) || isGCPMarketplace;
 
     return (
         <div className={"relative"}>
 
-            {loading &&
+            {loading && !isGCPMarketplace &&
                 <div className={"absolute w-full h-full flex items-center justify-center"}><CircularProgress /></div>}
 
-            <div className={cls("grid grid-cols-12 gap-4 items-center", loading ? "collapse" : "")}>
+            <div className={cls("grid grid-cols-12 gap-4 items-center", loading && !isGCPMarketplace ? "collapse" : "")}>
 
                 <div className={"col-span-12 md:col-span-7 flex flex-col gap-2"}>
 
                     <Typography variant={"h4"} className="mt-4 mb-2">{t("settings_subscription_plan")}</Typography>
 
-                    {isSubscribed &&
+                    {isGCPMarketplace && <GCPMarketplaceSubscriptionView />}
+
+                    {!isGCPMarketplace && isSubscribed &&
                         <Typography
                             variant={"subtitle1"}
                             className="my-2">
                             {t("settings_subscribed_to")} <Chip size={"small"}>FireCMS Cloud</Chip>.
                         </Typography>}
 
-                    {!isSubscribed && <Typography
+                    {!isGCPMarketplace && !isSubscribed && <Typography
                         variant={"subtitle1"}
                         className="my-2">
                         {t("settings_no_active_subscription")}
                     </Typography>}
 
 
-                    {!isSubscribed && trialIsActive && trialValidUntil &&
+                    {!isGCPMarketplace && !isSubscribed && trialIsActive && trialValidUntil &&
                         <Typography
                             variant={"subtitle1"}
                             className="my-2">
                             {t("settings_trial_valid_until", { date: trialValidUntil.toLocaleDateString() })}
                         </Typography>}
 
-                    {!isSubscribed && plusProduct && <UpgradeCloudSubscriptionView
+                    {!isGCPMarketplace && !isSubscribed && plusProduct && <UpgradeCloudSubscriptionView
                         product={plusProduct}
                         projectId={projectId} />}
 
 
-                    {isSubscribed && plusSubscription &&
+                    {!isGCPMarketplace && isSubscribed && plusSubscription &&
                         <CurrentCloudSubscriptionView subscription={plusSubscription} />}
 
-                    <StripeDisclaimer />
+                    {!isGCPMarketplace && <StripeDisclaimer />}
 
                 </div>
 
@@ -130,6 +133,48 @@ export function ProjectSubscriptionPlans() {
         </div>
     );
 
+}
+
+const GCP_CONSOLE_MARKETPLACE_URL = "https://console.cloud.google.com/marketplace/orders";
+
+function GCPMarketplaceSubscriptionView() {
+    const { t } = useTranslation();
+    const { subscriptionPlan } = useProjectConfig();
+
+    return (
+        <div className={"flex flex-col gap-3 my-2"}>
+            <div className={"flex items-center gap-2"}>
+                <Chip size={"small"} colorScheme={"cyanDark"}>GCP Marketplace</Chip>
+                <Chip size={"small"} colorScheme={"greenDark"}>
+                    {subscriptionPlan === "cloud_plus" ? "Cloud Plus" : subscriptionPlan === "pro" ? "Pro" : subscriptionPlan}
+                </Chip>
+            </div>
+
+            <Typography variant={"subtitle1"}>
+                {t("marketplace_managed_by_gcp")}
+            </Typography>
+
+            <Typography variant={"body2"} color={"secondary"}>
+                {t("marketplace_billing_note")}
+            </Typography>
+
+            <div className={"flex gap-2 mt-2"}>
+                <Button
+                    component={"a"}
+                    variant={"filled"}
+                    color={"primary"}
+                    href={GCP_CONSOLE_MARKETPLACE_URL}
+                    target="_blank"
+                    rel="noreferrer">
+                    {t("marketplace_manage_in_gcp_console")}
+                </Button>
+            </div>
+
+            <Typography variant={"caption"} color={"disabled"} className={"mt-2"}>
+                {t("marketplace_plan_changes_note")}
+            </Typography>
+        </div>
+    );
 }
 
 interface CurrentSubscriptionViewProps {

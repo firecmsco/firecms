@@ -41,6 +41,8 @@ export type ProjectConfig = {
     trialValidUntil?: Date;
     isTrialOver: boolean;
     subscriptionStatus?: object;
+    subscriptionSource?: "stripe" | "gcp_marketplace";
+    isGCPMarketplace: boolean;
     customizationRevision?: string;
 
     localTextSearchEnabled: boolean;
@@ -101,6 +103,7 @@ export function useBuildProjectConfig({
     const [subscriptionPlan, setSubscriptionPlan] = useState<ProjectSubscriptionPlan>();
     const [subscriptionData, setSubscriptionData] = useState<ProjectSubscriptionData | undefined>();
     const [trialValidUntil, setTrialValidUntil] = useState<Date | undefined>();
+    const [subscriptionSource, setSubscriptionSource] = useState<"stripe" | "gcp_marketplace" | undefined>();
 
     const isTrialOver = (subscriptionPlan === "free" && trialValidUntil ? new Date() > trialValidUntil : false) || false;
 
@@ -243,6 +246,7 @@ export function useBuildProjectConfig({
                     const plan = snapshot.get("subscription_plan") ?? "free";
                     setSubscriptionPlan(plan);
                     setSubscriptionData(snapshot.get("subscription_data"));
+                    setSubscriptionSource(snapshot.get("subscription_source"));
                     setLocalTextSearchEnabled(snapshot.get("local_text_search_enabled") ?? false);
                     setTypesenseSearchConfig(snapshot.get("typesense_search_config"));
                     setHistoryDefaultEnabled(snapshot.get("history_default_enabled") ?? false);
@@ -330,6 +334,8 @@ export function useBuildProjectConfig({
         subscriptionData: loadedProjectIdRef.current !== projectId ? undefined : subscriptionData,
         trialValidUntil: loadedProjectIdRef.current !== projectId ? undefined : trialValidUntil,
         isTrialOver: (loadedProjectIdRef.current !== projectId ? undefined : isTrialOver) ?? false,
+        subscriptionSource: loadedProjectIdRef.current !== projectId ? undefined : subscriptionSource,
+        isGCPMarketplace: subscriptionSource === "gcp_marketplace",
         customizationRevision: loadedProjectIdRef.current !== projectId ? undefined : customizationRevision,
         configLoading: loadedProjectIdRef.current !== projectId || clientConfigLoading,
         configError: loadedProjectIdRef.current !== projectId ? undefined : clientConfigError,

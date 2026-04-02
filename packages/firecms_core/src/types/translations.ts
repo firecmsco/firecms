@@ -722,4 +722,18 @@ export interface FireCMSTranslations {
     settings_appcheck_refresh_note: string;
     settings_appcheck_updated: string;
     settings_appcheck_error: string;
+
+    // ─── GCP Marketplace ─────────────────────────────────────────
+    marketplace_managed_by_gcp: string;
+    marketplace_billing_note: string;
+    marketplace_manage_in_gcp_console: string;
+    marketplace_plan_changes_note: string;
+    marketplace_welcome_title: string;
+    marketplace_welcome_subtitle: string;
+    marketplace_select_or_create_project: string;
+    marketplace_link_project: string;
+    marketplace_linking: string;
+    marketplace_link_success: string;
+    marketplace_link_error: string;
+    marketplace_no_account_id: string;
 }

@@ -375,6 +375,26 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
+    async function linkMarketplaceProject(props: {
+        gcpAccountId: string,
+        projectId: string
+    }): Promise<{ success: boolean }> {
+        const firebaseAccessToken = await getBackendAuthToken();
+        return fetch(`${host}/marketplace/link-project`,
+            {
+                method: "POST",
+                headers: buildHeaders({ firebaseAccessToken }),
+                body: JSON.stringify(props)
+            })
+            .then(async (res) => {
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data?.error ?? data?.message ?? "Error linking marketplace project");
+                }
+                return data as { success: boolean };
+            });
+    }
+
     return {
         createNewFireCMSProject,
         createFirebaseWebapp,
@@ -395,6 +415,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         getStripeUpdateLinkForSubscription,
         getStripeCancelLinkForSubscription,
         getStripeUpdateLinkForPaymentMethod,
+        linkMarketplaceProject,
         host,
         getRemoteConfigUrl
     }
