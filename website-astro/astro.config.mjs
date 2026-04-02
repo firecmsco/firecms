@@ -75,6 +75,16 @@ export default defineConfig({
                     ],
                 },
                 {
+                    label: "Client SDK",
+                    collapsed: false,
+                    items: [
+                        {
+                            label: "Client SDK overview",
+                            slug: "docs/sdk"
+                        }
+                    ],
+                },
+                {
                     label: "Core Concepts",
                     collapsed: false,
                     items: [

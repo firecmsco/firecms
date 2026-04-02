@@ -1,5 +1,5 @@
 import { CollectionRegistryController } from "./navigation";
-import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues, TableColumnInfo } from "../types";
+import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues, TableMetadata } from "../types";
 import { RebaseContext } from "../rebase_context";
 
 /**
@@ -205,9 +205,9 @@ export interface DataDriver {
     fetchUnmappedTables?(mappedPaths?: string[]): Promise<string[]>;
 
     /**
-     * Fetch column metadata for a given table (if supported)
+     * Fetch metadata for a given table (if supported)
      */
-    fetchTableColumns?(tableName: string): Promise<TableColumnInfo[]>;
+    fetchTableMetadata?(tableName: string): Promise<TableMetadata>;
 
     /**
      * Flag to indicate if the driver has requested the initialization of the text search index

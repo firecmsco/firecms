@@ -1,4 +1,4 @@
-import { TableColumnInfo } from "../types";
+import { TableMetadata } from "../types";
 
 /**
  * Administrative database operations.
@@ -34,7 +34,7 @@ export interface DatabaseAdmin {
     fetchUnmappedTables?(mappedPaths?: string[]): Promise<string[]>;
 
     /**
-     * Fetch column metadata for a given table (if supported)
+     * Fetch table metadata for a given table (if supported)
      */
-    fetchTableColumns?(tableName: string): Promise<TableColumnInfo[]>;
+    fetchTableMetadata?(tableName: string): Promise<TableMetadata>;
 }

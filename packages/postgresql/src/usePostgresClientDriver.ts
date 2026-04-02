@@ -10,7 +10,7 @@ import {
     ListenCollectionProps,
     ListenEntityProps,
     SaveEntityProps,
-    TableColumnInfo
+    TableMetadata
 } from "@rebasepro/types";
 import { RebaseWebSocketClient } from "@rebasepro/client";
 
@@ -87,12 +87,7 @@ export function usePostgresClientDriver(config: PostgresDataDriverConfig): Postg
             return client.listenEntity(
                 { path, entityId, databaseId },
                 (entity: Entity | null) => {
-                    if (entity !== null) {
-                        props.onUpdate(entity as Entity<M>);
-                    } else {
-                        // Handle null case - some Rebase listeners expect only non-null entities
-                        // We'll skip the update for null entities to match Rebase expectations
-                    }
+                    props.onUpdate(entity as Entity<M> | null);
                 },
                 props.onError
             );
@@ -122,8 +117,8 @@ export function usePostgresClientDriver(config: PostgresDataDriverConfig): Postg
             return client.fetchUnmappedTables(mappedPaths);
         },
 
-        async fetchTableColumns(tableName: string): Promise<TableColumnInfo[]> {
-            return client.fetchTableColumns(tableName);
+        async fetchTableMetadata(tableName: string): Promise<TableMetadata> {
+            return client.fetchTableMetadata(tableName);
         }
     } as PostgresDataDriver;
     }, [client]);

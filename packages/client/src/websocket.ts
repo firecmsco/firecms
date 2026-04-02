@@ -9,7 +9,7 @@ import {
     WebSocketErrorPayload,
     CollectionUpdateMessage,
     EntityUpdateMessage,
-    TableColumnInfo
+    TableMetadata
 } from "@rebasepro/types";
 
 /**
@@ -32,6 +32,8 @@ export interface RebaseWebSocketConfig {
     websocketUrl: string;
     /** Optional auth token getter for WebSocket authentication */
     getAuthToken?: () => Promise<string>;
+    /** Optional WebSocket constructor to override globalThis.WebSocket (e.g. for Node environments) */
+    WebSocket?: any;
 }
 
 
@@ -51,10 +53,27 @@ export class ApiError extends Error {
 export class RebaseWebSocketClient {
     private websocketUrl: string;
     private ws: WebSocket | null = null;
+    public getAuthToken?: () => Promise<string>;
     private subscriptions = new Map<string, {
         onUpdate: (data: WebSocketMessage) => void,
         onError?: (error: Error) => void
     }>();
+
+    private listeners = new Map<string, Set<Function>>();
+
+    public on(event: "connect" | "disconnect" | "reconnect" | "error", cb: Function) {
+        if (!this.listeners.has(event)) {
+            this.listeners.set(event, new Set());
+        }
+        this.listeners.get(event)!.add(cb);
+        return () => this.listeners.get(event)!.delete(cb);
+    }
+
+    private emit(event: string, ...args: any[]) {
+        if (this.listeners.has(event)) {
+            this.listeners.get(event)!.forEach(cb => cb(...args));
+        }
+    }
 
     // New: Subscription deduplication management with optimizations
     private collectionSubscriptions = new Map<string, {
@@ -110,15 +129,20 @@ export class RebaseWebSocketClient {
     private isConnected = false;
     private messageQueue: Record<string, unknown>[] = [];
 
-    // Auth support
-    private getAuthToken?: () => Promise<string>;
     private isAuthenticated = false;
     private authPromise: Promise<void> | null = null;
+    private WebSocketConstructor: any;
 
     constructor(config: RebaseWebSocketConfig) {
         this.websocketUrl = config.websocketUrl;
         this.getAuthToken = config.getAuthToken;
-        this.initWebSocket();
+        this.WebSocketConstructor = config.WebSocket || (typeof window !== "undefined" ? window.WebSocket : (typeof globalThis !== "undefined" ? (globalThis as any).WebSocket : undefined));
+        
+        if (!this.WebSocketConstructor) {
+            console.warn("WebSocket is not defined in this environment. Realtime subscriptions will not work unless you provide a WebSocket implementation in the config.");
+        } else {
+            this.initWebSocket();
+        }
     }
 
     /**
@@ -178,14 +202,24 @@ export class RebaseWebSocketClient {
         }
     }
 
+    public disconnect(): void {
+        this.isAuthenticated = false;
+        this.authPromise = null;
+        if (this.ws) {
+            this.ws.close();
+            this.ws = null;
+        }
+    }
+
     // Initialize WebSocket connection
     private initWebSocket() {
-        if (this.ws?.readyState === WebSocket.OPEN) return;
+        if (!this.WebSocketConstructor) return;
+        if (this.ws?.readyState === this.WebSocketConstructor.OPEN) return;
 
         try {
-            this.ws = new WebSocket(this.websocketUrl);
+            this.ws = new this.WebSocketConstructor(this.websocketUrl);
 
-            this.ws.onopen = async () => {
+            this.ws!.onopen = async () => {
                 console.log("Connected to PostgreSQL backend");
                 this.isConnected = true;
                 this.reconnectAttempts = 0;
@@ -201,10 +235,11 @@ export class RebaseWebSocketClient {
                     }
                 }
 
+                this.emit(this.reconnectAttempts === 0 ? "connect" : "reconnect");
                 this.processMessageQueue();
             };
 
-            this.ws.onmessage = (event) => {
+            this.ws!.onmessage = (event) => {
                 try {
                     const message = JSON.parse(event.data);
                     this.handleWebSocketMessage(message);
@@ -213,11 +248,12 @@ export class RebaseWebSocketClient {
                 }
             };
 
-            this.ws.onclose = () => {
+            this.ws!.onclose = () => {
                 console.log("Disconnected from PostgreSQL backend");
                 this.isConnected = false;
                 this.isAuthenticated = false;
                 this.authPromise = null;
+                this.emit("disconnect");
 
                 // Re-queue pending requests so the UI doesn't hang indefinitely or crash
                 for (const [reqId, request] of this.pendingRequests.entries()) {
@@ -236,9 +272,10 @@ export class RebaseWebSocketClient {
                 this.attemptReconnect();
             };
 
-            this.ws.onerror = (error) => {
+            this.ws!.onerror = (error) => {
                 console.error("WebSocket error:", error);
                 this.isConnected = false;
+                this.emit("error", error);
             };
         } catch (error) {
             console.error("Failed to initialize WebSocket:", error);
@@ -604,12 +641,13 @@ export class RebaseWebSocketClient {
         return response.tables || [];
     }
 
-    async fetchTableColumns(tableName: string): Promise<TableColumnInfo[]> {
+    async fetchTableMetadata(tableName: string): Promise<TableMetadata> {
         const response = await this.sendMessage({
-            type: "FETCH_TABLE_COLUMNS",
+            type: "FETCH_TABLE_METADATA",
             payload: { tableName }
-        }) as { columns?: TableColumnInfo[] };
-        return response.columns || [];
+        }) as { metadata?: TableMetadata };
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        return response.metadata || ({ columns: [], foreignKeys: [], junctions: [], policies: [] } as TableMetadata);
     }
 
     // Subscription methods

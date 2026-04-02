@@ -12,20 +12,18 @@ import {
 } from "@rebasepro/types";
 import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
-import { useCustomizationController, useRebaseContext } from "../hooks";
+import { useCustomizationController, useRebaseContext, useAuthSubscription } from "../hooks";
 import { ApiConfigProvider } from "../hooks/ApiConfigContext";
 import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { ErrorView } from "../components";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
 import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
-import { DataDriverContext } from "../contexts/DataDriverContext";
 import { RebaseDataContext } from "../contexts/RebaseDataContext";
 import { DatabaseAdminContext } from "../contexts/DatabaseAdminContext";
 import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
 import { CollectionRegistryContext, NavigationStateContext, CMSUrlContext } from "../hooks/navigation/contexts";
 import { DialogsProvider } from "../contexts/DialogsProvider";
-import { useBuildDataDriver } from "../internal/useBuildDataDriver";
 import { buildRebaseData } from "@rebasepro/common";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
@@ -53,9 +51,11 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         userConfigPersistence,
         dateTimeFormat,
         locale,
-        authController,
-        storageSource,
+        client,
+        authController: authControllerProp,
+        storageSource: storageSourceProp,
         driver: driverProp,
+        data: dataProp,
         databaseAdmin,
         plugins: _pluginsProp,
         onAnalyticsEvent,
@@ -86,6 +86,22 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         } as unknown as UserManagementDelegate<USER>;
 
     const sideDialogsController = useBuildSideDialogsController();
+    
+    // Auth fallback logic
+    const clientAuthController = useAuthSubscription(client?.auth);
+    const authController = authControllerProp ?? clientAuthController;
+    
+    // Data fallback logic
+    const resolvedData = useMemo(() => {
+        if (dataProp) return dataProp;
+        if (driverProp) return buildRebaseData(driverProp);
+        if (client?.data) return client.data;
+        throw new Error("Rebase requires either `client`, `data`, or `driver` to be provided");
+    }, [dataProp, driverProp, client]);
+
+    // Storage fallback logic
+    const resolvedStorage = storageSourceProp ?? client?.storage;
+
     const sideEntityController = useBuildSideEntityController(collectionRegistryController, cmsUrlController, navigationStateController, sideDialogsController, authController);
 
     const pluginsLoading = plugins?.some((p: RebasePlugin) => p.loading) ?? false;
@@ -106,20 +122,6 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     const analyticsController = useMemo(() => ({
         onAnalyticsEvent
     }), []);
-
-    /**
-     * Controller in charge of fetching and persisting data
-     */
-    const driver = useBuildDataDriver({
-        delegate: driverProp,
-        propertyConfigs,
-        // Used by DataDriver internally for type resolution, pass the registry
-        collectionRegistryController,
-        authController
-    });
-    
-    // Unified data API Proxy
-    const data = useMemo(() => buildRebaseData(driver), [driver]);
 
     const fallbackEffectiveRoleController = useBuildEffectiveRoleController();
     const activeEffectiveRoleController = effectiveRoleController ?? fallbackEffectiveRoleController;
@@ -150,15 +152,13 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                 <UserConfigurationPersistenceContext.Provider
                     value={userConfigPersistence}>
                     <StorageSourceContext.Provider
-                        value={storageSource}>
-                        <DataDriverContext.Provider
-                            value={driver}>
-                            <RebaseDataContext.Provider
-                                value={data}>
-                                <DatabaseAdminContext.Provider
-                                    value={databaseAdmin}>
-                                    <AuthControllerContext.Provider
-                                        value={authController}>
+                        value={resolvedStorage as any}>
+                        <RebaseDataContext.Provider
+                            value={resolvedData}>
+                            <DatabaseAdminContext.Provider
+                                value={databaseAdmin}>
+                                <AuthControllerContext.Provider
+                                    value={authController}>
                                         <SideDialogsControllerContext.Provider
                                             value={sideDialogsController}>
                                             <SideEntityControllerContext.Provider
@@ -183,10 +183,9 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                                                 </CollectionRegistryContext.Provider>
                                             </SideEntityControllerContext.Provider>
                                         </SideDialogsControllerContext.Provider>
-                                    </AuthControllerContext.Provider>
-                                </DatabaseAdminContext.Provider>
-                            </RebaseDataContext.Provider>
-                        </DataDriverContext.Provider>
+                                </AuthControllerContext.Provider>
+                            </DatabaseAdminContext.Provider>
+                        </RebaseDataContext.Provider>
                     </StorageSourceContext.Provider>
                 </UserConfigurationPersistenceContext.Provider>
             </CustomizationControllerContext.Provider>

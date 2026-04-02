@@ -1,5 +1,5 @@
-import { buildCollectionFromTableColumns } from "./pgColumnToProperty";
-import { StringProperty, NumberProperty, DateProperty, MapProperty, ArrayProperty, BooleanProperty, TableColumnInfo } from "@rebasepro/types";
+import { buildCollectionFromTableMetadata } from "./pgColumnToProperty";
+import { StringProperty, NumberProperty, DateProperty, MapProperty, ArrayProperty, BooleanProperty, TableColumnInfo, TableMetadata } from "@rebasepro/types";
 
 describe("pgColumnToProperty Inference Logic", () => {
     describe("String Data Types", () => {
@@ -7,7 +7,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             const columns: TableColumnInfo[] = [
                 { column_name: "first_name", data_type: "character varying", udt_name: "varchar", is_nullable: "NO", column_default: null, character_maximum_length: 255 }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             const prop = collection.properties!.first_name as StringProperty;
             expect(prop.type).toBe("string");
             expect(prop.columnType).toBe("varchar");
@@ -19,7 +19,7 @@ describe("pgColumnToProperty Inference Logic", () => {
                 { column_name: "bio", data_type: "text", udt_name: "text", is_nullable: "YES", column_default: null, character_maximum_length: null },
                 { column_name: "username", data_type: "citext", udt_name: "citext", is_nullable: "YES", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             
             const bioProp = collection.properties!.bio as StringProperty;
             expect(bioProp.type).toBe("string");
@@ -35,7 +35,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             const columns: TableColumnInfo[] = [
                 { column_name: "country_code", data_type: "char", udt_name: "char", is_nullable: "NO", column_default: null, character_maximum_length: 2 }
             ];
-            const collection = buildCollectionFromTableColumns("locations", columns);
+            const collection = buildCollectionFromTableMetadata("locations", { columns } as TableMetadata);
             
             const prop = collection.properties!.country_code as StringProperty;
             expect(prop.type).toBe("string");
@@ -46,7 +46,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             const columns: TableColumnInfo[] = [
                 { column_name: "token", data_type: "uuid", udt_name: "uuid", is_nullable: "NO", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("sessions", columns);
+            const collection = buildCollectionFromTableMetadata("sessions", { columns } as TableMetadata);
             
             const prop = collection.properties!.token as StringProperty;
             expect(prop.type).toBe("string");
@@ -60,7 +60,7 @@ describe("pgColumnToProperty Inference Logic", () => {
                 { column_name: "age", data_type: "integer", udt_name: "int4", is_nullable: "NO", column_default: null, character_maximum_length: null },
                 { column_name: "status_code", data_type: "smallint", udt_name: "int2", is_nullable: "YES", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             
             const ageProp = collection.properties!.age as NumberProperty;
             expect(ageProp.type).toBe("number");
@@ -79,7 +79,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             const columns: TableColumnInfo[] = [
                 { column_name: "view_count", data_type: "bigint", udt_name: "int8", is_nullable: "YES", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("posts", columns);
+            const collection = buildCollectionFromTableMetadata("posts", { columns } as TableMetadata);
             const prop = collection.properties!.view_count as NumberProperty;
             expect(prop.type).toBe("number");
             expect(prop.columnType).toBe("bigint");
@@ -92,7 +92,7 @@ describe("pgColumnToProperty Inference Logic", () => {
                 { column_name: "rating", data_type: "real", udt_name: "float4", is_nullable: "YES", column_default: null, character_maximum_length: null },
                 { column_name: "precision_val", data_type: "double precision", udt_name: "float8", is_nullable: "YES", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("products", columns);
+            const collection = buildCollectionFromTableMetadata("products", { columns } as TableMetadata);
             
             expect((collection.properties!.price as NumberProperty).columnType).toBe("numeric");
             expect((collection.properties!.rating as NumberProperty).columnType).toBe("real");
@@ -108,7 +108,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             const columns: TableColumnInfo[] = [
                 { column_name: "id", data_type: "integer", udt_name: "int4", is_nullable: "NO", column_default: "nextval('users_id_seq'::regclass)", character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             
             const prop = collection.properties!.id as NumberProperty;
             expect(prop.isId).toBe("increment");
@@ -119,7 +119,7 @@ describe("pgColumnToProperty Inference Logic", () => {
                 { column_name: "id", data_type: "serial", udt_name: "int4", is_nullable: "NO", column_default: null, character_maximum_length: null },
                 { column_name: "big_id", data_type: "bigserial", udt_name: "int8", is_nullable: "NO", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             
             expect((collection.properties!.id as NumberProperty).isId).toBe("increment");
             expect((collection.properties!.id as NumberProperty).columnType).toBe("serial");
@@ -131,7 +131,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             const columns: TableColumnInfo[] = [
                 { column_name: "id", data_type: "uuid", udt_name: "uuid", is_nullable: "NO", column_default: "gen_random_uuid()", character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             
             const prop = collection.properties!.id as StringProperty;
             expect(prop.isId).toBe("uuid");
@@ -142,7 +142,7 @@ describe("pgColumnToProperty Inference Logic", () => {
                 // If it's varchar with a random identity function that FireCMS doesn't purely know how to recreate natively
                 { column_name: "id", data_type: "varchar", udt_name: "varchar", is_nullable: "NO", column_default: "some_custom_id_generator()", character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             
             const prop = collection.properties!.id as StringProperty;
             expect(prop.isId).toBeUndefined(); // Wait, the current logic maps it as `undefined` if column_default doesn't include "nextval" / "identity" / "uuid" etc. Let's adjust test according to how we wrote pgColumnToProperty... Wait, actually our logic handles `column_default.includes('identity')` or `uuid_generate`. So custom generators fail to parse as `isAutoId=true`.
@@ -155,7 +155,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             const columns: TableColumnInfo[] = [
                 { column_name: "is_active", data_type: "boolean", udt_name: "bool", is_nullable: "NO", column_default: "true", character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             const prop = collection.properties!.is_active as BooleanProperty;
             expect(prop.type).toBe("boolean");
         });
@@ -166,7 +166,7 @@ describe("pgColumnToProperty Inference Logic", () => {
                 { column_name: "birthday", data_type: "date", udt_name: "date", is_nullable: "YES", column_default: null, character_maximum_length: null },
                 { column_name: "shift_start", data_type: "time", udt_name: "time", is_nullable: "YES", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("events", columns);
+            const collection = buildCollectionFromTableMetadata("events", { columns } as TableMetadata);
             
             expect((collection.properties!.created_at as DateProperty).columnType).toBe("timestamp");
             expect((collection.properties!.birthday as DateProperty).columnType).toBe("date");
@@ -178,7 +178,7 @@ describe("pgColumnToProperty Inference Logic", () => {
                 { column_name: "metadata", data_type: "jsonb", udt_name: "jsonb", is_nullable: "YES", column_default: null, character_maximum_length: null },
                 { column_name: "old_data", data_type: "json", udt_name: "json", is_nullable: "YES", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("docs", columns);
+            const collection = buildCollectionFromTableMetadata("docs", { columns } as TableMetadata);
             
             expect((collection.properties!.metadata as MapProperty).type).toBe("map");
             expect((collection.properties!.metadata as MapProperty).columnType).toBe("jsonb");
@@ -192,7 +192,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             const columns: TableColumnInfo[] = [
                 { column_name: "tags", data_type: "ARRAY", udt_name: "_varchar", is_nullable: "YES", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("posts", columns);
+            const collection = buildCollectionFromTableMetadata("posts", { columns } as TableMetadata);
             
             const prop = collection.properties!.tags as ArrayProperty;
             expect(prop.type).toBe("array");
@@ -211,7 +211,7 @@ describe("pgColumnToProperty Inference Logic", () => {
                     enum_values: ["admin", "super_admin", "editor"]
                 }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             
             const prop = collection.properties!.role as StringProperty;
             expect(prop.type).toBe("string");
@@ -229,7 +229,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             const columns: TableColumnInfo[] = [
                 { column_name: "user_first_name", data_type: "varchar", udt_name: "varchar", is_nullable: "YES", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             
             expect(collection.properties!.user_first_name.name).toBe("User First Name");
         });
@@ -240,7 +240,7 @@ describe("pgColumnToProperty Inference Logic", () => {
                 { column_name: "email", data_type: "varchar", udt_name: "varchar", is_nullable: "YES", column_default: null, character_maximum_length: null },
                 { column_name: "role", data_type: "varchar", udt_name: "varchar", is_nullable: "YES", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("users", columns);
+            const collection = buildCollectionFromTableMetadata("users", { columns } as TableMetadata);
             
             expect(collection.propertiesOrder).toEqual(["id", "email", "role"]);
         });
@@ -249,7 +249,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             const columns: TableColumnInfo[] = [
                 { column_name: "weird_col", data_type: "macaddr", udt_name: "macaddr", is_nullable: "NO", column_default: null, character_maximum_length: null }
             ];
-            const collection = buildCollectionFromTableColumns("networks", columns);
+            const collection = buildCollectionFromTableMetadata("networks", { columns } as TableMetadata);
             
             const prop = collection.properties!.weird_col as StringProperty;
             expect(prop.type).toBe("string");

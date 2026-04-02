@@ -1,3 +1,5 @@
+import { FindParams as TypesFindParams, FindResponse as TypesFindResponse } from "@rebasepro/types";
+
 export interface RebaseClientConfig {
     baseUrl: string;
     token?: string;
@@ -7,25 +9,11 @@ export interface RebaseClientConfig {
     websocketUrl?: string; // Optional real-time WebSocket connection
 }
 
-export interface FindParams {
-    limit?: number;
-    offset?: number;
-    page?: number;
-    where?: Record<string, string>;
-    orderBy?: string;
-    include?: string[];
-    searchString?: string;
-}
-
-export interface FindResponse<T> {
-    data: T[];
-    meta: {
-        total: number;
-        limit: number;
-        offset: number;
-        hasMore: boolean;
-    };
-}
+/**
+ * Re-export from `@rebasepro/types` for backward compatibility.
+ */
+export type FindParams = TypesFindParams;
+export type FindResponse<T> = TypesFindResponse<T extends Record<string, any> ? T : any>;
 
 export class RebaseApiError extends Error {
     status: number;
@@ -72,6 +60,7 @@ export interface Transport {
     readonly baseUrl: string;
     readonly apiPath: string;
     readonly fetchFn: typeof globalThis.fetch;
+    getHeaders: (init?: RequestInit) => Record<string, string>;
 }
 
 export function createTransport(config: RebaseClientConfig): Transport {
@@ -79,13 +68,22 @@ export function createTransport(config: RebaseClientConfig): Transport {
     const apiPath = config.apiPath || "/api";
     let token = config.token;
 
-    async function request<T = any>(path: string, init?: RequestInit): Promise<T> {
-        const url = config.baseUrl.replace(/\/$/, "") + apiPath + path;
-        const headers: Record<string, string> = {
+    function getHeaders(init?: RequestInit) {
+        return {
             "Content-Type": "application/json",
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
             ...((init?.headers as Record<string, string>) || {}),
         };
+    }
+
+    async function request<T = any>(path: string, init?: RequestInit): Promise<T> {
+        const url = config.baseUrl.replace(/\/$/, "") + apiPath + path;
+        const headers = getHeaders(init);
+
+        // If passing FormData, we MUST let fetch set the boundary, so remove Content-Type
+        if (init?.body instanceof FormData) {
+            delete (headers as Record<string, string>)["Content-Type"];
+        }
 
         const res = await fetchFn(url, { ...init, headers });
 
@@ -134,5 +132,6 @@ export function createTransport(config: RebaseClientConfig): Transport {
         get baseUrl() { return config.baseUrl.replace(/\/$/, ""); },
         get apiPath() { return apiPath; },
         get fetchFn() { return fetchFn; },
+        getHeaders
     };
 }

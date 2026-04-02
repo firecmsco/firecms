@@ -2,11 +2,13 @@ import { RebaseApiError, Transport } from "./transport";
 
 export interface RebaseUser {
     uid: string;
-    email: string;
+    email: string | null;
     displayName: string | null;
     photoURL: string | null;
     emailVerified?: boolean;
     roles?: string[];
+    providerId: string;
+    isAnonymous: boolean;
 }
 
 export interface RebaseTokens {

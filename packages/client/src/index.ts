@@ -8,6 +8,7 @@ export * from "./auth";
 export * from "./admin";
 export * from "./collection";
 export * from "./websocket";
+export * from "./storage";
 
 export interface CreateRebaseClientOptions extends RebaseClientConfig {
     auth?: CreateAuthOptions;
@@ -15,30 +16,32 @@ export interface CreateRebaseClientOptions extends RebaseClientConfig {
 }
 
 import { RebaseWebSocketClient } from "./websocket";
+import { RebaseClient as BaseRebaseClient, RebaseData, CollectionAccessor, StorageSource } from "@rebasepro/types";
 
-export type RebaseClient<DB = any> = {
+export type RebaseClient<DB = any> = BaseRebaseClient<DB> & {
     auth: ReturnType<typeof createAuth>;
     admin: ReturnType<typeof createAdmin>;
     ws?: RebaseWebSocketClient;
-    data: {
+    storage?: StorageSource;
+    call: <T = any>(endpoint: string, payload?: any) => Promise<T>;
+    data: RebaseData & {
         collection<K extends keyof DB>(slug: Extract<K, string>): CollectionClient<
-            DB[K] extends { Row: infer R } ? R : any,
-            DB[K] extends { Insert: infer I } ? I : any,
-            DB[K] extends { Update: infer U } ? U : any
+            DB[K] extends { Row: infer R extends Record<string, any> } ? R : any
         >;
     } & {
         [K in keyof DB]: CollectionClient<
-            DB[K] extends { Row: infer R } ? R : any,
-            DB[K] extends { Insert: infer I } ? I : any,
-            DB[K] extends { Update: infer U } ? U : any
+            DB[K] extends { Row: infer R extends Record<string, any> } ? R : any
         >;
     };
 };
+
+import { createStorage } from "./storage";
 
 export function createRebaseClient<DB = any>(options: CreateRebaseClientOptions): RebaseClient<DB> {
     const transport = createTransport(options);
     const auth = createAuth(transport, options.auth);
     const admin = createAdmin(transport, options.admin);
+    const storage = createStorage(transport);
 
     let ws: RebaseWebSocketClient | undefined;
     if (options.websocketUrl) {
@@ -49,13 +52,21 @@ export function createRebaseClient<DB = any>(options: CreateRebaseClientOptions)
                 return session?.accessToken || "";
             }
         });
+
+        auth.onAuthStateChange((event, session) => {
+            if (!ws) return;
+            if (event === "SIGNED_OUT") {
+                ws.disconnect();
+            } else if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+                if (session?.accessToken) {
+                    ws.authenticate(session.accessToken).catch(console.warn);
+                }
+            }
+        });
     }
 
     // Register transport callback for 401s after auth is instantiated
     if (!options.onUnauthorized) {
-        // NOTE: we need a way to mock or overwrite onUnauthorized on the transport.
-        // Actually, the transport accesses config.onUnauthorized directly per request,
-        // so we can just mutate the options object.
         options.onUnauthorized = async () => {
             try {
                 await auth.refreshSession();
@@ -66,37 +77,46 @@ export function createRebaseClient<DB = any>(options: CreateRebaseClientOptions)
         };
     }
 
-    const collectionClients = new Map<string, CollectionClient<unknown, unknown, unknown>>();
+    const collectionClients = new Map<string, CollectionClient<any>>();
 
-    function collection<K extends keyof DB>(slug: Extract<K, string>) {
+    function collection(slug: string): CollectionClient<any> {
         if (!collectionClients.has(slug)) {
             collectionClients.set(slug, createCollectionClient(transport, slug, ws));
         }
-        return collectionClients.get(slug);
+        return collectionClients.get(slug)!;
     }
 
-    const dataProxy = new Proxy(
-        { collection },
-        {
-            get(dataTarget, prop: string | symbol) {
-                if (prop in dataTarget) {
-                    return (dataTarget as Record<string, unknown>)[prop as string];
-                }
-                if (typeof prop === "string" && prop !== "then") {
-                    return (dataTarget as Record<string, unknown> & { collection: (slug: string) => CollectionClient<unknown, unknown, unknown> }).collection(prop);
-                }
-                return undefined;
+    const dataTarget = { collection } as Record<string, any>;
+
+    const dataProxy = new Proxy(dataTarget, {
+        get(_target, prop: string | symbol) {
+            if (prop === "collection") {
+                return collection;
             }
+            if (typeof prop === "symbol") return undefined;
+            if (typeof prop === "string" && prop !== "then" && prop !== "toJSON" && prop !== "$$typeof") {
+                return collection(prop);
+            }
+            return undefined;
         }
-    );
+    });
 
     const target = {
         auth,
         admin,
+        storage,
         ws,
         collection,
+        call: async <T = any>(endpoint: string, payload?: any): Promise<T> => {
+            const prefix = endpoint.startsWith("/") ? "" : "/";
+            const res = await transport.request<{ data: T }>(`${prefix}${endpoint}`, {
+                method: "POST",
+                body: payload ? JSON.stringify(payload) : undefined
+            });
+            return res.data ?? (res as unknown as T);
+        },
         data: dataProxy
-    };
+    } as unknown as RebaseClient<DB>;
 
     return new Proxy(target, {
         get(obj, prop: string | symbol) {

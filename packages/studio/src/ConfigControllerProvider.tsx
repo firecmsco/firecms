@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { TableColumnInfo } from "@rebasepro/types";
+import { TableMetadata } from "@rebasepro/types";
 import { deepEqual as equal } from "fast-equals";
 
 import { CollectionsConfigController } from "./types/config_controller";
@@ -97,8 +97,8 @@ export const ConfigControllerProvider = React.memo(
                 .catch((e: unknown) => console.warn("Could not fetch unmapped tables:", e));
         }, [databaseAdmin, authController.initialLoading, authController.user, collectionConfigController.collections]);
 
-        const onFetchTableColumns = useCallback(async (tableName: string): Promise<TableColumnInfo[]> => {
-            return databaseAdmin?.fetchTableColumns?.(tableName) ?? [];
+        const onFetchTableMetadata = useCallback(async (tableName: string): Promise<TableMetadata | undefined> => {
+            return databaseAdmin?.fetchTableMetadata?.(tableName);
         }, [databaseAdmin]);
 
         const urlController = useCMSUrlController();
@@ -295,7 +295,7 @@ export const ConfigControllerProvider = React.memo(
                         generateCollection={generateCollection}
                         onAnalyticsEvent={onAnalyticsEvent}
                         unmappedTables={unmappedTables}
-                        onFetchTableColumns={onFetchTableColumns}
+                        onFetchTableMetadata={onFetchTableMetadata}
                         handleClose={(collection) => {
                             if (currentDialog?.redirect) {
                                 if (collection && currentDialog?.isNewCollection && !currentDialog.parentCollectionIds.length) {

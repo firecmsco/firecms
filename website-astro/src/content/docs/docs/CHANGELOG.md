@@ -235,7 +235,7 @@ title: Changelog
   - Fixed id paths bug
   - Fixed merged collections order
   - DND (drag and drop) performance optimizations and bugfixes
-
+  - Fixed collection groups path handling
 - **Custom Fields**: Improved custom fields page
 - **Reference Dialog Fix**: Fixed reference dialog sorting issue when filters are applied in main collection
 - **Product Demo**: Improved product sync demo action
@@ -396,7 +396,7 @@ const userManagement = useBuildUserManagement({
 - Fixed for Cloud version refreshing navigation too often.
 - Fix for local search not working when returning to a collection.
 - Fix for bug when selecting a read only entity.
-
+- Fixed selection bug in collection groups for entities sharing id.
 - Reference previews now take into account arrays of images for the preview image.
 
 ## [3.0.0-beta.10] - 2024-07-10
@@ -487,7 +487,7 @@ const userManagement = useBuildUserManagement({
 - Hide new user button if `disabledSignupScreen`.
 - Improved docs navigation bar styling.
 - Allowing maps to be completely undefined.
-
+- Disabled add button in collection groups.
 - Big entity refactor, custom views are now under the formex provider.
 - CLI fix for not logged in users.
 - Fix for datamaps not getting traversed correctly with null values.
@@ -506,7 +506,7 @@ const userManagement = useBuildUserManagement({
 - Added JSON view example.
 - Changed virtual table to use size in pixels.
 - Some design updates for better user experience.
-
+- Added back collection group column with parent IDs.
 - Improved empty results output.
 - Added sample prompts and suggestions for DataTalk.
 - Enhanced side entity view, dynamically calculated based on collection property depth.
@@ -644,7 +644,7 @@ and the [migration guide](./cloud/migrating_from_v2).
 
 - Fix for missing subcollection links.
 - New email and password login flow
-
+- Removed add button in collection group
 - Export fixes
 - Fix for collections search
 
@@ -721,7 +721,7 @@ and the [migration guide](./cloud/migrating_from_v2).
 
 ## [2.0.0-beta.7] - 2023-05-23
 
-
+- Added support for collection groups
 - [BREAKING] The `countEntities` function in the data source now takes an
   object instead of a string as parameter. This will only affect you if you
   have built a custom component using that function.

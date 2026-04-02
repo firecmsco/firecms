@@ -1,6 +1,8 @@
 import { Transport, FindParams, FindResponse, buildQueryString } from "./transport";
 import { RebaseWebSocketClient } from "./websocket";
-import { Entity, FilterValues, WhereFilterOp } from "@rebasepro/types";
+import { Entity, FilterValues, WhereFilterOp, CollectionAccessor } from "@rebasepro/types";
+
+import { FilterOperator, QueryBuilder } from "./query_builder";
 
 function parseWhereFilter(where?: Record<string, string>): FilterValues<any> | undefined {
     if (!where) return undefined;
@@ -55,41 +57,71 @@ function parseWhereFilter(where?: Record<string, string>): FilterValues<any> | u
     return filters;
 }
 
-export interface CollectionClient<Row, Insert, Update> {
-    find(params?: FindParams): Promise<FindResponse<Row>>;
-    findById(id: string | number): Promise<Row | undefined>;
-    create(data: Insert): Promise<Row>;
-    update(id: string | number, data: Update): Promise<Row>;
-    delete(id: string | number): Promise<void>;
-    listen?(params: FindParams | undefined, onUpdate: (data: FindResponse<Row>) => void, onError?: (error: Error) => void): () => void;
-    listenById?(id: string | number, onUpdate: (data: Row | undefined) => void, onError?: (error: Error) => void): () => void;
+/**
+ * Wrap a flat row (returned by the REST API as `{ id, ...fields }`) into
+ * a proper `Entity<M>` structure expected by the core framework.
+ */
+function rowToEntity<M extends Record<string, any>>(row: Record<string, any>, slug: string): Entity<M> {
+    const { id, ...values } = row;
+    return {
+        id: id,
+        path: slug,
+        values: values as M
+    };
 }
 
-export function createCollectionClient<Row, Insert, Update>(transport: Transport, slug: string, ws?: RebaseWebSocketClient): CollectionClient<Row, Insert, Update> {
+/**
+ * CollectionClient extends `CollectionAccessor` from `@rebasepro/types` so that
+ * `client.data` can be passed directly to the core Rebase component.
+ *
+ * Additionally it exposes fluent query builder methods like `.where()`, `.orderBy()`.
+ */
+export interface CollectionClient<M extends Record<string, any> = any> extends CollectionAccessor<M> {
+    // Fluent Query Builder
+    where(column: keyof M & string, operator: FilterOperator, value: any): QueryBuilder<M>;
+    orderBy(column: keyof M & string, ascending?: "asc" | "desc"): QueryBuilder<M>;
+    limit(count: number): QueryBuilder<M>;
+    offset(count: number): QueryBuilder<M>;
+    search(searchString: string): QueryBuilder<M>;
+}
+
+export function createCollectionClient<M extends Record<string, any> = any>(transport: Transport, slug: string, ws?: RebaseWebSocketClient): CollectionClient<M> {
     const basePath = `/${slug}`;
 
     return {
         async find(params?: FindParams) {
             const qs = buildQueryString(params);
-            return transport.request<FindResponse<Row>>(basePath + qs, { method: "GET" });
+            const raw = await transport.request<{ data: Record<string, any>[]; meta: any }>(basePath + qs, { method: "GET" });
+            return {
+                data: (raw.data || []).map((row: Record<string, any>) => rowToEntity<M>(row, slug)),
+                meta: raw.meta
+            };
         },
 
         async findById(id: string | number) {
-            return transport.request<Row>(`${basePath}/${encodeURIComponent(String(id))}`, { method: "GET" });
+            const raw = await transport.request<Record<string, any>>(`${basePath}/${encodeURIComponent(String(id))}`, { method: "GET" });
+            if (!raw) return undefined;
+            return rowToEntity<M>(raw, slug);
         },
 
-        async create(data: Insert) {
-            return transport.request<Row>(basePath, {
+        async create(data: Partial<M>, id?: string | number) {
+            const body: any = { ...data };
+            if (id !== undefined) {
+                body.id = id;
+            }
+            const raw = await transport.request<Record<string, any>>(basePath, {
                 method: "POST",
-                body: JSON.stringify(data),
+                body: JSON.stringify(body),
             });
+            return rowToEntity<M>(raw, slug);
         },
 
-        async update(id: string | number, data: Update) {
-            return transport.request<Row>(`${basePath}/${encodeURIComponent(String(id))}`, {
+        async update(id: string | number, data: Partial<M>) {
+            const raw = await transport.request<Record<string, any>>(`${basePath}/${encodeURIComponent(String(id))}`, {
                 method: "PUT",
                 body: JSON.stringify(data),
             });
+            return rowToEntity<M>(raw, slug);
         },
 
         async delete(id: string | number) {
@@ -99,7 +131,7 @@ export function createCollectionClient<Row, Insert, Update>(transport: Transport
         },
 
         ...(ws && {
-            listen(params: FindParams | undefined, onUpdate: (data: FindResponse<Row>) => void, onError?: (error: Error) => void) {
+            listen(params: FindParams | undefined, onUpdate: (data: { data: Entity<M>[]; meta: any }) => void, onError?: (error: Error) => void) {
                 return ws.listenCollection(
                     {
                         path: slug,
@@ -111,19 +143,26 @@ export function createCollectionClient<Row, Insert, Update>(transport: Transport
                         searchString: params?.searchString
                     },
                     (entities: Entity[]) => {
-                        const rows = entities.map(e => ({ id: e.id, ...e.values } as unknown as Row));
-                        onUpdate({ data: rows, meta: { total: rows.length, limit: params?.limit || 20, offset: params?.offset || 0, hasMore: false } });
+                        onUpdate({
+                            data: entities as Entity<M>[],
+                            meta: {
+                                total: entities.length,
+                                limit: params?.limit || 20,
+                                offset: params?.offset || 0,
+                                hasMore: false
+                            }
+                        });
                     },
                     onError
                 );
             },
 
-            listenById(id: string | number, onUpdate: (data: Row | undefined) => void, onError?: (error: Error) => void) {
+            listenById(id: string | number, onUpdate: (data: Entity<M> | undefined) => void, onError?: (error: Error) => void) {
                 return ws.listenEntity(
                     { path: slug, entityId: String(id) },
                     (entity: Entity | null) => {
                         if (entity) {
-                            onUpdate({ id: entity.id, ...entity.values } as unknown as Row);
+                            onUpdate(entity as Entity<M>);
                         } else {
                             onUpdate(undefined);
                         }
@@ -131,6 +170,23 @@ export function createCollectionClient<Row, Insert, Update>(transport: Transport
                     onError
                 );
             }
-        })
+        }),
+
+        // Fluent builder instantiation
+        where(column: keyof M & string, operator: FilterOperator, value: any) {
+            return new QueryBuilder<M>(this as any).where(column, operator, value);
+        },
+        orderBy(column: keyof M & string, ascending?: "asc" | "desc") {
+            return new QueryBuilder<M>(this as any).orderBy(column, ascending);
+        },
+        limit(count: number) {
+            return new QueryBuilder<M>(this as any).limit(count);
+        },
+        offset(count: number) {
+            return new QueryBuilder<M>(this as any).offset(count);
+        },
+        search(searchString: string) {
+            return new QueryBuilder<M>(this as any).search(searchString);
+        }
     };
 }

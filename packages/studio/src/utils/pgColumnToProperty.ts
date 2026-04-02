@@ -1,4 +1,4 @@
-import { EntityCollection, Property, StringProperty, NumberProperty, ArrayProperty, TableColumnInfo } from "@rebasepro/types";
+import { EntityCollection, Property, StringProperty, NumberProperty, ArrayProperty, TableColumnInfo, TableMetadata } from "@rebasepro/types";
 
 /**
  * Maps a PostgreSQL column data type to a Rebase property type.
@@ -176,17 +176,20 @@ function pgTypeToRebaseProperty(column: TableColumnInfo): Property | null {
 }
 
 /**
- * Builds a partial EntityCollection from PostgreSQL table column metadata.
+ * Builds a partial EntityCollection from PostgreSQL table metadata.
  * This is used when creating a new collection from an existing database table.
  */
-export function buildCollectionFromTableColumns(
+export function buildCollectionFromTableMetadata(
     tableName: string,
-    columns: TableColumnInfo[]
+    metadata: TableMetadata
 ): Partial<EntityCollection> {
     const properties: Record<string, Property> = {};
     const propertiesOrder: string[] = [];
+    const relations: any[] = []; // In the builder/editor, target can be a string path before hydration
+    const securityRules: any[] = [];
 
-    for (const column of columns) {
+    // Parse columns
+    for (const column of metadata.columns) {
         const property = pgTypeToRebaseProperty(column);
         if (property) {
             // Remove undefined keys so we don't output "validation: undefined"
@@ -194,6 +197,64 @@ export function buildCollectionFromTableColumns(
             
             properties[column.column_name] = property;
             propertiesOrder.push(column.column_name);
+        }
+    }
+
+    // Parse Outgoing Foreign Keys -> Many-to-One / One-to-One
+    if (metadata.foreignKeys) {
+        for (const fk of metadata.foreignKeys) {
+            const relName = fk.column_name.endsWith('_id') ? fk.column_name.substring(0, fk.column_name.length - 3) : fk.column_name;
+            relations.push({
+                id: fk.column_name,
+                relationName: relName,
+                target: fk.foreign_table_name, // Will be hydrated later
+                cardinality: "one",
+                direction: "owning",
+                localKey: fk.column_name
+            });
+        }
+    }
+
+    // Parse Incoming Junctions -> Many-to-Many
+    if (metadata.junctions) {
+        for (const junction of metadata.junctions) {
+            const relName = junction.target_table_name; // E.g., 'roles'
+            relations.push({
+                id: junction.target_table_name + "_relation",
+                relationName: relName,
+                target: junction.target_table_name, // Will be hydrated later
+                cardinality: "many",
+                direction: "owning",
+                through: {
+                    table: junction.junction_table_name,
+                    sourceColumn: junction.source_column_name,
+                    targetColumn: junction.target_column_name
+                }
+            });
+        }
+    }
+
+    // Parse RLS Policies
+    if (metadata.policies) {
+        for (const policy of metadata.policies) {
+            // Attempt to map typical cmds to operations.
+            // Postgres cmd: SELECT, INSERT, UPDATE, DELETE, ALL
+            let operations: string[] = [];
+            switch(policy.cmd) {
+                case "ALL": operations = ["read", "create", "update", "delete"]; break;
+                case "SELECT": operations = ["read"]; break;
+                case "INSERT": operations = ["create"]; break;
+                case "UPDATE": operations = ["update"]; break;
+                case "DELETE": operations = ["delete"]; break;
+            }
+            securityRules.push({
+                name: policy.policy_name,
+                operations,
+                // roles is string[] e.g., ["public", "authenticated"]
+                roles: policy.roles ?? [],
+                qual: policy.qual,
+                with_check: policy.with_check
+            });
         }
     }
 
@@ -206,6 +267,8 @@ export function buildCollectionFromTableColumns(
         slug: tableName,
         dbPath: tableName,
         properties,
-        propertiesOrder
+        propertiesOrder,
+        ...(relations.length > 0 ? { relations } : {}),
+        ...(securityRules.length > 0 ? { securityRules } : {})
     };
 }

@@ -19,6 +19,7 @@ export * from "./useResolvedNavigationFrom";
 
 export * from "./useStorageSource";
 export * from "./useAuthController";
+export * from "./useAuthSubscription";
 export * from "./useDialogsController";
 export * from "./useSideDialogsController";
 export * from "./useAdminModeController";

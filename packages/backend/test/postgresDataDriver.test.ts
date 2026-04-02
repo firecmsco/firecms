@@ -399,9 +399,9 @@ describe('PostgresDataDriver', () => {
             expect(result).toEqual(['orphan_table']);
         });
 
-        it('should delegate fetchTableColumns without a transaction', async () => {
-            jest.spyOn(delegate, 'fetchTableColumns').mockResolvedValueOnce([{ name: 'id', type: 'int4' }] as any);
-            const result = await authDelegate.fetchTableColumns('users');
+        it('should delegate fetchTableMetadata without a transaction', async () => {
+            jest.spyOn(delegate, 'fetchTableMetadata').mockResolvedValueOnce([{ name: 'id', type: 'int4' }] as any);
+            const result = await authDelegate.fetchTableMetadata('users');
             expect(mockDb.transaction).not.toHaveBeenCalled();
             expect(result).toEqual([{ name: 'id', type: 'int4' }]);
         });

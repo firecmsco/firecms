@@ -12,6 +12,7 @@ import {
     DatabaseAdmin
 } from "../controllers";
 import { RebaseData } from "../controllers/data";
+import { RebaseClient } from "../controllers/client";
 import { RebaseContext } from "../rebase_context";
 import { UserManagementDelegate } from "./user_management_delegate";
 
@@ -144,27 +145,35 @@ export type RebaseProps<USER extends User> = {
     locale?: Locale;
 
     /**
-     * Internal data driver used by the CMS engine.
-     * The public `data` API is built from this automatically.
-     * @internal
+     * Unified RebaseClient for data, auth, and storage.
      */
-    driver: DataDriver;
+    client?: RebaseClient;
+
+    /**
+     * Optional override for RebaseData if not using `client`
+     */
+    data?: RebaseData;
+
+    /**
+     * Optional override for DataDriver if not using `client`
+     */
+    driver?: DataDriver;
+
+    /**
+     * Optional override for AuthController if not using `client`
+     */
+    authController?: AuthController<USER>;
+
+    /**
+     * Optional override for StorageSource if not using `client`
+     */
+    storageSource?: StorageSource;
 
     /**
      * Administrative database operations (SQL, schema discovery).
      * Only needed when the studio/admin features are enabled.
      */
     databaseAdmin?: DatabaseAdmin;
-
-    /**
-     * Connector to your file upload/fetch implementation
-     */
-    storageSource: StorageSource;
-
-    /**
-     * Delegate for implementing your auth operations.
-     */
-    authController: AuthController<USER>;
 
     /**
      * Use this controller to access the configuration that is stored locally,

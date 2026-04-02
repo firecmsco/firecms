@@ -18,7 +18,12 @@ import {
     ListenEntityProps,
     RebaseCallContext,
     SaveEntityProps,
-    RebaseData
+    RebaseData,
+    TableMetadata,
+    TableColumnInfo,
+    TableForeignKeyInfo,
+    TableJunctionInfo,
+    TablePolicyInfo
 } from "@rebasepro/types";
 import { buildRebaseData } from "@rebasepro/common";
 
@@ -684,20 +689,15 @@ export class PostgresDataDriver implements DataDriver {
         return filteredTables.filter((name: string) => !mappedSet.has(name.toLowerCase()));
     }
 
+    
     /**
-     * Fetch column metadata for a given table from information_schema.
+     * Fetch metadata for a given table from information_schema (columns, policies, constraints).
      */
-    async fetchTableColumns(tableName: string): Promise<{
-        column_name: string;
-        data_type: string;
-        udt_name: string;
-        is_nullable: string;
-        column_default: string | null;
-        character_maximum_length: number | null;
-    }[]> {
+    async fetchTableMetadata(tableName: string): Promise<TableMetadata> {
         // Sanitize table name as defense-in-depth (parameterized below)
         const safeName = tableName.replace(/[^a-zA-Z0-9_]/g, "");
 
+        // 1. Fetch Columns
         const result = await this.db.execute(drizzleSql`
             SELECT column_name, data_type, udt_name, is_nullable, column_default, character_maximum_length
             FROM information_schema.columns
@@ -725,16 +725,65 @@ export class PostgresDataDriver implements DataDriver {
                 }
             }
         }
+        const typedColumns = columns as unknown as TableColumnInfo[];
 
-        return columns as {
-            column_name: string;
-            data_type: string;
-            udt_name: string;
-            is_nullable: string;
-            column_default: string | null;
-            character_maximum_length: number | null;
-            enum_values?: string[];
-        }[];
+        // 2. Fetch Foreign Keys
+        const fkResult = await this.db.execute(drizzleSql`
+            SELECT
+                kcu.column_name as column_name,
+                ccu.table_name AS foreign_table_name,
+                ccu.column_name AS foreign_column_name
+            FROM 
+                information_schema.table_constraints AS tc 
+                JOIN information_schema.key_column_usage AS kcu
+                  ON tc.constraint_name = kcu.constraint_name
+                  AND tc.table_schema = kcu.table_schema
+                JOIN information_schema.constraint_column_usage AS ccu
+                  ON ccu.constraint_name = tc.constraint_name
+                  AND ccu.table_schema = tc.table_schema
+            WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_name = ${safeName};
+        `);
+        const foreignKeys = fkResult.rows as unknown as TableForeignKeyInfo[];
+
+        // 3. Fetch Junction Tables (Many-to-Many)
+        // A simple junction table is one that has foreign keys to our table and other tables
+        const junctionsResult = await this.db.execute(drizzleSql`
+            SELECT 
+                tc1.table_name as junction_table_name,
+                kcu1.column_name as source_column_name,
+                ccu2.table_name as target_table_name,
+                kcu2.column_name as target_column_name
+            FROM information_schema.table_constraints tc1
+            JOIN information_schema.key_column_usage kcu1 ON tc1.constraint_name = kcu1.constraint_name
+            JOIN information_schema.constraint_column_usage ccu1 ON ccu1.constraint_name = tc1.constraint_name
+            JOIN information_schema.table_constraints tc2 ON tc1.table_name = tc2.table_name AND tc2.constraint_type = 'FOREIGN KEY'
+            JOIN information_schema.key_column_usage kcu2 ON tc2.constraint_name = kcu2.constraint_name
+            JOIN information_schema.constraint_column_usage ccu2 ON ccu2.constraint_name = tc2.constraint_name
+            WHERE tc1.constraint_type = 'FOREIGN KEY' 
+              AND ccu1.table_name = ${safeName}
+              AND ccu2.table_name != ${safeName};
+        `);
+        const junctions = junctionsResult.rows as unknown as TableJunctionInfo[];
+
+        // 4. Fetch RLS Policies
+        const policiesResult = await this.db.execute(drizzleSql`
+            SELECT 
+                polname as policy_name, 
+                polcmd as cmd, 
+                polroles::regrole[]::text[] as roles, 
+                pg_get_expr(polqual, polrelid) as qual, 
+                pg_get_expr(polwithcheck, polrelid) as with_check
+            FROM pg_policy
+            WHERE polrelid = (SELECT oid FROM pg_class WHERE relname = ${safeName} AND relnamespace = 'public'::regnamespace);
+        `);
+        const policies = policiesResult.rows as unknown as TablePolicyInfo[];
+
+        return {
+            columns: typedColumns,
+            foreignKeys,
+            junctions,
+            policies
+        };
     }
 
     private generateSubscriptionId(): string {
@@ -897,7 +946,7 @@ export class AuthenticatedPostgresDataDriver implements DataDriver {
         return this.delegate.fetchUnmappedTables(mappedPaths);
     }
 
-    async fetchTableColumns(tableName: string) {
-        return this.delegate.fetchTableColumns(tableName);
+    async fetchTableMetadata(tableName: string) {
+        return this.delegate.fetchTableMetadata(tableName);
     }
 }

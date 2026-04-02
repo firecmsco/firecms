@@ -41,3 +41,31 @@ export interface TableColumnInfo {
     /** Enum values, populated for USER-DEFINED (enum) columns */
     enum_values?: string[];
 }
+
+export interface TableForeignKeyInfo {
+    column_name: string;
+    foreign_table_name: string;
+    foreign_column_name: string;
+}
+
+export interface TableJunctionInfo {
+    junction_table_name: string;
+    source_column_name: string;
+    target_table_name: string;
+    target_column_name: string;
+}
+
+export interface TablePolicyInfo {
+    policy_name: string;
+    roles: string[];
+    cmd: string;
+    qual?: string;
+    with_check?: string;
+}
+
+export interface TableMetadata {
+    columns: TableColumnInfo[];
+    foreignKeys: TableForeignKeyInfo[];
+    junctions: TableJunctionInfo[];
+    policies: TablePolicyInfo[];
+}

@@ -827,6 +827,179 @@ Make sure to set the `DATABASE_URL` environment variable on your backend and con
 
 Any static hosting provider that supports SPA rewrites will work. Build the frontend with `pnpm build` and serve the `dist` folder. Make sure all routes redirect to `index.html` for client-side routing to work.
 
+## Client SDK
+
+The **Rebase Client SDK** (`@rebasepro/client`) is a lightweight, transport-agnostic SDK that exposes a beautiful, fluent API modeled closely after Firebase and Supabase. You can plug it into any JavaScript environment—React, Vue, Node.js, React Native, Svelte, or Vanilla JS.
+
+It deeply unifies your access to Rebase functionalities:
+* **Authentication:** Automatically maintains your token session (incl. background refreshes).
+* **Data Sources (HTTP):** Exposes a typed, chainable query builder to interact with your data.
+* **Realtime (WebSocket):** Automatically reacts to authentication state changes and mirrors realtime changes.
+* **Storage:** Unified bucket/path abstraction to easily upload and resolve files natively.
+* **Serverless RPC:** Quickly invoke generic backend endpoints with automatic authorization via `client.call()`.
+
+---
+
+### 🚀 Installation
+
+```bash
+npm install @rebasepro/client @rebasepro/types
+```
+
+### 🛠 Initialization
+
+The client acts as your primary gateway. You initialize it once and reuse it across your application. 
+
+```typescript
+
+// Optionally import your generated database types for end-to-end type safety!
+import type { Database } from "./generated-types"; 
+
+export const rebase = createRebaseClient<Database>({
+    baseUrl: process.env.VITE_REBASE_ENDPOINT,
+    websocketUrl: process.env.VITE_REBASE_WS_ENDPOINT,
+
+    // Optional override for Node.js SSR environments:
+    // WebSocket: require('ws') 
+});
+```
+
+Because we've typed `createRebaseClient<Database>`, every query you write against it will now be strictly validated by TypeScript!
+
+---
+
+### 🔒 Authentication
+
+The auth subsystem cleanly mirrors what you know from other backend-as-a-service providers. Its state automatically propagates to the underlying Data and Realtime layers.
+
+```typescript
+// 1. Sign In
+const { user, accessToken } = await rebase.auth.signInWithEmail("user@example.com", "password");
+
+// 2. Fetch Session synchronously
+const session = rebase.auth.getSession();
+
+// 3. Listen to auth state changes cleanly
+rebase.auth.onAuthStateChange(async (event, session) => {
+    if (event === "SIGNED_IN") {
+        console.log("Welcome!", session.user);
+    } else if (event === "SIGNED_OUT") {
+        console.log("Goodbye!");
+    }
+});
+
+// 4. Sign Out
+await rebase.auth.signOut();
+```
+> [!NOTE]
+> When `onAuthStateChange` detects a logout or login, the WebSocket natively drops the connection and rebinds context, ensuring secure access to your real-time topics instantly.
+
+---
+
+### 🔍 Fluent Data Querying
+
+Querying data is intuitive and chainable. Access any generated collection directly off the client and stack filters beautifully. 
+
+#### Fetching Data
+
+```typescript
+const posts = await rebase.collection("posts")
+    .where("status", "==", "published")
+    .where("views", ">", 100)
+    .orderBy("createdAt", "desc")
+    .limit(20)
+    .find();
+```
+
+#### Mutating Data
+
+Inserting, updating, and deleting are straightforward and typed. 
+
+```typescript
+// Insert
+const newPost = await rebase.collection("posts").save({
+    title: "Understanding Rebase SDK",
+    status: "draft"
+});
+
+// Edit existing
+await rebase.collection("posts").save({
+    id: "some_uuid",
+    title: "Understanding Rebase SDK (Updated)"
+});
+
+// Delete
+await rebase.collection("posts").delete("some_uuid");
+```
+
+---
+
+### ⚡ Real-Time Subscriptions
+
+For real-time applications, use the `.listen()` method instead of `.find()`. The WebSocket handles the connection pooling, reconnection policies, and auth-bindings automatically behind the scenes.
+
+```typescript
+const unsubscribe = rebase.collection("posts")
+    .where("status", "==", "published")
+    .listen(
+        // On Updates (Initial payload + partial differentials)
+        (response) => {
+            console.log("Live posts update:", response.data);
+        },
+        // On Pipeline Errored
+        (error) => {
+            console.error("Realtime subscription crashed", error);
+        }
+    );
+
+// Stop listening when the component unmounts
+unsubscribe();
+```
+
+---
+
+### 📦 Storage
+
+Interacting with your file storage acts as a natural extension of your client instance. The backend's active Storage Driver interprets your paths invisibly.
+
+```typescript
+const file = new File(["dummy content"], "hello.txt", { type: "text/plain" });
+
+// Upload File
+await rebase.storage.uploadFile({
+    file,
+    path: "users",
+    fileName: "my_profile_pic.png",
+    onProgress: (progress) => {
+        console.log(`Uploading... ${progress}%`);
+    }
+});
+
+// Resolve Public/Signed URL
+const url = await rebase.storage.getDownloadURL("users/my_profile_pic.png");
+```
+
+---
+
+### 🔌 Custom Endpoint RPC
+
+If you have custom backend endpoints configured (e.g., executing a serverless function, trigger, or bespoke query), you can call them directly with automatic `Authorization` header injection using `client.call()`.
+
+```typescript
+// Triggers an authorized POST to {baseUrl}/my-custom-endpoint 
+const result = await rebase.call<{ success: boolean }>("/my-custom-endpoint", { 
+    triggerCustomJob: true 
+});
+
+console.log(result.success);
+```
+
+---
+
+### Summary
+
+The `@rebasepro/client` package is structurally designed to feel effortless. It centralizes your core external integrations under one uniform, strongly-typed facade. Plug it anywhere, and your frontend builds will accelerate tenfold.
+
 ## Collections
 
 **Collections** are the core building blocks of your Rebase **admin panel**. They define how your **Postgres data** is displayed, edited, and managed in the CMS interface.
@@ -972,7 +1145,7 @@ const productsCollection = buildCollection<Product>({
   })
 });
 ```
-Collections are passed directly to the `useBuildNavigationController` hook in your `App.tsx`.
+Collections are passed directly to the `useBuildNavigationStateController` hook in your `App.tsx`.
 
 #### Modifying a collection defined in the UI
 
@@ -1062,7 +1235,6 @@ to `false` in the collection configuration.
     - For additional field, use the field key.
     - If you have subcollections, you get a column for each subcollection, with the path (or alias) as the
       subcollection, prefixed with `subcollection:`. E.g., `subcollection:orders`.
-    - If you are using a collection group, you will also have an additional `collectionGroupParent` column.
     - Note that if you set this prop, other ways to hide fields, like `hidden` in the property definition, will be
       ignored. `propertiesOrder` has precedence over `hidden`.
 
@@ -1074,8 +1246,6 @@ to `false` in the collection configuration.
   `full_screen`.
 - **`formAutoSave`**: If set to true, the form will be auto-saved when the user changes the value of a field. Defaults
   to false. You can't use this prop if you are using a `customId`.
-- **`collectionGroup`**: If this collection is a top-level navigation entry, you can set this property to `true` to
-  indicate that this collection is a collection group.
 - **`alias`**: You can set an alias that will be used internally instead of the `path`. The `alias` value will be used
   to determine the URL of the collection while `path` will still be used in the datasource. Note that you can use this
   value in reference properties too.
@@ -1917,13 +2087,13 @@ your Rebase configuration.
 
 ## Dynamic collections
 
-Rebase offers the possibility to define collections dynamically. This means
-that collections can be built asynchronously, based on the logged-in user,
-based on the data of other collections, or based on any other arbitrary
-condition.
+While Rebase relies on a statically generated backend schema (powered by Firebase Data Connect and PostgreSQL), the **presentation** of your collections in the CMS can be extremely dynamic. This means you can adjust which collections are visible, configure field options, or populate UI elements asynchronously based on the logged-in user or data from other collections.
 
-Instead of defining your collections as an array, use a `EntityCollectionsBuilder`,
-a function that returns a promise of an object containing the collections.
+:::important
+Dynamic collections in Rebase are a **frontend concept**. You cannot create new database tables or columns on the fly. Any properties or collections returned by your dynamic builder must perfectly map to your generated static backend schema.
+:::
+
+Instead of defining your collections as a static array, use an `EntityCollectionsBuilder`—a function that returns a promise of an object containing the collections.
 
 ```tsx
 
@@ -2062,48 +2232,13 @@ const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
 
 #### Where to use the `collectionsBuilder`
 
-Use the `collectionsBuilder` in the `useBuildNavigationController` hook:
+Use the `collectionsBuilder` in the `useBuildNavigationStateController` hook:
 
 ```tsx
-const navigationController = useBuildNavigationController({
+const navigationController = useBuildNavigationStateController({
     collections: collectionsBuilder
 });
 ```
-
-## Collection Groups
-
-Collection groups allow you to query across related tables that share a common structure. For example, you could
-have a `locales` subcollection that exists under different product entities, and query all locales at once.
-
-Rebase will generate an additional column in the collection view with
-references to all the parent collections that are part of the
-configuration.
-
-In order to use collection groups, you need to specify the `collectionGroup`
-property in the `Collection` configuration.
-
-```tsx
-export const localeCollectionGroup = buildCollection({
-    name: "Product locales group",
-    path: "locales",
-    description: "This is a collection group related to the locales subcollection of products",
-    collectionGroup: true,
-    properties: {
-        name: {
-            name: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        // ...
-    },
-});
-```
-
-:::note
-When using collection groups with Postgres, the data source will query the relevant table
-and join with parent tables as needed. Make sure your database schema supports the 
-relationships you're querying.
-:::
 
 ## Entity actions
 
@@ -4466,7 +4601,7 @@ This document describes how to use the **Collection Editor UI Plugin** with **Re
 database collections. The Collection Editor UI Plugin provides an interface for creating, editing, and organizing
 collections, with support for customizable permissions and configuration options.
 
-Typically, collections in Rebase are defined in code, and passed as a prop to the `NavigationController` on
+Typically, collections in Rebase are defined in code, and passed as a prop to the `NavigationStateController` on
 initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing 
 a more user-friendly and flexible way to organize and configure your database collections.
 
@@ -4641,7 +4776,7 @@ function App() {
         userManagementPlugin
     ];
     
-    const navigationController = useBuildNavigationController({
+    const navigationController = useBuildNavigationStateController({
         collections: collectionsBuilder(),
         views: customViews,
         adminViews: userManagementAdminViews,
@@ -4758,7 +4893,7 @@ rights throughout your Rebase project.
 #### Example Integration
 
 ```jsx
-const navigationController = useBuildNavigationController({
+const navigationController = useBuildNavigationStateController({
     collections: customCollections,
     views: customViews,
     adminViews: userManagementAdminViews,
@@ -4934,7 +5069,7 @@ export function App() {
     dataSource: postgresDelegate
   });
 
-  const navigationController = useBuildNavigationController({
+  const navigationController = useBuildNavigationStateController({
     collections: collectionsBuilder,
     authController,
     dataSource: postgresDelegate
@@ -5198,7 +5333,7 @@ function App() {
 
     const plugins = [exportPlugin];
 
-    const navigationController = useBuildNavigationController({
+    const navigationController = useBuildNavigationStateController({
         // ... rest of your config
         plugins
     });
@@ -5332,7 +5467,7 @@ export default function App() {
 
     const plugins = [entityHistoryPlugin];
 
-    const navigationController = useBuildNavigationController({
+    const navigationController = useBuildNavigationStateController({
         // ... rest of your config
         plugins
     });
@@ -5551,7 +5686,7 @@ function App() {
 
     const plugins = [userManagementPlugin];
 
-    const navigationController = useBuildNavigationController({
+    const navigationController = useBuildNavigationStateController({
         collections,
         views,
         adminViews: userManagementAdminViews,
@@ -5577,11 +5712,11 @@ export default App;
 
 Besides the plugin, you will need to add the user management views to your Rebase project.
 They are exported as an array from the `@rebasepro/user_management` package.
-You can add them to your `useBuildNavigationController` hook configuration, in the `adminViews` array.
+You can add them to your `useBuildNavigationStateController` hook configuration, in the `adminViews` array.
 
 ```jsx
 
-const navigationController = useBuildNavigationController({
+const navigationController = useBuildNavigationStateController({
     collections,
     views,
     adminViews: userManagementAdminViews,
@@ -5620,13 +5755,13 @@ The `UserManagement` object includes a `collectionPermissions` function that che
 user can perform based on their roles and the collection configuration.
 The permissions will be based on your users and roles configuration in the database.
 
-You can pass this function to the `useBuildNavigationController` hook to integrate collection
+You can pass this function to the `useBuildNavigationStateController` hook to integrate collection
 permissions into your Rebase project.
 
 Note that if you apply permissions to a collection, they will override the permissions set in the collection configuration.
 
 ```jsx
-const navigationController = useBuildNavigationController({
+const navigationController = useBuildNavigationStateController({
     collections,
     collectionPermissions: userManagement.collectionPermissions,
     authController,
@@ -6001,7 +6136,7 @@ return <NavigationRoutes homePage={<>My custom home page</>}>
 </NavigationRoutes>
 ```
 
-Note that you can also define custom views by defining them in `useBuildNavigationController`, with the 
+Note that you can also define custom views by defining them in `useBuildNavigationStateController`, with the 
 added benefit that they will be automatically included in the default drawer.
 
 #### SideDialogs
@@ -6424,7 +6559,7 @@ const CustomStorageApp: React.FC = () => {
   // const authController = useAuthController(); // your auth controller
   // const dataSource = {}; // Your data source delegate implementation
 
-  const navigationController = useBuildNavigationController({
+  const navigationController = useBuildNavigationStateController({
     collections: [productsCollection],
     // authController,
     // dataSource

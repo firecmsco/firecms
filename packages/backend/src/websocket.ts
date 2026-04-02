@@ -1,6 +1,6 @@
 import { RealtimeService } from "./services/realtimeService";
 import { PostgresDataDriver } from "./services/postgresDataDriver";
-import { DataDriver, DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps, TableColumnInfo } from "@rebasepro/types";
+import { DataDriver, DeleteEntityProps, FetchCollectionProps, FetchEntityProps, SaveEntityProps, TableMetadata } from "@rebasepro/types";
 import { WebSocketServer, WebSocket } from "ws";
 import { Server } from "http";
 import { inspect } from "util";
@@ -303,18 +303,18 @@ export function createPostgresWebSocket(
                     }
                         break;
 
-                    case "FETCH_TABLE_COLUMNS": {
-                        console.debug("📋 [WebSocket Server] Processing FETCH_TABLE_COLUMNS request");
+                    case "FETCH_TABLE_METADATA": {
+                        console.debug("📋 [WebSocket Server] Processing FETCH_TABLE_METADATA request");
                         const { tableName } = payload;
                         const delegate = await getScopedDelegate();
-                        let columns: TableColumnInfo[] = [];
-                        if (delegate.fetchTableColumns) {
-                            columns = await delegate.fetchTableColumns(tableName);
+                        let metadata: TableMetadata | undefined;
+                        if (delegate.fetchTableMetadata) {
+                            metadata = await delegate.fetchTableMetadata(tableName);
                         }
-                        console.debug(`📋 [WebSocket Server] Fetched ${columns.length} columns for table '${tableName}'.`);
+                        console.debug(`📋 [WebSocket Server] Fetched metadata for table '${tableName}'. (${metadata?.columns?.length ?? 0} columns)`);
                         const response = {
-                            type: "FETCH_TABLE_COLUMNS_SUCCESS",
-                            payload: { columns },
+                            type: "FETCH_TABLE_METADATA_SUCCESS",
+                            payload: { metadata },
                             requestId
                         };
                         ws.send(JSON.stringify(response));

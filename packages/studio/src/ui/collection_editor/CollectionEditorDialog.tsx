@@ -64,8 +64,8 @@ import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
 import { AIModifiedPathsProvider, useAIModifiedPaths } from "./AIModifiedPathsContext";
 import { CollectionOperation, CollectionGenerationCallback } from "../../api/generateCollectionApi";
 import { CollectionRLSTab } from "./CollectionRLSTab";
-import { buildCollectionFromTableColumns } from "../../utils/pgColumnToProperty";
-import { TableColumnInfo } from "@rebasepro/types";
+import { buildCollectionFromTableMetadata } from "../../utils/pgColumnToProperty";
+import { TableMetadata } from "@rebasepro/types";
 export interface CollectionEditorDialogProps {
     open: boolean;
     isNewCollection: boolean;
@@ -125,7 +125,7 @@ export interface CollectionEditorDialogProps {
     /**
      * Callback to fetch column metadata for a table.
      */
-    onFetchTableColumns?: (tableName: string) => Promise<TableColumnInfo[]>;
+    onFetchTableMetadata?: (tableName: string) => Promise<TableMetadata | undefined>;
 }
 
 export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
@@ -321,7 +321,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     onAnalyticsEvent,
     fullScreen,
     unmappedTables,
-    onFetchTableColumns
+    onFetchTableMetadata
 }: CollectionEditorDialogProps & {
     handleCancel: () => void,
     setFormDirty: (dirty: boolean) => void,
@@ -734,10 +734,11 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 generateCollection={generateCollection}
                                 onAnalyticsEvent={onAnalyticsEvent}
                                 unmappedTables={unmappedTables}
-                                onImportFromTable={onFetchTableColumns ? async (tableName: string) => {
+                                onImportFromTable={onFetchTableMetadata ? async (tableName: string) => {
                                     try {
-                                        const columns = await onFetchTableColumns!(tableName);
-                                        const collectionData = buildCollectionFromTableColumns(tableName, columns);
+                                        const columns = await onFetchTableMetadata!(tableName);
+                                        if (!columns) return;
+                                        const collectionData = buildCollectionFromTableMetadata(tableName, columns);
                                         formController.setValues({
                                             ...formController.values,
                                             ...collectionData
