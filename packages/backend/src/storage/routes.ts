@@ -15,8 +15,11 @@ export interface StorageRoutesConfig {
     controller: StorageController;
     /** Base path for storage routes (default: '/api/storage') */
     basePath?: string;
-    /** Require authentication for all storage operations (default: true) */
+    /** Require authentication for write operations (default: true) */
     requireAuth?: boolean;
+    /** Allow unauthenticated read access to stored files (default: false).
+     *  When false and requireAuth is true, reads also require authentication. */
+    publicRead?: boolean;
 }
 
 /**
@@ -24,7 +27,7 @@ export interface StorageRoutesConfig {
  */
 export function createStorageRoutes(config: StorageRoutesConfig): Router {
     const router = Router();
-    const { controller, requireAuth = true } = config;
+    const { controller, requireAuth = true, publicRead = false } = config;
 
     // Configure multer for file uploads (memory storage for flexibility)
     const upload = multer({
@@ -35,14 +38,12 @@ export function createStorageRoutes(config: StorageRoutesConfig): Router {
     });
 
     // Use actual JWT auth middleware from auth module
-    // If requireAuth is true, use requireAuth middleware (returns 401 if not authenticated)
-    // If requireAuth is false, use optionalAuth (allows anonymous access but still extracts user if present)
     const writeAuthMiddleware = requireAuth ? jwtRequireAuth : optionalAuth;
 
-    // For read operations (GET file), allow public access by default (like Firebase Storage)
-    // This allows images to be displayed without needing auth headers
-    // If you need private files, set publicRead: false in config
-    const readAuthMiddleware = optionalAuth;
+    // For read operations: respect publicRead config.
+    // If publicRead is true (or requireAuth is false), allow anonymous reads.
+    // Otherwise, require authentication for reads too.
+    const readAuthMiddleware = (publicRead || !requireAuth) ? optionalAuth : jwtRequireAuth;
 
     /**
      * Parse bucket and path from a combined file path.

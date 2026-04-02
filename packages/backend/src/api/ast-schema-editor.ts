@@ -15,14 +15,39 @@ export class AstSchemaEditor {
         if (fs.existsSync(collectionsDir)) {
             this.project.addSourceFilesAtPaths(`${collectionsDir}/**/*.ts`);
         }
-        this.collectionsDir = collectionsDir;
+        this.collectionsDir = path.resolve(collectionsDir);
+    }
+
+    /**
+     * Sanitize collectionId to prevent path traversal attacks.
+     * Only allows alphanumeric characters, underscores, and hyphens.
+     */
+    private sanitizeCollectionId(collectionId: string): string {
+        const sanitized = collectionId.replace(/[^a-zA-Z0-9_-]/g, "");
+        if (!sanitized || sanitized !== collectionId) {
+            throw new Error(`Invalid collection ID: "${collectionId}". Only alphanumeric characters, underscores, and hyphens are allowed.`);
+        }
+        return sanitized;
+    }
+
+    /**
+     * Resolve a file path and ensure it falls within the collectionsDir.
+     */
+    private safePath(filename: string): string {
+        const resolved = path.resolve(this.collectionsDir, filename);
+        if (!resolved.startsWith(this.collectionsDir + path.sep) && resolved !== this.collectionsDir) {
+            throw new Error("Path traversal detected: resolved path is outside the collections directory.");
+        }
+        return resolved;
     }
 
     private getCollectionFile(collectionId: string) {
-        let file = this.project.getSourceFile(path.join(this.collectionsDir, `${collectionId}.ts`));
-        if (!file && fs.existsSync(path.join(this.collectionsDir, `${collectionId}.ts`))) {
+        const safeId = this.sanitizeCollectionId(collectionId);
+        const filePath = this.safePath(`${safeId}.ts`);
+        let file = this.project.getSourceFile(filePath);
+        if (!file && fs.existsSync(filePath)) {
             this.project.addSourceFilesAtPaths(`${this.collectionsDir}/**/*.ts`);
-            file = this.project.getSourceFile(path.join(this.collectionsDir, `${collectionId}.ts`));
+            file = this.project.getSourceFile(filePath);
         }
         return file;
     }
@@ -209,8 +234,9 @@ export class AstSchemaEditor {
 
         if (!file || !collectionObj) {
             // Create a new file
-            const newFilePath = path.join(this.collectionsDir, `${collectionId}.ts`);
-            file = this.project.createSourceFile(newFilePath, `import { EntityCollection } from "@rebasepro/types";\n\nconst ${collectionId}Collection: EntityCollection = ${this.convertJsonToAstString(collectionData)};\n\nexport default ${collectionId}Collection;\n`, { overwrite: true });
+            const safeId = this.sanitizeCollectionId(collectionId);
+            const newFilePath = this.safePath(`${safeId}.ts`);
+            file = this.project.createSourceFile(newFilePath, `import { EntityCollection } from "@rebasepro/types";\n\nconst ${safeId}Collection: EntityCollection = ${this.convertJsonToAstString(collectionData)};\n\nexport default ${safeId}Collection;\n`, { overwrite: true });
         } else {
             // Update root level properties gracefully
             for (const key of Object.keys(collectionData)) {

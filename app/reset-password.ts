@@ -11,7 +11,7 @@ const email = process.argv[2] || "francesco@rebase.pro";
 const newPassword = process.argv[3] || "NewPassword123!";
 
 async function resetPassword() {
-    const db = createPostgresDatabaseConnection(process.env.DATABASE_URL!);
+    const { db } = createPostgresDatabaseConnection(process.env.DATABASE_URL!);
     const hash = await hashPassword(newPassword);
 
     const result = await db.update(users)

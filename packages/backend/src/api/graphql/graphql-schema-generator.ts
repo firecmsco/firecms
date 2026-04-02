@@ -10,7 +10,7 @@ import {
     GraphQLFieldConfig,
     GraphQLInputObjectType,
 } from "graphql";
-import { DataDriver, EntityCollection, Property } from "@rebasepro/types";
+import { DataDriver, EntityCollection, FetchCollectionProps, Property } from "@rebasepro/types";
 
 /**
  * Lightweight GraphQL schema generator that leverages existing DataDriver
@@ -197,7 +197,18 @@ export class GraphQLSchemaGenerator {
                 },
                 resolve: async (_, args, context: { driver: DataDriver }) => {
                     const ds = context.driver || this.driver;
-                    const filter = args.where ? JSON.parse(args.where) : undefined;
+                    let filter: FetchCollectionProps["filter"] | undefined;
+                    if (args.where) {
+                        try {
+                            const parsed = JSON.parse(args.where);
+                            if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+                                throw new Error("Filter must be a JSON object");
+                            }
+                            filter = parsed;
+                        } catch (e) {
+                            throw new Error(`Invalid 'where' filter: ${e instanceof Error ? e.message : "malformed JSON"}`);
+                        }
+                    }
                     const entities = await ds.fetchCollection({
                         path: collection.dbPath || collection.slug,
                         collection,

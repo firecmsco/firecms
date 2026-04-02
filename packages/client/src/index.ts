@@ -37,16 +37,29 @@ export type RebaseClient<DB = any> = BaseRebaseClient<DB> & {
 
 import { createStorage } from "./storage";
 
+/**
+ * Derive a WebSocket URL from an HTTP base URL.
+ * `http://` → `ws://`, `https://` → `wss://`.
+ */
+function deriveWebSocketUrl(baseUrl: string): string {
+    return baseUrl
+        .replace(/^https:\/\//, "wss://")
+        .replace(/^http:\/\//, "ws://")
+        .replace(/\/$/, "");
+}
+
 export function createRebaseClient<DB = any>(options: CreateRebaseClientOptions): RebaseClient<DB> {
     const transport = createTransport(options);
     const auth = createAuth(transport, options.auth);
     const admin = createAdmin(transport, options.admin);
     const storage = createStorage(transport);
 
+    const resolvedWsUrl = options.websocketUrl ?? deriveWebSocketUrl(options.baseUrl);
+
     let ws: RebaseWebSocketClient | undefined;
-    if (options.websocketUrl) {
+    if (resolvedWsUrl) {
         ws = new RebaseWebSocketClient({
-            websocketUrl: options.websocketUrl,
+            websocketUrl: resolvedWsUrl,
             getAuthToken: async () => {
                 const session = await auth.getSession();
                 return session?.accessToken || "";

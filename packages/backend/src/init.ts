@@ -79,6 +79,19 @@ export interface PostgresDriverConfig {
     /** Explicit cluster connection string to enable cross-database queries 
         and administrative pool generation. */
     adminConnectionString?: string;
+    /**
+     * Raw Postgres connection string for the LISTEN/NOTIFY client.
+     * When provided, enables **cross-instance realtime**: multiple backend
+     * instances (e.g. Cloud Run replicas) will broadcast entity changes to
+     * each other via Postgres LISTEN/NOTIFY so all connected WebSocket
+     * clients receive updates regardless of which instance handled the write.
+     *
+     * This creates one dedicated Postgres connection (outside the pool) for
+     * the LISTEN channel.
+     *
+     * Omit to run in single-instance mode (the default).
+     */
+    connectionString?: string;
 }
 
 /**
@@ -277,7 +290,8 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             delegate,
             db,
             schema,
-            adminConnectionString
+            adminConnectionString,
+            connectionString
         } = resolveDriverConfig(dsConfig);
 
         if (delegate) {
@@ -311,6 +325,16 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             const poolManager = adminConnectionString ? new DatabasePoolManager(adminConnectionString) : undefined;
             const driver = new PostgresDataDriver(db, realtimeService, undefined, poolManager);
             realtimeService.setDataDriver(driver);
+
+            // Enable cross-instance realtime ONLY if connectionString is explicitly provided.
+            // This is an opt-in feature — omit connectionString to run in single-instance mode.
+            if (connectionString) {
+                try {
+                    await realtimeService.startListening(connectionString);
+                } catch (err) {
+                    console.warn(`⚠️ Cross-instance realtime could not be started for driver "${driverId}":`, err);
+                }
+            }
 
             realtimeServices[driverId] = realtimeService;
             delegates[driverId] = driver;
@@ -520,6 +544,7 @@ function resolveDriverConfig(config: DriverConfig): {
     db?: NodePgDatabase;
     schema?: PostgresDriverConfig["schema"];
     adminConnectionString?: string;
+    connectionString?: string;
 } {
     // If it's a DataDriver directly
     if (isDataDriverDelegate(config)) {
@@ -531,7 +556,8 @@ function resolveDriverConfig(config: DriverConfig): {
         return {
             db: config.connection,
             schema: config.schema,
-            adminConnectionString: config.adminConnectionString
+            adminConnectionString: config.adminConnectionString,
+            connectionString: config.connectionString
         };
     }
 

@@ -1,6 +1,7 @@
 import express, { Express, Request, Response, Router, RequestHandler, NextFunction } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import cors from "cors";
+import helmet from "helmet";
 import { GraphQLSchemaGenerator } from "./graphql/graphql-schema-generator";
 import { RestApiGenerator } from "./rest/api-generator";
 import { DataDriver, EntityCollection } from "@rebasepro/types";
@@ -65,10 +66,13 @@ export class RebaseApiServer {
      * Setup Express middleware
      */
     private setupMiddleware(): void {
-        // CORS - only apply to our routes
-        if (this.config.cors) {
-            this.router.use(cors(this.config.cors));
-        }
+        // Security headers
+        this.router.use(helmet({
+            contentSecurityPolicy: false, // disabled to allow GraphiQL/Swagger in non-production
+        }));
+
+        // CORS — always apply with safe defaults
+        this.router.use(cors(this.config.cors ?? { origin: false }));
 
         // Body parsing - only for our routes
         this.router.use(express.json({ limit: "10mb" }));
@@ -184,28 +188,30 @@ export class RebaseApiServer {
             res.json(openApiSpec);
         });
 
-        // Simple Swagger UI
-        this.router.get(`${basePath}/swagger`, (req: Request, res: Response) => {
-            res.send(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Rebase API Documentation</title>
-                    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui.css" />
-                </head>
-                <body>
-                    <div id="swagger-ui"></div>
-                    <script src="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui-bundle.js"></script>
-                    <script>
-                        SwaggerUIBundle({
-                            url: '${basePath}/docs',
-                            dom_id: '#swagger-ui'
-                        });
-                    </script>
-                </body>
-                </html>
-            `);
-        });
+        // Simple Swagger UI (non-production only)
+        if (process.env.NODE_ENV !== "production") {
+            this.router.get(`${basePath}/swagger`, (req: Request, res: Response) => {
+                res.send(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Rebase API Documentation</title>
+                        <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui.css" />
+                    </head>
+                    <body>
+                        <div id="swagger-ui"></div>
+                        <script src="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui-bundle.js"></script>
+                        <script>
+                            SwaggerUIBundle({
+                                url: '${basePath}/docs',
+                                dom_id: '#swagger-ui'
+                            });
+                        </script>
+                    </body>
+                    </html>
+                `);
+            });
+        }
 
         // Don't mount routes automatically - let the consumer mount the router
 

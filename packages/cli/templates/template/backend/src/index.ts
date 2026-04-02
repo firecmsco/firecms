@@ -23,7 +23,7 @@ const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
     throw new Error("DATABASE_URL environment variable is not set");
 }
-const db = createPostgresDatabaseConnection(databaseUrl);
+const { db, connectionString } = createPostgresDatabaseConnection(databaseUrl);
 
 // Middleware
 app.use(cors());
@@ -44,7 +44,10 @@ async function startServer() {
             "(default)": {
                 connection: db,
                 schema: { tables, enums, relations },
-                adminConnectionString: process.env.ADMIN_CONNECTION_STRING || process.env.DATABASE_URL
+                adminConnectionString: process.env.ADMIN_CONNECTION_STRING || process.env.DATABASE_URL,
+                // Pass connectionString to enable cross-instance realtime via Postgres LISTEN/NOTIFY.
+                // This is optional — omit it to run in single-instance mode.
+                connectionString
             }
         },
         auth: {

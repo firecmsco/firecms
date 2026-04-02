@@ -57,6 +57,6 @@ export function createPostgresDatabaseConnection(connectionString: string) {
         process.exit(0);
     });
 
-    return db;
+    return { db, connectionString };
 }
 

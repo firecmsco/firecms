@@ -224,7 +224,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
      * POST /auth/google
      * Login/register with Google ID token
      */
-    router.post("/google", asyncHandler(async (req: Request, res: Response) => {
+    router.post("/google", defaultAuthLimiter, asyncHandler(async (req: Request, res: Response) => {
         const { idToken } = req.body;
 
         if (!idToken) {
@@ -461,8 +461,8 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
         // Generate verification token
         const token = generateSecureToken();
 
-        // Store token in user record
-        await userService.setVerificationToken(user.id, token);
+        // Store hashed token in user record (raw token goes in the email URL)
+        await userService.setVerificationToken(user.id, hashToken(token));
 
         // Build verification URL
         const baseUrl = emailConfig?.verifyEmailUrl || "";
@@ -497,8 +497,8 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
             throw ApiError.badRequest("Verification token is required", "INVALID_INPUT");
         }
 
-        // Find user by verification token
-        const user = await userService.getUserByVerificationToken(token);
+        // Find user by hashed verification token
+        const user = await userService.getUserByVerificationToken(hashToken(token));
         if (!user) {
             throw ApiError.badRequest("Invalid or expired verification token", "INVALID_TOKEN");
         }
@@ -699,7 +699,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Router {
      * GET /auth/config
      * Get public auth configuration (for frontend to know what's available)
      */
-    router.get("/config", asyncHandler(async (_req: Request, res: Response) => {
+    router.get("/config", defaultAuthLimiter, asyncHandler(async (_req: Request, res: Response) => {
         const allUsers = await userService.listUsers();
         const needsSetup = allUsers.length === 0;
         const registrationAllowed = needsSetup || allowRegistration;

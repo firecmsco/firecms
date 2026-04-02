@@ -73,11 +73,16 @@ export class LocalStorageController implements StorageController {
     }
 
     /**
-     * Get the full filesystem path for a storage path
+     * Get the full filesystem path for a storage path.
+     * Includes a path traversal guard to prevent escaping the base directory.
      */
     private getFullPath(storagePath: string, bucket?: string): string {
         const parts = bucket ? [this.basePath, bucket, storagePath] : [this.basePath, storagePath];
-        return path.join(...parts);
+        const resolved = path.resolve(path.join(...parts));
+        if (!resolved.startsWith(this.basePath + path.sep) && resolved !== this.basePath) {
+            throw new Error("Path traversal detected: resolved storage path is outside the base directory.");
+        }
+        return resolved;
     }
 
     /**

@@ -43,9 +43,16 @@ export function parseQueryOptions(query: Record<string, unknown>): QueryOptions 
             const parsedWhere = typeof query.where === "string"
                 ? JSON.parse(query.where)
                 : query.where;
+            if (typeof parsedWhere !== "object" || parsedWhere === null || Array.isArray(parsedWhere)) {
+                throw new Error("Filter must be a JSON object");
+            }
             Object.assign(options.where, parsedWhere);
-        } catch {
-            // Invalid JSON, ignore
+        } catch (e) {
+            const message = e instanceof Error ? e.message : "malformed JSON";
+            const err = new Error(`Invalid 'where' filter: ${message}`) as Error & { code?: string; statusCode?: number };
+            err.code = "BAD_REQUEST";
+            err.statusCode = 400;
+            throw err;
         }
     }
 
