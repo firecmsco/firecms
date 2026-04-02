@@ -497,7 +497,7 @@ function convertFromMongoValue(value: unknown): any {
             return value;
         }
         if ("path" in value && "id" in value && typeof value.path === "string") {
-            return new EntityReference({ id: (value.id as any).toString(), path: value.path });
+            return new EntityReference({ id: String(value.id), path: value.path });
         }
         return convertFromMongoValues(value);
     }

@@ -81,9 +81,9 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:28]
 
 ***
 
-### dataSource
+### data
 
-> **dataSource**: [`DataSource`](../interfaces/DataSource)
+> **data**: [`RebaseData`](../interfaces/RebaseData)
 
 Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
@@ -123,7 +123,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:32]
 
 ### userManagement?
 
-> `optional` **userManagement**: [`UserManagementDelegate`](../interfaces/UserManagementDelegate)\<`USER`\>
+> `optional` **userManagement**: [`UserManagementDelegate`](../interfaces/UserManagementDelegate)
 
 Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 

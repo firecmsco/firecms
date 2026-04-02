@@ -69,9 +69,9 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
         searchString
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
     const dataClient = useData();
-    const navigationController = useCMSUrlController();
+    const cmsUrlController = useCMSUrlController();
 
-    const path = navigationController.resolveDatabasePathsFrom(inputPath);
+    const path = cmsUrlController.resolveDatabasePathsFrom(inputPath);
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;

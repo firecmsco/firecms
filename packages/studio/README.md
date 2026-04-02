@@ -47,7 +47,7 @@ export default function App() {
         collectionConfigController
     });
     
-    const navigationController = useBuildNavigationController({
+    const navigationController = useBuildNavigationStateController({
         // Your other config options
         plugins: [collectionEditorPlugin]
     });
@@ -120,7 +120,7 @@ const collectionsBuilder = useCallback(() => {
     return mergeCollections(codeCollections, collectionConfigController.collections ?? []);
 }, [collectionConfigController.collections]);
 
-const navigationController = useBuildNavigationController({
+const navigationController = useBuildNavigationStateController({
     collections: collectionsBuilder,
     // Other options
 });

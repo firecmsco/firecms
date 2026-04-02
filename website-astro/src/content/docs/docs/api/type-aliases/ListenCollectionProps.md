@@ -13,7 +13,9 @@ title: "ListenCollectionProps"
 
 > **ListenCollectionProps**\<`M`\> = [`FetchCollectionProps`](../interfaces/FetchCollectionProps)\<`M`\> & `object`
 
-Defined in: [types/src/controllers/datasource.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
+Defined in: [types/src/controllers/data\_driver.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+
+**`Internal`**
 
 ## Type Declaration
 

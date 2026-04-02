@@ -26,13 +26,14 @@ It contains only the dependencies that are available in both the frontend and th
 
 ## Properties
 
-### dataSource
+### data
 
-> **dataSource**: [`DataSource`](../interfaces/DataSource)
+> **data**: [`RebaseData`](../interfaces/RebaseData)
 
-Defined in: [types/src/rebase\_context.tsx:27](https://github.com/rebaseco/rebase/blob/main/packages/types/src/rebase_context.tsx)
+Defined in: [types/src/rebase\_context.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/types/src/rebase_context.tsx)
 
-Connector to your database, e.g. your Firestore database
+Unified data access — `context.data.products.create(...)`.
+Access any collection as a dynamic property.
 
 ***
 
@@ -40,7 +41,7 @@ Connector to your database, e.g. your Firestore database
 
 > **storageSource**: [`StorageSource`](../interfaces/StorageSource)
 
-Defined in: [types/src/rebase\_context.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/types/src/rebase_context.tsx)
+Defined in: [types/src/rebase\_context.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/types/src/rebase_context.tsx)
 
 Used storage implementation
 
@@ -50,6 +51,6 @@ Used storage implementation
 
 > `optional` **user**: `USER`
 
-Defined in: [types/src/rebase\_context.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/types/src/rebase_context.tsx)
+Defined in: [types/src/rebase\_context.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/types/src/rebase_context.tsx)
 
 Set by the backend when callbacks are executed on the server.

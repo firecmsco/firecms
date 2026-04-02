@@ -31,19 +31,19 @@ export function StudioHomePage({
 }) {
     const context = useRebaseContext();
     const customizationController = useCustomizationController();
-    const navigationController = useNavigationStateController();
+    const navigationStateController = useNavigationStateController();
     const breadcrumbs = useBreadcrumbsController();
 
     useEffect(() => {
         breadcrumbs.set({ breadcrumbs: [] });
     }, [breadcrumbs.set]);
 
-    if (!navigationController.topLevelNavigation)
+    if (!navigationStateController.topLevelNavigation)
         throw Error("Navigation not ready");
 
     const {
         navigationEntries: rawNavigationEntries,
-    } = navigationController.topLevelNavigation;
+    } = navigationStateController.topLevelNavigation;
 
     // Filter to only studio items (exclude "Views" and "Admin" generally)
     const processedGroups = useMemo(() => {

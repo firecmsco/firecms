@@ -50,7 +50,7 @@ export const editEntityAction: EntityAction = {
             path: newFullIdPath,
             sideEntityController: context.sideEntityController!,
             onClose: () => unhighlightEntity?.(entity),
-            navigation: context.navigation!,
+            navigation: context.cmsUrlController!,
             selectedTab: defaultSelectedView
         });
 
@@ -90,7 +90,7 @@ export const copyEntityAction: EntityAction = {
             copy: true,
             sideEntityController: context.sideEntityController!,
             onClose: () => unhighlightEntity?.(entity),
-            navigation: context.navigation!
+            navigation: context.cmsUrlController!
         });
 
         return Promise.resolve(undefined);

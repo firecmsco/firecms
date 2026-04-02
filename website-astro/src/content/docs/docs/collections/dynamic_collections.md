@@ -154,10 +154,10 @@ const collectionsBuilder: EntityCollectionsBuilder = useCallback(async ({
 
 ### Where to use the `collectionsBuilder`
 
-Use the `collectionsBuilder` in the `useBuildNavigationController` hook:
+Use the `collectionsBuilder` in the `useBuildNavigationStateController` hook:
 
 ```tsx
-const navigationController = useBuildNavigationController({
+const navigationController = useBuildNavigationStateController({
     collections: collectionsBuilder
 });
 ```

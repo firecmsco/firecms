@@ -147,7 +147,7 @@ import {
   SnackbarProvider,
   useBuildLocalConfigurationPersistence,
   useBuildModeController,
-  useBuildNavigationController,
+  useBuildNavigationStateController,
   useValidateAuthenticator,
   CenteredView,
   CircularProgressCenter
@@ -173,7 +173,7 @@ const CustomStorageApp: React.FC = () => {
   // const authController = useAuthController(); // your auth controller
   // const dataSource = {}; // Your data source delegate implementation
 
-  const navigationController = useBuildNavigationController({
+  const navigationController = useBuildNavigationStateController({
     collections: [productsCollection],
     // authController,
     // dataSource

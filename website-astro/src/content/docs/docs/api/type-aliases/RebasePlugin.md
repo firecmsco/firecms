@@ -532,4 +532,4 @@ Defined in: [types/src/types/plugins.tsx:46](https://github.com/rebaseco/rebase/
 Defined in: [types/src/types/plugins.tsx:52](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 Views to be automatically added to the navigation.
-These views will be merged with the views provided to useBuildNavigationController.
+These views will be merged with the views provided to useBuildNavigationStateController.

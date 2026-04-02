@@ -211,7 +211,7 @@ export function isMongoDriverConfig(obj: unknown): obj is { type: "mongodb"; con
     return typeof obj === "object" &&
         obj !== null &&
         "type" in obj &&
-        (obj as any).type === "mongodb" &&
+        (obj as Record<string, unknown>).type === "mongodb" &&
         "connection" in obj &&
         "client" in obj;
 }

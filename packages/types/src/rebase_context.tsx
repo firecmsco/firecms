@@ -3,7 +3,6 @@ import {
     AuthController,
     CustomizationController,
     DialogsController,
-    NavigationController,
     SideDialogsController,
     SideEntityController,
     SnackbarController,
@@ -49,13 +48,6 @@ export type RebaseCallContext<USER extends User = User> = {
 export type RebaseContext<USER extends User = User, AuthControllerType extends AuthController<USER> = AuthController<USER>> = RebaseCallContext<USER> & {
 
     /**
-     * Context that includes the resolved navigation and utility methods and
-     * attributes.
-     * @see useNavigation
-     */
-    navigation?: NavigationController;
-
-    /**
      * Controller to open the side dialog displaying entity forms
      * @see useSideEntityController
      */
@@ -67,6 +59,21 @@ export type RebaseContext<USER extends User = User, AuthControllerType extends A
      * or reference dialogs.
      */
     sideDialogsController?: SideDialogsController;
+
+    /**
+     * Controller in charge of URL/navigation
+     */
+    cmsUrlController?: import("./controllers/navigation").CMSUrlController;
+
+    /**
+     * Controller mapping strings to collections
+     */
+    collectionRegistryController?: import("./controllers/navigation").CollectionRegistryController;
+
+    /**
+     * Controller tracking navigation tree state
+     */
+    navigationStateController?: import("./controllers/navigation").NavigationStateController;
 
     /**
      * Controller used to open regular dialogs

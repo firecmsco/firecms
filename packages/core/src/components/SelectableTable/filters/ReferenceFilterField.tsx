@@ -96,9 +96,9 @@ export function ReferenceFilterField({
         }
     }
 
-    const navigationController = useCollectionRegistryController();
+    const collectionRegistryController = useCollectionRegistryController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return path ? navigationController.getCollection(path) : undefined;
+        return path ? collectionRegistryController.getCollection(path) : undefined;
     }, [path]);
 
     const onSingleEntitySelected = (entity: Entity<any>) => {

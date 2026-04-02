@@ -57,9 +57,9 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:19](https://git
 
 ***
 
-### dataSource
+### data
 
-> **dataSource**: [`DataSource`](../interfaces/DataSource)
+> **data**: [`RebaseData`](../interfaces/RebaseData)
 
 Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 

@@ -50,9 +50,9 @@ export function ArrayOfReferencesFieldBinding({
         setValue
     });
 
-    const navigationController = useCollectionRegistryController();
+    const collectionRegistryController = useCollectionRegistryController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return ofProperty.path ? navigationController.getCollection(ofProperty.path) : undefined;
+        return ofProperty.path ? collectionRegistryController.getCollection(ofProperty.path) : undefined;
     }, [ofProperty.path]);
 
     if (!collection) {

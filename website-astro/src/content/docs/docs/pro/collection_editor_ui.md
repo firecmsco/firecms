@@ -9,7 +9,7 @@ This document describes how to use the **Collection Editor UI Plugin** with **Re
 database collections. The Collection Editor UI Plugin provides an interface for creating, editing, and organizing
 collections, with support for customizable permissions and configuration options.
 
-Typically, collections in Rebase are defined in code, and passed as a prop to the `NavigationController` on
+Typically, collections in Rebase are defined in code, and passed as a prop to the `NavigationStateController` on
 initialization. The Collection Editor UI Plugin allows you to manage collections directly in the application, providing 
 a more user-friendly and flexible way to organize and configure your database collections.
 
@@ -143,7 +143,7 @@ resulting plugin into the Rebase configuration. This is typically done in your m
 
 ```jsx
 import React, { useCallback } from "react";
-import { Rebase, useBuildNavigationController, useAuthController } from "@rebasepro/core";
+import { Rebase, useBuildNavigationStateController, useAuthController } from "@rebasepro/core";
 import { mergeCollections, useCollectionEditorPlugin, useCollectionsConfigController } from "@rebasepro/collection_editor";
 import { usePostgresDataSource } from "@rebasepro/postgresql";
 import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@rebasepro/user_management";
@@ -197,7 +197,7 @@ function App() {
         userManagementPlugin
     ];
     
-    const navigationController = useBuildNavigationController({
+    const navigationController = useBuildNavigationStateController({
         collections: collectionsBuilder(),
         views: customViews,
         adminViews: userManagementAdminViews,
@@ -316,7 +316,7 @@ rights throughout your Rebase project.
 ### Example Integration
 
 ```jsx
-const navigationController = useBuildNavigationController({
+const navigationController = useBuildNavigationStateController({
     collections: customCollections,
     views: customViews,
     adminViews: userManagementAdminViews,
@@ -453,7 +453,7 @@ import {
   SnackbarProvider,
   useBuildLocalConfigurationPersistence,
   useBuildModeController,
-  useBuildNavigationController,
+  useBuildNavigationStateController,
   useValidateAuthenticator,
   useAuthController
 } from "@rebasepro/core";
@@ -519,7 +519,7 @@ export function App() {
     dataSource: postgresDelegate
   });
 
-  const navigationController = useBuildNavigationController({
+  const navigationController = useBuildNavigationStateController({
     collections: collectionsBuilder,
     authController,
     dataSource: postgresDelegate

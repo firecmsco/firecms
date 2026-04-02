@@ -40,6 +40,7 @@
     "packages/sdk_generator"
   ],
   "scripts": {
+    "test": "pnpm -r test",
     "dev": "cd app && run-s dev",
     "saas": "cd saas && run-s dev",
     "datatalk": "cd saas_datatalk && run-s dev",

@@ -13,4 +13,4 @@ title: "REBASE_LOCALE_STORAGE_KEY"
 
 > `const` **REBASE\_LOCALE\_STORAGE\_KEY**: `"rebase_locale"` = `"rebase_locale"`
 
-Defined in: core/src/i18n/RebaseI18nProvider.tsx:15
+Defined in: [core/src/i18n/RebaseI18nProvider.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/i18n/RebaseI18nProvider.tsx)

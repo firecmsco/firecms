@@ -6,6 +6,7 @@ import {
     EntityCollection,
     ExportConfig,
     getDefaultValuesFor,
+    RebaseContext,
     useAuthController,
     useCustomizationController,
     useData,
@@ -90,7 +91,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                     return {
                         [column.key]: await column.builder({
                             entity,
-                            context: context as any
+                            context: context as unknown as RebaseContext
                         })
                     };
                 }))).reduce((a, b) => ({ ...a, ...b }), {});
@@ -106,7 +107,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                         return {
                             [field.key]: await field.value({
                                 entity,
-                                context: context as any
+                                context: context as unknown as RebaseContext
                             })
                         };
                     }))).reduce((a, b) => ({ ...a, ...b }), {});

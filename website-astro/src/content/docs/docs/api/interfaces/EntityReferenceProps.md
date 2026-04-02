@@ -23,17 +23,17 @@ Props for creating an EntityReference
 
 Defined in: [types/src/types/entities.ts:60](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
-Which database within the datasource. Defaults to "(default)"
+Which database within the driver. Defaults to "(default)"
 
 ***
 
-### datasource?
+### driver?
 
-> `optional` **datasource**: `string`
+> `optional` **driver**: `string`
 
 Defined in: [types/src/types/entities.ts:58](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
-Which datasource (e.g., 'postgres', 'firestore'). Defaults to "(default)"
+Which driver (e.g., 'postgres', 'firestore'). Defaults to "(default)"
 
 ***
 

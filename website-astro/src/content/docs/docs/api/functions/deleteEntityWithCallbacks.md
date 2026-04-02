@@ -11,18 +11,14 @@ title: "deleteEntityWithCallbacks"
 
 # Function: deleteEntityWithCallbacks()
 
-> **deleteEntityWithCallbacks**\<`M`, `USER`\>(`dataSource`): `Promise`\<`boolean`\>
+> **deleteEntityWithCallbacks**\<`M`, `USER`\>(`data`): `Promise`\<`boolean`\>
 
-Defined in: [core/src/hooks/data/delete.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/delete.ts)
+Defined in: [core/src/hooks/data/delete.ts:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/delete.ts)
 
-This function is in charge of deleting an entity in the datasource.
+This function is in charge of deleting an entity.
 It will run all the delete callbacks specified in the collection.
 It is also possible to attach callbacks on save success or error, and callback
 errors.
-
-If you just want to delete any data without running the `beforeDelete`,
-and `afterDelete` callbacks, you can use the `deleteEntity` method
-in the datasource ([useDataSource](useDataSource)).
 
 ## Type Parameters
 
@@ -36,7 +32,7 @@ in the datasource ([useDataSource](useDataSource)).
 
 ## Parameters
 
-### dataSource
+### data
 
 [`DeleteEntityProps`](../interfaces/DeleteEntityProps)\<`M`\> & `object` & `object`
 

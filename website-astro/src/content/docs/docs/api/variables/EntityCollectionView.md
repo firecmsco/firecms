@@ -15,7 +15,7 @@ title: "EntityCollectionView"
 
 Defined in: [core/src/components/EntityCollectionView/EntityCollectionView.tsx:146](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionView.tsx)
 
-This component is in charge of binding a datasource path with an [EntityCollection](../interfaces/EntityCollection)
+This component is in charge of binding a driver path with an [EntityCollection](../interfaces/EntityCollection)
 where it's configuration is defined. It includes an infinite scrolling table
 and a 'Add' new entities button,
 
@@ -30,7 +30,7 @@ exclusively with config options.
 If you need a lower level implementation with more granular options, you
 can use [EntityCollectionTable](../functions/EntityCollectionTable).
 
-If you need a generic table that is not bound to the datasource or entities and
+If you need a generic table that is not bound to the driver or entities and
 properties at all, you can check [VirtualTable](VirtualTable)
 
 ## Param

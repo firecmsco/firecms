@@ -1,4 +1,4 @@
-import { AuthController, NavigationController, RebaseContext, User } from "@rebasepro/types";
+import { AuthController, RebaseContext, User } from "@rebasepro/types";
 import { useAuthController } from "./useAuthController";
 import { useSideDialogsController } from "./useSideDialogsController";
 import { useCollectionRegistryController, useNavigationStateController, useCMSUrlController } from "./navigation/contexts";
@@ -38,13 +38,6 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
     const navigationState = useNavigationStateController();
     const cmsUrlController = useCMSUrlController();
 
-    const navigation = React.useMemo(() => ({
-        ...collectionRegistry,
-        ...navigationState,
-        ...cmsUrlController,
-        getCollectionBySlug: collectionRegistry.getCollection
-    }), [collectionRegistry, navigationState, cmsUrlController]);
-    
     const data = useData();
     const storageSource = useStorageSource();
     const snackbarController = useSnackbarController();
@@ -62,7 +55,9 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
         authController,
         sideDialogsController,
         sideEntityController,
-        navigation: navigation as NavigationController,
+        cmsUrlController,
+        collectionRegistryController: collectionRegistry,
+        navigationStateController: navigationState,
         data,
         storageSource,
         snackbarController,
@@ -80,7 +75,9 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
             authController,
             sideDialogsController,
             sideEntityController,
-            navigation: navigation as NavigationController,
+            cmsUrlController,
+            collectionRegistryController: collectionRegistry,
+            navigationStateController: navigationState,
             data,
             storageSource,
             snackbarController,
@@ -92,7 +89,7 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
             effectiveRoleController,
             databaseAdmin
         };
-    }, [authController, dialogsController, navigation, sideDialogsController, effectiveRoleController, data, databaseAdmin]);
+    }, [authController, dialogsController, sideDialogsController, effectiveRoleController, data, databaseAdmin, cmsUrlController, collectionRegistry, navigationState]);
 
     return rebaseContextRef.current;
 }

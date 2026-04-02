@@ -19,7 +19,7 @@ Hook that resolves view and admin view props (which may be async builders or arr
 into concrete CMSView[]. Also injects Users/Roles admin views when userManagement
 is provided.
 
-Uses refs for potentially-unstable dependencies (dataSource, authController,
+Uses refs for potentially-unstable dependencies (driver, authController,
 plugins) to avoid re-triggering effects when their object identity changes.
 
 ## Type Parameters

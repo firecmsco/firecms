@@ -35,7 +35,7 @@ export default function App() {
     
     const plugins = [exportPlugin];
     
-    const navigationController = useBuildNavigationController({
+    const navigationController = useBuildNavigationStateController({
         // ... rest of your config
         plugins
     }); 

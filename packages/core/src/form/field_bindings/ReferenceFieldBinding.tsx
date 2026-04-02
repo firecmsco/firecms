@@ -55,9 +55,9 @@ function ReferenceFieldBindingInternal({
 
     const validValue = value && value.isEntityReference && value.isEntityReference();
 
-    const navigationController = useCollectionRegistryController();
+    const collectionRegistryController = useCollectionRegistryController();
     const collection: EntityCollection | undefined = useMemo(() => {
-        return property.path ? navigationController.getCollection(property.path) : undefined;
+        return property.path ? collectionRegistryController.getCollection(property.path) : undefined;
     }, [property.path]);
 
     if (!collection) {

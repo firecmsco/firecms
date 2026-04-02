@@ -13,7 +13,7 @@ title: "DeepPartial"
 
 > **DeepPartial**\<`T`\> = `T` *extends* `object` ? `{ [K in keyof T]?: DeepPartial<T[K]> }` : `T`
 
-Defined in: types/src/types/translations.ts:5
+Defined in: [types/src/types/translations.ts:5](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Recursively makes all properties optional.
 Used to type partial translation overrides.

@@ -68,9 +68,9 @@ export function EntityPreviewData({
     const sideEntityController = useSideEntityController();
     const customizationController = useCustomizationController();
 
-    const navigationController = useCollectionRegistryController();
+    const collectionRegistryController = useCollectionRegistryController();
 
-    const collection = collectionProp ?? navigationController.getCollection(entity.path);
+    const collection = collectionProp ?? collectionRegistryController.getCollection(entity.path);
 
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${entity.path}`);

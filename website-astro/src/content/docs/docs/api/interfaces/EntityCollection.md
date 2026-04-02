@@ -81,42 +81,12 @@ Useful for adding your own logic or blocking the execution of the operation.
 
 Defined in: [types/src/types/collections.ts:87](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
-Which database within the datasource.
+Which database within the driver.
 - For Firestore: The Firestore database ID (e.g., for multi-database projects)
 - For PostgreSQL: Schema or database name
 - For MongoDB: Database name
 
-If not specified, the default database of the datasource is used.
-
-***
-
-### datasource?
-
-> `optional` **datasource**: `string`
-
-Defined in: [types/src/types/collections.ts:77](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
-
-Which datasource handles this collection.
-Use this to route collections to different backends:
-- `"postgres"` - Route to PostgreSQL backend
-- `"firestore"` - Route to Firestore (client-side)
-- `"mongodb"` - Route to MongoDB backend
-- Custom IDs for your own datasource implementations
-
-If not specified, the default datasource `"(default)"` is used.
-
-#### Example
-
-```ts
-// Simple - no datasource needed for default
-{ slug: "products" }
-
-// Firestore collection (client-side real-time)
-{ slug: "analytics", datasource: "firestore" }
-
-// Multiple databases within a datasource
-{ slug: "orders", datasource: "postgres", databaseId: "orders_db" }
-```
+If not specified, the default database of the driver is used.
 
 ***
 
@@ -176,6 +146,36 @@ Defaults to "table".
 Defined in: [types/src/types/collections.ts:49](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Optional description of this view. You can use Markdown.
+
+***
+
+### driver?
+
+> `optional` **driver**: `string`
+
+Defined in: [types/src/types/collections.ts:77](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+
+Which driver handles this collection.
+Use this to route collections to different backends:
+- `"postgres"` - Route to PostgreSQL backend
+- `"firestore"` - Route to Firestore (client-side)
+- `"mongodb"` - Route to MongoDB backend
+- Custom IDs for your own driver implementations
+
+If not specified, the default driver `"(default)"` is used.
+
+#### Example
+
+```ts
+// Simple - no driver needed for default
+{ slug: "products" }
+
+// Firestore collection (client-side real-time)
+{ slug: "analytics", driver: "firestore" }
+
+// Multiple databases within a driver
+{ slug: "orders", driver: "postgres", databaseId: "orders_db" }
+```
 
 ***
 
@@ -300,7 +300,7 @@ effect.
 
 This prop is deprecated and will be removed in the future.
 You can apply grouping by using the `navigationGroupMappings` prop in the
-[useBuildNavigationController](../functions/useBuildNavigationController) hook instead.
+useBuildNavigationController hook instead.
 
 ***
 
@@ -659,7 +659,7 @@ Defined in: [types/src/types/collections.ts:29](https://github.com/rebaseco/reba
 
 You can set an alias that will be used internally instead of the `path`.
 The `alias` value will be used to determine the URL of the collection,
-while `path` will still be used in the datasource.
+while `path` will still be used in the driver.
 Note that you can use this value in reference properties too.
 
 ***

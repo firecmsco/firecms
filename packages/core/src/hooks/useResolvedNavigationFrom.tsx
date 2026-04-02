@@ -64,15 +64,15 @@ export function resolveNavigationFrom<M extends Record<string, any>, USER extend
 }): Promise<ResolvedNavigationEntry<M>[]> {
 
     const data = context.data;
-    const navigation = context.navigation;
+    const { navigationStateController, collectionRegistryController } = context;
 
-    if (!navigation) {
+    if (!navigationStateController || !collectionRegistryController) {
         throw Error("Calling resolveNavigationFrom, but main navigation has not yet been initialised");
     }
 
     const navigationEntries = getNavigationEntriesFromPath({
         path,
-        collections: navigation.collections ?? []
+        collections: collectionRegistryController.collections ?? []
     });
 
     const resultPromises: Promise<ResolvedNavigationEntry<any>>[] = navigationEntries
@@ -80,7 +80,7 @@ export function resolveNavigationFrom<M extends Record<string, any>, USER extend
             if (entry.type === "collection") {
                 return Promise.resolve(entry);
             } else if (entry.type === "entity") {
-                const collection = navigation.getCollection(entry.slug);
+                const collection = collectionRegistryController.getCollection(entry.slug);
                 if (!collection) {
                     throw Error(`No collection defined in the navigation for the entity with path ${entry.slug}`);
                 }
@@ -134,8 +134,7 @@ export function useResolvedNavigationFrom<M extends Record<string, any>, USER ex
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
 
     useEffect(() => {
-        const navigation = context.navigation;
-        if (navigation) {
+        if (context.navigationStateController && context.collectionRegistryController) {
             setDataLoading(true);
             setDataLoadingError(undefined);
             resolveNavigationFrom<M, USER>({ path, context })
@@ -146,7 +145,7 @@ export function useResolvedNavigationFrom<M extends Record<string, any>, USER ex
 
     }, [path, context]);
 
-    if (!context.navigation) {
+    if (!context.navigationStateController) {
         return { dataLoading: true };
     }
 

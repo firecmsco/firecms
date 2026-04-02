@@ -47,7 +47,7 @@ export type RebasePlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollect
 
     /**
      * Views to be automatically added to the navigation.
-     * These views will be merged with the views provided to useBuildNavigationController.
+     * These views will be merged with the views provided to useBuildNavigationStateController.
      */
     views?: CMSView[];
 

@@ -13,7 +13,9 @@ title: "ListenEntityProps"
 
 > **ListenEntityProps**\<`M`\> = [`FetchEntityProps`](../interfaces/FetchEntityProps)\<`M`\> & `object`
 
-Defined in: [types/src/controllers/datasource.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
+Defined in: [types/src/controllers/data\_driver.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+
+**`Internal`**
 
 ## Type Declaration
 

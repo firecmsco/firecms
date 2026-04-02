@@ -46,9 +46,9 @@ function RelationPreviewInternal({
 
     const customizationController = useCustomizationController();
 
-    const navigationController = useCollectionRegistryController();
+    const collectionRegistryController = useCollectionRegistryController();
 
-    const collection = navigationController.getCollection(relation.path);
+    const collection = collectionRegistryController.getCollection(relation.path);
     if (!collection) {
         if (customizationController.components?.missingReference) {
             return <customizationController.components.missingReference path={relation.path} />;

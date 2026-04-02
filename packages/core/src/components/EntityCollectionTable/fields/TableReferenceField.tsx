@@ -29,9 +29,9 @@ type TableReferenceFieldProps = {
 export function TableReferenceField(props: TableReferenceFieldProps) {
     const customizationController = useCustomizationController();
 
-    const navigationController = useCollectionRegistryController();
+    const collectionRegistryController = useCollectionRegistryController();
     const { path } = props;
-    const collection = navigationController.getCollection(path);
+    const collection = collectionRegistryController.getCollection(path);
     if (!collection) {
         if (customizationController.components?.missingReference) {
             return <customizationController.components.missingReference path={path} />;

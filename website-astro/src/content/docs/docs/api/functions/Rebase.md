@@ -13,7 +13,7 @@ title: "Rebase"
 
 > **Rebase**\<`USER`\>(`props`): `Element`
 
-Defined in: [core/src/core/Rebase.tsx:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/Rebase.tsx)
+Defined in: [core/src/core/Rebase.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/Rebase.tsx)
 
 If you are using independent components of the CMS
 you need to wrap them with this main component, so the internal hooks work.

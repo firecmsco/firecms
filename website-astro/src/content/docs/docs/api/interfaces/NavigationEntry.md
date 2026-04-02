@@ -11,7 +11,7 @@ title: "NavigationEntry"
 
 # Interface: NavigationEntry
 
-Defined in: [types/src/controllers/navigation.ts:295](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:286](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/src/controllers/navigation.ts:295](https://github.com/rebasec
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`any`, `any`\>
 
-Defined in: [types/src/controllers/navigation.ts:301](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:292](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/src/controllers/navigation.ts:301](https://github.com/rebasec
 
 > `optional` **description**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:303](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:294](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/src/controllers/navigation.ts:303](https://github.com/rebasec
 
 > **group**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:304](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:295](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/src/controllers/navigation.ts:304](https://github.com/rebasec
 
 > **id**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:296](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:287](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/src/controllers/navigation.ts:296](https://github.com/rebasec
 
 > **name**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:298](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:289](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [types/src/controllers/navigation.ts:298](https://github.com/rebasec
 
 > **slug**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:299](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:290](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [types/src/controllers/navigation.ts:299](https://github.com/rebasec
 
 > **type**: `"view"` \| `"collection"` \| `"admin"`
 
-Defined in: [types/src/controllers/navigation.ts:300](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:291](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [types/src/controllers/navigation.ts:300](https://github.com/rebasec
 
 > **url**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:297](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:288](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -83,4 +83,4 @@ Defined in: [types/src/controllers/navigation.ts:297](https://github.com/rebasec
 
 > `optional` **view**: [`CMSView`](CMSView)
 
-Defined in: [types/src/controllers/navigation.ts:302](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:293](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)

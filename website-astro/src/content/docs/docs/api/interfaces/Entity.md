@@ -13,7 +13,7 @@ title: "Entity"
 
 Defined in: [types/src/types/entities.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
-Representation of an entity fetched from the datasource
+Representation of an entity fetched from the driver
 
 ## Type Parameters
 
@@ -29,19 +29,19 @@ Representation of an entity fetched from the datasource
 
 Defined in: [types/src/types/entities.ts:39](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
-Which database within the datasource (e.g., for Firestore multi-database).
-If not specified, the default database of the datasource is used.
+Which database within the driver (e.g., for Firestore multi-database).
+If not specified, the default database of the driver is used.
 
 ***
 
-### datasource?
+### driver?
 
-> `optional` **datasource**: `string`
+> `optional` **driver**: `string`
 
 Defined in: [types/src/types/entities.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
-Which datasource this entity belongs to (e.g., 'postgres', 'firestore').
-If not specified, the default datasource is assumed.
+Which driver this entity belongs to (e.g., 'postgres', 'firestore').
+If not specified, the default driver is assumed.
 
 ***
 

@@ -13,4 +13,4 @@ title: "RebaseEditorTextSize"
 
 > **RebaseEditorTextSize** = `"sm"` \| `"base"` \| `"lg"`
 
-Defined in: core/src/editor/editor.tsx:28
+Defined in: [core/src/editor/editor.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)

@@ -13,16 +13,12 @@ title: "saveEntityWithCallbacks"
 
 > **saveEntityWithCallbacks**\<`M`\>(`collection`): `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
 
-Defined in: [core/src/hooks/data/save.ts:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/save.ts)
+Defined in: [core/src/hooks/data/save.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/save.ts)
 
-This function is in charge of saving an entity to the datasource.
+This function is in charge of saving an entity.
 It will run all the save callbacks specified in the collection.
 It is also possible to attach callbacks on save success or error, and callback
 errors.
-
-If you just want to save the data without running the `afterSave`,
-`afterSaveError` and `beforeSave` callbacks, you can use the `saveEntity` method
-in the datasource ([useDataSource](useDataSource)).
 
 ## Type Parameters
 
@@ -39,7 +35,3 @@ in the datasource ([useDataSource](useDataSource)).
 ## Returns
 
 `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
-
-## See
-
-useDataSource

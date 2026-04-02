@@ -345,7 +345,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:116](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Controller holding the logic for the table
-[useDataSourceTableController](../functions/useDataSourceTableController)
+[useDataTableController](../functions/useDataTableController)
 [EntityTableController](EntityTableController)
 
 ***

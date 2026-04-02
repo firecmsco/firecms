@@ -47,9 +47,9 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:21](https://github.c
 
 ***
 
-### dataSource
+### data
 
-> **dataSource**: [`DataSource`](../interfaces/DataSource)
+> **data**: [`RebaseData`](../interfaces/RebaseData)
 
 Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
@@ -73,7 +73,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:25](https://github.c
 
 ### userManagement?
 
-> `optional` **userManagement**: [`UserManagementDelegate`](../interfaces/UserManagementDelegate)\<`USER`\>
+> `optional` **userManagement**: [`UserManagementDelegate`](../interfaces/UserManagementDelegate)
 
 Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 

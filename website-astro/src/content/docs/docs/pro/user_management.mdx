@@ -100,7 +100,7 @@ function App() {
 
     const plugins = [userManagementPlugin];
 
-    const navigationController = useBuildNavigationController({
+    const navigationController = useBuildNavigationStateController({
         collections,
         views,
         adminViews: userManagementAdminViews,
@@ -126,12 +126,12 @@ export default App;
 
 Besides the plugin, you will need to add the user management views to your Rebase project.
 They are exported as an array from the `@rebasepro/user_management` package.
-You can add them to your `useBuildNavigationController` hook configuration, in the `adminViews` array.
+You can add them to your `useBuildNavigationStateController` hook configuration, in the `adminViews` array.
 
 ```jsx
 import {userManagementAdminViews} from "@rebasepro/user_management";
 
-const navigationController = useBuildNavigationController({
+const navigationController = useBuildNavigationStateController({
     collections,
     views,
     adminViews: userManagementAdminViews,
@@ -171,13 +171,13 @@ The `UserManagement` object includes a `collectionPermissions` function that che
 user can perform based on their roles and the collection configuration.
 The permissions will be based on your users and roles configuration in the database.
 
-You can pass this function to the `useBuildNavigationController` hook to integrate collection
+You can pass this function to the `useBuildNavigationStateController` hook to integrate collection
 permissions into your Rebase project.
 
 Note that if you apply permissions to a collection, they will override the permissions set in the collection configuration.
 
 ```jsx
-const navigationController = useBuildNavigationController({
+const navigationController = useBuildNavigationStateController({
     collections,
     collectionPermissions: userManagement.collectionPermissions,
     authController,

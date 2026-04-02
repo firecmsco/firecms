@@ -13,7 +13,7 @@ title: "StudioHomePage"
 
 > **StudioHomePage**(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/HomePage/StudioHomePage.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/StudioHomePage.tsx)
+Defined in: [core/src/components/HomePage/StudioHomePage.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/StudioHomePage.tsx)
 
 ## Parameters
 

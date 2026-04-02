@@ -166,7 +166,7 @@ return <NavigationRoutes homePage={<>My custom home page</>}>
 </NavigationRoutes>
 ```
 
-Note that you can also define custom views by defining them in `useBuildNavigationController`, with the 
+Note that you can also define custom views by defining them in `useBuildNavigationStateController`, with the 
 added benefit that they will be automatically included in the default drawer.
 
 ### SideDialogs

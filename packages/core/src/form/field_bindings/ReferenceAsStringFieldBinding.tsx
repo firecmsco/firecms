@@ -48,10 +48,10 @@ function ReferenceAsStringFieldBindingInternal({
         setValue
     });
 
-    const navigationController = useCollectionRegistryController();
+    const collectionRegistryController = useCollectionRegistryController();
     const path = property.reference.path;
     const collection: EntityCollection | undefined = useMemo(() => {
-        return path ? navigationController.getCollection(path) : undefined;
+        return path ? collectionRegistryController.getCollection(path) : undefined;
     }, [path]);
 
     const referenceValue: EntityReference | undefined = useMemo(() => {

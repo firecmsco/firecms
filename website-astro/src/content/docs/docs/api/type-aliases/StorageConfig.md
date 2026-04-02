@@ -207,7 +207,7 @@ specify some placeholders that get replaced with the corresponding values.
 Defined in: [types/src/types/properties.ts:876](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
 
 When set to true, this flag indicates that the download URL of the file
-will be saved in the datasource, instead of the storage path.
+will be saved in the driver, instead of the storage path.
 
 Note that the generated URL may use a token that, if disabled, may
 make the URL unusable and lose the original reference to Cloud Storage,

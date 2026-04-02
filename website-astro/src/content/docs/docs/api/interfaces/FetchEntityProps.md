@@ -11,7 +11,9 @@ title: "FetchEntityProps"
 
 # Interface: FetchEntityProps\<M\>
 
-Defined in: [types/src/controllers/datasource.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
+Defined in: [types/src/controllers/data\_driver.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+
+**`Internal`**
 
 ## Type Parameters
 
@@ -25,7 +27,7 @@ Defined in: [types/src/controllers/datasource.ts:8](https://github.com/rebaseco/
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
 
-Defined in: [types/src/controllers/datasource.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
+Defined in: [types/src/controllers/data\_driver.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -33,7 +35,7 @@ Defined in: [types/src/controllers/datasource.ts:12](https://github.com/rebaseco
 
 > `optional` **databaseId**: `string`
 
-Defined in: [types/src/controllers/datasource.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
+Defined in: [types/src/controllers/data\_driver.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -41,7 +43,7 @@ Defined in: [types/src/controllers/datasource.ts:11](https://github.com/rebaseco
 
 > **entityId**: `string` \| `number`
 
-Defined in: [types/src/controllers/datasource.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
+Defined in: [types/src/controllers/data\_driver.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -49,4 +51,4 @@ Defined in: [types/src/controllers/datasource.ts:10](https://github.com/rebaseco
 
 > **path**: `string`
 
-Defined in: [types/src/controllers/datasource.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/datasource.ts)
+Defined in: [types/src/controllers/data\_driver.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)

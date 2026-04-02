@@ -11,7 +11,7 @@ title: "NavigationFrom"
 
 # Interface: NavigationFrom\<M\>
 
-Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:117](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:113](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:117](https://github.co
 
 > `optional` **data**: [`ResolvedNavigationEntry`](../type-aliases/ResolvedNavigationEntry)\<`M`\>[]
 
-Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:118](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:114](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:118](https://github.co
 
 > **dataLoading**: `boolean`
 
-Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:119](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:115](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -41,4 +41,4 @@ Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:119](https://github.co
 
 > `optional` **dataLoadingError**: `Error`
 
-Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:120](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:116](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)

@@ -16,7 +16,7 @@ title: "useEntityFetch"
 Defined in: [core/src/hooks/data/useEntityFetch.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 This hook is used to fetch an entity.
-It gives real time updates if the datasource supports it.
+It gives real time updates if the driver supports it.
 
 ## Type Parameters
 

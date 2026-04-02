@@ -11,7 +11,7 @@ title: "CMSView"
 
 # Interface: CMSView
 
-Defined in: [types/src/controllers/navigation.ts:205](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:196](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Custom additional views created by the developer, added to the main
 navigation.
@@ -22,7 +22,7 @@ navigation.
 
 > `optional` **description**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:220](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:211](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Optional description of this view. You can use Markdown
 
@@ -32,7 +32,7 @@ Optional description of this view. You can use Markdown
 
 > `optional` **group**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:248](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:239](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Optional field used to group top level navigation entries under a
 navigation view.
@@ -44,7 +44,7 @@ This prop is ignored for admin views.
 
 > `optional` **hideFromNavigation**: `boolean`
 
-Defined in: [types/src/controllers/navigation.ts:235](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:226](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Should this view be hidden from the main navigation panel.
 It will still be accessible if you reach the specified path
@@ -55,7 +55,7 @@ It will still be accessible if you reach the specified path
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [types/src/controllers/navigation.ts:229](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:220](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Icon key to use in this view.
 You can use any of the icons in the Material specs:
@@ -69,7 +69,7 @@ Find all the icons in https://rebase.pro/docs/icons
 
 > **name**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:215](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:206](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Name of this view
 
@@ -79,7 +79,7 @@ Name of this view
 
 > `optional` **nestedRoutes**: `boolean`
 
-Defined in: [types/src/controllers/navigation.ts:254](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:245](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 If true, a wildcard route (slug/*) is automatically registered
 alongside the base route, enabling nested navigation within this view.
@@ -90,7 +90,7 @@ alongside the base route, enabling nested navigation within this view.
 
 > **slug**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:210](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:201](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 CMS Path you can reach this view from.
 
@@ -100,7 +100,7 @@ CMS Path you can reach this view from.
 
 > **view**: `ReactNode`
 
-Defined in: [types/src/controllers/navigation.ts:241](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:232](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Component to be rendered. This can be any React component, and can use
 any of the provided hooks

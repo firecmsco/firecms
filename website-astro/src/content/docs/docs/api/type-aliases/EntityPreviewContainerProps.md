@@ -13,7 +13,7 @@ title: "EntityPreviewContainerProps"
 
 > **EntityPreviewContainerProps** = `object`
 
-Defined in: [core/src/components/EntityPreview.tsx:318](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:314](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [core/src/components/EntityPreview.tsx:318](https://github.com/rebas
 
 > **children**: `React.ReactNode`
 
-Defined in: [core/src/components/EntityPreview.tsx:319](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:315](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [core/src/components/EntityPreview.tsx:319](https://github.com/rebas
 
 > `optional` **className**: `string`
 
-Defined in: [core/src/components/EntityPreview.tsx:323](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:319](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [core/src/components/EntityPreview.tsx:323](https://github.com/rebas
 
 > `optional` **fullwidth**: `boolean`
 
-Defined in: [core/src/components/EntityPreview.tsx:321](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:317](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [core/src/components/EntityPreview.tsx:321](https://github.com/rebas
 
 > `optional` **hover**: `boolean`
 
-Defined in: [core/src/components/EntityPreview.tsx:320](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:316](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [core/src/components/EntityPreview.tsx:320](https://github.com/rebas
 
 > `optional` **onClick**: (`e`) => `void`
 
-Defined in: [core/src/components/EntityPreview.tsx:325](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:321](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 #### Parameters
 
@@ -71,7 +71,7 @@ Defined in: [core/src/components/EntityPreview.tsx:325](https://github.com/rebas
 
 > `optional` **size**: [`PreviewSize`](PreviewSize)
 
-Defined in: [core/src/components/EntityPreview.tsx:322](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:318](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -79,4 +79,4 @@ Defined in: [core/src/components/EntityPreview.tsx:322](https://github.com/rebas
 
 > `optional` **style**: `React.CSSProperties`
 
-Defined in: [core/src/components/EntityPreview.tsx:324](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:320](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)

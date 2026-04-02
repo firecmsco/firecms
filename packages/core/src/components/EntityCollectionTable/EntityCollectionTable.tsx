@@ -90,7 +90,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
     const largeLayout = useLargeLayout();
     const selectedEntities = (selectionController?.selectedEntities?.length > 0 ? selectionController?.selectedEntities : highlightedEntities)?.filter(Boolean);
 
-    const context = useRebaseContext();
+    const context: RebaseContext<USER> = useRebaseContext<USER>();
 
     const [size, setSize] = React.useState<CollectionSize>(defaultSize ?? "m");
 
@@ -206,11 +206,11 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
         }
 
         const child: React.ReactNode = Builder
-            ? <Builder entity={entity} context={context as any} />
+            ? <Builder entity={entity} context={context} />
             : <>
                 {additionalField.value?.({
                     entity,
-                    context: context as any
+                    context: context as unknown as RebaseContext
                 })?.toString()}
             </>;
 

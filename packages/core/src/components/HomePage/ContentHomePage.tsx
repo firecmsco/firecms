@@ -53,7 +53,7 @@ export function ContentHomePage({
 
     const context = useRebaseContext();
     const customizationController = useCustomizationController();
-    const navigationController = useNavigationStateController();
+    const navigationStateController = useNavigationStateController();
     const breadcrumbs = useBreadcrumbsController();
     const { t } = useTranslation();
 
@@ -61,7 +61,7 @@ export function ContentHomePage({
         breadcrumbs.set({ breadcrumbs: [] });
     }, [breadcrumbs.set]);
 
-    if (!navigationController.topLevelNavigation)
+    if (!navigationStateController.topLevelNavigation)
         throw Error("Navigation not ready");
 
     const {
@@ -69,7 +69,7 @@ export function ContentHomePage({
         navigationEntries: rawNavigationEntries,
         groups: groupOrderFromNavController,
         onNavigationEntriesUpdate
-    } = navigationController.topLevelNavigation;
+    } = navigationStateController.topLevelNavigation;
 
     const fuse = useRef<Fuse<NavigationEntry> | null>(null);
     const [filteredUrls, setFilteredUrls] = useState<string[] | null>(null);

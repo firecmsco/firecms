@@ -13,7 +13,7 @@ title: "RebaseContext"
 
 > **RebaseContext**\<`USER`, `AuthControllerType`\> = [`RebaseCallContext`](RebaseCallContext)\<`USER`\> & `object`
 
-Defined in: [types/src/rebase\_context.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/types/src/rebase_context.tsx)
+Defined in: [types/src/rebase\_context.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/types/src/rebase_context.tsx)
 
 Context that includes the internal controllers and contexts used by the app.
 Some controllers and context included in this context can be accessed
@@ -33,11 +33,30 @@ Callback to send analytics events
 
 Used auth controller
 
+### cmsUrlController?
+
+> `optional` **cmsUrlController**: [`CMSUrlController`](CMSUrlController)
+
+Controller in charge of URL/navigation
+
+### collectionRegistryController?
+
+> `optional` **collectionRegistryController**: [`CollectionRegistryController`](CollectionRegistryController)
+
+Controller mapping strings to collections
+
 ### customizationController?
 
 > `optional` **customizationController**: [`CustomizationController`](CustomizationController)
 
 This controller holds the customization options for the CMS.
+
+### databaseAdmin?
+
+> `optional` **databaseAdmin**: [`DatabaseAdmin`](../interfaces/DatabaseAdmin)
+
+Administrative database operations (SQL, schema discovery).
+Only available in developer/admin contexts.
 
 ### dialogsController?
 
@@ -51,16 +70,11 @@ Controller used to open regular dialogs
 
 Controller to simulate different roles when dev mode is active.
 
-### navigation?
+### navigationStateController?
 
-> `optional` **navigation**: [`NavigationController`](NavigationController)
+> `optional` **navigationStateController**: [`NavigationStateController`](NavigationStateController)
 
-Context that includes the resolved navigation and utility methods and
-attributes.
-
-#### See
-
-useNavigation
+Controller tracking navigation tree state
 
 ### sideDialogsController?
 

@@ -61,7 +61,7 @@ export function EntityCard<M extends Record<string, any> = any>({
     const analyticsController = useAnalyticsController();
     const sideEntityController = useSideEntityController();
     const customizationController = useCustomizationController();
-    const navigationController = useCollectionRegistryController();
+    const collectionRegistryController = useCollectionRegistryController();
 
     const resolvedCollection = collection;
 

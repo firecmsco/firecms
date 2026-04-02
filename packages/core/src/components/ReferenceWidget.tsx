@@ -50,11 +50,11 @@ export function ReferenceWidget<M extends Record<string, any>>({
     includeEntityLink
 }: ReferenceWidgetProps<M>) {
 
-    const navigationController = useCollectionRegistryController();
+    const collectionRegistryController = useCollectionRegistryController();
 
     const collection: EntityCollection | undefined = useMemo(() => {
-        return navigationController.getCollection(path);
-    }, [path, navigationController.getCollection]);
+        return collectionRegistryController.getCollection(path);
+    }, [path, collectionRegistryController.getCollection]);
 
     const onSingleEntitySelected = useCallback((entity: Entity<M> | null) => {
         if (disabled)

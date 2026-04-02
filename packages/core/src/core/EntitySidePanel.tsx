@@ -39,7 +39,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     const location = useLocation();
 
     const sideEntityController = useSideEntityController();
-    const navigationController = useCollectionRegistryController();
+    const collectionRegistryController = useCollectionRegistryController();
     const sideDialogsController = useSideDialogContext();
     const cmsUrlController = useCMSUrlController();
 
@@ -74,10 +74,10 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }
 
     const parentCollectionIds = useMemo(() => {
-        return navigationController.getParentCollectionIds(path);
-    }, [navigationController, path]);
+        return collectionRegistryController.getParentCollectionIds(path);
+    }, [collectionRegistryController, path]);
 
-    const collection = navigationController.getCollection(path) ?? props.collection;
+    const collection = collectionRegistryController.getCollection(path) ?? props.collection;
 
     useEffect(() => {
         function beforeunload(e: any) {

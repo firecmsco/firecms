@@ -53,7 +53,7 @@ export default function App() {
 
     const plugins = [dataEnhancementPlugin];
     
-    const navigationController = useBuildNavigationController({
+    const navigationController = useBuildNavigationStateController({
         // ... rest of your config
         plugins
     }); 

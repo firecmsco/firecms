@@ -13,7 +13,7 @@ title: "RebaseEditorProps"
 
 > **RebaseEditorProps** = `object`
 
-Defined in: core/src/editor/editor.tsx:30
+Defined in: [core/src/editor/editor.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: core/src/editor/editor.tsx:30
 
 > `optional` **aiController**: [`EditorAIController`](EditorAIController)
 
-Defined in: core/src/editor/editor.tsx:39
+Defined in: [core/src/editor/editor.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: core/src/editor/editor.tsx:39
 
 > `optional` **content**: [`JSONContent`](JSONContent) \| `string`
 
-Defined in: core/src/editor/editor.tsx:31
+Defined in: [core/src/editor/editor.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: core/src/editor/editor.tsx:31
 
 > `optional` **customComponents**: [`CustomEditorComponent`](CustomEditorComponent)[]
 
-Defined in: core/src/editor/editor.tsx:40
+Defined in: [core/src/editor/editor.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: core/src/editor/editor.tsx:40
 
 > `optional` **disabled**: `boolean`
 
-Defined in: core/src/editor/editor.tsx:41
+Defined in: [core/src/editor/editor.tsx:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: core/src/editor/editor.tsx:41
 
 > **handleImageUpload**: (`file`) => `Promise`\<`string`\>
 
-Defined in: core/src/editor/editor.tsx:35
+Defined in: [core/src/editor/editor.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 #### Parameters
 
@@ -71,7 +71,7 @@ Defined in: core/src/editor/editor.tsx:35
 
 > `optional` **highlight**: `object`
 
-Defined in: core/src/editor/editor.tsx:38
+Defined in: [core/src/editor/editor.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 #### from
 
@@ -87,7 +87,7 @@ Defined in: core/src/editor/editor.tsx:38
 
 > `optional` **markdownConfig**: [`MarkdownEditorConfig`](../interfaces/MarkdownEditorConfig)
 
-Defined in: core/src/editor/editor.tsx:42
+Defined in: [core/src/editor/editor.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ***
 
@@ -95,7 +95,7 @@ Defined in: core/src/editor/editor.tsx:42
 
 > `optional` **onHtmlContentChange**: (`content`) => `void`
 
-Defined in: core/src/editor/editor.tsx:34
+Defined in: [core/src/editor/editor.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 #### Parameters
 
@@ -113,7 +113,7 @@ Defined in: core/src/editor/editor.tsx:34
 
 > `optional` **onJsonContentChange**: (`content`) => `void`
 
-Defined in: core/src/editor/editor.tsx:33
+Defined in: [core/src/editor/editor.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 #### Parameters
 
@@ -131,7 +131,7 @@ Defined in: core/src/editor/editor.tsx:33
 
 > `optional` **onMarkdownContentChange**: (`content`) => `void`
 
-Defined in: core/src/editor/editor.tsx:32
+Defined in: [core/src/editor/editor.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 #### Parameters
 
@@ -149,7 +149,7 @@ Defined in: core/src/editor/editor.tsx:32
 
 > `optional` **textSize**: [`RebaseEditorTextSize`](RebaseEditorTextSize)
 
-Defined in: core/src/editor/editor.tsx:37
+Defined in: [core/src/editor/editor.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ***
 
@@ -157,4 +157,4 @@ Defined in: core/src/editor/editor.tsx:37
 
 > `optional` **version**: `number`
 
-Defined in: core/src/editor/editor.tsx:36
+Defined in: [core/src/editor/editor.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)

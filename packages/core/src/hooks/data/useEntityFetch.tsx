@@ -46,9 +46,9 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
     }: EntityFetchProps<M, USER>): EntityFetchResult<M> {
 
     const dataClient = useData();
-    const navigationController = useCMSUrlController();
+    const cmsUrlController = useCMSUrlController();
 
-    const path = navigationController.resolveDatabasePathsFrom(inputPath);
+    const path = cmsUrlController.resolveDatabasePathsFrom(inputPath);
 
     const context: RebaseContext<USER> = useRebaseContext();
 

@@ -40,14 +40,14 @@ function NavigationChip({ entry }: { entry: NavigationEntry }) {
 
 export function FavouritesView({ hidden }: { hidden: boolean }) {
 
-    const navigationController = useNavigationStateController();
+    const navigationStateController = useNavigationStateController();
     const userConfigurationPersistence = useUserConfigurationPersistence();
 
     if (!userConfigurationPersistence)
         return null;
 
     const favouriteCollections = (userConfigurationPersistence?.favouritePaths ?? [])
-        .map((path) => navigationController.topLevelNavigation?.navigationEntries.find((entry) => entry.slug === path))
+        .map((path) => navigationStateController.topLevelNavigation?.navigationEntries.find((entry) => entry.slug === path))
         .filter(Boolean) as NavigationEntry[];
 
     return <Collapse in={favouriteCollections.length > 0}>

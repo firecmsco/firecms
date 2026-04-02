@@ -13,7 +13,7 @@ title: "es"
 
 > `const` **es**: [`RebaseTranslations`](../interfaces/RebaseTranslations)
 
-Defined in: core/src/locales/es.ts:11
+Defined in: [core/src/locales/es.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/locales/es.ts)
 
 Spanish baseline translations for @rebasepro/core.
 

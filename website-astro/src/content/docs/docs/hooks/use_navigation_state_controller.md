@@ -1,7 +1,7 @@
 ---
-slug: docs/hooks/use_navigation_controller
-title: useNavigationController
-sidebar_label: useNavigationController
+slug: docs/hooks/use_navigation_state_controller
+title: useNavigationStateController
+sidebar_label: useNavigationStateController
 description: Access the Rebase navigation controller to get collections, resolve paths, and perform navigation.
 ---
 
@@ -14,11 +14,11 @@ Use this hook to access the navigation controller of the app. This controller se
 
 ```tsx
 import React from "react";
-import { useNavigationController } from "@rebasepro/core";
+import { useNavigationStateController } from "@rebasepro/core";
 import { Button } from "@rebasepro/ui";
 
 export function NavigationExample() {
-    const navigationController = useNavigationController();
+    const navigationController = useNavigationStateController();
 
     const goToProducts = () => {
         // Navigate to the products collection
@@ -51,10 +51,10 @@ export function NavigationExample() {
     *   Example: `products` -> `/c/products`
 *   **`resolveIdsFrom(pathWithAliases)`**: Resolve aliases in a path to their actual IDs.
 
-### NavigationController Interface
+### NavigationStateController Interface
 
 ```tsx
-export type NavigationController = {
+export type NavigationStateController = {
     collections?: EntityCollection[];
     views?: CMSView[];
     loading: boolean;

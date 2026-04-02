@@ -35,9 +35,9 @@ This hook is used internally for validating an authenticator.
 
 `boolean` \| [`Authenticator`](../type-aliases/Authenticator)\<`USER`\>
 
-#### dataSource
+#### data
 
-[`DataSource`](../interfaces/DataSource)
+[`RebaseData`](../interfaces/RebaseData)
 
 #### disabled?
 

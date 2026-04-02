@@ -169,16 +169,7 @@ export type CollectionRegistryController<EC extends EntityCollection = EntityCol
 
 };
 
-/**
- * Legacy monolithic controller that includes the resolved navigation and utility methods and attributes.
- * It is a combination of CMSUrlController, NavigationStateController, and CollectionRegistryController.
- * @group Models
- * @deprecated Use the specific controllers instead.
- */
-export type NavigationController<EC extends EntityCollection = EntityCollection<any>> =
-    CMSUrlController &
-    NavigationStateController &
-    CollectionRegistryController<EC>;
+
 
 export interface NavigateOptions {
     replace?: boolean;

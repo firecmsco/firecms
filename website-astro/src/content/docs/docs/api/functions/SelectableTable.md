@@ -30,8 +30,8 @@ options you see in collections in the top level navigation, you can
 check [EntityCollectionView](../variables/EntityCollectionView).
 
 The data displayed in the table is managed by a [EntityTableController](../type-aliases/EntityTableController).
-You can build the default, bound to a path in the datasource, by using the hook
-[useDataSourceTableController](useDataSourceTableController)
+You can build the default, bound to a path in the driver, by using the hook
+[useDataTableController](useDataTableController)
 
 ## Type Parameters
 

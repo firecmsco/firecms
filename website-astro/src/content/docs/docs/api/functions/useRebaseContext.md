@@ -13,7 +13,7 @@ title: "useRebaseContext"
 
 > **useRebaseContext**\<`USER`, `AuthControllerType`\>(): [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`, `AuthControllerType`\>
 
-Defined in: [core/src/hooks/useRebaseContext.tsx:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useRebaseContext.tsx)
+Defined in: [core/src/hooks/useRebaseContext.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useRebaseContext.tsx)
 
 Hook to retrieve the [RebaseContext](../type-aliases/RebaseContext).
 

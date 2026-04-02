@@ -16,7 +16,7 @@ title: "ErrorView"
 Defined in: [core/src/components/ErrorView.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
 
 Generic error view. Displayed for example when an unexpected value comes
-from the datasource in a collection view.
+from the driver in a collection view.
 
 ## Parameters
 

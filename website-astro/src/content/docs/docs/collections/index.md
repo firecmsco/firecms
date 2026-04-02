@@ -149,7 +149,7 @@ const productsCollection = buildCollection<Product>({
   })
 });
 ```
-Collections are passed directly to the `useBuildNavigationController` hook in your `App.tsx`.
+Collections are passed directly to the `useBuildNavigationStateController` hook in your `App.tsx`.
 
 ### Modifying a collection defined in the UI
 

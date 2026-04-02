@@ -206,7 +206,7 @@ Defined in: [core/src/components/SelectableTable/SelectableTable.tsx:70](https:/
 Defined in: [core/src/components/SelectableTable/SelectableTable.tsx:66](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SelectableTable/SelectableTable.tsx)
 
 Controller holding the logic for the table
-[useDataSourceTableController](../functions/useDataSourceTableController)
+[useDataTableController](../functions/useDataTableController)
 [EntityTableController](EntityTableController)
 
 ***

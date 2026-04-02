@@ -18,14 +18,14 @@ Class used to create a reference to an entity in a different path.
 ## Example
 
 ```ts
-// Simple reference (most common case - single datasource, single db)
+// Simple reference (most common case - single driver, single db)
 new EntityReference({ id: "123", path: "users" })
 
-// Reference to a different datasource (e.g., Firestore)
-new EntityReference({ id: "123", path: "analytics", datasource: "firestore" })
+// Reference to a different driver (e.g., Firestore)
+new EntityReference({ id: "123", path: "analytics", driver: "firestore" })
 
-// Reference to a specific database within a datasource
-new EntityReference({ id: "123", path: "orders", datasource: "postgres", databaseId: "orders_db" })
+// Reference to a specific database within a driver
+new EntityReference({ id: "123", path: "orders", driver: "postgres", databaseId: "orders_db" })
 ```
 
 ## Constructors
@@ -54,8 +54,8 @@ Create a reference to an entity.
 // Simple reference (most common case)
 new EntityReference({ id: "123", path: "users" })
 
-// With datasource
-new EntityReference({ id: "123", path: "analytics", datasource: "firestore" })
+// With driver
+new EntityReference({ id: "123", path: "analytics", driver: "firestore" })
 ```
 
 ## Properties
@@ -74,18 +74,18 @@ Defined in: [types/src/types/entities.ts:78](https://github.com/rebaseco/rebase/
 
 Defined in: [types/src/types/entities.ts:99](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
-Which database within the datasource.
+Which database within the driver.
 Defaults to "(default)" if not specified.
 
 ***
 
-### datasource?
+### driver?
 
-> `readonly` `optional` **datasource**: `string`
+> `readonly` `optional` **driver**: `string`
 
 Defined in: [types/src/types/entities.ts:93](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
-Which datasource (e.g., 'postgres', 'firestore').
+Which driver (e.g., 'postgres', 'firestore').
 Defaults to "(default)" if not specified.
 
 ***
@@ -119,8 +119,8 @@ to the root of the database).
 
 Defined in: [types/src/types/entities.ts:126](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
 
-Get the full path including datasource and database prefixes if specified.
-For the common case (single datasource, single db), this just returns pathWithId.
+Get the full path including driver and database prefixes if specified.
+For the common case (single driver, single db), this just returns pathWithId.
 
 ##### Returns
 

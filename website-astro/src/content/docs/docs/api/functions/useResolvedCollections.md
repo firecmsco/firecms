@@ -18,7 +18,7 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:40](https://git
 Hook that resolves collection props (which may be async builders or arrays)
 into concrete EntityCollection[], and registers them with the CollectionRegistry.
 
-Uses refs for potentially-unstable dependencies (dataSource, authController,
+Uses refs for potentially-unstable dependencies (driver, authController,
 plugins) to avoid re-triggering effects when their object identity changes.
 
 ## Type Parameters
