@@ -26,6 +26,8 @@ export interface ApiConfig {
     };
     /** Whether auth is required for API endpoints (default: true) */
     requireAuth?: boolean;
+    /** Optional custom validator for authentication */
+    authValidator?: (req: import("express").Request) => Promise<AuthResult>;
     pagination?: {
         defaultLimit: number;
         maxLimit: number;

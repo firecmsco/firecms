@@ -9,6 +9,7 @@ import {
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import {
     CMSAnalyticsEvent,
+    CMSView,
     HomePageSection,
     NavigationEntry,
     PluginGenericProps
@@ -194,7 +195,7 @@ export function StudioHomePage({
                                 url="/users"
                                 name="Users"
                                 description="Manage developers & roles in the workspace"
-                                view={{ icon: "group" } as unknown as any}
+                                view={{ icon: "group" } as Partial<CMSView> as CMSView}
                                 type="admin"
                             />
 
@@ -205,7 +206,7 @@ export function StudioHomePage({
                                 url="/roles"
                                 name="Roles"
                                 description="Manage fine-grained access configurations"
-                                view={{ icon: "admin_panel_settings" } as unknown as any}
+                                view={{ icon: "admin_panel_settings" } as Partial<CMSView> as CMSView}
                                 type="admin"
                             />
                         </div>

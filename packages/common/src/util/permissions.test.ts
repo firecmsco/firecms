@@ -311,13 +311,17 @@ describe("Permissions Evaluator", () => {
         expect(canEditEntity(collection, mockAuthController, "test", createMockEntity({ author_uid: "other" }))).toBe(false);
     });
 
-    test("28. AST: complex SQL with AND/OR optimistically passes (entity present)", () => {
+    test("28. AST: complex SQL with AND/OR is evaluated by the parser", () => {
         const collection = createMockCollection([
             { operation: "update", using: "status IN ('published', 'draft') AND author_id = current_setting('app.user_id')" }
         ]);
-        // Complex queries are beyond our parser → optimistic true even with entity
-        const anyEntity = createMockEntity({ status: "archived", author_id: "someone-else" });
-        expect(canEditEntity(collection, mockAuthController, "test", anyEntity)).toBe(true);
+        // IN clause is optimistic true, but AND requires author_id to match user uid
+        const mismatchEntity = createMockEntity({ status: "archived", author_id: "someone-else" });
+        expect(canEditEntity(collection, mockAuthController, "test", mismatchEntity)).toBe(false);
+
+        // When author_id matches the current user, AND passes
+        const matchingEntity = createMockEntity({ status: "published", author_id: "user-123" });
+        expect(canEditEntity(collection, mockAuthController, "test", matchingEntity)).toBe(true);
     });
 
     test("29. AST: null entity ALWAYS optimistically passes SQL evaluation", () => {

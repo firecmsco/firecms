@@ -46,7 +46,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
 
         // Example to apply "limit" and "startAfter"
         if (startAfter !== undefined) {
-            dbQuery = query(dbQuery, orderByKey(), startAt(startAfter as any));
+            dbQuery = query(dbQuery, orderByKey(), startAt(String(startAfter)));
         }
         if (limit !== undefined) {
             dbQuery = query(dbQuery, limitToFirst(limit));
@@ -192,7 +192,7 @@ export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: Firebas
 
         // Check if the found entity is the same as the one being checked
         const [key, entityValue] = Object.entries(snapshot.val())[0];
-        if (entityValue && typeof entityValue === "object" && (entityValue as any)[name] === value && key === entityId) {
+        if (entityValue && typeof entityValue === "object" && (entityValue as Record<string, unknown>)[name] === value && key === entityId) {
             return true;
         }
 

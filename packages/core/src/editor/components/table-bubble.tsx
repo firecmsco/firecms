@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
-import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
+import { autoUpdate, computePosition, flip, offset, shift, type VirtualElement } from "@floating-ui/dom";
 import { IconButton, Tooltip, defaultBorderMixin, cls } from "@rebasepro/ui";
 import { useTranslation } from "../../hooks";
 import {
@@ -77,7 +77,7 @@ export const TableBubble = forwardRef<HTMLDivElement, TableBubbleProps>(
                 },
             };
 
-            const cleanup = autoUpdate(virtualEl as any, menuRef.current, () => {
+            const cleanup = autoUpdate(virtualEl as VirtualElement, menuRef.current, () => {
                 if (!menuRef.current || view.isDestroyed) return;
                 try {
                     start = view.coordsAtPos(state.selection.from);
@@ -86,7 +86,7 @@ export const TableBubble = forwardRef<HTMLDivElement, TableBubbleProps>(
                     // Ignore errors during fast remounts/updates
                 }
 
-                computePosition(virtualEl as any, menuRef.current, {
+                computePosition(virtualEl as VirtualElement, menuRef.current, {
                     placement: options?.placement || "top",
                     middleware: [offset(options?.offset || 8), flip(), shift()],
                     strategy: "fixed"
@@ -105,7 +105,7 @@ export const TableBubble = forwardRef<HTMLDivElement, TableBubbleProps>(
 
         if (!show || !view || !state) return null;
 
-        const executeCommand = (cmd: any) => {
+        const executeCommand = (cmd: (state: EditorState, dispatch?: (tr: import("prosemirror-state").Transaction) => void) => boolean) => {
             cmd(state, view.dispatch);
             view.focus();
         };

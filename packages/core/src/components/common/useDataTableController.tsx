@@ -146,12 +146,12 @@ export function useDataTableController<M extends Record<string, any> = any, USER
 
         const { filterValues: urlFilterValues, sortBy: urlSortBy } = parseFilterAndSort(location.search);
         if (!forceFilter) {
-            setFilterValues(urlFilterValues as any);
+            setFilterValues(urlFilterValues as FilterValues<Extract<keyof M, string>> | undefined);
         }
         if (urlSortBy && forceFilter && !checkFilterCombination(forceFilter, urlSortBy)) {
             console.warn("URL sort is not compatible with the force filter.");
         } else {
-            setSortBy(urlSortBy as any);
+            setSortBy(urlSortBy as [Extract<keyof M, string>, "asc" | "desc"] | undefined);
         }
     }, [location.search, updateUrl, forceFilter, checkFilterCombination]);
 
@@ -213,7 +213,7 @@ export function useDataTableController<M extends Record<string, any> = any, USER
                                 entity,
                                 context
                             })));
-                } catch (_e: any) {
+                } catch (_e: unknown) {
                     console.error(_e);
                 }
             }
@@ -370,7 +370,7 @@ function encodeFilterAndSort(filterValues?: FilterValues<string>, sortBy?: [stri
         Object.entries(filterValues).forEach(([key, value]) => {
             if (value) {
                 const [op, val] = value;
-                let encodedValue: any = val;
+                let encodedValue: unknown = val;
                 try {
                     if (typeof val === "object") {
                         if (val instanceof Date) {
@@ -396,7 +396,7 @@ function encodeFilterAndSort(filterValues?: FilterValues<string>, sortBy?: [stri
                 }
                 if (encodedValue !== undefined) {
                     entries[encodeURIComponent(`${key}_op`)] = encodeURIComponent(op);
-                    entries[encodeURIComponent(`${key}_value`)] = encodedValue ? encodeURIComponent(encodedValue.toString()) : "null";
+                    entries[encodeURIComponent(`${key}_value`)] = encodedValue ? encodeURIComponent(String(encodedValue)) : "null";
                 }
             }
         });
@@ -455,7 +455,7 @@ function encodeRelation(val: EntityRelation) {
 }
 
 function decodeString(val: string): EntityReference | EntityRelation | Date | string {
-    let parsedFilterVal: any = val;
+    let parsedFilterVal: EntityReference | EntityRelation | Date | string = val;
     if (isDate(val)) {
         try {
             parsedFilterVal = new Date(val);

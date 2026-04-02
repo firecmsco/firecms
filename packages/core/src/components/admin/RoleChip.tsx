@@ -1,22 +1,22 @@
 import React from "react";
-import { Chip } from "@rebasepro/ui";
+import { Chip, ChipColorScheme } from "@rebasepro/ui";
 import { Role } from "@rebasepro/types";
-import { getColorSchemeForSeed } from "@rebasepro/ui";
+import { getColorSchemeForSeed, getColorSchemeForKey } from "@rebasepro/ui";
 
 export function RoleChip({ role }: { role: Role }) {
-    let colorScheme: any;
+    let colorScheme: ChipColorScheme;
     if (role.isAdmin) {
-        colorScheme = "blueDarker";
+        colorScheme = getColorSchemeForKey("blueDarker");
     } else if (role.id === "editor") {
-        colorScheme = "yellowLight";
+        colorScheme = getColorSchemeForKey("yellowLight");
     } else if (role.id === "viewer") {
-        colorScheme = "grayLight";
+        colorScheme = getColorSchemeForKey("grayLight");
     } else {
         colorScheme = getColorSchemeForSeed(role.id);
     }
 
     return (
-        <Chip colorScheme={colorScheme as any} key={role.id}>
+        <Chip colorScheme={colorScheme} key={role.id}>
             {role.name}
         </Chip>
     );

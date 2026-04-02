@@ -60,7 +60,7 @@ export function LastEditedByIndicator({
         };
     }, [path, entityId, dataClient]);
 
-    const metadata = latestEntry?.values ? (latestEntry.values as any).__metadata : undefined;
+    const metadata = latestEntry?.values ? (latestEntry.values as Record<string, Record<string, any>>).__metadata : undefined;
     const uid = metadata?.updated_by;
     const editedOn = metadata?.updated_on;
 

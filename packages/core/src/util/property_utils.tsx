@@ -1,6 +1,6 @@
 import React from "react";
 
-import { EntityCollection, Properties, Property, PropertyConfig, } from "@rebasepro/types";
+import { EntityCollection, MapProperty, Properties, Property, PropertyConfig, } from "@rebasepro/types";
 import { isPropertyBuilder } from "@rebasepro/common";
 import { CircleIcon, FunctionsIcon } from "@rebasepro/ui";
 import { getFieldConfig } from "../core";
@@ -118,11 +118,12 @@ export function getPropertiesWithPropertiesOrder(properties: Properties, propert
     // First add properties in the specified order
     validOrderKeys.forEach(key => {
         const property = properties[key];
-        if (typeof property === "object" && property.type === "map" && (property as any).properties) {
+        if (typeof property === "object" && property.type === "map" && (property as MapProperty).properties) {
+            const mapProp = property as MapProperty;
             result[key] = {
-                ...property,
-                properties: getPropertiesWithPropertiesOrder((property as any).properties, (property as any).propertiesOrder ?? [])
-            } as any;
+                ...mapProp,
+                properties: getPropertiesWithPropertiesOrder(mapProp.properties!, mapProp.propertiesOrder ?? [])
+            } as Property;
         } else if (property) {
             result[key] = property;
         }
@@ -132,11 +133,12 @@ export function getPropertiesWithPropertiesOrder(properties: Properties, propert
     propertyKeys.forEach(key => {
         if (!result[key]) {
             const property = properties[key];
-            if (typeof property === "object" && property.type === "map" && (property as any).properties) {
+            if (typeof property === "object" && property.type === "map" && (property as MapProperty).properties) {
+                const mapProp = property as MapProperty;
                 result[key] = {
-                    ...property,
-                    properties: getPropertiesWithPropertiesOrder((property as any).properties, (property as any).propertiesOrder ?? [])
-                } as any;
+                    ...mapProp,
+                    properties: getPropertiesWithPropertiesOrder(mapProp.properties!, mapProp.propertiesOrder ?? [])
+                } as Property;
             } else if (property) {
                 result[key] = property;
             }
@@ -146,7 +148,7 @@ export function getPropertiesWithPropertiesOrder(properties: Properties, propert
     return result;
 }
 
-export function getDefaultPropertiesOrder(collection: EntityCollection<any>): string[] {
+export function getDefaultPropertiesOrder(collection: EntityCollection): string[] {
     if (collection.propertiesOrder) return collection.propertiesOrder;
     return [...Object.keys(collection.properties), ...(collection.additionalFields ?? []).map(field => field.key)];
 }

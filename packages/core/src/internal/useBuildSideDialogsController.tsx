@@ -2,6 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SideDialogPanelProps, SideDialogsController } from "@rebasepro/types";
 import { deepEqual as equal } from "fast-equals"
+import { Location } from "react-router-dom";
+
+interface SideDialogLocationState {
+    base_location?: Location;
+    panels?: string[];
+}
 
 export function useBuildSideDialogsController(): SideDialogsController {
 
@@ -20,7 +26,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
     };
 
     useEffect(() => {
-        const state = location.state as any;
+        const state = location.state as SideDialogLocationState | null;
         const panelKeys: string[] = state?.panels ?? [];
         const newPanels = panelKeys
             .map(key => routesStore.current[key])
@@ -50,7 +56,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
                 navigate(-1);
             routesCount.current--;
         } else if (lastSidePanel.parentUrlPath) {
-            const baseLocation = (location.state as any)?.base_location ?? location;
+            const baseLocation = (location.state as SideDialogLocationState | null)?.base_location ?? location;
             navigate(
                 lastSidePanel.parentUrlPath,
                 {
@@ -73,7 +79,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
         });
         routesCount.current = routesCount.current + newPanels.length;
 
-        const baseLocation = (location.state as any)?.base_location ?? location;
+        const baseLocation = (location.state as SideDialogLocationState | null)?.base_location ?? location;
 
         const currentPanels = sidePanelsRef.current;
         const updatedPanels = [...currentPanels, ...newPanels];
@@ -102,7 +108,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
             routesStore.current[panel.key] = panel;
         });
 
-        const baseLocation = (location.state as any)?.base_location ?? location;
+        const baseLocation = (location.state as SideDialogLocationState | null)?.base_location ?? location;
 
         const currentPanels = sidePanelsRef.current;
         const updatedPanels = [...currentPanels.slice(0, -newPanels.length), ...newPanels];

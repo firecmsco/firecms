@@ -11,7 +11,6 @@
   "workspaces": [
     "packages/auth",
     "packages/rebase",
-    "packages/rebase_cloud",
     "packages/core",
     "packages/common",
     "packages/types",
@@ -32,17 +31,12 @@
     "packages/entity_history",
     "packages/schema_inference",
     "packages/data_enhancement",
-    "packages/user_management",
     "packages/formex",
     "packages/media_manager",
     "app",
     "app/frontend",
     "app/backend",
     "app/shared",
-    "legacy_examples/example_cloud",
-    "legacy_examples/example",
-    "legacy_examples/example_next",
-    "legacy_examples/example_pro",
     "packages/sdk_generator"
   ],
   "scripts": {

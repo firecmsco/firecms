@@ -171,6 +171,7 @@ describe("EntityService - Relation Types Tests", () => {
             select: jest.fn().mockReturnThis(),
             from: jest.fn().mockReturnThis(),
             where: jest.fn().mockReturnThis(),
+            $dynamic: jest.fn().mockReturnThis(),
             limit: jest.fn().mockReturnThis(),
             orderBy: jest.fn().mockReturnValue(mockQuery),
             innerJoin: jest.fn().mockReturnThis(),

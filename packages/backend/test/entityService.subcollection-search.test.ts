@@ -158,6 +158,7 @@ describe("EntityService - Subcollection Search Tests", () => {
         const mockQueryBuilder = {
             from: jest.fn().mockReturnThis(),
             where: jest.fn().mockReturnThis(),
+            $dynamic: jest.fn().mockReturnThis(),
             orderBy: jest.fn().mockReturnThis(),
             limit: jest.fn().mockReturnThis(),
             innerJoin: jest.fn().mockReturnThis(),
@@ -482,6 +483,7 @@ describe("EntityService - Subcollection Search Tests", () => {
             const mockQueryBuilder = {
                 from: jest.fn().mockReturnThis(),
                 where: jest.fn().mockReturnThis(),
+                $dynamic: jest.fn().mockReturnThis(),
                 orderBy: jest.fn().mockReturnThis(),
                 limit: mockLimit,
                 innerJoin: jest.fn().mockReturnThis(),

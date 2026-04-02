@@ -119,7 +119,7 @@ function extractColumns(newData: object[]): TableColumn[] {
     const sampleData = newData.slice(0, sampleSize);
 
     const columns = Object.keys(sampleData[0]).map((key) => {
-        const sampleValues = sampleData.map((row) => (row as any)[key]);
+        const sampleValues = sampleData.map((row) => (row as Record<string, unknown>)[key]);
         const type = determinetype(sampleValues);
 
         return {

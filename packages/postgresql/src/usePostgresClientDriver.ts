@@ -12,10 +12,14 @@ import {
     SaveEntityProps,
     TableColumnInfo
 } from "@rebasepro/types";
-import { PostgresDataDriverClient, PostgresDataDriverConfig } from "./postgres_client";
+import { RebaseWebSocketClient } from "@rebasepro/client";
+
+export interface PostgresDataDriverConfig {
+    wsClient?: RebaseWebSocketClient;
+}
 
 export interface PostgresDataDriver extends DataDriver {
-    client: PostgresDataDriverClient;
+    client?: RebaseWebSocketClient;
 }
 
 function recursivelyMap(
@@ -80,16 +84,12 @@ function cmsToDelegateModel(data: any): any {
 }
 
 export function usePostgresClientDriver(config: PostgresDataDriverConfig): PostgresDataDriver {
-    const client = useMemo(() => new PostgresDataDriverClient(config), [config.websocketUrl]);
+    const client = config.wsClient;
 
-    // Update auth token getter when it changes (e.g., when auth loading completes)
-    useEffect(() => {
-        if (config.getAuthToken) {
-            client.setAuthTokenGetter(config.getAuthToken);
-        }
-    }, [client, config.getAuthToken]);
-
-    return useMemo(() => ({
+    return useMemo(() => {
+        if (!client) throw new Error("RebaseWebSocketClient must be provided in config.wsClient");
+        
+        return {
 
         key: "postgres",
 
@@ -98,27 +98,18 @@ export function usePostgresClientDriver(config: PostgresDataDriverConfig): Postg
         client,
 
         async fetchCollection<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<Entity<M>[]> {
-            // Strip out navigationController and any other unnecessary props before sending to client
-            const {
-                navigationController,
-                collection,
-                ...cleanProps
-            } = props as any;
-            const entities = await client.fetchCollection(cleanProps);
-            return entities.map(e => ({
+            // Pick only the fields the client needs, ignoring extra fields from the CMS layer
+            const { path, filter, limit, startAfter, orderBy, searchString, order } = props;
+            const entities = await client.fetchCollection({ path, filter, limit, startAfter, orderBy, searchString, order });
+            return entities.map((e: Entity<any>) => ({
                 ...e,
                 values: delegateToCMSModel(e.values)
             }));
         },
 
         async fetchEntity<M extends Record<string, any>>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined> {
-            // Strip out navigationController and any other unnecessary props before sending to client
-            const {
-                navigationController,
-                collection,
-                ...cleanProps
-            } = props as any;
-            const entity = await client.fetchEntity(cleanProps);
+            const { path, entityId, databaseId } = props;
+            const entity = await client.fetchEntity({ path, entityId, databaseId });
             if (!entity) return undefined;
             return {
                 ...entity,
@@ -143,13 +134,8 @@ export function usePostgresClientDriver(config: PostgresDataDriverConfig): Postg
         },
 
         async deleteEntity<M extends Record<string, any>>(props: DeleteEntityProps<M>): Promise<void> {
-            // Strip out navigationController and any other unnecessary props before sending to client
-            const {
-                navigationController,
-                collection,
-                ...cleanProps
-            } = props as any;
-            return client.deleteEntity(cleanProps);
+            const { entity } = props;
+            return client.deleteEntity({ entity });
         },
 
         async checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection): Promise<boolean> {
@@ -157,24 +143,14 @@ export function usePostgresClientDriver(config: PostgresDataDriverConfig): Postg
         },
 
         async countEntities<M extends Record<string, any>>(props: FetchCollectionProps<M>): Promise<number> {
-            // Strip out navigationController and any other unnecessary props before sending to client
-            const {
-                navigationController,
-                collection,
-                ...cleanProps
-            } = props as any;
-            return client.countEntities(cleanProps);
+            const { path, filter, limit, startAfter, orderBy, searchString, order } = props;
+            return client.countEntities({ path, filter, limit, startAfter, orderBy, searchString, order });
         },
 
         listenCollection<M extends Record<string, any>>(props: ListenCollectionProps<M>): () => void {
-            // Strip out navigationController and any other unnecessary props before sending to client
-            const {
-                navigationController,
-                collection,
-                ...cleanProps
-            } = props as any;
+            const { path, filter, limit, startAfter, orderBy, searchString, order, onUpdate, onError } = props;
             return client.listenCollection(
-                cleanProps,
+                { path, filter, limit, startAfter, orderBy, searchString, order },
                 (entities: Entity[]) => props.onUpdate(entities.map(e => ({
                     ...e,
                     values: delegateToCMSModel(e.values)
@@ -184,14 +160,9 @@ export function usePostgresClientDriver(config: PostgresDataDriverConfig): Postg
         },
 
         listenEntity<M extends Record<string, any>>(props: ListenEntityProps<M>): () => void {
-            // Strip out navigationController and any other unnecessary props before sending to client
-            const {
-                navigationController,
-                collection,
-                ...cleanProps
-            } = props as any;
+            const { path, entityId, databaseId, onUpdate, onError } = props;
             return client.listenEntity(
-                cleanProps,
+                { path, entityId, databaseId },
                 (entity: Entity | null) => {
                     if (entity !== null) {
                         props.onUpdate({
@@ -234,6 +205,7 @@ export function usePostgresClientDriver(config: PostgresDataDriverConfig): Postg
         async fetchTableColumns(tableName: string): Promise<TableColumnInfo[]> {
             return client.fetchTableColumns(tableName);
         }
-    }), [client]) as PostgresDataDriver;
+    } as PostgresDataDriver;
+    }, [client]);
 
 }

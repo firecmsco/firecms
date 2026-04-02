@@ -4,13 +4,13 @@
 
 import { renderHook, waitFor } from "@testing-library/react";
 import { useResolvedCollections } from "../../src/hooks/navigation/useResolvedCollections";
-import { AuthController, CollectionRegistryController, DataDriver, EntityCollection } from "@rebasepro/types";
+import { AuthController, CollectionRegistryController, RebaseData, EntityCollection } from "@rebasepro/types";
 import { CollectionRegistry } from "@rebasepro/common";
 import { jest } from "@jest/globals";
 
 describe("useResolvedCollections", () => {
 
-    const mockDataDriver: DataDriver = {} as DataDriver;
+    const mockData: RebaseData = {} as RebaseData;
 
     const mockCollectionRegistry = new CollectionRegistry();
     jest.spyOn(mockCollectionRegistry, "registerMultiple").mockReturnValue(true);
@@ -34,7 +34,7 @@ describe("useResolvedCollections", () => {
         const { result } = renderHook(() => useResolvedCollections({
             authController: mockAuthController,
             collections: mockCollections,
-            driver: mockDataDriver,
+            data: mockData,
             collectionRegistryController: mockCollectionRegistryController,
         }));
 
@@ -64,7 +64,7 @@ describe("useResolvedCollections", () => {
         const { result } = renderHook(() => useResolvedCollections({
             authController: mockAuthController,
             collections: builder,
-            driver: mockDataDriver,
+            data: mockData,
             collectionRegistryController: mockCollectionRegistryController,
         }));
 
@@ -75,7 +75,7 @@ describe("useResolvedCollections", () => {
         expect(builder).toHaveBeenCalledWith({
             user: mockAuthController.user,
             authController: mockAuthController,
-            driver: mockDataDriver
+            data: mockData
         });
         expect(result.current.collections).toEqual(mockCollections);
     });
@@ -92,7 +92,7 @@ describe("useResolvedCollections", () => {
         const { result, rerender } = renderHook(() => useResolvedCollections({
             authController: mockAuthController,
             collections: mockCollections,
-            driver: mockDataDriver,
+            data: mockData,
             collectionRegistryController: mockCollectionRegistryController,
         }));
 
@@ -135,7 +135,7 @@ describe("useResolvedCollections", () => {
         const { result } = renderHook(() => useResolvedCollections({
             authController: mockAuthController,
             collections: builder,
-            driver: mockDataDriver,
+            data: mockData,
             collectionRegistryController: mockCollectionRegistryController,
         }));
 

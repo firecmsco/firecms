@@ -66,7 +66,7 @@ async function processProperties(
                 ...(propsContext as Record<string, unknown>),
                 value: currentValue,
                 previousValue
-            } as any));
+            } as never));
             if (cbRes !== undefined) {
                 currentValue = cbRes;
             }

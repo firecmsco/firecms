@@ -51,7 +51,7 @@ export async function refreshCredentials(
 ): Promise<object | null> {
     if (!credentials) return null;
     // If the token hasn't expired, just return it.
-    const expiryDate = new Date((credentials as any)["expiry_date"]);
+    const expiryDate = new Date((credentials as Record<string, unknown>)["expiry_date"] as number);
     if (expiryDate.getTime() > Date.now()) {
         return credentials;
     }

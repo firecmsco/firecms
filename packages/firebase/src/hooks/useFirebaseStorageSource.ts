@@ -102,8 +102,7 @@ export function useFirebaseStorageSource({
                             } else if (errorMessage.toLowerCase().includes("network")) {
                                 reject(new Error("Network error: Check your internet connection"));
                             } else {
-                                const newError = new Error(errorMessage);
-                                (newError as any).code = error?.code;
+                                const newError = Object.assign(new Error(errorMessage), { code: error?.code });
                                 reject(newError);
                             }
                         },

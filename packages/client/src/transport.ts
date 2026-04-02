@@ -4,6 +4,7 @@ export interface RebaseClientConfig {
     apiPath?: string;
     fetch?: typeof globalThis.fetch;
     onUnauthorized?: () => Promise<boolean>;
+    websocketUrl?: string; // Optional real-time WebSocket connection
 }
 
 export interface FindParams {
@@ -13,6 +14,7 @@ export interface FindParams {
     where?: Record<string, string>;
     orderBy?: string;
     include?: string[];
+    searchString?: string;
 }
 
 export interface FindResponse<T> {

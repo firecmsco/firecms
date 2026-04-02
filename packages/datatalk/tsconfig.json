@@ -44,9 +44,7 @@
       "@rebasepro/formex": [
         "../formex/src"
       ],
-      "@rebasepro/collection_editor_firebase": [
-        "../collection_editor_firebase/src"
-      ],
+
       "@rebasepro/schema_inference": [
         "../schema_inference/src"
       ],
@@ -56,9 +54,7 @@
       "@rebasepro/data_export": [
         "../data_export/src"
       ],
-      "@rebasepro/collection_editor": [
-        "../collection_editor/src"
-      ],
+
       "@rebasepro/data_import_export": [
         "../data_import_export/src"
       ]

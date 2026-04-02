@@ -41,6 +41,7 @@ import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
 import { usePostgresClientDriver } from "@rebasepro/postgresql";
 import { CollectionsStudioView, RLSEditor, SQLEditor, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
 import { CMSView } from "@rebasepro/types";
+import { createRebaseClient } from "@rebasepro/client";
 import { buildRebaseData } from "@rebasepro/common";
 import { collections } from "virtual:rebase-collections";
 import { Route, Outlet } from "react-router-dom";
@@ -70,9 +71,30 @@ export function App() {
         currentUser: authController.user
     });
 
-    const postgresDelegate = usePostgresClientDriver({
+    const rebaseClient = React.useMemo(() => createRebaseClient({
+        baseUrl: API_URL,
         websocketUrl: API_URL.replace(/^http/, "ws"),
-        getAuthToken: authController.initialLoading ? undefined : authController.getAuthToken
+        auth: {
+            // We pass the authController's getToken to the client.
+            // But wait, createRebaseClient also creates its own auth.
+            // For dogfooding, authController could eventually be rewritten
+            // to just wrap rebaseClient.auth. For now, since there's custom logic:
+        }
+    }), [API_URL]);
+
+    // Force the client's auth getter to use the controller if needed
+    // Or just assign getAuthToken directly to the WS client if we had a setter.
+    // Wait, the client sets `wsClient.getAuthToken = async () => auth.getSession()`.
+    // Instead we can overwrite:
+    if (rebaseClient.ws) {
+         rebaseClient.ws.setAuthTokenGetter(async () => {
+             const token = await authController.getAuthToken();
+             return token ?? "";
+         });
+    }
+
+    const postgresDelegate = usePostgresClientDriver({
+        wsClient: rebaseClient.ws
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();

@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
-import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
+import { autoUpdate, computePosition, flip, offset, shift, type VirtualElement } from "@floating-ui/dom";
 import { NodeSelection } from "prosemirror-state";
 import { TextField, defaultBorderMixin, Typography, cls } from "@rebasepro/ui";
 import { useTranslation } from "../../hooks";
@@ -78,14 +78,14 @@ export const ImageBubble = forwardRef<HTMLDivElement, ImageBubbleProps>(
                 }
             };
 
-            const cleanup = autoUpdate(virtualEl as any, menuRef.current, () => {
+            const cleanup = autoUpdate(virtualEl as VirtualElement, menuRef.current, () => {
                 if (!menuRef.current) return;
                 try {
                     start = view.coordsAtPos(state.selection.from);
                     end = view.coordsAtPos(state.selection.to);
                 } catch (e) {}
 
-                computePosition(virtualEl as any, menuRef.current, {
+                computePosition(virtualEl as VirtualElement, menuRef.current, {
                     placement: options?.placement || "bottom",
                     middleware: [offset(options?.offset || 8), flip(), shift()],
                     strategy: "fixed"
@@ -138,7 +138,7 @@ export const ImageBubble = forwardRef<HTMLDivElement, ImageBubbleProps>(
                     size={"small"}
                     placeholder={t("alt_text")}
                     value={alt}
-                    onChange={(e: any) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                         setAlt(e.target.value);
                         handleSave(e.target.value, title);
                     }}
@@ -147,7 +147,7 @@ export const ImageBubble = forwardRef<HTMLDivElement, ImageBubbleProps>(
                     size={"small"}
                     placeholder={t("title")}
                     value={title}
-                    onChange={(e: any) => {
+                    onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                         setTitle(e.target.value);
                         handleSave(alt, e.target.value);
                     }}

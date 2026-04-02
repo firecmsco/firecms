@@ -3,6 +3,18 @@ import { EditorView } from "prosemirror-view";
 import { Slice } from "prosemirror-model";
 import { serializeForClipboard } from "./clipboard";
 
+/** ProseMirror internal drag state — not exposed in type definitions */
+interface ProseMirrorDragState {
+    slice: Slice;
+    move: boolean;
+    node?: NodeSelection;
+}
+
+/** EditorView with access to the internal `dragging` property */
+interface EditorViewWithDrag extends EditorView {
+    dragging: ProseMirrorDragState | null;
+}
+
 export interface DragHandleOptions {
     /**
      * The width of the drag handle
@@ -95,7 +107,7 @@ export function dragHandlePlugin(options: DragHandleOptions = { dragHandleWidth:
         const {
             dom,
             text
-        } = serializeForClipboard(view as any, slice);
+        } = serializeForClipboard(view as EditorViewWithDrag, slice);
 
         event.dataTransfer.clearData();
         event.dataTransfer.setData("text/html", dom.innerHTML);
@@ -104,11 +116,11 @@ export function dragHandlePlugin(options: DragHandleOptions = { dragHandleWidth:
 
         event.dataTransfer.setDragImage(node, 0, 0);
 
-        (view as any).dragging = {
+        (view as EditorViewWithDrag).dragging = {
             slice,
             move: true,
             node: draggedNodeSelection
-        } as { slice: Slice, move: boolean, node: NodeSelection };
+        };
     }
 
     function handleClick(event: MouseEvent, view: EditorView) {
@@ -150,10 +162,10 @@ export function dragHandlePlugin(options: DragHandleOptions = { dragHandleWidth:
             dragHandleElement.dataset.dragHandle = "";
             dragHandleElement.classList.add("drag-handle");
             dragHandleElement.addEventListener("dragstart", (e) => {
-                handleDragStart(e, view as any);
+                handleDragStart(e, view);
             });
             dragHandleElement.addEventListener("click", (e) => {
-                handleClick(e, view as any);
+                handleClick(e, view);
             });
             const onMouseMove = (event: MouseEvent) => {
                 if (!view.editable) {
@@ -301,7 +313,7 @@ export function globalDragDropPlugin() {
 
                 // If it's a native slice drag (no explicitly captured node from our drag handle)
                 // then we bail out here and let ProseMirror native drop logic and native dropcursor handle it
-                if (!(editorView.dragging as any).node) {
+                if (!((editorView as EditorViewWithDrag).dragging as ProseMirrorDragState | null & { node?: unknown })?.node) {
                     removeCursor();
                     return;
                 }
@@ -364,7 +376,7 @@ export function globalDragDropPlugin() {
             const handleDrop = (event: DragEvent) => {
                 if (!editorView.editable || !editorView.dragging) return;
 
-                if (!(editorView.dragging as any).node) {
+                if (!((editorView as EditorViewWithDrag).dragging as ProseMirrorDragState | null & { node?: unknown })?.node) {
                     removeCursor();
                     return;
                 }
@@ -379,7 +391,7 @@ export function globalDragDropPlugin() {
                 let targetPos = getBlockInsertionPoint(event, clampedX);
                 if (targetPos === null) return;
 
-                const dragging = (editorView as any).dragging as { slice: Slice, move: boolean, node?: NodeSelection };
+                const dragging = (editorView as EditorViewWithDrag).dragging;
                 if (dragging && dragging.slice) {
                     let tr = editorView.state.tr;
                     if (dragging.move) {
@@ -397,7 +409,7 @@ export function globalDragDropPlugin() {
                     let { node, slice } = dragging;
 
                     if (node && node.node) {
-                        let nodeToInsert: any = node.node;
+                        let nodeToInsert: import("prosemirror-model").Node | import("prosemirror-model").Fragment = node.node;
                         const $mapped = tr.doc.resolve(mappedTarget);
                         const parentName = $mapped.parent.type.name;
 
@@ -405,15 +417,15 @@ export function globalDragDropPlugin() {
                         const isTargetTaskList = parentName === "taskList";
 
                         // 1. Unwrap incoming lists if they don't match the destination perfectly
-                        if (nodeToInsert.type.name === "list_item" && !isTargetList) {
+                        if ("type" in nodeToInsert && nodeToInsert.type.name === "list_item" && !isTargetList) {
                             nodeToInsert = nodeToInsert.content;
-                        } else if (nodeToInsert.type.name === "taskItem" && !isTargetTaskList) {
+                        } else if ("type" in nodeToInsert && nodeToInsert.type.name === "taskItem" && !isTargetTaskList) {
                             nodeToInsert = nodeToInsert.content;
                         }
 
                         // 2. Wrap incoming blocks/fragments into exactly the target list type
-                        const isFragment = !nodeToInsert.type;
-                        const needsWrap = isFragment || (nodeToInsert.type.name !== "list_item" && nodeToInsert.type.name !== "taskItem");
+                        const isFragment = !("type" in nodeToInsert);
+                        const needsWrap = isFragment || ("type" in nodeToInsert && nodeToInsert.type.name !== "list_item" && nodeToInsert.type.name !== "taskItem");
 
                         if (needsWrap) {
                             if (isTargetList) {
@@ -449,7 +461,7 @@ export function globalDragDropPlugin() {
                     }
                 }
 
-                (editorView as any).dragging = null;
+                (editorView as EditorViewWithDrag).dragging = null;
             };
 
             const handleDragEnd = () => {

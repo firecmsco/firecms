@@ -77,7 +77,8 @@ export class RebaseApiServer {
         // Auth middleware - delegates to canonical createAuthMiddleware()
         this.router.use(createAuthMiddleware({
             driver: this.driver,
-            requireAuth: this.config.requireAuth ?? true
+            requireAuth: this.config.requireAuth ?? true,
+            validator: this.config.authValidator
         }));
     }
 

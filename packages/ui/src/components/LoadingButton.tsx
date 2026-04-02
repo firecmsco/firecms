@@ -19,7 +19,7 @@ export function LoadingButton<P extends React.ElementType = "button">({
         <Button
             disabled={loading || disabled}
             onClick={onClick}
-            component={props.component as any}
+            component={props.component as React.ElementType}
             {...props}
         >
             {loading && (

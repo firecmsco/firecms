@@ -299,7 +299,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
             }
         } catch (e) {
             console.error(e);
-            setNavigationLoadingError(e as any);
+            setNavigationLoadingError(e instanceof Error ? e : new Error(String(e)));
         }
 
         if (navigationLoading)

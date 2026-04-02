@@ -40,6 +40,7 @@ import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
 import { usePostgresClientDriver } from "@rebasepro/postgresql";
 import { CollectionsStudioView, RLSEditor, SQLEditor, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
 import { CMSView } from "@rebasepro/types";
+import { createRebaseClient } from "@rebasepro/client";
 import { buildRebaseData } from "@rebasepro/common";
 import { collections } from "virtual:rebase-collections";
 import { Route, Outlet } from "react-router-dom";
@@ -69,9 +70,21 @@ export function App() {
         currentUser: authController.user
     });
 
-    const postgresDelegate = usePostgresClientDriver({
+    const rebaseClient = React.useMemo(() => createRebaseClient({
+        baseUrl: API_URL,
         websocketUrl: API_URL.replace(/^http/, "ws"),
-        getAuthToken: authController.initialLoading ? undefined : authController.getAuthToken
+        auth: {}
+    }), [API_URL]);
+
+    if (rebaseClient.ws) {
+         rebaseClient.ws.setAuthTokenGetter(async () => {
+             const token = await authController.getAuthToken();
+             return token ?? "";
+         });
+    }
+
+    const postgresDelegate = usePostgresClientDriver({
+        wsClient: rebaseClient.ws
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();

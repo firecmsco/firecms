@@ -1,6 +1,6 @@
 import { forwardRef, type ReactNode, useEffect, useRef, useState } from "react";
 import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
-import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
+import { autoUpdate, computePosition, flip, offset, shift, type VirtualElement } from "@floating-ui/dom";
 import { NodeSelection } from "prosemirror-state";
 
 export interface EditorBubbleProps {
@@ -68,7 +68,7 @@ export const EditorBubble = forwardRef<HTMLDivElement, EditorBubbleProps>(
                 }
             };
 
-            const cleanup = autoUpdate(virtualEl as any, menuRef.current, () => {
+            const cleanup = autoUpdate(virtualEl as VirtualElement, menuRef.current, () => {
                 if (!menuRef.current) return;
 
                 // Recompute coords in case of scroll
@@ -79,7 +79,7 @@ export const EditorBubble = forwardRef<HTMLDivElement, EditorBubbleProps>(
                     // Ignore error if selection is out of bounds
                 }
 
-                computePosition(virtualEl as any, menuRef.current, {
+                computePosition(virtualEl as VirtualElement, menuRef.current, {
                     placement: options?.placement || "top",
                     middleware: [offset(options?.offset || 8), flip(), shift()],
                     strategy: "fixed"

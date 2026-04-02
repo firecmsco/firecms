@@ -1,4 +1,5 @@
 import { keymap } from "prosemirror-keymap";
+import { TextSelection } from "prosemirror-state";
 
 export const customKeymapPlugin = () => {
   return keymap({
@@ -14,7 +15,7 @@ export const customKeymapPlugin = () => {
 
       if (isCurrentTextSelectionNotExtendedToNodeBoundaries) {
         if (dispatch) {
-          dispatch(tr.setSelection((state.selection.constructor as any).create(state.doc, startNodePos, endNodePos)));
+          dispatch(tr.setSelection(TextSelection.create(state.doc, startNodePos, endNodePos)));
         }
         return true;
       }

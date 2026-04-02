@@ -111,7 +111,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
 
         const input = multiline ? (
             <textarea
-                {...(inputProps as any)}
+                {...(inputProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
                 ref={inputRef}
                 placeholder={focused || hasValue || !label ? placeholder : undefined}
                 autoFocus={autoFocus}

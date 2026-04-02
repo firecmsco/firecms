@@ -112,7 +112,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
 
                         const reader = new FileReader();
                         reader.onload = async (readerEvent) => {
-                            await onFileRead(view as any, readerEvent, position.pos, upload, image);
+                            await onFileRead(view, readerEvent, position.pos, upload, image);
                         };
                         reader.readAsDataURL(image);
                     });
@@ -120,7 +120,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                     return true;
                 }
             },
-            handlePaste(view: EditorView, event: ClipboardEvent, slice: any) {
+            handlePaste(view: EditorView, event: ClipboardEvent) {
                 const html = event.clipboardData?.getData("text/html");
                 if (html && html.includes("<img")) {
                     // Let ProseMirror handle the HTML paste natively (e.g. copy-pasted from the editor itself or a webpage)
@@ -139,7 +139,7 @@ export const createDropImagePlugin = (upload: UploadFn): Plugin => {
                             anyImageFound = true;
                             const reader = new FileReader();
                             reader.onload = async (readerEvent) => {
-                                await onFileRead(view as any, readerEvent, pos, upload, image);
+                                await onFileRead(view, readerEvent, pos, upload, image);
                             };
                             reader.readAsDataURL(image);
                         }

@@ -152,7 +152,7 @@ export function buildConditionContext(params: {
             email: user?.email ?? null,
             displayName: user?.displayName ?? null,
             photoURL: user?.photoURL ?? null,
-            roles: user?.roles ?? []
+            roles: (user?.roles ?? []).map((r: any) => typeof r === "string" ? r : r.id)
         },
         now: Date.now()
     };

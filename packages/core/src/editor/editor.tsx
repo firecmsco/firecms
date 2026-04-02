@@ -233,8 +233,8 @@ export const RebaseEditor = ({
         {isMarkdownMode && (
           <TextareaAutosize
             value={internalMarkdown}
-            onChange={handleMarkdownChange as any}
-            onBlur={handleMarkdownBlur as any}
+            onChange={handleMarkdownChange}
+            onBlur={handleMarkdownBlur}
             className={cls(
               "w-full h-full min-h-[300px] p-12 bg-transparent resize-none font-mono focus:ring-0",
               proseClass

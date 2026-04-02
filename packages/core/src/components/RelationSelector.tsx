@@ -275,7 +275,7 @@ export const RelationSelector = React.forwardRef<
                 <PopoverPrimitive.Root open={isPopoverOpen} onOpenChange={handleRootOpenChange} modal={false}>
                     <PopoverPrimitive.Trigger asChild>
                         <button
-                            ref={triggerRef as any}
+                            ref={triggerRef as React.Ref<HTMLButtonElement>}
                             type="button"
                             aria-haspopup="listbox"
                             aria-expanded={isPopoverOpen}

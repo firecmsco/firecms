@@ -22,6 +22,6 @@ export function PropertyConfigBadge({
         style={{
             background: !disabled ? (propertyConfig?.color ?? defaultPropertyConfig?.color ?? "#888") : undefined
         }}>
-        {propertyConfig?.Icon ? getIconForWidget(propertyConfig, iconSize as any) : getIconForWidget(defaultPropertyConfig, iconSize as any)}
+        {propertyConfig?.Icon ? getIconForWidget(propertyConfig, iconSize) : getIconForWidget(defaultPropertyConfig, iconSize)}
     </div>
 }

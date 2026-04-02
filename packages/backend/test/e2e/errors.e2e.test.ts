@@ -51,7 +51,8 @@ describe("Global Error Handling E2E", () => {
             driver: mockDataDriver as any,
             collections: mockCollections,
             enableGraphQL: false,
-            enableREST: true
+            enableREST: true,
+            requireAuth: false
         });
 
         app = server.getApp();

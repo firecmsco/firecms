@@ -44,7 +44,7 @@
     },
     "scripts": {
         "watch": "vite build --watch",
-        "build": "rm -rf ./dist && vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+        "build": "rm -rf dist || true && vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
         "prepublishOnly": "run-s build",
         "test:lint": "eslint \"src/**\" --quiet",
         "test": "jest --passWithNoTests",

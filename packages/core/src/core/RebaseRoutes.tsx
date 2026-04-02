@@ -18,7 +18,7 @@ import { CustomCMSRoute } from "../routes/CustomCMSRoute";
  */
 export function RebaseRoutes({ children }: { children?: React.ReactNode }) {
     const location = useLocation();
-    const state = location.state as any;
+    const state = location.state as Record<string, unknown> | null;
     const baseLocation = state?.base_location ?? location;
 
     const { views, adminViews } = useNavigationStateController();

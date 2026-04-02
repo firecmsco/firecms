@@ -94,7 +94,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             if (!isNaN(Number(newValue)) && newValue.trim() !== "") typedValue = Number(newValue);
         }
 
-        onValueChange?.(typedValue as any);
+        onValueChange?.(typedValue as SelectValue & typeof value);
         if (onChange) {
             const event = {
                 target: {

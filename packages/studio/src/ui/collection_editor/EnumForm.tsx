@@ -81,7 +81,7 @@ export function EnumForm({
         }
     }, [values.enum]);
 
-    return <Formex value={formex}>
+    return <Formex value={formex as any}>
         <EnumFormFields enumValuesPath={"enumValues"}
             values={values}
             errors={errors}

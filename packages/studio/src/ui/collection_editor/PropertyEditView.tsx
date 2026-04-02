@@ -208,7 +208,7 @@ export const PropertyForm = React.memo(
             getController?.(formexController);
         }, [formexController, getController]);
 
-        return <Formex value={formexController}>
+        return <Formex value={formexController as any}>
             <PropertyEditFormFields
                 onPropertyChanged={onPropertyChangedImmediate
                     ? doOnPropertyChanged

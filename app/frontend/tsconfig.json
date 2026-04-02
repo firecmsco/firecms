@@ -46,12 +46,7 @@
       "@rebasepro/data_enhancement": [
         "../../packages/data_enhancement/src"
       ],
-      "@rebasepro/collection_editor": [
-        "../../packages/collection_editor/src"
-      ],
-      "@rebasepro/collection_editor_firebase": [
-        "../../packages/collection_editor_firebase/src"
-      ],
+
       "@rebasepro/entity_history": [
         "../../packages/entity_history/src"
       ],
@@ -69,6 +64,9 @@
       ],
       "@rebasepro/common": [
         "../../packages/common/src"
+      ],
+      "@rebasepro/client": [
+        "../../packages/client/src"
       ],
       "@rebasepro/formex": [
         "../../packages/formex/src"

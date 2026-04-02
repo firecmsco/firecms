@@ -139,6 +139,9 @@ importers:
       '@rebasepro/auth':
         specifier: 0.0.1
         version: link:../../packages/auth
+      '@rebasepro/client':
+        specifier: workspace:*
+        version: link:../../packages/client
       '@rebasepro/core':
         specifier: 0.0.1
         version: link:../../packages/core
@@ -358,6 +361,9 @@ importers:
       '@rebasepro/auth':
         specifier: 0.0.1
         version: link:../../packages/auth
+      '@rebasepro/client':
+        specifier: workspace:*
+        version: link:../../packages/client
       '@rebasepro/core':
         specifier: 0.0.1
         version: link:../../packages/core
@@ -1030,7 +1036,7 @@ importers:
         specifier: ^7.2.4
         version: 7.3.1(@types/node@20.19.17)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/create_firecms_app:
+  packages/create_rebase_app:
     dependencies:
       '@rebasepro/cli':
         specifier: 0.0.1
@@ -1649,6 +1655,9 @@ importers:
 
   packages/postgresql:
     dependencies:
+      '@rebasepro/client':
+        specifier: 0.0.1
+        version: link:../client
       '@rebasepro/core':
         specifier: 0.0.1
         version: link:../core

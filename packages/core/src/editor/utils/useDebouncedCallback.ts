@@ -8,13 +8,13 @@ export function useDebouncedCallback<T>(value: T, callback: () => void, immediat
         pendingUpdate.current = false;
     };
 
-    const handlerRef = React.useRef<number | undefined>(undefined);
+    const handlerRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     React.useEffect(
         () => {
             pendingUpdate.current = true;
             clearTimeout(handlerRef.current);
-            handlerRef.current = setTimeout(performUpdate, timeoutMs) as any;
+            handlerRef.current = setTimeout(performUpdate, timeoutMs);
             return () => {
                 if (immediate)
                     performUpdate();

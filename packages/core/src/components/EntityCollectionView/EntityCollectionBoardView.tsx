@@ -107,13 +107,13 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         columnColors
     } = useMemo(() => {
         const property = getPropertyInPath(collection.properties, columnProperty);
-        if (!property || !("type" in property) || (property as any).type !== "string") {
+        if (!property || !("type" in property) || property.type !== "string") {
             return {
                 enumColumns: [] as string[],
                 columnLabels: {} as Record<string, string>
             };
         }
-        const stringProperty = property as any;
+        const stringProperty = property;
         if (!stringProperty.enum) {
             return {
                 enumColumns: [] as string[],

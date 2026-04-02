@@ -1,4 +1,4 @@
-import { AuthController, RebaseContext, User } from "@rebasepro/types";
+import { AuthController, NavigationController, RebaseContext, User } from "@rebasepro/types";
 import { useAuthController } from "./useAuthController";
 import { useSideDialogsController } from "./useSideDialogsController";
 import { useCollectionRegistryController, useNavigationStateController, useCMSUrlController } from "./navigation/contexts";
@@ -62,7 +62,7 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
         authController,
         sideDialogsController,
         sideEntityController,
-        navigation: navigation as any,
+        navigation: navigation as NavigationController,
         data,
         storageSource,
         snackbarController,
@@ -80,7 +80,7 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
             authController,
             sideDialogsController,
             sideEntityController,
-            navigation: navigation as any,
+            navigation: navigation as NavigationController,
             data,
             storageSource,
             snackbarController,

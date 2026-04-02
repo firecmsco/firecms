@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, ReactNode } from "react";
 import { Fragment, DOMParser } from "prosemirror-model";
 import { useProseMirrorContext } from "../hooks/useProseMirrorContext";
-import { autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom";
+import { autoUpdate, computePosition, flip, offset, shift, type VirtualElement } from "@floating-ui/dom";
 import { SlashCommandPluginKey } from "../plugins/slashCommandPlugin";
 import {
     cls,
@@ -284,9 +284,9 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
             }
         };
 
-        const cleanup = autoUpdate(virtualEl as any, menuRef.current, () => {
+        const cleanup = autoUpdate(virtualEl as VirtualElement, menuRef.current, () => {
             if (!menuRef.current) return;
-            computePosition(virtualEl as any, menuRef.current, {
+            computePosition(virtualEl as VirtualElement, menuRef.current, {
                 placement: "bottom-start",
                 middleware: [offset(4), flip(), shift()],
                 strategy: "fixed"
@@ -460,7 +460,7 @@ export const SlashCommandMenu = ({ upload, aiController }: { upload: UploadFn, a
     );
 };
 
-const createTableNode = (schema: any, rowsCount: number, colsCount: number) => {
+const createTableNode = (schema: import("prosemirror-model").Schema, rowsCount: number, colsCount: number) => {
     const rows = [];
     for (let r = 0; r < rowsCount; r++) {
         const cells = [];

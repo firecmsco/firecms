@@ -135,7 +135,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
                     }
                     const configProperty = resolveProperty({
                         propertyKey,
-                        property: propertyConfig.property as any,
+                        property: propertyConfig.property as Property,
                         values: fieldProps.form.values,
                         path: context.path,
                         entityId: context.entityId,
@@ -285,7 +285,7 @@ const shouldPropertyReRender = (property: Property, plugins?: RebasePlugin[]): b
     if (plugins?.some((plugin) => plugin.form?.fieldBuilder)) {
         return true;
     }
-    if (isPropertyBuilder(property as any)) {
+    if (isPropertyBuilder(property)) {
         return true;
     }
     const defAProperty = property as Property;

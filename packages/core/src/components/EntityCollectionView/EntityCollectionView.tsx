@@ -512,15 +512,15 @@ export const EntityCollectionView = React.memo(
         const kanbanEnabled = useMemo(() => {
             if (!collection.kanban?.columnProperty) return false;
             const property = getPropertyInPath(resolvedCollection.properties, collection.kanban.columnProperty);
-            if (!property || (property as any).type !== "string") return false;
-            return Boolean((property as any).enum);
+            if (!property || property.type !== "string") return false;
+            return Boolean("enum" in property && property.enum);
         }, [collection.kanban?.columnProperty, resolvedCollection.properties]);
 
         // Compute the effective enabled views:
         // - Start from collection.enabledViews (defaults to all three)
         // - Filter out kanban if no enum properties exist
         const hasEnumProperty = useMemo(() => {
-            return Object.values(resolvedCollection.properties).some((p: any) => p.type === "string" && p.enum);
+            return Object.values(resolvedCollection.properties).some((p: Property) => p.type === "string" && "enum" in p && p.enum);
         }, [resolvedCollection.properties]);
 
         const enabledViews: ViewMode[] = useMemo(() => {
@@ -537,8 +537,8 @@ export const EntityCollectionView = React.memo(
             const properties = resolvedCollection.properties;
 
             for (const [key, property] of Object.entries(properties)) {
-                const prop = property as any;
-                if (prop && prop.type === "string" && prop.enum) {
+                const prop = property;
+                if (prop && prop.type === "string" && "enum" in prop && prop.enum) {
                     options.push({
                         key,
                         label: prop.name || key
@@ -552,7 +552,7 @@ export const EntityCollectionView = React.memo(
         // Get saved kanban property from user config
         const getSavedKanbanProperty = useCallback((): string | undefined => {
             const saved = userConfigPersistence?.getCollectionConfig<M>(path);
-            return (saved as any)?.kanbanColumnProperty;
+            return (saved as Record<string, unknown>)?.kanbanColumnProperty as string | undefined;
         }, [userConfigPersistence, path]);
 
         // Selected kanban property state - priority: saved config > collection default > first available
@@ -586,7 +586,7 @@ export const EntityCollectionView = React.memo(
             setSelectedKanbanProperty(property);
             // Save to local persistence
             if (userConfigPersistence) {
-                onCollectionModifiedForUser(path, { kanbanColumnProperty: property } as any);
+                onCollectionModifiedForUser(path, { kanbanColumnProperty: property } as PartialEntityCollection<M>);
             }
         }, [userConfigPersistence, onCollectionModifiedForUser, path, analyticsController]);
 

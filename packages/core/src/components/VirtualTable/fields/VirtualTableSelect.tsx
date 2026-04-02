@@ -88,7 +88,7 @@ export function VirtualTableSelect(props: {
                 includeClear={false}
                 useChips={false}
                 value={validValue
-                    ? ((internalValue as any[]).map(v => v.toString()))
+                    ? ((internalValue as (string | number)[]).map(v => v.toString()))
                     : ([])}
                 onValueChange={onChange}
                 onOpenChange={handleOpenChange}>

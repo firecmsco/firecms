@@ -31,6 +31,8 @@ import {
 import { usePostgresClientDriver } from "@rebasepro/postgresql";
 import { collections } from "virtual:rebase-collections";
 import { Route, Outlet } from "react-router-dom";
+import { createRebaseClient } from "@rebasepro/client";
+import { buildRebaseData } from "@rebasepro/common";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -56,9 +58,21 @@ export function App() {
         currentUser: authController.user
     });
 
-    const postgresDelegate = usePostgresClientDriver({
+    const rebaseClient = React.useMemo(() => createRebaseClient({
+        baseUrl: API_URL,
         websocketUrl: API_URL.replace(/^http/, "ws"),
-        getAuthToken: authController.initialLoading ? undefined : authController.getAuthToken
+        auth: {}
+    }), [API_URL]);
+
+    if (rebaseClient.ws) {
+         rebaseClient.ws.setAuthTokenGetter(async () => {
+             const token = await authController.getAuthToken();
+             return token ?? "";
+         });
+    }
+
+    const postgresDelegate = usePostgresClientDriver({
+        wsClient: rebaseClient.ws
     });
 
     const collectionsBuilder = useCallback(() => {
@@ -75,7 +89,7 @@ export function App() {
     const navigationStateController = useBuildNavigationStateController({
         collections: collectionsBuilder,
         authController,
-        driver: postgresDelegate,
+        data: buildRebaseData(postgresDelegate),
         collectionRegistryController,
         cmsUrlController,
         userManagement

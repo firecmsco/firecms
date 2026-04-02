@@ -6,9 +6,6 @@
  * to PostgreSQL backends with real-time synchronization capabilities.
  */
 
-// Core client functionality
-export * from "./postgres_client";
-
 // React hooks and data source implementation
 export * from "./usePostgresClientDriver";
 

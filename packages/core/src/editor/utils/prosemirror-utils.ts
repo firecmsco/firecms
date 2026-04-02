@@ -1,22 +1,25 @@
-import { EditorState } from "prosemirror-state";
+import { EditorState, TextSelection, Transaction } from "prosemirror-state";
+import { MarkType, NodeType, Node as ProseMirrorNode } from "prosemirror-model";
 
-export function isMarkActive(state: EditorState, type: any) {
+export function isMarkActive(state: EditorState, type: MarkType) {
     if (!state || !type) return false;
     const { from, $from, to, empty } = state.selection;
     if (empty) return !!type.isInSet(state.storedMarks || $from.marks());
     return state.doc.rangeHasMark(from, to, type);
 }
 
-export function isNodeActive(state: EditorState, type: any, attrs: any = {}) {
+export function isNodeActive(state: EditorState, type: NodeType, attrs: Record<string, unknown> = {}) {
     if (!state || !type) return false;
-    const { $from, to, node } = state.selection as any;
+    const selection = state.selection;
+    const { $from, to } = selection;
+    const node = selection instanceof TextSelection ? undefined : (selection as unknown as { node?: ProseMirrorNode }).node;
     if (node) {
         return node.type === type && (!attrs || Object.keys(attrs).every((key) => node.attrs[key] === attrs[key]));
     }
     return to <= $from.end() && $from.parent.type === type && (!attrs || Object.keys(attrs).every((key) => $from.parent.attrs[key] === attrs[key]));
 }
 
-export function getMarkAttributes(state: EditorState, type: any) {
+export function getMarkAttributes(state: EditorState, type: MarkType) {
     if (!state || !type) return {};
     const { from, $from, to, empty } = state.selection;
     let mark;
@@ -37,9 +40,10 @@ export function getMarkAttributes(state: EditorState, type: any) {
     return mark ? mark.attrs : {};
 }
 
-export function setMark(type: any, attrs?: any) {
-    return (state: EditorState, dispatch?: (tr: any) => void) => {
-        const { empty, $cursor, ranges } = state.selection as any;
+export function setMark(type: MarkType, attrs?: Record<string, unknown>) {
+    return (state: EditorState, dispatch?: (tr: Transaction) => void) => {
+        const selection = state.selection as TextSelection;
+        const { empty, $cursor, ranges } = selection;
         if ((empty && !$cursor) || !type) return false;
         if (dispatch) {
             if ($cursor) {
@@ -57,9 +61,10 @@ export function setMark(type: any, attrs?: any) {
     };
 }
 
-export function unsetMark(type: any) {
-    return (state: EditorState, dispatch?: (tr: any) => void) => {
-        const { empty, $cursor, ranges } = state.selection as any;
+export function unsetMark(type: MarkType) {
+    return (state: EditorState, dispatch?: (tr: Transaction) => void) => {
+        const selection = state.selection as TextSelection;
+        const { empty, $cursor, ranges } = selection;
         if ((empty && !$cursor) || !type) return false;
         if (dispatch) {
             let tr = state.tr;
@@ -69,7 +74,7 @@ export function unsetMark(type: any) {
                 let markEnd = -1;
                 let currentMarkStart = -1;
                 
-                parent.forEach((child: any, offset: number) => {
+                parent.forEach((child: ProseMirrorNode, offset: number) => {
                     const childStart = $cursor.start() + offset;
                     const childEnd = childStart + child.nodeSize;
                     

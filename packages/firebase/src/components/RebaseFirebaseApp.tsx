@@ -176,13 +176,13 @@ export function RebaseFirebaseApp({
         collections,
         views,
         adminViews,
-        authController: authController as any,
+        authController,
         data: buildRebaseData(firestoreDelegate),
         plugins,
         collectionRegistryController,
         cmsUrlController,
         adminMode: adminModeController.mode,
-        userManagement: userManagement as any
+        userManagement
     });
 
     if (firebaseConfigLoading || !firebaseApp || loading) {

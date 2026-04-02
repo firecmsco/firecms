@@ -50,7 +50,7 @@ export function buildProperty<T, P extends Property = Property>(
     P extends ArrayProperty ? ArrayProperty :
     P extends MapProperty ? MapProperty : never {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return property as any;
+    return property as unknown as ReturnType<typeof buildProperty<T, P>>;
 }
 
 /**

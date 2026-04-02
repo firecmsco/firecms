@@ -53,7 +53,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const [exportType, setExportType] = React.useState<"csv" | "json">("csv");
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
 
-    const context = useRebaseContext<USER>() as any;
+    const context = useRebaseContext<USER>();
     const dataClient = useData();
     const cmsUrlController = useCMSUrlController();
 
@@ -90,7 +90,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                     return {
                         [column.key]: await column.builder({
                             entity,
-                            context
+                            context: context as any
                         })
                     };
                 }))).reduce((a, b) => ({ ...a, ...b }), {});
@@ -106,7 +106,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                         return {
                             [field.key]: await field.value({
                                 entity,
-                                context
+                                context: context as any
                             })
                         };
                     }))).reduce((a, b) => ({ ...a, ...b }), {});

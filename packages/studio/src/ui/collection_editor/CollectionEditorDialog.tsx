@@ -660,7 +660,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     };
 
     return <div className="h-full w-full flex flex-col bg-white dark:bg-surface-950">
-        <Formex value={formController}>
+        <Formex value={formController as any}>
 
             <>
                 {!isNewCollection && <div className={cls("px-4 py-2 w-full flex shrink-0 items-center justify-between gap-4 bg-white dark:bg-surface-950 border-b", defaultBorderMixin)}>

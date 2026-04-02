@@ -81,8 +81,8 @@ export function getChanges<T extends object>(source: Partial<T>, comparison: Par
     const allKeys = Array.from(new Set([...Object.keys(source), ...Object.keys(comparison)]));
 
     for (const key of allKeys) {
-        const sourceValue = (source as any)[key];
-        const comparisonValue = (comparison as any)[key];
+        const sourceValue = (source as Record<string, unknown>)[key];
+        const comparisonValue = (comparison as Record<string, unknown>)[key];
 
         if (equal(sourceValue, comparisonValue)) {
             continue;
@@ -92,11 +92,11 @@ export function getChanges<T extends object>(source: Partial<T>, comparison: Par
         const comparisonHasKey = comparison && typeof comparison === "object" && Object.prototype.hasOwnProperty.call(comparison, key);
 
         if (comparisonHasKey && !sourceHasKey) {
-            (changes as any)[key] = undefined;
+            (changes as Record<string, unknown>)[key] = undefined;
         } else if (Array.isArray(sourceValue)) {
             const comparisonArray = Array.isArray(comparisonValue) ? comparisonValue : [];
             if (sourceValue.length < comparisonArray.length) {
-                (changes as any)[key] = sourceValue;
+                (changes as Record<string, unknown>)[key] = sourceValue;
                 continue;
             }
             const changedArray = sourceValue.map((item, index) => {
@@ -111,15 +111,15 @@ export function getChanges<T extends object>(source: Partial<T>, comparison: Par
                 return item;
             });
             if (changedArray.some(item => item !== null) || sourceValue.length > comparisonArray.length) {
-                (changes as any)[key] = changedArray;
+                (changes as Record<string, unknown>)[key] = changedArray;
             }
         } else if (isObject(sourceValue) && sourceValue && isObject(comparisonValue) && comparisonValue) {
             const nestedChanges = getChanges(sourceValue, comparisonValue);
             if (Object.keys(nestedChanges).length > 0) {
-                (changes as any)[key] = nestedChanges;
+                (changes as Record<string, unknown>)[key] = nestedChanges;
             }
         } else {
-            (changes as any)[key] = sourceValue;
+            (changes as Record<string, unknown>)[key] = sourceValue;
         }
     }
 
@@ -290,8 +290,8 @@ export function EntityForm<M extends Record<string, any>>({
                 .then(() => {
                     return {};
                 })
-                .catch((e: any) => {
-                    return yupToFormErrors(e);
+                .catch((e: unknown) => {
+                    return yupToFormErrors(e instanceof ValidationError ? e : new ValidationError(String(e)));
                 });
         }
     });
@@ -540,7 +540,7 @@ export function EntityForm<M extends Record<string, any>>({
             });
             const otherEntities = entityId ? data.filter(e => e.id !== entityId) : data;
             return otherEntities.length === 0;
-        } catch (e: any) {
+        } catch (e: unknown) {
             console.error("Error checking unique field", e);
             return true;
         }
@@ -726,7 +726,7 @@ export function EntityForm<M extends Record<string, any>>({
     />;
 
     return (
-        <Formex value={formex}>
+        <Formex value={formex as unknown as FormexController<Record<string, unknown>>}>
             <form
                 onSubmit={formex.handleSubmit}
                 onReset={() => formex.resetForm({

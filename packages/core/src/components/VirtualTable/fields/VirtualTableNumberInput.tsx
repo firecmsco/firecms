@@ -42,9 +42,7 @@ export function VirtualTableNumberInput(props: {
         }
 
     }, [internalValue, value]);
-
-    useDebouncedCallback(internalValue, doUpdate, !focused, 2000);
-
+    useDebouncedCallback(internalValue, doUpdate, !focused, 1000);
     useEffect(
         () => {
             if (!focused && propStringValue !== internalValue)

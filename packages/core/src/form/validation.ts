@@ -104,7 +104,7 @@ export function mapPropertyToYup(propertyContext: PropertyContext<Property>): An
 
     // Log the error but don't crash the form - return a permissive schema with an error message
     console.error("Unsupported data type in yup mapping", property);
-    const dataType = (property as any).dataType ?? "unknown";
+    const dataType = "dataType" in (property as Record<string, unknown>) ? String((property as Record<string, unknown>).dataType) : "unknown";
     return yup.mixed().test(
         "unsupported-data-type",
         `Unsupported data type: ${dataType}`,
@@ -148,9 +148,9 @@ export function getYupMapObjectSchema({
             "required",
             validation?.requiredMessage ? validation.requiredMessage : "Required",
             (value) => value !== undefined
-        ) as any;
+        ) as ObjectSchema<Record<string, unknown>>;
     }
-    return yup.object().shape(shape.fields).default(undefined).nullable().optional() as any;
+    return yup.object().shape(shape.fields).default(undefined).nullable().optional() as unknown as ObjectSchema<Record<string, unknown>>;
 }
 
 function getYupStringSchema({

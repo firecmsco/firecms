@@ -20,7 +20,7 @@ export function StringPropertyPreview({
         const enumKey = value;
         return <EnumValuesChip
             enumKey={enumKey}
-            enumValues={property.enum as any}
+            enumValues={property.enum}
             size={size} />;
     } else if (property.previewAsTag) {
         const colorScheme = getColorSchemeForSeed(propertyKey ?? "");

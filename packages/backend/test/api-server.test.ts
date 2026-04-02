@@ -1,5 +1,6 @@
 import express, { Express, Router } from "express";
 import { RebaseApiServer } from "../src/api/server";
+import { generateOpenApiSpec } from "../src/api/openapi-generator";
 import { PostgresDataDriver } from "../src/services/driver";
 
 // Mock dependencies
@@ -110,7 +111,7 @@ describe("RebaseApiServer", () => {
                 collections: mockCollections
             });
 
-            const spec = server.generateOpenApiSpec();
+            const spec = generateOpenApiSpec(mockCollections, "/api");
 
             expect(spec).toBeDefined();
             expect(spec.openapi).toBe("3.0.0");
@@ -124,7 +125,7 @@ describe("RebaseApiServer", () => {
                 collections: mockCollections
             });
 
-            const spec = server.generateOpenApiSpec();
+            const spec = generateOpenApiSpec(mockCollections, "/api");
 
             // Should have paths for products and categories
             expect(spec.paths["/products"]).toBeDefined();
@@ -137,7 +138,7 @@ describe("RebaseApiServer", () => {
                 collections: mockCollections
             });
 
-            const spec = server.generateOpenApiSpec();
+            const spec = generateOpenApiSpec(mockCollections, "/api");
 
             const productsPath = spec.paths["/products"];
             expect(productsPath.get).toBeDefined(); // List
@@ -155,7 +156,7 @@ describe("RebaseApiServer", () => {
                 collections: mockCollections
             });
 
-            const spec = server.generateOpenApiSpec();
+            const spec = generateOpenApiSpec(mockCollections, "/api");
 
             // The implementation uses hardcoded values
             expect(spec.info.title).toBe("Rebase Auto-Generated API");
@@ -296,9 +297,7 @@ describe("RebaseApiServer", () => {
             const server = await RebaseApiServer.create({
                 driver: mockDataDriver,
                 collections: mockCollections,
-                auth: {
-                    enabled: true
-                }
+                requireAuth: false
             });
 
             const app = server.getApp();
@@ -314,10 +313,7 @@ describe("RebaseApiServer", () => {
             const server = await RebaseApiServer.create({
                 driver: mockDataDriver,
                 collections: mockCollections,
-                auth: {
-                    enabled: true,
-                    requireAuth: true
-                }
+                requireAuth: true
             });
 
             const app = server.getApp();
@@ -339,10 +335,7 @@ describe("RebaseApiServer", () => {
             const server = await RebaseApiServer.create({
                 driver: mockDataDriver,
                 collections: mockCollections,
-                auth: {
-                    enabled: true,
-                    validator: customValidator
-                }
+                authValidator: customValidator
             });
 
             const app = server.getApp();

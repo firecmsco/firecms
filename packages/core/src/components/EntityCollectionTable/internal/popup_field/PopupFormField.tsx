@@ -412,7 +412,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     return (
         <Portal.Root asChild
             container={container}>
-            <Formex value={formex}>
+            <Formex value={formex as any}>
                 {draggable}
             </Formex>
         </Portal.Root>

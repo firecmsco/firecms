@@ -6,12 +6,29 @@ import {
     FetchEntityProps,
     SaveEntityProps,
     WebSocketMessage,
+    WebSocketErrorPayload,
     CollectionUpdateMessage,
     EntityUpdateMessage,
     TableColumnInfo
 } from "@rebasepro/types";
 
-export interface PostgresDataDriverConfig {
+/**
+ * Extract error message and code from a WebSocket message payload.
+ * Handles both `{ error: string }` and `{ error: { message, code } }` shapes.
+ */
+function extractMessageError(message: WebSocketMessage): { errorMessage: string; errorCode?: string } {
+    const payload = message.payload as WebSocketErrorPayload | undefined;
+    const errPayload = payload?.error;
+    const errorMessage = typeof errPayload === "object"
+        ? errPayload.message
+        : payload?.message || (typeof errPayload === "string" ? errPayload : undefined) || message.error || "Unknown error";
+    const errorCode = typeof errPayload === "object"
+        ? errPayload.code
+        : payload?.code;
+    return { errorMessage, errorCode };
+}
+
+export interface RebaseWebSocketConfig {
     websocketUrl: string;
     /** Optional auth token getter for WebSocket authentication */
     getAuthToken?: () => Promise<string>;
@@ -31,11 +48,11 @@ export class ApiError extends Error {
 }
 
 
-export class PostgresDataDriverClient {
+export class RebaseWebSocketClient {
     private websocketUrl: string;
     private ws: WebSocket | null = null;
     private subscriptions = new Map<string, {
-        onUpdate: (data: any) => void,
+        onUpdate: (data: WebSocketMessage) => void,
         onError?: (error: Error) => void
     }>();
 
@@ -83,18 +100,22 @@ export class PostgresDataDriverClient {
     private connectionPromise: Promise<void> | null = null;
     private isReconnecting = false;
 
-    private pendingRequests = new Map<string, { resolve: (p: any) => void; reject: (p: any) => void; message?: any }>();
+    private pendingRequests = new Map<string, {
+        resolve: (p: unknown) => void;
+        reject: (p: Error) => void;
+        message?: Record<string, unknown> & { _queuedResolve?: (p: unknown) => void; _queuedReject?: (p: Error) => void }
+    }>();
     private reconnectAttempts = 0;
     private maxReconnectAttempts = 5;
     private isConnected = false;
-    private messageQueue: any[] = [];
+    private messageQueue: Record<string, unknown>[] = [];
 
     // Auth support
     private getAuthToken?: () => Promise<string>;
     private isAuthenticated = false;
     private authPromise: Promise<void> | null = null;
 
-    constructor(config: PostgresDataDriverConfig) {
+    constructor(config: RebaseWebSocketConfig) {
         this.websocketUrl = config.websocketUrl;
         this.getAuthToken = config.getAuthToken;
         this.initWebSocket();
@@ -228,7 +249,7 @@ export class PostgresDataDriverClient {
     private processMessageQueue() {
         while (this.messageQueue.length > 0 && this.isConnected) {
             const message = this.messageQueue.shift();
-            this.sendMessage(message);
+            if (message) this.sendMessage(message);
         }
     }
 
@@ -263,13 +284,7 @@ export class PostgresDataDriverClient {
             this.pendingRequests.delete(requestId);
 
             if (type === "ERROR" || type === "AUTH_ERROR" || message.error) {
-                const errPayload = (message.payload as any)?.error;
-                const errorMessage = typeof errPayload === "object"
-                    ? errPayload.message
-                    : (message.payload as any)?.message || errPayload || message.error || "Unknown error";
-                const errorCode = typeof errPayload === "object"
-                    ? errPayload.code
-                    : (message.payload as any)?.code;
+                const { errorMessage, errorCode } = extractMessageError(message);
                 reject(new ApiError(errorMessage, errorMessage, errorCode));
             } else {
                 resolve(message.payload || message);
@@ -339,13 +354,7 @@ export class PostgresDataDriverClient {
             if (collectionKey) {
                 const collectionSub = this.collectionSubscriptions.get(collectionKey);
                 if (collectionSub) {
-                    const errPayload = (message.payload as any)?.error;
-                    const errorMessage = typeof errPayload === "object"
-                        ? errPayload.message
-                        : (message.payload as any)?.message || errPayload || message.error || "Unknown error";
-                    const errorCode = typeof errPayload === "object"
-                        ? errPayload.code
-                        : (message.payload as any)?.code;
+                    const { errorMessage, errorCode } = extractMessageError(message);
                     const error = new ApiError(errorMessage, errorMessage, errorCode);
                     collectionSub.callbacks.forEach(callback => {
                         if (callback.onError) {
@@ -360,13 +369,7 @@ export class PostgresDataDriverClient {
             if (entityKey) {
                 const entitySub = this.entitySubscriptions.get(entityKey);
                 if (entitySub) {
-                    const errPayload = (message.payload as any)?.error;
-                    const errorMessage = typeof errPayload === "object"
-                        ? errPayload.message
-                        : (message.payload as any)?.message || errPayload || message.error || "Unknown error";
-                    const errorCode = typeof errPayload === "object"
-                        ? errPayload.code
-                        : (message.payload as any)?.code;
+                    const { errorMessage, errorCode } = extractMessageError(message);
                     const error = new ApiError(errorMessage, errorMessage, errorCode);
                     entitySub.callbacks.forEach(callback => {
                         if (callback.onError) {
@@ -386,13 +389,7 @@ export class PostgresDataDriverClient {
             }
             if (message.type === "ERROR" || message.error) {
                 if (callback.onError) {
-                    const errPayload = (message.payload as any)?.error;
-                    const errorMessage = typeof errPayload === "object"
-                        ? errPayload.message
-                        : (message.payload as any)?.message || errPayload || message.error || "Unknown error";
-                    const errorCode = typeof errPayload === "object"
-                        ? errPayload.code
-                        : (message.payload as any)?.code;
+                    const { errorMessage, errorCode } = extractMessageError(message);
                     callback.onError(new ApiError(errorMessage, errorMessage, errorCode));
                 }
             } else {
@@ -462,46 +459,48 @@ export class PostgresDataDriverClient {
         }
     }
 
-    private sendMessage(message: any): Promise<any> {
+    private sendMessage(message: Record<string, unknown>): Promise<unknown> {
         // If already has a requestId (re-sending from queue), use the stored promise handlers
-        if (message._queuedResolve) {
-            return this.doSendMessage(message, message._queuedResolve, message._queuedReject);
+        const queuedMsg = message as Record<string, unknown> & { _queuedResolve?: (p: unknown) => void; _queuedReject?: (p: Error) => void };
+        if (queuedMsg._queuedResolve && queuedMsg._queuedReject) {
+            return this.doSendMessage(message, queuedMsg._queuedResolve, queuedMsg._queuedReject);
         }
 
         if (!this.isConnected || !this.ws) {
             // Queue the message and return a promise that will be resolved when actually sent
-            return new Promise((resolve, reject) => {
-                message._queuedResolve = resolve;
-                message._queuedReject = reject;
+            return new Promise<unknown>((resolve, reject) => {
+                const queueable = message as Record<string, unknown> & { _queuedResolve?: (p: unknown) => void; _queuedReject?: (p: Error) => void };
+                queueable._queuedResolve = resolve;
+                queueable._queuedReject = reject;
                 this.messageQueue.push(message);
             });
         }
 
-        return new Promise((resolve, reject) => {
+        return new Promise<unknown>((resolve, reject) => {
             this.doSendMessage(message, resolve, reject);
         });
     }
 
-    private async doSendMessage(message: any, resolve: (value: any) => void, reject: (error: any) => void): Promise<void> {
+    private async doSendMessage(message: Record<string, unknown>, resolve: (value: unknown) => void, reject: (error: Error) => void): Promise<void> {
         // Ensure authenticated before sending non-auth messages
         if (message.type !== "AUTHENTICATE" && this.getAuthToken && !this.isAuthenticated) {
             try {
                 await this.ensureAuthenticated();
-            } catch (error: any) {
-                const errorMessage = error?.message || "Authentication required";
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : "Authentication required";
                 reject(new ApiError(errorMessage, errorMessage));
                 return;
             }
         }
 
-        const requestId = message.requestId || `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+        const requestId = (message.requestId as string) || `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
         message.requestId = requestId;
 
         if (!this.pendingRequests.has(requestId)) {
             this.pendingRequests.set(requestId, {
                 resolve,
                 reject,
-                message
+                message: message as Record<string, unknown> & { _queuedResolve?: (p: unknown) => void; _queuedReject?: (p: Error) => void }
             });
         }
 
@@ -518,7 +517,7 @@ export class PostgresDataDriverClient {
         const response = await this.sendMessage({
             type: "FETCH_COLLECTION",
             payload: props
-        });
+        }) as { entities?: Entity<M>[] };
         return response.entities || [];
     }
 
@@ -526,7 +525,7 @@ export class PostgresDataDriverClient {
         const response = await this.sendMessage({
             type: "FETCH_ENTITY",
             payload: props
-        });
+        }) as { entity?: Entity<M> };
         return response.entity;
     }
 
@@ -534,7 +533,7 @@ export class PostgresDataDriverClient {
         const response = await this.sendMessage({
             type: "SAVE_ENTITY",
             payload: props
-        });
+        }) as { entity: Entity<M> };
         return response.entity;
     }
 
@@ -545,11 +544,11 @@ export class PostgresDataDriverClient {
         });
     }
 
-    async executeSql(sql: string, options?: { database?: string, role?: string }): Promise<any[]> {
+    async executeSql(sql: string, options?: { database?: string, role?: string }): Promise<Record<string, unknown>[]> {
         const response = await this.sendMessage({
             type: "EXECUTE_SQL",
             payload: { sql, options }
-        });
+        }) as { result?: Record<string, unknown>[] };
         return response.result || [];
     }
 
@@ -557,21 +556,21 @@ export class PostgresDataDriverClient {
         const response = await this.sendMessage({
             type: "FETCH_DATABASES",
             payload: {}
-        });
+        }) as { databases?: string[] };
         return response.databases || [];
     }
 
     async fetchAvailableRoles(): Promise<string[]> {
         const response = await this.sendMessage({
             type: "FETCH_ROLES"
-        });
+        }) as { roles?: string[] };
         return response.roles || [];
     }
 
     async fetchCurrentDatabase(): Promise<string | undefined> {
         const response = await this.sendMessage({
             type: "FETCH_CURRENT_DATABASE"
-        });
+        }) as { database?: string };
         return response.database;
     }
 
@@ -585,7 +584,7 @@ export class PostgresDataDriverClient {
                 entityId,
                 collection
             }
-        });
+        }) as { isUnique: boolean };
         return response.isUnique;
     }
 
@@ -593,7 +592,7 @@ export class PostgresDataDriverClient {
         const response = await this.sendMessage({
             type: "COUNT_ENTITIES",
             payload: props
-        });
+        }) as { count: number };
         return response.count;
     }
 
@@ -601,7 +600,7 @@ export class PostgresDataDriverClient {
         const response = await this.sendMessage({
             type: "FETCH_UNMAPPED_TABLES",
             payload: { mappedPaths }
-        });
+        }) as { tables?: string[] };
         return response.tables || [];
     }
 
@@ -609,7 +608,7 @@ export class PostgresDataDriverClient {
         const response = await this.sendMessage({
             type: "FETCH_TABLE_COLUMNS",
             payload: { tableName }
-        });
+        }) as { columns?: TableColumnInfo[] };
         return response.columns || [];
     }
 
@@ -672,7 +671,7 @@ export class PostgresDataDriverClient {
 
         this.collectionSubscriptions.set(subscriptionKey, {
             backendSubscriptionId,
-            callbacks: callbackMap as any, // Type assertion to satisfy the interface
+            callbacks: callbackMap,
             props
         });
 
@@ -694,7 +693,7 @@ export class PostgresDataDriverClient {
         return () => {
             const subscription = this.collectionSubscriptions.get(subscriptionKey);
             if (subscription) {
-                const callbacks = subscription.callbacks as Map<string, any>;
+                const callbacks = subscription.callbacks;
                 callbacks.delete(callbackId);
                 if (callbacks.size === 0) {
                     this.collectionSubscriptions.delete(subscriptionKey);
@@ -768,7 +767,7 @@ export class PostgresDataDriverClient {
 
         this.entitySubscriptions.set(subscriptionKey, {
             backendSubscriptionId,
-            callbacks: callbackMap as any, // Type assertion to satisfy the interface
+            callbacks: callbackMap,
             props
         });
 
@@ -790,7 +789,7 @@ export class PostgresDataDriverClient {
         return () => {
             const subscription = this.entitySubscriptions.get(subscriptionKey);
             if (subscription) {
-                const callbacks = subscription.callbacks as Map<string, any>;
+                const callbacks = subscription.callbacks;
                 callbacks.delete(callbackId);
                 if (callbacks.size === 0) {
                     this.entitySubscriptions.delete(subscriptionKey);

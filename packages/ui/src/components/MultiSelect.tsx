@@ -28,7 +28,7 @@ interface MultiSelectContextProps<T extends MultiSelectValue = string> {
 }
 
 // Create a proper generic context
-export const MultiSelectContext = React.createContext<MultiSelectContextProps<any>>({} as any);
+export const MultiSelectContext = React.createContext<MultiSelectContextProps<MultiSelectValue>>(null! as MultiSelectContextProps<MultiSelectValue>);
 
 /**
  * Props for MultiSelect component

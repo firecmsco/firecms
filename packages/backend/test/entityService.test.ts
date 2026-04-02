@@ -146,6 +146,7 @@ describe("EntityService", () => {
             select: jest.fn().mockReturnThis(),
             from: jest.fn().mockReturnThis(),
             where: jest.fn().mockReturnThis(),
+            $dynamic: jest.fn().mockReturnThis(),
             limit: jest.fn().mockResolvedValue([]),
             orderBy: jest.fn().mockResolvedValue([]), // This is now a terminal operation by default
             innerJoin: jest.fn().mockReturnThis(),
@@ -579,6 +580,7 @@ describe("EntityService - Comprehensive Tests", () => {
             select: jest.fn().mockReturnThis(),
             from: jest.fn().mockReturnThis(),
             where: jest.fn().mockReturnThis(),
+            $dynamic: jest.fn().mockReturnThis(),
             limit: jest.fn().mockReturnThis(),
             orderBy: jest.fn().mockReturnThis(),
             innerJoin: jest.fn().mockReturnThis(),

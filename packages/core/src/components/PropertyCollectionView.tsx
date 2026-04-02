@@ -57,8 +57,8 @@ export function buildPropertyLabelAndGetProperty(
         }
 
         // seg is a string key
-        if (currentProps && (currentProps as any)[seg]) {
-            const nextProp = (currentProps as any)[seg] as Property;
+        if (currentProps && (currentProps as Record<string, Property>)[seg]) {
+            const nextProp = (currentProps as Record<string, Property>)[seg];
             currentProp = nextProp;
             // Last segment label should be the property name (or the raw key)
             lastLabel = nextProp.name || String(seg);
@@ -311,7 +311,7 @@ export function buildDataFromPaths(values: object, paths: string[]): object {
 
         // lodash.set would be perfect here
         const segments = path.replace(/\[(\d+)\]/g, ".$1").split(".");
-        let current: any = result;
+        let current: Record<string, unknown> = result;
         segments.forEach((segment, index) => {
             if (index === segments.length - 1) {
                 current[segment] = value;
@@ -325,7 +325,7 @@ export function buildDataFromPaths(values: object, paths: string[]): object {
                         current[segment] = {};
                     }
                 }
-                current = current[segment];
+                current = current[segment] as Record<string, unknown>;
             }
         });
     });

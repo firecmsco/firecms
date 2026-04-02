@@ -22,7 +22,7 @@ import { getAppendableSuggestion } from "../utils/suggestions";
 import { getSimplifiedProperties } from "../utils/properties";
 import { useEditorAIController } from "../editor/useEditorAIController";
 
-export const DataEnhancementControllerContext = React.createContext<DataEnhancementController>({} as any);
+export const DataEnhancementControllerContext = React.createContext<DataEnhancementController>(null! as DataEnhancementController);
 
 export type DataEnhancementControllerProviderProps = {
 

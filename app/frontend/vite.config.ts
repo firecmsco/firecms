@@ -40,6 +40,7 @@ export default defineConfig({
             "@rebasepro/core": path.resolve(__dirname, "../../packages/core/src"),
             "@rebasepro/types": path.resolve(__dirname, "../../packages/types/src"),
             "@rebasepro/common": path.resolve(__dirname, "../../packages/common/src"),
+            "@rebasepro/client": path.resolve(__dirname, "../../packages/client/src"),
             "@rebasepro/ui": path.resolve(__dirname, "../../packages/ui/src"),
             "@rebasepro/ui/index.css": path.resolve(__dirname, "../../packages/ui/index.css"),
             "@rebasepro/formex": path.resolve(__dirname, "../../packages/formex/src"),

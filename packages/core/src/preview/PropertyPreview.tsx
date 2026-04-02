@@ -231,11 +231,12 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
             // Many-cardinality relation: value is an array of EntityRelation (or plain objects)
             content = (
                 <div className="flex flex-col w-full gap-0.5">
-                    {(value as any[]).map((item: any, index: number) => {
+                    {(value as unknown[]).map((item: unknown, index: number) => {
+                        const itemObj = item as Record<string, unknown>;
                         const entityRelation: EntityRelation | null = (item instanceof EntityRelation)
                             ? item
-                            : (item && typeof item === "object" && (item.__type === "relation" || ("isEntityRelation" in item && item.isEntityRelation())))
-                                ? new EntityRelation(item.id, item.path)
+                            : (item && typeof item === "object" && (itemObj.__type === "relation" || ("isEntityRelation" in itemObj && typeof itemObj.isEntityRelation === "function" && itemObj.isEntityRelation())))
+                                ? new EntityRelation(itemObj.id as string | number, itemObj.path as string)
                                 : null;
                         if (!entityRelation) return null;
                         return (
@@ -256,11 +257,11 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
             );
         } else {
             // Single-cardinality relation
-            const rawValue = value as any;
+            const rawValue = value as Record<string, unknown>;
             const relationValue: EntityRelation | null = (value instanceof EntityRelation)
                 ? value
-                : (typeof rawValue === "object" && (rawValue.__type === "relation" || ("isEntityRelation" in rawValue && rawValue.isEntityRelation())))
-                    ? new EntityRelation(rawValue.id, rawValue.path)
+                : (typeof rawValue === "object" && (rawValue.__type === "relation" || ("isEntityRelation" in rawValue && typeof rawValue.isEntityRelation === "function" && rawValue.isEntityRelation())))
+                    ? new EntityRelation(rawValue.id as string | number, rawValue.path as string)
                     : null;
             if (relationValue) {
                 content = <RelationPreview

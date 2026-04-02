@@ -157,13 +157,13 @@ export function EntityHistoryEntry({
                 {previewKeys && previewKeys.map((key) => {
                     const childProperty = getPropertyInPath(collection.properties, key);
 
-                    const valueInPath = getValueInPath(entity.values, key) as any;
-                    const previousValueInPath = previousValues ? getValueInPath(previousValues, key) as any : undefined;
+                    const valueInPath = getValueInPath(entity.values, key);
+                    const previousValueInPath = previousValues ? getValueInPath(previousValues, key) : undefined;
 
                     const element = childProperty ? (entity
                         ? <PropertyPreview
                             propertyKey={key as string}
-                            value={valueInPath}
+                            value={valueInPath as never}
                             property={childProperty as Property}
                             size={"small"} />
                         : <SkeletonPropertyComponent

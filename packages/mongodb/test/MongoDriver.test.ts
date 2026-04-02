@@ -6,14 +6,14 @@
 
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { MongoClient, Db, ObjectId } from "mongodb";
-import { MongoDataDriver } from "../src/services/MongoDataDriver";
+import { MongoDriver } from "../src/services/MongoDriver";
 import { EntityCollection } from "@rebasepro/types";
 
-describe("MongoDataDriver", () => {
+describe("MongoDriver", () => {
     let mongoServer: MongoMemoryServer;
     let client: MongoClient;
     let db: Db;
-    let delegate: MongoDataDriver;
+    let delegate: MongoDriver;
 
     const mockCollection: EntityCollection = {
         name: "users",
@@ -30,7 +30,7 @@ describe("MongoDataDriver", () => {
         client = new MongoClient(uri);
         await client.connect();
         db = client.db("test");
-        delegate = new MongoDataDriver(db);
+        delegate = new MongoDriver(db);
     });
 
     afterAll(async () => {

@@ -239,7 +239,7 @@ export function downloadDataAsCsv(data: object[], name: string) {
     const csvContent = [
         headers.join(","),
         ...data.map(row => headers.map(header => {
-            const value = (row as any)[header];
+            const value = (row as Record<string, unknown>)[header];
             if (value === null || value === undefined) return "";
             if (Array.isArray(value)) return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
             return `"${String(value).replace(/"/g, '""')}"`;

@@ -32,7 +32,8 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, horizontalListSortingStrategy, SortableContext, useSortable } from "@dnd-kit/sortable";
 
-const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- React contexts cannot be generic; the Provider value is always structurally correct
+const VirtualListContext = createContext<VirtualTableContextProps<Record<string, unknown>>>(null! as VirtualTableContextProps<Record<string, unknown>>);
 VirtualListContext.displayName = "VirtualListContext";
 
 type InnerElementProps = {
@@ -398,7 +399,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     draggingColumnId && "overflow-hidden"
                 )}>
                 <VirtualListContext.Provider
-                    value={virtualListController}>
+                    value={virtualListController as unknown as VirtualTableContextProps<Record<string, unknown>>}>
 
                     <MemoizedList
                         outerRef={tableRef}

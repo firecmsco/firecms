@@ -451,7 +451,8 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
 
             const mockBaseQuery = {
                 innerJoin: jest.fn().mockReturnThis(),
-                where: jest.fn().mockReturnThis()
+                where: jest.fn().mockReturnThis(),
+                $dynamic: jest.fn().mockReturnThis()
             };
 
             const result = DrizzleConditionBuilder.buildRelationCountQuery(
@@ -484,7 +485,8 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
 
             const mockBaseQuery = {
                 innerJoin: jest.fn().mockReturnThis(),
-                where: jest.fn().mockReturnThis()
+                where: jest.fn().mockReturnThis(),
+                $dynamic: jest.fn().mockReturnThis()
             };
 
             const result = DrizzleConditionBuilder.buildRelationCountQuery(
@@ -519,7 +521,8 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
 
             const mockBaseQuery = {
                 innerJoin: jest.fn().mockReturnThis(),
-                where: jest.fn().mockReturnThis()
+                where: jest.fn().mockReturnThis(),
+                $dynamic: jest.fn().mockReturnThis()
             };
 
             const additionalFilters = [eq(mockTagsTable.name, "javascript")];
@@ -555,7 +558,8 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
 
             const mockBaseQuery = {
                 innerJoin: jest.fn().mockReturnThis(),
-                where: jest.fn().mockReturnThis()
+                where: jest.fn().mockReturnThis(),
+                $dynamic: jest.fn().mockReturnThis()
             };
 
             const additionalFilters = [eq(mockPostsTable.title, "Test Post")];

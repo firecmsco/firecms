@@ -41,9 +41,7 @@
       "@rebasepro/common": [
         "../common/src"
       ],
-      "@rebasepro/collection_editor": [
-        "../collection_editor/src"
-      ],
+
       "@rebasepro/data_enhancement": [
         "../data_enhancement/src"
       ],

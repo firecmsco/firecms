@@ -1,5 +1,11 @@
 import { Entity } from "./entities";
 
+export interface WebSocketErrorPayload {
+    error?: string | { message: string; code?: string };
+    message?: string;
+    code?: string;
+}
+
 export interface WebSocketMessage {
     type: string;
     payload?: unknown;

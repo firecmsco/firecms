@@ -11,7 +11,7 @@ export type HistoryConfigController = {
     getUser?: (uid: string) => User | null;
 }
 
-export const HistoryControllerContext = React.createContext<HistoryConfigController>({} as any);
+export const HistoryControllerContext = React.createContext<HistoryConfigController>(null! as HistoryConfigController);
 export const useHistoryController = (): HistoryConfigController => useContext(HistoryControllerContext);
 
 export interface HistoryControllerProviderProps {

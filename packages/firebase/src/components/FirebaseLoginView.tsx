@@ -19,6 +19,7 @@ import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitter
 import {
     getAuth,
     getMultiFactorResolver,
+    MultiFactorError,
     PhoneAuthProvider,
     PhoneMultiFactorGenerator,
     RecaptchaVerifier
@@ -151,7 +152,7 @@ export function FirebaseLoginView({
         const auth = getAuth(firebaseApp);
         const recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha", { size: "invisible" });
 
-        const resolver = getMultiFactorResolver(auth, authController.authProviderError as any);
+        const resolver = getMultiFactorResolver(auth, authController.authProviderError as MultiFactorError);
 
         if (resolver.hints[0].factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
 
@@ -185,7 +186,7 @@ export function FirebaseLoginView({
         if (authController.user != null) return errorView; // if the user is logged in via MFA
         const ignoredCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
         if (authController.authProviderError) {
-            const authError = authController.authProviderError as any;
+            const authError = authController.authProviderError as FirebaseError;
             if (authError.code === "auth/operation-not-allowed" ||
                 authError.code === "auth/configuration-not-found") {
                 errorView =

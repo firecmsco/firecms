@@ -162,7 +162,7 @@ export class MongoEntityService implements EntityRepository {
         const collection = this.getCollection(collectionPath);
         const id = this.toObjectId(entityId);
 
-        const doc = await collection.findOne({ _id: id as any });
+        const doc = await collection.findOne({ _id: id } as Filter<Document>);
 
         if (!doc) return undefined;
 
@@ -272,7 +272,7 @@ export class MongoEntityService implements EntityRepository {
             // Update existing entity
             const id = this.toObjectId(entityId);
             await collection.updateOne(
-                { _id: id as any },
+                { _id: id } as Filter<Document>,
                 { $set: mongoValues },
                 { upsert: true }
             );
@@ -309,7 +309,7 @@ export class MongoEntityService implements EntityRepository {
         const collection = this.getCollection(collectionPath);
         const id = this.toObjectId(entityId);
 
-        const result = await collection.deleteOne({ _id: id as any });
+        const result = await collection.deleteOne({ _id: id } as Filter<Document>);
 
         if (result.deletedCount === 0) {
             console.warn(`Entity ${entityId} not found in collection ${collectionPath}`);
@@ -332,7 +332,7 @@ export class MongoEntityService implements EntityRepository {
 
         if (excludeEntityId) {
             const id = this.toObjectId(excludeEntityId);
-            query._id = { $ne: id as any };
+            (query as Record<string, unknown>)._id = { $ne: id };
         }
 
         const count = await collection.countDocuments(query);

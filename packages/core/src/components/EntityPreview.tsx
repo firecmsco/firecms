@@ -85,10 +85,10 @@ export function EntityPreviewData({
     const usedImageProperty = imageProperty && "of" in imageProperty ? imageProperty.of : imageProperty;
     const restProperties = listProperties.filter(p => p !== titleProperty && p !== imagePropertyKey);
 
-    const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) as any : undefined;
+    const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) : undefined;
     const usedImageValue = imageProperty !== undefined ? ("of" in imageProperty
-        ? ((imageValue ?? []).length > 0
-            ? imageValue[0] : undefined)
+        ? (((imageValue as unknown[]) ?? []).length > 0
+            ? (imageValue as unknown[])[0] : undefined)
         : imageValue)
         : undefined;
 
@@ -99,14 +99,14 @@ export function EntityPreviewData({
                 "w-8 h-8 ml-1 mr-2 m-2 self-start": size === "medium",
                 "w-10 h-10 ml-2 mr-2 m-2 self-start": size === "large"
             })}>
-                {usedImageProperty && usedImageValue && <PropertyPreview property={usedImageProperty}
+                {usedImageProperty && usedImageValue ? <PropertyPreview property={usedImageProperty}
                     propertyKey={imagePropertyKey as string}
                     size={"small"}
-                    value={usedImageValue} />}
-                {(!usedImageProperty || !usedImageValue) && <IconForView collectionOrView={collection}
+                    value={usedImageValue as never} /> : null}
+                {(!usedImageProperty || !usedImageValue) ? <IconForView collectionOrView={collection}
                     color={"primary"}
                     size={size}
-                    className={"m-auto p-1"} />}
+                    className={"m-auto p-1"} /> : null}
             </div>
 
             <div
@@ -130,7 +130,7 @@ export function EntityPreviewData({
                             entity
                                 ? <PropertyPreview
                                     propertyKey={titleProperty as string}
-                                    value={getValueInPath(entity.values, titleProperty) as any}
+                                    value={getValueInPath(entity.values, titleProperty) as never}
                                     property={collection.properties[titleProperty as string] as Property}
                                     size={"medium"} />
                                 : <SkeletonPropertyComponent
@@ -152,7 +152,7 @@ export function EntityPreviewData({
                                 entity
                                     ? <PropertyPreview
                                         propertyKey={key as string}
-                                        value={valueInPath as any}
+                                        value={valueInPath as never}
                                         property={childProperty as Property}
                                         size={"small"} />
                                     : <SkeletonPropertyComponent

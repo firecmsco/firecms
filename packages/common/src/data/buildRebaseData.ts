@@ -127,7 +127,7 @@ function createDriverAccessor<M extends Record<string, any> = any>(
 
         async delete(id: string | number): Promise<void> {
             return driver.deleteEntity({
-                entity: { id, path: slug, values: {} as any }
+                entity: { id, path: slug, values: {} as Record<string, unknown> }
             });
         },
 

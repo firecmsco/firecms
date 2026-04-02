@@ -142,7 +142,7 @@ export function mergeDeep<T extends Record<string, any>, U extends Record<string
     for (const key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
             const sourceValue = source[key];
-            const outputValue = (output as any)[key]; // Current value in our merged object (originating from target)
+            const outputValue = (output as Record<string, unknown>)[key]; // Current value in our merged object (originating from target)
 
             // Skip if source value is undefined and ignoreUndefined is true.
             // This handles both not adding new undefined properties and not overwriting existing properties with undefined.

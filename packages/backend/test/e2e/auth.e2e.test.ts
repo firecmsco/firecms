@@ -60,10 +60,8 @@ describe("Auth and Context Request Scope E2E Tests", () => {
             driver: mockDefaultDataDriver as any,
             collections: mockCollections,
             enableREST: true,
-            auth: {
-                enabled: true,
-                validator: async () => mockUser
-            }
+            requireAuth: true,
+            authValidator: async () => mockUser
         });
         app = server.getApp();
 
@@ -83,9 +81,7 @@ describe("Auth and Context Request Scope E2E Tests", () => {
             driver: mockDefaultDataDriver as any,
             collections: mockCollections,
             enableREST: true,
-            auth: {
-                enabled: false // Explicitly disabled
-            }
+            requireAuth: false
         });
         app = server.getApp();
 
@@ -105,10 +101,8 @@ describe("Auth and Context Request Scope E2E Tests", () => {
             collections: mockCollections,
             enableGraphQL: true,
             enableREST: false,
-            auth: {
-                enabled: true,
-                validator: async () => mockUser
-            }
+            requireAuth: true,
+            authValidator: async () => mockUser
         });
         app = server.getApp();
 

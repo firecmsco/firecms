@@ -17,8 +17,6 @@ import {
     ListenEntityProps,
     SaveEntityProps
 } from "@rebasepro/types";
-import { buildRebaseData } from "@rebasepro/common";
-import { RebaseData } from "@rebasepro/types";
 import { MongoEntityService } from "../db/MongoEntityService";
 import { MongoRealtimeService } from "./MongoRealtimeService";
 
@@ -34,7 +32,7 @@ export class MongoDriver implements DataDriver {
 
     private entityService: MongoEntityService;
     private realtimeService: MongoRealtimeService;
-    public data: RebaseData;
+
 
     constructor(
         private db: Db,
@@ -42,7 +40,6 @@ export class MongoDriver implements DataDriver {
     ) {
         this.entityService = new MongoEntityService(db);
         this.realtimeService = realtimeService ?? new MongoRealtimeService(db);
-        this.data = buildRebaseData(this);
     }
 
 

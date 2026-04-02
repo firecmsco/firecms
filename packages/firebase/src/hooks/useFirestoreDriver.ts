@@ -116,7 +116,7 @@ export function useFirestoreDriver({
         filter: FilterValues<Extract<keyof M, string>> | undefined,
         orderBy: string | undefined,
         order: "desc" | "asc" | undefined,
-        startAfter: any[] | undefined,
+        startAfter: unknown[] | undefined,
         limit: number | undefined,
         databaseId?: string) => {
 
@@ -328,7 +328,7 @@ export function useFirestoreDriver({
                 orderBy,
                 order
             });
-            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter as any[] | undefined, limit, databaseId);
+            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter as unknown[] | undefined, limit, databaseId);
 
             const snapshot = await getDocs(query);
             return snapshot.docs.map((doc) => createEntityFromDocument(doc, databaseId));
@@ -396,7 +396,7 @@ export function useFirestoreDriver({
                 path,
                 resolvedPath
             });
-            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter as any[] | undefined, limit, databaseId);
+            const query = buildQuery(resolvedPath, filter, orderBy, order, startAfter as unknown[] | undefined, limit, databaseId);
             return onSnapshot(query,
                 {
                     next: (snapshot) => {
