@@ -2,6 +2,7 @@
 import { Entity, FilterValues } from "@rebasepro/types";
 import { EntityFetchService, EntityPersistService, RelationService } from "./services";
 import { EntityRepository, FetchCollectionOptions, SearchOptions, CountOptions, DrizzleClient } from "./interfaces";
+import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 
 // Re-export data transformer functions for external use
 export { sanitizeAndConvertDates, serializeDataToServer, parseDataFromServer } from "./data-transformer";
@@ -27,9 +28,9 @@ export class EntityService implements EntityRepository {
     private fetchService: EntityFetchService;
     private persistService: EntityPersistService;
 
-    constructor(private db: DrizzleClient) {
-        this.fetchService = new EntityFetchService(db);
-        this.persistService = new EntityPersistService(db);
+    constructor(private db: DrizzleClient, private registry: BackendCollectionRegistry) {
+        this.fetchService = new EntityFetchService(db, registry);
+        this.persistService = new EntityPersistService(db, registry);
     }
 
     // =============================================================

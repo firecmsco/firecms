@@ -157,9 +157,12 @@ export function useBackendStorageSource({
 
         const result = await response.json();
 
+        const token = await getAuthToken();
+        const tokenQuery = token ? `?token=${token}` : '';
+
         // The URL should point to the storage file endpoint
         const downloadConfig: DownloadConfig = {
-            url: `${storageBasePath}/file/${filePath}`,
+            url: `${storageBasePath}/file/${filePath}${tokenQuery}`,
             metadata: result.data
         };
 

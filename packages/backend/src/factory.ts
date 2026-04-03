@@ -138,9 +138,9 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
     }
 
     // Create services
-    const entityService = new EntityService(db);
-    const realtimeService = new RealtimeService(db);
-    const driver = new PostgresDataDriver(db, realtimeService);
+    const entityService = new EntityService(db, collectionRegistry);
+    const realtimeService = new RealtimeService(db, collectionRegistry);
+    const driver = new PostgresDataDriver(db, realtimeService, collectionRegistry);
     realtimeService.setDataDriver(driver);
     const postgresConnection = new PostgresConnection(db);
 
@@ -173,10 +173,11 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
  */
 export function createPostgresDelegate(
     db: NodePgDatabase,
+    registry: BackendCollectionRegistry,
     realtimeService?: RealtimeService
 ): PostgresDataDriver {
-    const realtime = realtimeService ?? new RealtimeService(db);
-    return new PostgresDataDriver(db, realtime);
+    const realtime = realtimeService ?? new RealtimeService(db, registry);
+    return new PostgresDataDriver(db, realtime, registry);
 }
 
 /**
@@ -189,8 +190,8 @@ export function createPostgresDelegate(
  * const realtimeService = createPostgresRealtimeService(db);
  * ```
  */
-export function createPostgresRealtimeService(db: NodePgDatabase): RealtimeService {
-    return new RealtimeService(db);
+export function createPostgresRealtimeService(db: NodePgDatabase, registry: BackendCollectionRegistry): RealtimeService {
+    return new RealtimeService(db, registry);
 }
 
 /**
@@ -204,8 +205,8 @@ export function createPostgresRealtimeService(db: NodePgDatabase): RealtimeServi
  * const users = await repository.fetchCollection("users", {});
  * ```
  */
-export function createPostgresEntityRepository(db: NodePgDatabase): EntityRepository {
-    return new EntityService(db);
+export function createPostgresEntityRepository(db: NodePgDatabase, registry: BackendCollectionRegistry): EntityRepository {
+    return new EntityService(db, registry);
 }
 
 // =============================================================================

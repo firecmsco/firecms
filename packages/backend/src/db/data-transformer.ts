@@ -65,7 +65,8 @@ export function sanitizeAndConvertDates(obj: unknown): unknown {
 export function serializeDataToServer<M extends Record<string, any>>(
     entity: M,
     properties: Properties,
-    collection?: EntityCollection
+    collection?: EntityCollection,
+    registry?: BackendCollectionRegistry
 ): Record<string, any> {
     if (!entity || !properties) return entity;
 
@@ -109,7 +110,7 @@ export function serializeDataToServer<M extends Record<string, any>>(
                 } else if (relation.direction === "inverse" && relation.foreignKeyOnTarget) {
                     // Inverse relation: Need to update the target table's FK
                     const serializedValue = serializePropertyToServer(value, property);
-                    const pks = getPrimaryKeys(collection);
+                    const pks = getPrimaryKeys(collection, registry!);
                     inverseRelationUpdates.push({
                         relationKey: key,
                         relation,
@@ -121,7 +122,7 @@ export function serializeDataToServer<M extends Record<string, any>>(
                 } else if (relation.direction === "inverse" && relation.joinPath && relation.joinPath.length > 0) {
                     // Inverse relation via joinPath: capture as inverse relation update
                     const serializedValue = serializePropertyToServer(value, property);
-                    const pks = getPrimaryKeys(collection);
+                    const pks = getPrimaryKeys(collection, registry!);
                     inverseRelationUpdates.push({
                         relationKey: key,
                         relation,
@@ -270,7 +271,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
                     try {
                         const targetCollection = relation.target();
                         const targetTable = registry.getTable(targetCollection.dbPath);
-                        const pks = getPrimaryKeys(collection);
+                        const pks = getPrimaryKeys(collection, registry!);
                         const currentEntityId = buildCompositeId(data, pks);
 
                         if (targetTable && currentEntityId) {
@@ -286,7 +287,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
                                 if (relatedEntities.length > 0) {
                                     if (relation.cardinality === "one") {
                                         // One-to-one: return single relation object
-                                        const targetPks = getPrimaryKeys(targetCollection);
+                                        const targetPks = getPrimaryKeys(targetCollection, registry!);
                                         const relatedEntity = relatedEntities[0] as Record<string, any>;
                                         result[propKey] = {
                                             id: buildCompositeId(relatedEntity, targetPks),
@@ -295,7 +296,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
                                         };
                                     } else {
                                         // One-to-many: return array of relation objects
-                                        const targetPks = getPrimaryKeys(targetCollection);
+                                        const targetPks = getPrimaryKeys(targetCollection, registry!);
                                         result[propKey] = relatedEntities.map((entity: Record<string, unknown>) => ({
                                             id: buildCompositeId(entity, targetPks),
                                             path: targetCollection.slug || targetCollection.dbPath,
@@ -312,7 +313,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
                     // Join path relation: Multi-hop relation using joins
                     try {
                         const targetCollection = relation.target();
-                        const pks = getPrimaryKeys(collection);
+                        const pks = getPrimaryKeys(collection, registry!);
                         const currentEntityId = buildCompositeId(data, pks);
 
                         if (currentEntityId) {
@@ -383,7 +384,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
                             const joinResults = await query.where(combinedWhere).limit(relation.cardinality === "one" ? 1 : 100);
 
                             if (joinResults.length > 0) {
-                                const targetPks = getPrimaryKeys(targetCollection);
+                                const targetPks = getPrimaryKeys(targetCollection, registry!);
                                 const targetTableName = relation.joinPath[relation.joinPath.length - 1].table;
 
                                 if (relation.cardinality === "one") {

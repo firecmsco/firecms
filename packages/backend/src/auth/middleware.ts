@@ -41,18 +41,20 @@ export const requireAuth: RequestHandler = (
     next: NextFunction
 ): void => {
     const authHeader = req.headers.authorization;
+    const queryToken = req.query.token as string | undefined;
+    const hasBearer = authHeader && authHeader.startsWith("Bearer ");
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!hasBearer && !queryToken) {
         res.status(401).json({
             error: {
-                message: "Authorization header missing or invalid",
+                message: "Authorization header or token query parameter missing or invalid",
                 code: "UNAUTHORIZED"
             }
         });
         return;
     }
 
-    const token = authHeader.substring(7); // Remove "Bearer " prefix
+    const token = hasBearer ? authHeader!.substring(7) : queryToken!;
     const payload = verifyAccessToken(token);
 
     if (!payload) {
@@ -118,9 +120,11 @@ export const optionalAuth: RequestHandler = (
     next: NextFunction
 ): void => {
     const authHeader = req.headers.authorization;
+    const queryToken = req.query.token as string | undefined;
+    const hasBearer = authHeader && authHeader.startsWith("Bearer ");
 
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-        const token = authHeader.substring(7);
+    if (hasBearer || queryToken) {
+        const token = hasBearer ? authHeader!.substring(7) : queryToken!;
         const payload = verifyAccessToken(token);
         if (payload) {
             req.user = payload;
@@ -199,8 +203,11 @@ export function createAuthMiddleware(options: AuthMiddlewareOptions): RequestHan
             // Default JWT path
             try {
                 const authHeader = req.headers.authorization;
-                if (authHeader && authHeader.startsWith("Bearer ")) {
-                    const token = authHeader.substring(7);
+                const queryToken = req.query.token as string | undefined;
+                const hasBearer = authHeader && authHeader.startsWith("Bearer ");
+                
+                if (hasBearer || queryToken) {
+                    const token = hasBearer ? authHeader.substring(7) : queryToken!;
                     const payload = extractUserFromToken(token);
 
                     if (payload) {

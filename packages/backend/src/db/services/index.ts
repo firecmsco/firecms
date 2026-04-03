@@ -9,6 +9,5 @@ export {
     getTableForCollection,
     getPrimaryKeys,
     parseIdValues,
-    buildCompositeId,
-    collectionRegistry
+    buildCompositeId
 } from "./entity-helpers";

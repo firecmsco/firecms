@@ -6,7 +6,7 @@ import { DrizzleClient } from "../db/interfaces";
 import { User } from "@rebasepro/types";
 import { sql as drizzleSql } from "drizzle-orm";
 import { buildPropertyCallbacks, mergeDeep } from "@rebasepro/common";
-import { collectionRegistry } from "../collections/registry";
+import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 import {
     DataDriver,
     DeleteEntityProps,
@@ -51,10 +51,11 @@ export class PostgresDataDriver implements DataDriver {
     constructor(
         public db: DrizzleClient,
         realtimeService: RealtimeService,
+        public readonly registry: BackendCollectionRegistry,
         user?: User,
         public poolManager?: DatabasePoolManager
     ) {
-        this.entityService = new EntityService(db);
+        this.entityService = new EntityService(db, registry);
         this.realtimeService = realtimeService;
         this.user = user;
         this.data = buildRebaseData(this);
@@ -64,7 +65,7 @@ export class PostgresDataDriver implements DataDriver {
 
     private resolveCollectionCallbacks<M extends Record<string, any>>(collection: EntityCollection<M> | undefined, path: string) {
         if (!collection && !path) return { collection: undefined, callbacks: undefined, propertyCallbacks: undefined };
-        const registryCollection = collectionRegistry.getCollectionByPath(path);
+        const registryCollection = this.registry.getCollectionByPath(path);
         const resolvedCollection = registryCollection
             ? { ...collection, ...registryCollection } as EntityCollection<M>
             : collection as EntityCollection<M>;
@@ -843,8 +844,8 @@ export class AuthenticatedPostgresDataDriver implements DataDriver {
                     set_config('app.jwt', ${JSON.stringify({ sub: userId, roles: userRoles })}, true)
             `);
 
-            const txEntityService = new EntityService(tx);
-            const txDelegate = new PostgresDataDriver(tx, this.delegate.realtimeService, this.user, this.delegate.poolManager);
+            const txEntityService = new EntityService(tx, this.delegate.registry);
+            const txDelegate = new PostgresDataDriver(tx, this.delegate.realtimeService, this.delegate.registry, this.user, this.delegate.poolManager);
             
             txDelegate.entityService = txEntityService;
             txDelegate._deferNotifications = true;

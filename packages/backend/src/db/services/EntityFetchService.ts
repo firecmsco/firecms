@@ -9,12 +9,12 @@ import {
     getTableForCollection,
     getPrimaryKeys,
     parseIdValues,
-    buildCompositeId,
-    collectionRegistry
+    buildCompositeId
 } from "./entity-helpers";
 import { parseDataFromServer } from "../data-transformer";
 import { RelationService } from "./RelationService";
 import { DrizzleClient } from "../interfaces";
+import { BackendCollectionRegistry } from "../../collections/BackendCollectionRegistry";
 
 /**
  * Service for handling all entity read operations.
@@ -23,8 +23,8 @@ import { DrizzleClient } from "../interfaces";
 export class EntityFetchService {
     private relationService: RelationService;
 
-    constructor(private db: DrizzleClient) {
-        this.relationService = new RelationService(db);
+    constructor(private db: DrizzleClient, private registry: BackendCollectionRegistry) {
+        this.relationService = new RelationService(db, registry);
     }
 
     /**
@@ -47,9 +47,9 @@ export class EntityFetchService {
         entityId: string | number,
         databaseId?: string
     ): Promise<Entity<M> | undefined> {
-        const collection = getCollectionByPath(collectionPath);
-        const table = getTableForCollection(collection);
-        const idInfoArray = getPrimaryKeys(collection);
+        const collection = getCollectionByPath(collectionPath, this.registry);
+        const table = getTableForCollection(collection, this.registry);
+        const idInfoArray = getPrimaryKeys(collection, this.registry);
         const idInfo = idInfoArray[0];
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
 
@@ -69,7 +69,7 @@ export class EntityFetchService {
         if (result.length === 0) return undefined;
 
         const raw = result[0] as M;
-        const values = await parseDataFromServer(raw, collection, this.db, collectionRegistry);
+        const values = await parseDataFromServer(raw, collection, this.db, this.registry);
 
         // Load relations based on cardinality
         const resolvedRelations = resolveCollectionRelations(collection);
@@ -139,9 +139,9 @@ export class EntityFetchService {
             databaseId?: string;
         } = {}
     ): Promise<Entity<M>[]> {
-        const collection = getCollectionByPath(collectionPath);
-        const table = getTableForCollection(collection);
-        const idInfoArray = getPrimaryKeys(collection);
+        const collection = getCollectionByPath(collectionPath, this.registry);
+        const table = getTableForCollection(collection, this.registry);
+        const idInfoArray = getPrimaryKeys(collection, this.registry);
         const idInfo = idInfoArray[0];
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
 
@@ -281,7 +281,7 @@ export class EntityFetchService {
 
         // First pass: parse all entities
         const entitiesWithValues = await Promise.all(results.map(async (entity: Record<string, unknown>) => {
-            const values = await parseDataFromServer(entity as M, collection, this.db, collectionRegistry);
+            const values = await parseDataFromServer(entity as M, collection, this.db, this.registry);
             return {
                 entity,
                 values,
@@ -427,7 +427,7 @@ export class EntityFetchService {
         }
 
         const rootCollectionPath = pathSegments[0];
-        let currentCollection = getCollectionByPath(rootCollectionPath);
+        let currentCollection = getCollectionByPath(rootCollectionPath, this.registry);
         let currentEntityId: string | number = pathSegments[1];
 
         for (let i = 2; i < pathSegments.length; i += 2) {
@@ -472,8 +472,8 @@ export class EntityFetchService {
             return this.countEntitiesFromPath<M>(collectionPath, options);
         }
 
-        const collection = getCollectionByPath(collectionPath);
-        const table = getTableForCollection(collection);
+        const collection = getCollectionByPath(collectionPath, this.registry);
+        const table = getTableForCollection(collection, this.registry);
 
         let query = this.db.select({ count: count() }).from(table).$dynamic();
 
@@ -502,7 +502,7 @@ export class EntityFetchService {
         }
 
         const rootCollectionPath = pathSegments[0];
-        let currentCollection = getCollectionByPath(rootCollectionPath);
+        let currentCollection = getCollectionByPath(rootCollectionPath, this.registry);
         let currentEntityId: string | number = pathSegments[1];
 
         for (let i = 2; i < pathSegments.length; i += 2) {
@@ -544,9 +544,9 @@ export class EntityFetchService {
     ): Promise<boolean> {
         if (value === undefined || value === null) return true;
 
-        const collection = getCollectionByPath(collectionPath);
-        const table = getTableForCollection(collection);
-        const idInfoArray = getPrimaryKeys(collection);
+        const collection = getCollectionByPath(collectionPath, this.registry);
+        const table = getTableForCollection(collection, this.registry);
+        const idInfoArray = getPrimaryKeys(collection, this.registry);
         const idInfo = idInfoArray[0];
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
         const field = table[fieldName as keyof typeof table] as AnyPgColumn;

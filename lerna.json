@@ -27,8 +27,7 @@
     "app",
     "app/frontend",
     "app/backend",
-    "app/shared",
-    "packages/media_manager"
+    "app/shared"
   ],
   "npmClient": "pnpm"
 }

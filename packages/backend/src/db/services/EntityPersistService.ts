@@ -15,6 +15,7 @@ import { sanitizeAndConvertDates, serializeDataToServer } from "../data-transfor
 import { RelationService } from "./RelationService";
 import { EntityFetchService } from "./EntityFetchService";
 import { DrizzleClient } from "../interfaces";
+import { BackendCollectionRegistry } from "../../collections/BackendCollectionRegistry";
 
 /**
  * Service for handling all entity write operations.
@@ -24,9 +25,9 @@ export class EntityPersistService {
     private relationService: RelationService;
     private fetchService: EntityFetchService;
 
-    constructor(private db: DrizzleClient) {
-        this.relationService = new RelationService(db);
-        this.fetchService = new EntityFetchService(db);
+    constructor(private db: DrizzleClient, private registry: BackendCollectionRegistry) {
+        this.relationService = new RelationService(db, registry);
+        this.fetchService = new EntityFetchService(db, registry);
     }
 
 
@@ -34,9 +35,9 @@ export class EntityPersistService {
      * Delete an entity by ID
      */
     async deleteEntity(collectionPath: string, entityId: string | number, _databaseId?: string): Promise<void> {
-        const collection = getCollectionByPath(collectionPath);
-        const table = getTableForCollection(collection);
-        const idInfoArray = getPrimaryKeys(collection);
+        const collection = getCollectionByPath(collectionPath, this.registry);
+        const table = getTableForCollection(collection, this.registry);
+        const idInfoArray = getPrimaryKeys(collection, this.registry);
         const idInfo = idInfoArray[0];
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
 
@@ -69,7 +70,7 @@ export class EntityPersistService {
             const segments = collectionPath.split("/").filter(Boolean);
             if (segments.length >= 3 && segments.length % 2 === 1) {
                 const rootSegment = segments[0];
-                let currentCollection = getCollectionByPath(rootSegment);
+                let currentCollection = getCollectionByPath(rootSegment, this.registry);
                 let currentEntityId: string | number = segments[1];
 
                 for (let i = 2; i < segments.length; i += 2) {
@@ -87,7 +88,7 @@ export class EntityPersistService {
 
                         // Handle many-to-many with junction table
                         if (relation.cardinality === "many" && relation.through) {
-                            const parentIdInfoArray = getPrimaryKeys(currentCollection);
+                            const parentIdInfoArray = getPrimaryKeys(currentCollection, this.registry);
                             const parentIdInfo = parentIdInfoArray[0];
                             const parsedParentIdObj = parseIdValues(currentEntityId, parentIdInfoArray);
                             const parsedParentId = parsedParentIdObj[parentIdInfo.fieldName];
@@ -124,7 +125,7 @@ export class EntityPersistService {
                             throw new Error(`Relation '${relationKey}' lacks configuration for path-based saving.`);
                         }
 
-                        const parentIdInfoArray = getPrimaryKeys(currentCollection);
+                        const parentIdInfoArray = getPrimaryKeys(currentCollection, this.registry);
                         const parentIdInfo = parentIdInfoArray[0];
                         const parsedParentIdObj = parseIdValues(currentEntityId, parentIdInfoArray);
                         const parsedParentId = parsedParentIdObj[parentIdInfo.fieldName];
@@ -144,9 +145,9 @@ export class EntityPersistService {
             }
         }
 
-        const collection = getCollectionByPath(effectiveCollectionPath);
-        const table = getTableForCollection(collection);
-        const idInfoArray = getPrimaryKeys(collection);
+        const collection = getCollectionByPath(effectiveCollectionPath, this.registry);
+        const table = getTableForCollection(collection, this.registry);
+        const idInfoArray = getPrimaryKeys(collection, this.registry);
         const primaryKeyFields = idInfoArray.map(info => info.fieldName);
 
         // Build an object mapping required for dynamic returning
@@ -173,7 +174,7 @@ export class EntityPersistService {
         }
 
         // Transform relations to IDs, then sanitize
-        const processedData = serializeDataToServer(otherValues as M, collection.properties as Properties, collection);
+        const processedData = serializeDataToServer(otherValues as M, collection.properties as Properties, collection, this.registry);
 
         // Extract relation updates before sanitizing
         const inverseRelationUpdates = ((processedData as Record<string, unknown>).__inverseRelationUpdates as Array<{ relationKey: string; relation: Relation; newValue: unknown; currentEntityId?: string | number; }>) || [];

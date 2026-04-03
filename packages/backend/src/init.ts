@@ -1,6 +1,6 @@
 import { DataDriver, EntityCollection } from "@rebasepro/types";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
-import { collectionRegistry } from "./collections/registry";
+import { BackendCollectionRegistry } from "./collections/BackendCollectionRegistry";
 import { loadCollectionsFromDirectory } from "./collections/loader";
 import { getTableName, isTable, Relations } from "drizzle-orm";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
@@ -218,6 +218,11 @@ export interface RebaseBackendInstance {
      * Equivalent to `storageRegistry?.getDefault()`.
      */
     storageController?: StorageController;
+
+    /**
+     * Collection registry instance used by this backend.
+     */
+    collectionRegistry: BackendCollectionRegistry;
 }
 
 export async function initializeRebaseBackend(config: RebaseBackendConfig): Promise<RebaseBackendInstance> {
@@ -257,6 +262,9 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
     }
 
     console.log("🔥 Initializing Rebase Backend");
+
+    // Create a fresh registry for this backend instance (no singleton)
+    const collectionRegistry = new BackendCollectionRegistry();
 
     // ============ Load collections dynamically if needed ============
     let activeCollections = config.collections || [];
@@ -321,9 +329,9 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             if (schema.relations) collectionRegistry.registerRelations(schema.relations);
 
             // Create realtime service and driver delegate
-            const realtimeService = new RealtimeService(db);
+            const realtimeService = new RealtimeService(db, collectionRegistry);
             const poolManager = adminConnectionString ? new DatabasePoolManager(adminConnectionString) : undefined;
-            const driver = new PostgresDataDriver(db, realtimeService, undefined, poolManager);
+            const driver = new PostgresDataDriver(db, realtimeService, collectionRegistry, undefined, poolManager);
             realtimeService.setDataDriver(driver);
 
             // Enable cross-instance realtime ONLY if connectionString is explicitly provided.
@@ -490,7 +498,8 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         roleService,
         emailService,
         storageRegistry,
-        storageController
+        storageController,
+        collectionRegistry
     };
 }
 
@@ -605,8 +614,8 @@ export async function initializeRebaseAPI(
 
     console.log("🚀 Initializing Rebase REST/GraphQL API (optional for external integrations)");
 
-    // Get collections from the registry using the correct method
-    const collections = collectionRegistry.getCollections();
+    // Get collections from the backend's registry instance
+    const collections = backend.collectionRegistry.getCollections();
 
     const apiServer = await RebaseApiServer.create({
         collections,

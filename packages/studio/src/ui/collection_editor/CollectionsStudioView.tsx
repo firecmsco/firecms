@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
     cls,
     defaultBorderMixin,
@@ -9,7 +9,7 @@ import {
     AddIcon,
     StorageIcon,
 } from "@rebasepro/ui";
-import { useCMSUrlController, useNavigationStateController, IconForView } from "@rebasepro/core";
+import { useCMSUrlController, IconForView } from "@rebasepro/core";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionStudioView } from "./CollectionStudioView";
 
@@ -52,19 +52,13 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                 orientation="horizontal"
                 panelSizePercent={sidebarSize}
                 onPanelSizeChange={setSidebarSize}
-                minPanelSizePx={260}
+                minPanelSizePx={220}
                 firstPanel={
-                    <div className={cls("flex flex-col h-full w-full bg-surface-50 dark:bg-surface-900 border-r", defaultBorderMixin)}>
-                        <div className={cls("px-4 py-3 border-b flex justify-between items-center", defaultBorderMixin)}>
-                            <div>
-                                <Typography variant="subtitle1" className="flex items-center gap-2">
-                                    <StorageIcon size="small" />
-                                    Schema Editor
-                                </Typography>
-                                <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark mt-1 block">
-                                    Rebase Collections
-                                </Typography>
-                            </div>
+                    <div className={cls("flex flex-col h-full w-full bg-white dark:bg-surface-950 border-r", defaultBorderMixin)}>
+                        <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                            <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">
+                                Collections
+                            </Typography>
                             <Button
                                 size="small"
                                 variant="text"
@@ -75,35 +69,37 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                             </Button>
                         </div>
 
-                        <div className="flex-grow overflow-y-auto w-full no-scrollbar px-2 py-4 space-y-1">
+                        <div className="flex-grow overflow-y-auto w-full no-scrollbar p-2 space-y-0.5">
                             {collections.length === 0 && (
-                                <Typography variant="caption" className="text-text-disabled mx-2">
-                                    No collections yet.
-                                </Typography>
+                                <div className="p-4 text-center">
+                                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark italic">
+                                        No collections yet.
+                                    </Typography>
+                                </div>
                             )}
                             {collections.map((collection) => {
                                 const collectionKey = collection.slug || collection.dbPath;
                                 const isSelected = activeCollectionId === collectionKey;
                                 return (
-                                    <button
+                                    <div
                                         key={collectionKey}
                                         onClick={() => navigate(urlController.buildCMSUrlPath(`schema/${collectionKey}`))}
                                         className={cls(
-                                            "w-full text-left px-3 py-2 rounded-md text-sm transition-colors flex items-center gap-3 group",
+                                            "flex items-center gap-3 px-3 py-2 cursor-pointer rounded-md text-sm transition-colors",
                                             isSelected
-                                                ? "bg-primary text-white"
+                                                ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light"
                                                 : "hover:bg-surface-100 dark:hover:bg-surface-800 text-text-secondary dark:text-text-secondary-dark"
                                         )}
                                     >
                                         <IconForView collectionOrView={collection} size={18} className={cls(
                                             isSelected
-                                                ? "text-white"
+                                                ? "text-primary dark:text-primary-light"
                                                 : "text-text-secondary dark:text-text-secondary-dark"
                                         )} />
                                         <span className="truncate flex-1">
                                             {collection.name || collection.slug || collection.dbPath}
                                         </span>
-                                    </button>
+                                    </div>
                                 );
                             })}
                         </div>

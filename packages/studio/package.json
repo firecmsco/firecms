@@ -8,6 +8,7 @@
     "source": "src/index.ts",
     "dependencies": {
         "@monaco-editor/react": "^4.7.0",
+        "@rebasepro/client": "0.0.1",
         "@rebasepro/common": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/data_export": "0.0.1",

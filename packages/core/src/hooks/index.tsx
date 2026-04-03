@@ -51,3 +51,5 @@ export * from "./usePermissions";
 export * from "./ApiConfigContext";
 
 export * from "./useTranslation";
+
+export * from "./useRebaseClient";

@@ -768,7 +768,7 @@ export const SQLEditor = () => {
         const savedWidths = columnWidths[activeTab.sql] || {};
         const resultColumnKeys = Object.keys(results[0]);
 
-        // Compute matched CMS collections for this query, including PK column detection
+        // Compute matched collections for this query, including PK column detection
         const matchedCollections: ResolvedQueryCollection[] = (() => {
             if (!activeTab.lastExecutedSql || !collectionRegistry.collections) return [];
             try {
@@ -792,7 +792,7 @@ export const SQLEditor = () => {
                 }));
         };
 
-        // Build the columns array. If we have actionable CMS collections, prepend a dedicated action column.
+        // Build the columns array. If we have actionable collections, prepend a dedicated action column.
         const dataColumns: VirtualTableColumn[] = resultColumnKeys.map(key => ({
             key,
             title: key,
@@ -807,7 +807,7 @@ export const SQLEditor = () => {
 
         return (
             <div className="flex-grow flex flex-col overflow-hidden min-h-0">
-                {/* CMS Collection Badges Bar */}
+                {/* Collection Badges Bar */}
                 {actionableCollections.length > 0 && (
                     <div className={cls("px-4 py-1.5 border-b flex items-center gap-2 shrink-0 bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
                         <Tooltip title={t("studio_sql_cms_collections_tooltip")}>
@@ -835,7 +835,7 @@ export const SQLEditor = () => {
                         headerHeight={32}
                         onColumnResizeEnd={handleColumnResize}
                         cellRenderer={({ rowData, column, rowIndex }) => {
-                            // Dedicated CMS action column
+                            // Dedicated collection action column
                             if (column.key === "__cms_action__") {
                                 const rowActions = getRowEntityActions(rowData);
                                 if (rowActions.length === 0) {
@@ -1032,17 +1032,20 @@ export const SQLEditor = () => {
                 secondPanel={
                     <div className="flex-grow flex flex-col min-w-0 h-full w-full">
                         {/* Toolbar */}
-                        <div className={cls("h-[44px] shrink-0 flex items-center justify-between px-4 border-b bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                        <div className={cls("flex items-center justify-between pr-2 border-b bg-white dark:bg-surface-950", defaultBorderMixin)}>
                             <div className="flex items-center flex-grow overflow-hidden mr-4">
                                 <div className="flex items-center no-scrollbar overflow-x-auto min-w-0">
-                                    <Tabs value={activeTabId} onValueChange={setActiveTabId} variant="invisible">
+                                    <Tabs value={activeTabId} onValueChange={setActiveTabId} variant="boxy" className="w-[unset] flex-shrink-0" innerClassName="bg-white dark:bg-surface-950">
                                         {tabs.map(tab => (
-                                            <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group gap-2">
+                                            <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group max-w-[200px]">
+                                                <svg className="w-3.5 h-3.5 text-blue-500 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                                </svg>
                                                 <span className="truncate">{tab.name}</span>
                                                 {tabs.length > 1 && (
                                                     <button
                                                         onClick={(e) => handleCloseTab(tab.id, e)}
-                                                        className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
+                                                        className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity focus:outline-none"
                                                     >
                                                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                                     </button>
@@ -1053,7 +1056,7 @@ export const SQLEditor = () => {
                                     <IconButton
                                         size="small"
                                         onClick={handleAddTab}
-                                        className="ml-1 flex-shrink-0"
+                                        className="ml-2 flex-shrink-0"
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                                     </IconButton>

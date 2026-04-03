@@ -9,17 +9,17 @@ import {
     getTableForCollection,
     getPrimaryKeys,
     parseIdValues,
-    buildCompositeId,
-    collectionRegistry
+    buildCompositeId
 } from "./entity-helpers";
 import { parseDataFromServer } from "../data-transformer";
+import { BackendCollectionRegistry } from "../../collections/BackendCollectionRegistry";
 
 /**
  * Service for handling all relation-related operations.
  * Handles fetching, updating, and managing entity relations.
  */
 export class RelationService {
-    constructor(private db: DrizzleClient) { }
+    constructor(private db: DrizzleClient, private registry: BackendCollectionRegistry) { }
 
     /**
      * Fetch entities related to a parent entity through a specific relation
@@ -38,7 +38,7 @@ export class RelationService {
             databaseId?: string;
         } = {}
     ): Promise<Entity<M>[]> {
-        const parentCollection = getCollectionByPath(parentCollectionPath);
+        const parentCollection = getCollectionByPath(parentCollectionPath, this.registry);
         const resolvedRelations = resolveCollectionRelations(parentCollection);
         const relation = resolvedRelations[relationKey];
 
@@ -67,15 +67,15 @@ export class RelationService {
         } = {}
     ): Promise<Entity<M>[]> {
         const targetCollection = relation.target();
-        const targetTable = getTableForCollection(targetCollection);
-        const idInfo = getPrimaryKeys(targetCollection);
+        const targetTable = getTableForCollection(targetCollection, this.registry);
+        const idInfo = getPrimaryKeys(targetCollection, this.registry);
         const idField = targetTable[idInfo[0].fieldName as keyof typeof targetTable] as AnyPgColumn;
 
-        const parentPks = getPrimaryKeys(parentCollection);
+        const parentPks = getPrimaryKeys(parentCollection, this.registry);
         const parentIdInfo = parentPks[0];
         const parsedParentIdObj = parseIdValues(parentEntityId, parentPks);
         const parsedParentId = parsedParentIdObj[parentIdInfo.fieldName];
-        const parentTable = collectionRegistry.getTable(getTableName(parentCollection));
+        const parentTable = this.registry.getTable(getTableName(parentCollection));
         if (!parentTable) throw new Error("Parent table not found");
         const parentIdCol = parentTable[parentIdInfo.fieldName as keyof typeof parentTable] as AnyPgColumn;
 
@@ -86,7 +86,7 @@ export class RelationService {
 
             // Apply each join in the path
             for (const join of relation.joinPath) {
-                const joinTable = collectionRegistry.getTable(join.table);
+                const joinTable = this.registry.getTable(join.table);
                 if (!joinTable) {
                     throw new Error(`Join table not found: ${join.table}`);
                 }
@@ -112,7 +112,7 @@ export class RelationService {
             }
 
             // Add where condition for the parent entity
-            const parentIdField = parentTable[getPrimaryKeys(parentCollection)[0].fieldName as keyof typeof parentTable] as AnyPgColumn;
+            const parentIdField = parentTable[getPrimaryKeys(parentCollection, this.registry)[0].fieldName as keyof typeof parentTable] as AnyPgColumn;
             query = query.where(eq(parentIdField, parsedParentId)) as unknown as typeof query;
 
             if (options.limit) {
@@ -127,7 +127,7 @@ export class RelationService {
             for (const row of results as Array<Record<string, unknown>>) {
                 const targetEntity = (row[targetTableName] as Record<string, unknown>) || row;
                 const entityId = targetEntity[idInfo[0].fieldName as string];
-                const parsedValues = await parseDataFromServer(targetEntity, targetCollection, this.db, collectionRegistry);
+                const parsedValues = await parseDataFromServer(targetEntity, targetCollection, this.db, this.registry);
 
                 entities.push({
                     id: entityId?.toString() || "",
@@ -173,7 +173,7 @@ export class RelationService {
             parentTable,
             parentIdCol,
             idField,
-            collectionRegistry,
+            this.registry,
             additionalFilters
         ) as typeof query;
 
@@ -192,7 +192,7 @@ export class RelationService {
         for (const row of results) {
             const targetEntity = row[getTableName(targetCollection)] || row;
             const entityId = targetEntity[idInfo[0].fieldName];
-            const parsedValues = await parseDataFromServer(targetEntity, targetCollection, this.db, collectionRegistry);
+            const parsedValues = await parseDataFromServer(targetEntity, targetCollection, this.db, this.registry);
 
             entities.push({
                 id: entityId?.toString() || "",
@@ -213,22 +213,22 @@ export class RelationService {
         relationKey: string,
         options: { filter?: FilterValues<Extract<keyof M, string>>; databaseId?: string } = {}
     ): Promise<number> {
-        const parentCollection = getCollectionByPath(parentCollectionPath);
+        const parentCollection = getCollectionByPath(parentCollectionPath, this.registry);
         const resolvedRelations = resolveCollectionRelations(parentCollection);
         const relation = resolvedRelations[relationKey];
         if (!relation) throw new Error(`Relation '${relationKey}' not found in collection '${parentCollectionPath}'`);
 
         const targetCollection = relation.target();
-        const targetTable = getTableForCollection(targetCollection);
-        const targetPks = getPrimaryKeys(targetCollection);
+        const targetTable = getTableForCollection(targetCollection, this.registry);
+        const targetPks = getPrimaryKeys(targetCollection, this.registry);
         const targetIdInfo = targetPks[0];
         const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
 
-        const parentPks = getPrimaryKeys(parentCollection);
+        const parentPks = getPrimaryKeys(parentCollection, this.registry);
         const parentIdInfo = parentPks[0];
         const parsedParentIdObj = parseIdValues(parentEntityId, parentPks);
         const parsedParentId = parsedParentIdObj[parentIdInfo.fieldName];
-        const parentTable = collectionRegistry.getTable(getTableName(parentCollection));
+        const parentTable = this.registry.getTable(getTableName(parentCollection));
         if (!parentTable) throw new Error("Parent table not found");
         const parentIdCol = parentTable[parentIdInfo.fieldName as keyof typeof parentTable] as AnyPgColumn;
 
@@ -247,7 +247,7 @@ export class RelationService {
             parentTable,
             parentIdCol,
             targetIdField,
-            collectionRegistry,
+            this.registry,
             additionalFilters
         );
 
@@ -266,16 +266,16 @@ export class RelationService {
     ): Promise<Map<string | number, Entity<Record<string, unknown>>>> {
         if (parentEntityIds.length === 0) return new Map();
 
-        const parentCollection = getCollectionByPath(parentCollectionPath);
+        const parentCollection = getCollectionByPath(parentCollectionPath, this.registry);
         const targetCollection = relation.target();
-        const targetTable = getTableForCollection(targetCollection);
-        const targetPks = getPrimaryKeys(targetCollection);
+        const targetTable = getTableForCollection(targetCollection, this.registry);
+        const targetPks = getPrimaryKeys(targetCollection, this.registry);
         const targetIdInfo = targetPks[0];
         const targetIdField = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
 
-        const parentPks = getPrimaryKeys(parentCollection);
+        const parentPks = getPrimaryKeys(parentCollection, this.registry);
         const parentIdInfo = parentPks[0];
-        const parentTable = collectionRegistry.getTable(getTableName(parentCollection));
+        const parentTable = this.registry.getTable(getTableName(parentCollection));
         if (!parentTable) throw new Error("Parent table not found");
         const parentIdCol = parentTable[parentIdInfo.fieldName as keyof typeof parentTable] as AnyPgColumn;
 
@@ -289,7 +289,7 @@ export class RelationService {
 
             // Apply each join in the path
             for (const join of relation.joinPath) {
-                const joinTable = collectionRegistry.getTable(join.table);
+                const joinTable = this.registry.getTable(join.table);
                 if (!joinTable) {
                     throw new Error(`Join table not found: ${join.table}`);
                 }
@@ -315,7 +315,7 @@ export class RelationService {
             }
 
             // Add where condition for ALL parent entities at once
-            const parentIdField = parentTable[getPrimaryKeys(parentCollection)[0].fieldName as keyof typeof parentTable] as AnyPgColumn;
+            const parentIdField = parentTable[getPrimaryKeys(parentCollection, this.registry)[0].fieldName as keyof typeof parentTable] as AnyPgColumn;
             query = query.where(inArray(parentIdField, parsedParentIds)) as unknown as typeof query;
 
             const results = await query;
@@ -350,7 +350,7 @@ export class RelationService {
             parentTable,
             parentIdCol,
             targetIdField,
-            collectionRegistry,
+            this.registry,
             []
         ) as typeof query;
 
@@ -422,7 +422,7 @@ export class RelationService {
                 )?.table;
 
                 if (junctionTableName) {
-                    junctionTable = collectionRegistry.getTable(junctionTableName);
+                    junctionTable = this.registry.getTable(junctionTableName);
 
                     if (junctionTable) {
                         for (const joinStep of relation.joinPath) {
@@ -453,7 +453,7 @@ export class RelationService {
                     continue;
                 }
 
-                const parentPks = getPrimaryKeys(collection);
+                const parentPks = getPrimaryKeys(collection, this.registry);
                 const parentIdInfo = parentPks[0];
                 const parsedParentIdObj = parseIdValues(entityId, parentPks);
                 const parsedParentId = parsedParentIdObj[parentIdInfo.fieldName];
@@ -462,7 +462,7 @@ export class RelationService {
                 await tx.delete(junctionTable).where(eq(sourceJunctionColumn, parsedParentId));
 
                 if (targetEntityIds.length > 0) {
-                    const targetPks = getPrimaryKeys(targetCollection);
+                    const targetPks = getPrimaryKeys(targetCollection, this.registry);
                     const targetIdInfo = targetPks[0];
                     const parsedTargetIds = targetEntityIds.map(id => parseIdValues(id, targetPks)[targetIdInfo.fieldName]);
 
@@ -477,7 +477,7 @@ export class RelationService {
                 }
             } else if (relation.through && relation.cardinality === "many" && relation.direction === "owning") {
                 // Handle many-to-many relations with junction table using 'through' property
-                const junctionTable = collectionRegistry.getTable(relation.through.table);
+                const junctionTable = this.registry.getTable(relation.through.table);
                 if (!junctionTable) {
                     console.warn(`Junction table '${relation.through.table}' not found for relation '${key}' in collection '${collection.slug || collection.dbPath}'`);
                     continue;
@@ -491,7 +491,7 @@ export class RelationService {
                     continue;
                 }
 
-                const parentPks = getPrimaryKeys(collection);
+                const parentPks = getPrimaryKeys(collection, this.registry);
                 const parentIdInfo = parentPks[0];
                 const parsedParentIdObj = parseIdValues(entityId, parentPks);
                 const parsedParentId = parsedParentIdObj[parentIdInfo.fieldName];
@@ -500,7 +500,7 @@ export class RelationService {
                 await tx.delete(junctionTable).where(eq(sourceJunctionColumn, parsedParentId));
 
                 if (targetEntityIds.length > 0) {
-                    const targetPks = getPrimaryKeys(targetCollection);
+                    const targetPks = getPrimaryKeys(targetCollection, this.registry);
                     const targetIdInfo = targetPks[0];
                     const parsedTargetIds = targetEntityIds.map(id => parseIdValues(id, targetPks)[targetIdInfo.fieldName]);
 
@@ -515,8 +515,8 @@ export class RelationService {
                 }
             } else if (relation.cardinality === "many" && relation.direction === "inverse" && relation.foreignKeyOnTarget) {
                 // Handle one-to-many (inverse) by updating target FK to point to parent
-                const targetTable = getTableForCollection(targetCollection);
-                const targetPks = getPrimaryKeys(targetCollection);
+                const targetTable = getTableForCollection(targetCollection, this.registry);
+                const targetPks = getPrimaryKeys(targetCollection, this.registry);
                 const targetIdInfo = targetPks[0];
                 const targetIdCol = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
                 const fkCol = targetTable[relation.foreignKeyOnTarget as keyof typeof targetTable] as AnyPgColumn;
@@ -526,7 +526,7 @@ export class RelationService {
                     continue;
                 }
 
-                const parentPks = getPrimaryKeys(collection);
+                const parentPks = getPrimaryKeys(collection, this.registry);
                 const parentIdInfo = parentPks[0];
                 const parsedParentIdObj = parseIdValues(entityId, parentPks);
                 const parsedParentId = parsedParentIdObj[parentIdInfo.fieldName];
@@ -576,10 +576,10 @@ export class RelationService {
 
             try {
                 const targetCollection = relation.target();
-                const targetTable = getTableForCollection(targetCollection);
-                const targetPks = getPrimaryKeys(targetCollection);
+                const targetTable = getTableForCollection(targetCollection, this.registry);
+                const targetPks = getPrimaryKeys(targetCollection, this.registry);
                 const targetIdInfo = targetPks[0];
-                const sourcePks = getPrimaryKeys(sourceCollection);
+                const sourcePks = getPrimaryKeys(sourceCollection, this.registry);
                 const sourceIdInfo = sourcePks[0];
 
                 // Handle inverse relations with joinPath
@@ -699,7 +699,7 @@ export class RelationService {
             // If there's exactly one intermediate table, it's likely a junction table for many-to-many
             if (intermediateTables.length === 1 && relation.cardinality === "many") {
                 const junctionTableName = intermediateTables[0];
-                const junctionTable = collectionRegistry.getTable(junctionTableName);
+                const junctionTable = this.registry.getTable(junctionTableName);
 
                 if (!junctionTable) {
                     console.warn(`Junction table '${junctionTableName}' not found for inverse joinPath relation '${relation.relationName}'`);
@@ -736,7 +736,7 @@ export class RelationService {
                 }
 
                 // Perform the junction table update
-                const sourcePks = getPrimaryKeys(sourceCollection);
+                const sourcePks = getPrimaryKeys(sourceCollection, this.registry);
                 const sourceIdInfo = sourcePks[0];
                 const parsedSourceIdObj = parseIdValues(sourceEntityId, sourcePks);
                 const parsedSourceId = parsedSourceIdObj[sourceIdInfo.fieldName];
@@ -746,7 +746,7 @@ export class RelationService {
 
                 // Add new entries if newValue is provided
                 if (newValue && Array.isArray(newValue) && newValue.length > 0) {
-                    const targetPks = getPrimaryKeys(targetCollection);
+                    const targetPks = getPrimaryKeys(targetCollection, this.registry);
                     const targetIdInfo = targetPks[0];
                     const targetEntityIds = (newValue as Array<{ id: string | number } | string | number>).map((rel) => typeof rel === 'object' && rel !== null ? rel.id : rel);
                     const parsedTargetIds = targetEntityIds.map(id => parseIdValues(id, targetPks)[targetIdInfo.fieldName]);
@@ -761,7 +761,7 @@ export class RelationService {
                     }
                 } else if (newValue && !Array.isArray(newValue)) {
                     // Single value for one-to-one
-                    const targetPks = getPrimaryKeys(targetCollection);
+                    const targetPks = getPrimaryKeys(targetCollection, this.registry);
                     const targetIdInfo = targetPks[0];
                     const targetId = typeof newValue === 'object' && newValue !== null ? (newValue as Record<string, unknown>).id as string | number : newValue as string | number;
                     const parsedTargetIdObj = parseIdValues(targetId, targetPks);
@@ -794,7 +794,7 @@ export class RelationService {
         junctionInfo: { table: string; sourceColumn: string; targetColumn: string }
     ) {
         try {
-            const junctionTable = collectionRegistry.getTable(junctionInfo.table);
+            const junctionTable = this.registry.getTable(junctionInfo.table);
             if (!junctionTable) {
                 console.warn(`Junction table '${junctionInfo.table}' not found for many-to-many inverse relation '${relation.relationName}'`);
                 return;
@@ -808,7 +808,7 @@ export class RelationService {
                 return;
             }
 
-            const sourcePks = getPrimaryKeys(sourceCollection);
+            const sourcePks = getPrimaryKeys(sourceCollection, this.registry);
             const sourceIdInfo = sourcePks[0];
             const parsedSourceIdObj = parseIdValues(sourceEntityId, sourcePks);
             const parsedSourceId = parsedSourceIdObj[sourceIdInfo.fieldName];
@@ -818,7 +818,7 @@ export class RelationService {
 
             // Add new entries if newValue is provided
             if (newValue && Array.isArray(newValue) && newValue.length > 0) {
-                const targetPks = getPrimaryKeys(targetCollection);
+                const targetPks = getPrimaryKeys(targetCollection, this.registry);
                 const targetIdInfo = targetPks[0];
                 const targetEntityIds = (newValue as Array<{ id: string | number }>).map((rel) => rel.id);
                 const parsedTargetIds = targetEntityIds.map(id => parseIdValues(id, targetPks)[targetIdInfo.fieldName]);
@@ -854,15 +854,15 @@ export class RelationService {
         for (const upd of updates) {
             const { relation, newTargetId } = upd;
             const targetCollection = relation.target();
-            const targetTable = getTableForCollection(targetCollection);
-            const targetPks = getPrimaryKeys(targetCollection);
+            const targetTable = getTableForCollection(targetCollection, this.registry);
+            const targetPks = getPrimaryKeys(targetCollection, this.registry);
             const targetIdInfo = targetPks[0];
             const targetIdCol = targetTable[targetIdInfo.fieldName as keyof typeof targetTable] as AnyPgColumn;
 
             // Determine mapping of columns
             const { targetFKColName, parentSourceColName } = this.resolveJoinPathWriteMapping(parentCollection, relation);
-            const parentTable = getTableForCollection(parentCollection);
-            const parentPks = getPrimaryKeys(parentCollection);
+            const parentTable = getTableForCollection(parentCollection, this.registry);
+            const parentPks = getPrimaryKeys(parentCollection, this.registry);
             const parentIdInfo = parentPks[0];
             const parsedParentIdObj = parseIdValues(parentEntityId, parentPks);
             const parsedParentId = parsedParentIdObj[parentIdInfo.fieldName];
@@ -971,7 +971,7 @@ export class RelationService {
         const targetCollection = relation.target();
 
         try {
-            const junctionTable = collectionRegistry.getTable(relation.through!.table);
+            const junctionTable = this.registry.getTable(relation.through!.table);
             if (!junctionTable) {
                 console.warn(`Junction table '${relation.through!.table}' not found for relation '${relationKey}'`);
                 return;
@@ -986,7 +986,7 @@ export class RelationService {
             }
 
             // Parse the new entity ID to the correct type
-            const targetPks = getPrimaryKeys(targetCollection);
+            const targetPks = getPrimaryKeys(targetCollection, this.registry);
             const targetIdInfo = targetPks[0];
             const parsedNewEntityIdObj = parseIdValues(newEntityId, targetPks);
             const parsedNewEntityId = parsedNewEntityIdObj[targetIdInfo.fieldName];

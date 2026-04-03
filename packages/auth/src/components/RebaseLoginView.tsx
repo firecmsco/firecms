@@ -1,6 +1,17 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 
-import { ArrowBackIcon, Button, CircularProgress, IconButton, MailIcon, TextField, Typography } from "@rebasepro/ui";
+import {
+    ArrowBackIcon,
+    Button,
+    CircularProgress,
+    cls,
+    IconButton,
+    LoadingButton,
+    MailIcon,
+    Paper,
+    TextField,
+    Typography
+} from "@rebasepro/ui";
 import { ErrorView, RebaseLogo, useModeController } from "@rebasepro/core";
 
 import { RebaseAuthController } from "../types";
@@ -60,9 +71,10 @@ export interface RebaseLoginViewProps {
     googleClientId?: string;
 }
 
+type AuthMode = "buttons" | "login" | "register" | "forgot";
+
 /**
  * Login view component for custom JWT authentication
- * Based on MongoLoginView pattern from @rebasepro/mongodb
  */
 export function RebaseLoginView({
     logo,
@@ -76,18 +88,36 @@ export function RebaseLoginView({
 }: RebaseLoginViewProps) {
 
     const modeState = useModeController();
+    const isDark = modeState.mode === "dark";
 
-    const [registrationSelected, setRegistrationSelected] = useState(false);
-    const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
-    const [forgotPasswordSelected, setForgotPasswordSelected] = useState(false);
+    const [mode, setMode] = useState<AuthMode>("buttons");
+    const [fadeIn, setFadeIn] = useState(false);
+    const [viewVisible, setViewVisible] = useState(true);
+
+    const switchMode = (newMode: AuthMode) => {
+        setViewVisible(false);
+        setTimeout(() => {
+            setMode(newMode);
+            setViewVisible(true);
+        }, 150);
+    };
 
     // Auto-show setup form when no users exist (bootstrap mode)
     const isBootstrapMode = authController.needsSetup;
 
+    useEffect(() => {
+        const timer = setTimeout(() => setFadeIn(true), 50);
+        return () => clearTimeout(timer);
+    }, []);
+
     function buildErrorView() {
         if (!authController.authProviderError) return null;
         if (authController.user != null) return null;
-        return <ErrorView error={authController.authProviderError.message ?? authController.authProviderError} />;
+        return (
+            <div className="w-full">
+                <ErrorView error={authController.authProviderError.message ?? authController.authProviderError} />
+            </div>
+        );
     }
 
     let logoComponent;
@@ -114,94 +144,125 @@ export function RebaseLoginView({
         }
     }
 
+    const showRegistration = !disableSignupScreen && authController.registrationEnabled;
+
     return (
-        <div className="flex flex-col justify-center items-center min-h-screen min-w-full p-2">
-            <div className="flex flex-col items-center w-full max-w-md">
-                <div className={`m-4 p-4 w-64 h-64`}>
+        <div
+            className={cls(
+                "flex items-center justify-center min-h-screen w-full p-4 transition-opacity duration-500",
+                fadeIn ? "opacity-100" : "opacity-0"
+            )}>
+
+            <Paper className="flex flex-col items-center w-[480px] max-w-full p-8 sm:p-10">
+                {/* Logo */}
+                <div className="w-32 h-32 m-2 mb-6">
                     {logoComponent}
                 </div>
-                {notAllowedMessage &&
-                    <div className="p-4">
+
+                {notAllowedMessage && (
+                    <div className="p-4 w-full">
                         <ErrorView error={notAllowedMessage} />
                     </div>
-                }
-                {!forgotPasswordSelected && buildErrorView()}
-
-                {/* Bootstrap mode: show setup form directly */}
-                {isBootstrapMode && !authController.user && (
-                    <LoginForm
-                        authController={authController}
-                        registrationMode={true}
-                        onClose={() => {}}
-                        onForgotPassword={() => {}}
-                        mode={modeState.mode}
-                        noUserComponent={noUserComponent}
-                        disableSignupScreen={false}
-                        bootstrapMode={true}
-                    />
                 )}
 
-                {/* Normal mode: show login/register buttons */}
-                {!isBootstrapMode && !passwordLoginSelected && !registrationSelected && !forgotPasswordSelected && (
-                    <>
-                        <LoginButton
-                            disabled={disabled}
-                            text={"Email/password"}
-                            icon={<MailIcon />}
-                            onClick={() => {
-                                setRegistrationSelected(false);
-                                setPasswordLoginSelected(true);
-                                setForgotPasswordSelected(false);
-                            }}
+                {mode !== "forgot" && buildErrorView()}
+
+                <div className={cls(
+                    "w-full transition-opacity duration-150",
+                    viewVisible ? "opacity-100" : "opacity-0"
+                )}>
+                    {/* Bootstrap mode: show setup form directly */}
+                    {isBootstrapMode && !authController.user && (
+                        <LoginForm
+                            authController={authController}
+                            registrationMode={true}
+                            onClose={() => {}}
+                            onForgotPassword={() => {}}
+                            mode={modeState.mode}
+                            noUserComponent={noUserComponent}
+                            disableSignupScreen={false}
+                            bootstrapMode={true}
                         />
-                        {googleEnabled && googleClientId && (
-                            <GoogleLoginButton
-                                disabled={disabled}
-                                googleClientId={googleClientId}
-                                authController={authController}
-                            />
-                        )}
-                        {!disableSignupScreen && authController.registrationEnabled && (
-                            <LoginButton
-                                disabled={disabled}
-                                text={"Create account"}
-                                icon={<MailIcon />}
-                                onClick={() => {
-                                    setRegistrationSelected(true);
-                                    setPasswordLoginSelected(false);
-                                    setForgotPasswordSelected(false);
-                                }}
-                            />
-                        )}
-                    </>
-                )}
-                {!isBootstrapMode && (passwordLoginSelected || registrationSelected) && !forgotPasswordSelected && (
-                    <LoginForm
-                        authController={authController}
-                        registrationMode={registrationSelected}
-                        onClose={() => {
-                            setRegistrationSelected(false);
-                            setPasswordLoginSelected(false);
-                        }}
-                        onForgotPassword={() => {
-                            setForgotPasswordSelected(true);
-                            setPasswordLoginSelected(false);
-                        }}
-                        mode={modeState.mode}
-                        noUserComponent={noUserComponent}
-                        disableSignupScreen={disableSignupScreen}
-                    />
-                )}
-                {forgotPasswordSelected && (
-                    <ForgotPasswordForm
-                        authController={authController}
-                        onClose={() => {
-                            setForgotPasswordSelected(false);
-                            setPasswordLoginSelected(true);
-                        }}
-                    />
-                )}
-            </div>
+                    )}
+
+                    {/* Normal mode */}
+                    {!isBootstrapMode && (
+                        <>
+                            {/* Provider buttons screen */}
+                            {mode === "buttons" && (
+                                <div className="w-full flex flex-col gap-3 mt-2">
+                                    <LoginButton
+                                        disabled={disabled}
+                                        text={"Sign in with email"}
+                                        icon={<MailIcon />}
+                                        onClick={() => switchMode("login")}
+                                    />
+                                    {googleEnabled && googleClientId && (
+                                        <GoogleLoginButton
+                                            disabled={disabled}
+                                            googleClientId={googleClientId}
+                                            authController={authController}
+                                        />
+                                    )}
+                                    {showRegistration && (
+                                        <div className="mt-2 text-center">
+                                            <Typography variant="body2" color="secondary">
+                                                Don't have an account?{" "}
+                                                <button
+                                                    type="button"
+                                                    className={cls(
+                                                        "font-semibold hover:underline cursor-pointer",
+                                                        isDark ? "text-primary-400" : "text-primary-600"
+                                                    )}
+                                                    onClick={() => switchMode("register")}
+                                                >
+                                                    Create one
+                                                </button>
+                                            </Typography>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Login form */}
+                            {mode === "login" && (
+                                <LoginForm
+                                    authController={authController}
+                                    registrationMode={false}
+                                    onClose={() => switchMode("buttons")}
+                                    onForgotPassword={() => switchMode("forgot")}
+                                    mode={modeState.mode}
+                                    noUserComponent={noUserComponent}
+                                    disableSignupScreen={disableSignupScreen}
+                                    switchToRegister={showRegistration ? () => switchMode("register") : undefined}
+                                />
+                            )}
+
+                            {/* Registration form */}
+                            {mode === "register" && (
+                                <LoginForm
+                                    authController={authController}
+                                    registrationMode={true}
+                                    onClose={() => switchMode("buttons")}
+                                    onForgotPassword={() => switchMode("forgot")}
+                                    mode={modeState.mode}
+                                    noUserComponent={noUserComponent}
+                                    disableSignupScreen={disableSignupScreen}
+                                    switchToLogin={() => switchMode("login")}
+                                />
+                            )}
+
+                            {/* Forgot password form */}
+                            {mode === "forgot" && (
+                                <ForgotPasswordForm
+                                    authController={authController}
+                                    onClose={() => switchMode("login")}
+                                />
+                            )}
+                        </>
+                    )}
+                </div>
+            </Paper>
         </div>
     );
 }
@@ -213,22 +274,20 @@ function LoginButton({
     disabled
 }: { icon: React.ReactNode, onClick: () => void, text: string, disabled?: boolean }) {
     return (
-        <div className="m-2 w-full">
-            <Button
-                disabled={disabled}
-                className={`w-full`}
-                onClick={onClick}>
-                <div className="flex items-center justify-center p-2 w-full h-8">
-                    <div className="flex flex-col items-center justify-center w-8">
-                        {icon}
-                    </div>
-                    <div className="grow pl-2 text-center">
-                        {text}
-                    </div>
-                </div>
-            </Button>
-        </div>
-    )
+        <Button
+            disabled={disabled}
+            className="w-full"
+            variant="outlined"
+            size="large"
+            onClick={onClick}>
+            <div className="flex items-center justify-center w-full gap-3 py-1">
+                <span className="flex items-center justify-center w-5 h-5">
+                    {icon}
+                </span>
+                <Typography variant="button">{text}</Typography>
+            </div>
+        </Button>
+    );
 }
 
 function GoogleLoginButton({
@@ -266,31 +325,27 @@ function GoogleLoginButton({
     };
 
     return (
-        <div className="m-2 w-full">
-            <Button
-                disabled={disabled}
-                className={`w-full`}
-                onClick={handleGoogleLogin}>
-                <div className="flex items-center justify-center p-2 w-full h-8">
-                    <div className="flex flex-col items-center justify-center w-8">
-                        <svg viewBox="0 0 24 24" width="24" height="24">
-                            <path fill="currentColor"
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                            <path fill="currentColor"
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                            <path fill="currentColor"
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                            <path fill="currentColor"
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                        </svg>
-                    </div>
-                    <div className="grow pl-2 text-center">
-                        Continue with Google
-                    </div>
-                </div>
-            </Button>
-        </div>
-    )
+        <Button
+            disabled={disabled}
+            className="w-full"
+            variant="outlined"
+            size="large"
+            onClick={handleGoogleLogin}>
+            <div className="flex items-center justify-center w-full gap-3 py-1">
+                <svg viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="#4285F4"
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853"
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05"
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                    <path fill="#EA4335"
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                </svg>
+                <Typography variant="button">Continue with Google</Typography>
+            </div>
+        </Button>
+    );
 }
 
 function LoginForm({
@@ -301,7 +356,9 @@ function LoginForm({
     registrationMode,
     noUserComponent,
     disableSignupScreen,
-    bootstrapMode = false
+    bootstrapMode = false,
+    switchToRegister,
+    switchToLogin
 }: {
     onClose: () => void,
     onForgotPassword: () => void,
@@ -310,16 +367,16 @@ function LoginForm({
     registrationMode: boolean,
     noUserComponent?: ReactNode,
     disableSignupScreen: boolean,
-    bootstrapMode?: boolean
+    bootstrapMode?: boolean,
+    switchToRegister?: () => void,
+    switchToLogin?: () => void
 }) {
-
+    const isDark = mode === "dark";
     const passwordRef = useRef<HTMLInputElement | null>(null);
 
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
     const [displayName, setDisplayName] = useState<string>();
-
-    const loginMode = !registrationMode;
 
     useEffect(() => {
         if (!document) return;
@@ -346,92 +403,108 @@ function LoginForm({
         }
     }
 
-    const onBackPressed = () => {
-        onClose();
-    }
-
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         if (registrationMode)
             handleRegistration();
         else
             handleEnterPassword();
-    }
+    };
 
-    const label = bootstrapMode
-        ? "Welcome! Create your admin account"
+    const title = bootstrapMode
+        ? "Welcome!"
         : registrationMode
-            ? "Create a new account"
-            : "Enter your email and password";
+            ? "Create account"
+            : "Sign in";
 
-    const button = registrationMode ? "Create account" : "Login";
+    const subtitle = bootstrapMode
+        ? "Create your admin account to get started. This account will have admin privileges."
+        : registrationMode
+            ? "Fill in your details to create a new account"
+            : "Enter your credentials to continue";
+
+    const buttonLabel = registrationMode ? "Create account" : "Sign in";
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-[500px] gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col w-full gap-1 mt-2">
             {!bootstrapMode && (
-                <div className="w-full">
-                    <IconButton onClick={onBackPressed}>
-                        <ArrowBackIcon />
+                <div className="w-full mb-2">
+                    <IconButton onClick={onClose}>
+                        <ArrowBackIcon/>
                     </IconButton>
                 </div>
             )}
 
-            <div className="flex justify-center w-full py-2">
-                <Typography align={"center"} variant={bootstrapMode ? "subtitle1" : "subtitle2"}>{label}</Typography>
-            </div>
+            <Typography variant="h6" className="mb-0.5">
+                {title}
+            </Typography>
+            <Typography variant="body2" color="secondary" className="mb-5">
+                {subtitle}
+            </Typography>
 
-            {bootstrapMode && (
-                <Typography variant="body2" className="text-gray-500 text-center mb-2">
-                    No users found. Create the first account to get started. This account will have admin privileges.
-                </Typography>
+            {registrationMode && noUserComponent && (
+                <div className="w-full mb-2">
+                    {noUserComponent}
+                </div>
             )}
 
             {registrationMode && (
-                <div className="w-full">
-                    <TextField placeholder="Display Name (optional)"
-                        className={"w-full"}
+                <div className="w-full mb-3">
+                    <Typography variant="label" color="secondary" className="mb-1">
+                        Display Name
+                    </Typography>
+                    <TextField placeholder="Jane Doe (optional)"
+                        className="w-full"
                         value={displayName ?? ""}
                         disabled={authController.initialLoading}
                         type="text"
+                        size="medium"
                         onChange={(event) => setDisplayName(event.target.value)} />
                 </div>
             )}
 
-            <div className="w-full">
-                <TextField placeholder="Email"
-                    className={"w-full"}
+            <div className="w-full mb-3">
+                <Typography variant="label" color="secondary" className="mb-1">
+                    Email
+                </Typography>
+                <TextField placeholder="you@example.com"
+                    className="w-full"
                     autoFocus
                     value={email ?? ""}
                     disabled={authController.initialLoading}
                     type="email"
+                    size="medium"
                     onChange={(event) => setEmail(event.target.value)} />
             </div>
 
-            <div className="w-full">
-                {registrationMode && noUserComponent}
-            </div>
-
-            <div className="w-full">
-                <TextField placeholder="Password"
-                    className={"w-full"}
+            <div className="w-full mb-1">
+                <Typography variant="label" color="secondary" className="mb-1">
+                    Password
+                </Typography>
+                <TextField placeholder="••••••••"
+                    className="w-full"
                     value={password ?? ""}
                     disabled={authController.initialLoading}
                     inputRef={passwordRef}
                     type="password"
+                    size="medium"
                     onChange={(event) => setPassword(event.target.value)} />
             </div>
 
             {registrationMode && (
-                <Typography variant="caption" className="text-gray-500 text-sm">
-                    Password: 8+ chars, uppercase, lowercase, number
+                <Typography variant="caption" color="secondary" className="mb-3">
+                    Password must be 8+ characters with uppercase, lowercase, and a number
                 </Typography>
             )}
 
             {!registrationMode && (
-                <div className="w-full text-right">
+                <div className="w-full text-right mb-3">
                     <button
                         type="button"
-                        className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                        className={cls(
+                            "text-xs font-medium hover:underline cursor-pointer",
+                            isDark ? "text-primary-400" : "text-primary-600"
+                        )}
                         onClick={onForgotPassword}
                     >
                         Forgot password?
@@ -439,14 +512,53 @@ function LoginForm({
                 </div>
             )}
 
-            <div className="flex justify-end items-center w-full gap-2">
-                {authController.authLoading && (
-                    <CircularProgress />
-                )}
-                <Button type="submit" disabled={authController.authLoading}>
-                    {button}
-                </Button>
-            </div>
+            <LoadingButton
+                type="submit"
+                variant="filled"
+                className="w-full mt-1"
+                size="large"
+                loading={authController.authLoading}
+                disabled={authController.authLoading || !email || !password}
+            >
+                {buttonLabel}
+            </LoadingButton>
+
+            {/* Switch between login/register */}
+            {switchToRegister && (
+                <div className="mt-4 text-center">
+                    <Typography variant="body2" color="secondary">
+                        Don't have an account?{" "}
+                        <button
+                            type="button"
+                            className={cls(
+                                "font-semibold hover:underline cursor-pointer",
+                                isDark ? "text-primary-400" : "text-primary-600"
+                            )}
+                            onClick={switchToRegister}
+                        >
+                            Create one
+                        </button>
+                    </Typography>
+                </div>
+            )}
+
+            {switchToLogin && (
+                <div className="mt-4 text-center">
+                    <Typography variant="body2" color="secondary">
+                        Already have an account?{" "}
+                        <button
+                            type="button"
+                            className={cls(
+                                "font-semibold hover:underline cursor-pointer",
+                                isDark ? "text-primary-400" : "text-primary-600"
+                            )}
+                            onClick={switchToLogin}
+                        >
+                            Sign in
+                        </button>
+                    </Typography>
+                </div>
+            )}
         </form>
     );
 }
@@ -458,6 +570,8 @@ function ForgotPasswordForm({
     onClose: () => void,
     authController: RebaseAuthController
 }) {
+    const modeState = useModeController();
+    const isDark = modeState.mode === "dark";
     const [email, setEmail] = useState<string>("");
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -500,71 +614,79 @@ function ForgotPasswordForm({
 
     if (submitted) {
         return (
-            <div className="flex flex-col items-center w-full max-w-[500px] gap-4 p-4">
+            <div className="flex flex-col w-full gap-4 mt-2">
                 <div className="w-full">
                     <IconButton onClick={onClose}>
-                        <ArrowBackIcon />
+                        <ArrowBackIcon/>
                     </IconButton>
                 </div>
 
-                <div className="text-center">
-                    <Typography variant="subtitle1" className="mb-4">
+                <div className={cls(
+                    "text-center rounded-xl p-6",
+                    isDark ? "bg-surface-800" : "bg-surface-50"
+                )}>
+                    <div className="text-3xl mb-3">📧</div>
+                    <Typography variant="subtitle1" className="mb-2">
                         Check your email
                     </Typography>
-                    <Typography variant="body2" className="text-gray-600">
+                    <Typography variant="body2" color="secondary">
                         If an account exists for <strong>{email}</strong>, you'll receive a password reset link shortly.
                     </Typography>
                 </div>
 
-                <Button onClick={onClose} className="mt-4">
-                    Back to login
+                <Button onClick={onClose} variant="text" className="mt-2">
+                    Back to sign in
                 </Button>
             </div>
         );
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-[500px] gap-2">
-            <div className="w-full">
-                <IconButton onClick={onClose}>
-                    <ArrowBackIcon />
+        <form onSubmit={handleSubmit} className="flex flex-col w-full gap-1 mt-2">
+            <div className="w-full mb-2">
+                    <IconButton onClick={onClose}>
+                        <ArrowBackIcon/>
                 </IconButton>
             </div>
 
-            <div className="flex justify-center w-full py-2">
-                <Typography align={"center"} variant={"subtitle2"}>Reset your password</Typography>
-            </div>
-
-            <Typography variant="body2" className="text-gray-600 text-center mb-2">
-                Enter your email address and we'll send you a link to reset your password.
+            <Typography variant="h6" className="mb-0.5">
+                Reset password
+            </Typography>
+            <Typography variant="body2" color="secondary" className="mb-5">
+                Enter your email and we'll send you a reset link.
             </Typography>
 
             {error && (
-                <div className="w-full">
+                <div className="w-full mb-3">
                     <ErrorView error={error} />
                 </div>
             )}
 
-            <div className="w-full">
+            <div className="w-full mb-3">
+                <Typography variant="label" color="secondary" className="mb-1">
+                    Email
+                </Typography>
                 <TextField
-                    placeholder="Email"
-                    className={"w-full"}
+                    placeholder="you@example.com"
+                    className="w-full"
                     autoFocus
                     value={email}
                     type="email"
+                    size="medium"
                     onChange={(event) => setEmail(event.target.value)}
                 />
             </div>
 
-            <div className="flex justify-end items-center w-full gap-2 mt-2">
-                {authController.authLoading && (
-                    <CircularProgress />
-                )}
-                <Button type="submit" disabled={authController.authLoading || !email}>
-                    Send reset link
-                </Button>
-            </div>
+            <LoadingButton
+                type="submit"
+                variant="filled"
+                className="w-full"
+                size="large"
+                loading={authController.authLoading}
+                disabled={authController.authLoading || !email}
+            >
+                Send reset link
+            </LoadingButton>
         </form>
     );
 }
-

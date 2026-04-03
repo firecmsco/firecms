@@ -74,9 +74,6 @@
       "@rebasepro/data_import_export": [
         "../../packages/data_import_export/src"
       ],
-      "@rebasepro/media_manager": [
-        "../../packages/media_manager/src"
-      ],
       "@rebasepro/schema_inference": [
         "../../packages/schema_inference/src"
       ],

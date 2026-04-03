@@ -21,27 +21,5 @@ export function RebaseRoutes({ children }: { children?: React.ReactNode }) {
     const state = location.state as Record<string, unknown> | null;
     const baseLocation = state?.base_location ?? location;
 
-    const { views, adminViews } = useNavigationStateController();
-
-    const allViews = [...(views ?? []), ...(adminViews ?? [])];
-
-    return (
-        <Routes location={baseLocation}>
-            {children}
-            {allViews.map(view => {
-                const slugs = Array.isArray(view.slug) ? view.slug : [view.slug];
-                return slugs.flatMap(slug => {
-                    const routes = [
-                        <Route key={slug} path={slug} element={<CustomCMSRoute cmsView={view} />} />
-                    ];
-                    if (view.nestedRoutes) {
-                        routes.push(
-                            <Route key={slug + "/*"} path={slug + "/*"} element={<CustomCMSRoute cmsView={view} />} />
-                        );
-                    }
-                    return routes;
-                });
-            })}
-        </Routes>
-    );
+    return <Routes location={baseLocation}>{children}</Routes>;
 }

@@ -20,6 +20,7 @@ import { StorageSourceContext } from "../contexts/StorageSourceContext";
 import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
 import { RebaseDataContext } from "../contexts/RebaseDataContext";
 import { DatabaseAdminContext } from "../contexts/DatabaseAdminContext";
+import { RebaseClientInstanceContext } from "../contexts/RebaseClientInstanceContext";
 import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
 import { CollectionRegistryContext, NavigationStateContext, CMSUrlContext } from "../hooks/navigation/contexts";
@@ -102,6 +103,9 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     // Storage fallback logic
     const resolvedStorage = storageSourceProp ?? client?.storage;
 
+    // Database fallback logic
+    const resolvedDatabaseAdmin = databaseAdmin ?? (client?.ws as any);
+
     const sideEntityController = useBuildSideEntityController(collectionRegistryController, cmsUrlController, navigationStateController, sideDialogsController, authController);
 
     const pluginsLoading = plugins?.some((p: RebasePlugin) => p.loading) ?? false;
@@ -147,6 +151,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     }
 
     const content = (
+        <RebaseClientInstanceContext.Provider value={client}>
         <AnalyticsContext.Provider value={analyticsController}>
             <CustomizationControllerContext.Provider value={customizationController}>
                 <UserConfigurationPersistenceContext.Provider
@@ -156,7 +161,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                         <RebaseDataContext.Provider
                             value={resolvedData}>
                             <DatabaseAdminContext.Provider
-                                value={databaseAdmin}>
+                                value={resolvedDatabaseAdmin}>
                                 <AuthControllerContext.Provider
                                     value={authController}>
                                         <SideDialogsControllerContext.Provider
@@ -190,6 +195,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                 </UserConfigurationPersistenceContext.Provider>
             </CustomizationControllerContext.Provider>
         </AnalyticsContext.Provider>
+        </RebaseClientInstanceContext.Provider>
     );
 
     if (apiUrl) {

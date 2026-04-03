@@ -29,8 +29,7 @@ export * from "./services/realtimeService";
 export * from "./services/driver-registry";
 
 // Collections
-export * from "./collections/registry";
-export { PostgresCollectionRegistry } from "./collections/BackendCollectionRegistry";
+export { BackendCollectionRegistry, PostgresCollectionRegistry } from "./collections/BackendCollectionRegistry";
 
 // Utilities
 export { DrizzleConditionBuilder, PostgresConditionBuilder } from "./utils/drizzle-conditions";

@@ -3,7 +3,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { cls } from "../util";
 import { defaultBorderMixin } from "../styles";
 
-export type TabVariant = "standard" | "underline" | "invisible";
+export type TabVariant = "standard" | "boxy" | "pill";
 
 const TabsContext = createContext<{ variant: TabVariant }>({ variant: "standard" });
 import { IconButton } from "./IconButton";
@@ -103,8 +103,8 @@ export function Tabs({
                 <TabsPrimitive.List className={cls(
                     variant === "standard" && "inline-flex h-10 items-center justify-start rounded-md bg-surface-50 p-1 text-surface-600 dark:bg-surface-900 dark:text-surface-400 gap-2 border",
                     variant === "standard" && defaultBorderMixin,
-                    variant === "underline" && "inline-flex text-sm font-medium text-center text-surface-accent-800 dark:text-white items-end",
-                    variant === "invisible" && "inline-flex h-10 items-center justify-start gap-2",
+                    variant === "boxy" && "flex items-center h-full",
+                    variant === "pill" && "flex items-center gap-0.5",
                     innerClassName)
                 }>
                     {children}
@@ -155,24 +155,23 @@ export function Tab({
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-400 focus-visible:ring-offset-2",
                 "disabled:pointer-events-none disabled:opacity-50",
                 variant === "standard" && "rounded-sm px-3 py-1.5 data-[state=active]:bg-white data-[state=active]:text-surface-900 dark:data-[state=active]:bg-surface-950 dark:data-[state=active]:text-surface-50",
-                variant === "underline" && cls(
-                    "border-b-2 border-transparent data-[state=active]:border-secondary",
-                    disabled
-                        ? "text-surface-accent-400 dark:text-surface-accent-500"
-                        : "text-surface-accent-700 dark:text-surface-accent-300 data-[state=active]:text-surface-accent-900 data-[state=active]:dark:text-white hover:text-surface-accent-800 dark:hover:text-surface-accent-200"
+                variant === "boxy" && cls(
+                    "flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 border-r border-surface-200 dark:border-surface-800 cursor-pointer text-[12px] font-medium transition-colors group relative",
+                    "data-[state=active]:bg-surface-50 dark:data-[state=active]:bg-surface-800",
+                    "data-[state=active]:text-text-primary dark:data-[state=active]:text-text-primary-dark",
+                    "data-[state=active]:border-b-2 data-[state=active]:border-b-primary",
+                    "text-text-secondary dark:text-text-secondary-dark hover:bg-surface-100 dark:hover:bg-surface-800"
                 ),
-                variant === "invisible" && "rounded-sm px-3 py-1.5 data-[state=active]:bg-white data-[state=active]:text-surface-900 dark:data-[state=active]:bg-surface-950 dark:data-[state=active]:text-surface-50",
+                variant === "pill" && cls(
+                    "px-2 py-0.5 rounded text-[10px] font-medium transition-colors",
+                    "data-[state=active]:bg-primary/10 data-[state=active]:text-primary dark:data-[state=active]:bg-primary/20 dark:data-[state=active]:text-blue-400",
+                    "text-text-disabled dark:text-text-disabled-dark hover:text-text-secondary dark:hover:text-text-secondary-dark"
+                ),
                 className,
-                variant !== "underline" && innerClassName
+                variant === "standard" && innerClassName
             )}
         >
-            {variant === "underline" ? (
-                <div className={cls("line-clamp-1 inline-block p-2 px-4 rounded hover:bg-surface-accent-200 hover:bg-opacity-75 dark:hover:bg-surface-accent-800", innerClassName)}>
-                    {children}
-                </div>
-            ) : (
-                children
-            )}
+            {children}
         </TabsPrimitive.Trigger>
     );
 }

@@ -48,3 +48,4 @@ export * from "./Debug/UIReferenceView";
 export * from "./AdminModeSyncer";
 export * from "./UserSettingsView";
 export * from "./LanguageToggle";
+export * from "./UserSelectPopover";

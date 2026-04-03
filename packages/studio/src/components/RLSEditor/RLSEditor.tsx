@@ -16,7 +16,9 @@ import {
     WarningIcon,
     KeyIcon,
     DeleteIcon,
-    IconButton
+    IconButton,
+    Tabs,
+    Tab
 } from "@rebasepro/ui";
 import { useRebaseContext, useSnackbarController, useCollectionRegistryController, ErrorView, useTranslation } from "@rebasepro/core";
 import { PolicyEditor } from "./PolicyEditor";
@@ -63,6 +65,9 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
     });
 
     const [expandedSchemas, setExpandedSchemas] = useState<Record<string, boolean>>({ public: true });
+
+    // Sidebar tab: "tables" or "info"
+    const [sidebarTab, setSidebarTab] = useState<"tables" | "info">("tables");
 
     useEffect(() => {
         try {
@@ -260,6 +265,15 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
         return Object.values(policiesMap).sort((a, b) => a.policyname.localeCompare(b.policyname));
     }, [activeTableData, activeCollection]);
 
+    // Stats for the info tab
+    const rlsStats = useMemo(() => {
+        const total = tables.length;
+        const enabled = tables.filter(t => t.rlsEnabled).length;
+        const withPolicies = tables.filter(t => t.policies.length > 0).length;
+        const totalPolicies = tables.reduce((sum, t) => sum + t.policies.length, 0);
+        return { total, enabled, withPolicies, totalPolicies };
+    }, [tables]);
+
     const renderPolicyTag = (label: string, value: string) => {
         return (
             <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-surface-100 dark:bg-surface-800 border border-surface-200 dark:border-surface-700/50">
@@ -281,101 +295,206 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                 onPanelSizeChange={setSidebarSize}
                 minPanelSizePx={220}
                 firstPanel={
-                    <div className={cls("flex flex-col h-full w-full bg-surface-50 dark:bg-surface-900 border-r", defaultBorderMixin)}>
-                        <div className={cls("px-4 py-3 border-b", defaultBorderMixin)}>
-                            <Typography variant="subtitle1" className="flex items-center gap-2">
-                                <SecurityIcon size="small" />
-                                RLS Studio
-                            </Typography>
-                            <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark mt-1 block">
-                                {t("studio_rls_description")}
-                            </Typography>
-                        </div>
+                    <div className={cls("flex flex-col h-full w-full bg-white dark:bg-surface-950 border-r", defaultBorderMixin)}>
+                        <Tabs value={sidebarTab} onValueChange={(v) => setSidebarTab(v as "tables" | "info")} variant="boxy" className="border-b border-surface-200 dark:border-surface-800">
+                            <Tab value="tables">Tables</Tab>
+                            <Tab value="info">Info</Tab>
+                        </Tabs>
 
-                        <div className="flex-grow overflow-y-auto w-full no-scrollbar px-2 py-4 space-y-1">
-                            {isLoading && tables.length === 0 ? (
-                                <div className="flex justify-center p-4"><CircularProgress size="small" /></div>
-                            ) : Object.keys(groupedTables).length === 0 ? (
-                                <div className="p-4 text-center">
-                                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark italic">{t("studio_rls_no_tables")}</Typography>
-                                </div>
-                            ) : (
-                                Object.entries(groupedTables).map(([schemaName, schemaTables]) => (
-                                    <div key={schemaName} className="mb-2">
-                                        <div
-                                            className="flex items-center p-1.5 cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800 rounded transition-colors group mb-1"
-                                            onClick={() => setExpandedSchemas(prev => ({ ...prev, [schemaName]: !prev[schemaName] }))}
-                                        >
-                                            <svg className={cls("w-3.5 h-3.5 mr-1.5 transition-transform text-text-secondary dark:text-text-secondary-dark", expandedSchemas[schemaName] ? "rotate-90" : "")} fill="currentColor" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" /></svg>
-                                            <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark uppercase tracking-wider text-[11px] truncate flex-grow group-hover:text-text-primary dark:group-hover:text-text-primary-dark transition-colors">{schemaName}</Typography>
-                                        </div>
-
-                                        {expandedSchemas[schemaName] && (
-                                            <div className="space-y-0.5 ml-2">
-                                                {schemaTables.map(table => {
-                                                    const key = `${table.schemaName}.${table.tableName}`;
-                                                    const isSelected = selectedTable === key;
-                                                    return (
-                                                        <button
-                                                            key={key}
-                                                            onClick={() => setSelectedTable(key)}
-                                                            className={cls(
-                                                                "w-full text-left px-3 py-1.5 rounded-md text-sm transition-colors flex items-center justify-between group",
-                                                                isSelected
-                                                                    ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light"
-                                                                    : "hover:bg-surface-200 dark:hover:bg-surface-800 text-text-secondary dark:text-text-secondary-dark"
-                                                            )}
-                                                        >
-                                                            <span className="truncate">{table.tableName}</span>
-                                                            <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                                                                {table.rlsEnabled ? (
-                                                                    <Tooltip title={t("studio_rls_enabled")}>
-                                                                        <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                                                                    </Tooltip>
-                                                                ) : (
-                                                                    <Tooltip title={t("studio_rls_disabled")}>
-                                                                        <div className="w-1.5 h-1.5 rounded-full bg-orange-400 opacity-50" />
-                                                                    </Tooltip>
-                                                                )}
-                                                                <span className="text-[10px] opacity-40 group-hover:opacity-100 min-w-[1.2rem] text-right font-medium">
-                                                                    {table.policies.length}
-                                                                </span>
-                                                            </div>
-                                                        </button>
-                                                    );
-                                                })}
+                        <div className="flex-grow overflow-hidden relative">
+                            {sidebarTab === "tables" && (
+                                <div className="flex flex-col h-full">
+                                    <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                                        <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">
+                                            {t("studio_rls_description")}
+                                        </Typography>
+                                        <IconButton size="small" onClick={fetchRLSData} title="Refresh">
+                                            <RefreshIcon size="smallest" />
+                                        </IconButton>
+                                    </div>
+                                    <div className="flex-grow overflow-y-auto no-scrollbar p-1">
+                                        {isLoading && tables.length === 0 ? (
+                                            <div className="flex justify-center p-4"><CircularProgress size="small" /></div>
+                                        ) : Object.keys(groupedTables).length === 0 ? (
+                                            <div className="p-4 text-center">
+                                                <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark italic">{t("studio_rls_no_tables")}</Typography>
                                             </div>
+                                        ) : (
+                                            Object.entries(groupedTables).map(([schemaName, schemaTables]) => (
+                                                <div key={schemaName} className="mb-2">
+                                                    <div
+                                                        className="flex items-center p-1 cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800 rounded transition-colors"
+                                                        onClick={() => setExpandedSchemas(prev => ({ ...prev, [schemaName]: !prev[schemaName] }))}
+                                                    >
+                                                        <svg className={cls("w-3 h-3 mr-1 transition-transform", expandedSchemas[schemaName] ? "rotate-90" : "")} fill="currentColor" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" /></svg>
+                                                        <Typography variant="body2" className="text-text-primary dark:text-text-primary-dark font-medium text-xs truncate flex-grow">{schemaName}</Typography>
+                                                    </div>
+
+                                                    {expandedSchemas[schemaName] && (
+                                                        <div className="ml-3 mt-1 space-y-0.5">
+                                                            {schemaTables.map(table => {
+                                                                const key = `${table.schemaName}.${table.tableName}`;
+                                                                const isSelected = selectedTable === key;
+                                                                return (
+                                                                    <div
+                                                                        key={key}
+                                                                        onClick={() => setSelectedTable(key)}
+                                                                        className={cls(
+                                                                            "flex items-center p-1 cursor-pointer rounded transition-colors group relative",
+                                                                            isSelected
+                                                                                ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light"
+                                                                                : "hover:bg-surface-100 dark:hover:bg-surface-800 text-text-secondary dark:text-text-secondary-dark"
+                                                                        )}
+                                                                    >
+                                                                        <svg className="w-3.5 h-3.5 mr-1 shrink-0 text-text-disabled dark:text-text-disabled-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                                                        <Typography variant="body2" className="text-xs truncate flex-1 min-w-0">{table.tableName}</Typography>
+                                                                        <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                                                                            {table.rlsEnabled ? (
+                                                                                <Tooltip title={t("studio_rls_enabled")}>
+                                                                                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                                                                                </Tooltip>
+                                                                            ) : (
+                                                                                <Tooltip title={t("studio_rls_disabled")}>
+                                                                                    <div className="w-1.5 h-1.5 rounded-full bg-orange-400 opacity-50" />
+                                                                                </Tooltip>
+                                                                            )}
+                                                                            <span className="text-[10px] opacity-40 group-hover:opacity-100 min-w-[1.2rem] text-right font-medium">
+                                                                                {table.policies.length}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))
                                         )}
                                     </div>
-                                ))
+                                </div>
+                            )}
+
+                            {sidebarTab === "info" && (
+                                <div className="flex flex-col h-full">
+                                    <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                                        <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">
+                                            Overview
+                                        </Typography>
+                                    </div>
+                                    <div className="flex-grow overflow-y-auto p-3 space-y-3 no-scrollbar">
+                                        <div className={cls("p-3 rounded-lg border bg-white dark:bg-surface-900", defaultBorderMixin)}>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <SecurityIcon size="small" className="text-primary" />
+                                                <Typography variant="body2" className="font-semibold text-[13px]">RLS Studio</Typography>
+                                            </div>
+                                            <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[11px] leading-relaxed block">
+                                                Manage Row Level Security policies for your PostgreSQL tables. Enable RLS and create fine-grained access policies.
+                                            </Typography>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <div className={cls("p-2.5 rounded border bg-white dark:bg-surface-900 flex items-center justify-between", defaultBorderMixin)}>
+                                                <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[11px]">Total tables</Typography>
+                                                <Typography variant="body2" className="font-mono text-[13px] font-medium">{rlsStats.total}</Typography>
+                                            </div>
+                                            <div className={cls("p-2.5 rounded border bg-white dark:bg-surface-900 flex items-center justify-between", defaultBorderMixin)}>
+                                                <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[11px]">RLS enabled</Typography>
+                                                <div className="flex items-center gap-1.5">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                                                    <Typography variant="body2" className="font-mono text-[13px] font-medium">{rlsStats.enabled}</Typography>
+                                                </div>
+                                            </div>
+                                            <div className={cls("p-2.5 rounded border bg-white dark:bg-surface-900 flex items-center justify-between", defaultBorderMixin)}>
+                                                <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[11px]">Tables with policies</Typography>
+                                                <Typography variant="body2" className="font-mono text-[13px] font-medium">{rlsStats.withPolicies}</Typography>
+                                            </div>
+                                            <div className={cls("p-2.5 rounded border bg-white dark:bg-surface-900 flex items-center justify-between", defaultBorderMixin)}>
+                                                <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[11px]">Total policies</Typography>
+                                                <Typography variant="body2" className="font-mono text-[13px] font-medium">{rlsStats.totalPolicies}</Typography>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             )}
                         </div>
                     </div>
                 }
                 secondPanel={
                     <div className="flex-grow flex flex-col min-w-0 h-full w-full bg-white dark:bg-surface-950">
-                        {/* Toolbar Header matching SQLEditor style */}
-                        <div className={cls("h-[44px] shrink-0 flex items-center justify-between px-4 border-b bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
-                            <Typography variant="subtitle2" className="font-mono text-text-secondary dark:text-text-secondary-dark">
-                                {activeTableData ? `${activeTableData.schemaName}.${activeTableData.tableName}` : t("studio_rls_select_table")}
-                            </Typography>
-                            <Button
-                                size="small"
-                                variant="text"
-                                className="text-[11px] text-text-secondary dark:text-text-secondary-dark"
-                                onClick={fetchRLSData}
-                                startIcon={<RefreshIcon size="smallest" />}
-                            >
-                                Refresh
-                            </Button>
+                        {/* Toolbar Header matching SQL/JS Editor style */}
+                        <div className={cls("flex items-center justify-between pr-2 border-b bg-white dark:bg-surface-950", defaultBorderMixin)}>
+                            <div className="flex items-center flex-grow overflow-hidden px-4">
+                                <Typography variant="subtitle2" className="font-mono text-text-secondary dark:text-text-secondary-dark truncate">
+                                    {activeTableData ? `${activeTableData.schemaName}.${activeTableData.tableName}` : t("studio_rls_select_table")}
+                                </Typography>
+                                {activeTableData && (
+                                    <div className="ml-3">
+                                        {activeTableData.rlsEnabled ? (
+                                            <Chip size="smallest" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800">{t("studio_rls_enabled")}</Chip>
+                                        ) : (
+                                            <Chip size="smallest" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800">{t("studio_rls_disabled")}</Chip>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex shrink-0 items-center justify-end gap-1.5">
+                                {activeTableData && (
+                                    <>
+                                        <Button
+                                            variant="text"
+                                            size="small"
+                                            onClick={async () => {
+                                                const table = activeTableData.tableName;
+                                                const action = activeTableData.rlsEnabled ? "DISABLE" : "ENABLE";
+                                                if (!confirm(`Are you sure you want to ${action.toLowerCase()} Row Level Security on "${table}"?`)) return;
+                                                try {
+                                                    await databaseAdmin!.executeSql!(`ALTER TABLE "${table}" ${action} ROW LEVEL SECURITY`);
+                                                    snackbarController.open({ type: "success", message: `RLS ${action.toLowerCase()}d on ${table}` });
+                                                    fetchRLSData();
+                                                } catch (e: unknown) {
+                                                    snackbarController.open({ type: "error", message: e instanceof Error ? e.message : String(e) });
+                                                }
+                                            }}
+                                        >
+                                            {activeTableData.rlsEnabled ? t("studio_rls_disable_rls") : t("studio_rls_enable_rls")}
+                                        </Button>
+
+                                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1" />
+
+                                        <Button
+                                            variant="text"
+                                            size="small"
+                                            onClick={fetchRLSData}
+                                            startIcon={<RefreshIcon size="smallest" />}
+                                        >
+                                            Refresh
+                                        </Button>
+
+                                        <div className="h-4 w-px bg-surface-200 dark:bg-surface-800 mx-1" />
+
+                                        <Button
+                                            size="small"
+                                            color="primary"
+                                            disabled={!activeCollection}
+                                            onClick={() => setEditingPolicy("new")}
+                                        >
+                                            {t("studio_rls_create_policy")}
+                                        </Button>
+                                    </>
+                                )}
+                            </div>
                         </div>
+
                         {error ? (
                             <div className="p-6 h-full flex items-center justify-center">
                                 <ErrorView title={t("studio_rls_error")} error={error} onRetry={fetchRLSData} />
                             </div>
                         ) : !activeTableData ? (
                             <div className="flex-grow flex items-center justify-center text-text-disabled h-full">
-                                <Typography variant="body2">{t("studio_rls_select_table")}</Typography>
+                                <div className="text-center">
+                                    <svg className="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                                    <Typography variant="body2">{t("studio_rls_select_table")}</Typography>
+                                </div>
                             </div>
                         ) : editingPolicy ? (
                             <PolicyEditor
@@ -423,47 +542,6 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                             />
                         ) : (
                             <div className="flex-grow flex flex-col overflow-hidden">
-                                <div className="p-6 pb-2 shrink-0">
-                                    <div className="flex items-start justify-between mb-2">
-                                        <Typography variant="h5" className="flex items-center gap-3">
-                                            {activeTableData.tableName}
-                                            {activeTableData.rlsEnabled ? (
-                                                <Chip size="small" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800">{t("studio_rls_enabled")}</Chip>
-                                            ) : (
-                                                <Chip size="small" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800">{t("studio_rls_disabled")}</Chip>
-                                            )}
-                                        </Typography>
-                                        <div className="flex gap-2">
-                                            <Button
-                                                variant="text"
-                                                size="small"
-                                                onClick={async () => {
-                                                    const table = activeTableData.tableName;
-                                                    const action = activeTableData.rlsEnabled ? "DISABLE" : "ENABLE";
-                                                    if (!confirm(`Are you sure you want to ${action.toLowerCase()} Row Level Security on "${table}"?`)) return;
-                                                    try {
-                                                        await databaseAdmin!.executeSql!(`ALTER TABLE "${table}" ${action} ROW LEVEL SECURITY`);
-                                                        snackbarController.open({ type: "success", message: `RLS ${action.toLowerCase()}d on ${table}` });
-                                                        fetchRLSData();
-                                                    } catch (e: unknown) {
-                                                        snackbarController.open({ type: "error", message: e instanceof Error ? e.message : String(e) });
-                                                    }
-                                                }}
-                                            >
-                                                {activeTableData.rlsEnabled ? t("studio_rls_disable_rls") : t("studio_rls_enable_rls")}
-                                            </Button>
-                                            <Button
-                                                variant="filled"
-                                                size="small"
-                                                color="neutral"
-                                                disabled={!activeCollection}
-                                                onClick={() => setEditingPolicy("new")}
-                                            >
-                                                {t("studio_rls_create_policy")}
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div className="p-6 pt-4 flex-grow overflow-auto bg-surface-50 dark:bg-surface-900">
                                     <div className="max-w-4xl mx-auto">
                                     {activeTableData && !activeCollection && (

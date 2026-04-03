@@ -18,7 +18,7 @@ interface SearchBarProps {
      * - "medium": 44px height (matches TextField medium)
      * @default "medium"
      */
-    size?: "small" | "medium";
+    size?: "smallest" | "small" | "medium";
     /**
      * @deprecated Use size="medium" or size="small" instead. This prop will be removed in a future version.
      */
@@ -70,9 +70,9 @@ export function SearchBar({
     }, [onTextSearch]);
 
     // Height classes matching TextField sizes
-    const heightClass = size === "small" ? "h-[36px]" : "h-[44px]";
-    const iconPaddingClass = size === "small" ? "px-2" : "px-4";
-    const inputPaddingClass = size === "small" ? "pl-8" : "pl-12";
+    const heightClass = size === "smallest" ? "h-8" : size === "small" ? "h-[36px]" : "h-[44px]";
+    const iconPaddingClass = size === "smallest" ? "px-2" : size === "small" ? "px-2" : "px-4";
+    const inputPaddingClass = size === "smallest" ? "pl-8" : size === "small" ? "pl-8" : "pl-12";
 
     return (
         <div

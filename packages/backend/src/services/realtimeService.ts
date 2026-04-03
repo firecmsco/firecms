@@ -8,7 +8,7 @@ import { Entity, FetchCollectionProps, ListenCollectionProps, ListenEntityProps,
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { sql as drizzleSql } from "drizzle-orm";
 import { RealtimeProvider, CollectionSubscriptionConfig, EntitySubscriptionConfig } from "../db/interfaces";
-import { collectionRegistry } from "../collections/registry";
+import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 
 /** Channel name used for Postgres LISTEN/NOTIFY cross-instance realtime. */
 const PG_NOTIFY_CHANNEL = "rebase_entity_changes";
@@ -75,9 +75,9 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
     /** Reconnection timer handle. */
     private reconnectTimer?: ReturnType<typeof setTimeout>;
 
-    constructor(private db: NodePgDatabase) {
+    constructor(private db: NodePgDatabase, private registry: BackendCollectionRegistry) {
         super();
-        this.entityService = new EntityService(db);
+        this.entityService = new EntityService(db, registry);
     }
 
     setDataDriver(driver: DataDriver) {
@@ -253,7 +253,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             // Send initial data
             let entities;
             if (this.driver) {
-                const collection = collectionRegistry.getCollectionByPath(request.path);
+                const collection = this.registry.getCollectionByPath(request.path);
                 entities = await this.driver.fetchCollection({
                     path: request.path,
                     collection: collection,
@@ -298,7 +298,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             // Send initial data
             let entity;
             if (this.driver) {
-                const collection = collectionRegistry.getCollectionByPath(request.path);
+                const collection = this.registry.getCollectionByPath(request.path);
                 entity = await this.driver.fetchEntity({
                     path: request.path,
                     entityId: request.entityId,
@@ -460,7 +460,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         authContext?: SubscriptionAuthContext
     ): Promise<Entity[]> {
         if (this.driver) {
-            const collection = collectionRegistry.getCollectionByPath(notifyPath);
+            const collection = this.registry.getCollectionByPath(notifyPath);
             const fetchFn = async () => this.driver!.fetchCollection({
                 path: notifyPath,
                 collection: collection,
@@ -478,7 +478,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                     await tx.execute(drizzleSql`SELECT set_config('app.user_id', ${authContext.userId}, true)`);
                     await tx.execute(drizzleSql`SELECT set_config('app.user_roles', ${authContext.roles.join(",")}, true)`);
                     await tx.execute(drizzleSql`SELECT set_config('app.jwt', ${JSON.stringify({ sub: authContext.userId, roles: authContext.roles })}, true)`);
-                    const txEntityService = new EntityService(tx);
+                    const txEntityService = new EntityService(tx, this.registry);
                     if (collectionRequest.searchString) {
                         return await txEntityService.searchEntities(
                             notifyPath,
@@ -691,7 +691,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                     let entity: Entity | null = null;
                     try {
                         if (this.driver) {
-                            const collection = collectionRegistry.getCollectionByPath(p);
+                            const collection = this.registry.getCollectionByPath(p);
                             const fetched = await this.driver.fetchEntity({
                                 path: p,
                                 entityId: eid,

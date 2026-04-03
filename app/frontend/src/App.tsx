@@ -36,9 +36,10 @@ import {
     useBuildModeController,
     useBuildNavigationStateController,
     UIReferenceView,
+    CustomCMSRoute
 } from "@rebasepro/core";
 import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
-import { CollectionsStudioView, RLSEditor, SQLEditor, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
+import { CollectionsStudioView, JSEditor, RLSEditor, SQLEditor, StorageView, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
 import { CMSView } from "@rebasepro/types";
 import { createRebaseClient } from "@rebasepro/client";
 import { collections } from "virtual:rebase-collections";
@@ -112,6 +113,14 @@ export function App() {
             view: <SQLEditor />
         },
         {
+            slug: "js",
+            name: "JS Console",
+            group: "Database",
+            icon: "code",
+            description: "Execute JavaScript with the Rebase SDK",
+            view: <JSEditor />
+        },
+        {
             slug: "rls",
             name: "RLS Policies",
             group: "Database",
@@ -126,6 +135,14 @@ export function App() {
             icon: "view_list",
             nestedRoutes: true,
             view: <CollectionsStudioView configController={collectionConfigController} />
+        },
+        {
+            slug: "storage",
+            name: "Storage",
+            group: "Storage",
+            icon: "cloud",
+            description: "Browse and manage storage files",
+            view: <StorageView />
         }
     ], [collectionConfigController]);
 
@@ -197,6 +214,21 @@ export function App() {
 
                                         {/* Hidden debug route — not in sidebar */}
                                         <Route path={"/debug/ui"} element={<UIReferenceView />} />
+
+                                        {[...(navigationStateController.views ?? []), ...(navigationStateController.adminViews ?? [])].map(view => {
+                                            const slugs = Array.isArray(view.slug) ? view.slug : [view.slug];
+                                            return slugs.flatMap(slug => {
+                                                const routes = [
+                                                    <Route key={slug} path={slug} element={<CustomCMSRoute cmsView={view} />} />
+                                                ];
+                                                if (view.nestedRoutes) {
+                                                    routes.push(
+                                                        <Route key={slug + "/*"} path={slug + "/*"} element={<CustomCMSRoute cmsView={view} />} />
+                                                    );
+                                                }
+                                                return routes;
+                                            });
+                                        })}
 
                                         <Route path={"*"} element={<NotFoundPage />} />
                                     </Route>

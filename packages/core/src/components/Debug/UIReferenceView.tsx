@@ -65,6 +65,8 @@ import { RebaseLogo } from "../RebaseLogo";
 const SECTIONS = [
     { id: "drawer", label: "Drawer" },
     { id: "appbar", label: "App Bar" },
+    { id: "tabs", label: "Tabs" },
+    { id: "editor-sidebar", label: "Editor Sidebar" },
     { id: "typography", label: "Typography" },
     { id: "buttons", label: "Buttons" },
     { id: "inputs", label: "Form Inputs" },
@@ -309,6 +311,180 @@ export function UIReferenceView() {
                             <MenuItem><SettingsIcon /> Account Settings</MenuItem>
                             <MenuItem><LogoutIcon /> Log Out</MenuItem>
                         </Menu>
+                    </div>
+                </SectionBlock>
+
+                {/* ═══════════════════════════════════════════════
+                    SECTION: Tabs
+                ═══════════════════════════════════════════════ */}
+                <SectionBlock id="tabs" title="Tabs — Tabs.tsx">
+                    <Typography variant="body2" color="secondary" className="mb-4">
+                        All editor components use <code className="font-mono text-xs">variant="boxy"</code> tabs for sidebar navigation.
+                        The boxy variant provides a segmented, flat tab bar that integrates tightly with editor chrome.
+                    </Typography>
+
+                    <div className="flex flex-col gap-6">
+                        {/* Default variant */}
+                        <div>
+                            <Typography variant="caption" color="secondary" className="block mb-2 font-mono">variant="default"</Typography>
+                            <Tabs value="tab1" onValueChange={() => {}}>
+                                <Tab value="tab1">Schema</Tab>
+                                <Tab value="tab2">Snippets</Tab>
+                                <Tab value="tab3">History</Tab>
+                            </Tabs>
+                        </div>
+
+                        {/* Boxy variant — exact pattern from SQLEditorSidebar, JSEditorSidebar, RLSEditor */}
+                        <div>
+                            <Typography variant="caption" color="secondary" className="block mb-2 font-mono">variant="boxy" (Editor Standard)</Typography>
+                            <div className={cls("border rounded-lg overflow-hidden w-[320px]", defaultBorderMixin)}>
+                                <Tabs value="schema" onValueChange={() => {}} variant="boxy" className="border-b border-surface-200 dark:border-surface-800">
+                                    <Tab value="schema">Schema</Tab>
+                                    <Tab value="snippets">Snippets</Tab>
+                                    <Tab value="history">History</Tab>
+                                </Tabs>
+                                {/* Section header pattern — used in all editor sidebars */}
+                                <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                                    <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">TABLES</Typography>
+                                    <IconButton size="small">
+                                        <SettingsIcon size="smallest" />
+                                    </IconButton>
+                                </div>
+                                <div className="p-2 h-24">
+                                    <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark italic p-2">Tab content area…</Typography>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Toolbar tabs — from SQLEditor/JSEditor main toolbar */}
+                        <div>
+                            <Typography variant="caption" color="secondary" className="block mb-2 font-mono">Toolbar Tabs (boxy, inline with controls)</Typography>
+                            <div className={cls("border rounded-lg overflow-hidden flex items-center justify-between pr-2 bg-white dark:bg-surface-950", defaultBorderMixin)}>
+                                <div className="flex items-center">
+                                    <Tabs value="query1" onValueChange={() => {}} variant="boxy" className="w-[unset] flex-shrink-0">
+                                        <Tab value="query1" className="flex items-center gap-1.5">
+                                            <svg className="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
+                                            Query 1
+                                        </Tab>
+                                        <Tab value="query2" className="flex items-center gap-1.5">
+                                            <svg className="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
+                                            Query 2
+                                        </Tab>
+                                    </Tabs>
+                                    <IconButton size="small" className="ml-2 flex-shrink-0">
+                                        <AddIcon />
+                                    </IconButton>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <Button variant="text" size="small">Explain</Button>
+                                    <div className="h-4 w-px bg-surface-200 dark:bg-surface-800" />
+                                    <Button size="small" color="primary">Run</Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </SectionBlock>
+
+                {/* ═══════════════════════════════════════════════
+                    SECTION: Editor Sidebar
+                ═══════════════════════════════════════════════ */}
+                <SectionBlock id="editor-sidebar" title="Editor Sidebar — Harmonized Pattern">
+                    <Typography variant="body2" color="secondary" className="mb-4">
+                        All studio editor components (SQL, JS, RLS, Collection) share the same underlying sidebar foundation:
+                        <code className="font-mono text-xs">Tabs variant="boxy"</code> at top (optional) → section header with uppercase label → scrollable list.
+                        While SQL/JS/RLS use dense tree entries, the Collection Schema Editor uses larger items (<code className="font-mono text-xs">px-3 py-2</code>, <code className="font-mono text-xs">text-sm</code>) suitable for primary navigation.
+                    </Typography>
+
+                    <div className="flex gap-6 flex-wrap">
+                        {/* SQL Editor Sidebar replica */}
+                        <div>
+                            <Typography variant="caption" color="secondary" className="block mb-1">SQL Editor Sidebar</Typography>
+                            <div className={cls("flex flex-col h-72 w-[240px] border rounded-lg overflow-hidden", defaultBorderMixin)}>
+                                <Tabs value="schema" onValueChange={() => {}} variant="boxy" className="border-b border-surface-200 dark:border-surface-800">
+                                    <Tab value="schema">Schema</Tab>
+                                    <Tab value="snippets">Snippets</Tab>
+                                    <Tab value="history">History</Tab>
+                                </Tabs>
+                                <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                                    <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-secondary dark:text-text-secondary-dark">TABLES</Typography>
+                                    <IconButton size="small">
+                                        <SettingsIcon size="smallest" />
+                                    </IconButton>
+                                </div>
+                                <div className="flex-grow overflow-y-auto no-scrollbar p-1">
+                                    {/* Schema tree items — from SchemaBrowser */}
+                                    <div className="mb-2">
+                                        <div className="flex items-center p-1 cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800 rounded transition-colors">
+                                            <svg className="w-3 h-3 mr-1 rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" /></svg>
+                                            <Typography variant="body2" className="text-text-primary dark:text-text-primary-dark font-medium text-xs">public</Typography>
+                                        </div>
+                                        <div className="ml-3 mt-1 space-y-1">
+                                            {["users", "posts", "comments"].map(t => (
+                                                <div key={t} className="flex items-center p-1 cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800 rounded transition-colors group">
+                                                    <svg className="w-3.5 h-3.5 mr-1 shrink-0 text-text-disabled dark:text-text-disabled-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                                    <Typography variant="body2" className="text-text-secondary dark:text-text-secondary-dark text-xs truncate">{t}</Typography>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* RLS Editor Sidebar replica */}
+                        <div>
+                            <Typography variant="caption" color="secondary" className="block mb-1">RLS Editor Sidebar</Typography>
+                            <div className={cls("flex flex-col h-72 w-[240px] border rounded-lg overflow-hidden", defaultBorderMixin)}>
+                                <Tabs value="tables" onValueChange={() => {}} variant="boxy" className="border-b border-surface-200 dark:border-surface-800">
+                                    <Tab value="tables">Tables</Tab>
+                                    <Tab value="info">Info</Tab>
+                                </Tabs>
+                                <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                                    <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">RLS</Typography>
+                                    <IconButton size="small">
+                                        <SettingsIcon size="smallest" />
+                                    </IconButton>
+                                </div>
+                                <div className="flex-grow overflow-y-auto no-scrollbar p-1">
+                                    <div className="mb-2">
+                                        <div className="flex items-center p-1 cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800 rounded transition-colors">
+                                            <svg className="w-3 h-3 mr-1 rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" /></svg>
+                                            <Typography variant="body2" className="text-text-primary dark:text-text-primary-dark font-medium text-xs">public</Typography>
+                                        </div>
+                                        <div className="ml-3 mt-1 space-y-0.5">
+                                            {[{ name: "users", enabled: true }, { name: "posts", enabled: true }, { name: "sessions", enabled: false }].map(t => (
+                                                <div key={t.name} className={cls("flex items-center p-1 cursor-pointer rounded transition-colors", t.name === "users" ? "bg-primary/10 text-primary dark:bg-primary/20" : "hover:bg-surface-100 dark:hover:bg-surface-800 text-text-secondary")}>
+                                                    <svg className="w-3.5 h-3.5 mr-1 shrink-0 text-text-disabled" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                                    <Typography variant="body2" className="text-xs truncate flex-1">{t.name}</Typography>
+                                                    <div className={cls("w-1.5 h-1.5 rounded-full shrink-0", t.enabled ? "bg-green-500" : "bg-orange-400 opacity-50")} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Collection Editor Sidebar replica */}
+                        <div>
+                            <Typography variant="caption" color="secondary" className="block mb-1">Collection Editor Sidebar</Typography>
+                            <div className={cls("flex flex-col h-72 w-[240px] border rounded-lg overflow-hidden bg-white dark:bg-surface-950", defaultBorderMixin)}>
+                                <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                                    <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">COLLECTIONS</Typography>
+                                    <IconButton size="small">
+                                        <AddIcon size="small" />
+                                    </IconButton>
+                                </div>
+                                <div className="flex-grow overflow-y-auto no-scrollbar p-2 space-y-0.5">
+                                    {[{ name: "Authors" }, { name: "Posts", selected: true }, { name: "Tags" }].map(c => (
+                                        <div key={c.name} className={cls("flex items-center gap-3 px-3 py-2 cursor-pointer rounded-md text-sm transition-colors", c.selected ? "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light" : "hover:bg-surface-100 dark:hover:bg-surface-800 text-text-secondary dark:text-text-secondary-dark")}>
+                                            <FolderIcon size={18} className={cls(c.selected ? "text-primary dark:text-primary-light" : "text-text-secondary dark:text-text-secondary-dark")} />
+                                            <span className="truncate flex-1">{c.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </SectionBlock>
 

@@ -38,7 +38,7 @@ export const SchemaBrowser = ({
     return (
         <div className="flex flex-col h-full overflow-hidden">
             <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
-                <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-secondary dark:text-text-secondary-dark">{t("studio_schema_tables")}</Typography>
+                <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">{t("studio_schema_tables")}</Typography>
                 <IconButton size="small" onClick={onRetrySchema} title="Refresh schema">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                 </IconButton>

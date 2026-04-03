@@ -46,7 +46,7 @@ export const SQLEditorSidebar = ({
 
     return (
         <div className={cls("flex flex-col h-full w-full bg-white dark:bg-surface-950 border-r", defaultBorderMixin)}>
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "schema" | "snippets" | "history")} variant="underline">
+            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "schema" | "snippets" | "history")} variant="boxy" className="border-b border-surface-200 dark:border-surface-800">
                 <Tab value="schema">{t("studio_sql_sidebar_schema")}</Tab>
                 <Tab value="snippets">{t("studio_sql_sidebar_snippets")}</Tab>
                 <Tab value="history">{t("studio_sql_sidebar_history")}</Tab>

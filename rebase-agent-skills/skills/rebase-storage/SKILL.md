@@ -97,13 +97,14 @@ const productsCollection: EntityCollection = {
 };
 ```
 
-## Media Manager
+## Storage Browser
 
-The `@rebasepro/media_manager` package provides a visual file browser in the Studio:
-- Browse uploaded files by folder
-- Drag-and-drop uploads
-- Image previews with metadata
+The `@rebasepro/studio` package includes a built-in `StorageView` component in the Studio:
+- Browse uploaded files and folders with a tree sidebar
+- Drag-and-drop file uploads
+- Image, video, and audio previews with metadata
 - File search and filtering
+- Grid and list view modes
 
 ## Storage API Endpoints
 

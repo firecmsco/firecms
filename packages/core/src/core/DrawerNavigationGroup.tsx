@@ -42,6 +42,10 @@ export interface DrawerNavigationGroupProps {
      * Optional callback when a navigation item is clicked
      */
     onItemClick?: (entry: NavigationEntry) => void;
+    /**
+     * Hide the group header (title and expandable panel)
+     */
+    hideHeader?: boolean;
 }
 
 /**
@@ -57,7 +61,8 @@ export function DrawerNavigationGroup({
     tooltipsOpen,
     adminMenuOpen,
     headerActions,
-    onItemClick
+    onItemClick,
+    hideHeader
 }: DrawerNavigationGroupProps) {
     const { t } = useTranslation();
     return (
@@ -66,39 +71,42 @@ export function DrawerNavigationGroup({
             key={`drawer_group_${group}`}
         >
             {/* Group Header */}
-            <div
-                className={cls("pl-4 pr-2 py-1 flex flex-row items-center transition-colors",
-                    drawerOpen ? "cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700/50 rounded-t-lg bg-surface-50 dark:bg-surface-800/30" : "opacity-0 invisible pointer-events-none"
-                )}
-                onClick={drawerOpen ? onToggleCollapsed : undefined}
-            >
-                <ExpandMoreIcon
-                    size={"smallest"}
-                    className={cls(
-                        "text-surface-500 dark:text-surface-400 transition-transform duration-200 mr-1",
-                        collapsed ? "-rotate-90" : "rotate-0"
+            {!hideHeader && (
+                <div
+                    className={cls("pl-4 pr-2 py-1 flex flex-row items-center transition-colors",
+                        drawerOpen ? "cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700/50 rounded-t-lg bg-surface-50 dark:bg-surface-800/30" : "opacity-0 invisible pointer-events-none"
                     )}
-                />
-                <Typography
-                    variant={"caption"}
-                    color={"secondary"}
-                    className="font-medium flex-grow line-clamp-1"
+                    onClick={drawerOpen ? onToggleCollapsed : undefined}
                 >
-                    {(group || t("views_group")).toUpperCase()}
-                </Typography>
-                {headerActions && (
-                    <div onClick={(e) => e.stopPropagation()}>
-                        {headerActions}
-                    </div>
-                )}
-            </div>
+                    <ExpandMoreIcon
+                        size={"smallest"}
+                        className={cls(
+                            "text-surface-500 dark:text-surface-400 transition-transform duration-200 mr-1",
+                            collapsed ? "-rotate-90" : "rotate-0"
+                        )}
+                    />
+                    <Typography
+                        variant={"caption"}
+                        color={"secondary"}
+                        className="font-medium flex-grow line-clamp-1"
+                    >
+                        {(group || t("views_group")).toUpperCase()}
+                    </Typography>
+                    {headerActions && (
+                        <div onClick={(e) => e.stopPropagation()}>
+                            {headerActions}
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* Collapsible Content */}
             <div
                 className={cls(
-                    "overflow-hidden transition-all duration-200 ease-in-out bg-surface-50 dark:bg-surface-800/30",
-                    drawerOpen ? "rounded-b-lg" : "rounded-lg",
-                    collapsed ? "max-h-0 opacity-0" : "max-h-[2000px] opacity-100"
+                    "overflow-hidden transition-all duration-200 ease-in-out",
+                    !hideHeader && "bg-surface-50 dark:bg-surface-800/30",
+                    !hideHeader ? (drawerOpen ? "rounded-b-lg" : "rounded-lg") : "rounded-lg",
+                    (!hideHeader && collapsed) ? "max-h-0 opacity-0" : "max-h-[2000px] opacity-100"
                 )}
             >
                 {entries.map((entry) => (

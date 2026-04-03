@@ -11,14 +11,14 @@ export interface ExtractedTable {
 }
 
 /**
- * A CMS collection matched to a table in a SQL query.
+ * A collection matched to a table in a SQL query.
  */
 export interface ResolvedQueryCollection {
     /** DB table name from the SQL AST (e.g. "blog_posts") */
     tableName: string;
     /** SQL alias if present (e.g. "bp") */
     tableAlias?: string;
-    /** The matched CMS collection */
+    /** The matched collection */
     collection: EntityCollection;
     /** Columns from this table that are present in the result set */
     columns: string[];
@@ -72,7 +72,7 @@ function slugToSnakeCase(slug: string): string {
 }
 
 /**
- * Resolve which CMS collections are referenced by a SQL query.
+ * Resolve which collections are referenced by a SQL query.
  *
  * Parses the SQL, extracts table names, and matches each against
  * registered collections via `collection.dbPath` (falling back to

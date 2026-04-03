@@ -1,30 +1,33 @@
 import { PgTable, AnyPgColumn } from "drizzle-orm/pg-core";
 import { EntityCollection, Property } from "@rebasepro/types";
-import { collectionRegistry } from "../../collections/registry";
+import { BackendCollectionRegistry } from "../../collections/BackendCollectionRegistry";
 
 /**
  * Shared helper functions for entity operations.
  * These are used by EntityFetchService, EntityPersistService, and RelationService.
+ *
+ * All functions that need collection/table lookups require an explicit
+ * `BackendCollectionRegistry` instance — there is no global singleton.
  */
 
-export function getCollectionByPath(collectionPath: string): EntityCollection {
-    const collection = collectionRegistry.getCollectionByPath(collectionPath);
+export function getCollectionByPath(collectionPath: string, registry: BackendCollectionRegistry): EntityCollection {
+    const collection = registry.getCollectionByPath(collectionPath);
     if (!collection) {
         throw new Error(`Collection not found: ${collectionPath}`);
     }
     return collection;
 }
 
-export function getTableForCollection(collection: EntityCollection): PgTable<any> {
-    const table = collectionRegistry.getTable(collection.dbPath);
+export function getTableForCollection(collection: EntityCollection, registry: BackendCollectionRegistry): PgTable<any> {
+    const table = registry.getTable(collection.dbPath);
     if (!table) {
         throw new Error(`Table not found for dbPath: ${collection.dbPath}`);
     }
     return table;
 }
 
-export function getPrimaryKeys(collection: EntityCollection): { fieldName: string; type: "string" | "number" }[] {
-    const table = getTableForCollection(collection);
+export function getPrimaryKeys(collection: EntityCollection, registry: BackendCollectionRegistry): { fieldName: string; type: "string" | "number" }[] {
+    const table = getTableForCollection(collection, registry);
 
     // Fallback to explicitly defined isId properties
     if (collection.properties) {
@@ -114,5 +117,3 @@ export function buildCompositeId(values: Record<string, any>, primaryKeys: { fie
     }
     return primaryKeys.map(pk => String(values[pk.fieldName] ?? "")).join(":::");
 }
-
-export { collectionRegistry };
