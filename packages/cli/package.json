@@ -32,6 +32,7 @@
     "@rebasepro/types": "0.0.1",
     "arg": "^5.0.2",
     "chalk": "^4.1.2",
+    "dotenv": "^16.0.0",
     "execa": "^4.1.0",
     "inquirer": "12.11.1",
     "jiti": "^2.4.2",

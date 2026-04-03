@@ -22,7 +22,15 @@ import {
     Menu,
     MenuItem,
     ResizablePanels,
-    Chip
+    Chip,
+    CloseIcon,
+    AddIcon,
+    StorageIcon,
+    TerminalIcon,
+    EditIcon,
+    MoreVertIcon,
+    NotesIcon,
+    PlayArrowIcon
 } from "@rebasepro/ui";
 import { useRebaseContext, useSnackbarController, useCollectionRegistryController, useSideEntityController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView, IconForView, useTranslation } from "@rebasepro/core";
 import { MonacoEditor } from "./MonacoEditor";
@@ -98,6 +106,66 @@ export const SQLEditor = () => {
     const [isLoadingConfig, setIsLoadingConfig] = useState(true);
     const [connectionConfigError, setConnectionConfigError] = useState<string | null>(null);
 
+    // Tabbed interface state
+    const [tabs, setTabs] = useState<Array<{
+        id: string,
+        name: string,
+        sql: string,
+        database?: string,
+        role?: string,
+        results: Record<string, unknown>[] | null,
+        loading: boolean,
+        error: string | null,
+        execTime: number | null,
+        lastExecutedSql: string | null
+    }>>(() => {
+        const saved = localStorage.getItem(STORAGE_KEY_TABS);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            return parsed.map((t: Record<string, unknown>) => ({
+                ...t,
+                results: null,
+                loading: false,
+                error: null,
+                execTime: null,
+                lastExecutedSql: null
+            }));
+        }
+        return [{
+            id: "1",
+            name: "Query 1",
+            sql: "SELECT * FROM ",
+            database: localStorage.getItem("rebase_sql_selected_db") || undefined,
+            role: localStorage.getItem("rebase_sql_selected_role") || undefined,
+            results: null,
+            loading: false,
+            error: null,
+            execTime: null,
+            lastExecutedSql: null
+        }];
+    });
+    const [activeTabId, setActiveTabId] = useState<string>(() => {
+        return localStorage.getItem(STORAGE_KEY_ACTIVE_TAB) || "1";
+    });
+
+    const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
+
+    // Helper to update active tab state
+    const updateActiveTab = useCallback((update: Partial<typeof activeTab>) => {
+        setTabs(prev => prev.map(t => t.id === activeTabId ? { ...t, ...update } : t));
+    }, [activeTabId]);
+
+    const sql = activeTab.sql;
+    const results = activeTab.results;
+    const loading = activeTab.loading;
+    const error = activeTab.error;
+    const execTime = activeTab.execTime;
+
+    const setSql = (newSql: string) => updateActiveTab({ sql: newSql });
+    const setResults = (newResults: Record<string, unknown>[] | null) => updateActiveTab({ results: newResults });
+    const setLoading = (newLoading: boolean) => updateActiveTab({ loading: newLoading });
+    const setError = (newError: string | null) => updateActiveTab({ error: newError });
+
     useEffect(() => {
         let mounted = true;
         const fetchConnectionConfig = async () => {
@@ -118,19 +186,39 @@ export const SQLEditor = () => {
                     setAvailableDatabases(dbs);
                     setAvailableRoles(roles);
 
-                    // Set default database: always prefer the actual connected database.
-                    // The 'postgres' system database is typically empty and not useful as a default.
-                    if (dbs.length > 0) {
-                        const actualDb = currentDbFromApi && dbs.includes(currentDbFromApi) ? currentDbFromApi : dbs[0];
-                        setSelectedDatabase(actualDb);
-                        localStorage.setItem("rebase_sql_selected_db", actualDb);
+                    const loadedDb = localStorage.getItem("rebase_sql_selected_db") || undefined;
+                    const loadedRole = localStorage.getItem("rebase_sql_selected_role") || undefined;
+
+                    let initialActiveTabId = localStorage.getItem(STORAGE_KEY_ACTIVE_TAB) || "1";
+                    let initialTabs: any[] = [];
+                    try {
+                        const savedTabs = localStorage.getItem(STORAGE_KEY_TABS);
+                        if (savedTabs) initialTabs = JSON.parse(savedTabs);
+                    } catch (e) {}
+                    const currentActiveTab = initialTabs.find(t => t.id === initialActiveTabId);
+
+                    let actualDb = currentActiveTab?.database || loadedDb;
+                    if (actualDb && !dbs.includes(actualDb)) actualDb = undefined;
+                    if (!actualDb && dbs.length > 0) {
+                        actualDb = currentDbFromApi && dbs.includes(currentDbFromApi) ? currentDbFromApi : dbs[0];
                     }
 
-                    // Set default role if not selected, preferring 'postgres'
-                    if (!localStorage.getItem("rebase_sql_selected_role") && roles.length > 0) {
-                        const defaultRole = roles.includes("postgres") ? "postgres" : roles[0];
-                        setSelectedRole(defaultRole);
-                        localStorage.setItem("rebase_sql_selected_role", defaultRole);
+                    if (actualDb) {
+                        setSelectedDatabase(actualDb);
+                        localStorage.setItem("rebase_sql_selected_db", actualDb);
+                        setTabs(prev => prev.map(t => t.id === initialActiveTabId && !t.database ? { ...t, database: actualDb } : t));
+                    }
+
+                    let actualRole = currentActiveTab?.role || loadedRole;
+                    if (actualRole && !roles.includes(actualRole)) actualRole = undefined;
+                    if (!actualRole && roles.length > 0) {
+                        actualRole = roles.includes("postgres") ? "postgres" : roles[0];
+                    }
+
+                    if (actualRole) {
+                        setSelectedRole(actualRole);
+                        localStorage.setItem("rebase_sql_selected_role", actualRole);
+                        setTabs(prev => prev.map(t => t.id === initialActiveTabId && !t.role ? { ...t, role: actualRole } : t));
                     }
                 }
             } catch (err: unknown) {
@@ -151,17 +239,40 @@ export const SQLEditor = () => {
         return () => { mounted = false; };
     }, [databaseAdmin]);
 
-    const handleDatabaseChange = (db: string) => {
+    const handleDatabaseChange = (db: string, tabId?: string) => {
         setSelectedDatabase(db);
         localStorage.setItem("rebase_sql_selected_db", db);
+        setTabs(prev => prev.map(t => t.id === (tabId || activeTabId) ? { ...t, database: db } : t));
         // Reset so the schema will be re-fetched for the new database
         schemaFetchedRef.current = false;
     };
 
-    const handleRoleChange = (role: string) => {
+    const handleRoleChange = (role: string, tabId?: string) => {
         setSelectedRole(role);
         localStorage.setItem("rebase_sql_selected_role", role);
+        setTabs(prev => prev.map(t => t.id === (tabId || activeTabId) ? { ...t, role } : t));
     };
+
+    const handleTabChange = useCallback((newTabId: string) => {
+        setActiveTabId(newTabId);
+        const newTab = tabs.find(t => t.id === newTabId);
+        if (newTab) {
+            if (newTab.database && newTab.database !== selectedDatabase) {
+                setSelectedDatabase(newTab.database);
+                localStorage.setItem("rebase_sql_selected_db", newTab.database);
+                schemaFetchedRef.current = false;
+            } else if (!newTab.database && selectedDatabase) {
+                setTabs(prev => prev.map(t => t.id === newTabId ? { ...t, database: selectedDatabase } : t));
+            }
+
+            if (newTab.role && newTab.role !== selectedRole) {
+                setSelectedRole(newTab.role);
+                localStorage.setItem("rebase_sql_selected_role", newTab.role);
+            } else if (!newTab.role && selectedRole) {
+                setTabs(prev => prev.map(t => t.id === newTabId ? { ...t, role: selectedRole } : t));
+            }
+        }
+    }, [tabs, selectedDatabase, selectedRole]);
 
     const fetchSchema = useCallback(async () => {
         if (!databaseAdmin?.executeSql) {
@@ -250,61 +361,7 @@ export const SQLEditor = () => {
         }
     }, [fetchSchema, isLoadingConfig, selectedDatabase]);
 
-    // Tabbed interface state
-    const [tabs, setTabs] = useState<Array<{
-        id: string,
-        name: string,
-        sql: string,
-        results: Record<string, unknown>[] | null,
-        loading: boolean,
-        error: string | null,
-        execTime: number | null,
-        lastExecutedSql: string | null
-    }>>(() => {
-        const saved = localStorage.getItem(STORAGE_KEY_TABS);
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            return parsed.map((t: Record<string, unknown>) => ({
-                ...t,
-                results: null,
-                loading: false,
-                error: null,
-                execTime: null,
-                lastExecutedSql: null
-            }));
-        }
-        return [{
-            id: "1",
-            name: "Query 1",
-            sql: "SELECT * FROM ",
-            results: null,
-            loading: false,
-            error: null,
-            execTime: null,
-            lastExecutedSql: null
-        }];
-    });
-    const [activeTabId, setActiveTabId] = useState<string>(() => {
-        return localStorage.getItem(STORAGE_KEY_ACTIVE_TAB) || "1";
-    });
 
-    const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
-
-    // Helper to update active tab state
-    const updateActiveTab = useCallback((update: Partial<typeof activeTab>) => {
-        setTabs(prev => prev.map(t => t.id === activeTabId ? { ...t, ...update } : t));
-    }, [activeTabId]);
-
-    const sql = activeTab.sql;
-    const results = activeTab.results;
-    const loading = activeTab.loading;
-    const error = activeTab.error;
-    const execTime = activeTab.execTime;
-
-    const setSql = (newSql: string) => updateActiveTab({ sql: newSql });
-    const setResults = (newResults: Record<string, unknown>[] | null) => updateActiveTab({ results: newResults });
-    const setLoading = (newLoading: boolean) => updateActiveTab({ loading: newLoading });
-    const setError = (newError: string | null) => updateActiveTab({ error: newError });
 
     const [autoLimit, setAutoLimit] = useState(true);
     const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -444,7 +501,9 @@ export const SQLEditor = () => {
         const sanitizedTabs = tabs.map(t => ({
             id: t.id,
             name: t.name,
-            sql: t.sql
+            sql: t.sql,
+            database: t.database,
+            role: t.role,
         }));
         localStorage.setItem(STORAGE_KEY_TABS, JSON.stringify(sanitizedTabs));
     }, [tabs]);
@@ -484,6 +543,8 @@ export const SQLEditor = () => {
             id: newId,
             name,
             sql: "SELECT * FROM ",
+            database: selectedDatabase,
+            role: selectedRole,
             results: null,
             loading: false,
             error: null,
@@ -827,7 +888,7 @@ export const SQLEditor = () => {
                         </div>
                     </div>
                 )}
-                <div className="flex-grow relative h-full">
+                <div className="flex-grow relative h-full min-h-0 min-w-0">
                     <VirtualTable
                         data={results}
                         columns={columns}
@@ -846,8 +907,9 @@ export const SQLEditor = () => {
                                     return (
                                         <div className="h-full flex items-center justify-center">
                                             <Tooltip title={t("studio_sql_edit_entity", { name: ra.collection.collection.name, id: String(ra.entityId) })}>
-                                                <button
-                                                    className="p-1 text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors rounded"
+                                                <IconButton
+                                                    size="small"
+                                                    className="text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         sideEntityController.open({
@@ -858,8 +920,8 @@ export const SQLEditor = () => {
                                                         });
                                                     }}
                                                 >
-                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                                </button>
+                                                    <EditIcon size="small" />
+                                                </IconButton>
                                             </Tooltip>
                                         </div>
                                     );
@@ -869,12 +931,13 @@ export const SQLEditor = () => {
                                     <div className="h-full flex items-center justify-center">
                                         <Menu
                                             trigger={
-                                                <button
-                                                    className="p-1 text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors rounded"
+                                                <IconButton
+                                                    size="small"
+                                                    className="text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors"
                                                     onClick={(e) => e.stopPropagation()}
                                                 >
-                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                                </button>
+                                                    <MoreVertIcon size="small" />
+                                                </IconButton>
                                             }
                                         >
                                             {rowActions.map(ra => (
@@ -1035,20 +1098,19 @@ export const SQLEditor = () => {
                         <div className={cls("flex items-center justify-between pr-2 border-b bg-white dark:bg-surface-950", defaultBorderMixin)}>
                             <div className="flex items-center flex-grow overflow-hidden mr-4">
                                 <div className="flex items-center no-scrollbar overflow-x-auto min-w-0">
-                                    <Tabs value={activeTabId} onValueChange={setActiveTabId} variant="boxy" className="w-[unset] flex-shrink-0" innerClassName="bg-white dark:bg-surface-950">
+                                    <Tabs value={activeTabId} onValueChange={handleTabChange} variant="boxy" className="w-[unset] flex-shrink-0" innerClassName="bg-white dark:bg-surface-950">
                                         {tabs.map(tab => (
                                             <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group max-w-[200px]">
-                                                <svg className="w-3.5 h-3.5 text-blue-500 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                                                </svg>
+                                                <TerminalIcon size="smallest" className="text-blue-500 mr-1.5 flex-shrink-0" />
                                                 <span className="truncate">{tab.name}</span>
                                                 {tabs.length > 1 && (
-                                                    <button
+                                                    <IconButton
+                                                        size="smallest"
                                                         onClick={(e) => handleCloseTab(tab.id, e)}
-                                                        className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity focus:outline-none"
+                                                        className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
                                                     >
-                                                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                                                    </button>
+                                                        <CloseIcon size="smallest" />
+                                                    </IconButton>
                                                 )}
                                             </Tab>
                                         ))}
@@ -1058,15 +1120,15 @@ export const SQLEditor = () => {
                                         onClick={handleAddTab}
                                         className="ml-2 flex-shrink-0"
                                     >
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                                        <AddIcon size="small" />
                                     </IconButton>
                                 </div>
                             </div>
                             <div className="flex shrink-0 items-center justify-end pr-2 gap-1.5">
                                 <Tooltip title={t("studio_sql_format_sql")}>
-                                    <button onClick={handlePrettify} className="p-2 text-text-secondary hover:text-text-primary transition-colors focus:outline-none flex items-center justify-center">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-                                    </button>
+                                    <IconButton size="small" onClick={handlePrettify} className="text-text-secondary hover:text-text-primary transition-colors">
+                                        <NotesIcon size="small" />
+                                    </IconButton>
                                 </Tooltip>
 
                                 <Button
@@ -1123,10 +1185,14 @@ export const SQLEditor = () => {
 
                                 <Menu
                                     trigger={
-                                        <button className="flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark transition-colors bg-surface-100 hover:bg-surface-200 dark:bg-surface-800 dark:hover:bg-surface-700 rounded border border-transparent mr-2">
-                                            <svg className="w-3.5 h-3.5 text-text-disabled dark:text-text-disabled-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
+                                        <Button
+                                            size="small"
+                                            variant="outlined"
+                                            className="text-text-secondary dark:text-text-secondary-dark font-medium mr-2"
+                                        >
+                                            <StorageIcon size="small" className="mr-1.5 text-text-disabled dark:text-text-disabled-dark" />
                                             <span className="max-w-[80px] truncate">{isLoadingConfig ? "..." : (selectedDatabase || t("studio_sql_select_db"))}</span>
-                                        </button>
+                                        </Button>
                                     }
                                 >
                                     <div className="max-h-64 overflow-y-auto">
@@ -1168,7 +1234,7 @@ export const SQLEditor = () => {
                                     size="small"
                                     color="primary"
                                 >
-                                    {loading ? <CircularProgress size="smallest" className="mr-2" /> : <svg className="w-3.5 h-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>}
+                                    {loading ? <CircularProgress size="smallest" className="mr-2" /> : <PlayArrowIcon size="small" className="mr-2" />}
                                     {t("studio_sql_run")}
                                 </Button>
                             </div>

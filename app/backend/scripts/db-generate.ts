@@ -49,7 +49,7 @@ const child = spawn("npx", ["drizzle-kit", "generate"], {
 child.on("close", (code) => {
     if (code === 0) {
         console.log("");
-        console.log(`You can now run ${formatTerminalText("pnpm db:migrate", {
+        console.log(`You can now run ${formatTerminalText("rebase db migrate", {
             bold: true,
             backgroundColor: "green",
             textColor: "black"

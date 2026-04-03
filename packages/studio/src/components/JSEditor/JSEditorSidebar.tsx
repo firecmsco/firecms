@@ -7,6 +7,8 @@ import {
     Tab,
     Tooltip,
     IconButton,
+    AddIcon,
+    DeleteIcon
 } from "@rebasepro/ui";
 
 export interface JSSnippet {
@@ -114,7 +116,7 @@ export const JSEditorSidebar = ({
                 {/* Collections browser */}
                 {activeTab === "collections" && (
                     <div className="flex flex-col h-full">
-                        <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                        <div className={cls("flex items-center justify-between px-3 py-2 border-b bg-surface-50 dark:bg-surface-900 min-h-[48px]", defaultBorderMixin)}>
                             <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">
                                 Collections
                             </Typography>
@@ -142,7 +144,7 @@ export const JSEditorSidebar = ({
                 {/* Quick reference */}
                 {activeTab === "reference" && (
                     <div className="flex flex-col h-full">
-                        <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                        <div className={cls("flex items-center justify-between px-3 py-2 border-b bg-surface-50 dark:bg-surface-900 min-h-[48px]", defaultBorderMixin)}>
                             <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">
                                 SDK Reference
                             </Typography>
@@ -182,7 +184,7 @@ export const JSEditorSidebar = ({
 
                     return (
                         <div className="flex flex-col h-full">
-                            <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                            <div className={cls("flex items-center justify-between px-3 py-2 border-b bg-surface-50 dark:bg-surface-900 min-h-[48px]", defaultBorderMixin)}>
                                 <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">Snippets</Typography>
                             </div>
                             <div className="flex-grow overflow-y-auto p-2 space-y-2 no-scrollbar">
@@ -231,7 +233,7 @@ export const JSEditorSidebar = ({
                 {/* History */}
                 {activeTab === "history" && (
                     <div className="flex flex-col h-full">
-                        <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                        <div className={cls("flex items-center justify-between px-3 py-2 border-b bg-surface-50 dark:bg-surface-900 min-h-[48px]", defaultBorderMixin)}>
                             <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">History</Typography>
                         </div>
                         <div className="flex-grow overflow-y-auto p-1 space-y-1 no-scrollbar">
@@ -289,15 +291,16 @@ function CollectionItem({ collection, onInsertCode }: { collection: CollectionIn
                     {collection.slug}
                 </Typography>
                 <Tooltip title="Insert find() snippet">
-                    <button
-                        className="opacity-0 group-hover:opacity-100 p-0.5 text-text-disabled hover:text-primary transition-all"
+                    <IconButton
+                        size="smallest"
+                        className="opacity-0 group-hover:opacity-100 text-text-disabled hover:text-primary transition-all"
                         onClick={(e) => {
                             e.stopPropagation();
                             onInsertCode(`const result = await client.data.${collection.slug}.find({ limit: 20 });\nreturn result;`);
                         }}
                     >
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                    </button>
+                        <AddIcon size="smallest" />
+                    </IconButton>
                 </Tooltip>
             </div>
             {expanded && collection.properties.length > 0 && (
@@ -330,15 +333,16 @@ function SnippetItem({ snippet, onSelect, onDelete }: { snippet: JSSnippet; onSe
             <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[10px] block mt-1 truncate font-mono">
                 {snippet.code}
             </Typography>
-            <button
-                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 p-1 text-text-disabled hover:text-red-500 transition-opacity"
+            <IconButton
+                size="smallest"
+                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 text-text-disabled hover:text-red-500 transition-opacity"
                 onClick={(e) => {
                     e.stopPropagation();
                     onDelete(snippet.id);
                 }}
             >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-            </button>
+                <DeleteIcon size="smallest" />
+            </IconButton>
         </div>
     );
 }

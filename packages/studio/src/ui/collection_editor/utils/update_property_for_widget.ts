@@ -251,6 +251,15 @@ export function updatePropertyFromWidget(propertyData: any,
                 mode: "date_time"
             } as DateProperty
         );
+    } else if (selectedWidgetId === "relation") {
+        updatedProperty = mergeDeep(
+            propertyData,
+            {
+                type: "relation",
+                propertyConfig: "relation",
+                relationName: propertyData.relationName ?? ""
+            } as Property
+        );
     } else if (selectedWidgetId === "repeat") {
         updatedProperty = mergeDeep(
             propertyData,

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { Highlight, themes } from "prism-react-renderer";
 import {
     Button,
     Typography,
@@ -18,6 +19,14 @@ import {
     MenuItem,
     Tabs,
     Tab,
+    TerminalIcon,
+    CloseIcon,
+    AddIcon,
+    SaveIcon,
+    DownloadIcon,
+    PlayArrowIcon,
+    MoreVertIcon,
+    EditIcon
 } from "@rebasepro/ui";
 import {
     useRebaseContext,
@@ -26,6 +35,7 @@ import {
     useSideEntityController,
     useApiConfig,
     useTranslation,
+    useModeController,
     VirtualTable,
     VirtualTableColumn,
     ErrorView,
@@ -610,17 +620,16 @@ export function JSEditor() {
                                         <Tabs value={activeTabId} onValueChange={setActiveTabId} variant="boxy" className="w-[unset] flex-shrink-0" innerClassName="bg-white dark:bg-surface-950">
                                             {tabs.map(tab => (
                                                 <Tab key={tab.id} value={tab.id} className="flex items-center justify-between group max-w-[200px]">
-                                                    <svg className="w-3.5 h-3.5 text-amber-500 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                    </svg>
+                                                    <TerminalIcon size="smallest" className="text-amber-500 mr-1.5 flex-shrink-0" />
                                                     <span className="truncate">{tab.name}</span>
                                                     {tabs.length > 1 && (
-                                                        <button
+                                                        <IconButton
+                                                            size="smallest"
                                                             onClick={(e) => { e.stopPropagation(); closeTab(tab.id); }}
-                                                            className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity focus:outline-none"
+                                                            className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
                                                         >
-                                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                                                        </button>
+                                                            <CloseIcon size="smallest" />
+                                                        </IconButton>
                                                     )}
                                                 </Tab>
                                             ))}
@@ -630,7 +639,7 @@ export function JSEditor() {
                                             onClick={addTab}
                                             className="ml-2 flex-shrink-0"
                                         >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                                            <AddIcon size="small" />
                                         </IconButton>
                                     </div>
                                 </div>
@@ -656,14 +665,14 @@ export function JSEditor() {
                                             }}
                                             disabled={!activeTab?.code.trim()}
                                         >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+                                            <SaveIcon size="small" />
                                         </IconButton>
                                     </Tooltip>
 
                                     {result?.value && (
                                         <Tooltip title="Export result as JSON">
                                             <IconButton size="small" onClick={exportResult}>
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                                <DownloadIcon size="small" />
                                             </IconButton>
                                         </Tooltip>
                                     )}
@@ -674,7 +683,7 @@ export function JSEditor() {
                                         disabled={isRunning || !activeTab?.code.trim()}
                                         onClick={() => executeCode()}
                                     >
-                                        {isRunning ? <CircularProgress size="smallest" className="mr-2" /> : <svg className="w-3.5 h-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>}
+                                        {isRunning ? <CircularProgress size="smallest" className="mr-2" /> : <PlayArrowIcon size="small" className="mr-2" />}
                                         Run
                                     </Button>
                                 </div>
@@ -787,7 +796,7 @@ export function JSEditor() {
                                                                 </div>
                                                             </div>
                                                         )}
-                                                        <div className="flex-grow relative h-full">
+                                                        <div className="flex-grow relative h-full min-h-0 min-w-0">
                                                             <VirtualTable
                                                                 data={tableData.data}
                                                                 columns={
@@ -807,8 +816,9 @@ export function JSEditor() {
                                                                             return (
                                                                                 <div className="h-full flex items-center justify-center">
                                                                                     <Tooltip title={t("studio_sql_edit_entity", { name: ra.collection.collection.name, id: String(ra.entityId) })}>
-                                                                                        <button
-                                                                                            className="p-1 text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors rounded"
+                                                                                        <IconButton
+                                                                                            size="small"
+                                                                                            className="text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300"
                                                                                             onClick={(e) => {
                                                                                                 e.stopPropagation();
                                                                                                 sideEntityController.open({
@@ -819,8 +829,8 @@ export function JSEditor() {
                                                                                                 });
                                                                                             }}
                                                                                         >
-                                                                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                                                                        </button>
+                                                                                            <EditIcon size="small" />
+                                                                                        </IconButton>
                                                                                     </Tooltip>
                                                                                 </div>
                                                                             );
@@ -830,12 +840,13 @@ export function JSEditor() {
                                                                             <div className="h-full flex items-center justify-center">
                                                                                 <Menu
                                                                                     trigger={
-                                                                                        <button
-                                                                                            className="p-1 text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors rounded"
+                                                                                        <IconButton
+                                                                                            size="small"
+                                                                                            className="text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300"
                                                                                             onClick={(e) => e.stopPropagation()}
                                                                                         >
-                                                                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                                                                        </button>
+                                                                                            <MoreVertIcon size="small" />
+                                                                                        </IconButton>
                                                                                     }
                                                                                 >
                                                                                     {rowActions.map(ra => (
@@ -992,23 +1003,25 @@ export function JSEditor() {
 
 function JSONHighlight({ value }: { value: any }) {
     const json = formatJSON(value);
+    const { mode } = useModeController();
 
-    const highlighted = json.replace(
-        /("(?:[^"\\]|\\.)*")\s*:/g,
-        '<span class="text-blue-600 dark:text-blue-400">$1</span>:'
-    ).replace(
-        /:\s*("(?:[^"\\]|\\.)*")/g,
-        ': <span class="text-green-600 dark:text-green-400">$1</span>'
-    ).replace(
-        /:\s*(\d+\.?\d*)/g,
-        ': <span class="text-amber-600 dark:text-amber-400">$1</span>'
-    ).replace(
-        /:\s*(true|false)/g,
-        ': <span class="text-purple-600 dark:text-purple-400">$1</span>'
-    ).replace(
-        /:\s*(null)/g,
-        ': <span class="text-red-400">$1</span>'
+    return (
+        <Highlight
+            theme={mode === "dark" ? themes.vsDark : themes.github}
+            code={json}
+            language="json"
+        >
+            {({ style, tokens, getLineProps, getTokenProps }) => (
+                <span style={{ ...style, backgroundColor: "transparent" }}>
+                    {tokens.map((line, i) => (
+                        <div key={i} {...getLineProps({ line })}>
+                            {line.map((token, key) => (
+                                <span key={key} {...getTokenProps({ token })} />
+                            ))}
+                        </div>
+                    ))}
+                </span>
+            )}
+        </Highlight>
     );
-
-    return <span dangerouslySetInnerHTML={{ __html: highlighted }} />;
 }

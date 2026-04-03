@@ -934,17 +934,19 @@ export const StorageView = () => {
                                                 {i > 0 && (
                                                     <Typography variant="caption" className="text-text-disabled dark:text-text-disabled-dark mx-0.5">/</Typography>
                                                 )}
-                                                <button
+                                                <Button
+                                                    variant="text"
+                                                    size="small"
                                                     className={cls(
-                                                        "px-1.5 py-0.5 rounded text-xs transition-colors whitespace-nowrap",
+                                                        "px-1.5 py-0.5 min-h-0 min-w-0 h-6 text-xs whitespace-nowrap normal-case font-normal",
                                                         i === segments.length - 1
                                                             ? "text-text-primary dark:text-text-primary-dark font-medium"
-                                                            : "text-text-secondary dark:text-text-secondary-dark hover:text-text-primary dark:hover:text-text-primary-dark hover:bg-surface-100 dark:hover:bg-surface-800"
+                                                            : "text-text-secondary dark:text-text-secondary-dark"
                                                     )}
                                                     onClick={() => handleNavigate(seg.path)}
                                                 >
                                                     {seg.label}
-                                                </button>
+                                                </Button>
                                             </React.Fragment>
                                         ))}
                                     </div>

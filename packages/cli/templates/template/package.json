@@ -10,7 +10,7 @@
         "shared"
     ],
     "scripts": {
-        "dev": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:frontend\"",
+        "dev": "rebase dev",
         "dev:frontend": "cd frontend && pnpm run dev",
         "dev:backend": "cd backend && pnpm run dev",
         "build": "pnpm run build:shared && pnpm run build:frontend && pnpm run build:backend",
@@ -18,9 +18,11 @@
         "build:frontend": "cd frontend && pnpm run build",
         "build:backend": "cd backend && pnpm run build",
         "start": "cd backend && pnpm start",
-        "db:generate": "cd backend && pnpm run db:generate",
-        "db:migrate": "cd backend && pnpm run db:migrate",
-        "db:studio": "cd backend && pnpm run db:studio"
+        "schema:generate": "rebase schema generate",
+        "db:push": "rebase db push",
+        "db:generate": "rebase db generate",
+        "db:migrate": "rebase db migrate",
+        "db:studio": "rebase db studio"
     },
     "devDependencies": {
         "concurrently": "^8.2.2",

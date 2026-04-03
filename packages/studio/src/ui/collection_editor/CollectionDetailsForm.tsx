@@ -15,7 +15,8 @@ import {
     TextField,
     Tooltip,
     Typography,
-    useAutoComplete
+    useAutoComplete,
+    Button
 } from "@rebasepro/ui";
 
 import { Field, getIn, useFormex } from "@rebasepro/formex";
@@ -322,13 +323,14 @@ export function CollectionDetailsForm({
 
                             return (
                                 <>
-                                    <button
-                                        type="button"
-                                        className="ml-3.5 text-sm text-primary hover:text-primary-dark mt-2"
-                                        onClick={() => setOrderPropertyDialogOpen(true)}
-                                    >
-                                        + Create "{dialogPropertyKey}" property
-                                    </button>
+                                        <Button
+                                            variant="text"
+                                            size="small"
+                                            className="ml-3.5 mt-2"
+                                            onClick={() => setOrderPropertyDialogOpen(true)}
+                                        >
+                                            + Create "{dialogPropertyKey}" property
+                                        </Button>
                                     <PropertyFormDialog
                                         open={orderPropertyDialogOpen}
                                         onCancel={() => setOrderPropertyDialogOpen(false)}

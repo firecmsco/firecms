@@ -5,7 +5,7 @@ import {
     defaultBorderMixin,
     ResizablePanels,
     Typography,
-    Button,
+    IconButton,
     AddIcon,
     StorageIcon,
 } from "@rebasepro/ui";
@@ -55,18 +55,17 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                 minPanelSizePx={220}
                 firstPanel={
                     <div className={cls("flex flex-col h-full w-full bg-white dark:bg-surface-950 border-r", defaultBorderMixin)}>
-                        <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                        <div className={cls("flex items-center justify-between px-3 py-2 border-b bg-surface-50 dark:bg-surface-900 min-h-[48px]", defaultBorderMixin)}>
                             <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">
                                 Collections
                             </Typography>
-                            <Button
+                            <IconButton
                                 size="small"
-                                variant="text"
                                 onClick={() => navigate(urlController.buildCMSUrlPath("schema/new"))}
                                 className={activeCollectionId === "new" ? "text-primary dark:text-primary-dark" : "text-text-secondary dark:text-text-secondary-dark"}
                             >
                                 <AddIcon size="small" />
-                            </Button>
+                            </IconButton>
                         </div>
 
                         <div className="flex-grow overflow-y-auto w-full no-scrollbar p-2 space-y-0.5">

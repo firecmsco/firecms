@@ -58,17 +58,48 @@ const postsCollection: EntityCollection = {
         author: {
             name: "Author",
             type: "relation",
-            relationName: "author"
+            relationName: "author",
+            relation: {
+                relationName: "author",
+                cardinality: "one",
+                direction: "owning"
+            }
         },
         profile: {
             name: "Profile",
             type: "relation",
-            relationName: "author_profile"
+            relationName: "author_profile",
+            relation: {
+                relationName: "author_profile",
+                cardinality: "one",
+                direction: "inverse",
+                joinPath: [
+                    {
+                        table: "authors",
+                        on: {
+                            from: "posts.author_id",
+                            to: "authors.id"
+                        }
+                    },
+                    {
+                        table: "profiles",
+                        on: {
+                            from: "authors.id",
+                            to: "profiles.author_id"
+                        }
+                    }
+                ]
+            }
         },
         tags: {
             name: "Tags",
             type: "relation",
-            relationName: "tags"
+            relationName: "tags",
+            relation: {
+                relationName: "tags",
+                cardinality: "many",
+                direction: "owning"
+            }
         }
     },
     relations: [
@@ -107,17 +138,7 @@ const postsCollection: EntityCollection = {
             ]
         }
     ],
-    securityRules: [
-        {
-            name: "Enable read access for all users",
-            operation: "select",
-            mode: "permissive",
-            using: "true",
-            roles: [
-                "public"
-            ]
-        }
-    ]
+    securityRules: []
 };
 
 export default postsCollection;

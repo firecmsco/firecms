@@ -101,7 +101,7 @@ const runGeneration = async (collectionsFilePath?: string, outputPath?: string) 
             console.log(schemaContent);
         }
 
-        console.log(`You can now run ${formatTerminalText("pnpm db:generate", {
+        console.log(`You can now run ${formatTerminalText("rebase db generate", {
             bold: true,
             backgroundColor: "blue",
             textColor: "black"

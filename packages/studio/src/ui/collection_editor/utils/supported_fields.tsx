@@ -17,6 +17,7 @@ export const supportedFieldsIds: PropertyConfigId[] = [
     "reference",
     "reference_as_string",
     "multi_references",
+    "relation",
     "switch",
     "date_time",
     "group",

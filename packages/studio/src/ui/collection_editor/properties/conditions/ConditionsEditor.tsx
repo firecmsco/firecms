@@ -8,10 +8,11 @@ import {
     DebouncedTextField,
     Typography,
     Chip,
-    BooleanSwitchWithLabel,
     TextField,
     cls,
-    defaultBorderMixin
+    defaultBorderMixin,
+    Button,
+    BooleanSwitchWithLabel
 } from "@rebasepro/ui";
 import {
     Properties,
@@ -520,20 +521,18 @@ function ConditionGroupRow({
                 ))}
             </div>
 
-            <button
+            <Button
+                variant="outlined"
+                className={cls(
+                    "mt-3 w-full border-dashed",
+                    "hover:bg-surface-100 dark:hover:bg-surface-800",
+                    "text-secondary"
+                )}
                 onClick={handleAddRule}
                 disabled={disabled}
-                type="button"
-                className={cls(
-                    "mt-3 w-full py-2 px-3 rounded-md text-sm",
-                    "border border-dashed text-secondary",
-                    "hover:bg-surface-100 dark:hover:bg-surface-800",
-                    "transition-colors",
-                    defaultBorderMixin
-                )}
             >
                 + Add condition
-            </button>
+            </Button>
         </div>
     );
 }

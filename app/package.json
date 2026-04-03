@@ -19,11 +19,12 @@
         "build:backend": "cd backend && pnpm run build",
         "start": "cd backend && pnpm start",
         "deploy": "pnpm run build && pnpm run start",
-        "db:pull": "cd backend && pnpm run db:pull",
-        "db:generate": "cd backend && pnpm run db:generate",
-        "db:migrate": "cd backend && pnpm run db:migrate",
-        "db:studio": "cd backend && pnpm run db:studio",
-        "generate:schema": "cd backend && pnpm run generate:schema"
+        "schema:generate": "rebase schema generate",
+        "db:push": "rebase db push",
+        "db:pull": "rebase db pull",
+        "db:generate": "rebase db generate",
+        "db:migrate": "rebase db migrate",
+        "db:studio": "rebase db studio"
     },
     "devDependencies": {
         "@rebasepro/types": "0.0.1",

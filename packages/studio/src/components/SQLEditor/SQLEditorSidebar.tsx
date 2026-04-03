@@ -4,7 +4,9 @@ import {
     cls,
     defaultBorderMixin,
     Tabs,
-    Tab
+    Tab,
+    IconButton,
+    DeleteIcon
 } from "@rebasepro/ui";
 import { useTranslation } from "@rebasepro/core";
 import { SchemaBrowser } from "./SchemaBrowser";
@@ -69,7 +71,7 @@ export const SQLEditorSidebar = ({
 
                     return (
                         <div className="flex flex-col h-full">
-                            <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                            <div className={cls("flex items-center justify-between px-3 py-2 border-b bg-surface-50 dark:bg-surface-900 min-h-[48px]", defaultBorderMixin)}>
                                 <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">{t("studio_sql_sidebar_snippets")}</Typography>
                             </div>
                             <div className="flex-grow overflow-y-auto p-2 space-y-2 no-scrollbar">
@@ -94,15 +96,16 @@ export const SQLEditorSidebar = ({
                                                         >
                                                             <Typography variant="body2" className="text-text-primary dark:text-text-primary-dark font-medium text-[13px] truncate pr-6">{snippet.name}</Typography>
                                                             <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[10px] block mt-1 truncate">{snippet.sql}</Typography>
-                                                            <button
-                                                                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 p-1 text-text-disabled hover:text-red-500 transition-opacity"
+                                                            <IconButton
+                                                                size="smallest"
+                                                                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 text-text-disabled hover:text-red-500 transition-opacity"
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
                                                                     onDeleteSnippet(snippet.id);
                                                                 }}
                                                             >
-                                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                                            </button>
+                                                                <DeleteIcon size="smallest" />
+                                                            </IconButton>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -124,15 +127,16 @@ export const SQLEditorSidebar = ({
                                                         >
                                                             <Typography variant="body2" className="text-text-primary dark:text-text-primary-dark font-medium text-[13px] truncate pr-6">{snippet.name}</Typography>
                                                             <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark text-[10px] block mt-1 truncate">{snippet.sql}</Typography>
-                                                            <button
-                                                                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 p-1 text-text-disabled hover:text-red-500 transition-opacity"
+                                                            <IconButton
+                                                                size="smallest"
+                                                                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 text-text-disabled hover:text-red-500 transition-opacity"
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
                                                                     onDeleteSnippet(snippet.id);
                                                                 }}
                                                             >
-                                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                                            </button>
+                                                                <DeleteIcon size="smallest" />
+                                                            </IconButton>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -147,7 +151,7 @@ export const SQLEditorSidebar = ({
 
                 {activeTab === "history" && (
                     <div className="flex flex-col h-full">
-                        <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                        <div className={cls("flex items-center justify-between px-3 py-2 border-b bg-surface-50 dark:bg-surface-900 min-h-[48px]", defaultBorderMixin)}>
                             <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">{t("studio_sql_sidebar_history")}</Typography>
                         </div>
                         <div className="flex-grow overflow-y-auto p-1 space-y-1 no-scrollbar">

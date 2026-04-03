@@ -228,8 +228,10 @@ export class RebaseWebSocketClient {
                 if (this.getAuthToken && !this.isAuthenticated) {
                     try {
                         const token = await this.getAuthToken();
-                        await this.authenticate(token);
-                        console.log("WebSocket auto-authenticated");
+                        if (token) {
+                            await this.authenticate(token);
+                            console.log("WebSocket auto-authenticated");
+                        }
                     } catch (error) {
                         console.warn("WebSocket auto-auth failed, requests may fail:", error);
                     }
@@ -451,6 +453,7 @@ export class RebaseWebSocketClient {
         for (let attempt = 0; attempt < retryCount; attempt++) {
             try {
                 const token = await this.getAuthToken();
+                if (!token) throw new Error("user not logged in");
                 this.authPromise = this.authenticate(token);
                 await this.authPromise;
                 this.authPromise = null;

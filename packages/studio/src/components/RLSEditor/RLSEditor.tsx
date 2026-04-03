@@ -304,12 +304,12 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                         <div className="flex-grow overflow-hidden relative">
                             {sidebarTab === "tables" && (
                                 <div className="flex flex-col h-full">
-                                    <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                                    <div className={cls("flex items-center justify-between px-3 py-2 border-b bg-surface-50 dark:bg-surface-900 min-h-[48px]", defaultBorderMixin)}>
                                         <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">
-                                            {t("studio_rls_description")}
+                                            {t("studio_schema_tables")}
                                         </Typography>
                                         <IconButton size="small" onClick={fetchRLSData} title="Refresh">
-                                            <RefreshIcon size="smallest" />
+                                            <RefreshIcon size="small" />
                                         </IconButton>
                                     </div>
                                     <div className="flex-grow overflow-y-auto no-scrollbar p-1">
@@ -376,7 +376,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
 
                             {sidebarTab === "info" && (
                                 <div className="flex flex-col h-full">
-                                    <div className={cls("p-3 border-b flex justify-between items-center bg-surface-50 dark:bg-surface-900", defaultBorderMixin)}>
+                                    <div className={cls("flex items-center justify-between px-3 py-2 border-b bg-surface-50 dark:bg-surface-900 min-h-[48px]", defaultBorderMixin)}>
                                         <Typography variant="caption" className="font-bold uppercase tracking-wider text-text-disabled dark:text-text-disabled-dark">
                                             Overview
                                         </Typography>
@@ -422,7 +422,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                 secondPanel={
                     <div className="flex-grow flex flex-col min-w-0 h-full w-full bg-white dark:bg-surface-950">
                         {/* Toolbar Header matching SQL/JS Editor style */}
-                        <div className={cls("flex items-center justify-between pr-2 border-b bg-white dark:bg-surface-950", defaultBorderMixin)}>
+                        <div className={cls("flex items-center justify-between pr-2 border-b bg-white dark:bg-surface-950 min-h-[46px]", defaultBorderMixin)}>
                             <div className="flex items-center flex-grow overflow-hidden px-4">
                                 <Typography variant="subtitle2" className="font-mono text-text-secondary dark:text-text-secondary-dark truncate">
                                     {activeTableData ? `${activeTableData.schemaName}.${activeTableData.tableName}` : t("studio_rls_select_table")}
@@ -543,11 +543,10 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                         ) : (
                             <div className="flex-grow flex flex-col overflow-hidden">
                                 <div className="p-6 pt-4 flex-grow overflow-auto bg-surface-50 dark:bg-surface-900">
-                                    <div className="max-w-4xl mx-auto">
+                                    <div className="max-w-4xl mx-auto flex flex-col gap-6">
                                     {activeTableData && !activeCollection && (
                                         <Alert
                                             color="warning"
-                                            className="mb-6"
                                         >
                                             <Typography variant="body2" className="mb-1">
                                                 Table not managed by Rebase
@@ -587,7 +586,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                     )}
 
                                     {activeTableData && mergedPolicies && mergedPolicies.length > 0 && (
-                                        <div className="mt-8 flex flex-col gap-3">
+                                        <div className="flex flex-col gap-3">
                                             <Typography variant="subtitle2" className="text-text-secondary dark:text-text-secondary-dark uppercase tracking-wider mb-1">{t("studio_rls_policies")}</Typography>
                                             {mergedPolicies.map(policy => (
                                                 <Paper key={policy.policyname} className={cls("p-3 sm:px-4 sm:py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border rounded-lg", defaultBorderMixin)}>
@@ -615,7 +614,46 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                             {renderPolicyTag("Roles", Array.isArray(policy.roles) ? policy.roles.join(", ") : policy.roles)}
                                                         </div>
                                                     </div>
-                                                    <div className="flex gap-2 shrink-0">
+                                                    <div className="flex gap-2 shrink-0 items-center">
+                                                        {policy.status === "live" && activeCollection && (
+                                                            <Button
+                                                                size="small"
+                                                                variant="outlined"
+                                                                color="primary"
+                                                                onClick={async () => {
+                                                                    const rule: Record<string, unknown> = {
+                                                                        name: policy.policyname,
+                                                                        operation: policy.cmd?.toLowerCase(),
+                                                                        mode: policy.permissive?.toLowerCase(),
+                                                                        using: policy.qual || undefined,
+                                                                        withCheck: policy.with_check || undefined,
+                                                                        roles: policy.roles
+                                                                    };
+
+                                                                    const existingRules = activeCollection.securityRules || [];
+                                                                    const newRules = [...existingRules, rule];
+
+                                                                    try {
+                                                                        const response = await fetch(`${apiUrl}/api/schema-editor/collection/save`, {
+                                                                            method: "POST",
+                                                                            headers: { "Content-Type": "application/json" },
+                                                                            body: JSON.stringify({
+                                                                                collectionId: (activeCollection as { id?: string, path?: string, alias?: string }).id || (activeCollection as { id?: string, path?: string, alias?: string }).path || (activeCollection as { id?: string, path?: string, alias?: string }).alias || activeTableData!.tableName,
+                                                                                collectionData: { securityRules: newRules }
+                                                                            })
+                                                                        });
+                                                                        if (!response.ok) throw new Error("Failed to save policy");
+
+                                                                        snackbarController.open({ type: "success", message: "Policy imported successfully" });
+                                                                        fetchRLSData();
+                                                                    } catch (e: unknown) {
+                                                                        snackbarController.open({ type: "error", message: e instanceof Error ? e.message : String(e) });
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Import to codebase
+                                                            </Button>
+                                                        )}
                                                         <Button size="small" variant="text" color="primary" onClick={() => setEditingPolicy(policy)} disabled={!activeCollection}>
                                                             {t("studio_rls_edit")}
                                                         </Button>

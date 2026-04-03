@@ -15,7 +15,8 @@ import {
     MenuItem,
     Skeleton,
     Typography,
-    SettingsIcon
+    SettingsIcon,
+    HomeIcon
 } from "@rebasepro/ui";
 import { useAuthController, useLargeLayout, useModeController, useCMSUrlController, useAdminModeController, useTranslation } from "../hooks";
 import { User } from "@rebasepro/types";
@@ -156,13 +157,21 @@ export const DefaultAppBar = function DefaultAppBar({
 
 
 
-            {(breadcrumbs.breadcrumbs ?? []).length > 0 && <div className="mr-8 hidden lg:block">
+            <div className="mr-8 hidden lg:block">
                 <div className={"flex flex-row gap-2 items-center"}>
+                    <Link
+                        className="visited:text-inherit dark:visited:text-inherit block"
+                        to={adminModeController.mode === "studio" ? (navigation?.basePath === "/" ? "/s" : `${navigation?.basePath ?? ""}/s`) : (navigation?.basePath ?? "/")}
+                    >
+                        <div className="flex flex-row items-center justify-center -mt-0.5 opacity-80 hover:opacity-100 transition-opacity">
+                            <HomeIcon size="small" />
+                        </div>
+                    </Link>
                     {breadcrumbs.breadcrumbs.map((breadcrumb, index) => {
                         return <React.Fragment key={breadcrumb.url + "_" + index}>
-                            {index > 0 && <Typography variant={"caption"} color={"secondary"}>
+                            <Typography variant={"caption"} color={"secondary"}>
                                 /
-                            </Typography>}
+                            </Typography>
                             <Link
                                 key={index}
                                 className="visited:text-inherit dark:visited:text-inherit block"
@@ -187,8 +196,7 @@ export const DefaultAppBar = function DefaultAppBar({
                         </React.Fragment>;
                     })}
                 </div>
-            </div>}
-
+            </div>
             {startAdornment}
 
 

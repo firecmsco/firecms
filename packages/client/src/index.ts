@@ -62,7 +62,7 @@ export function createRebaseClient<DB = any>(options: CreateRebaseClientOptions)
             websocketUrl: resolvedWsUrl,
             getAuthToken: async () => {
                 const session = await auth.getSession();
-                return session?.accessToken || "";
+                return session?.accessToken || options.token || "";
             }
         });
 

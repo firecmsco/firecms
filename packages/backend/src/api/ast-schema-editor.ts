@@ -239,6 +239,20 @@ export class AstSchemaEditor {
             file = this.project.createSourceFile(newFilePath, `import { EntityCollection } from "@rebasepro/types";\n\nconst ${safeId}Collection: EntityCollection = ${this.convertJsonToAstString(collectionData)};\n\nexport default ${safeId}Collection;\n`, { overwrite: true });
         } else {
             // Update root level properties gracefully
+            
+            // Force delete securityRules if empty or undefined to handle Formex / serialization stripping
+            if (!("securityRules" in collectionData) || collectionData.securityRules === undefined || (Array.isArray(collectionData.securityRules) && collectionData.securityRules.length === 0)) {
+                const srProp = collectionObj.getProperty("securityRules");
+                if (srProp) {
+                    srProp.remove();
+                }
+                
+                // If it was in collectionData as an empty array, delete it so the loop below doesn't add it back as "[]"
+                // Actually, if it's "[]", omitting it entirely from the TS file achieves the same logical effect (no RLS rules)
+                // and correctly triggers "unmapped policies" if the DB still has them.
+                delete collectionData["securityRules"];
+            }
+
             for (const key of Object.keys(collectionData)) {
                 if (key === "relations") continue; // Kept via other AST functions or handled separately.
 

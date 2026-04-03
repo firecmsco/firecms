@@ -9,6 +9,7 @@
   },
   "homepage": "https://rebase.pro",
   "workspaces": [
+    "packages/mcp_server",
     "packages/auth",
     "packages/rebase",
     "packages/core",

@@ -1,5 +1,6 @@
 import { CMSView } from "@rebasepro/types";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
+import { useCMSUrlController } from "../hooks";
 import { useEffect } from "react";
 
 export function CustomCMSRoute({ cmsView }: {
@@ -7,15 +8,16 @@ export function CustomCMSRoute({ cmsView }: {
 }) {
 
     const breadcrumbs = useBreadcrumbsController();
+    const cmsUrlController = useCMSUrlController();
 
     useEffect(() => {
         breadcrumbs.set({
             breadcrumbs: [{
                 title: cmsView.name,
-                url: cmsView.slug
+                url: cmsUrlController.buildCMSUrlPath(cmsView.slug)
             }]
         });
-    }, [cmsView.slug]);
+    }, [cmsView.slug, cmsUrlController]);
 
     return cmsView.view;
 }

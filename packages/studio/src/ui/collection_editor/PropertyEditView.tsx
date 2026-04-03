@@ -47,6 +47,7 @@ import { DateTimePropertyField } from "./properties/DateTimePropertyField";
 import { AdvancedPropertyValidation } from "./properties/advanced/AdvancedPropertyValidation";
 import { editableProperty } from "../../utils/entities";
 import { KeyValuePropertyField } from "./properties/KeyValuePropertyField";
+import { RelationPropertyField } from "./properties/RelationPropertyField";
 import { updatePropertyFromWidget } from "./utils/update_property_for_widget";
 import { UrlPropertyField } from "./properties/UrlPropertyField";
 import { supportedFields } from "./utils/supported_fields";
@@ -485,6 +486,11 @@ function PropertyEditFormFields({
     } else if (selectedFieldConfigId === "key_value") {
         childComponent =
             <KeyValuePropertyField disabled={disabled} />;
+    } else if (selectedFieldConfigId === "relation") {
+        childComponent =
+            <RelationPropertyField
+                showErrors={showErrors}
+                disabled={disabled} />;
     } else {
         childComponent = null;
     }

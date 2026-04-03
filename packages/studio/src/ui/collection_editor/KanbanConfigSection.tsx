@@ -14,7 +14,8 @@ import {
     IconButton,
     Select,
     SelectItem,
-    Typography
+    Typography,
+    Button
 } from "@rebasepro/ui";
 import { useFormex } from "@rebasepro/formex";
 import { PropertyFormDialog } from "./PropertyEditView";
@@ -147,13 +148,14 @@ export function KanbanConfigSection({
 
             {showCreateButton && (
                 <>
-                    <button
-                        type="button"
-                        className="ml-3.5 text-sm text-primary hover:text-primary-dark mt-2"
+                    <Button
+                        variant="text"
+                        size="small"
+                        className="ml-3.5 mt-2"
                         onClick={() => setColumnPropertyDialogOpen(true)}
                     >
                         + Create "{dialogPropertyKey}" property
-                    </button>
+                    </Button>
                     <PropertyFormDialog
                         open={columnPropertyDialogOpen}
                         onCancel={() => setColumnPropertyDialogOpen(false)}
