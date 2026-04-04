@@ -392,7 +392,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Change password for authenticated user
      */
     router.post("/change-password", requireAuth, async (c) => {
-        const userCtx = c.get("user") as any;
+        const userCtx = c.get("user") as { userId: string; roles?: string[] } | undefined;
         if (!userCtx) {
             throw ApiError.unauthorized("Not authenticated");
         }
@@ -437,7 +437,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Send email verification link (authenticated)
      */
     router.post("/send-verification", requireAuth, async (c) => {
-        const userCtx = c.get("user") as any;
+        const userCtx = c.get("user") as { userId: string; roles?: string[] } | undefined;
         if (!userCtx) {
             throw ApiError.unauthorized("Not authenticated");
         }
@@ -581,7 +581,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Get active refresh tokens (sessions) for the current user
      */
     router.get("/sessions", requireAuth, async (c) => {
-        const userCtx = c.get("user") as any;
+        const userCtx = c.get("user") as { userId: string; roles?: string[] } | undefined;
         if (!userCtx) {
             throw ApiError.unauthorized("Not authenticated");
         }
@@ -607,7 +607,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Delete all refresh tokens for the current user (remote logout every device)
      */
     router.delete("/sessions", requireAuth, async (c) => {
-        const userCtx = c.get("user") as any;
+        const userCtx = c.get("user") as { userId: string; roles?: string[] } | undefined;
         if (!userCtx) {
             throw ApiError.unauthorized("Not authenticated");
         }
@@ -621,7 +621,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Delete a specific refresh token (remote logout)
      */
     router.delete("/sessions/:id", requireAuth, async (c) => {
-        const userCtx = c.get("user") as any;
+        const userCtx = c.get("user") as { userId: string; roles?: string[] } | undefined;
         if (!userCtx) {
             throw ApiError.unauthorized("Not authenticated");
         }
@@ -640,7 +640,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Get current authenticated user
      */
     router.get("/me", requireAuth, async (c) => {
-        const userCtx = c.get("user") as any;
+        const userCtx = c.get("user") as { userId: string; roles?: string[] } | undefined;
         if (!userCtx) {
             throw ApiError.unauthorized("Not authenticated");
         }
@@ -667,7 +667,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Update current authenticated user profile
      */
     router.patch("/me", requireAuth, async (c) => {
-        const userCtx = c.get("user") as any;
+        const userCtx = c.get("user") as { userId: string; roles?: string[] } | undefined;
         if (!userCtx) {
             throw ApiError.unauthorized("Not authenticated");
         }

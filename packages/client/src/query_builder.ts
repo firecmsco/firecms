@@ -1,4 +1,4 @@
-import { FindParams } from "@rebasepro/types";
+import { FindParams, Entity } from "@rebasepro/types";
 import { FindResponse } from "./transport";
 import { CollectionClient } from "./collection";
 
@@ -121,6 +121,6 @@ export class QueryBuilder<M extends Record<string, any> = any> {
         if (!this.collection.listen) {
             throw new Error("Listen is only available when RebaseClient is configured with a websocketUrl.");
         }
-        return this.collection.listen(this.params, onUpdate as any, onError);
+        return this.collection.listen(this.params, onUpdate as unknown as (data: { data: Entity<M>[]; meta: any }) => void, onError);
     }
 }

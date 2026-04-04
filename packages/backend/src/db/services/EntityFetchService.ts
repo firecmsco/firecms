@@ -1,6 +1,6 @@
 import { and, asc, count, desc, eq, getTableName, gt, lt, or, SQL } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
-import { Entity, EntityCollection, FilterValues } from "@rebasepro/types";
+import { Entity, EntityCollection, FilterValues, Relation } from "@rebasepro/types";
 import { resolveCollectionRelations } from "@rebasepro/common";
 import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
 import {
@@ -10,7 +10,7 @@ import {
     parseIdValues,
     buildCompositeId
 } from "./entity-helpers";
-import { parseDataFromServer } from "../data-transformer";
+import { parseDataFromServer, normalizeDbValues } from "../data-transformer";
 import { RelationService } from "./RelationService";
 import { DrizzleClient } from "../interfaces";
 import { BackendCollectionRegistry } from "../../collections/BackendCollectionRegistry";
@@ -38,6 +38,319 @@ export class EntityFetchService {
         return DrizzleConditionBuilder.buildFilterConditions(filter, table, collectionPath);
     }
 
+    // =============================================================
+    // DRIZZLE QUERY HELPERS
+    // =============================================================
+
+    /**
+     * Build the `with` config for Drizzle's relational query API.
+     * Converts collection relations to a Drizzle-compatible `with` object.
+     *
+     * When `include` is provided, only those relations are loaded.
+     * When `include` is absent, ALL relations are loaded (CMS path).
+     *
+     * Automatically detects many-to-many junction tables and nests
+     * the target relation so actual entity data is returned.
+     */
+    private buildWithConfig(
+        collection: EntityCollection,
+        include?: string[]
+    ): Record<string, boolean | { with: Record<string, boolean> }> {
+        const resolvedRelations = resolveCollectionRelations(collection);
+        const propertyKeys = new Set(Object.keys(collection.properties || {}));
+        const withConfig: Record<string, boolean | { with: Record<string, boolean> }> = {};
+
+        const shouldInclude = (key: string) =>
+            !include || include.length === 0 || include[0] === "*" || include.includes(key);
+
+        for (const [key, relation] of Object.entries(resolvedRelations)) {
+            if (!shouldInclude(key)) continue;
+            // Only include relations that map to actual properties (or include all for REST)
+            if (!include && !propertyKeys.has(key)) continue;
+
+            const drizzleRelName = relation.relationName || key;
+
+            // Detect many-to-many junction tables:
+            // If the relation goes through a junction table (relation.through exists or
+            // the Drizzle schema maps to a junction table), we need two-level with.
+            if (relation.cardinality === "many" && this.isJunctionRelation(relation, collection)) {
+                // The Drizzle relation points to the junction table.
+                // We need: { [junctionRelName]: { with: { [targetFkName]: true } } }
+                // The target FK name is the relation on the junction table that points to the actual target.
+                const targetFkName = this.getJunctionTargetRelationName(relation, collection);
+                if (targetFkName) {
+                    withConfig[drizzleRelName] = { with: { [targetFkName]: true } };
+                } else {
+                    withConfig[drizzleRelName] = true;
+                }
+            } else {
+                withConfig[drizzleRelName] = true;
+            }
+        }
+
+        return withConfig;
+    }
+
+    /**
+     * Detect if a many-to-many relation uses a junction table in the Drizzle schema.
+     */
+    private isJunctionRelation(relation: Relation, _collection: EntityCollection): boolean {
+        // If `through` is defined, it's explicitly a junction relation
+        if (relation.through) return true;
+        // If joinPath has an intermediate table, it's likely junction-based
+        if (relation.joinPath && relation.joinPath.length > 1) return true;
+        return false;
+    }
+
+    /**
+     * Get the Drizzle relation name on the junction table that points to the actual target entity.
+     * For example, for posts_tags junction, this returns "tag_id" (the relation pointing to tags).
+     */
+    private getJunctionTargetRelationName(relation: Relation, _collection: EntityCollection): string | null {
+        if (relation.through) {
+            // The junction relation on the junction table pointing to the target
+            // uses the targetColumn name as the Drizzle relation name
+            return relation.through.targetColumn.replace(/_id$/, "_id");
+        }
+        return null;
+    }
+
+    /**
+     * Convert a db.query result row (with nested relation objects) to an Entity<M>.
+     * Handles:
+     * - The { id, path, values } wrapping
+     * - Type normalization (dates, numbers, NaN) via normalizeDbValues
+     * - Converting nested relation objects to { id, path, __type: "relation" } for CMS
+     * - Flattening junction-table many-to-many results
+     */
+    private drizzleResultToEntity<M extends Record<string, any>>(
+        row: Record<string, unknown>,
+        collection: EntityCollection,
+        collectionPath: string,
+        idInfo: { fieldName: string; type: "string" | "number" },
+        databaseId?: string
+    ): Entity<M> {
+        const resolvedRelations = resolveCollectionRelations(collection);
+        const propertyKeys = new Set(Object.keys(collection.properties || {}));
+
+        // Normalize non-relation values (dates, numbers, etc.)
+        const normalizedValues = normalizeDbValues(row as M, collection);
+
+        // Convert nested relation objects to CMS-style { id, path, __type: "relation" }
+        for (const [key, relation] of Object.entries(resolvedRelations)) {
+            if (!propertyKeys.has(key)) continue;
+            const drizzleRelName = relation.relationName || key;
+            const relData = row[drizzleRelName];
+
+            if (relData === undefined || relData === null) continue;
+
+            if (relation.cardinality === "many" && Array.isArray(relData)) {
+                const targetCollection = relation.target();
+                const targetPath = targetCollection.slug || targetCollection.dbPath;
+                const targetPks = getPrimaryKeys(targetCollection, this.registry);
+                const targetIdField = targetPks[0].fieldName;
+
+                (normalizedValues as Record<string, unknown>)[key] = relData.map((item: Record<string, unknown>) => {
+                    // Handle junction table flattening:
+                    // Junction rows look like { post_id: 1, tag_id: { id: 5, name: "ts" } }
+                    let targetEntity = item;
+                    if (this.isJunctionRelation(relation, collection)) {
+                        // Find the nested target object in the junction row
+                        const nestedKey = Object.keys(item).find(
+                            nk => typeof item[nk] === "object" && item[nk] !== null && !Array.isArray(item[nk])
+                        );
+                        if (nestedKey) {
+                            targetEntity = item[nestedKey] as Record<string, unknown>;
+                        }
+                    }
+
+                    return {
+                        id: String(targetEntity[targetIdField] ?? targetEntity.id ?? targetEntity[Object.keys(targetEntity)[0]]),
+                        path: targetPath,
+                        __type: "relation" as const
+                    };
+                });
+            } else if (relation.cardinality === "one" && typeof relData === "object" && !Array.isArray(relData)) {
+                const targetCollection = relation.target();
+                const targetPath = targetCollection.slug || targetCollection.dbPath;
+                const targetPks = getPrimaryKeys(targetCollection, this.registry);
+                const targetIdField = targetPks[0].fieldName;
+                const relObj = relData as Record<string, unknown>;
+
+                (normalizedValues as Record<string, unknown>)[key] = {
+                    id: String(relObj[targetIdField] ?? relObj.id ?? relObj[Object.keys(relObj)[0]]),
+                    path: targetPath,
+                    __type: "relation" as const
+                };
+            }
+        }
+
+        return {
+            id: String(row[idInfo.fieldName]),
+            path: collectionPath,
+            values: normalizedValues as M,
+            databaseId
+        };
+    }
+
+    /**
+     * Convert a db.query result row to a flat REST-style object with populated relations.
+     */
+    private drizzleResultToRestRow(
+        row: Record<string, unknown>,
+        collection: EntityCollection,
+        idInfo: { fieldName: string; type: "string" | "number" }
+    ): Record<string, unknown> {
+        const flat: Record<string, unknown> = { id: String(row[idInfo.fieldName]) };
+        const resolvedRelations = resolveCollectionRelations(collection);
+
+        for (const [k, v] of Object.entries(row)) {
+            if (k === idInfo.fieldName) continue;
+
+            const relation = resolvedRelations[k];
+            if (Array.isArray(v) && relation) {
+                // Many relation — flatten each nested entity, handling junction tables
+                flat[k] = v.map((item: Record<string, unknown>) => {
+                    if (this.isJunctionRelation(relation, collection)) {
+                        const nestedKey = Object.keys(item).find(
+                            nk => typeof item[nk] === "object" && item[nk] !== null && !Array.isArray(item[nk])
+                        );
+                        if (nestedKey) {
+                            const nested = item[nestedKey] as Record<string, unknown>;
+                            return { id: String(nested.id ?? nested[Object.keys(nested)[0]]), ...nested };
+                        }
+                    }
+                    return { id: String(item.id ?? item[Object.keys(item)[0]]), ...item };
+                });
+            } else if (typeof v === "object" && v !== null && !Array.isArray(v) && relation) {
+                // One-to-one relation — inline the object
+                const relObj = v as Record<string, unknown>;
+                flat[k] = { id: String(relObj.id ?? relObj[Object.keys(relObj)[0]]), ...relObj };
+            } else {
+                flat[k] = v;
+            }
+        }
+        return flat;
+    }
+
+    /**
+     * Build db.query-compatible options from standard fetch options.
+     * Handles filter, search, orderBy, limit, and cursor-based pagination.
+     */
+    private buildDrizzleQueryOptions<M extends Record<string, any>>(
+        table: PgTable<any>,
+        idField: AnyPgColumn,
+        idInfo: { fieldName: string; type: "string" | "number" },
+        options: {
+            filter?: FilterValues<Extract<keyof M, string>>;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+            startAfter?: Record<string, unknown>;
+            searchString?: string;
+        },
+        collectionPath: string,
+        withConfig?: Record<string, any>
+    ): Record<string, unknown> {
+        const queryOpts: Record<string, unknown> = {};
+
+        if (withConfig) queryOpts.with = withConfig;
+
+        // Build where conditions
+        const allConditions: SQL[] = [];
+
+        if (options.searchString) {
+            const collection = getCollectionByPath(collectionPath, this.registry);
+            const searchConditions = DrizzleConditionBuilder.buildSearchConditions(
+                options.searchString, collection.properties, table
+            );
+            if (searchConditions.length === 0) {
+                // Return options that will produce empty results
+                queryOpts.where = and(eq(idField, -99999999)); // impossible condition
+                return queryOpts;
+            }
+            allConditions.push(DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!);
+        }
+
+        if (options.filter) {
+            const filterConditions = this.buildFilterConditions(options.filter, table, collectionPath);
+            if (filterConditions.length > 0) allConditions.push(...filterConditions);
+        }
+
+        // Cursor-based pagination (startAfter)
+        if (options.startAfter) {
+            const cursorConditions = this.buildCursorConditions(table, idField, idInfo, options);
+            if (cursorConditions.length > 0) allConditions.push(...cursorConditions);
+        }
+
+        if (allConditions.length > 0) {
+            queryOpts.where = and(...allConditions);
+        }
+
+        // OrderBy
+        const orderExpressions: any[] = [];
+        if (options.orderBy) {
+            const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
+            if (orderByField) {
+                orderExpressions.push(options.order === "asc" ? asc(orderByField) : desc(orderByField));
+            }
+        }
+        orderExpressions.push(desc(idField));
+        if (orderExpressions.length > 0) {
+            queryOpts.orderBy = orderExpressions;
+        }
+
+        // Limit
+        const limitValue = options.searchString ? (options.limit || 50) : options.limit;
+        if (limitValue) queryOpts.limit = limitValue;
+
+        return queryOpts;
+    }
+
+    /**
+     * Extract cursor pagination conditions from startAfter options.
+     */
+    private buildCursorConditions(
+        table: PgTable<any>,
+        idField: AnyPgColumn,
+        idInfo: { fieldName: string; type: "string" | "number" },
+        options: { orderBy?: string; order?: "desc" | "asc"; startAfter?: Record<string, unknown> }
+    ): SQL[] {
+        if (!options.startAfter) return [];
+        const cursor = options.startAfter;
+
+        if (options.orderBy) {
+            const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
+            if (orderByField) {
+                const startAfterOrderValue = (cursor.values as Record<string, unknown> | undefined)?.[options.orderBy] ?? cursor[options.orderBy];
+                const startAfterId = cursor.id ?? cursor[idInfo.fieldName];
+
+                if (startAfterOrderValue !== undefined && startAfterId !== undefined) {
+                    if (options.order === "asc") {
+                        return [or(
+                            gt(orderByField, startAfterOrderValue),
+                            and(eq(orderByField, startAfterOrderValue), gt(idField, startAfterId))
+                        )!];
+                    } else {
+                        return [or(
+                            lt(orderByField, startAfterOrderValue),
+                            and(eq(orderByField, startAfterOrderValue), lt(idField, startAfterId))
+                        )!];
+                    }
+                }
+            }
+        } else {
+            const startAfterId = cursor.id ?? cursor[idInfo.fieldName];
+            if (startAfterId !== undefined && startAfterId !== null) {
+                const idInfoArray = [idInfo] as Array<{ fieldName: string; type: "string" | "number" }>;
+                const parsedStartAfterIdObj = parseIdValues(startAfterId as string | number, idInfoArray);
+                return [lt(idField, parsedStartAfterIdObj[idInfo.fieldName])];
+            }
+        }
+
+        return [];
+    }
+
     /**
      * Fetch a single entity by ID
      */
@@ -59,6 +372,27 @@ export class EntityFetchService {
         const parsedIdObj = parseIdValues(entityId, idInfoArray);
         const parsedId = parsedIdObj[idInfo.fieldName];
 
+        // Primary path: use db.query.findFirst with relation loading
+        const dbAny = this.db as any;
+        const tableName = getTableName(table);
+
+        if (dbAny.query?.[tableName]) {
+            try {
+                const withConfig = this.buildWithConfig(collection);
+                const row = await dbAny.query[tableName].findFirst({
+                    where: eq(idField, parsedId),
+                    with: withConfig
+                });
+
+                if (!row) return undefined;
+
+                return this.drizzleResultToEntity<M>(row, collection, collectionPath, idInfo, databaseId);
+            } catch (e) {
+                console.warn(`[EntityFetchService] db.query.findFirst failed for ${collectionPath}, falling back to db.select:`, e);
+            }
+        }
+
+        // Fallback: db.select + N+1 relation loading
         const result = await this.db
             .select()
             .from(table)
@@ -70,7 +404,7 @@ export class EntityFetchService {
         const raw = result[0] as M;
         const values = await parseDataFromServer(raw, collection, this.db, this.registry);
 
-        // Load relations based on cardinality
+        // Load relations based on cardinality (N+1 — only used in fallback)
         const resolvedRelations = resolveCollectionRelations(collection);
         const propertyKeys = new Set(Object.keys(collection.properties));
 
@@ -148,41 +482,49 @@ export class EntityFetchService {
             throw new Error(`ID field '${idInfo.fieldName}' not found in table for collection '${collectionPath}'`);
         }
 
+        // Primary path: use db.query.findMany with relation loading
+        const dbAny = this.db as any;
+        const tableName = getTableName(table);
+
+        if (dbAny.query?.[tableName]) {
+            try {
+                const withConfig = this.buildWithConfig(collection);
+                const queryOpts = this.buildDrizzleQueryOptions<M>(
+                    table, idField, idInfo, options, collectionPath, withConfig
+                );
+
+                const results = await dbAny.query[tableName].findMany(queryOpts);
+
+                return (results as Record<string, unknown>[]).map(row =>
+                    this.drizzleResultToEntity<M>(row, collection, collectionPath, idInfo, options.databaseId)
+                );
+            } catch (e) {
+                console.warn(`[EntityFetchService] db.query.findMany failed for ${collectionPath}, falling back to db.select:`, e);
+            }
+        }
+
+        // Fallback: db.select + processEntityResults (N+1 for relations)
         let query = this.db.select().from(table).$dynamic();
         const allConditions: SQL[] = [];
 
-        // Add search conditions if search string is provided
         if (options.searchString) {
             const searchConditions = DrizzleConditionBuilder.buildSearchConditions(
-                options.searchString,
-                collection.properties,
-                table
+                options.searchString, collection.properties, table
             );
-
-            if (searchConditions.length === 0) {
-                return []; // No searchable fields found
-            }
-
+            if (searchConditions.length === 0) return [];
             allConditions.push(DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!);
         }
 
-        // Add filter conditions
         if (options.filter) {
             const filterConditions = this.buildFilterConditions(options.filter, table, collectionPath);
-            if (filterConditions.length > 0) {
-                allConditions.push(...filterConditions);
-            }
+            if (filterConditions.length > 0) allConditions.push(...filterConditions);
         }
 
-        // Apply all conditions
         if (allConditions.length > 0) {
             const finalCondition = DrizzleConditionBuilder.combineConditionsWithAnd(allConditions);
-            if (finalCondition) {
-                query = query.where(finalCondition);
-            }
+            if (finalCondition) query = query.where(finalCondition);
         }
 
-        // Apply ordering
         const orderExpressions = [];
         if (options.orderBy) {
             const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
@@ -190,76 +532,20 @@ export class EntityFetchService {
                 orderExpressions.push(options.order === "asc" ? asc(orderByField) : desc(orderByField));
             }
         }
-
-        // Default ordering by ID
         orderExpressions.push(desc(idField));
+        if (orderExpressions.length > 0) query = query.orderBy(...orderExpressions);
 
-        if (orderExpressions.length > 0) {
-            query = query.orderBy(...orderExpressions);
-        }
-
-        // Apply startAfter pagination
         if (options.startAfter) {
-            const startAfterConditions: SQL[] = [];
-
-            if (options.orderBy) {
-                const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
-                if (orderByField) {
-                    const cursor = options.startAfter as Record<string, unknown>;
-                    const startAfterOrderValue = (cursor.values as Record<string, unknown> | undefined)?.[options.orderBy] ?? cursor[options.orderBy];
-                    const startAfterId = cursor.id ?? cursor[idInfo.fieldName];
-
-                    if (startAfterOrderValue !== undefined && startAfterId !== undefined) {
-                        if (options.order === "asc") {
-                            startAfterConditions.push(
-                                or(
-                                    gt(orderByField, startAfterOrderValue),
-                                    and(
-                                        eq(orderByField, startAfterOrderValue),
-                                        gt(idField, startAfterId)
-                                    )
-                                )!
-                            );
-                        } else {
-                            startAfterConditions.push(
-                                or(
-                                    lt(orderByField, startAfterOrderValue),
-                                    and(
-                                        eq(orderByField, startAfterOrderValue),
-                                        lt(idField, startAfterId)
-                                    )
-                                )!
-                            );
-                        }
-                    }
-                }
-            } else {
-                const cursor = options.startAfter as Record<string, unknown>;
-                const startAfterId = cursor.id ?? cursor[idInfo.fieldName];
-                if (startAfterId !== undefined && startAfterId !== null) {
-                    const parsedStartAfterIdObj = parseIdValues(startAfterId as string | number, idInfoArray);
-                    const parsedStartAfterId = parsedStartAfterIdObj[idInfo.fieldName];
-                    startAfterConditions.push(lt(idField, parsedStartAfterId));
-                }
-            }
-
-            if (startAfterConditions.length > 0) {
-                const startAfterCondition = DrizzleConditionBuilder.combineConditionsWithAnd(startAfterConditions);
-                if (startAfterCondition) {
-                    allConditions.push(startAfterCondition);
-                    const finalCondition = DrizzleConditionBuilder.combineConditionsWithAnd(allConditions);
-                    if (finalCondition) {
-                        query = query.where(finalCondition);
-                    }
-                }
+            const cursorConditions = this.buildCursorConditions(table, idField, idInfo, options);
+            if (cursorConditions.length > 0) {
+                allConditions.push(...cursorConditions);
+                const finalCondition = DrizzleConditionBuilder.combineConditionsWithAnd(allConditions);
+                if (finalCondition) query = query.where(finalCondition);
             }
         }
 
-        // Apply limit
         const limitValue = options.searchString ? (options.limit || 50) : options.limit;
-        if (limitValue) {
-            query = query.limit(limitValue);
-        }
+        if (limitValue) query = query.limit(limitValue);
 
         const results = await query;
 
@@ -267,7 +553,11 @@ export class EntityFetchService {
     }
 
     /**
-     * Process raw database results into Entity objects with relations
+     * @deprecated Only used in the fallback path when db.query is unavailable.
+     * The primary path uses drizzleResultToEntity which handles relation
+     * mapping without N+1 queries.
+     *
+     * Process raw database results into Entity objects with relations.
      */
     private async processEntityResults<M extends Record<string, any>>(
         results: Record<string, unknown>[],
@@ -608,25 +898,43 @@ export class EntityFetchService {
         const table = getTableForCollection(collection, this.registry);
         const idInfoArray = getPrimaryKeys(collection, this.registry);
         const idInfo = idInfoArray[0];
+        const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
 
-        // First, try Drizzle relational query API (db.query) if include is requested
-        if (include && include.length > 0 && this.hasDrizzleQueryAPI(collectionPath)) {
-            const result = await this.fetchWithDrizzleQuery<M>(collectionPath, collection, options, include, idInfo);
-            if (result) return result;
+        // Primary path: use db.query.findMany
+        const dbAny = this.db as any;
+        const tableName = getTableName(table);
+
+        if (dbAny.query?.[tableName]) {
+            try {
+                const withConfig = (include && include.length > 0)
+                    ? this.buildWithConfig(collection, include)
+                    : undefined;
+
+                const queryOpts = this.buildDrizzleQueryOptions<M>(
+                    table, idField, idInfo, options, collectionPath, withConfig
+                );
+
+                const results = await dbAny.query[tableName].findMany(queryOpts);
+
+                return (results as Record<string, unknown>[]).map(row =>
+                    this.drizzleResultToRestRow(row, collection, idInfo)
+                );
+            } catch (e) {
+                console.warn(`[fetchCollectionForRest] db.query.findMany failed for ${collectionPath}, falling back:`, e);
+            }
         }
 
         // Fallback: fetch base entities without relations
         const entities = await this.fetchEntitiesWithConditionsRaw<M>(collectionPath, options);
 
         if (!include || include.length === 0) {
-            // Fast path: no relations, just return flat entities
             return entities.map(entity => ({
                 id: String(entity[idInfo.fieldName]),
                 ...entity
             }));
         }
 
-        // Resolve which relation keys to include
+        // Fallback relation loading via batch
         const resolvedRelations = resolveCollectionRelations(collection);
         const propertyKeys = new Set(Object.keys(collection.properties || {}));
         const shouldInclude = (key: string) =>
@@ -634,23 +942,17 @@ export class EntityFetchService {
 
         const entityIds = entities.map(e => e[idInfo.fieldName] as string | number);
 
-        // Batch load requested one-to-one relations
         for (const [key, relation] of Object.entries(resolvedRelations)) {
             if (!propertyKeys.has(key) || !shouldInclude(key) || relation.cardinality !== "one") continue;
-
             try {
                 const batchResults = await this.relationService.batchFetchRelatedEntities(
                     collectionPath, entityIds, key, relation
                 );
-
                 for (const entity of entities) {
                     const eid = entity[idInfo.fieldName] as string | number;
                     const related = batchResults.get(eid);
                     if (related) {
-                        (entity as Record<string, unknown>)[key] = {
-                            id: related.id,
-                            ...related.values
-                        };
+                        (entity as Record<string, unknown>)[key] = { id: related.id, ...related.values };
                     }
                 }
             } catch (e) {
@@ -658,22 +960,17 @@ export class EntityFetchService {
             }
         }
 
-        // Batch load requested many relations
         for (const [key, relation] of Object.entries(resolvedRelations)) {
             if (!propertyKeys.has(key) || !shouldInclude(key) || relation.cardinality !== "many") continue;
-
             try {
-                // Use batchFetchManyRelatedEntities for efficiency
                 const batchResults = await this.batchFetchManyRelatedEntities(
                     collectionPath, entityIds, key
                 );
-
                 for (const entity of entities) {
                     const eid = entity[idInfo.fieldName] as string | number;
                     const relatedList = batchResults.get(String(eid)) || [];
                     (entity as Record<string, unknown>)[key] = relatedList.map(e => ({
-                        id: e.id,
-                        ...e.values
+                        id: e.id, ...e.values
                     }));
                 }
             } catch (e) {
@@ -705,6 +1002,30 @@ export class EntityFetchService {
         const parsedIdObj = parseIdValues(entityId, idInfoArray);
         const parsedId = parsedIdObj[idInfo.fieldName];
 
+        // Primary path: use db.query.findFirst
+        const dbAny = this.db as any;
+        const tableName = getTableName(table);
+
+        if (dbAny.query?.[tableName]) {
+            try {
+                const withConfig = (include && include.length > 0)
+                    ? this.buildWithConfig(collection, include)
+                    : undefined;
+
+                const row = await dbAny.query[tableName].findFirst({
+                    where: eq(idField, parsedId),
+                    ...(withConfig ? { with: withConfig } : {})
+                });
+
+                if (!row) return null;
+
+                return this.drizzleResultToRestRow(row, collection, idInfo);
+            } catch (e) {
+                console.warn(`[fetchEntityForRest] db.query.findFirst failed for ${collectionPath}, falling back:`, e);
+            }
+        }
+
+        // Fallback: db.select + N+1 relation loading
         const result = await this.db
             .select()
             .from(table)
@@ -720,7 +1041,7 @@ export class EntityFetchService {
             return flatEntity;
         }
 
-        // Populate requested relations
+        // Fallback relation population
         const resolvedRelations = resolveCollectionRelations(collection);
         const propertyKeys = new Set(Object.keys(collection.properties || {}));
         const shouldInclude = (key: string) =>
@@ -810,6 +1131,9 @@ export class EntityFetchService {
     }
 
     /**
+     * @deprecated Superseded by inline `dbAny.query?.[tableName]` checks in fetchCollectionForRest/fetchEntityForRest.
+     * Kept for backward compatibility only.
+     *
      * Check if the Drizzle instance has the relational query API available
      * for a given collection path.
      */
@@ -823,6 +1147,10 @@ export class EntityFetchService {
     }
 
     /**
+     * @deprecated Superseded by the new `buildWithConfig` + `buildDrizzleQueryOptions` approach
+     * used directly in fetchCollectionForRest/fetchEntityForRest.
+     * Kept for backward compatibility only.
+     *
      * Attempt to use Drizzle's relational query API (db.query.<table>.findMany)
      * for efficient JOIN-based relation loading.
      * Returns null if the API is not available or the query fails.
@@ -917,6 +1245,10 @@ export class EntityFetchService {
     }
 
     /**
+     * @deprecated Only used in the fallback path when db.query is unavailable.
+     * The primary path uses db.query.findMany with `with` config, which
+     * loads all relations in a single query.
+     *
      * Batch fetch many-to-many related entities for multiple parent IDs.
      * Groups results by parent ID to avoid N+1.
      */

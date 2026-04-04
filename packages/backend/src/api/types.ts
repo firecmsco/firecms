@@ -76,6 +76,8 @@ export interface QueryOptions {
     where?: Record<string, unknown>;
     orderBy?: Array<{ field: string; direction: 'asc' | 'desc' }>;
     include?: string[];
+    /** Columns to return in the response (field-level selection) */
+    fields?: string[];
 }
 
 /**

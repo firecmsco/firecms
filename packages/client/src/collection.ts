@@ -175,22 +175,22 @@ export function createCollectionClient<M extends Record<string, any> = any>(tran
 
         // Fluent builder instantiation
         where(column: keyof M & string, operator: FilterOperator, value: any) {
-            return new QueryBuilder<M>(this as any).where(column, operator, value);
+            return new QueryBuilder<M>(this as unknown as CollectionClient<M>).where(column, operator, value);
         },
         orderBy(column: keyof M & string, ascending?: "asc" | "desc") {
-            return new QueryBuilder<M>(this as any).orderBy(column, ascending);
+            return new QueryBuilder<M>(this as unknown as CollectionClient<M>).orderBy(column, ascending);
         },
         limit(count: number) {
-            return new QueryBuilder<M>(this as any).limit(count);
+            return new QueryBuilder<M>(this as unknown as CollectionClient<M>).limit(count);
         },
         offset(count: number) {
-            return new QueryBuilder<M>(this as any).offset(count);
+            return new QueryBuilder<M>(this as unknown as CollectionClient<M>).offset(count);
         },
         search(searchString: string) {
-            return new QueryBuilder<M>(this as any).search(searchString);
+            return new QueryBuilder<M>(this as unknown as CollectionClient<M>).search(searchString);
         },
         include(...relations: string[]) {
-            return new QueryBuilder<M>(this as any).include(...relations);
+            return new QueryBuilder<M>(this as unknown as CollectionClient<M>).include(...relations);
         }
     };
 }

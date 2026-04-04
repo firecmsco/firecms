@@ -57,7 +57,7 @@ export function parseQueryOptions(query: Record<string, unknown>): QueryOptions 
     }
 
     // PostgREST style filtering
-    const reservedQueryKeys = ["limit", "offset", "page", "orderBy", "where", "include"];
+    const reservedQueryKeys = ["limit", "offset", "page", "orderBy", "where", "include", "fields"];
     for (const [key, rawValue] of Object.entries(query)) {
         if (reservedQueryKeys.includes(key)) continue;
 
@@ -143,6 +143,12 @@ export function parseQueryOptions(query: Record<string, unknown>): QueryOptions 
         } else {
             options.include = includeStr.split(",").map(s => s.trim()).filter(Boolean);
         }
+    }
+
+    // Field selection
+    if (query.fields) {
+        const fieldsStr = String(query.fields).trim();
+        options.fields = fieldsStr.split(",").map(s => s.trim()).filter(Boolean);
     }
 
     return options;

@@ -16,7 +16,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 // drags in React peer-deps).  By importing at runtime only we keep the MCP
 // server build clean.
 const CLIENT_PKG = "@rebasepro/client";
-async function loadClientSdk(): Promise<(opts: any) => any> {
+async function loadClientSdk(): Promise<(opts: Record<string, unknown>) => unknown> {
     const mod = await import(/* webpackIgnore: true */ CLIENT_PKG);
     return mod.createRebaseClient;
 }
@@ -41,15 +41,34 @@ const API_TOKEN = process.env.REBASE_API_TOKEN || process.env.REBASE_TOKEN || ""
 
 // ── Rebase Client (lazy) ────────────────────────────────────────────────────
 
-let _client: any = null;
+type RebaseClient = {
+    data: {
+        collection: (slug: string) => {
+            find: (opts: Record<string, unknown>) => Promise<unknown>;
+            findById: (id: string) => Promise<unknown>;
+            create: (data: unknown) => Promise<unknown>;
+            update: (id: string, data: unknown) => Promise<unknown>;
+            delete: (id: string) => Promise<void>;
+        }
+    };
+    admin: {
+        listUsers: () => Promise<unknown>;
+        createUser: (opts: Record<string, unknown>) => Promise<unknown>;
+        updateUser: (id: string, opts: Record<string, unknown>) => Promise<unknown>;
+        deleteUser: (id: string) => Promise<unknown>;
+        listRoles: () => Promise<unknown>;
+    };
+};
 
-async function getClient(): Promise<any> {
+let _client: RebaseClient | null = null;
+
+async function getClient(): Promise<RebaseClient> {
     if (!_client) {
         const createRebaseClient = await loadClientSdk();
         _client = createRebaseClient({
             baseUrl: BASE_URL,
             token: API_TOKEN || undefined,
-        });
+        }) as RebaseClient;
     }
     return _client;
 }
@@ -325,7 +344,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     switch (name) {
         case "list_documents": {
-            const { collection: slug, limit, offset, orderBy, where } = args as any;
+            const argsObj = args as { collection: string; limit?: number; offset?: number; orderBy?: string; where?: Record<string, unknown> };
+            const { collection: slug, limit, offset, orderBy, where } = argsObj;
             const result = await client.data.collection(slug).find({
                 limit,
                 offset,
@@ -336,26 +356,30 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         }
 
         case "get_document": {
-            const { collection: slug, id } = args as any;
+            const argsObj = args as { collection: string; id: string };
+            const { collection: slug, id } = argsObj;
             const entity = await client.data.collection(slug).findById(id);
             if (!entity) return textResult(`Document ${id} not found in ${slug}`);
             return jsonResult(entity);
         }
 
         case "create_document": {
-            const { collection: slug, data } = args as any;
+            const argsObj = args as { collection: string; data: Record<string, unknown> };
+            const { collection: slug, data } = argsObj;
             const entity = await client.data.collection(slug).create(data);
             return jsonResult(entity);
         }
 
         case "update_document": {
-            const { collection: slug, id, data } = args as any;
+            const argsObj = args as { collection: string; id: string; data: Record<string, unknown> };
+            const { collection: slug, id, data } = argsObj;
             const entity = await client.data.collection(slug).update(id, data);
             return jsonResult(entity);
         }
 
         case "delete_document": {
-            const { collection: slug, id } = args as any;
+            const argsObj = args as { collection: string; id: string };
+            const { collection: slug, id } = argsObj;
             await client.data.collection(slug).delete(id);
             return textResult(`Deleted document ${id} from ${slug}`);
         }
@@ -367,19 +391,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         }
 
         case "create_user": {
-            const { email, displayName, password, roles } = args as any;
+            const argsObj = args as { email: string; displayName?: string; password?: string; roles?: string[] };
+            const { email, displayName, password, roles } = argsObj;
             const result = await client.admin.createUser({ email, displayName, password, roles });
             return jsonResult(result);
         }
 
         case "update_user": {
-            const { userId, email, displayName, roles } = args as any;
+            const argsObj = args as { userId: string; email?: string; displayName?: string; roles?: string[] };
+            const { userId, email, displayName, roles } = argsObj;
             const result = await client.admin.updateUser(userId, { email, displayName, roles });
             return jsonResult(result);
         }
 
         case "delete_user": {
-            const { userId } = args as any;
+            const argsObj = args as { userId: string };
+            const { userId } = argsObj;
             const result = await client.admin.deleteUser(userId);
             return jsonResult(result);
         }
@@ -412,7 +439,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         }
 
         case "rebase_dev_logs": {
-            const lineCount = (args as any)?.lines ?? 50;
+            const argsObj = args as { lines?: number } | undefined;
+            const lineCount = argsObj?.lines ?? 50;
             const recent = devLogs.slice(-lineCount);
             if (recent.length === 0) {
                 return textResult(devProcess ? "No output captured yet." : "Dev server is not running.");

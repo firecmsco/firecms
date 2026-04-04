@@ -511,3 +511,46 @@ export function parsePropertyFromServer(value: unknown, property: Property, coll
             return value;
     }
 }
+
+/**
+ * Lightweight value normalization for db.query results.
+ * Only handles type coercion (dates, numbers, NaN) and property filtering.
+ * Does NOT query the database for relations — those are already resolved
+ * by Drizzle's relational query API.
+ *
+ * Use this instead of `parseDataFromServer` when processing results from
+ * `db.query.findFirst/findMany` which return pre-hydrated relation data.
+ */
+export function normalizeDbValues<M extends Record<string, any>>(
+    data: M,
+    collection: EntityCollection
+): M {
+    const properties = collection.properties;
+    if (!data || !properties) return data;
+
+    const result: Record<string, any> = {};
+
+    // Get FK columns that are used internally for relations and not defined as properties
+    const resolvedRelations = resolveCollectionRelations(collection);
+    const internalFKColumns = new Set<string>();
+    Object.values(resolvedRelations).forEach(relation => {
+        if (relation.localKey && !properties[relation.localKey]) {
+            internalFKColumns.add(relation.localKey);
+        }
+    });
+
+    for (const [key, value] of Object.entries(data)) {
+        // Skip internal FK columns
+        if (internalFKColumns.has(key)) continue;
+
+        const property = properties[key as keyof M] as Property;
+        if (!property) continue; // Skip DB columns not defined in properties
+
+        // Skip relation properties — they're already handled by db.query
+        if (property.type === "relation") continue;
+
+        result[key] = parsePropertyFromServer(value, property, collection, key);
+    }
+
+    return result as M;
+}
