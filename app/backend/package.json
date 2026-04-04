@@ -10,11 +10,11 @@
         "start": "tsx src/index.ts"
     },
     "dependencies": {
-        "@rebasepro/backend": "0.0.1",
-        "cors": "^2.8.5",
+        "@rebasepro/backend": "workspace:*",
+        "hono": "^4.2.0",
+        "@hono/node-server": "^1.11.0",
         "dotenv": "^16.0.0",
         "drizzle-orm": "^0.44.4",
-        "express": "^5.1.0",
         "pg": "^8.11.3",
         "rebase-app-shared": "workspace:*",
         "ws": "^8.16.0",
@@ -25,6 +25,7 @@
         "@types/pg": "^8.6.5",
         "@types/ws": "^8.5.10",
         "drizzle-kit": "^0.31.4",
+        "tsx": "^4.20.6",
         "typescript": "^5.3.3"
     },
     "gitHead": "e42be25c08d53e4b59790f8619ba848cce455363",

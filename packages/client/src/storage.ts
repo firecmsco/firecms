@@ -70,8 +70,11 @@ export function createStorage(transport: Transport): StorageSource {
         try {
             const result = await transport.request<{ data: any }>(`/storage/metadata/${filePath}`);
             
+            const activeToken = await transport.resolveToken();
+            const tokenQuery = activeToken ? `?token=${activeToken}` : '';
+
             const downloadConfig: DownloadConfig = {
-                url: `${transport.baseUrl}${transport.apiPath}/storage/file/${filePath}`,
+                url: `${transport.baseUrl}${transport.apiPath}/storage/file/${filePath}${tokenQuery}`,
                 metadata: result.data
             };
 

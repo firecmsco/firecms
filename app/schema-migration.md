@@ -10,24 +10,44 @@ This guide explains how to modify your data model (add properties, change collec
 
 Rebase uses a **two-step schema generation process**:
 
-1. **Rebase Collections → Drizzle Schema**: The `generate:schema` script reads your Rebase collection definitions and generates a Drizzle ORM schema file.
-2. **Drizzle Schema → SQL Migrations**: The `db:generate` command compares the generated schema with your current database and creates SQL migration files.
+1. **Rebase Collections → Drizzle Schema**: The `rebase schema generate` command reads your Rebase collection definitions and generates a Drizzle ORM schema file.
+2. **Drizzle Schema → Database**: Either apply directly with `rebase db push` (development) or generate migration files with `rebase db generate` (production).
 
 ```mermaid
 graph LR
-    A[collections.ts] -->|generate:schema| B[schema.generated.ts]
-    B -->|db:generate| C[./drizzle/*.sql]
-    C -->|db:migrate| D[(PostgreSQL)]
+    A[collections.ts] -->|rebase schema generate| B[schema.generated.ts]
+    B -->|rebase db push| C[(Dev Database)]
+    B -->|rebase db generate| D[./drizzle/*.sql]
+    D -->|rebase db migrate| E[(Prod Database)]
 ```
 
-## Step-by-Step Instructions
+## Quick Start (Development)
+
+For rapid development, use `rebase db push` which applies changes directly without migration files:
+
+```bash
+# 1. Modify your collection (add property, relation, etc.)
+# 2. Regenerate the Drizzle schema
+// turbo
+rebase schema generate
+
+# 3. Push changes directly to database
+// turbo
+rebase db push
+```
+
+> [!TIP]
+> Use `rebase db push` during development for fast iteration. It directly syncs your schema to the database without creating migration files.
+
+## Production Workflow (With Migrations)
+
+For production deployments, use migrations for version-controlled, reviewable changes:
 
 ### 1. Modify Your Collection Definitions
 
-Edit your collection file (e.g., `app/shared/collections.ts` or your specific collection file):
+Edit your collection file (e.g., `app/shared/collections.ts`):
 
 ```typescript
-// Example: Adding a new property to an existing collection
 const postsCollection: EntityCollection = {
     name: "Posts",
     dbPath: "posts",
@@ -38,7 +58,7 @@ const postsCollection: EntityCollection = {
         published_at: {
             name: "Published At",
             type: "date",
-            mode: "date"  // or "date_time"
+            mode: "date"
         }
     }
 };
@@ -46,65 +66,51 @@ const postsCollection: EntityCollection = {
 
 ### 2. Generate the Drizzle Schema
 
-From the `app/backend` directory:
-
 ```bash
 // turbo
-pnpm run generate:schema
-```
-
-This reads your collections and outputs `src/schema.generated.ts`.
-
-**Output:**
-```
-✅ Drizzle schema generated successfully at src/schema.generated.ts
-You can now run pnpm db:generate to generate the SQL migration files.
+rebase schema generate
 ```
 
 ### 3. Generate SQL Migration Files
 
 ```bash
 // turbo
-pnpm run db:generate
+rebase db generate
 ```
 
-This compares your new schema with the current database state and generates SQL migration files in the `./drizzle` folder.
+This creates timestamped `.sql` files in `./drizzle`. **Review them before applying!**
 
-**Output:**
-```
-drizzle-kit: generating migration files...
-✅ migrations generated in ./drizzle
-```
-
-You can inspect the generated `.sql` files to verify the changes before applying them.
-
-### 4. Apply Migrations to Database
+### 4. Apply Migrations
 
 ```bash
-pnpm run db:migrate
+rebase db migrate
 ```
-
-This executes the pending migrations against your PostgreSQL database.
 
 > [!WARNING]
 > Always backup your database before running migrations in production!
 
 ## Quick Reference
 
-| Command | Description |
-|---------|-------------|
-| `pnpm run generate:schema` | Converts Rebase collections → Drizzle schema |
-| `pnpm run db:generate` | Creates SQL migration files from schema changes |
-| `pnpm run db:migrate` | Applies pending migrations to database |
-| `pnpm run db:studio` | Opens Drizzle Studio to inspect your database |
-| `pnpm run db:pull` | Introspects existing database into Drizzle schema |
+| Command | Description | When to Use |
+|---------|-------------|-------------|
+| `rebase schema generate` | Collections → Drizzle schema | Always first step |
+| `rebase db push` | Apply schema directly to DB | Development |
+| `rebase db generate` | Create SQL migration files | Production prep |
+| `rebase db migrate` | Run pending migrations | Production deploy |
+| `rebase db studio` | Visual database browser | Debugging |
+| `rebase db pull` | DB → Drizzle schema (introspect) | Legacy DB import |
 
 ## Common Scenarios
 
 ### Adding a New Property
 
-1. Add the property to your collection definition
-2. Run `generate:schema` → `db:generate` → `db:migrate`
+```bash
+# Development
+rebase schema generate && rebase db push
+
+# Production
+rebase schema generate && rebase db generate && rebase db migrate
+```
 
 ### Changing a Property Type
 
@@ -112,61 +118,57 @@ This executes the pending migrations against your PostgreSQL database.
 > Changing existing column types may cause data loss. Review the generated migration carefully!
 
 1. Modify the property type in your collection
-2. Run `generate:schema` → `db:generate`
+2. Run `rebase schema generate` → `rebase db generate`
 3. **Review the migration SQL** for any `ALTER COLUMN` or `DROP COLUMN` statements
-4. Run `db:migrate` only if you're satisfied with the changes
+4. Run `rebase db migrate` only if you're satisfied with the changes
 
 ### Adding a New Collection
 
 1. Create the collection definition
 2. Export it in your collections file
-3. Run `generate:schema` → `db:generate` → `db:migrate`
+3. Run `rebase schema generate` → `rebase db push` (dev) or `rebase db generate` → `rebase db migrate` (prod)
 
 ### Adding Relations
 
 1. Define the relation in your collection's `relations` array
 2. For `owning` relations, the foreign key column is added automatically
 3. For `many-to-many` relations, a junction table is created
-4. Run `generate:schema` → `db:generate` → `db:migrate`
+4. Run `rebase schema generate` → `rebase db push` (dev) or the migration workflow (prod)
+
+## Important Notes
+
+### Tables Not in Schema Are Ignored
+
+The `drizzle.config.ts` is configured to **only manage tables defined in your schema**. Other tables in the database (like `rebase_users`, `rebase_roles`, or any custom tables) are completely ignored and will not be affected by migrations.
+
+### Never Use `db pull` Then `db migrate`
+
+If you use `rebase db pull` to introspect an existing database, it creates a "baseline" migration file with commented-out SQL. **Do not run `rebase db migrate` after `rebase db pull`** - those tables already exist!
+
+Instead, after `rebase db pull`:
+1. Delete the generated migration file in `./drizzle/`
+2. Clean up the `./drizzle/meta/_journal.json` to remove the entry
+3. Or simply use `rebase db push` for future changes
 
 ## Troubleshooting
 
 ### "DATABASE_URL is not set"
 
-Make sure your `.env` file contains the `DATABASE_URL`:
+Make sure your `.env` file exists in the project root folder and contains:
 
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/rebase
 ```
 
-### Recovering from Failed Migrations (`DrizzleQueryError`)
+### Migration Already Applied
 
-If `db:migrate` fails (e.g., "column cannot be cast automatically" or "type already exists"), your database is in a stuck state. Here is how to recover:
+If you see errors about migrations already existing:
+- Check `./drizzle` folder for existing migration files
+- Clean up old migrations if needed
+- Use `rebase db push` for development to avoid migration file buildup
 
-#### Option 1: Fix the SQL Migration (Recommended)
-Drizzle generated raw SQL that PostgreSQL rejected. You can manually fix the SQL file.
-1. Open the pending `drizzle/000X_filename.sql` file.
-2. Modify the SQL to be valid. For example, add a `USING id::text::uuid` clause to an `ALTER COLUMN`, or wrap a type creation in `DO $$ BEGIN IF NOT EXISTS... END IF; $$;`.
-3. Run `pnpm run db:migrate` again.
+### Tables Being Dropped Unexpectedly
 
-#### Option 2: The "Force Sync" (Development Only)
-If your migration journal is hopelessly out of sync and you are in development:
-1. Delete the `drizzle/` folder entirely (wiping migration history).
-2. Delete the `__drizzle_migrations` table in your PostgreSQL database.
-3. Run `pnpm run db:generate` to generate a fresh init SQL file.
-4. **DO NOT** run `db:migrate`. Instead, run `pnpm run db:push`. This forces Drizzle to realign the database schema with your current collections without relying on the broken migration history.
-
-#### Option 3: The "Nuclear" Drop (Wipes Data)
-If a specific table is corrupted and you don't care about the data (local dev):
-1. Delete the failed `drizzle/000X_filename.sql` file.
-2. Use a PostgreSQL client (e.g. `pnpm run db:studio` or TablePlus) and run `DROP TABLE "my_table" CASCADE;`.
-3. Run `pnpm run db:generate` to generate a fresh creation script for that table.
-4. Run `pnpm run db:migrate`.
-
-### Development with --watch Mode
-
-For active development, you can use watch mode to auto-regenerate the schema:
-
-```bash
-tsx ../../packages/backend/src/generate-drizzle-schema.ts --collections=../shared/collections.ts --output=src/schema.generated.ts --watch
-```
+This shouldn't happen with the current config, but if it does:
+- Check that `tablesFilter` in `drizzle.config.ts` includes your tables
+- Ensure the schema file exports a `tables` object with all your tables

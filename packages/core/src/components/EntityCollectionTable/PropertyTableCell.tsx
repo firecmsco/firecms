@@ -25,7 +25,7 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 import { PropertyPreview } from "../../preview";
 import { getPreviewSizeFrom } from "../../preview/util";
 
-import { CustomFieldValidator, mapPropertyToYup } from "../../form/validation";
+import { CustomFieldValidator, mapPropertyToZod } from "../../form/validation";
 
 import { EntityTableCell } from "./internal/EntityTableCell";
 import { EntityTableCellActions } from "./internal/EntityTableCellActions";
@@ -130,7 +130,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
         const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
         const disabled = readonly || disabledProp || Boolean(property.disabled);
 
-        const validation = useMemo(() => mapPropertyToYup({
+        const validation = useMemo(() => mapPropertyToZod({
             property,
             entityId: entity.id,
             customFieldValidator,
@@ -149,13 +149,12 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
             [onValueUpdated, value]
         );
 
-        const saveValues = (value: any) => {
+        const saveValues = async (value: any) => {
             if (equal(value, internalValueRef.current))
                 return;
             setSaved(false);
-            validation
-                .validate(value)
-                .then(() => {
+            const result = await validation.safeParseAsync(value);
+            if (result.success) {
                     setValidationError(undefined);
                     internalValueRef.current = value;
                     if (onValueChange) {
@@ -173,17 +172,21 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any>>(
                         }
 
                     }
-                })
-                .catch((e) => {
-                    setValidationError(e);
-                });
+            } else {
+                    setValidationError(result.error);
+            }
         };
 
         useEffect(() => {
             validation
-                .validate(internalValue)
-                .then(() => setValidationError(undefined))
-                .catch(setValidationError);
+                .safeParseAsync(internalValue)
+                .then((result) => {
+                    if (result.success) {
+                        setValidationError(undefined);
+                    } else {
+                        setValidationError(result.error);
+                    }
+                });
         }, [internalValue, validation, propertyKey, property, entity]);
 
         const updateValue = (newValue: any | null) => {

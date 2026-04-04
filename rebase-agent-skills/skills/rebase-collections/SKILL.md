@@ -138,14 +138,14 @@ After modifying collections, apply changes to the database:
 # All commands run from the app/ directory unless noted
 
 # 1. Regenerate the Drizzle schema from your collection definitions
-pnpm run generate:schema
+rebase schema generate
 
-# 2a. Development — push changes directly (from app/backend/)
-cd backend && pnpm run db:push
+# 2a. Development — push changes directly
+rebase db push
 
-# 2b. Production — generate and review migration files (from app/)
-pnpm run db:generate
-pnpm run db:migrate
+# 2b. Production — generate and review migration files
+rebase db generate
+rebase db migrate
 ```
 
 ## References

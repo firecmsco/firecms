@@ -19,6 +19,9 @@ import { RebaseWebSocketClient } from "./websocket";
 import { RebaseClient as BaseRebaseClient, RebaseData, CollectionAccessor, StorageSource } from "@rebasepro/types";
 
 export type RebaseClient<DB = any> = BaseRebaseClient<DB> & {
+    setToken: (token: string | null) => void;
+    setAuthTokenGetter: (getter: () => Promise<string | null>) => void;
+    resolveToken: () => Promise<string | null>;
     auth: ReturnType<typeof createAuth>;
     admin: ReturnType<typeof createAdmin>;
     ws?: RebaseWebSocketClient;
@@ -119,6 +122,10 @@ export function createRebaseClient<DB = any>(options: CreateRebaseClientOptions)
         admin,
         storage,
         ws,
+        setToken: transport.setToken,
+        setAuthTokenGetter: transport.setAuthTokenGetter,
+        resolveToken: transport.resolveToken,
+        baseUrl: transport.baseUrl,
         collection,
         call: async <T = any>(endpoint: string, payload?: any): Promise<T> => {
             const prefix = endpoint.startsWith("/") ? "" : "/";

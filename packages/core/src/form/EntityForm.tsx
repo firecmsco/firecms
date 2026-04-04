@@ -34,7 +34,7 @@ import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, 
 import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@rebasepro/formex";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { FormEntry, FormLayout, LabelWithIconAndTooltip, PropertyFieldBinding } from "../form";
-import { ValidationError } from "yup";
+import { z } from "zod";
 import {
     flattenKeys,
     getEntityFromCache,
@@ -43,7 +43,7 @@ import {
     saveEntityToCache
 } from "../util/entity_cache";
 import { ErrorFocus } from "./components/ErrorFocus";
-import { CustomFieldValidator, getYupEntitySchema } from "./validation";
+import { CustomFieldValidator, getEntitySchema } from "./validation";
 import { EntityFormActions } from "./EntityFormActions";
 import { EntityFormActionsProps } from "@rebasepro/types";
 import { LocalChangesMenu } from "./components/LocalChangesMenu";
@@ -286,13 +286,10 @@ export function EntityForm<M extends Record<string, any>>({
             }
         },
         validation: async (values) => {
-            return validationSchema?.validate(values, { abortEarly: false })
-                .then(() => {
-                    return {};
-                })
-                .catch((e: unknown) => {
-                    return yupToFormErrors(e instanceof ValidationError ? e : new ValidationError(String(e)));
-                });
+            if (!validationSchema) return {};
+            const result = await validationSchema.safeParseAsync(values);
+            if (result.success) return {};
+            return zodToFormErrors(result.error);
         }
     });
 
@@ -546,7 +543,7 @@ export function EntityForm<M extends Record<string, any>>({
         }
     }, [dataClient, path, entityId]);
 
-    const validationSchema = useMemo(() => getYupEntitySchema(
+    const validationSchema = useMemo(() => getEntitySchema(
         entityId,
         collection.properties,
         uniqueFieldValidator),
@@ -805,20 +802,21 @@ export function getInitialEntityValues<M extends object>(
     }
 }
 
-export function yupToFormErrors(yupError: ValidationError): Record<string, any> {
+export function zodToFormErrors(zodError: z.ZodError): Record<string, any> {
     let errors: Record<string, any> = {};
-    if (yupError.inner) {
-        if (yupError.inner.length === 0) {
-            return setIn(errors, yupError.path!, yupError.message);
-        }
-        for (const err of yupError.inner) {
-            if (!getIn(errors, err.path!)) {
-                errors = setIn(errors, err.path!, err.message);
-            }
+    for (const issue of zodError.issues) {
+        const path = issue.path.join(".");
+        if (path && !getIn(errors, path)) {
+            errors = setIn(errors, path, issue.message);
         }
     }
     return errors;
 }
+
+/**
+ * @deprecated Use zodToFormErrors instead
+ */
+export const yupToFormErrors = zodToFormErrors as any;
 
 function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<any>, lastSavedValues: any, save: (values: EntityValues<any>) => Promise<Entity<any> | void>) {
     if (!autoSave) return;

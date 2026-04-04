@@ -68,8 +68,7 @@
         "react-image-file-resizer": "^0.4.8",
         "react-transition-group": "^4.4.5",
         "react-use-measure": "^2.1.7",
-        "react-window": "^1.8.11",
-        "yup": "^0.32.11"
+        "react-window": "^1.8.11"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

@@ -60,9 +60,11 @@ pnpm dev:backend
 pnpm dev:frontend
 
 # Database operations
-pnpm db:migrate     # Run database migrations
-pnpm db:studio     # Open Drizzle Studio
-pnpm generate:schema # Generate schema from collections
+rebase schema generate # Generate schema from collections
+rebase db push         # Push schema changes to development database
+rebase db generate     # Generate SQL migrations (for production)
+rebase db migrate      # Run database migrations (for production)
+rebase db studio       # Open Drizzle Studio
 ```
 
 ## 📦 Production Deployment
@@ -130,8 +132,11 @@ app/
 | `pnpm start` | Start production server |
 | `pnpm deploy` | Build and deploy |
 | `pnpm clean` | Clean all build artifacts |
-| `pnpm db:migrate` | Run database migrations |
-| `pnpm db:studio` | Open database studio |
+| `rebase schema generate` | Generate DB schema |
+| `rebase db push` | Push changes to development database |
+| `rebase db generate` | Generate SQL migration files |
+| `rebase db migrate` | Run database migrations |
+| `rebase db studio` | Open database studio |
 
 ## 📊 Database
 
@@ -150,7 +155,7 @@ Currently configured with Firebase Authentication, but can be easily adapted to 
 1. **Shared Collections**: Edit collections in `shared/collections/` - changes are immediately available to both frontend and backend
 2. **Environment Variables**: All configuration is in the root `.env` file
 3. **Hot Reloading**: Both frontend and backend support hot reloading during development
-4. **Database Schema**: Run `pnpm generate:schema` after changing collections
+4. **Database Schema**: Run `rebase schema generate` and then `rebase db push` after changing collections
 
 ## 📝 License
 

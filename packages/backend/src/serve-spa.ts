@@ -1,5 +1,5 @@
-import { Express, Request, Response, NextFunction } from "express";
-import express from "express";
+import { Hono } from "hono";
+import { serveStatic } from "@hono/node-server/serve-static";
 import * as path from "path";
 import * as fs from "fs";
 
@@ -33,28 +33,9 @@ export interface ServeSPAConfig {
 }
 
 /**
- * Serve a Single Page Application from an Express app.
- * 
- * This helper:
- * - Serves static files from the frontend build directory
- * - Returns index.html for all non-API routes (SPA client-side routing)
- * - Automatically skips API routes and configurable exclusion paths
- * 
- * @example
- * ```typescript
- * import { serveSPA } from "@rebasepro/backend";
- * 
- * // After initializing backend and API...
- * serveSPA(app, {
- *     frontendPath: path.join(__dirname, "../../frontend/dist"),
- *     excludePaths: ["/health", "/ws"]
- * });
- * ```
- * 
- * @param app Express application instance
- * @param config SPA configuration
+ * Serve a Single Page Application from an Hono app.
  */
-export function serveSPA(app: Express, config: ServeSPAConfig): void {
+export function serveSPA(app: Hono<any>, config: ServeSPAConfig): void {
     const {
         frontendPath,
         apiBasePath = "/api",
@@ -70,15 +51,17 @@ export function serveSPA(app: Express, config: ServeSPAConfig): void {
     }
 
     // Serve static files from frontend build
-    app.use(express.static(frontendPath));
+    app.use("/*", serveStatic({
+        root: path.relative(process.cwd(), frontendPath)
+    }));
 
     // Build list of paths to exclude from SPA handling
     const allExcludePaths = [apiBasePath, ...excludePaths];
 
     // SPA fallback - serve index.html for all non-excluded routes
-    app.get("*", (req: Request, res: Response, next: NextFunction) => {
+    app.get("*", async (c, next) => {
         // Skip excluded paths (API, health checks, etc.)
-        if (allExcludePaths.some(p => req.path.startsWith(p))) {
+        if (allExcludePaths.some(p => c.req.path.startsWith(p))) {
             return next();
         }
 
@@ -89,8 +72,10 @@ export function serveSPA(app: Express, config: ServeSPAConfig): void {
             return next();
         }
 
-        res.sendFile(indexPath);
+        const html = fs.readFileSync(indexPath, "utf-8");
+        return c.html(html);
     });
 
     console.log(`✅ SPA serving enabled from: ${frontendPath}`);
 }
+

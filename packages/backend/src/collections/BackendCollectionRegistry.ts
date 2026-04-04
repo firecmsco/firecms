@@ -47,6 +47,32 @@ export class BackendCollectionRegistry extends CollectionRegistry implements Col
         return Object.fromEntries(this.relations.entries());
     }
 
+    /**
+     * Get the merged schema object (tables + relations) for use with Drizzle's
+     * relational query API (`db.query`).
+     */
+    getMergedSchema(): Record<string, unknown> {
+        const result: Record<string, unknown> = {};
+        for (const [name, table] of this.tables.entries()) {
+            result[name] = table;
+        }
+        for (const [name, relation] of this.relations.entries()) {
+            result[name] = relation;
+        }
+        return result;
+    }
+
+    /**
+     * Get the available Drizzle relation keys for a given collection path.
+     * Maps from the collection's relation property names to the Drizzle relation names
+     * defined in the schema.
+     */
+    getRelationKeysForCollection(collectionPath: string): string[] {
+        const collection = this.getCollectionByPath(collectionPath);
+        if (!collection?.relations) return [];
+        return collection.relations.map(r => r.relationName || r.localKey || "").filter(Boolean);
+    }
+
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, RequestHandler } from "express";
+import { ErrorHandler } from "hono";
 
 /**
  * Standardized API error class.
@@ -62,42 +62,44 @@ export interface ErrorResponse {
 }
 
 /**
- * Express error-handling middleware.
+ * Hono error-handling middleware (`app.onError`).
  * Converts any error into the canonical `{ error: { message, code } }` shape.
- *
- * - `ApiError` instances use their own statusCode/code.
- * - Plain `Error` with a `code` property maps known codes to HTTP statuses.
- * - Everything else becomes a 500.
  */
-export function errorHandler(
-    err: Error & { statusCode?: number; code?: string; details?: unknown },
-    _req: Request,
-    res: Response,
-    _next: NextFunction
-): void {
-    if (err instanceof ApiError) {
-        res.status(err.statusCode).json({
+export const errorHandler: ErrorHandler = (err, c) => {
+    // Typecast custom error properties
+    const error = err as Error & { statusCode?: number; code?: string; details?: unknown };
+
+    if (error instanceof ApiError) {
+        // Operational errors — log at warn level
+        console.warn(
+            `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+        );
+        return c.json({
             error: {
-                message: err.message,
-                code: err.code,
-                ...(err.details !== undefined && { details: err.details })
+                message: error.message,
+                code: error.code,
+                ...(error.details !== undefined && { details: error.details })
             }
-        } satisfies ErrorResponse);
-        return;
+        } satisfies ErrorResponse, (error.statusCode || 500) as any);
     }
 
-    // Handle plain Errors with a code property (e.g. from REST api-generator)
-    const statusCode = err.statusCode || codeToStatus(err.code) || 500;
-    const code = err.code || "INTERNAL_ERROR";
+    const statusCode = error.statusCode || codeToStatus(error.code) || 500;
+    const code = error.code || "INTERNAL_ERROR";
 
-    res.status(statusCode).json({
+    // Unexpected errors — log at error level with full stack
+    console.error(
+        `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+    );
+    console.error(error.stack || error);
+
+    return c.json({
         error: {
-            message: err.message || "An unexpected error occurred",
+            message: error.message || "An unexpected error occurred",
             code,
-            ...(err.details !== undefined && { details: err.details })
+            ...(error.details !== undefined && { details: error.details })
         }
-    } satisfies ErrorResponse);
-}
+    } satisfies ErrorResponse, statusCode as any);
+};
 
 /**
  * Map known error codes to HTTP status codes.
@@ -123,23 +125,4 @@ function codeToStatus(code?: string): number | undefined {
     return map[code];
 }
 
-/**
- * Wrap an async route handler so thrown errors are passed to `next()`.
- * Eliminates try/catch boilerplate in every route.
- *
- * Usage:
- * ```ts
- * router.get("/path", asyncHandler(async (req, res) => {
- *     const data = await fetchData();
- *     if (!data) throw ApiError.notFound("Not found");
- *     res.json(data);
- * }));
- * ```
- */
-export function asyncHandler(
-    fn: (req: Request, res: Response, next: NextFunction) => Promise<void>
-): RequestHandler {
-    return (req: Request, res: Response, next: NextFunction) => {
-        fn(req, res, next).catch(next);
-    };
-}
+

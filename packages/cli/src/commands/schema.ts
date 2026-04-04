@@ -7,7 +7,7 @@
 import arg from "arg";
 import chalk from "chalk";
 import fs from "fs";
-import { spawn } from "child_process";
+import execa from "execa";
 import path from "path";
 import {
     requireProjectRoot,
@@ -108,27 +108,17 @@ async function schemaGenerate(rawArgs: string[]): Promise<void> {
         env.DOTENV_CONFIG_PATH = envFile;
     }
 
-    // Shell out to tsx using shell mode to match package.json behavior
-    const child = spawn(cmdParts.join(" "), {
-        cwd: backendDir,
-        stdio: "inherit",
-        env,
-        shell: true,
-    });
-
-    return new Promise((resolve, reject) => {
-        child.on("close", (code) => {
-            if (code === 0) {
-                resolve();
-            } else {
-                process.exit(code ?? 1);
-            }
+    // Shell out to tsx
+    try {
+        await execa(cmdParts[0], cmdParts.slice(1), {
+            cwd: backendDir,
+            stdio: "inherit",
+            env,
         });
-        child.on("error", (err) => {
-            console.error(chalk.red(`✗ Failed to run schema generator: ${err.message}`));
-            reject(err);
-        });
-    });
+    } catch (err: any) {
+        console.error(chalk.red(`✗ Failed to run schema generator: ${err.message}`));
+        process.exit(1);
+    }
 }
 
 function printSchemaHelp() {

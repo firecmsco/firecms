@@ -32,6 +32,7 @@ const cliRoot = findParentDir(__dirname, "cli");
 export interface InitOptions {
     projectName: string;
     git: boolean;
+    installDeps: boolean;
     targetDirectory: string;
     templateDirectory: string;
 }
@@ -49,7 +50,9 @@ async function promptForOptions(rawArgs: string[]): Promise<InitOptions> {
     const args = arg(
         {
             "--git": Boolean,
-            "-g": "--git"
+            "--install": Boolean,
+            "-g": "--git",
+            "-i": "--install"
         },
         {
             argv: rawArgs.slice(3), // skip "node", "rebase", "init"
@@ -87,6 +90,15 @@ async function promptForOptions(rawArgs: string[]): Promise<InitOptions> {
         });
     }
 
+    if (!args["--install"]) {
+        questions.push({
+            type: "confirm",
+            name: "installDeps",
+            message: "Install dependencies with pnpm?",
+            default: true
+        });
+    }
+
     const answers = await inquirer.prompt(questions);
 
     const projectName = nameArg || answers.projectName;
@@ -96,6 +108,7 @@ async function promptForOptions(rawArgs: string[]): Promise<InitOptions> {
     return {
         projectName,
         git: args["--git"] || answers.git || false,
+        installDeps: args["--install"] || answers.installDeps || false,
         targetDirectory,
         templateDirectory
     };
@@ -122,15 +135,20 @@ async function createProject(options: InitOptions) {
 
     // Copy template files
     console.log(chalk.gray("  Copying project files..."));
-    await copy(options.templateDirectory, options.targetDirectory, {
-        clobber: false,
-        dot: true,
-        filter: (source: string) => {
-            const basename = path.basename(source);
-            // Skip node_modules and .DS_Store
-            return basename !== "node_modules" && basename !== ".DS_Store";
-        }
-    });
+    try {
+        await copy(options.templateDirectory, options.targetDirectory, {
+            clobber: false,
+            dot: true,
+            filter: (source: string) => {
+                const basename = path.basename(source);
+                // Skip node_modules and .DS_Store
+                return basename !== "node_modules" && basename !== ".DS_Store";
+            }
+        });
+    } catch (err: any) {
+        console.error(`${chalk.red.bold("ERROR")} Failed to copy template files: ${err.message}`);
+        process.exit(1);
+    }
 
     // Replace placeholder project name in package.json files
     await replacePlaceholders(options);
@@ -171,6 +189,20 @@ async function createProject(options: InitOptions) {
         }
     }
 
+    if (options.installDeps) {
+        console.log("");
+        console.log(chalk.gray("  Installing dependencies with pnpm..."));
+        console.log("");
+        try {
+            await execa("pnpm", ["install"], {
+                cwd: options.targetDirectory,
+                stdio: "inherit"
+            });
+        } catch {
+            console.warn(chalk.yellow("  Warning: Failed to install dependencies. You may need to run `pnpm install` manually."));
+        }
+    }
+
     // Success message
     console.log("");
     console.log(`${chalk.green.bold("✓")} Project ${chalk.bold(options.projectName)} created successfully!`);
@@ -178,7 +210,9 @@ async function createProject(options: InitOptions) {
     console.log(chalk.bold("Next steps:"));
     console.log("");
     console.log(`  ${chalk.cyan("cd")} ${options.projectName}`);
-    console.log(`  ${chalk.cyan("pnpm install")}`);
+    if (!options.installDeps) {
+        console.log(`  ${chalk.cyan("pnpm install")}`);
+    }
     console.log("");
     console.log(chalk.gray("  # Set up your database connection in .env"));
     console.log(chalk.gray("  # Then run:"));

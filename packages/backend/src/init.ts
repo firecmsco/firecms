@@ -11,7 +11,8 @@ import { DatabasePoolManager } from "./services/databasePoolManager";
 import { Server } from "http";
 import { createPostgresWebSocket } from "./websocket";
 import { ApiConfig, RebaseApiServer } from "./api";
-import { Express } from "express";
+import { Hono } from "hono";
+import { HonoEnv } from "./api/types";
 import * as fs from "fs";
 import * as path from "path";
 import { pathToFileURL } from "url";
@@ -114,8 +115,8 @@ export interface RebaseBackendConfig {
     collections?: EntityCollection[];
     collectionsDir?: string;
     server: Server;
-    /** Express app for mounting auth/storage routes */
-    app: Express;
+    /** Hono app for mounting auth/storage routes */
+    app: Hono<HonoEnv>;
     /** Base path for API routes (default: '/api') */
     basePath?: string;
 
@@ -232,13 +233,13 @@ export async function initializeRebaseBackend(config: RebaseBackendConfig): Prom
         console.error("❌ Critical error during Rebase Backend initialization:", error);
 
         const basePath = config.basePath || "/api";
-        config.app.use(basePath, (req, res, next) => {
-            res.status(503).json({
+        config.app.use(`${basePath}/*`, async (c) => {
+            return c.json({
                 error: {
                     message: "Backend initialization failed. Please check the backend server logs for more details. This is usually caused by a database connection failure.",
                     code: "backend-init-failed"
                 }
-            });
+            }, 503);
         });
 
         // Return a mocked instance so the server still starts and serves the 503 errors
@@ -328,10 +329,19 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             if (schema.enums) collectionRegistry.registerEnums(schema.enums);
             if (schema.relations) collectionRegistry.registerRelations(schema.relations);
 
-            // Create realtime service and driver delegate
-            const realtimeService = new RealtimeService(db, collectionRegistry);
+            // Build a merged schema object and re-create Drizzle with it.
+            // This enables db.query.<table>.findMany({ with: { ... } }) for relational queries.
+            const mergedSchema: Record<string, unknown> = {
+                ...schema.tables,
+                ...(schema.relations || {})
+            };
+            const { drizzle: createDrizzle } = await import("drizzle-orm/node-postgres");
+            const schemaAwareDb = createDrizzle((db as any).$client ?? db, { schema: mergedSchema });
+
+            // Create realtime service and driver delegate, using schema-aware db
+            const realtimeService = new RealtimeService(schemaAwareDb, collectionRegistry);
             const poolManager = adminConnectionString ? new DatabasePoolManager(adminConnectionString) : undefined;
-            const driver = new PostgresDataDriver(db, realtimeService, collectionRegistry, undefined, poolManager);
+            const driver = new PostgresDataDriver(schemaAwareDb, realtimeService, collectionRegistry, undefined, poolManager);
             realtimeService.setDataDriver(driver);
 
             // Enable cross-instance realtime ONLY if connectionString is explicitly provided.
@@ -458,11 +468,11 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             emailConfig: config.auth.email,
             allowRegistration: config.auth.allowRegistration ?? false
         });
-        config.app.use(`${basePath}/auth`, authRoutes);
+        config.app.route(`${basePath}/auth`, authRoutes);
         console.log(`✅ Auth endpoints: ${basePath}/auth/*`);
 
         const adminRoutes = createAdminRoutes({ db: defaultDb });
-        config.app.use(`${basePath}/admin`, adminRoutes);
+        config.app.route(`${basePath}/admin`, adminRoutes);
         console.log(`✅ Admin endpoints: ${basePath}/admin/*`);
     }
 
@@ -471,7 +481,7 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             controller: storageController,
             requireAuth: config.auth?.requireAuth ?? true
         });
-        config.app.use(`${basePath}/storage`, storageRoutes);
+        config.app.route(`${basePath}/storage`, storageRoutes);
         console.log(`✅ Storage endpoints: ${basePath}/storage/*`);
     }
 
@@ -595,21 +605,21 @@ function isBackendStorageConfig(obj: unknown): obj is BackendStorageConfig {
  * initializeRebaseBackend(). This function is only needed if you want
  * to expose REST/GraphQL APIs for external integrations.
  * 
- * @param app Express application instance
+ * @param app Hono application instance
  * @param backend Rebase backend instance from initializeRebaseBackend
  * @param config API configuration options
  * @returns API server instance
  */
 export async function initializeRebaseAPI(
-    app: Express,
+    app: Hono<HonoEnv>,
     backend: RebaseBackendInstance,
     config: Partial<ApiConfig> = {}
 ): Promise<RebaseApiServer> {
     if ((backend as unknown as Record<string, unknown>).__failed) {
         console.warn("⚠️ Skipping REST/GraphQL API initialization because backend initialization failed.");
         // Return a dummy api server
-        const express = await import("express");
-        return { getRouter: () => express.Router() } as unknown as RebaseApiServer;
+        const { Hono } = await import("hono");
+        return { getRouter: () => new Hono<HonoEnv>() } as unknown as RebaseApiServer;
     }
 
     console.log("🚀 Initializing Rebase REST/GraphQL API (optional for external integrations)");
@@ -629,9 +639,9 @@ export async function initializeRebaseAPI(
         pagination: config.pagination
     });
 
-    // Mount API router on the provided Express app
+    // Mount API router on the provided Hono app
     const apiRouter = apiServer.getRouter();
-    app.use(apiRouter);
+    app.route("/", apiRouter);
 
     const basePath = config.basePath || "/api";
     console.log(`✅ GraphQL endpoint: ${basePath}/graphql`);

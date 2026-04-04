@@ -6,7 +6,7 @@ import { PersistedCollection } from "./types/persisted_collection";
 
 import React, { useMemo } from "react";
 export function useLocalCollectionsConfigController(
-    apiUrl: string = "http://localhost:3001",
+    clientOrUrl: any,
     baseCollections: EntityCollection[] = [],
     options?: {
         readOnly?: boolean;
@@ -19,13 +19,22 @@ export function useLocalCollectionsConfigController(
     const request = async (endpoint: string, payload: Record<string, unknown>) => {
         console.log("dispatching dev server request", endpoint, payload);
         try {
-            const token = options?.getAuthToken ? await options.getAuthToken() : null;
+            let token = options?.getAuthToken ? await options.getAuthToken() : null;
+            let baseUrl = typeof clientOrUrl === "string" ? clientOrUrl : "http://localhost:3001";
+            
+            if (typeof clientOrUrl === "object" && clientOrUrl !== null) {
+                baseUrl = clientOrUrl.baseUrl || baseUrl;
+                if (!token && clientOrUrl.resolveToken) {
+                    token = await clientOrUrl.resolveToken();
+                }
+            }
+
             const headers: Record<string, string> = { "Content-Type": "application/json" };
             if (token) {
                 headers["Authorization"] = `Bearer ${token}`;
             }
 
-            const response = await fetch(`${apiUrl.replace(/\/$/, '')}/api/schema-editor${endpoint}`, {
+            const response = await fetch(`${baseUrl.replace(/\/$/, '')}/api/schema-editor${endpoint}`, {
                 method: "POST",
                 headers,
                 body: JSON.stringify(payload)
@@ -98,5 +107,5 @@ export function useLocalCollectionsConfigController(
 
         navigationEntries: [],
         saveNavigationEntries: async () => { },
-    }), [apiUrl, parsedCollections, options?.readOnly, options?.getAuthToken]);
+    }), [clientOrUrl, parsedCollections, options?.readOnly, options?.getAuthToken]);
 }

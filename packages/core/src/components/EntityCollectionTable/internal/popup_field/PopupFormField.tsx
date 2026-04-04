@@ -13,11 +13,11 @@ import {
 } from "@rebasepro/types";
 import { Formex, useCreateFormex } from "@rebasepro/formex";
 import { useDraggable } from "./useDraggable";
-import { CustomFieldValidator, getYupEntitySchema } from "../../../../form/validation";
+import { CustomFieldValidator, getEntitySchema } from "../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
 import { getPropertyInPath } from "../../../../util";
 import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@rebasepro/ui";
-import { PropertyFieldBinding, yupToFormErrors } from "../../../../form";
+import { PropertyFieldBinding, zodToFormErrors } from "../../../../form";
 import { useAuthController, useCustomizationController, useData, useRebaseContext } from "../../../../hooks";
 import { OnCellValueChangeParams } from "../../../common";
 import { isReadOnly } from "@rebasepro/common";
@@ -200,7 +200,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const validationSchema = useMemo(() => {
         if (!collection || !entityId) return;
-        return getYupEntitySchema(
+        return getEntitySchema(
             entityId,
             propertyKey && collection.properties[propertyKey as string]
                 ? { [propertyKey]: collection.properties[propertyKey as string] } as Properties
@@ -248,10 +248,11 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const formex = useCreateFormex<M>({
         initialValues: (entity?.values ?? {}) as EntityValues<M>,
-        validation: (values) => {
-            return validationSchema?.validate(values, { abortEarly: false })
-                .then(() => ({}))
-                .catch(yupToFormErrors);
+        validation: async (values) => {
+            if (!validationSchema) return {};
+            const result = await validationSchema.safeParseAsync(values);
+            if (result.success) return {};
+            return zodToFormErrors(result.error);
         },
         validateOnInitialRender: true,
         onSubmit: (values, actions) => {

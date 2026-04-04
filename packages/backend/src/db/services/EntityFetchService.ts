@@ -1,6 +1,5 @@
-import { and, asc, count, desc, eq, gt, lt, or, SQL } from "drizzle-orm";
+import { and, asc, count, desc, eq, getTableName, gt, lt, or, SQL } from "drizzle-orm";
 import { AnyPgColumn, PgTable } from "drizzle-orm/pg-core";
-// import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Entity, EntityCollection, FilterValues } from "@rebasepro/types";
 import { resolveCollectionRelations } from "@rebasepro/common";
 import { DrizzleConditionBuilder } from "../../utils/drizzle-conditions";
@@ -264,7 +263,7 @@ export class EntityFetchService {
 
         const results = await query;
 
-        return this.processEntityResults<M>(results, collection, collectionPath, idInfo, options.databaseId);
+        return this.processEntityResults<M>(results, collection, collectionPath, idInfo, options.databaseId, false);
     }
 
     /**
@@ -275,7 +274,8 @@ export class EntityFetchService {
         collection: EntityCollection,
         collectionPath: string,
         idInfo: { fieldName: string; type: "string" | "number" },
-        databaseId?: string
+        databaseId?: string,
+        skipRelations: boolean = false
     ): Promise<Entity<M>[]> {
         if (results.length === 0) return [];
 
@@ -290,69 +290,71 @@ export class EntityFetchService {
             };
         }));
 
-        // Second pass: batch load missing one-to-one relations
-        const resolvedRelations = resolveCollectionRelations(collection);
-        const propertyKeys = new Set(Object.keys(collection.properties));
+        if (!skipRelations) {
+            // Second pass: batch load missing one-to-one relations
+            const resolvedRelations = resolveCollectionRelations(collection);
+            const propertyKeys = new Set(Object.keys(collection.properties));
 
-        for (const [key, relation] of Object.entries(resolvedRelations)) {
-            if (!propertyKeys.has(key) || relation.cardinality !== "one") continue;
+            for (const [key, relation] of Object.entries(resolvedRelations)) {
+                if (!propertyKeys.has(key) || relation.cardinality !== "one") continue;
 
-            const entitiesMissingRelation = entitiesWithValues.filter(item =>
-                (item.values as Record<string, unknown>)[key] == null
-            );
-
-            if (entitiesMissingRelation.length === 0) continue;
-
-            try {
-                const entityIds = entitiesMissingRelation.map(item => item.entity[idInfo.fieldName] as string | number);
-                const relationResults = await this.relationService.batchFetchRelatedEntities(
-                    collectionPath,
-                    entityIds,
-                    key,
-                    relation
+                const entitiesMissingRelation = entitiesWithValues.filter(item =>
+                    (item.values as Record<string, unknown>)[key] == null
                 );
 
-                entitiesMissingRelation.forEach(item => {
-                    const entityId = item.entity[idInfo.fieldName] as string | number;
-                    const relatedEntity = relationResults.get(entityId);
-                    if (relatedEntity) {
-                        (item.values as Record<string, unknown>)[key] = {
-                            id: relatedEntity.id,
-                            path: relatedEntity.path,
-                            __type: "relation"
-                        };
-                    }
-                });
-            } catch (e) {
-                console.warn(`Could not batch load one-to-one relation property: ${key}`, e);
+                if (entitiesMissingRelation.length === 0) continue;
+
+                try {
+                    const entityIds = entitiesMissingRelation.map(item => item.entity[idInfo.fieldName] as string | number);
+                    const relationResults = await this.relationService.batchFetchRelatedEntities(
+                        collectionPath,
+                        entityIds,
+                        key,
+                        relation
+                    );
+
+                    entitiesMissingRelation.forEach(item => {
+                        const entityId = item.entity[idInfo.fieldName] as string | number;
+                        const relatedEntity = relationResults.get(entityId);
+                        if (relatedEntity) {
+                            (item.values as Record<string, unknown>)[key] = {
+                                id: relatedEntity.id,
+                                path: relatedEntity.path,
+                                __type: "relation"
+                            };
+                        }
+                    });
+                } catch (e) {
+                    console.warn(`Could not batch load one-to-one relation property: ${key}`, e);
+                }
             }
+
+            // Handle many relations
+            const manyRelationPromises = entitiesWithValues.map(async (item) => {
+                const manyRelationQueries = Object.entries(resolvedRelations)
+                    .filter(([key, relation]) => propertyKeys.has(key) && relation.cardinality === "many")
+                    .map(async ([key]) => {
+                        try {
+                            const relatedEntities = await this.relationService.fetchRelatedEntities(
+                                collectionPath,
+                                item.entity[idInfo.fieldName] as string | number,
+                                key,
+                                {}
+                            );
+                            (item.values as Record<string, unknown>)[key] = relatedEntities.map(e => ({
+                                id: e.id,
+                                path: e.path,
+                                __type: "relation"
+                            }));
+                        } catch (e) {
+                            console.warn(`Could not resolve many relation property: ${key}`, e);
+                        }
+                    });
+                await Promise.all(manyRelationQueries);
+            });
+
+            await Promise.all(manyRelationPromises);
         }
-
-        // Handle many relations
-        const manyRelationPromises = entitiesWithValues.map(async (item) => {
-            const manyRelationQueries = Object.entries(resolvedRelations)
-                .filter(([key, relation]) => propertyKeys.has(key) && relation.cardinality === "many")
-                .map(async ([key]) => {
-                    try {
-                        const relatedEntities = await this.relationService.fetchRelatedEntities(
-                            collectionPath,
-                            item.entity[idInfo.fieldName] as string | number,
-                            key,
-                            {}
-                        );
-                        (item.values as Record<string, unknown>)[key] = relatedEntities.map(e => ({
-                            id: e.id,
-                            path: e.path,
-                            __type: "relation"
-                        }));
-                    } catch (e) {
-                        console.warn(`Could not resolve many relation property: ${key}`, e);
-                    }
-                });
-            await Promise.all(manyRelationQueries);
-        });
-
-        await Promise.all(manyRelationPromises);
 
         return entitiesWithValues.map(item => ({
             id: item.id,
@@ -575,5 +577,369 @@ export class EntityFetchService {
      */
     getRelationService(): RelationService {
         return this.relationService;
+    }
+
+    // =============================================================
+    // REST API INCLUDE-AWARE METHODS
+    // =============================================================
+
+    /**
+     * Fetch a collection of entities with optional relation includes.
+     * When `include` is provided, only the specified relations are populated
+     * with full entity data (not just { id, path, __type }).
+     * When `include` is absent, no relation queries are made (fast path).
+     *
+     * @param include - Array of relation keys to populate, or ["*"] for all
+     */
+    async fetchCollectionForRest<M extends Record<string, any>>(
+        collectionPath: string,
+        options: {
+            filter?: FilterValues<Extract<keyof M, string>>;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+            startAfter?: Record<string, unknown>;
+            searchString?: string;
+            databaseId?: string;
+        } = {},
+        include?: string[]
+    ): Promise<Record<string, unknown>[]> {
+        const collection = getCollectionByPath(collectionPath, this.registry);
+        const table = getTableForCollection(collection, this.registry);
+        const idInfoArray = getPrimaryKeys(collection, this.registry);
+        const idInfo = idInfoArray[0];
+
+        // First, try Drizzle relational query API (db.query) if include is requested
+        if (include && include.length > 0 && this.hasDrizzleQueryAPI(collectionPath)) {
+            const result = await this.fetchWithDrizzleQuery<M>(collectionPath, collection, options, include, idInfo);
+            if (result) return result;
+        }
+
+        // Fallback: fetch base entities without relations
+        const entities = await this.fetchEntitiesWithConditionsRaw<M>(collectionPath, options);
+
+        if (!include || include.length === 0) {
+            // Fast path: no relations, just return flat entities
+            return entities.map(entity => ({
+                id: String(entity[idInfo.fieldName]),
+                ...entity
+            }));
+        }
+
+        // Resolve which relation keys to include
+        const resolvedRelations = resolveCollectionRelations(collection);
+        const propertyKeys = new Set(Object.keys(collection.properties || {}));
+        const shouldInclude = (key: string) =>
+            include[0] === "*" || include.includes(key);
+
+        const entityIds = entities.map(e => e[idInfo.fieldName] as string | number);
+
+        // Batch load requested one-to-one relations
+        for (const [key, relation] of Object.entries(resolvedRelations)) {
+            if (!propertyKeys.has(key) || !shouldInclude(key) || relation.cardinality !== "one") continue;
+
+            try {
+                const batchResults = await this.relationService.batchFetchRelatedEntities(
+                    collectionPath, entityIds, key, relation
+                );
+
+                for (const entity of entities) {
+                    const eid = entity[idInfo.fieldName] as string | number;
+                    const related = batchResults.get(eid);
+                    if (related) {
+                        (entity as Record<string, unknown>)[key] = {
+                            id: related.id,
+                            ...related.values
+                        };
+                    }
+                }
+            } catch (e) {
+                console.warn(`[include] Failed to batch load one-to-one '${key}':`, e);
+            }
+        }
+
+        // Batch load requested many relations
+        for (const [key, relation] of Object.entries(resolvedRelations)) {
+            if (!propertyKeys.has(key) || !shouldInclude(key) || relation.cardinality !== "many") continue;
+
+            try {
+                // Use batchFetchManyRelatedEntities for efficiency
+                const batchResults = await this.batchFetchManyRelatedEntities(
+                    collectionPath, entityIds, key
+                );
+
+                for (const entity of entities) {
+                    const eid = entity[idInfo.fieldName] as string | number;
+                    const relatedList = batchResults.get(String(eid)) || [];
+                    (entity as Record<string, unknown>)[key] = relatedList.map(e => ({
+                        id: e.id,
+                        ...e.values
+                    }));
+                }
+            } catch (e) {
+                console.warn(`[include] Failed to batch load many '${key}':`, e);
+            }
+        }
+
+        return entities.map(entity => ({
+            id: String(entity[idInfo.fieldName]),
+            ...entity
+        }));
+    }
+
+    /**
+     * Fetch a single entity with optional relation includes for REST API.
+     */
+    async fetchEntityForRest<M extends Record<string, any>>(
+        collectionPath: string,
+        entityId: string | number,
+        include?: string[],
+        databaseId?: string
+    ): Promise<Record<string, unknown> | null> {
+        const collection = getCollectionByPath(collectionPath, this.registry);
+        const table = getTableForCollection(collection, this.registry);
+        const idInfoArray = getPrimaryKeys(collection, this.registry);
+        const idInfo = idInfoArray[0];
+        const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
+
+        const parsedIdObj = parseIdValues(entityId, idInfoArray);
+        const parsedId = parsedIdObj[idInfo.fieldName];
+
+        const result = await this.db
+            .select()
+            .from(table)
+            .where(eq(idField, parsedId))
+            .limit(1);
+
+        if (result.length === 0) return null;
+
+        const raw = result[0] as Record<string, unknown>;
+        const flatEntity: Record<string, unknown> = { id: String(raw[idInfo.fieldName]), ...raw };
+
+        if (!include || include.length === 0) {
+            return flatEntity;
+        }
+
+        // Populate requested relations
+        const resolvedRelations = resolveCollectionRelations(collection);
+        const propertyKeys = new Set(Object.keys(collection.properties || {}));
+        const shouldInclude = (key: string) =>
+            include[0] === "*" || include.includes(key);
+
+        for (const [key, relation] of Object.entries(resolvedRelations)) {
+            if (!propertyKeys.has(key) || !shouldInclude(key)) continue;
+
+            try {
+                const relatedEntities = await this.relationService.fetchRelatedEntities(
+                    collectionPath, parsedId, key, {}
+                );
+
+                if (relation.cardinality === "one") {
+                    if (relatedEntities.length > 0) {
+                        const e = relatedEntities[0];
+                        flatEntity[key] = { id: e.id, ...e.values };
+                    }
+                } else {
+                    flatEntity[key] = relatedEntities.map(e => ({
+                        id: e.id, ...e.values
+                    }));
+                }
+            } catch (e) {
+                console.warn(`[include] Failed to load relation '${key}':`, e);
+            }
+        }
+
+        return flatEntity;
+    }
+
+    /**
+     * Fetch raw rows without any relation processing (for REST fast path)
+     */
+    private async fetchEntitiesWithConditionsRaw<M extends Record<string, any>>(
+        collectionPath: string,
+        options: {
+            filter?: FilterValues<Extract<keyof M, string>>;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+            startAfter?: Record<string, unknown>;
+            searchString?: string;
+        } = {}
+    ): Promise<Record<string, unknown>[]> {
+        const collection = getCollectionByPath(collectionPath, this.registry);
+        const table = getTableForCollection(collection, this.registry);
+        const idInfoArray = getPrimaryKeys(collection, this.registry);
+        const idInfo = idInfoArray[0];
+        const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
+
+        let query = this.db.select().from(table).$dynamic();
+        const allConditions: SQL[] = [];
+
+        if (options.searchString) {
+            const searchConditions = DrizzleConditionBuilder.buildSearchConditions(
+                options.searchString, collection.properties, table
+            );
+            if (searchConditions.length === 0) return [];
+            allConditions.push(DrizzleConditionBuilder.combineConditionsWithOr(searchConditions)!);
+        }
+
+        if (options.filter) {
+            const filterConditions = this.buildFilterConditions(options.filter, table, collectionPath);
+            if (filterConditions.length > 0) allConditions.push(...filterConditions);
+        }
+
+        if (allConditions.length > 0) {
+            const finalCondition = DrizzleConditionBuilder.combineConditionsWithAnd(allConditions);
+            if (finalCondition) query = query.where(finalCondition);
+        }
+
+        const orderExpressions = [];
+        if (options.orderBy) {
+            const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
+            if (orderByField) {
+                orderExpressions.push(options.order === "asc" ? asc(orderByField) : desc(orderByField));
+            }
+        }
+        orderExpressions.push(desc(idField));
+        if (orderExpressions.length > 0) query = query.orderBy(...orderExpressions);
+
+        const limitValue = options.searchString ? (options.limit || 50) : options.limit;
+        if (limitValue) query = query.limit(limitValue);
+
+        return await query as Record<string, unknown>[];
+    }
+
+    /**
+     * Check if the Drizzle instance has the relational query API available
+     * for a given collection path.
+     */
+    private hasDrizzleQueryAPI(collectionPath: string): boolean {
+        const dbAny = this.db as any;
+        if (!dbAny.query) return false;
+        const collection = getCollectionByPath(collectionPath, this.registry);
+        const table = getTableForCollection(collection, this.registry);
+        const tableName = getTableName(table);
+        return !!dbAny.query[tableName];
+    }
+
+    /**
+     * Attempt to use Drizzle's relational query API (db.query.<table>.findMany)
+     * for efficient JOIN-based relation loading.
+     * Returns null if the API is not available or the query fails.
+     */
+    private async fetchWithDrizzleQuery<M extends Record<string, any>>(
+        collectionPath: string,
+        collection: EntityCollection,
+        options: {
+            filter?: FilterValues<Extract<keyof M, string>>;
+            orderBy?: string;
+            order?: "desc" | "asc";
+            limit?: number;
+        },
+        include: string[],
+        idInfo: { fieldName: string; type: "string" | "number" }
+    ): Promise<Record<string, unknown>[] | null> {
+        try {
+            const dbAny = this.db as any;
+            const table = getTableForCollection(collection, this.registry);
+            const tableName = getTableName(table);
+            const queryTarget = dbAny.query[tableName];
+
+            if (!queryTarget?.findMany) return null;
+
+            // Build the `with` config from include array
+            const resolvedRelations = resolveCollectionRelations(collection);
+            const withConfig: Record<string, boolean> = {};
+            for (const [key, relation] of Object.entries(resolvedRelations)) {
+                if (include[0] === "*" || include.includes(key)) {
+                    // Use the Drizzle relation name (from the schema)
+                    const drizzleRelName = relation.relationName || key;
+                    withConfig[drizzleRelName] = true;
+                }
+            }
+
+            // Build query options
+            const queryOpts: Record<string, unknown> = { with: withConfig };
+            if (options.limit) queryOpts.limit = options.limit;
+
+            // Build where clause
+            if (options.filter) {
+                const filterConditions = this.buildFilterConditions(
+                    options.filter as any, table, collectionPath
+                );
+                if (filterConditions.length > 0) {
+                    queryOpts.where = and(...filterConditions);
+                }
+            }
+
+            // Build orderBy
+            if (options.orderBy) {
+                const orderByField = table[options.orderBy as keyof typeof table] as AnyPgColumn;
+                if (orderByField) {
+                    queryOpts.orderBy = options.order === "asc" ? asc(orderByField) : desc(orderByField);
+                }
+            }
+
+            const results = await queryTarget.findMany(queryOpts);
+
+            // Flatten the nested Drizzle results into REST format
+            return results.map((row: Record<string, unknown>) => {
+                const flat: Record<string, unknown> = { id: String(row[idInfo.fieldName]) };
+                for (const [k, v] of Object.entries(row)) {
+                    if (k === idInfo.fieldName) continue;
+                    if (Array.isArray(v)) {
+                        // Many relation — flatten each nested entity
+                        flat[k] = v.map((item: Record<string, unknown>) => {
+                            // Junction table rows may have the target nested, flatten those
+                            const keys = Object.keys(item);
+                            // If it looks like a junction row (only FKs + nested objects), extract nested
+                            const nestedObj = keys.find(nk => typeof item[nk] === "object" && item[nk] !== null && !Array.isArray(item[nk]));
+                            if (nestedObj && keys.length <= 3) {
+                                const nested = item[nestedObj] as Record<string, unknown>;
+                                return { id: String(nested.id ?? nested[Object.keys(nested)[0]]), ...nested };
+                            }
+                            return { id: String(item.id ?? item[Object.keys(item)[0]]), ...item };
+                        });
+                    } else if (typeof v === "object" && v !== null) {
+                        // One-to-one relation — inline the object
+                        const relObj = v as Record<string, unknown>;
+                        flat[k] = { id: String(relObj.id ?? relObj[Object.keys(relObj)[0]]), ...relObj };
+                    } else {
+                        flat[k] = v;
+                    }
+                }
+                return flat;
+            });
+        } catch (e) {
+            console.warn(`[include] Drizzle relational query failed for '${collectionPath}', falling back:`, e);
+            return null;
+        }
+    }
+
+    /**
+     * Batch fetch many-to-many related entities for multiple parent IDs.
+     * Groups results by parent ID to avoid N+1.
+     */
+    private async batchFetchManyRelatedEntities(
+        parentCollectionPath: string,
+        parentIds: (string | number)[],
+        relationKey: string
+    ): Promise<Map<string, Entity[]>> {
+        const resultMap = new Map<string, Entity[]>();
+
+        // Fetch for all parents using Promise.all (limited batch)
+        const batchPromises = parentIds.map(async (parentId) => {
+            try {
+                const related = await this.relationService.fetchRelatedEntities(
+                    parentCollectionPath, parentId, relationKey, {}
+                );
+                resultMap.set(String(parentId), related);
+            } catch (e) {
+                resultMap.set(String(parentId), []);
+            }
+        });
+
+        await Promise.all(batchPromises);
+        return resultMap;
     }
 }

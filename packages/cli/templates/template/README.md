@@ -24,11 +24,11 @@ pnpm install
 DATABASE_URL=postgresql://postgres:password@localhost:5432/mydb
 ```
 
-3. Generate and run database migrations:
+3. Generate the schema and push to database:
 
 ```bash
-pnpm db:generate
-pnpm db:migrate
+rebase schema generate
+rebase db push
 ```
 
 4. Start the dev server:

@@ -111,20 +111,24 @@ export const RelationSelector = React.forwardRef<
         const contentRef = useRef<HTMLDivElement | null>(null);
         const searchInputRef = useRef<HTMLInputElement | null>(null);
 
-        const computeSelectedItems = useCallback(async (val?: EntityRelation | EntityRelation[] | null) => {
+        const computeSelectedItems = useCallback(async (val?: any | null) => {
             if (!val) return [] as RelationItem[];
             const relationsArray = Array.isArray(val) ? val : [val];
-            const promises = relationsArray.map(async (rel) => {
+            const promises = relationsArray.map(async (rel: any) => {
+                const isPrimitive = typeof rel === "string" || typeof rel === "number";
+                const relId = isPrimitive ? rel : rel.id;
+                const path = isPrimitive ? collection.slug : rel.path;
+                
                 try {
-                    const entity = await dataClient.collection(rel.path).findById(rel.id);
-                    if (entity) return entityToRelationItem(entity, rel);
+                    const entity = await dataClient.collection(path).findById(relId);
+                    if (entity) return entityToRelationItem(entity, isPrimitive ? new EntityRelation(relId, path) : rel);
                 } catch (e) {
                     console.warn("RelationSelector: could not fetch entity for relation", rel, e);
                 }
                 return {
-                    id: rel.id,
-                    label: String(rel.id),
-                    relation: rel
+                    id: relId,
+                    label: String(relId),
+                    relation: isPrimitive ? new EntityRelation(relId, path) : rel
                 } as RelationItem;
             });
             return Promise.all(promises);

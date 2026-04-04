@@ -43,6 +43,8 @@ export type RebaseAuthController = AuthController & {
  * Props for useRebaseAuthController hook
  */
 export interface RebaseAuthControllerProps {
+    /** The Rebase Client instance */
+    client?: any;
     /** Base URL of the backend API */
     apiUrl?: string;
     /** Google OAuth client ID (optional, enables Google login) */

@@ -9,7 +9,7 @@
  */
 import arg from "arg";
 import chalk from "chalk";
-import { spawn, ChildProcess } from "child_process";
+import execa, { ExecaChildProcess } from "execa";
 import path from "path";
 import {
     requireProjectRoot,
@@ -17,7 +17,6 @@ import {
     findFrontendDir,
     findEnvFile,
     resolveTsx,
-    resolveLocalBin,
 } from "../utils/project";
 
 export async function devCommand(rawArgs: string[]): Promise<void> {
@@ -53,7 +52,7 @@ export async function devCommand(rawArgs: string[]): Promise<void> {
     console.log(chalk.bold("  🚀 Rebase Dev Server"));
     console.log("");
 
-    const children: ChildProcess[] = [];
+    const children: ExecaChildProcess[] = [];
 
     // Handle graceful shutdown
     const cleanup = () => {
@@ -93,7 +92,7 @@ export async function devCommand(rawArgs: string[]): Promise<void> {
 
         console.log(`  ${chalk.cyan("▶")} Backend:  ${chalk.gray(backendDir)}`);
 
-        const backendChild = spawn(
+        const backendChild = execa(
             tsxBin,
             ["watch", ...watchDirs, "--conditions", "development", "src/index.ts"],
             {
@@ -103,6 +102,7 @@ export async function devCommand(rawArgs: string[]): Promise<void> {
                 shell: true,
             }
         );
+        backendChild.catch(() => {}); // prevent unhandled promise rejection on exit
 
         backendChild.stdout?.on("data", (data: Buffer) => {
             const lines = data.toString().split("\n").filter(Boolean);
@@ -125,12 +125,9 @@ export async function devCommand(rawArgs: string[]): Promise<void> {
 
     // Start frontend
     if (!backendOnly && frontendDir) {
-        const viteBin = resolveLocalBin(projectRoot, "vite") ||
-            path.join(frontendDir, "node_modules", ".bin", "vite");
-
         console.log(`  ${chalk.magenta("▶")} Frontend: ${chalk.gray(frontendDir)}`);
 
-        const frontendChild = spawn(
+        const frontendChild = execa(
             "pnpm",
             ["run", "dev"],
             {
@@ -140,6 +137,7 @@ export async function devCommand(rawArgs: string[]): Promise<void> {
                 shell: true,
             }
         );
+        frontendChild.catch(() => {}); // prevent unhandled promise rejection on exit
 
         frontendChild.stdout?.on("data", (data: Buffer) => {
             const lines = data.toString().split("\n").filter(Boolean);
@@ -174,7 +172,7 @@ export async function devCommand(rawArgs: string[]): Promise<void> {
         children.map(
             (child) =>
                 new Promise<void>((resolve) => {
-                    child.on("close", () => resolve());
+                    child.finally(() => resolve());
                 })
         )
     );

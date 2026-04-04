@@ -242,7 +242,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
             continue;
         }
 
-        result[key] = parsePropertyFromServer(value, property, collection);
+        result[key] = parsePropertyFromServer(value, property, collection, key);
     }
 
     // Add relation properties that should be populated from FK values or inverse queries
@@ -423,7 +423,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
 /**
  * Parse a single property value from database format to frontend format
  */
-export function parsePropertyFromServer(value: unknown, property: Property, collection: EntityCollection): unknown {
+export function parsePropertyFromServer(value: unknown, property: Property, collection: EntityCollection, propertyKey?: string): unknown {
     if (value === null || value === undefined) {
         return value;
     }
@@ -432,8 +432,20 @@ export function parsePropertyFromServer(value: unknown, property: Property, coll
         case "relation":
             // Transform ID back to relation object with type information
             if (typeof value === "string" || typeof value === "number") {
-                const relationDef = collection.relations?.find((rel) => rel.relationName === property.relationName);
-                if (!relationDef) throw new Error("Relation not defined in property");
+                let relationDef = (property as any).relation;
+                if (!relationDef && propertyKey) {
+                    const resolvedRelations = resolveCollectionRelations(collection);
+                    relationDef = resolvedRelations[propertyKey];
+                }
+                if (!relationDef) {
+                    relationDef = collection.relations?.find((rel) => rel.relationName === (property as any).relationName);
+                }
+                
+                if (!relationDef) {
+                    console.warn(`Relation not defined in property for key: ${propertyKey || 'unknown'}`);
+                    return value;
+                }
+                
                 try {
                     const targetCollection = relationDef.target();
                     return {
@@ -442,7 +454,7 @@ export function parsePropertyFromServer(value: unknown, property: Property, coll
                         __type: "relation"
                     };
                 } catch (e) {
-                    console.warn(`Could not resolve target collection for relation property: ${property.relationName}`, e);
+                    console.warn(`Could not resolve target collection for relation property: ${propertyKey || 'unknown'}`, e);
                     return value;
                 }
             }

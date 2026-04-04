@@ -94,7 +94,7 @@ function isTokenExpiredOrNearExpiry(expiresAt: number, bufferMs: number = TOKEN_
 export function useRebaseAuthController(
     props: RebaseAuthControllerProps = {}
 ): RebaseAuthController {
-    const { apiUrl, onSignOut, defineRolesFor } = props;
+    const { client, apiUrl, onSignOut, defineRolesFor } = props;
 
     const [user, setUser] = useState<User | null>(null);
     const [authLoading, setAuthLoading] = useState(false);
@@ -115,10 +115,12 @@ export function useRebaseAuthController(
 
     // Configure API URL on mount
     useEffect(() => {
-        if (apiUrl) {
+        if (client) {
+            authApi.setApiUrl(client.baseUrl);
+        } else if (apiUrl) {
             authApi.setApiUrl(apiUrl);
         }
-    }, [apiUrl]);
+    }, [client, apiUrl]);
 
     // Clear session and sign out
     const clearSessionAndSignOut = useCallback(() => {
@@ -274,6 +276,20 @@ export function useRebaseAuthController(
 
         return currentTokens.accessToken;
     }, [initialLoading, refreshAccessToken, clearSessionAndSignOut]);
+
+    // Install token getter onto client
+    useEffect(() => {
+        if (client) {
+            client.setAuthTokenGetter(async () => {
+                try { return await getAuthToken(); } catch { return null; }
+            });
+            if (client.ws) {
+                client.ws.setAuthTokenGetter(async () => {
+                    try { return await getAuthToken(); } catch { return ""; }
+                });
+            }
+        }
+    }, [client, getAuthToken]);
 
     // Handle successful authentication
     const handleAuthSuccess = useCallback(async (userInfo: UserInfo, tokens: AuthTokens) => {

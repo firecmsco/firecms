@@ -9,7 +9,7 @@ export { configureGoogleOAuth, verifyGoogleIdToken, isGoogleOAuthConfigured } fr
 export type { GoogleUserInfo } from "./google-oauth";
 
 export { requireAuth, requireAdmin, optionalAuth, extractUserFromToken, createAuthMiddleware } from "./middleware";
-export type { AuthenticatedRequest, AuthMiddlewareOptions, AuthResult } from "./middleware";
+export type { AuthMiddlewareOptions, AuthResult } from "./middleware";
 
 export { UserService, RoleService, RefreshTokenService, PasswordResetTokenService } from "./services";
 export type { Role } from "./services";

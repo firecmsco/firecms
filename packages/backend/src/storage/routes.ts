@@ -1,15 +1,14 @@
 /**
- * Storage REST API routes
+ * Storage REST API routes using Hono
  */
 
-import { Router, Request, Response, NextFunction } from 'express';
-import multer from 'multer';
-import * as path from 'path';
+import { Hono } from 'hono';
 import * as fs from 'fs';
 import { StorageController } from './types';
 import { LocalStorageController } from './LocalStorageController';
 import { requireAuth as jwtRequireAuth, optionalAuth } from '../auth/middleware';
-import { ApiError, asyncHandler } from '../api/errors';
+import { ApiError } from '../api/errors';
+import { HonoEnv } from '../api/types';
 
 export interface StorageRoutesConfig {
     controller: StorageController;
@@ -25,35 +24,18 @@ export interface StorageRoutesConfig {
 /**
  * Create storage REST API routes
  */
-export function createStorageRoutes(config: StorageRoutesConfig): Router {
-    const router = Router();
+export function createStorageRoutes(config: StorageRoutesConfig): Hono<HonoEnv> {
+    const router = new Hono<HonoEnv>();
     const { controller, requireAuth = true, publicRead = false } = config;
-
-    // Configure multer for file uploads (memory storage for flexibility)
-    const upload = multer({
-        storage: multer.memoryStorage(),
-        limits: {
-            fileSize: 50 * 1024 * 1024 // 50MB default, controller will also validate
-        }
-    });
 
     // Use actual JWT auth middleware from auth module
     const writeAuthMiddleware = requireAuth ? jwtRequireAuth : optionalAuth;
 
     // For read operations: respect publicRead config.
-    // If publicRead is true (or requireAuth is false), allow anonymous reads.
-    // Otherwise, require authentication for reads too.
     const readAuthMiddleware = (publicRead || !requireAuth) ? optionalAuth : jwtRequireAuth;
 
     /**
      * Parse bucket and path from a combined file path.
-     * Only 'default' is recognized as an explicit bucket prefix.
-     * All other paths are treated as file paths within the 'default' bucket.
-     * 
-     * Examples:
-     *   'default/images/photo.jpg' → bucket='default', path='images/photo.jpg'
-     *   'author_pictures/photo.jpg' → bucket='default', path='author_pictures/photo.jpg'
-     *   'images/photo.jpg' → bucket='default', path='images/photo.jpg'
      */
     const parseBucketAndPath = (filePath: string): { bucket: string; resolvedPath: string } => {
         const parts = filePath.split('/');
@@ -76,56 +58,57 @@ export function createStorageRoutes(config: StorageRoutesConfig): Router {
     /**
      * POST /upload - Upload a file
      * Body: multipart/form-data with 'file' field
-     * Query params: path (optional), bucket (optional)
+     * Request body can also contain metadata keys 'metadata_*'
      */
-    router.post('/upload', writeAuthMiddleware, upload.single('file'), asyncHandler(async (req: Request, res: Response) => {
-        if (!req.file) {
+    router.post('/upload', writeAuthMiddleware, async (c) => {
+        const body = await c.req.parseBody();
+        const uploadedFile = body['file'];
+
+        if (!uploadedFile || typeof uploadedFile === 'string') {
             throw ApiError.badRequest('No file provided');
         }
 
-        const { path: storagePath, bucket, fileName } = req.body;
-
-        // Convert multer file to browser File-like object
-        const file = new File(
-            [new Uint8Array(req.file.buffer)],
-            fileName || req.file.originalname,
-            { type: req.file.mimetype }
-        );
+        const storagePath = typeof body['path'] === 'string' ? body['path'] : '';
+        const bucket = typeof body['bucket'] === 'string' ? body['bucket'] : undefined;
+        let fileName = typeof body['fileName'] === 'string' ? body['fileName'] : undefined;
+        
+        if (!fileName) {
+            fileName = uploadedFile.name;
+        }
 
         // Extract custom metadata from request body
         const metadata: Record<string, any> = {};
-        for (const [key, value] of Object.entries(req.body)) {
+        for (const [key, value] of Object.entries(body)) {
             if (key.startsWith('metadata_')) {
                 metadata[key.replace('metadata_', '')] = value;
             }
         }
 
         const result = await controller.uploadFile({
-            file,
-            fileName: fileName || req.file.originalname,
-            path: storagePath || '',
+            file: uploadedFile,
+            fileName: fileName || 'unnamed',
+            path: storagePath,
             metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
             bucket
         });
 
-        res.status(201).json({
+        return c.json({
             success: true,
             data: result
-        });
-    }));
+        }, 201);
+    });
 
     /**
-     * GET /file/:filePath - Download/serve a file
+     * GET /file/* - Download/serve a file
      * Path: /file/{bucket}/{path} or /file/{path}
-     * Note: Uses :filePath(*) for Express 5 compatibility
      */
-    router.get('/file/*filePath', readAuthMiddleware, asyncHandler(async (req: Request, res: Response) => {
-        // Ensure filePath is a string (Express 5 may return string[])
-        const rawPath = req.params.filePath;
-        const filePath = Array.isArray(rawPath) ? rawPath.join('/') : rawPath;
-        if (!filePath) {
+    router.get('/file/*', readAuthMiddleware, async (c) => {
+        const rawPath = c.req.path.replace(new RegExp(`^.*/file/`), '');
+        if (!rawPath) {
             throw ApiError.badRequest('File path required');
         }
+
+        const filePath = decodeURIComponent(rawPath);
 
         // For local storage, serve the file directly
         if (controller.getType() === 'local') {
@@ -151,9 +134,10 @@ export function createStorageRoutes(config: StorageRoutesConfig): Router {
                 }
             }
 
-            res.setHeader('Content-Type', contentType);
-            res.sendFile(absolutePath);
-            return;
+            c.header('Content-Type', contentType);
+            // In a better scenario, we should pipe the stream instead of reading whole file
+            const fileContent = fs.readFileSync(absolutePath);
+            return c.body(fileContent as any); 
         }
 
         // For S3 storage, redirect to signed URL
@@ -162,21 +146,19 @@ export function createStorageRoutes(config: StorageRoutesConfig): Router {
             throw ApiError.notFound('File not found');
         }
 
-        res.redirect(downloadConfig.url);
-    }));
+        return c.redirect(downloadConfig.url);
+    });
 
     /**
-     * GET /metadata/:filePath - Get file metadata
-     * Path: /metadata/{bucket}/{path} or /metadata/{path}
+     * GET /metadata/* - Get file metadata
      */
-    router.get('/metadata/*filePath', readAuthMiddleware, asyncHandler(async (req: Request, res: Response) => {
-        // Ensure filePath is a string (Express 5 may return string[])
-        const rawPath = req.params.filePath;
-        const filePath = Array.isArray(rawPath) ? rawPath.join('/') : rawPath;
-        if (!filePath) {
+    router.get('/metadata/*', readAuthMiddleware, async (c) => {
+        const rawPath = c.req.path.replace(new RegExp(`^.*/metadata/`), '');
+        if (!rawPath) {
             throw ApiError.badRequest('File path required');
         }
 
+        const filePath = decodeURIComponent(rawPath);
         const { bucket, resolvedPath } = parseBucketAndPath(filePath);
 
         const downloadConfig = await controller.getDownloadURL(resolvedPath, bucket);
@@ -185,55 +167,55 @@ export function createStorageRoutes(config: StorageRoutesConfig): Router {
             throw ApiError.notFound('File not found');
         }
 
-        res.json({
+        return c.json({
             success: true,
             data: downloadConfig.metadata
         });
-    }));
+    });
 
     /**
-     * DELETE /file/:filePath - Delete a file
-     * Path: /file/{bucket}/{path} or /file/{path}
+     * DELETE /file/* - Delete a file
      */
-    router.delete('/file/*filePath', writeAuthMiddleware, asyncHandler(async (req: Request, res: Response) => {
-        // Ensure filePath is a string (Express 5 may return string[])
-        const rawPath = req.params.filePath;
-        const filePath = Array.isArray(rawPath) ? rawPath.join('/') : rawPath;
-        if (!filePath) {
+    router.delete('/file/*', writeAuthMiddleware, async (c) => {
+        const rawPath = c.req.path.replace(new RegExp(`^.*/file/`), '');
+        if (!rawPath) {
             throw ApiError.badRequest('File path required');
         }
 
+        const filePath = decodeURIComponent(rawPath);
         const { bucket, resolvedPath } = parseBucketAndPath(filePath);
 
         await controller.deleteFile(resolvedPath, bucket);
 
-        res.json({
+        return c.json({
             success: true,
             message: 'File deleted'
         });
-    }));
+    });
 
     /**
      * GET /list - List files in a path
-     * Query params: path, bucket, maxResults, pageToken
      */
-    router.get('/list', writeAuthMiddleware, asyncHandler(async (req: Request, res: Response) => {
-        const { path: storagePath, bucket, maxResults, pageToken } = req.query;
+    router.get('/list', writeAuthMiddleware, async (c) => {
+        const storagePath = c.req.query('path') || '';
+        const bucket = c.req.query('bucket');
+        const maxResults = c.req.query('maxResults');
+        const pageToken = c.req.query('pageToken');
 
         const result = await controller.list(
-            (storagePath as string) || '',
+            storagePath,
             {
-                bucket: bucket as string | undefined,
-                maxResults: maxResults ? parseInt(maxResults as string, 10) : undefined,
-                pageToken: pageToken as string | undefined
+                bucket,
+                maxResults: maxResults ? parseInt(maxResults, 10) : undefined,
+                pageToken
             }
         );
 
-        res.json({
+        return c.json({
             success: true,
             data: result
         });
-    }));
+    });
 
     return router;
 }

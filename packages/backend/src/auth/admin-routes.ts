@@ -1,45 +1,35 @@
-import { Router, Response } from "express";
-import { ApiError, asyncHandler } from "../api/errors";
+import { Hono } from "hono";
+import { ApiError } from "../api/errors";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { UserService, RoleService, Role } from "./services";
+import { UserService, RoleService } from "./services";
 import { NewUser } from "../db/auth-schema";
-import { requireAuth, requireAdmin, AuthenticatedRequest } from "./middleware";
+import { requireAuth, requireAdmin } from "./middleware";
 import { hashPassword, validatePasswordStrength } from "./password";
 import { AuthModuleConfig } from "./routes";
+import { HonoEnv } from "../api/types";
 
 /**
  * Create admin routes for user and role management
- * Read operations require authentication only
- * Write operations (create, update, delete) require admin role
  */
-export function createAdminRoutes(config: AuthModuleConfig): Router {
-    const router = Router();
+export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
+    const router = new Hono<HonoEnv>();
     const userService = new UserService(config.db);
     const roleService = new RoleService(config.db);
 
-    // Apply auth middleware to all routes (but NOT requireAdmin for reads)
-    router.use(requireAuth);
+    // Apply auth middleware to all routes
+    router.use("/*", requireAuth);
 
-    // ============================================
-    // BOOTSTRAP ENDPOINT - Make yourself admin when no admins exist
-    // ============================================
-
-    /**
-     * POST /admin/bootstrap
-     * Allows current user to make themselves admin if no admin users exist
-     * This is for initial setup only
-     */
-    router.post("/bootstrap", asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-        if (!req.user) {
+    router.post("/bootstrap", async (c) => {
+        const user = c.get("user") as any;
+        if (!user) {
             throw ApiError.unauthorized("Not authenticated");
         }
 
-        // Check if any admin users exist
         const users = await userService.listUsers();
         let hasAdmin = false;
 
-        for (const user of users) {
-            const roles = await userService.getUserRoleIds(user.id);
+        for (const u of users) {
+            const roles = await userService.getUserRoleIds(u.id);
             if (roles.includes("admin")) {
                 hasAdmin = true;
                 break;
@@ -50,66 +40,47 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
             throw ApiError.forbidden("Admin users already exist. Bootstrap not allowed.");
         }
 
-        // Make current user admin
-        await userService.setUserRoles(req.user.userId, ["admin"]);
+        await userService.setUserRoles(user.userId, ["admin"]);
 
-        console.log(`Bootstrap: User ${req.user.userId} promoted to admin`);
-
-        res.json({
+        return c.json({
             success: true,
             message: "You are now an admin",
             user: {
-                uid: req.user.userId,
+                uid: user.userId,
                 roles: ["admin"]
             }
         });
-    }));
+    });
 
-    // ============================================
-    // USER MANAGEMENT ROUTES
-    // ============================================
-
-    /**
-     * GET /admin/users
-     * List all users with their roles
-     * Any authenticated user can view
-     */
-    router.get("/users", asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+    router.get("/users", async (c) => {
         const users = await userService.listUsers();
-
-        // Get roles for each user
         const usersWithRoles = await Promise.all(
-            users.map(async (user) => {
-                const roles = await userService.getUserRoleIds(user.id);
+            users.map(async (u) => {
+                const roles = await userService.getUserRoleIds(u.id);
                 return {
-                    uid: user.id,
-                    email: user.email,
-                    displayName: user.displayName,
-                    photoURL: user.photoUrl,
-                    provider: user.provider,
+                    uid: u.id,
+                    email: u.email,
+                    displayName: u.displayName,
+                    photoURL: u.photoUrl,
+                    provider: u.provider,
                     roles,
-                    createdAt: user.createdAt,
-                    updatedAt: user.updatedAt
+                    createdAt: u.createdAt,
+                    updatedAt: u.updatedAt
                 };
             })
         );
+        return c.json({ users: usersWithRoles });
+    });
 
-        res.json({ users: usersWithRoles });
-    }));
-
-    /**
-     * GET /admin/users/:userId
-     * Get a single user by ID
-     */
-    router.get("/users/:userId", asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-        const userId = req.params.userId as string;
+    router.get("/users/:userId", async (c) => {
+        const userId = c.req.param("userId");
         const result = await userService.getUserWithRoles(userId);
 
         if (!result) {
             throw ApiError.notFound("User not found");
         }
 
-        res.json({
+        return c.json({
             user: {
                 uid: result.user.id,
                 email: result.user.email,
@@ -121,27 +92,21 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
                 updatedAt: result.user.updatedAt
             }
         });
-    }));
+    });
 
-    /**
-     * POST /admin/users
-     * Create a new user (admin-created, no password required initially)
-     * Requires admin role
-     */
-    router.post("/users", requireAdmin, asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-        const { email, displayName, password, roles } = req.body;
+    router.post("/users", requireAdmin, async (c) => {
+        const body = await c.req.json();
+        const { email, displayName, password, roles } = body;
 
         if (!email) {
             throw ApiError.badRequest("Email is required", "INVALID_INPUT");
         }
 
-        // Check if email exists
         const existing = await userService.getUserByEmail(email);
         if (existing) {
             throw ApiError.conflict("Email already exists", "EMAIL_EXISTS");
         }
 
-        // Hash password if provided
         let passwordHash: string | undefined;
         if (password) {
             const validation = validatePasswordStrength(password);
@@ -151,7 +116,6 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
             passwordHash = await hashPassword(password);
         }
 
-        // Create user
         const user = await userService.createUser({
             email: email.toLowerCase(),
             displayName: displayName || null,
@@ -159,7 +123,6 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
             provider: password ? "email" : "admin_created"
         });
 
-        // Assign roles
         if (roles && Array.isArray(roles) && roles.length > 0) {
             await userService.setUserRoles(user.id, roles);
         } else {
@@ -168,35 +131,30 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
 
         const userRoles = await userService.getUserRoleIds(user.id);
 
-        res.status(201).json({
+        return c.json({
             user: {
                 uid: user.id,
                 email: user.email,
                 displayName: user.displayName,
                 roles: userRoles
             }
-        });
-    }));
+        }, 201);
+    });
 
-    /**
-     * PUT /admin/users/:userId
-     * Update a user - requires admin role
-     */
-    router.put("/users/:userId", requireAdmin, asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-        const userId = req.params.userId as string;
-        const { email, displayName, password, roles } = req.body;
+    router.put("/users/:userId", requireAdmin, async (c) => {
+        const userId = c.req.param("userId");
+        const body = await c.req.json();
+        const { email, displayName, password, roles } = body;
 
         const existing = await userService.getUserById(userId);
         if (!existing) {
             throw ApiError.notFound("User not found");
         }
 
-        // Build update object
         const updates: Partial<NewUser> = {};
         if (email !== undefined) updates.email = email.toLowerCase();
         if (displayName !== undefined) updates.displayName = displayName;
 
-        // Update password if provided
         if (password) {
             const validation = validatePasswordStrength(password);
             if (!validation.valid) {
@@ -205,19 +163,17 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
             updates.passwordHash = await hashPassword(password);
         }
 
-        // Update user
         if (Object.keys(updates).length > 0) {
             await userService.updateUser(userId, updates);
         }
 
-        // Update roles if provided
         if (roles !== undefined && Array.isArray(roles)) {
             await userService.setUserRoles(userId, roles);
         }
 
         const result = await userService.getUserWithRoles(userId);
 
-        res.json({
+        return c.json({
             user: {
                 uid: result!.user.id,
                 email: result!.user.email,
@@ -225,17 +181,13 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
                 roles: result!.roles.map(r => r.id)
             }
         });
-    }));
+    });
 
-    /**
-     * DELETE /admin/users/:userId
-     * Delete a user - requires admin role
-     */
-    router.delete("/users/:userId", requireAdmin, asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-        const userId = req.params.userId as string;
+    router.delete("/users/:userId", requireAdmin, async (c) => {
+        const userId = c.req.param("userId");
+        const user = c.get("user") as any;
 
-        // Prevent self-deletion
-        if (req.user?.userId === userId) {
+        if (user?.userId === userId) {
             throw ApiError.badRequest("Cannot delete your own account", "SELF_DELETE");
         }
 
@@ -246,21 +198,13 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
 
         await userService.deleteUser(userId);
 
-        res.json({ success: true });
-    }));
+        return c.json({ success: true });
+    });
 
-    // ============================================
-    // ROLE MANAGEMENT ROUTES
-    // ============================================
-
-    /**
-     * GET /admin/roles
-     * List all roles
-     */
-    router.get("/roles", asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+    router.get("/roles", async (c) => {
         const roles = await roleService.listRoles();
 
-        res.json({
+        return c.json({
             roles: roles.map(r => ({
                 id: r.id,
                 name: r.name,
@@ -269,35 +213,27 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
                 config: r.config
             }))
         });
-    }));
+    });
 
-    /**
-     * GET /admin/roles/:roleId
-     * Get a single role
-     */
-    router.get("/roles/:roleId", asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-        const roleId = req.params.roleId as string;
+    router.get("/roles/:roleId", async (c) => {
+        const roleId = c.req.param("roleId");
         const role = await roleService.getRoleById(roleId);
 
         if (!role) {
             throw ApiError.notFound("Role not found");
         }
 
-        res.json({ role });
-    }));
+        return c.json({ role });
+    });
 
-    /**
-     * POST /admin/roles
-     * Create a new role - requires admin role
-     */
-    router.post("/roles", requireAdmin, asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-        const { id, name, isAdmin, defaultPermissions, config } = req.body;
+    router.post("/roles", requireAdmin, async (c) => {
+        const body = await c.req.json();
+        const { id, name, isAdmin, defaultPermissions, config } = body;
 
         if (!id || !name) {
             throw ApiError.badRequest("Role ID and name are required", "INVALID_INPUT");
         }
 
-        // Check if role exists
         const existing = await roleService.getRoleById(id);
         if (existing) {
             throw ApiError.conflict("Role already exists", "ROLE_EXISTS");
@@ -311,16 +247,13 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
             config: config ?? null
         });
 
-        res.status(201).json({ role });
-    }));
+        return c.json({ role }, 201);
+    });
 
-    /**
-     * PUT /admin/roles/:roleId
-     * Update a role - requires admin role
-     */
-    router.put("/roles/:roleId", requireAdmin, asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-        const roleId = req.params.roleId as string;
-        const { name, isAdmin, defaultPermissions, config } = req.body;
+    router.put("/roles/:roleId", requireAdmin, async (c) => {
+        const roleId = c.req.param("roleId");
+        const body = await c.req.json();
+        const { name, isAdmin, defaultPermissions, config } = body;
 
         const existing = await roleService.getRoleById(roleId);
         if (!existing) {
@@ -334,17 +267,12 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
             config
         });
 
-        res.json({ role });
-    }));
+        return c.json({ role });
+    });
 
-    /**
-     * DELETE /admin/roles/:roleId
-     * Delete a role - requires admin role
-     */
-    router.delete("/roles/:roleId", requireAdmin, asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
-        const roleId = req.params.roleId as string;
+    router.delete("/roles/:roleId", requireAdmin, async (c) => {
+        const roleId = c.req.param("roleId");
 
-        // Prevent deletion of built-in roles
         if (["admin", "editor", "viewer"].includes(roleId)) {
             throw ApiError.badRequest("Cannot delete built-in roles", "BUILTIN_ROLE");
         }
@@ -356,8 +284,8 @@ export function createAdminRoutes(config: AuthModuleConfig): Router {
 
         await roleService.deleteRole(roleId);
 
-        res.json({ success: true });
-    }));
+        return c.json({ success: true });
+    });
 
     return router;
 }

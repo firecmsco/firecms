@@ -14,8 +14,8 @@ Collections (TypeScript) → Drizzle Schema (generated) → PostgreSQL (database
 ```
 
 The backend uses a **two-step process**:
-1. **`generate:schema`** reads your Rebase collection definitions and generates a Drizzle ORM schema file (`schema.generated.ts`)
-2. **`db:push`** or **`db:generate` + `db:migrate`** applies the schema to the database
+1. **`rebase schema generate`** reads your Rebase collection definitions and generates a Drizzle ORM schema file (`schema.generated.ts`)
+2. **`rebase db push`** or **`rebase db generate` + `rebase db migrate`** applies the schema to the database
 
 ## Prerequisites
 
@@ -29,38 +29,37 @@ The backend uses a **two-step process**:
 # From the app/ directory:
 
 # 1. Generate Drizzle schema from collections
-pnpm run generate:schema
+rebase schema generate
 
 # 2. Push changes directly to database (no migration files)
-# Note: db:push runs from app/backend/, not app/
-cd backend && pnpm run db:push
+rebase db push
 ```
 
 ## Production Workflow (With Migrations)
 
 ```bash
 # 1. Generate Drizzle schema
-pnpm run generate:schema
+rebase schema generate
 
 # 2. Generate SQL migration files (creates timestamped .sql in ./drizzle/)
-pnpm run db:generate
+rebase db generate
 
 # 3. Review the generated SQL before applying!
 
 # 4. Apply migrations
-pnpm run db:migrate
+rebase db migrate
 ```
 
 ## Command Reference
 
 | Command | Description | When to Use |
 |---------|-------------|-------------|
-| `pnpm run generate:schema` | Collections → Drizzle schema (from `app/`) | Always first step |
-| `cd backend && pnpm run db:push` | Apply schema directly to DB (from `app/backend/`) | Development |
-| `pnpm run db:generate` | Generate schema + create SQL migration files (from `app/`) | Production prep |
-| `pnpm run db:migrate` | Run pending migrations (from `app/`) | Production deploy |
-| `pnpm run db:studio` | Visual database browser — Drizzle Studio (from `app/`) | Debugging |
-| `pnpm run db:pull` | DB → Drizzle schema — introspect (from `app/`) | Legacy DB import |
+| `rebase schema generate` | Collections → Drizzle schema | Always first step |
+| `rebase db push` | Apply schema directly to DB | Development |
+| `rebase db generate` | Generate schema + create SQL migration files | Production prep |
+| `rebase db migrate` | Run pending migrations | Production deploy |
+| `rebase db studio` | Visual database browser — Drizzle Studio | Debugging |
+| `rebase db pull` | DB → Drizzle schema — introspect | Legacy DB import |
 
 ## Drizzle Configuration
 

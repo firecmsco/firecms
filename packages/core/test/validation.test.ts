@@ -1,14 +1,13 @@
 /**
  * Extensive test suite for validation.ts
  *
- * This file tests all validation functions before the yup v1 upgrade.
- * It serves as a regression test to ensure the upgrade doesn't break existing behavior.
+ * This file tests all validation functions after the zod migration.
+ * It serves as a regression test to ensure the migration doesn't break existing behavior.
  */
 
 import {
-    getYupEntitySchema,
-    mapPropertyToYup,
-    getYupMapObjectSchema,
+    getEntitySchema,
+    mapPropertyToZod,
     CustomFieldValidator
 } from "../src/form/validation";
 import {
@@ -94,27 +93,27 @@ describe("String Validation", () => {
     describe("Basic string validation", () => {
         it("should accept any string when no validation is set", async () => {
             const property = createStringProperty();
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("hello")).resolves.toBe("hello");
-            await expect(schema.validate("")).resolves.toBe("");
-            await expect(schema.validate(null)).resolves.toBe(null);
-            await expect(schema.validate(undefined)).resolves.toBe(undefined);
+            await expect(schema.parseAsync("hello")).resolves.toBe("hello");
+            await expect(schema.parseAsync("")).resolves.toBe("");
+            await expect(schema.parseAsync(null)).resolves.toBe(null);
+            await expect(schema.parseAsync(undefined)).resolves.toBe(undefined);
         });
 
         it("should accept null when not required", async () => {
             const property = createStringProperty({
                 validation: { required: false }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(null)).resolves.toBe(null);
+            await expect(schema.parseAsync(null)).resolves.toBe(null);
         });
     });
 
@@ -123,15 +122,15 @@ describe("String Validation", () => {
             const property = createStringProperty({
                 validation: { required: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("hello")).resolves.toBe("hello");
-            await expect(schema.validate("")).rejects.toThrow();
-            await expect(schema.validate(null)).rejects.toThrow();
-            await expect(schema.validate(undefined)).rejects.toThrow();
+            await expect(schema.parseAsync("hello")).resolves.toBe("hello");
+            await expect(schema.parseAsync("")).rejects.toThrow();
+            await expect(schema.parseAsync(null)).rejects.toThrow();
+            await expect(schema.parseAsync(undefined)).rejects.toThrow();
         });
 
         it("should use custom required message", async () => {
@@ -141,16 +140,16 @@ describe("String Validation", () => {
                     requiredMessage: "This field is mandatory"
                 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
             try {
-                await schema.validate(undefined);
+                await schema.parseAsync(undefined);
                 fail("Should have thrown");
             } catch (e: any) {
-                expect(e.message).toBe("This field is mandatory");
+                expect(e.issues[0].message).toBe("This field is mandatory");
             }
         });
     });
@@ -161,14 +160,14 @@ describe("String Validation", () => {
                 name: "Title",
                 validation: { min: 5 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("hello")).resolves.toBe("hello");
-            await expect(schema.validate("12345")).resolves.toBe("12345");
-            await expect(schema.validate("hi")).rejects.toThrow();
+            await expect(schema.parseAsync("hello")).resolves.toBe("hello");
+            await expect(schema.parseAsync("12345")).resolves.toBe("12345");
+            await expect(schema.parseAsync("hi")).rejects.toThrow();
         });
 
         it("should validate max length", async () => {
@@ -176,13 +175,13 @@ describe("String Validation", () => {
                 name: "Title",
                 validation: { max: 10 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("hello")).resolves.toBe("hello");
-            await expect(schema.validate("this is too long")).rejects.toThrow();
+            await expect(schema.parseAsync("hello")).resolves.toBe("hello");
+            await expect(schema.parseAsync("this is too long")).rejects.toThrow();
         });
 
         it("should validate min length of 0", async () => {
@@ -190,12 +189,12 @@ describe("String Validation", () => {
                 name: "Title",
                 validation: { min: 0 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("")).resolves.toBe("");
+            await expect(schema.parseAsync("")).resolves.toBe("");
         });
 
         it("should validate max length of 0", async () => {
@@ -203,13 +202,13 @@ describe("String Validation", () => {
                 name: "Title",
                 validation: { max: 0 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("")).resolves.toBe("");
-            await expect(schema.validate("a")).rejects.toThrow();
+            await expect(schema.parseAsync("")).resolves.toBe("");
+            await expect(schema.parseAsync("a")).rejects.toThrow();
         });
     });
 
@@ -219,14 +218,14 @@ describe("String Validation", () => {
                 name: "Code",
                 validation: { matches: /^[A-Z]{3}$/ }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("ABC")).resolves.toBe("ABC");
-            await expect(schema.validate("abc")).rejects.toThrow();
-            await expect(schema.validate("ABCD")).rejects.toThrow();
+            await expect(schema.parseAsync("ABC")).resolves.toBe("ABC");
+            await expect(schema.parseAsync("abc")).rejects.toThrow();
+            await expect(schema.parseAsync("ABCD")).rejects.toThrow();
         });
 
         it("should use custom matches message", async () => {
@@ -237,16 +236,16 @@ describe("String Validation", () => {
                     matchesMessage: "Must be exactly 3 uppercase letters"
                 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
             try {
-                await schema.validate("abc");
+                await schema.parseAsync("abc");
                 fail("Should have thrown");
             } catch (e: any) {
-                expect(e.message).toBe("Must be exactly 3 uppercase letters");
+                expect(e.issues[0].message).toBe("Must be exactly 3 uppercase letters");
             }
         });
 
@@ -255,13 +254,13 @@ describe("String Validation", () => {
                 name: "Code",
                 validation: { matches: "/^[A-Z]{3}$/" }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("ABC")).resolves.toBe("ABC");
-            await expect(schema.validate("abc")).rejects.toThrow();
+            await expect(schema.parseAsync("ABC")).resolves.toBe("ABC");
+            await expect(schema.parseAsync("abc")).rejects.toThrow();
         });
     });
 
@@ -270,36 +269,36 @@ describe("String Validation", () => {
             const property = createStringProperty({
                 validation: { trim: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("  hello  ")).resolves.toBe("hello");
+            await expect(schema.parseAsync("  hello  ")).resolves.toBe("hello");
         });
 
         it("should convert to lowercase when lowercase is enabled", async () => {
             const property = createStringProperty({
                 validation: { lowercase: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("HeLLo")).resolves.toBe("hello");
+            await expect(schema.parseAsync("HeLLo")).resolves.toBe("hello");
         });
 
         it("should convert to uppercase when uppercase is enabled", async () => {
             const property = createStringProperty({
                 validation: { uppercase: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("HeLLo")).resolves.toBe("HELLO");
+            await expect(schema.parseAsync("HeLLo")).resolves.toBe("HELLO");
         });
     });
 
@@ -310,13 +309,13 @@ describe("String Validation", () => {
                 email: true,
                 validation: {} // Need validation object for email check to apply
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("test@example.com")).resolves.toBe("test@example.com");
-            await expect(schema.validate("not-an-email")).rejects.toThrow();
+            await expect(schema.parseAsync("test@example.com")).resolves.toBe("test@example.com");
+            await expect(schema.parseAsync("not-an-email")).rejects.toThrow();
         });
     });
 
@@ -327,13 +326,13 @@ describe("String Validation", () => {
                 url: true,
                 validation: {} // Need validation object for URL check to apply
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("https://example.com")).resolves.toBe("https://example.com");
-            await expect(schema.validate("not-a-url")).rejects.toThrow();
+            await expect(schema.parseAsync("https://example.com")).resolves.toBe("https://example.com");
+            await expect(schema.parseAsync("not-a-url")).rejects.toThrow();
         });
 
         it("should skip URL validation when storage.storeUrl is false", async () => {
@@ -345,13 +344,13 @@ describe("String Validation", () => {
                     storagePath: "images"
                 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
             // Should not validate as URL when storage.storeUrl is false
-            await expect(schema.validate("not-a-url")).resolves.toBe("not-a-url");
+            await expect(schema.parseAsync("not-a-url")).resolves.toBe("not-a-url");
         });
     });
 
@@ -364,14 +363,14 @@ describe("String Validation", () => {
                     { id: "archived", label: "Archived" }
                 ]
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("draft")).resolves.toBe("draft");
-            await expect(schema.validate("published")).resolves.toBe("published");
-            await expect(schema.validate("invalid")).rejects.toThrow();
+            await expect(schema.parseAsync("draft")).resolves.toBe("draft");
+            await expect(schema.parseAsync("published")).resolves.toBe("published");
+            await expect(schema.parseAsync("invalid")).rejects.toThrow();
         });
 
         it("should allow null for non-required enum", async () => {
@@ -381,12 +380,12 @@ describe("String Validation", () => {
                     { id: "published", label: "Published" }
                 ]
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(null)).resolves.toBe(null);
+            await expect(schema.parseAsync(null)).resolves.toBe(null);
         });
 
         it("should reject null for required enum", async () => {
@@ -397,12 +396,12 @@ describe("String Validation", () => {
                 ],
                 validation: { required: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(null)).rejects.toThrow();
+            await expect(schema.parseAsync(null)).rejects.toThrow();
         });
     });
 
@@ -413,14 +412,14 @@ describe("String Validation", () => {
             const property = createStringProperty({
                 validation: { unique: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity",
                 customFieldValidator: customValidator,
                 name: "slug"
             });
 
-            await schema.validate("unique-value");
+            await schema.parseAsync("unique-value");
 
             expect(customValidator).toHaveBeenCalledWith(expect.objectContaining({
                 name: "slug",
@@ -435,14 +434,14 @@ describe("String Validation", () => {
             const property = createStringProperty({
                 validation: { unique: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity",
                 customFieldValidator: customValidator,
                 name: "slug"
             });
 
-            await expect(schema.validate("duplicate-value")).rejects.toThrow("This value already exists and should be unique");
+            await expect(schema.parseAsync("duplicate-value")).rejects.toThrow("This value already exists and should be unique");
         });
     });
 });
@@ -456,26 +455,26 @@ describe("Number Validation", () => {
     describe("Basic number validation", () => {
         it("should accept any number when no validation is set", async () => {
             const property = createNumberProperty();
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(42)).resolves.toBe(42);
-            await expect(schema.validate(0)).resolves.toBe(0);
-            await expect(schema.validate(-10)).resolves.toBe(-10);
-            await expect(schema.validate(3.14)).resolves.toBe(3.14);
-            await expect(schema.validate(null)).resolves.toBe(null);
+            await expect(schema.parseAsync(42)).resolves.toBe(42);
+            await expect(schema.parseAsync(0)).resolves.toBe(0);
+            await expect(schema.parseAsync(-10)).resolves.toBe(-10);
+            await expect(schema.parseAsync(3.14)).resolves.toBe(3.14);
+            await expect(schema.parseAsync(null)).resolves.toBe(null);
         });
 
         it("should reject non-numbers", async () => {
             const property = createNumberProperty();
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate("not a number")).rejects.toThrow("Must be a number");
+            await expect(schema.parseAsync("not a number")).rejects.toThrow("Must be a number");
         });
     });
 
@@ -484,15 +483,15 @@ describe("Number Validation", () => {
             const property = createNumberProperty({
                 validation: { required: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(42)).resolves.toBe(42);
-            await expect(schema.validate(0)).resolves.toBe(0);
-            await expect(schema.validate(null)).rejects.toThrow();
-            await expect(schema.validate(undefined)).rejects.toThrow();
+            await expect(schema.parseAsync(42)).resolves.toBe(42);
+            await expect(schema.parseAsync(0)).resolves.toBe(0);
+            await expect(schema.parseAsync(null)).rejects.toThrow();
+            await expect(schema.parseAsync(undefined)).rejects.toThrow();
         });
     });
 
@@ -502,14 +501,14 @@ describe("Number Validation", () => {
                 name: "Age",
                 validation: { min: 18 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(18)).resolves.toBe(18);
-            await expect(schema.validate(25)).resolves.toBe(25);
-            await expect(schema.validate(17)).rejects.toThrow();
+            await expect(schema.parseAsync(18)).resolves.toBe(18);
+            await expect(schema.parseAsync(25)).resolves.toBe(25);
+            await expect(schema.parseAsync(17)).rejects.toThrow();
         });
 
         it("should validate max value", async () => {
@@ -517,14 +516,14 @@ describe("Number Validation", () => {
                 name: "Quantity",
                 validation: { max: 100 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(100)).resolves.toBe(100);
-            await expect(schema.validate(50)).resolves.toBe(50);
-            await expect(schema.validate(101)).rejects.toThrow();
+            await expect(schema.parseAsync(100)).resolves.toBe(100);
+            await expect(schema.parseAsync(50)).resolves.toBe(50);
+            await expect(schema.parseAsync(101)).rejects.toThrow();
         });
 
         it("should validate min of 0", async () => {
@@ -532,13 +531,13 @@ describe("Number Validation", () => {
                 name: "Count",
                 validation: { min: 0 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(0)).resolves.toBe(0);
-            await expect(schema.validate(-1)).rejects.toThrow();
+            await expect(schema.parseAsync(0)).resolves.toBe(0);
+            await expect(schema.parseAsync(-1)).rejects.toThrow();
         });
 
         it("should validate max of 0", async () => {
@@ -546,14 +545,14 @@ describe("Number Validation", () => {
                 name: "Temperature",
                 validation: { max: 0 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(0)).resolves.toBe(0);
-            await expect(schema.validate(-10)).resolves.toBe(-10);
-            await expect(schema.validate(1)).rejects.toThrow();
+            await expect(schema.parseAsync(0)).resolves.toBe(0);
+            await expect(schema.parseAsync(-10)).resolves.toBe(-10);
+            await expect(schema.parseAsync(1)).rejects.toThrow();
         });
     });
 
@@ -563,13 +562,13 @@ describe("Number Validation", () => {
                 name: "Score",
                 validation: { lessThan: 100 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(99)).resolves.toBe(99);
-            await expect(schema.validate(100)).rejects.toThrow();
+            await expect(schema.parseAsync(99)).resolves.toBe(99);
+            await expect(schema.parseAsync(100)).rejects.toThrow();
         });
 
         it("should validate moreThan", async () => {
@@ -577,13 +576,13 @@ describe("Number Validation", () => {
                 name: "Price",
                 validation: { moreThan: 0 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(1)).resolves.toBe(1);
-            await expect(schema.validate(0)).rejects.toThrow();
+            await expect(schema.parseAsync(1)).resolves.toBe(1);
+            await expect(schema.parseAsync(0)).rejects.toThrow();
         });
 
         it("should validate lessThan 0", async () => {
@@ -591,13 +590,13 @@ describe("Number Validation", () => {
                 name: "Negative",
                 validation: { lessThan: 0 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(-1)).resolves.toBe(-1);
-            await expect(schema.validate(0)).rejects.toThrow();
+            await expect(schema.parseAsync(-1)).resolves.toBe(-1);
+            await expect(schema.parseAsync(0)).rejects.toThrow();
         });
 
         it("should validate moreThan 0", async () => {
@@ -605,13 +604,13 @@ describe("Number Validation", () => {
                 name: "Positive",
                 validation: { moreThan: 0 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(0.001)).resolves.toBe(0.001);
-            await expect(schema.validate(0)).rejects.toThrow();
+            await expect(schema.parseAsync(0.001)).resolves.toBe(0.001);
+            await expect(schema.parseAsync(0)).rejects.toThrow();
         });
     });
 
@@ -621,14 +620,14 @@ describe("Number Validation", () => {
                 name: "Amount",
                 validation: { positive: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(1)).resolves.toBe(1);
-            await expect(schema.validate(0)).rejects.toThrow();
-            await expect(schema.validate(-1)).rejects.toThrow();
+            await expect(schema.parseAsync(1)).resolves.toBe(1);
+            await expect(schema.parseAsync(0)).rejects.toThrow();
+            await expect(schema.parseAsync(-1)).rejects.toThrow();
         });
 
         it("should validate negative numbers", async () => {
@@ -636,14 +635,14 @@ describe("Number Validation", () => {
                 name: "Debt",
                 validation: { negative: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(-1)).resolves.toBe(-1);
-            await expect(schema.validate(0)).rejects.toThrow();
-            await expect(schema.validate(1)).rejects.toThrow();
+            await expect(schema.parseAsync(-1)).resolves.toBe(-1);
+            await expect(schema.parseAsync(0)).rejects.toThrow();
+            await expect(schema.parseAsync(1)).rejects.toThrow();
         });
 
         it("should validate integers", async () => {
@@ -651,15 +650,15 @@ describe("Number Validation", () => {
                 name: "Count",
                 validation: { integer: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(42)).resolves.toBe(42);
-            await expect(schema.validate(0)).resolves.toBe(0);
-            await expect(schema.validate(-10)).resolves.toBe(-10);
-            await expect(schema.validate(3.14)).rejects.toThrow();
+            await expect(schema.parseAsync(42)).resolves.toBe(42);
+            await expect(schema.parseAsync(0)).resolves.toBe(0);
+            await expect(schema.parseAsync(-10)).resolves.toBe(-10);
+            await expect(schema.parseAsync(3.14)).rejects.toThrow();
         });
     });
 });
@@ -672,28 +671,28 @@ describe("Boolean Validation", () => {
 
     it("should accept boolean values", async () => {
         const property = createBooleanProperty();
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate(true)).resolves.toBe(true);
-        await expect(schema.validate(false)).resolves.toBe(false);
-        await expect(schema.validate(null)).resolves.toBe(null);
+        await expect(schema.parseAsync(true)).resolves.toBe(true);
+        await expect(schema.parseAsync(false)).resolves.toBe(false);
+        await expect(schema.parseAsync(null)).resolves.toBe(null);
     });
 
     it("should reject null when required", async () => {
         const property = createBooleanProperty({
             validation: { required: true }
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate(true)).resolves.toBe(true);
-        await expect(schema.validate(false)).resolves.toBe(false);
-        await expect(schema.validate(null)).rejects.toThrow();
+        await expect(schema.parseAsync(true)).resolves.toBe(true);
+        await expect(schema.parseAsync(false)).resolves.toBe(false);
+        await expect(schema.parseAsync(null)).rejects.toThrow();
     });
 });
 
@@ -705,28 +704,28 @@ describe("Date Validation", () => {
 
     it("should accept Date objects", async () => {
         const property = createDateProperty();
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
         const now = new Date();
-        await expect(schema.validate(now)).resolves.toEqual(now);
-        await expect(schema.validate(null)).resolves.toBe(null);
+        await expect(schema.parseAsync(now)).resolves.toEqual(now);
+        await expect(schema.parseAsync(null)).resolves.toBe(null);
     });
 
     it("should reject null when required", async () => {
         const property = createDateProperty({
             validation: { required: true }
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
         const now = new Date();
-        await expect(schema.validate(now)).resolves.toEqual(now);
-        await expect(schema.validate(null)).rejects.toThrow();
+        await expect(schema.parseAsync(now)).resolves.toEqual(now);
+        await expect(schema.parseAsync(null)).rejects.toThrow();
     });
 
     it("should validate min date", async () => {
@@ -735,13 +734,13 @@ describe("Date Validation", () => {
             name: "StartDate",
             validation: { min: minDate }
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate(new Date("2024-06-01"))).resolves.toBeDefined();
-        await expect(schema.validate(new Date("2023-06-01"))).rejects.toThrow();
+        await expect(schema.parseAsync(new Date("2024-06-01"))).resolves.toBeDefined();
+        await expect(schema.parseAsync(new Date("2023-06-01"))).rejects.toThrow();
     });
 
     it("should validate max date", async () => {
@@ -750,37 +749,37 @@ describe("Date Validation", () => {
             name: "EndDate",
             validation: { max: maxDate }
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate(new Date("2024-06-01"))).resolves.toBeDefined();
-        await expect(schema.validate(new Date("2025-01-01"))).rejects.toThrow();
+        await expect(schema.parseAsync(new Date("2024-06-01"))).resolves.toBeDefined();
+        await expect(schema.parseAsync(new Date("2025-01-01"))).rejects.toThrow();
     });
 
     it("should skip validation for autoValue dates", async () => {
         const property = createDateProperty({
             autoValue: "on_create"
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
         // autoValue dates should accept anything (they're auto-generated)
-        await expect(schema.validate(null)).resolves.toBe(null);
+        await expect(schema.parseAsync(null)).resolves.toBe(null);
     });
 
     it("should reject non-Date values", async () => {
         const property = createDateProperty();
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
         // Non-Date strings that yup can't parse should be rejected
-        await expect(schema.validate("not-a-date")).rejects.toThrow();
+        await expect(schema.parseAsync("not-a-date")).rejects.toThrow();
     });
 });
 
@@ -793,27 +792,27 @@ describe("Array Validation", () => {
     describe("Basic array validation", () => {
         it("should accept arrays", async () => {
             const property = createArrayProperty(createStringProperty());
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(["a", "b", "c"])).resolves.toEqual(["a", "b", "c"]);
-            await expect(schema.validate([])).resolves.toEqual([]);
-            await expect(schema.validate(null)).resolves.toBe(null);
+            await expect(schema.parseAsync(["a", "b", "c"])).resolves.toEqual(["a", "b", "c"]);
+            await expect(schema.parseAsync([])).resolves.toEqual([]);
+            await expect(schema.parseAsync(null)).resolves.toBe(null);
         });
 
         it("should reject null when required", async () => {
             const property = createArrayProperty(createStringProperty(), {
                 validation: { required: true }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(["a"])).resolves.toEqual(["a"]);
-            await expect(schema.validate(null)).rejects.toThrow();
+            await expect(schema.parseAsync(["a"])).resolves.toEqual(["a"]);
+            await expect(schema.parseAsync(null)).rejects.toThrow();
         });
     });
 
@@ -823,13 +822,13 @@ describe("Array Validation", () => {
                 name: "Tags",
                 validation: { min: 2 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(["a", "b"])).resolves.toEqual(["a", "b"]);
-            await expect(schema.validate(["a"])).rejects.toThrow();
+            await expect(schema.parseAsync(["a", "b"])).resolves.toEqual(["a", "b"]);
+            await expect(schema.parseAsync(["a"])).rejects.toThrow();
         });
 
         it("should validate max length", async () => {
@@ -837,13 +836,13 @@ describe("Array Validation", () => {
                 name: "Tags",
                 validation: { max: 3 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(["a", "b", "c"])).resolves.toEqual(["a", "b", "c"]);
-            await expect(schema.validate(["a", "b", "c", "d"])).rejects.toThrow();
+            await expect(schema.parseAsync(["a", "b", "c"])).resolves.toEqual(["a", "b", "c"]);
+            await expect(schema.parseAsync(["a", "b", "c", "d"])).rejects.toThrow();
         });
 
         it("should validate min of 0", async () => {
@@ -851,12 +850,12 @@ describe("Array Validation", () => {
                 name: "Tags",
                 validation: { min: 0 }
             });
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate([])).resolves.toEqual([]);
+            await expect(schema.parseAsync([])).resolves.toEqual([]);
         });
     });
 
@@ -865,26 +864,26 @@ describe("Array Validation", () => {
             const property = createArrayProperty(
                 createStringProperty({ validation: { min: 2 } })
             );
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(["ab", "cd"])).resolves.toEqual(["ab", "cd"]);
-            await expect(schema.validate(["a"])).rejects.toThrow();
+            await expect(schema.parseAsync(["ab", "cd"])).resolves.toEqual(["ab", "cd"]);
+            await expect(schema.parseAsync(["a"])).rejects.toThrow();
         });
 
         it("should validate number items", async () => {
             const property = createArrayProperty(
                 createNumberProperty({ validation: { min: 0 } })
             );
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate([1, 2, 3])).resolves.toEqual([1, 2, 3]);
-            await expect(schema.validate([-1])).rejects.toThrow();
+            await expect(schema.parseAsync([1, 2, 3])).resolves.toEqual([1, 2, 3]);
+            await expect(schema.parseAsync([-1])).rejects.toThrow();
         });
     });
 
@@ -894,13 +893,13 @@ describe("Array Validation", () => {
                 createStringProperty({ validation: { uniqueInArray: true } }),
                 { name: "Tags" }
             );
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate(["a", "b", "c"])).resolves.toEqual(["a", "b", "c"]);
-            await expect(schema.validate(["a", "b", "a"])).rejects.toThrow();
+            await expect(schema.parseAsync(["a", "b", "c"])).resolves.toEqual(["a", "b", "c"]);
+            await expect(schema.parseAsync(["a", "b", "a"])).rejects.toThrow();
         });
 
         it("should reject duplicate values in map property", async () => {
@@ -911,17 +910,17 @@ describe("Array Validation", () => {
                 }),
                 { name: "Items" }
             );
-            const schema = mapPropertyToYup({
+            const schema = mapPropertyToZod({
                 property,
                 entityId: "test-entity"
             });
 
-            await expect(schema.validate([
+            await expect(schema.parseAsync([
                 { key: "a", value: "1" },
                 { key: "b", value: "2" }
             ])).resolves.toBeDefined();
 
-            await expect(schema.validate([
+            await expect(schema.parseAsync([
                 { key: "a", value: "1" },
                 { key: "a", value: "2" }
             ])).rejects.toThrow();
@@ -940,26 +939,26 @@ describe("Map Validation", () => {
             name: createStringProperty({ validation: { required: true } }),
             age: createNumberProperty({ validation: { min: 0 } })
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate({ name: "John", age: 30 })).resolves.toEqual({ name: "John", age: 30 });
-        await expect(schema.validate({ name: "", age: 30 })).rejects.toThrow();
-        await expect(schema.validate({ name: "John", age: -1 })).rejects.toThrow();
+        await expect(schema.parseAsync({ name: "John", age: 30 })).resolves.toEqual({ name: "John", age: 30 });
+        await expect(schema.parseAsync({ name: "", age: 30 })).rejects.toThrow();
+        await expect(schema.parseAsync({ name: "John", age: -1 })).rejects.toThrow();
     });
 
     it("should accept null when not required", async () => {
         const property = createMapProperty({
             name: createStringProperty()
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate(null)).resolves.toBe(null);
+        await expect(schema.parseAsync(null)).resolves.toBe(null);
     });
 
     it("should allow null for required map (original behavior)", async () => {
@@ -967,15 +966,15 @@ describe("Map Validation", () => {
             { name: createStringProperty() },
             { validation: { required: true } }
         );
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate({ name: "test" })).resolves.toBeDefined();
+        await expect(schema.parseAsync({ name: "test" })).resolves.toBeDefined();
         // In yup v0.x, .required().nullable(true) allowed null values
         // This was the original behavior - null was considered valid for required fields
-        await expect(schema.validate(null)).resolves.toBe(null);
+        await expect(schema.parseAsync(null)).resolves.toBe(null);
     });
 
     it("should validate deeply nested maps", async () => {
@@ -985,16 +984,16 @@ describe("Map Validation", () => {
                 city: createStringProperty({ validation: { required: true } })
             })
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate({
+        await expect(schema.parseAsync({
             address: { street: "123 Main St", city: "NYC" }
         })).resolves.toBeDefined();
 
-        await expect(schema.validate({
+        await expect(schema.parseAsync({
             address: { street: "", city: "NYC" }
         })).rejects.toThrow();
     });
@@ -1008,27 +1007,27 @@ describe("Reference Validation", () => {
 
     it("should accept reference objects", async () => {
         const property = createReferenceProperty("users");
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
         const ref = { id: "user123", path: "users" };
-        await expect(schema.validate(ref)).resolves.toEqual(ref);
-        await expect(schema.validate(null)).resolves.toBe(null);
+        await expect(schema.parseAsync(ref)).resolves.toEqual(ref);
+        await expect(schema.parseAsync(null)).resolves.toBe(null);
     });
 
     it("should reject null when required", async () => {
         const property = createReferenceProperty("users", {
             validation: { required: true }
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate({ id: "user123", path: "users" })).resolves.toBeDefined();
-        await expect(schema.validate(null)).rejects.toThrow();
+        await expect(schema.parseAsync({ id: "user123", path: "users" })).resolves.toBeDefined();
+        await expect(schema.parseAsync(null)).rejects.toThrow();
     });
 });
 
@@ -1040,27 +1039,27 @@ describe("GeoPoint Validation", () => {
 
     it("should accept geopoint objects", async () => {
         const property = createGeoPointProperty();
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
         const geo = { latitude: 40.7128, longitude: -74.0060 };
-        await expect(schema.validate(geo)).resolves.toEqual(geo);
-        await expect(schema.validate(null)).resolves.toBe(null);
+        await expect(schema.parseAsync(geo)).resolves.toEqual(geo);
+        await expect(schema.parseAsync(null)).resolves.toBe(null);
     });
 
     it("should reject null when required", async () => {
         const property = createGeoPointProperty({
             validation: { required: true }
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate({ latitude: 40.7128, longitude: -74.0060 })).resolves.toBeDefined();
-        await expect(schema.validate(null)).rejects.toThrow();
+        await expect(schema.parseAsync({ latitude: 40.7128, longitude: -74.0060 })).resolves.toBeDefined();
+        await expect(schema.parseAsync(null)).rejects.toThrow();
     });
 });
 
@@ -1068,7 +1067,7 @@ describe("GeoPoint Validation", () => {
 // ENTITY SCHEMA TESTS
 // ============================================================================
 
-describe("getYupEntitySchema", () => {
+describe("getEntitySchema", () => {
 
     it("should create a complete entity schema", async () => {
         const properties: Properties = {
@@ -1078,16 +1077,16 @@ describe("getYupEntitySchema", () => {
             tags: createArrayProperty(createStringProperty())
         };
 
-        const schema = getYupEntitySchema("entity-id", properties);
+        const schema = getEntitySchema("entity-id", properties);
 
-        await expect(schema.validate({
+        await expect(schema.parseAsync({
             title: "Test",
             count: 10,
             active: true,
             tags: ["a", "b"]
         })).resolves.toBeDefined();
 
-        await expect(schema.validate({
+        await expect(schema.parseAsync({
             title: "",
             count: 10,
             active: true,
@@ -1110,9 +1109,9 @@ describe("getYupEntitySchema", () => {
             })
         };
 
-        const schema = getYupEntitySchema("entity-id", properties);
+        const schema = getEntitySchema("entity-id", properties);
 
-        await expect(schema.validate({
+        await expect(schema.parseAsync({
             name: "John Doe",
             profile: {
                 bio: "A short bio",
@@ -1132,9 +1131,9 @@ describe("getYupEntitySchema", () => {
             slug: createStringProperty({ validation: { unique: true } })
         };
 
-        const schema = getYupEntitySchema("entity-id", properties, customValidator);
+        const schema = getEntitySchema("entity-id", properties, customValidator);
 
-        await schema.validate({ slug: "test-slug" });
+        await schema.parseAsync({ slug: "test-slug" });
 
         expect(customValidator).toHaveBeenCalled();
     });
@@ -1149,12 +1148,12 @@ describe("Error Handling", () => {
     it("should return a failing schema for unsupported data types", async () => {
         const property = { type: "unsupported" } as any;
 
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate("anything")).rejects.toThrow("Unsupported data type: unknown");
+        await expect(schema.parseAsync("anything")).rejects.toThrow("Unsupported data type: unknown");
     });
 
     it("should return a failing schema for property builders (unresolved properties)", async () => {
@@ -1163,12 +1162,12 @@ describe("Error Handling", () => {
             dynamicProps: () => ({ validation: { required: true } })
         } as any;
 
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property: propertyBuilder as any,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate("anything")).rejects.toThrow("Invalid property configuration: property builder should be resolved");
+        await expect(schema.parseAsync("anything")).rejects.toThrow("Invalid property configuration: property builder should be resolved");
     });
 });
 
@@ -1190,19 +1189,19 @@ describe("Combined Validations", () => {
                 trim: true
             }
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
         // Valid: lowercase, within length, matches pattern
-        await expect(schema.validate("  john_doe123  ")).resolves.toBe("john_doe123");
+        await expect(schema.parseAsync("  john_doe123  ")).resolves.toBe("john_doe123");
 
         // Invalid: too short
-        await expect(schema.validate("ab")).rejects.toThrow();
+        await expect(schema.parseAsync("ab")).rejects.toThrow();
 
         // Invalid: contains invalid chars
-        await expect(schema.validate("John-Doe")).rejects.toThrow();
+        await expect(schema.parseAsync("John-Doe")).rejects.toThrow();
     });
 
     it("should apply multiple number validations together", async () => {
@@ -1215,18 +1214,18 @@ describe("Combined Validations", () => {
                 integer: true
             }
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate(50)).resolves.toBe(50);
-        await expect(schema.validate(0)).resolves.toBe(0);
-        await expect(schema.validate(100)).resolves.toBe(100);
-        await expect(schema.validate(-1)).rejects.toThrow();
-        await expect(schema.validate(101)).rejects.toThrow();
-        await expect(schema.validate(50.5)).rejects.toThrow();
-        await expect(schema.validate(null)).rejects.toThrow();
+        await expect(schema.parseAsync(50)).resolves.toBe(50);
+        await expect(schema.parseAsync(0)).resolves.toBe(0);
+        await expect(schema.parseAsync(100)).resolves.toBe(100);
+        await expect(schema.parseAsync(-1)).rejects.toThrow();
+        await expect(schema.parseAsync(101)).rejects.toThrow();
+        await expect(schema.parseAsync(50.5)).rejects.toThrow();
+        await expect(schema.parseAsync(null)).rejects.toThrow();
     });
 });
 
@@ -1237,36 +1236,36 @@ describe("Combined Validations", () => {
 describe("Edge Cases", () => {
 
     it("should handle empty properties object", async () => {
-        const schema = getYupEntitySchema("entity-id", {});
+        const schema = getEntitySchema("entity-id", {});
 
-        await expect(schema.validate({})).resolves.toEqual({});
+        await expect(schema.parseAsync({})).resolves.toEqual({});
     });
 
     it("should handle undefined validation object", async () => {
         const property = createStringProperty({
             validation: undefined
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
-        await expect(schema.validate("anything")).resolves.toBe("anything");
-        await expect(schema.validate(null)).resolves.toBe(null);
+        await expect(schema.parseAsync("anything")).resolves.toBe("anything");
+        await expect(schema.parseAsync(null)).resolves.toBe(null);
     });
 
     it("should handle empty array of enum values", async () => {
         const property = createStringProperty({
             enum: []
         });
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
         // Empty enum should only accept null
-        await expect(schema.validate(null)).resolves.toBe(null);
-        await expect(schema.validate("anything")).rejects.toThrow();
+        await expect(schema.parseAsync(null)).resolves.toBe(null);
+        await expect(schema.parseAsync("anything")).rejects.toThrow();
     });
 
     it("should handle array with undefined of property", async () => {
@@ -1274,13 +1273,13 @@ describe("Edge Cases", () => {
             type: "array",
             of: undefined as any
         };
-        const schema = mapPropertyToYup({
+        const schema = mapPropertyToZod({
             property,
             entityId: "test-entity"
         });
 
         // Should still work as a basic array
-        await expect(schema.validate(["anything"])).resolves.toEqual(["anything"]);
+        await expect(schema.parseAsync(["anything"])).resolves.toEqual(["anything"]);
     });
 });
 
@@ -1294,12 +1293,12 @@ describe("ID Validation", () => {
             isId: "uuid",
             validation: { required: true }
         });
-        const schema = getYupEntitySchema(undefined, { custom_id: property });
+        const schema = getEntitySchema(undefined, { custom_id: property });
 
         // Because isId is a string, getYupEntitySchema skips generating validation for it
-        await expect(schema.validate({ custom_id: null })).resolves.toEqual({ custom_id: null });
-        await expect(schema.validate({})).resolves.toEqual({});
-        await expect(schema.validate({ custom_id: "my-uuid" })).resolves.toEqual({ custom_id: "my-uuid" });
+        await expect(schema.parseAsync({ custom_id: null })).resolves.toEqual({ custom_id: null });
+        await expect(schema.parseAsync({})).resolves.toEqual({});
+        await expect(schema.parseAsync({ custom_id: "my-uuid" })).resolves.toEqual({ custom_id: "my-uuid" });
     });
 
     it("should ignore required validation when isId is a custom generator SQL string", async () => {
@@ -1307,9 +1306,9 @@ describe("ID Validation", () => {
             isId: "sql`gen_random_uuid()`",
             validation: { required: true }
         });
-        const schema = getYupEntitySchema(undefined, { event_id: property });
+        const schema = getEntitySchema(undefined, { event_id: property });
 
-        await expect(schema.validate({})).resolves.toEqual({});
+        await expect(schema.parseAsync({})).resolves.toEqual({});
     });
 
     it("should ignore required validation for number ID properties when isId is 'increment'", async () => {
@@ -1317,20 +1316,20 @@ describe("ID Validation", () => {
             isId: "increment",
             validation: { required: true }
         });
-        const schema = getYupEntitySchema(undefined, { ticket_id: property });
+        const schema = getEntitySchema(undefined, { ticket_id: property });
 
-        await expect(schema.validate({})).resolves.toEqual({});
-        await expect(schema.validate({ ticket_id: 10 })).resolves.toEqual({ ticket_id: 10 });
+        await expect(schema.parseAsync({})).resolves.toEqual({});
+        await expect(schema.parseAsync({ ticket_id: 10 })).resolves.toEqual({ ticket_id: 10 });
     });
 
     it("should enforce required validation when isId is simply true, even without validation config", async () => {
         const property = createStringProperty({
             isId: true
         });
-        const schema = getYupEntitySchema(undefined, { user_name: property });
+        const schema = getEntitySchema(undefined, { user_name: property });
 
         // The property must be provided manually since isId is just 'true'
-        await expect(schema.validate({})).rejects.toThrow();
-        await expect(schema.validate({ user_name: "manual-id" })).resolves.toEqual({ user_name: "manual-id" });
+        await expect(schema.parseAsync({})).rejects.toThrow();
+        await expect(schema.parseAsync({ user_name: "manual-id" })).resolves.toEqual({ user_name: "manual-id" });
     });
 });

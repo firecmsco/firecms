@@ -1,15 +1,7 @@
-import { Request, Response, NextFunction, RequestHandler } from "express";
+import { MiddlewareHandler, Context } from "hono";
 import { DataDriver } from "@rebasepro/types";
 import { verifyAccessToken, AccessTokenPayload } from "./jwt";
-
-/**
- * Extended Request type with authenticated user info
- */
-export interface AuthenticatedRequest extends Request {
-    user?: AccessTokenPayload;
-    /** RLS-scoped DataDriver when withAuth() is available */
-    driver?: DataDriver;
-}
+import { HonoEnv } from "../api/types";
 
 /**
  * Result from a custom auth validator.
@@ -28,110 +20,104 @@ export interface AuthMiddlewareOptions {
     /** If true, return 401 when no valid token is present (default: false) */
     requireAuth?: boolean;
     /** Optional custom validator (for non-JWT auth, e.g. Firebase Auth) */
-    validator?: (req: Request) => Promise<AuthResult>;
+    validator?: (c: Context<HonoEnv>) => Promise<AuthResult>;
 }
 
 /**
  * Express middleware that requires a valid JWT token
  * Returns 401 if token is missing or invalid
  */
-export const requireAuth: RequestHandler = (
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-): void => {
-    const authHeader = req.headers.authorization;
-    const queryToken = req.query.token as string | undefined;
+export const requireAuth: MiddlewareHandler<HonoEnv> = async (
+    c,
+    next
+) => {
+    const authHeader = c.req.header("authorization");
+    const queryToken = c.req.query("token");
     const hasBearer = authHeader && authHeader.startsWith("Bearer ");
 
     if (!hasBearer && !queryToken) {
-        res.status(401).json({
+        return c.json({
             error: {
                 message: "Authorization header or token query parameter missing or invalid",
                 code: "UNAUTHORIZED"
             }
-        });
-        return;
+        }, 401);
     }
 
     const token = hasBearer ? authHeader!.substring(7) : queryToken!;
     const payload = verifyAccessToken(token);
 
     if (!payload) {
-        res.status(401).json({
+        return c.json({
             error: {
                 message: "Invalid or expired token",
                 code: "UNAUTHORIZED"
             }
-        });
-        return;
+        }, 401);
     }
 
-    req.user = payload;
-    next();
+    c.set("user", payload);
+    return next();
 };
 
 /**
- * Express middleware that requires the user to have an admin or schema-admin role.
- * Must be used AFTER requireAuth or on a route where req.user is guaranteed.
+ * Middleware that requires the user to have an admin or schema-admin role.
+ * Must be used AFTER requireAuth or on a route where user is guaranteed.
  */
-export const requireAdmin: RequestHandler = (
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-): void => {
-    if (!req.user) {
-        res.status(401).json({
+export const requireAdmin: MiddlewareHandler<HonoEnv> = async (
+    c,
+    next
+) => {
+    const user = c.get("user");
+    if (!user) {
+        return c.json({
             error: {
                 message: "User not authenticated. requireAuth middleware is missing?",
                 code: "UNAUTHORIZED"
             }
-        });
-        return;
+        }, 401);
     }
 
-    const roles = req.user.roles || [];
-    const isAdmin = roles.some(role => {
-        const roleId = typeof role === "string" ? role : (role as { id: string }).id;
+    const roles = (user as any).roles || [];
+    const isAdmin = roles.some((role: any) => {
+        const roleId = typeof role === "string" ? role : role.id;
         return roleId === "admin" || roleId === "schema-admin";
     });
 
     if (!isAdmin) {
-        res.status(403).json({
+        return c.json({
             error: {
                 message: "Admin privileges required for this operation",
                 code: "FORBIDDEN"
             }
-        });
-        return;
+        }, 403);
     }
 
-    next();
+    return next();
 };
 
 
 /**
- * Express middleware that optionally extracts user from JWT
+ * Middleware that optionally extracts user from JWT
  * Does not return 401 if token is missing - allows anonymous access
  */
-export const optionalAuth: RequestHandler = (
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-): void => {
-    const authHeader = req.headers.authorization;
-    const queryToken = req.query.token as string | undefined;
+export const optionalAuth: MiddlewareHandler<HonoEnv> = async (
+    c,
+    next
+) => {
+    const authHeader = c.req.header("authorization");
+    const queryToken = c.req.query("token");
     const hasBearer = authHeader && authHeader.startsWith("Bearer ");
 
     if (hasBearer || queryToken) {
         const token = hasBearer ? authHeader!.substring(7) : queryToken!;
         const payload = verifyAccessToken(token);
         if (payload) {
-            req.user = payload;
+            c.set("user", payload);
         }
     }
 
-    next();
+    return next();
 };
 
 /**
@@ -169,68 +155,69 @@ async function scopeDataDriver(
  * This is the single source of truth for HTTP auth in Rebase.
  * Use this instead of manually parsing tokens in route handlers.
  */
-export function createAuthMiddleware(options: AuthMiddlewareOptions): RequestHandler {
+export function createAuthMiddleware(options: AuthMiddlewareOptions): MiddlewareHandler<HonoEnv> {
     const { driver, requireAuth: enforceAuth = false, validator } = options;
 
-    return async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+    return async (c, next) => {
         if (validator) {
             // Custom validator path (e.g., Firebase Auth, API keys)
             try {
-                const authResult = await validator(req);
+                const authResult = await validator(c);
                 if (authResult && typeof authResult === "object") {
                     const id = ("userId" in authResult ? authResult.userId : undefined)
                         || ("uid" in authResult ? authResult.uid : undefined);
                     if (id) {
                         const roles = authResult.roles || [];
-                        req.user = { userId: id, roles };
+                        c.set("user", { userId: id, roles });
                         const user = { uid: id, roles, ...authResult };
-                        req.driver = await scopeDataDriver(driver, user);
+                        c.set("driver", await scopeDataDriver(driver, user as any));
                     } else {
-                        req.driver = driver;
+                        c.set("driver", driver);
                     }
                 } else if (authResult === true) {
-                    req.user = { userId: "default", roles: [] };
-                    req.driver = driver;
+                    c.set("user", { userId: "default", roles: [] });
+                    c.set("driver", driver);
                 } else {
                     // Not authenticated - driver stays unscoped
-                    req.driver = driver;
+                    c.set("driver", driver);
                 }
             } catch (error) {
-                res.status(401).json({ error: { message: "Unauthorized", code: "UNAUTHORIZED" } });
-                return;
+                return c.json({ error: { message: "Unauthorized", code: "UNAUTHORIZED" } }, 401);
             }
         } else {
             // Default JWT path
             try {
-                const authHeader = req.headers.authorization;
-                const queryToken = req.query.token as string | undefined;
+                const authHeader = c.req.header("authorization");
+                const queryToken = c.req.query("token");
                 const hasBearer = authHeader && authHeader.startsWith("Bearer ");
                 
                 if (hasBearer || queryToken) {
-                    const token = hasBearer ? authHeader.substring(7) : queryToken!;
+                    const token = hasBearer ? authHeader!.substring(7) : queryToken!;
                     const payload = extractUserFromToken(token);
 
                     if (payload) {
-                        req.user = payload;
+                        c.set("user", payload);
                         const user = { uid: payload.userId, roles: payload.roles };
-                        req.driver = await scopeDataDriver(driver, user);
+                        c.set("driver", await scopeDataDriver(driver, user as any));
                     } else {
-                        req.driver = driver;
+                        console.error("[AUTH] Token payload empty or invalid for token: " + token.substring(0, 10));
+                        c.set("driver", driver);
                     }
                 } else {
-                    req.driver = driver;
+                    console.error("[AUTH] No token found! Auth header:", authHeader, "Query:", queryToken, "Path:", c.req.path);
+                    c.set("driver", driver);
                 }
             } catch (error) {
                 console.error("Default auth validation error", error);
-                req.driver = driver;
+                c.set("driver", driver);
             }
         }
 
-        if (enforceAuth && !req.user) {
-            res.status(401).json({ error: { message: "Unauthorized: Invalid or missing token", code: "UNAUTHORIZED" } });
-            return;
+        if (enforceAuth && !c.get("user")) {
+            console.error("[AUTH] Rejecting with 401. Path:", c.req.path);
+            return c.json({ error: { message: "Unauthorized: Invalid or missing token", code: "UNAUTHORIZED" } }, 401);
         }
 
-        next();
+        return next();
     };
 }

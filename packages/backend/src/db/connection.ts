@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
 
-export function createPostgresDatabaseConnection(connectionString: string) {
+export function createPostgresDatabaseConnection(connectionString: string, schema?: Record<string, unknown>) {
     const pool = new Pool({
         connectionString,
         // Connection pool settings for resilience
@@ -41,8 +41,8 @@ export function createPostgresDatabaseConnection(connectionString: string) {
         console.debug("Database client removed from pool");
     });
 
-    // Create drizzle instance with error handling wrapper
-    const db = drizzle(pool);
+    // Create drizzle instance — pass schema when available to enable db.query relational API
+    const db = schema ? drizzle(pool, { schema }) : drizzle(pool);
 
     // Graceful shutdown handler
     process.on("SIGINT", async () => {

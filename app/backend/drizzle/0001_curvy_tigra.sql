@@ -1,1 +1,0 @@
-ALTER TABLE "authors" ADD COLUMN "picture" varchar;

@@ -75,7 +75,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
     /** Reconnection timer handle. */
     private reconnectTimer?: ReturnType<typeof setTimeout>;
 
-    constructor(private db: NodePgDatabase, private registry: BackendCollectionRegistry) {
+    constructor(private db: NodePgDatabase<any>, private registry: BackendCollectionRegistry) {
         super();
         this.entityService = new EntityService(db, registry);
     }

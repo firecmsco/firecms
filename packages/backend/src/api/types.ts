@@ -1,12 +1,18 @@
 import { EntityCollection } from "@rebasepro/types";
-import { AuthenticatedRequest, AuthResult } from "../auth/middleware";
+import { AuthResult } from "../auth/middleware";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { DataDriver } from "@rebasepro/types";
 
 /**
- * Extended request type for API endpoints.
- * Extends AuthenticatedRequest which provides `user` and `driver`.
+ * Hono Environment Variables
+ * Passed to generic Hono<HonoEnv> to type `c.get()`
  */
-export interface RebaseRequest extends AuthenticatedRequest {}
+export type HonoEnv = {
+    Variables: {
+        user?: AuthResult | { userId?: string, roles?: string[] };
+        driver?: DataDriver;
+    }
+};
 
 /**
  * Configuration for API generation
@@ -27,7 +33,7 @@ export interface ApiConfig {
     /** Whether auth is required for API endpoints (default: true) */
     requireAuth?: boolean;
     /** Optional custom validator for authentication */
-    authValidator?: (req: import("express").Request) => Promise<AuthResult>;
+    authValidator?: (c: import("hono").Context<import("./types").HonoEnv>) => Promise<AuthResult>;
     pagination?: {
         defaultLimit: number;
         maxLimit: number;

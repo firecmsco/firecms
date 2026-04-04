@@ -70,9 +70,11 @@ pnpm dev:frontend
 Rebase uses Drizzle ORM for type-safe database operations. Common database commands:
 
 ```bash
-pnpm db:migrate      # Run database migrations
-pnpm db:studio       # Open Drizzle Studio
-pnpm generate:schema # Generate Postgres schema from your collections
+rebase schema generate # Generate Postgres schema from your collections
+rebase db push         # Push changes to development database
+rebase db generate     # Generate SQL migration files
+rebase db migrate      # Run pending migrations
+rebase db studio       # Open Drizzle Studio
 ```
 
 ### Changing the base URL of Rebase

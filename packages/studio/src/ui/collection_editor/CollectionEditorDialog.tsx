@@ -44,7 +44,7 @@ import {
     Tabs,
     Typography
 } from "@rebasepro/ui";
-import { YupSchema } from "./CollectionYupValidation";
+import { CollectionEditorSchema } from "./CollectionYupValidation";
 import { GeneralSettingsForm } from "./GeneralSettingsForm";
 import { DisplaySettingsForm } from "./DisplaySettingsForm";
 import { CollectionPropertiesEditorForm } from "./CollectionPropertiesEditorForm";
@@ -524,15 +524,14 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const validation = (col: PersistedCollection) => {
 
         let errors: Record<string, string> = {};
-        const schema = (currentView === "properties" || currentView === "relations" || currentView === "general") && YupSchema;
+        const schema = (currentView === "properties" || currentView === "relations" || currentView === "general") && CollectionEditorSchema;
         if (schema) {
-            try {
-                schema.validateSync(col, { abortEarly: false });
-            } catch (e: unknown) {
-                const yupError = e as { inner?: Array<{ path?: string; message: string }> };
-                yupError.inner?.forEach((err) => {
-                    if (err.path) {
-                        errors[err.path] = err.message;
+            const result = schema.safeParse(col);
+            if (!result.success) {
+                result.error.issues.forEach((issue) => {
+                    const path = issue.path.join(".");
+                    if (path) {
+                        errors[path] = issue.message;
                     }
                 });
             }

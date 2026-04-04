@@ -10,7 +10,7 @@
  */
 import arg from "arg";
 import chalk from "chalk";
-import { spawn } from "child_process";
+import execa from "execa";
 import path from "path";
 import {
     requireProjectRoot,
@@ -95,25 +95,16 @@ async function runDrizzleKit(action: string, _rawArgs: string[]): Promise<void> 
     }
 
     // Shell out to drizzle-kit
-    const child = spawn(drizzleKitBin, [action], {
-        cwd: backendDir,
-        stdio: "inherit",
-        env,
-    });
-
-    return new Promise((resolve, reject) => {
-        child.on("close", (code) => {
-            if (code === 0) {
-                resolve();
-            } else {
-                process.exit(code ?? 1);
-            }
+    try {
+        await execa(drizzleKitBin, [action], {
+            cwd: backendDir,
+            stdio: "inherit",
+            env,
         });
-        child.on("error", (err) => {
-            console.error(chalk.red(`✗ Failed to run drizzle-kit ${action}: ${err.message}`));
-            reject(err);
-        });
-    });
+    } catch (err: any) {
+        console.error(chalk.red(`✗ Failed to run drizzle-kit ${action}: ${err.message}`));
+        process.exit(1);
+    }
 }
 
 function printDbHelp() {

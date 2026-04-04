@@ -28,7 +28,6 @@ import {
     SnackbarProvider,
     UserSettingsView,
     UsersView,
-    useBackendStorageSource,
     useBuildAdminModeController,
     useBuildCMSUrlController,
     useBuildCollectionRegistryController,
@@ -54,37 +53,24 @@ export function App() {
     const adminModeController = useBuildAdminModeController();
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    const authController = useRebaseAuthController({
-        apiUrl: API_URL,
-        googleClientId: GOOGLE_CLIENT_ID
-    });
-
-    const storageSource = useBackendStorageSource({
-        apiUrl: API_URL,
-        getAuthToken: authController.getAuthToken
-    });
-
-    const userManagement = useBackendUserManagement({
-        apiUrl: API_URL,
-        getAuthToken: authController.getAuthToken,
-        currentUser: authController.user
-    });
-
     const rebaseClient = React.useMemo(() => createRebaseClient({
         baseUrl: API_URL,
         websocketUrl: API_URL.replace(/^http/, "ws")
     }), [API_URL]);
 
-    if (rebaseClient.ws) {
-         rebaseClient.ws.setAuthTokenGetter(async () => {
-             const token = await authController.getAuthToken();
-             return token ?? "";
-         });
-    }
+    const authController = useRebaseAuthController({
+        client: rebaseClient,
+        googleClientId: GOOGLE_CLIENT_ID
+    });
+
+    const userManagement = useBackendUserManagement({
+        client: rebaseClient,
+        currentUser: authController.user
+    });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin();
     const collectionConfigController = useLocalCollectionsConfigController(
-        API_URL,
+        rebaseClient,
         collections,
         {
             getAuthToken: authController.getAuthToken
@@ -173,7 +159,7 @@ export function App() {
                         navigationStateController={navigationStateController}
                         authController={authController}
                         userConfigPersistence={userConfigPersistence}
-                        storageSource={storageSource}
+                        storageSource={rebaseClient.storage}
                     >
                         {({ loading }) => {
                             if (loading || authController.initialLoading) {

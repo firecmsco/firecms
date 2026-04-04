@@ -91,6 +91,23 @@ export class QueryBuilder<M extends Record<string, any> = any> {
     }
 
     /**
+     * Include related entities in the response.
+     * Relations will be populated with full entity data instead of just IDs.
+     *
+     * @param relations - Relation names to include, or "*" for all.
+     * @example
+     * // Include specific relations
+     * client.data.posts.include("tags", "author").find()
+     *
+     * // Include all relations
+     * client.data.posts.include("*").find()
+     */
+    include(...relations: string[]): this {
+        this.params.include = relations;
+        return this;
+    }
+
+    /**
      * Execute the find query and return the results.
      */
     async find(): Promise<FindResponse<M>> {

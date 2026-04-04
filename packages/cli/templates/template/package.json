@@ -17,12 +17,7 @@
         "build:shared": "cd shared && pnpm run build",
         "build:frontend": "cd frontend && pnpm run build",
         "build:backend": "cd backend && pnpm run build",
-        "start": "cd backend && pnpm start",
-        "schema:generate": "rebase schema generate",
-        "db:push": "rebase db push",
-        "db:generate": "rebase db generate",
-        "db:migrate": "rebase db migrate",
-        "db:studio": "rebase db studio"
+        "start": "cd backend && pnpm start"
     },
     "devDependencies": {
         "concurrently": "^8.2.2",

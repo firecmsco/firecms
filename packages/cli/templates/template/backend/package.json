@@ -12,9 +12,9 @@
     "dependencies": {
         "{{PROJECT_NAME}}-shared": "workspace:*",
         "@rebasepro/backend": "0.0.1",
-        "cors": "^2.8.5",
         "drizzle-orm": "^0.44.4",
-        "express": "^5.1.0",
+        "hono": "^4.2.0",
+        "@hono/node-server": "^1.11.0",
         "pg": "^8.11.3",
         "ws": "^8.16.0",
         "zod": "^3.22.4",

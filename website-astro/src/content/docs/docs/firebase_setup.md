@@ -49,16 +49,19 @@ Common database commands:
 
 ```bash
 # Generate schema from your collections
-pnpm generate:schema
+rebase schema generate
+
+# Generate SQL migration files
+rebase db generate
 
 # Run database migrations
-pnpm db:migrate
+rebase db migrate
 
 # Open Drizzle Studio to visually browse your database
-pnpm db:studio
+rebase db studio
 ```
 
-After defining or modifying a collection, run `pnpm generate:schema` followed by `pnpm db:migrate` to apply the changes to your database.
+After defining or modifying a collection, run `rebase schema generate` followed by `rebase db push` for development or `rebase db generate` and `rebase db migrate` for production to apply the changes to your database.
 
 ### Row Level Security (RLS)
 

@@ -83,6 +83,7 @@ export interface CollectionClient<M extends Record<string, any> = any> extends C
     limit(count: number): QueryBuilder<M>;
     offset(count: number): QueryBuilder<M>;
     search(searchString: string): QueryBuilder<M>;
+    include(...relations: string[]): QueryBuilder<M>;
 }
 
 export function createCollectionClient<M extends Record<string, any> = any>(transport: Transport, slug: string, ws?: RebaseWebSocketClient): CollectionClient<M> {
@@ -187,6 +188,9 @@ export function createCollectionClient<M extends Record<string, any> = any>(tran
         },
         search(searchString: string) {
             return new QueryBuilder<M>(this as any).search(searchString);
+        },
+        include(...relations: string[]) {
+            return new QueryBuilder<M>(this as any).include(...relations);
         }
     };
 }

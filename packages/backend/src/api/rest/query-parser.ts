@@ -135,5 +135,15 @@ export function parseQueryOptions(query: Record<string, unknown>): QueryOptions 
         }
     }
 
+    // Relation includes
+    if (query.include) {
+        const includeStr = String(query.include).trim();
+        if (includeStr === "*") {
+            options.include = ["*"];
+        } else {
+            options.include = includeStr.split(",").map(s => s.trim()).filter(Boolean);
+        }
+    }
+
     return options;
 }

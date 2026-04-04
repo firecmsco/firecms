@@ -34,8 +34,8 @@ Please adhere to these principles when working with Rebase, as they ensure relia
 3. **Follow the Schema-as-Code approach:** Schemas are defined as standalone TypeScript files. The visual Studio generates TypeScript via AST manipulation — it does NOT run raw SQL. Always define collections in code first.
 
 4. **Use the two-step migration workflow:**
-   - `pnpm run generate:schema` — converts collection definitions to Drizzle ORM schema (from `app/`)
-   - `cd backend && pnpm run db:push` (development, from `app/backend/`) or `pnpm run db:generate && pnpm run db:migrate` (production, from `app/`)
+   - `rebase schema generate` — converts collection definitions to Drizzle ORM schema
+   - `rebase db push` (development) or `rebase db generate && rebase db migrate` (production)
 
 5. **Use Rebase MCP Server tools when available:** For data operations, user management, and collection browsing, prefer the MCP tools (`list_documents`, `get_document`, `create_document`, etc.) over writing manual API calls.
 

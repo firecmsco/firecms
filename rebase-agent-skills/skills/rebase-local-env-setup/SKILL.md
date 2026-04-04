@@ -94,8 +94,8 @@ pnpm install
 
 ```bash
 cd app
-pnpm run generate:schema
-cd backend && pnpm run db:push
+rebase schema generate
+rebase db push
 ```
 
 ## 7. Start the Development Server

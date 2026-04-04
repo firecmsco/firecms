@@ -29,14 +29,19 @@ export interface UserManagement<USER extends User = User> {
 
 export interface BackendUserManagementConfig {
     /**
-     * Base API URL for the backend
+     * The Rebase Client instance
      */
-    apiUrl: string;
+    client?: any;
 
     /**
-     * Function to get the current auth token
+     * Base API URL for the backend (optional, extracted from client if not provided)
      */
-    getAuthToken: () => Promise<string>;
+    apiUrl?: string;
+
+    /**
+     * Function to get the current auth token (optional, extracted from client if not provided)
+     */
+    getAuthToken?: () => Promise<string>;
 
     /**
      * Current logged-in user
@@ -95,7 +100,7 @@ function convertRole(apiRole: ApiRole): Role {
  * Compatible with Rebase UserManagement interface
  */
 export function useBackendUserManagement(config: BackendUserManagementConfig): UserManagement {
-    const { apiUrl, getAuthToken, currentUser } = config;
+    const { client, apiUrl, getAuthToken, currentUser } = config;
 
     const [users, setUsers] = useState<User[]>([]);
     const [roles, setRoles] = useState<Role[]>([]);
@@ -122,13 +127,16 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
             }
 
             try {
-                const token = await getAuthToken();
+                // Determine token provider
+                const token = getAuthToken ? await getAuthToken() : (client ? await client.resolveToken() : null);
+                const baseUrl = apiUrl || (client?.baseUrl ? client.baseUrl : "");
+                
                 // Use /api/admin prefix for admin endpoints
-                const response = await fetch(`${apiUrl}/api/admin${endpoint}`, {
+                const response = await fetch(`${baseUrl}/api/admin${endpoint}`, {
                     method,
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
+                        ...(token ? { "Authorization": `Bearer ${token}` } : {})
                     },
                     body: body ? JSON.stringify(body) : undefined,
                     signal
