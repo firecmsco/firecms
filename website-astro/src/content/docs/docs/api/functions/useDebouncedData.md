@@ -13,7 +13,7 @@ title: "useDebouncedData"
 
 > **useDebouncedData**\<`T`\>(`data`, `deps`, `timeoutMs`): `T`[]
 
-Defined in: [core/src/components/common/useDebouncedData.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useDebouncedData.ts)
+Defined in: [core/src/components/common/useDebouncedData.ts:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/common/useDebouncedData.ts)
 
 Hack to prevent data updates for incomplete callbacks from Firestore
 triggers.

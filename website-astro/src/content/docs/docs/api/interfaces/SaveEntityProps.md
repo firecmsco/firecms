@@ -11,7 +11,7 @@ title: "SaveEntityProps"
 
 # Interface: SaveEntityProps\<M\>
 
-Defined in: [types/src/controllers/data\_driver.ts:52](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:52](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 **`Internal`**
 
@@ -27,7 +27,7 @@ Defined in: [types/src/controllers/data\_driver.ts:52](https://github.com/rebase
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:57](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:57](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/src/controllers/data\_driver.ts:57](https://github.com/rebase
 
 > `optional` **entityId**: `string` \| `number`
 
-Defined in: [types/src/controllers/data\_driver.ts:55](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:55](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/src/controllers/data\_driver.ts:55](https://github.com/rebase
 
 > **path**: `string`
 
-Defined in: [types/src/controllers/data\_driver.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:53](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/src/controllers/data\_driver.ts:53](https://github.com/rebase
 
 > `optional` **previousValues**: `Partial`\<`M`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:56](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:56](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [types/src/controllers/data\_driver.ts:56](https://github.com/rebase
 
 > **status**: [`EntityStatus`](../type-aliases/EntityStatus)
 
-Defined in: [types/src/controllers/data\_driver.ts:58](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:58](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -67,4 +67,4 @@ Defined in: [types/src/controllers/data\_driver.ts:58](https://github.com/rebase
 
 > **values**: `Partial`\<[`EntityValues`](../type-aliases/EntityValues)\<`M`\>\>
 
-Defined in: [types/src/controllers/data\_driver.ts:54](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:54](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)

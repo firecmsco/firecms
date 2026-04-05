@@ -3,23 +3,26 @@ import { createAdmin } from "../src/admin";
 import { Transport } from "../src/transport";
 
 describe("createAdmin", () => {
-    let mockRequest: jest.Mock<any>;
+    let mockRequest: jest.Mock<Transport["request"]>;
     let transport: Transport;
 
     beforeEach(() => {
-        mockRequest = jest.fn() as jest.Mock<any>;
+        mockRequest = jest.fn() as jest.Mock<Transport["request"]>;
         transport = {
             request: mockRequest,
             baseUrl: "http://localhost",
             apiPath: "/api/v1",
             fetchFn: globalThis.fetch,
-            setToken: jest.fn()
-        } as unknown as Transport;
+            setToken: jest.fn(),
+            setAuthTokenGetter: jest.fn(),
+            getHeaders: jest.fn().mockReturnValue({}),
+            resolveToken: jest.fn().mockResolvedValue(null)
+        } as Transport;
     });
 
     it("bootstrap calls POST /admin/bootstrap", async () => {
-        const admin = createAdmin(transport as any);
-        mockRequest.mockResolvedValueOnce({ ok: true } as any);
+        const admin = createAdmin(transport);
+        mockRequest.mockResolvedValueOnce({ ok: true } as Awaited<ReturnType<typeof admin.bootstrap>>);
 
         const result = await admin.bootstrap();
         
@@ -29,8 +32,8 @@ describe("createAdmin", () => {
 
     describe("Users", () => {
         it("listUsers calls GET /admin/users", async () => {
-            const admin = createAdmin(transport as any);
-            mockRequest.mockResolvedValueOnce({ users: [] } as any);
+            const admin = createAdmin(transport);
+            mockRequest.mockResolvedValueOnce({ users: [] });
 
             const result = await admin.listUsers();
             expect(result).toEqual({ users: [] });
@@ -38,8 +41,8 @@ describe("createAdmin", () => {
         });
 
         it("getUser calls GET /admin/users/:id", async () => {
-            const admin = createAdmin(transport as any);
-            mockRequest.mockResolvedValueOnce({ user: { id: "usr_1" } } as any);
+            const admin = createAdmin(transport);
+            mockRequest.mockResolvedValueOnce({ user: { id: "usr_1" } });
 
             const result = await admin.getUser("usr_1");
             expect(result).toEqual({ user: { id: "usr_1" } });
@@ -47,8 +50,8 @@ describe("createAdmin", () => {
         });
 
         it("createUser calls POST /admin/users", async () => {
-            const admin = createAdmin(transport as any);
-            mockRequest.mockResolvedValueOnce({ user: { id: "usr_1" } } as any);
+            const admin = createAdmin(transport);
+            mockRequest.mockResolvedValueOnce({ user: { id: "usr_1" } });
 
             const data = { email: "admin@example.com", password: "123", roles: ["admin"] };
             const result = await admin.createUser(data);
@@ -58,8 +61,8 @@ describe("createAdmin", () => {
         });
 
         it("updateUser calls PUT /admin/users/:id", async () => {
-            const admin = createAdmin(transport as any);
-            mockRequest.mockResolvedValueOnce({ user: { id: "usr_1", roles: [] } } as any);
+            const admin = createAdmin(transport);
+            mockRequest.mockResolvedValueOnce({ user: { id: "usr_1", roles: [] } });
 
             const patch = { roles: ["user"] };
             await admin.updateUser("usr_1", patch);
@@ -68,8 +71,8 @@ describe("createAdmin", () => {
         });
 
         it("deleteUser calls DELETE /admin/users/:id", async () => {
-            const admin = createAdmin(transport as any);
-            mockRequest.mockResolvedValueOnce({ ok: true } as any);
+            const admin = createAdmin(transport);
+            mockRequest.mockResolvedValueOnce({ ok: true });
 
             await admin.deleteUser("usr_1");
             expect(mockRequest).toHaveBeenCalledWith("/admin/users/usr_1", { method: "DELETE" });
@@ -78,8 +81,8 @@ describe("createAdmin", () => {
 
     describe("Roles", () => {
         it("listRoles calls GET /admin/roles", async () => {
-            const admin = createAdmin(transport as any);
-            mockRequest.mockResolvedValueOnce({ roles: [] } as any);
+            const admin = createAdmin(transport);
+            mockRequest.mockResolvedValueOnce({ roles: [] });
 
             const result = await admin.listRoles();
             expect(result).toEqual({ roles: [] });
@@ -87,16 +90,16 @@ describe("createAdmin", () => {
         });
 
         it("getRole calls GET /admin/roles/:id", async () => {
-            const admin = createAdmin(transport as any);
-            mockRequest.mockResolvedValueOnce({ role: { id: "admin" } } as any);
+            const admin = createAdmin(transport);
+            mockRequest.mockResolvedValueOnce({ role: { id: "admin" } });
 
             await admin.getRole("admin");
             expect(mockRequest).toHaveBeenCalledWith("/admin/roles/admin", { method: "GET" });
         });
 
         it("createRole calls POST /admin/roles", async () => {
-            const admin = createAdmin(transport as any);
-            mockRequest.mockResolvedValueOnce({ role: { id: "editor" } } as any);
+            const admin = createAdmin(transport);
+            mockRequest.mockResolvedValueOnce({ role: { id: "editor" } });
 
             const data = { id: "editor", name: "Editor", isAdmin: false };
             await admin.createRole(data);
@@ -105,8 +108,8 @@ describe("createAdmin", () => {
         });
 
         it("updateRole calls PUT /admin/roles/:id", async () => {
-            const admin = createAdmin(transport as any);
-            mockRequest.mockResolvedValueOnce({ role: { id: "editor" } } as any);
+            const admin = createAdmin(transport);
+            mockRequest.mockResolvedValueOnce({ role: { id: "editor" } });
 
             const patch = { name: "Senior Editor" };
             await admin.updateRole("editor", patch);
@@ -115,8 +118,8 @@ describe("createAdmin", () => {
         });
 
         it("deleteRole calls DELETE /admin/roles/:id", async () => {
-            const admin = createAdmin(transport as any);
-            mockRequest.mockResolvedValueOnce({ ok: true } as any);
+            const admin = createAdmin(transport);
+            mockRequest.mockResolvedValueOnce({ ok: true });
 
             await admin.deleteRole("editor");
             expect(mockRequest).toHaveBeenCalledWith("/admin/roles/editor", { method: "DELETE" });

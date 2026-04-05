@@ -13,7 +13,7 @@ title: "EntityCallbacks"
 
 > **EntityCallbacks**\<`M`, `USER`\> = `object`
 
-Defined in: [types/src/types/entity\_callbacks.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:12](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 This interface defines all the callbacks that can be used when an entity
 is being created, updated or deleted.
@@ -35,7 +35,7 @@ Useful for adding your own logic or blocking the execution of the operation.
 
 > `optional` **afterDelete**(`props`): `void`
 
-Defined in: [types/src/types/entity\_callbacks.ts:60](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:60](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Callback used after the entity is deleted.
 
@@ -55,7 +55,7 @@ Callback used after the entity is deleted.
 
 > `optional` **afterRead**(`props`): [`Entity`](../interfaces/Entity)\<`M`\> \| `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
 
-Defined in: [types/src/types/entity\_callbacks.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:18](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Callback used after fetching data
 
@@ -75,7 +75,7 @@ Callback used after fetching data
 
 > `optional` **afterSave**(`props`): `void` \| `Promise`\<`void`\>
 
-Defined in: [types/src/types/entity\_callbacks.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:36](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Callback used when save is successful
 
@@ -95,7 +95,7 @@ Callback used when save is successful
 
 > `optional` **afterSaveError**(`props`): `void` \| `Promise`\<`void`\>
 
-Defined in: [types/src/types/entity\_callbacks.ts:43](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:43](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Callback used when saving fails
 
@@ -115,7 +115,7 @@ Callback used when saving fails
 
 > `optional` **beforeDelete**(`props`): `void`
 
-Defined in: [types/src/types/entity\_callbacks.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:53](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Callback used before the entity is deleted.
 If you throw an error in this method the process stops, and an
@@ -137,7 +137,7 @@ error snackbar gets displayed.
 
 > `optional` **beforeSave**(`props`): `Partial`\<`M`\> \| `Promise`\<`Partial`\<`M`\>\>
 
-Defined in: [types/src/types/entity\_callbacks.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:29](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Callback used before saving, you need to return the values that will get
 saved. If you throw an error in this method the process stops, and an

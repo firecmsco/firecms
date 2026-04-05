@@ -13,7 +13,7 @@ title: "Properties"
 
 > **Properties** = `object`
 
-Defined in: [types/src/types/properties.ts:63](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:63](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ## Index Signature
 

@@ -78,10 +78,9 @@ export const requireAdmin: MiddlewareHandler<HonoEnv> = async (
         }, 401);
     }
 
-    const roles = (user as any).roles || [];
-    const isAdmin = roles.some((role: any) => {
-        const roleId = typeof role === "string" ? role : role.id;
-        return roleId === "admin" || roleId === "schema-admin";
+    const roles = (typeof user === "object" && user !== null && "roles" in user) ? (user.roles || []) : [];
+    const isAdmin = roles.some((role: string) => {
+        return role === "admin" || role === "schema-admin";
     });
 
     if (!isAdmin) {
@@ -170,7 +169,7 @@ export function createAuthMiddleware(options: AuthMiddlewareOptions): Middleware
                         const roles = authResult.roles || [];
                         c.set("user", { userId: id, roles });
                         const user = { uid: id, roles, ...authResult };
-                        c.set("driver", await scopeDataDriver(driver, user as any));
+                        c.set("driver", await scopeDataDriver(driver, user));
                     } else {
                         c.set("driver", driver);
                     }
@@ -198,7 +197,7 @@ export function createAuthMiddleware(options: AuthMiddlewareOptions): Middleware
                     if (payload) {
                         c.set("user", payload);
                         const user = { uid: payload.userId, roles: payload.roles };
-                        c.set("driver", await scopeDataDriver(driver, user as any));
+                        c.set("driver", await scopeDataDriver(driver, user));
                     } else {
                         console.error("[AUTH] Token payload empty or invalid for token: " + token.substring(0, 10));
                         c.set("driver", driver);

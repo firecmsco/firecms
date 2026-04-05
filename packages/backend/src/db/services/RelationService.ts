@@ -81,7 +81,7 @@ export class RelationService {
 
         // Handle join path relations
         if (relation.joinPath && relation.joinPath.length > 0) {
-            let query = this.db.select().from(parentTable);
+            let query = this.db.select().from(parentTable).$dynamic();
             let currentTable = parentTable;
 
             // Apply each join in the path
@@ -107,16 +107,17 @@ export class RelationService {
                     throw new Error(`Join columns not found: ${fromColumn} -> ${toColumn}`);
                 }
 
-                query = query.innerJoin(joinTable, eq(fromCol, toCol)) as unknown as typeof query;
+                // @ts-expect-error Drizzle mutates base query generic on innerJoin
+                query = query.innerJoin(joinTable, eq(fromCol, toCol));
                 currentTable = joinTable;
             }
 
             // Add where condition for the parent entity
             const parentIdField = parentTable[getPrimaryKeys(parentCollection, this.registry)[0].fieldName as keyof typeof parentTable] as AnyPgColumn;
-            query = query.where(eq(parentIdField, parsedParentId)) as unknown as typeof query;
+            query = query.where(eq(parentIdField, parsedParentId));
 
             if (options.limit) {
-                query = query.limit(options.limit) as unknown as typeof query;
+                query = query.limit(options.limit);
             }
 
             const results = await query;
@@ -165,6 +166,7 @@ export class RelationService {
         }
 
         // Use unified relation query builder
+        // @ts-expect-error buildRelationQuery uses dynamic queries
         query = DrizzleConditionBuilder.buildRelationQuery(
             query,
             relation,
@@ -175,7 +177,7 @@ export class RelationService {
             idField,
             this.registry,
             additionalFilters
-        ) as typeof query;
+        );
 
         if (options.limit) {
             query = query.limit(options.limit);
@@ -284,7 +286,7 @@ export class RelationService {
 
         // Handle join path relations with batching
         if (relation.joinPath && relation.joinPath.length > 0) {
-            let query = this.db.select().from(parentTable);
+            let query = this.db.select().from(parentTable).$dynamic();
             let currentTable = parentTable;
 
             // Apply each join in the path
@@ -310,13 +312,14 @@ export class RelationService {
                     throw new Error(`Join columns not found: ${fromColumn} -> ${toColumn}`);
                 }
 
-                query = query.innerJoin(joinTable, eq(fromCol, toCol)) as unknown as typeof query;
+                // @ts-expect-error Drizzle mutates base query generic on innerJoin
+                query = query.innerJoin(joinTable, eq(fromCol, toCol));
                 currentTable = joinTable;
             }
 
             // Add where condition for ALL parent entities at once
             const parentIdField = parentTable[getPrimaryKeys(parentCollection, this.registry)[0].fieldName as keyof typeof parentTable] as AnyPgColumn;
-            query = query.where(inArray(parentIdField, parsedParentIds)) as unknown as typeof query;
+            query = query.where(inArray(parentIdField, parsedParentIds));
 
             const results = await query;
             const targetTableName = relation.joinPath[relation.joinPath.length - 1].table;
@@ -342,6 +345,7 @@ export class RelationService {
         let query = this.db.select().from(targetTable).$dynamic();
 
         // Build the relation query with ALL parent IDs
+        // @ts-expect-error buildRelationQuery uses dynamic queries
         query = DrizzleConditionBuilder.buildRelationQuery(
             query,
             relation,
@@ -352,7 +356,7 @@ export class RelationService {
             targetIdField,
             this.registry,
             []
-        ) as typeof query;
+        );
 
         const results = await query;
         const resultMap = new Map<string | number, Entity<Record<string, unknown>>>();

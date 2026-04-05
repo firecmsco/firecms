@@ -243,7 +243,7 @@ describe("LocalStorageController", () => {
 
             // Should not throw
             expect(() => {
-                (controller as any).validateFile(file);
+                (controller as {validateFile: (f: File) => void}).validateFile(file);
             }).not.toThrow();
         });
 
@@ -258,7 +258,7 @@ describe("LocalStorageController", () => {
             const file = new File([largeContent], "large.txt", { type: "text/plain" });
 
             expect(() => {
-                (smallController as any).validateFile(file);
+                (smallController as {validateFile: (f: File) => void}).validateFile(file);
             }).toThrow(/exceeds/i);
         });
 
@@ -271,7 +271,7 @@ describe("LocalStorageController", () => {
             const file = new File(["content"], "script.js", { type: "application/javascript" });
 
             expect(() => {
-                (controllerWithTypes as any).validateFile(file);
+                (controllerWithTypes as {validateFile: (f: File) => void}).validateFile(file);
             }).toThrow(/not allowed/i);
         });
     });

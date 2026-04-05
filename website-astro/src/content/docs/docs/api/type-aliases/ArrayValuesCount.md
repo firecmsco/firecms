@@ -13,4 +13,4 @@ title: "ArrayValuesCount"
 
 > **ArrayValuesCount** = `Record`\<`string`, `number`\>
 
-Defined in: [common/src/util/flatten\_object.ts:24](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/flatten_object.ts)
+Defined in: [common/src/util/flatten\_object.ts:24](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/flatten_object.ts)

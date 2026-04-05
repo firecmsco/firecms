@@ -13,7 +13,7 @@ title: "Role"
 
 > **Role** = `object`
 
-Defined in: [types/src/users/roles.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/roles.ts)
+Defined in: [types/src/users/roles.ts:3](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/roles.ts)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/src/users/roles.ts:3](https://github.com/rebaseco/rebase/blob
 
 > `optional` **config**: `object`
 
-Defined in: [types/src/users/roles.ts:25](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/roles.ts)
+Defined in: [types/src/users/roles.ts:25](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/roles.ts)
 
 Permissions related to editing the collections
 
@@ -43,7 +43,7 @@ Permissions related to editing the collections
 
 > **id**: `string`
 
-Defined in: [types/src/users/roles.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/roles.ts)
+Defined in: [types/src/users/roles.ts:8](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/roles.ts)
 
 ID of the role
 
@@ -53,7 +53,7 @@ ID of the role
 
 > `optional` **isAdmin**: `boolean`
 
-Defined in: [types/src/users/roles.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/roles.ts)
+Defined in: [types/src/users/roles.ts:18](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/roles.ts)
 
 If this flag is true, the user can perform any action
 
@@ -63,6 +63,6 @@ If this flag is true, the user can perform any action
 
 > **name**: `string`
 
-Defined in: [types/src/users/roles.ts:13](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/roles.ts)
+Defined in: [types/src/users/roles.ts:13](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/roles.ts)
 
 Name of the role

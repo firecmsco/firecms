@@ -13,7 +13,7 @@ title: "EntityCollectionViewActions"
 
 > **EntityCollectionViewActions**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:29](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ## Type Parameters
 

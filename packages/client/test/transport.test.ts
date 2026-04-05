@@ -1,6 +1,12 @@
 import { describe, it, expect, jest, beforeEach } from "@jest/globals";
 import { createTransport, buildQueryString, RebaseApiError } from "../src/transport";
 
+/**
+ * A minimal mock shape that satisfies the `fetch` signature used by `createTransport`.
+ * This avoids `as any` by providing a compatible callable type.
+ */
+type MockFetch = jest.Mock<(input: RequestInfo | URL, init?: RequestInit) => Promise<Partial<Response>>>;
+
 describe("buildQueryString", () => {
     it("handles an empty params object", () => {
         expect(buildQueryString({})).toBe("");
@@ -27,10 +33,10 @@ describe("buildQueryString", () => {
 });
 
 describe("createTransport", () => {
-    let fetchMock: jest.Mock<any>;
+    let fetchMock: MockFetch;
 
     beforeEach(() => {
-        fetchMock = jest.fn() as jest.Mock<any>;
+        fetchMock = jest.fn() as MockFetch;
     });
 
     it("initializes securely with config properties", () => {
@@ -40,7 +46,7 @@ describe("createTransport", () => {
     });
 
     it("makes a basic GET request overriding prefix", async () => {
-        const transport = createTransport({ baseUrl: "https://api.example.com", fetch: fetchMock as any });
+        const transport = createTransport({ baseUrl: "https://api.example.com", fetch: fetchMock as typeof globalThis.fetch });
         fetchMock.mockResolvedValueOnce({
             ok: true,
             status: 200,
@@ -63,7 +69,7 @@ describe("createTransport", () => {
     });
 
     it("injects Authorization headers when a token is provided", async () => {
-        const transport = createTransport({ baseUrl: "http://localhost", token: "static-token", fetch: fetchMock as any });
+        const transport = createTransport({ baseUrl: "http://localhost", token: "static-token", fetch: fetchMock as typeof globalThis.fetch });
         fetchMock.mockResolvedValueOnce({ ok: true, status: 200, json: async () => ({}) });
 
         await transport.request("/secure", { method: "GET" });
@@ -79,7 +85,7 @@ describe("createTransport", () => {
     });
 
     it("updates token dynamically using setToken", async () => {
-        const transport = createTransport({ baseUrl: "http://localhost", fetch: fetchMock as any });
+        const transport = createTransport({ baseUrl: "http://localhost", fetch: fetchMock as typeof globalThis.fetch });
         transport.setToken("dynamic-token");
 
         fetchMock.mockResolvedValueOnce({ ok: true, status: 200, json: async () => ({}) });
@@ -96,7 +102,7 @@ describe("createTransport", () => {
     });
 
     it("parses JSON payloads for standard POST bodies", async () => {
-        const transport = createTransport({ baseUrl: "http://localhost", fetch: fetchMock as any });
+        const transport = createTransport({ baseUrl: "http://localhost", fetch: fetchMock as typeof globalThis.fetch });
         fetchMock.mockResolvedValueOnce({ ok: true, status: 201, json: async () => ({ id: 1 }) });
 
         await transport.request("/create", { method: "POST", body: JSON.stringify({ name: "test" }) });
@@ -111,7 +117,7 @@ describe("createTransport", () => {
 
     describe("Error Handling", () => {
         it("throws RebaseApiError on non-ok JSON responses", async () => {
-            const transport = createTransport({ baseUrl: "http://localhost", fetch: fetchMock as any });
+            const transport = createTransport({ baseUrl: "http://localhost", fetch: fetchMock as typeof globalThis.fetch });
             fetchMock.mockResolvedValueOnce({
                 ok: false,
                 status: 400,
@@ -120,7 +126,7 @@ describe("createTransport", () => {
 
             await expect(transport.request("/fail", { method: "GET" })).rejects.toThrow(RebaseApiError);
             
-            const transport2 = createTransport({ baseUrl: "http://localhost", fetch: fetchMock as any });
+            const transport2 = createTransport({ baseUrl: "http://localhost", fetch: fetchMock as typeof globalThis.fetch });
             fetchMock.mockResolvedValueOnce({
                 ok: false,
                 status: 400,
@@ -130,7 +136,7 @@ describe("createTransport", () => {
         });
 
         it("throws RebaseApiError falling back to statusText on generic failure", async () => {
-            const transport = createTransport({ baseUrl: "http://localhost", fetch: fetchMock as any });
+            const transport = createTransport({ baseUrl: "http://localhost", fetch: fetchMock as typeof globalThis.fetch });
             fetchMock.mockResolvedValueOnce({
                 ok: false,
                 status: 500,
@@ -149,7 +155,7 @@ describe("createTransport", () => {
             const transport = createTransport({ 
                 baseUrl: "http://localhost", 
                 onUnauthorized, 
-                fetch: fetchMock as any 
+                fetch: fetchMock as typeof globalThis.fetch 
             });
 
             fetchMock.mockResolvedValueOnce({
@@ -176,7 +182,7 @@ describe("createTransport", () => {
             const transport = createTransport({ 
                 baseUrl: "http://localhost", 
                 onUnauthorized, 
-                fetch: fetchMock as any 
+                fetch: fetchMock as typeof globalThis.fetch 
             });
 
             fetchMock.mockResolvedValueOnce({

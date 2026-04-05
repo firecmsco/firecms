@@ -1,5 +1,6 @@
 import { describe, test } from "@jest/globals";
 import { buildCollection, buildProperty, resolveCollection } from "../src/util";
+import { AuthController } from "@rebasepro/types";
 import * as util from "util";
 
 const testCollection = buildCollection({
@@ -102,7 +103,7 @@ describe("resolutions", () => {
             collection: testCollection,
             path: "ignore",
             values,
-            authController: {} as any
+            authController: {} as Partial<AuthController> as AuthController
         });
 
         console.log("resolvedCollection", util.inspect(resolvedCollection, false, null, true));

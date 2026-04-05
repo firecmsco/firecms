@@ -13,7 +13,7 @@ title: "EntityPreviewWithId"
 
 > **EntityPreviewWithId**(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/EntityPreview.tsx:200](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:200](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ## Parameters
 

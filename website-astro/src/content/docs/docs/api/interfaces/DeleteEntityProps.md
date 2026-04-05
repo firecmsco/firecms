@@ -11,7 +11,7 @@ title: "DeleteEntityProps"
 
 # Interface: DeleteEntityProps\<M\>
 
-Defined in: [types/src/controllers/data\_driver.ts:64](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:64](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 **`Internal`**
 
@@ -27,7 +27,7 @@ Defined in: [types/src/controllers/data\_driver.ts:64](https://github.com/rebase
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:66](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:66](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -35,4 +35,4 @@ Defined in: [types/src/controllers/data\_driver.ts:66](https://github.com/rebase
 
 > **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:65](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:65](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)

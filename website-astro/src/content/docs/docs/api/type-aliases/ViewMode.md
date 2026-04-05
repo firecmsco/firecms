@@ -13,6 +13,6 @@ title: "ViewMode"
 
 > **ViewMode** = `"table"` \| `"cards"` \| `"kanban"`
 
-Defined in: [types/src/types/collections.ts:470](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:470](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 View mode for displaying a collection.

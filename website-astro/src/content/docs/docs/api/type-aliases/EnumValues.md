@@ -13,7 +13,7 @@ title: "EnumValues"
 
 > **EnumValues** = [`EnumValueConfig`](EnumValueConfig)[] \| `Record`\<`string` \| `number`, `string` \| [`EnumValueConfig`](EnumValueConfig)\>
 
-Defined in: [types/src/types/properties.ts:684](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:684](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 We use this type to define mapping between string or number values in
 the data source to a label (such in a select dropdown).

@@ -13,7 +13,7 @@ title: "buildConditionContext"
 
 > **buildConditionContext**(`params`): [`ConditionContext`](../interfaces/ConditionContext)
 
-Defined in: [common/src/util/conditions.ts:119](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/conditions.ts)
+Defined in: [common/src/util/conditions.ts:119](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/conditions.ts)
 
 Build a ConditionContext from the current property resolution context.
 

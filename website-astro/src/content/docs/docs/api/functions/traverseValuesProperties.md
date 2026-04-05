@@ -13,7 +13,7 @@ title: "traverseValuesProperties"
 
 > **traverseValuesProperties**\<`M`\>(`inputValues`, `properties`, `operation`): `M` \| `undefined`
 
-Defined in: [common/src/util/entities.ts:149](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
+Defined in: [common/src/util/entities.ts:149](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/entities.ts)
 
 ## Type Parameters
 

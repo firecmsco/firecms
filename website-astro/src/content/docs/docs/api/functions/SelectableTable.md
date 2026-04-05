@@ -13,7 +13,7 @@ title: "SelectableTable"
 
 > **SelectableTable**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/SelectableTable/SelectableTable.tsx:128](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SelectableTable/SelectableTable.tsx)
+Defined in: [core/src/components/SelectableTable/SelectableTable.tsx:128](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/SelectableTable/SelectableTable.tsx)
 
 This component is in charge of rendering a collection table with a high
 degree of customization.

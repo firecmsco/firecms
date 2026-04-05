@@ -13,7 +13,7 @@ title: "EntityPreviewDataProps"
 
 > **EntityPreviewDataProps** = `object`
 
-Defined in: [core/src/components/EntityPreview.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:36](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [core/src/components/EntityPreview.tsx:36](https://github.com/rebase
 
 > `optional` **actions**: `React.ReactNode`
 
-Defined in: [core/src/components/EntityPreview.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:38](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [core/src/components/EntityPreview.tsx:38](https://github.com/rebase
 
 > `optional` **collection**: [`EntityCollection`](../interfaces/EntityCollection)
 
-Defined in: [core/src/components/EntityPreview.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:39](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [core/src/components/EntityPreview.tsx:39](https://github.com/rebase
 
 > **entity**: [`Entity`](../interfaces/Entity)\<`any`\>
 
-Defined in: [core/src/components/EntityPreview.tsx:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:41](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [core/src/components/EntityPreview.tsx:41](https://github.com/rebase
 
 > `optional` **includeEntityLink**: `boolean`
 
-Defined in: [core/src/components/EntityPreview.tsx:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:45](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [core/src/components/EntityPreview.tsx:45](https://github.com/rebase
 
 > `optional` **includeId**: `boolean`
 
-Defined in: [core/src/components/EntityPreview.tsx:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:43](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [core/src/components/EntityPreview.tsx:43](https://github.com/rebase
 
 > `optional` **includeImage**: `boolean`
 
-Defined in: [core/src/components/EntityPreview.tsx:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:46](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [core/src/components/EntityPreview.tsx:46](https://github.com/rebase
 
 > `optional` **includeTitle**: `boolean`
 
-Defined in: [core/src/components/EntityPreview.tsx:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:44](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [core/src/components/EntityPreview.tsx:44](https://github.com/rebase
 
 > `optional` **onSideEntityClick**: (`entity`) => `void`
 
-Defined in: [core/src/components/EntityPreview.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:42](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 #### Parameters
 
@@ -95,7 +95,7 @@ Defined in: [core/src/components/EntityPreview.tsx:42](https://github.com/rebase
 
 > `optional` **previewKeys**: `string`[]
 
-Defined in: [core/src/components/EntityPreview.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:40](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
 
 ***
 
@@ -103,4 +103,4 @@ Defined in: [core/src/components/EntityPreview.tsx:40](https://github.com/rebase
 
 > `optional` **size**: `"smallest"` \| `"small"` \| `"medium"` \| `"large"`
 
-Defined in: [core/src/components/EntityPreview.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)
+Defined in: [core/src/components/EntityPreview.tsx:37](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityPreview.tsx)

@@ -11,7 +11,7 @@ title: "EntityBeforeDeleteProps"
 
 # Interface: EntityBeforeDeleteProps\<M, USER\>
 
-Defined in: [types/src/types/entity\_callbacks.ts:158](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:158](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Parameters passed to hooks when an entity is deleted
 
@@ -31,7 +31,7 @@ Parameters passed to hooks when an entity is deleted
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [types/src/types/entity\_callbacks.ts:163](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:163](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 collection of the entity being deleted
 
@@ -41,7 +41,7 @@ collection of the entity being deleted
 
 > **context**: [`RebaseCallContext`](../type-aliases/RebaseCallContext)\<`USER`\>
 
-Defined in: [types/src/types/entity\_callbacks.ts:183](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:183](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Context of the app status
 
@@ -51,7 +51,7 @@ Context of the app status
 
 > **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [types/src/types/entity\_callbacks.ts:178](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:178](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Deleted entity
 
@@ -61,7 +61,7 @@ Deleted entity
 
 > **entityId**: `string` \| `number`
 
-Defined in: [types/src/types/entity\_callbacks.ts:173](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:173](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Deleted entity id
 
@@ -71,6 +71,6 @@ Deleted entity id
 
 > **path**: `string`
 
-Defined in: [types/src/types/entity\_callbacks.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:168](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Path of the parent collection

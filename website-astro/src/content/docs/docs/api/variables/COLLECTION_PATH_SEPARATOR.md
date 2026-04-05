@@ -13,4 +13,4 @@ title: "COLLECTION_PATH_SEPARATOR"
 
 > `const` **COLLECTION\_PATH\_SEPARATOR**: `"::"` = `"::"`
 
-Defined in: [common/src/util/paths.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/paths.ts)
+Defined in: [common/src/util/paths.ts:1](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/paths.ts)

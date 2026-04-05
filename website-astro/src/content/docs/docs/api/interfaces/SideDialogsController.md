@@ -11,7 +11,7 @@ title: "SideDialogsController"
 
 # Interface: SideDialogsController
 
-Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
+Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:7](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
 
 Controller to open the side dialog
 
@@ -21,7 +21,7 @@ Controller to open the side dialog
 
 > **close**: () => `void`
 
-Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
+Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
 
 Close the last panel
 
@@ -35,7 +35,7 @@ Close the last panel
 
 > **open**: (`panelProps`) => `void`
 
-Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:29](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
+Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:29](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
 
 Open one or multiple side panels
 
@@ -55,7 +55,7 @@ Open one or multiple side panels
 
 > **replace**: (`panelProps`) => `void`
 
-Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
+Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:35](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
 
 Replace the last open panel with the given one
 
@@ -75,7 +75,7 @@ Replace the last open panel with the given one
 
 > **setSidePanels**: (`panels`) => `void`
 
-Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
+Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
 
 Override the current side panels
 
@@ -95,6 +95,6 @@ Override the current side panels
 
 > **sidePanels**: [`SideDialogPanelProps`](SideDialogPanelProps)[]
 
-Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
+Defined in: [types/src/controllers/side\_dialogs\_controller.tsx:17](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/side_dialogs_controller.tsx)
 
 List of side panels currently open

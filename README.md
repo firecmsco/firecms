@@ -15,7 +15,7 @@
   <a href="https://demo.rebase.pro">Live Demo</a> •
   <a href="https://rebase.pro/docs">Documentation</a> •
   <a href="https://rebase.pro/features">Features</a> •
-  <a href="https://github.com/rebaseco/rebase">GitHub</a> •
+  <a href="https://github.com/rebasepro/rebase">GitHub</a> •
   <a href="https://discord.gg/fxy7xsQm3m">Discord</a>
 </p>
 
@@ -153,7 +153,7 @@ Rebase is structured as a modular monorepo, allowing you to consume only the lay
 
 - 📖 [Documentation](https://rebase.pro/docs)
 - 💬 [Discord Community](https://discord.gg/fxy7xsQm3m)
-- 🐛 [GitHub Issues](https://github.com/rebaseco/rebase/issues)
+- 🐛 [GitHub Issues](https://github.com/rebasepro/rebase/issues)
 - 📝 [Changelog](https://rebase.pro/docs/changelog)
 
 ---
@@ -167,4 +167,4 @@ Developers operating enterprise architectures at **Google**, **Microsoft**, **IK
 ## License
 
 Rebase is proudly open-source and licensed under the **MIT License**.
-See the full [License](https://github.com/rebaseco/rebase/blob/main/LICENSE) for details.
+See the full [License](https://github.com/rebasepro/rebase/blob/main/LICENSE) for details.

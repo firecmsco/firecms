@@ -13,7 +13,7 @@ title: "useCollectionRegistryController"
 
 > **useCollectionRegistryController**\<`EC`\>(): [`CollectionRegistryController`](../type-aliases/CollectionRegistryController)\<`EC`\>
 
-Defined in: [core/src/hooks/navigation/contexts/CollectionRegistryContext.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/contexts/CollectionRegistryContext.tsx)
+Defined in: [core/src/hooks/navigation/contexts/CollectionRegistryContext.tsx:13](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/contexts/CollectionRegistryContext.tsx)
 
 ## Type Parameters
 

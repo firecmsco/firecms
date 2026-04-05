@@ -11,7 +11,7 @@ title: "AdditionalFieldDelegate"
 
 # Interface: AdditionalFieldDelegate\<M, USER\>
 
-Defined in: [types/src/types/collections.ts:588](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:588](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Use this interface for adding additional fields to entity collection views and forms.
 
@@ -31,7 +31,7 @@ Use this interface for adding additional fields to entity collection views and f
 
 > `optional` **Builder**: `ComponentType`\<[`AdditionalFieldDelegateProps`](../type-aliases/AdditionalFieldDelegateProps)\<`M`, `USER`\>\>
 
-Defined in: [types/src/types/collections.ts:610](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:610](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Builder for the content of the cell for this column
 
@@ -41,7 +41,7 @@ Builder for the content of the cell for this column
 
 > `optional` **dependencies**: `Extract`\<keyof `M`, `string`\>[]
 
-Defined in: [types/src/types/collections.ts:620](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:620](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 If this column needs to update dynamically based on other properties,
 you can define an array of keys as strings with the
@@ -56,7 +56,7 @@ it will be updated in every render.
 
 > **key**: `string`
 
-Defined in: [types/src/types/collections.ts:595](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:595](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ID of this column. You can use this id in the `properties` field of the
 collection in any order you want
@@ -67,7 +67,7 @@ collection in any order you want
 
 > **name**: `string`
 
-Defined in: [types/src/types/collections.ts:600](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:600](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Header of this column
 
@@ -77,7 +77,7 @@ Header of this column
 
 > `optional` **value**: (`props`) => `string` \| `number` \| `Promise`\<`string` \| `number`\> \| `undefined`
 
-Defined in: [types/src/types/collections.ts:629](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:629](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Use this prop to define the value of the column as a string or number.
 This is the value that will be used for exporting the collection.
@@ -106,6 +106,6 @@ view.
 
 > `optional` **width**: `number`
 
-Defined in: [types/src/types/collections.ts:605](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:605](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Width of the generated column in pixels

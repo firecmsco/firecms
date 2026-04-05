@@ -11,7 +11,7 @@ title: "EntityFormActionsProps"
 
 # Interface: EntityFormActionsProps
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:4](https://github.c
 
 > **collection**: [`EntityCollection`](EntityCollection)
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:6](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:6](https://github.c
 
 > **disabled**: `boolean`
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:11](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:11](https://github.
 
 > `optional` **entity**: [`Entity`](Entity)\<`object`\>
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:7](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:7](https://github.c
 
 > **formContext**: [`FormContext`](FormContext)
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:17](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:17](https://github.
 
 > **formex**: `FormexController`\<`any`\>
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:10](https://github.
 
 > **layout**: `"bottom"` \| `"side"`
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:8](https://github.c
 
 > **navigateBack**: () => `void`
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:16](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 #### Returns
 
@@ -79,7 +79,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:16](https://github.
 
 > **openEntityMode**: `"side_panel"` \| `"full_screen"`
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:14](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -87,7 +87,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:14](https://github.
 
 > **path**: `string`
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:5](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -95,7 +95,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:5](https://github.c
 
 > **pluginActions**: `ReactNode`[]
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:13](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -103,7 +103,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:13](https://github.
 
 > `optional` **savingError**: `Error`
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -111,7 +111,7 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:9](https://github.c
 
 > `optional` **showDefaultActions**: `boolean`
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:15](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
 
 ***
 
@@ -119,4 +119,4 @@ Defined in: [types/src/components/EntityFormActionsProps.tsx:15](https://github.
 
 > **status**: `"copy"` \| `"new"` \| `"existing"`
 
-Defined in: [types/src/components/EntityFormActionsProps.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)
+Defined in: [types/src/components/EntityFormActionsProps.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/EntityFormActionsProps.tsx)

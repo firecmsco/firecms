@@ -11,7 +11,7 @@ title: "RealtimeProvider"
 
 # Interface: RealtimeProvider
 
-Defined in: [types/src/types/backend.ts:246](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:246](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Abstract realtime provider interface.
 Handles real-time subscriptions and notifications for entity changes.
@@ -22,7 +22,7 @@ Handles real-time subscriptions and notifications for entity changes.
 
 > **notifyEntityUpdate**(`path`, `entityId`, `entity`, `databaseId?`): `Promise`\<`void`\>
 
-Defined in: [types/src/types/backend.ts:273](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:273](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Notify all relevant subscribers of an entity update
 
@@ -54,7 +54,7 @@ Notify all relevant subscribers of an entity update
 
 > **subscribeToCollection**(`subscriptionId`, `config`, `callback?`): `void`
 
-Defined in: [types/src/types/backend.ts:250](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:250](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Subscribe to collection changes
 
@@ -82,7 +82,7 @@ Subscribe to collection changes
 
 > **subscribeToEntity**(`subscriptionId`, `config`, `callback?`): `void`
 
-Defined in: [types/src/types/backend.ts:259](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:259](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Subscribe to single entity changes
 
@@ -110,7 +110,7 @@ Subscribe to single entity changes
 
 > **unsubscribe**(`subscriptionId`): `void`
 
-Defined in: [types/src/types/backend.ts:268](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:268](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Unsubscribe from a subscription
 

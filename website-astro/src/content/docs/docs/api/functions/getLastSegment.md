@@ -13,7 +13,7 @@ title: "getLastSegment"
 
 > **getLastSegment**(`path`): `string`
 
-Defined in: [common/src/util/navigation\_utils.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_utils.ts)
+Defined in: [common/src/util/navigation\_utils.ts:26](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/navigation_utils.ts)
 
 ## Parameters
 

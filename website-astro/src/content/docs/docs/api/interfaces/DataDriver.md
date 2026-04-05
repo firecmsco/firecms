@@ -11,7 +11,7 @@ title: "DataDriver"
 
 # Interface: DataDriver
 
-Defined in: [types/src/controllers/data\_driver.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:82](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 **`Internal`**
 
@@ -24,7 +24,7 @@ This is NOT the public API — use `RebaseData` / `context.data` instead.
 
 > `optional` **cmsToDelegateModel**: (`data`) => `unknown`
 
-Defined in: [types/src/controllers/data\_driver.ts:172](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:172](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [types/src/controllers/data\_driver.ts:172](https://github.com/rebas
 
 > `optional` **currentTime**: () => `unknown`
 
-Defined in: [types/src/controllers/data\_driver.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:168](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Get the object to generate the current time in the driver
 
@@ -56,7 +56,7 @@ Get the object to generate the current time in the driver
 
 > `optional` **delegateToCMSModel**: (`data`) => `unknown`
 
-Defined in: [types/src/controllers/data\_driver.ts:170](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:170](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [types/src/controllers/data\_driver.ts:170](https://github.com/rebas
 
 > `optional` **initialised**: `boolean`
 
-Defined in: [types/src/controllers/data\_driver.ts:92](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:92](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 If the driver has been initialised
 
@@ -84,7 +84,7 @@ If the driver has been initialised
 
 > `optional` **initTextSearch**: (`props`) => `Promise`\<`boolean`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:174](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:174](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 #### Parameters
 
@@ -120,7 +120,7 @@ Defined in: [types/src/controllers/data\_driver.ts:174](https://github.com/rebas
 
 > `optional` **key**: `string`
 
-Defined in: [types/src/controllers/data\_driver.ts:87](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:87](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Key that identifies this driver
 
@@ -130,7 +130,7 @@ Key that identifies this driver
 
 > `optional` **needsInitTextSearch**: `boolean`
 
-Defined in: [types/src/controllers/data\_driver.ts:215](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:215](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Flag to indicate if the driver has requested the initialization of the text search index
 
@@ -140,7 +140,7 @@ Flag to indicate if the driver has requested the initialization of the text sear
 
 > **checkUniqueField**(`path`, `name`, `value`, `entityId?`, `collection?`): `Promise`\<`boolean`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:144](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:144](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Check if the given property is unique in the given collection
 
@@ -182,7 +182,7 @@ of the property
 
 > `optional` **countEntities**\<`M`\>(`props`): `Promise`\<`number`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:155](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:155](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Count the number of entities in a collection
 
@@ -208,7 +208,7 @@ Count the number of entities in a collection
 
 > **deleteEntity**\<`M`\>(`props`): `Promise`\<`void`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:133](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:133](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Delete an entity
 
@@ -236,7 +236,7 @@ was the whole deletion flow successful
 
 > `optional` **executeSql**(`sql`, `options?`): `Promise`\<`Record`\<`string`, `unknown`\>[]\>
 
-Defined in: [types/src/controllers/data\_driver.ts:185](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:185](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Execute raw SQL (if supported by the driver)
 
@@ -266,7 +266,7 @@ Execute raw SQL (if supported by the driver)
 
 > `optional` **fetchAvailableDatabases**(): `Promise`\<`string`[]\>
 
-Defined in: [types/src/controllers/data\_driver.ts:190](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:190](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Fetch the available databases (if supported by the driver)
 
@@ -280,7 +280,7 @@ Fetch the available databases (if supported by the driver)
 
 > `optional` **fetchAvailableRoles**(): `Promise`\<`string`[]\>
 
-Defined in: [types/src/controllers/data\_driver.ts:195](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:195](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Fetch the available roles (if supported by the driver)
 
@@ -294,7 +294,7 @@ Fetch the available roles (if supported by the driver)
 
 > **fetchCollection**\<`M`\>(`props`): `Promise`\<[`Entity`](Entity)\<`M`\>[]\>
 
-Defined in: [types/src/controllers/data\_driver.ts:99](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:99](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Fetch data from a collection
 
@@ -322,7 +322,7 @@ Promise of entities
 
 > `optional` **fetchCurrentDatabase**(): `Promise`\<`string` \| `undefined`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:200](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:200](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Fetch the current database name (if supported by the driver)
 
@@ -336,7 +336,7 @@ Fetch the current database name (if supported by the driver)
 
 > **fetchEntity**\<`M`\>(`props`): `Promise`\<[`Entity`](Entity)\<`M`\> \| `undefined`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:113](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:113](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Retrieve an entity given a path and a collection
 
@@ -362,7 +362,7 @@ Retrieve an entity given a path and a collection
 
 > `optional` **fetchTableColumns**(`tableName`): `Promise`\<[`TableColumnInfo`](TableColumnInfo)[]\>
 
-Defined in: [types/src/controllers/data\_driver.ts:210](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:210](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Fetch column metadata for a given table (if supported)
 
@@ -382,7 +382,7 @@ Fetch column metadata for a given table (if supported)
 
 > `optional` **fetchUnmappedTables**(`mappedPaths?`): `Promise`\<`string`[]\>
 
-Defined in: [types/src/controllers/data\_driver.ts:205](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:205](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Fetch database tables not yet mapped to a collection (if supported)
 
@@ -402,7 +402,7 @@ Fetch database tables not yet mapped to a collection (if supported)
 
 > `optional` **isFilterCombinationValid**(`props`): `boolean`
 
-Defined in: [types/src/controllers/data\_driver.ts:161](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:161](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Check if the given filter combination is valid
 
@@ -422,7 +422,7 @@ Check if the given filter combination is valid
 
 > `optional` **listenCollection**\<`M`\>(`props`): () => `void`
 
-Defined in: [types/src/controllers/data\_driver.ts:107](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:107](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Listen to a collection in a given path. If you don't implement this method
 `fetchCollection` will be used instead, with no real time updates.
@@ -455,7 +455,7 @@ Function to cancel subscription
 
 > `optional` **listenEntity**\<`M`\>(`props`): () => `void`
 
-Defined in: [types/src/controllers/data\_driver.ts:120](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:120](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Get realtime updates on one entity.
 
@@ -487,7 +487,7 @@ Function to cancel subscription
 
 > **saveEntity**\<`M`\>(`props`): `Promise`\<[`Entity`](Entity)\<`M`\>\>
 
-Defined in: [types/src/controllers/data\_driver.ts:126](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:126](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 Save entity to the specified path
 

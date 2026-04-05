@@ -6,7 +6,7 @@ Object.assign(global, { TextDecoder, TextEncoder });
 
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { useBuildNavigationStateController } from "../../src/hooks/navigation/useBuildNavigationStateController";
-import { AuthController, CollectionRegistryController, DataDriver, EntityCollection } from "@rebasepro/types";
+import { AuthController, CMSUrlController, CollectionRegistryController, DataDriver, EntityCollection } from "@rebasepro/types";
 import { CollectionRegistry } from "@rebasepro/common";
 import { jest } from "@jest/globals";
 
@@ -17,18 +17,18 @@ describe("useBuildNavigationStateController", () => {
     const mockCollectionRegistry = new CollectionRegistry();
     jest.spyOn(mockCollectionRegistry, "registerMultiple").mockReturnValue(true);
 
-    const mockCollectionRegistryController: CollectionRegistryController<any> & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> } = {
+    const mockCollectionRegistryController = {
         collectionRegistryRef: { current: mockCollectionRegistry },
         getCollection: jest.fn(),
         getCollections: jest.fn(),
-    } as any;
+    } as Partial<CollectionRegistryController> as CollectionRegistryController & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> };
 
-    const mockCmsUrlController: any = {
+    const mockCmsUrlController = {
         buildUrlCollectionPath: (path: string) => `/c/${path}`,
         buildCMSUrlPath: (path: string) => `/${path}`,
         basePath: "/",
         baseCollectionPath: "/c",
-    };
+    } as Partial<CMSUrlController> as CMSUrlController;
 
     it("should aggregate loading states from collections and views", async () => {
         let authLoading = true;
@@ -51,7 +51,7 @@ describe("useBuildNavigationStateController", () => {
 
         // Turn off auth loading
         authLoading = false;
-        (mockAuthController as any).user = { uid: "test" };
+        (mockAuthController as { user: { uid: string } | null }).user = { uid: "test" };
 
         rerender();
 
@@ -88,7 +88,7 @@ describe("useBuildNavigationStateController", () => {
         expect(typeof result.current.refreshNavigation).toBe("function");
 
         // This is mostly a sanity check that the refresh propagates without errors
-        let refreshPromise: any;
+        let refreshPromise: unknown;
         act(() => {
             refreshPromise = result.current.refreshNavigation();
         });

@@ -13,7 +13,7 @@ title: "sortProperties"
 
 > **sortProperties**\<`M`\>(`properties`, `propertiesOrder?`): [`Properties`](../type-aliases/Properties)
 
-Defined in: [common/src/util/collections.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/collections.ts)
+Defined in: [common/src/util/collections.ts:10](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/collections.ts)
 
 ## Type Parameters
 

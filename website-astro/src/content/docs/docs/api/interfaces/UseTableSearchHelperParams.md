@@ -11,7 +11,7 @@ title: "UseTableSearchHelperParams"
 
 # Interface: UseTableSearchHelperParams\<M\>
 
-Defined in: [core/src/components/common/useTableSearchHelper.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
+Defined in: [core/src/components/common/useTableSearchHelper.ts:6](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [core/src/components/common/useTableSearchHelper.ts:6](https://githu
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [core/src/components/common/useTableSearchHelper.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
+Defined in: [core/src/components/common/useTableSearchHelper.ts:7](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [core/src/components/common/useTableSearchHelper.ts:7](https://githu
 
 > `optional` **parentCollectionIds**: `string`[]
 
-Defined in: [core/src/components/common/useTableSearchHelper.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
+Defined in: [core/src/components/common/useTableSearchHelper.ts:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
 
 ***
 
@@ -41,4 +41,4 @@ Defined in: [core/src/components/common/useTableSearchHelper.ts:9](https://githu
 
 > **path**: `string`
 
-Defined in: [core/src/components/common/useTableSearchHelper.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
+Defined in: [core/src/components/common/useTableSearchHelper.ts:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)

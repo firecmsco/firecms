@@ -13,7 +13,7 @@ title: "useRelationSelector"
 
 > **useRelationSelector**\<`M`\>(`__namedParameters`): [`RelationSelectorController`](../interfaces/RelationSelectorController)
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:52](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:52](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 Hook to manage relation selection with data fetching from Rebase data source
 

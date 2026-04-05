@@ -11,7 +11,7 @@ title: "DialogsController"
 
 # Interface: DialogsController
 
-Defined in: [types/src/controllers/dialogs\_controller.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/dialogs_controller.tsx)
+Defined in: [types/src/controllers/dialogs\_controller.tsx:7](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/dialogs_controller.tsx)
 
 Controller to open the side dialog
 
@@ -21,7 +21,7 @@ Controller to open the side dialog
 
 > **close**: () => `void`
 
-Defined in: [types/src/controllers/dialogs\_controller.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/dialogs_controller.tsx)
+Defined in: [types/src/controllers/dialogs\_controller.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/dialogs_controller.tsx)
 
 Close the last dialog
 
@@ -35,7 +35,7 @@ Close the last dialog
 
 > **open**: \<`T`\>(`props`) => `object`
 
-Defined in: [types/src/controllers/dialogs\_controller.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/dialogs_controller.tsx)
+Defined in: [types/src/controllers/dialogs\_controller.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/dialogs_controller.tsx)
 
 Open a dialog
 

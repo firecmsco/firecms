@@ -11,7 +11,7 @@ title: "Relation"
 
 # Interface: Relation
 
-Defined in: [types/src/types/relations.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:12](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 Extended relation that combines base relation with Rebase UI config
 
@@ -21,7 +21,7 @@ Extended relation that combines base relation with Rebase UI config
 
 > **cardinality**: `"one"` \| `"many"`
 
-Defined in: [types/src/types/relations.ts:28](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:28](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 The nature of the relationship, determining if one or many records are returned.
 
@@ -31,7 +31,7 @@ The nature of the relationship, determining if one or many records are returned.
 
 > `optional` **direction**: `"owning"` \| `"inverse"`
 
-Defined in: [types/src/types/relations.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:36](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 Which side owns the persistence for this relationship.
 - "owning": The foreign key (for one-to-one/many-to-one) or the junction table (for many-to-many) is managed by this collection.
@@ -44,7 +44,7 @@ Defaults to "owning".
 
 > `optional` **foreignKeyOnTarget**: `string`
 
-Defined in: [types/src/types/relations.ts:57](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:57](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 Column on the TARGET table that stores the foreign key to this entity.
 Required when `direction` is "inverse".
@@ -61,7 +61,7 @@ Required when `direction` is "inverse".
 
 > `optional` **inverseRelationName**: `string`
 
-Defined in: [types/src/types/relations.ts:43](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:43](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 The name of the inverse relation.
 This is only needed when the inverse relation is not the same as the relation name.
@@ -73,7 +73,7 @@ For example, if the relation name is "posts", the inverse relation name might be
 
 > `optional` **joinPath**: [`JoinStep`](JoinStep)[]
 
-Defined in: [types/src/types/relations.ts:274](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:274](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 An explicit, ordered array of JOINs to perform to get from the source
 to the target. Used for multi-hop relations, composite keys, or when you need
@@ -232,7 +232,7 @@ over how tables are joined together.
 
 > `optional` **localKey**: `string`
 
-Defined in: [types/src/types/relations.ts:50](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:50](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 Column on THIS table that stores the foreign key to the target.
 Required when `direction` is "owning" and `cardinality` is "one".
@@ -249,7 +249,7 @@ Required when `direction` is "owning" and `cardinality` is "one".
 
 > `optional` **onDelete**: [`OnAction`](../type-aliases/OnAction)
 
-Defined in: [types/src/types/relations.ts:283](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:283](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 Action to perform on delete.
 
@@ -259,7 +259,7 @@ Action to perform on delete.
 
 > `optional` **onUpdate**: [`OnAction`](../type-aliases/OnAction)
 
-Defined in: [types/src/types/relations.ts:279](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:279](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 Action to perform on update.
 
@@ -269,7 +269,7 @@ Action to perform on update.
 
 > `optional` **overrides**: `Partial`\<[`EntityCollection`](EntityCollection)\<`any`, `any`\>\>
 
-Defined in: [types/src/types/relations.ts:285](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:285](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 ***
 
@@ -277,7 +277,7 @@ Defined in: [types/src/types/relations.ts:285](https://github.com/rebaseco/rebas
 
 > `optional` **relationName**: `string`
 
-Defined in: [types/src/types/relations.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:18](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 The application-level name for this relationship.
 If not provided, it will be inferred from the target collection path.
@@ -294,7 +294,7 @@ If not provided, it will be inferred from the target collection path.
 
 > **target**: () => [`EntityCollection`](EntityCollection)
 
-Defined in: [types/src/types/relations.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:23](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 The final collection you want to retrieve records from.
 
@@ -308,7 +308,7 @@ The final collection you want to retrieve records from.
 
 > `optional` **through**: `object`
 
-Defined in: [types/src/types/relations.ts:113](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:113](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 Defines the junction table for a many-to-many relationship.
 Required when `cardinality` is "many" and `direction` is "owning".
@@ -381,7 +381,7 @@ Required when `cardinality` is "many" and `direction` is "owning".
 
 > `optional` **validation**: `object`
 
-Defined in: [types/src/types/relations.ts:287](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:287](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 #### required?
 

@@ -11,7 +11,7 @@ title: "RelationSelectorController"
 
 # Interface: RelationSelectorController
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:37](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [core/src/hooks/data/useRelationSelector.tsx:37](https://github.com/
 
 > **entityToRelationItem**: (`entity`, `relation`) => `RelationItem`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:44](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 #### Parameters
 
@@ -41,7 +41,7 @@ Defined in: [core/src/hooks/data/useRelationSelector.tsx:44](https://github.com/
 
 > **error**: `Error` \| `undefined`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:40](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [core/src/hooks/data/useRelationSelector.tsx:40](https://github.com/
 
 > **hasMore**: `boolean`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:43](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [core/src/hooks/data/useRelationSelector.tsx:43](https://github.com/
 
 > **isLoading**: `boolean`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:39](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 ***
 
@@ -65,7 +65,7 @@ Defined in: [core/src/hooks/data/useRelationSelector.tsx:39](https://github.com/
 
 > **items**: `RelationItem`[]
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:38](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 ***
 
@@ -73,7 +73,7 @@ Defined in: [core/src/hooks/data/useRelationSelector.tsx:38](https://github.com/
 
 > **loadMore**: () => `void`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:42](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 #### Returns
 
@@ -85,7 +85,7 @@ Defined in: [core/src/hooks/data/useRelationSelector.tsx:42](https://github.com/
 
 > **search**: (`searchString`) => `void`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:41](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 #### Parameters
 

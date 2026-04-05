@@ -13,7 +13,7 @@ title: "UsersView"
 
 > **UsersView**(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/admin/UsersView.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/admin/UsersView.tsx)
+Defined in: [core/src/components/admin/UsersView.tsx:34](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/admin/UsersView.tsx)
 
 ## Parameters
 

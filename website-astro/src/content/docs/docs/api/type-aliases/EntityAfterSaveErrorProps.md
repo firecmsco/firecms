@@ -13,7 +13,7 @@ title: "EntityAfterSaveErrorProps"
 
 > **EntityAfterSaveErrorProps**\<`M`, `USER`\> = `Omit`\<[`EntityAfterSaveProps`](../interfaces/EntityAfterSaveProps)\<`M`, `USER`\>, `"entityId"`\> & `object`
 
-Defined in: [types/src/types/entity\_callbacks.ts:105](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
+Defined in: [types/src/types/entity\_callbacks.ts:105](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_callbacks.ts)
 
 Parameters passed to hooks before an entity is saved
 

@@ -13,7 +13,7 @@ title: "JSONContent"
 
 > **JSONContent** = `object`
 
-Defined in: [core/src/editor/components/index.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/components/index.ts)
+Defined in: [core/src/editor/components/index.ts:7](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/components/index.ts)
 
 ## Indexable
 
@@ -25,7 +25,7 @@ Defined in: [core/src/editor/components/index.ts:7](https://github.com/rebaseco/
 
 > `optional` **attrs**: `Record`\<`string`, `any`\>
 
-Defined in: [core/src/editor/components/index.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/components/index.ts)
+Defined in: [core/src/editor/components/index.ts:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/components/index.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [core/src/editor/components/index.ts:9](https://github.com/rebaseco/
 
 > `optional` **content**: `JSONContent`[]
 
-Defined in: [core/src/editor/components/index.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/components/index.ts)
+Defined in: [core/src/editor/components/index.ts:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/components/index.ts)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [core/src/editor/components/index.ts:10](https://github.com/rebaseco
 
 > `optional` **marks**: `object`[]
 
-Defined in: [core/src/editor/components/index.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/components/index.ts)
+Defined in: [core/src/editor/components/index.ts:11](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/components/index.ts)
 
 #### attrs?
 
@@ -57,7 +57,7 @@ Defined in: [core/src/editor/components/index.ts:11](https://github.com/rebaseco
 
 > `optional` **text**: `string`
 
-Defined in: [core/src/editor/components/index.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/components/index.ts)
+Defined in: [core/src/editor/components/index.ts:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/components/index.ts)
 
 ***
 
@@ -65,4 +65,4 @@ Defined in: [core/src/editor/components/index.ts:12](https://github.com/rebaseco
 
 > `optional` **type**: `string`
 
-Defined in: [core/src/editor/components/index.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/components/index.ts)
+Defined in: [core/src/editor/components/index.ts:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/components/index.ts)

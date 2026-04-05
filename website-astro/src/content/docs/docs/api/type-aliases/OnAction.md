@@ -13,4 +13,4 @@ title: "OnAction"
 
 > **OnAction** = `"cascade"` \| `"restrict"` \| `"no action"` \| `"set null"` \| `"set default"`
 
-Defined in: [types/src/types/relations.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:6](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)

@@ -336,7 +336,8 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
                 ...(schema.relations || {})
             };
             const { drizzle: createDrizzle } = await import("drizzle-orm/node-postgres");
-            const schemaAwareDb = createDrizzle((db as any).$client ?? db, { schema: mergedSchema });
+            const rawClient = ("$client" in db ? (db as Record<string, unknown>).$client : db) as import("pg").Pool;
+            const schemaAwareDb = createDrizzle(rawClient, { schema: mergedSchema });
 
             // Create realtime service and driver delegate, using schema-aware db
             const realtimeService = new RealtimeService(schemaAwareDb, collectionRegistry);

@@ -13,7 +13,7 @@ title: "UrlComponentPreview"
 
 > **UrlComponentPreview**(`__namedParameters`): `ReactElement`
 
-Defined in: [core/src/preview/components/UrlComponentPreview.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/UrlComponentPreview.tsx)
+Defined in: [core/src/preview/components/UrlComponentPreview.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/components/UrlComponentPreview.tsx)
 
 ## Parameters
 

@@ -13,7 +13,7 @@ title: "UseResolvedCollectionsResult"
 
 > **UseResolvedCollectionsResult** = `object`
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:26](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:26](https://git
 
 > **collections**: [`EntityCollection`](../interfaces/EntityCollection)[]
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:27](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:27](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:27](https://git
 
 > **error**: `Error` \| `undefined`
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:29](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:29](https://git
 
 > **loading**: `boolean`
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:28](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:28](https://git
 
 > **refresh**: () => `void`
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:30](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 #### Returns
 

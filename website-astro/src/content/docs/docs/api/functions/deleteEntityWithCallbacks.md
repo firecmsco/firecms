@@ -13,7 +13,7 @@ title: "deleteEntityWithCallbacks"
 
 > **deleteEntityWithCallbacks**\<`M`, `USER`\>(`data`): `Promise`\<`boolean`\>
 
-Defined in: [core/src/hooks/data/delete.ts:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/delete.ts)
+Defined in: [core/src/hooks/data/delete.ts:38](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/delete.ts)
 
 This function is in charge of deleting an entity.
 It will run all the delete callbacks specified in the collection.

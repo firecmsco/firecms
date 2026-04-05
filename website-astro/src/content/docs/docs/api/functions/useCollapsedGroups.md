@@ -13,7 +13,7 @@ title: "useCollapsedGroups"
 
 > **useCollapsedGroups**(`groupNames`, `namespace`): `object`
 
-Defined in: [core/src/hooks/useCollapsedGroups.ts:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useCollapsedGroups.ts)
+Defined in: [core/src/hooks/useCollapsedGroups.ts:13](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useCollapsedGroups.ts)
 
 Custom hook for managing collapsed/expanded state of navigation groups
 with localStorage persistence. Automatically cleans up stale group entries

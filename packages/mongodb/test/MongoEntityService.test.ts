@@ -149,7 +149,7 @@ describe("MongoEntityService", () => {
         it("should handle string IDs", async () => {
             // Insert with a custom string ID (non-ObjectId)
             await db.collection("items").insertOne({
-                _id: "custom-string-id" as any,
+                _id: "custom-string-id" as unknown as import("mongodb").ObjectId,
                 name: "Custom ID Item"
             });
 

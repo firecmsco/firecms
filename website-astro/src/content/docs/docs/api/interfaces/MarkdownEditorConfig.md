@@ -11,7 +11,7 @@ title: "MarkdownEditorConfig"
 
 # Interface: MarkdownEditorConfig
 
-Defined in: [core/src/editor/editor.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
+Defined in: [core/src/editor/editor.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [core/src/editor/editor.tsx:23](https://github.com/rebaseco/rebase/b
 
 > `optional` **html**: `boolean`
 
-Defined in: [core/src/editor/editor.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
+Defined in: [core/src/editor/editor.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [core/src/editor/editor.tsx:24](https://github.com/rebaseco/rebase/b
 
 > `optional` **transformPastedText**: `boolean`
 
-Defined in: [core/src/editor/editor.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
+Defined in: [core/src/editor/editor.tsx:25](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/editor.tsx)

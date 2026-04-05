@@ -13,7 +13,7 @@ title: "useBuildAdminModeController"
 
 > **useBuildAdminModeController**(): [`AdminModeController`](../interfaces/AdminModeController)
 
-Defined in: [core/src/hooks/useBuildAdminModeController.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useBuildAdminModeController.tsx)
+Defined in: [core/src/hooks/useBuildAdminModeController.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useBuildAdminModeController.tsx)
 
 Use this hook to build an admin mode controller that determines
 whether the UI shows Developer or Editor tools.

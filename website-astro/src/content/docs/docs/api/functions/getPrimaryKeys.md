@@ -13,7 +13,7 @@ title: "getPrimaryKeys"
 
 > **getPrimaryKeys**\<`M`\>(`collection`): `Extract`\<keyof `M`, `string`\>[]
 
-Defined in: [common/src/util/collections.ts:113](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/collections.ts)
+Defined in: [common/src/util/collections.ts:113](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/collections.ts)
 
 Returns the primary keys for an entity collection by inspecting the properties
 and finding any properties with `isId`.

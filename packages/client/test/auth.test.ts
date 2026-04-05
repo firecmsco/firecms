@@ -2,10 +2,20 @@ import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals
 import { createAuth, createMemoryStorage, RebaseSession, RebaseUser } from "../src/auth";
 import { Transport } from "../src/transport";
 
+/** Minimal mock Response shape used by auth methods that call fetch directly. */
+interface MockResponse {
+    ok: boolean;
+    status?: number;
+    statusText?: string;
+    json: () => Promise<Record<string, unknown>>;
+}
+
+type MockFetch = jest.Mock<(input: RequestInfo | URL, init?: RequestInit) => Promise<MockResponse>>;
+
 describe("createAuth", () => {
-    let mockRequest: jest.Mock<any>;
+    let mockRequest: jest.Mock<Transport["request"]>;
     let transport: Transport;
-    let mockFetch: jest.Mock<any>;
+    let mockFetch: MockFetch;
 
     const mockUser: RebaseUser = {
         uid: "usr_1",
@@ -13,6 +23,8 @@ describe("createAuth", () => {
         displayName: "Test User",
         roles: ["user"],
         photoURL: null,
+        providerId: "local",
+        isAnonymous: false,
     };
 
     const mockSession: RebaseSession = {
@@ -24,15 +36,18 @@ describe("createAuth", () => {
 
     beforeEach(() => {
         jest.useFakeTimers();
-        mockRequest = jest.fn() as jest.Mock<any>;
-        mockFetch = jest.fn() as jest.Mock<any>;
+        mockRequest = jest.fn() as jest.Mock<Transport["request"]>;
+        mockFetch = jest.fn() as MockFetch;
         transport = {
             request: mockRequest,
             baseUrl: "http://localhost",
             apiPath: "/api/v1",
-            fetchFn: mockFetch,
-            setToken: jest.fn()
-        } as unknown as Transport;
+            fetchFn: mockFetch as unknown as typeof globalThis.fetch,
+            setToken: jest.fn(),
+            setAuthTokenGetter: jest.fn(),
+            getHeaders: jest.fn().mockReturnValue({}),
+            resolveToken: jest.fn().mockResolvedValue(null)
+        } as Transport;
     });
 
     afterEach(() => {
@@ -56,7 +71,7 @@ describe("createAuth", () => {
                 },
                 user: mockUser
             })
-        } as any);
+        });
         
         const storage = createMemoryStorage();
         const auth = createAuth(transport, { storage });
@@ -85,7 +100,7 @@ describe("createAuth", () => {
                 },
                 user: mockUser
             })
-        } as any);
+        });
         
         const auth = createAuth(transport, { storage: createMemoryStorage() });
 
@@ -110,7 +125,7 @@ describe("createAuth", () => {
         const listener = jest.fn();
         auth.onAuthStateChange(listener);
 
-        mockFetch.mockResolvedValueOnce({ ok: true, json: async () => ({}) } as any);
+        mockFetch.mockResolvedValueOnce({ ok: true, json: async () => ({}) });
 
         await auth.signOut();
 
@@ -145,7 +160,7 @@ describe("createAuth", () => {
                         accessTokenExpiresAt: newSession.expiresAt
                     }
                 })
-            } as any);
+            });
 
             const result = await authWithSession.refreshSession();
 
@@ -162,7 +177,7 @@ describe("createAuth", () => {
     describe("User Management Methods", () => {
         it("getSessions calls /auth/sessions", async () => {
             const auth = createAuth(transport, { storage: createMemoryStorage() });
-            mockRequest.mockResolvedValueOnce({ sessions: [] } as any);
+            mockRequest.mockResolvedValueOnce({ sessions: [] });
 
             const sessions = await auth.getSessions();
             expect(sessions).toEqual([]);
@@ -171,7 +186,7 @@ describe("createAuth", () => {
 
         it("revokeSession calls DELETE /auth/sessions/:id", async () => {
             const auth = createAuth(transport, { storage: createMemoryStorage() });
-            mockRequest.mockResolvedValueOnce({ success: true } as any);
+            mockRequest.mockResolvedValueOnce({ success: true });
 
             await auth.revokeSession("sess_1");
             expect(mockRequest).toHaveBeenCalledWith("/auth/sessions/sess_1", { method: "DELETE" });

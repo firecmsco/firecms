@@ -11,7 +11,7 @@ title: "SecurityRule"
 
 # Interface: SecurityRule
 
-Defined in: [types/src/types/collections.ts:795](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:795](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Flexible Row Level Security rule for a collection.
 
@@ -36,7 +36,7 @@ Restrictive rules are AND'd (all must pass). This mirrors Supabase behavior.
 
 > `optional` **access**: `"public"`
 
-Defined in: [types/src/types/collections.ts:882](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:882](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 **Shortcut.** Grant unrestricted row access (no row filtering) for this operation.
 Generates `USING (true)`.
@@ -63,7 +63,7 @@ Cannot be combined with `using` / `withCheck` / `ownerField`.
 
 > `optional` **mode**: `"permissive"` \| `"restrictive"`
 
-Defined in: [types/src/types/collections.ts:849](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:849](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Whether this policy is `"permissive"` (default) or `"restrictive"`.
 
@@ -86,7 +86,7 @@ This is the same model as PostgreSQL / Supabase.
 
 > `optional` **name**: `string`
 
-Defined in: [types/src/types/collections.ts:804](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:804](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Optional human-readable name for the policy.
 If not provided, one will be auto-generated from the table name and operation.
@@ -101,7 +101,7 @@ operation name appended, e.g. `"owner_access_select"`, `"owner_access_update"`.
 
 > `optional` **operation**: [`SecurityOperation`](../type-aliases/SecurityOperation)
 
-Defined in: [types/src/types/collections.ts:815](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:815](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Which SQL operation this policy applies to.
 Use this when the policy targets a single operation or all operations.
@@ -121,7 +121,7 @@ If neither is specified, defaults to `"all"`.
 
 > `optional` **operations**: [`SecurityOperation`](../type-aliases/SecurityOperation)[]
 
-Defined in: [types/src/types/collections.ts:835](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:835](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Array of SQL operations this policy applies to.
 The compiler will generate one PostgreSQL policy per operation, sharing
@@ -150,7 +150,7 @@ Takes precedence over `operation` (singular) if both are specified.
 
 > `optional` **ownerField**: `string`
 
-Defined in: [types/src/types/collections.ts:863](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:863](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 **Shortcut.** The property (column) that stores the owner's user ID.
 Generates a USING/WITH CHECK clause like:
@@ -170,7 +170,7 @@ Cannot be combined with `using` / `withCheck` / `access`.
 
 > `optional` **pgRoles**: `string`[]
 
-Defined in: [types/src/types/collections.ts:1006](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:1006](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 **Advanced.** Native PostgreSQL database roles the policy applies to.
 
@@ -205,7 +205,7 @@ Use this if you have dedicated PostgreSQL roles (e.g. `app_read`,
 
 > `optional` **roles**: `string`[]
 
-Defined in: [types/src/types/collections.ts:906](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:906](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 **Shortcut.** Restrict this rule to users that have one of these
 application-level roles.
@@ -238,7 +238,7 @@ When combined, the role check is AND'd with the other condition.
 
 > `optional` **using**: `string`
 
-Defined in: [types/src/types/collections.ts:939](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:939](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Raw SQL expression for the `USING` clause.
 This controls which *existing* rows are visible / can be modified / deleted.
@@ -279,7 +279,7 @@ Cannot be combined with `ownerField` or `access`.
 
 > `optional` **withCheck**: `string`
 
-Defined in: [types/src/types/collections.ts:981](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:981](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Raw SQL expression for the `WITH CHECK` clause.
 This controls which *new/updated* row values are allowed.

@@ -3,7 +3,7 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { EntityCollection } from "@rebasepro/types";
 import { collectionRegistry } from "../src/collections/registry";
 
-// --- Mock Drizzle ORM table definitions (using 'as any' to avoid TS-specific syntax errors in a misconfigured Jest environment) ---
+// --- Mock Drizzle ORM table definitions ---
 const mockAuthorsTable = {
     id: { name: "id" },
     name: { name: "name" },
@@ -122,7 +122,7 @@ authorsCollection = {
 
 describe("EntityService", () => {
     let entityService: EntityService;
-    let db: jest.Mocked<NodePgDatabase<any>>;
+    let db: jest.Mocked<NodePgDatabase>;
 
     beforeEach(() => {
         jest.spyOn(collectionRegistry, "getCollectionByPath").mockImplementation(path => {
@@ -133,11 +133,11 @@ describe("EntityService", () => {
             return undefined;
         });
         jest.spyOn(collectionRegistry, "getTable").mockImplementation(dbPath => {
-            if (dbPath === "authors") return mockAuthorsTable as any;
-            if (dbPath === "posts") return mockPostsTable as any;
-            if (dbPath === "tags") return mockTagsTable as any;
-            if (dbPath === "posts_tags") return mockPostsTagsTable as any;
-            if (dbPath === "project_users") return mockProjectUsersTable as any;
+            if (dbPath === "authors") return mockAuthorsTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+            if (dbPath === "posts") return mockPostsTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+            if (dbPath === "tags") return mockTagsTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+            if (dbPath === "posts_tags") return mockPostsTagsTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+            if (dbPath === "project_users") return mockProjectUsersTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
             return undefined;
         });
         jest.spyOn(collectionRegistry, "getCollections").mockReturnValue([authorsCollection, postsCollection, tagsCollection, projectUsersCollection]);
@@ -157,7 +157,7 @@ describe("EntityService", () => {
             set: jest.fn().mockReturnThis(),
             delete: jest.fn().mockReturnThis(),
             transaction: jest.fn((callback) => callback(db)),
-        } as any;
+        } as unknown as jest.Mocked<NodePgDatabase>;
 
         entityService = new EntityService(db);
     });
@@ -189,7 +189,7 @@ describe("EntityService", () => {
                 id: "user1",
                 email: "test@test.com"
             };
-            db.limit.mockResolvedValue([mockUser] as any);
+            db.limit.mockResolvedValue([mockUser] as unknown as never);
 
             const entity = await entityService.fetchEntity("project_users", "proj1:::user1");
 
@@ -260,10 +260,10 @@ describe("EntityService", () => {
             // Intercept update chain
             db.update.mockReturnValue({
                 set: mockSet
-            } as any);
+            } as unknown as ReturnType<typeof db.update>);
 
             // Mock fetch back (the final step of saveEntity)
-            db.limit.mockResolvedValue([returnedSaved] as any);
+            db.limit.mockResolvedValue([returnedSaved] as unknown as never);
 
             const savedEntity = await entityService.saveEntity("project_users", valuesToSave, "proj1:::user1");
 
@@ -566,13 +566,13 @@ describe("EntityService - Comprehensive Tests", () => {
         });
 
         jest.spyOn(collectionRegistry, "getTable").mockImplementation(dbPath => {
-            if (dbPath === "users") return mockUsersTable as any;
-            if (dbPath === "companies") return mockCompaniesTable as any;
-            if (dbPath === "projects") return mockProjectsTable as any;
-            if (dbPath === "tasks") return mockTasksTable as any;
-            if (dbPath === "tags") return mockTagsTable as any;
-            if (dbPath === "categories") return mockCategoriesTable as any;
-            if (dbPath === "project_tags") return mockProjectTagsTable as any;
+            if (dbPath === "users") return mockUsersTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+            if (dbPath === "companies") return mockCompaniesTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+            if (dbPath === "projects") return mockProjectsTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+            if (dbPath === "tasks") return mockTasksTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+            if (dbPath === "tags") return mockTagsTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+            if (dbPath === "categories") return mockCategoriesTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+            if (dbPath === "project_tags") return mockProjectTagsTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
             return undefined;
         });
 
@@ -591,10 +591,10 @@ describe("EntityService - Comprehensive Tests", () => {
             set: jest.fn().mockReturnThis(),
             delete: jest.fn().mockReturnThis(),
             transaction: jest.fn((callback) => callback(db)),
-        } as any;
+        } as unknown as jest.Mocked<NodePgDatabase>;
 
         // Add a then method to make the db object awaitable when the query chain ends
-        (db as any).then = jest.fn((resolve) => resolve([]));
+        (db as unknown as Record<string, jest.Mock>).then = jest.fn((resolve) => resolve([]));
 
         entityService = new EntityService(db);
     });
@@ -626,13 +626,13 @@ describe("EntityService - Comprehensive Tests", () => {
                     email: { name: "email" },
                     name: { name: "name" },
                     _def: { tableName: "users" }
-                } as any;
-                if (dbPath === "companies") return mockCompaniesTable as any;
-                if (dbPath === "projects") return mockProjectsTable as any;
-                if (dbPath === "tasks") return mockTasksTable as any;
-                if (dbPath === "tags") return mockTagsTable as any;
-                if (dbPath === "categories") return mockCategoriesTable as any;
-                if (dbPath === "project_tags") return mockProjectTagsTable as any;
+                } as unknown as ReturnType<typeof collectionRegistry.getTable>;
+                if (dbPath === "companies") return mockCompaniesTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+                if (dbPath === "projects") return mockProjectsTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+                if (dbPath === "tasks") return mockTasksTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+                if (dbPath === "tags") return mockTagsTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+                if (dbPath === "categories") return mockCategoriesTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
+                if (dbPath === "project_tags") return mockProjectTagsTable as unknown as ReturnType<typeof collectionRegistry.getTable>;
                 return undefined;
             });
 
@@ -712,7 +712,7 @@ describe("EntityService - Comprehensive Tests", () => {
                 { id: 2, title: "Project 2" }
             ];
             // Override the then method to return our mock data for this specific test
-            (db as any).then = jest.fn((resolve) => resolve(mockProjects));
+            (db as unknown as Record<string, jest.Mock>).then = jest.fn((resolve) => resolve(mockProjects));
 
             await entityService.fetchCollection("projects", {
                 limit: 10
@@ -866,7 +866,7 @@ describe("EntityService - Comprehensive Tests", () => {
                 { id: 1, title: "Searchable Project", description: "Test description" }
             ];
             // Override the then method to return our mock data for this specific test
-            (db as any).then = jest.fn((resolve) => resolve(mockResults));
+            (db as unknown as Record<string, jest.Mock>).then = jest.fn((resolve) => resolve(mockResults));
 
             const entities = await entityService.searchEntities("projects", "Searchable", {});
 
@@ -879,7 +879,7 @@ describe("EntityService - Comprehensive Tests", () => {
                 { id: 1, title: "Active Project", status: "active" }
             ];
             // Override the then method to return our mock data for this specific test
-            (db as any).then = jest.fn((resolve) => resolve(mockResults));
+            (db as unknown as Record<string, jest.Mock>).then = jest.fn((resolve) => resolve(mockResults));
 
             const entities = await entityService.searchEntities("projects", "Active", {
                 filter: { status: ["==", "active"] }

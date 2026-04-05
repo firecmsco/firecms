@@ -11,7 +11,7 @@ title: "StorageFieldItem"
 
 # Interface: StorageFieldItem
 
-Defined in: [core/src/util/useStorageUploadController.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
+Defined in: [core/src/util/useStorageUploadController.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
 
 Internal representation of an item in the storage
 It can have two states, having a storagePathOrDownloadUrl set,
@@ -24,7 +24,7 @@ Or have a pending file being uploaded.
 
 > `optional` **file**: `File`
 
-Defined in: [core/src/util/useStorageUploadController.tsx:27](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
+Defined in: [core/src/util/useStorageUploadController.tsx:27](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [core/src/util/useStorageUploadController.tsx:27](https://github.com
 
 > `optional` **fileName**: `string`
 
-Defined in: [core/src/util/useStorageUploadController.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
+Defined in: [core/src/util/useStorageUploadController.tsx:28](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [core/src/util/useStorageUploadController.tsx:28](https://github.com
 
 > **id**: `number`
 
-Defined in: [core/src/util/useStorageUploadController.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
+Defined in: [core/src/util/useStorageUploadController.tsx:25](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [core/src/util/useStorageUploadController.tsx:25](https://github.com
 
 > `optional` **metadata**: `any`
 
-Defined in: [core/src/util/useStorageUploadController.tsx:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
+Defined in: [core/src/util/useStorageUploadController.tsx:29](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [core/src/util/useStorageUploadController.tsx:29](https://github.com
 
 > **size**: [`PreviewSize`](../type-aliases/PreviewSize)
 
-Defined in: [core/src/util/useStorageUploadController.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
+Defined in: [core/src/util/useStorageUploadController.tsx:30](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
 
 ***
 
@@ -64,4 +64,4 @@ Defined in: [core/src/util/useStorageUploadController.tsx:30](https://github.com
 
 > `optional` **storagePathOrDownloadUrl**: `string`
 
-Defined in: [core/src/util/useStorageUploadController.tsx:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
+Defined in: [core/src/util/useStorageUploadController.tsx:26](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)

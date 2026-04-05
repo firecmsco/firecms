@@ -11,7 +11,7 @@ title: "UnsavedChangesDialogProps"
 
 # Interface: UnsavedChangesDialogProps
 
-Defined in: [core/src/components/UnsavedChangesDialog.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
+Defined in: [core/src/components/UnsavedChangesDialog.tsx:5](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [core/src/components/UnsavedChangesDialog.tsx:5](https://github.com/
 
 > `optional` **body**: `ReactNode`
 
-Defined in: [core/src/components/UnsavedChangesDialog.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
+Defined in: [core/src/components/UnsavedChangesDialog.tsx:7](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [core/src/components/UnsavedChangesDialog.tsx:7](https://github.com/
 
 > **handleCancel**: () => `void`
 
-Defined in: [core/src/components/UnsavedChangesDialog.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
+Defined in: [core/src/components/UnsavedChangesDialog.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
 
 #### Returns
 
@@ -39,7 +39,7 @@ Defined in: [core/src/components/UnsavedChangesDialog.tsx:10](https://github.com
 
 > **handleOk**: () => `void`
 
-Defined in: [core/src/components/UnsavedChangesDialog.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
+Defined in: [core/src/components/UnsavedChangesDialog.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
 
 #### Returns
 
@@ -51,7 +51,7 @@ Defined in: [core/src/components/UnsavedChangesDialog.tsx:9](https://github.com/
 
 > **open**: `boolean`
 
-Defined in: [core/src/components/UnsavedChangesDialog.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
+Defined in: [core/src/components/UnsavedChangesDialog.tsx:6](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
 
 ***
 
@@ -59,4 +59,4 @@ Defined in: [core/src/components/UnsavedChangesDialog.tsx:6](https://github.com/
 
 > `optional` **title**: `string`
 
-Defined in: [core/src/components/UnsavedChangesDialog.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
+Defined in: [core/src/components/UnsavedChangesDialog.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)

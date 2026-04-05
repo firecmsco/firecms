@@ -28,24 +28,16 @@ const description = "Join the waitlist for Rebase, the open-source Postgres CMS.
             </p>
             
             <div class="relative bg-surface-900/60 backdrop-blur-sm p-2 sm:p-3 rounded-2xl ring-1 ring-surface-800 shadow-2xl focus-within:ring-primary/50 transition-all mb-8 max-w-md mx-auto">
-                <form id="waitlist-form" onsubmit="
-                    event.preventDefault(); 
-                    document.getElementById('waitlist-form').classList.add('hidden'); 
-                    document.getElementById('success-message').classList.remove('hidden');
-                    // Send analytics event if needed
-                    if (typeof window.gtag === 'function') {
-                        window.gtag('event', 'generate_lead', {
-                            event_category: 'waitlist',
-                            currency: 'USD',
-                            value: 1
-                        });
-                    }
-                " class="flex flex-col sm:flex-row w-full items-center gap-3">
-                    <input type="email" required placeholder="Enter your work email" class="w-full flex-auto bg-surface-950/50 px-5 py-4 text-base text-white placeholder-surface-500 rounded-xl focus:outline-none border border-surface-700/50 focus:border-primary/50 focus:bg-black transition-all" />
+                <form id="waitlist-form" class="flex flex-col sm:flex-row w-full items-center gap-3">
+                    <input type="email" id="email-input" required placeholder="Enter your work email" class="w-full flex-auto bg-surface-950/50 px-5 py-4 text-base text-white placeholder-surface-500 rounded-xl focus:outline-none border border-surface-700/50 focus:border-primary/50 focus:bg-black transition-all" />
                     <button type="submit" class="w-full sm:w-auto flex-none rounded-xl bg-primary px-8 py-4 font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all btn-glow whitespace-nowrap text-base">
                         Request Access
                     </button>
                 </form>
+                
+                <div id="error-message" class="hidden absolute -bottom-8 left-0 right-0 text-center text-red-400 text-sm font-medium animate-in fade-in zoom-in duration-300">
+                    Something went wrong. Please try again.
+                </div>
                 
                 <div id="success-message" class="hidden p-8 text-center animate-in fade-in zoom-in duration-300">
                     <div class="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 ring-1 ring-green-500/40">
@@ -64,3 +56,51 @@ const description = "Join the waitlist for Rebase, the open-source Postgres CMS.
         </div>
     </main>
 </Layout>
+
+<script>
+    import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+    import { db } from "../utils/firebase";
+
+    document.addEventListener("astro:page-load", () => {
+        const form = document.getElementById("waitlist-form") as HTMLFormElement;
+        const successMsg = document.getElementById("success-message");
+        const errorMsg = document.getElementById("error-message");
+        const input = document.getElementById("email-input") as HTMLInputElement;
+
+        if (form && !form.dataset.initialized) {
+            form.dataset.initialized = 'true';
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                
+                const email = input.value;
+                if (!email) return;
+
+                try {
+                    const btn = form.querySelector("button");
+                    if (btn) btn.disabled = true;
+
+                    await addDoc(collection(db, "waitlist"), {
+                        email,
+                        createdAt: serverTimestamp()
+                    });
+
+                    form.classList.add("hidden");
+                    if (successMsg) successMsg.classList.remove("hidden");
+
+                    if (typeof window !== "undefined" && typeof (window as any).gtag === 'function') {
+                        (window as any).gtag('event', 'generate_lead', {
+                            event_category: 'waitlist',
+                            currency: 'USD',
+                            value: 1
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    const btn = form.querySelector("button");
+                    if (btn) btn.disabled = false;
+                    if (errorMsg) errorMsg.classList.remove("hidden");
+                }
+            });
+        }
+    });
+</script>

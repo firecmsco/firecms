@@ -11,7 +11,7 @@ title: "SideEntityController"
 
 # Interface: SideEntityController
 
-Defined in: [types/src/controllers/side\_entity\_controller.tsx:82](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/side_entity_controller.tsx)
+Defined in: [types/src/controllers/side\_entity\_controller.tsx:82](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/side_entity_controller.tsx)
 
 Controller to open the side dialog displaying entity forms
 
@@ -21,7 +21,7 @@ Controller to open the side dialog displaying entity forms
 
 > **close**: () => `void`
 
-Defined in: [types/src/controllers/side\_entity\_controller.tsx:86](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/side_entity_controller.tsx)
+Defined in: [types/src/controllers/side\_entity\_controller.tsx:86](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/side_entity_controller.tsx)
 
 Close the last panel
 
@@ -35,7 +35,7 @@ Close the last panel
 
 > **open**: \<`M`\>(`props`) => `void`
 
-Defined in: [types/src/controllers/side\_entity\_controller.tsx:97](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/side_entity_controller.tsx)
+Defined in: [types/src/controllers/side\_entity\_controller.tsx:97](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/side_entity_controller.tsx)
 
 Open a new entity sideDialog. By default, the collection and configuration
 of the view is fetched from the collections you have specified in the
@@ -66,7 +66,7 @@ to edit. You can set an entityId if you would like to edit and existing one
 
 > **replace**: \<`M`\>(`props`) => `void`
 
-Defined in: [types/src/controllers/side\_entity\_controller.tsx:103](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/side_entity_controller.tsx)
+Defined in: [types/src/controllers/side\_entity\_controller.tsx:103](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/side_entity_controller.tsx)
 
 Replace the last open entity panel with the given one.
 

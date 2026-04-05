@@ -13,7 +13,7 @@ title: "BackendFactory"
 
 > **BackendFactory**\<`TConfig`\> = (`config`) => [`BackendInstance`](../interfaces/BackendInstance)
 
-Defined in: [types/src/types/backend.ts:384](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:384](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Factory function type for creating backend instances
 

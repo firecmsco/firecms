@@ -13,7 +13,7 @@ title: "ReferenceWidgetProps"
 
 > **ReferenceWidgetProps**\<`M`\> = `object`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:9](https://github.com/rebas
 
 > `optional` **className**: `string`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:29](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:29](https://github.com/reba
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:22](https://github.com/reba
 
 > `optional` **forceFilter**: [`FilterValues`](FilterValues)\<`string`\>
 
-Defined in: [core/src/components/ReferenceWidget.tsx:27](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:27](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 Allow selection of entities that pass the given filter only.
 
@@ -53,7 +53,7 @@ Allow selection of entities that pass the given filter only.
 
 > `optional` **includeEntityLink**: `boolean`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:31](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:31](https://github.com/reba
 
 > `optional` **includeId**: `boolean`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:30](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:30](https://github.com/reba
 
 > `optional` **multiselect**: `boolean`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:11](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:11](https://github.com/reba
 
 > `optional` **name**: `string`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 ***
 
@@ -85,7 +85,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:10](https://github.com/reba
 
 > `optional` **onMultipleReferenceSelected**: (`params`) => `void`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:17](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 #### Parameters
 
@@ -109,7 +109,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:17](https://github.com/reba
 
 > `optional` **onReferenceSelected**: (`params`) => `void`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:13](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 #### Parameters
 
@@ -133,7 +133,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:13](https://github.com/reba
 
 > **path**: `string`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 ***
 
@@ -141,7 +141,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:21](https://github.com/reba
 
 > `optional` **previewProperties**: `string`[]
 
-Defined in: [core/src/components/ReferenceWidget.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 ***
 
@@ -149,7 +149,7 @@ Defined in: [core/src/components/ReferenceWidget.tsx:23](https://github.com/reba
 
 > **size**: [`PreviewSize`](PreviewSize)
 
-Defined in: [core/src/components/ReferenceWidget.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:28](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 ***
 
@@ -157,4 +157,4 @@ Defined in: [core/src/components/ReferenceWidget.tsx:28](https://github.com/reba
 
 > **value**: [`EntityReference`](../classes/EntityReference) \| [`EntityReference`](../classes/EntityReference)[] \| `null`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)

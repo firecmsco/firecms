@@ -11,7 +11,7 @@ title: "StringPropertyValidationSchema"
 
 # Interface: StringPropertyValidationSchema
 
-Defined in: [types/src/types/properties.ts:759](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:759](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Validation rules for strings
 
@@ -25,7 +25,7 @@ Validation rules for strings
 
 > `optional` **length**: `number`
 
-Defined in: [types/src/types/properties.ts:760](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:760](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [types/src/types/properties.ts:760](https://github.com/rebaseco/reba
 
 > `optional` **lowercase**: `boolean`
 
-Defined in: [types/src/types/properties.ts:769](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:769](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [types/src/types/properties.ts:769](https://github.com/rebaseco/reba
 
 > `optional` **matches**: `string` \| `RegExp`
 
-Defined in: [types/src/types/properties.ts:763](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:763](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [types/src/types/properties.ts:763](https://github.com/rebaseco/reba
 
 > `optional` **matchesMessage**: `string`
 
-Defined in: [types/src/types/properties.ts:767](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:767](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Message displayed when the input does not satisfy the regex in `matches`
 
@@ -59,7 +59,7 @@ Message displayed when the input does not satisfy the regex in `matches`
 
 > `optional` **max**: `number`
 
-Defined in: [types/src/types/properties.ts:762](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:762](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [types/src/types/properties.ts:762](https://github.com/rebaseco/reba
 
 > `optional` **min**: `number`
 
-Defined in: [types/src/types/properties.ts:761](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:761](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [types/src/types/properties.ts:761](https://github.com/rebaseco/reba
 
 > `optional` **required**: `boolean`
 
-Defined in: [types/src/types/properties.ts:719](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:719](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Is this field required
 
@@ -89,7 +89,7 @@ Is this field required
 
 > `optional` **requiredMessage**: `string`
 
-Defined in: [types/src/types/properties.ts:724](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:724](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Customize the required message when the property is not set
 
@@ -103,7 +103,7 @@ Customize the required message when the property is not set
 
 > `optional` **trim**: `boolean`
 
-Defined in: [types/src/types/properties.ts:768](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:768](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -111,7 +111,7 @@ Defined in: [types/src/types/properties.ts:768](https://github.com/rebaseco/reba
 
 > `optional` **unique**: `boolean`
 
-Defined in: [types/src/types/properties.ts:730](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:730](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 If the unique flag is set to `true`, you can only have one entity in the
 collection with this value.
@@ -126,7 +126,7 @@ collection with this value.
 
 > `optional` **uniqueInArray**: `boolean`
 
-Defined in: [types/src/types/properties.ts:738](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:738](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 If the uniqueInArray flag is set to `true`, you can only have this value
 once per entry in the parent `ArrayProperty`. It has no effect if this
@@ -143,4 +143,4 @@ children of an `ArrayProperty` or first level children of `MapProperty`
 
 > `optional` **uppercase**: `boolean`
 
-Defined in: [types/src/types/properties.ts:770](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:770](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)

@@ -1,7 +1,7 @@
 import { eq, SQL } from "drizzle-orm";
 import { AnyPgColumn } from "drizzle-orm/pg-core";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { EntityCollection, Properties, Property, Relation } from "@rebasepro/types";
+import { EntityCollection, Properties, Property, Relation, RelationProperty } from "@rebasepro/types";
 import { resolveCollectionRelations } from "@rebasepro/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 import { DrizzleConditionBuilder } from "../utils/drizzle-conditions";
@@ -67,10 +67,10 @@ export function serializeDataToServer<M extends Record<string, any>>(
     properties: Properties,
     collection?: EntityCollection,
     registry?: BackendCollectionRegistry
-): Record<string, any> {
+): Record<string, unknown> {
     if (!entity || !properties) return entity;
 
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
 
     // Get normalized relations if collection is provided
     const resolvedRelations = collection ? resolveCollectionRelations(collection) : {};
@@ -185,7 +185,7 @@ export function serializePropertyToServer(value: unknown, property: Property): u
 
         case "map":
             if (typeof value === "object" && property.properties) {
-                const result: Record<string, any> = {};
+                const result: Record<string, unknown> = {};
                 for (const [subKey, subValue] of Object.entries(value)) {
                     const subProperty = (property.properties as Properties)[subKey];
                     if (subProperty) {
@@ -215,7 +215,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
     const properties = collection.properties;
     if (!data || !properties) return data;
 
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
 
     // Get the normalized relations once
     const resolvedRelations = resolveCollectionRelations(collection);
@@ -288,7 +288,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
                                     if (relation.cardinality === "one") {
                                         // One-to-one: return single relation object
                                         const targetPks = getPrimaryKeys(targetCollection, registry!);
-                                        const relatedEntity = relatedEntities[0] as Record<string, any>;
+                                        const relatedEntity = relatedEntities[0] as Record<string, unknown>;
                                         result[propKey] = {
                                             id: buildCompositeId(relatedEntity, targetPks),
                                             path: targetCollection.slug || targetCollection.dbPath,
@@ -389,7 +389,7 @@ export async function parseDataFromServer<M extends Record<string, any>>(
 
                                 if (relation.cardinality === "one") {
                                     // One-to-one: return single relation object
-                                    const joinResult = joinResults[0] as Record<string, any>;
+                                    const joinResult = joinResults[0] as Record<string, unknown>;
                                     const targetEntity = joinResult[targetTableName] || joinResult;
                                     result[propKey] = {
                                         id: buildCompositeId(targetEntity, targetPks),
@@ -432,13 +432,13 @@ export function parsePropertyFromServer(value: unknown, property: Property, coll
         case "relation":
             // Transform ID back to relation object with type information
             if (typeof value === "string" || typeof value === "number") {
-                let relationDef = (property as any).relation;
+                let relationDef: Relation | undefined = (property as RelationProperty).relation;
                 if (!relationDef && propertyKey) {
                     const resolvedRelations = resolveCollectionRelations(collection);
                     relationDef = resolvedRelations[propertyKey];
                 }
                 if (!relationDef) {
-                    relationDef = collection.relations?.find((rel) => rel.relationName === (property as any).relationName);
+                    relationDef = collection.relations?.find((rel) => rel.relationName === (property as RelationProperty).relationName);
                 }
                 
                 if (!relationDef) {
@@ -468,7 +468,7 @@ export function parsePropertyFromServer(value: unknown, property: Property, coll
 
         case "map":
             if (typeof value === "object" && property.properties) {
-                const result: Record<string, any> = {};
+                const result: Record<string, unknown> = {};
                 for (const [subKey, subValue] of Object.entries(value)) {
                     const subProperty = (property.properties as Properties)[subKey];
                     if (subProperty) {
@@ -528,7 +528,7 @@ export function normalizeDbValues<M extends Record<string, any>>(
     const properties = collection.properties;
     if (!data || !properties) return data;
 
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
 
     // Get FK columns that are used internally for relations and not defined as properties
     const resolvedRelations = resolveCollectionRelations(collection);

@@ -13,7 +13,7 @@ title: "useBuildCollectionRegistryController"
 
 > **useBuildCollectionRegistryController**(`props`): [`CollectionRegistryController`](../type-aliases/CollectionRegistryController) & `object`
 
-Defined in: [core/src/hooks/navigation/useBuildCollectionRegistryController.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildCollectionRegistryController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildCollectionRegistryController.tsx:5](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildCollectionRegistryController.tsx)
 
 ## Parameters
 

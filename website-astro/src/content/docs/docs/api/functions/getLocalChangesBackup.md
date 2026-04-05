@@ -13,7 +13,7 @@ title: "getLocalChangesBackup"
 
 > **getLocalChangesBackup**(`collection`): `"manual_apply"` \| `"auto_apply"`
 
-Defined in: [common/src/util/collections.ts:99](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/collections.ts)
+Defined in: [common/src/util/collections.ts:99](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/collections.ts)
 
 ## Parameters
 

@@ -148,8 +148,8 @@ describe("String Validation", () => {
             try {
                 await schema.parseAsync(undefined);
                 fail("Should have thrown");
-            } catch (e: any) {
-                expect(e.issues[0].message).toBe("This field is mandatory");
+            } catch (e: unknown) {
+                expect((e as { issues: Array<{ message: string }> }).issues[0].message).toBe("This field is mandatory");
             }
         });
     });
@@ -244,8 +244,8 @@ describe("String Validation", () => {
             try {
                 await schema.parseAsync("abc");
                 fail("Should have thrown");
-            } catch (e: any) {
-                expect(e.issues[0].message).toBe("Must be exactly 3 uppercase letters");
+            } catch (e: unknown) {
+                expect((e as { issues: Array<{ message: string }> }).issues[0].message).toBe("Must be exactly 3 uppercase letters");
             }
         });
 
@@ -1146,7 +1146,7 @@ describe("getEntitySchema", () => {
 describe("Error Handling", () => {
 
     it("should return a failing schema for unsupported data types", async () => {
-        const property = { type: "unsupported" } as any;
+        const property = { type: "unsupported" } as unknown as Property;
 
         const schema = mapPropertyToZod({
             property,
@@ -1160,10 +1160,10 @@ describe("Error Handling", () => {
         const propertyBuilder = {
             type: "string",
             dynamicProps: () => ({ validation: { required: true } })
-        } as any;
+        } as unknown as Property;
 
         const schema = mapPropertyToZod({
-            property: propertyBuilder as any,
+            property: propertyBuilder,
             entityId: "test-entity"
         });
 
@@ -1271,7 +1271,7 @@ describe("Edge Cases", () => {
     it("should handle array with undefined of property", async () => {
         const property: ArrayProperty = {
             type: "array",
-            of: undefined as any
+            of: undefined!
         };
         const schema = mapPropertyToZod({
             property,

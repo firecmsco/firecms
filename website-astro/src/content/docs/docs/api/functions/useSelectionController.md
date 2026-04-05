@@ -13,7 +13,7 @@ title: "useSelectionController"
 
 > **useSelectionController**\<`M`\>(`onSelectionChange?`): [`SelectionController`](../type-aliases/SelectionController)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionView/useSelectionController.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/useSelectionController.tsx)
+Defined in: [core/src/components/EntityCollectionView/useSelectionController.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/useSelectionController.tsx)
 
 ## Type Parameters
 

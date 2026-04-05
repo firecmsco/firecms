@@ -13,7 +13,7 @@ title: "ReferenceFieldBinding"
 
 > **ReferenceFieldBinding**(`props`): `Element`
 
-Defined in: [core/src/form/field\_bindings/ReferenceFieldBinding.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/ReferenceFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/ReferenceFieldBinding.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/field_bindings/ReferenceFieldBinding.tsx)
 
 Field that opens a reference selection dialog.
 

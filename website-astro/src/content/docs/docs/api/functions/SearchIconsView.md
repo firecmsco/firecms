@@ -13,7 +13,7 @@ title: "SearchIconsView"
 
 > **SearchIconsView**(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/SearchIconsView.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)
+Defined in: [core/src/components/SearchIconsView.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)
 
 ## Parameters
 

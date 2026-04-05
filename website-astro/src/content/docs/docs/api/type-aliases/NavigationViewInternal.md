@@ -13,7 +13,7 @@ title: "NavigationViewInternal"
 
 > **NavigationViewInternal**\<`M`\> = [`NavigationViewEntityInternal`](../interfaces/NavigationViewEntityInternal)\<`M`\> \| [`NavigationViewCollectionInternal`](../interfaces/NavigationViewCollectionInternal)\<`M`\> \| [`NavigationViewEntityCustomInternal`](../interfaces/NavigationViewEntityCustomInternal)\<`M`\>
 
-Defined in: [common/src/util/navigation\_from\_path.ts:5](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
+Defined in: [common/src/util/navigation\_from\_path.ts:5](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
 
 ## Type Parameters
 

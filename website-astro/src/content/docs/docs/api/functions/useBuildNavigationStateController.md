@@ -13,7 +13,7 @@ title: "useBuildNavigationStateController"
 
 > **useBuildNavigationStateController**\<`EC`, `USER`\>(`props`): [`NavigationStateController`](../type-aliases/NavigationStateController)
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:53](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 Main hook that resolves collections, views, and admin views into a
 NavigationStateController. This is a thin composition of three focused hooks:

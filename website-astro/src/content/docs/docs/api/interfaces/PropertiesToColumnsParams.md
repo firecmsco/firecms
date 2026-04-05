@@ -11,7 +11,7 @@ title: "PropertiesToColumnsParams"
 
 # Interface: PropertiesToColumnsParams\<M\>
 
-Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:20](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:20](htt
 
 > `optional` **AdditionalHeaderWidget**: `ComponentType`\<\{ `onHover`: `boolean`; `property`: [`Property`](../type-aliases/Property); `propertyKey`: `string`; \}\>
 
-Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:24](htt
 
 > `optional` **forceFilter**: `Partial`\<`Record`\<keyof `M` *extends* `string` ? keyof `any` : `never`, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
 
-Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:23](htt
 
 > **properties**: [`Properties`](../type-aliases/Properties)
 
-Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:21](htt
 
 > `optional` **sortable**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)
+Defined in: [core/src/components/EntityCollectionTable/column\_utils.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/column_utils.tsx)

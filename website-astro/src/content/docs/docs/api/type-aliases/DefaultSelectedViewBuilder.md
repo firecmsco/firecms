@@ -13,7 +13,7 @@ title: "DefaultSelectedViewBuilder"
 
 > **DefaultSelectedViewBuilder** = (`params`) => `string` \| `undefined`
 
-Defined in: [types/src/types/collections.ts:717](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:717](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Used in the [EntityCollection#defaultSelectedView](../interfaces/EntityCollection.md#defaultselectedview) to define the default
 

@@ -11,7 +11,7 @@ title: "NavigationViewCollectionInternal"
 
 # Interface: NavigationViewCollectionInternal\<M\>
 
-Defined in: [common/src/util/navigation\_from\_path.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
+Defined in: [common/src/util/navigation\_from\_path.ts:18](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [common/src/util/navigation\_from\_path.ts:18](https://github.com/re
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [common/src/util/navigation\_from\_path.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
+Defined in: [common/src/util/navigation\_from\_path.ts:23](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [common/src/util/navigation\_from\_path.ts:23](https://github.com/re
 
 > **id**: `string`
 
-Defined in: [common/src/util/navigation\_from\_path.ts:20](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
+Defined in: [common/src/util/navigation\_from\_path.ts:20](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [common/src/util/navigation\_from\_path.ts:20](https://github.com/re
 
 > **path**: `string`
 
-Defined in: [common/src/util/navigation\_from\_path.ts:22](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
+Defined in: [common/src/util/navigation\_from\_path.ts:22](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [common/src/util/navigation\_from\_path.ts:22](https://github.com/re
 
 > **slug**: `string`
 
-Defined in: [common/src/util/navigation\_from\_path.ts:21](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
+Defined in: [common/src/util/navigation\_from\_path.ts:21](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
 
 ***
 
@@ -57,4 +57,4 @@ Defined in: [common/src/util/navigation\_from\_path.ts:21](https://github.com/re
 
 > **type**: `"collection"`
 
-Defined in: [common/src/util/navigation\_from\_path.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)
+Defined in: [common/src/util/navigation\_from\_path.ts:19](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/navigation_from_path.ts)

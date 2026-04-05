@@ -13,7 +13,7 @@ title: "SideDialogController"
 
 > **SideDialogController** = `object`
 
-Defined in: [core/src/core/SideDialogs.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
+Defined in: [core/src/core/SideDialogs.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [core/src/core/SideDialogs.tsx:10](https://github.com/rebaseco/rebas
 
 > **blocked**: `boolean`
 
-Defined in: [core/src/core/SideDialogs.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
+Defined in: [core/src/core/SideDialogs.tsx:11](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [core/src/core/SideDialogs.tsx:11](https://github.com/rebaseco/rebas
 
 > **close**: (`force?`) => `void`
 
-Defined in: [core/src/core/SideDialogs.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
+Defined in: [core/src/core/SideDialogs.tsx:15](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
 
 #### Parameters
 
@@ -47,7 +47,7 @@ Defined in: [core/src/core/SideDialogs.tsx:15](https://github.com/rebaseco/rebas
 
 > **pendingClose**: `boolean`
 
-Defined in: [core/src/core/SideDialogs.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
+Defined in: [core/src/core/SideDialogs.tsx:16](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
 
 ***
 
@@ -55,7 +55,7 @@ Defined in: [core/src/core/SideDialogs.tsx:16](https://github.com/rebaseco/rebas
 
 > **setBlocked**: (`blocked`) => `void`
 
-Defined in: [core/src/core/SideDialogs.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
+Defined in: [core/src/core/SideDialogs.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
 
 #### Parameters
 
@@ -73,7 +73,7 @@ Defined in: [core/src/core/SideDialogs.tsx:12](https://github.com/rebaseco/rebas
 
 > **setBlockedNavigationMessage**: (`message?`) => `void`
 
-Defined in: [core/src/core/SideDialogs.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
+Defined in: [core/src/core/SideDialogs.tsx:13](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
 
 #### Parameters
 
@@ -91,7 +91,7 @@ Defined in: [core/src/core/SideDialogs.tsx:13](https://github.com/rebaseco/rebas
 
 > **setPendingClose**: (`pendingClose`) => `void`
 
-Defined in: [core/src/core/SideDialogs.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
+Defined in: [core/src/core/SideDialogs.tsx:17](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
 
 #### Parameters
 
@@ -109,4 +109,4 @@ Defined in: [core/src/core/SideDialogs.tsx:17](https://github.com/rebaseco/rebas
 
 > `optional` **width**: `string`
 
-Defined in: [core/src/core/SideDialogs.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
+Defined in: [core/src/core/SideDialogs.tsx:14](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)

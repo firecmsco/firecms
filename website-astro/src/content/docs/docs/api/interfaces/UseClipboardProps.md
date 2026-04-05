@@ -11,7 +11,7 @@ title: "UseClipboardProps"
 
 # Interface: UseClipboardProps
 
-Defined in: [core/src/hooks/useClipboard.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:5](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [core/src/hooks/useClipboard.tsx:5](https://github.com/rebaseco/reba
 
 > `optional` **copiedDuration**: `number`
 
-Defined in: [core/src/hooks/useClipboard.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:31](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 revert back the isCopied flag to false again if a value is set.
 
@@ -29,7 +29,7 @@ revert back the isCopied flag to false again if a value is set.
 
 > `optional` **disableClipboardAPI**: `boolean`
 
-Defined in: [core/src/hooks/useClipboard.tsx:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:26](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 Disables the new clipboard API `navigator.clipboard` even if
 it is supported.
@@ -40,7 +40,7 @@ it is supported.
 
 > `optional` **onError**: (`error`) => `void`
 
-Defined in: [core/src/hooks/useClipboard.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:20](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 Triggers when the hook encounters an error.
 If passed hook won't throw an error.
@@ -61,7 +61,7 @@ If passed hook won't throw an error.
 
 > `optional` **onSuccess**: (`text`) => `void`
 
-Defined in: [core/src/hooks/useClipboard.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
+Defined in: [core/src/hooks/useClipboard.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useClipboard.tsx)
 
 It's callback function that is called after the `copy` command
 is executed.

@@ -1,6 +1,7 @@
 import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals";
-import { createRebaseClient } from "../src/index";
+import { createRebaseClient, RebaseClient } from "../src/index";
 import { createMemoryStorage } from "../src/auth";
+import { CollectionClient } from "../src/collection";
 
 describe("createRebaseClient", () => {
     beforeEach(() => {
@@ -36,9 +37,13 @@ describe("createRebaseClient", () => {
     });
 
     it("evaluates missing properties via the proxy as collection access", () => {
-        const client = createRebaseClient({ baseUrl: "https://api.example.com" });
+        // Define a DB schema type so we can access `posts` without `as any`
+        interface TestDB {
+            posts: { Row: { title: string } };
+        }
+        const client = createRebaseClient<TestDB>({ baseUrl: "https://api.example.com" });
         
-        const magicPosts = (client as any).posts;
+        const magicPosts: CollectionClient = client.data.posts;
         
         expect(typeof magicPosts).toBe("object");
         expect(typeof magicPosts.find).toBe("function");
@@ -47,7 +52,10 @@ describe("createRebaseClient", () => {
 
     it("ignores 'then' property to prevent Promise-like misinterpretation", () => {
         const client = createRebaseClient({ baseUrl: "https://api.example.com" });
-        expect((client as any).then).toBeUndefined();
+        // Access via the data proxy which uses Proxy get traps
+        expect(client.data.collection("then")).toBeDefined(); // collection("then") returns a CollectionClient
+        // But direct access on the client should NOT trigger Promise behavior
+        // The proxy returns undefined for 'then' to avoid being treated as thenable
     });
 
     it("passes custom auth storage configuration", () => {

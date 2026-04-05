@@ -13,7 +13,7 @@ title: "PartialEntityCollection"
 
 > **PartialEntityCollection**\<`M`\> = `Partial`\<[`EntityCollection`](../interfaces/EntityCollection)\<`M`\>\>
 
-Defined in: [types/src/controllers/local\_config\_persistence.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
+Defined in: [types/src/controllers/local\_config\_persistence.tsx:6](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
 
 ## Type Parameters
 

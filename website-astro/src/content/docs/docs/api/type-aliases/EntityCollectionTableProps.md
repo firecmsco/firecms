@@ -13,7 +13,7 @@ title: "EntityCollectionTableProps"
 
 > **EntityCollectionTableProps**\<`M`, `USER`\> = `object`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ## Type Parameters
 
@@ -31,7 +31,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **actions**: `React.ReactNode`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:104](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:104](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Additional component that renders actions such as buttons in the
 collection toolbar, displayed on the right side
@@ -42,7 +42,7 @@ collection toolbar, displayed on the right side
 
 > `optional` **actionsStart**: `React.ReactNode`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:44](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Additional component that renders actions such as buttons in the
 collection toolbar, displayed on the left side
@@ -53,7 +53,7 @@ collection toolbar, displayed on the left side
 
 > `optional` **AddColumnComponent**: `React.ComponentType`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:144](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:144](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **additionalFields**: [`AdditionalFieldDelegate`](../interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>[]
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:124](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:124](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **AdditionalHeaderWidget**: `React.ComponentType`\<\{ `onHover`: `boolean`; `property`: [`Property`](Property); `propertyKey`: `string`; \}\>
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:138](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:138](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **additionalIDHeaderWidget**: `React.ReactNode`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:146](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:146](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -85,7 +85,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **className**: `string`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -93,7 +93,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **defaultSize**: [`CollectionSize`](CollectionSize)
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:126](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:126](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -101,7 +101,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **displayedColumnIds**: `PropertyColumnConfig`[]
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:118](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:118](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -109,7 +109,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **emptyComponent**: `React.ReactNode`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:148](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:148](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -117,7 +117,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > **enablePopupIcon**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:156](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:156](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -125,7 +125,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **endAdornment**: `React.ReactNode`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:136](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:136](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -133,7 +133,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **filterable**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:132](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:132](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -141,7 +141,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **forceFilter**: [`FilterValues`](FilterValues)\<`Extract`\<keyof `M`, `string`\>\>
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:120](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:120](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -149,7 +149,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **getIdColumnWidth**: () => `number`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:150](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:150](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 #### Returns
 
@@ -161,7 +161,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **getPropertyFor**: (`props`) => [`Property`](Property) \| `null`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:130](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:130](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 #### Parameters
 
@@ -179,7 +179,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **hideToolbar**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:169](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:169](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 If true, the internal toolbar will not be rendered.
 Used when the parent component renders its own toolbar.
@@ -190,7 +190,7 @@ Used when the parent component renders its own toolbar.
 
 > `optional` **highlightedEntities**: [`Entity`](../interfaces/Entity)\<`M`\>[]
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:33](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 List of entities that will be displayed as selected;
 
@@ -200,7 +200,7 @@ List of entities that will be displayed as selected;
 
 > `optional` **hoverRow**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:98](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:98](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Should apply a different style to a row when hovering
 
@@ -210,7 +210,7 @@ Should apply a different style to a row when hovering
 
 > `optional` **initialScroll**: `number`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:78](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:78](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Initial scroll position
 
@@ -220,7 +220,7 @@ Initial scroll position
 
 > `optional` **inlineEditing**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:122](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:122](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -228,7 +228,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **onColumnsOrderChange**: (`columns`) => `void`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:163](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:163](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Callback when columns are reordered via drag-and-drop
 
@@ -248,7 +248,7 @@ Callback when columns are reordered via drag-and-drop
 
 > `optional` **onScroll**: (`props`) => `void`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:84](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:84](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Callback when the table is scrolled
 
@@ -278,7 +278,7 @@ Callback when the table is scrolled
 
 > `optional` **onTextSearchClick**: () => `void`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:152](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:152](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 #### Returns
 
@@ -290,7 +290,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **onValueChange**: [`OnCellValueChange`](OnCellValueChange)\<`any`, `M`\>
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:49](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:49](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Callback when a cell value changes.
 
@@ -300,7 +300,7 @@ Callback when a cell value changes.
 
 > `optional` **openEntityMode**: `"side_panel"` \| `"full_screen"`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:158](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:158](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -308,7 +308,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > **properties**: [`Properties`](Properties)
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:128](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:128](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -316,7 +316,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > **selectionController**: [`SelectionController`](SelectionController)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:28](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Display these entities as selected
 
@@ -326,7 +326,7 @@ Display these entities as selected
 
 > `optional` **sortable**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:134](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:134](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -334,7 +334,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **style**: `React.CSSProperties`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -342,7 +342,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > **tableController**: [`EntityTableController`](EntityTableController)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:116](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:116](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Controller holding the logic for the table
 [useDataTableController](../functions/useDataTableController)
@@ -354,7 +354,7 @@ Controller holding the logic for the table
 
 > `optional` **tableRowActionsBuilder**: (`params`) => `React.ReactNode`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:58](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Builder for creating the buttons in each row
 
@@ -388,7 +388,7 @@ Builder for creating the buttons in each row
 
 > `optional` **textSearchLoading**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:154](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:154](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -396,7 +396,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **title**: `React.ReactNode`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:38](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Override the title in the toolbar
 
@@ -406,7 +406,7 @@ Override the title in the toolbar
 
 > `optional` **uniqueFieldValidator**: [`UniqueFieldValidator`](UniqueFieldValidator)
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:51](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:51](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 ***
 
@@ -414,7 +414,7 @@ Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProp
 
 > `optional` **viewModeToggle**: `React.ReactNode`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:109](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:109](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 View mode toggle button, positioned left of the search bar.
 
@@ -424,7 +424,7 @@ View mode toggle button, positioned left of the search bar.
 
 > `optional` **onColumnResize**(`params`): `void`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:73](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:73](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Callback when a column is resized
 
@@ -444,7 +444,7 @@ Callback when a column is resized
 
 > `optional` **onEntityClick**(`entity`): `void`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:68](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:68](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Callback when anywhere on the table is clicked
 
@@ -464,7 +464,7 @@ Callback when anywhere on the table is clicked
 
 > `optional` **onSizeChanged**(`size`): `void`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:93](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx:93](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTableProps.tsx)
 
 Callback when the selected size of the table is changed
 

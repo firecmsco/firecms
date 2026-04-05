@@ -13,4 +13,4 @@ title: "DEFAULT_FIELD_CONFIGS"
 
 > `const` **DEFAULT\_FIELD\_CONFIGS**: `Record`\<[`DefaultFieldConfig`](../type-aliases/DefaultFieldConfig), [`PropertyConfig`](../type-aliases/PropertyConfig)\>
 
-Defined in: [core/src/core/field\_configs.tsx:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/field_configs.tsx)
+Defined in: [core/src/core/field\_configs.tsx:46](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/field_configs.tsx)

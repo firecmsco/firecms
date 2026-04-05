@@ -1,9 +1,10 @@
 # Rebase Documentation
 
-> This is the documentation for Rebase, a headless CMS for Firebase/MongoDB. It is a powerful tool to manage your data,
-> with a focus on developer experience and extensibility.
-> Easy to get started, easy to customize and easy to extend.Rebase is great both for existing projects, since it will 
-> adapt to any database structure you have, as well as for new ones.
+> Rebase is an open-source Postgres admin panel and headless CMS built with React and TypeScript.
+> Connect your existing PostgreSQL database and get a full admin UI, REST & GraphQL APIs, a SQL editor,
+> row-level security, and an MCP server for AI agents — all generated from your schema.
+> Rebase uses Drizzle ORM under the hood and keeps your TypeScript collection definitions as the single source of truth.
+> Great for existing projects (it adapts to any Postgres schema) and new ones alike.
 
 ## Getting started
 
@@ -6191,7 +6192,7 @@ export default {
 };
 ```
 
-You may want to check the original [`tailwind.config.js`](https://github.com/rebaseco/rebase/blob/main/packages/ui/tailwind.config.js)
+You may want to check the original [`tailwind.config.js`](https://github.com/rebasepro/rebase/blob/main/packages/ui/tailwind.config.js)
 file in the `@rebasepro/ui` package.
 
 You can extend the default theme by adding your customizations, including all supported
@@ -6224,7 +6225,7 @@ body {
 These are the default values but you can change them to match your brand.
 
 Just like in the previous section, feel free to take a look at the original
-[`index.css`](https://github.com/rebaseco/rebase/blob/main/packages/ui/src/index.css) file in the `@rebasepro/ui` package.
+[`index.css`](https://github.com/rebasepro/rebase/blob/main/packages/ui/src/index.css) file in the `@rebasepro/ui` package.
 
 ##### Customizing colors in the tailwind config
 

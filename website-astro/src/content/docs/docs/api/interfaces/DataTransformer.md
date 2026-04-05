@@ -11,7 +11,7 @@ title: "DataTransformer"
 
 # Interface: DataTransformer
 
-Defined in: [types/src/types/backend.ts:314](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:314](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Abstract data transformer interface.
 Handles serialization/deserialization between frontend and database formats.
@@ -22,7 +22,7 @@ Handles serialization/deserialization between frontend and database formats.
 
 > **deserializeFromDatabase**\<`M`\>(`data`, `collection`): `Promise`\<`M`\>
 
-Defined in: [types/src/types/backend.ts:326](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:326](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Transform database data back to entity format
 
@@ -52,7 +52,7 @@ Transform database data back to entity format
 
 > **serializeToDatabase**\<`M`\>(`entity`, `collection`): `Record`\<`string`, `any`\>
 
-Defined in: [types/src/types/backend.ts:318](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:318](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Transform entity data for storage in the database
 

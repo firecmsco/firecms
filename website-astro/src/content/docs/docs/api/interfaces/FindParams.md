@@ -11,7 +11,7 @@ title: "FindParams"
 
 # Interface: FindParams
 
-Defined in: [types/src/controllers/data.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:10](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Parameters for querying a collection.
 Uses PostgREST-style filter syntax for consistency between
@@ -23,7 +23,7 @@ the SDK (HTTP) and framework (in-process) contexts.
 
 > `optional` **include**: `string`[]
 
-Defined in: [types/src/controllers/data.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:34](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Relations to include in the response
 
@@ -33,7 +33,7 @@ Relations to include in the response
 
 > `optional` **limit**: `number`
 
-Defined in: [types/src/controllers/data.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:12](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Maximum number of items to return (default: 20)
 
@@ -43,7 +43,7 @@ Maximum number of items to return (default: 20)
 
 > `optional` **offset**: `number`
 
-Defined in: [types/src/controllers/data.ts:14](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:14](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Number of items to skip
 
@@ -53,7 +53,7 @@ Number of items to skip
 
 > `optional` **orderBy**: `string`
 
-Defined in: [types/src/controllers/data.ts:32](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:32](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Sort order. Format: "field:direction".
 
@@ -69,7 +69,7 @@ Sort order. Format: "field:direction".
 
 > `optional` **page**: `number`
 
-Defined in: [types/src/controllers/data.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:16](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Page number (1-indexed), alternative to offset
 
@@ -79,7 +79,7 @@ Page number (1-indexed), alternative to offset
 
 > `optional` **searchString**: `string`
 
-Defined in: [types/src/controllers/data.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:36](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Full-text search string
 
@@ -89,7 +89,7 @@ Full-text search string
 
 > `optional` **where**: `Record`\<`string`, `string`\>
 
-Defined in: [types/src/controllers/data.ts:27](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:27](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 PostgREST-style filter object.
 Keys are field names, values use "operator.value" format.

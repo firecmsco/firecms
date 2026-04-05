@@ -13,7 +13,7 @@ title: "applyPropertyConditions"
 
 > **applyPropertyConditions**(`property`, `context`): [`Property`](../type-aliases/Property)
 
-Defined in: [common/src/util/conditions.ts:164](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/conditions.ts)
+Defined in: [common/src/util/conditions.ts:164](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/conditions.ts)
 
 Apply PropertyConditions to a resolved property, evaluating all JSON Logic rules.
 

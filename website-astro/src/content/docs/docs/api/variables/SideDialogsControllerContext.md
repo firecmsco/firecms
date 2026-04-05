@@ -13,4 +13,4 @@ title: "SideDialogsControllerContext"
 
 > `const` **SideDialogsControllerContext**: `Context`\<[`SideDialogsController`](../interfaces/SideDialogsController)\>
 
-Defined in: [core/src/contexts/SideDialogsControllerContext.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/SideDialogsControllerContext.tsx)
+Defined in: [core/src/contexts/SideDialogsControllerContext.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/core/src/contexts/SideDialogsControllerContext.tsx)

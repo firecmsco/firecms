@@ -13,7 +13,7 @@ title: "ArrayCustomShapedFieldBinding"
 
 > **ArrayCustomShapedFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [core/src/form/field\_bindings/ArrayCustomShapedFieldBinding.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/ArrayCustomShapedFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/ArrayCustomShapedFieldBinding.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/field_bindings/ArrayCustomShapedFieldBinding.tsx)
 
 Array field used for custom
 

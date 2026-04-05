@@ -13,7 +13,7 @@ title: "removeNulls"
 
 > **removeNulls**(`value`): `unknown`
 
-Defined in: [common/src/util/objects.ts:314](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:314](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Parameters
 

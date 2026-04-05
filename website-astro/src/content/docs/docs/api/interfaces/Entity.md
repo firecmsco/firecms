@@ -11,7 +11,7 @@ title: "Entity"
 
 # Interface: Entity\<M\>
 
-Defined in: [types/src/types/entities.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:11](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Representation of an entity fetched from the driver
 
@@ -27,7 +27,7 @@ Representation of an entity fetched from the driver
 
 > `optional` **databaseId**: `string`
 
-Defined in: [types/src/types/entities.ts:39](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:39](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Which database within the driver (e.g., for Firestore multi-database).
 If not specified, the default database of the driver is used.
@@ -38,7 +38,7 @@ If not specified, the default database of the driver is used.
 
 > `optional` **driver**: `string`
 
-Defined in: [types/src/types/entities.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:33](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Which driver this entity belongs to (e.g., 'postgres', 'firestore').
 If not specified, the default driver is assumed.
@@ -49,7 +49,7 @@ If not specified, the default driver is assumed.
 
 > **id**: `string` \| `number`
 
-Defined in: [types/src/types/entities.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:16](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ID of the entity
 
@@ -59,7 +59,7 @@ ID of the entity
 
 > **path**: `string`
 
-Defined in: [types/src/types/entities.ts:22](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:22](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 A string representing the path of the referenced document (relative
 to the root of the database).
@@ -70,6 +70,6 @@ to the root of the database).
 
 > **values**: `M`
 
-Defined in: [types/src/types/entities.ts:27](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:27](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Current values

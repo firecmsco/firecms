@@ -13,7 +13,7 @@ title: "registerConditionOperations"
 
 > **registerConditionOperations**(): `void`
 
-Defined in: [common/src/util/conditions.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/conditions.ts)
+Defined in: [common/src/util/conditions.ts:29](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/conditions.ts)
 
 Register custom JSON Logic operations for Rebase.
 Call this once at app initialization.

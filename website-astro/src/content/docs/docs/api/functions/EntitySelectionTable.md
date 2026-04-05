@@ -13,7 +13,7 @@ title: "EntitySelectionTable"
 
 > **EntitySelectionTable**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/ReferenceTable/EntitySelectionTable.tsx:92](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceTable/EntitySelectionTable.tsx)
+Defined in: [core/src/components/ReferenceTable/EntitySelectionTable.tsx:92](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceTable/EntitySelectionTable.tsx)
 
 This component allows to select entities from a given collection.
 You probably want to open this dialog as a side view using useEntitySelectionTable

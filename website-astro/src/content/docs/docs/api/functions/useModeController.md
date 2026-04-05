@@ -13,7 +13,7 @@ title: "useModeController"
 
 > **useModeController**(): [`ModeController`](../interfaces/ModeController)
 
-Defined in: [core/src/hooks/useModeController.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
+Defined in: [core/src/hooks/useModeController.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
 
 Hook to retrieve the current mode ("light" | "dark"), and `setMode`
 or `toggle` functions to change it.

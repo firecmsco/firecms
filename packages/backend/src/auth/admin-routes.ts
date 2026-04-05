@@ -20,8 +20,8 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
     router.use("/*", requireAuth);
 
     router.post("/bootstrap", async (c) => {
-        const user = c.get("user") as any;
-        if (!user) {
+        const user = c.get("user");
+        if (!user || typeof user !== "object") {
             throw ApiError.unauthorized("Not authenticated");
         }
 
@@ -40,13 +40,17 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.forbidden("Admin users already exist. Bootstrap not allowed.");
         }
 
-        await userService.setUserRoles(user.userId, ["admin"]);
+        const userId = "userId" in user ? user.userId : undefined;
+        if (!userId) {
+            throw ApiError.unauthorized("User ID not found in auth context");
+        }
+        await userService.setUserRoles(userId, ["admin"]);
 
         return c.json({
             success: true,
             message: "You are now an admin",
             user: {
-                uid: user.userId,
+                uid: userId,
                 roles: ["admin"]
             }
         });
@@ -185,9 +189,10 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
     router.delete("/users/:userId", requireAdmin, async (c) => {
         const userId = c.req.param("userId");
-        const user = c.get("user") as any;
+        const user = c.get("user");
 
-        if (user?.userId === userId) {
+        const currentUserId = user && typeof user === "object" && "userId" in user ? user.userId : undefined;
+        if (currentUserId === userId) {
             throw ApiError.badRequest("Cannot delete your own account", "SELF_DELETE");
         }
 

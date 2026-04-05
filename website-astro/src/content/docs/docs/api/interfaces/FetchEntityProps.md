@@ -11,7 +11,7 @@ title: "FetchEntityProps"
 
 # Interface: FetchEntityProps\<M\>
 
-Defined in: [types/src/controllers/data\_driver.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:8](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 **`Internal`**
 
@@ -27,7 +27,7 @@ Defined in: [types/src/controllers/data\_driver.ts:8](https://github.com/rebasec
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:12](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/src/controllers/data\_driver.ts:12](https://github.com/rebase
 
 > `optional` **databaseId**: `string`
 
-Defined in: [types/src/controllers/data\_driver.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:11](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/src/controllers/data\_driver.ts:11](https://github.com/rebase
 
 > **entityId**: `string` \| `number`
 
-Defined in: [types/src/controllers/data\_driver.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:10](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -51,4 +51,4 @@ Defined in: [types/src/controllers/data\_driver.ts:10](https://github.com/rebase
 
 > **path**: `string`
 
-Defined in: [types/src/controllers/data\_driver.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:9](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)

@@ -1,5 +1,5 @@
 import { canCreateEntity, canEditEntity, canDeleteEntity, canReadCollection } from "./permissions";
-import { EntityCollection, AuthController, Entity, User } from "@rebasepro/types";
+import { EntityCollection, AuthController, Entity, User, SecurityRule } from "@rebasepro/types";
 
 describe("Permissions Evaluator", () => {
 
@@ -25,7 +25,7 @@ describe("Permissions Evaluator", () => {
         roles: ["admin"]
     };
 
-    const mockAuthController: AuthController<any> = {
+    const mockAuthController: AuthController<User> = {
         user: mockUser,
         initialLoading: false,
         authLoading: false,
@@ -33,32 +33,32 @@ describe("Permissions Evaluator", () => {
         signOut: async () => { },
         getAuthToken: async () => "token",
         setExtra: () => { },
-        extra: {}
+        extra: undefined
     };
 
-    const adminAuthController: AuthController<any> = {
+    const adminAuthController: AuthController<User> = {
         ...mockAuthController,
         user: adminUser
     };
 
-    const unauthenticatedController: AuthController<any> = {
+    const unauthenticatedController: AuthController<User> = {
         ...mockAuthController,
         user: null
     };
 
-    const createMockCollection = (rules?: any[]): EntityCollection<any> => ({
-        id: "test",
+    const createMockCollection = (rules?: SecurityRule[]): EntityCollection => ({
+        slug: "test",
         name: "Test",
+        dbPath: "test",
         properties: {},
         securityRules: rules
-    } as any);
+    });
 
-    const createMockEntity = (values: Record<string, any>): Entity<any> => ({
+    const createMockEntity = (values: Record<string, unknown>): Entity => ({
         id: "entity-123",
         path: "test",
         values,
-        originalValues: values,
-    } as any);
+    });
 
     // ─── Section 1: Core Defaults ─────────────────────────────────────────────────
 
@@ -75,8 +75,8 @@ describe("Permissions Evaluator", () => {
         expect(canReadCollection(collection, mockAuthController)).toBe(true);
     });
 
-    test("3. Null securityRules falls back to true", () => {
-        const collection = createMockCollection(null as any);
+    test("3. Undefined securityRules falls back to true", () => {
+        const collection = createMockCollection(undefined);
         expect(canReadCollection(collection, mockAuthController)).toBe(true);
     });
 

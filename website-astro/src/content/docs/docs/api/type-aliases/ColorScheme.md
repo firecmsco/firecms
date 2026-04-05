@@ -13,7 +13,7 @@ title: "ColorScheme"
 
 > **ColorScheme** = `object`
 
-Defined in: [types/src/types/chips.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/chips.ts)
+Defined in: [types/src/types/chips.ts:1](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/chips.ts)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/src/types/chips.ts:1](https://github.com/rebaseco/rebase/blob
 
 > **color**: `string`
 
-Defined in: [types/src/types/chips.ts:2](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/chips.ts)
+Defined in: [types/src/types/chips.ts:2](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/chips.ts)
 
 ***
 
@@ -29,4 +29,4 @@ Defined in: [types/src/types/chips.ts:2](https://github.com/rebaseco/rebase/blob
 
 > **text**: `string`
 
-Defined in: [types/src/types/chips.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/chips.ts)
+Defined in: [types/src/types/chips.ts:3](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/chips.ts)

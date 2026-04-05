@@ -11,7 +11,7 @@ title: "ErrorViewProps"
 
 # Interface: ErrorViewProps
 
-Defined in: [core/src/components/ErrorView.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
+Defined in: [core/src/components/ErrorView.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [core/src/components/ErrorView.tsx:8](https://github.com/rebaseco/re
 
 > **error**: `string` \| `ReactElement`\<`unknown`, `string` \| `JSXElementConstructor`\<`any`\>\> \| `Error`
 
-Defined in: [core/src/components/ErrorView.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
+Defined in: [core/src/components/ErrorView.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [core/src/components/ErrorView.tsx:10](https://github.com/rebaseco/r
 
 > `optional` **onRetry**: () => `void`
 
-Defined in: [core/src/components/ErrorView.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
+Defined in: [core/src/components/ErrorView.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
 
 #### Returns
 
@@ -39,7 +39,7 @@ Defined in: [core/src/components/ErrorView.tsx:12](https://github.com/rebaseco/r
 
 > `optional` **title**: `string`
 
-Defined in: [core/src/components/ErrorView.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
+Defined in: [core/src/components/ErrorView.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
 
 ***
 
@@ -47,4 +47,4 @@ Defined in: [core/src/components/ErrorView.tsx:9](https://github.com/rebaseco/re
 
 > `optional` **tooltip**: `string`
 
-Defined in: [core/src/components/ErrorView.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorView.tsx)
+Defined in: [core/src/components/ErrorView.tsx:11](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ErrorView.tsx)

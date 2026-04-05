@@ -13,7 +13,7 @@ title: "useTableSearchHelper"
 
 > **useTableSearchHelper**\<`M`\>(`__namedParameters`): `object`
 
-Defined in: [core/src/components/common/useTableSearchHelper.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
+Defined in: [core/src/components/common/useTableSearchHelper.ts:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/common/useTableSearchHelper.ts)
 
 ## Type Parameters
 

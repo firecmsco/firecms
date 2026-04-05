@@ -11,7 +11,7 @@ title: "UseRelationSelectorProps"
 
 # Interface: UseRelationSelectorProps\<M\>
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:6](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [core/src/hooks/data/useRelationSelector.tsx:6](https://github.com/r
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:14](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 The collection that represents the relation entities
 
@@ -35,7 +35,7 @@ The collection that represents the relation entities
 
 > `optional` **descriptionProperty**: keyof `M`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:34](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 Property name to use as the secondary display field
 
@@ -45,7 +45,7 @@ Property name to use as the secondary display field
 
 > `optional` **forceFilter**: `Partial`\<`Record`\<`string`, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 Force filter to be applied to the relation search
 
@@ -55,7 +55,7 @@ Force filter to be applied to the relation search
 
 > `optional` **getDescriptionFromEntity**: (`entity`) => `string` \| `undefined`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:30](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 Function to extract the description from an entity
 
@@ -75,7 +75,7 @@ Function to extract the description from an entity
 
 > `optional` **getLabelFromEntity**: (`entity`) => `string`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:26](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 Function to extract the label from an entity
 
@@ -95,7 +95,7 @@ Function to extract the label from an entity
 
 > `optional` **pageSize**: `number`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 Page size for pagination
 
@@ -105,6 +105,6 @@ Page size for pagination
 
 > **path**: `string`
 
-Defined in: [core/src/hooks/data/useRelationSelector.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
+Defined in: [core/src/hooks/data/useRelationSelector.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useRelationSelector.tsx)
 
 Full path where the relation data is located

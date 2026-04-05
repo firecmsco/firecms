@@ -13,7 +13,7 @@ title: "getColorScheme"
 
 > **getColorScheme**(`enumValues`, `key`): `ChipColorScheme` \| `undefined`
 
-Defined in: [core/src/util/enums.ts:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/enums.ts)
+Defined in: [core/src/util/enums.ts:5](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/enums.ts)
 
 ## Parameters
 

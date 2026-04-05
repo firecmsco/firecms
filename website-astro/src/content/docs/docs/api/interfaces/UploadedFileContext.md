@@ -11,7 +11,7 @@ title: "UploadedFileContext"
 
 # Interface: UploadedFileContext
 
-Defined in: [types/src/types/properties.ts:906](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:906](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/src/types/properties.ts:906](https://github.com/rebaseco/reba
 
 > `optional` **entityId**: `string` \| `number`
 
-Defined in: [types/src/types/properties.ts:925](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:925](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Entity ID
 
@@ -29,7 +29,7 @@ Entity ID
 
 > **file**: `File`
 
-Defined in: [types/src/types/properties.ts:910](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:910](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Uploaded file
 
@@ -39,7 +39,7 @@ Uploaded file
 
 > `optional` **path**: `string`
 
-Defined in: [types/src/types/properties.ts:930](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:930](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Entity path. E.g. `products/PID/locales`
 
@@ -49,7 +49,7 @@ Entity path. E.g. `products/PID/locales`
 
 > **property**: [`StringProperty`](StringProperty) \| [`ArrayProperty`](ArrayProperty)
 
-Defined in: [types/src/types/properties.ts:920](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:920](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Property related to this upload
 
@@ -59,7 +59,7 @@ Property related to this upload
 
 > **propertyKey**: `string`
 
-Defined in: [types/src/types/properties.ts:915](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:915](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Property field name
 
@@ -69,7 +69,7 @@ Property field name
 
 > **storage**: [`StorageConfig`](../type-aliases/StorageConfig)
 
-Defined in: [types/src/types/properties.ts:940](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:940](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Storage meta specified by the developer
 
@@ -79,6 +79,6 @@ Storage meta specified by the developer
 
 > **values**: `any`
 
-Defined in: [types/src/types/properties.ts:935](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:935](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Values of the current entity

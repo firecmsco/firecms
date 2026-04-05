@@ -13,7 +13,7 @@ title: "pick"
 
 > `const` **pick**: \<`T`\>(`obj`, ...`args`) => `Partial`\<`T`\>
 
-Defined in: [common/src/util/objects.ts:98](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:98](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Type Parameters
 

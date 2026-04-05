@@ -13,7 +13,7 @@ title: "DatePreview"
 
 > **DatePreview**(`__namedParameters`): `ReactElement`
 
-Defined in: [core/src/preview/components/DatePreview.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/DatePreview.tsx)
+Defined in: [core/src/preview/components/DatePreview.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/components/DatePreview.tsx)
 
 ## Parameters
 

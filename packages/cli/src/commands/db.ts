@@ -101,8 +101,8 @@ async function runDrizzleKit(action: string, _rawArgs: string[]): Promise<void> 
             stdio: "inherit",
             env,
         });
-    } catch (err: any) {
-        console.error(chalk.red(`✗ Failed to run drizzle-kit ${action}: ${err.message}`));
+    } catch (err: unknown) {
+        console.error(chalk.red(`✗ Failed to run drizzle-kit ${action}: ${err instanceof Error ? err.message : String(err)}`));
         process.exit(1);
     }
 }

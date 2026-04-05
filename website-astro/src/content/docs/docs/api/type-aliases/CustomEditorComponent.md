@@ -13,7 +13,7 @@ title: "CustomEditorComponent"
 
 > **CustomEditorComponent** = `object`
 
-Defined in: [core/src/editor/editor.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
+Defined in: [core/src/editor/editor.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [core/src/editor/editor.tsx:18](https://github.com/rebaseco/rebase/b
 
 > **component**: `React.FC`
 
-Defined in: [core/src/editor/editor.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
+Defined in: [core/src/editor/editor.tsx:20](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ***
 
@@ -29,4 +29,4 @@ Defined in: [core/src/editor/editor.tsx:20](https://github.com/rebaseco/rebase/b
 
 > **name**: `string`
 
-Defined in: [core/src/editor/editor.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
+Defined in: [core/src/editor/editor.tsx:19](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/editor.tsx)

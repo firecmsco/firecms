@@ -13,7 +13,7 @@ title: "NavigationResult"
 
 > **NavigationResult** = `object`
 
-Defined in: [types/src/controllers/navigation.ts:298](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:298](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/src/controllers/navigation.ts:298](https://github.com/rebasec
 
 > **allowDragAndDrop**: `boolean`
 
-Defined in: [types/src/controllers/navigation.ts:300](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:300](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [types/src/controllers/navigation.ts:300](https://github.com/rebasec
 
 > **groups**: `string`[]
 
-Defined in: [types/src/controllers/navigation.ts:304](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:304](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [types/src/controllers/navigation.ts:304](https://github.com/rebasec
 
 > **navigationEntries**: [`NavigationEntry`](../interfaces/NavigationEntry)[]
 
-Defined in: [types/src/controllers/navigation.ts:302](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:302](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [types/src/controllers/navigation.ts:302](https://github.com/rebasec
 
 > **onNavigationEntriesUpdate**: (`entries`) => `void`
 
-Defined in: [types/src/controllers/navigation.ts:306](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:306](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 #### Parameters
 

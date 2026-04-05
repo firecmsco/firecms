@@ -13,7 +13,7 @@ title: "EntityCard"
 
 > **EntityCard**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:50](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:50](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
 
 Card component for displaying an entity in a grid view.
 Shows thumbnail, title, and preview properties.

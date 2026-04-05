@@ -13,7 +13,7 @@ title: "randomColor"
 
 > **randomColor**(): `string`
 
-Defined in: [common/src/util/strings.ts:25](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/strings.ts)
+Defined in: [common/src/util/strings.ts:25](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/strings.ts)
 
 ## Returns
 

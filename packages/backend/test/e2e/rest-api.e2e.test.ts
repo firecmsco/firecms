@@ -1,18 +1,30 @@
 import request from "supertest";
 import { RebaseApiServer } from "../../src/api/server";
+import { DataDriver, EntityCollection } from "@rebasepro/types";
+import type { Server } from "http";
+
+interface MockDataDriver extends Partial<DataDriver> {
+    key: string;
+    fetchCollection: jest.Mock;
+    fetchEntity: jest.Mock;
+    saveEntity: jest.Mock;
+    deleteEntity: jest.Mock;
+    countEntities: jest.Mock;
+    getConfigurations: jest.Mock;
+}
 
 // Mock dependencies
 jest.mock("graphql-http/lib/use/express", () => ({
-    createHandler: jest.fn().mockReturnValue((req: any, res: any) => res.json({}))
+    createHandler: jest.fn().mockReturnValue((req: unknown, res: { json: (data: unknown) => void }) => res.json({}))
 }));
 
-jest.mock("cors", () => jest.fn(() => (req: any, res: any, next: any) => next()));
+jest.mock("cors", () => jest.fn(() => (req: unknown, res: unknown, next: () => void) => next()));
 
 describe("REST API E2E Tests", () => {
-    let mockDataDriver: any;
-    let mockCollections: any[];
+    let mockDataDriver: MockDataDriver;
+    let mockCollections: EntityCollection[];
     let server: RebaseApiServer;
-    let app: any;
+    let app: Server;
 
     beforeEach(async () => {
         mockCollections = [
@@ -27,7 +39,7 @@ describe("REST API E2E Tests", () => {
                     price: {
                         type: "number",
                         callbacks: {
-                            afterRead: ({ value }) => value * 2
+                            afterRead: ({ value }: { value: number }) => value * 2
                         }
                     }
                 },
@@ -41,11 +53,12 @@ describe("REST API E2E Tests", () => {
             fetchEntity: jest.fn().mockResolvedValue(null),
             saveEntity: jest.fn().mockResolvedValue({ id: "1", values: {}, path: "test" }),
             deleteEntity: jest.fn().mockResolvedValue(undefined),
+            countEntities: jest.fn().mockResolvedValue(0),
             getConfigurations: jest.fn().mockResolvedValue({ collections: mockCollections, schema: {} })
         };
 
         server = await RebaseApiServer.create({
-            driver: mockDataDriver as any,
+            driver: mockDataDriver as DataDriver,
             collections: mockCollections,
             enableGraphQL: false,
             enableREST: true,

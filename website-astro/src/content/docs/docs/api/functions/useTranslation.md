@@ -13,7 +13,7 @@ title: "useTranslation"
 
 > **useTranslation**(): `object`
 
-Defined in: [core/src/hooks/useTranslation.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useTranslation.ts)
+Defined in: [core/src/hooks/useTranslation.ts:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useTranslation.ts)
 
 **`Internal`**
 

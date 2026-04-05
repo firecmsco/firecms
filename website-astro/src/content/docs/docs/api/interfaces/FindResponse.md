@@ -11,7 +11,7 @@ title: "FindResponse"
 
 # Interface: FindResponse\<M\>
 
-Defined in: [types/src/controllers/data.ts:43](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:43](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Paginated response from a collection query.
 
@@ -27,7 +27,7 @@ Paginated response from a collection query.
 
 > **data**: [`Entity`](Entity)\<`M`\>[]
 
-Defined in: [types/src/controllers/data.ts:45](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:45](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Array of entities matching the query
 
@@ -37,7 +37,7 @@ Array of entities matching the query
 
 > **meta**: `object`
 
-Defined in: [types/src/controllers/data.ts:47](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:47](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Pagination metadata
 

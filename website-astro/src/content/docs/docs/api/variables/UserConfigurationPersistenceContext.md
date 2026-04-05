@@ -13,4 +13,4 @@ title: "UserConfigurationPersistenceContext"
 
 > `const` **UserConfigurationPersistenceContext**: `Context`\<[`UserConfigurationPersistence`](../interfaces/UserConfigurationPersistence) \| `undefined`\>
 
-Defined in: [core/src/contexts/UserConfigurationPersistenceContext.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/UserConfigurationPersistenceContext.tsx)
+Defined in: [core/src/contexts/UserConfigurationPersistenceContext.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/core/src/contexts/UserConfigurationPersistenceContext.tsx)

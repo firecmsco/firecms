@@ -5,7 +5,7 @@
   "author": "Rebase",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rebaseco/rebase.git"
+    "url": "https://github.com/rebasepro/rebase.git"
   },
   "homepage": "https://rebase.pro",
   "workspaces": [

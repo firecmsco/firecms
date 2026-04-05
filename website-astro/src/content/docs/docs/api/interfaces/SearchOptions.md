@@ -11,7 +11,7 @@ title: "SearchOptions"
 
 # Interface: SearchOptions\<M\>
 
-Defined in: [types/src/types/backend.ts:57](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:57](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Options for searching entities
 
@@ -27,7 +27,7 @@ Options for searching entities
 
 > `optional` **databaseId**: `string`
 
-Defined in: [types/src/types/backend.ts:62](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:62](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/src/types/backend.ts:62](https://github.com/rebaseco/rebase/b
 
 > `optional` **filter**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
 
-Defined in: [types/src/types/backend.ts:58](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:58](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/src/types/backend.ts:58](https://github.com/rebaseco/rebase/b
 
 > `optional` **limit**: `number`
 
-Defined in: [types/src/types/backend.ts:61](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:61](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/src/types/backend.ts:61](https://github.com/rebaseco/rebase/b
 
 > `optional` **order**: `"desc"` \| `"asc"`
 
-Defined in: [types/src/types/backend.ts:60](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:60](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -59,4 +59,4 @@ Defined in: [types/src/types/backend.ts:60](https://github.com/rebaseco/rebase/b
 
 > `optional` **orderBy**: `string`
 
-Defined in: [types/src/types/backend.ts:59](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:59](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)

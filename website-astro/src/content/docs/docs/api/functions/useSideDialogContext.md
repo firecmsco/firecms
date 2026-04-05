@@ -13,7 +13,7 @@ title: "useSideDialogContext"
 
 > **useSideDialogContext**(): [`SideDialogController`](../type-aliases/SideDialogController)
 
-Defined in: [core/src/core/SideDialogs.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
+Defined in: [core/src/core/SideDialogs.tsx:40](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/SideDialogs.tsx)
 
 This hook is used to access the properties of a particular side dialog,
 in contrast with [useSideDialogsController](useSideDialogsController) which handles the

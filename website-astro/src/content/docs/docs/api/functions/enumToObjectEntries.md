@@ -13,7 +13,7 @@ title: "enumToObjectEntries"
 
 > **enumToObjectEntries**(`enumValues`): [`EnumValueConfig`](../type-aliases/EnumValueConfig)[]
 
-Defined in: [common/src/util/enums.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/enums.ts)
+Defined in: [common/src/util/enums.ts:3](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/enums.ts)
 
 ## Parameters
 

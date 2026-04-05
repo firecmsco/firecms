@@ -30,6 +30,7 @@ import {
     MapProperty,
     ReferenceProperty,
     RelationProperty,
+    Relation,
     EntityReference
 } from "@rebasepro/types";
 
@@ -68,10 +69,10 @@ function rel(overrides: Partial<RelationProperty> = {}): RelationProperty {
  */
 async function runFormValidation(
     properties: Properties,
-    values: Record<string, any>,
+    values: Record<string, unknown>,
     entityId?: string | number,
     customFieldValidator?: CustomFieldValidator
-): Promise<Record<string, any>> {
+): Promise<Record<string, unknown>> {
     const schema = getEntitySchema(entityId ?? "test-entity", properties, customFieldValidator);
     const result = await schema.safeParseAsync(values);
     if (result.success) return {};
@@ -84,7 +85,7 @@ async function runFormValidation(
  */
 async function runCellValidation(
     property: Property,
-    value: any,
+    value: unknown,
     entityId?: string | number
 ): Promise<{ success: boolean; error?: z.ZodError }> {
     const schema = mapPropertyToZod({ property, entityId: entityId ?? "test-entity" });
@@ -413,7 +414,7 @@ describe("Required validation — exact trigger values", () => {
 
     it("relation many required: rejects null and empty array", async () => {
         const schema = mapPropertyToZod({
-            property: rel({ relation: { cardinality: "many" } as any, validation: { required: true } }),
+            property: rel({ relation: { cardinality: "many" } as Partial<Relation> as Relation, validation: { required: true } }),
             entityId: "e"
         });
         expect((await schema.safeParseAsync(null)).success).toBe(false);
@@ -984,7 +985,7 @@ describe("Relation property validation", () => {
 
     it("relation one: accepts object, null", async () => {
         const schema = mapPropertyToZod({
-            property: rel({ relation: { cardinality: "one" } as any }),
+            property: rel({ relation: { cardinality: "one" } as Partial<Relation> as Relation }),
             entityId: "e"
         });
         expect((await schema.safeParseAsync({ id: 1, name: "Test" })).success).toBe(true);
@@ -993,7 +994,7 @@ describe("Relation property validation", () => {
 
     it("relation many: accepts array of objects, null", async () => {
         const schema = mapPropertyToZod({
-            property: rel({ relation: { cardinality: "many" } as any }),
+            property: rel({ relation: { cardinality: "many" } as Partial<Relation> as Relation }),
             entityId: "e"
         });
         expect((await schema.safeParseAsync([{ id: 1 }, { id: 2 }])).success).toBe(true);
@@ -1003,7 +1004,7 @@ describe("Relation property validation", () => {
 
     it("relation many required: rejects empty array", async () => {
         const schema = mapPropertyToZod({
-            property: rel({ relation: { cardinality: "many" } as any, validation: { required: true } }),
+            property: rel({ relation: { cardinality: "many" } as Partial<Relation> as Relation, validation: { required: true } }),
             entityId: "e"
         });
         expect((await schema.safeParseAsync([])).success).toBe(false);

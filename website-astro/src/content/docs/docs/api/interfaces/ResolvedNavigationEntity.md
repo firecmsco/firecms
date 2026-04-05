@@ -11,7 +11,7 @@ title: "ResolvedNavigationEntity"
 
 # Interface: ResolvedNavigationEntity\<M\>
 
-Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:19](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ## See
 
@@ -29,7 +29,7 @@ resolveNavigationFrom
 
 > **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:21](https://github.com
 
 > **entityId**: `string` \| `number`
 
-Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:22](https://github.com
 
 > **parentCollection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:24](https://github.com
 
 > **path**: `string`
 
-Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
 
 ***
 
@@ -61,4 +61,4 @@ Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:23](https://github.com
 
 > **type**: `"entity"`
 
-Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)
+Defined in: [core/src/hooks/useResolvedNavigationFrom.tsx:20](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useResolvedNavigationFrom.tsx)

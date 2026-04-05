@@ -13,7 +13,7 @@ title: "DrawerToggle"
 
 > **DrawerToggle**(`__namedParameters`): `Element`
 
-Defined in: [core/src/core/DefaultDrawer.tsx:212](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/DefaultDrawer.tsx)
+Defined in: [core/src/core/DefaultDrawer.tsx:212](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/DefaultDrawer.tsx)
 
 Toggle button at the bottom of the drawer.
 Uses double-chevron icons to indicate collapse/expand direction.

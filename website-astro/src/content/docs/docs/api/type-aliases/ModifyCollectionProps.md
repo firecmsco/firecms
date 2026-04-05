@@ -13,7 +13,7 @@ title: "ModifyCollectionProps"
 
 > **ModifyCollectionProps** = `object`
 
-Defined in: [types/src/types/modify\_collections.tsx:3](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/modify_collections.tsx)
+Defined in: [types/src/types/modify\_collections.tsx:3](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/modify_collections.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/src/types/modify\_collections.tsx:3](https://github.com/rebas
 
 > **collection**: [`EntityCollection`](../interfaces/EntityCollection)
 
-Defined in: [types/src/types/modify\_collections.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/modify_collections.tsx)
+Defined in: [types/src/types/modify\_collections.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/modify_collections.tsx)
 
 ***
 
@@ -29,4 +29,4 @@ Defined in: [types/src/types/modify\_collections.tsx:4](https://github.com/rebas
 
 > **parentPaths**: `string`[]
 
-Defined in: [types/src/types/modify\_collections.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/modify_collections.tsx)
+Defined in: [types/src/types/modify\_collections.tsx:5](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/modify_collections.tsx)

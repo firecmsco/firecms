@@ -13,7 +13,7 @@ title: "createFormexStub"
 
 > **createFormexStub**\<`T`\>(`values`): `FormexController`\<`T`\>
 
-Defined in: [core/src/util/createFormexStub.tsx:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/createFormexStub.tsx)
+Defined in: [core/src/util/createFormexStub.tsx:3](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/createFormexStub.tsx)
 
 ## Type Parameters
 

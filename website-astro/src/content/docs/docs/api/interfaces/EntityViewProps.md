@@ -11,7 +11,7 @@ title: "EntityViewProps"
 
 # Interface: EntityViewProps\<M\>
 
-Defined in: [core/src/components/EntityView.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
+Defined in: [core/src/components/EntityView.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityView.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [core/src/components/EntityView.tsx:12](https://github.com/rebaseco/
 
 > `optional` **className**: `string`
 
-Defined in: [core/src/components/EntityView.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
+Defined in: [core/src/components/EntityView.tsx:16](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityView.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [core/src/components/EntityView.tsx:16](https://github.com/rebaseco/
 
 > **collection**: [`EntityCollection`](EntityCollection)\<`M`\>
 
-Defined in: [core/src/components/EntityView.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
+Defined in: [core/src/components/EntityView.tsx:14](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityView.tsx)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [core/src/components/EntityView.tsx:14](https://github.com/rebaseco/
 
 > **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [core/src/components/EntityView.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
+Defined in: [core/src/components/EntityView.tsx:13](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityView.tsx)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [core/src/components/EntityView.tsx:13](https://github.com/rebaseco/
 
 > **path**: `string`
 
-Defined in: [core/src/components/EntityView.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityView.tsx)
+Defined in: [core/src/components/EntityView.tsx:15](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityView.tsx)

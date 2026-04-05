@@ -13,7 +13,7 @@ title: "getDefaultFieldConfig"
 
 > **getDefaultFieldConfig**(`property`): [`PropertyConfig`](../type-aliases/PropertyConfig) \| `undefined`
 
-Defined in: [core/src/core/field\_configs.tsx:347](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/field_configs.tsx)
+Defined in: [core/src/core/field\_configs.tsx:347](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/field_configs.tsx)
 
 ## Parameters
 

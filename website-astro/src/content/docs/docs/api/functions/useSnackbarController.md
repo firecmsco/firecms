@@ -13,7 +13,7 @@ title: "useSnackbarController"
 
 > **useSnackbarController**(): `object`
 
-Defined in: [core/src/hooks/useSnackbarController.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSnackbarController.tsx)
+Defined in: [core/src/hooks/useSnackbarController.tsx:15](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useSnackbarController.tsx)
 
 Hook to retrieve the SnackbarContext.
 

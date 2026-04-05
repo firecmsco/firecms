@@ -13,7 +13,7 @@ title: "OnVirtualTableColumnResizeParams"
 
 > **OnVirtualTableColumnResizeParams** = `object`
 
-Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:264](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:264](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ## See
 
@@ -25,7 +25,7 @@ Table
 
 > **column**: [`VirtualTableColumn`](../interfaces/VirtualTableColumn)
 
-Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:267](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:267](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:267](https:/
 
 > **key**: `string`
 
-Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:266](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:266](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -41,4 +41,4 @@ Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:266](https:/
 
 > **width**: `number`
 
-Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:265](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:265](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)

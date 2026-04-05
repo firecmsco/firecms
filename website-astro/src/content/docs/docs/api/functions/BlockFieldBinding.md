@@ -13,7 +13,7 @@ title: "BlockFieldBinding"
 
 > **BlockFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [core/src/form/field\_bindings/BlockFieldBinding.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/BlockFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/BlockFieldBinding.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/field_bindings/BlockFieldBinding.tsx)
 
 If the `oneOf` property is specified, this fields render each array entry as
 a `type` select and the corresponding field widget to the selected `type.

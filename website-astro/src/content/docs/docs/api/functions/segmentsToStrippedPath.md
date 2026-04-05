@@ -13,7 +13,7 @@ title: "segmentsToStrippedPath"
 
 > **segmentsToStrippedPath**(`paths`): `string`
 
-Defined in: [common/src/util/paths.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/paths.ts)
+Defined in: [common/src/util/paths.ts:12](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/paths.ts)
 
 ## Parameters
 

@@ -13,7 +13,7 @@ title: "AnalyticsController"
 
 > **AnalyticsController** = `object`
 
-Defined in: [types/src/controllers/analytics\_controller.tsx:1](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/analytics_controller.tsx)
+Defined in: [types/src/controllers/analytics\_controller.tsx:1](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/analytics_controller.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/src/controllers/analytics\_controller.tsx:1](https://github.c
 
 > `optional` **onAnalyticsEvent**: (`event`, `data?`) => `void`
 
-Defined in: [types/src/controllers/analytics\_controller.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/analytics_controller.tsx)
+Defined in: [types/src/controllers/analytics\_controller.tsx:6](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/analytics_controller.tsx)
 
 Callback used to get analytics events from the CMS
 

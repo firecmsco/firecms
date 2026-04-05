@@ -11,7 +11,7 @@ title: "EntityFetchResult"
 
 # Interface: EntityFetchResult\<M\>
 
-Defined in: [core/src/hooks/data/useEntityFetch.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [core/src/hooks/data/useEntityFetch.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [core/src/hooks/data/useEntityFetch.tsx:21](https://github.com/rebas
 
 > **dataLoading**: `boolean`
 
-Defined in: [core/src/hooks/data/useEntityFetch.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [core/src/hooks/data/useEntityFetch.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [core/src/hooks/data/useEntityFetch.tsx:23](https://github.com/rebas
 
 > `optional` **dataLoadingError**: `Error`
 
-Defined in: [core/src/hooks/data/useEntityFetch.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [core/src/hooks/data/useEntityFetch.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
 
 ***
 
@@ -41,4 +41,4 @@ Defined in: [core/src/hooks/data/useEntityFetch.tsx:24](https://github.com/rebas
 
 > `optional` **entity**: [`Entity`](Entity)\<`M`\>
 
-Defined in: [core/src/hooks/data/useEntityFetch.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)
+Defined in: [core/src/hooks/data/useEntityFetch.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useEntityFetch.tsx)

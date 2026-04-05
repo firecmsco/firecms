@@ -11,7 +11,7 @@ title: "PluginFormActionProps"
 
 # Interface: PluginFormActionProps\<USER, EC\>
 
-Defined in: [types/src/types/plugins.tsx:299](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:299](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ## Type Parameters
 
@@ -29,7 +29,7 @@ Defined in: [types/src/types/plugins.tsx:299](https://github.com/rebaseco/rebase
 
 > **collection**: `EC`
 
-Defined in: [types/src/types/plugins.tsx:304](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:304](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [types/src/types/plugins.tsx:304](https://github.com/rebaseco/rebase
 
 > **context**: [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
-Defined in: [types/src/types/plugins.tsx:307](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:307](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [types/src/types/plugins.tsx:307](https://github.com/rebaseco/rebase
 
 > **disabled**: `boolean`
 
-Defined in: [types/src/types/plugins.tsx:305](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:305](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [types/src/types/plugins.tsx:305](https://github.com/rebaseco/rebase
 
 > `optional` **entityId**: `string` \| `number`
 
-Defined in: [types/src/types/plugins.tsx:300](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:300](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [types/src/types/plugins.tsx:300](https://github.com/rebaseco/rebase
 
 > `optional` **formContext**: [`FormContext`](FormContext)\<`any`\>
 
-Defined in: [types/src/types/plugins.tsx:306](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:306](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [types/src/types/plugins.tsx:306](https://github.com/rebaseco/rebase
 
 > **openEntityMode**: `"side_panel"` \| `"full_screen"`
 
-Defined in: [types/src/types/plugins.tsx:308](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:308](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [types/src/types/plugins.tsx:308](https://github.com/rebaseco/rebase
 
 > **parentCollectionIds**: `string`[]
 
-Defined in: [types/src/types/plugins.tsx:302](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:302](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -85,7 +85,7 @@ Defined in: [types/src/types/plugins.tsx:302](https://github.com/rebaseco/rebase
 
 > **path**: `string`
 
-Defined in: [types/src/types/plugins.tsx:301](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:301](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -93,4 +93,4 @@ Defined in: [types/src/types/plugins.tsx:301](https://github.com/rebaseco/rebase
 
 > **status**: [`EntityStatus`](../type-aliases/EntityStatus)
 
-Defined in: [types/src/types/plugins.tsx:303](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:303](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)

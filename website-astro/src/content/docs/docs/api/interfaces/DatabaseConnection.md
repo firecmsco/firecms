@@ -11,7 +11,7 @@ title: "DatabaseConnection"
 
 # Interface: DatabaseConnection
 
-Defined in: [types/src/types/backend.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:11](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Abstract database connection interface.
 Represents a connection to any database system.
@@ -22,7 +22,7 @@ Represents a connection to any database system.
 
 > `readonly` `optional` **isConnected**: `boolean`
 
-Defined in: [types/src/types/backend.ts:20](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:20](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Whether the connection is currently active
 
@@ -32,7 +32,7 @@ Whether the connection is currently active
 
 > `readonly` **type**: `string`
 
-Defined in: [types/src/types/backend.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:15](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Type identifier for this database (e.g., 'postgres', 'mongodb', 'mysql')
 
@@ -42,7 +42,7 @@ Type identifier for this database (e.g., 'postgres', 'mongodb', 'mysql')
 
 > `optional` **close**(): `Promise`\<`void`\>
 
-Defined in: [types/src/types/backend.ts:25](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:25](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Close the database connection
 

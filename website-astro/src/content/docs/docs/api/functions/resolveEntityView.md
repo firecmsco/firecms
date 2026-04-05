@@ -13,7 +13,7 @@ title: "resolveEntityView"
 
 > **resolveEntityView**(`entityView`, `contextEntityViews?`): [`EntityCustomView`](../type-aliases/EntityCustomView)\<`any`\> \| `undefined`
 
-Defined in: [common/src/util/resolutions.ts:331](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
+Defined in: [common/src/util/resolutions.ts:331](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 ## Parameters
 

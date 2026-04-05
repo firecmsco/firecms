@@ -13,7 +13,7 @@ title: "useStorageUploadController"
 
 > **useStorageUploadController**\<`M`\>(`__namedParameters`): `object`
 
-Defined in: [core/src/util/useStorageUploadController.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
+Defined in: [core/src/util/useStorageUploadController.tsx:33](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/useStorageUploadController.tsx)
 
 ## Type Parameters
 

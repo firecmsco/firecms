@@ -13,7 +13,7 @@ title: "isDefaultFieldConfigId"
 
 > **isDefaultFieldConfigId**(`id`): `id is DefaultFieldConfig`
 
-Defined in: [common/src/util/fields.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/fields.ts)
+Defined in: [common/src/util/fields.ts:3](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/fields.ts)
 
 ## Parameters
 

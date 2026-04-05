@@ -3,31 +3,40 @@ import SectionBackgroundAccents from "./SectionBackgroundAccents.astro";
 
 const footerNavs = [
     {
-        title: "Company",
+        title: "Product",
         links: [
-            { label: "Contact", url: "/contact" },
-            { label: "About", url: "/about" },
-            { label: "Why Rebase", url: "/why-rebase" },
-            { label: "Book a Call", url: "https://calendar.app.google/QipmvFoUznse8KnNA", external: true },
+            { label: "Features", url: "/features" },
+            { label: "Rebase Studio", url: "/studio" },
+            { label: "Backend & APIs", url: "/backend" },
+            { label: "AI & Agents", url: "/ai" },
+            { label: "Demo", url: "https://demo.rebase.pro", external: true },
+        ],
+    },
+    {
+        title: "Developers",
+        links: [
+            { label: "Overview", url: "/developers" },
+            { label: "Client SDK", url: "/sdk" },
+            { label: "CLI & Tooling", url: "/cli" },
+            { label: "Security & Auth", url: "/security" },
+            { label: "UI Components", url: "/ui" },
+            { label: "llms.txt", url: "/llms.txt", external: true },
         ],
     },
     {
         title: "Solutions",
         links: [
-            { label: "Startups", url: "/startups" },
-            { label: "Agencies", url: "/agencies" },
-            { label: "Developers", url: "/developers" },
+            { label: "For Startups", url: "/startups" },
+            { label: "For Agencies", url: "/agencies" },
+            { label: "Why Rebase", url: "/why-rebase" },
         ],
     },
     {
-        title: "Product",
+        title: "Company",
         links: [
-            { label: "Demo", url: "https://demo.rebase.pro", external: true },
-            { label: "Features", url: "/features" },
-            { label: "UI Components", url: "/ui" },
-
-            { label: "Security", url: "/security" },
-            { label: "llms.txt", url: "/llms.txt", external: true },
+            { label: "About", url: "/about" },
+            { label: "Contact", url: "/contact" },
+            { label: "Book a Call", url: "https://calendar.app.google/QipmvFoUznse8KnNA", external: true },
         ],
     },
     {
@@ -54,7 +63,7 @@ const footerNavs = [
                     The Open-Source Postgres CMS · Built in Europe
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-4">
+            <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3 lg:grid-cols-5">
                 {footerNavs.map((nav) => (
                     <div>
                         <p class="mb-6 text-sm font-semibold uppercase text-white">{nav.title}</p>

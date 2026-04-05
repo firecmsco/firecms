@@ -13,4 +13,4 @@ title: "DEFAULT_ONE_OF_VALUE"
 
 > `const` **DEFAULT\_ONE\_OF\_VALUE**: `"value"` = `"value"`
 
-Defined in: [common/src/util/common.ts:2](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/common.ts)
+Defined in: [common/src/util/common.ts:2](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/common.ts)

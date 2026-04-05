@@ -13,7 +13,7 @@ title: "EntityCardProps"
 
 > **EntityCardProps**\<`M`\> = `object`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:32](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:32](https:/
 
 > **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:34](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:34](https:/
 
 > **entity**: [`Entity`](../interfaces/Entity)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:33](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:33](https:/
 
 > `optional` **highlighted**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:37](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:37](https:/
 
 > `optional` **onClick**: (`entity`) => `void`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:35](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
 
 #### Parameters
 
@@ -69,7 +69,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:35](https:/
 
 > `optional` **onSelectionChange**: (`entity`, `selected`) => `void`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:38](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
 
 #### Parameters
 
@@ -91,7 +91,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:38](https:/
 
 > `optional` **selected**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:36](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
 
 ***
 
@@ -99,7 +99,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:36](https:/
 
 > `optional` **selectionEnabled**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:39](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
 
 ***
 
@@ -107,6 +107,6 @@ Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:39](https:/
 
 > `optional` **size**: [`CollectionSize`](CollectionSize)
 
-Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCard.tsx:43](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCard.tsx)
 
 Size of the card - affects checkbox styling

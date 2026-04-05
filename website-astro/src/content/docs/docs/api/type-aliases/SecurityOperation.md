@@ -13,6 +13,6 @@ title: "SecurityOperation"
 
 > **SecurityOperation** = `"select"` \| `"insert"` \| `"update"` \| `"delete"` \| `"all"`
 
-Defined in: [types/src/types/collections.ts:773](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:773](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 SQL operation that a policy applies to.

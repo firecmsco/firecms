@@ -34,7 +34,10 @@ import { PgTransaction } from "drizzle-orm/pg-core";
 /**
  * Type representing either a direct database connection or a transaction.
  * Used to allow services to operate within a transaction context.
+ * Note: `any` is intentional here — it represents a Drizzle client with
+ * a dynamic schema, enabling `db.query[tableName]` access without casts.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DrizzleClient = NodePgDatabase<any> | PgTransaction<any, any, any>;
 
 export type {

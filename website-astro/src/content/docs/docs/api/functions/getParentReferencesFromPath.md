@@ -13,7 +13,7 @@ title: "getParentReferencesFromPath"
 
 > **getParentReferencesFromPath**(`props`): [`EntityReference`](../classes/EntityReference)[]
 
-Defined in: [common/src/util/parent\_references\_from\_path.ts:5](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/parent_references_from_path.ts)
+Defined in: [common/src/util/parent\_references\_from\_path.ts:5](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/parent_references_from_path.ts)
 
 ## Parameters
 

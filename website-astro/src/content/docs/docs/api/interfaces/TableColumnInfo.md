@@ -11,7 +11,7 @@ title: "TableColumnInfo"
 
 # Interface: TableColumnInfo
 
-Defined in: [types/src/types/websockets.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:34](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 Column metadata returned by table introspection.
 
@@ -21,7 +21,7 @@ Column metadata returned by table introspection.
 
 > **character\_maximum\_length**: `number` \| `null`
 
-Defined in: [types/src/types/websockets.ts:40](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:40](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [types/src/types/websockets.ts:40](https://github.com/rebaseco/rebas
 
 > **column\_default**: `string` \| `null`
 
-Defined in: [types/src/types/websockets.ts:39](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:39](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [types/src/types/websockets.ts:39](https://github.com/rebaseco/rebas
 
 > **column\_name**: `string`
 
-Defined in: [types/src/types/websockets.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:35](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [types/src/types/websockets.ts:35](https://github.com/rebaseco/rebas
 
 > **data\_type**: `string`
 
-Defined in: [types/src/types/websockets.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:36](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [types/src/types/websockets.ts:36](https://github.com/rebaseco/rebas
 
 > `optional` **enum\_values**: `string`[]
 
-Defined in: [types/src/types/websockets.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:42](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 Enum values, populated for USER-DEFINED (enum) columns
 
@@ -63,7 +63,7 @@ Enum values, populated for USER-DEFINED (enum) columns
 
 > **is\_nullable**: `string`
 
-Defined in: [types/src/types/websockets.ts:38](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:38](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 ***
 
@@ -71,4 +71,4 @@ Defined in: [types/src/types/websockets.ts:38](https://github.com/rebaseco/rebas
 
 > **udt\_name**: `string`
 
-Defined in: [types/src/types/websockets.ts:37](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:37](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)

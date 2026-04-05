@@ -13,7 +13,7 @@ title: "RebaseContext"
 
 > **RebaseContext**\<`USER`, `AuthControllerType`\> = [`RebaseCallContext`](RebaseCallContext)\<`USER`\> & `object`
 
-Defined in: [types/src/rebase\_context.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/types/src/rebase_context.tsx)
+Defined in: [types/src/rebase\_context.tsx:48](https://github.com/rebasepro/rebase/blob/main/packages/types/src/rebase_context.tsx)
 
 Context that includes the internal controllers and contexts used by the app.
 Some controllers and context included in this context can be accessed

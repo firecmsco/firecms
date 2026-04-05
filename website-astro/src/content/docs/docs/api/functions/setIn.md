@@ -13,7 +13,7 @@ title: "setIn"
 
 > **setIn**\<`T`\>(`obj`, `path`, `value`): `T`
 
-Defined in: [common/src/util/objects.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:42](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Type Parameters
 

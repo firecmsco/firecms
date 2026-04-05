@@ -13,7 +13,7 @@ title: "buildEnumLabel"
 
 > **buildEnumLabel**(`labelOrConfig?`): `string` \| `undefined`
 
-Defined in: [core/src/util/enums.ts:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/enums.ts)
+Defined in: [core/src/util/enums.ts:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/enums.ts)
 
 ## Parameters
 

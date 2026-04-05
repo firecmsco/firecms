@@ -11,7 +11,7 @@ title: "RebaseData"
 
 # Interface: RebaseData
 
-Defined in: [types/src/controllers/data.ts:133](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:133](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 The unified data access object.
 
@@ -53,7 +53,7 @@ data.products.find({ where: { status: "eq.published" } })
 
 > **collection**(`slug`): [`CollectionAccessor`](CollectionAccessor)
 
-Defined in: [types/src/controllers/data.ts:143](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:143](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Get a collection accessor by slug.
 Alternative to dynamic property access for cases where

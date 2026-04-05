@@ -13,7 +13,7 @@ title: "OnRowClickParams"
 
 > **OnRowClickParams**\<`T`\> = `object`
 
-Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:5](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:5](https://g
 
 > **event**: `React.SyntheticEvent`
 
-Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:8](https://g
 
 > **rowData**: `T`
 
-Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:6](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
 
 ***
 
@@ -43,4 +43,4 @@ Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:6](https://g
 
 > **rowIndex**: `number`
 
-Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)
+Defined in: [core/src/components/VirtualTable/VirtualTableProps.tsx:7](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/VirtualTable/VirtualTableProps.tsx)

@@ -11,7 +11,7 @@ title: "CollectionFetchResult"
 
 # Interface: CollectionFetchResult\<M\>
 
-Defined in: [core/src/hooks/data/useCollectionFetch.tsx:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [core/src/hooks/data/useCollectionFetch.tsx:45](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [core/src/hooks/data/useCollectionFetch.tsx:45](https://github.com/r
 
 > **data**: [`Entity`](Entity)\<`M`\>[]
 
-Defined in: [core/src/hooks/data/useCollectionFetch.tsx:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [core/src/hooks/data/useCollectionFetch.tsx:46](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [core/src/hooks/data/useCollectionFetch.tsx:46](https://github.com/r
 
 > **dataLoading**: `boolean`
 
-Defined in: [core/src/hooks/data/useCollectionFetch.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [core/src/hooks/data/useCollectionFetch.tsx:47](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [core/src/hooks/data/useCollectionFetch.tsx:47](https://github.com/r
 
 > `optional` **dataLoadingError**: `Error`
 
-Defined in: [core/src/hooks/data/useCollectionFetch.tsx:49](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [core/src/hooks/data/useCollectionFetch.tsx:49](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
 
 ***
 
@@ -49,4 +49,4 @@ Defined in: [core/src/hooks/data/useCollectionFetch.tsx:49](https://github.com/r
 
 > **noMoreToLoad**: `boolean`
 
-Defined in: [core/src/hooks/data/useCollectionFetch.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)
+Defined in: [core/src/hooks/data/useCollectionFetch.tsx:48](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useCollectionFetch.tsx)

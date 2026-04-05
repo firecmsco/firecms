@@ -13,4 +13,4 @@ title: "PropertyPreview"
 
 > `const` **PropertyPreview**: `MemoExoticComponent`\<\<`P`\>(`props`) => `any`\>
 
-Defined in: [core/src/preview/PropertyPreview.tsx:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/PropertyPreview.tsx)
+Defined in: [core/src/preview/PropertyPreview.tsx:41](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/PropertyPreview.tsx)

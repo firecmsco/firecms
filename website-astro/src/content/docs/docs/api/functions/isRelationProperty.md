@@ -13,7 +13,7 @@ title: "isRelationProperty"
 
 > **isRelationProperty**(`property`): `boolean` \| `null`
 
-Defined in: [core/src/util/property\_utils.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/property_utils.tsx)
+Defined in: [core/src/util/property\_utils.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/property_utils.tsx)
 
 ## Parameters
 

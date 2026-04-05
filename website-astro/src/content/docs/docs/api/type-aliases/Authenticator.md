@@ -13,7 +13,7 @@ title: "Authenticator"
 
 > **Authenticator**\<`USER`\> = (`props`) => `boolean` \| `Promise`\<`boolean`\>
 
-Defined in: [types/src/controllers/auth.tsx:72](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/auth.tsx)
+Defined in: [types/src/controllers/auth.tsx:72](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/auth.tsx)
 
 Implement this function to allow access to specific users.
 

@@ -13,7 +13,7 @@ title: "EntityLinkBuilder"
 
 > **EntityLinkBuilder**\<`M`\> = (`{ entity }`) => `string`
 
-Defined in: [types/src/types/entity\_link\_builder.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entity_link_builder.ts)
+Defined in: [types/src/types/entity\_link\_builder.ts:6](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entity_link_builder.ts)
 
 ## Type Parameters
 

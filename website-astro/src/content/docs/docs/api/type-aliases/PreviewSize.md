@@ -13,4 +13,4 @@ title: "PreviewSize"
 
 > **PreviewSize** = `"small"` \| `"medium"` \| `"large"`
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:6](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)

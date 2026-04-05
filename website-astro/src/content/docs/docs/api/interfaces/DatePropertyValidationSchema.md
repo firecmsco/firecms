@@ -11,7 +11,7 @@ title: "DatePropertyValidationSchema"
 
 # Interface: DatePropertyValidationSchema
 
-Defined in: [types/src/types/properties.ts:777](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:777](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Validation rules for dates
 
@@ -25,7 +25,7 @@ Validation rules for dates
 
 > `optional` **max**: `Date`
 
-Defined in: [types/src/types/properties.ts:779](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:779](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [types/src/types/properties.ts:779](https://github.com/rebaseco/reba
 
 > `optional` **min**: `Date`
 
-Defined in: [types/src/types/properties.ts:778](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:778](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [types/src/types/properties.ts:778](https://github.com/rebaseco/reba
 
 > `optional` **required**: `boolean`
 
-Defined in: [types/src/types/properties.ts:719](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:719](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Is this field required
 
@@ -55,7 +55,7 @@ Is this field required
 
 > `optional` **requiredMessage**: `string`
 
-Defined in: [types/src/types/properties.ts:724](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:724](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Customize the required message when the property is not set
 
@@ -69,7 +69,7 @@ Customize the required message when the property is not set
 
 > `optional` **unique**: `boolean`
 
-Defined in: [types/src/types/properties.ts:730](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:730](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 If the unique flag is set to `true`, you can only have one entity in the
 collection with this value.
@@ -84,7 +84,7 @@ collection with this value.
 
 > `optional` **uniqueInArray**: `boolean`
 
-Defined in: [types/src/types/properties.ts:738](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:738](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 If the uniqueInArray flag is set to `true`, you can only have this value
 once per entry in the parent `ArrayProperty`. It has no effect if this

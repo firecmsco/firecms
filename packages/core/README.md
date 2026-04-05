@@ -138,7 +138,7 @@ You can replace the Firebase Storage implementation with your own.
 ## Included example
 
 You can access the code for the demo project under
-[`example`](https://github.com/Rebaseco/rebase/tree/master/example). It includes
+[`example`](https://github.com/rebasepro/rebase/tree/master/example). It includes
 every feature provided by this CMS.
 
 Keep in mind you need to update the dependencies in that project if you want to

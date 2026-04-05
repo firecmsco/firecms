@@ -13,7 +13,7 @@ title: "NavigationBlocker"
 
 > **NavigationBlocker** = `object`
 
-Defined in: [types/src/controllers/navigation.ts:184](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:184](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [types/src/controllers/navigation.ts:184](https://github.com/rebasec
 
 > **isBlocked**: (`path`) => `boolean`
 
-Defined in: [types/src/controllers/navigation.ts:186](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:186](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 #### Parameters
 
@@ -39,7 +39,7 @@ Defined in: [types/src/controllers/navigation.ts:186](https://github.com/rebasec
 
 > `optional` **proceed**: () => `void`
 
-Defined in: [types/src/controllers/navigation.ts:187](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:187](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 #### Returns
 
@@ -51,7 +51,7 @@ Defined in: [types/src/controllers/navigation.ts:187](https://github.com/rebasec
 
 > `optional` **reset**: () => `void`
 
-Defined in: [types/src/controllers/navigation.ts:188](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:188](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 #### Returns
 
@@ -63,7 +63,7 @@ Defined in: [types/src/controllers/navigation.ts:188](https://github.com/rebasec
 
 > **updateBlockListener**: (`path`, `block`, `basePath?`) => () => `void`
 
-Defined in: [types/src/controllers/navigation.ts:185](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:185](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 #### Parameters
 

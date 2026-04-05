@@ -11,7 +11,7 @@ title: "JoinStep"
 
 # Interface: JoinStep
 
-Defined in: [types/src/types/relations.ts:321](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:321](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 Defines a single, explicit step in a multi-join path.
 
@@ -47,7 +47,7 @@ and the `to` columns refer to the current table being joined.
 
 > **on**: `object`
 
-Defined in: [types/src/types/relations.ts:347](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:347](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 The join condition for this step. Defines how the previous table
 connects to the current table.
@@ -79,7 +79,7 @@ and columns are matched by position (index 0 with index 0, etc.).
 
 > **table**: `string`
 
-Defined in: [types/src/types/relations.ts:328](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/relations.ts)
+Defined in: [types/src/types/relations.ts:328](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/relations.ts)
 
 The database table name to join TO in this step.
 This is the table you're joining into, not the table you're joining from.

@@ -1,0 +1,271 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+
+const title = "Rebase Client SDK — Type-Safe Queries, Auth, Storage & Realtime";
+const description = "A unified TypeScript client for your Rebase backend. Proxy-based data access, fluent query builder, auth, admin, storage, and realtime subscriptions.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://rebase.pro" },
+    { name: "Client SDK", url: "https://rebase.pro/sdk" }
+];
+
+const initCode = `<span class="text-blue-400">import</span> { createRebaseClient } <span class="text-blue-400">from</span> <span class="text-emerald-400">"@rebasepro/client"</span>;
+<span class="text-blue-400">import type</span> { Database } <span class="text-blue-400">from</span> <span class="text-emerald-400">"./database.types"</span>;
+
+<span class="text-blue-400">const</span> rebase = createRebaseClient&lt;Database&gt;({
+  baseUrl: <span class="text-emerald-400">"https://api.myapp.com"</span>,
+});
+
+<span class="text-surface-500">// Everything is dot-accessible:</span>
+rebase.<span class="text-amber-400">data</span>      <span class="text-surface-500">// → collection queries</span>
+rebase.<span class="text-amber-400">auth</span>      <span class="text-surface-500">// → sign in, sign up, sessions</span>
+rebase.<span class="text-amber-400">admin</span>     <span class="text-surface-500">// → user/role management</span>
+rebase.<span class="text-amber-400">storage</span>   <span class="text-surface-500">// → file upload/download</span>`;
+
+const crudCode = `<span class="text-surface-500">// Find all published posts</span>
+<span class="text-blue-400">const</span> { data } = <span class="text-blue-400">await</span> rebase.data.posts.<span class="text-amber-400">find</span>({
+  limit: <span class="text-amber-400">20</span>,
+  orderBy: <span class="text-emerald-400">"createdAt:desc"</span>
+});
+
+<span class="text-surface-500">// Get single post</span>
+<span class="text-blue-400">const</span> post = <span class="text-blue-400">await</span> rebase.data.posts
+  .<span class="text-amber-400">findById</span>(<span class="text-emerald-400">"abc-123"</span>);
+
+<span class="text-surface-500">// Create</span>
+<span class="text-blue-400">await</span> rebase.data.posts.<span class="text-amber-400">create</span>({
+  title: <span class="text-emerald-400">"Hello World"</span>,
+  status: <span class="text-emerald-400">"draft"</span>
+});
+
+<span class="text-surface-500">// Update</span>
+<span class="text-blue-400">await</span> rebase.data.posts.<span class="text-amber-400">update</span>(<span class="text-emerald-400">"abc-123"</span>, {
+  status: <span class="text-emerald-400">"published"</span>
+});
+
+<span class="text-surface-500">// Delete</span>
+<span class="text-blue-400">await</span> rebase.data.posts.<span class="text-amber-400">delete</span>(<span class="text-emerald-400">"abc-123"</span>);`;
+
+const queryCode = `<span class="text-surface-500">// Chained queries</span>
+<span class="text-blue-400">const</span> { data } = <span class="text-blue-400">await</span> rebase.data.posts
+  .<span class="text-amber-400">where</span>(<span class="text-emerald-400">"status"</span>, <span class="text-emerald-400">"eq"</span>, <span class="text-emerald-400">"published"</span>)
+  .<span class="text-amber-400">where</span>(<span class="text-emerald-400">"views"</span>, <span class="text-emerald-400">"gte"</span>, <span class="text-amber-400">100</span>)
+  .<span class="text-amber-400">orderBy</span>(<span class="text-emerald-400">"createdAt"</span>, <span class="text-emerald-400">"desc"</span>)
+  .<span class="text-amber-400">limit</span>(<span class="text-amber-400">10</span>)
+  .<span class="text-amber-400">find</span>();
+
+<span class="text-surface-500">// Include relations</span>
+<span class="text-blue-400">const</span> { data: posts } = <span class="text-blue-400">await</span> rebase.data.posts
+  .<span class="text-amber-400">include</span>(<span class="text-emerald-400">"author"</span>, <span class="text-emerald-400">"tags"</span>)
+  .<span class="text-amber-400">find</span>();
+
+<span class="text-surface-500">// Full-text search</span>
+<span class="text-blue-400">const</span> results = <span class="text-blue-400">await</span> rebase.data.posts
+  .<span class="text-amber-400">search</span>(<span class="text-emerald-400">"rebase tutorial"</span>)
+  .<span class="text-amber-400">limit</span>(<span class="text-amber-400">5</span>)
+  .<span class="text-amber-400">find</span>();
+
+<span class="text-surface-500">// Realtime listening</span>
+<span class="text-blue-400">const</span> unsub = rebase.data.posts
+  .<span class="text-amber-400">where</span>(<span class="text-emerald-400">"status"</span>, <span class="text-emerald-400">"eq"</span>, <span class="text-emerald-400">"published"</span>)
+  .<span class="text-amber-400">listen</span>(({ data }) =&gt; {
+    console.log(<span class="text-emerald-400">"Live update:"</span>, data);
+  });`;
+
+const authCode = `<span class="text-surface-500">// Sign in</span>
+<span class="text-blue-400">await</span> rebase.auth.<span class="text-amber-400">signInWithEmail</span>(
+  <span class="text-emerald-400">"user@app.com"</span>, <span class="text-emerald-400">"password"</span>
+);
+
+<span class="text-surface-500">// Google OAuth</span>
+<span class="text-blue-400">await</span> rebase.auth.<span class="text-amber-400">signInWithGoogle</span>(idToken);
+
+<span class="text-surface-500">// Listen for auth changes</span>
+rebase.auth.<span class="text-amber-400">onAuthStateChange</span>((event, session) =&gt; {
+  console.log(event, session?.user);
+});
+
+<span class="text-surface-500">// Session management</span>
+<span class="text-blue-400">const</span> sessions = <span class="text-blue-400">await</span> rebase.auth.<span class="text-amber-400">getSessions</span>();
+<span class="text-blue-400">await</span> rebase.auth.<span class="text-amber-400">revokeSession</span>(sessionId);`;
+
+const adminCode = `<span class="text-surface-500">// User management</span>
+<span class="text-blue-400">const</span> { users } = <span class="text-blue-400">await</span> rebase.admin.<span class="text-amber-400">listUsers</span>();
+<span class="text-blue-400">await</span> rebase.admin.<span class="text-amber-400">createUser</span>({
+  email: <span class="text-emerald-400">"new@app.com"</span>,
+  roles: [<span class="text-emerald-400">"editor"</span>]
+});
+
+<span class="text-surface-500">// Role management</span>
+<span class="text-blue-400">const</span> { roles } = <span class="text-blue-400">await</span> rebase.admin.<span class="text-amber-400">listRoles</span>();
+
+<span class="text-surface-500">// File storage</span>
+<span class="text-blue-400">await</span> rebase.storage.<span class="text-amber-400">uploadFile</span>({
+  file: myFile,
+  path: <span class="text-emerald-400">"uploads/avatar.jpg"</span>
+});
+
+<span class="text-blue-400">const</span> { url } = <span class="text-blue-400">await</span> rebase.storage
+  .<span class="text-amber-400">getDownloadURL</span>(<span class="text-emerald-400">"uploads/avatar.jpg"</span>);
+
+<span class="text-blue-400">await</span> rebase.storage.<span class="text-amber-400">deleteFile</span>(<span class="text-emerald-400">"old.pdf"</span>);`;
+
+const sdkGenCode = `<span class="text-surface-500">$ rebase generate-sdk</span>
+<span class="text-emerald-400">✓</span> Generated database.types.ts
+
+<span class="text-surface-500">// database.types.ts (auto-generated)</span>
+<span class="text-blue-400">export interface</span> Database {
+  posts: {
+    id: <span class="text-amber-400">string</span>;
+    title: <span class="text-amber-400">string</span>;
+    status: <span class="text-emerald-400">"draft"</span> | <span class="text-emerald-400">"published"</span>;
+    authorId: <span class="text-amber-400">string</span>;
+    createdAt: <span class="text-amber-400">Date</span>;
+  };
+  users: {
+    id: <span class="text-amber-400">string</span>;
+    email: <span class="text-amber-400">string</span>;
+    displayName: <span class="text-amber-400">string</span> | <span class="text-amber-400">null</span>;
+  };
+}`;
+---
+
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
+  <main>
+    <!-- Hero -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute -bottom-40 right-1/4 w-[700px] h-[700px] rounded-full bg-emerald-500/5 blur-3xl opacity-50"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+      </div>
+      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+        <div class="inline-flex items-center py-1.5 px-3 mb-6 text-sm rounded-full bg-surface-800/40 text-surface-400 ring-1 ring-inset ring-white/10 mx-auto">
+          <span class="text-sm font-medium">npm install @rebasepro/client</span>
+        </div>
+        <h1 class="mb-6 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+          Client SDK
+        </h1>
+        <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
+          One client. Full typed access to your data, auth, storage, and realtime — from any JavaScript or TypeScript environment.
+        </p>
+      </div>
+    </section>
+
+    <!-- Init Code -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-emerald-500/10 text-emerald-400 ring-1 ring-inset ring-emerald-500/20">
+              Fully Typed
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">One Client, Everything You Need</h2>
+            <p class="text-lg text-surface-400 mb-6"><code class="text-sm bg-surface-800 px-1.5 py-0.5 rounded">createRebaseClient</code> gives you typed access to data, auth, admin, and storage via a single instance. Generate types with <code class="text-sm bg-surface-800 px-1.5 py-0.5 rounded">rebase generate-sdk</code> for full IntelliSense.</p>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6">
+            <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300" set:html={initCode}/></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data Access -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Proxy-Based Data Access</h2>
+          <p class="mt-4 text-lg text-surface-400">Access any collection as a typed property. No string lookups, no manual typing — just <code class="text-sm bg-surface-800 px-1.5 py-0.5 rounded">rebase.data.posts</code>.</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6">
+            <div class="text-xs font-semibold text-surface-500 mb-3 uppercase tracking-wider">CRUD Operations</div>
+            <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300" set:html={crudCode}/></pre>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6">
+            <div class="text-xs font-semibold text-surface-500 mb-3 uppercase tracking-wider">Fluent Query Builder</div>
+            <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300" set:html={queryCode}/></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Auth & Admin -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-blue-500/10 text-blue-400 ring-1 ring-inset ring-blue-500/20">
+              rebase.auth
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Built-in Auth Client</h2>
+            <p class="text-lg text-surface-400 mb-6">Full auth lifecycle — sign in, sign up, Google OAuth, token refresh, password reset, email verification, and session management. Works in browser and Node.js.</p>
+            <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6">
+              <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300" set:html={authCode}/></pre>
+            </div>
+          </div>
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-purple-500/10 text-purple-400 ring-1 ring-inset ring-purple-500/20">
+              rebase.admin + rebase.storage
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Admin & Storage</h2>
+            <p class="text-lg text-surface-400 mb-6">Manage users, roles, and files programmatically — no admin UI required.</p>
+            <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6">
+              <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300" set:html={adminCode}/></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SDK Generator -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-amber-500/10 text-amber-400 ring-1 ring-inset ring-amber-500/20">
+              @rebasepro/sdk_generator
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Generated Types</h2>
+            <p class="text-lg text-surface-400 mb-6">Run <code class="text-sm bg-surface-800 px-1.5 py-0.5 rounded">rebase generate-sdk</code> to produce a <code class="text-sm bg-surface-800 px-1.5 py-0.5 rounded">database.types.ts</code> file from your collection definitions. Pass it as a generic to <code class="text-sm bg-surface-800 px-1.5 py-0.5 rounded">createRebaseClient&lt;Database&gt;</code> for full end-to-end type safety.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> Auto-generated from your collection definitions</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Full IntelliSense for <code class="text-sm bg-surface-800 px-1 rounded">rebase.data.&lt;collection&gt;</code></li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Property types, enums, and relations included</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Regenerate on schema changes with one command</li>
+            </ul>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6">
+            <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300" set:html={sdkGenCode}/></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-black py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Start building with the SDK</h2>
+        <p class="text-lg text-surface-400 mb-8">Install, connect, query — in under 30 seconds.</p>
+        <div class="inline-block rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6 mb-8 text-left">
+          <pre class="text-sm font-mono"><code class="text-surface-300"><span class="text-surface-500">$</span> npm install @rebasepro/client
+<span class="text-surface-500">$</span> rebase generate-sdk</code></pre>
+        </div>
+        <div class="flex items-center justify-center gap-x-6">
+          <a href="/backend"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+            Backend & APIs
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 filter invert"/>
+          </a>
+          <a href="/cli" class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+            CLI & Tooling
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 filter invert"/>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

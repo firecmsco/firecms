@@ -13,7 +13,7 @@ title: "canCreateEntity"
 
 > **canCreateEntity**\<`M`, `USER`\>(`collection`, `authController`, `path`, `entity`): `boolean`
 
-Defined in: [common/src/util/permissions.ts:216](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/permissions.ts)
+Defined in: [common/src/util/permissions.ts:216](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/permissions.ts)
 
 ## Type Parameters
 

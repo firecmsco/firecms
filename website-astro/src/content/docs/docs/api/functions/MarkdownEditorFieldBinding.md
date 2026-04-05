@@ -13,7 +13,7 @@ title: "MarkdownEditorFieldBinding"
 
 > **MarkdownEditorFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [core/src/form/field\_bindings/MarkdownEditorFieldBinding.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/MarkdownEditorFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/MarkdownEditorFieldBinding.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/field_bindings/MarkdownEditorFieldBinding.tsx)
 
 ## Parameters
 

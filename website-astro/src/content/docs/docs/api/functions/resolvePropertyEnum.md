@@ -13,7 +13,7 @@ title: "resolvePropertyEnum"
 
 > **resolvePropertyEnum**(`property`): [`StringProperty`](../interfaces/StringProperty) \| [`NumberProperty`](../interfaces/NumberProperty)
 
-Defined in: [common/src/util/resolutions.ts:153](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
+Defined in: [common/src/util/resolutions.ts:153](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 Resolve enum aliases for a string or number property
 

@@ -13,4 +13,4 @@ title: "EffectiveRoleControllerContext"
 
 > `const` **EffectiveRoleControllerContext**: `Context`\<[`EffectiveRoleController`](../interfaces/EffectiveRoleController)\>
 
-Defined in: [core/src/contexts/EffectiveRoleController.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/EffectiveRoleController.tsx)
+Defined in: [core/src/contexts/EffectiveRoleController.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/contexts/EffectiveRoleController.tsx)

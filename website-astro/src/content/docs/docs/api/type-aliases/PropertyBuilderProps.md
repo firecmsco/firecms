@@ -13,7 +13,7 @@ title: "PropertyBuilderProps"
 
 > **PropertyBuilderProps**\<`M`\> = `object`
 
-Defined in: [types/src/types/properties.ts:638](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:638](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [types/src/types/properties.ts:638](https://github.com/rebaseco/reba
 
 > **authController**: [`AuthController`](AuthController)
 
-Defined in: [types/src/types/properties.ts:645](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:645](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/src/types/properties.ts:645](https://github.com/rebaseco/reba
 
 > `optional` **entityId**: `string` \| `number`
 
-Defined in: [types/src/types/properties.ts:644](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:644](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/src/types/properties.ts:644](https://github.com/rebaseco/reba
 
 > `optional` **index**: `number`
 
-Defined in: [types/src/types/properties.ts:642](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:642](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/src/types/properties.ts:642](https://github.com/rebaseco/reba
 
 > **path**: `string`
 
-Defined in: [types/src/types/properties.ts:643](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:643](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [types/src/types/properties.ts:643](https://github.com/rebaseco/reba
 
 > `optional` **previousValues**: `Partial`\<`M`\>
 
-Defined in: [types/src/types/properties.ts:640](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:640](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [types/src/types/properties.ts:640](https://github.com/rebaseco/reba
 
 > `optional` **propertyValue**: `unknown`
 
-Defined in: [types/src/types/properties.ts:641](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:641](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -75,4 +75,4 @@ Defined in: [types/src/types/properties.ts:641](https://github.com/rebaseco/reba
 
 > **values**: `Partial`\<`M`\>
 
-Defined in: [types/src/types/properties.ts:639](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:639](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)

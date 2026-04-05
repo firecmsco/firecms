@@ -13,7 +13,7 @@ title: "buildAdditionalFieldDelegate"
 
 > **buildAdditionalFieldDelegate**\<`M`, `USER`\>(`additionalFieldDelegate`): [`AdditionalFieldDelegate`](../interfaces/AdditionalFieldDelegate)\<`M`, `USER`\>
 
-Defined in: [common/src/util/builders.ts:122](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/builders.ts)
+Defined in: [common/src/util/builders.ts:122](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/builders.ts)
 
 Identity function we use to defeat the type system of Typescript and build
 additional field delegates views with all its properties

@@ -11,18 +11,18 @@ import { deepEqual } from "fast-equals";
 
 describe("useTopLevelNavigation", () => {
 
-    const mockCmsUrlController: CMSUrlController = {
+    const mockCmsUrlController = {
         buildUrlCollectionPath: (path: string) => `/c/${path}`,
         buildCMSUrlPath: (path: string) => `/${path}`,
         basePath: "/",
         baseCollectionPath: "/c",
-    } as any;
+    } as Partial<CMSUrlController> as CMSUrlController;
 
-    const mockCollectionRegistryController: CollectionRegistryController<any> & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> } = {
+    const mockCollectionRegistryController = {
         collectionRegistryRef: { current: new CollectionRegistry() },
         getCollection: jest.fn(),
         getCollections: jest.fn(),
-    } as any;
+    } as Partial<CollectionRegistryController> as CollectionRegistryController & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> };
 
     const collections: EntityCollection[] = [
         { id: "test", name: "Test Collection", path: "test", slug: "test", group: "My Group" }
@@ -132,8 +132,8 @@ describe("useTopLevelNavigation", () => {
     it("should map views and adminViews into the navigation", () => {
         const { result } = renderHook(() => useTopLevelNavigation({
             collections: [],
-            views: [{ name: "My View", slug: "my-view", view: null as any }],
-            adminViews: [{ name: "Admin Setup", slug: "setup", view: null as any }],
+            views: [{ name: "My View", slug: "my-view", view: null! }],
+            adminViews: [{ name: "Admin Setup", slug: "setup", view: null! }],
             cmsUrlController: mockCmsUrlController,
             collectionRegistryController: mockCollectionRegistryController
         }));

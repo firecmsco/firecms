@@ -13,7 +13,7 @@ title: "PropertyCallbacks"
 
 > **PropertyCallbacks**\<`T`, `M`, `USER`\> = `object`
 
-Defined in: [types/src/types/properties.ts:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:17](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Callbacks/Hooks for individual property fields
 
@@ -37,7 +37,7 @@ Callbacks/Hooks for individual property fields
 
 > `optional` **afterRead**(`props`): `T` \| `Promise`\<`T`\>
 
-Defined in: [types/src/types/properties.ts:21](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:21](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Callback used after fetching data, to transform the value before rendering
 
@@ -57,7 +57,7 @@ Callback used after fetching data, to transform the value before rendering
 
 > `optional` **beforeSave**(`props`): `T` \| `Promise`\<`T`\>
 
-Defined in: [types/src/types/properties.ts:31](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:31](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Callback used before saving, after validation.
 You can modify the value before it's saved.

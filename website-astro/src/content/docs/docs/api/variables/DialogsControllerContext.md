@@ -13,4 +13,4 @@ title: "DialogsControllerContext"
 
 > `const` **DialogsControllerContext**: `Context`\<[`DialogsController`](../interfaces/DialogsController)\>
 
-Defined in: [core/src/contexts/DialogsProvider.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/DialogsProvider.tsx)
+Defined in: [core/src/contexts/DialogsProvider.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/core/src/contexts/DialogsProvider.tsx)

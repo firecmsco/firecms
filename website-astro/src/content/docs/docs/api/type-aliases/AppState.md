@@ -13,7 +13,7 @@ title: "AppState"
 
 > **AppState** = `object`
 
-Defined in: [core/src/app/useApp.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:7](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 This context represents the state of the app in terms of layout.
 
@@ -23,7 +23,7 @@ This context represents the state of the app in terms of layout.
 
 > `optional` **autoOpenDrawer**: `boolean`
 
-Defined in: [core/src/app/useApp.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:14](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [core/src/app/useApp.tsx:14](https://github.com/rebaseco/rebase/blob
 
 > **closeDrawer**: () => `void`
 
-Defined in: [core/src/app/useApp.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 #### Returns
 
@@ -43,7 +43,7 @@ Defined in: [core/src/app/useApp.tsx:12](https://github.com/rebaseco/rebase/blob
 
 > **closeHover**: () => `void`
 
-Defined in: [core/src/app/useApp.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:13](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 #### Returns
 
@@ -55,7 +55,7 @@ Defined in: [core/src/app/useApp.tsx:13](https://github.com/rebaseco/rebase/blob
 
 > **drawerHovered**: `boolean`
 
-Defined in: [core/src/app/useApp.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ***
 
@@ -63,7 +63,7 @@ Defined in: [core/src/app/useApp.tsx:9](https://github.com/rebaseco/rebase/blob/
 
 > **drawerOpen**: `boolean`
 
-Defined in: [core/src/app/useApp.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ***
 
@@ -71,7 +71,7 @@ Defined in: [core/src/app/useApp.tsx:10](https://github.com/rebaseco/rebase/blob
 
 > **hasDrawer**: `boolean`
 
-Defined in: [core/src/app/useApp.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ***
 
@@ -79,7 +79,7 @@ Defined in: [core/src/app/useApp.tsx:8](https://github.com/rebaseco/rebase/blob/
 
 > `optional` **logo**: `string`
 
-Defined in: [core/src/app/useApp.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:15](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ***
 
@@ -87,7 +87,7 @@ Defined in: [core/src/app/useApp.tsx:15](https://github.com/rebaseco/rebase/blob
 
 > **openDrawer**: () => `void`
 
-Defined in: [core/src/app/useApp.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:11](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 #### Returns
 

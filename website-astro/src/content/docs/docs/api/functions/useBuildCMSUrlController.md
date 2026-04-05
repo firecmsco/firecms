@@ -13,7 +13,7 @@ title: "useBuildCMSUrlController"
 
 > **useBuildCMSUrlController**(`props`): [`CMSUrlController`](../type-aliases/CMSUrlController)
 
-Defined in: [core/src/hooks/navigation/useBuildCMSUrlController.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildCMSUrlController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildCMSUrlController.tsx:6](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildCMSUrlController.tsx)
 
 ## Parameters
 

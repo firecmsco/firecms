@@ -13,7 +13,7 @@ title: "SaveEntityWithCallbacksProps"
 
 > **SaveEntityWithCallbacksProps**\<`M`\> = [`SaveEntityProps`](../interfaces/SaveEntityProps)\<`M`\> & `object`
 
-Defined in: [core/src/hooks/data/save.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/save.ts)
+Defined in: [core/src/hooks/data/save.ts:7](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/save.ts)
 
 ## Type Declaration
 

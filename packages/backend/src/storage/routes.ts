@@ -77,7 +77,7 @@ export function createStorageRoutes(config: StorageRoutesConfig): Hono<HonoEnv> 
         }
 
         // Extract custom metadata from request body
-        const metadata: Record<string, any> = {};
+        const metadata: Record<string, unknown> = {};
         for (const [key, value] of Object.entries(body)) {
             if (key.startsWith('metadata_')) {
                 metadata[key.replace('metadata_', '')] = value;
@@ -137,7 +137,7 @@ export function createStorageRoutes(config: StorageRoutesConfig): Hono<HonoEnv> 
             c.header('Content-Type', contentType);
             // In a better scenario, we should pipe the stream instead of reading whole file
             const fileContent = fs.readFileSync(absolutePath);
-            return c.body(fileContent as any); 
+            return c.body(new Uint8Array(fileContent)); 
         }
 
         // For S3 storage, redirect to signed URL

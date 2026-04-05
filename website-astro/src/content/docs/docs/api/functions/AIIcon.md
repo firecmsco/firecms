@@ -13,7 +13,7 @@ title: "AIIcon"
 
 > **AIIcon**(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/AIIcon.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/AIIcon.tsx)
+Defined in: [core/src/components/AIIcon.tsx:13](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/AIIcon.tsx)
 
 AI-styled AutoAwesome icon with gradient coloring.
 Used consistently across AI features for visual identification.

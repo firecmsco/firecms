@@ -11,7 +11,7 @@ title: "EnumValuesChipProps"
 
 # Interface: EnumValuesChipProps
 
-Defined in: [core/src/preview/components/EnumValuesChip.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [core/src/preview/components/EnumValuesChip.tsx:7](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [core/src/preview/components/EnumValuesChip.tsx:7](https://github.co
 
 > `optional` **children**: `ReactNode`
 
-Defined in: [core/src/preview/components/EnumValuesChip.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [core/src/preview/components/EnumValuesChip.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [core/src/preview/components/EnumValuesChip.tsx:12](https://github.c
 
 > `optional` **className**: `string`
 
-Defined in: [core/src/preview/components/EnumValuesChip.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [core/src/preview/components/EnumValuesChip.tsx:11](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [core/src/preview/components/EnumValuesChip.tsx:11](https://github.c
 
 > **enumKey**: `string` \| `number`
 
-Defined in: [core/src/preview/components/EnumValuesChip.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [core/src/preview/components/EnumValuesChip.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [core/src/preview/components/EnumValuesChip.tsx:9](https://github.co
 
 > `optional` **enumValues**: [`EnumValues`](../type-aliases/EnumValues)
 
-Defined in: [core/src/preview/components/EnumValuesChip.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [core/src/preview/components/EnumValuesChip.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
 
 ***
 
@@ -51,4 +51,4 @@ Defined in: [core/src/preview/components/EnumValuesChip.tsx:8](https://github.co
 
 > **size**: `"small"` \| `"medium"` \| `"large"`
 
-Defined in: [core/src/preview/components/EnumValuesChip.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)
+Defined in: [core/src/preview/components/EnumValuesChip.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/components/EnumValuesChip.tsx)

@@ -66,7 +66,7 @@ export class RestApiGenerator {
                         limit: queryOptions.limit,
                         orderBy: queryOptions.orderBy?.[0]?.field,
                         order: queryOptions.orderBy?.[0]?.direction === "desc" ? "desc" : "asc",
-                        searchString: (queryDict as any).searchString,
+                        searchString: queryDict.searchString as string | undefined,
                     },
                     queryOptions.include
                 );

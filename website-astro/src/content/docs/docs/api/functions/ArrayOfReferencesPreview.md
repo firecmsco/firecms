@@ -13,7 +13,7 @@ title: "ArrayOfReferencesPreview"
 
 > **ArrayOfReferencesPreview**(`__namedParameters`): `Element`
 
-Defined in: [core/src/preview/property\_previews/ArrayOfReferencesPreview.tsx:7](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOfReferencesPreview.tsx)
+Defined in: [core/src/preview/property\_previews/ArrayOfReferencesPreview.tsx:7](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOfReferencesPreview.tsx)
 
 ## Parameters
 

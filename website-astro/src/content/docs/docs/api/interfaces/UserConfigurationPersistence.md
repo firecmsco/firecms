@@ -11,7 +11,7 @@ title: "UserConfigurationPersistence"
 
 # Interface: UserConfigurationPersistence
 
-Defined in: [types/src/controllers/local\_config\_persistence.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
+Defined in: [types/src/controllers/local\_config\_persistence.tsx:13](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
 
 This interface is in charge of defining the controller that persists
 modifications to a collection or collection, and retrieves them back from
@@ -23,7 +23,7 @@ a data source, such as local storage or Firestore.
 
 > **collapsedGroups**: `string`[]
 
-Defined in: [types/src/controllers/local\_config\_persistence.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
+Defined in: [types/src/controllers/local\_config\_persistence.tsx:20](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [types/src/controllers/local\_config\_persistence.tsx:20](https://gi
 
 > **favouritePaths**: `string`[]
 
-Defined in: [types/src/controllers/local\_config\_persistence.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
+Defined in: [types/src/controllers/local\_config\_persistence.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [types/src/controllers/local\_config\_persistence.tsx:18](https://gi
 
 > **getCollectionConfig**: \<`M`\>(`path`) => [`PartialEntityCollection`](../type-aliases/PartialEntityCollection)\<`M`\>
 
-Defined in: [types/src/controllers/local\_config\_persistence.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
+Defined in: [types/src/controllers/local\_config\_persistence.tsx:15](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
 
 #### Type Parameters
 
@@ -63,7 +63,7 @@ Defined in: [types/src/controllers/local\_config\_persistence.tsx:15](https://gi
 
 > **onCollectionModified**: \<`M`\>(`path`, `partialCollection`) => `void`
 
-Defined in: [types/src/controllers/local\_config\_persistence.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
+Defined in: [types/src/controllers/local\_config\_persistence.tsx:14](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
 
 #### Type Parameters
 
@@ -91,7 +91,7 @@ Defined in: [types/src/controllers/local\_config\_persistence.tsx:14](https://gi
 
 > **recentlyVisitedPaths**: `string`[]
 
-Defined in: [types/src/controllers/local\_config\_persistence.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
+Defined in: [types/src/controllers/local\_config\_persistence.tsx:16](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
 
 ***
 
@@ -99,7 +99,7 @@ Defined in: [types/src/controllers/local\_config\_persistence.tsx:16](https://gi
 
 > **setCollapsedGroups**: (`paths`) => `void`
 
-Defined in: [types/src/controllers/local\_config\_persistence.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
+Defined in: [types/src/controllers/local\_config\_persistence.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
 
 #### Parameters
 
@@ -117,7 +117,7 @@ Defined in: [types/src/controllers/local\_config\_persistence.tsx:21](https://gi
 
 > **setFavouritePaths**: (`paths`) => `void`
 
-Defined in: [types/src/controllers/local\_config\_persistence.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
+Defined in: [types/src/controllers/local\_config\_persistence.tsx:19](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
 
 #### Parameters
 
@@ -135,7 +135,7 @@ Defined in: [types/src/controllers/local\_config\_persistence.tsx:19](https://gi
 
 > **setRecentlyVisitedPaths**: (`paths`) => `void`
 
-Defined in: [types/src/controllers/local\_config\_persistence.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
+Defined in: [types/src/controllers/local\_config\_persistence.tsx:17](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/local_config_persistence.tsx)
 
 #### Parameters
 

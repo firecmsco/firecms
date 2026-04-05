@@ -13,7 +13,7 @@ title: "RebaseI18nProvider"
 
 > **RebaseI18nProvider**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [core/src/i18n/RebaseI18nProvider.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/i18n/RebaseI18nProvider.tsx)
+Defined in: [core/src/i18n/RebaseI18nProvider.tsx:47](https://github.com/rebasepro/rebase/blob/main/packages/core/src/i18n/RebaseI18nProvider.tsx)
 
 **`Internal`**
 

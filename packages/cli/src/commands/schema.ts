@@ -115,8 +115,8 @@ async function schemaGenerate(rawArgs: string[]): Promise<void> {
             stdio: "inherit",
             env,
         });
-    } catch (err: any) {
-        console.error(chalk.red(`✗ Failed to run schema generator: ${err.message}`));
+    } catch (err: unknown) {
+        console.error(chalk.red(`✗ Failed to run schema generator: ${err instanceof Error ? err.message : String(err)}`));
         process.exit(1);
     }
 }

@@ -9,14 +9,14 @@ import { describe, expect, it, jest, beforeEach } from "@jest/globals";
  */
 
 // Mock types matching the actual implementation
-interface BoardColumnData<M extends Record<string, any> = any> {
+interface BoardColumnData<M extends Record<string, any> = Record<string, any>> {
     entities: Array<{ id: string; values: M; path: string }>;
     loading: boolean;
     hasMore: boolean;
     error?: Error;
 }
 
-interface BoardDataController<M extends Record<string, any> = any, COLUMN extends string = string> {
+interface BoardDataController<M extends Record<string, any> = Record<string, any>, COLUMN extends string = string> {
     columnData: Record<COLUMN, BoardColumnData<M>>;
     loadMoreColumn: (column: COLUMN) => void;
     refreshColumn: (column: COLUMN) => void;
@@ -82,7 +82,7 @@ describe("useBoardDataController types and logic", () => {
             const mockRefreshColumn = jest.fn();
             const mockRefreshAll = jest.fn();
 
-            const controller: BoardDataController<any, "todo" | "in_progress" | "done"> = {
+            const controller: BoardDataController<Record<string, unknown>, "todo" | "in_progress" | "done"> = {
                 columnData: {
                     todo: { entities: [], loading: false, hasMore: true },
                     in_progress: { entities: [], loading: true, hasMore: true },
@@ -149,7 +149,7 @@ describe("useBoardDataController types and logic", () => {
         it("should build filter with column property equality", () => {
             const columnProperty = "status";
             const column = "todo";
-            const additionalFilters = { priority: ["==", "high"] as [string, any] };
+            const additionalFilters = { priority: ["==", "high"] as [string, string] };
 
             // Mirrors filter construction in hook
             const columnFilter = {
@@ -247,17 +247,17 @@ describe("useBoardDataController types and logic", () => {
             const newColumns = ["todo", "in_progress", "done", "archived"];
 
             // Simulate initialization logic
-            const updated = { ...existingCounts };
+            const updated: Record<string, number> = { ...existingCounts };
             newColumns.forEach(col => {
                 if (!(col in updated)) {
-                    (updated as any)[col] = pageSize;
+                    updated[col] = pageSize;
                 }
             });
 
-            expect((updated as any).todo).toBe(60); // Preserved
-            expect((updated as any).in_progress).toBe(30); // Preserved
-            expect((updated as any).done).toBe(30); // New, initialized
-            expect((updated as any).archived).toBe(30); // New, initialized
+            expect(updated.todo).toBe(60); // Preserved
+            expect(updated.in_progress).toBe(30); // Preserved
+            expect(updated.done).toBe(30); // New, initialized
+            expect(updated.archived).toBe(30); // New, initialized
         });
 
         it("should initialize column data state for new columns", () => {

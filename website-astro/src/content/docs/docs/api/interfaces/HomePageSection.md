@@ -11,7 +11,7 @@ title: "HomePageSection"
 
 # Interface: HomePageSection
 
-Defined in: [types/src/controllers/navigation.ts:255](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:255](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 A composable section that can be rendered on the home page.
 Use this to add custom content alongside the auto-generated
@@ -23,7 +23,7 @@ navigation groups.
 
 > **children**: `ReactNode`
 
-Defined in: [types/src/controllers/navigation.ts:269](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:269](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Arbitrary React content rendered inside the section.
 
@@ -33,7 +33,7 @@ Arbitrary React content rendered inside the section.
 
 > **key**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:259](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:259](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Unique key for this section.
 
@@ -43,6 +43,6 @@ Unique key for this section.
 
 > **title**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:264](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:264](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Title displayed as the section header.

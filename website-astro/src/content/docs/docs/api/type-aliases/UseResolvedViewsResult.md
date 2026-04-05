@@ -13,7 +13,7 @@ title: "UseResolvedViewsResult"
 
 > **UseResolvedViewsResult** = `object`
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:31](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ## Properties
 
@@ -21,7 +21,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:31](https://github.c
 
 > **adminViews**: [`CMSView`](../interfaces/CMSView)[] \| `undefined`
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:33](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:33](https://github.c
 
 > **error**: `Error` \| `undefined`
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:35](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:35](https://github.c
 
 > **loading**: `boolean`
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:34](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:34](https://github.c
 
 > **refresh**: () => `void`
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:36](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 #### Returns
 
@@ -57,4 +57,4 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:36](https://github.c
 
 > **views**: [`CMSView`](../interfaces/CMSView)[] \| `undefined`
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:32](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)

@@ -11,7 +11,7 @@ title: "EntityReference"
 
 # Class: EntityReference
 
-Defined in: [types/src/types/entities.ts:76](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:76](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Class used to create a reference to an entity in a different path.
 
@@ -34,7 +34,7 @@ new EntityReference({ id: "123", path: "orders", driver: "postgres", databaseId:
 
 > **new EntityReference**(`props`): `EntityReference`
 
-Defined in: [types/src/types/entities.ts:111](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:111](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Create a reference to an entity.
 
@@ -64,7 +64,7 @@ new EntityReference({ id: "123", path: "analytics", driver: "firestore" })
 
 > `readonly` **\_\_type**: `"reference"` = `"reference"`
 
-Defined in: [types/src/types/entities.ts:78](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:78](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [types/src/types/entities.ts:78](https://github.com/rebaseco/rebase/
 
 > `readonly` `optional` **databaseId**: `string`
 
-Defined in: [types/src/types/entities.ts:99](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:99](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Which database within the driver.
 Defaults to "(default)" if not specified.
@@ -83,7 +83,7 @@ Defaults to "(default)" if not specified.
 
 > `readonly` `optional` **driver**: `string`
 
-Defined in: [types/src/types/entities.ts:93](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:93](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Which driver (e.g., 'postgres', 'firestore').
 Defaults to "(default)" if not specified.
@@ -94,7 +94,7 @@ Defaults to "(default)" if not specified.
 
 > `readonly` **id**: `string`
 
-Defined in: [types/src/types/entities.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:82](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ID of the entity
 
@@ -104,7 +104,7 @@ ID of the entity
 
 > `readonly` **path**: `string`
 
-Defined in: [types/src/types/entities.ts:87](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:87](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 A string representing the path of the referenced document (relative
 to the root of the database).
@@ -117,7 +117,7 @@ to the root of the database).
 
 > **get** **fullPath**(): `string`
 
-Defined in: [types/src/types/entities.ts:126](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:126](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Get the full path including driver and database prefixes if specified.
 For the common case (single driver, single db), this just returns pathWithId.
@@ -134,7 +134,7 @@ For the common case (single driver, single db), this just returns pathWithId.
 
 > **get** **pathWithId**(): `string`
 
-Defined in: [types/src/types/entities.ts:118](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:118](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ##### Returns
 
@@ -146,7 +146,7 @@ Defined in: [types/src/types/entities.ts:118](https://github.com/rebaseco/rebase
 
 > **isEntityReference**(): `boolean`
 
-Defined in: [types/src/types/entities.ts:145](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:145](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 #### Returns
 

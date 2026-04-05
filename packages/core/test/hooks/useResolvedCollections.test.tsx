@@ -15,11 +15,11 @@ describe("useResolvedCollections", () => {
     const mockCollectionRegistry = new CollectionRegistry();
     jest.spyOn(mockCollectionRegistry, "registerMultiple").mockReturnValue(true);
 
-    const mockCollectionRegistryController: CollectionRegistryController<any> & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> } = {
+    const mockCollectionRegistryController = {
         collectionRegistryRef: { current: mockCollectionRegistry },
         getCollection: jest.fn(),
         getCollections: jest.fn(),
-    } as any;
+    } as Partial<CollectionRegistryController> as CollectionRegistryController & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> };
 
     it("should resolve a static array of collections and register them", async () => {
         const mockAuthController = {
@@ -82,7 +82,7 @@ describe("useResolvedCollections", () => {
 
     it("should wait while auth is initially loading before resolving", async () => {
         let authLoading = true;
-        const mockAuthController: any = {
+        const mockAuthController: Partial<AuthController> & { initialLoading: boolean; user: { uid: string } | null } = {
             get initialLoading() { return authLoading; },
             user: null
         };

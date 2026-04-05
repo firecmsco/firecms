@@ -13,7 +13,7 @@ title: "getEntityFromCache"
 
 > **getEntityFromCache**(`path`): `object` \| `undefined`
 
-Defined in: [core/src/util/entity\_cache.ts:167](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/entity_cache.ts)
+Defined in: [core/src/util/entity\_cache.ts:167](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/entity_cache.ts)
 
 Retrieves an entity from the in-memory cache or `sessionStorage`.
 If the entity is not in the cache but exists in `sessionStorage`, it loads it into the cache.

@@ -13,7 +13,7 @@ title: "UnsavedChangesDialog"
 
 > **UnsavedChangesDialog**(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/UnsavedChangesDialog.tsx:13](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
+Defined in: [core/src/components/UnsavedChangesDialog.tsx:13](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/UnsavedChangesDialog.tsx)
 
 ## Parameters
 

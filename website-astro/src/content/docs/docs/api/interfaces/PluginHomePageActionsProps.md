@@ -11,7 +11,7 @@ title: "PluginHomePageActionsProps"
 
 # Interface: PluginHomePageActionsProps\<EP, M, USER, EC\>
 
-Defined in: [types/src/types/plugins.tsx:278](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:278](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 Props passed to the [RebasePlugin.homePage.CollectionActions](../type-aliases/RebasePlugin.md#homepage) method.
 You can use it to add custom actions to the navigation card of each collection.
@@ -40,7 +40,7 @@ You can use it to add custom actions to the navigation card of each collection.
 
 > **collection**: `EC`
 
-Defined in: [types/src/types/plugins.tsx:288](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:288](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 The collection configuration
 
@@ -50,7 +50,7 @@ The collection configuration
 
 > **context**: [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
-Defined in: [types/src/types/plugins.tsx:293](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:293](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 Context of the app status
 
@@ -60,7 +60,7 @@ Context of the app status
 
 > `optional` **extraProps**: `EP`
 
-Defined in: [types/src/types/plugins.tsx:295](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:295](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [types/src/types/plugins.tsx:295](https://github.com/rebaseco/rebase
 
 > **slug**: `string`
 
-Defined in: [types/src/types/plugins.tsx:283](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:283](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 Collection path of this entity. This is the full path, like
 `users/1234/addresses`

@@ -13,7 +13,7 @@ title: "EntityCollectionCardViewProps"
 
 > **EntityCollectionCardViewProps**\<`M`\> = `object`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:17](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.t
 
 > **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.t
 
 > `optional` **emptyComponent**: `React.ReactNode`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.t
 
 > `optional` **highlightedEntities**: [`Entity`](../interfaces/Entity)\<`M`\>[]
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.t
 
 > `optional` **initialScroll**: `number`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:30](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.t
 
 > `optional` **onEntityClick**: (`entity`) => `void`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:20](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 #### Parameters
 
@@ -77,7 +77,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.t
 
 > `optional` **onScroll**: (`props`) => `void`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:25](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 #### Parameters
 
@@ -105,7 +105,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.t
 
 > `optional` **selectionController**: [`SelectionController`](SelectionController)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 ***
 
@@ -113,7 +113,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.t
 
 > `optional` **selectionEnabled**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 ***
 
@@ -121,7 +121,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.t
 
 > `optional` **size**: [`CollectionSize`](CollectionSize)
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:39](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 Size of the cards in the grid view.
 - "xs": Extra small cards, most cards per row
@@ -136,4 +136,4 @@ Size of the cards in the grid view.
 
 > **tableController**: [`EntityTableController`](EntityTableController)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:19](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)

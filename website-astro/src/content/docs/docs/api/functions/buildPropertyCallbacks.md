@@ -13,7 +13,7 @@ title: "buildPropertyCallbacks"
 
 > **buildPropertyCallbacks**(`properties`): [`EntityCallbacks`](../type-aliases/EntityCallbacks) \| `undefined`
 
-Defined in: [common/src/util/callbacks.ts:84](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/callbacks.ts)
+Defined in: [common/src/util/callbacks.ts:84](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/callbacks.ts)
 
 Helper function to extract field-level PropertyCallbacks from a properties schema
 and wrap them into an EntityCallbacks object recursively.

@@ -13,7 +13,7 @@ title: "sanitizeData"
 
 > **sanitizeData**\<`M`\>(`values`, `properties`): `Record`\<`string`, `unknown`\>
 
-Defined in: [common/src/util/entities.ts:120](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/entities.ts)
+Defined in: [common/src/util/entities.ts:120](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/entities.ts)
 
 Add missing required fields, expected in the collection, to the values of an entity
 

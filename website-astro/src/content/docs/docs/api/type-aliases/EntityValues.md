@@ -13,7 +13,7 @@ title: "EntityValues"
 
 > **EntityValues**\<`M`\> = `M`
 
-Defined in: [types/src/types/entities.ts:47](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:47](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 This type represents a record of key value pairs as described in an
 entity collection.

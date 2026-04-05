@@ -10,7 +10,7 @@ import { FilterValues } from "@rebasepro/types";
 describe("MongoConditionBuilder", () => {
     describe("buildFilterConditions", () => {
         it("should return empty array for undefined filter", () => {
-            const result = MongoConditionBuilder.buildFilterConditions(undefined as any);
+            const result = MongoConditionBuilder.buildFilterConditions(undefined as unknown as FilterValues<string>);
             expect(result).toEqual([]);
         });
 
@@ -108,7 +108,7 @@ describe("MongoConditionBuilder", () => {
         it("should skip null filter params", () => {
             const filter: FilterValues<string> = {
                 status: ["==", "active"],
-                empty: undefined as any
+                empty: undefined as unknown as [string, unknown]
             };
             const result = MongoConditionBuilder.buildFilterConditions(filter);
             expect(result).toHaveLength(1);

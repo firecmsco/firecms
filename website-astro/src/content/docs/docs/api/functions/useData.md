@@ -13,7 +13,7 @@ title: "useData"
 
 > **useData**(): [`RebaseData`](../interfaces/RebaseData)
 
-Defined in: [core/src/hooks/data/useData.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/useData.tsx)
+Defined in: [core/src/hooks/data/useData.tsx:16](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/useData.tsx)
 
 Use this hook to access the unified data API.
 

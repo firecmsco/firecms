@@ -13,7 +13,7 @@ title: "RebaseEditor"
 
 > **RebaseEditor**(`__namedParameters`): `Element`
 
-Defined in: [core/src/editor/editor.tsx:51](https://github.com/rebaseco/rebase/blob/main/packages/core/src/editor/editor.tsx)
+Defined in: [core/src/editor/editor.tsx:51](https://github.com/rebasepro/rebase/blob/main/packages/core/src/editor/editor.tsx)
 
 ## Parameters
 

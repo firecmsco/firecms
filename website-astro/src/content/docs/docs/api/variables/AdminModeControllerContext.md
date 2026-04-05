@@ -13,4 +13,4 @@ title: "AdminModeControllerContext"
 
 > `const` **AdminModeControllerContext**: `Context`\<[`AdminModeController`](../interfaces/AdminModeController)\>
 
-Defined in: [core/src/contexts/AdminModeController.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/AdminModeController.tsx)
+Defined in: [core/src/contexts/AdminModeController.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/contexts/AdminModeController.tsx)

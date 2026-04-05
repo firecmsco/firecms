@@ -13,7 +13,7 @@ title: "useEntitySelectionDialog"
 
 > **useEntitySelectionDialog**\<`M`\>(`referenceDialogProps`): `object`
 
-Defined in: [core/src/hooks/useEntitySelectionDialog.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useEntitySelectionDialog.tsx)
+Defined in: [core/src/hooks/useEntitySelectionDialog.tsx:16](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useEntitySelectionDialog.tsx)
 
 This hook is used to open a side dialog that allows the selection
 of entities under a given path.

@@ -11,7 +11,7 @@ title: "ModeController"
 
 # Interface: ModeController
 
-Defined in: [core/src/hooks/useModeController.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
+Defined in: [core/src/hooks/useModeController.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
 
 Use this controller to change color mode
 
@@ -21,7 +21,7 @@ Use this controller to change color mode
 
 > **mode**: `"light"` \| `"dark"`
 
-Defined in: [core/src/hooks/useModeController.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
+Defined in: [core/src/hooks/useModeController.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [core/src/hooks/useModeController.tsx:9](https://github.com/rebaseco
 
 > **setMode**: (`mode`) => `void`
 
-Defined in: [core/src/hooks/useModeController.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
+Defined in: [core/src/hooks/useModeController.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useModeController.tsx)
 
 #### Parameters
 

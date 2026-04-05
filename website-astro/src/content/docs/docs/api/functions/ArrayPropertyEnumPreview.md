@@ -13,7 +13,7 @@ title: "ArrayPropertyEnumPreview"
 
 > **ArrayPropertyEnumPreview**(`__namedParameters`): `Element` \| `null`
 
-Defined in: [core/src/preview/property\_previews/ArrayPropertyEnumPreview.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayPropertyEnumPreview.tsx)
+Defined in: [core/src/preview/property\_previews/ArrayPropertyEnumPreview.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/property_previews/ArrayPropertyEnumPreview.tsx)
 
 ## Parameters
 

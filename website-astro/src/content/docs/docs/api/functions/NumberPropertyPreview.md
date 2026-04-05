@@ -13,7 +13,7 @@ title: "NumberPropertyPreview"
 
 > **NumberPropertyPreview**(`__namedParameters`): `ReactElement`
 
-Defined in: [core/src/preview/property\_previews/NumberPropertyPreview.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/NumberPropertyPreview.tsx)
+Defined in: [core/src/preview/property\_previews/NumberPropertyPreview.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/property_previews/NumberPropertyPreview.tsx)
 
 ## Parameters
 

@@ -13,7 +13,7 @@ title: "useTopLevelNavigation"
 
 > **useTopLevelNavigation**(`props`): [`UseTopLevelNavigationResult`](../type-aliases/UseTopLevelNavigationResult)
 
-Defined in: [core/src/hooks/navigation/useTopLevelNavigation.ts:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useTopLevelNavigation.ts)
+Defined in: [core/src/hooks/navigation/useTopLevelNavigation.ts:41](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useTopLevelNavigation.ts)
 
 Hook that computes the top-level NavigationResult from resolved collections,
 views, and admin views. Pure computation — no async, no effects.

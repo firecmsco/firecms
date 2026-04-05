@@ -13,7 +13,7 @@ title: "KeyValueFieldBinding"
 
 > **KeyValueFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [core/src/form/field\_bindings/KeyValueFieldBinding.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/KeyValueFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/KeyValueFieldBinding.tsx:37](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/field_bindings/KeyValueFieldBinding.tsx)
 
 Field that allows edition of key value pairs.
 

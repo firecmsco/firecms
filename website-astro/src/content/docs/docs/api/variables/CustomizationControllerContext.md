@@ -13,4 +13,4 @@ title: "CustomizationControllerContext"
 
 > `const` **CustomizationControllerContext**: `Context`\<[`CustomizationController`](../type-aliases/CustomizationController)\>
 
-Defined in: [core/src/contexts/CustomizationControllerContext.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/CustomizationControllerContext.tsx)
+Defined in: [core/src/contexts/CustomizationControllerContext.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/core/src/contexts/CustomizationControllerContext.tsx)

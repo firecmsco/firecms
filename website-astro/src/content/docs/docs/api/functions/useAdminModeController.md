@@ -13,7 +13,7 @@ title: "useAdminModeController"
 
 > **useAdminModeController**(): [`AdminModeController`](../interfaces/AdminModeController)
 
-Defined in: [core/src/hooks/useAdminModeController.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useAdminModeController.tsx)
+Defined in: [core/src/hooks/useAdminModeController.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useAdminModeController.tsx)
 
 Hook to retrieve the current admin mode ("developer" | "editor"), and `setMode`
 to change it.

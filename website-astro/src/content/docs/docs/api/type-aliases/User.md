@@ -13,7 +13,7 @@ title: "User"
 
 > **User** = `object`
 
-Defined in: [types/src/users/user.ts:12](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/user.ts)
+Defined in: [types/src/users/user.ts:12](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/user.ts)
 
 This interface represents a user.
 It has some of the same fields as a Firebase User.
@@ -28,7 +28,7 @@ in this interface, it contains all the methods of the former, such as `delete`,
 
 > `readonly` **displayName**: `string` \| `null`
 
-Defined in: [types/src/users/user.ts:20](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/user.ts)
+Defined in: [types/src/users/user.ts:20](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/user.ts)
 
 The display name of the user.
 
@@ -38,7 +38,7 @@ The display name of the user.
 
 > `readonly` **email**: `string` \| `null`
 
-Defined in: [types/src/users/user.ts:24](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/user.ts)
+Defined in: [types/src/users/user.ts:24](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/user.ts)
 
 The email of the user.
 
@@ -48,7 +48,7 @@ The email of the user.
 
 > `optional` **getIdToken**: (`forceRefresh?`) => `Promise`\<`string`\>
 
-Defined in: [types/src/users/user.ts:44](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/user.ts)
+Defined in: [types/src/users/user.ts:44](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/user.ts)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [types/src/users/user.ts:44](https://github.com/rebaseco/rebase/blob
 
 > `readonly` **isAnonymous**: `boolean`
 
-Defined in: [types/src/users/user.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/user.ts)
+Defined in: [types/src/users/user.ts:36](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/user.ts)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [types/src/users/user.ts:36](https://github.com/rebaseco/rebase/blob
 
 > `readonly` **photoURL**: `string` \| `null`
 
-Defined in: [types/src/users/user.ts:28](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/user.ts)
+Defined in: [types/src/users/user.ts:28](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/user.ts)
 
 The profile photo URL of the user.
 
@@ -84,7 +84,7 @@ The profile photo URL of the user.
 
 > `readonly` **providerId**: `string`
 
-Defined in: [types/src/users/user.ts:32](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/user.ts)
+Defined in: [types/src/users/user.ts:32](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/user.ts)
 
 The provider used to authenticate the user.
 
@@ -94,7 +94,7 @@ The provider used to authenticate the user.
 
 > `optional` **roles**: `string`[]
 
-Defined in: [types/src/users/user.ts:42](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/user.ts)
+Defined in: [types/src/users/user.ts:42](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/user.ts)
 
 Role IDs assigned to this user (e.g. ["admin", "editor"]).
 These are plain string IDs — use the UserManagementDelegate to look up full Role objects.
@@ -105,6 +105,6 @@ These are plain string IDs — use the UserManagementDelegate to look up full Ro
 
 > `readonly` **uid**: `string`
 
-Defined in: [types/src/users/user.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/types/src/users/user.ts)
+Defined in: [types/src/users/user.ts:16](https://github.com/rebasepro/rebase/blob/main/packages/types/src/users/user.ts)
 
 The user's unique ID, scoped to the project.

@@ -879,7 +879,7 @@ export const SQLEditor = () => {
                                 <Tooltip key={mc.tableName} title={`Table "${mc.tableName}" → ${mc.collection.name} (PK: ${mc.pkColumn})`}>
                                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-primary/10 dark:bg-primary-dark/15 text-primary dark:text-primary-dark whitespace-nowrap border border-primary/20 dark:border-primary-dark/20">
                                         {typeof mc.collection.icon === "string" && (
-                                            <IconForView collectionOrView={{ icon: mc.collection.icon } as never} className="text-[12px]" />
+                                            <IconForView collectionOrView={mc.collection} className="text-[12px]" />
                                         )}
                                         {mc.collection.name}
                                     </span>

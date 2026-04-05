@@ -1,0 +1,460 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+import { RebaseEditorDemo } from "../components/RebaseEditorDemo";
+import "../styles/editor.css";
+
+const title = "Rebase Studio — Visual Admin Panel & Schema Editor";
+const description = "Build and manage your Postgres admin panel visually. Schema editor, spreadsheet views, rich text editor, data import/export, and white-labeling — all from code.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://rebase.pro" },
+    { name: "Rebase Studio", url: "https://rebase.pro/studio" }
+];
+
+const collectionEditorHtml = `<span class="text-primary-light">import</span> { buildCollection } <span class="text-primary-light">from</span> <span class="text-green-400">"@rebasepro/core"</span>;
+
+<span class="text-primary-light">export const</span> <span class="text-white">orders</span> = buildCollection({
+  <span class="text-blue-300">name</span>: <span class="text-green-400">"Orders"</span>,
+  <span class="text-blue-300">properties</span>: {
+    <span class="text-blue-300">customer</span>: { <span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span>, <span class="text-blue-300">name</span>: <span class="text-green-400">"Customer"</span> },
+    <span class="text-blue-300">total</span>:    { <span class="text-blue-300">type</span>: <span class="text-green-400">"number"</span>, <span class="text-blue-300">name</span>: <span class="text-green-400">"Total"</span> },
+    <span class="text-blue-300">status</span>:   { <span class="text-blue-300">type</span>: <span class="text-green-400">"string"</span>,
+      <span class="text-blue-300">enum</span>: { <span class="text-blue-300">pending</span>: <span class="text-green-400">"Pending"</span>,
+              <span class="text-blue-300">shipped</span>: <span class="text-green-400">"Shipped"</span>,
+              <span class="text-blue-300">delivered</span>: <span class="text-green-400">"Delivered"</span> } },
+  },
+  <span class="text-blue-300">securityRules</span>: [<span class="text-surface-500">/* ... */</span>],
+  <span class="text-blue-300">callbacks</span>: { <span class="text-blue-300">onSave</span>: <span class="text-surface-500">/* ... */</span> }
+});`;
+---
+
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
+  <main>
+    <!-- Hero -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute -bottom-40 right-1/3 w-[700px] h-[700px] rounded-full bg-purple-500/5 blur-3xl opacity-50"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+      </div>
+      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+        <div class="inline-flex items-center py-1.5 px-3 mb-6 text-sm rounded-full bg-surface-800/40 text-surface-400 ring-1 ring-inset ring-white/10 mx-auto">
+          <span class="text-sm font-medium">Visual · Code-backed · Extensible</span>
+        </div>
+        <h1 class="mb-6 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+          Rebase Studio
+        </h1>
+        <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
+          A full-featured admin panel that generates real TypeScript code. Edit visually, ship as code, extend with React.
+        </p>
+        <div class="flex items-center justify-center gap-x-4">
+          <a href="https://demo.rebase.pro" target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+            Try the Demo
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 filter invert"/>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Schema Editor -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-indigo-500/10 text-indigo-400 ring-1 ring-inset ring-indigo-500/20">
+              Schema-as-Code
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Visual Schema Editor</h2>
+            <p class="text-lg text-surface-400 mb-6">Build your data model visually — every change generates clean, version-controlled TypeScript collection files via AST transformation. What you see is what gets committed.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> 20+ built-in field types (text, number, date, enum, map, array, reference…)</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Relation editor with cardinality, direction, and cascade controls</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> RLS security rules defined per collection</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Validation rules with Zod schema generation</li>
+            </ul>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800">
+            <video class="w-full h-auto" loop autoplay muted playsinline>
+              <source src="/img/schema_editor.webm" type="video/webm"/>
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SQL Editor Mockup -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div class="lg:order-last">
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-cyan-500/10 text-cyan-400 ring-1 ring-inset ring-cyan-500/20">
+              Built-in SQL View
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">SQL Editor</h2>
+            <p class="text-lg text-surface-400 mb-6">Write and execute SQL directly against your Postgres database from the admin UI. Schema-aware autocomplete, result previews, and query history — all integrated.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> Monaco-based editor with syntax highlighting</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Schema browser sidebar with table/column introspection</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Inline result table with sorting and pagination</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Saved snippets and query history</li>
+            </ul>
+          </div>
+
+          <!-- SQL Editor code-based "screenshot" -->
+          <div class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl">
+            <!-- Toolbar -->
+            <div class="flex items-center justify-between px-3 py-2.5 border-b border-surface-700/40 bg-surface-900/60">
+              <div class="flex items-center gap-2">
+                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/terminal.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">SQL Editor</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="px-2 py-1 rounded-md bg-surface-800/60 text-[10px] text-surface-500 font-mono">History</div>
+                <div class="px-2 py-1 rounded-md bg-surface-800/60 text-[10px] text-surface-500 font-mono">Snippets</div>
+                <div class="px-2.5 py-1 rounded-md bg-primary/20 text-primary text-[10px] font-semibold">▶ Run</div>
+              </div>
+            </div>
+            <!-- Editor area + line numbers -->
+            <div class="flex">
+              <div class="py-3 px-2 text-right text-[11px] font-mono text-surface-600 leading-[1.6rem] select-none border-r border-surface-800/40">
+                <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div>
+              </div>
+              <pre class="py-3 px-4 text-[12px] font-mono leading-[1.6rem] text-surface-300 overflow-x-auto flex-1"><span class="text-purple-400">SELECT</span>
+  p.<span class="text-blue-300">title</span>,
+  p.<span class="text-blue-300">status</span>,
+  u.<span class="text-blue-300">display_name</span> <span class="text-purple-400">AS</span> <span class="text-green-400">author</span>,
+  <span class="text-amber-400">COUNT</span>(c.<span class="text-blue-300">id</span>) <span class="text-purple-400">AS</span> <span class="text-green-400">comments</span>
+<span class="text-purple-400">FROM</span> <span class="text-white">posts</span> p
+<span class="text-purple-400">JOIN</span> <span class="text-white">users</span> u <span class="text-purple-400">ON</span> p.author_id = u.id
+<span class="text-purple-400">LEFT JOIN</span> <span class="text-white">comments</span> c <span class="text-purple-400">ON</span> c.post_id = p.id
+<span class="text-purple-400">GROUP BY</span> p.id, u.id
+<span class="text-purple-400">LIMIT</span> <span class="text-amber-400">5</span>;</pre>
+            </div>
+            <!-- Execution info -->
+            <div class="flex items-center justify-between px-4 py-1.5 bg-surface-900/40 border-t border-b border-surface-800/40 text-[10px]">
+              <span class="text-green-400 font-medium">✓ 5 rows · 12ms</span>
+              <span class="text-surface-500 font-mono">public.posts</span>
+            </div>
+            <!-- Result table -->
+            <div class="flex text-[10px] font-semibold text-surface-500 tracking-wider uppercase border-b border-surface-700/40 bg-surface-900/30">
+              <div class="px-3 py-2 flex-1">title</div>
+              <div class="px-3 py-2 w-20">status</div>
+              <div class="px-3 py-2 w-28">author</div>
+              <div class="px-3 py-2 w-20 text-right">comments</div>
+            </div>
+            <div class="flex text-sm border-b border-surface-800/40 hover:bg-surface-800/20">
+              <div class="px-3 py-2.5 text-surface-200 flex-1 truncate text-xs">Getting Started with Rebase</div>
+              <div class="px-3 py-2.5 w-20"><span class="rounded-md px-1.5 py-0.5 text-[9px] font-medium bg-green-950 text-green-300">published</span></div>
+              <div class="px-3 py-2.5 w-28 text-surface-400 text-xs truncate">Alice Chen</div>
+              <div class="px-3 py-2.5 w-20 text-right text-surface-400 font-mono text-xs">24</div>
+            </div>
+            <div class="flex text-sm border-b border-surface-800/40 hover:bg-surface-800/20">
+              <div class="px-3 py-2.5 text-surface-200 flex-1 truncate text-xs">Schema Migrations Guide</div>
+              <div class="px-3 py-2.5 w-20"><span class="rounded-md px-1.5 py-0.5 text-[9px] font-medium bg-green-950 text-green-300">published</span></div>
+              <div class="px-3 py-2.5 w-28 text-surface-400 text-xs truncate">Bob Park</div>
+              <div class="px-3 py-2.5 w-20 text-right text-surface-400 font-mono text-xs">18</div>
+            </div>
+            <div class="flex text-sm border-b border-surface-800/40 hover:bg-surface-800/20">
+              <div class="px-3 py-2.5 text-surface-200 flex-1 truncate text-xs">Custom Views Tutorial</div>
+              <div class="px-3 py-2.5 w-20"><span class="rounded-md px-1.5 py-0.5 text-[9px] font-medium bg-amber-950 text-amber-300">draft</span></div>
+              <div class="px-3 py-2.5 w-28 text-surface-400 text-xs truncate">Alice Chen</div>
+              <div class="px-3 py-2.5 w-20 text-right text-surface-400 font-mono text-xs">7</div>
+            </div>
+            <div class="flex text-sm border-b border-surface-800/40 hover:bg-surface-800/20">
+              <div class="px-3 py-2.5 text-surface-200 flex-1 truncate text-xs">RLS Best Practices</div>
+              <div class="px-3 py-2.5 w-20"><span class="rounded-md px-1.5 py-0.5 text-[9px] font-medium bg-green-950 text-green-300">published</span></div>
+              <div class="px-3 py-2.5 w-28 text-surface-400 text-xs truncate">Eve Müller</div>
+              <div class="px-3 py-2.5 w-20 text-right text-surface-400 font-mono text-xs">31</div>
+            </div>
+            <div class="flex text-sm hover:bg-surface-800/20">
+              <div class="px-3 py-2.5 text-surface-200 flex-1 truncate text-xs">REST API Deep Dive</div>
+              <div class="px-3 py-2.5 w-20"><span class="rounded-md px-1.5 py-0.5 text-[9px] font-medium bg-amber-950 text-amber-300">draft</span></div>
+              <div class="px-3 py-2.5 w-28 text-surface-400 text-xs truncate">Bob Park</div>
+              <div class="px-3 py-2.5 w-20 text-right text-surface-400 font-mono text-xs">3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RLS Security Policies Mockup -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-orange-500/10 text-orange-400 ring-1 ring-inset ring-orange-500/20">
+              Row-Level Security
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">RLS Policy Editor</h2>
+            <p class="text-lg text-surface-400 mb-6">Manage Postgres Row-Level Security visually. Define policies per table, sync them between code and database, and see live status at a glance.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> Enable/disable RLS per table with one click</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Visual USING and WITH CHECK clause editor (Monaco)</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Sync code-based policies with live database</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> PERMISSIVE / RESTRICTIVE modes, role targeting</li>
+            </ul>
+          </div>
+
+          <!-- RLS Editor code-based "screenshot" -->
+          <div class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl">
+            <div class="flex h-[460px]">
+              <!-- Sidebar -->
+              <div class="w-[160px] border-r border-surface-800/40 flex flex-col shrink-0">
+                <div class="px-3 py-2.5 border-b border-surface-800/40 bg-surface-900/40">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[10px] uppercase tracking-wider font-semibold text-surface-500">Tables</span>
+                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/refresh-cw.svg" alt="" class="h-3 w-3 filter invert opacity-30"/>
+                  </div>
+                </div>
+                <div class="flex-1 overflow-y-auto p-1.5 space-y-0.5">
+                  <div class="text-[10px] font-semibold text-surface-500 px-1.5 py-1 tracking-wider">▾ public</div>
+                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-surface-400 hover:bg-surface-800/40 cursor-pointer">
+                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-green-500"></div>
+                    <span class="truncate flex-1 font-mono text-[11px]">posts</span>
+                    <span class="text-[10px] opacity-40">2</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs bg-primary/10 text-primary cursor-pointer">
+                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-green-500"></div>
+                    <span class="truncate flex-1 font-mono text-[11px]">users</span>
+                    <span class="text-[10px] opacity-40">3</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-surface-400 hover:bg-surface-800/40 cursor-pointer">
+                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-green-500"></div>
+                    <span class="truncate flex-1 font-mono text-[11px]">comments</span>
+                    <span class="text-[10px] opacity-40">1</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-surface-400 hover:bg-surface-800/40 cursor-pointer">
+                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-orange-400 opacity-50"></div>
+                    <span class="truncate flex-1 font-mono text-[11px]">orders</span>
+                    <span class="text-[10px] opacity-40">0</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-surface-400 hover:bg-surface-800/40 cursor-pointer">
+                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-green-500"></div>
+                    <span class="truncate flex-1 font-mono text-[11px]">products</span>
+                    <span class="text-[10px] opacity-40">2</span>
+                  </div>
+                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-surface-400 hover:bg-surface-800/40 cursor-pointer">
+                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-orange-400 opacity-50"></div>
+                    <span class="truncate flex-1 font-mono text-[11px]">sessions</span>
+                    <span class="text-[10px] opacity-40">0</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Main panel -->
+              <div class="flex-1 flex flex-col min-w-0">
+                <!-- Table header -->
+                <div class="flex items-center justify-between px-4 py-2.5 border-b border-surface-800/40 bg-surface-900/30">
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-mono text-surface-300">public.users</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-900/30 text-green-400 border border-green-800/40 font-medium">RLS ENABLED</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] px-2 py-1 rounded-md bg-surface-800/60 text-surface-500 cursor-pointer">Disable RLS</span>
+                    <span class="text-[10px] px-2 py-1 rounded-md bg-primary/20 text-primary font-semibold cursor-pointer">+ Create Policy</span>
+                  </div>
+                </div>
+                <!-- Policies -->
+                <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-surface-900/20">
+                  <!-- Policy 1 -->
+                  <div class="p-3 rounded-lg border border-surface-800/50 bg-surface-950/80">
+                    <div class="flex items-center justify-between mb-2.5">
+                      <div class="flex items-center gap-2">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/key-round.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="text-sm text-white font-medium">users_read_own</span>
+                        <span class="text-[8px] px-1.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800/40 font-bold uppercase">SELECT</span>
+                      </div>
+                      <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-900/20 text-green-400 border border-green-800/30 font-medium">Live + Code</span>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">
+                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
+                        <span class="text-surface-500 uppercase font-semibold">Using:</span>
+                        <code class="text-amber-300 font-mono">auth.uid() = id</code>
+                      </div>
+                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
+                        <span class="text-surface-500 uppercase font-semibold">Roles:</span>
+                        <span class="text-surface-300 font-mono">public</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Policy 2 -->
+                  <div class="p-3 rounded-lg border border-surface-800/50 bg-surface-950/80">
+                    <div class="flex items-center justify-between mb-2.5">
+                      <div class="flex items-center gap-2">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/key-round.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="text-sm text-white font-medium">users_update_own</span>
+                        <span class="text-[8px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/40 font-bold uppercase">UPDATE</span>
+                      </div>
+                      <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-900/20 text-green-400 border border-green-800/30 font-medium">Live + Code</span>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">
+                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
+                        <span class="text-surface-500 uppercase font-semibold">Using:</span>
+                        <code class="text-amber-300 font-mono">auth.uid() = id</code>
+                      </div>
+                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
+                        <span class="text-surface-500 uppercase font-semibold">Check:</span>
+                        <code class="text-amber-300 font-mono">auth.uid() = id</code>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Policy 3 -->
+                  <div class="p-3 rounded-lg border border-primary/20 bg-primary/5">
+                    <div class="flex items-center justify-between mb-2.5">
+                      <div class="flex items-center gap-2">
+                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/key-round.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="text-sm text-white font-medium">admin_full_access</span>
+                        <span class="text-[8px] px-1.5 py-0.5 rounded bg-green-950 text-green-300 border border-green-800/40 font-bold uppercase">ALL</span>
+                      </div>
+                      <span class="text-[9px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-medium">Unapplied</span>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5">
+                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
+                        <span class="text-surface-500 uppercase font-semibold">Using:</span>
+                        <code class="text-amber-300 font-mono">auth.role() = 'admin'</code>
+                      </div>
+                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
+                        <span class="text-surface-500 uppercase font-semibold">Roles:</span>
+                        <span class="text-surface-300 font-mono">admin</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JS/Code Editor Mockup + Rich Text Editor -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Built-in Editors for Every Workflow</h2>
+          <p class="mt-4 text-lg text-surface-400">From code to content, Rebase Studio has a dedicated editor for every task.</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+          <!-- JS/Collection Editor Mockup -->
+          <div class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl">
+            <div class="flex items-center justify-between px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
+              <div class="flex items-center gap-2">
+                <div class="flex gap-1.5">
+                  <div class="w-2.5 h-2.5 rounded-full bg-red-500/60"></div>
+                  <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/60"></div>
+                  <div class="w-2.5 h-2.5 rounded-full bg-green-500/60"></div>
+                </div>
+                <span class="text-[11px] text-surface-400 font-mono tracking-wider uppercase font-semibold ml-2">Collection Editor</span>
+              </div>
+              <span class="text-[11px] text-surface-500 font-mono">orders.ts</span>
+            </div>
+            <div class="flex">
+              <div class="py-3 px-2 text-right text-[11px] font-mono text-surface-600 leading-[1.55rem] select-none border-r border-surface-800/40 bg-surface-950">
+                <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div>
+              </div>
+              <pre class="py-3 px-4 text-[11px] font-mono leading-[1.55rem] text-surface-300 overflow-x-auto flex-1 bg-surface-950" set:html={collectionEditorHtml}></pre>
+            </div>
+            <div class="px-4 py-2 border-t border-surface-800/40 bg-surface-900/30">
+              <p class="text-[11px] text-surface-500">Every visual change writes back to this file via AST transformation.</p>
+            </div>
+          </div>
+
+          <!-- Real Rich Text Editor -->
+          <div class="rounded-xl overflow-hidden ring-1 ring-surface-700 shadow-2xl">
+            <RebaseEditorDemo client:only="react" />
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Schema Inference -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-amber-500/10 text-amber-400 ring-1 ring-inset ring-amber-500/20">
+              Zero-Config Start
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Schema Inference</h2>
+            <p class="text-lg text-surface-400 mb-6">Point Rebase at your existing PostgreSQL database. It introspects your tables, columns, types, and relations — then generates a full admin panel automatically. No config files to write.</p>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900/50 p-8">
+            <div class="font-mono text-sm text-surface-300 space-y-3">
+              <div class="text-surface-500"># Connect to your existing database</div>
+              <div><span class="text-emerald-400">$</span> npx create-rebase-app ./my-admin</div>
+              <div class="text-surface-500"># Rebase introspects your tables…</div>
+              <div class="text-amber-400">✓ Found 12 tables, 3 enums, 8 relations</div>
+              <div class="text-amber-400">✓ Generated collection definitions</div>
+              <div class="text-emerald-400">✓ Admin panel ready at localhost:3000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Grid -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">More Studio Features</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/table.svg" alt="" class="h-8 w-8 mb-4 filter invert"/>
+            <h3 class="text-lg font-semibold text-white mb-2">Spreadsheet View</h3>
+            <p class="text-sm text-surface-400">Inline editing, column resizing, sorting, filtering, and bulk actions — like a supercharged Google Sheets for your database.</p>
+          </div>
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/text-cursor-input.svg" alt="" class="h-8 w-8 mb-4 filter invert"/>
+            <h3 class="text-lg font-semibold text-white mb-2">Auto-Generated Forms</h3>
+            <p class="text-sm text-surface-400">Schema-aware forms with validation, conditional fields, and custom React field widgets. Complete control via code.</p>
+          </div>
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-input.svg" alt="" class="h-8 w-8 mb-4 filter invert"/>
+            <h3 class="text-lg font-semibold text-white mb-2">Data Import/Export</h3>
+            <p class="text-sm text-surface-400">CSV and JSON with field mapping, type detection, and conflict resolution. Export with column selection and filter preservation.</p>
+          </div>
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/history.svg" alt="" class="h-8 w-8 mb-4 filter invert"/>
+            <h3 class="text-lg font-semibold text-white mb-2">Entity History</h3>
+            <p class="text-sm text-surface-400">Full audit trail of every change. See who modified what, when, and revert to any previous state.</p>
+          </div>
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/palette.svg" alt="" class="h-8 w-8 mb-4 filter invert"/>
+            <h3 class="text-lg font-semibold text-white mb-2">White-Labeling</h3>
+            <p class="text-sm text-surface-400">Custom logos, colors, and branding. Deliver a branded admin panel to your clients or team.</p>
+          </div>
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/puzzle.svg" alt="" class="h-8 w-8 mb-4 filter invert"/>
+            <h3 class="text-lg font-semibold text-white mb-2">Custom React Views</h3>
+            <p class="text-sm text-surface-400">Drop in your own React components as custom fields, entity views, or entire pages inside the admin.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-black py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">See Rebase Studio in action</h2>
+        <div class="flex items-center justify-center gap-x-6">
+          <a href="https://demo.rebase.pro" target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+            Open Live Demo
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 filter invert"/>
+          </a>
+          <a href="/features" class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+            All Features
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 filter invert"/>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

@@ -13,7 +13,7 @@ title: "RepeatFieldBinding"
 
 > **RepeatFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [core/src/form/field\_bindings/RepeatFieldBinding.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/RepeatFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/RepeatFieldBinding.tsx:20](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/field_bindings/RepeatFieldBinding.tsx)
 
 Generic array field that allows reordering and renders the child property
 as nodes.

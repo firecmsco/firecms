@@ -13,7 +13,7 @@ title: "buildRebaseData"
 
 > **buildRebaseData**(`driver`): [`RebaseData`](../interfaces/RebaseData)
 
-Defined in: [common/src/data/buildRebaseData.ts:195](https://github.com/rebaseco/rebase/blob/main/packages/common/src/data/buildRebaseData.ts)
+Defined in: [common/src/data/buildRebaseData.ts:195](https://github.com/rebasepro/rebase/blob/main/packages/common/src/data/buildRebaseData.ts)
 
 Build a `RebaseData` object from a `DataDriver` using JavaScript Proxy.
 

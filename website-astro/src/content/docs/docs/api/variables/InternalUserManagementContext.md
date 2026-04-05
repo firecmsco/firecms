@@ -13,4 +13,4 @@ title: "InternalUserManagementContext"
 
 > `const` **InternalUserManagementContext**: `Context`\<[`UserManagementDelegate`](../interfaces/UserManagementDelegate)\<`any`\> \| `undefined`\>
 
-Defined in: [core/src/contexts/InternalUserManagementContext.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/InternalUserManagementContext.tsx)
+Defined in: [core/src/contexts/InternalUserManagementContext.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/core/src/contexts/InternalUserManagementContext.tsx)

@@ -50,7 +50,7 @@ export function useCreateFormex<T extends object>({
 
     const onValuesChangeRef = useRef(onValuesChangeDeferred);
     onValuesChangeRef.current = onValuesChangeDeferred;
-    const debounceTimeoutRef = useRef<any>(undefined);
+    const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const callDebouncedOnValuesChange = useCallback((values: T) => {
         if (onValuesChangeRef.current) {
@@ -94,11 +94,11 @@ export function useCreateFormex<T extends object>({
     }, [validation]);
 
     const setFieldValue = useCallback(
-        (key: string, value: any, shouldValidate?: boolean) => {
-            const newValues = setIn(valuesRef.current, key, value);
+        (key: string, value: unknown, shouldValidate?: boolean) => {
+            const newValues = setIn(valuesRef.current as Record<string, unknown>, key, value) as T;
             valuesRef.current = newValues;
             setValuesInner(newValues);
-            if (!equal(getIn(initialValuesRef.current, key), value)) {
+            if (!equal(getIn(initialValuesRef.current as Record<string, unknown>, key), value)) {
                 setDirty(true);
             }
             if (shouldValidate) {

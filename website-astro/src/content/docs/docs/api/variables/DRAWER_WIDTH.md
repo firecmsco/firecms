@@ -13,4 +13,4 @@ title: "DRAWER_WIDTH"
 
 > `const` **DRAWER\_WIDTH**: `280` = `280`
 
-Defined in: [core/src/app/Scaffold.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/Scaffold.tsx)
+Defined in: [core/src/app/Scaffold.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/Scaffold.tsx)

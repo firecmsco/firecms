@@ -13,7 +13,7 @@ title: "UseResolvedCollectionsProps"
 
 > **UseResolvedCollectionsProps**\<`EC`, `USER`\> = `object`
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:17](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 ## Type Parameters
 
@@ -31,7 +31,7 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:17](https://git
 
 > **authController**: [`AuthController`](AuthController)\<`USER`\>
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:18](https://git
 
 > **collectionRegistryController**: [`CollectionRegistryController`](CollectionRegistryController)\<`EC`\> & `object`
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 #### Type Declaration
 
@@ -53,7 +53,7 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:23](https://git
 
 > `optional` **collections**: `EC`[] \| [`EntityCollectionsBuilder`](EntityCollectionsBuilder)\<`EC`\>
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:19](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:19](https://git
 
 > **data**: [`RebaseData`](../interfaces/RebaseData)
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:20](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:20](https://git
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 ***
 
@@ -77,4 +77,4 @@ Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:22](https://git
 
 > `optional` **plugins**: [`RebasePlugin`](RebasePlugin)[]
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)

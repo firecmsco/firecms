@@ -13,7 +13,7 @@ title: "renderSkeletonIcon"
 
 > **renderSkeletonIcon**(): `Element`
 
-Defined in: [core/src/preview/property\_previews/SkeletonPropertyComponent.tsx:273](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
+Defined in: [core/src/preview/property\_previews/SkeletonPropertyComponent.tsx:273](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/property_previews/SkeletonPropertyComponent.tsx)
 
 ## Returns
 

@@ -11,7 +11,7 @@ title: "PropertyPreviewProps"
 
 # Interface: PropertyPreviewProps\<P, CustomProps\>
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:11](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
 
 ## Type Parameters
 
@@ -29,7 +29,7 @@ Defined in: [types/src/components/PropertyPreviewProps.tsx:11](https://github.co
 
 > `optional` **customProps**: `CustomProps`
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:47](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
 
 Additional properties set by the developer
 
@@ -39,7 +39,7 @@ Additional properties set by the developer
 
 > `optional` **fill**: `boolean`
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:59](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:59](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
 
 If true, image previews will fill their container completely.
 Only applies to image type properties.
@@ -50,7 +50,7 @@ Only applies to image type properties.
 
 > `optional` **height**: `number`
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:36](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
 
 Max height assigned to the preview, depending on the context.
 It may be undefined if unlimited.
@@ -61,7 +61,7 @@ It may be undefined if unlimited.
 
 > `optional` **interactive**: `boolean`
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:53](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:53](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
 
 If the preview should be interactive or not.
 This applies only to videos.
@@ -72,7 +72,7 @@ This applies only to videos.
 
 > **property**: `P`
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:25](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
 
 Property this display is related to, now strongly typed to P
 
@@ -82,7 +82,7 @@ Property this display is related to, now strongly typed to P
 
 > `optional` **propertyKey**: `string`
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:15](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
 
 Name of the property
 
@@ -92,7 +92,7 @@ Name of the property
 
 > **size**: [`PreviewSize`](../type-aliases/PreviewSize)
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:30](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
 
 Desired size of the preview, depending on the context.
 
@@ -102,7 +102,7 @@ Desired size of the preview, depending on the context.
 
 > **value**: [`InferPropertyType`](../type-aliases/InferPropertyType)\<`P`\>
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:20](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
 
 Current value of the property, inferred from the property schema P
 
@@ -112,7 +112,7 @@ Current value of the property, inferred from the property schema P
 
 > `optional` **width**: `number`
 
-Defined in: [types/src/components/PropertyPreviewProps.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
+Defined in: [types/src/components/PropertyPreviewProps.tsx:42](https://github.com/rebasepro/rebase/blob/main/packages/types/src/components/PropertyPreviewProps.tsx)
 
 Max height width to the preview, depending on the context.
 It may be undefined if unlimited.

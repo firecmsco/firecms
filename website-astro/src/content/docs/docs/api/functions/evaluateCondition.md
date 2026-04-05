@@ -13,7 +13,7 @@ title: "evaluateCondition"
 
 > **evaluateCondition**(`rule`, `context`): `unknown`
 
-Defined in: [common/src/util/conditions.ts:71](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/conditions.ts)
+Defined in: [common/src/util/conditions.ts:71](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/conditions.ts)
 
 Evaluate a JSON Logic rule against the given context.
 

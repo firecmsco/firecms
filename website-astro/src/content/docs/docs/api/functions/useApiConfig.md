@@ -13,7 +13,7 @@ title: "useApiConfig"
 
 > **useApiConfig**(): [`ApiConfig`](../interfaces/ApiConfig) \| `undefined`
 
-Defined in: [core/src/hooks/ApiConfigContext.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/ApiConfigContext.tsx)
+Defined in: [core/src/hooks/ApiConfigContext.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/ApiConfigContext.tsx)
 
 Read the API config from context. Returns `undefined` if no provider is present,
 allowing hooks to fall back to their own props.

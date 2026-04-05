@@ -13,7 +13,7 @@ title: "PropertyFieldBinding"
 
 > `const` **PropertyFieldBinding**: \<`M`\>(`propertyKey`) => `ReactElement`\<[`PropertyFieldBindingProps`](../interfaces/PropertyFieldBindingProps)\<`M`\>\>
 
-Defined in: [core/src/form/PropertyFieldBinding.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/PropertyFieldBinding.tsx)
+Defined in: [core/src/form/PropertyFieldBinding.tsx:47](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/PropertyFieldBinding.tsx)
 
 This component renders a form field creating the corresponding configuration
 from a property. For example if bound to a string property, it will generate

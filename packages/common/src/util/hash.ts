@@ -1,4 +1,5 @@
 export function hashString(str: string): number {
+    if (!str) return 0;
     let hash = 0;
     let i;
     let chr;

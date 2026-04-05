@@ -13,4 +13,4 @@ title: "AppContext"
 
 > `const` **AppContext**: `Context`\<[`AppState`](../type-aliases/AppState)\>
 
-Defined in: [core/src/app/useApp.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)

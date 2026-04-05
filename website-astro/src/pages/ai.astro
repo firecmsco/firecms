@@ -1,0 +1,242 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+
+const title = "Rebase AI & Agents — MCP Server, AI Autofill & DataTalk";
+const description = "Make your data accessible to AI agents. Rebase provides a Model Context Protocol (MCP) server, AI-powered data enhancement, and natural language SQL queries.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://rebase.pro" },
+    { name: "AI & Agents", url: "https://rebase.pro/ai" }
+];
+
+const mcpConfigCode = `<span class="text-surface-500">// .cursor/mcp.json</span>
+{
+  <span class="text-blue-400">"mcpServers"</span>: {
+    <span class="text-blue-400">"rebase"</span>: {
+      <span class="text-blue-400">"command"</span>: <span class="text-emerald-400">"npx"</span>,
+      <span class="text-blue-400">"args"</span>: [<span class="text-emerald-400">"@rebasepro/mcp-server"</span>],
+      <span class="text-blue-400">"env"</span>: {
+        <span class="text-blue-400">"REBASE_BASE_URL"</span>: <span class="text-emerald-400">"http://localhost:3001"</span>
+      }
+    }
+  }
+}`;
+
+const enhancementCode = `<span class="text-blue-400">import</span> { useDataEnhancementPlugin } <span class="text-blue-400">from</span>
+  <span class="text-emerald-400">"@rebasepro/data_enhancement"</span>;
+
+<span class="text-blue-400">const</span> plugin = <span class="text-amber-400">useDataEnhancementPlugin</span>({
+  getConfigForPath: ({ path }) =&gt; ({
+    suggestions: <span class="text-amber-400">true</span>,
+    autofill: <span class="text-amber-400">true</span>,
+  })
+});
+
+<span class="text-surface-500">// Drop into your Rebase app:</span>
+&lt;Rebase
+  plugins={[plugin]}
+  ...
+/&gt;`;
+---
+
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
+  <main>
+    <!-- Hero -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute -bottom-40 left-1/3 w-[700px] h-[700px] rounded-full bg-violet-500/5 blur-3xl opacity-50"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+      </div>
+      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+        <div class="inline-flex items-center py-1.5 px-3 mb-6 text-sm rounded-full bg-violet-500/10 text-violet-400 ring-1 ring-inset ring-violet-500/20 mx-auto">
+          <span class="text-sm font-medium">MCP · AI Autofill · DataTalk</span>
+        </div>
+        <h1 class="mb-6 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+          AI & Agents
+        </h1>
+        <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
+          Let AI agents read, write, and manage your data autonomously. Rebase is the bridge between your database and the agentic future.
+        </p>
+      </div>
+    </section>
+
+    <!-- MCP Server -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-violet-500/10 text-violet-400 ring-1 ring-inset ring-violet-500/20">
+              Model Context Protocol
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">MCP Server</h2>
+            <p class="text-lg text-surface-400 mb-6">The <code class="text-sm bg-surface-800 px-1.5 py-0.5 rounded">@rebasepro/mcp-server</code> package exposes your entire Rebase project to AI assistants like Cursor, Claude, and Windsurf via the Model Context Protocol standard.</p>
+            <p class="text-surface-400 mb-6">AI agents can autonomously manage your data, run migrations, generate SDKs, and control the dev server — all through a standardized, secure interface.</p>
+            <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6 mt-6">
+              <div class="text-xs font-semibold text-surface-500 mb-3 uppercase tracking-wider">Configuration</div>
+              <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300" set:html={mcpConfigCode}/></pre>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold text-white mb-6">Available Tools</h3>
+            <div class="space-y-4">
+              <div class="p-4 rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+                <h4 class="text-white font-semibold mb-1">📝 Data Tools</h4>
+                <p class="text-sm text-surface-400">List, get, create, update, and delete documents in any collection with filtering and pagination.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+                <h4 class="text-white font-semibold mb-1">👤 Admin Tools</h4>
+                <p class="text-sm text-surface-400">List users, create users, assign roles, delete users, and list roles — all programmatically.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+                <h4 class="text-white font-semibold mb-1">🗄️ Schema & DB Tools</h4>
+                <p class="text-sm text-surface-400"><code class="text-xs bg-surface-800 px-1 rounded">schema_generate</code>, <code class="text-xs bg-surface-800 px-1 rounded">db_push</code>, <code class="text-xs bg-surface-800 px-1 rounded">db_pull</code>, <code class="text-xs bg-surface-800 px-1 rounded">db_generate</code>, <code class="text-xs bg-surface-800 px-1 rounded">db_migrate</code>, <code class="text-xs bg-surface-800 px-1 rounded">generate_sdk</code></p>
+              </div>
+              <div class="p-4 rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+                <h4 class="text-white font-semibold mb-1">🖥️ Dev Server</h4>
+                <p class="text-sm text-surface-400">Start, stop, and read logs from the dev server without leaving your AI assistant.</p>
+              </div>
+              <div class="p-4 rounded-xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+                <h4 class="text-white font-semibold mb-1">📁 Resources</h4>
+                <p class="text-sm text-surface-400">Collection definitions and generated Drizzle schema exposed as MCP resources for context-aware AI assistance.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Data Enhancement -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div class="lg:order-last">
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-pink-500/10 text-pink-400 ring-1 ring-inset ring-pink-500/20">
+              Schema-Aware AI
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">AI Data Enhancement</h2>
+            <p class="text-lg text-surface-400 mb-6">The data enhancement plugin analyzes your collection schema and uses AI to auto-fill fields, suggest descriptions, generate SEO metadata, and translate content — all from within the admin UI.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> One-click autofill based on existing field values</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Schema-aware prompts (knows your field types and constraints)</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Inline AI completions in the rich text editor</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Works with any OpenAI-compatible API</li>
+            </ul>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6">
+            <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300" set:html={enhancementCode}/></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DataTalk -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-cyan-500/10 text-cyan-400 ring-1 ring-inset ring-cyan-500/20">
+              Natural Language → SQL
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">DataTalk</h2>
+            <p class="text-lg text-surface-400 mb-6">Ask questions about your data in plain English. DataTalk converts natural language to SQL, executes it against your Postgres database, and renders the results in charts and tables.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> Schema-aware query generation</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Auto-generated visualizations</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Conversation history and follow-ups</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Integrated as a Rebase admin view</li>
+            </ul>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900/50 p-8">
+            <div class="space-y-4">
+              <div class="flex items-start gap-3">
+                <div class="h-8 w-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                  <span class="text-blue-400 text-sm">You</span>
+                </div>
+                <div class="bg-surface-800/50 rounded-xl px-4 py-2.5">
+                  <p class="text-surface-300 text-sm">Show me the top 10 users by order count this month</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="h-8 w-8 rounded-full bg-violet-500/20 flex items-center justify-center flex-shrink-0">
+                  <span class="text-violet-400 text-sm">AI</span>
+                </div>
+                <div class="bg-surface-800/50 rounded-xl px-4 py-2.5 flex-1">
+                  <p class="text-surface-300 text-sm mb-2">Here are the top 10 users:</p>
+                  <div class="bg-surface-900 rounded-lg p-3 font-mono text-xs text-surface-400">
+                    <div class="text-emerald-400 mb-1">SELECT u.display_name, COUNT(o.id)</div>
+                    <div>FROM users u JOIN orders o ON ...</div>
+                    <div>WHERE o.created_at &gt;= ...</div>
+                    <div>GROUP BY u.id ORDER BY count DESC</div>
+                    <div>LIMIT 10;</div>
+                  </div>
+                  <div class="mt-3 flex items-end gap-1 h-20">
+                    <div class="flex-1 rounded-t bg-gradient-to-t from-violet-500/30 to-violet-500/80" style="height: 100%"></div>
+                    <div class="flex-1 rounded-t bg-gradient-to-t from-violet-500/30 to-violet-500/80" style="height: 85%"></div>
+                    <div class="flex-1 rounded-t bg-gradient-to-t from-violet-500/30 to-violet-500/80" style="height: 75%"></div>
+                    <div class="flex-1 rounded-t bg-gradient-to-t from-violet-500/30 to-violet-500/80" style="height: 60%"></div>
+                    <div class="flex-1 rounded-t bg-gradient-to-t from-violet-500/30 to-violet-500/80" style="height: 53%"></div>
+                    <div class="flex-1 rounded-t bg-gradient-to-t from-violet-500/30 to-violet-500/80" style="height: 45%"></div>
+                    <div class="flex-1 rounded-t bg-gradient-to-t from-violet-500/30 to-violet-500/80" style="height: 38%"></div>
+                    <div class="flex-1 rounded-t bg-gradient-to-t from-violet-500/30 to-violet-500/80" style="height: 33%"></div>
+                    <div class="flex-1 rounded-t bg-gradient-to-t from-violet-500/30 to-violet-500/80" style="height: 25%"></div>
+                    <div class="flex-1 rounded-t bg-gradient-to-t from-violet-500/30 to-violet-500/80" style="height: 18%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integration Grid -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Works With Your AI Stack</h2>
+          <p class="mt-4 text-lg text-surface-400">Rebase integrates with the tools developers are already using.</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div class="p-6 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 text-center">
+            <p class="text-white font-semibold mb-1">Cursor</p>
+            <p class="text-sm text-surface-400">MCP integration</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 text-center">
+            <p class="text-white font-semibold mb-1">Claude Desktop</p>
+            <p class="text-sm text-surface-400">MCP integration</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 text-center">
+            <p class="text-white font-semibold mb-1">Windsurf</p>
+            <p class="text-sm text-surface-400">MCP integration</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 text-center">
+            <p class="text-white font-semibold mb-1">OpenAI API</p>
+            <p class="text-sm text-surface-400">Data enhancement</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-black py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">Make your data AI-ready</h2>
+        <div class="flex items-center justify-center gap-x-6">
+          <a href="/sdk"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+            Client SDK
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 filter invert"/>
+          </a>
+          <a href="/backend" class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+            Backend & APIs
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 filter invert"/>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

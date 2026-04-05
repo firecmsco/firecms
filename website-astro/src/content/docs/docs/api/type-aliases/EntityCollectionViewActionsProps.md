@@ -13,7 +13,7 @@ title: "EntityCollectionViewActionsProps"
 
 > **EntityCollectionViewActionsProps**\<`M`\> = `object`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:16](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:16](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewAction
 
 > **collection**: [`EntityCollection`](../interfaces/EntityCollection)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:17](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewAction
 
 > `optional` **collectionEntitiesCount**: `number`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:26](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewAction
 
 > **onMultipleDeleteClick**: () => `void`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 #### Returns
 
@@ -55,7 +55,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewAction
 
 > **onNewClick**: () => `void`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 #### Returns
 
@@ -67,7 +67,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewAction
 
 > **parentCollectionIds**: `string`[]
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:20](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewAction
 
 > **path**: `string`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -83,7 +83,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewAction
 
 > **relativePath**: `string`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:19](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -91,7 +91,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewAction
 
 > **selectionController**: [`SelectionController`](SelectionController)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -99,7 +99,7 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewAction
 
 > **selectionEnabled**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
 
 ***
 
@@ -107,4 +107,4 @@ Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewAction
 
 > **tableController**: [`EntityTableController`](EntityTableController)\<`M`\>
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx:25](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionViewActions.tsx)

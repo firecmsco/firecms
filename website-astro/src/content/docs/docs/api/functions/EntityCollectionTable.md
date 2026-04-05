@@ -13,7 +13,7 @@ title: "EntityCollectionTable"
 
 > **EntityCollectionTable**\<`M`, `USER`\>(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTable.tsx:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTable.tsx)
+Defined in: [core/src/components/EntityCollectionTable/EntityCollectionTable.tsx:44](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/EntityCollectionTable.tsx)
 
 This component is in charge of rendering a collection table with a high
 degree of customization.

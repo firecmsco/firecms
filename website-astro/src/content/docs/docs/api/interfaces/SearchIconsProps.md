@@ -11,7 +11,7 @@ title: "SearchIconsProps"
 
 # Interface: SearchIconsProps
 
-Defined in: [core/src/components/SearchIconsView.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)
+Defined in: [core/src/components/SearchIconsView.tsx:17](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [core/src/components/SearchIconsView.tsx:17](https://github.com/reba
 
 > `optional` **onIconSelected**: (`icon`) => `void`
 
-Defined in: [core/src/components/SearchIconsView.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)
+Defined in: [core/src/components/SearchIconsView.tsx:19](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)
 
 #### Parameters
 
@@ -37,4 +37,4 @@ Defined in: [core/src/components/SearchIconsView.tsx:19](https://github.com/reba
 
 > `optional` **selectedIcon**: `string`
 
-Defined in: [core/src/components/SearchIconsView.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)
+Defined in: [core/src/components/SearchIconsView.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/SearchIconsView.tsx)

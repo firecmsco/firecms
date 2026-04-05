@@ -7,9 +7,10 @@ import { ConditionBuilderStatic } from "../db/interfaces";
 
 /** Drizzle dynamic query builder — accepts innerJoin + where chaining */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface DrizzleDynamicQuery {
+export interface DrizzleDynamicQuery {
     innerJoin(table: PgTable<any>, condition: SQL): this;
     where(condition: SQL | undefined): this;
+    limit(limit: number): this;
 }
 
 /**

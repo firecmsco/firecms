@@ -13,7 +13,7 @@ title: "CollectionRegistryController"
 
 > **CollectionRegistryController**\<`EC`\> = `object`
 
-Defined in: [types/src/controllers/navigation.ts:122](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:122](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Controller that provides access to the registered entity collections.
 
@@ -29,7 +29,7 @@ Controller that provides access to the registered entity collections.
 
 > `optional` **collections**: [`EntityCollection`](../interfaces/EntityCollection)[]
 
-Defined in: [types/src/controllers/navigation.ts:130](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:130](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 List of the mapped collections in the CMS.
 Each entry relates to a collection in the root database.
@@ -42,7 +42,7 @@ generates an entry in the main menu.
 
 > **convertIdsToPaths**: (`ids`) => `string`[]
 
-Defined in: [types/src/controllers/navigation.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:168](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Resolve paths from a list of ids
 
@@ -62,7 +62,7 @@ Resolve paths from a list of ids
 
 > **getCollection**: (`slugOrPath`, `includeUserOverride?`) => `EC` \| `undefined`
 
-Defined in: [types/src/controllers/navigation.ts:141](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:141](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Get the collection configuration for a given path.
 The collection is resolved from the given path or alias.
@@ -87,7 +87,7 @@ The collection is resolved from the given path or alias.
 
 > **getParentCollectionIds**: (`path`) => `string`[]
 
-Defined in: [types/src/controllers/navigation.ts:162](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:162](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Retrieve all the related parent collection ids for a given path
 
@@ -107,7 +107,7 @@ Retrieve all the related parent collection ids for a given path
 
 > **getParentReferencesFromPath**: (`path`) => [`EntityReference`](../classes/EntityReference)[]
 
-Defined in: [types/src/controllers/navigation.ts:156](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:156](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Retrieve all the related parent references for a given path
 
@@ -127,7 +127,7 @@ Retrieve all the related parent references for a given path
 
 > **getRawCollection**: (`slugOrPath`) => `EC` \| `undefined`
 
-Defined in: [types/src/controllers/navigation.ts:148](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:148](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Get the raw, un-normalized collection configuration.
 This bypasses the `CollectionRegistry` normalization (such as injecting `relation` instances).
@@ -149,6 +149,6 @@ This is strictly for the Visual Editor to manipulate AST code without persisting
 
 > **initialised**: `boolean`
 
-Defined in: [types/src/controllers/navigation.ts:135](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:135](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Is the registry ready to be used

@@ -23,7 +23,7 @@ describe("getArrayValuesCount", () => {
     });
 
     it("should handle empty input", () => {
-        const array: any[] = [];
+        const array: Record<string, unknown>[] = [];
         const result = getArrayValuesCount(array);
         expect(result).toEqual({});
     });

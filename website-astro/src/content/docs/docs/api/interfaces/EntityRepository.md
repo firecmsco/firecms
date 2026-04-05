@@ -11,7 +11,7 @@ title: "EntityRepository"
 
 # Interface: EntityRepository
 
-Defined in: [types/src/types/backend.ts:147](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:147](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Abstract entity repository interface.
 Handles all CRUD operations for entities in the database.
@@ -27,7 +27,7 @@ Implementations should handle:
 
 > **checkUniqueField**(`collectionPath`, `fieldName`, `value`, `excludeEntityId?`, `databaseId?`): `Promise`\<`boolean`\>
 
-Defined in: [types/src/types/backend.ts:204](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:204](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Check if a field value is unique in a collection
 
@@ -63,7 +63,7 @@ Check if a field value is unique in a collection
 
 > **countEntities**\<`M`\>(`collectionPath`, `options?`): `Promise`\<`number`\>
 
-Defined in: [types/src/types/backend.ts:177](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:177](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Count entities in a collection
 
@@ -93,7 +93,7 @@ Count entities in a collection
 
 > **deleteEntity**(`collectionPath`, `entityId`, `databaseId?`): `Promise`\<`void`\>
 
-Defined in: [types/src/types/backend.ts:195](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:195](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Delete an entity by ID
 
@@ -121,7 +121,7 @@ Delete an entity by ID
 
 > **fetchCollection**\<`M`\>(`collectionPath`, `options?`): `Promise`\<[`Entity`](Entity)\<`M`\>[]\>
 
-Defined in: [types/src/types/backend.ts:160](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:160](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Fetch a collection of entities with optional filtering, ordering, and pagination
 
@@ -151,7 +151,7 @@ Fetch a collection of entities with optional filtering, ordering, and pagination
 
 > **fetchEntity**\<`M`\>(`collectionPath`, `entityId`, `databaseId?`): `Promise`\<[`Entity`](Entity)\<`M`\> \| `undefined`\>
 
-Defined in: [types/src/types/backend.ts:151](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:151](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Fetch a single entity by ID
 
@@ -185,7 +185,7 @@ Fetch a single entity by ID
 
 > **saveEntity**\<`M`\>(`collectionPath`, `values`, `entityId?`, `databaseId?`): `Promise`\<[`Entity`](Entity)\<`M`\>\>
 
-Defined in: [types/src/types/backend.ts:185](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:185](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Save an entity (create or update)
 
@@ -223,7 +223,7 @@ Save an entity (create or update)
 
 > **searchEntities**\<`M`\>(`collectionPath`, `searchString`, `options?`): `Promise`\<[`Entity`](Entity)\<`M`\>[]\>
 
-Defined in: [types/src/types/backend.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:168](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Search entities by text
 

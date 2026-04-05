@@ -13,7 +13,7 @@ title: "UseResolvedViewsProps"
 
 > **UseResolvedViewsProps**\<`USER`\> = `object`
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:20](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:20](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ## Type Parameters
 
@@ -27,7 +27,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:20](https://github.c
 
 > `optional` **adminMode**: `"content"` \| `"studio"` \| `"settings"`
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:26](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:26](https://github.c
 
 > `optional` **adminViews**: [`CMSView`](../interfaces/CMSView)[] \| [`CMSViewsBuilder`](CMSViewsBuilder)
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:23](https://github.c
 
 > **authController**: [`AuthController`](AuthController)\<`USER`\>
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:21](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:21](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:21](https://github.c
 
 > **data**: [`RebaseData`](../interfaces/RebaseData)
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:24](https://github.c
 
 > `optional` **effectiveRoleController**: [`EffectiveRoleController`](../interfaces/EffectiveRoleController)
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:27](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:27](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:27](https://github.c
 
 > `optional` **plugins**: [`RebasePlugin`](RebasePlugin)[]
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:25](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:25](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:25](https://github.c
 
 > `optional` **userManagement**: [`UserManagementDelegate`](../interfaces/UserManagementDelegate)
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:28](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
 
 ***
 
@@ -83,4 +83,4 @@ Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:28](https://github.c
 
 > `optional` **views**: [`CMSView`](../interfaces/CMSView)[] \| [`CMSViewsBuilder`](CMSViewsBuilder)
 
-Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)
+Defined in: [core/src/hooks/navigation/useResolvedViews.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedViews.tsx)

@@ -11,7 +11,7 @@ title: "BooleanProperty"
 
 # Interface: BooleanProperty
 
-Defined in: [types/src/types/properties.ts:349](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:349](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ## Extends
 
@@ -23,7 +23,7 @@ Defined in: [types/src/types/properties.ts:349](https://github.com/rebaseco/reba
 
 > `optional` **callbacks**: [`PropertyCallbacks`](../type-aliases/PropertyCallbacks)\<`any`, `any`, [`User`](../type-aliases/User)\>
 
-Defined in: [types/src/types/properties.ts:212](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:212](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Callbacks/Hooks for this property field to transform and sanitize data during its lifecycle.
 
@@ -37,7 +37,7 @@ Callbacks/Hooks for this property field to transform and sanitize data during it
 
 > `optional` **columnWidth**: `number`
 
-Defined in: [types/src/types/properties.ts:128](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:128](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Width in pixels of this column in the collection view. If not set
 the width is inferred based on the other configurations
@@ -52,7 +52,7 @@ the width is inferred based on the other configurations
 
 > `optional` **conditions**: [`PropertyConditions`](PropertyConditions)
 
-Defined in: [types/src/types/properties.ts:207](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:207](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Declarative conditions for dynamic property behavior using JSON Logic.
 
@@ -76,7 +76,7 @@ An alternative to PropertyBuilder functions that can be:
 
 > `optional` **customProps**: `any`
 
-Defined in: [types/src/types/properties.ts:170](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:170](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Additional props that are passed to the components defined in `field`
 or in `preview`.
@@ -91,7 +91,7 @@ or in `preview`.
 
 > `optional` **defaultValue**: `unknown`
 
-Defined in: [types/src/types/properties.ts:158](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:158](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 This value will be set by default for new entities.
 
@@ -105,7 +105,7 @@ This value will be set by default for new entities.
 
 > `optional` **description**: `string`
 
-Defined in: [types/src/types/properties.ts:114](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:114](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Property description, always displayed under the field
 
@@ -119,7 +119,7 @@ Property description, always displayed under the field
 
 > `optional` **disabled**: `boolean` \| [`PropertyDisabledConfig`](PropertyDisabledConfig)
 
-Defined in: [types/src/types/properties.ts:148](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:148](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Is this field disabled.
 When set to true, it gets rendered as a
@@ -137,7 +137,7 @@ disabled or hide the field completely)
 
 > `optional` **dynamicProps**: (`props`) => `Partial`\<[`Property`](../type-aliases/Property)\>
 
-Defined in: [types/src/types/properties.ts:194](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:194](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Use this to define dynamic properties that change based on certain conditions
 or on the entity's values. For example, you can make a field read-only if
@@ -164,7 +164,7 @@ This function receives the same props as a `PropertyBuilder` and should return a
 
 > `optional` **Field**: `ComponentType`\<[`FieldProps`](FieldProps)\<`any`, `any`, `any`\>\>
 
-Defined in: [types/src/types/properties.ts:179](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:179](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 If you need to render a custom field, you can create a component that
 takes `FieldProps` as props. You receive the value, a function to
@@ -182,7 +182,7 @@ in the component.
 
 > `optional` **hideFromCollection**: `boolean`
 
-Defined in: [types/src/types/properties.ts:133](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:133](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Do not show this property in the collection view
 
@@ -196,7 +196,7 @@ Do not show this property in the collection view
 
 > **name**: `string`
 
-Defined in: [types/src/types/properties.ts:109](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:109](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Property name (e.g. Product)
 
@@ -210,7 +210,7 @@ Property name (e.g. Product)
 
 > `optional` **Preview**: `ComponentType`\<[`PropertyPreviewProps`](PropertyPreviewProps)\<`any`, `any`\>\>
 
-Defined in: [types/src/types/properties.ts:186](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:186](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Configure how a property is displayed as a preview, e.g. in the collection
 view. You can customize it by passing custom props that are received
@@ -226,7 +226,7 @@ in the component.
 
 > `optional` **propertyConfig**: `string`
 
-Defined in: [types/src/types/properties.ts:122](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:122](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 You can use this prop to reuse a property that has been defined
 in the top level of the CMS in the prop `fields`.
@@ -243,7 +243,7 @@ overwritten by the current property config.
 
 > `optional` **readOnly**: `boolean`
 
-Defined in: [types/src/types/properties.ts:139](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:139](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Is this a read only property. When set to true, it gets rendered as a
 preview.
@@ -258,7 +258,7 @@ preview.
 
 > **type**: `"boolean"`
 
-Defined in: [types/src/types/properties.ts:350](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:350](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ***
 
@@ -266,7 +266,7 @@ Defined in: [types/src/types/properties.ts:350](https://github.com/rebaseco/reba
 
 > `optional` **validation**: [`PropertyValidationSchema`](PropertyValidationSchema)
 
-Defined in: [types/src/types/properties.ts:354](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:354](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Rules for validating this property
 
@@ -280,7 +280,7 @@ Rules for validating this property
 
 > `optional` **widthPercentage**: `number`
 
-Defined in: [types/src/types/properties.ts:164](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:164](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 A number between 0 and 100 that indicates the width of the field in the form view.
 It defaults to 100, but you can set it to 50 to have two fields in the same row.

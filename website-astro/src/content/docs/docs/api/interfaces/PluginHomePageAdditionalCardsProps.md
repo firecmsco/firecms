@@ -11,7 +11,7 @@ title: "PluginHomePageAdditionalCardsProps"
 
 # Interface: PluginHomePageAdditionalCardsProps\<USER\>
 
-Defined in: [types/src/types/plugins.tsx:325](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:325](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [types/src/types/plugins.tsx:325](https://github.com/rebaseco/rebase
 
 > **context**: [`RebaseContext`](../type-aliases/RebaseContext)\<`USER`\>
 
-Defined in: [types/src/types/plugins.tsx:327](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:327](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -33,4 +33,4 @@ Defined in: [types/src/types/plugins.tsx:327](https://github.com/rebaseco/rebase
 
 > `optional` **group**: `string`
 
-Defined in: [types/src/types/plugins.tsx:326](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:326](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)

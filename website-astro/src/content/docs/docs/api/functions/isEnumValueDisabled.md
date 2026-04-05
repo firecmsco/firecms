@@ -13,7 +13,7 @@ title: "isEnumValueDisabled"
 
 > **isEnumValueDisabled**(`labelOrConfig?`): `boolean` \| `undefined`
 
-Defined in: [core/src/util/enums.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/enums.ts)
+Defined in: [core/src/util/enums.ts:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/enums.ts)
 
 ## Parameters
 

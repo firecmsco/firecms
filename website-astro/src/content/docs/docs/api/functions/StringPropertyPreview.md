@@ -13,7 +13,7 @@ title: "StringPropertyPreview"
 
 > **StringPropertyPreview**(`__namedParameters`): `ReactElement`
 
-Defined in: [core/src/preview/property\_previews/StringPropertyPreview.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/StringPropertyPreview.tsx)
+Defined in: [core/src/preview/property\_previews/StringPropertyPreview.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/property_previews/StringPropertyPreview.tsx)
 
 ## Parameters
 

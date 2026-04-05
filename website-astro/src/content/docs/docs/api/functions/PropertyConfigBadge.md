@@ -13,7 +13,7 @@ title: "PropertyConfigBadge"
 
 > **PropertyConfigBadge**(`__namedParameters`): `ReactNode`
 
-Defined in: [core/src/components/PropertyConfigBadge.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/PropertyConfigBadge.tsx)
+Defined in: [core/src/components/PropertyConfigBadge.tsx:5](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/PropertyConfigBadge.tsx)
 
 ## Parameters
 

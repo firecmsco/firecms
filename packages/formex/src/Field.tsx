@@ -18,7 +18,7 @@ export interface FieldInputProps<Value> {
     onBlur: (event: React.FocusEvent) => void,
 }
 
-export interface FormexFieldProps<Value = any, FormValues extends object = any> {
+export interface FormexFieldProps<Value = unknown, FormValues extends object = object> {
     field: FieldInputProps<Value>;
     form: FormexController<FormValues>;
 }
@@ -31,7 +31,7 @@ export interface FieldConfig<Value, C extends React.ElementType | undefined = un
     as?:
         | C
         | string
-        | React.ForwardRefExoticComponent<any>;
+        | React.ForwardRefExoticComponent<Record<string, unknown>>;
 
     /**
      * Children render function <Field name>{props => ...}</Field>)
@@ -57,10 +57,10 @@ export interface FieldConfig<Value, C extends React.ElementType | undefined = un
     type?: string;
 
     /** Field value */
-    value?: any;
+    value?: unknown;
 
     /** Inner ref */
-    innerRef?: (instance: any) => void;
+    innerRef?: (instance: unknown) => void;
 
 }
 
@@ -116,26 +116,25 @@ export function Field<T, C extends React.ElementType | undefined = undefined>({
     return React.createElement(asElement, { ...field, ...props, className }, children);
 }
 
-const getFieldProps = (nameOrOptions: string | FieldConfig<any>, formex: FormexController<any>): FieldInputProps<any> => {
-    const isAnObject = isObject(nameOrOptions);
-    const name = isAnObject
-        ? (nameOrOptions as FieldConfig<any>).name
-        : nameOrOptions;
-    const valueState = getIn(formex.values, name);
+const getFieldProps = (nameOrOptions: string | FieldConfig<unknown>, formex: FormexController<object>): FieldInputProps<unknown> => {
+    const name: string = typeof nameOrOptions === "string"
+        ? nameOrOptions
+        : nameOrOptions.name;
+    const valueState = getIn(formex.values as Record<string, unknown>, name);
 
-    const field: FieldInputProps<any> = {
-        name,
+    const field: FieldInputProps<unknown> = {
+        name: name as string,
         value: valueState,
         onChange: formex.handleChange,
         onBlur: formex.handleBlur,
     };
-    if (isAnObject) {
+    if (typeof nameOrOptions !== "string") {
         const {
             type,
             value: valueProp, // value is special for checkboxes
             as: is,
             multiple,
-        } = nameOrOptions as FieldConfig<any>;
+        } = nameOrOptions as FieldConfig<unknown>;
 
         if (type === "checkbox") {
             if (valueProp === undefined) {

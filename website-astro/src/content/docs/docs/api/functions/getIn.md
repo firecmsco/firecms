@@ -13,7 +13,7 @@ title: "getIn"
 
 > **getIn**(`obj`, `key`, `def?`, `p?`): `unknown`
 
-Defined in: [common/src/util/objects.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:23](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/objects.ts)
 
 Deeply get a value from an object via its path.
 

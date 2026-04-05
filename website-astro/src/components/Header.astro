@@ -6,46 +6,92 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "");
 const navLinks = [
     {
         href: "/features",
-        label: "Features"
+        label: "Product",
+        dropdown: [
+            [
+                {
+                    href: "/features",
+                    label: "Features",
+                    description: "Everything Rebase can do, at a glance.",
+                    icon: "layers"
+                },
+                {
+                    href: "/studio",
+                    label: "Rebase Studio",
+                    description: "Visual schema editor, spreadsheet views, rich text.",
+                    icon: "layout-dashboard"
+                },
+                {
+                    href: "/backend",
+                    label: "Backend & APIs",
+                    description: "Hono server, REST, GraphQL, WebSockets.",
+                    icon: "server"
+                },
+                {
+                    href: "/ai",
+                    label: "AI & Agents",
+                    description: "MCP server, AI autofill, natural language queries.",
+                    icon: "bot"
+                },
+            ],
+        ]
     },
     {
-        href: "/why-rebase",
-        label: "Why Rebase",
+        href: "/developers",
+        label: "Developers",
         dropdown: [
             [
                 {
                     href: "/developers",
-                    label: "Developers",
-                    description: "Built for developers, by developers.",
+                    label: "Developer Overview",
+                    description: "Schema-as-code, React extensibility, callbacks.",
                     icon: "code"
                 },
                 {
+                    href: "/sdk",
+                    label: "Client SDK",
+                    description: "Typed queries, auth, storage, realtime.",
+                    icon: "terminal"
+                },
+                {
+                    href: "/cli",
+                    label: "CLI & Tooling",
+                    description: "Scaffold, generate, migrate, deploy.",
+                    icon: "square-terminal"
+                },
+                {
+                    href: "/security",
+                    label: "Security & Auth",
+                    description: "JWT auth, RLS policies, role-based access.",
+                    icon: "shield-check"
+                },
+            ],
+        ]
+    },
+    {
+        href: "/why-rebase",
+        label: "Solutions",
+        dropdown: [
+            [
+                {
                     href: "/startups",
-                    label: "Startups",
-                    description: "Launch your project faster than ever.",
+                    label: "For Startups",
+                    description: "Ship your back-office in a sprint.",
                     icon: "rocket"
                 },
                 {
                     href: "/agencies",
-                    label: "Agencies",
-                    description: "Deliver amazing projects to your clients.",
+                    label: "For Agencies",
+                    description: "Deliver bespoke client projects, faster.",
                     icon: "briefcase"
-                }
+                },
+                {
+                    href: "/why-rebase",
+                    label: "Why Rebase",
+                    description: "See how Rebase compares to alternatives.",
+                    icon: "git-compare-arrows"
+                },
             ],
-            [
-                {
-                    href: "/security",
-                    label: "Security",
-                    description: "Keep your data safe and secure.",
-                    icon: "shield"
-                },
-                {
-                    href: "/ui",
-                    label: "UI",
-                    description: "A beautiful and intuitive user interface.",
-                    icon: "palette"
-                },
-            ]
         ]
     },
     // {

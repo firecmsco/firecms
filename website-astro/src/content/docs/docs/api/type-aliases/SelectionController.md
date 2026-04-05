@@ -13,7 +13,7 @@ title: "SelectionController"
 
 > **SelectionController**\<`M`\> = `object`
 
-Defined in: [types/src/types/collections.ts:531](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:531](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Use this controller to retrieve the selected entities or modify them in
 an [EntityCollection](../interfaces/EntityCollection)
@@ -30,7 +30,7 @@ an [EntityCollection](../interfaces/EntityCollection)
 
 > **isEntitySelected**: (`entity`) => `boolean`
 
-Defined in: [types/src/types/collections.ts:534](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:534](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [types/src/types/collections.ts:534](https://github.com/rebaseco/reb
 
 > **selectedEntities**: [`Entity`](../interfaces/Entity)\<`M`\>[]
 
-Defined in: [types/src/types/collections.ts:532](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:532](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [types/src/types/collections.ts:532](https://github.com/rebaseco/reb
 
 > **setSelectedEntities**: `Dispatch`\<`SetStateAction`\<[`Entity`](../interfaces/Entity)\<`M`\>[]\>\>
 
-Defined in: [types/src/types/collections.ts:533](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:533](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [types/src/types/collections.ts:533](https://github.com/rebaseco/reb
 
 > **toggleEntitySelection**: (`entity`, `newSelectedState?`) => `void`
 
-Defined in: [types/src/types/collections.ts:535](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:535](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 #### Parameters
 

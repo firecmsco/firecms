@@ -13,6 +13,6 @@ title: "PreviewType"
 
 > **PreviewType** = `"image"` \| `"video"` \| `"audio"` \| `"file"`
 
-Defined in: [types/src/types/properties.ts:947](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:947](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Used for previewing urls if the download file is known

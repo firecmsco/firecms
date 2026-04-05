@@ -11,7 +11,7 @@ title: "CollectionAccessor"
 
 # Interface: CollectionAccessor\<M\>
 
-Defined in: [types/src/controllers/data.ts:64](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:64](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 A single collection's CRUD accessor.
 
@@ -31,7 +31,7 @@ This is the unified API surface used in both:
 
 > `optional` **count**(`params?`): `Promise`\<`number`\>
 
-Defined in: [types/src/controllers/data.ts:109](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:109](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Count the number of records matching the given filter.
 
@@ -51,7 +51,7 @@ Count the number of records matching the given filter.
 
 > **create**(`data`, `id?`): `Promise`\<[`Entity`](Entity)\<`M`\>\>
 
-Defined in: [types/src/controllers/data.ts:81](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:81](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Create a new record.
 
@@ -81,7 +81,7 @@ The created entity
 
 > **delete**(`id`): `Promise`\<`void`\>
 
-Defined in: [types/src/controllers/data.ts:92](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:92](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Delete a record by ID.
 
@@ -101,7 +101,7 @@ Delete a record by ID.
 
 > **find**(`params?`): `Promise`\<[`FindResponse`](FindResponse)\<`M`\>\>
 
-Defined in: [types/src/controllers/data.ts:68](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:68](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Find multiple records with optional filtering, pagination, and sorting.
 
@@ -121,7 +121,7 @@ Find multiple records with optional filtering, pagination, and sorting.
 
 > **findById**(`id`): `Promise`\<[`Entity`](Entity)\<`M`\> \| `undefined`\>
 
-Defined in: [types/src/controllers/data.ts:73](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:73](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Find a single record by its ID.
 
@@ -141,7 +141,7 @@ Find a single record by its ID.
 
 > `optional` **listen**(`params`, `onUpdate`, `onError?`): () => `void`
 
-Defined in: [types/src/controllers/data.ts:98](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:98](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Subscribe to a collection for real-time updates.
 Optional method, may not be supported by all implementations (like stateless HTTP clients).
@@ -174,7 +174,7 @@ Optional method, may not be supported by all implementations (like stateless HTT
 
 > `optional` **listenById**(`id`, `onUpdate`, `onError?`): () => `void`
 
-Defined in: [types/src/controllers/data.ts:104](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:104](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Subscribe to a single record for real-time updates.
 Optional method.
@@ -207,7 +207,7 @@ Optional method.
 
 > **update**(`id`, `data`): `Promise`\<[`Entity`](Entity)\<`M`\>\>
 
-Defined in: [types/src/controllers/data.ts:87](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data.ts)
+Defined in: [types/src/controllers/data.ts:87](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data.ts)
 
 Update an existing record by ID.
 

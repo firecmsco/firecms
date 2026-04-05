@@ -1,4 +1,5 @@
 import { ErrorHandler } from "hono";
+import { ContentfulStatusCode } from "hono/utils/http-status";
 
 /**
  * Standardized API error class.
@@ -80,7 +81,7 @@ export const errorHandler: ErrorHandler = (err, c) => {
                 code: error.code,
                 ...(error.details !== undefined && { details: error.details })
             }
-        } satisfies ErrorResponse, (error.statusCode || 500) as any);
+        } satisfies ErrorResponse, (error.statusCode || 500) as ContentfulStatusCode);
     }
 
     const statusCode = error.statusCode || codeToStatus(error.code) || 500;
@@ -98,7 +99,7 @@ export const errorHandler: ErrorHandler = (err, c) => {
             code,
             ...(error.details !== undefined && { details: error.details })
         }
-    } satisfies ErrorResponse, statusCode as any);
+    } satisfies ErrorResponse, statusCode as ContentfulStatusCode);
 };
 
 /**

@@ -13,7 +13,7 @@ title: "RebaseRoutes"
 
 > **RebaseRoutes**(`__namedParameters`): `Element`
 
-Defined in: [core/src/core/RebaseRoutes.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/core/RebaseRoutes.tsx)
+Defined in: [core/src/core/RebaseRoutes.tsx:19](https://github.com/rebasepro/rebase/blob/main/packages/core/src/core/RebaseRoutes.tsx)
 
 A drop-in replacement for react-router's `<Routes>` that preserves the
 underlying view when a side dialog navigates the URL to a different path.

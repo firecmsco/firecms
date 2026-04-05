@@ -13,7 +13,7 @@ title: "InferCollectionType"
 
 > **InferCollectionType**\<`S`\> = `S` *extends* [`EntityCollection`](../interfaces/EntityCollection)\<infer M\> ? `M` : `never`
 
-Defined in: [types/src/types/collections.ts:711](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:711](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 ## Type Parameters
 

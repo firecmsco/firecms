@@ -11,7 +11,7 @@ title: "ConditionBuilder"
 
 # Interface: ConditionBuilder\<T\>
 
-Defined in: [types/src/types/backend.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:82](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Abstract condition builder interface.
 Implementations translate Rebase filter conditions to database-specific queries.
@@ -33,7 +33,7 @@ The type of condition returned by the builder (e.g., SQL for PostgreSQL, Filter<
 
 > **buildFilterConditions**\<`M`\>(`filter`, `collectionPath`, ...`args`): `T`[]
 
-Defined in: [types/src/types/backend.ts:86](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:86](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Build filter conditions from Rebase FilterValues
 
@@ -67,7 +67,7 @@ Build filter conditions from Rebase FilterValues
 
 > **buildSearchConditions**(`searchString`, `properties`, ...`args`): `T`[]
 
-Defined in: [types/src/types/backend.ts:95](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:95](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Build search conditions for text search
 
@@ -95,7 +95,7 @@ Build search conditions for text search
 
 > **combineConditionsWithAnd**(`conditions`): `T` \| `undefined`
 
-Defined in: [types/src/types/backend.ts:104](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:104](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Combine multiple conditions with AND operator
 
@@ -115,7 +115,7 @@ Combine multiple conditions with AND operator
 
 > **combineConditionsWithOr**(`conditions`): `T` \| `undefined`
 
-Defined in: [types/src/types/backend.ts:109](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:109](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Combine multiple conditions with OR operator
 

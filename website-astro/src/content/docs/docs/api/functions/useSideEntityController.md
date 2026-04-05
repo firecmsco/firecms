@@ -13,7 +13,7 @@ title: "useSideEntityController"
 
 > **useSideEntityController**(): [`SideEntityController`](../interfaces/SideEntityController)
 
-Defined in: [core/src/hooks/useSideEntityController.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useSideEntityController.tsx)
+Defined in: [core/src/hooks/useSideEntityController.tsx:15](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useSideEntityController.tsx)
 
 Use this hook to retrieve an entity controller that allows you to open
 a side dialog to edit an entity.

@@ -13,7 +13,7 @@ title: "DeleteEntityWithCallbacksProps"
 
 > **DeleteEntityWithCallbacksProps**\<`M`, `USER`\> = [`DeleteEntityProps`](../interfaces/DeleteEntityProps)\<`M`\> & `object`
 
-Defined in: [core/src/hooks/data/delete.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/delete.ts)
+Defined in: [core/src/hooks/data/delete.ts:15](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/delete.ts)
 
 ## Type Declaration
 

@@ -11,7 +11,7 @@ title: "UploadFileResult"
 
 # Interface: UploadFileResult
 
-Defined in: [types/src/controllers/storage.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
+Defined in: [types/src/controllers/storage.ts:15](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/src/controllers/storage.ts:15](https://github.com/rebaseco/re
 
 > **bucket**: `string`
 
-Defined in: [types/src/controllers/storage.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
+Defined in: [types/src/controllers/storage.ts:23](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Bucket where the file was uploaded
 
@@ -29,7 +29,7 @@ Bucket where the file was uploaded
 
 > **path**: `string`
 
-Defined in: [types/src/controllers/storage.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
+Defined in: [types/src/controllers/storage.ts:19](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Storage path including the file name where the file was uploaded.
 
@@ -39,7 +39,7 @@ Storage path including the file name where the file was uploaded.
 
 > `optional` **storageUrl**: `string`
 
-Defined in: [types/src/controllers/storage.ts:32](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
+Defined in: [types/src/controllers/storage.ts:32](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 Fully qualified storage URL for the uploaded file.
 

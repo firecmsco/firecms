@@ -13,7 +13,7 @@ title: "resolveArrayProperties"
 
 > **resolveArrayProperties**\<`M`\>(`__namedParameters`): [`Property`](../type-aliases/Property)[]
 
-Defined in: [common/src/util/resolutions.ts:202](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
+Defined in: [common/src/util/resolutions.ts:202](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 ## Type Parameters
 

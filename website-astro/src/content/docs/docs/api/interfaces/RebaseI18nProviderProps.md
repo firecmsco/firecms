@@ -11,7 +11,7 @@ title: "RebaseI18nProviderProps"
 
 # Interface: RebaseI18nProviderProps
 
-Defined in: [core/src/i18n/RebaseI18nProvider.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/i18n/RebaseI18nProvider.tsx)
+Defined in: [core/src/i18n/RebaseI18nProvider.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/i18n/RebaseI18nProvider.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [core/src/i18n/RebaseI18nProvider.tsx:22](https://github.com/rebasec
 
 > `optional` **locale**: `string`
 
-Defined in: [core/src/i18n/RebaseI18nProvider.tsx:24](https://github.com/rebaseco/rebase/blob/main/packages/core/src/i18n/RebaseI18nProvider.tsx)
+Defined in: [core/src/i18n/RebaseI18nProvider.tsx:24](https://github.com/rebasepro/rebase/blob/main/packages/core/src/i18n/RebaseI18nProvider.tsx)
 
 BCP-47 locale tag, e.g. "en", "es", "fr". Defaults to "en".
 
@@ -29,7 +29,7 @@ BCP-47 locale tag, e.g. "en", "es", "fr". Defaults to "en".
 
 > `optional` **translations**: `object`
 
-Defined in: [core/src/i18n/RebaseI18nProvider.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/i18n/RebaseI18nProvider.tsx)
+Defined in: [core/src/i18n/RebaseI18nProvider.tsx:34](https://github.com/rebasepro/rebase/blob/main/packages/core/src/i18n/RebaseI18nProvider.tsx)
 
 Override or extend any FireCMS UI string, keyed by locale.
 

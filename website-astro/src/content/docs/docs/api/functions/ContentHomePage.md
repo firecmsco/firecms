@@ -13,7 +13,7 @@ title: "ContentHomePage"
 
 > **ContentHomePage**(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/HomePage/ContentHomePage.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/HomePage/ContentHomePage.tsx)
+Defined in: [core/src/components/HomePage/ContentHomePage.tsx:40](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/HomePage/ContentHomePage.tsx)
 
 ## Parameters
 

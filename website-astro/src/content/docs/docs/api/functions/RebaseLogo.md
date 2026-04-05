@@ -13,7 +13,7 @@ title: "RebaseLogo"
 
 > **RebaseLogo**(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/RebaseLogo.tsx:3](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/RebaseLogo.tsx)
+Defined in: [core/src/components/RebaseLogo.tsx:3](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/RebaseLogo.tsx)
 
 ## Parameters
 

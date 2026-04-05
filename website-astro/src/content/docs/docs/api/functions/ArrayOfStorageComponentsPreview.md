@@ -13,7 +13,7 @@ title: "ArrayOfStorageComponentsPreview"
 
 > **ArrayOfStorageComponentsPreview**(`__namedParameters`): `Element`
 
-Defined in: [core/src/preview/property\_previews/ArrayOfStorageComponentsPreview.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOfStorageComponentsPreview.tsx)
+Defined in: [core/src/preview/property\_previews/ArrayOfStorageComponentsPreview.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/property_previews/ArrayOfStorageComponentsPreview.tsx)
 
 ## Parameters
 

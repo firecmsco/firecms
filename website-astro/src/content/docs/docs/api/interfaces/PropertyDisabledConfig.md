@@ -11,7 +11,7 @@ title: "PropertyDisabledConfig"
 
 # Interface: PropertyDisabledConfig
 
-Defined in: [types/src/types/properties.ts:651](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:651](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/src/types/properties.ts:651](https://github.com/rebaseco/reba
 
 > `optional` **clearOnDisabled**: `boolean`
 
-Defined in: [types/src/types/properties.ts:659](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:659](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Enable this flag if you would like to clear the value of the field
 when the corresponding property gets disabled.
@@ -33,7 +33,7 @@ properties.
 
 > `optional` **disabledMessage**: `string`
 
-Defined in: [types/src/types/properties.ts:665](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:665](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Explanation of why this property is disabled (e.g. a different field
 needs to be enabled)
@@ -44,6 +44,6 @@ needs to be enabled)
 
 > `optional` **hidden**: `boolean`
 
-Defined in: [types/src/types/properties.ts:670](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:670](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Set this flag to true if you want to hide this field when disabled

@@ -11,7 +11,7 @@ title: "UserManagementDelegate"
 
 # Interface: UserManagementDelegate\<USER\>
 
-Defined in: [types/src/types/user\_management\_delegate.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:11](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Delegate to manage users, roles, and their permissions.
 This interface allows the CMS to be completely agnostic of the underlying
@@ -29,7 +29,7 @@ authentication provider or backend.
 
 > `optional` **allowDefaultRolesCreation**: `boolean`
 
-Defined in: [types/src/types/user\_management\_delegate.ts:77](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:77](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 If true, the UI will allow the user to create the default roles (admin, editor, viewer).
 
@@ -39,7 +39,7 @@ If true, the UI will allow the user to create the default roles (admin, editor, 
 
 > `optional` **bootstrapAdmin**: () => `Promise`\<`void`\>
 
-Defined in: [types/src/types/user\_management\_delegate.ts:96](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:96](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Optional function to bootstrap an admin user.
 Often used when the database is empty.
@@ -54,7 +54,7 @@ Often used when the database is empty.
 
 > `optional` **defineRolesFor**: (`user`) => [`Role`](../type-aliases/Role)[] \| `Promise`\<[`Role`](../type-aliases/Role)[] \| `undefined`\> \| `undefined`
 
-Defined in: [types/src/types/user\_management\_delegate.ts:90](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:90](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Optionally define roles for a given user. This is useful when the roles
 are coming from a separate provider than the one issuing the tokens.
@@ -75,7 +75,7 @@ are coming from a separate provider than the one issuing the tokens.
 
 > `optional` **deleteRole**: (`role`) => `Promise`\<`void`\>
 
-Defined in: [types/src/types/user\_management\_delegate.ts:67](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:67](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Delete a role
 
@@ -95,7 +95,7 @@ Delete a role
 
 > `optional` **deleteUser**: (`user`) => `Promise`\<`void`\>
 
-Defined in: [types/src/types/user\_management\_delegate.ts:45](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:45](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Delete a user
 
@@ -115,7 +115,7 @@ Delete a user
 
 > **getUser**: (`uid`) => `USER` \| `null`
 
-Defined in: [types/src/types/user\_management\_delegate.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:33](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Function to get a user by its uid. This is used to show
 user information when assigning ownership of an entity.
@@ -136,7 +136,7 @@ user information when assigning ownership of an entity.
 
 > `optional` **includeCollectionConfigPermissions**: `boolean`
 
-Defined in: [types/src/types/user\_management\_delegate.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:82](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Should collection config permissions be included?
 
@@ -146,7 +146,7 @@ Should collection config permissions be included?
 
 > `optional` **isAdmin**: `boolean`
 
-Defined in: [types/src/types/user\_management\_delegate.ts:72](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:72](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Is the currently logged in user an admin?
 
@@ -156,7 +156,7 @@ Is the currently logged in user an admin?
 
 > **loading**: `boolean`
 
-Defined in: [types/src/types/user\_management\_delegate.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:16](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Are the users and roles currently being fetched?
 
@@ -166,7 +166,7 @@ Are the users and roles currently being fetched?
 
 > `optional` **roles**: [`Role`](../type-aliases/Role)[]
 
-Defined in: [types/src/types/user\_management\_delegate.ts:50](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:50](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 List of roles defined in the CMS.
 
@@ -176,7 +176,7 @@ List of roles defined in the CMS.
 
 > `optional` **rolesError**: `Error`
 
-Defined in: [types/src/types/user\_management\_delegate.ts:55](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:55](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Optional error if roles failed to load.
 
@@ -186,7 +186,7 @@ Optional error if roles failed to load.
 
 > `optional` **saveRole**: (`role`) => `Promise`\<`void`\>
 
-Defined in: [types/src/types/user\_management\_delegate.ts:61](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:61](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Save a role (create or update)
 
@@ -206,7 +206,7 @@ Save a role (create or update)
 
 > `optional` **saveUser**: (`user`) => `Promise`\<`USER`\>
 
-Defined in: [types/src/types/user\_management\_delegate.ts:39](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:39](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Save a user (create or update)
 
@@ -226,7 +226,7 @@ Save a user (create or update)
 
 > **users**: `USER`[]
 
-Defined in: [types/src/types/user\_management\_delegate.ts:21](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:21](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 List of users managed by the CMS.
 
@@ -236,6 +236,6 @@ List of users managed by the CMS.
 
 > `optional` **usersError**: `Error`
 
-Defined in: [types/src/types/user\_management\_delegate.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
+Defined in: [types/src/types/user\_management\_delegate.ts:26](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/user_management_delegate.ts)
 
 Optional error if users failed to load.

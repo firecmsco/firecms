@@ -11,7 +11,7 @@ title: "PropertyTableCellProps"
 
 # Interface: PropertyTableCellProps\<T\>
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:40](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:40]
 
 > **align**: `"center"` \| `"left"` \| `"right"`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:43](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:43](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:43]
 
 > **columnIndex**: `number`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:42](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:42](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:42]
 
 > `optional` **customFieldValidator**: `CustomFieldValidator`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:44](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:44](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:44]
 
 > **disabled**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:52](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:52](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:52]
 
 > `optional` **enablePopupIcon**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:53](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:53](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -65,7 +65,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:53]
 
 > **entity**: [`Entity`](Entity)\<`any`\>
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:50](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:50](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -73,7 +73,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:50]
 
 > `optional` **frozen**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:60](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:60](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -81,7 +81,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:60]
 
 > **height**: `number`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:48](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:48](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -89,7 +89,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:48]
 
 > `optional` **isDraggable**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:59](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:59](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -97,7 +97,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:59]
 
 > `optional` **isDragging**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:58](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:58](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -105,7 +105,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:58]
 
 > **path**: `string`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:51](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:51](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -113,7 +113,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:51]
 
 > **property**: [`Property`](../type-aliases/Property)
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:47](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:47](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -121,7 +121,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:47]
 
 > **propertyKey**: `string`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:41](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:41](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -129,7 +129,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:41]
 
 > **readonly**: `boolean`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:46](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:46](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -137,7 +137,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:46]
 
 > `optional` **sortableAttributes**: `Record`\<`string`, `any`\>
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:57](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:57](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -145,7 +145,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:57]
 
 > `optional` **sortableNodeRef**: (`node`) => `void`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:55](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:55](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 #### Parameters
 
@@ -163,7 +163,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:55]
 
 > `optional` **sortableStyle**: `CSSProperties`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:56](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -171,7 +171,7 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:56]
 
 > **value**: `T`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:45](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:45](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
 
 ***
 
@@ -179,4 +179,4 @@ Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:45]
 
 > **width**: `number`
 
-Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:49](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)
+Defined in: [core/src/components/EntityCollectionTable/PropertyTableCell.tsx:49](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionTable/PropertyTableCell.tsx)

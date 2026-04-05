@@ -13,7 +13,7 @@ title: "EnumValueConfig"
 
 > **EnumValueConfig** = `object`
 
-Defined in: [types/src/types/properties.ts:690](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:690](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Configuration for a particular entry in an `EnumValues`
 
@@ -23,7 +23,7 @@ Configuration for a particular entry in an `EnumValues`
 
 > `optional` **color**: [`ColorKey`](ColorKey) \| [`ColorScheme`](ColorScheme)
 
-Defined in: [types/src/types/properties.ts:707](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:707](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 You can pick from a list of predefined color combinations or define
 your own [ColorScheme](ColorScheme)
@@ -34,7 +34,7 @@ your own [ColorScheme](ColorScheme)
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [types/src/types/properties.ts:702](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:702](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 This value will not be selectable
 
@@ -44,7 +44,7 @@ This value will not be selectable
 
 > **id**: `string` \| `number`
 
-Defined in: [types/src/types/properties.ts:694](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:694](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Value stored in the data source.
 
@@ -54,6 +54,6 @@ Value stored in the data source.
 
 > **label**: `string`
 
-Defined in: [types/src/types/properties.ts:698](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:698](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Displayed label

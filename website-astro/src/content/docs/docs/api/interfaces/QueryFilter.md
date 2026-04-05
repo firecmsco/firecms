@@ -11,7 +11,7 @@ title: "QueryFilter"
 
 # Interface: QueryFilter
 
-Defined in: [types/src/types/backend.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:35](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 A single filter condition for database queries
 
@@ -21,7 +21,7 @@ A single filter condition for database queries
 
 > **field**: `string`
 
-Defined in: [types/src/types/backend.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:36](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [types/src/types/backend.ts:36](https://github.com/rebaseco/rebase/b
 
 > **operator**: [`WhereFilterOp`](../type-aliases/WhereFilterOp)
 
-Defined in: [types/src/types/backend.ts:37](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:37](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -37,4 +37,4 @@ Defined in: [types/src/types/backend.ts:37](https://github.com/rebaseco/rebase/b
 
 > **value**: `unknown`
 
-Defined in: [types/src/types/backend.ts:38](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:38](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)

@@ -1,14 +1,14 @@
 
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { RebaseApiServer } from '../src/api/server';
-import { DataDriver, User } from '@rebasepro/types';
+import { DataDriver, EntityCollection, User } from '@rebasepro/types';
 import { ApiConfig } from '../src/api/types';
 import http from 'http';
 import { AddressInfo } from 'net';
 
 // Mock DataDriver
 const mockWithAuth = jest.fn();
-const mockDataDriver: DataDriver & { withAuth: any } = {
+const mockDataDriver: DataDriver & { withAuth: jest.Mock } = {
     key: 'test-postgres',
     fetchCollection: jest.fn().mockImplementation(async () => {
         return [{ id: 'default-entity', values: { name: 'Default' } }];
@@ -17,8 +17,9 @@ const mockDataDriver: DataDriver & { withAuth: any } = {
     saveEntity: jest.fn(),
     deleteEntity: jest.fn(),
     countEntities: jest.fn(),
+    checkUniqueField: jest.fn(),
     withAuth: mockWithAuth
-} as any;
+};
 
 const mockScopedDataDriver = {
     ...mockDataDriver,
@@ -43,11 +44,12 @@ describe('RebaseApiServer RLS Integration', () => {
                 {
                     slug: 'test_collection',
                     name: 'Test Collection',
-                    properties: { name: { dataType: 'string', name: 'Name' } }
-                } as any
+                    dbPath: 'test_collection',
+                    properties: { name: { type: 'string', name: 'Name' } }
+                } as EntityCollection
             ],
             requireAuth: false,
-            authValidator: jest.fn() as any,
+            authValidator: jest.fn() as ApiConfig['authValidator'],
             enableREST: true
         };
         server = await RebaseApiServer.create({ ...config, driver: mockDataDriver });
@@ -71,7 +73,7 @@ describe('RebaseApiServer RLS Integration', () => {
 
     it('should use default driver when no auth is provided', async () => {
         // setup validator to return null (no auth)
-        (config.authValidator as any).mockResolvedValue(null);
+        (config.authValidator as jest.Mock).mockResolvedValue(null);
         await startServer();
 
         const response = await fetch(`${baseUrl}/test_collection`);
@@ -86,7 +88,7 @@ describe('RebaseApiServer RLS Integration', () => {
     it('should use scoped driver when auth is provided and withAuth exists', async () => {
         const user: User = { uid: 'test-user', email: 'test@example.com' };
         // setup validator to return user
-        (config.authValidator as any).mockResolvedValue(user);
+        (config.authValidator as jest.Mock).mockResolvedValue(user);
         await startServer();
 
         const response = await fetch(`${baseUrl}/test_collection`);
@@ -100,7 +102,7 @@ describe('RebaseApiServer RLS Integration', () => {
 
     it('should fallback to default driver if withAuth fails', async () => {
         const user: User = { uid: 'test-user', email: 'test@example.com' };
-        (config.authValidator as any).mockResolvedValue(user);
+        (config.authValidator as jest.Mock).mockResolvedValue(user);
         mockWithAuth.mockRejectedValue(new Error("Auth failed"));
 
         // Mock console.error to avoid noise

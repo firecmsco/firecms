@@ -13,7 +13,7 @@ title: "ArrayEnumPreview"
 
 > **ArrayEnumPreview**(`__namedParameters`): `Element`
 
-Defined in: [core/src/preview/components/ArrayEnumPreview.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/preview/components/ArrayEnumPreview.tsx)
+Defined in: [core/src/preview/components/ArrayEnumPreview.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/preview/components/ArrayEnumPreview.tsx)
 
 ## Parameters
 

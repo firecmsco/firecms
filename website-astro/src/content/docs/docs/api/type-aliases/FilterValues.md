@@ -13,7 +13,7 @@ title: "FilterValues"
 
 > **FilterValues**\<`Key`\> = `Partial`\<`Record`\<`Key`, \[[`WhereFilterOp`](WhereFilterOp), `any`\]\>\>
 
-Defined in: [types/src/types/collections.ts:562](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:562](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Used to define filters applied in collections
 

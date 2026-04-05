@@ -13,7 +13,7 @@ title: "singular"
 
 > **singular**(`word`, `amount?`): `string`
 
-Defined in: [common/src/util/plurals.ts:98](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/plurals.ts)
+Defined in: [common/src/util/plurals.ts:98](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/plurals.ts)
 
 Returns the singular of an English word.
 

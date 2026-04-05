@@ -11,7 +11,7 @@ title: "ApiConfig"
 
 # Interface: ApiConfig
 
-Defined in: [core/src/hooks/ApiConfigContext.tsx:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/ApiConfigContext.tsx)
+Defined in: [core/src/hooks/ApiConfigContext.tsx:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/ApiConfigContext.tsx)
 
 Configuration for API connectivity. Passed once at the top level
 and available to any hook that needs `apiUrl` or `getAuthToken`.
@@ -25,7 +25,7 @@ serves as a fallback to eliminate repetitive threading.
 
 > **apiUrl**: `string`
 
-Defined in: [core/src/hooks/ApiConfigContext.tsx:11](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/ApiConfigContext.tsx)
+Defined in: [core/src/hooks/ApiConfigContext.tsx:11](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/ApiConfigContext.tsx)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [core/src/hooks/ApiConfigContext.tsx:11](https://github.com/rebaseco
 
 > `optional` **getAuthToken**: () => `Promise`\<`string` \| `null`\>
 
-Defined in: [core/src/hooks/ApiConfigContext.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/ApiConfigContext.tsx)
+Defined in: [core/src/hooks/ApiConfigContext.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/ApiConfigContext.tsx)
 
 #### Returns
 

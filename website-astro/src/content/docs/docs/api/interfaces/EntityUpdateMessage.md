@@ -11,7 +11,7 @@ title: "EntityUpdateMessage"
 
 # Interface: EntityUpdateMessage
 
-Defined in: [types/src/types/websockets.ts:25](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:25](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 ## Extends
 
@@ -23,7 +23,7 @@ Defined in: [types/src/types/websockets.ts:25](https://github.com/rebaseco/rebas
 
 > `optional` **entities**: [`Entity`](Entity)\<`Record`\<`string`, `unknown`\>\>[]
 
-Defined in: [types/src/types/websockets.ts:14](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:14](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 #### Inherited from
 
@@ -35,7 +35,7 @@ Defined in: [types/src/types/websockets.ts:14](https://github.com/rebaseco/rebas
 
 > **entity**: [`Entity`](Entity)\<`Record`\<`string`, `unknown`\>\> \| `null`
 
-Defined in: [types/src/types/websockets.ts:28](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:28](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ Defined in: [types/src/types/websockets.ts:28](https://github.com/rebaseco/rebas
 
 > `optional` **error**: `string`
 
-Defined in: [types/src/types/websockets.ts:16](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:16](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 #### Inherited from
 
@@ -59,7 +59,7 @@ Defined in: [types/src/types/websockets.ts:16](https://github.com/rebaseco/rebas
 
 > `optional` **payload**: `unknown`
 
-Defined in: [types/src/types/websockets.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:11](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 #### Inherited from
 
@@ -71,7 +71,7 @@ Defined in: [types/src/types/websockets.ts:11](https://github.com/rebaseco/rebas
 
 > `optional` **requestId**: `string`
 
-Defined in: [types/src/types/websockets.ts:13](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:13](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 #### Inherited from
 
@@ -83,7 +83,7 @@ Defined in: [types/src/types/websockets.ts:13](https://github.com/rebaseco/rebas
 
 > **subscriptionId**: `string`
 
-Defined in: [types/src/types/websockets.ts:27](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:27](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 #### Overrides
 
@@ -95,7 +95,7 @@ Defined in: [types/src/types/websockets.ts:27](https://github.com/rebaseco/rebas
 
 > **type**: `"entity_update"`
 
-Defined in: [types/src/types/websockets.ts:26](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:26](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 #### Overrides
 

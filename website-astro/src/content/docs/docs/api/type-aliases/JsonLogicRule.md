@@ -13,7 +13,7 @@ title: "JsonLogicRule"
 
 > **JsonLogicRule** = `Record`\<`string`, `any`\>
 
-Defined in: [types/src/types/properties.ts:1018](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1018](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 A JSON Logic rule that gets evaluated at runtime.
 

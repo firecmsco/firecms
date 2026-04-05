@@ -13,7 +13,7 @@ title: "useStorageSource"
 
 > **useStorageSource**(`collection?`): [`StorageSource`](../interfaces/StorageSource)
 
-Defined in: [core/src/hooks/useStorageSource.tsx:9](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useStorageSource.tsx)
+Defined in: [core/src/hooks/useStorageSource.tsx:9](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useStorageSource.tsx)
 
 Use this hook to get the storage source being used
 

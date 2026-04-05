@@ -11,7 +11,7 @@ title: "EntityRelation"
 
 # Class: EntityRelation
 
-Defined in: [types/src/types/entities.ts:153](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:153](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 Class used to create a reference to an entity in a different path
 
@@ -21,7 +21,7 @@ Class used to create a reference to an entity in a different path
 
 > **new EntityRelation**(`id`, `path`): `EntityRelation`
 
-Defined in: [types/src/types/entities.ts:166](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:166](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 #### Parameters
 
@@ -43,7 +43,7 @@ Defined in: [types/src/types/entities.ts:166](https://github.com/rebaseco/rebase
 
 > `readonly` **\_\_type**: `"relation"` = `"relation"`
 
-Defined in: [types/src/types/entities.ts:155](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:155](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/src/types/entities.ts:155](https://github.com/rebaseco/rebase
 
 > `readonly` **id**: `string` \| `number`
 
-Defined in: [types/src/types/entities.ts:159](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:159](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ID of the entity
 
@@ -61,7 +61,7 @@ ID of the entity
 
 > `readonly` **path**: `string`
 
-Defined in: [types/src/types/entities.ts:164](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:164](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 A string representing the path of the referenced document (relative
 to the root of the database).
@@ -74,7 +74,7 @@ to the root of the database).
 
 > **get** **pathWithId**(): `string`
 
-Defined in: [types/src/types/entities.ts:171](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:171](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 ##### Returns
 
@@ -86,7 +86,7 @@ Defined in: [types/src/types/entities.ts:171](https://github.com/rebaseco/rebase
 
 > **isEntityReference**(): `boolean`
 
-Defined in: [types/src/types/entities.ts:175](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:175](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 #### Returns
 
@@ -98,7 +98,7 @@ Defined in: [types/src/types/entities.ts:175](https://github.com/rebaseco/rebase
 
 > **isEntityRelation**(): `boolean`
 
-Defined in: [types/src/types/entities.ts:179](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/entities.ts)
+Defined in: [types/src/types/entities.ts:179](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/entities.ts)
 
 #### Returns
 

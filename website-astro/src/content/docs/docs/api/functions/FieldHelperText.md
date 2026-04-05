@@ -13,7 +13,7 @@ title: "FieldHelperText"
 
 > **FieldHelperText**\<`T`\>(`__namedParameters`): `Element` \| `null`
 
-Defined in: [core/src/form/components/FieldHelperText.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/components/FieldHelperText.tsx)
+Defined in: [core/src/form/components/FieldHelperText.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/components/FieldHelperText.tsx)
 
 Component in charge of rendering the description of a field
 as well as the error message if any.

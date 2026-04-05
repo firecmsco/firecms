@@ -13,6 +13,6 @@ title: "SnackbarMessageType"
 
 > **SnackbarMessageType** = `"success"` \| `"info"` \| `"warning"` \| `"error"`
 
-Defined in: [types/src/controllers/snackbar.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/snackbar.ts)
+Defined in: [types/src/controllers/snackbar.ts:6](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/snackbar.ts)
 
 Possible snackbar types

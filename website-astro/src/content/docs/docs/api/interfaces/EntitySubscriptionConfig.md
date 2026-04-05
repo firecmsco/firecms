@@ -11,7 +11,7 @@ title: "EntitySubscriptionConfig"
 
 # Interface: EntitySubscriptionConfig
 
-Defined in: [types/src/types/backend.ts:236](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:236](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Configuration for subscribing to a single entity
 
@@ -21,7 +21,7 @@ Configuration for subscribing to a single entity
 
 > **clientId**: `string`
 
-Defined in: [types/src/types/backend.ts:237](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:237](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [types/src/types/backend.ts:237](https://github.com/rebaseco/rebase/
 
 > **entityId**: `string` \| `number`
 
-Defined in: [types/src/types/backend.ts:239](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:239](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -37,4 +37,4 @@ Defined in: [types/src/types/backend.ts:239](https://github.com/rebaseco/rebase/
 
 > **path**: `string`
 
-Defined in: [types/src/types/backend.ts:238](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:238](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)

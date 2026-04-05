@@ -13,7 +13,7 @@ title: "ReferenceWidget"
 
 > **ReferenceWidget**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/ReferenceWidget.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
+Defined in: [core/src/components/ReferenceWidget.tsx:37](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ReferenceWidget.tsx)
 
 This field allows selecting reference/s.
 

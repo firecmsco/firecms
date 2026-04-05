@@ -13,7 +13,7 @@ title: "saveEntityWithCallbacks"
 
 > **saveEntityWithCallbacks**\<`M`\>(`collection`): `Promise`\<[`Entity`](../interfaces/Entity)\<`M`\>\>
 
-Defined in: [core/src/hooks/data/save.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/data/save.ts)
+Defined in: [core/src/hooks/data/save.ts:33](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/data/save.ts)
 
 This function is in charge of saving an entity.
 It will run all the save callbacks specified in the collection.

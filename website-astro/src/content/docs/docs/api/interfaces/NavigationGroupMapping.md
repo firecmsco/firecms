@@ -11,7 +11,7 @@ title: "NavigationGroupMapping"
 
 # Interface: NavigationGroupMapping
 
-Defined in: [types/src/controllers/navigation.ts:275](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:275](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Used to group navigation entries in the main navigation.
 
@@ -21,7 +21,7 @@ Used to group navigation entries in the main navigation.
 
 > **entries**: `string`[]
 
-Defined in: [types/src/controllers/navigation.ts:283](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:283](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 List of collection ids or view paths that belong to this group.
 
@@ -31,6 +31,6 @@ List of collection ids or view paths that belong to this group.
 
 > **name**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:279](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:279](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Name of the group, used to display the group header in the UI

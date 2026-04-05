@@ -13,7 +13,7 @@ title: "resolveProperties"
 
 > **resolveProperties**\<`M`\>(`properties`): [`Properties`](../type-aliases/Properties)
 
-Defined in: [common/src/util/resolutions.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
+Defined in: [common/src/util/resolutions.ts:168](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 Resolve enums and arrays for properties
 

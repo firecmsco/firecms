@@ -13,7 +13,7 @@ title: "mergeDeep"
 
 > **mergeDeep**\<`T`, `U`\>(`target`, `source`, `ignoreUndefined`): `T` & `U`
 
-Defined in: [common/src/util/objects.ts:122](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/objects.ts)
+Defined in: [common/src/util/objects.ts:122](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/objects.ts)
 
 ## Type Parameters
 

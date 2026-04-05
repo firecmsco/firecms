@@ -13,7 +13,7 @@ title: "resolveEntityAction"
 
 > **resolveEntityAction**\<`M`\>(`entityAction`, `contextEntityActions?`): [`EntityAction`](../type-aliases/EntityAction)\<`M`\> \| `undefined`
 
-Defined in: [common/src/util/resolutions.ts:339](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
+Defined in: [common/src/util/resolutions.ts:339](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 ## Type Parameters
 

@@ -21,7 +21,7 @@ describe("useResolvedViews", () => {
         } as unknown as AuthController;
 
         const mockViews: CMSView[] = [
-            { name: "My View", slug: "my-view", view: null as any }
+            { name: "My View", slug: "my-view", view: null! }
         ];
 
         const { result } = renderHook(() => useResolvedViews({
@@ -42,7 +42,7 @@ describe("useResolvedViews", () => {
 
     it("should wait while auth is initially loading", async () => {
         let authLoading = true;
-        const mockAuthController: any = {
+        const mockAuthController: Partial<AuthController> & { initialLoading: boolean; user: { uid: string } | null } = {
             get initialLoading() { return authLoading; },
             user: null
         };
@@ -73,7 +73,7 @@ describe("useResolvedViews", () => {
             user: { uid: "test-user" }
         } as unknown as AuthController;
 
-        const userManagementActive: any = {
+        const userManagementActive: { roles: boolean; users: boolean } = {
             roles: true,
             users: true
         };

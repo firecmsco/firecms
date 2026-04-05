@@ -13,4 +13,4 @@ title: "defaultDateFormat"
 
 > `const` **defaultDateFormat**: `"MMMM dd, yyyy, HH:mm:ss"` = `"MMMM dd, yyyy, HH:mm:ss"`
 
-Defined in: [common/src/util/dates.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/dates.ts)
+Defined in: [common/src/util/dates.ts:1](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/dates.ts)

@@ -13,7 +13,7 @@ title: "iconSynonyms"
 
 > `const` **iconSynonyms**: `object`
 
-Defined in: [core/src/util/icon\_synonyms.ts:1](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/icon_synonyms.ts)
+Defined in: [core/src/util/icon\_synonyms.ts:1](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/icon_synonyms.ts)
 
 ## Type Declaration
 

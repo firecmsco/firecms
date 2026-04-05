@@ -13,7 +13,7 @@ title: "EntityCollectionCardView"
 
 > **EntityCollectionCardView**\<`M`\>(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:73](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
+Defined in: [core/src/components/EntityCollectionView/EntityCollectionCardView.tsx:73](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/EntityCollectionView/EntityCollectionCardView.tsx)
 
 Card grid view for displaying entities with infinite scroll.
 Alternative to the EntityCollectionTable for visual browsing.

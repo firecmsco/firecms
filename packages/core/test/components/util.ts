@@ -53,7 +53,7 @@ export const productCollection: EntityCollection = {
             name: "Available",
             columnWidth: 100
         },
-        price: ({ values }: any) => ({
+        price: ({ values }: { values: Record<string, unknown> }) => ({
             type: "number",
             name: "Price",
             validation: {

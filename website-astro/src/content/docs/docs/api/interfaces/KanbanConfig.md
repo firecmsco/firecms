@@ -11,7 +11,7 @@ title: "KanbanConfig"
 
 # Interface: KanbanConfig\<M\>
 
-Defined in: [types/src/types/collections.ts:456](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:456](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Configuration for Kanban board view mode.
 
@@ -27,7 +27,7 @@ Configuration for Kanban board view mode.
 
 > **columnProperty**: `Extract`\<keyof `M`, `string`\>
 
-Defined in: [types/src/types/collections.ts:463](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:463](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Property key to use for Kanban board columns.
 Must reference a string property with enumValues defined.

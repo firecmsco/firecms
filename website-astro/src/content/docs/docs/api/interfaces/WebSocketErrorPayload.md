@@ -11,7 +11,7 @@ title: "WebSocketErrorPayload"
 
 # Interface: WebSocketErrorPayload
 
-Defined in: [types/src/types/websockets.ts:3](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:3](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/src/types/websockets.ts:3](https://github.com/rebaseco/rebase
 
 > `optional` **code**: `string`
 
-Defined in: [types/src/types/websockets.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:6](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/src/types/websockets.ts:6](https://github.com/rebaseco/rebase
 
 > `optional` **error**: `string` \| \{ `code?`: `string`; `message`: `string`; \}
 
-Defined in: [types/src/types/websockets.ts:4](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:4](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)
 
 ***
 
@@ -35,4 +35,4 @@ Defined in: [types/src/types/websockets.ts:4](https://github.com/rebaseco/rebase
 
 > `optional` **message**: `string`
 
-Defined in: [types/src/types/websockets.ts:5](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/websockets.ts)
+Defined in: [types/src/types/websockets.ts:5](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/websockets.ts)

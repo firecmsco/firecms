@@ -13,7 +13,7 @@ title: "resolveRelationProperty"
 
 > **resolveRelationProperty**(`property`, `relations`): [`RelationProperty`](../interfaces/RelationProperty)
 
-Defined in: [common/src/util/resolutions.ts:136](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/resolutions.ts)
+Defined in: [common/src/util/resolutions.ts:136](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/resolutions.ts)
 
 ## Parameters
 

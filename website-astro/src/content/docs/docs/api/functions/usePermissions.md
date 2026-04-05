@@ -13,7 +13,7 @@ title: "usePermissions"
 
 > **usePermissions**(): `object`
 
-Defined in: [core/src/hooks/usePermissions.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/usePermissions.ts)
+Defined in: [core/src/hooks/usePermissions.ts:10](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/usePermissions.ts)
 
 Hook to evaluate roles and permissions for the current user.
 It abstracts away the need to pass `authController` to permission evaluation functions.

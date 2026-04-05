@@ -101,16 +101,9 @@ export class Analytics {
             console.debug('Analytics tracking:', eventType, payload);
 
             if (useBeacon) {
-                const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-                navigator.sendBeacon(`${this.apiUrl}/track`, blob);
+                // Disabled custom beacon, using GA4
             } else {
-                await fetch(`${this.apiUrl}/track`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
+                // Disabled custom fetch, using GA4
             }
         } catch (error) {
             console.error('Analytics error:', error);

@@ -25,7 +25,7 @@ export default defineConfig({
                 {
                     icon: "github",
                     label: "GitHub",
-                    href: "https://github.com/rebaseco/rebase"
+                    href: "https://github.com/rebasepro/rebase"
                 }
             ],
             expressiveCode: {

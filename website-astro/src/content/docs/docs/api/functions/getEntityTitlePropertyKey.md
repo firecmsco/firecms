@@ -13,7 +13,7 @@ title: "getEntityTitlePropertyKey"
 
 > **getEntityTitlePropertyKey**\<`M`\>(`collection`, `propertyConfigs`): `string` \| `undefined`
 
-Defined in: [core/src/util/previews.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/previews.ts)
+Defined in: [core/src/util/previews.ts:34](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/previews.ts)
 
 ## Type Parameters
 

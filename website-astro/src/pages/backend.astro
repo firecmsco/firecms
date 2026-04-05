@@ -1,0 +1,204 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+
+const title = "Rebase Backend — Hono Server, REST, GraphQL & WebSocket APIs";
+const description = "A production-ready Hono backend with auto-generated REST and GraphQL APIs, WebSocket realtime, Drizzle ORM, JWT auth, S3 storage, and OpenAPI docs — all from your collection definitions.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://rebase.pro" },
+    { name: "Backend & APIs", url: "https://rebase.pro/backend" }
+];
+
+const honoCode = `<span class="text-blue-400">import</span> { RebaseApiServer } <span class="text-blue-400">from</span> <span class="text-emerald-400">"@rebasepro/backend"</span>;
+<span class="text-blue-400">import</span> { PostgresDataDriver } <span class="text-blue-400">from</span> <span class="text-emerald-400">"@rebasepro/backend"</span>;
+
+<span class="text-blue-400">const</span> driver = <span class="text-blue-400">new</span> <span class="text-amber-400">PostgresDataDriver</span>(db);
+
+<span class="text-blue-400">const</span> server = <span class="text-blue-400">await</span> RebaseApiServer.<span class="text-amber-400">create</span>({
+  driver,
+  collectionsDir: <span class="text-emerald-400">"./collections"</span>,
+  enableREST: <span class="text-amber-400">true</span>,
+  enableGraphQL: <span class="text-amber-400">true</span>,
+});
+
+server.<span class="text-amber-400">listen</span>(<span class="text-amber-400">3001</span>);
+<span class="text-surface-500">// REST:    /api/posts, /api/users, …</span>
+<span class="text-surface-500">// GraphQL: /api/graphql</span>
+<span class="text-surface-500">// Swagger: /api/swagger</span>
+<span class="text-surface-500">// Docs:    /api/docs</span>`;
+
+const drizzleCode = `<span class="text-surface-500">// Your collection definition:</span>
+<span class="text-blue-400">const</span> postsCollection = {
+  slug: <span class="text-emerald-400">"posts"</span>,
+  properties: { title: { dataType: <span class="text-emerald-400">"string"</span> } },
+  relations: [{
+    relationName: <span class="text-emerald-400">"author"</span>,
+    target: () =&gt; usersCollection,
+    cardinality: <span class="text-emerald-400">"one-to-one"</span>
+  }]
+};
+
+<span class="text-surface-500">// Generates Drizzle schema + REST API:</span>
+<span class="text-amber-400">GET</span> /api/posts?include=author
+<span class="text-surface-500">// → Single query, no N+1</span>`;
+---
+
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
+  <main>
+    <!-- Hero -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute -bottom-40 left-1/4 w-[700px] h-[700px] rounded-full bg-blue-500/5 blur-3xl opacity-50"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+      </div>
+      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+        <div class="inline-flex items-center py-1.5 px-3 mb-6 text-sm rounded-full bg-surface-800/40 text-surface-400 ring-1 ring-inset ring-white/10 mx-auto">
+          <span class="text-sm font-medium">Hono · Drizzle · PostgreSQL</span>
+        </div>
+        <h1 class="mb-6 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+          Backend & APIs
+        </h1>
+        <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
+          Define your collections in TypeScript. Get a production-ready API server with REST, GraphQL, WebSocket realtime, JWT auth, and auto-generated OpenAPI docs.
+        </p>
+      </div>
+    </section>
+
+    <!-- Architecture Overview -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-3xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">One definition, four APIs</h2>
+          <p class="mt-4 text-lg text-surface-400">Every collection you define automatically generates REST, GraphQL, WebSocket, and OpenAPI endpoints. Zero config.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 text-center">
+            <div class="mx-auto h-14 w-14 rounded-full bg-blue-500/10 flex items-center justify-center mb-4">
+              <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/globe.svg" alt="" class="h-7 w-7 filter invert"/>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">REST API</h3>
+            <p class="text-sm text-surface-400">Full CRUD endpoints with pagination, filtering, sorting, and relation loading.</p>
+          </div>
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 text-center">
+            <div class="mx-auto h-14 w-14 rounded-full bg-pink-500/10 flex items-center justify-center mb-4">
+              <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/braces.svg" alt="" class="h-7 w-7 filter invert"/>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">GraphQL</h3>
+            <p class="text-sm text-surface-400">Auto-generated schema with queries, mutations, and a built-in GraphiQL IDE.</p>
+          </div>
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 text-center">
+            <div class="mx-auto h-14 w-14 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4">
+              <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/radio.svg" alt="" class="h-7 w-7 filter invert"/>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">WebSocket</h3>
+            <p class="text-sm text-surface-400">Realtime data sync with auth, rate limiting, and collection/entity subscriptions.</p>
+          </div>
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 text-center">
+            <div class="mx-auto h-14 w-14 rounded-full bg-amber-500/10 flex items-center justify-center mb-4">
+              <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-text.svg" alt="" class="h-7 w-7 filter invert"/>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">OpenAPI/Swagger</h3>
+            <p class="text-sm text-surface-400">Auto-generated OpenAPI 3.0 spec with a built-in Swagger UI for testing.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hono Server -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-orange-500/10 text-orange-400 ring-1 ring-inset ring-orange-500/20">
+              Powered by Hono
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Built on Hono</h2>
+            <p class="text-lg text-surface-400 mb-6">The Rebase backend is a composable Hono application. Mount it standalone or embed it into your existing app. Add custom middleware, routes, and business logic.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> Composable middleware (CORS, secure headers, auth)</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Mount as a sub-app on your existing Hono/Express server</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Deploy on Node.js, Docker, Railway, Fly.io, or bare metal</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> SPA static serving built in</li>
+            </ul>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6">
+            <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300" set:html={honoCode}/></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Drizzle ORM -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div class="lg:order-last">
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-green-500/10 text-green-400 ring-1 ring-inset ring-green-500/20">
+              Zero N+1 Queries
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Drizzle Relational Queries</h2>
+            <p class="text-lg text-surface-400 mb-6">Collections generate Drizzle ORM schemas with full relation support. The query engine uses <code class="text-sm bg-surface-800 px-1.5 py-0.5 rounded">db.query.findMany</code> with nested includes — zero N+1 queries, maximum performance.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> Auto-generated Drizzle schema from collections</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> One-to-one, one-to-many, many-to-many relations</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Field-level selection (only fetch what you need)</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Cursor and offset pagination</li>
+            </ul>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6">
+            <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300" set:html={drizzleCode}/></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Storage & Email -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Batteries Included</h2>
+          <p class="mt-4 text-lg text-surface-400">Storage, email, and auth — everything you need for production, built in.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/hard-drive.svg" alt="" class="h-8 w-8 mb-4 filter invert"/>
+            <h3 class="text-lg font-semibold text-white mb-2">File Storage</h3>
+            <p class="text-sm text-surface-400">Local filesystem for development, S3-compatible storage for production. Upload, download, list, and delete via API.</p>
+          </div>
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/mail.svg" alt="" class="h-8 w-8 mb-4 filter invert"/>
+            <h3 class="text-lg font-semibold text-white mb-2">Email Service</h3>
+            <p class="text-sm text-surface-400">Built-in SMTP integration for password reset, email verification, and custom transactional emails.</p>
+          </div>
+          <div class="p-7 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800">
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/shield-check.svg" alt="" class="h-8 w-8 mb-4 filter invert"/>
+            <h3 class="text-lg font-semibold text-white mb-2">JWT Authentication</h3>
+            <p class="text-sm text-surface-400">Custom JWT auth with access/refresh tokens, Google OAuth, role-based access control, and session management.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-black py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">Deploy your backend in minutes</h2>
+        <div class="flex items-center justify-center gap-x-6">
+          <a href="/developers"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+            Developer Guide
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-5 w-5 filter invert"/>
+          </a>
+          <a href="/sdk" class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+            Client SDK
+            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 filter invert"/>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

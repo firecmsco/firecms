@@ -5,7 +5,7 @@ import { graphqlServer } from "@hono/graphql-server";
 import { serve } from "@hono/node-server";
 import { GraphQLSchemaGenerator } from "./graphql/graphql-schema-generator";
 import { RestApiGenerator } from "./rest/api-generator";
-import { DataDriver, EntityCollection } from "@rebasepro/types";
+import { DataDriver, EntityCollection, Relation } from "@rebasepro/types";
 import { ApiConfig, HonoEnv } from "./types";
 import { loadCollectionsFromDirectory } from "../collections/loader";
 import { createSchemaEditorRoutes } from "./schema-editor-routes";
@@ -73,17 +73,20 @@ export class RebaseApiServer {
         this.router.use("/*", secureHeaders());
 
         // CORS
-        const rawCors = this.config.cors as any;
+        const rawCors = this.config.cors as { origin?: string | string[] | boolean | ((origin: string) => string), [key: string]: unknown } | false | undefined;
         if (rawCors !== false && rawCors?.origin !== false) {
-            const corsConfig: any = typeof rawCors === 'object' ? { ...rawCors } : {};
+            const corsConfig: NonNullable<Parameters<typeof cors>[0]> = typeof rawCors === 'object' ? { 
+                ...rawCors, 
+                origin: typeof rawCors.origin === 'string' || Array.isArray(rawCors.origin) || typeof rawCors.origin === 'function' ? rawCors.origin : '*' 
+            } as NonNullable<Parameters<typeof cors>[0]> : { origin: '*' };
             
             // Translate Express `origin: true` to Hono origin reflection function
-            if (corsConfig.origin === true) {
+            if (typeof rawCors === 'object' && rawCors.origin === true) {
                 // Return the requested origin directly
                 corsConfig.origin = (origin: string) => origin;
             }
             
-            this.router.use("/*", cors(Object.keys(corsConfig).length > 0 ? corsConfig : undefined));
+            this.router.use("/*", cors(corsConfig));
         }
 
         // Auth middleware
@@ -105,23 +108,23 @@ export class RebaseApiServer {
             return c.json({
                 status: "healthy",
                 timestamp: new Date().toISOString(),
-                collections: this.config.collections?.map((col: any) => col.slug) || [],
+                collections: this.config.collections?.map((col: EntityCollection) => col.slug) || [],
                 driver: this.driver.key
             });
         });
 
         // Collections metadata endpoint
         this.router.get(`${basePath}/collections`, (c) => {
-            const collectionsMetadata = (this.config.collections || []).map((col: any) => ({
+            const collectionsMetadata = (this.config.collections || []).map((col: EntityCollection) => ({
                 slug: col.slug,
                 name: col.name,
                 singularName: col.singularName,
                 description: col.description,
                 dbPath: col.dbPath,
                 properties: Object.keys(col.properties),
-                relations: col.relations?.map((r: any) => ({
+                relations: col.relations?.map((r: Relation) => ({
                     relationName: r.relationName,
-                    target: r.target().slug,
+                    target: typeof r.target === 'function' ? r.target().slug : r.target,
                     cardinality: r.cardinality,
                     direction: r.direction
                 })) || []

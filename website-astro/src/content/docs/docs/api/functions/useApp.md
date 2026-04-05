@@ -13,7 +13,7 @@ title: "useApp"
 
 > **useApp**(): [`AppState`](../type-aliases/AppState)
 
-Defined in: [core/src/app/useApp.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/app/useApp.tsx)
+Defined in: [core/src/app/useApp.tsx:34](https://github.com/rebasepro/rebase/blob/main/packages/core/src/app/useApp.tsx)
 
 ## Returns
 

@@ -134,7 +134,7 @@ validation: {
                     <div class="mt-8 lg:mt-0 self-start">
                         <h3 class="text-xl font-semibold text-white">Schema as Code, Backed by Git</h3>
                         <p class="mt-4 text-lg text-surface-400">
-                            Define your data models in pure TypeScript. Your code remains the single source of truth, fully versioned in Git. Even when non-technical users add fields via the UI, Rebase uses AST mutation to surgically write clean TypeScript back to your repo.
+                            Define your data models in pure TypeScript, or construct them visually using the <strong>Rebase Studio</strong> GUI. Even when non-technical users add fields via the UI, Rebase uses AST mutation to surgically write clean TypeScript back to your repo. Your code remains the single source of truth, fully versioned in Git.
                         </p>
                         <p class="mt-4 text-lg text-surface-400">
                             From a single collection definition, Rebase instantly generates:
@@ -232,6 +232,39 @@ export const productsCollection = buildCollection({
                             callbacks to trigger cloud functions, send notifications, clean data, or integrate with
                             third-party APIs right from your CMS configuration.
                         </p>
+                    </div>
+                </div>
+
+                <!-- Client SDK -->
+                <div class="mt-16 sm:mt-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="mt-8 lg:mt-0 lg:order-1 self-start">
+                        <h3 class="text-xl font-semibold text-white">A Truly Typed Client SDK</h3>
+                        <p class="mt-4 text-lg text-surface-400">
+                            Query your database from any frontend securely with the Universal Client SDK. Powered by Drizzle ORM, it provides perfect TypeScript autocomplete and eliminates N+1 query issues instantly by effortlessly resolving deep relational data with the <code>with</code> clause.
+                        </p>
+                    </div>
+                    <div class="relative w-full lg:order-2 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(56,189,248,0.15)] ring-1 ring-surface-800">
+                        <CodeBlock
+                                language="typescript"
+                                code={`import { createRebaseClient } from "@rebasepro/client";
+
+// Perfect type inference automatically applied!
+const posts = await rebaseClient.data.posts.findMany({
+    // Type-safe deep relation fetching. No N+1 queries.
+    with: {
+        author: true,
+        comments: {
+            with: { author: true }
+        }
+    },
+    where: "status = 'published'",
+    orderBy: "createdAt DESC",
+    limit: 10
+});
+
+console.log(posts[0].author.name); // 100% type-safe`}
+                                client:load
+                        />
                     </div>
                 </div>
 
@@ -356,6 +389,36 @@ export const productsCollection = buildCollection({
                             (references)</strong>, enums, arrays,
                             maps, and more, all as pre-built components.
                         </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MCP AI SERVER SECTION for DEVELOPERS -->
+        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden border-t border-surface-800/40">
+            <SectionBackgroundAccents blob={{ position: "bottom", size: "lg" }}/>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="lg:col-span-1">
+                        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Built for the Age of AI</h2>
+                        <p class="mt-6 text-lg leading-8 text-surface-400">Turn your entire Postgres architecture into an autonomous API immediately. Rebase includes a native server implementing the  <strong>Model Context Protocol (MCP)</strong>.</p>
+                        <p class="mt-4 text-lg leading-8 text-surface-400">Expose granular data-plane APIs directly to AI tools (Cursor, Claude, Windsurf) allowing them to autonomously execute multi-table fetching, writes, and modifications — while respecting every validation and RLS rule your schema defines.</p>
+                    </div>
+                    <div class="lg:col-span-1 border border-surface-800 rounded-xl bg-surface-950 p-6 font-mono text-sm shadow-[0_0_20px_rgba(56,189,248,0.08)]">
+                         <div class="text-surface-500 mb-4">// Run the Rebase MCP server locally to expose your data securely...</div>
+                         <div class="text-primary font-bold mb-2">$ npx @rebasepro/mcp start</div>
+                         <div class="text-green-400 mb-6">✓ Rebase MCP server connected on stdio</div>
+                         
+                         <div class="text-surface-500 mb-2">// Sample Agent Execution</div>
+                         <div class="text-white p-3 bg-surface-900 rounded border border-surface-800 break-words">
+                            "AI Prompt: I need you to find all users mapped to 'Enterprise' accounts 
+                            and trigger their onboarding email."
+                         </div>
+                         <div class="text-purple-400 mt-4 pl-3 border-l-2 border-purple-500">
+                             -> Executing tool: rebase_query_database<br/>
+                             -> Accessing relations strictly through Drizzle ORM<br/>
+                             -> Respecting row-level permissions
+                         </div>
                     </div>
                 </div>
             </div>

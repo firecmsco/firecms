@@ -13,7 +13,7 @@ title: "getEntityPreviewKeys"
 
 > **getEntityPreviewKeys**(`authController`, `targetCollection`, `fields`, `previewProperties?`, `limit?`): `string`[]
 
-Defined in: [core/src/util/previews.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/util/previews.ts)
+Defined in: [core/src/util/previews.ts:6](https://github.com/rebasepro/rebase/blob/main/packages/core/src/util/previews.ts)
 
 ## Parameters
 

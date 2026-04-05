@@ -11,7 +11,7 @@ title: "RebaseTranslations"
 
 # Interface: RebaseTranslations
 
-Defined in: [types/src/types/translations.ts:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:17](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 All user-visible strings used internally by @rebasepro/core.
 Pass a `DeepPartial<RebaseTranslations>` via the `translations` prop
@@ -24,7 +24,7 @@ a new locale.
 
 > **a\_property\_of\_this\_map\_has\_error**: `string`
 
-Defined in: [types/src/types/translations.ts:500](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:500](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 MapFieldBinding
 
@@ -34,7 +34,7 @@ MapFieldBinding
 
 > **access\_all\_data\_in\_every\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:323](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:323](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [types/src/types/translations.ts:323](https://github.com/rebaseco/re
 
 > **account\_settings**: `string`
 
-Defined in: [types/src/types/translations.ts:454](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:454](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [types/src/types/translations.ts:454](https://github.com/rebaseco/re
 
 > **action\_defined\_in\_code**: `string`
 
-Defined in: [types/src/types/translations.ts:267](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:267](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [types/src/types/translations.ts:267](https://github.com/rebaseco/re
 
 > **add**: `string`
 
-Defined in: [types/src/types/translations.ts:62](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:62](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [types/src/types/translations.ts:62](https://github.com/rebaseco/reb
 
 > **add\_below**: `string`
 
-Defined in: [types/src/types/translations.ts:100](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:100](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [types/src/types/translations.ts:100](https://github.com/rebaseco/re
 
 > **add\_column\_after**: `string`
 
-Defined in: [types/src/types/translations.ts:491](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:491](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -82,7 +82,7 @@ Defined in: [types/src/types/translations.ts:491](https://github.com/rebaseco/re
 
 > **add\_column\_before**: `string`
 
-Defined in: [types/src/types/translations.ts:490](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:490](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -90,7 +90,7 @@ Defined in: [types/src/types/translations.ts:490](https://github.com/rebaseco/re
 
 > **add\_current\_user\_as\_admin**: `string`
 
-Defined in: [types/src/types/translations.ts:172](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:172](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -98,7 +98,7 @@ Defined in: [types/src/types/translations.ts:172](https://github.com/rebaseco/re
 
 > **add\_custom\_entity\_action**: `string`
 
-Defined in: [types/src/types/translations.ts:268](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:268](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -106,7 +106,7 @@ Defined in: [types/src/types/translations.ts:268](https://github.com/rebaseco/re
 
 > **add\_custom\_entity\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:277](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:277](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -114,7 +114,7 @@ Defined in: [types/src/types/translations.ts:277](https://github.com/rebaseco/re
 
 > **add\_entry**: `string`
 
-Defined in: [types/src/types/translations.ts:98](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:98](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Label for buttons that add a new item to a list
 
@@ -124,7 +124,7 @@ Label for buttons that add a new item to a list
 
 > **add\_logged\_user\_as\_admin**: `string`
 
-Defined in: [types/src/types/translations.ts:171](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:171](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -132,7 +132,7 @@ Defined in: [types/src/types/translations.ts:171](https://github.com/rebaseco/re
 
 > **add\_new\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:231](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:231](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -140,7 +140,7 @@ Defined in: [types/src/types/translations.ts:231](https://github.com/rebaseco/re
 
 > **add\_on\_top**: `string`
 
-Defined in: [types/src/types/translations.ts:99](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:99](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -148,7 +148,7 @@ Defined in: [types/src/types/translations.ts:99](https://github.com/rebaseco/reb
 
 > **add\_property**: `string`
 
-Defined in: [types/src/types/translations.ts:140](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:140](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -156,7 +156,7 @@ Defined in: [types/src/types/translations.ts:140](https://github.com/rebaseco/re
 
 > **add\_reference**: `string`
 
-Defined in: [types/src/types/translations.ts:468](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:468](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -164,7 +164,7 @@ Defined in: [types/src/types/translations.ts:468](https://github.com/rebaseco/re
 
 > **add\_reference\_to**: `string`
 
-Defined in: [types/src/types/translations.ts:469](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:469](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -172,7 +172,7 @@ Defined in: [types/src/types/translations.ts:469](https://github.com/rebaseco/re
 
 > **add\_role**: `string`
 
-Defined in: [types/src/types/translations.ts:374](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:374](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -180,7 +180,7 @@ Defined in: [types/src/types/translations.ts:374](https://github.com/rebaseco/re
 
 > **add\_row\_after**: `string`
 
-Defined in: [types/src/types/translations.ts:488](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:488](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -188,7 +188,7 @@ Defined in: [types/src/types/translations.ts:488](https://github.com/rebaseco/re
 
 > **add\_row\_before**: `string`
 
-Defined in: [types/src/types/translations.ts:487](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:487](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Editor table-bubble
 
@@ -198,7 +198,7 @@ Editor table-bubble
 
 > **add\_specific**: `string`
 
-Defined in: [types/src/types/translations.ts:65](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:65](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -206,7 +206,7 @@ Defined in: [types/src/types/translations.ts:65](https://github.com/rebaseco/reb
 
 > **add\_subcollection**: `string`
 
-Defined in: [types/src/types/translations.ts:273](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:273](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -214,7 +214,7 @@ Defined in: [types/src/types/translations.ts:273](https://github.com/rebaseco/re
 
 > **add\_to\_field**: `string`
 
-Defined in: [types/src/types/translations.ts:102](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:102](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Label when a fieldName is provided — "Add to {fieldName}"
 
@@ -224,7 +224,7 @@ Label when a fieldName is provided — "Add to {fieldName}"
 
 > **add\_user**: `string`
 
-Defined in: [types/src/types/translations.ts:373](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:373](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -232,7 +232,7 @@ Defined in: [types/src/types/translations.ts:373](https://github.com/rebaseco/re
 
 > **add\_your**: `string`
 
-Defined in: [types/src/types/translations.ts:571](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:571](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -240,7 +240,7 @@ Defined in: [types/src/types/translations.ts:571](https://github.com/rebaseco/re
 
 > **admin**: `string`
 
-Defined in: [types/src/types/translations.ts:148](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:148](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -248,7 +248,7 @@ Defined in: [types/src/types/translations.ts:148](https://github.com/rebaseco/re
 
 > **admin\_panel\_ready\_bring\_data**: `string`
 
-Defined in: [types/src/types/translations.ts:578](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:578](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -256,7 +256,7 @@ Defined in: [types/src/types/translations.ts:578](https://github.com/rebaseco/re
 
 > **admin\_panel\_ready\_get\_started**: `string`
 
-Defined in: [types/src/types/translations.ts:579](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:579](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -264,7 +264,7 @@ Defined in: [types/src/types/translations.ts:579](https://github.com/rebaseco/re
 
 > **advanced\_settings**: `string`
 
-Defined in: [types/src/types/translations.ts:248](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:248](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -272,7 +272,7 @@ Defined in: [types/src/types/translations.ts:248](https://github.com/rebaseco/re
 
 > **ai\_assist**: `string`
 
-Defined in: [types/src/types/translations.ts:509](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:509](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -280,7 +280,7 @@ Defined in: [types/src/types/translations.ts:509](https://github.com/rebaseco/re
 
 > **ai\_modified**: `string`
 
-Defined in: [types/src/types/translations.ts:367](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:367](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -288,7 +288,7 @@ Defined in: [types/src/types/translations.ts:367](https://github.com/rebaseco/re
 
 > **ai\_placeholder\_create**: `string`
 
-Defined in: [types/src/types/translations.ts:507](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:507](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -296,7 +296,7 @@ Defined in: [types/src/types/translations.ts:507](https://github.com/rebaseco/re
 
 > **ai\_placeholder\_modify**: `string`
 
-Defined in: [types/src/types/translations.ts:508](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:508](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -304,7 +304,7 @@ Defined in: [types/src/types/translations.ts:508](https://github.com/rebaseco/re
 
 > **all**: `string`
 
-Defined in: [types/src/types/translations.ts:327](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:327](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -312,7 +312,7 @@ Defined in: [types/src/types/translations.ts:327](https://github.com/rebaseco/re
 
 > **all\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:321](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:321](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -320,7 +320,7 @@ Defined in: [types/src/types/translations.ts:321](https://github.com/rebaseco/re
 
 > **all\_entries\_loaded**: `string`
 
-Defined in: [types/src/types/translations.ts:59](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:59](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -328,7 +328,7 @@ Defined in: [types/src/types/translations.ts:59](https://github.com/rebaseco/reb
 
 > **all\_of\_these**: `string`
 
-Defined in: [types/src/types/translations.ts:309](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:309](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -336,7 +336,7 @@ Defined in: [types/src/types/translations.ts:309](https://github.com/rebaseco/re
 
 > **allow\_all\_permissions\_in\_this\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:326](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:326](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -344,7 +344,7 @@ Defined in: [types/src/types/translations.ts:326](https://github.com/rebaseco/re
 
 > **alt\_text**: `string`
 
-Defined in: [types/src/types/translations.ts:496](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:496](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Editor image-bubble
 
@@ -354,7 +354,7 @@ Editor image-bubble
 
 > **and\_our**: `string`
 
-Defined in: [types/src/types/translations.ts:538](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:538](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -362,7 +362,7 @@ Defined in: [types/src/types/translations.ts:538](https://github.com/rebaseco/re
 
 > **any\_of\_these**: `string`
 
-Defined in: [types/src/types/translations.ts:310](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:310](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -370,7 +370,7 @@ Defined in: [types/src/types/translations.ts:310](https://github.com/rebaseco/re
 
 > **apply\_changes**: `string`
 
-Defined in: [types/src/types/translations.ts:75](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:75](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -378,7 +378,7 @@ Defined in: [types/src/types/translations.ts:75](https://github.com/rebaseco/reb
 
 > **apply\_filters**: `string`
 
-Defined in: [types/src/types/translations.ts:426](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:426](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -386,7 +386,7 @@ Defined in: [types/src/types/translations.ts:426](https://github.com/rebaseco/re
 
 > **are\_you\_sure\_leave**: `string`
 
-Defined in: [types/src/types/translations.ts:145](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:145](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Shown in unsaved-changes dialogs
 
@@ -396,7 +396,7 @@ Shown in unsaved-changes dialogs
 
 > **array**: `string`
 
-Defined in: [types/src/types/translations.ts:85](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:85](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -404,7 +404,7 @@ Defined in: [types/src/types/translations.ts:85](https://github.com/rebaseco/reb
 
 > **arrays\_of\_arrays\_not\_supported**: `string`
 
-Defined in: [types/src/types/translations.ts:86](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:86](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -412,7 +412,7 @@ Defined in: [types/src/types/translations.ts:86](https://github.com/rebaseco/reb
 
 > **auth\_account\_exists\_with\_different\_credential**: `string`
 
-Defined in: [types/src/types/translations.ts:547](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:547](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -420,7 +420,7 @@ Defined in: [types/src/types/translations.ts:547](https://github.com/rebaseco/re
 
 > **auth\_create\_new\_account**: `string`
 
-Defined in: [types/src/types/translations.ts:554](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:554](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -428,7 +428,7 @@ Defined in: [types/src/types/translations.ts:554](https://github.com/rebaseco/re
 
 > **auth\_email\_already\_in\_use**: `string`
 
-Defined in: [types/src/types/translations.ts:548](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:548](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -436,7 +436,7 @@ Defined in: [types/src/types/translations.ts:548](https://github.com/rebaseco/re
 
 > **auth\_enter\_email\_first**: `string`
 
-Defined in: [types/src/types/translations.ts:551](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:551](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -444,7 +444,7 @@ Defined in: [types/src/types/translations.ts:551](https://github.com/rebaseco/re
 
 > **auth\_google\_permissions\_required**: `string`
 
-Defined in: [types/src/types/translations.ts:549](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:549](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -452,7 +452,7 @@ Defined in: [types/src/types/translations.ts:549](https://github.com/rebaseco/re
 
 > **auth\_have\_account**: `string`
 
-Defined in: [types/src/types/translations.ts:558](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:558](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -460,7 +460,7 @@ Defined in: [types/src/types/translations.ts:558](https://github.com/rebaseco/re
 
 > **auth\_invalid\_email\_password**: `string`
 
-Defined in: [types/src/types/translations.ts:550](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:550](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -468,7 +468,7 @@ Defined in: [types/src/types/translations.ts:550](https://github.com/rebaseco/re
 
 > **auth\_new\_user**: `string`
 
-Defined in: [types/src/types/translations.ts:557](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:557](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -476,7 +476,7 @@ Defined in: [types/src/types/translations.ts:557](https://github.com/rebaseco/re
 
 > **auth\_password**: `string`
 
-Defined in: [types/src/types/translations.ts:555](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:555](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -484,7 +484,7 @@ Defined in: [types/src/types/translations.ts:555](https://github.com/rebaseco/re
 
 > **auth\_password\_reset\_sent**: `string`
 
-Defined in: [types/src/types/translations.ts:552](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:552](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -492,7 +492,7 @@ Defined in: [types/src/types/translations.ts:552](https://github.com/rebaseco/re
 
 > **auth\_reset\_password**: `string`
 
-Defined in: [types/src/types/translations.ts:556](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:556](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -500,7 +500,7 @@ Defined in: [types/src/types/translations.ts:556](https://github.com/rebaseco/re
 
 > **auth\_sign\_in**: `string`
 
-Defined in: [types/src/types/translations.ts:559](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:559](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -508,7 +508,7 @@ Defined in: [types/src/types/translations.ts:559](https://github.com/rebaseco/re
 
 > **auth\_sign\_in\_account**: `string`
 
-Defined in: [types/src/types/translations.ts:553](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:553](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -516,7 +516,7 @@ Defined in: [types/src/types/translations.ts:553](https://github.com/rebaseco/re
 
 > **auth\_sign\_up**: `string`
 
-Defined in: [types/src/types/translations.ts:560](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:560](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -524,7 +524,7 @@ Defined in: [types/src/types/translations.ts:560](https://github.com/rebaseco/re
 
 > **auth\_user\_disabled**: `string`
 
-Defined in: [types/src/types/translations.ts:546](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:546](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -532,7 +532,7 @@ Defined in: [types/src/types/translations.ts:546](https://github.com/rebaseco/re
 
 > **auth\_user\_not\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:544](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:544](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -540,7 +540,7 @@ Defined in: [types/src/types/translations.ts:544](https://github.com/rebaseco/re
 
 > **auth\_wrong\_password**: `string`
 
-Defined in: [types/src/types/translations.ts:545](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:545](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -548,7 +548,7 @@ Defined in: [types/src/types/translations.ts:545](https://github.com/rebaseco/re
 
 > **auto\_detect\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:580](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:580](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -556,7 +556,7 @@ Defined in: [types/src/types/translations.ts:580](https://github.com/rebaseco/re
 
 > **auto\_detect\_collections\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:581](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:581](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -564,7 +564,7 @@ Defined in: [types/src/types/translations.ts:581](https://github.com/rebaseco/re
 
 > **auto\_setup\_collections\_button**: `string`
 
-Defined in: [types/src/types/translations.ts:562](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:562](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -572,7 +572,7 @@ Defined in: [types/src/types/translations.ts:562](https://github.com/rebaseco/re
 
 > **auto\_setup\_collections\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:564](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:564](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -580,7 +580,7 @@ Defined in: [types/src/types/translations.ts:564](https://github.com/rebaseco/re
 
 > **auto\_setup\_collections\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:563](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:563](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -588,7 +588,7 @@ Defined in: [types/src/types/translations.ts:563](https://github.com/rebaseco/re
 
 > **autogenerate\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:389](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:389](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -596,7 +596,7 @@ Defined in: [types/src/types/translations.ts:389](https://github.com/rebaseco/re
 
 > **back**: `string`
 
-Defined in: [types/src/types/translations.ts:403](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:403](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -604,7 +604,7 @@ Defined in: [types/src/types/translations.ts:403](https://github.com/rebaseco/re
 
 > **back\_to\_home**: `string`
 
-Defined in: [types/src/types/translations.ts:200](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:200](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -612,7 +612,7 @@ Defined in: [types/src/types/translations.ts:200](https://github.com/rebaseco/re
 
 > **blog\_posts**: `string`
 
-Defined in: [types/src/types/translations.ts:524](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:524](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -620,7 +620,7 @@ Defined in: [types/src/types/translations.ts:524](https://github.com/rebaseco/re
 
 > **board**: `string`
 
-Defined in: [types/src/types/translations.ts:429](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:429](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -628,7 +628,7 @@ Defined in: [types/src/types/translations.ts:429](https://github.com/rebaseco/re
 
 > **boolean**: `string`
 
-Defined in: [types/src/types/translations.ts:82](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:82](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -636,7 +636,7 @@ Defined in: [types/src/types/translations.ts:82](https://github.com/rebaseco/reb
 
 > **bootstrap\_admin\_success**: `string`
 
-Defined in: [types/src/types/translations.ts:481](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:481](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 UsersView — snackbar
 
@@ -646,7 +646,7 @@ UsersView — snackbar
 
 > **browser\_does\_not\_support\_audio**: `string`
 
-Defined in: [types/src/types/translations.ts:88](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:88](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -654,7 +654,7 @@ Defined in: [types/src/types/translations.ts:88](https://github.com/rebaseco/reb
 
 > **by\_signing\_in\_you\_agree\_to\_our**: `string`
 
-Defined in: [types/src/types/translations.ts:536](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:536](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -662,7 +662,7 @@ Defined in: [types/src/types/translations.ts:536](https://github.com/rebaseco/re
 
 > **can\_user\_create\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:332](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:332](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -670,7 +670,7 @@ Defined in: [types/src/types/translations.ts:332](https://github.com/rebaseco/re
 
 > **can\_user\_delete\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:338](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:338](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -678,7 +678,7 @@ Defined in: [types/src/types/translations.ts:338](https://github.com/rebaseco/re
 
 > **can\_user\_edit\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:336](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:336](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -686,7 +686,7 @@ Defined in: [types/src/types/translations.ts:336](https://github.com/rebaseco/re
 
 > **cancel**: `string`
 
-Defined in: [types/src/types/translations.ts:30](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:30](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -694,7 +694,7 @@ Defined in: [types/src/types/translations.ts:30](https://github.com/rebaseco/reb
 
 > **cannot\_delete\_selected**: `string`
 
-Defined in: [types/src/types/translations.ts:94](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:94](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -702,7 +702,7 @@ Defined in: [types/src/types/translations.ts:94](https://github.com/rebaseco/reb
 
 > **cards**: `string`
 
-Defined in: [types/src/types/translations.ts:428](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:428](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -710,7 +710,7 @@ Defined in: [types/src/types/translations.ts:428](https://github.com/rebaseco/re
 
 > **cards\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:205](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:205](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -718,7 +718,7 @@ Defined in: [types/src/types/translations.ts:205](https://github.com/rebaseco/re
 
 > **change\_icon**: `string`
 
-Defined in: [types/src/types/translations.ts:233](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:233](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -726,7 +726,7 @@ Defined in: [types/src/types/translations.ts:233](https://github.com/rebaseco/re
 
 > **choose\_how\_entities\_displayed\_default**: `string`
 
-Defined in: [types/src/types/translations.ts:207](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:207](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -734,7 +734,7 @@ Defined in: [types/src/types/translations.ts:207](https://github.com/rebaseco/re
 
 > **clear**: `string`
 
-Defined in: [types/src/types/translations.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:29](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Clear a new/copy form (not yet persisted)
 
@@ -744,7 +744,7 @@ Clear a new/copy form (not yet persisted)
 
 > **clear\_filter**: `string`
 
-Defined in: [types/src/types/translations.ts:54](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:54](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -752,7 +752,7 @@ Defined in: [types/src/types/translations.ts:54](https://github.com/rebaseco/reb
 
 > **clear\_filter\_sort**: `string`
 
-Defined in: [types/src/types/translations.ts:55](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:55](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -760,7 +760,7 @@ Defined in: [types/src/types/translations.ts:55](https://github.com/rebaseco/reb
 
 > **clear\_sort**: `string`
 
-Defined in: [types/src/types/translations.ts:56](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:56](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -768,7 +768,7 @@ Defined in: [types/src/types/translations.ts:56](https://github.com/rebaseco/reb
 
 > **click\_to\_edit**: `string`
 
-Defined in: [types/src/types/translations.ts:127](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:127](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -776,7 +776,7 @@ Defined in: [types/src/types/translations.ts:127](https://github.com/rebaseco/re
 
 > **close**: `string`
 
-Defined in: [types/src/types/translations.ts:71](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:71](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -784,7 +784,7 @@ Defined in: [types/src/types/translations.ts:71](https://github.com/rebaseco/reb
 
 > **close\_drawer**: `string`
 
-Defined in: [types/src/types/translations.ts:114](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:114](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -792,7 +792,7 @@ Defined in: [types/src/types/translations.ts:114](https://github.com/rebaseco/re
 
 > **cms\_users**: `string`
 
-Defined in: [types/src/types/translations.ts:531](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:531](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Admin views config
 
@@ -802,7 +802,7 @@ Admin views config
 
 > **code\_defined**: `string`
 
-Defined in: [types/src/types/translations.ts:254](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:254](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -810,7 +810,7 @@ Defined in: [types/src/types/translations.ts:254](https://github.com/rebaseco/re
 
 > **code\_for\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:284](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:284](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -818,7 +818,7 @@ Defined in: [types/src/types/translations.ts:284](https://github.com/rebaseco/re
 
 > **collapse**: `string`
 
-Defined in: [types/src/types/translations.ts:116](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:116](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -826,7 +826,7 @@ Defined in: [types/src/types/translations.ts:116](https://github.com/rebaseco/re
 
 > **collection**: `string`
 
-Defined in: [types/src/types/translations.ts:475](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:475](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -834,7 +834,7 @@ Defined in: [types/src/types/translations.ts:475](https://github.com/rebaseco/re
 
 > **collection\_blog\_posts\_subtitle**: `string`
 
-Defined in: [types/src/types/translations.ts:525](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:525](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -842,7 +842,7 @@ Defined in: [types/src/types/translations.ts:525](https://github.com/rebaseco/re
 
 > **collection\_does\_not\_exist**: `string`
 
-Defined in: [types/src/types/translations.ts:129](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:129](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -850,7 +850,7 @@ Defined in: [types/src/types/translations.ts:129](https://github.com/rebaseco/re
 
 > **collection\_editor**: `string`
 
-Defined in: [types/src/types/translations.ts:305](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:305](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -858,7 +858,7 @@ Defined in: [types/src/types/translations.ts:305](https://github.com/rebaseco/re
 
 > **collection\_group**: `string`
 
-Defined in: [types/src/types/translations.ts:246](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:246](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -866,7 +866,7 @@ Defined in: [types/src/types/translations.ts:246](https://github.com/rebaseco/re
 
 > **collection\_group\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:247](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:247](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -874,7 +874,7 @@ Defined in: [types/src/types/translations.ts:247](https://github.com/rebaseco/re
 
 > **collection\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:244](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:244](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -882,7 +882,7 @@ Defined in: [types/src/types/translations.ts:244](https://github.com/rebaseco/re
 
 > **collection\_id\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:245](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:245](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -890,7 +890,7 @@ Defined in: [types/src/types/translations.ts:245](https://github.com/rebaseco/re
 
 > **collection\_name\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:236](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:236](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -898,7 +898,7 @@ Defined in: [types/src/types/translations.ts:236](https://github.com/rebaseco/re
 
 > **collection\_pages\_subtitle**: `string`
 
-Defined in: [types/src/types/translations.ts:527](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:527](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -906,7 +906,7 @@ Defined in: [types/src/types/translations.ts:527](https://github.com/rebaseco/re
 
 > **collection\_permissions**: `string`
 
-Defined in: [types/src/types/translations.ts:474](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:474](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -914,7 +914,7 @@ Defined in: [types/src/types/translations.ts:474](https://github.com/rebaseco/re
 
 > **collection\_products\_subtitle**: `string`
 
-Defined in: [types/src/types/translations.ts:522](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:522](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -922,7 +922,7 @@ Defined in: [types/src/types/translations.ts:522](https://github.com/rebaseco/re
 
 > **collection\_users\_subtitle**: `string`
 
-Defined in: [types/src/types/translations.ts:523](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:523](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -930,7 +930,7 @@ Defined in: [types/src/types/translations.ts:523](https://github.com/rebaseco/re
 
 > **collection\_with\_name**: `string`
 
-Defined in: [types/src/types/translations.ts:232](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:232](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -938,7 +938,7 @@ Defined in: [types/src/types/translations.ts:232](https://github.com/rebaseco/re
 
 > **collections\_have\_been\_setup**: `string`
 
-Defined in: [types/src/types/translations.ts:567](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:567](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -946,7 +946,7 @@ Defined in: [types/src/types/translations.ts:567](https://github.com/rebaseco/re
 
 > **column\_cannot\_be\_edited**: `string`
 
-Defined in: [types/src/types/translations.ts:70](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:70](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -954,7 +954,7 @@ Defined in: [types/src/types/translations.ts:70](https://github.com/rebaseco/reb
 
 > **column\_in\_file**: `string`
 
-Defined in: [types/src/types/translations.ts:383](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:383](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -962,7 +962,7 @@ Defined in: [types/src/types/translations.ts:383](https://github.com/rebaseco/re
 
 > **config\_doc\_id\_generation**: `string`
 
-Defined in: [types/src/types/translations.ts:258](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:258](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -970,7 +970,7 @@ Defined in: [types/src/types/translations.ts:258](https://github.com/rebaseco/re
 
 > **confirm\_multiple\_delete**: `string`
 
-Defined in: [types/src/types/translations.ts:436](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:436](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -978,7 +978,7 @@ Defined in: [types/src/types/translations.ts:436](https://github.com/rebaseco/re
 
 > **continue\_from\_scratch**: `string`
 
-Defined in: [types/src/types/translations.ts:528](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:528](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -986,7 +986,7 @@ Defined in: [types/src/types/translations.ts:528](https://github.com/rebaseco/re
 
 > **copied**: `string`
 
-Defined in: [types/src/types/translations.ts:287](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:287](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -994,7 +994,7 @@ Defined in: [types/src/types/translations.ts:287](https://github.com/rebaseco/re
 
 > **copy**: `string`
 
-Defined in: [types/src/types/translations.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:34](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1002,7 +1002,7 @@ Defined in: [types/src/types/translations.ts:34](https://github.com/rebaseco/reb
 
 > **copy\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:64](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:64](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1010,7 +1010,7 @@ Defined in: [types/src/types/translations.ts:64](https://github.com/rebaseco/reb
 
 > **copy\_url\_to\_clipboard**: `string`
 
-Defined in: [types/src/types/translations.ts:158](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:158](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1018,7 +1018,7 @@ Defined in: [types/src/types/translations.ts:158](https://github.com/rebaseco/re
 
 > **create**: `string`
 
-Defined in: [types/src/types/translations.ts:20](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:20](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1026,7 +1026,7 @@ Defined in: [types/src/types/translations.ts:20](https://github.com/rebaseco/reb
 
 > **create\_a\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:582](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:582](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1034,7 +1034,7 @@ Defined in: [types/src/types/translations.ts:582](https://github.com/rebaseco/re
 
 > **create\_and\_close**: `string`
 
-Defined in: [types/src/types/translations.ts:25](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:25](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1042,7 +1042,7 @@ Defined in: [types/src/types/translations.ts:25](https://github.com/rebaseco/reb
 
 > **create\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:227](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:227](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1050,7 +1050,7 @@ Defined in: [types/src/types/translations.ts:227](https://github.com/rebaseco/re
 
 > **create\_collection\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:583](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:583](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1058,7 +1058,7 @@ Defined in: [types/src/types/translations.ts:583](https://github.com/rebaseco/re
 
 > **create\_collection\_from\_file\_formats**: `string`
 
-Defined in: [types/src/types/translations.ts:519](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:519](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1066,7 +1066,7 @@ Defined in: [types/src/types/translations.ts:519](https://github.com/rebaseco/re
 
 > **create\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:329](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:329](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1074,7 +1074,7 @@ Defined in: [types/src/types/translations.ts:329](https://github.com/rebaseco/re
 
 > **create\_copy**: `string`
 
-Defined in: [types/src/types/translations.ts:22](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:22](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Used when duplicating an existing entity
 
@@ -1084,7 +1084,7 @@ Used when duplicating an existing entity
 
 > **create\_copy\_and\_close**: `string`
 
-Defined in: [types/src/types/translations.ts:24](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:24](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1092,7 +1092,7 @@ Defined in: [types/src/types/translations.ts:24](https://github.com/rebaseco/reb
 
 > **create\_default\_roles**: `string`
 
-Defined in: [types/src/types/translations.ts:167](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:167](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1100,7 +1100,7 @@ Defined in: [types/src/types/translations.ts:167](https://github.com/rebaseco/re
 
 > **create\_default\_roles\_and\_add\_admin**: `string`
 
-Defined in: [types/src/types/translations.ts:173](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:173](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1108,7 +1108,7 @@ Defined in: [types/src/types/translations.ts:173](https://github.com/rebaseco/re
 
 > **create\_entities**: `string`
 
-Defined in: [types/src/types/translations.ts:317](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:317](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1116,7 +1116,7 @@ Defined in: [types/src/types/translations.ts:317](https://github.com/rebaseco/re
 
 > **create\_entities\_in\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:322](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:322](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1124,7 +1124,7 @@ Defined in: [types/src/types/translations.ts:322](https://github.com/rebaseco/re
 
 > **create\_first\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:221](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:221](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1132,7 +1132,7 @@ Defined in: [types/src/types/translations.ts:221](https://github.com/rebaseco/re
 
 > **create\_from\_json\_config**: `string`
 
-Defined in: [types/src/types/translations.ts:517](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:517](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1140,7 +1140,7 @@ Defined in: [types/src/types/translations.ts:517](https://github.com/rebaseco/re
 
 > **create\_index**: `string`
 
-Defined in: [types/src/types/translations.ts:125](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:125](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1148,7 +1148,7 @@ Defined in: [types/src/types/translations.ts:125](https://github.com/rebaseco/re
 
 > **create\_property**: `string`
 
-Defined in: [types/src/types/translations.ts:627](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:627](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1156,7 +1156,7 @@ Defined in: [types/src/types/translations.ts:627](https://github.com/rebaseco/re
 
 > **create\_role**: `string`
 
-Defined in: [types/src/types/translations.ts:340](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:340](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1164,7 +1164,7 @@ Defined in: [types/src/types/translations.ts:340](https://github.com/rebaseco/re
 
 > **create\_user**: `string`
 
-Defined in: [types/src/types/translations.ts:353](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:353](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1172,7 +1172,7 @@ Defined in: [types/src/types/translations.ts:353](https://github.com/rebaseco/re
 
 > **create\_your\_first\_entry**: `string`
 
-Defined in: [types/src/types/translations.ts:60](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:60](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1180,7 +1180,7 @@ Defined in: [types/src/types/translations.ts:60](https://github.com/rebaseco/reb
 
 > **create\_your\_users\_and\_roles**: `string`
 
-Defined in: [types/src/types/translations.ts:175](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:175](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1188,7 +1188,7 @@ Defined in: [types/src/types/translations.ts:175](https://github.com/rebaseco/re
 
 > **created\_on**: `string`
 
-Defined in: [types/src/types/translations.ts:377](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:377](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1196,7 +1196,7 @@ Defined in: [types/src/types/translations.ts:377](https://github.com/rebaseco/re
 
 > **csv**: `string`
 
-Defined in: [types/src/types/translations.ts:415](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:415](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1204,7 +1204,7 @@ Defined in: [types/src/types/translations.ts:415](https://github.com/rebaseco/re
 
 > **current**: `string`
 
-Defined in: [types/src/types/translations.ts:465](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:465](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1212,7 +1212,7 @@ Defined in: [types/src/types/translations.ts:465](https://github.com/rebaseco/re
 
 > **current\_form\_in\_sync**: `string`
 
-Defined in: [types/src/types/translations.ts:154](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:154](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1220,7 +1220,7 @@ Defined in: [types/src/types/translations.ts:154](https://github.com/rebaseco/re
 
 > **custom\_actions**: `string`
 
-Defined in: [types/src/types/translations.ts:264](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:264](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1228,7 +1228,7 @@ Defined in: [types/src/types/translations.ts:264](https://github.com/rebaseco/re
 
 > **custom\_or\_other**: `string`
 
-Defined in: [types/src/types/translations.ts:297](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:297](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1236,7 +1236,7 @@ Defined in: [types/src/types/translations.ts:297](https://github.com/rebaseco/re
 
 > **custom\_views**: `string`
 
-Defined in: [types/src/types/translations.ts:274](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:274](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1244,7 +1244,7 @@ Defined in: [types/src/types/translations.ts:274](https://github.com/rebaseco/re
 
 > **customise\_collection\_code**: `string`
 
-Defined in: [types/src/types/translations.ts:286](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:286](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1252,7 +1252,7 @@ Defined in: [types/src/types/translations.ts:286](https://github.com/rebaseco/re
 
 > **customise\_permissions\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:328](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:328](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1260,7 +1260,7 @@ Defined in: [types/src/types/translations.ts:328](https://github.com/rebaseco/re
 
 > **dark\_mode**: `string`
 
-Defined in: [types/src/types/translations.ts:361](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:361](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1268,7 +1268,7 @@ Defined in: [types/src/types/translations.ts:361](https://github.com/rebaseco/re
 
 > **data\_imported\_successfully**: `string`
 
-Defined in: [types/src/types/translations.ts:409](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:409](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1276,7 +1276,7 @@ Defined in: [types/src/types/translations.ts:409](https://github.com/rebaseco/re
 
 > **data\_is\_not\_array\_of\_references**: `string`
 
-Defined in: [types/src/types/translations.ts:128](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:128](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1284,7 +1284,7 @@ Defined in: [types/src/types/translations.ts:128](https://github.com/rebaseco/re
 
 > **data\_property\_mapping**: `string`
 
-Defined in: [types/src/types/translations.ts:307](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:307](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1292,7 +1292,7 @@ Defined in: [types/src/types/translations.ts:307](https://github.com/rebaseco/re
 
 > **data\_type\_not\_supported**: `string`
 
-Defined in: [types/src/types/translations.ts:87](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:87](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1300,7 +1300,7 @@ Defined in: [types/src/types/translations.ts:87](https://github.com/rebaseco/reb
 
 > **database\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:572](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:572](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1308,7 +1308,7 @@ Defined in: [types/src/types/translations.ts:572](https://github.com/rebaseco/re
 
 > **database\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:261](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:261](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1316,7 +1316,7 @@ Defined in: [types/src/types/translations.ts:261](https://github.com/rebaseco/re
 
 > **date**: `string`
 
-Defined in: [types/src/types/translations.ts:83](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:83](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1324,7 +1324,7 @@ Defined in: [types/src/types/translations.ts:83](https://github.com/rebaseco/reb
 
 > **dates\_as\_strings**: `string`
 
-Defined in: [types/src/types/translations.ts:418](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:418](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1332,7 +1332,7 @@ Defined in: [types/src/types/translations.ts:418](https://github.com/rebaseco/re
 
 > **dates\_as\_timestamps**: `string`
 
-Defined in: [types/src/types/translations.ts:417](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:417](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1340,7 +1340,7 @@ Defined in: [types/src/types/translations.ts:417](https://github.com/rebaseco/re
 
 > **default\_collection\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:203](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:203](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1348,7 +1348,7 @@ Defined in: [types/src/types/translations.ts:203](https://github.com/rebaseco/re
 
 > **default\_permissions**: `string`
 
-Defined in: [types/src/types/translations.ts:376](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:376](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1356,7 +1356,7 @@ Defined in: [types/src/types/translations.ts:376](https://github.com/rebaseco/re
 
 > **default\_row\_size**: `string`
 
-Defined in: [types/src/types/translations.ts:633](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:633](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1364,7 +1364,7 @@ Defined in: [types/src/types/translations.ts:633](https://github.com/rebaseco/re
 
 > **default\_text**: `string`
 
-Defined in: [types/src/types/translations.ts:262](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:262](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1372,7 +1372,7 @@ Defined in: [types/src/types/translations.ts:262](https://github.com/rebaseco/re
 
 > **default\_value**: `string`
 
-Defined in: [types/src/types/translations.ts:388](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:388](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1380,7 +1380,7 @@ Defined in: [types/src/types/translations.ts:388](https://github.com/rebaseco/re
 
 > **default\_values**: `string`
 
-Defined in: [types/src/types/translations.ts:385](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:385](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1388,7 +1388,7 @@ Defined in: [types/src/types/translations.ts:385](https://github.com/rebaseco/re
 
 > **default\_values\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:386](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:386](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1396,7 +1396,7 @@ Defined in: [types/src/types/translations.ts:386](https://github.com/rebaseco/re
 
 > **define\_collections\_programmatically**: `string`
 
-Defined in: [types/src/types/translations.ts:222](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:222](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1404,7 +1404,7 @@ Defined in: [types/src/types/translations.ts:222](https://github.com/rebaseco/re
 
 > **define\_custom\_actions\_cli**: `string`
 
-Defined in: [types/src/types/translations.ts:266](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:266](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1412,7 +1412,7 @@ Defined in: [types/src/types/translations.ts:266](https://github.com/rebaseco/re
 
 > **define\_custom\_views\_cli**: `string`
 
-Defined in: [types/src/types/translations.ts:275](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:275](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1420,7 +1420,7 @@ Defined in: [types/src/types/translations.ts:275](https://github.com/rebaseco/re
 
 > **delete**: `string`
 
-Defined in: [types/src/types/translations.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:35](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1428,7 +1428,7 @@ Defined in: [types/src/types/translations.ts:35](https://github.com/rebaseco/reb
 
 > **delete\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:337](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:337](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1436,7 +1436,7 @@ Defined in: [types/src/types/translations.ts:337](https://github.com/rebaseco/re
 
 > **delete\_column**: `string`
 
-Defined in: [types/src/types/translations.ts:492](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:492](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1444,7 +1444,7 @@ Defined in: [types/src/types/translations.ts:492](https://github.com/rebaseco/re
 
 > **delete\_confirmation\_body**: `string`
 
-Defined in: [types/src/types/translations.ts:40](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:40](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1452,7 +1452,7 @@ Defined in: [types/src/types/translations.ts:40](https://github.com/rebaseco/reb
 
 > **delete\_confirmation\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:39](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:39](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1460,7 +1460,7 @@ Defined in: [types/src/types/translations.ts:39](https://github.com/rebaseco/reb
 
 > **delete\_data\_in\_any\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:325](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:325](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1468,7 +1468,7 @@ Defined in: [types/src/types/translations.ts:325](https://github.com/rebaseco/re
 
 > **delete\_entities**: `string`
 
-Defined in: [types/src/types/translations.ts:320](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:320](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1476,7 +1476,7 @@ Defined in: [types/src/types/translations.ts:320](https://github.com/rebaseco/re
 
 > **delete\_entity\_confirm\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:437](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:437](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1484,7 +1484,7 @@ Defined in: [types/src/types/translations.ts:437](https://github.com/rebaseco/re
 
 > **delete\_multiple\_confirmation\_body**: `string`
 
-Defined in: [types/src/types/translations.ts:41](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:41](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1492,7 +1492,7 @@ Defined in: [types/src/types/translations.ts:41](https://github.com/rebaseco/reb
 
 > **delete\_not\_allowed**: `string`
 
-Defined in: [types/src/types/translations.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:36](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1500,7 +1500,7 @@ Defined in: [types/src/types/translations.ts:36](https://github.com/rebaseco/reb
 
 > **delete\_property\_warning**: `string`
 
-Defined in: [types/src/types/translations.ts:292](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:292](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1508,7 +1508,7 @@ Defined in: [types/src/types/translations.ts:292](https://github.com/rebaseco/re
 
 > **delete\_role\_confirmation**: `string`
 
-Defined in: [types/src/types/translations.ts:168](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:168](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1516,7 +1516,7 @@ Defined in: [types/src/types/translations.ts:168](https://github.com/rebaseco/re
 
 > **delete\_row**: `string`
 
-Defined in: [types/src/types/translations.ts:489](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:489](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1524,7 +1524,7 @@ Defined in: [types/src/types/translations.ts:489](https://github.com/rebaseco/re
 
 > **delete\_selected**: `string`
 
-Defined in: [types/src/types/translations.ts:93](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:93](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 "Delete" action on collections, may require permissions check
 
@@ -1534,7 +1534,7 @@ Defined in: [types/src/types/translations.ts:93](https://github.com/rebaseco/reb
 
 > **delete\_table**: `string`
 
-Defined in: [types/src/types/translations.ts:493](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:493](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1542,7 +1542,7 @@ Defined in: [types/src/types/translations.ts:493](https://github.com/rebaseco/re
 
 > **delete\_this\_property**: `string`
 
-Defined in: [types/src/types/translations.ts:291](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:291](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1550,7 +1550,7 @@ Defined in: [types/src/types/translations.ts:291](https://github.com/rebaseco/re
 
 > **delete\_this\_role**: `string`
 
-Defined in: [types/src/types/translations.ts:165](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:165](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1558,7 +1558,7 @@ Defined in: [types/src/types/translations.ts:165](https://github.com/rebaseco/re
 
 > **delete\_this\_subcollection**: `string`
 
-Defined in: [types/src/types/translations.ts:278](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:278](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1566,7 +1566,7 @@ Defined in: [types/src/types/translations.ts:278](https://github.com/rebaseco/re
 
 > **delete\_this\_user**: `string`
 
-Defined in: [types/src/types/translations.ts:169](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:169](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1574,7 +1574,7 @@ Defined in: [types/src/types/translations.ts:169](https://github.com/rebaseco/re
 
 > **delete\_user\_confirmation**: `string`
 
-Defined in: [types/src/types/translations.ts:174](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:174](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1582,7 +1582,7 @@ Defined in: [types/src/types/translations.ts:174](https://github.com/rebaseco/re
 
 > **deleted**: `string`
 
-Defined in: [types/src/types/translations.ts:450](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:450](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1590,7 +1590,7 @@ Defined in: [types/src/types/translations.ts:450](https://github.com/rebaseco/re
 
 > **describe\_changes\_to\_make**: `string`
 
-Defined in: [types/src/types/translations.ts:506](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:506](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1598,7 +1598,7 @@ Defined in: [types/src/types/translations.ts:506](https://github.com/rebaseco/re
 
 > **describe\_collection\_ai**: `string`
 
-Defined in: [types/src/types/translations.ts:515](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:515](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1606,7 +1606,7 @@ Defined in: [types/src/types/translations.ts:515](https://github.com/rebaseco/re
 
 > **describe\_collection\_to\_create**: `string`
 
-Defined in: [types/src/types/translations.ts:505](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:505](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1614,7 +1614,7 @@ Defined in: [types/src/types/translations.ts:505](https://github.com/rebaseco/re
 
 > **description**: `string`
 
-Defined in: [types/src/types/translations.ts:242](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:242](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1622,7 +1622,7 @@ Defined in: [types/src/types/translations.ts:242](https://github.com/rebaseco/re
 
 > **description\_of\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:243](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:243](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1630,7 +1630,7 @@ Defined in: [types/src/types/translations.ts:243](https://github.com/rebaseco/re
 
 > **discard**: `string`
 
-Defined in: [types/src/types/translations.ts:27](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:27](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Discard changes on an existing entity
 
@@ -1640,7 +1640,7 @@ Discard changes on an existing entity
 
 > **discard\_changes**: `string`
 
-Defined in: [types/src/types/translations.ts:46](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:46](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1648,7 +1648,7 @@ Defined in: [types/src/types/translations.ts:46](https://github.com/rebaseco/reb
 
 > **discard\_local\_changes**: `string`
 
-Defined in: [types/src/types/translations.ts:76](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:76](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1656,7 +1656,7 @@ Defined in: [types/src/types/translations.ts:76](https://github.com/rebaseco/reb
 
 > **display\_name**: `string`
 
-Defined in: [types/src/types/translations.ts:457](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:457](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1664,7 +1664,7 @@ Defined in: [types/src/types/translations.ts:457](https://github.com/rebaseco/re
 
 > **display\_settings**: `string`
 
-Defined in: [types/src/types/translations.ts:632](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:632](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1672,7 +1672,7 @@ Defined in: [types/src/types/translations.ts:632](https://github.com/rebaseco/re
 
 > **do\_not\_close\_tab**: `string`
 
-Defined in: [types/src/types/translations.ts:399](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:399](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1680,7 +1680,7 @@ Defined in: [types/src/types/translations.ts:399](https://github.com/rebaseco/re
 
 > **do\_not\_import\_property**: `string`
 
-Defined in: [types/src/types/translations.ts:407](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:407](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1688,7 +1688,7 @@ Defined in: [types/src/types/translations.ts:407](https://github.com/rebaseco/re
 
 > **do\_not\_set\_value**: `string`
 
-Defined in: [types/src/types/translations.ts:391](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:391](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1696,7 +1696,7 @@ Defined in: [types/src/types/translations.ts:391](https://github.com/rebaseco/re
 
 > **doc\_history\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:252](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:252](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1704,7 +1704,7 @@ Defined in: [types/src/types/translations.ts:252](https://github.com/rebaseco/re
 
 > **doc\_history\_enabled**: `string`
 
-Defined in: [types/src/types/translations.ts:250](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:250](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1712,7 +1712,7 @@ Defined in: [types/src/types/translations.ts:250](https://github.com/rebaseco/re
 
 > **doc\_history\_global**: `string`
 
-Defined in: [types/src/types/translations.ts:249](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:249](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1720,7 +1720,7 @@ Defined in: [types/src/types/translations.ts:249](https://github.com/rebaseco/re
 
 > **doc\_history\_not\_enabled**: `string`
 
-Defined in: [types/src/types/translations.ts:251](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:251](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1728,7 +1728,7 @@ Defined in: [types/src/types/translations.ts:251](https://github.com/rebaseco/re
 
 > **doc\_id\_auto\_generated**: `string`
 
-Defined in: [types/src/types/translations.ts:257](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:257](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1736,7 +1736,7 @@ Defined in: [types/src/types/translations.ts:257](https://github.com/rebaseco/re
 
 > **document\_id\_generation**: `string`
 
-Defined in: [types/src/types/translations.ts:253](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:253](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1744,7 +1744,7 @@ Defined in: [types/src/types/translations.ts:253](https://github.com/rebaseco/re
 
 > **document\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:209](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:209](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1752,7 +1752,7 @@ Defined in: [types/src/types/translations.ts:209](https://github.com/rebaseco/re
 
 > **done**: `string`
 
-Defined in: [types/src/types/translations.ts:68](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:68](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1760,7 +1760,7 @@ Defined in: [types/src/types/translations.ts:68](https://github.com/rebaseco/reb
 
 > **download**: `string`
 
-Defined in: [types/src/types/translations.ts:420](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:420](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1768,7 +1768,7 @@ Defined in: [types/src/types/translations.ts:420](https://github.com/rebaseco/re
 
 > **download\_table\_csv**: `string`
 
-Defined in: [types/src/types/translations.ts:414](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:414](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1776,7 +1776,7 @@ Defined in: [types/src/types/translations.ts:414](https://github.com/rebaseco/re
 
 > **drag\_and\_drop\_file**: `string`
 
-Defined in: [types/src/types/translations.ts:394](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:394](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1784,7 +1784,7 @@ Defined in: [types/src/types/translations.ts:394](https://github.com/rebaseco/re
 
 > **drag\_drop\_file**: `string`
 
-Defined in: [types/src/types/translations.ts:445](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:445](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1792,7 +1792,7 @@ Defined in: [types/src/types/translations.ts:445](https://github.com/rebaseco/re
 
 > **drag\_drop\_files**: `string`
 
-Defined in: [types/src/types/translations.ts:444](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:444](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1800,7 +1800,7 @@ Defined in: [types/src/types/translations.ts:444](https://github.com/rebaseco/re
 
 > **drag\_drop\_multiple**: `string`
 
-Defined in: [types/src/types/translations.ts:108](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:108](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Drag and drop help text for multiple files
 
@@ -1810,7 +1810,7 @@ Drag and drop help text for multiple files
 
 > **drag\_drop\_single**: `string`
 
-Defined in: [types/src/types/translations.ts:110](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:110](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Drag and drop help text for a single file
 
@@ -1820,7 +1820,7 @@ Drag and drop help text for a single file
 
 > **drop\_here\_create\_group**: `string`
 
-Defined in: [types/src/types/translations.ts:137](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:137](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1828,7 +1828,7 @@ Defined in: [types/src/types/translations.ts:137](https://github.com/rebaseco/re
 
 > **edit**: `string`
 
-Defined in: [types/src/types/translations.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:33](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1836,7 +1836,7 @@ Defined in: [types/src/types/translations.ts:33](https://github.com/rebaseco/reb
 
 > **edit\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:224](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:224](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1844,7 +1844,7 @@ Defined in: [types/src/types/translations.ts:224](https://github.com/rebaseco/re
 
 > **edit\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:333](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:333](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1852,7 +1852,7 @@ Defined in: [types/src/types/translations.ts:333](https://github.com/rebaseco/re
 
 > **edit\_name**: `string`
 
-Defined in: [types/src/types/translations.ts:141](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:141](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1860,7 +1860,7 @@ Defined in: [types/src/types/translations.ts:141](https://github.com/rebaseco/re
 
 > **edit\_schema\_for\_this\_form**: `string`
 
-Defined in: [types/src/types/translations.ts:178](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:178](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1868,7 +1868,7 @@ Defined in: [types/src/types/translations.ts:178](https://github.com/rebaseco/re
 
 > **editor\_autocomplete**: `string`
 
-Defined in: [types/src/types/translations.ts:676](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:676](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1876,7 +1876,7 @@ Defined in: [types/src/types/translations.ts:676](https://github.com/rebaseco/re
 
 > **editor\_autocomplete\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:677](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:677](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1884,7 +1884,7 @@ Defined in: [types/src/types/translations.ts:677](https://github.com/rebaseco/re
 
 > **editor\_bold**: `string`
 
-Defined in: [types/src/types/translations.ts:672](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:672](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1892,7 +1892,7 @@ Defined in: [types/src/types/translations.ts:672](https://github.com/rebaseco/re
 
 > **editor\_bullet\_list**: `string`
 
-Defined in: [types/src/types/translations.ts:655](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:655](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1900,7 +1900,7 @@ Defined in: [types/src/types/translations.ts:655](https://github.com/rebaseco/re
 
 > **editor\_bullet\_list\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:656](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:656](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1908,7 +1908,7 @@ Defined in: [types/src/types/translations.ts:656](https://github.com/rebaseco/re
 
 > **editor\_cancel**: `string`
 
-Defined in: [types/src/types/translations.ts:668](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:668](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1916,7 +1916,7 @@ Defined in: [types/src/types/translations.ts:668](https://github.com/rebaseco/re
 
 > **editor\_code**: `string`
 
-Defined in: [types/src/types/translations.ts:661](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:661](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1924,7 +1924,7 @@ Defined in: [types/src/types/translations.ts:661](https://github.com/rebaseco/re
 
 > **editor\_code\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:662](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:662](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1932,7 +1932,7 @@ Defined in: [types/src/types/translations.ts:662](https://github.com/rebaseco/re
 
 > **editor\_heading\_1**: `string`
 
-Defined in: [types/src/types/translations.ts:647](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:647](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1940,7 +1940,7 @@ Defined in: [types/src/types/translations.ts:647](https://github.com/rebaseco/re
 
 > **editor\_heading\_1\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:648](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:648](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1948,7 +1948,7 @@ Defined in: [types/src/types/translations.ts:648](https://github.com/rebaseco/re
 
 > **editor\_heading\_2**: `string`
 
-Defined in: [types/src/types/translations.ts:649](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:649](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1956,7 +1956,7 @@ Defined in: [types/src/types/translations.ts:649](https://github.com/rebaseco/re
 
 > **editor\_heading\_2\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:650](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:650](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1964,7 +1964,7 @@ Defined in: [types/src/types/translations.ts:650](https://github.com/rebaseco/re
 
 > **editor\_heading\_3**: `string`
 
-Defined in: [types/src/types/translations.ts:651](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:651](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1972,7 +1972,7 @@ Defined in: [types/src/types/translations.ts:651](https://github.com/rebaseco/re
 
 > **editor\_heading\_3\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:652](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:652](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1980,7 +1980,7 @@ Defined in: [types/src/types/translations.ts:652](https://github.com/rebaseco/re
 
 > **editor\_image**: `string`
 
-Defined in: [types/src/types/translations.ts:663](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:663](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1988,7 +1988,7 @@ Defined in: [types/src/types/translations.ts:663](https://github.com/rebaseco/re
 
 > **editor\_image\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:664](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:664](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -1996,7 +1996,7 @@ Defined in: [types/src/types/translations.ts:664](https://github.com/rebaseco/re
 
 > **editor\_italic**: `string`
 
-Defined in: [types/src/types/translations.ts:673](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:673](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2004,7 +2004,7 @@ Defined in: [types/src/types/translations.ts:673](https://github.com/rebaseco/re
 
 > **editor\_link**: `string`
 
-Defined in: [types/src/types/translations.ts:666](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:666](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2012,7 +2012,7 @@ Defined in: [types/src/types/translations.ts:666](https://github.com/rebaseco/re
 
 > **editor\_multiple**: `string`
 
-Defined in: [types/src/types/translations.ts:665](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:665](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2020,7 +2020,7 @@ Defined in: [types/src/types/translations.ts:665](https://github.com/rebaseco/re
 
 > **editor\_numbered\_list**: `string`
 
-Defined in: [types/src/types/translations.ts:657](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:657](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2028,7 +2028,7 @@ Defined in: [types/src/types/translations.ts:657](https://github.com/rebaseco/re
 
 > **editor\_numbered\_list\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:658](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:658](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2036,7 +2036,7 @@ Defined in: [types/src/types/translations.ts:658](https://github.com/rebaseco/re
 
 > **editor\_open\_in\_new\_window**: `string`
 
-Defined in: [types/src/types/translations.ts:671](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:671](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2044,7 +2044,7 @@ Defined in: [types/src/types/translations.ts:671](https://github.com/rebaseco/re
 
 > **editor\_paste\_or\_type\_link**: `string`
 
-Defined in: [types/src/types/translations.ts:670](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:670](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2052,7 +2052,7 @@ Defined in: [types/src/types/translations.ts:670](https://github.com/rebaseco/re
 
 > **editor\_quote**: `string`
 
-Defined in: [types/src/types/translations.ts:659](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:659](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2060,7 +2060,7 @@ Defined in: [types/src/types/translations.ts:659](https://github.com/rebaseco/re
 
 > **editor\_quote\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:660](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:660](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2068,7 +2068,7 @@ Defined in: [types/src/types/translations.ts:660](https://github.com/rebaseco/re
 
 > **editor\_remove\_link**: `string`
 
-Defined in: [types/src/types/translations.ts:669](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:669](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2076,7 +2076,7 @@ Defined in: [types/src/types/translations.ts:669](https://github.com/rebaseco/re
 
 > **editor\_save**: `string`
 
-Defined in: [types/src/types/translations.ts:667](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:667](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2084,7 +2084,7 @@ Defined in: [types/src/types/translations.ts:667](https://github.com/rebaseco/re
 
 > **editor\_strikethrough**: `string`
 
-Defined in: [types/src/types/translations.ts:675](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:675](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2092,7 +2092,7 @@ Defined in: [types/src/types/translations.ts:675](https://github.com/rebaseco/re
 
 > **editor\_text**: `string`
 
-Defined in: [types/src/types/translations.ts:645](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:645](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2100,7 +2100,7 @@ Defined in: [types/src/types/translations.ts:645](https://github.com/rebaseco/re
 
 > **editor\_text\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:646](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:646](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2108,7 +2108,7 @@ Defined in: [types/src/types/translations.ts:646](https://github.com/rebaseco/re
 
 > **editor\_todo\_list**: `string`
 
-Defined in: [types/src/types/translations.ts:653](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:653](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2116,7 +2116,7 @@ Defined in: [types/src/types/translations.ts:653](https://github.com/rebaseco/re
 
 > **editor\_todo\_list\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:654](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:654](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2124,7 +2124,7 @@ Defined in: [types/src/types/translations.ts:654](https://github.com/rebaseco/re
 
 > **editor\_underline**: `string`
 
-Defined in: [types/src/types/translations.ts:674](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:674](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2132,7 +2132,7 @@ Defined in: [types/src/types/translations.ts:674](https://github.com/rebaseco/re
 
 > **email**: `string`
 
-Defined in: [types/src/types/translations.ts:378](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:378](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2140,7 +2140,7 @@ Defined in: [types/src/types/translations.ts:378](https://github.com/rebaseco/re
 
 > **email\_of\_this\_user**: `string`
 
-Defined in: [types/src/types/translations.ts:351](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:351](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2148,7 +2148,7 @@ Defined in: [types/src/types/translations.ts:351](https://github.com/rebaseco/re
 
 > **email\_password**: `string`
 
-Defined in: [types/src/types/translations.ts:540](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:540](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2156,7 +2156,7 @@ Defined in: [types/src/types/translations.ts:540](https://github.com/rebaseco/re
 
 > **enable\_text\_search**: `string`
 
-Defined in: [types/src/types/translations.ts:259](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:259](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2164,7 +2164,7 @@ Defined in: [types/src/types/translations.ts:259](https://github.com/rebaseco/re
 
 > **entities\_saved**: `string`
 
-Defined in: [types/src/types/translations.ts:398](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:398](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2172,7 +2172,7 @@ Defined in: [types/src/types/translations.ts:398](https://github.com/rebaseco/re
 
 > **entities\_will\_be\_overwritten**: `string`
 
-Defined in: [types/src/types/translations.ts:408](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:408](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2180,7 +2180,7 @@ Defined in: [types/src/types/translations.ts:408](https://github.com/rebaseco/re
 
 > **entities\_with\_same\_id\_overwritten**: `string`
 
-Defined in: [types/src/types/translations.ts:304](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:304](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2188,7 +2188,7 @@ Defined in: [types/src/types/translations.ts:304](https://github.com/rebaseco/re
 
 > **entity\_not\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:162](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:162](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2196,7 +2196,7 @@ Defined in: [types/src/types/translations.ts:162](https://github.com/rebaseco/re
 
 > **enum\_form\_dialog**: `string`
 
-Defined in: [types/src/types/translations.ts:302](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:302](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2204,7 +2204,7 @@ Defined in: [types/src/types/translations.ts:302](https://github.com/rebaseco/re
 
 > **error**: `string`
 
-Defined in: [types/src/types/translations.ts:120](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:120](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2212,7 +2212,7 @@ Defined in: [types/src/types/translations.ts:120](https://github.com/rebaseco/re
 
 > **error\_before\_delete**: `string`
 
-Defined in: [types/src/types/translations.ts:123](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:123](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2220,7 +2220,7 @@ Defined in: [types/src/types/translations.ts:123](https://github.com/rebaseco/re
 
 > **error\_changing\_data\_type**: `string`
 
-Defined in: [types/src/types/translations.ts:299](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:299](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2228,7 +2228,7 @@ Defined in: [types/src/types/translations.ts:299](https://github.com/rebaseco/re
 
 > **error\_deleting**: `string`
 
-Defined in: [types/src/types/translations.ts:122](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:122](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2236,7 +2236,7 @@ Defined in: [types/src/types/translations.ts:122](https://github.com/rebaseco/re
 
 > **error\_deleting\_asset**: `string`
 
-Defined in: [types/src/types/translations.ts:349](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:349](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2244,7 +2244,7 @@ Defined in: [types/src/types/translations.ts:349](https://github.com/rebaseco/re
 
 > **error\_deleting\_entities**: `string`
 
-Defined in: [types/src/types/translations.ts:449](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:449](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2252,7 +2252,7 @@ Defined in: [types/src/types/translations.ts:449](https://github.com/rebaseco/re
 
 > **error\_deleting\_role**: `string`
 
-Defined in: [types/src/types/translations.ts:473](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:473](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2260,7 +2260,7 @@ Defined in: [types/src/types/translations.ts:473](https://github.com/rebaseco/re
 
 > **error\_deleting\_user**: `string`
 
-Defined in: [types/src/types/translations.ts:484](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:484](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2268,7 +2268,7 @@ Defined in: [types/src/types/translations.ts:484](https://github.com/rebaseco/re
 
 > **error\_firestore\_index**: `string`
 
-Defined in: [types/src/types/translations.ts:124](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:124](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2276,7 +2276,7 @@ Defined in: [types/src/types/translations.ts:124](https://github.com/rebaseco/re
 
 > **error\_id\_already\_exists**: `string`
 
-Defined in: [types/src/types/translations.ts:295](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:295](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2284,7 +2284,7 @@ Defined in: [types/src/types/translations.ts:295](https://github.com/rebaseco/re
 
 > **error\_id\_format**: `string`
 
-Defined in: [types/src/types/translations.ts:294](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:294](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2292,7 +2292,7 @@ Defined in: [types/src/types/translations.ts:294](https://github.com/rebaseco/re
 
 > **error\_loading\_auth**: `string`
 
-Defined in: [types/src/types/translations.ts:152](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:152](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2300,7 +2300,7 @@ Defined in: [types/src/types/translations.ts:152](https://github.com/rebaseco/re
 
 > **error\_loading\_navigation**: `string`
 
-Defined in: [types/src/types/translations.ts:151](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:151](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2308,7 +2308,7 @@ Defined in: [types/src/types/translations.ts:151](https://github.com/rebaseco/re
 
 > **error\_must\_specify\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:293](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:293](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2316,7 +2316,7 @@ Defined in: [types/src/types/translations.ts:293](https://github.com/rebaseco/re
 
 > **error\_must\_specify\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:296](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:296](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2324,7 +2324,7 @@ Defined in: [types/src/types/translations.ts:296](https://github.com/rebaseco/re
 
 > **error\_saving\_data**: `string`
 
-Defined in: [types/src/types/translations.ts:395](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:395](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2332,7 +2332,7 @@ Defined in: [types/src/types/translations.ts:395](https://github.com/rebaseco/re
 
 > **error\_saving\_role**: `string`
 
-Defined in: [types/src/types/translations.ts:339](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:339](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2340,7 +2340,7 @@ Defined in: [types/src/types/translations.ts:339](https://github.com/rebaseco/re
 
 > **error\_setting\_up\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:568](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:568](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2348,7 +2348,7 @@ Defined in: [types/src/types/translations.ts:568](https://github.com/rebaseco/re
 
 > **error\_updating\_asset**: `string`
 
-Defined in: [types/src/types/translations.ts:348](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:348](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2356,7 +2356,7 @@ Defined in: [types/src/types/translations.ts:348](https://github.com/rebaseco/re
 
 > **error\_uploading\_file**: `string`
 
-Defined in: [types/src/types/translations.ts:121](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:121](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2364,7 +2364,7 @@ Defined in: [types/src/types/translations.ts:121](https://github.com/rebaseco/re
 
 > **error\_uploading\_file\_size**: `string`
 
-Defined in: [types/src/types/translations.ts:442](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:442](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2372,7 +2372,7 @@ Defined in: [types/src/types/translations.ts:442](https://github.com/rebaseco/re
 
 > **error\_uploading\_file\_type**: `string`
 
-Defined in: [types/src/types/translations.ts:443](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:443](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2380,7 +2380,7 @@ Defined in: [types/src/types/translations.ts:443](https://github.com/rebaseco/re
 
 > **error\_user\_not\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:313](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:313](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2388,7 +2388,7 @@ Defined in: [types/src/types/translations.ts:313](https://github.com/rebaseco/re
 
 > **exact\_length**: `string`
 
-Defined in: [types/src/types/translations.ts:599](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:599](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2396,7 +2396,7 @@ Defined in: [types/src/types/translations.ts:599](https://github.com/rebaseco/re
 
 > **expand**: `string`
 
-Defined in: [types/src/types/translations.ts:117](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:117](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2404,7 +2404,7 @@ Defined in: [types/src/types/translations.ts:117](https://github.com/rebaseco/re
 
 > **explore\_docs**: `string`
 
-Defined in: [types/src/types/translations.ts:586](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:586](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2412,7 +2412,7 @@ Defined in: [types/src/types/translations.ts:586](https://github.com/rebaseco/re
 
 > **export**: `string`
 
-Defined in: [types/src/types/translations.ts:412](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:412](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2420,7 +2420,7 @@ Defined in: [types/src/types/translations.ts:412](https://github.com/rebaseco/re
 
 > **export\_data**: `string`
 
-Defined in: [types/src/types/translations.ts:413](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:413](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2428,7 +2428,7 @@ Defined in: [types/src/types/translations.ts:413](https://github.com/rebaseco/re
 
 > **failed\_to\_bootstrap\_admin**: `string`
 
-Defined in: [types/src/types/translations.ts:482](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:482](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2436,7 +2436,7 @@ Defined in: [types/src/types/translations.ts:482](https://github.com/rebaseco/re
 
 > **field\_name**: `string`
 
-Defined in: [types/src/types/translations.ts:619](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:619](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2444,7 +2444,7 @@ Defined in: [types/src/types/translations.ts:619](https://github.com/rebaseco/re
 
 > **file\_not\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:163](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:163](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2452,7 +2452,7 @@ Defined in: [types/src/types/translations.ts:163](https://github.com/rebaseco/re
 
 > **filter**: `string`
 
-Defined in: [types/src/types/translations.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:53](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2460,7 +2460,7 @@ Defined in: [types/src/types/translations.ts:53](https://github.com/rebaseco/reb
 
 > **filter\_for\_null\_values**: `string`
 
-Defined in: [types/src/types/translations.ts:138](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:138](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2468,7 +2468,7 @@ Defined in: [types/src/types/translations.ts:138](https://github.com/rebaseco/re
 
 > **filters**: `string`
 
-Defined in: [types/src/types/translations.ts:355](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:355](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2476,7 +2476,7 @@ Defined in: [types/src/types/translations.ts:355](https://github.com/rebaseco/re
 
 > **find\_by\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:51](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:51](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2484,7 +2484,7 @@ Defined in: [types/src/types/translations.ts:51](https://github.com/rebaseco/reb
 
 > **find\_entity\_by\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:52](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:52](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2492,7 +2492,7 @@ Defined in: [types/src/types/translations.ts:52](https://github.com/rebaseco/reb
 
 > **flatten\_arrays**: `string`
 
-Defined in: [types/src/types/translations.ts:419](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:419](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2500,7 +2500,7 @@ Defined in: [types/src/types/translations.ts:419](https://github.com/rebaseco/re
 
 > **full\_screen**: `string`
 
-Defined in: [types/src/types/translations.ts:211](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:211](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2508,7 +2508,7 @@ Defined in: [types/src/types/translations.ts:211](https://github.com/rebaseco/re
 
 > **generate\_collection\_with\_ai**: `string`
 
-Defined in: [types/src/types/translations.ts:503](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:503](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 AI Collection Generator Popover
 
@@ -2518,7 +2518,7 @@ AI Collection Generator Popover
 
 > **generate\_with\_ai**: `string`
 
-Defined in: [types/src/types/translations.ts:516](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:516](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2526,7 +2526,7 @@ Defined in: [types/src/types/translations.ts:516](https://github.com/rebaseco/re
 
 > **generating**: `string`
 
-Defined in: [types/src/types/translations.ts:510](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:510](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2534,7 +2534,7 @@ Defined in: [types/src/types/translations.ts:510](https://github.com/rebaseco/re
 
 > **group\_by**: `string`
 
-Defined in: [types/src/types/translations.ts:369](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:369](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2542,7 +2542,7 @@ Defined in: [types/src/types/translations.ts:369](https://github.com/rebaseco/re
 
 > **group\_name\_empty\_error**: `string`
 
-Defined in: [types/src/types/translations.ts:184](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:184](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2550,7 +2550,7 @@ Defined in: [types/src/types/translations.ts:184](https://github.com/rebaseco/re
 
 > **group\_name\_exists\_error**: `string`
 
-Defined in: [types/src/types/translations.ts:185](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:185](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2558,7 +2558,7 @@ Defined in: [types/src/types/translations.ts:185](https://github.com/rebaseco/re
 
 > **group\_name\_label**: `string`
 
-Defined in: [types/src/types/translations.ts:183](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:183](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2566,7 +2566,7 @@ Defined in: [types/src/types/translations.ts:183](https://github.com/rebaseco/re
 
 > **home**: `string`
 
-Defined in: [types/src/types/translations.ts:149](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:149](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2574,7 +2574,7 @@ Defined in: [types/src/types/translations.ts:149](https://github.com/rebaseco/re
 
 > **id**: `string`
 
-Defined in: [types/src/types/translations.ts:379](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:379](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2582,7 +2582,7 @@ Defined in: [types/src/types/translations.ts:379](https://github.com/rebaseco/re
 
 > **id\_column\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:390](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:390](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2590,7 +2590,7 @@ Defined in: [types/src/types/translations.ts:390](https://github.com/rebaseco/re
 
 > **id\_of\_this\_role**: `string`
 
-Defined in: [types/src/types/translations.ts:316](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:316](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2598,7 +2598,7 @@ Defined in: [types/src/types/translations.ts:316](https://github.com/rebaseco/re
 
 > **import**: `string`
 
-Defined in: [types/src/types/translations.ts:400](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:400](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2606,7 +2606,7 @@ Defined in: [types/src/types/translations.ts:400](https://github.com/rebaseco/re
 
 > **import\_data**: `string`
 
-Defined in: [types/src/types/translations.ts:401](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:401](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2614,7 +2614,7 @@ Defined in: [types/src/types/translations.ts:401](https://github.com/rebaseco/re
 
 > **imported\_data\_preview**: `string`
 
-Defined in: [types/src/types/translations.ts:303](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:303](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2622,7 +2622,7 @@ Defined in: [types/src/types/translations.ts:303](https://github.com/rebaseco/re
 
 > **include\_json\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:639](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:639](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2630,7 +2630,7 @@ Defined in: [types/src/types/translations.ts:639](https://github.com/rebaseco/re
 
 > **include\_undefined\_values**: `string`
 
-Defined in: [types/src/types/translations.ts:422](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:422](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2638,7 +2638,7 @@ Defined in: [types/src/types/translations.ts:422](https://github.com/rebaseco/re
 
 > **incomplete\_condition**: `string`
 
-Defined in: [types/src/types/translations.ts:618](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:618](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2646,7 +2646,7 @@ Defined in: [types/src/types/translations.ts:618](https://github.com/rebaseco/re
 
 > **initialize**: `string`
 
-Defined in: [types/src/types/translations.ts:435](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:435](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2654,7 +2654,7 @@ Defined in: [types/src/types/translations.ts:435](https://github.com/rebaseco/re
 
 > **initialize\_kanban\_order**: `string`
 
-Defined in: [types/src/types/translations.ts:370](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:370](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2662,7 +2662,7 @@ Defined in: [types/src/types/translations.ts:370](https://github.com/rebaseco/re
 
 > **initialize\_kanban\_order\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:430](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:430](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2670,7 +2670,7 @@ Defined in: [types/src/types/translations.ts:430](https://github.com/rebaseco/re
 
 > **inline\_editing\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:638](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:638](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2678,7 +2678,7 @@ Defined in: [types/src/types/translations.ts:638](https://github.com/rebaseco/re
 
 > **inline\_editing\_disabled**: `string`
 
-Defined in: [types/src/types/translations.ts:637](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:637](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2686,7 +2686,7 @@ Defined in: [types/src/types/translations.ts:637](https://github.com/rebaseco/re
 
 > **inline\_editing\_enabled**: `string`
 
-Defined in: [types/src/types/translations.ts:636](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:636](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2694,7 +2694,7 @@ Defined in: [types/src/types/translations.ts:636](https://github.com/rebaseco/re
 
 > **integer\_value**: `string`
 
-Defined in: [types/src/types/translations.ts:611](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:611](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2702,7 +2702,7 @@ Defined in: [types/src/types/translations.ts:611](https://github.com/rebaseco/re
 
 > **internal\_error**: `string`
 
-Defined in: [types/src/types/translations.ts:143](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:143](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2710,7 +2710,7 @@ Defined in: [types/src/types/translations.ts:143](https://github.com/rebaseco/re
 
 > **invalid\_regular\_expression**: `string`
 
-Defined in: [types/src/types/translations.ts:614](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:614](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2718,7 +2718,7 @@ Defined in: [types/src/types/translations.ts:614](https://github.com/rebaseco/re
 
 > **is\_admin**: `string`
 
-Defined in: [types/src/types/translations.ts:375](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:375](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2726,7 +2726,7 @@ Defined in: [types/src/types/translations.ts:375](https://github.com/rebaseco/re
 
 > **is\_false**: `string`
 
-Defined in: [types/src/types/translations.ts:441](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:441](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2734,7 +2734,7 @@ Defined in: [types/src/types/translations.ts:441](https://github.com/rebaseco/re
 
 > **is\_subcollection\_of**: `string`
 
-Defined in: [types/src/types/translations.ts:234](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:234](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2742,7 +2742,7 @@ Defined in: [types/src/types/translations.ts:234](https://github.com/rebaseco/re
 
 > **is\_true**: `string`
 
-Defined in: [types/src/types/translations.ts:440](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:440](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2750,7 +2750,7 @@ Defined in: [types/src/types/translations.ts:440](https://github.com/rebaseco/re
 
 > **items\_need\_backfill**: `string`
 
-Defined in: [types/src/types/translations.ts:434](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:434](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2758,7 +2758,7 @@ Defined in: [types/src/types/translations.ts:434](https://github.com/rebaseco/re
 
 > **json**: `string`
 
-Defined in: [types/src/types/translations.ts:416](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:416](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2766,7 +2766,7 @@ Defined in: [types/src/types/translations.ts:416](https://github.com/rebaseco/re
 
 > **json\_view\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:641](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:641](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2774,7 +2774,7 @@ Defined in: [types/src/types/translations.ts:641](https://github.com/rebaseco/re
 
 > **kanban\_column\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:626](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:626](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2782,7 +2782,7 @@ Defined in: [types/src/types/translations.ts:626](https://github.com/rebaseco/re
 
 > **kanban\_column\_property**: `string`
 
-Defined in: [types/src/types/translations.ts:622](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:622](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2790,7 +2790,7 @@ Defined in: [types/src/types/translations.ts:622](https://github.com/rebaseco/re
 
 > **kanban\_property\_not\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:624](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:624](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2798,7 +2798,7 @@ Defined in: [types/src/types/translations.ts:624](https://github.com/rebaseco/re
 
 > **kanban\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:206](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:206](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2806,7 +2806,7 @@ Defined in: [types/src/types/translations.ts:206](https://github.com/rebaseco/re
 
 > **kanban\_view\_not\_available**: `string`
 
-Defined in: [types/src/types/translations.ts:431](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:431](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2814,7 +2814,7 @@ Defined in: [types/src/types/translations.ts:431](https://github.com/rebaseco/re
 
 > **kanban\_view\_requires\_enum**: `string`
 
-Defined in: [types/src/types/translations.ts:432](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:432](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2822,7 +2822,7 @@ Defined in: [types/src/types/translations.ts:432](https://github.com/rebaseco/re
 
 > **keep\_editing**: `string`
 
-Defined in: [types/src/types/translations.ts:47](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:47](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2830,7 +2830,7 @@ Defined in: [types/src/types/translations.ts:47](https://github.com/rebaseco/reb
 
 > **key**: `string`
 
-Defined in: [types/src/types/translations.ts:106](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:106](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Placeholder for the 'key' input in a KeyValue field
 
@@ -2840,7 +2840,7 @@ Placeholder for the 'key' input in a KeyValue field
 
 > **large\_number\_of\_documents**: `string`
 
-Defined in: [types/src/types/translations.ts:421](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:421](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2848,7 +2848,7 @@ Defined in: [types/src/types/translations.ts:421](https://github.com/rebaseco/re
 
 > **less\_than**: `string`
 
-Defined in: [types/src/types/translations.ts:607](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:607](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2856,7 +2856,7 @@ Defined in: [types/src/types/translations.ts:607](https://github.com/rebaseco/re
 
 > **light\_mode**: `string`
 
-Defined in: [types/src/types/translations.ts:362](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:362](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2864,7 +2864,7 @@ Defined in: [types/src/types/translations.ts:362](https://github.com/rebaseco/re
 
 > **list**: `string`
 
-Defined in: [types/src/types/translations.ts:427](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:427](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2872,7 +2872,7 @@ Defined in: [types/src/types/translations.ts:427](https://github.com/rebaseco/re
 
 > **loading**: `string`
 
-Defined in: [types/src/types/translations.ts:132](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:132](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2880,7 +2880,7 @@ Defined in: [types/src/types/translations.ts:132](https://github.com/rebaseco/re
 
 > **local\_changes\_applied**: `string`
 
-Defined in: [types/src/types/translations.ts:133](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:133](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2888,7 +2888,7 @@ Defined in: [types/src/types/translations.ts:133](https://github.com/rebaseco/re
 
 > **local\_changes\_discarded**: `string`
 
-Defined in: [types/src/types/translations.ts:134](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:134](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2896,7 +2896,7 @@ Defined in: [types/src/types/translations.ts:134](https://github.com/rebaseco/re
 
 > **log\_out**: `string`
 
-Defined in: [types/src/types/translations.ts:69](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:69](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2904,7 +2904,7 @@ Defined in: [types/src/types/translations.ts:69](https://github.com/rebaseco/reb
 
 > **logged\_user\_not\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:345](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:345](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2912,7 +2912,7 @@ Defined in: [types/src/types/translations.ts:345](https://github.com/rebaseco/re
 
 > **lowercase**: `string`
 
-Defined in: [types/src/types/translations.ts:596](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:596](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2920,7 +2920,7 @@ Defined in: [types/src/types/translations.ts:596](https://github.com/rebaseco/re
 
 > **map**: `string`
 
-Defined in: [types/src/types/translations.ts:84](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:84](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2928,7 +2928,7 @@ Defined in: [types/src/types/translations.ts:84](https://github.com/rebaseco/reb
 
 > **map\_to\_property**: `string`
 
-Defined in: [types/src/types/translations.ts:384](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:384](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2936,7 +2936,7 @@ Defined in: [types/src/types/translations.ts:384](https://github.com/rebaseco/re
 
 > **matches\_regex**: `string`
 
-Defined in: [types/src/types/translations.ts:602](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:602](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2944,7 +2944,7 @@ Defined in: [types/src/types/translations.ts:602](https://github.com/rebaseco/re
 
 > **max\_length**: `string`
 
-Defined in: [types/src/types/translations.ts:601](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:601](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2952,7 +2952,7 @@ Defined in: [types/src/types/translations.ts:601](https://github.com/rebaseco/re
 
 > **max\_value**: `string`
 
-Defined in: [types/src/types/translations.ts:606](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:606](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2960,7 +2960,7 @@ Defined in: [types/src/types/translations.ts:606](https://github.com/rebaseco/re
 
 > **min\_length**: `string`
 
-Defined in: [types/src/types/translations.ts:600](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:600](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2968,7 +2968,7 @@ Defined in: [types/src/types/translations.ts:600](https://github.com/rebaseco/re
 
 > **min\_value**: `string`
 
-Defined in: [types/src/types/translations.ts:605](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:605](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2976,7 +2976,7 @@ Defined in: [types/src/types/translations.ts:605](https://github.com/rebaseco/re
 
 > **modify\_collection\_with\_ai**: `string`
 
-Defined in: [types/src/types/translations.ts:504](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:504](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2984,7 +2984,7 @@ Defined in: [types/src/types/translations.ts:504](https://github.com/rebaseco/re
 
 > **more\_info**: `string`
 
-Defined in: [types/src/types/translations.ts:265](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:265](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -2992,7 +2992,7 @@ Defined in: [types/src/types/translations.ts:265](https://github.com/rebaseco/re
 
 > **more\_than**: `string`
 
-Defined in: [types/src/types/translations.ts:608](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:608](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3000,7 +3000,7 @@ Defined in: [types/src/types/translations.ts:608](https://github.com/rebaseco/re
 
 > **multiple\_deleted**: `string`
 
-Defined in: [types/src/types/translations.ts:447](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:447](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3008,7 +3008,7 @@ Defined in: [types/src/types/translations.ts:447](https://github.com/rebaseco/re
 
 > **multiple\_entities**: `string`
 
-Defined in: [types/src/types/translations.ts:356](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:356](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3016,7 +3016,7 @@ Defined in: [types/src/types/translations.ts:356](https://github.com/rebaseco/re
 
 > **must\_be\_at\_least\_one\_admin**: `string`
 
-Defined in: [types/src/types/translations.ts:344](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:344](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3024,7 +3024,7 @@ Defined in: [types/src/types/translations.ts:344](https://github.com/rebaseco/re
 
 > **must\_specify\_target\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:615](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:615](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3032,7 +3032,7 @@ Defined in: [types/src/types/translations.ts:615](https://github.com/rebaseco/re
 
 > **name**: `string`
 
-Defined in: [types/src/types/translations.ts:235](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:235](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3040,7 +3040,7 @@ Defined in: [types/src/types/translations.ts:235](https://github.com/rebaseco/re
 
 > **name\_of\_this\_role**: `string`
 
-Defined in: [types/src/types/translations.ts:315](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:315](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3048,7 +3048,7 @@ Defined in: [types/src/types/translations.ts:315](https://github.com/rebaseco/re
 
 > **name\_of\_this\_user**: `string`
 
-Defined in: [types/src/types/translations.ts:350](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:350](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3056,7 +3056,7 @@ Defined in: [types/src/types/translations.ts:350](https://github.com/rebaseco/re
 
 > **navigation\_drawer**: `string`
 
-Defined in: [types/src/types/translations.ts:115](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:115](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3064,7 +3064,7 @@ Defined in: [types/src/types/translations.ts:115](https://github.com/rebaseco/re
 
 > **need\_specify\_block\_properties**: `string`
 
-Defined in: [types/src/types/translations.ts:617](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:617](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3072,7 +3072,7 @@ Defined in: [types/src/types/translations.ts:617](https://github.com/rebaseco/re
 
 > **need\_specify\_repeat\_field**: `string`
 
-Defined in: [types/src/types/translations.ts:616](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:616](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3080,7 +3080,7 @@ Defined in: [types/src/types/translations.ts:616](https://github.com/rebaseco/re
 
 > **negative\_value**: `string`
 
-Defined in: [types/src/types/translations.ts:610](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:610](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3088,7 +3088,7 @@ Defined in: [types/src/types/translations.ts:610](https://github.com/rebaseco/re
 
 > **new\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:230](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:230](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3096,7 +3096,7 @@ Defined in: [types/src/types/translations.ts:230](https://github.com/rebaseco/re
 
 > **next**: `string`
 
-Defined in: [types/src/types/translations.ts:404](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:404](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3104,7 +3104,7 @@ Defined in: [types/src/types/translations.ts:404](https://github.com/rebaseco/re
 
 > **no**: `string`
 
-Defined in: [types/src/types/translations.ts:331](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:331](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3112,7 +3112,7 @@ Defined in: [types/src/types/translations.ts:331](https://github.com/rebaseco/re
 
 > **no\_active\_sessions**: `string`
 
-Defined in: [types/src/types/translations.ts:461](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:461](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3120,7 +3120,7 @@ Defined in: [types/src/types/translations.ts:461](https://github.com/rebaseco/re
 
 > **no\_collection\_selected**: `string`
 
-Defined in: [types/src/types/translations.ts:283](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:283](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3128,7 +3128,7 @@ Defined in: [types/src/types/translations.ts:283](https://github.com/rebaseco/re
 
 > **no\_collections\_configured**: `string`
 
-Defined in: [types/src/types/translations.ts:476](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:476](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3136,7 +3136,7 @@ Defined in: [types/src/types/translations.ts:476](https://github.com/rebaseco/re
 
 > **no\_collections\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:219](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:219](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3144,7 +3144,7 @@ Defined in: [types/src/types/translations.ts:219](https://github.com/rebaseco/re
 
 > **no\_collections\_found\_to\_setup**: `string`
 
-Defined in: [types/src/types/translations.ts:566](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:566](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3152,7 +3152,7 @@ Defined in: [types/src/types/translations.ts:566](https://github.com/rebaseco/re
 
 > **no\_custom\_actions\_defined**: `string`
 
-Defined in: [types/src/types/translations.ts:217](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:217](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3160,7 +3160,7 @@ Defined in: [types/src/types/translations.ts:217](https://github.com/rebaseco/re
 
 > **no\_custom\_views\_defined**: `string`
 
-Defined in: [types/src/types/translations.ts:215](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:215](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3168,7 +3168,7 @@ Defined in: [types/src/types/translations.ts:215](https://github.com/rebaseco/re
 
 > **no\_entries\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:58](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:58](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3176,7 +3176,7 @@ Defined in: [types/src/types/translations.ts:58](https://github.com/rebaseco/reb
 
 > **no\_enum\_string\_properties**: `string`
 
-Defined in: [types/src/types/translations.ts:625](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:625](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3184,7 +3184,7 @@ Defined in: [types/src/types/translations.ts:625](https://github.com/rebaseco/re
 
 > **no\_enum\_values\_configured**: `string`
 
-Defined in: [types/src/types/translations.ts:433](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:433](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3192,7 +3192,7 @@ Defined in: [types/src/types/translations.ts:433](https://github.com/rebaseco/re
 
 > **no\_filter**: `string`
 
-Defined in: [types/src/types/translations.ts:439](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:439](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3200,7 +3200,7 @@ Defined in: [types/src/types/translations.ts:439](https://github.com/rebaseco/re
 
 > **no\_filterable\_properties**: `string`
 
-Defined in: [types/src/types/translations.ts:425](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:425](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3208,7 +3208,7 @@ Defined in: [types/src/types/translations.ts:425](https://github.com/rebaseco/re
 
 > **no\_items**: `string`
 
-Defined in: [types/src/types/translations.ts:57](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:57](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3216,7 +3216,7 @@ Defined in: [types/src/types/translations.ts:57](https://github.com/rebaseco/reb
 
 > **no\_json\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:640](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:640](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3224,7 +3224,7 @@ Defined in: [types/src/types/translations.ts:640](https://github.com/rebaseco/re
 
 > **no\_number\_properties**: `string`
 
-Defined in: [types/src/types/translations.ts:630](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:630](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3232,7 +3232,7 @@ Defined in: [types/src/types/translations.ts:630](https://github.com/rebaseco/re
 
 > **no\_permissions\_create\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:226](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:226](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3240,7 +3240,7 @@ Defined in: [types/src/types/translations.ts:226](https://github.com/rebaseco/re
 
 > **no\_permissions\_edit\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:225](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:225](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3248,7 +3248,7 @@ Defined in: [types/src/types/translations.ts:225](https://github.com/rebaseco/re
 
 > **no\_permissions\_to\_edit\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:179](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:179](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3256,7 +3256,7 @@ Defined in: [types/src/types/translations.ts:179](https://github.com/rebaseco/re
 
 > **no\_results**: `string`
 
-Defined in: [types/src/types/translations.ts:359](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:359](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3264,7 +3264,7 @@ Defined in: [types/src/types/translations.ts:359](https://github.com/rebaseco/re
 
 > **no\_results\_filter\_sort**: `string`
 
-Defined in: [types/src/types/translations.ts:61](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:61](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3272,7 +3272,7 @@ Defined in: [types/src/types/translations.ts:61](https://github.com/rebaseco/reb
 
 > **no\_roles\_yet**: `string`
 
-Defined in: [types/src/types/translations.ts:166](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:166](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3280,7 +3280,7 @@ Defined in: [types/src/types/translations.ts:166](https://github.com/rebaseco/re
 
 > **no\_rules**: `string`
 
-Defined in: [types/src/types/translations.ts:478](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:478](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3288,7 +3288,7 @@ Defined in: [types/src/types/translations.ts:478](https://github.com/rebaseco/re
 
 > **no\_security\_rules\_defined**: `string`
 
-Defined in: [types/src/types/translations.ts:477](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:477](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3296,7 +3296,7 @@ Defined in: [types/src/types/translations.ts:477](https://github.com/rebaseco/re
 
 > **no\_unmapped\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:573](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:573](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3304,7 +3304,7 @@ Defined in: [types/src/types/translations.ts:573](https://github.com/rebaseco/re
 
 > **no\_users\_or\_roles\_defined**: `string`
 
-Defined in: [types/src/types/translations.ts:176](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:176](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3312,7 +3312,7 @@ Defined in: [types/src/types/translations.ts:176](https://github.com/rebaseco/re
 
 > **no\_users\_yet**: `string`
 
-Defined in: [types/src/types/translations.ts:170](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:170](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3320,7 +3320,7 @@ Defined in: [types/src/types/translations.ts:170](https://github.com/rebaseco/re
 
 > **not\_found\_suffix**: `string`
 
-Defined in: [types/src/types/translations.ts:642](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:642](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3328,7 +3328,7 @@ Defined in: [types/src/types/translations.ts:642](https://github.com/rebaseco/re
 
 > **not\_valid\_regexp**: `string`
 
-Defined in: [types/src/types/translations.ts:603](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:603](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3336,7 +3336,7 @@ Defined in: [types/src/types/translations.ts:603](https://github.com/rebaseco/re
 
 > **number**: `string`
 
-Defined in: [types/src/types/translations.ts:81](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:81](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3344,7 +3344,7 @@ Defined in: [types/src/types/translations.ts:81](https://github.com/rebaseco/reb
 
 > **ok**: `string`
 
-Defined in: [types/src/types/translations.ts:364](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:364](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3352,7 +3352,7 @@ Defined in: [types/src/types/translations.ts:364](https://github.com/rebaseco/re
 
 > **only\_admins\_change\_roles**: `string`
 
-Defined in: [types/src/types/translations.ts:343](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:343](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3360,7 +3360,7 @@ Defined in: [types/src/types/translations.ts:343](https://github.com/rebaseco/re
 
 > **only\_admins\_edit\_roles**: `string`
 
-Defined in: [types/src/types/translations.ts:312](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:312](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3368,7 +3368,7 @@ Defined in: [types/src/types/translations.ts:312](https://github.com/rebaseco/re
 
 > **only\_own\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:334](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:334](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3376,7 +3376,7 @@ Defined in: [types/src/types/translations.ts:334](https://github.com/rebaseco/re
 
 > **open\_image\_in\_new\_tab**: `string`
 
-Defined in: [types/src/types/translations.ts:159](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:159](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3384,7 +3384,7 @@ Defined in: [types/src/types/translations.ts:159](https://github.com/rebaseco/re
 
 > **open\_in\_console**: `string`
 
-Defined in: [types/src/types/translations.ts:135](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:135](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3392,7 +3392,7 @@ Defined in: [types/src/types/translations.ts:135](https://github.com/rebaseco/re
 
 > **open\_menu**: `string`
 
-Defined in: [types/src/types/translations.ts:113](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:113](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3400,7 +3400,7 @@ Defined in: [types/src/types/translations.ts:113](https://github.com/rebaseco/re
 
 > **order\_property**: `string`
 
-Defined in: [types/src/types/translations.ts:628](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:628](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3408,7 +3408,7 @@ Defined in: [types/src/types/translations.ts:628](https://github.com/rebaseco/re
 
 > **order\_property\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:631](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:631](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3416,7 +3416,7 @@ Defined in: [types/src/types/translations.ts:631](https://github.com/rebaseco/re
 
 > **order\_property\_not\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:629](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:629](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3424,7 +3424,7 @@ Defined in: [types/src/types/translations.ts:629](https://github.com/rebaseco/re
 
 > **own**: `string`
 
-Defined in: [types/src/types/translations.ts:335](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:335](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3432,7 +3432,7 @@ Defined in: [types/src/types/translations.ts:335](https://github.com/rebaseco/re
 
 > **page\_not\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:198](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:198](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3440,7 +3440,7 @@ Defined in: [types/src/types/translations.ts:198](https://github.com/rebaseco/re
 
 > **page\_not\_found\_body**: `string`
 
-Defined in: [types/src/types/translations.ts:199](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:199](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3448,7 +3448,7 @@ Defined in: [types/src/types/translations.ts:199](https://github.com/rebaseco/re
 
 > **pages**: `string`
 
-Defined in: [types/src/types/translations.ts:526](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:526](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3456,7 +3456,7 @@ Defined in: [types/src/types/translations.ts:526](https://github.com/rebaseco/re
 
 > **passkey\_error\_unsupported**: `string`
 
-Defined in: [types/src/types/translations.ts:146](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:146](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3464,7 +3464,7 @@ Defined in: [types/src/types/translations.ts:146](https://github.com/rebaseco/re
 
 > **paste\_json\_config**: `string`
 
-Defined in: [types/src/types/translations.ts:518](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:518](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3472,7 +3472,7 @@ Defined in: [types/src/types/translations.ts:518](https://github.com/rebaseco/re
 
 > **path**: `string`
 
-Defined in: [types/src/types/translations.ts:237](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:237](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3480,7 +3480,7 @@ Defined in: [types/src/types/translations.ts:237](https://github.com/rebaseco/re
 
 > **path\_in\_database**: `string`
 
-Defined in: [types/src/types/translations.ts:239](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:239](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3488,7 +3488,7 @@ Defined in: [types/src/types/translations.ts:239](https://github.com/rebaseco/re
 
 > **photo\_url**: `string`
 
-Defined in: [types/src/types/translations.ts:458](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:458](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3496,7 +3496,7 @@ Defined in: [types/src/types/translations.ts:458](https://github.com/rebaseco/re
 
 > **positive\_value**: `string`
 
-Defined in: [types/src/types/translations.ts:609](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:609](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3504,7 +3504,7 @@ Defined in: [types/src/types/translations.ts:609](https://github.com/rebaseco/re
 
 > **preview\_changes**: `string`
 
-Defined in: [types/src/types/translations.ts:74](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:74](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3512,7 +3512,7 @@ Defined in: [types/src/types/translations.ts:74](https://github.com/rebaseco/reb
 
 > **preview\_local\_changes**: `string`
 
-Defined in: [types/src/types/translations.ts:77](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:77](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3520,7 +3520,7 @@ Defined in: [types/src/types/translations.ts:77](https://github.com/rebaseco/reb
 
 > **preview\_local\_changes\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:78](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:78](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3528,7 +3528,7 @@ Defined in: [types/src/types/translations.ts:78](https://github.com/rebaseco/reb
 
 > **privacy\_policy**: `string`
 
-Defined in: [types/src/types/translations.ts:539](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:539](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3536,7 +3536,7 @@ Defined in: [types/src/types/translations.ts:539](https://github.com/rebaseco/re
 
 > **products**: `string`
 
-Defined in: [types/src/types/translations.ts:521](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:521](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3544,7 +3544,7 @@ Defined in: [types/src/types/translations.ts:521](https://github.com/rebaseco/re
 
 > **profile**: `string`
 
-Defined in: [types/src/types/translations.ts:455](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:455](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3552,7 +3552,7 @@ Defined in: [types/src/types/translations.ts:455](https://github.com/rebaseco/re
 
 > **project\_settings**: `string`
 
-Defined in: [types/src/types/translations.ts:533](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:533](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3560,7 +3560,7 @@ Defined in: [types/src/types/translations.ts:533](https://github.com/rebaseco/re
 
 > **properties\_in\_this\_group**: `string`
 
-Defined in: [types/src/types/translations.ts:306](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:306](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3568,7 +3568,7 @@ Defined in: [types/src/types/translations.ts:306](https://github.com/rebaseco/re
 
 > **property**: `string`
 
-Defined in: [types/src/types/translations.ts:387](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:387](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3576,7 +3576,7 @@ Defined in: [types/src/types/translations.ts:387](https://github.com/rebaseco/re
 
 > **property\_cant\_be\_edited**: `string`
 
-Defined in: [types/src/types/translations.ts:289](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:289](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3584,7 +3584,7 @@ Defined in: [types/src/types/translations.ts:289](https://github.com/rebaseco/re
 
 > **property\_edit\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:308](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:308](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3592,7 +3592,7 @@ Defined in: [types/src/types/translations.ts:308](https://github.com/rebaseco/re
 
 > **property\_not\_editable\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:290](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:290](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3600,7 +3600,7 @@ Defined in: [types/src/types/translations.ts:290](https://github.com/rebaseco/re
 
 > **query\_and\_update\_with\_datatalk**: `string`
 
-Defined in: [types/src/types/translations.ts:574](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:574](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3608,7 +3608,7 @@ Defined in: [types/src/types/translations.ts:574](https://github.com/rebaseco/re
 
 > **read**: `string`
 
-Defined in: [types/src/types/translations.ts:380](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:380](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3616,7 +3616,7 @@ Defined in: [types/src/types/translations.ts:380](https://github.com/rebaseco/re
 
 > **read\_entities**: `string`
 
-Defined in: [types/src/types/translations.ts:318](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:318](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3624,7 +3624,7 @@ Defined in: [types/src/types/translations.ts:318](https://github.com/rebaseco/re
 
 > **read\_the\_docs**: `string`
 
-Defined in: [types/src/types/translations.ts:584](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:584](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3632,7 +3632,7 @@ Defined in: [types/src/types/translations.ts:584](https://github.com/rebaseco/re
 
 > **read\_the\_docs\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:585](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:585](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3640,7 +3640,7 @@ Defined in: [types/src/types/translations.ts:585](https://github.com/rebaseco/re
 
 > **reference\_does\_not\_exist**: `string`
 
-Defined in: [types/src/types/translations.ts:161](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:161](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3648,7 +3648,7 @@ Defined in: [types/src/types/translations.ts:161](https://github.com/rebaseco/re
 
 > **reference\_not\_set**: `string`
 
-Defined in: [types/src/types/translations.ts:160](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:160](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3656,7 +3656,7 @@ Defined in: [types/src/types/translations.ts:160](https://github.com/rebaseco/re
 
 > **refresh\_data**: `string`
 
-Defined in: [types/src/types/translations.ts:360](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:360](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3664,7 +3664,7 @@ Defined in: [types/src/types/translations.ts:360](https://github.com/rebaseco/re
 
 > **regex\_helper**: `string`
 
-Defined in: [types/src/types/translations.ts:604](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:604](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3672,7 +3672,7 @@ Defined in: [types/src/types/translations.ts:604](https://github.com/rebaseco/re
 
 > **relative\_path\_to\_parent**: `string`
 
-Defined in: [types/src/types/translations.ts:238](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:238](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3680,7 +3680,7 @@ Defined in: [types/src/types/translations.ts:238](https://github.com/rebaseco/re
 
 > **remove**: `string`
 
-Defined in: [types/src/types/translations.ts:63](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:63](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3688,7 +3688,7 @@ Defined in: [types/src/types/translations.ts:63](https://github.com/rebaseco/reb
 
 > **remove\_action\_warning**: `string`
 
-Defined in: [types/src/types/translations.ts:270](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:270](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3696,7 +3696,7 @@ Defined in: [types/src/types/translations.ts:270](https://github.com/rebaseco/re
 
 > **remove\_collection\_warning**: `string`
 
-Defined in: [types/src/types/translations.ts:279](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:279](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3704,7 +3704,7 @@ Defined in: [types/src/types/translations.ts:279](https://github.com/rebaseco/re
 
 > **remove\_this\_action**: `string`
 
-Defined in: [types/src/types/translations.ts:269](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:269](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3712,7 +3712,7 @@ Defined in: [types/src/types/translations.ts:269](https://github.com/rebaseco/re
 
 > **remove\_this\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:280](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:280](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3720,7 +3720,7 @@ Defined in: [types/src/types/translations.ts:280](https://github.com/rebaseco/re
 
 > **remove\_view\_warning**: `string`
 
-Defined in: [types/src/types/translations.ts:281](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:281](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3728,7 +3728,7 @@ Defined in: [types/src/types/translations.ts:281](https://github.com/rebaseco/re
 
 > **rename\_group**: `string`
 
-Defined in: [types/src/types/translations.ts:182](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:182](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3736,7 +3736,7 @@ Defined in: [types/src/types/translations.ts:182](https://github.com/rebaseco/re
 
 > **required**: `string`
 
-Defined in: [types/src/types/translations.ts:300](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:300](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3744,7 +3744,7 @@ Defined in: [types/src/types/translations.ts:300](https://github.com/rebaseco/re
 
 > **required\_message**: `string`
 
-Defined in: [types/src/types/translations.ts:593](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:593](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3752,7 +3752,7 @@ Defined in: [types/src/types/translations.ts:593](https://github.com/rebaseco/re
 
 > **required\_tooltip**: `string`
 
-Defined in: [types/src/types/translations.ts:594](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:594](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3760,7 +3760,7 @@ Defined in: [types/src/types/translations.ts:594](https://github.com/rebaseco/re
 
 > **retry**: `string`
 
-Defined in: [types/src/types/translations.ts:396](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:396](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3768,7 +3768,7 @@ Defined in: [types/src/types/translations.ts:396](https://github.com/rebaseco/re
 
 > **revoke\_all\_sessions**: `string`
 
-Defined in: [types/src/types/translations.ts:463](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:463](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3776,7 +3776,7 @@ Defined in: [types/src/types/translations.ts:463](https://github.com/rebaseco/re
 
 > **revoking**: `string`
 
-Defined in: [types/src/types/translations.ts:462](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:462](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3784,7 +3784,7 @@ Defined in: [types/src/types/translations.ts:462](https://github.com/rebaseco/re
 
 > **role**: `string`
 
-Defined in: [types/src/types/translations.ts:314](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:314](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3792,7 +3792,7 @@ Defined in: [types/src/types/translations.ts:314](https://github.com/rebaseco/re
 
 > **role\_deleted\_successfully**: `string`
 
-Defined in: [types/src/types/translations.ts:472](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:472](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 RolesView — table & permissions
 
@@ -3802,7 +3802,7 @@ RolesView — table & permissions
 
 > **role\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:466](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:466](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3810,7 +3810,7 @@ Defined in: [types/src/types/translations.ts:466](https://github.com/rebaseco/re
 
 > **role\_name**: `string`
 
-Defined in: [types/src/types/translations.ts:467](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:467](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3818,7 +3818,7 @@ Defined in: [types/src/types/translations.ts:467](https://github.com/rebaseco/re
 
 > **roles**: `string`
 
-Defined in: [types/src/types/translations.ts:352](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:352](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3826,7 +3826,7 @@ Defined in: [types/src/types/translations.ts:352](https://github.com/rebaseco/re
 
 > **roles\_menu**: `string`
 
-Defined in: [types/src/types/translations.ts:532](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:532](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3834,7 +3834,7 @@ Defined in: [types/src/types/translations.ts:532](https://github.com/rebaseco/re
 
 > **save**: `string`
 
-Defined in: [types/src/types/translations.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:19](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3842,7 +3842,7 @@ Defined in: [types/src/types/translations.ts:19](https://github.com/rebaseco/reb
 
 > **save\_and\_close**: `string`
 
-Defined in: [types/src/types/translations.ts:23](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:23](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3850,7 +3850,7 @@ Defined in: [types/src/types/translations.ts:23](https://github.com/rebaseco/reb
 
 > **save\_before\_changing\_schema**: `string`
 
-Defined in: [types/src/types/translations.ts:177](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:177](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3858,7 +3858,7 @@ Defined in: [types/src/types/translations.ts:177](https://github.com/rebaseco/re
 
 > **save\_collection\_config**: `string`
 
-Defined in: [types/src/types/translations.ts:365](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:365](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3866,7 +3866,7 @@ Defined in: [types/src/types/translations.ts:365](https://github.com/rebaseco/re
 
 > **save\_data**: `string`
 
-Defined in: [types/src/types/translations.ts:405](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:405](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3874,7 +3874,7 @@ Defined in: [types/src/types/translations.ts:405](https://github.com/rebaseco/re
 
 > **save\_profile**: `string`
 
-Defined in: [types/src/types/translations.ts:459](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:459](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3882,7 +3882,7 @@ Defined in: [types/src/types/translations.ts:459](https://github.com/rebaseco/re
 
 > **saving**: `string`
 
-Defined in: [types/src/types/translations.ts:460](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:460](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3890,7 +3890,7 @@ Defined in: [types/src/types/translations.ts:460](https://github.com/rebaseco/re
 
 > **saving\_data**: `string`
 
-Defined in: [types/src/types/translations.ts:397](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:397](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3898,7 +3898,7 @@ Defined in: [types/src/types/translations.ts:397](https://github.com/rebaseco/re
 
 > **search**: `string`
 
-Defined in: [types/src/types/translations.ts:50](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:50](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3906,7 +3906,7 @@ Defined in: [types/src/types/translations.ts:50](https://github.com/rebaseco/reb
 
 > **search\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:188](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:188](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3914,7 +3914,7 @@ Defined in: [types/src/types/translations.ts:188](https://github.com/rebaseco/re
 
 > **search\_for\_more\_icons**: `string`
 
-Defined in: [types/src/types/translations.ts:366](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:366](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3922,7 +3922,7 @@ Defined in: [types/src/types/translations.ts:366](https://github.com/rebaseco/re
 
 > **see\_console\_details**: `string`
 
-Defined in: [types/src/types/translations.ts:136](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:136](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3930,7 +3930,7 @@ Defined in: [types/src/types/translations.ts:136](https://github.com/rebaseco/re
 
 > **select\_a\_property**: `string`
 
-Defined in: [types/src/types/translations.ts:623](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:623](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3938,7 +3938,7 @@ Defined in: [types/src/types/translations.ts:623](https://github.com/rebaseco/re
 
 > **select\_custom\_action**: `string`
 
-Defined in: [types/src/types/translations.ts:216](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:216](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3946,7 +3946,7 @@ Defined in: [types/src/types/translations.ts:216](https://github.com/rebaseco/re
 
 > **select\_custom\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:214](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:214](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3954,7 +3954,7 @@ Defined in: [types/src/types/translations.ts:214](https://github.com/rebaseco/re
 
 > **select\_from**: `string`
 
-Defined in: [types/src/types/translations.ts:67](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:67](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3962,7 +3962,7 @@ Defined in: [types/src/types/translations.ts:67](https://github.com/rebaseco/reb
 
 > **select\_property\_widget**: `string`
 
-Defined in: [types/src/types/translations.ts:298](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:298](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3970,7 +3970,7 @@ Defined in: [types/src/types/translations.ts:298](https://github.com/rebaseco/re
 
 > **select\_reference**: `string`
 
-Defined in: [types/src/types/translations.ts:452](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:452](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3978,7 +3978,7 @@ Defined in: [types/src/types/translations.ts:452](https://github.com/rebaseco/re
 
 > **select\_references**: `string`
 
-Defined in: [types/src/types/translations.ts:453](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:453](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3986,7 +3986,7 @@ Defined in: [types/src/types/translations.ts:453](https://github.com/rebaseco/re
 
 > **select\_specific**: `string`
 
-Defined in: [types/src/types/translations.ts:66](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:66](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -3994,7 +3994,7 @@ Defined in: [types/src/types/translations.ts:66](https://github.com/rebaseco/reb
 
 > **select\_template**: `string`
 
-Defined in: [types/src/types/translations.ts:520](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:520](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4002,7 +4002,7 @@ Defined in: [types/src/types/translations.ts:520](https://github.com/rebaseco/re
 
 > **sessions**: `string`
 
-Defined in: [types/src/types/translations.ts:456](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:456](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4010,7 +4010,7 @@ Defined in: [types/src/types/translations.ts:456](https://github.com/rebaseco/re
 
 > **set\_value\_to\_false**: `string`
 
-Defined in: [types/src/types/translations.ts:393](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:393](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4018,7 +4018,7 @@ Defined in: [types/src/types/translations.ts:393](https://github.com/rebaseco/re
 
 > **set\_value\_to\_true**: `string`
 
-Defined in: [types/src/types/translations.ts:392](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:392](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4026,7 +4026,7 @@ Defined in: [types/src/types/translations.ts:392](https://github.com/rebaseco/re
 
 > **settings\_default\_language**: `string`
 
-Defined in: [types/src/types/translations.ts:693](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:693](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4034,7 +4034,7 @@ Defined in: [types/src/types/translations.ts:693](https://github.com/rebaseco/re
 
 > **settings\_default\_language\_caption**: `string`
 
-Defined in: [types/src/types/translations.ts:694](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:694](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4042,7 +4042,7 @@ Defined in: [types/src/types/translations.ts:694](https://github.com/rebaseco/re
 
 > **settings\_doc\_history\_all\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:697](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:697](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4050,7 +4050,7 @@ Defined in: [types/src/types/translations.ts:697](https://github.com/rebaseco/re
 
 > **settings\_doc\_history\_caption**: `string`
 
-Defined in: [types/src/types/translations.ts:698](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:698](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4058,7 +4058,7 @@ Defined in: [types/src/types/translations.ts:698](https://github.com/rebaseco/re
 
 > **settings\_drag\_drop\_logo**: `string`
 
-Defined in: [types/src/types/translations.ts:703](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:703](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4066,7 +4066,7 @@ Defined in: [types/src/types/translations.ts:703](https://github.com/rebaseco/re
 
 > **settings\_enable\_local\_text\_search**: `string`
 
-Defined in: [types/src/types/translations.ts:695](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:695](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4074,7 +4074,7 @@ Defined in: [types/src/types/translations.ts:695](https://github.com/rebaseco/re
 
 > **settings\_heading**: `string`
 
-Defined in: [types/src/types/translations.ts:691](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:691](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4082,7 +4082,7 @@ Defined in: [types/src/types/translations.ts:691](https://github.com/rebaseco/re
 
 > **settings\_local\_text\_search\_caption**: `string`
 
-Defined in: [types/src/types/translations.ts:696](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:696](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4090,7 +4090,7 @@ Defined in: [types/src/types/translations.ts:696](https://github.com/rebaseco/re
 
 > **settings\_primary\_color**: `string`
 
-Defined in: [types/src/types/translations.ts:700](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:700](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4098,7 +4098,7 @@ Defined in: [types/src/types/translations.ts:700](https://github.com/rebaseco/re
 
 > **settings\_project\_name**: `string`
 
-Defined in: [types/src/types/translations.ts:692](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:692](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4106,7 +4106,7 @@ Defined in: [types/src/types/translations.ts:692](https://github.com/rebaseco/re
 
 > **settings\_sample\_theme\_components**: `string`
 
-Defined in: [types/src/types/translations.ts:702](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:702](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4114,7 +4114,7 @@ Defined in: [types/src/types/translations.ts:702](https://github.com/rebaseco/re
 
 > **settings\_secondary\_color**: `string`
 
-Defined in: [types/src/types/translations.ts:701](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:701](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4122,7 +4122,7 @@ Defined in: [types/src/types/translations.ts:701](https://github.com/rebaseco/re
 
 > **settings\_security\_rules**: `string`
 
-Defined in: [types/src/types/translations.ts:704](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:704](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4130,7 +4130,7 @@ Defined in: [types/src/types/translations.ts:704](https://github.com/rebaseco/re
 
 > **settings\_security\_rules\_add\_domain**: `string`
 
-Defined in: [types/src/types/translations.ts:706](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:706](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4138,7 +4138,7 @@ Defined in: [types/src/types/translations.ts:706](https://github.com/rebaseco/re
 
 > **settings\_security\_rules\_caption**: `string`
 
-Defined in: [types/src/types/translations.ts:707](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:707](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4146,7 +4146,7 @@ Defined in: [types/src/types/translations.ts:707](https://github.com/rebaseco/re
 
 > **settings\_security\_rules\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:705](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:705](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4154,7 +4154,7 @@ Defined in: [types/src/types/translations.ts:705](https://github.com/rebaseco/re
 
 > **settings\_theme**: `string`
 
-Defined in: [types/src/types/translations.ts:699](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:699](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4162,7 +4162,7 @@ Defined in: [types/src/types/translations.ts:699](https://github.com/rebaseco/re
 
 > **should\_documents\_opened\_full\_screen**: `string`
 
-Defined in: [types/src/types/translations.ts:212](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:212](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4170,7 +4170,7 @@ Defined in: [types/src/types/translations.ts:212](https://github.com/rebaseco/re
 
 > **side\_dialog\_width**: `string`
 
-Defined in: [types/src/types/translations.ts:634](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:634](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4178,7 +4178,7 @@ Defined in: [types/src/types/translations.ts:634](https://github.com/rebaseco/re
 
 > **side\_dialog\_width\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:635](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:635](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4186,7 +4186,7 @@ Defined in: [types/src/types/translations.ts:635](https://github.com/rebaseco/re
 
 > **side\_panel**: `string`
 
-Defined in: [types/src/types/translations.ts:210](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:210](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4194,7 +4194,7 @@ Defined in: [types/src/types/translations.ts:210](https://github.com/rebaseco/re
 
 > **sign\_in\_with\_google**: `string`
 
-Defined in: [types/src/types/translations.ts:541](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:541](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4202,7 +4202,7 @@ Defined in: [types/src/types/translations.ts:541](https://github.com/rebaseco/re
 
 > **singular\_name**: `string`
 
-Defined in: [types/src/types/translations.ts:240](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:240](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4210,7 +4210,7 @@ Defined in: [types/src/types/translations.ts:240](https://github.com/rebaseco/re
 
 > **singular\_name\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:241](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:241](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4218,7 +4218,7 @@ Defined in: [types/src/types/translations.ts:241](https://github.com/rebaseco/re
 
 > **size\_label**: `string`
 
-Defined in: [types/src/types/translations.ts:368](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:368](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4226,7 +4226,7 @@ Defined in: [types/src/types/translations.ts:368](https://github.com/rebaseco/re
 
 > **so\_empty**: `string`
 
-Defined in: [types/src/types/translations.ts:358](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:358](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4234,7 +4234,7 @@ Defined in: [types/src/types/translations.ts:358](https://github.com/rebaseco/re
 
 > **some\_entities\_deleted**: `string`
 
-Defined in: [types/src/types/translations.ts:448](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:448](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4242,7 +4242,7 @@ Defined in: [types/src/types/translations.ts:448](https://github.com/rebaseco/re
 
 > **start\_building\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:220](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:220](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4250,7 +4250,7 @@ Defined in: [types/src/types/translations.ts:220](https://github.com/rebaseco/re
 
 > **string**: `string`
 
-Defined in: [types/src/types/translations.ts:80](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:80](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4258,7 +4258,7 @@ Defined in: [types/src/types/translations.ts:80](https://github.com/rebaseco/reb
 
 > **studio\_add\_kanban\_column**: `string`
 
-Defined in: [types/src/types/translations.ts:861](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:861](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4266,7 +4266,7 @@ Defined in: [types/src/types/translations.ts:861](https://github.com/rebaseco/re
 
 > **studio\_add\_kanban\_column\_add**: `string`
 
-Defined in: [types/src/types/translations.ts:865](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:865](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4274,7 +4274,7 @@ Defined in: [types/src/types/translations.ts:865](https://github.com/rebaseco/re
 
 > **studio\_add\_kanban\_column\_adding**: `string`
 
-Defined in: [types/src/types/translations.ts:889](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:889](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4282,7 +4282,7 @@ Defined in: [types/src/types/translations.ts:889](https://github.com/rebaseco/re
 
 > **studio\_add\_kanban\_column\_cancel**: `string`
 
-Defined in: [types/src/types/translations.ts:866](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:866](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4290,7 +4290,7 @@ Defined in: [types/src/types/translations.ts:866](https://github.com/rebaseco/re
 
 > **studio\_add\_kanban\_column\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:888](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:888](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4298,7 +4298,7 @@ Defined in: [types/src/types/translations.ts:888](https://github.com/rebaseco/re
 
 > **studio\_add\_kanban\_column\_name**: `string`
 
-Defined in: [types/src/types/translations.ts:863](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:863](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4306,7 +4306,7 @@ Defined in: [types/src/types/translations.ts:863](https://github.com/rebaseco/re
 
 > **studio\_add\_kanban\_column\_name\_placeholder**: `string`
 
-Defined in: [types/src/types/translations.ts:864](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:864](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4314,7 +4314,7 @@ Defined in: [types/src/types/translations.ts:864](https://github.com/rebaseco/re
 
 > **studio\_add\_kanban\_column\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:862](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:862](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4322,7 +4322,7 @@ Defined in: [types/src/types/translations.ts:862](https://github.com/rebaseco/re
 
 > **studio\_collection\_view\_cms**: `string`
 
-Defined in: [types/src/types/translations.ts:868](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:868](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4330,7 +4330,7 @@ Defined in: [types/src/types/translations.ts:868](https://github.com/rebaseco/re
 
 > **studio\_collection\_view\_edit**: `string`
 
-Defined in: [types/src/types/translations.ts:890](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:890](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4338,7 +4338,7 @@ Defined in: [types/src/types/translations.ts:890](https://github.com/rebaseco/re
 
 > **studio\_collection\_view\_sql**: `string`
 
-Defined in: [types/src/types/translations.ts:867](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:867](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4346,7 +4346,7 @@ Defined in: [types/src/types/translations.ts:867](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_disabled**: `string`
 
-Defined in: [types/src/types/translations.ts:891](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:891](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4354,7 +4354,7 @@ Defined in: [types/src/types/translations.ts:891](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_edit**: `string`
 
-Defined in: [types/src/types/translations.ts:892](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:892](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4362,7 +4362,7 @@ Defined in: [types/src/types/translations.ts:892](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_no\_permission**: `string`
 
-Defined in: [types/src/types/translations.ts:870](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:870](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4370,7 +4370,7 @@ Defined in: [types/src/types/translations.ts:870](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_start\_clear\_filter**: `string`
 
-Defined in: [types/src/types/translations.ts:896](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:896](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4378,7 +4378,7 @@ Defined in: [types/src/types/translations.ts:896](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_start\_copied**: `string`
 
-Defined in: [types/src/types/translations.ts:873](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:873](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4386,7 +4386,7 @@ Defined in: [types/src/types/translations.ts:873](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_start\_no\_permission**: `string`
 
-Defined in: [types/src/types/translations.ts:872](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:872](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4394,7 +4394,7 @@ Defined in: [types/src/types/translations.ts:872](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_start\_reset\_filter**: `string`
 
-Defined in: [types/src/types/translations.ts:897](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:897](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4402,7 +4402,7 @@ Defined in: [types/src/types/translations.ts:897](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_start\_save\_filter**: `string`
 
-Defined in: [types/src/types/translations.ts:895](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:895](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4410,7 +4410,7 @@ Defined in: [types/src/types/translations.ts:895](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_start\_saved**: `string`
 
-Defined in: [types/src/types/translations.ts:898](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:898](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4418,7 +4418,7 @@ Defined in: [types/src/types/translations.ts:898](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_start\_tooltip**: `string`
 
-Defined in: [types/src/types/translations.ts:871](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:871](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4426,7 +4426,7 @@ Defined in: [types/src/types/translations.ts:871](https://github.com/rebaseco/re
 
 > **studio\_editor\_collection\_tooltip**: `string`
 
-Defined in: [types/src/types/translations.ts:869](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:869](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4434,7 +4434,7 @@ Defined in: [types/src/types/translations.ts:869](https://github.com/rebaseco/re
 
 > **studio\_editor\_entity\_edit\_schema**: `string`
 
-Defined in: [types/src/types/translations.ts:894](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:894](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4442,7 +4442,7 @@ Defined in: [types/src/types/translations.ts:894](https://github.com/rebaseco/re
 
 > **studio\_editor\_entity\_no\_permission**: `string`
 
-Defined in: [types/src/types/translations.ts:875](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:875](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4450,7 +4450,7 @@ Defined in: [types/src/types/translations.ts:875](https://github.com/rebaseco/re
 
 > **studio\_editor\_entity\_save\_first**: `string`
 
-Defined in: [types/src/types/translations.ts:893](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:893](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4458,7 +4458,7 @@ Defined in: [types/src/types/translations.ts:893](https://github.com/rebaseco/re
 
 > **studio\_editor\_entity\_tooltip**: `string`
 
-Defined in: [types/src/types/translations.ts:874](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:874](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4466,7 +4466,7 @@ Defined in: [types/src/types/translations.ts:874](https://github.com/rebaseco/re
 
 > **studio\_home\_collection\_deleted**: `string`
 
-Defined in: [types/src/types/translations.ts:902](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:902](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4474,7 +4474,7 @@ Defined in: [types/src/types/translations.ts:902](https://github.com/rebaseco/re
 
 > **studio\_home\_confirm\_delete\_body**: `string`
 
-Defined in: [types/src/types/translations.ts:879](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:879](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4482,7 +4482,7 @@ Defined in: [types/src/types/translations.ts:879](https://github.com/rebaseco/re
 
 > **studio\_home\_confirm\_delete\_no\_data**: `string`
 
-Defined in: [types/src/types/translations.ts:901](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:901](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4490,7 +4490,7 @@ Defined in: [types/src/types/translations.ts:901](https://github.com/rebaseco/re
 
 > **studio\_home\_confirm\_delete\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:878](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:878](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4498,7 +4498,7 @@ Defined in: [types/src/types/translations.ts:878](https://github.com/rebaseco/re
 
 > **studio\_home\_delete**: `string`
 
-Defined in: [types/src/types/translations.ts:900](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:900](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4506,7 +4506,7 @@ Defined in: [types/src/types/translations.ts:900](https://github.com/rebaseco/re
 
 > **studio\_home\_delete\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:877](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:877](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4514,7 +4514,7 @@ Defined in: [types/src/types/translations.ts:877](https://github.com/rebaseco/re
 
 > **studio\_home\_duplicate\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:899](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:899](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4522,7 +4522,7 @@ Defined in: [types/src/types/translations.ts:899](https://github.com/rebaseco/re
 
 > **studio\_home\_edit\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:876](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:876](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4530,7 +4530,7 @@ Defined in: [types/src/types/translations.ts:876](https://github.com/rebaseco/re
 
 > **studio\_kanban\_configure**: `string`
 
-Defined in: [types/src/types/translations.ts:903](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:903](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4538,7 +4538,7 @@ Defined in: [types/src/types/translations.ts:903](https://github.com/rebaseco/re
 
 > **studio\_kanban\_setup**: `string`
 
-Defined in: [types/src/types/translations.ts:880](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:880](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4546,7 +4546,7 @@ Defined in: [types/src/types/translations.ts:880](https://github.com/rebaseco/re
 
 > **studio\_missing\_reference**: `string`
 
-Defined in: [types/src/types/translations.ts:881](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:881](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4554,7 +4554,7 @@ Defined in: [types/src/types/translations.ts:881](https://github.com/rebaseco/re
 
 > **studio\_missing\_reference\_create**: `string`
 
-Defined in: [types/src/types/translations.ts:882](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:882](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4562,7 +4562,7 @@ Defined in: [types/src/types/translations.ts:882](https://github.com/rebaseco/re
 
 > **studio\_missing\_reference\_error**: `string`
 
-Defined in: [types/src/types/translations.ts:904](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:904](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4570,7 +4570,7 @@ Defined in: [types/src/types/translations.ts:904](https://github.com/rebaseco/re
 
 > **studio\_new\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:883](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:883](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4578,7 +4578,7 @@ Defined in: [types/src/types/translations.ts:883](https://github.com/rebaseco/re
 
 > **studio\_new\_collection\_add**: `string`
 
-Defined in: [types/src/types/translations.ts:905](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:905](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4586,7 +4586,7 @@ Defined in: [types/src/types/translations.ts:905](https://github.com/rebaseco/re
 
 > **studio\_new\_collection\_card**: `string`
 
-Defined in: [types/src/types/translations.ts:884](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:884](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4594,7 +4594,7 @@ Defined in: [types/src/types/translations.ts:884](https://github.com/rebaseco/re
 
 > **studio\_new\_collection\_no\_permission**: `string`
 
-Defined in: [types/src/types/translations.ts:885](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:885](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4602,7 +4602,7 @@ Defined in: [types/src/types/translations.ts:885](https://github.com/rebaseco/re
 
 > **studio\_policy\_behavior**: `string`
 
-Defined in: [types/src/types/translations.ts:824](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:824](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4610,7 +4610,7 @@ Defined in: [types/src/types/translations.ts:824](https://github.com/rebaseco/re
 
 > **studio\_policy\_cancel**: `string`
 
-Defined in: [types/src/types/translations.ts:818](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:818](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4618,7 +4618,7 @@ Defined in: [types/src/types/translations.ts:818](https://github.com/rebaseco/re
 
 > **studio\_policy\_check\_expr**: `string`
 
-Defined in: [types/src/types/translations.ts:834](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:834](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4626,7 +4626,7 @@ Defined in: [types/src/types/translations.ts:834](https://github.com/rebaseco/re
 
 > **studio\_policy\_check\_expr\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:835](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:835](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4634,7 +4634,7 @@ Defined in: [types/src/types/translations.ts:835](https://github.com/rebaseco/re
 
 > **studio\_policy\_command**: `string`
 
-Defined in: [types/src/types/translations.ts:829](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:829](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4642,7 +4642,7 @@ Defined in: [types/src/types/translations.ts:829](https://github.com/rebaseco/re
 
 > **studio\_policy\_create**: `string`
 
-Defined in: [types/src/types/translations.ts:816](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:816](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4650,7 +4650,7 @@ Defined in: [types/src/types/translations.ts:816](https://github.com/rebaseco/re
 
 > **studio\_policy\_defining\_rules**: `string`
 
-Defined in: [types/src/types/translations.ts:817](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:817](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4658,7 +4658,7 @@ Defined in: [types/src/types/translations.ts:817](https://github.com/rebaseco/re
 
 > **studio\_policy\_edit**: `string`
 
-Defined in: [types/src/types/translations.ts:815](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:815](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4666,7 +4666,7 @@ Defined in: [types/src/types/translations.ts:815](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_auth\_jwt**: `string`
 
-Defined in: [types/src/types/translations.ts:854](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:854](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4674,7 +4674,7 @@ Defined in: [types/src/types/translations.ts:854](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_auth\_roles**: `string`
 
-Defined in: [types/src/types/translations.ts:855](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:855](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4682,7 +4682,7 @@ Defined in: [types/src/types/translations.ts:855](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_auth\_uid**: `string`
 
-Defined in: [types/src/types/translations.ts:853](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:853](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4690,7 +4690,7 @@ Defined in: [types/src/types/translations.ts:853](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_auth\_vars\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:852](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:852](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4698,7 +4698,7 @@ Defined in: [types/src/types/translations.ts:852](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_auth\_vars\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:851](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:851](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4706,7 +4706,7 @@ Defined in: [types/src/types/translations.ts:851](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_docs\_cta**: `string`
 
-Defined in: [types/src/types/translations.ts:856](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:856](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4714,7 +4714,7 @@ Defined in: [types/src/types/translations.ts:856](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_got\_it**: `string`
 
-Defined in: [types/src/types/translations.ts:858](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:858](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4722,7 +4722,7 @@ Defined in: [types/src/types/translations.ts:858](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_intro**: `string`
 
-Defined in: [types/src/types/translations.ts:837](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:837](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4730,7 +4730,7 @@ Defined in: [types/src/types/translations.ts:837](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_read\_docs**: `string`
 
-Defined in: [types/src/types/translations.ts:857](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:857](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4738,7 +4738,7 @@ Defined in: [types/src/types/translations.ts:857](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_role\_anon**: `string`
 
-Defined in: [types/src/types/translations.ts:844](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:844](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4746,7 +4746,7 @@ Defined in: [types/src/types/translations.ts:844](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_role\_authenticated**: `string`
 
-Defined in: [types/src/types/translations.ts:843](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:843](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4754,7 +4754,7 @@ Defined in: [types/src/types/translations.ts:843](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_role\_public**: `string`
 
-Defined in: [types/src/types/translations.ts:842](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:842](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4762,7 +4762,7 @@ Defined in: [types/src/types/translations.ts:842](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_step1\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:839](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:839](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4770,7 +4770,7 @@ Defined in: [types/src/types/translations.ts:839](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_step1\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:838](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:838](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4778,7 +4778,7 @@ Defined in: [types/src/types/translations.ts:838](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_step2\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:841](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:841](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4786,7 +4786,7 @@ Defined in: [types/src/types/translations.ts:841](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_step2\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:840](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:840](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4794,7 +4794,7 @@ Defined in: [types/src/types/translations.ts:840](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_step3\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:846](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:846](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4802,7 +4802,7 @@ Defined in: [types/src/types/translations.ts:846](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_step3\_example**: `string`
 
-Defined in: [types/src/types/translations.ts:847](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:847](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4810,7 +4810,7 @@ Defined in: [types/src/types/translations.ts:847](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_step3\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:845](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:845](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4818,7 +4818,7 @@ Defined in: [types/src/types/translations.ts:845](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_step4\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:849](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:849](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4826,7 +4826,7 @@ Defined in: [types/src/types/translations.ts:849](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_step4\_example**: `string`
 
-Defined in: [types/src/types/translations.ts:850](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:850](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4834,7 +4834,7 @@ Defined in: [types/src/types/translations.ts:850](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_step4\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:848](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:848](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4842,7 +4842,7 @@ Defined in: [types/src/types/translations.ts:848](https://github.com/rebaseco/re
 
 > **studio\_policy\_help\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:836](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:836](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4850,7 +4850,7 @@ Defined in: [types/src/types/translations.ts:836](https://github.com/rebaseco/re
 
 > **studio\_policy\_name**: `string`
 
-Defined in: [types/src/types/translations.ts:822](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:822](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4858,7 +4858,7 @@ Defined in: [types/src/types/translations.ts:822](https://github.com/rebaseco/re
 
 > **studio\_policy\_name\_placeholder**: `string`
 
-Defined in: [types/src/types/translations.ts:823](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:823](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4866,7 +4866,7 @@ Defined in: [types/src/types/translations.ts:823](https://github.com/rebaseco/re
 
 > **studio\_policy\_permissive**: `string`
 
-Defined in: [types/src/types/translations.ts:825](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:825](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4874,7 +4874,7 @@ Defined in: [types/src/types/translations.ts:825](https://github.com/rebaseco/re
 
 > **studio\_policy\_permissive\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:826](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:826](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4882,7 +4882,7 @@ Defined in: [types/src/types/translations.ts:826](https://github.com/rebaseco/re
 
 > **studio\_policy\_restrictive**: `string`
 
-Defined in: [types/src/types/translations.ts:827](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:827](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4890,7 +4890,7 @@ Defined in: [types/src/types/translations.ts:827](https://github.com/rebaseco/re
 
 > **studio\_policy\_restrictive\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:828](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:828](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4898,7 +4898,7 @@ Defined in: [types/src/types/translations.ts:828](https://github.com/rebaseco/re
 
 > **studio\_policy\_roles\_placeholder**: `string`
 
-Defined in: [types/src/types/translations.ts:831](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:831](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4906,7 +4906,7 @@ Defined in: [types/src/types/translations.ts:831](https://github.com/rebaseco/re
 
 > **studio\_policy\_save**: `string`
 
-Defined in: [types/src/types/translations.ts:819](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:819](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4914,7 +4914,7 @@ Defined in: [types/src/types/translations.ts:819](https://github.com/rebaseco/re
 
 > **studio\_policy\_select\_template**: `string`
 
-Defined in: [types/src/types/translations.ts:821](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:821](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4922,7 +4922,7 @@ Defined in: [types/src/types/translations.ts:821](https://github.com/rebaseco/re
 
 > **studio\_policy\_target\_roles**: `string`
 
-Defined in: [types/src/types/translations.ts:830](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:830](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4930,7 +4930,7 @@ Defined in: [types/src/types/translations.ts:830](https://github.com/rebaseco/re
 
 > **studio\_policy\_template**: `string`
 
-Defined in: [types/src/types/translations.ts:820](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:820](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4938,7 +4938,7 @@ Defined in: [types/src/types/translations.ts:820](https://github.com/rebaseco/re
 
 > **studio\_policy\_using\_expr**: `string`
 
-Defined in: [types/src/types/translations.ts:832](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:832](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4946,7 +4946,7 @@ Defined in: [types/src/types/translations.ts:832](https://github.com/rebaseco/re
 
 > **studio\_policy\_using\_expr\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:833](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:833](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4954,7 +4954,7 @@ Defined in: [types/src/types/translations.ts:833](https://github.com/rebaseco/re
 
 > **studio\_property\_add\_column**: `string`
 
-Defined in: [types/src/types/translations.ts:886](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:886](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4962,7 +4962,7 @@ Defined in: [types/src/types/translations.ts:886](https://github.com/rebaseco/re
 
 > **studio\_property\_add\_column\_no\_permission**: `string`
 
-Defined in: [types/src/types/translations.ts:887](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:887](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4970,7 +4970,7 @@ Defined in: [types/src/types/translations.ts:887](https://github.com/rebaseco/re
 
 > **studio\_rls\_add\_first\_policy**: `string`
 
-Defined in: [types/src/types/translations.ts:795](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:795](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4978,7 +4978,7 @@ Defined in: [types/src/types/translations.ts:795](https://github.com/rebaseco/re
 
 > **studio\_rls\_confirm\_delete\_body**: `string`
 
-Defined in: [types/src/types/translations.ts:803](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:803](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4986,7 +4986,7 @@ Defined in: [types/src/types/translations.ts:803](https://github.com/rebaseco/re
 
 > **studio\_rls\_confirm\_delete\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:802](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:802](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -4994,7 +4994,7 @@ Defined in: [types/src/types/translations.ts:802](https://github.com/rebaseco/re
 
 > **studio\_rls\_confirm\_disable\_body**: `string`
 
-Defined in: [types/src/types/translations.ts:807](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:807](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5002,7 +5002,7 @@ Defined in: [types/src/types/translations.ts:807](https://github.com/rebaseco/re
 
 > **studio\_rls\_confirm\_disable\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:806](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:806](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5010,7 +5010,7 @@ Defined in: [types/src/types/translations.ts:806](https://github.com/rebaseco/re
 
 > **studio\_rls\_confirm\_enable\_body**: `string`
 
-Defined in: [types/src/types/translations.ts:805](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:805](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5018,7 +5018,7 @@ Defined in: [types/src/types/translations.ts:805](https://github.com/rebaseco/re
 
 > **studio\_rls\_confirm\_enable\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:804](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:804](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5026,7 +5026,7 @@ Defined in: [types/src/types/translations.ts:804](https://github.com/rebaseco/re
 
 > **studio\_rls\_create\_policy**: `string`
 
-Defined in: [types/src/types/translations.ts:791](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:791](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5034,7 +5034,7 @@ Defined in: [types/src/types/translations.ts:791](https://github.com/rebaseco/re
 
 > **studio\_rls\_delete**: `string`
 
-Defined in: [types/src/types/translations.ts:801](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:801](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5042,7 +5042,7 @@ Defined in: [types/src/types/translations.ts:801](https://github.com/rebaseco/re
 
 > **studio\_rls\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:785](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:785](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5050,7 +5050,7 @@ Defined in: [types/src/types/translations.ts:785](https://github.com/rebaseco/re
 
 > **studio\_rls\_disable\_force\_rls**: `string`
 
-Defined in: [types/src/types/translations.ts:799](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:799](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5058,7 +5058,7 @@ Defined in: [types/src/types/translations.ts:799](https://github.com/rebaseco/re
 
 > **studio\_rls\_disable\_rls**: `string`
 
-Defined in: [types/src/types/translations.ts:790](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:790](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5066,7 +5066,7 @@ Defined in: [types/src/types/translations.ts:790](https://github.com/rebaseco/re
 
 > **studio\_rls\_disabled**: `string`
 
-Defined in: [types/src/types/translations.ts:787](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:787](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5074,7 +5074,7 @@ Defined in: [types/src/types/translations.ts:787](https://github.com/rebaseco/re
 
 > **studio\_rls\_edit**: `string`
 
-Defined in: [types/src/types/translations.ts:800](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:800](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5082,7 +5082,7 @@ Defined in: [types/src/types/translations.ts:800](https://github.com/rebaseco/re
 
 > **studio\_rls\_enable\_force\_rls**: `string`
 
-Defined in: [types/src/types/translations.ts:798](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:798](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5090,7 +5090,7 @@ Defined in: [types/src/types/translations.ts:798](https://github.com/rebaseco/re
 
 > **studio\_rls\_enable\_rls**: `string`
 
-Defined in: [types/src/types/translations.ts:789](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:789](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5098,7 +5098,7 @@ Defined in: [types/src/types/translations.ts:789](https://github.com/rebaseco/re
 
 > **studio\_rls\_enabled**: `string`
 
-Defined in: [types/src/types/translations.ts:786](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:786](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5106,7 +5106,7 @@ Defined in: [types/src/types/translations.ts:786](https://github.com/rebaseco/re
 
 > **studio\_rls\_error**: `string`
 
-Defined in: [types/src/types/translations.ts:810](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:810](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5114,7 +5114,7 @@ Defined in: [types/src/types/translations.ts:810](https://github.com/rebaseco/re
 
 > **studio\_rls\_force\_rls**: `string`
 
-Defined in: [types/src/types/translations.ts:796](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:796](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5122,7 +5122,7 @@ Defined in: [types/src/types/translations.ts:796](https://github.com/rebaseco/re
 
 > **studio\_rls\_force\_rls\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:797](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:797](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5130,7 +5130,7 @@ Defined in: [types/src/types/translations.ts:797](https://github.com/rebaseco/re
 
 > **studio\_rls\_loading**: `string`
 
-Defined in: [types/src/types/translations.ts:812](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:812](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5138,7 +5138,7 @@ Defined in: [types/src/types/translations.ts:812](https://github.com/rebaseco/re
 
 > **studio\_rls\_no\_policies**: `string`
 
-Defined in: [types/src/types/translations.ts:793](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:793](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5146,7 +5146,7 @@ Defined in: [types/src/types/translations.ts:793](https://github.com/rebaseco/re
 
 > **studio\_rls\_no\_policies\_desc**: `string`
 
-Defined in: [types/src/types/translations.ts:794](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:794](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5154,7 +5154,7 @@ Defined in: [types/src/types/translations.ts:794](https://github.com/rebaseco/re
 
 > **studio\_rls\_no\_rls**: `string`
 
-Defined in: [types/src/types/translations.ts:788](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:788](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5162,7 +5162,7 @@ Defined in: [types/src/types/translations.ts:788](https://github.com/rebaseco/re
 
 > **studio\_rls\_no\_tables**: `string`
 
-Defined in: [types/src/types/translations.ts:809](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:809](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5170,7 +5170,7 @@ Defined in: [types/src/types/translations.ts:809](https://github.com/rebaseco/re
 
 > **studio\_rls\_policies**: `string`
 
-Defined in: [types/src/types/translations.ts:792](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:792](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5178,7 +5178,7 @@ Defined in: [types/src/types/translations.ts:792](https://github.com/rebaseco/re
 
 > **studio\_rls\_retry**: `string`
 
-Defined in: [types/src/types/translations.ts:811](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:811](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5186,7 +5186,7 @@ Defined in: [types/src/types/translations.ts:811](https://github.com/rebaseco/re
 
 > **studio\_rls\_select\_table**: `string`
 
-Defined in: [types/src/types/translations.ts:808](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:808](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5194,7 +5194,7 @@ Defined in: [types/src/types/translations.ts:808](https://github.com/rebaseco/re
 
 > **studio\_rls\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:784](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:784](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5202,7 +5202,7 @@ Defined in: [types/src/types/translations.ts:784](https://github.com/rebaseco/re
 
 > **studio\_schema\_columns**: `string`
 
-Defined in: [types/src/types/translations.ts:781](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:781](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5210,7 +5210,7 @@ Defined in: [types/src/types/translations.ts:781](https://github.com/rebaseco/re
 
 > **studio\_schema\_delete\_from**: `string`
 
-Defined in: [types/src/types/translations.ts:780](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:780](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5218,7 +5218,7 @@ Defined in: [types/src/types/translations.ts:780](https://github.com/rebaseco/re
 
 > **studio\_schema\_insert\_into**: `string`
 
-Defined in: [types/src/types/translations.ts:778](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:778](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5226,7 +5226,7 @@ Defined in: [types/src/types/translations.ts:778](https://github.com/rebaseco/re
 
 > **studio\_schema\_loading**: `string`
 
-Defined in: [types/src/types/translations.ts:773](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:773](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5234,7 +5234,7 @@ Defined in: [types/src/types/translations.ts:773](https://github.com/rebaseco/re
 
 > **studio\_schema\_no\_tables**: `string`
 
-Defined in: [types/src/types/translations.ts:774](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:774](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5242,7 +5242,7 @@ Defined in: [types/src/types/translations.ts:774](https://github.com/rebaseco/re
 
 > **studio\_schema\_primary\_key**: `string`
 
-Defined in: [types/src/types/translations.ts:776](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:776](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5250,7 +5250,7 @@ Defined in: [types/src/types/translations.ts:776](https://github.com/rebaseco/re
 
 > **studio\_schema\_retry**: `string`
 
-Defined in: [types/src/types/translations.ts:775](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:775](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5258,7 +5258,7 @@ Defined in: [types/src/types/translations.ts:775](https://github.com/rebaseco/re
 
 > **studio\_schema\_select\_all**: `string`
 
-Defined in: [types/src/types/translations.ts:777](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:777](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5266,7 +5266,7 @@ Defined in: [types/src/types/translations.ts:777](https://github.com/rebaseco/re
 
 > **studio\_schema\_tables**: `string`
 
-Defined in: [types/src/types/translations.ts:772](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:772](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5274,7 +5274,7 @@ Defined in: [types/src/types/translations.ts:772](https://github.com/rebaseco/re
 
 > **studio\_schema\_update**: `string`
 
-Defined in: [types/src/types/translations.ts:779](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:779](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5282,7 +5282,7 @@ Defined in: [types/src/types/translations.ts:779](https://github.com/rebaseco/re
 
 > **studio\_sql\_add\_to\_favorites**: `string`
 
-Defined in: [types/src/types/translations.ts:725](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:725](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5290,7 +5290,7 @@ Defined in: [types/src/types/translations.ts:725](https://github.com/rebaseco/re
 
 > **studio\_sql\_admin**: `string`
 
-Defined in: [types/src/types/translations.ts:730](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:730](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5298,7 +5298,7 @@ Defined in: [types/src/types/translations.ts:730](https://github.com/rebaseco/re
 
 > **studio\_sql\_cancel**: `string`
 
-Defined in: [types/src/types/translations.ts:737](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:737](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5306,7 +5306,7 @@ Defined in: [types/src/types/translations.ts:737](https://github.com/rebaseco/re
 
 > **studio\_sql\_cannot\_edit\_missing\_query**: `string`
 
-Defined in: [types/src/types/translations.ts:744](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:744](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5314,7 +5314,7 @@ Defined in: [types/src/types/translations.ts:744](https://github.com/rebaseco/re
 
 > **studio\_sql\_cannot\_resolve\_table**: `string`
 
-Defined in: [types/src/types/translations.ts:745](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:745](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5322,7 +5322,7 @@ Defined in: [types/src/types/translations.ts:745](https://github.com/rebaseco/re
 
 > **studio\_sql\_cms**: `string`
 
-Defined in: [types/src/types/translations.ts:752](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:752](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5330,7 +5330,7 @@ Defined in: [types/src/types/translations.ts:752](https://github.com/rebaseco/re
 
 > **studio\_sql\_cms\_collections\_tooltip**: `string`
 
-Defined in: [types/src/types/translations.ts:753](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:753](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5338,7 +5338,7 @@ Defined in: [types/src/types/translations.ts:753](https://github.com/rebaseco/re
 
 > **studio\_sql\_copy\_markdown**: `string`
 
-Defined in: [types/src/types/translations.ts:718](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:718](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5346,7 +5346,7 @@ Defined in: [types/src/types/translations.ts:718](https://github.com/rebaseco/re
 
 > **studio\_sql\_dangerous\_operation**: `string`
 
-Defined in: [types/src/types/translations.ts:738](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:738](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5354,7 +5354,7 @@ Defined in: [types/src/types/translations.ts:738](https://github.com/rebaseco/re
 
 > **studio\_sql\_dangerous\_operation\_body**: `string`
 
-Defined in: [types/src/types/translations.ts:739](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:739](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5362,7 +5362,7 @@ Defined in: [types/src/types/translations.ts:739](https://github.com/rebaseco/re
 
 > **studio\_sql\_database**: `string`
 
-Defined in: [types/src/types/translations.ts:728](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:728](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5370,7 +5370,7 @@ Defined in: [types/src/types/translations.ts:728](https://github.com/rebaseco/re
 
 > **studio\_sql\_edit\_entity**: `string`
 
-Defined in: [types/src/types/translations.ts:754](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:754](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5378,7 +5378,7 @@ Defined in: [types/src/types/translations.ts:754](https://github.com/rebaseco/re
 
 > **studio\_sql\_error\_executing**: `string`
 
-Defined in: [types/src/types/translations.ts:749](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:749](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5386,7 +5386,7 @@ Defined in: [types/src/types/translations.ts:749](https://github.com/rebaseco/re
 
 > **studio\_sql\_error\_explaining**: `string`
 
-Defined in: [types/src/types/translations.ts:750](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:750](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5394,7 +5394,7 @@ Defined in: [types/src/types/translations.ts:750](https://github.com/rebaseco/re
 
 > **studio\_sql\_executing\_query**: `string`
 
-Defined in: [types/src/types/translations.ts:710](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:710](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5402,7 +5402,7 @@ Defined in: [types/src/types/translations.ts:710](https://github.com/rebaseco/re
 
 > **studio\_sql\_execution\_not\_supported**: `string`
 
-Defined in: [types/src/types/translations.ts:748](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:748](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5410,7 +5410,7 @@ Defined in: [types/src/types/translations.ts:748](https://github.com/rebaseco/re
 
 > **studio\_sql\_explain**: `string`
 
-Defined in: [types/src/types/translations.ts:722](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:722](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5418,7 +5418,7 @@ Defined in: [types/src/types/translations.ts:722](https://github.com/rebaseco/re
 
 > **studio\_sql\_export\_csv**: `string`
 
-Defined in: [types/src/types/translations.ts:720](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:720](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5426,7 +5426,7 @@ Defined in: [types/src/types/translations.ts:720](https://github.com/rebaseco/re
 
 > **studio\_sql\_export\_json**: `string`
 
-Defined in: [types/src/types/translations.ts:719](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:719](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5434,7 +5434,7 @@ Defined in: [types/src/types/translations.ts:719](https://github.com/rebaseco/re
 
 > **studio\_sql\_fetch\_error**: `string`
 
-Defined in: [types/src/types/translations.ts:756](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:756](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5442,7 +5442,7 @@ Defined in: [types/src/types/translations.ts:756](https://github.com/rebaseco/re
 
 > **studio\_sql\_format\_sql**: `string`
 
-Defined in: [types/src/types/translations.ts:721](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:721](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5450,7 +5450,7 @@ Defined in: [types/src/types/translations.ts:721](https://github.com/rebaseco/re
 
 > **studio\_sql\_limit\_1000**: `string`
 
-Defined in: [types/src/types/translations.ts:723](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:723](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5458,7 +5458,7 @@ Defined in: [types/src/types/translations.ts:723](https://github.com/rebaseco/re
 
 > **studio\_sql\_markdown\_copied**: `string`
 
-Defined in: [types/src/types/translations.ts:741](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:741](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5466,7 +5466,7 @@ Defined in: [types/src/types/translations.ts:741](https://github.com/rebaseco/re
 
 > **studio\_sql\_markdown\_copy\_failed**: `string`
 
-Defined in: [types/src/types/translations.ts:742](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:742](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5474,7 +5474,7 @@ Defined in: [types/src/types/translations.ts:742](https://github.com/rebaseco/re
 
 > **studio\_sql\_missing\_pk**: `string`
 
-Defined in: [types/src/types/translations.ts:746](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:746](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5482,7 +5482,7 @@ Defined in: [types/src/types/translations.ts:746](https://github.com/rebaseco/re
 
 > **studio\_sql\_no\_results**: `string`
 
-Defined in: [types/src/types/translations.ts:715](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:715](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5490,7 +5490,7 @@ Defined in: [types/src/types/translations.ts:715](https://github.com/rebaseco/re
 
 > **studio\_sql\_no\_tables**: `string`
 
-Defined in: [types/src/types/translations.ts:758](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:758](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5498,7 +5498,7 @@ Defined in: [types/src/types/translations.ts:758](https://github.com/rebaseco/re
 
 > **studio\_sql\_query\_error**: `string`
 
-Defined in: [types/src/types/translations.ts:711](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:711](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5506,7 +5506,7 @@ Defined in: [types/src/types/translations.ts:711](https://github.com/rebaseco/re
 
 > **studio\_sql\_query\_results**: `string`
 
-Defined in: [types/src/types/translations.ts:732](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:732](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5514,7 +5514,7 @@ Defined in: [types/src/types/translations.ts:732](https://github.com/rebaseco/re
 
 > **studio\_sql\_remove\_from\_favorites**: `string`
 
-Defined in: [types/src/types/translations.ts:724](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:724](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5522,7 +5522,7 @@ Defined in: [types/src/types/translations.ts:724](https://github.com/rebaseco/re
 
 > **studio\_sql\_role**: `string`
 
-Defined in: [types/src/types/translations.ts:729](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:729](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5530,7 +5530,7 @@ Defined in: [types/src/types/translations.ts:729](https://github.com/rebaseco/re
 
 > **studio\_sql\_row\_updated**: `string`
 
-Defined in: [types/src/types/translations.ts:743](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:743](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5538,7 +5538,7 @@ Defined in: [types/src/types/translations.ts:743](https://github.com/rebaseco/re
 
 > **studio\_sql\_rows**: `string`
 
-Defined in: [types/src/types/translations.ts:716](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:716](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5546,7 +5546,7 @@ Defined in: [types/src/types/translations.ts:716](https://github.com/rebaseco/re
 
 > **studio\_sql\_run**: `string`
 
-Defined in: [types/src/types/translations.ts:727](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:727](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5554,7 +5554,7 @@ Defined in: [types/src/types/translations.ts:727](https://github.com/rebaseco/re
 
 > **studio\_sql\_run\_query\_placeholder**: `string`
 
-Defined in: [types/src/types/translations.ts:712](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:712](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5562,7 +5562,7 @@ Defined in: [types/src/types/translations.ts:712](https://github.com/rebaseco/re
 
 > **studio\_sql\_save**: `string`
 
-Defined in: [types/src/types/translations.ts:726](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:726](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5570,7 +5570,7 @@ Defined in: [types/src/types/translations.ts:726](https://github.com/rebaseco/re
 
 > **studio\_sql\_save\_first\_to\_favorite**: `string`
 
-Defined in: [types/src/types/translations.ts:751](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:751](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5578,7 +5578,7 @@ Defined in: [types/src/types/translations.ts:751](https://github.com/rebaseco/re
 
 > **studio\_sql\_save\_snippet**: `string`
 
-Defined in: [types/src/types/translations.ts:733](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:733](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5586,7 +5586,7 @@ Defined in: [types/src/types/translations.ts:733](https://github.com/rebaseco/re
 
 > **studio\_sql\_schema\_fetch\_error**: `string`
 
-Defined in: [types/src/types/translations.ts:759](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:759](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5594,7 +5594,7 @@ Defined in: [types/src/types/translations.ts:759](https://github.com/rebaseco/re
 
 > **studio\_sql\_select\_db**: `string`
 
-Defined in: [types/src/types/translations.ts:731](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:731](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5602,7 +5602,7 @@ Defined in: [types/src/types/translations.ts:731](https://github.com/rebaseco/re
 
 > **studio\_sql\_sidebar\_delete\_snippet**: `string`
 
-Defined in: [types/src/types/translations.ts:769](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:769](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5610,7 +5610,7 @@ Defined in: [types/src/types/translations.ts:769](https://github.com/rebaseco/re
 
 > **studio\_sql\_sidebar\_history**: `string`
 
-Defined in: [types/src/types/translations.ts:763](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:763](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5618,7 +5618,7 @@ Defined in: [types/src/types/translations.ts:763](https://github.com/rebaseco/re
 
 > **studio\_sql\_sidebar\_history\_hint**: `string`
 
-Defined in: [types/src/types/translations.ts:768](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:768](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5626,7 +5626,7 @@ Defined in: [types/src/types/translations.ts:768](https://github.com/rebaseco/re
 
 > **studio\_sql\_sidebar\_no\_history**: `string`
 
-Defined in: [types/src/types/translations.ts:767](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:767](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5634,7 +5634,7 @@ Defined in: [types/src/types/translations.ts:767](https://github.com/rebaseco/re
 
 > **studio\_sql\_sidebar\_no\_snippets**: `string`
 
-Defined in: [types/src/types/translations.ts:765](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:765](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5642,7 +5642,7 @@ Defined in: [types/src/types/translations.ts:765](https://github.com/rebaseco/re
 
 > **studio\_sql\_sidebar\_save\_snippet\_hint**: `string`
 
-Defined in: [types/src/types/translations.ts:766](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:766](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5650,7 +5650,7 @@ Defined in: [types/src/types/translations.ts:766](https://github.com/rebaseco/re
 
 > **studio\_sql\_sidebar\_schema**: `string`
 
-Defined in: [types/src/types/translations.ts:764](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:764](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5658,7 +5658,7 @@ Defined in: [types/src/types/translations.ts:764](https://github.com/rebaseco/re
 
 > **studio\_sql\_sidebar\_snippets**: `string`
 
-Defined in: [types/src/types/translations.ts:762](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:762](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5666,7 +5666,7 @@ Defined in: [types/src/types/translations.ts:762](https://github.com/rebaseco/re
 
 > **studio\_sql\_snippet\_name**: `string`
 
-Defined in: [types/src/types/translations.ts:734](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:734](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5674,7 +5674,7 @@ Defined in: [types/src/types/translations.ts:734](https://github.com/rebaseco/re
 
 > **studio\_sql\_snippet\_name\_placeholder**: `string`
 
-Defined in: [types/src/types/translations.ts:735](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:735](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5682,7 +5682,7 @@ Defined in: [types/src/types/translations.ts:735](https://github.com/rebaseco/re
 
 > **studio\_sql\_snippet\_saved**: `string`
 
-Defined in: [types/src/types/translations.ts:740](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:740](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5690,7 +5690,7 @@ Defined in: [types/src/types/translations.ts:740](https://github.com/rebaseco/re
 
 > **studio\_sql\_snippet\_saved\_local**: `string`
 
-Defined in: [types/src/types/translations.ts:736](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:736](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5698,7 +5698,7 @@ Defined in: [types/src/types/translations.ts:736](https://github.com/rebaseco/re
 
 > **studio\_sql\_sql\_not\_supported**: `string`
 
-Defined in: [types/src/types/translations.ts:755](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:755](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5706,7 +5706,7 @@ Defined in: [types/src/types/translations.ts:755](https://github.com/rebaseco/re
 
 > **studio\_sql\_success**: `string`
 
-Defined in: [types/src/types/translations.ts:714](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:714](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5714,7 +5714,7 @@ Defined in: [types/src/types/translations.ts:714](https://github.com/rebaseco/re
 
 > **studio\_sql\_time**: `string`
 
-Defined in: [types/src/types/translations.ts:717](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:717](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5722,7 +5722,7 @@ Defined in: [types/src/types/translations.ts:717](https://github.com/rebaseco/re
 
 > **studio\_sql\_unexpected\_format**: `string`
 
-Defined in: [types/src/types/translations.ts:757](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:757](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5730,7 +5730,7 @@ Defined in: [types/src/types/translations.ts:757](https://github.com/rebaseco/re
 
 > **studio\_sql\_update\_failed**: `string`
 
-Defined in: [types/src/types/translations.ts:747](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:747](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5738,7 +5738,7 @@ Defined in: [types/src/types/translations.ts:747](https://github.com/rebaseco/re
 
 > **studio\_sql\_visual\_execution\_plan**: `string`
 
-Defined in: [types/src/types/translations.ts:713](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:713](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5746,7 +5746,7 @@ Defined in: [types/src/types/translations.ts:713](https://github.com/rebaseco/re
 
 > **subcollections\_of**: `string`
 
-Defined in: [types/src/types/translations.ts:272](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:272](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5754,7 +5754,7 @@ Defined in: [types/src/types/translations.ts:272](https://github.com/rebaseco/re
 
 > **submit**: `string`
 
-Defined in: [types/src/types/translations.ts:423](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:423](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5762,7 +5762,7 @@ Defined in: [types/src/types/translations.ts:423](https://github.com/rebaseco/re
 
 > **system\_mode**: `string`
 
-Defined in: [types/src/types/translations.ts:363](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:363](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5770,7 +5770,7 @@ Defined in: [types/src/types/translations.ts:363](https://github.com/rebaseco/re
 
 > **table\_view**: `string`
 
-Defined in: [types/src/types/translations.ts:204](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:204](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5778,7 +5778,7 @@ Defined in: [types/src/types/translations.ts:204](https://github.com/rebaseco/re
 
 > **terms\_and\_conditions**: `string`
 
-Defined in: [types/src/types/translations.ts:537](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:537](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5786,7 +5786,7 @@ Defined in: [types/src/types/translations.ts:537](https://github.com/rebaseco/re
 
 > **text\_search\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:260](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:260](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5794,7 +5794,7 @@ Defined in: [types/src/types/translations.ts:260](https://github.com/rebaseco/re
 
 > **text\_search\_dialog\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:680](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:680](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5802,7 +5802,7 @@ Defined in: [types/src/types/translations.ts:680](https://github.com/rebaseco/re
 
 > **text\_search\_enable\_for\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:686](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:686](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5810,7 +5810,7 @@ Defined in: [types/src/types/translations.ts:686](https://github.com/rebaseco/re
 
 > **text\_search\_enable\_for\_project**: `string`
 
-Defined in: [types/src/types/translations.ts:687](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:687](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5818,7 +5818,7 @@ Defined in: [types/src/types/translations.ts:687](https://github.com/rebaseco/re
 
 > **text\_search\_enabled\_snackbar**: `string`
 
-Defined in: [types/src/types/translations.ts:688](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:688](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5826,7 +5826,7 @@ Defined in: [types/src/types/translations.ts:688](https://github.com/rebaseco/re
 
 > **text\_search\_external\_suggestion**: `string`
 
-Defined in: [types/src/types/translations.ts:683](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:683](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5834,7 +5834,7 @@ Defined in: [types/src/types/translations.ts:683](https://github.com/rebaseco/re
 
 > **text\_search\_local\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:684](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:684](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5842,7 +5842,7 @@ Defined in: [types/src/types/translations.ts:684](https://github.com/rebaseco/re
 
 > **text\_search\_local\_fetch\_warning**: `string`
 
-Defined in: [types/src/types/translations.ts:682](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:682](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5850,7 +5850,7 @@ Defined in: [types/src/types/translations.ts:682](https://github.com/rebaseco/re
 
 > **text\_search\_local\_not\_recommended**: `string`
 
-Defined in: [types/src/types/translations.ts:681](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:681](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5858,7 +5858,7 @@ Defined in: [types/src/types/translations.ts:681](https://github.com/rebaseco/re
 
 > **text\_search\_own\_implementation**: `string`
 
-Defined in: [types/src/types/translations.ts:685](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:685](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5866,7 +5866,7 @@ Defined in: [types/src/types/translations.ts:685](https://github.com/rebaseco/re
 
 > **this\_can\_take\_a\_minute**: `string`
 
-Defined in: [types/src/types/translations.ts:565](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:565](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5874,7 +5874,7 @@ Defined in: [types/src/types/translations.ts:565](https://github.com/rebaseco/re
 
 > **this\_entity\_not\_exist**: `string`
 
-Defined in: [types/src/types/translations.ts:142](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:142](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5882,7 +5882,7 @@ Defined in: [types/src/types/translations.ts:142](https://github.com/rebaseco/re
 
 > **this\_form\_has\_been\_modified**: `string`
 
-Defined in: [types/src/types/translations.ts:153](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:153](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5890,7 +5890,7 @@ Defined in: [types/src/types/translations.ts:153](https://github.com/rebaseco/re
 
 > **this\_form\_has\_errors**: `string`
 
-Defined in: [types/src/types/translations.ts:150](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:150](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5898,7 +5898,7 @@ Defined in: [types/src/types/translations.ts:150](https://github.com/rebaseco/re
 
 > **this\_is\_subcollection\_of**: `string`
 
-Defined in: [types/src/types/translations.ts:513](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:513](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Recently extracted strings for collection editor
 
@@ -5908,7 +5908,7 @@ Recently extracted strings for collection editor
 
 > **title**: `string`
 
-Defined in: [types/src/types/translations.ts:497](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:497](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5916,7 +5916,7 @@ Defined in: [types/src/types/translations.ts:497](https://github.com/rebaseco/re
 
 > **to\_scaffold\_a\_local\_project**: `string`
 
-Defined in: [types/src/types/translations.ts:588](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:588](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5924,7 +5924,7 @@ Defined in: [types/src/types/translations.ts:588](https://github.com/rebaseco/re
 
 > **trim**: `string`
 
-Defined in: [types/src/types/translations.ts:598](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:598](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5932,7 +5932,7 @@ Defined in: [types/src/types/translations.ts:598](https://github.com/rebaseco/re
 
 > **type**: `string`
 
-Defined in: [types/src/types/translations.ts:79](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:79](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5940,7 +5940,7 @@ Defined in: [types/src/types/translations.ts:79](https://github.com/rebaseco/reb
 
 > **unexpected\_reference\_value**: `string`
 
-Defined in: [types/src/types/translations.ts:157](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:157](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5948,7 +5948,7 @@ Defined in: [types/src/types/translations.ts:157](https://github.com/rebaseco/re
 
 > **unexpected\_value**: `string`
 
-Defined in: [types/src/types/translations.ts:155](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:155](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5956,7 +5956,7 @@ Defined in: [types/src/types/translations.ts:155](https://github.com/rebaseco/re
 
 > **unexpected\_value\_click\_to\_edit**: `string`
 
-Defined in: [types/src/types/translations.ts:156](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:156](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5964,7 +5964,7 @@ Defined in: [types/src/types/translations.ts:156](https://github.com/rebaseco/re
 
 > **unique**: `string`
 
-Defined in: [types/src/types/translations.ts:592](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:592](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5972,7 +5972,7 @@ Defined in: [types/src/types/translations.ts:592](https://github.com/rebaseco/re
 
 > **unique\_tooltip**: `string`
 
-Defined in: [types/src/types/translations.ts:595](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:595](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5980,7 +5980,7 @@ Defined in: [types/src/types/translations.ts:595](https://github.com/rebaseco/re
 
 > **unknown\_device**: `string`
 
-Defined in: [types/src/types/translations.ts:464](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:464](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5988,7 +5988,7 @@ Defined in: [types/src/types/translations.ts:464](https://github.com/rebaseco/re
 
 > **unsaved\_changes**: `string`
 
-Defined in: [types/src/types/translations.ts:357](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:357](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -5996,7 +5996,7 @@ Defined in: [types/src/types/translations.ts:357](https://github.com/rebaseco/re
 
 > **unsaved\_changes\_body**: `string`
 
-Defined in: [types/src/types/translations.ts:45](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:45](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6004,7 +6004,7 @@ Defined in: [types/src/types/translations.ts:45](https://github.com/rebaseco/reb
 
 > **unsaved\_changes\_in\_entity**: `string`
 
-Defined in: [types/src/types/translations.ts:164](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:164](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6012,7 +6012,7 @@ Defined in: [types/src/types/translations.ts:164](https://github.com/rebaseco/re
 
 > **unsaved\_changes\_title**: `string`
 
-Defined in: [types/src/types/translations.ts:44](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:44](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6020,7 +6020,7 @@ Defined in: [types/src/types/translations.ts:44](https://github.com/rebaseco/reb
 
 > **unsaved\_local\_changes**: `string`
 
-Defined in: [types/src/types/translations.ts:72](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:72](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6028,7 +6028,7 @@ Defined in: [types/src/types/translations.ts:72](https://github.com/rebaseco/reb
 
 > **unsaved\_local\_changes\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:73](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:73](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6036,7 +6036,7 @@ Defined in: [types/src/types/translations.ts:73](https://github.com/rebaseco/reb
 
 > **update**: `string`
 
-Defined in: [types/src/types/translations.ts:341](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:341](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6044,7 +6044,7 @@ Defined in: [types/src/types/translations.ts:341](https://github.com/rebaseco/re
 
 > **update\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:228](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:228](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6052,7 +6052,7 @@ Defined in: [types/src/types/translations.ts:228](https://github.com/rebaseco/re
 
 > **update\_data\_in\_any\_collection**: `string`
 
-Defined in: [types/src/types/translations.ts:324](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:324](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6060,7 +6060,7 @@ Defined in: [types/src/types/translations.ts:324](https://github.com/rebaseco/re
 
 > **update\_entities**: `string`
 
-Defined in: [types/src/types/translations.ts:319](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:319](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6068,7 +6068,7 @@ Defined in: [types/src/types/translations.ts:319](https://github.com/rebaseco/re
 
 > **upload\_file\_description**: `string`
 
-Defined in: [types/src/types/translations.ts:402](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:402](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6076,7 +6076,7 @@ Defined in: [types/src/types/translations.ts:402](https://github.com/rebaseco/re
 
 > **uppercase**: `string`
 
-Defined in: [types/src/types/translations.ts:597](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:597](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6084,7 +6084,7 @@ Defined in: [types/src/types/translations.ts:597](https://github.com/rebaseco/re
 
 > **use\_column\_as\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:406](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:406](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6092,7 +6092,7 @@ Defined in: [types/src/types/translations.ts:406](https://github.com/rebaseco/re
 
 > **use\_config\_define\_json**: `string`
 
-Defined in: [types/src/types/translations.ts:285](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:285](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6100,7 +6100,7 @@ Defined in: [types/src/types/translations.ts:285](https://github.com/rebaseco/re
 
 > **use\_existing\_paths\_database**: `string`
 
-Defined in: [types/src/types/translations.ts:514](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:514](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6108,7 +6108,7 @@ Defined in: [types/src/types/translations.ts:514](https://github.com/rebaseco/re
 
 > **user**: `string`
 
-Defined in: [types/src/types/translations.ts:346](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:346](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6116,7 +6116,7 @@ Defined in: [types/src/types/translations.ts:346](https://github.com/rebaseco/re
 
 > **user\_deleted\_successfully**: `string`
 
-Defined in: [types/src/types/translations.ts:483](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:483](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6124,7 +6124,7 @@ Defined in: [types/src/types/translations.ts:483](https://github.com/rebaseco/re
 
 > **user\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:347](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:347](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6132,7 +6132,7 @@ Defined in: [types/src/types/translations.ts:347](https://github.com/rebaseco/re
 
 > **user\_not\_found**: `string`
 
-Defined in: [types/src/types/translations.ts:89](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:89](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6140,7 +6140,7 @@ Defined in: [types/src/types/translations.ts:89](https://github.com/rebaseco/reb
 
 > **users**: `string`
 
-Defined in: [types/src/types/translations.ts:372](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:372](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6148,7 +6148,7 @@ Defined in: [types/src/types/translations.ts:372](https://github.com/rebaseco/re
 
 > **users\_can\_define\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:256](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:256](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6156,7 +6156,7 @@ Defined in: [types/src/types/translations.ts:256](https://github.com/rebaseco/re
 
 > **users\_must\_define\_id**: `string`
 
-Defined in: [types/src/types/translations.ts:255](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:255](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6164,7 +6164,7 @@ Defined in: [types/src/types/translations.ts:255](https://github.com/rebaseco/re
 
 > **validation**: `string`
 
-Defined in: [types/src/types/translations.ts:591](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:591](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6172,7 +6172,7 @@ Defined in: [types/src/types/translations.ts:591](https://github.com/rebaseco/re
 
 > **value**: `string`
 
-Defined in: [types/src/types/translations.ts:104](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:104](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Placeholder for the 'value' input in a KeyValue field
 
@@ -6182,7 +6182,7 @@ Placeholder for the 'value' input in a KeyValue field
 
 > **value\_is\_not\_reference**: `string`
 
-Defined in: [types/src/types/translations.ts:126](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:126](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6190,7 +6190,7 @@ Defined in: [types/src/types/translations.ts:126](https://github.com/rebaseco/re
 
 > **value\_updated\_elsewhere**: `string`
 
-Defined in: [types/src/types/translations.ts:139](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:139](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6198,7 +6198,7 @@ Defined in: [types/src/types/translations.ts:139](https://github.com/rebaseco/re
 
 > **view\_defined\_in\_code**: `string`
 
-Defined in: [types/src/types/translations.ts:276](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:276](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6206,7 +6206,7 @@ Defined in: [types/src/types/translations.ts:276](https://github.com/rebaseco/re
 
 > **views\_group**: `string`
 
-Defined in: [types/src/types/translations.ts:192](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:192](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 Default group name shown when collections/views have no explicit group
 
@@ -6216,7 +6216,7 @@ Default group name shown when collections/views have no explicit group
 
 > **want\_to\_customize\_with\_code**: `string`
 
-Defined in: [types/src/types/translations.ts:587](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:587](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6224,7 +6224,7 @@ Defined in: [types/src/types/translations.ts:587](https://github.com/rebaseco/re
 
 > **welcome\_to\_rebase**: `string`
 
-Defined in: [types/src/types/translations.ts:577](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:577](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6232,7 +6232,7 @@ Defined in: [types/src/types/translations.ts:577](https://github.com/rebaseco/re
 
 > **yes**: `string`
 
-Defined in: [types/src/types/translations.ts:330](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:330](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 
 ***
 
@@ -6240,4 +6240,4 @@ Defined in: [types/src/types/translations.ts:330](https://github.com/rebaseco/re
 
 > **youd\_need\_to\_save\_before\_additional\_collections**: `string`
 
-Defined in: [types/src/types/translations.ts:195](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/translations.ts)
+Defined in: [types/src/types/translations.ts:195](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)

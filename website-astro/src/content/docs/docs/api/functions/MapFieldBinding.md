@@ -13,7 +13,7 @@ title: "MapFieldBinding"
 
 > **MapFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [core/src/form/field\_bindings/MapFieldBinding.tsx:19](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/MapFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/MapFieldBinding.tsx:19](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/field_bindings/MapFieldBinding.tsx)
 
 Field that renders the children property fields
 

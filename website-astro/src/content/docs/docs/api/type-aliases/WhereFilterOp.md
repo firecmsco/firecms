@@ -13,7 +13,7 @@ title: "WhereFilterOp"
 
 > **WhereFilterOp** = `"<"` \| `"<="` \| `"=="` \| `"!="` \| `">="` \| `">"` \| `"array-contains"` \| `"in"` \| `"not-in"` \| `"array-contains-any"`
 
-Defined in: [types/src/types/collections.ts:543](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/collections.ts)
+Defined in: [types/src/types/collections.ts:543](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/collections.ts)
 
 Filter conditions in a `Query.where()` clause are specified using the
 strings `<`, `<=`, `==`, `>=`, `>`, `array-contains`, `in`, and `array-contains-any`.

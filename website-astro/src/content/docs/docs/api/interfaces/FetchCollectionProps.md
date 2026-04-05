@@ -11,7 +11,7 @@ title: "FetchCollectionProps"
 
 # Interface: FetchCollectionProps\<M\>
 
-Defined in: [types/src/controllers/data\_driver.ts:28](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:28](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 **`Internal`**
 
@@ -27,7 +27,7 @@ Defined in: [types/src/controllers/data\_driver.ts:28](https://github.com/rebase
 
 > `optional` **collection**: [`EntityCollection`](EntityCollection)\<`M`, `any`\>
 
-Defined in: [types/src/controllers/data\_driver.ts:30](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:30](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/src/controllers/data\_driver.ts:30](https://github.com/rebase
 
 > `optional` **filter**: `Partial`\<`Record`\<`Extract`\<keyof `M`, `string`\>, \[[`WhereFilterOp`](../type-aliases/WhereFilterOp), `any`\]\>\>
 
-Defined in: [types/src/controllers/data\_driver.ts:31](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:31](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/src/controllers/data\_driver.ts:31](https://github.com/rebase
 
 > `optional` **limit**: `number`
 
-Defined in: [types/src/controllers/data\_driver.ts:32](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:32](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [types/src/controllers/data\_driver.ts:32](https://github.com/rebase
 
 > `optional` **order**: `"desc"` \| `"asc"`
 
-Defined in: [types/src/controllers/data\_driver.ts:36](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:36](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [types/src/controllers/data\_driver.ts:36](https://github.com/rebase
 
 > `optional` **orderBy**: `string`
 
-Defined in: [types/src/controllers/data\_driver.ts:34](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:34](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -67,7 +67,7 @@ Defined in: [types/src/controllers/data\_driver.ts:34](https://github.com/rebase
 
 > **path**: `string`
 
-Defined in: [types/src/controllers/data\_driver.ts:29](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:29](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -75,7 +75,7 @@ Defined in: [types/src/controllers/data\_driver.ts:29](https://github.com/rebase
 
 > `optional` **searchString**: `string`
 
-Defined in: [types/src/controllers/data\_driver.ts:35](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:35](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
 
 ***
 
@@ -83,4 +83,4 @@ Defined in: [types/src/controllers/data\_driver.ts:35](https://github.com/rebase
 
 > `optional` **startAfter**: `unknown`
 
-Defined in: [types/src/controllers/data\_driver.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/data_driver.ts)
+Defined in: [types/src/controllers/data\_driver.ts:33](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/data_driver.ts)

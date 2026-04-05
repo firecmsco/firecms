@@ -13,7 +13,7 @@ title: "MultiSelectFieldBinding"
 
 > **MultiSelectFieldBinding**(`__namedParameters`): `Element`
 
-Defined in: [core/src/form/field\_bindings/MultiSelectFieldBinding.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/field_bindings/MultiSelectFieldBinding.tsx)
+Defined in: [core/src/form/field\_bindings/MultiSelectFieldBinding.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/field_bindings/MultiSelectFieldBinding.tsx)
 
 This fields renders a dropdown with multiple selection.
 

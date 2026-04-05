@@ -8,4 +8,5 @@ packages:
 #  - 'examples/*'
 #  - 'saas'
 #  - 'website'
+  - 'website-astro'
 

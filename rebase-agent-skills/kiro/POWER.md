@@ -63,7 +63,7 @@ Once configured, the MCP server provides Rebase capabilities to your AI assistan
 - Rebase Documentation: https://rebase.pro/docs
 - Live Demo: https://demo.rebase.pro
 - Discord Community: https://discord.gg/fxy7xsQm3m
-- GitHub: https://github.com/rebaseco/rebase
+- GitHub: https://github.com/rebasepro/rebase
 
 ## License and support
 

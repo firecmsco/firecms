@@ -13,4 +13,4 @@ title: "SideEntityControllerContext"
 
 > `const` **SideEntityControllerContext**: `Context`\<[`SideEntityController`](../interfaces/SideEntityController)\>
 
-Defined in: [core/src/contexts/SideEntityControllerContext.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/contexts/SideEntityControllerContext.tsx)
+Defined in: [core/src/contexts/SideEntityControllerContext.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/core/src/contexts/SideEntityControllerContext.tsx)

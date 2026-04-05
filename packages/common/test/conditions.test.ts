@@ -4,7 +4,7 @@ import {
     evaluateCondition,
     registerConditionOperations
 } from "../src/util/conditions";
-import { ConditionContext, ResolvedProperty } from "../../types";
+import { AuthController, ConditionContext, EnumValueConfig, Property, ResolvedProperty, StringProperty } from "../../types";
 
 describe("Property Conditions", () => {
 
@@ -289,12 +289,12 @@ describe("Property Conditions", () => {
                 conditions: {
                     allowedEnumValues: ["electronics", "clothing"]
                 }
-            } as any;
+            } as unknown as Property;
 
-            const result = applyPropertyConditions(property, baseContext) as any;
+            const result = applyPropertyConditions(property, baseContext);
 
-            expect(result.enumValues).toHaveLength(2);
-            expect(result.enumValues.map((e: any) => e.id)).toEqual(["electronics", "clothing"]);
+            expect((result as Record<string, unknown>)['enumValues']).toHaveLength(2);
+            expect(((result as Record<string, unknown>)['enumValues'] as EnumValueConfig[]).map((e) => e.id)).toEqual(["electronics", "clothing"]);
         });
 
         it("should apply enum conditions with object format (Firestore workaround)", () => {
@@ -317,12 +317,12 @@ describe("Property Conditions", () => {
                         ]
                     }
                 }
-            } as any;
+            } as unknown as Property;
 
-            const result = applyPropertyConditions(property, baseContext) as any;
+            const result = applyPropertyConditions(property, baseContext);
 
-            expect(result.enumValues).toHaveLength(2);
-            expect(result.enumValues.map((e: any) => e.id)).toEqual(["electronics", "clothing"]);
+            expect((result as Record<string, unknown>)['enumValues']).toHaveLength(2);
+            expect(((result as Record<string, unknown>)['enumValues'] as EnumValueConfig[]).map((e) => e.id)).toEqual(["electronics", "clothing"]);
         });
 
         it("should apply excludedEnumValues to remove specific values", () => {
@@ -340,12 +340,12 @@ describe("Property Conditions", () => {
                     // Simple array of excluded values
                     excludedEnumValues: ["published"]
                 }
-            } as any;
+            } as unknown as Property;
 
-            const result = applyPropertyConditions(property, baseContext) as any;
+            const result = applyPropertyConditions(property, baseContext);
 
-            expect(result.enumValues).toHaveLength(2);
-            expect(result.enumValues.map((e: any) => e.id)).toEqual(["draft", "archived"]);
+            expect((result as Record<string, unknown>)['enumValues']).toHaveLength(2);
+            expect(((result as Record<string, unknown>)['enumValues'] as EnumValueConfig[]).map((e) => e.id)).toEqual(["draft", "archived"]);
         });
 
         it("should apply enum conditions to disable specific values", () => {
@@ -366,16 +366,16 @@ describe("Property Conditions", () => {
                         }
                     }
                 }
-            } as any;
+            } as unknown as Property;
 
-            const result = applyPropertyConditions(property, baseContext) as any;
-            const archivedOption = result.enumValues.find((e: any) => e.id === "archived");
-            expect(archivedOption.disabled).toBeFalsy();
+            const result = applyPropertyConditions(property, baseContext);
+            const archivedOption = ((result as Record<string, unknown>)['enumValues'] as EnumValueConfig[]).find((e) => e.id === "archived");
+            expect(archivedOption!.disabled).toBeFalsy();
 
             const contextDraft = { ...baseContext, values: { status: "draft" } };
-            const resultDraft = applyPropertyConditions(property, contextDraft) as any;
-            const archivedOptionDraft = resultDraft.enumValues.find((e: any) => e.id === "archived");
-            expect(archivedOptionDraft.disabled).toBe(true);
+            const resultDraft = applyPropertyConditions(property, contextDraft);
+            const archivedOptionDraft = ((resultDraft as Record<string, unknown>)['enumValues'] as EnumValueConfig[]).find((e) => e.id === "archived");
+            expect(archivedOptionDraft!.disabled).toBe(true);
         });
 
         it("should handle multiple conditions together", () => {
@@ -442,7 +442,7 @@ describe("Property Conditions", () => {
                 values: { title: "Hello", createdAt: now },
                 path: "products",
                 entityId: "123",
-                authController: mockAuthController as any
+                authController: mockAuthController as AuthController
             });
 
             expect(context.values.createdAt).toBe(now.getTime());
@@ -459,7 +459,7 @@ describe("Property Conditions", () => {
 
             const context = buildConditionContext({
                 path: "products",
-                authController: mockAuthController as any
+                authController: mockAuthController as AuthController
             });
 
             expect(context.isNew).toBe(true);
@@ -480,7 +480,7 @@ describe("Property Conditions", () => {
             const context = buildConditionContext({
                 path: "products",
                 entityId: "123",
-                authController: mockAuthController as any
+                authController: mockAuthController as AuthController
             });
 
             // Roles are mapped from Role.id
@@ -494,7 +494,7 @@ describe("Property Conditions", () => {
 
             const context = buildConditionContext({
                 path: "products",
-                authController: mockAuthController as any
+                authController: mockAuthController as AuthController
             });
 
             expect(context.user).toBeDefined();

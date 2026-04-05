@@ -13,7 +13,7 @@ title: "RebaseRoute"
 
 > **RebaseRoute**(): `Element` \| `null`
 
-Defined in: [core/src/routes/RebaseRoute.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/routes/RebaseRoute.tsx)
+Defined in: [core/src/routes/RebaseRoute.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/routes/RebaseRoute.tsx)
 
 ## Returns
 

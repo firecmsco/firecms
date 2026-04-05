@@ -11,7 +11,7 @@ title: "ExportMappingFunction"
 
 # Interface: ExportMappingFunction\<USER\>
 
-Defined in: [types/src/types/export\_import.ts:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/export_import.ts)
+Defined in: [types/src/types/export\_import.ts:17](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/export_import.ts)
 
 ## Type Parameters
 
@@ -25,7 +25,7 @@ Defined in: [types/src/types/export\_import.ts:17](https://github.com/rebaseco/r
 
 > **builder**: (`__namedParameters`) => `string` \| `Promise`\<`string`\>
 
-Defined in: [types/src/types/export\_import.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/export_import.ts)
+Defined in: [types/src/types/export\_import.ts:19](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/export_import.ts)
 
 #### Parameters
 
@@ -49,4 +49,4 @@ Defined in: [types/src/types/export\_import.ts:19](https://github.com/rebaseco/r
 
 > **key**: `string`
 
-Defined in: [types/src/types/export\_import.ts:18](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/export_import.ts)
+Defined in: [types/src/types/export\_import.ts:18](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/export_import.ts)

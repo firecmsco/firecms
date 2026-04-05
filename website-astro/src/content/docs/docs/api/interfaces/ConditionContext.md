@@ -11,7 +11,7 @@ title: "ConditionContext"
 
 # Interface: ConditionContext
 
-Defined in: [types/src/types/properties.ts:1217](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1217](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Context available during JSON Logic condition evaluation.
 Mirrors PropertyBuilderProps but adapted for JSON serialization.
@@ -22,7 +22,7 @@ Mirrors PropertyBuilderProps but adapted for JSON serialization.
 
 > `optional` **entityId**: `string`
 
-Defined in: [types/src/types/properties.ts:1242](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1242](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Entity ID. Undefined for new entities.
 
@@ -32,7 +32,7 @@ Entity ID. Undefined for new entities.
 
 > `optional` **index**: `number`
 
-Defined in: [types/src/types/properties.ts:1252](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1252](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Index of this property (only for array items).
 
@@ -42,7 +42,7 @@ Index of this property (only for array items).
 
 > **isNew**: `boolean`
 
-Defined in: [types/src/types/properties.ts:1247](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1247](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Whether this is a new entity being created.
 
@@ -52,7 +52,7 @@ Whether this is a new entity being created.
 
 > **now**: `number`
 
-Defined in: [types/src/types/properties.ts:1269](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1269](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Current timestamp as Unix milliseconds.
 
@@ -62,7 +62,7 @@ Current timestamp as Unix milliseconds.
 
 > **path**: `string`
 
-Defined in: [types/src/types/properties.ts:1237](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1237](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Collection path (e.g., "products", "users/uid123/orders")
 
@@ -72,7 +72,7 @@ Collection path (e.g., "products", "users/uid123/orders")
 
 > **previousValues**: `Record`\<`string`, `any`\>
 
-Defined in: [types/src/types/properties.ts:1227](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1227](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Previous values before the current edit session.
 
@@ -82,7 +82,7 @@ Previous values before the current edit session.
 
 > **propertyValue**: `unknown`
 
-Defined in: [types/src/types/properties.ts:1232](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1232](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Current value of this property specifically.
 
@@ -92,7 +92,7 @@ Current value of this property specifically.
 
 > **user**: `object`
 
-Defined in: [types/src/types/properties.ts:1257](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1257](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Current authenticated user information.
 
@@ -124,7 +124,7 @@ Role IDs the user has (extracted from Role[].id)
 
 > **values**: `Record`\<`string`, `any`\>
 
-Defined in: [types/src/types/properties.ts:1222](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1222](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Current form/entity values.
 Date values are converted to Unix timestamps (milliseconds).

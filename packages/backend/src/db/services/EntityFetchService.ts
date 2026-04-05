@@ -12,8 +12,12 @@ import {
 } from "./entity-helpers";
 import { parseDataFromServer, normalizeDbValues } from "../data-transformer";
 import { RelationService } from "./RelationService";
+import { RelationalQueryBuilder } from "drizzle-orm/pg-core/query-builders/query";
 import { DrizzleClient } from "../interfaces";
 import { BackendCollectionRegistry } from "../../collections/BackendCollectionRegistry";
+
+/** Type-safe accessor for Drizzle's relational query API via dynamic table name */
+type DbQueryAccessor = Record<string, RelationalQueryBuilder<any, any>> | undefined;
 
 /**
  * Service for handling all entity read operations.
@@ -24,6 +28,15 @@ export class EntityFetchService {
 
     constructor(private db: DrizzleClient, private registry: BackendCollectionRegistry) {
         this.relationService = new RelationService(db, registry);
+    }
+
+    /**
+     * Get the relational query builder for a given table name.
+     * Safely narrows the DrizzleClient union type to access db.query[tableName].
+     */
+    private getQueryBuilder(tableName: string): RelationalQueryBuilder<any, any> | undefined {
+        const query = (this.db as { query?: DbQueryAccessor }).query;
+        return query?.[tableName];
     }
 
     /**
@@ -373,16 +386,18 @@ export class EntityFetchService {
         const parsedId = parsedIdObj[idInfo.fieldName];
 
         // Primary path: use db.query.findFirst with relation loading
-        const dbAny = this.db as any;
+        
         const tableName = getTableName(table);
 
-        if (dbAny.query?.[tableName]) {
+        const qb = this.getQueryBuilder(tableName);
+        if (qb) {
             try {
                 const withConfig = this.buildWithConfig(collection);
-                const row = await dbAny.query[tableName].findFirst({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic query config
+                const row = await qb.findFirst({
                     where: eq(idField, parsedId),
                     with: withConfig
-                });
+                } as any);
 
                 if (!row) return undefined;
 
@@ -483,17 +498,19 @@ export class EntityFetchService {
         }
 
         // Primary path: use db.query.findMany with relation loading
-        const dbAny = this.db as any;
+        
         const tableName = getTableName(table);
 
-        if (dbAny.query?.[tableName]) {
+        const qb = this.getQueryBuilder(tableName);
+        if (qb) {
             try {
                 const withConfig = this.buildWithConfig(collection);
                 const queryOpts = this.buildDrizzleQueryOptions<M>(
                     table, idField, idInfo, options, collectionPath, withConfig
                 );
 
-                const results = await dbAny.query[tableName].findMany(queryOpts);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic query config
+                const results = await qb.findMany(queryOpts as any);
 
                 return (results as Record<string, unknown>[]).map(row =>
                     this.drizzleResultToEntity<M>(row, collection, collectionPath, idInfo, options.databaseId)
@@ -901,10 +918,11 @@ export class EntityFetchService {
         const idField = table[idInfo.fieldName as keyof typeof table] as AnyPgColumn;
 
         // Primary path: use db.query.findMany
-        const dbAny = this.db as any;
+        
         const tableName = getTableName(table);
 
-        if (dbAny.query?.[tableName]) {
+        const qb = this.getQueryBuilder(tableName);
+        if (qb) {
             try {
                 const withConfig = (include && include.length > 0)
                     ? this.buildWithConfig(collection, include)
@@ -914,7 +932,8 @@ export class EntityFetchService {
                     table, idField, idInfo, options, collectionPath, withConfig
                 );
 
-                const results = await dbAny.query[tableName].findMany(queryOpts);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic query config
+                const results = await qb.findMany(queryOpts as any);
 
                 return (results as Record<string, unknown>[]).map(row =>
                     this.drizzleResultToRestRow(row, collection, idInfo)
@@ -1003,19 +1022,21 @@ export class EntityFetchService {
         const parsedId = parsedIdObj[idInfo.fieldName];
 
         // Primary path: use db.query.findFirst
-        const dbAny = this.db as any;
+        
         const tableName = getTableName(table);
 
-        if (dbAny.query?.[tableName]) {
+        const qb = this.getQueryBuilder(tableName);
+        if (qb) {
             try {
                 const withConfig = (include && include.length > 0)
                     ? this.buildWithConfig(collection, include)
                     : undefined;
 
-                const row = await dbAny.query[tableName].findFirst({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic query config
+                const row = await qb.findFirst({
                     where: eq(idField, parsedId),
                     ...(withConfig ? { with: withConfig } : {})
-                });
+                } as any);
 
                 if (!row) return null;
 
@@ -1131,19 +1152,23 @@ export class EntityFetchService {
     }
 
     /**
-     * @deprecated Superseded by inline `dbAny.query?.[tableName]` checks in fetchCollectionForRest/fetchEntityForRest.
+     * @deprecated Superseded by inline `this.db.query?.[tableName]` checks in fetchCollectionForRest/fetchEntityForRest.
      * Kept for backward compatibility only.
      *
      * Check if the Drizzle instance has the relational query API available
      * for a given collection path.
      */
     private hasDrizzleQueryAPI(collectionPath: string): boolean {
-        const dbAny = this.db as any;
-        if (!dbAny.query) return false;
+        
+        const qb = this.getQueryBuilder("__probe__");
+        if (!qb) {
+            // If getQueryBuilder returns undefined even for a probe, query API is not available
+            return false;
+        }
         const collection = getCollectionByPath(collectionPath, this.registry);
         const table = getTableForCollection(collection, this.registry);
         const tableName = getTableName(table);
-        return !!dbAny.query[tableName];
+        return !!this.getQueryBuilder(tableName);
     }
 
     /**
@@ -1168,10 +1193,10 @@ export class EntityFetchService {
         idInfo: { fieldName: string; type: "string" | "number" }
     ): Promise<Record<string, unknown>[] | null> {
         try {
-            const dbAny = this.db as any;
+            
             const table = getTableForCollection(collection, this.registry);
             const tableName = getTableName(table);
-            const queryTarget = dbAny.query[tableName];
+            const queryTarget = this.getQueryBuilder(tableName);
 
             if (!queryTarget?.findMany) return null;
 
@@ -1193,7 +1218,7 @@ export class EntityFetchService {
             // Build where clause
             if (options.filter) {
                 const filterConditions = this.buildFilterConditions(
-                    options.filter as any, table, collectionPath
+                    options.filter, table, collectionPath
                 );
                 if (filterConditions.length > 0) {
                     queryOpts.where = and(...filterConditions);
@@ -1208,7 +1233,8 @@ export class EntityFetchService {
                 }
             }
 
-            const results = await queryTarget.findMany(queryOpts);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- deprecated method, will be removed
+            const results = await queryTarget.findMany(queryOpts as any);
 
             // Flatten the nested Drizzle results into REST format
             return results.map((row: Record<string, unknown>) => {

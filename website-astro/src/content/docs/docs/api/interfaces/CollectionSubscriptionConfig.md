@@ -11,7 +11,7 @@ title: "CollectionSubscriptionConfig"
 
 # Interface: CollectionSubscriptionConfig
 
-Defined in: [types/src/types/backend.ts:221](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:221](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 Configuration for subscribing to a collection
 
@@ -21,7 +21,7 @@ Configuration for subscribing to a collection
 
 > **clientId**: `string`
 
-Defined in: [types/src/types/backend.ts:222](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:222](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -29,7 +29,7 @@ Defined in: [types/src/types/backend.ts:222](https://github.com/rebaseco/rebase/
 
 > `optional` **databaseId**: `string`
 
-Defined in: [types/src/types/backend.ts:229](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:229](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -37,7 +37,7 @@ Defined in: [types/src/types/backend.ts:229](https://github.com/rebaseco/rebase/
 
 > `optional` **filter**: `unknown`
 
-Defined in: [types/src/types/backend.ts:224](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:224](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [types/src/types/backend.ts:224](https://github.com/rebaseco/rebase/
 
 > `optional` **limit**: `number`
 
-Defined in: [types/src/types/backend.ts:227](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:227](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [types/src/types/backend.ts:227](https://github.com/rebaseco/rebase/
 
 > `optional` **order**: `"desc"` \| `"asc"`
 
-Defined in: [types/src/types/backend.ts:226](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:226](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [types/src/types/backend.ts:226](https://github.com/rebaseco/rebase/
 
 > `optional` **orderBy**: `string`
 
-Defined in: [types/src/types/backend.ts:225](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:225](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [types/src/types/backend.ts:225](https://github.com/rebaseco/rebase/
 
 > **path**: `string`
 
-Defined in: [types/src/types/backend.ts:223](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:223](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [types/src/types/backend.ts:223](https://github.com/rebaseco/rebase/
 
 > `optional` **searchString**: `string`
 
-Defined in: [types/src/types/backend.ts:230](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:230](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)
 
 ***
 
@@ -85,4 +85,4 @@ Defined in: [types/src/types/backend.ts:230](https://github.com/rebaseco/rebase/
 
 > `optional` **startAfter**: `unknown`
 
-Defined in: [types/src/types/backend.ts:228](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/backend.ts)
+Defined in: [types/src/types/backend.ts:228](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/backend.ts)

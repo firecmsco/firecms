@@ -11,7 +11,7 @@ title: "PropertyConditions"
 
 # Interface: PropertyConditions
 
-Defined in: [types/src/types/properties.ts:1055](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1055](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Declarative conditions for dynamic property behavior.
 All conditions are JSON Logic rules evaluated against ConditionContext.
@@ -31,7 +31,7 @@ https://jsonlogic.com/ for JSON Logic syntax
 
 > `optional` **acceptedFiles**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1203](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1203](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Dynamic accepted file types.
 Should evaluate to an array of MIME types.
@@ -42,7 +42,7 @@ Should evaluate to an array of MIME types.
 
 > `optional` **allowedEnumValues**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1157](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1157](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Filter which enum values are available.
 Should evaluate to an array of allowed enum value IDs.
@@ -53,7 +53,7 @@ Should evaluate to an array of allowed enum value IDs.
 
 > `optional` **canAddElements**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1188](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1188](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Can elements be added to the array?
 
@@ -63,7 +63,7 @@ Can elements be added to the array?
 
 > `optional` **clearOnDisabled**: `boolean`
 
-Defined in: [types/src/types/properties.ts:1081](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1081](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Clear the field's value when it becomes disabled.
 
@@ -79,7 +79,7 @@ false
 
 > `optional` **defaultValue**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1131](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1131](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Dynamic default value for new entities.
 Should evaluate to a value of the appropriate type for the field.
@@ -91,7 +91,7 @@ Only applied when entityId is empty (new entity).
 
 > `optional` **disabled**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1070](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1070](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Disable the field when this condition evaluates to true.
 The field becomes non-editable but still visible (unless also hidden).
@@ -111,7 +111,7 @@ Disable when another field has a specific value
 
 > `optional` **disabledMessage**: `string`
 
-Defined in: [types/src/types/properties.ts:1075](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1075](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Message to display when the field is disabled by a condition.
 
@@ -121,7 +121,7 @@ Message to display when the field is disabled by a condition.
 
 > `optional` **enumConditions**: `Record`\<`string` \| `number`, [`EnumValueConditions`](EnumValueConditions)\>
 
-Defined in: [types/src/types/properties.ts:1151](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1151](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Conditions for individual enum values.
 Keys are the enum value IDs, values are condition configs.
@@ -146,7 +146,7 @@ Disable certain enum options based on user role
 
 > `optional` **excludedEnumValues**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1163](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1163](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Exclude specific enum values.
 Should evaluate to an array of enum value IDs to exclude.
@@ -157,7 +157,7 @@ Should evaluate to an array of enum value IDs to exclude.
 
 > `optional` **hidden**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1087](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1087](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Hide the field completely when this condition evaluates to true.
 The field is removed from the form (not just visually hidden).
@@ -168,7 +168,7 @@ The field is removed from the form (not just visually hidden).
 
 > `optional` **max**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1120](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1120](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Dynamic maximum value for number/string length.
 Should evaluate to a number.
@@ -179,7 +179,7 @@ Should evaluate to a number.
 
 > `optional` **maxFileSize**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1209](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1209](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Dynamic maximum file size in bytes.
 Should evaluate to a number.
@@ -190,7 +190,7 @@ Should evaluate to a number.
 
 > `optional` **min**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1114](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1114](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Dynamic minimum value for number/string length.
 Should evaluate to a number.
@@ -201,7 +201,7 @@ Should evaluate to a number.
 
 > `optional` **readOnly**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1093](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1093](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Make the field read-only when this condition evaluates to true.
 Renders as a preview instead of an input.
@@ -212,7 +212,7 @@ Renders as a preview instead of an input.
 
 > `optional` **referenceFilter**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1179](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1179](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Dynamic filter for reference selection.
 Should evaluate to a FilterValues object.
@@ -223,7 +223,7 @@ Should evaluate to a FilterValues object.
 
 > `optional` **referencePath**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1173](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1173](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Dynamic path for reference properties.
 Should evaluate to a collection path string.
@@ -234,7 +234,7 @@ Should evaluate to a collection path string.
 
 > `optional` **required**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1103](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1103](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Make the field required when this condition evaluates to true.
 Overrides the static `validation.required` setting.
@@ -245,7 +245,7 @@ Overrides the static `validation.required` setting.
 
 > `optional` **requiredMessage**: `string`
 
-Defined in: [types/src/types/properties.ts:1108](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1108](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Custom message when conditional required validation fails.
 
@@ -255,6 +255,6 @@ Custom message when conditional required validation fails.
 
 > `optional` **sortable**: [`JsonLogicRule`](../type-aliases/JsonLogicRule)
 
-Defined in: [types/src/types/properties.ts:1193](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/properties.ts)
+Defined in: [types/src/types/properties.ts:1193](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/properties.ts)
 
 Can elements be reordered in the array?

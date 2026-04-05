@@ -13,7 +13,7 @@ title: "BuildNavigationStateProps"
 
 > **BuildNavigationStateProps**\<`EC`, `USER`\> = `object`
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:26](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:26](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ## Type Parameters
 
@@ -31,7 +31,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:26]
 
 > `optional` **adminMode**: `"content"` \| `"studio"` \| `"settings"`
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:38](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:38](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:38]
 
 > `optional` **adminViews**: [`CMSView`](../interfaces/CMSView)[] \| [`CMSViewsBuilder`](CMSViewsBuilder)
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:30](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:30](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -47,7 +47,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:30]
 
 > **authController**: [`AuthController`](AuthController)\<`USER`\>
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:27](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:27](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -55,7 +55,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:27]
 
 > **cmsUrlController**: [`CMSUrlController`](CMSUrlController)
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:37](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:37](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -63,7 +63,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:37]
 
 > **collectionRegistryController**: [`CollectionRegistryController`](CollectionRegistryController)\<`EC`\> & `object`
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:36](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:36](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 #### Type Declaration
 
@@ -77,7 +77,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:36]
 
 > `optional` **collections**: `EC`[] \| [`EntityCollectionsBuilder`](EntityCollectionsBuilder)\<`EC`\>
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:28](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -85,7 +85,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:28]
 
 > **data**: [`RebaseData`](../interfaces/RebaseData)
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:31](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:31](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -93,7 +93,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:31]
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:34](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:34](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -101,7 +101,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:34]
 
 > `optional` **effectiveRoleController**: [`EffectiveRoleController`](../interfaces/EffectiveRoleController)
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:39](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -109,7 +109,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:39]
 
 > `optional` **navigationGroupMappings**: [`NavigationGroupMapping`](../interfaces/NavigationGroupMapping)[]
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:33](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:33](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -117,7 +117,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:33]
 
 > `optional` **plugins**: [`RebasePlugin`](RebasePlugin)[]
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:32](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -125,7 +125,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:32]
 
 > `optional` **userManagement**: [`UserManagementDelegate`](../interfaces/UserManagementDelegate)
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:40](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -133,7 +133,7 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:40]
 
 > `optional` **views**: [`CMSView`](../interfaces/CMSView)[] \| [`CMSViewsBuilder`](CMSViewsBuilder)
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:29](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
 
 ***
 
@@ -141,4 +141,4 @@ Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:29]
 
 > `optional` **viewsOrder**: `string`[]
 
-Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:35](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)
+Defined in: [core/src/hooks/navigation/useBuildNavigationStateController.tsx:35](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useBuildNavigationStateController.tsx)

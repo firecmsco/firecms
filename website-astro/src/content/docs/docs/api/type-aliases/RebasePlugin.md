@@ -13,7 +13,7 @@ title: "RebasePlugin"
 
 > **RebasePlugin**\<`PROPS`, `FORM_PROPS`, `EC`, `COL_ACTIONS_PROPS`, `COL_ACTIONS_START__PROPS`\> = `object`
 
-Defined in: [types/src/types/plugins.tsx:17](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:17](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 Interface used to define plugins for Rebase.
 NOTE: This is a work in progress and the API is not stable yet.
@@ -46,7 +46,7 @@ NOTE: This is a work in progress and the API is not stable yet.
 
 > `optional` **collection**: `object`
 
-Defined in: [types/src/types/plugins.tsx:254](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:254](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 #### injectCollections()?
 
@@ -86,7 +86,7 @@ Use this method to modify a single collection before it is rendered.
 
 > `optional` **collectionView**: `object`
 
-Defined in: [types/src/types/plugins.tsx:112](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:112](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 #### AddColumnComponent?
 
@@ -301,7 +301,7 @@ Used by plugins to persist the new Kanban column order.
 
 > `optional` **form**: `object`
 
-Defined in: [types/src/types/plugins.tsx:228](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:228](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 #### Actions?
 
@@ -379,7 +379,7 @@ Add custom content above the entity title in the form view
 
 > `optional` **homePage**: `object`
 
-Defined in: [types/src/types/plugins.tsx:54](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:54](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 #### additionalActions?
 
@@ -475,7 +475,7 @@ group => navigationEntriesOrder (path)
 
 > **key**: `string`
 
-Defined in: [types/src/types/plugins.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 Key of the plugin. This is used to identify the plugin in the CMS.
 
@@ -485,7 +485,7 @@ Key of the plugin. This is used to identify the plugin in the CMS.
 
 > `optional` **loading**: `boolean`
 
-Defined in: [types/src/types/plugins.tsx:28](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:28](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 If this flag is set to true, no content will be shown in the CMS
 until the plugin is fully loaded.
@@ -496,7 +496,7 @@ until the plugin is fully loaded.
 
 > `optional` **provider**: `object`
 
-Defined in: [types/src/types/plugins.tsx:39](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:39](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 You can use this prop to add higher order components to the CMS.
 The components will be added to the root of the CMS, so any component
@@ -521,7 +521,7 @@ you can use the hooks provided by the CMS.
 
 > `optional` **userManagement**: [`UserManagementDelegate`](../interfaces/UserManagementDelegate)
 
-Defined in: [types/src/types/plugins.tsx:46](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:46](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 ***
 
@@ -529,7 +529,7 @@ Defined in: [types/src/types/plugins.tsx:46](https://github.com/rebaseco/rebase/
 
 > `optional` **views**: [`CMSView`](../interfaces/CMSView)[]
 
-Defined in: [types/src/types/plugins.tsx:52](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/plugins.tsx)
+Defined in: [types/src/types/plugins.tsx:52](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/plugins.tsx)
 
 Views to be automatically added to the navigation.
 These views will be merged with the views provided to useBuildNavigationStateController.

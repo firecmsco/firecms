@@ -13,7 +13,7 @@ title: "useUnsavedChangesDialog"
 
 > **useUnsavedChangesDialog**(`when`, `onOk`): `object`
 
-Defined in: [core/src/hooks/useUnsavedChangesDialog.tsx:12](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useUnsavedChangesDialog.tsx)
+Defined in: [core/src/hooks/useUnsavedChangesDialog.tsx:12](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useUnsavedChangesDialog.tsx)
 
 A single, unified hook to prevent navigation when there are unsaved changes.
 

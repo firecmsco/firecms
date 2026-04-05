@@ -236,20 +236,20 @@ describe("mergeDeep", () => {
 
     it("should return target if target is not an object (e.g. null, primitive)", () => {
         const source = { a: 1 };
-        expect(mergeDeep(null as any, source)).toBeNull();
-        expect(mergeDeep("string" as any, source)).toBe("string");
-        expect(mergeDeep(123 as any, source)).toBe(123);
+        expect(mergeDeep(null as unknown as Record<string, unknown>, source)).toBeNull();
+        expect(mergeDeep("string" as unknown as Record<string, unknown>, source)).toBe("string");
+        expect(mergeDeep(123 as unknown as Record<string, unknown>, source)).toBe(123);
     });
 
     it("should return a shallow copy of target if target is an object and source is not an object", () => {
         const target = { a: 1 };
         const targetCopy = { ...target };
 
-        const resultNullSource = mergeDeep(target, null as any);
+        const resultNullSource = mergeDeep(target, null as unknown as Record<string, unknown>);
         expect(resultNullSource).toEqual(targetCopy);
         expect(resultNullSource).not.toBe(target); // Should be a copy
 
-        const resultPrimitiveSource = mergeDeep(target, "string" as any);
+        const resultPrimitiveSource = mergeDeep(target, "string" as unknown as Record<string, unknown>);
         expect(resultPrimitiveSource).toEqual(targetCopy);
         expect(resultPrimitiveSource).not.toBe(target); // Should be a copy
     });

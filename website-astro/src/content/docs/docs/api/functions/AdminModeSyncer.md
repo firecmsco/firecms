@@ -13,7 +13,7 @@ title: "AdminModeSyncer"
 
 > **AdminModeSyncer**(`__namedParameters`): `null`
 
-Defined in: [core/src/components/AdminModeSyncer.tsx:22](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/AdminModeSyncer.tsx)
+Defined in: [core/src/components/AdminModeSyncer.tsx:22](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/AdminModeSyncer.tsx)
 
 A highly customizable utility component that observes react-router routes and
 actively shifts the internal Rebase `adminModeController` context to match

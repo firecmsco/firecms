@@ -13,7 +13,7 @@ title: "useInternalUserManagementController"
 
 > **useInternalUserManagementController**\<`USER`\>(): [`UserManagementDelegate`](../interfaces/UserManagementDelegate)\<`USER`\> \| `undefined`
 
-Defined in: [core/src/hooks/useInternalUserManagementController.tsx:15](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useInternalUserManagementController.tsx)
+Defined in: [core/src/hooks/useInternalUserManagementController.tsx:15](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useInternalUserManagementController.tsx)
 
 Use this hook to get the internal user management of the app.
 Note that this is different from the user management plugin controller.

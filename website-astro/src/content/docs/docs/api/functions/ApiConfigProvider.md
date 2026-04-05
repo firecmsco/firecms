@@ -13,7 +13,7 @@ title: "ApiConfigProvider"
 
 > **ApiConfigProvider**(`__namedParameters`): `Element`
 
-Defined in: [core/src/hooks/ApiConfigContext.tsx:29](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/ApiConfigContext.tsx)
+Defined in: [core/src/hooks/ApiConfigContext.tsx:29](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/ApiConfigContext.tsx)
 
 Provide API configuration (apiUrl, getAuthToken) to the entire subtree.
 Typically rendered inside `<Rebase>` or at the app root.

@@ -1,5 +1,6 @@
 import { expect, it } from "@jest/globals";
 import { Timestamp } from "@firebase/firestore";
+import type { Firestore } from "@firebase/firestore";
 import { cmsToFirestoreModel, firestoreToCMSModel } from "../src";
 
 it("cmsToFirestoreModel", () => {
@@ -14,7 +15,7 @@ it("cmsToFirestoreModel", () => {
         order: 2,
         title: { en: "Test pill in english" }
     };
-    const result = cmsToFirestoreModel(inputValues, {} as any);
+    const result = cmsToFirestoreModel(inputValues, {} as unknown as Firestore);
     expect(result).toEqual(inputValues);
 });
 

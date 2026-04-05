@@ -11,7 +11,7 @@ title: "ExportConfig"
 
 # Interface: ExportConfig\<USER\>
 
-Defined in: [types/src/types/export\_import.ts:10](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/export_import.ts)
+Defined in: [types/src/types/export\_import.ts:10](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/export_import.ts)
 
 You can use this configuration to add additional fields to the data
 exports
@@ -28,4 +28,4 @@ exports
 
 > **additionalFields**: [`ExportMappingFunction`](ExportMappingFunction)\<`USER`\>[]
 
-Defined in: [types/src/types/export\_import.ts:11](https://github.com/rebaseco/rebase/blob/main/packages/types/src/types/export_import.ts)
+Defined in: [types/src/types/export\_import.ts:11](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/export_import.ts)

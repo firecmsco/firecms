@@ -13,7 +13,7 @@ title: "FormLayout"
 
 > **FormLayout**(`__namedParameters`): `Element`
 
-Defined in: [core/src/form/components/FormLayout.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/form/components/FormLayout.tsx)
+Defined in: [core/src/form/components/FormLayout.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/core/src/form/components/FormLayout.tsx)
 
 ## Parameters
 

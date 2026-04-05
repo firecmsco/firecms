@@ -13,7 +13,7 @@ title: "OnCellValueChange"
 
 > **OnCellValueChange**\<`T`, `M`\> = (`params`) => `Promise`\<`void`\> \| `void`
 
-Defined in: [core/src/components/common/types.tsx:56](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/common/types.tsx)
+Defined in: [core/src/components/common/types.tsx:56](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/common/types.tsx)
 
 Callback when a cell has changed in a table
 

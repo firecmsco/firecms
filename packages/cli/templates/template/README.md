@@ -56,4 +56,4 @@ Collections are defined once in `shared/collections/` and used by both the front
 ## Documentation
 
 - [Rebase Docs](https://rebase.pro/docs)
-- [GitHub](https://github.com/rebaseco/rebase)
+- [GitHub](https://github.com/rebasepro/rebase)

@@ -11,7 +11,7 @@ title: "AIIconProps"
 
 # Interface: AIIconProps
 
-Defined in: [core/src/components/AIIcon.tsx:4](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/AIIcon.tsx)
+Defined in: [core/src/components/AIIcon.tsx:4](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/AIIcon.tsx)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [core/src/components/AIIcon.tsx:4](https://github.com/rebaseco/rebas
 
 > `optional` **className**: `string`
 
-Defined in: [core/src/components/AIIcon.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/AIIcon.tsx)
+Defined in: [core/src/components/AIIcon.tsx:6](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/AIIcon.tsx)
 
 ***
 
@@ -27,4 +27,4 @@ Defined in: [core/src/components/AIIcon.tsx:6](https://github.com/rebaseco/rebas
 
 > `optional` **size**: `"small"` \| `"medium"` \| `"large"` \| `"smallest"`
 
-Defined in: [core/src/components/AIIcon.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/AIIcon.tsx)
+Defined in: [core/src/components/AIIcon.tsx:5](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/AIIcon.tsx)

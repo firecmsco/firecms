@@ -13,7 +13,7 @@ title: "CMSUrlController"
 
 > **CMSUrlController** = `object`
 
-Defined in: [types/src/controllers/navigation.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:8](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Controller that handles URL path building and resolution.
 
@@ -23,7 +23,7 @@ Controller that handles URL path building and resolution.
 
 > **baseCollectionPath**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:19](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:19](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Default path under the collection routes of the CMS will be created.
 It defaults to '/c'
@@ -34,7 +34,7 @@ It defaults to '/c'
 
 > **basePath**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:13](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:13](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Default path under the navigation routes of the CMS will be created.
 Defaults to '/'. You may want to change this `basepath` to 'admin' for example.
@@ -45,7 +45,7 @@ Defaults to '/'. You may want to change this `basepath` to 'admin' for example.
 
 > **buildCMSUrlPath**: (`path`) => `string`
 
-Defined in: [types/src/controllers/navigation.ts:53](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:53](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Build a URL path for the CMS (e.g. for custom views)
 
@@ -65,7 +65,7 @@ Build a URL path for the CMS (e.g. for custom views)
 
 > **buildUrlCollectionPath**: (`path`) => `string`
 
-Defined in: [types/src/controllers/navigation.ts:47](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:47](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Build a URL collection path from a data path
 `products` => `/c/products`
@@ -87,7 +87,7 @@ Build a URL collection path from a data path
 
 > **homeUrl**: `string`
 
-Defined in: [types/src/controllers/navigation.ts:33](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:33](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Base url path for the home screen
 
@@ -97,7 +97,7 @@ Base url path for the home screen
 
 > **isUrlCollectionPath**: (`urlPath`) => `boolean`
 
-Defined in: [types/src/controllers/navigation.ts:39](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:39](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Check if a url path belongs to a collection
 
@@ -117,7 +117,7 @@ Check if a url path belongs to a collection
 
 > **navigate**: (`to`, `options?`) => `void`
 
-Defined in: [types/src/controllers/navigation.ts:68](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:68](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 A function to navigate to a specified route or URL.
 
@@ -145,7 +145,7 @@ Optional configuration settings for navigation, such as replace behavior or stat
 
 > **resolveDatabasePathsFrom**: (`path`) => `string`
 
-Defined in: [types/src/controllers/navigation.ts:60](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:60](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Turn a path with collection ids into a resolved path.
 The ids (typically used in urls) will be replaced with relative paths (typically used in database paths)
@@ -166,7 +166,7 @@ The ids (typically used in urls) will be replaced with relative paths (typically
 
 > **urlPathToDataPath**: (`cmsPath`) => `string`
 
-Defined in: [types/src/controllers/navigation.ts:28](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/navigation.ts)
+Defined in: [types/src/controllers/navigation.ts:28](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/navigation.ts)
 
 Convert a URL path to a collection or entity path
 `/c/products` => `products`

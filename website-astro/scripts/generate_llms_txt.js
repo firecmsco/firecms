@@ -251,9 +251,10 @@ async function buildSlugMap(directoryPath, slugMap) {
 
 const intro = `# Rebase Documentation
 
-> This is the documentation for Rebase, a headless CMS for Firebase/MongoDB. It is a powerful tool to manage your data,
-> with a focus on developer experience and extensibility.
-> Easy to get started, easy to customize and easy to extend.Rebase is great both for existing projects, since it will 
-> adapt to any database structure you have, as well as for new ones.
+> Rebase is an open-source Postgres admin panel and headless CMS built with React and TypeScript.
+> Connect your existing PostgreSQL database and get a full admin UI, REST & GraphQL APIs, a SQL editor,
+> row-level security, and an MCP server for AI agents — all generated from your schema.
+> Rebase uses Drizzle ORM under the hood and keeps your TypeScript collection definitions as the single source of truth.
+> Great for existing projects (it adapts to any Postgres schema) and new ones alike.
 
 `;

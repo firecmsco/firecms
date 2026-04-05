@@ -11,7 +11,7 @@ title: "UploadFileProps"
 
 # Interface: UploadFileProps
 
-Defined in: [types/src/controllers/storage.ts:4](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
+Defined in: [types/src/controllers/storage.ts:4](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ## Properties
 
@@ -19,7 +19,7 @@ Defined in: [types/src/controllers/storage.ts:4](https://github.com/rebaseco/reb
 
 > `optional` **bucket**: `string`
 
-Defined in: [types/src/controllers/storage.ts:9](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
+Defined in: [types/src/controllers/storage.ts:9](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [types/src/controllers/storage.ts:9](https://github.com/rebaseco/reb
 
 > **file**: `File`
 
-Defined in: [types/src/controllers/storage.ts:5](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
+Defined in: [types/src/controllers/storage.ts:5](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [types/src/controllers/storage.ts:5](https://github.com/rebaseco/reb
 
 > `optional` **fileName**: `string`
 
-Defined in: [types/src/controllers/storage.ts:6](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
+Defined in: [types/src/controllers/storage.ts:6](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [types/src/controllers/storage.ts:6](https://github.com/rebaseco/reb
 
 > `optional` **metadata**: `Record`\<`string`, `unknown`\>
 
-Defined in: [types/src/controllers/storage.ts:8](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
+Defined in: [types/src/controllers/storage.ts:8](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/storage.ts)
 
 ***
 
@@ -51,4 +51,4 @@ Defined in: [types/src/controllers/storage.ts:8](https://github.com/rebaseco/reb
 
 > `optional` **path**: `string`
 
-Defined in: [types/src/controllers/storage.ts:7](https://github.com/rebaseco/rebase/blob/main/packages/types/src/controllers/storage.ts)
+Defined in: [types/src/controllers/storage.ts:7](https://github.com/rebasepro/rebase/blob/main/packages/types/src/controllers/storage.ts)

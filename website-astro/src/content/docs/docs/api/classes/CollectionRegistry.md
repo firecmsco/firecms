@@ -11,7 +11,7 @@ title: "CollectionRegistry"
 
 # Class: CollectionRegistry
 
-Defined in: [common/src/collections/CollectionRegistry.ts:15](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:15](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 ## Constructors
 
@@ -19,7 +19,7 @@ Defined in: [common/src/collections/CollectionRegistry.ts:15](https://github.com
 
 > **new CollectionRegistry**(`collections?`): `CollectionRegistry`
 
-Defined in: [common/src/collections/CollectionRegistry.ts:31](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:31](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 #### Parameters
 
@@ -37,7 +37,7 @@ Defined in: [common/src/collections/CollectionRegistry.ts:31](https://github.com
 
 > **get**(`path`): [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\> \| `undefined`
 
-Defined in: [common/src/collections/CollectionRegistry.ts:156](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:156](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 #### Parameters
 
@@ -55,7 +55,7 @@ Defined in: [common/src/collections/CollectionRegistry.ts:156](https://github.co
 
 > **getCollectionByPath**(`collectionPath`): [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\> \| `undefined`
 
-Defined in: [common/src/collections/CollectionRegistry.ts:179](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:179](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 Get collection by resolving multi-segment paths through relations
 e.g., "authors/70/posts" resolves to the posts collection
@@ -76,7 +76,7 @@ e.g., "authors/70/posts" resolves to the posts collection
 
 > **getCollections**(): [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>[]
 
-Defined in: [common/src/collections/CollectionRegistry.ts:224](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:224](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 #### Returns
 
@@ -88,7 +88,7 @@ Defined in: [common/src/collections/CollectionRegistry.ts:224](https://github.co
 
 > **getRaw**(`path`): [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\> \| `undefined`
 
-Defined in: [common/src/collections/CollectionRegistry.ts:169](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:169](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 Gets the pristine, un-normalized collection exactly as it was provided.
 Useful for the AST editor so it doesn't accidentally serialize injected metadata back to disk.
@@ -109,7 +109,7 @@ Useful for the AST editor so it doesn't accidentally serialize injected metadata
 
 > **getRawCollections**(): [`EntityCollection`](../interfaces/EntityCollection)\<`any`, `any`\>[]
 
-Defined in: [common/src/collections/CollectionRegistry.ts:228](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:228](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 #### Returns
 
@@ -121,7 +121,7 @@ Defined in: [common/src/collections/CollectionRegistry.ts:228](https://github.co
 
 > **normalizeCollection**(`collection`): [`EntityCollection`](../interfaces/EntityCollection)
 
-Defined in: [common/src/collections/CollectionRegistry.ts:111](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:111](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 #### Parameters
 
@@ -139,7 +139,7 @@ Defined in: [common/src/collections/CollectionRegistry.ts:111](https://github.co
 
 > **register**(`collection`, `rawCollection?`): `void`
 
-Defined in: [common/src/collections/CollectionRegistry.ts:76](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:76](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 #### Parameters
 
@@ -161,7 +161,7 @@ Defined in: [common/src/collections/CollectionRegistry.ts:76](https://github.com
 
 > **registerMultiple**(`collections`): `boolean`
 
-Defined in: [common/src/collections/CollectionRegistry.ts:55](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:55](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 Registers a collection and its subcollections recursively.
 Returns true if the collections have changed, false otherwise.
@@ -185,7 +185,7 @@ snapshot. Only re-normalizes and re-registers when the raw input actually change
 
 > **reset**(): `void`
 
-Defined in: [common/src/collections/CollectionRegistry.ts:37](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:37](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 #### Returns
 
@@ -197,7 +197,7 @@ Defined in: [common/src/collections/CollectionRegistry.ts:37](https://github.com
 
 > **resolvePathToCollections**(`path`): `object`
 
-Defined in: [common/src/collections/CollectionRegistry.ts:236](https://github.com/rebaseco/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
+Defined in: [common/src/collections/CollectionRegistry.ts:236](https://github.com/rebasepro/rebase/blob/main/packages/common/src/collections/CollectionRegistry.ts)
 
 Resolves a multi-segment path like "products/123/locales" and returns
 information about the collections and entity IDs along the path

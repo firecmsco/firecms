@@ -13,7 +13,7 @@ title: "getTableName"
 
 > **getTableName**(`collection`): `string`
 
-Defined in: [common/src/util/relations.ts:195](https://github.com/rebaseco/rebase/blob/main/packages/common/src/util/relations.ts)
+Defined in: [common/src/util/relations.ts:195](https://github.com/rebasepro/rebase/blob/main/packages/common/src/util/relations.ts)
 
 ## Parameters
 

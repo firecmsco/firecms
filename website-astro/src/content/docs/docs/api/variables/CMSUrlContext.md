@@ -13,4 +13,4 @@ title: "CMSUrlContext"
 
 > `const` **CMSUrlContext**: `Context`\<[`CMSUrlController`](../type-aliases/CMSUrlController)\>
 
-Defined in: [core/src/hooks/navigation/contexts/CMSUrlContext.tsx:6](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/contexts/CMSUrlContext.tsx)
+Defined in: [core/src/hooks/navigation/contexts/CMSUrlContext.tsx:6](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/contexts/CMSUrlContext.tsx)

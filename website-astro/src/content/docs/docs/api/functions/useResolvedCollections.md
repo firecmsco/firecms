@@ -13,7 +13,7 @@ title: "useResolvedCollections"
 
 > **useResolvedCollections**\<`EC`, `USER`\>(`props`): [`UseResolvedCollectionsResult`](../type-aliases/UseResolvedCollectionsResult)
 
-Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
+Defined in: [core/src/hooks/navigation/useResolvedCollections.ts:40](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/navigation/useResolvedCollections.ts)
 
 Hook that resolves collection props (which may be async builders or arrays)
 into concrete EntityCollection[], and registers them with the CollectionRegistry.

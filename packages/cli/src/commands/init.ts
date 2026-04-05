@@ -63,7 +63,7 @@ async function promptForOptions(rawArgs: string[]): Promise<InitOptions> {
     // The first positional arg after "init" is the project name
     const nameArg = args._[0];
 
-    const questions: any[] = [];
+    const questions: Record<string, unknown>[] = [];
 
     if (!nameArg) {
         questions.push({
@@ -99,7 +99,7 @@ async function promptForOptions(rawArgs: string[]): Promise<InitOptions> {
         });
     }
 
-    const answers = await inquirer.prompt(questions);
+    const answers = await inquirer.prompt(questions as unknown as Parameters<typeof inquirer.prompt>[0]);
 
     const projectName = nameArg || answers.projectName;
     const targetDirectory = path.resolve(process.cwd(), projectName);
@@ -145,8 +145,8 @@ async function createProject(options: InitOptions) {
                 return basename !== "node_modules" && basename !== ".DS_Store";
             }
         });
-    } catch (err: any) {
-        console.error(`${chalk.red.bold("ERROR")} Failed to copy template files: ${err.message}`);
+    } catch (err: unknown) {
+        console.error(`${chalk.red.bold("ERROR")} Failed to copy template files: ${err instanceof Error ? err.message : String(err)}`);
         process.exit(1);
     }
 
@@ -158,11 +158,11 @@ async function createProject(options: InitOptions) {
     const envPath = path.join(options.targetDirectory, ".env");
     if (fs.existsSync(envTemplatePath) && !fs.existsSync(envPath)) {
         fs.renameSync(envTemplatePath, envPath);
-        
+
         // Generate secure random strings
         const jwtSecret = crypto.randomBytes(32).toString("hex");
         const dbPassword = crypto.randomBytes(16).toString("hex");
-        
+
         let envContent = fs.readFileSync(envPath, "utf-8");
         envContent = envContent.replace(
             "postgresql://rebase:password@localhost:5432/rebase",
@@ -172,10 +172,10 @@ async function createProject(options: InitOptions) {
             "change-this-to-a-secure-random-string",
             jwtSecret
         );
-        
+
         // Append POSTGRES_PASSWORD for docker-compose interpolation
         envContent += `\n# Docker Compose Database Password\nPOSTGRES_PASSWORD=${dbPassword}\n`;
-        
+
         fs.writeFileSync(envPath, envContent, "utf-8");
     }
 
@@ -223,7 +223,7 @@ async function createProject(options: InitOptions) {
         + chalk.gray(" and the frontend (Vite + React) concurrently."));
     console.log("");
     console.log(chalk.gray("Docs: https://rebase.pro/docs"));
-    console.log(chalk.gray("GitHub: https://github.com/rebaseco/rebase"));
+    console.log(chalk.gray("GitHub: https://github.com/rebasepro/rebase"));
     console.log("");
 }
 

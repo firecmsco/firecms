@@ -10,7 +10,7 @@ jest.mock("../src/auth/password");
 import { hashPassword } from "../src/auth/password";
 
 describe("Admin Routes", () => {
-    let db: jest.Mocked<NodePgDatabase<any>>;
+    let db: jest.Mocked<NodePgDatabase>;
     let mockUserService: jest.Mocked<UserService>;
     let mockRoleService: jest.Mocked<RoleService>;
     let mockReq: Partial<Request> & { user?: { userId: string; roles: string[] } };
@@ -43,7 +43,7 @@ describe("Admin Routes", () => {
             getUserRoles: jest.fn(),
             setUserRoles: jest.fn(),
             getUserWithRoles: jest.fn()
-        } as any;
+        } as unknown as jest.Mocked<UserService>;
 
         mockRoleService = {
             getRoleById: jest.fn(),
@@ -51,7 +51,7 @@ describe("Admin Routes", () => {
             createRole: jest.fn(),
             updateRole: jest.fn(),
             deleteRole: jest.fn()
-        } as any;
+        } as unknown as jest.Mocked<RoleService>;
     });
 
     describe("requireAdmin middleware", () => {
@@ -66,7 +66,7 @@ describe("Admin Routes", () => {
             // The middleware checks if user.roles includes an admin role
             const mockAdminReq = {
                 user: adminUser
-            } as any;
+            } as unknown as Request;
 
             // Since requireAdmin checks roles array, admin should pass
             expect(mockAdminReq.user.roles).toContain("admin");
@@ -112,7 +112,7 @@ describe("Admin Routes", () => {
             it("should return user with roles", async () => {
                 const mockUser = { id: "user-1", email: "test@example.com" };
                 const mockRoles = [{ id: "editor", name: "Editor", isAdmin: false }];
-                mockUserService.getUserWithRoles.mockResolvedValue({ user: mockUser as any, roles: mockRoles as any });
+                mockUserService.getUserWithRoles.mockResolvedValue({ user: mockUser as unknown as Parameters<typeof mockUserService.getUserWithRoles>[0] extends string ? ReturnType<typeof mockUserService.getUserById> : never, roles: mockRoles as unknown as Role[] });
 
                 const result = await mockUserService.getUserWithRoles("user-1");
 
@@ -133,9 +133,9 @@ describe("Admin Routes", () => {
             it("should create user when admin", async () => {
                 const newUser = { email: "new@example.com", displayName: "New User" };
                 const createdUser = { id: "new-user-id", ...newUser };
-                mockUserService.createUser.mockResolvedValue(createdUser as any);
+                mockUserService.createUser.mockResolvedValue(createdUser as unknown as Awaited<ReturnType<typeof mockUserService.createUser>>);
 
-                const result = await mockUserService.createUser(newUser as any);
+                const result = await mockUserService.createUser(newUser as unknown as Parameters<typeof mockUserService.createUser>[0]);
 
                 expect(result.id).toBe("new-user-id");
                 expect(result.email).toBe("new@example.com");
@@ -154,9 +154,9 @@ describe("Admin Routes", () => {
         describe("PUT /admin/users/:id (admin required)", () => {
             it("should update user", async () => {
                 const updatedUser = { id: "user-1", email: "test@example.com", displayName: "Updated Name" };
-                mockUserService.updateUser.mockResolvedValue(updatedUser as any);
+                mockUserService.updateUser.mockResolvedValue(updatedUser as unknown as Awaited<ReturnType<typeof mockUserService.updateUser>>);
 
-                const result = await mockUserService.updateUser("user-1", { displayName: "Updated Name" } as any);
+                const result = await mockUserService.updateUser("user-1", { displayName: "Updated Name" } as unknown as Parameters<typeof mockUserService.updateUser>[1]);
 
                 expect(result?.displayName).toBe("Updated Name");
             });
@@ -164,7 +164,7 @@ describe("Admin Routes", () => {
             it("should return null for non-existent user", async () => {
                 mockUserService.updateUser.mockResolvedValue(null);
 
-                const result = await mockUserService.updateUser("nonexistent", {} as any);
+                const result = await mockUserService.updateUser("nonexistent", {} as unknown as Parameters<typeof mockUserService.updateUser>[1]);
 
                 expect(result).toBeNull();
             });
@@ -198,7 +198,7 @@ describe("Admin Routes", () => {
                     { id: "admin", name: "Admin", isAdmin: true },
                     { id: "editor", name: "Editor", isAdmin: false }
                 ];
-                mockRoleService.listRoles.mockResolvedValue(mockRoles as any);
+                mockRoleService.listRoles.mockResolvedValue(mockRoles as unknown as Awaited<ReturnType<typeof mockRoleService.listRoles>>);
 
                 const roles = await mockRoleService.listRoles();
 
@@ -209,7 +209,7 @@ describe("Admin Routes", () => {
         describe("GET /admin/roles/:id", () => {
             it("should return role by ID", async () => {
                 const mockRole = { id: "admin", name: "Admin", isAdmin: true };
-                mockRoleService.getRoleById.mockResolvedValue(mockRole as any);
+                mockRoleService.getRoleById.mockResolvedValue(mockRole as unknown as Role);
 
                 const role = await mockRoleService.getRoleById("admin");
 
@@ -230,9 +230,9 @@ describe("Admin Routes", () => {
             it("should create a new role", async () => {
                 const newRole = { id: "custom", name: "Custom Role" };
                 const createdRole = { ...newRole, isAdmin: false, defaultPermissions: null, collectionPermissions: null, config: null };
-                mockRoleService.createRole.mockResolvedValue(createdRole as any);
+                mockRoleService.createRole.mockResolvedValue(createdRole as unknown as Role);
 
-                const role = await mockRoleService.createRole(newRole as any);
+                const role = await mockRoleService.createRole(newRole as unknown as Parameters<typeof mockRoleService.createRole>[0]);
 
                 expect(role.id).toBe("custom");
                 expect(role.name).toBe("Custom Role");
@@ -242,7 +242,7 @@ describe("Admin Routes", () => {
         describe("PUT /admin/roles/:id (admin required)", () => {
             it("should update an existing role", async () => {
                 const updatedRole = { id: "editor", name: "Super Editor", isAdmin: false };
-                mockRoleService.updateRole.mockResolvedValue(updatedRole as any);
+                mockRoleService.updateRole.mockResolvedValue(updatedRole as unknown as Role);
 
                 const role = await mockRoleService.updateRole("editor", { name: "Super Editor" });
 

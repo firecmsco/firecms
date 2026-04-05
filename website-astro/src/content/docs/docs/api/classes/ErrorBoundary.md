@@ -11,7 +11,7 @@ title: "ErrorBoundary"
 
 # Class: ErrorBoundary
 
-Defined in: [core/src/components/ErrorBoundary.tsx:5](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorBoundary.tsx)
+Defined in: [core/src/components/ErrorBoundary.tsx:5](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ErrorBoundary.tsx)
 
 ## Extends
 
@@ -23,7 +23,7 @@ Defined in: [core/src/components/ErrorBoundary.tsx:5](https://github.com/rebasec
 
 > **new ErrorBoundary**(`props`): `ErrorBoundary`
 
-Defined in: [core/src/components/ErrorBoundary.tsx:8](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorBoundary.tsx)
+Defined in: [core/src/components/ErrorBoundary.tsx:8](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ErrorBoundary.tsx)
 
 #### Parameters
 
@@ -45,7 +45,7 @@ React.Component\<PropsWithChildren\<Record\<string, unknown\>\>, \{ error: Error
 
 > **componentDidCatch**(`error`, `errorInfo`): `void`
 
-Defined in: [core/src/components/ErrorBoundary.tsx:18](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorBoundary.tsx)
+Defined in: [core/src/components/ErrorBoundary.tsx:18](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ErrorBoundary.tsx)
 
 Catches exceptions generated in descendant components. Unhandled exceptions will cause
 the entire component tree to unmount.
@@ -74,7 +74,7 @@ the entire component tree to unmount.
 
 > **render**(): `string` \| `number` \| `bigint` \| `boolean` \| `Iterable`\<`ReactNode`, `any`, `any`\> \| `Promise`\<`AwaitedReactNode`\> \| `Element` \| `null` \| `undefined`
 
-Defined in: [core/src/components/ErrorBoundary.tsx:23](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorBoundary.tsx)
+Defined in: [core/src/components/ErrorBoundary.tsx:23](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ErrorBoundary.tsx)
 
 #### Returns
 
@@ -90,7 +90,7 @@ Defined in: [core/src/components/ErrorBoundary.tsx:23](https://github.com/rebase
 
 > `static` **getDerivedStateFromError**(`error`): `object`
 
-Defined in: [core/src/components/ErrorBoundary.tsx:14](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/ErrorBoundary.tsx)
+Defined in: [core/src/components/ErrorBoundary.tsx:14](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/ErrorBoundary.tsx)
 
 #### Parameters
 

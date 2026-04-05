@@ -13,7 +13,7 @@ title: "AIModifiedIndicator"
 
 > **AIModifiedIndicator**(`__namedParameters`): `Element`
 
-Defined in: [core/src/components/AIIcon.tsx:32](https://github.com/rebaseco/rebase/blob/main/packages/core/src/components/AIIcon.tsx)
+Defined in: [core/src/components/AIIcon.tsx:32](https://github.com/rebasepro/rebase/blob/main/packages/core/src/components/AIIcon.tsx)
 
 Small animated dot indicator for AI-modified elements.
 Shows a pulsing gradient dot.

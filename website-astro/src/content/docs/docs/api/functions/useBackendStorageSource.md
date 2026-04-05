@@ -13,7 +13,7 @@ title: "useBackendStorageSource"
 
 > **useBackendStorageSource**(`__namedParameters`): [`StorageSource`](../interfaces/StorageSource)
 
-Defined in: [core/src/hooks/useBackendStorageSource.ts:40](https://github.com/rebaseco/rebase/blob/main/packages/core/src/hooks/useBackendStorageSource.ts)
+Defined in: [core/src/hooks/useBackendStorageSource.ts:40](https://github.com/rebasepro/rebase/blob/main/packages/core/src/hooks/useBackendStorageSource.ts)
 
 Hook to create a StorageSource that uses the backend storage REST API.
 Use this for self-hosted Rebase with local or S3 storage.
