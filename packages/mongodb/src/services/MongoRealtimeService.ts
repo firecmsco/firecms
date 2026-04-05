@@ -8,6 +8,7 @@
 import { Db, ChangeStream, ChangeStreamDocument, Document, ObjectId } from "mongodb";
 import {
     Entity,
+    FilterValues,
     RealtimeProvider,
     CollectionSubscriptionConfig,
     EntitySubscriptionConfig,
@@ -123,7 +124,7 @@ export class MongoRealtimeService implements RealtimeProvider {
     ): Promise<void> {
         try {
             const entities = await this.entityService.fetchCollection(config.path, {
-                filter: config.filter as any,
+                filter: config.filter as FilterValues<string> | undefined,
                 orderBy: config.orderBy,
                 order: config.order,
                 limit: config.limit,

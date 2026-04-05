@@ -78,7 +78,6 @@ export function StringNumberFilterField({
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
         if (prevOpIsArray !== newOpIsArray) {
-            // @ts-ignore
             newValue = newOpIsArray ? (typeof val === "string" || typeof val === "number" ? [val] : []) : undefined;
         }
 

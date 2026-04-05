@@ -59,15 +59,12 @@ export function getIconForProperty(
 export function getPropertyInPath(properties: Properties, path: string): Property | undefined {
     if (typeof properties === "object") {
         if (path in properties) {
-            // @ts-ignore
-            return properties[path as keyof typeof properties];
+            return (properties as Record<string, Property>)[path];
         }
         if (path.includes(".")) {
             const pathSegments = path.split(".");
-            // @ts-ignore
-            const childProperty = properties[pathSegments[0] as keyof typeof properties];
+            const childProperty = (properties as Record<string, Property>)[pathSegments[0]];
             if (typeof childProperty === "object" && childProperty.type === "map" && childProperty.properties) {
-                // @ts-ignore
                 return getPropertyInPath(childProperty.properties, pathSegments.slice(1).join("."))
             }
         }

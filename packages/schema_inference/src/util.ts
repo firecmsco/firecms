@@ -88,8 +88,8 @@ export function mergeDeep<T extends Record<any, any>, U extends Record<any, any>
                 // Only recursively merge plain objects, not class instances
                 if (!(key in target))
                     Object.assign(output, { [key]: sourceElement });
-                else if (isPlainObject((target as any)[key]))
-                    (output as any)[key] = mergeDeep((target as any)[key], sourceElement);
+                else if (isPlainObject((target as Record<string, unknown>)[key]))
+                    (output as Record<string, unknown>)[key] = mergeDeep((target as Record<string, unknown>)[key] as Record<string, unknown>, sourceElement);
                 else
                     Object.assign(output, { [key]: sourceElement });
             } else if (isObject(sourceElement)) {

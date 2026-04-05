@@ -104,7 +104,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     const resolvedStorage = storageSourceProp ?? client?.storage;
 
     // Database fallback logic
-    const resolvedDatabaseAdmin = databaseAdmin ?? (client?.ws as any);
+    const resolvedDatabaseAdmin = databaseAdmin ?? (client?.ws as unknown as typeof databaseAdmin);
 
     const sideEntityController = useBuildSideEntityController(collectionRegistryController, cmsUrlController, navigationStateController, sideDialogsController, authController);
 
@@ -157,7 +157,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                 <UserConfigurationPersistenceContext.Provider
                     value={userConfigPersistence}>
                     <StorageSourceContext.Provider
-                        value={resolvedStorage as any}>
+                        value={resolvedStorage!}>
                         <RebaseDataContext.Provider
                             value={resolvedData}>
                             <DatabaseAdminContext.Provider

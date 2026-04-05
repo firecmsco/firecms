@@ -55,7 +55,7 @@ export function KeyValueFieldBinding({
         throw Error(`Your property ${propertyKey} needs to have the 'keyValue' prop in order to use this field binding`);
     }
 
-    const initialValues = getIn(context.formex.initialValues, propertyKey);
+    const initialValues = getIn(context.formex.initialValues, propertyKey) as Record<string, unknown> | undefined;
 
     const mapFormView = <MapEditView value={value}
         setValue={setValue}
@@ -177,11 +177,9 @@ function MapEditView<T extends Record<string, any>>({
 
                     const newValue = { ...(value ?? {}) } as T;
                     if (typeof initialValue === "object" && fieldKey in initialValue) {
-                        // @ts-ignore
-                        newValue[fieldKey] = undefined; // set to undefined to remove from the object, the driver will remove it from the backend
+                        (newValue as Record<string, unknown>)[fieldKey] = undefined; // set to undefined to remove from the object, the driver will remove it from the backend
                     } else {
-                        // @ts-ignore
-                        delete newValue[fieldKey];
+                        delete (newValue as Record<string, unknown>)[fieldKey];
                     }
                     setValue({
                         ...newValue,
@@ -195,11 +193,9 @@ function MapEditView<T extends Record<string, any>>({
                     onDeleteClick={() => {
                         const newValue = { ...(value ?? {}) as T };
                         if (initialValue && fieldKey in initialValue) {
-                            // @ts-ignore
-                            newValue[fieldKey] = undefined;
+                            (newValue as Record<string, unknown>)[fieldKey] = undefined;
                         } else {
-                            // @ts-ignore
-                            delete newValue[fieldKey];
+                            delete (newValue as Record<string, unknown>)[fieldKey];
                         }
                         setInternalState(internalState.filter((currentRowId) => currentRowId[0] !== rowId));
                         setValue({

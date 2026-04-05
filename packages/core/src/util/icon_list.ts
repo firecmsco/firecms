@@ -5,8 +5,7 @@ import Fuse from "fuse.js";
 
 const map = iconKeys
     .map((importName) => {
-        // @ts-ignore
-        const iconSynonym = importName in iconSynonyms ? iconSynonyms[importName] : "";
+        const iconSynonym = importName in iconSynonyms ? (iconSynonyms as Record<string, string>)[importName] : "";
         return {
             key: importName,
             synonyms: iconSynonym,

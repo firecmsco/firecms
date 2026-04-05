@@ -59,16 +59,15 @@ export function DateTimeFilterField({
             return;
         }
 
-        let newValue: Date | null | undefined = val;
+        let newValue: Date | Date[] | null | undefined = val;
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
         if (prevOpIsArray !== newOpIsArray) {
-            // @ts-ignore
-            newValue = newOpIsArray ? (val ? [val] : []) : "";
+            newValue = newOpIsArray ? (val ? [val] : []) : undefined;
         }
 
         setOperation(op);
-        setInternalValue(newValue);
+        setInternalValue(Array.isArray(newValue) ? newValue[0] ?? null : newValue);
 
         const hasNewValue = newValue !== null && Array.isArray(newValue)
             ? newValue.length > 0

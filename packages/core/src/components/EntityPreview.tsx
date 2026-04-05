@@ -335,9 +335,8 @@ export const EntityPreviewContainer = React.forwardRef<HTMLDivElement, EntityPre
         ref={ref}
         style={{
             ...style,
-            // @ts-ignore
-            tabindex: 0
-        }}
+            tabIndex: 0
+        } as React.CSSProperties}
         className={cls(
             "bg-white dark:bg-surface-900",
             size === "small" ? "min-h-[32px]" : "min-h-[44px]",

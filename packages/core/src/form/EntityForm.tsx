@@ -462,8 +462,8 @@ export function EntityForm<M extends Record<string, any>>({
     const disabled = formex.isSubmitting || Boolean(disabledProp);
 
     const formContext: FormContext<M> = {
-        // @ts-ignore
-        setFieldValue: useCallback(formex.setFieldValue, []),
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- stable reference for form field value setter
+        setFieldValue: useCallback((key: string, value: unknown) => formex.setFieldValue(key, value), []),
         values: formex.values,
         collection: collection,
         entityId: entityId as string,
@@ -816,7 +816,7 @@ export function zodToFormErrors(zodError: z.ZodError): Record<string, any> {
 /**
  * @deprecated Use zodToFormErrors instead
  */
-export const yupToFormErrors = zodToFormErrors as any;
+export const yupToFormErrors = zodToFormErrors;
 
 function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<any>, lastSavedValues: any, save: (values: EntityValues<any>) => Promise<Entity<any> | void>) {
     if (!autoSave) return;

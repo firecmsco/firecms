@@ -11,13 +11,11 @@ const entityCache: Map<string, object> = new Map();
 const isSessionStorageAvailable = typeof sessionStorage !== "undefined";
 
 // Define custom replacer for JSON.stringify
-function customReplacer(key: string): any {
+function customReplacer(this: Record<string, unknown>, key: string): unknown {
 
-    // @ts-ignore
     const value = this[key];
 
     // Handle Date objects
-    // @ts-ignore
     if (value instanceof Date) {
         return {
             __type: "Date",
@@ -26,7 +24,6 @@ function customReplacer(key: string): any {
     }
 
     // Handle EntityReference
-    // @ts-ignore
     if (value instanceof EntityReference) {
         return {
             __type: "EntityReference",
@@ -46,7 +43,6 @@ function customReplacer(key: string): any {
     }
 
     // Handle GeoPoint
-    // @ts-ignore
     if (value instanceof GeoPoint) {
         return {
             __type: "GeoPoint",
@@ -56,7 +52,6 @@ function customReplacer(key: string): any {
     }
 
     // Handle Vector
-    // @ts-ignore
     if (value instanceof Vector) {
         return {
             __type: "Vector",
@@ -68,24 +63,25 @@ function customReplacer(key: string): any {
 }
 
 // Define custom reviver for JSON.parse
-function customReviver(key: string, value: any): any {
+function customReviver(_key: string, value: unknown): unknown {
     if (value && typeof value === "object" && "__type" in value) {
-        switch (value.__type) {
+        const record = value as Record<string, unknown>;
+        switch (record.__type) {
             case "Date":
-                return new Date(value.value);
+                return new Date(record.value as string);
             case "EntityReference":
                 return new EntityReference({
-                    id: value.id,
-                    path: value.path,
-                    driver: value.driver,
-                    databaseId: value.databaseId
+                    id: record.id as string,
+                    path: record.path as string,
+                    driver: record.driver as string | undefined,
+                    databaseId: record.databaseId as string | undefined
                 });
             case "EntityRelation":
-                return new EntityRelation(value.id, value.path);
+                return new EntityRelation(record.id as string, record.path as string);
             case "GeoPoint":
-                return new GeoPoint(value.latitude, value.longitude);
+                return new GeoPoint(record.latitude as number, record.longitude as number);
             case "Vector":
-                return new Vector(value.value);
+                return new Vector(record.value as number[]);
             default:
                 return value;
         }

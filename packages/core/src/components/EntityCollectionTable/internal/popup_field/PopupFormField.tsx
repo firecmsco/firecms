@@ -11,7 +11,7 @@ import {
     Property,
     PropertyFieldBindingProps,
 } from "@rebasepro/types";
-import { Formex, useCreateFormex } from "@rebasepro/formex";
+import { Formex, FormexController, useCreateFormex } from "@rebasepro/formex";
 import { useDraggable } from "./useDraggable";
 import { CustomFieldValidator, getEntitySchema } from "../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
@@ -413,7 +413,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     return (
         <Portal.Root asChild
             container={container}>
-            <Formex value={formex as any}>
+            <Formex value={formex as unknown as FormexController<Record<string, unknown>>}>
                 {draggable}
             </Formex>
         </Portal.Root>

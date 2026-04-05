@@ -75,8 +75,9 @@ export function ReferenceFilterField({
         const newOpIsArray = multipleSelectOperations.includes(op);
         let newValue = val;
         if (prevOpIsArray !== newOpIsArray) {
-            // @ts-ignore
-            newValue = newOpIsArray ? (newValue?.isEntityReference && newValue?.isEntityReference() ? [newValue] : []) : undefined
+            newValue = newOpIsArray
+                ? (newValue && !Array.isArray(newValue) && newValue.isEntityReference?.() ? [newValue] : [])
+                : undefined;
         }
 
         setOperation(op);

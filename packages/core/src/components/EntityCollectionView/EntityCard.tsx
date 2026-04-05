@@ -84,10 +84,10 @@ export function EntityCard<M extends Record<string, any> = any>({
     const imageProperty = imagePropertyKey ? resolvedCollection.properties[imagePropertyKey] : undefined;
     const usedImageProperty = imageProperty && "of" in imageProperty ? imageProperty.of : imageProperty;
 
-    const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) as any : undefined;
+    const imageValue = imagePropertyKey ? getValueInPath(entity.values, imagePropertyKey) : undefined;
     const usedImageValue = imageProperty !== undefined
         ? ("of" in imageProperty
-            ? ((imageValue ?? []).length > 0 ? imageValue[0] : undefined)
+            ? (((imageValue as unknown[]) ?? []).length > 0 ? (imageValue as unknown[])[0] : undefined)
             : imageValue)
         : undefined;
 
@@ -207,12 +207,12 @@ export function EntityCard<M extends Record<string, any> = any>({
                 {previewKeys.slice(0, 2).map((key) => {
                     const property = resolvedCollection.properties[key];
                     if (!property) return null;
-                    const value = getValueInPath(entity.values, key) as any;
+                    const value = getValueInPath(entity.values, key);
                     return (
                         <div key={key} className="truncate text-xs text-surface-600 dark:text-surface-400">
                             <PropertyPreview
                                 propertyKey={key}
-                                value={value}
+                                value={value as never}
                                 property={property}
                                 size="small"
                             />

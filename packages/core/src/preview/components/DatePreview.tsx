@@ -28,8 +28,7 @@ export function DatePreview({
 }: DatePreviewProps): React.ReactElement {
 
     const customizationController = useCustomizationController();
-    // @ts-ignore
-    const dateUtilsLocale = customizationController?.locale ? locales[customizationController?.locale] : undefined;
+    const dateUtilsLocale = customizationController?.locale ? (locales as Record<string, locales.Locale>)[customizationController.locale] : undefined;
 
     if (!date) {
         return <></>;

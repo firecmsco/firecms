@@ -69,8 +69,7 @@ export function RepeatFieldBinding({
         storedProps,
         storeProps
     }: ArrayEntryParams) => {
-        // @ts-ignore
-        const childProperty = resolvedProperties[index] ?? ofProperty;
+        const childProperty = (resolvedProperties as Record<number, typeof ofProperty>)?.[index] ?? ofProperty;
         const fieldProps: PropertyFieldBindingProps = {
             propertyKey: `${propertyKey}.${index}`,
             disabled,

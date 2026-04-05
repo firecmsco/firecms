@@ -27,17 +27,38 @@ export interface FetchHistoryOptions {
     offset?: number;
 }
 
+export interface HistoryRetentionConfig {
+    /** Max entries per entity. Oldest pruned first. Default 200. */
+    maxEntries: number;
+    /** Entries older than this many days are pruned. Default 90. */
+    ttlDays: number;
+}
+
+const DEFAULT_RETENTION: HistoryRetentionConfig = {
+    maxEntries: 200,
+    ttlDays: 90
+};
+
 /**
  * Service for recording and querying entity change history.
  * Stores snapshots in the `rebase.entity_history` table.
  */
 export class HistoryService {
-    constructor(private db: NodePgDatabase) {}
+    public retention: HistoryRetentionConfig;
+
+    constructor(
+        private db: NodePgDatabase,
+        retention?: Partial<HistoryRetentionConfig>
+    ) {
+        this.retention = { ...DEFAULT_RETENTION, ...retention };
+    }
 
     /**
      * Record a history entry for an entity change.
      * This is intentionally fire-and-forget safe — errors are logged but never
      * bubble up to block the main save/delete operation.
+     *
+     * After inserting, kicks off a non-blocking pruning pass for this entity.
      */
     async recordHistory(params: RecordHistoryParams): Promise<void> {
         const {
@@ -67,6 +88,11 @@ export class HistoryService {
                     ${updatedBy ?? null}
                 )
             `);
+
+            // Non-blocking prune for this specific entity
+            this.pruneEntity(tableName, entityId).catch(err =>
+                console.error("History prune failed:", err)
+            );
         } catch (error) {
             console.error("Failed to record entity history:", error);
         }
@@ -126,6 +152,51 @@ export class HistoryService {
 
         if (result.rows.length === 0) return null;
         return result.rows[0] as unknown as HistoryEntry;
+    }
+
+    // ───────── Retention / Pruning ─────────
+
+    /**
+     * Prune history for a single entity: enforce maxEntries and TTL.
+     */
+    async pruneEntity(tableName: string, entityId: string): Promise<number> {
+        let deleted = 0;
+
+        // 1. TTL — delete entries older than ttlDays
+        const ttlResult = await this.db.execute(sql`
+            DELETE FROM rebase.entity_history
+            WHERE table_name = ${tableName}
+              AND entity_id = ${String(entityId)}
+              AND updated_at < NOW() - MAKE_INTERVAL(days => ${this.retention.ttlDays})
+        `);
+        deleted += ttlResult.rowCount ?? 0;
+
+        // 2. Max entries — keep the newest maxEntries, delete the rest
+        const maxResult = await this.db.execute(sql`
+            DELETE FROM rebase.entity_history
+            WHERE id IN (
+                SELECT id FROM rebase.entity_history
+                WHERE table_name = ${tableName}
+                  AND entity_id = ${String(entityId)}
+                ORDER BY updated_at DESC
+                OFFSET ${this.retention.maxEntries}
+            )
+        `);
+        deleted += maxResult.rowCount ?? 0;
+
+        return deleted;
+    }
+
+    /**
+     * Global prune: enforce TTL across ALL entities in a single sweep.
+     * Intended to be called periodically (e.g. once per hour or daily).
+     */
+    async pruneExpired(): Promise<number> {
+        const result = await this.db.execute(sql`
+            DELETE FROM rebase.entity_history
+            WHERE updated_at < NOW() - MAKE_INTERVAL(days => ${this.retention.ttlDays})
+        `);
+        return result.rowCount ?? 0;
     }
 }
 

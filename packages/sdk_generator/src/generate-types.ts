@@ -126,7 +126,8 @@ export function generateTypedefs(collections: EntityCollection[]): string {
             if (prop.type === "relation") continue; 
             const tsType = propertyToTypeScriptType(prop);
             const isRequired = prop.validation?.required;
-            const isAutoId = "isId" in prop && (prop as any).isId && (prop as any).isId !== "manual" && (prop as any).isId !== true;
+            const typedProp = prop as StringProperty | NumberProperty;
+            const isAutoId = "isId" in prop && typedProp.isId && typedProp.isId !== "manual" && typedProp.isId !== true;
             const isOptional = !isRequired || isAutoId;
             lines.push(`      ${toSafeIdentifier(key)}${isOptional ? "?" : ""}: ${tsType};`);
             emittedKeys.add(key);

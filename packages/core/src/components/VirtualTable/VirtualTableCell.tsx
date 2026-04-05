@@ -24,8 +24,7 @@ type VirtualTableCellProps<T extends any> = {
 
 export const VirtualTableCell = React.memo<VirtualTableCellProps<any>>(
     function VirtualTableCell<T>(props: VirtualTableCellProps<T>) {
-        // @ts-ignore
-        return props.rowData && props.cellRenderer(
+        return props.rowData && React.createElement(props.cellRenderer,
             {
                 cellData: props.cellData,
                 rowData: props.rowData,

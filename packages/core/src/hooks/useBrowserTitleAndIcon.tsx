@@ -11,14 +11,12 @@ export function useBrowserTitleAndIcon(name: string, logo?: string) {
     useEffect(() => {
         if (document) {
             document.title = `${name} - Rebase`;
-            let link = document.querySelector("link[rel~='icon']");
+            let link = document.querySelector("link[rel~='icon']") as HTMLLinkElement | null;
             if (!link) {
                 link = document.createElement("link");
-                // @ts-ignore
                 link.rel = "icon";
                 document.getElementsByTagName("head")[0].appendChild(link);
             }
-            // @ts-ignore
             link.href = logo ?? rebaseLogo;
         }
     }, [name, logo]);

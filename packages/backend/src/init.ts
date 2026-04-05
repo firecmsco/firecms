@@ -190,9 +190,37 @@ export interface RebaseBackendConfig {
      * values on every create, update, and delete for collections that have
      * `history: true` in their definition.
      *
+     * Pass an object to customise retention:
+     * ```ts
+     * history: {
+     *     maxEntries: 200,   // per entity, oldest pruned first (default 200)
+     *     ttlDays: 90        // entries older than this are pruned  (default 90)
+     * }
+     * ```
+     *
      * Requires a PostgreSQL default driver (creates `rebase.entity_history` table).
      */
-    history?: boolean;
+    history?: boolean | HistoryConfig;
+}
+
+/**
+ * Retention policy for entity history.
+ * Controls how many entries are kept per entity and how old they can be.
+ */
+export interface HistoryConfig {
+    /**
+     * Maximum number of history entries to keep per entity.
+     * When exceeded, the oldest entries are pruned.
+     * @default 200
+     */
+    maxEntries?: number;
+
+    /**
+     * Number of days to retain history entries.
+     * Entries older than this are pruned.
+     * @default 90
+     */
+    ttlDays?: number;
 }
 
 export interface RebaseBackendInstance {
@@ -460,7 +488,12 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         } else {
             console.log("📜 Configuring entity history...");
             await ensureHistoryTableExists(defaultDb);
-            historyService = new HistoryService(defaultDb);
+
+            // Resolve retention config: `true` → defaults, object → merge
+            const retentionConfig = typeof config.history === "object"
+                ? config.history
+                : undefined;
+            historyService = new HistoryService(defaultDb, retentionConfig);
 
             // Inject the history service into the default driver
             const defaultDriver = delegates[DEFAULT_DRIVER_ID];
@@ -468,7 +501,22 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
                 defaultDriver.historyService = historyService;
             }
 
-            console.log("✅ Entity history configured");
+            // Periodic global TTL prune (every 6 hours)
+            const PRUNE_INTERVAL_MS = 6 * 60 * 60 * 1000;
+            const pruneTimer = setInterval(() => {
+                historyService!.pruneExpired().then(deleted => {
+                    if (deleted > 0) {
+                        console.log(`🧹 Pruned ${deleted} expired history entries`);
+                    }
+                }).catch(err => {
+                    console.error("History prune sweep failed:", err);
+                });
+            }, PRUNE_INTERVAL_MS);
+            // Don't prevent process exit
+            pruneTimer.unref();
+
+            const { maxEntries, ttlDays } = historyService.retention;
+            console.log(`✅ Entity history configured (retain ${maxEntries} entries / ${ttlDays} days)`);
         }
     }
 

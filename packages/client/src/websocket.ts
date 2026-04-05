@@ -33,7 +33,7 @@ export interface RebaseWebSocketConfig {
     /** Optional auth token getter for WebSocket authentication */
     getAuthToken?: () => Promise<string>;
     /** Optional WebSocket constructor to override globalThis.WebSocket (e.g. for Node environments) */
-    WebSocket?: any;
+    WebSocket?: typeof WebSocket;
 }
 
 
@@ -118,12 +118,12 @@ export class RebaseWebSocketClient {
 
     private isAuthenticated = false;
     private authPromise: Promise<void> | null = null;
-    private WebSocketConstructor: any;
+    private WebSocketConstructor: typeof WebSocket | undefined;
 
     constructor(config: RebaseWebSocketConfig) {
         this.websocketUrl = config.websocketUrl;
         this.getAuthToken = config.getAuthToken;
-        this.WebSocketConstructor = config.WebSocket || (typeof window !== "undefined" ? window.WebSocket : (typeof globalThis !== "undefined" ? (globalThis as any).WebSocket : undefined));
+        this.WebSocketConstructor = config.WebSocket || (typeof WebSocket !== "undefined" ? WebSocket : undefined);
         
         if (!this.WebSocketConstructor) {
             console.warn("WebSocket is not defined in this environment. Realtime subscriptions will not work unless you provide a WebSocket implementation in the config.");
