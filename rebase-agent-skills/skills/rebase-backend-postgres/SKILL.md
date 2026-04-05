@@ -64,7 +64,7 @@ rebase db migrate
 ## Drizzle Configuration
 
 The `drizzle.config.ts` is configured to:
-- **Only manage tables defined in your schema** — other tables (like `rebase_users`, `rebase_roles`) are ignored
+- **Only manage tables defined in your schema** — other tables (like internal `rebase.*` tables) are ignored
 - Use the `DATABASE_URL` from your `.env` file
 - Output migrations to `./drizzle/`
 

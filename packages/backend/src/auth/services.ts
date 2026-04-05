@@ -116,8 +116,8 @@ export class UserService implements UserRepository {
     async getUserRoles(userId: string): Promise<Role[]> {
         const result = await this.db.execute(sql`
             SELECT r.id, r.name, r.is_admin, r.default_permissions, r.collection_permissions, r.config
-            FROM rebase_roles r
-            INNER JOIN rebase_user_roles ur ON r.id = ur.role_id
+            FROM rebase.roles r
+            INNER JOIN rebase.user_roles ur ON r.id = ur.role_id
             WHERE ur.user_id = ${userId}
         `);
 
@@ -144,12 +144,12 @@ export class UserService implements UserRepository {
      */
     async setUserRoles(userId: string, roleIds: string[]): Promise<void> {
         // Delete existing roles
-        await this.db.execute(sql`DELETE FROM rebase_user_roles WHERE user_id = ${userId}`);
+        await this.db.execute(sql`DELETE FROM rebase.user_roles WHERE user_id = ${userId}`);
 
         // Insert new roles
         for (const roleId of roleIds) {
             await this.db.execute(sql`
-                INSERT INTO rebase_user_roles (user_id, role_id)
+                INSERT INTO rebase.user_roles (user_id, role_id)
                 VALUES (${userId}, ${roleId})
                 ON CONFLICT DO NOTHING
             `);
@@ -161,7 +161,7 @@ export class UserService implements UserRepository {
      */
     async assignDefaultRole(userId: string, roleId: string = "editor"): Promise<void> {
         await this.db.execute(sql`
-            INSERT INTO rebase_user_roles (user_id, role_id)
+            INSERT INTO rebase.user_roles (user_id, role_id)
             VALUES (${userId}, ${roleId})
             ON CONFLICT DO NOTHING
         `);
@@ -189,7 +189,7 @@ export class RoleService implements RoleRepository {
     async getRoleById(id: string): Promise<Role | null> {
         const result = await this.db.execute(sql`
             SELECT id, name, is_admin, default_permissions, collection_permissions, config
-            FROM rebase_roles
+            FROM rebase.roles
             WHERE id = ${id}
         `);
 
@@ -209,7 +209,7 @@ export class RoleService implements RoleRepository {
     async listRoles(): Promise<Role[]> {
         const result = await this.db.execute(sql`
             SELECT id, name, is_admin, default_permissions, collection_permissions, config
-            FROM rebase_roles
+            FROM rebase.roles
             ORDER BY name
         `);
 
@@ -225,7 +225,7 @@ export class RoleService implements RoleRepository {
 
     async createRole(data: Omit<Role, "isAdmin" | "collectionPermissions"> & { isAdmin?: boolean; collectionPermissions?: Role["collectionPermissions"] }): Promise<Role> {
         const result = await this.db.execute(sql`
-            INSERT INTO rebase_roles (id, name, is_admin, default_permissions, collection_permissions, config)
+            INSERT INTO rebase.roles (id, name, is_admin, default_permissions, collection_permissions, config)
             VALUES (
                 ${data.id},
                 ${data.name},
@@ -254,7 +254,7 @@ export class RoleService implements RoleRepository {
         if (!existing) return null;
 
         await this.db.execute(sql`
-            UPDATE rebase_roles 
+            UPDATE rebase.roles 
             SET 
                 name = ${data.name ?? existing.name},
                 is_admin = ${data.isAdmin ?? existing.isAdmin},
@@ -268,7 +268,7 @@ export class RoleService implements RoleRepository {
     }
 
     async deleteRole(id: string): Promise<void> {
-        await this.db.execute(sql`DELETE FROM rebase_roles WHERE id = ${id}`);
+        await this.db.execute(sql`DELETE FROM rebase.roles WHERE id = ${id}`);
     }
 }
 
@@ -284,7 +284,7 @@ export class RefreshTokenService {
         // Delete any existing session for this user/device combo, then insert.
         // This approach doesn't require the unique_device_session constraint to exist.
         await this.db.execute(sql`
-            DELETE FROM rebase_refresh_tokens 
+            DELETE FROM rebase.refresh_tokens 
             WHERE user_id = ${userId} 
             AND user_agent = ${safeUserAgent} 
             AND ip_address = ${safeIpAddress}
@@ -361,7 +361,7 @@ export class PasswordResetTokenService {
     async createToken(userId: string, tokenHash: string, expiresAt: Date): Promise<void> {
         // Delete any existing unused tokens for this user
         await this.db.execute(sql`
-            DELETE FROM rebase_password_reset_tokens 
+            DELETE FROM rebase.password_reset_tokens 
             WHERE user_id = ${userId} AND used_at IS NULL
         `);
 
@@ -389,7 +389,7 @@ export class PasswordResetTokenService {
         // Check if expired or used
         const result = await this.db.execute(sql`
             SELECT user_id, expires_at 
-            FROM rebase_password_reset_tokens 
+            FROM rebase.password_reset_tokens 
             WHERE token_hash = ${tokenHash} 
               AND used_at IS NULL 
               AND expires_at > NOW()
@@ -426,7 +426,7 @@ export class PasswordResetTokenService {
      */
     async deleteExpired(): Promise<void> {
         await this.db.execute(sql`
-            DELETE FROM rebase_password_reset_tokens 
+            DELETE FROM rebase.password_reset_tokens 
             WHERE expires_at < NOW()
         `);
     }

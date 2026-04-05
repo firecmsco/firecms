@@ -49,7 +49,6 @@ export default defineConfig({
             "@rebasepro/firebase": path.resolve(__dirname, "../../packages/firebase/src"),
             "@rebasepro/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
             "@rebasepro/data_import": path.resolve(__dirname, "../../packages/data_import/src"),
-            "@rebasepro/entity_history": path.resolve(__dirname, "../../packages/entity_history/src"),
             "@rebasepro/data_export": path.resolve(__dirname, "../../packages/data_export/src"),
             "@rebasepro/schema_inference": path.resolve(__dirname, "../../packages/schema_inference/src"),
             "@rebasepro/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src"),

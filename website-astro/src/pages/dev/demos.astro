@@ -1,0 +1,168 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { SQLEditorDemo } from "../../components/demos/SQLEditorDemo";
+import { RLSEditorDemo } from "../../components/demos/RLSEditorDemo";
+import { StorageViewDemo } from "../../components/demos/StorageViewDemo";
+import { EntityViewDemo } from "../../components/demos/EntityViewDemo";
+import { JSEditorDemo } from "../../components/demos/JSEditorDemo";
+import { SchemaEditorDemo } from "../../components/SchemaEditorDemo";
+import { RebaseEditorDemo } from "../../components/RebaseEditorDemo";
+import "../../styles/editor.css";
+
+const title = "Development Demos — Rebase Component Lab";
+const description = "Internal development sandbox for prototyping and evaluating Rebase Studio components.";
+
+// Only allow this page in development
+if (import.meta.env.PROD) {
+    return Astro.redirect("/");
+}
+---
+
+<Layout title={title} description={description}>
+    <main class="bg-black min-h-screen">
+        <!-- Header -->
+        <section class="relative overflow-hidden pt-20 pb-10 sm:pt-28 sm:pb-14">
+            <div class="pointer-events-none absolute inset-0">
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+                <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-3xl opacity-50"></div>
+            </div>
+            <div class="px-4 mx-auto max-w-7xl text-center lg:px-12 relative z-10">
+                <div class="inline-flex items-center py-1.5 px-3 mb-6 text-sm rounded-full bg-amber-500/10 text-amber-400 ring-1 ring-inset ring-amber-500/20 mx-auto">
+                    <span class="text-sm font-medium">🛠  Development Only</span>
+                </div>
+                <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl text-white font-sans">
+                    Component Lab
+                </h1>
+                <p class="mb-6 text-lg leading-8 text-surface-400 sm:px-16 xl:px-48">
+                    Interactive demos simulating core Rebase Studio features. Each section is a self-contained React component with mock data.
+                </p>
+
+                <!-- TOC -->
+                <div class="flex flex-wrap items-center justify-center gap-2">
+                    <a href="#entity-view" class="px-3 py-1.5 rounded-lg bg-surface-800/40 text-surface-400 text-xs font-medium hover:text-white hover:bg-surface-800/60 transition-colors">Entity View</a>
+                    <a href="#sql-editor" class="px-3 py-1.5 rounded-lg bg-surface-800/40 text-surface-400 text-xs font-medium hover:text-white hover:bg-surface-800/60 transition-colors">SQL Editor</a>
+                    <a href="#rls-editor" class="px-3 py-1.5 rounded-lg bg-surface-800/40 text-surface-400 text-xs font-medium hover:text-white hover:bg-surface-800/60 transition-colors">RLS Editor</a>
+                    <a href="#js-editor" class="px-3 py-1.5 rounded-lg bg-surface-800/40 text-surface-400 text-xs font-medium hover:text-white hover:bg-surface-800/60 transition-colors">JS Editor</a>
+                    <a href="#storage-view" class="px-3 py-1.5 rounded-lg bg-surface-800/40 text-surface-400 text-xs font-medium hover:text-white hover:bg-surface-800/60 transition-colors">Storage</a>
+                    <a href="#schema-editor" class="px-3 py-1.5 rounded-lg bg-surface-800/40 text-surface-400 text-xs font-medium hover:text-white hover:bg-surface-800/60 transition-colors">Schema Editor</a>
+                    <a href="#rich-text-editor" class="px-3 py-1.5 rounded-lg bg-surface-800/40 text-surface-400 text-xs font-medium hover:text-white hover:bg-surface-800/60 transition-colors">Rich Text</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Entity View Demo -->
+        <section id="entity-view" class="py-12 sm:py-16">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="inline-flex items-center py-1 px-2.5 mb-3 text-xs font-medium rounded-full bg-indigo-500/10 text-indigo-400 ring-1 ring-inset ring-indigo-500/20">
+                        Collection View + Forms
+                    </div>
+                    <h2 class="text-2xl font-medium tracking-tight text-white sm:text-3xl mb-3">Entity View</h2>
+                    <p class="text-surface-400 max-w-2xl">Spreadsheet-like table view with inline editing, row selection, and a slide-in form panel for creating/editing entities. Includes auto-generated forms with text, number, boolean, select, date, and textarea fields.</p>
+                </div>
+                <EntityViewDemo client:only="react" />
+            </div>
+        </section>
+
+        <div class="mx-auto max-w-7xl px-6 lg:px-8"><hr class="border-surface-800/40" /></div>
+
+        <!-- SQL Editor Demo -->
+        <section id="sql-editor" class="py-12 sm:py-16">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="inline-flex items-center py-1 px-2.5 mb-3 text-xs font-medium rounded-full bg-cyan-500/10 text-cyan-400 ring-1 ring-inset ring-cyan-500/20">
+                        Built-in SQL View
+                    </div>
+                    <h2 class="text-2xl font-medium tracking-tight text-white sm:text-3xl mb-3">SQL Editor</h2>
+                    <p class="text-surface-400 max-w-2xl">Full SQL editor with schema browser sidebar, syntax highlighting, tab management, query execution simulation, and result table with export options. Try editing the SQL and pressing Run or ⌘ Enter.</p>
+                </div>
+                <SQLEditorDemo client:only="react" />
+            </div>
+        </section>
+
+        <div class="mx-auto max-w-7xl px-6 lg:px-8"><hr class="border-surface-800/40" /></div>
+
+        <!-- RLS Editor Demo -->
+        <section id="rls-editor" class="py-12 sm:py-16">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="inline-flex items-center py-1 px-2.5 mb-3 text-xs font-medium rounded-full bg-orange-500/10 text-orange-400 ring-1 ring-inset ring-orange-500/20">
+                        Row-Level Security
+                    </div>
+                    <h2 class="text-2xl font-medium tracking-tight text-white sm:text-3xl mb-3">RLS Policy Editor</h2>
+                    <p class="text-surface-400 max-w-2xl">Visual Postgres RLS policy management with per-table enable/disable, policy cards showing USING/CHECK expressions, inline editing, sync status indicators, and new policy creation form. Try selecting different tables and creating a new policy.</p>
+                </div>
+                <RLSEditorDemo client:only="react" />
+            </div>
+        </section>
+
+        <div class="mx-auto max-w-7xl px-6 lg:px-8"><hr class="border-surface-800/40" /></div>
+
+        <!-- JS Editor Demo -->
+        <section id="js-editor" class="py-12 sm:py-16">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="inline-flex items-center py-1 px-2.5 mb-3 text-xs font-medium rounded-full bg-amber-500/10 text-amber-400 ring-1 ring-inset ring-amber-500/20">
+                        JavaScript Console
+                    </div>
+                    <h2 class="text-2xl font-medium tracking-tight text-white sm:text-3xl mb-3">JS / SDK Editor</h2>
+                    <p class="text-surface-400 max-w-2xl">JavaScript execution environment with Rebase SDK integration. Features collection browser sidebar, snippet library, JSON/console result views, and "Run as" user selector. Click SDK methods in the sidebar to auto-generate code.</p>
+                </div>
+                <JSEditorDemo client:only="react" />
+            </div>
+        </section>
+
+        <div class="mx-auto max-w-7xl px-6 lg:px-8"><hr class="border-surface-800/40" /></div>
+
+        <!-- Storage View Demo -->
+        <section id="storage-view" class="py-12 sm:py-16">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="inline-flex items-center py-1 px-2.5 mb-3 text-xs font-medium rounded-full bg-emerald-500/10 text-emerald-400 ring-1 ring-inset ring-emerald-500/20">
+                        File Management
+                    </div>
+                    <h2 class="text-2xl font-medium tracking-tight text-white sm:text-3xl mb-3">Storage Browser</h2>
+                    <p class="text-surface-400 max-w-2xl">File storage manager with folder tree sidebar, breadcrumb navigation, grid/list view toggle, file preview panel with metadata, upload overlay, and drag-and-drop support. Try navigating folders and selecting files.</p>
+                </div>
+                <StorageViewDemo client:only="react" />
+            </div>
+        </section>
+
+        <div class="mx-auto max-w-7xl px-6 lg:px-8"><hr class="border-surface-800/40" /></div>
+
+        <!-- Schema Editor Demo (existing component) -->
+        <section id="schema-editor" class="py-12 sm:py-16">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="inline-flex items-center py-1 px-2.5 mb-3 text-xs font-medium rounded-full bg-violet-500/10 text-violet-400 ring-1 ring-inset ring-violet-500/20">
+                        Schema-as-Code
+                    </div>
+                    <h2 class="text-2xl font-medium tracking-tight text-white sm:text-3xl mb-3">Schema Editor</h2>
+                    <p class="text-surface-400 max-w-2xl">Visual schema editor with property list, type configuration, and animated interactions. This is the existing demo used in the Studio showcase page.</p>
+                </div>
+                <div class="rounded-xl overflow-hidden ring-1 ring-surface-700 shadow-2xl">
+                    <SchemaEditorDemo client:only="react" />
+                </div>
+            </div>
+        </section>
+
+        <div class="mx-auto max-w-7xl px-6 lg:px-8"><hr class="border-surface-800/40" /></div>
+
+        <!-- Rich Text Editor Demo (existing component) -->
+        <section id="rich-text-editor" class="py-12 sm:py-16 pb-24">
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mb-8">
+                    <div class="inline-flex items-center py-1 px-2.5 mb-3 text-xs font-medium rounded-full bg-pink-500/10 text-pink-400 ring-1 ring-inset ring-pink-500/20">
+                        Content Editing
+                    </div>
+                    <h2 class="text-2xl font-medium tracking-tight text-white sm:text-3xl mb-3">Rich Text Editor</h2>
+                    <p class="text-surface-400 max-w-2xl">Block-based rich text editor built on the Rebase editor package. This is the existing demo used in the Studio showcase page.</p>
+                </div>
+                <div class="rounded-xl overflow-hidden ring-1 ring-surface-700 shadow-2xl">
+                    <RebaseEditorDemo client:only="react" />
+                </div>
+            </div>
+        </section>
+
+    </main>
+</Layout>

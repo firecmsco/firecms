@@ -72,21 +72,17 @@ export class RebaseApiServer {
         // Security headers
         this.router.use("/*", secureHeaders());
 
-        // CORS
-        const rawCors = this.config.cors as { origin?: string | string[] | boolean | ((origin: string) => string), [key: string]: unknown } | false | undefined;
-        if (rawCors !== false && rawCors?.origin !== false) {
-            const corsConfig: NonNullable<Parameters<typeof cors>[0]> = typeof rawCors === 'object' ? { 
-                ...rawCors, 
-                origin: typeof rawCors.origin === 'string' || Array.isArray(rawCors.origin) || typeof rawCors.origin === 'function' ? rawCors.origin : '*' 
-            } as NonNullable<Parameters<typeof cors>[0]> : { origin: '*' };
-            
-            // Translate Express `origin: true` to Hono origin reflection function
-            if (typeof rawCors === 'object' && rawCors.origin === true) {
-                // Return the requested origin directly
-                corsConfig.origin = (origin: string) => origin;
-            }
-            
-            this.router.use("/*", cors(corsConfig));
+        // CORS — only applied if explicitly configured via `cors` option.
+        // If omitted, the user is expected to configure CORS on their own
+        // Hono app before mounting the API (recommended approach).
+        if (this.config.cors) {
+            const origin = this.config.cors.origin;
+            this.router.use("/*", cors({
+                origin: typeof origin === "boolean"
+                    ? (origin ? ((o: string) => o) : "")
+                    : (origin ?? "*"),
+                credentials: this.config.cors.credentials ?? false
+            }));
         }
 
         // Auth middleware

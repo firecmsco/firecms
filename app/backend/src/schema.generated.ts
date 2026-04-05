@@ -107,11 +107,13 @@ export const postsRelations = drizzleRelations(posts, ({ one, many }) => ({
 export const postsTagsRelations = drizzleRelations(postsTags, ({ one, many }) => ({
     post_id: one(posts, {
         fields: [postsTags.post_id],
-        references: [posts.id]
+        references: [posts.id],
+        relationName: "tags"
     }),
     tag_id: one(tags, {
         fields: [postsTags.tag_id],
-        references: [tags.id]
+        references: [tags.id],
+        relationName: "posts"
     })
 }));
 
@@ -124,7 +126,7 @@ export const profilesRelations = drizzleRelations(profiles, ({ one, many }) => (
 }));
 
 export const tagsRelations = drizzleRelations(tags, ({ one, many }) => ({
-    posts: many(posts, { relationName: "posts" })
+    posts: many(postsTags, { relationName: "posts" })
 }));
 
 export const testEntitiesRelations = drizzleRelations(testEntities, ({ one, many }) => ({
@@ -135,11 +137,13 @@ export const testEntitiesRelations = drizzleRelations(testEntities, ({ one, many
 export const tagsTestEntitiesRelations = drizzleRelations(tagsTestEntities, ({ one, many }) => ({
     test_entitie_id: one(testEntities, {
         fields: [tagsTestEntities.test_entitie_id],
-        references: [testEntities.id]
+        references: [testEntities.id],
+        relationName: "test_entity_tags"
     }),
     test_entity_tag_id: one(tags, {
         fields: [tagsTestEntities.test_entity_tag_id],
-        references: [tags.id]
+        references: [tags.id],
+        relationName: "test_entity_tags"
     })
 }));
 

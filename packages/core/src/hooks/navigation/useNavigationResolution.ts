@@ -5,11 +5,54 @@ import {
     DataDriver,
     EntityCollection,
     EntityCollectionsBuilder,
+    EntityCustomView,
     RebasePlugin,
     User,
     RebaseData
 } from "@rebasepro/types";
 import { canReadCollection } from "@rebasepro/common";
+import { EntityHistoryView } from "../../components/history/EntityHistoryView";
+
+/**
+ * Auto-inject the "History" tab into any collection that has `history: true`.
+ * Skips if the collection already has an entity view named "History".
+ */
+function injectHistoryViews(collections: EntityCollection[]): EntityCollection[] {
+    return collections.map((collection) => {
+        let modified = collection;
+
+        if (collection.history) {
+            const existing = (collection.entityViews ?? []) as (string | EntityCustomView)[];
+            const alreadyHasHistory = existing.some(
+                v => typeof v === "object" && v.name === "History"
+            );
+
+            if (!alreadyHasHistory) {
+                const historyView: EntityCustomView = {
+                    key: "__rebase_history",
+                    name: "History",
+                    Builder: EntityHistoryView,
+                    position: "end"
+                };
+                modified = {
+                    ...collection,
+                    entityViews: [...existing, historyView]
+                };
+            }
+        }
+
+        // Recurse into subcollections
+        if (modified.subcollections) {
+            const originalSubcollections = modified.subcollections;
+            return {
+                ...modified,
+                subcollections: () => injectHistoryViews(originalSubcollections() ?? [])
+            };
+        }
+
+        return modified;
+    });
+}
 
 export function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[], authController: AuthController<User>): EntityCollection[] {
     return resolvedCollections
@@ -64,6 +107,9 @@ export async function resolveCollections(
             }
         }
     }
+
+    // Auto-inject history views for collections with history: true
+    resolvedCollections = injectHistoryViews(resolvedCollections);
 
     resolvedCollections = filterOutNotAllowedCollections(resolvedCollections, authController);
     return resolvedCollections;

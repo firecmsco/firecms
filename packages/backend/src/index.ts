@@ -49,6 +49,7 @@ export * from "./types/index";
 export * from "./auth";
 // Re-export schema types (excluding Role to avoid conflict with auth/services.ts Role interface)
 export {
+    rebaseSchema,
     users,
     roles,
     userRoles,
@@ -81,6 +82,9 @@ export * from "./storage";
 export * from "./generate-drizzle-schema";
 export * from "./utils/logging";
 export * from "./utils/sql";
+
+// Entity history
+export * from "./history";
 
 // Factory functions for creating backend instances
 export * from "./factory";

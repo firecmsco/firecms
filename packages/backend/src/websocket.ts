@@ -383,15 +383,21 @@ export function createPostgresWebSocket(
                     // Route subscription messages to RealtimeService
                     case "subscribe_collection":
                     case "subscribe_entity":
-                    case "unsubscribe":
+                    case "unsubscribe": {
                         wsDebug("🔄 [WebSocket Server] Routing subscription message to RealtimeService:", type);
+                        // Attach auth context from the WS session so RLS-aware refetches work
+                        const session = clientSessions.get(clientId);
+                        const authContext = session?.user
+                            ? { userId: session.user.userId, roles: session.user.roles ?? [] }
+                            : undefined;
                         // Let RealtimeService handle these messages
                         await realtimeService.handleClientMessage(clientId, {
                             type,
                             payload,
                             subscriptionId: payload?.subscriptionId
-                        });
+                        }, authContext);
                         break;
+                    }
 
                     default:
                         console.error("❌ [WebSocket Server] Unknown message type:", type);

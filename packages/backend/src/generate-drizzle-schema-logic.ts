@@ -499,8 +499,33 @@ export const generateSchema = async (collections: EntityCollection[]): Promise<s
                 if (!relation?.through)
                     throw new Error("Internal, the relation should have a through property. Relations passed to this script should sanitized first with sanitizeRelation().");
 
-                tableRelations.push(`    ${relation.through.sourceColumn}: one(${sourceTableVar}, {\n        fields: [${tableVarName}.${relation.through.sourceColumn}],\n        references: [${sourceTableVar}.${sourceId}]\n    })`);
-                tableRelations.push(`    ${relation.through.targetColumn}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${relation.through.targetColumn}],\n        references: [${targetTableVar}.${targetId}]\n    })`);
+                // The owning relation's name — used on the source side of the junction
+                const owningRelationName = relation.relationName ?? toSnakeCase(getTableName(targetCollection));
+
+                // Find the inverse relation name on the target collection (if any)
+                // This is needed so the junction's target-side one() can pair with the
+                // inverse many() on the target table.
+                let inverseRelationName: string | null = null;
+                try {
+                    const targetRelations = resolveCollectionRelations(targetCollection);
+                    for (const [, targetRel] of Object.entries(targetRelations)) {
+                        if (targetRel.direction === "inverse" &&
+                            targetRel.cardinality === "many" &&
+                            targetRel.inverseRelationName === owningRelationName) {
+                            inverseRelationName = targetRel.relationName ?? null;
+                            break;
+                        }
+                    }
+                } catch {
+                    // ignore — inverse side may not exist
+                }
+
+                // Source side one(): pairs with owning table's many(junctionTable, { relationName })
+                tableRelations.push(`    ${relation.through.sourceColumn}: one(${sourceTableVar}, {\n        fields: [${tableVarName}.${relation.through.sourceColumn}],\n        references: [${sourceTableVar}.${sourceId}],\n        relationName: \"${owningRelationName}\"\n    })`);
+
+                // Target side one(): pairs with inverse table's many(junctionTable, { relationName })
+                const targetRelName = inverseRelationName ?? owningRelationName;
+                tableRelations.push(`    ${relation.through.targetColumn}: one(${targetTableVar}, {\n        fields: [${tableVarName}.${relation.through.targetColumn}],\n        references: [${targetTableVar}.${targetId}],\n        relationName: \"${targetRelName}\"\n    })`);
             }
         } else {
             const resolvedRelations = resolveCollectionRelations(collection);

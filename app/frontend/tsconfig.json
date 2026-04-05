@@ -47,9 +47,6 @@
         "../../packages/data_enhancement/src"
       ],
 
-      "@rebasepro/entity_history": [
-        "../../packages/entity_history/src"
-      ],
       "@rebasepro/data_import": [
         "../../packages/data_import/src"
       ],

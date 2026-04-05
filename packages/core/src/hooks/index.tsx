@@ -53,3 +53,5 @@ export * from "./ApiConfigContext";
 export * from "./useTranslation";
 
 export * from "./useRebaseClient";
+
+export * from "./useEntityHistory";

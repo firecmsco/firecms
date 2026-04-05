@@ -128,19 +128,17 @@ export function extractUserFromToken(token: string): AccessTokenPayload | null {
 
 /**
  * Helper to scope a DataDriver via withAuth() for RLS.
- * Returns the scoped driver, or falls back to the original on error.
+ * SECURITY: If withAuth() is available but fails, the error is re-thrown
+ * so the request is denied rather than proceeding with unscoped access.
  */
 async function scopeDataDriver(
     driver: DataDriver,
     user: { uid: string; roles?: string[] }
 ): Promise<DataDriver> {
     if ("withAuth" in driver && typeof (driver as Record<string, unknown>).withAuth === "function") {
-        try {
-            return await (driver as unknown as { withAuth: (user: Record<string, unknown>) => Promise<DataDriver> }).withAuth(user);
-        } catch (e) {
-            console.error("Failed to initialize scoped data source", e);
-            return driver;
-        }
+        // Fail closed — do NOT catch and swallow errors here.
+        // If RLS scoping fails the request must be rejected.
+        return await (driver as unknown as { withAuth: (user: Record<string, unknown>) => Promise<DataDriver> }).withAuth(user);
     }
     return driver;
 }

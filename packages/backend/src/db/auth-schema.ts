@@ -1,10 +1,16 @@
-import { pgTable, varchar, uuid, timestamp, boolean, jsonb, primaryKey, unique } from "drizzle-orm/pg-core";
+import { pgSchema, varchar, uuid, timestamp, boolean, jsonb, primaryKey, unique } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
+
+/**
+ * Dedicated PostgreSQL schema for all Rebase internal tables.
+ * Keeps the user's `public` schema clean.
+ */
+export const rebaseSchema = pgSchema("rebase");
 
 /**
  * Users table - stores both email/password and OAuth users
  */
-export const users = pgTable("rebase_users", {
+export const users = rebaseSchema.table("users", {
     id: uuid("id").defaultRandom().primaryKey(),
     email: varchar("email", { length: 255 }).notNull().unique(),
     passwordHash: varchar("password_hash", { length: 255 }), // NULL for OAuth-only users
@@ -22,7 +28,7 @@ export const users = pgTable("rebase_users", {
 /**
  * Roles table - defines permission sets
  */
-export const roles = pgTable("rebase_roles", {
+export const roles = rebaseSchema.table("roles", {
     id: varchar("id", { length: 50 }).primaryKey(), // 'admin', 'editor', 'viewer'
     name: varchar("name", { length: 100 }).notNull(),
     isAdmin: boolean("is_admin").default(false).notNull(),
@@ -50,7 +56,7 @@ export const roles = pgTable("rebase_roles", {
 /**
  * User-Role junction table
  */
-export const userRoles = pgTable("rebase_user_roles", {
+export const userRoles = rebaseSchema.table("user_roles", {
     userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
     roleId: varchar("role_id", { length: 50 }).notNull().references(() => roles.id, { onDelete: "cascade" })
 }, (table) => ({
@@ -60,7 +66,7 @@ export const userRoles = pgTable("rebase_user_roles", {
 /**
  * Refresh tokens for long-lived sessions
  */
-export const refreshTokens = pgTable("rebase_refresh_tokens", {
+export const refreshTokens = rebaseSchema.table("refresh_tokens", {
     id: uuid("id").defaultRandom().primaryKey(),
     userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
     tokenHash: varchar("token_hash", { length: 255 }).notNull().unique(),
@@ -75,7 +81,7 @@ export const refreshTokens = pgTable("rebase_refresh_tokens", {
 /**
  * Password reset tokens for forgot password flow
  */
-export const passwordResetTokens = pgTable("rebase_password_reset_tokens", {
+export const passwordResetTokens = rebaseSchema.table("password_reset_tokens", {
     id: uuid("id").defaultRandom().primaryKey(),
     userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
     tokenHash: varchar("token_hash", { length: 255 }).notNull().unique(),
@@ -87,7 +93,7 @@ export const passwordResetTokens = pgTable("rebase_password_reset_tokens", {
 /**
  * App config - key/value store for custom settings
  */
-export const appConfig = pgTable("rebase_app_config", {
+export const appConfig = rebaseSchema.table("app_config", {
     key: varchar("key", { length: 100 }).primaryKey(),
     value: jsonb("value").notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull()

@@ -139,7 +139,7 @@ rebase schema generate && rebase db generate && rebase db migrate
 
 ### Tables Not in Schema Are Ignored
 
-The `drizzle.config.ts` is configured to **only manage tables defined in your schema**. Other tables in the database (like `rebase_users`, `rebase_roles`, or any custom tables) are completely ignored and will not be affected by migrations.
+The `drizzle.config.ts` is configured to **only manage tables defined in your schema**. Other tables in the database (like internal Rebase tables in the `rebase` schema, or any custom tables) are completely ignored and will not be affected by migrations.
 
 ### Never Use `db pull` Then `db migrate`
 

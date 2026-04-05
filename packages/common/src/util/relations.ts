@@ -82,12 +82,14 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
             // Try to determine if this is a many-to-many inverse relation
             if (newRelation.inverseRelationName && !newRelation.foreignKeyOnTarget) {
                 try {
-                    // Look for a corresponding owning many-to-many relation on the target collection
+                    // Look for a corresponding owning many-to-many relation on the target collection.
+                    // Note: we intentionally do NOT require `through` here because the raw (unsanitized)
+                    // relations won't have `through` populated yet — sanitizeRelation fills it in later.
+                    // `cardinality: "many" + direction: "owning"` is sufficient to identify owning M2M.
                     const targetRelations = targetCollection.relations || [];
                     for (const targetRel of targetRelations) {
                         if (targetRel.cardinality === "many" &&
-                            targetRel.direction === "owning" &&
-                            targetRel.through &&
+                            (targetRel.direction === "owning" || !targetRel.direction) &&
                             (targetRel.relationName === newRelation.inverseRelationName)) {
                             // Found a corresponding owning many-to-many relation
                             isManyToManyInverse = true;
@@ -124,7 +126,7 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
     if (newRelation.cardinality === "one" && newRelation.direction === "inverse" && !newRelation.foreignKeyOnTarget && !newRelation.joinPath) {
         throw new Error(`Configuration Error in relation from '${sourceCollection.name}': An 'inverse' one-to-one relation requires a 'foreignKeyOnTarget'. Check the relation config for '${newRelation.relationName}'`);
     }
-    if (newRelation.cardinality === "many" && newRelation.direction === "inverse" && !newRelation.foreignKeyOnTarget && !newRelation.joinPath) {
+    if (newRelation.cardinality === "many" && newRelation.direction === "inverse" && !newRelation.foreignKeyOnTarget && !newRelation.joinPath && !newRelation.inverseRelationName) {
         throw new Error(`Configuration Error in relation from '${sourceCollection.name}': An 'inverse' one-to-many relation requires a 'foreignKeyOnTarget'. Check the relation config for '${newRelation.relationName}'`);
     }
 

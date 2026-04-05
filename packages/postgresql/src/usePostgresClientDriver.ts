@@ -49,7 +49,6 @@ export function usePostgresClientDriver(config: PostgresDataDriverConfig): Postg
         },
 
         async saveEntity<M extends Record<string, any>>(props: SaveEntityProps<M>): Promise<Entity<M>> {
-            console.log("Saving entity", props.path, props.values);
             return client.saveEntity({
                 path: props.path,
                 values: props.values,

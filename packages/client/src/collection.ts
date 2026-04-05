@@ -87,7 +87,7 @@ export interface CollectionClient<M extends Record<string, any> = any> extends C
 }
 
 export function createCollectionClient<M extends Record<string, any> = any>(transport: Transport, slug: string, ws?: RebaseWebSocketClient): CollectionClient<M> {
-    const basePath = `/${slug}`;
+    const basePath = `/data/${slug}`;
 
     return {
         async find(params?: FindParams) {

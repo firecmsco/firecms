@@ -11,6 +11,9 @@ import { DatabasePoolManager } from "./services/databasePoolManager";
 import { Server } from "http";
 import { createPostgresWebSocket } from "./websocket";
 import { ApiConfig, RebaseApiServer } from "./api";
+import { RestApiGenerator } from "./api/rest/api-generator";
+import { createAuthMiddleware } from "./auth/middleware";
+import { errorHandler } from "./api/errors";
 import { Hono } from "hono";
 import { HonoEnv } from "./api/types";
 import * as fs from "fs";
@@ -36,6 +39,7 @@ import {
     StorageController,
     StorageRegistry
 } from "./storage";
+import { HistoryService, ensureHistoryTableExists, createHistoryRoutes } from "./history";
 
 /**
  * Authentication configuration for Rebase backend
@@ -67,7 +71,8 @@ export interface AuthConfig {
  */
 export interface PostgresDriverConfig {
     /** Drizzle database connection */
-    connection: NodePgDatabase;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    connection: NodePgDatabase<any>;
     /** Database schema */
     schema: {
         /** Database tables (Drizzle schema) */
@@ -178,6 +183,16 @@ export interface RebaseBackendConfig {
      * Properties without `storageId` use "(default)".
      */
     storage?: BackendStorageConfig | Record<string, BackendStorageConfig>;
+
+    /**
+     * Enable entity change history.
+     * When `true`, the backend will automatically record a snapshot of entity
+     * values on every create, update, and delete for collections that have
+     * `history: true` in their definition.
+     *
+     * Requires a PostgreSQL default driver (creates `rebase.entity_history` table).
+     */
+    history?: boolean;
 }
 
 export interface RebaseBackendInstance {
@@ -224,6 +239,11 @@ export interface RebaseBackendInstance {
      * Collection registry instance used by this backend.
      */
     collectionRegistry: BackendCollectionRegistry;
+
+    /**
+     * Entity history service (only present when `history: true` in config).
+     */
+    historyService?: HistoryService;
 }
 
 export async function initializeRebaseBackend(config: RebaseBackendConfig): Promise<RebaseBackendInstance> {
@@ -372,7 +392,8 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
 
     // ============ Get default driver for auth ============
     // Auth requires PostgreSQL, so we need to find the default db connection
-    let defaultDb: NodePgDatabase | undefined;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let defaultDb: NodePgDatabase<any> | undefined;
     const defaultConfig = rawDriverConfigs[DEFAULT_DRIVER_ID];
     if (defaultConfig) {
         const resolved = resolveDriverConfig(defaultConfig);
@@ -427,6 +448,30 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         }
     }
 
+    // ============ Initialize history if configured ============
+    let historyService: HistoryService | undefined;
+
+    if (config.history) {
+        if (!defaultDb) {
+            console.warn(
+                "⚠️ History requires a PostgreSQL database. No default PostgreSQL driver found. " +
+                "History will not be initialized."
+            );
+        } else {
+            console.log("📜 Configuring entity history...");
+            await ensureHistoryTableExists(defaultDb);
+            historyService = new HistoryService(defaultDb);
+
+            // Inject the history service into the default driver
+            const defaultDriver = delegates[DEFAULT_DRIVER_ID];
+            if (defaultDriver instanceof PostgresDataDriver) {
+                defaultDriver.historyService = historyService;
+            }
+
+            console.log("✅ Entity history configured");
+        }
+    }
+
     // ============ Initialize storage if configured ============
     let storageRegistry: StorageRegistry | undefined;
     let storageController: StorageController | undefined;
@@ -459,7 +504,7 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         }
     }
 
-    // ============ Mount core routes (auth, admin, storage) ============
+    // ============ Mount core routes (auth, admin, storage, data) ============
     const basePath = config.basePath || "/api";
 
     if (config.auth && defaultDb && userService && roleService) {
@@ -486,10 +531,64 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         console.log(`✅ Storage endpoints: ${basePath}/storage/*`);
     }
 
+    // ============ Mount internal data routes (always-on) ============
+    // These power the client SDK (@rebasepro/client). They are always
+    // available regardless of whether the public API layer is enabled.
+    const defaultDataDriverDelegate = driverRegistry.getDefault();
+
+    if (activeCollections.length > 0) {
+        const dataRouter = new Hono<HonoEnv>();
+
+        // Auth middleware for internal data routes
+        dataRouter.use("/*", createAuthMiddleware({
+            driver: defaultDataDriverDelegate,
+            requireAuth: config.auth?.requireAuth !== false && !!config.auth?.jwtSecret
+        }));
+
+        // Collections metadata endpoint
+        dataRouter.get("/collections", (c) => {
+            const collectionsMetadata = activeCollections.map((col) => ({
+                slug: col.slug,
+                name: col.name,
+                singularName: col.singularName,
+                description: col.description,
+                dbPath: col.dbPath,
+                properties: Object.keys(col.properties),
+                relations: col.relations?.map((r) => ({
+                    relationName: r.relationName,
+                    target: typeof r.target === 'function' ? r.target().slug : r.target,
+                    cardinality: r.cardinality,
+                    direction: r.direction
+                })) || []
+            }));
+            return c.json({ data: collectionsMetadata });
+        });
+
+        // CRUD routes for each collection
+        const restGenerator = new RestApiGenerator(activeCollections, defaultDataDriverDelegate);
+        const restRoutes = restGenerator.generateRoutes();
+        dataRouter.route("/", restRoutes);
+
+        // History routes (only when enabled)
+        if (historyService && defaultDataDriverDelegate instanceof PostgresDataDriver) {
+            const historyRoutes = createHistoryRoutes({
+                historyService,
+                registry: collectionRegistry,
+                driver: defaultDataDriverDelegate
+            });
+            dataRouter.route("/", historyRoutes);
+            console.log(`✅ Entity history endpoints: ${basePath}/data/:slug/:entityId/history`);
+        }
+
+        dataRouter.onError(errorHandler);
+
+        config.app.route(`${basePath}/data`, dataRouter);
+        console.log(`✅ Internal data endpoints: ${basePath}/data/* (${activeCollections.length} collections)`);
+    }
+
     // ============ Create WebSocket with auth support ============
     // Use the default realtime service and driver delegate
     const defaultRealtimeService = realtimeServices[DEFAULT_DRIVER_ID];
-    const defaultDataDriverDelegate = driverRegistry.getDefault();
 
     createPostgresWebSocket(
         config.server,
@@ -510,7 +609,8 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         emailService,
         storageRegistry,
         storageController,
-        collectionRegistry
+        collectionRegistry,
+        historyService
     };
 }
 
@@ -561,7 +661,8 @@ function isDriverConfig(obj: unknown): obj is DriverConfig {
  */
 function resolveDriverConfig(config: DriverConfig): {
     delegate?: DataDriver;
-    db?: NodePgDatabase;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    db?: NodePgDatabase<any>;
     schema?: PostgresDriverConfig["schema"];
     adminConnectionString?: string;
     connectionString?: string;
@@ -600,12 +701,21 @@ function isBackendStorageConfig(obj: unknown): obj is BackendStorageConfig {
 }
 
 /**
- * Initialize optional REST/GraphQL API endpoints on an Express app.
- * 
- * NOTE: Auth, admin, and storage routes are automatically mounted by
- * initializeRebaseBackend(). This function is only needed if you want
- * to expose REST/GraphQL APIs for external integrations.
- * 
+ * Initialize the **public** REST/GraphQL API layer.
+ *
+ * This is **optional** and separate from the core data plane. The core
+ * backend (`initializeRebaseBackend`) already mounts:
+ *   - Internal CRUD endpoints at `/api/data/:slug` (used by the client SDK)
+ *   - Auth endpoints at `/api/auth/*`
+ *   - Admin endpoints at `/api/admin/*`
+ *   - Storage endpoints at `/api/storage/*`
+ *   - WebSocket for realtime subscriptions and CMS admin operations
+ *
+ * Call this function only if you want to expose a **public** REST and/or
+ * GraphQL API for third-party integrations, mobile apps, or external
+ * consumers. The `enableREST` and `enableGraphQL` flags control which
+ * public API flavors are available.
+ *
  * @param app Hono application instance
  * @param backend Rebase backend instance from initializeRebaseBackend
  * @param config API configuration options
@@ -617,13 +727,13 @@ export async function initializeRebaseAPI(
     config: Partial<ApiConfig> = {}
 ): Promise<RebaseApiServer> {
     if ((backend as unknown as Record<string, unknown>).__failed) {
-        console.warn("⚠️ Skipping REST/GraphQL API initialization because backend initialization failed.");
+        console.warn("⚠️ Skipping public API initialization because backend initialization failed.");
         // Return a dummy api server
         const { Hono } = await import("hono");
         return { getRouter: () => new Hono<HonoEnv>() } as unknown as RebaseApiServer;
     }
 
-    console.log("🚀 Initializing Rebase REST/GraphQL API (optional for external integrations)");
+    console.log("🌐 Initializing public REST/GraphQL API (for third-party integrations)");
 
     // Get collections from the backend's registry instance
     const collections = backend.collectionRegistry.getCollections();
@@ -645,7 +755,8 @@ export async function initializeRebaseAPI(
     app.route("/", apiRouter);
 
     const basePath = config.basePath || "/api";
-    console.log(`✅ GraphQL endpoint: ${basePath}/graphql`);
+    if (config.enableGraphQL !== false) console.log(`✅ Public GraphQL: ${basePath}/graphql`);
+    if (config.enableREST !== false) console.log(`✅ Public REST: ${basePath}/:collection`);
     console.log(`✅ API docs: ${basePath}/swagger`);
 
     return apiServer;

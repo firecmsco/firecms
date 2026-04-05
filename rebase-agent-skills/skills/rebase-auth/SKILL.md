@@ -67,7 +67,7 @@ const backend = await initializeRebaseBackend({
 });
 ```
 
-Auth tables (`rebase_users`, `rebase_roles`, etc.) are auto-created on first startup.
+Auth tables (`rebase.users`, `rebase.roles`, etc.) are auto-created on first startup.
 
 ### 2. Define Roles
 

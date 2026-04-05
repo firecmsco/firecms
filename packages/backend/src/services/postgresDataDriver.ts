@@ -26,6 +26,7 @@ import {
     TablePolicyInfo
 } from "@rebasepro/types";
 import { buildRebaseData } from "@rebasepro/common";
+import { HistoryService } from "../history/HistoryService";
 
 export class PostgresDataDriver implements DataDriver {
     key = "postgres";
@@ -33,6 +34,7 @@ export class PostgresDataDriver implements DataDriver {
 
     public entityService: EntityService;
     public realtimeService: RealtimeService;
+    public historyService?: HistoryService;
     public user?: User;
     public data: RebaseData;
 
@@ -53,10 +55,12 @@ export class PostgresDataDriver implements DataDriver {
         realtimeService: RealtimeService,
         public readonly registry: BackendCollectionRegistry,
         user?: User,
-        public poolManager?: DatabasePoolManager
+        public poolManager?: DatabasePoolManager,
+        historyService?: HistoryService
     ) {
         this.entityService = new EntityService(db, registry);
         this.realtimeService = realtimeService;
+        this.historyService = historyService;
         this.user = user;
         this.data = buildRebaseData(this);
     }
@@ -301,22 +305,23 @@ export class PostgresDataDriver implements DataDriver {
             data: this.data
         } as unknown as RebaseCallContext;
 
-        if (callbacks?.beforeSave || propertyCallbacks?.beforeSave) {
-            let previousValues: Partial<Entity<M>["values"]> | undefined;
-            if (status === "existing" && entityId) {
-                const existing = await this.entityService.fetchEntity<M>(path, entityId, resolvedCollection?.databaseId);
-                if (existing) {
-                    previousValues = existing.values as Partial<Entity<M>["values"]>;
-                }
+        // Fetch previous values for callbacks AND history recording
+        let previousValuesForHistory: Partial<Entity<M>["values"]> | undefined;
+        if (status === "existing" && entityId) {
+            const existing = await this.entityService.fetchEntity<M>(path, entityId, resolvedCollection?.databaseId);
+            if (existing) {
+                previousValuesForHistory = existing.values as Partial<Entity<M>["values"]>;
             }
+        }
 
+        if (callbacks?.beforeSave || propertyCallbacks?.beforeSave) {
             if (callbacks?.beforeSave) {
                 const result = await callbacks.beforeSave({
                     collection: resolvedCollection as EntityCollection<M>,
                     path,
                     entityId,
                     values: updatedValues,
-                    previousValues,
+                    previousValues: previousValuesForHistory,
                     status,
                     context: contextForCallback
                 });
@@ -329,7 +334,7 @@ export class PostgresDataDriver implements DataDriver {
                     path,
                     entityId,
                     values: updatedValues,
-                    previousValues,
+                    previousValues: previousValuesForHistory,
                     status,
                     context: contextForCallback
                 });
@@ -366,14 +371,13 @@ export class PostgresDataDriver implements DataDriver {
             }
 
             if (callbacks?.afterSave || propertyCallbacks?.afterSave) {
-                let previousValues: Partial<Entity<M>["values"]> | undefined = undefined;
                 if (callbacks?.afterSave) {
                     await callbacks.afterSave({
                         collection: resolvedCollection as EntityCollection<M>,
                         path,
                         entityId: savedEntity.id,
                         values: updatedValues,
-                        previousValues,
+                        previousValues: previousValuesForHistory,
                         status,
                         context: contextForCallback
                     });
@@ -384,11 +388,23 @@ export class PostgresDataDriver implements DataDriver {
                         path,
                         entityId: savedEntity.id,
                         values: updatedValues,
-                        previousValues,
+                        previousValues: previousValuesForHistory,
                         status,
                         context: contextForCallback
                     });
                 }
+            }
+
+            // Record entity history (fire-and-forget, never blocks the save)
+            if (this.historyService && resolvedCollection?.history) {
+                this.historyService.recordHistory({
+                    tableName: path,
+                    entityId: savedEntity.id.toString(),
+                    action: status === "new" ? "create" : "update",
+                    values: savedEntity.values as Record<string, unknown>,
+                    previousValues: previousValuesForHistory as Record<string, unknown> | undefined,
+                    updatedBy: this.user?.uid
+                });
             }
 
             // Notify real-time subscribers (deferred if inside a transaction)
@@ -498,6 +514,17 @@ export class PostgresDataDriver implements DataDriver {
                     context: contextForCallback
                 });
             }
+        }
+
+        // Record delete history (fire-and-forget)
+        if (this.historyService && resolvedCollection?.history) {
+            this.historyService.recordHistory({
+                tableName: entity.path,
+                entityId: entity.id.toString(),
+                action: "delete",
+                values: entity.values as Record<string, unknown>,
+                updatedBy: this.user?.uid
+            });
         }
 
         // Notify real-time subscribers (deferred if inside a transaction)
@@ -845,7 +872,7 @@ export class AuthenticatedPostgresDataDriver implements DataDriver {
             `);
 
             const txEntityService = new EntityService(tx, this.delegate.registry);
-            const txDelegate = new PostgresDataDriver(tx, this.delegate.realtimeService, this.delegate.registry, this.user, this.delegate.poolManager);
+            const txDelegate = new PostgresDataDriver(tx, this.delegate.realtimeService, this.delegate.registry, this.user, this.delegate.poolManager, this.delegate.historyService);
             
             txDelegate.entityService = txEntityService;
             txDelegate._deferNotifications = true;

@@ -15,7 +15,6 @@
         "@rebasepro/data_export": "0.0.1",
         "@rebasepro/data_import": "0.0.1",
         "@rebasepro/datatalk": "0.0.1",
-        "@rebasepro/entity_history": "0.0.1",
         "@rebasepro/firebase": "0.0.1",
         "@rebasepro/formex": "0.0.1",
         "@rebasepro/postgresql": "0.0.1",

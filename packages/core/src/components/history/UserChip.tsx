@@ -1,4 +1,4 @@
-import { User } from "@rebasepro/core";
+import { User } from "@rebasepro/types";
 import { Chip, Tooltip } from "@rebasepro/ui";
 
 export function UserChip({ user }: { user: User }) {

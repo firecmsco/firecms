@@ -886,7 +886,7 @@ export interface SecurityRule {
      * application-level roles.
      *
      * **Important:** These are NOT native PostgreSQL database roles. They are
-     * application roles managed by Rebase, stored in the `rebase_user_roles`
+     * application roles managed by Rebase, stored in the `rebase.user_roles`
      * table, and injected into each transaction via `auth.roles()`.
      *
      * Generates a condition like:

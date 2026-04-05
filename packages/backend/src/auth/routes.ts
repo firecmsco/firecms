@@ -1,4 +1,4 @@
-import { Hono, MiddlewareHandler } from "hono";
+import { Hono } from "hono";
 import { ApiError } from "../api/errors";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { randomBytes, createHash } from "crypto";
@@ -10,10 +10,8 @@ import { requireAuth } from "./middleware";
 import { EmailService, EmailConfig } from "../email";
 import { getPasswordResetTemplate, getEmailVerificationTemplate } from "../email/templates";
 import { HonoEnv } from "../api/types";
-
-// Rate limiting stub, to be properly implemented or replaced with @hono/rate-limit
-const defaultAuthLimiter: MiddlewareHandler<any> = async (c, next) => await next();
-const strictAuthLimiter: MiddlewareHandler<any> = async (c, next) => await next();
+import { defaultAuthLimiter, strictAuthLimiter } from "./rate-limiter";
+import { z } from "zod";
 
 /**
  * Shared configuration for auth and admin route factories.
@@ -80,6 +78,51 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
     const passwordResetTokenService = new PasswordResetTokenService(config.db);
     const { emailService, emailConfig, allowRegistration = false } = config;
 
+    // ── Zod input schemas ──────────────────────────────────────────────
+    const registerSchema = z.object({
+        email: z.string().email("Invalid email address").max(255),
+        password: z.string().min(1, "Password is required").max(128),
+        displayName: z.string().max(255).optional()
+    });
+    const loginSchema = z.object({
+        email: z.string().email("Invalid email address").max(255),
+        password: z.string().min(1, "Password is required").max(128)
+    });
+    const googleSchema = z.object({
+        idToken: z.string().min(1, "ID token is required")
+    });
+    const forgotPasswordSchema = z.object({
+        email: z.string().email("Invalid email address").max(255)
+    });
+    const resetPasswordSchema = z.object({
+        token: z.string().min(1, "Token is required"),
+        password: z.string().min(1, "Password is required").max(128)
+    });
+    const changePasswordSchema = z.object({
+        oldPassword: z.string().min(1, "Old password is required").max(128),
+        newPassword: z.string().min(1, "New password is required").max(128)
+    });
+    const refreshSchema = z.object({
+        refreshToken: z.string().min(1, "Refresh token is required")
+    });
+    const logoutSchema = z.object({
+        refreshToken: z.string().optional()
+    });
+    const updateProfileSchema = z.object({
+        displayName: z.string().max(255).optional(),
+        photoURL: z.string().url().max(2048).optional()
+    });
+
+    /** Parse a Zod schema against the request body, throwing ApiError on failure */
+    function parseBody<T>(schema: z.ZodSchema<T>, body: unknown): T {
+        const result = schema.safeParse(body);
+        if (!result.success) {
+            const messages = result.error.errors.map(e => `${e.path.join(".")}: ${e.message}`).join(". ");
+            throw ApiError.badRequest(messages, "INVALID_INPUT");
+        }
+        return result.data;
+    }
+
     /**
      * Check if email service is configured
      */
@@ -102,17 +145,12 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Create a new account with email/password
      */
     router.post("/register", defaultAuthLimiter, async (c) => {
-        const body = await c.req.json();
-        const { email, password, displayName } = body;
+        const { email, password, displayName } = parseBody(registerSchema, await c.req.json());
 
         // Check if registration is allowed
         const registrationAllowed = await isRegistrationAllowed();
         if (!registrationAllowed) {
             throw ApiError.forbidden("Registration is disabled", "REGISTRATION_DISABLED");
-        }
-
-        if (!email || !password) {
-            throw ApiError.badRequest("Email and password are required", "INVALID_INPUT");
         }
 
         // Validate password strength
@@ -168,12 +206,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Login with email/password
      */
     router.post("/login", defaultAuthLimiter, async (c) => {
-        const body = await c.req.json();
-        const { email, password } = body;
-
-        if (!email || !password) {
-            throw ApiError.badRequest("Email and password are required", "INVALID_INPUT");
-        }
+        const { email, password } = parseBody(loginSchema, await c.req.json());
 
         const user = await userService.getUserByEmail(email);
         if (!user) {
@@ -216,12 +249,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Login/register with Google ID token
      */
     router.post("/google", defaultAuthLimiter, async (c) => {
-        const body = await c.req.json();
-        const { idToken } = body;
-
-        if (!idToken) {
-            throw ApiError.badRequest("ID token is required", "INVALID_INPUT");
-        }
+        const { idToken } = parseBody(googleSchema, await c.req.json());
 
         if (!isGoogleOAuthConfigured()) {
             throw ApiError.serviceUnavailable("Google login not configured", "NOT_CONFIGURED");
@@ -291,12 +319,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Request password reset email
      */
     router.post("/forgot-password", strictAuthLimiter, async (c) => {
-        const body = await c.req.json();
-        const { email } = body;
-
-        if (!email) {
-            throw ApiError.badRequest("Email is required", "INVALID_INPUT");
-        }
+        const { email } = parseBody(forgotPasswordSchema, await c.req.json());
 
         // Check if email service is configured
         if (!isEmailConfigured()) {
@@ -353,12 +376,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Reset password using token
      */
     router.post("/reset-password", strictAuthLimiter, async (c) => {
-        const body = await c.req.json();
-        const { token, password } = body;
-
-        if (!token || !password) {
-            throw ApiError.badRequest("Token and password are required", "INVALID_INPUT");
-        }
+        const { token, password } = parseBody(resetPasswordSchema, await c.req.json());
 
         // Validate password strength
         const passwordValidation = validatePasswordStrength(password);
@@ -397,12 +415,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.unauthorized("Not authenticated");
         }
 
-        const body = await c.req.json();
-        const { oldPassword, newPassword } = body;
-
-        if (!oldPassword || !newPassword) {
-            throw ApiError.badRequest("Old password and new password are required", "INVALID_INPUT");
-        }
+        const { oldPassword, newPassword } = parseBody(changePasswordSchema, await c.req.json());
 
         // Get user
         const user = await userService.getUserById(userCtx.userId);
@@ -512,12 +525,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Refresh access token using refresh token
      */
     router.post("/refresh", async (c) => {
-        const body = await c.req.json();
-        const { refreshToken } = body;
-
-        if (!refreshToken) {
-            throw ApiError.badRequest("Refresh token is required", "INVALID_INPUT");
-        }
+        const { refreshToken } = parseBody(refreshSchema, await c.req.json());
 
         const tokenHash = hashRefreshToken(refreshToken);
         const storedToken = await refreshTokenService.findByHash(tokenHash);
@@ -565,8 +573,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Invalidate refresh token
      */
     router.post("/logout", async (c) => {
-        const body = await c.req.json();
-        const { refreshToken } = body;
+        const { refreshToken } = parseBody(logoutSchema, await c.req.json());
 
         if (refreshToken) {
             const tokenHash = hashRefreshToken(refreshToken);
@@ -672,8 +679,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.unauthorized("Not authenticated");
         }
 
-        const body = await c.req.json();
-        const { displayName, photoURL } = body;
+        const { displayName, photoURL } = parseBody(updateProfileSchema, await c.req.json());
 
         const updatedUser = await userService.updateUser(userCtx.userId, {
             displayName: displayName !== undefined ? displayName : undefined,

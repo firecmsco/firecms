@@ -9,9 +9,8 @@
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <!-- Section Title - independent but aligned with left menu -->
         <div class="w-full lg:w-[400px] mb-36 mt-16">
-            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Everything You Need to Manage Your
-                Postgres Data</h2>
-            <p class="mt-6 text-lg leading-8 text-surface-400">Key features for a fast, flexible headless CMS experience</p>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Built for the way<br/>you actually work</h2>
+            <p class="mt-6 text-lg leading-8 text-surface-400">Not another tool to learn — Rebase works with your existing database and your existing workflow.</p>
         </div>
 
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-16">
@@ -22,25 +21,24 @@
                         <li>
                             <a href="#screen-1" data-index-item class="group block" data-active="false">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Data Editing</span>
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Edit like a spreadsheet</span>
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                     <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        Manage your Postgres tables with an intuitive spreadsheet-like interface. Edit entries
-                                        inline, sort and filter data in real-time, use relational links, and create beautiful
-                                        structured content with our powerful Notion-style editor. Built for speed and
-                                        ease of use.</p>
+                                        Save like it's a database. Inline editing, real-time filters,
+                                        relational links, and a Notion-style rich text editor — all powered by
+                                        your existing Postgres tables.</p>
                                 </div>
                             </a>
                         </li>
                         <li>
                             <a href="#screen-2" data-index-item class="group block" data-active="false">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">AI Data Enhancement</span>
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Your schema, understood</span>
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                      <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        Enrich your data with AI-powered suggestions. Automatically generate descriptions, translations, categories, and more — right from inside the admin panel. No third-party tools needed.
+                                        Connect your Postgres and Rebase reads your schema — tables, types, constraints, relations. You get a fully structured admin panel without writing a single line of config.
                                     </p>
                                 </div>
                             </a>
@@ -48,26 +46,24 @@
                         <li>
                             <a href="#screen-3" data-index-item class="group block" data-active="false">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Schema Builder</span>
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Visual editor, real TypeScript</span>
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                     <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        Design your data models visually with our powerful schema editor, or let Rebase
-                                        automatically infer schemas from your existing Postgres database. Choose from 20+ field types
-                                        with advanced validation rules and customize everything to match your needs.</p>
+                                        Design your data model visually in Rebase Studio. Every change writes back to
+                                        your local TypeScript files via AST — your code stays clean, your team stays in sync.</p>
                                 </div>
                             </a>
                         </li>
                         <li>
                             <a href="#screen-4" data-index-item class="group block" data-active="false">
                                 <div class="flex items-center gap-3">
-                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">Easy Integration</span>
+                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">One command to start</span>
                                 </div>
                                 <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
                                     <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        Self-host our open-source framework with full TypeScript support. Simple NPM install,
-                                        comprehensive documentation, and seamless integration with your existing
-                                        Postgres setup.</p>
+                                        <code class="text-surface-300">npx create-rebase-app</code> — that's it. Self-host on your own infrastructure,
+                                        keep full control of your data, and extend with pure React and TypeScript.</p>
                                 </div>
                             </a>
                         </li>
@@ -80,7 +76,7 @@
                 <div class="w-full lg:w-[1240px] space-y-32">
                     <!-- Screen 1: Data Editing -->
                     <div id="screen-1" class="scroll-mt-32">
-                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Data Editing</h3>
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Edit like a spreadsheet</h3>
                         <section data-screen class="w-full will-change-transform">
                             <div class="relative rounded-2xl p-[1px]">
                                 <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950">
@@ -101,7 +97,7 @@
 
                     <!-- Screen 2: AI Data Enhancement -->
                     <div id="screen-2" class="scroll-mt-32">
-                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">AI Data Enhancement</h3>
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Your schema, understood</h3>
                         <section data-screen class="w-full will-change-transform">
                             <div class="relative rounded-2xl p-[1px]">
                                 <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950">
@@ -122,7 +118,7 @@
 
                     <!-- Screen 3: Schema Builder -->
                     <div id="screen-3" class="scroll-mt-32">
-                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Schema Builder</h3>
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Visual editor, real TypeScript</h3>
                         <section data-screen class="w-full will-change-transform">
                             <div class="relative rounded-2xl p-[1px]">
                                 <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950">
@@ -142,7 +138,7 @@
 
                     <!-- Screen 4: Easy Integration -->
                     <div id="screen-4" class="scroll-mt-32">
-                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">Easy Integration</h3>
+                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">One command to start</h3>
                         <section data-screen class="w-full will-change-transform">
                             <div class="relative rounded-2xl p-[1px]">
                                 {/* Apply min-height and flex classes here */}

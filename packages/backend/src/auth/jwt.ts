@@ -19,9 +19,37 @@ let jwtConfig: JwtConfig = {
 };
 
 /**
- * Configure JWT settings - call this during initialization
+ * Configure JWT settings - call this during initialization.
+ * Validates the secret strength to prevent deployment with default/weak secrets.
  */
 export function configureJwt(config: JwtConfig): void {
+    // Reject obviously weak/default secrets
+    const weakSecrets = new Set([
+        "secret",
+        "jwt-secret",
+        "jwt_secret",
+        "your-secret",
+        "your-super-secret-jwt-key-change-in-production",
+        "change-me",
+        "changeme",
+        "password",
+        "test"
+    ]);
+
+    if (!config.secret || config.secret.length < 32) {
+        throw new Error(
+            "JWT secret is too short. Must be at least 32 characters. " +
+            "Generate one with: node -e \"console.log(require('crypto').randomBytes(48).toString('base64'))\""
+        );
+    }
+
+    if (weakSecrets.has(config.secret.toLowerCase())) {
+        throw new Error(
+            "JWT secret is a known default/weak value. Please use a strong, randomly generated secret. " +
+            "Generate one with: node -e \"console.log(require('crypto').randomBytes(48).toString('base64'))\""
+        );
+    }
+
     jwtConfig = {
         ...jwtConfig,
         ...config

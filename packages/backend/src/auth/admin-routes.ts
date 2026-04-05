@@ -56,7 +56,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         });
     });
 
-    router.get("/users", async (c) => {
+    router.get("/users", requireAdmin, async (c) => {
         const users = await userService.listUsers();
         const usersWithRoles = await Promise.all(
             users.map(async (u) => {
@@ -76,7 +76,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         return c.json({ users: usersWithRoles });
     });
 
-    router.get("/users/:userId", async (c) => {
+    router.get("/users/:userId", requireAdmin, async (c) => {
         const userId = c.req.param("userId");
         const result = await userService.getUserWithRoles(userId);
 
@@ -206,7 +206,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         return c.json({ success: true });
     });
 
-    router.get("/roles", async (c) => {
+    router.get("/roles", requireAdmin, async (c) => {
         const roles = await roleService.listRoles();
 
         return c.json({
@@ -220,7 +220,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         });
     });
 
-    router.get("/roles/:roleId", async (c) => {
+    router.get("/roles/:roleId", requireAdmin, async (c) => {
         const roleId = c.req.param("roleId");
         const role = await roleService.getRoleById(roleId);
 

@@ -49,3 +49,6 @@ export * from "./AdminModeSyncer";
 export * from "./UserSettingsView";
 export * from "./LanguageToggle";
 export * from "./UserSelectPopover";
+
+// Entity history
+export * from "./history";

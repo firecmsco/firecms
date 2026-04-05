@@ -30,11 +30,10 @@ const breadcrumbs = [
 
             <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
                 <h1 class="mb-6 text-4xl font-medium tracking-tight md:text-5xl lg:text-6xl text-white font-sans">
-                    The Back-Office Framework<br/> That Respects Your Code
+                    Your admin panel shouldn't<br/> make you write CRUD.
                 </h1>
                 <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
-                    Rebase is the developer-first framework you've been waiting for. Build powerful, fast, and flexible
-                    internal tools, CRUD interfaces, and admin panels with pure React and TypeScript.
+                    Pure React and TypeScript. Schema-as-code. Full control — from custom fields to entire pages.
                 </p>
             </div>
             <SectionBackgroundAccents bottomLine={true}/>
@@ -394,35 +393,6 @@ console.log(posts[0].author.name); // 100% type-safe`}
             </div>
         </section>
 
-        <!-- MCP AI SERVER SECTION for DEVELOPERS -->
-        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden border-t border-surface-800/40">
-            <SectionBackgroundAccents blob={{ position: "bottom", size: "lg" }}/>
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    <div class="lg:col-span-1">
-                        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Built for the Age of AI</h2>
-                        <p class="mt-6 text-lg leading-8 text-surface-400">Turn your entire Postgres architecture into an autonomous API immediately. Rebase includes a native server implementing the  <strong>Model Context Protocol (MCP)</strong>.</p>
-                        <p class="mt-4 text-lg leading-8 text-surface-400">Expose granular data-plane APIs directly to AI tools (Cursor, Claude, Windsurf) allowing them to autonomously execute multi-table fetching, writes, and modifications — while respecting every validation and RLS rule your schema defines.</p>
-                    </div>
-                    <div class="lg:col-span-1 border border-surface-800 rounded-xl bg-surface-950 p-6 font-mono text-sm shadow-[0_0_20px_rgba(56,189,248,0.08)]">
-                         <div class="text-surface-500 mb-4">// Run the Rebase MCP server locally to expose your data securely...</div>
-                         <div class="text-primary font-bold mb-2">$ npx @rebasepro/mcp start</div>
-                         <div class="text-green-400 mb-6">✓ Rebase MCP server connected on stdio</div>
-                         
-                         <div class="text-surface-500 mb-2">// Sample Agent Execution</div>
-                         <div class="text-white p-3 bg-surface-900 rounded border border-surface-800 break-words">
-                            "AI Prompt: I need you to find all users mapped to 'Enterprise' accounts 
-                            and trigger their onboarding email."
-                         </div>
-                         <div class="text-purple-400 mt-4 pl-3 border-l-2 border-purple-500">
-                             -> Executing tool: rebase_query_database<br/>
-                             -> Accessing relations strictly through Drizzle ORM<br/>
-                             -> Respecting row-level permissions
-                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="bg-black pt-16 pb-12 sm:pt-24 sm:pb-16">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">

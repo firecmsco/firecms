@@ -36,9 +36,14 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
     console.log("🔍 Checking auth tables...");
 
     try {
+        // ── Create the rebase schema ────────────────────────────────────
+        await db.execute(sql`CREATE SCHEMA IF NOT EXISTS rebase`);
+
+        // ── Create tables (idempotent) ──────────────────────────────────
+
         // Create users table
         await db.execute(sql`
-            CREATE TABLE IF NOT EXISTS rebase_users (
+            CREATE TABLE IF NOT EXISTS rebase.users (
                 id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
                 email TEXT NOT NULL UNIQUE,
                 password_hash TEXT,
@@ -53,19 +58,19 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 
         // Create index on email for faster lookups
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_rebase_users_email 
-            ON rebase_users(email)
+            CREATE INDEX IF NOT EXISTS idx_users_email 
+            ON rebase.users(email)
         `);
 
         // Create index on google_id for OAuth lookups
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_rebase_users_google_id 
-            ON rebase_users(google_id)
+            CREATE INDEX IF NOT EXISTS idx_users_google_id 
+            ON rebase.users(google_id)
         `);
 
         // Create roles table
         await db.execute(sql`
-            CREATE TABLE IF NOT EXISTS rebase_roles (
+            CREATE TABLE IF NOT EXISTS rebase.roles (
                 id TEXT PRIMARY KEY,
                 name TEXT NOT NULL,
                 is_admin BOOLEAN DEFAULT FALSE,
@@ -78,30 +83,30 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 
         // Migration: Add collection_permissions column if it doesn't exist (for existing databases)
         await db.execute(sql`
-            ALTER TABLE rebase_roles 
+            ALTER TABLE rebase.roles 
             ADD COLUMN IF NOT EXISTS collection_permissions JSONB
         `);
 
         // Create user_roles junction table
         await db.execute(sql`
-            CREATE TABLE IF NOT EXISTS rebase_user_roles (
-                user_id TEXT NOT NULL REFERENCES rebase_users(id) ON DELETE CASCADE,
-                role_id TEXT NOT NULL REFERENCES rebase_roles(id) ON DELETE CASCADE,
+            CREATE TABLE IF NOT EXISTS rebase.user_roles (
+                user_id TEXT NOT NULL REFERENCES rebase.users(id) ON DELETE CASCADE,
+                role_id TEXT NOT NULL REFERENCES rebase.roles(id) ON DELETE CASCADE,
                 PRIMARY KEY (user_id, role_id)
             )
         `);
 
         // Create index on user_id for faster lookups
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_rebase_user_roles_user 
-            ON rebase_user_roles(user_id)
+            CREATE INDEX IF NOT EXISTS idx_user_roles_user 
+            ON rebase.user_roles(user_id)
         `);
 
         // Create refresh tokens table (includes user_agent, ip_address, and unique constraint)
         await db.execute(sql`
-            CREATE TABLE IF NOT EXISTS rebase_refresh_tokens (
+            CREATE TABLE IF NOT EXISTS rebase.refresh_tokens (
                 id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-                user_id TEXT NOT NULL REFERENCES rebase_users(id) ON DELETE CASCADE,
+                user_id TEXT NOT NULL REFERENCES rebase.users(id) ON DELETE CASCADE,
                 token_hash TEXT NOT NULL UNIQUE,
                 expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
                 user_agent TEXT,
@@ -113,24 +118,24 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 
         // Create index on token_hash for faster lookups
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_rebase_refresh_tokens_hash 
-            ON rebase_refresh_tokens(token_hash)
+            CREATE INDEX IF NOT EXISTS idx_refresh_tokens_hash 
+            ON rebase.refresh_tokens(token_hash)
         `);
 
         // Create index on user_id for cleanup operations
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_rebase_refresh_tokens_user 
-            ON rebase_refresh_tokens(user_id)
+            CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user 
+            ON rebase.refresh_tokens(user_id)
         `);
 
         // Migration: Add user_agent and ip_address to refresh tokens (for tables created before these columns existed)
         await db.execute(sql`
-            ALTER TABLE rebase_refresh_tokens 
+            ALTER TABLE rebase.refresh_tokens 
             ADD COLUMN IF NOT EXISTS user_agent TEXT
         `);
 
         await db.execute(sql`
-            ALTER TABLE rebase_refresh_tokens 
+            ALTER TABLE rebase.refresh_tokens 
             ADD COLUMN IF NOT EXISTS ip_address TEXT
         `);
 
@@ -139,12 +144,13 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
         const constraintCheck = await db.execute(sql`
             SELECT 1 FROM information_schema.table_constraints 
             WHERE constraint_name = 'unique_device_session' 
-            AND table_name = 'rebase_refresh_tokens'
+            AND table_schema = 'rebase'
+            AND table_name = 'refresh_tokens'
         `);
         if (constraintCheck.rows.length === 0) {
             try {
                 await db.execute(sql`
-                    ALTER TABLE rebase_refresh_tokens
+                    ALTER TABLE rebase.refresh_tokens
                     ADD CONSTRAINT unique_device_session UNIQUE (user_id, user_agent, ip_address)
                 `);
                 console.log("✅ Added unique_device_session constraint");
@@ -155,8 +161,8 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
                     console.warn("⚠️ Duplicate sessions found, cleaning up before adding constraint...");
                     // Keep only the most recent token per user/device combo
                     await db.execute(sql`
-                        DELETE FROM rebase_refresh_tokens a
-                        USING rebase_refresh_tokens b
+                        DELETE FROM rebase.refresh_tokens a
+                        USING rebase.refresh_tokens b
                         WHERE a.user_id = b.user_id 
                         AND COALESCE(a.user_agent, '') = COALESCE(b.user_agent, '')
                         AND COALESCE(a.ip_address, '') = COALESCE(b.ip_address, '')
@@ -164,7 +170,7 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
                     `);
                     // Retry constraint creation
                     await db.execute(sql`
-                        ALTER TABLE rebase_refresh_tokens
+                        ALTER TABLE rebase.refresh_tokens
                         ADD CONSTRAINT unique_device_session UNIQUE (user_id, user_agent, ip_address)
                     `).catch((retryErr: unknown) => {
                         const retryMessage = retryErr instanceof Error ? retryErr.message : String(retryErr);
@@ -178,9 +184,9 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 
         // Create password reset tokens table
         await db.execute(sql`
-            CREATE TABLE IF NOT EXISTS rebase_password_reset_tokens (
+            CREATE TABLE IF NOT EXISTS rebase.password_reset_tokens (
                 id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-                user_id TEXT NOT NULL REFERENCES rebase_users(id) ON DELETE CASCADE,
+                user_id TEXT NOT NULL REFERENCES rebase.users(id) ON DELETE CASCADE,
                 token_hash TEXT NOT NULL UNIQUE,
                 expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
                 used_at TIMESTAMP WITH TIME ZONE,
@@ -190,29 +196,38 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
 
         // Create index on token_hash for password reset lookups
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_rebase_password_reset_tokens_hash 
-            ON rebase_password_reset_tokens(token_hash)
+            CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_hash 
+            ON rebase.password_reset_tokens(token_hash)
         `);
 
         // Create index on user_id for password reset cleanup
         await db.execute(sql`
-            CREATE INDEX IF NOT EXISTS idx_rebase_password_reset_tokens_user 
-            ON rebase_password_reset_tokens(user_id)
+            CREATE INDEX IF NOT EXISTS idx_password_reset_tokens_user 
+            ON rebase.password_reset_tokens(user_id)
+        `);
+
+        // Create app config table
+        await db.execute(sql`
+            CREATE TABLE IF NOT EXISTS rebase.app_config (
+                key TEXT PRIMARY KEY,
+                value JSONB NOT NULL,
+                updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            )
         `);
 
         // Migration: Add email verification columns to users if they don't exist
         await db.execute(sql`
-            ALTER TABLE rebase_users 
+            ALTER TABLE rebase.users 
             ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT FALSE
         `);
 
         await db.execute(sql`
-            ALTER TABLE rebase_users 
+            ALTER TABLE rebase.users 
             ADD COLUMN IF NOT EXISTS email_verification_token TEXT
         `);
 
         await db.execute(sql`
-            ALTER TABLE rebase_users 
+            ALTER TABLE rebase.users 
             ADD COLUMN IF NOT EXISTS email_verification_sent_at TIMESTAMP WITH TIME ZONE
         `);
 
@@ -266,7 +281,7 @@ export async function ensureAuthTablesExist(db: NodePgDatabase): Promise<void> {
  */
 async function seedDefaultRoles(db: NodePgDatabase): Promise<void> {
     // Check if any roles exist
-    const result = await db.execute(sql`SELECT COUNT(*) as count FROM rebase_roles`);
+    const result = await db.execute(sql`SELECT COUNT(*) as count FROM rebase.roles`);
     const count = parseInt((result.rows[0] as unknown as Record<string, string | number>)?.count as string || "0", 10);
 
     if (count > 0) {
@@ -278,7 +293,7 @@ async function seedDefaultRoles(db: NodePgDatabase): Promise<void> {
 
     for (const role of DEFAULT_ROLES) {
         await db.execute(sql`
-            INSERT INTO rebase_roles (id, name, is_admin, default_permissions, config)
+            INSERT INTO rebase.roles (id, name, is_admin, default_permissions, config)
             VALUES (
                 ${role.id}, 
                 ${role.name}, 

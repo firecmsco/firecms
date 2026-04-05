@@ -14,7 +14,6 @@
     "packages/data_import",
     "packages/data_export",
     "packages/data_import_export",
-    "packages/entity_history",
     "packages/firebase",
     "packages/mongodb",
     "packages/cli",

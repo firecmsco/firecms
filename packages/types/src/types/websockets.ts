@@ -29,6 +29,20 @@ export interface EntityUpdateMessage extends WebSocketMessage {
 }
 
 /**
+ * Lightweight patch message sent to collection subscribers when a single
+ * entity is created, updated, or deleted. The client can merge this into
+ * its cached collection data for near-instant cross-tab updates without
+ * waiting for a full collection refetch.
+ */
+export interface CollectionEntityPatchMessage extends WebSocketMessage {
+    type: "collection_entity_patch";
+    subscriptionId: string;
+    entityId: string;
+    /** The updated entity, or null if deleted */
+    entity: Entity<Record<string, unknown>> | null;
+}
+
+/**
  * Column metadata returned by table introspection.
  */
 export interface TableColumnInfo {

@@ -20,3 +20,5 @@ export type { AuthModuleConfig } from "./routes";
 export { createAdminRoutes } from "./admin-routes";
 
 export { ensureAuthTablesExist } from "./ensure-tables";
+
+export { createRateLimiter, defaultAuthLimiter, strictAuthLimiter } from "./rate-limiter";

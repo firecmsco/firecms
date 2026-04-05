@@ -4,7 +4,7 @@ import { Client as PgClient } from "pg";
 import { randomUUID } from "crypto";
 import { EntityService } from "../db/entityService";
 
-import { Entity, FetchCollectionProps, ListenCollectionProps, ListenEntityProps, DataDriver, CollectionUpdateMessage, EntityUpdateMessage, WebSocketMessage } from "@rebasepro/types";
+import { Entity, FetchCollectionProps, ListenCollectionProps, ListenEntityProps, DataDriver, CollectionUpdateMessage, EntityUpdateMessage, CollectionEntityPatchMessage, WebSocketMessage } from "@rebasepro/types";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { sql as drizzleSql } from "drizzle-orm";
 import { RealtimeProvider, CollectionSubscriptionConfig, EntitySubscriptionConfig } from "../db/interfaces";
@@ -74,10 +74,20 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
     private broadcasting = false;
     /** Reconnection timer handle. */
     private reconnectTimer?: ReturnType<typeof setTimeout>;
+    /** Debounce timers for collection refetches to prevent refetch storms. */
+    private refetchTimers = new Map<string, ReturnType<typeof setTimeout>>();
+    /** Debounce window (ms) for coalescing rapid entity updates into a single correctness refetch. */
+    private static readonly REFETCH_DEBOUNCE_MS = 300;
 
     constructor(private db: NodePgDatabase<any>, private registry: BackendCollectionRegistry) {
         super();
         this.entityService = new EntityService(db, registry);
+    }
+
+    /** Whether to emit verbose debug logs (disabled in production). */
+    private static readonly DEBUG = process.env.NODE_ENV !== "production";
+    private debugLog(...args: unknown[]) {
+        if (RealtimeService.DEBUG) console.debug(...args);
     }
 
     setDataDriver(driver: DataDriver) {
@@ -106,18 +116,18 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         };
         authContext?: SubscriptionAuthContext;
     }) {
-        console.debug("📋 [RealtimeService] Registering DataDriver subscription:", subscriptionId, subscription.authContext ? "(with auth)" : "(no auth)");
+        this.debugLog("📋 [RealtimeService] Registering DataDriver subscription:", subscriptionId, subscription.authContext ? "(with auth)" : "(no auth)");
         this._subscriptions.set(subscriptionId, subscription);
     }
 
     // Add callback management methods
     addSubscriptionCallback(subscriptionId: string, callback: (data: Entity[] | Entity | null) => void) {
-        console.debug("📋 [RealtimeService] Adding callback for subscription:", subscriptionId);
+        this.debugLog("📋 [RealtimeService] Adding callback for subscription:", subscriptionId);
         this.subscriptionCallbacks.set(subscriptionId, callback);
     }
 
     removeSubscriptionCallback(subscriptionId: string) {
-        console.debug("📋 [RealtimeService] Removing callback for subscription:", subscriptionId);
+        this.debugLog("📋 [RealtimeService] Removing callback for subscription:", subscriptionId);
         this.subscriptionCallbacks.delete(subscriptionId);
     }
 
@@ -199,28 +209,37 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
     }
 
     // Public method to handle messages from external sources (like main WebSocket handler)
-    async handleClientMessage(clientId: string, message: WebSocketMessage) {
-        await this.handleMessage(clientId, message);
+    async handleClientMessage(clientId: string, message: WebSocketMessage, authContext?: SubscriptionAuthContext) {
+        await this.handleMessage(clientId, message, authContext);
     }
 
     async removeClient(clientId: string) {
         this.clients.delete(clientId);
 
-        // Remove all subscriptions for this client from memory
+        // Remove all subscriptions, callbacks, and pending refetch timers for this client
         for (const [subscriptionId, subscription] of this._subscriptions.entries()) {
             if (subscription.clientId === clientId) {
                 this._subscriptions.delete(subscriptionId);
+                this.subscriptionCallbacks.delete(subscriptionId);
+
+                // Cancel any pending debounced refetch timers
+                const wsTimerKey = `ws_${subscriptionId}`;
+                const drvTimerKey = `drv_${subscriptionId}`;
+                const wsTimer = this.refetchTimers.get(wsTimerKey);
+                if (wsTimer) { clearTimeout(wsTimer); this.refetchTimers.delete(wsTimerKey); }
+                const drvTimer = this.refetchTimers.get(drvTimerKey);
+                if (drvTimer) { clearTimeout(drvTimer); this.refetchTimers.delete(drvTimerKey); }
             }
         }
     }
 
-    private async handleMessage(clientId: string, message: WebSocketMessage) {
+    private async handleMessage(clientId: string, message: WebSocketMessage, authContext?: SubscriptionAuthContext) {
         switch (message.type) {
             case "subscribe_collection":
-                await this.handleCollectionSubscription(clientId, message.payload as RealTimeListenCollectionProps);
+                await this.handleCollectionSubscription(clientId, message.payload as RealTimeListenCollectionProps, authContext);
                 break;
             case "subscribe_entity":
-                await this.handleEntitySubscription(clientId, message.payload as RealTimeListenEntityProps);
+                await this.handleEntitySubscription(clientId, message.payload as RealTimeListenEntityProps, authContext);
                 break;
             case "unsubscribe":
                 await this.handleUnsubscribe(clientId, message.subscriptionId!);
@@ -230,11 +249,11 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         }
     }
 
-    private async handleCollectionSubscription(clientId: string, request: RealTimeListenCollectionProps) {
+    private async handleCollectionSubscription(clientId: string, request: RealTimeListenCollectionProps, authContext?: SubscriptionAuthContext) {
         const subscriptionId = request.subscriptionId;
 
         try {
-            // Store subscription with full request parameters
+            // Store subscription with full request parameters and auth context for RLS
             this._subscriptions.set(subscriptionId, {
                 clientId,
                 type: "collection",
@@ -247,7 +266,8 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                     startAfter: request.startAfter as Record<string, unknown> | undefined,
                     databaseId: request.collection?.databaseId,
                     searchString: request.searchString
-                }
+                },
+                authContext
             });
 
             // Send initial data
@@ -283,16 +303,17 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         }
     }
 
-    private async handleEntitySubscription(clientId: string, request: RealTimeListenEntityProps) {
+    private async handleEntitySubscription(clientId: string, request: RealTimeListenEntityProps, authContext?: SubscriptionAuthContext) {
         const subscriptionId = request.subscriptionId;
 
         try {
-            // Store subscription in memory
+            // Store subscription in memory with auth context for RLS
             this._subscriptions.set(subscriptionId, {
                 clientId,
                 type: "entity",
                 path: request.path,
-                entityId: request.entityId
+                entityId: request.entityId,
+                authContext
             });
 
             // Send initial data
@@ -321,6 +342,13 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
 
     private async handleUnsubscribe(_clientId: string, subscriptionId: string) {
         this._subscriptions.delete(subscriptionId);
+        this.subscriptionCallbacks.delete(subscriptionId);
+        // Cancel any pending debounced refetch
+        for (const prefix of ["ws_", "drv_"]) {
+            const key = `${prefix}${subscriptionId}`;
+            const timer = this.refetchTimers.get(key);
+            if (timer) { clearTimeout(timer); this.refetchTimers.delete(key); }
+        }
     }
 
     /**
@@ -330,7 +358,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
      *                  cross-instance notification to avoid infinite loops.
      */
     async notifyEntityUpdate(path: string, entityId: string, entity: Entity | null, databaseId?: string, broadcast = true) {
-        console.debug("🔔 [RealtimeService] notifyEntityUpdate called for path:", path, "entityId:", entityId, "isDelete:", entity === null);
+        this.debugLog("🔔 [RealtimeService] notifyEntityUpdate called for path:", path, "entityId:", entityId, "isDelete:", entity === null);
 
         // Get all paths that need to be notified - the direct path plus any parent paths
         const pathsToNotify = [path];
@@ -339,7 +367,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         if (path.includes("/") && path.split("/").length > 1) {
             const parentPaths = this.getParentPaths(path);
             pathsToNotify.push(...parentPaths);
-            console.debug(`🔗 [RealtimeService] Nested path detected. Will notify paths: ${pathsToNotify.join(", ")}`);
+            this.debugLog(`🔗 [RealtimeService] Nested path detected. Will notify paths: ${pathsToNotify.join(", ")}`);
         }
 
         // Process each path that needs notification
@@ -356,14 +384,14 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             }
         }
 
-        console.debug("🔔 [RealtimeService] notifyEntityUpdate completed for path:", path);
+        this.debugLog("🔔 [RealtimeService] notifyEntityUpdate completed for path:", path);
     }
 
     /**
      * Notify subscriptions for a specific path
      */
     private async notifyPathUpdate(notifyPath: string, originalPath: string, entityId: string, entity: Entity | null, _databaseId?: string) {
-        console.debug(`📡 [RealtimeService] Notifying path: ${notifyPath} (original: ${originalPath})`);
+        this.debugLog(`📡 [RealtimeService] Notifying path: ${notifyPath} (original: ${originalPath})`);
 
         // Find all relevant subscriptions for this specific path
         const allSubscriptions = Array.from(this._subscriptions.entries()).filter(([, sub]) => {
@@ -380,7 +408,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             return false;
         });
 
-        console.debug(`📡 [RealtimeService] Found ${allSubscriptions.length} subscriptions for path: ${notifyPath}`);
+        this.debugLog(`📡 [RealtimeService] Found ${allSubscriptions.length} subscriptions for path: ${notifyPath}`);
 
         // Separate WebSocket subscriptions from DataDriver callback subscriptions
         const webSocketSubscriptions = allSubscriptions.filter(([, sub]) =>
@@ -394,22 +422,18 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         // Handle WebSocket subscriptions
         for (const [subscriptionId, subscription] of webSocketSubscriptions) {
             try {
-                console.debug(`🔄 [RealtimeService] Processing WebSocket subscription: ${subscriptionId} of type: ${subscription.type} for path: ${notifyPath}`);
-
                 if (subscription.type === "entity" && notifyPath === originalPath) {
                     // Send entity update directly (only for exact path matches)
                     this.sendEntityUpdate(subscription.clientId, subscriptionId, entity);
-                    console.debug(`📄 [RealtimeService] Sent entity_update to ${subscriptionId}`);
 
                 } else if (subscription.type === "collection" && subscription.collectionRequest) {
-                    // Refetch the collection with its specific filters and send update
-                    const collectionRequest = subscription.collectionRequest;
-                    console.debug(`📋 [RealtimeService] Refetching collection for subscription: ${subscriptionId}, path: ${notifyPath}`);
+                    // Phase 1: Send instant entity-level patch (no DB query)
+                    // This gives immediate cross-tab feedback
+                    this.sendCollectionEntityPatch(subscription.clientId, subscriptionId, entityId, entity);
 
-                    const entities = await this.fetchCollectionWithAuth(notifyPath, collectionRequest, subscription.authContext);
-
-                    console.debug(`📬 [RealtimeService] Sending collection_update with ${entities.length} entities to ${subscriptionId} (path: ${notifyPath})`);
-                    this.sendCollectionUpdate(subscription.clientId, subscriptionId, entities);
+                    // Phase 2: Schedule a deferred full refetch for correctness
+                    // Handles filter/sort changes and ensures consistency
+                    this.debouncedCollectionRefetch(subscriptionId, notifyPath, subscription);
                 }
             } catch (error) {
                 console.error(`❌ [RealtimeService] Error processing WebSocket subscription ${subscriptionId}:`, error);
@@ -420,33 +444,73 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         // Handle DataDriver callback subscriptions
         for (const [subscriptionId, subscription] of driverSubscriptions) {
             try {
-                console.debug(`🔄 [RealtimeService] Processing DataDriver subscription: ${subscriptionId} of type: ${subscription.type} for path: ${notifyPath}`);
-
                 const callback = this.subscriptionCallbacks.get(subscriptionId);
-                if (!callback) {
-                    console.debug(`⚠️ [RealtimeService] No callback found for DataDriver subscription: ${subscriptionId}`);
-                    continue;
-                }
+                if (!callback) continue;
 
                 if (subscription.type === "entity" && notifyPath === originalPath) {
                     // Call the callback directly with the entity (only for exact path matches)
                     callback(entity);
-                    console.debug(`📄 [RealtimeService] Called DataDriver callback for entity ${subscriptionId}`);
 
                 } else if (subscription.type === "collection" && subscription.collectionRequest) {
-                    // Refetch the collection and call the callback
-                    const collectionRequest = subscription.collectionRequest;
-                    console.debug(`📋 [RealtimeService] Refetching collection for DataDriver subscription: ${subscriptionId}, path: ${notifyPath}`);
-
-                    const entities = await this.fetchCollectionWithAuth(notifyPath, collectionRequest, subscription.authContext);
-
-                    console.debug(`📬 [RealtimeService] Calling DataDriver callback with ${entities.length} entities for ${subscriptionId} (path: ${notifyPath})`);
-                    callback(entities);
+                    // Debounce collection refetches for DataDriver subscriptions too
+                    this.debouncedDriverRefetch(subscriptionId, notifyPath, subscription, callback);
                 }
             } catch (error) {
                 console.error(`❌ [RealtimeService] Error processing DataDriver subscription ${subscriptionId}:`, error);
             }
         }
+    }
+
+    /**
+     * Debounce a collection refetch for a WebSocket subscription.
+     * Coalesces rapid entity mutations into a single database query.
+     */
+    private debouncedCollectionRefetch(
+        subscriptionId: string,
+        notifyPath: string,
+        subscription: { clientId: string; collectionRequest?: { filter?: Record<string, unknown>; orderBy?: string; order?: "desc" | "asc"; limit?: number; startAfter?: Record<string, unknown>; databaseId?: string; searchString?: string }; authContext?: SubscriptionAuthContext }
+    ) {
+        const timerKey = `ws_${subscriptionId}`;
+        const existing = this.refetchTimers.get(timerKey);
+        if (existing) clearTimeout(existing);
+
+        this.refetchTimers.set(timerKey, setTimeout(async () => {
+            this.refetchTimers.delete(timerKey);
+            // Verify subscription still exists (client may have disconnected)
+            if (!this._subscriptions.has(subscriptionId)) return;
+            try {
+                const entities = await this.fetchCollectionWithAuth(notifyPath, subscription.collectionRequest!, subscription.authContext);
+                this.sendCollectionUpdate(subscription.clientId, subscriptionId, entities);
+            } catch (error) {
+                console.error(`❌ [RealtimeService] Error in debounced refetch for ${subscriptionId}:`, error);
+                this.sendError(subscription.clientId, `Failed to process update for subscription ${subscriptionId}`, subscriptionId);
+            }
+        }, RealtimeService.REFETCH_DEBOUNCE_MS));
+    }
+
+    /**
+     * Debounce a collection refetch for a DataDriver callback subscription.
+     */
+    private debouncedDriverRefetch(
+        subscriptionId: string,
+        notifyPath: string,
+        subscription: { collectionRequest?: { filter?: Record<string, unknown>; orderBy?: string; order?: "desc" | "asc"; limit?: number; startAfter?: Record<string, unknown>; databaseId?: string; searchString?: string }; authContext?: SubscriptionAuthContext },
+        callback: (data: Entity[] | Entity | null) => void
+    ) {
+        const timerKey = `drv_${subscriptionId}`;
+        const existing = this.refetchTimers.get(timerKey);
+        if (existing) clearTimeout(existing);
+
+        this.refetchTimers.set(timerKey, setTimeout(async () => {
+            this.refetchTimers.delete(timerKey);
+            if (!this._subscriptions.has(subscriptionId)) return;
+            try {
+                const entities = await this.fetchCollectionWithAuth(notifyPath, subscription.collectionRequest!, subscription.authContext);
+                callback(entities);
+            } catch (error) {
+                console.error(`❌ [RealtimeService] Error in debounced driver refetch for ${subscriptionId}:`, error);
+            }
+        }, RealtimeService.REFETCH_DEBOUNCE_MS));
     }
 
     /**
@@ -548,6 +612,20 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         this.sendMessage(clientId, message);
     }
 
+    /**
+     * Send a lightweight entity-level patch to a collection subscriber.
+     * The client can merge this into its cached data for instant feedback.
+     */
+    private sendCollectionEntityPatch(clientId: string, subscriptionId: string, entityId: string, entity: Entity | null) {
+        const message: CollectionEntityPatchMessage = {
+            type: "collection_entity_patch",
+            subscriptionId,
+            entityId,
+            entity: entity as Entity<Record<string, unknown>> | null
+        };
+        this.sendMessage(clientId, message);
+    }
+
     private sendError(clientId: string, error: string, subscriptionId?: string) {
         console.error("Error handling collection subscription:", error);
         const message = {
@@ -558,7 +636,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         this.sendMessage(clientId, message);
     }
 
-    private sendMessage(clientId: string, message: CollectionUpdateMessage | EntityUpdateMessage | { type: string; subscriptionId?: string; error?: string }) {
+    private sendMessage(clientId: string, message: CollectionUpdateMessage | EntityUpdateMessage | CollectionEntityPatchMessage | { type: string; subscriptionId?: string; error?: string }) {
         const client = this.clients.get(clientId);
         if (client && client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify(message));
@@ -683,7 +761,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                     // Skip our own notifications — already processed locally
                     if (sid === this.instanceId) return;
 
-                    console.debug(`📡 [RealtimeService] Received cross-instance notification: path=${p}, entityId=${eid}, from=${sid}`);
+                    this.debugLog(`📡 [RealtimeService] Received cross-instance notification: path=${p}, entityId=${eid}, from=${sid}`);
 
                     // Refetch the entity from the DB so entity subscriptions
                     // receive the actual data instead of null (which the client
@@ -706,7 +784,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
                         }
                     } catch (fetchErr) {
                         // If the fetch fails (e.g. entity was deleted), entity stays null
-                        console.debug(`📡 [RealtimeService] Could not refetch entity ${eid} from ${p} — treating as deleted`, fetchErr);
+                        this.debugLog(`📡 [RealtimeService] Could not refetch entity ${eid} from ${p} — treating as deleted`, fetchErr);
                     }
 
                     // Trigger local fan-out with broadcast=false to avoid re-broadcasting
@@ -720,7 +798,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
             await client.query(`LISTEN ${PG_NOTIFY_CHANNEL}`);
             this.listenClient = client;
 
-            console.debug(`📡 [RealtimeService] LISTEN client connected on channel "${PG_NOTIFY_CHANNEL}"`);
+            this.debugLog(`📡 [RealtimeService] LISTEN client connected on channel "${PG_NOTIFY_CHANNEL}"`);
         } catch (err) {
             console.error("❌ [RealtimeService] Failed to connect LISTEN client:", err);
             this.scheduleReconnect();
@@ -734,7 +812,7 @@ export class RealtimeService extends EventEmitter implements RealtimeProvider {
         if (!this.broadcasting || this.reconnectTimer) return;
 
         const delay = 3000; // Fixed 3s delay; simple and predictable
-        console.debug(`📡 [RealtimeService] Scheduling LISTEN reconnect in ${delay}ms...`);
+        this.debugLog(`📡 [RealtimeService] Scheduling LISTEN reconnect in ${delay}ms...`);
 
         this.reconnectTimer = setTimeout(async () => {
             this.reconnectTimer = undefined;

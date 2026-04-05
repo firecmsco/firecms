@@ -104,20 +104,7 @@ export class RebaseWebSocketClient {
     private backendToCollectionKey = new Map<string, string>();
     private backendToEntityKey = new Map<string, string>();
 
-    // Optimization: Debounce subscription creation to handle rapid component mounting/unmounting
-    private pendingSubscriptions = new Map<string, {
-        timer: NodeJS.Timeout;
-        callbacks: Array<{
-            onUpdate: (entities: Entity[]) => void;
-            onError?: (error: Error) => void;
-            callbackId: string;
-        }>;
-        props: FetchCollectionProps;
-    }>();
 
-    // Optimization: Connection status tracking
-    private connectionPromise: Promise<void> | null = null;
-    private isReconnecting = false;
 
     private pendingRequests = new Map<string, {
         resolve: (p: unknown) => void;
@@ -221,6 +208,7 @@ export class RebaseWebSocketClient {
 
             this.ws!.onopen = async () => {
                 console.log("Connected to PostgreSQL backend");
+                const wasReconnect = this.reconnectAttempts > 0;
                 this.isConnected = true;
                 this.reconnectAttempts = 0;
 
@@ -237,8 +225,15 @@ export class RebaseWebSocketClient {
                     }
                 }
 
-                this.emit(this.reconnectAttempts === 0 ? "connect" : "reconnect");
+                this.emit(wasReconnect ? "reconnect" : "connect");
                 this.processMessageQueue();
+
+                // Re-subscribe all active subscriptions after reconnect.
+                // The server-side subscription state was lost when the connection dropped,
+                // so we need to re-register every active subscription.
+                if (wasReconnect) {
+                    this.resubscribeAll();
+                }
             };
 
             this.ws!.onmessage = (event) => {
@@ -349,6 +344,52 @@ export class RebaseWebSocketClient {
                             callback.onUpdate(entities);
                         } catch (error) {
                             console.error("Error in collection subscription callback:", error);
+                            if (callback.onError) {
+                                callback.onError(error instanceof Error ? error : new Error(String(error)));
+                            }
+                        }
+                    });
+                    return;
+                }
+            }
+        }
+
+        // Handle instant entity-level patches for collection subscriptions.
+        // These arrive before the full refetch and give immediate cross-tab feedback.
+        if (subscriptionId && type === "collection_entity_patch") {
+            const subscriptionKey = this.backendToCollectionKey.get(subscriptionId);
+            if (subscriptionKey) {
+                const collectionSub = this.collectionSubscriptions.get(subscriptionKey);
+                if (collectionSub && collectionSub.isInitialDataReceived && collectionSub.latestData) {
+                    const patchEntity = message.entity;
+                    const patchEntityId = (message as unknown as { entityId: string }).entityId;
+                    let updated: Entity[];
+
+                    if (patchEntity === null || patchEntity === undefined) {
+                        // Entity was deleted — remove it from the cached list
+                        updated = collectionSub.latestData.filter(e => String(e.id) !== String(patchEntityId));
+                    } else {
+                        // Entity was created or updated — merge into the cached list
+                        const idx = collectionSub.latestData.findIndex(e => String(e.id) === String(patchEntity.id));
+                        if (idx >= 0) {
+                            // Update in place (preserve array position)
+                            updated = [...collectionSub.latestData];
+                            updated[idx] = patchEntity;
+                        } else {
+                            // New entity — prepend (most recently created entities first)
+                            updated = [patchEntity, ...collectionSub.latestData];
+                        }
+                    }
+
+                    collectionSub.latestData = updated;
+                    collectionSub.lastUpdated = Date.now();
+
+                    // Fire all callbacks with the patched data
+                    collectionSub.callbacks.forEach(callback => {
+                        try {
+                            callback.onUpdate(updated);
+                        } catch (error) {
+                            console.error("Error in collection patch callback:", error);
                             if (callback.onError) {
                                 callback.onError(error instanceof Error ? error : new Error(String(error)));
                             }
@@ -844,6 +885,57 @@ export class RebaseWebSocketClient {
                 }
             }
         };
+    }
+
+    /**
+     * Re-send all active subscriptions to the backend after a reconnect.
+     * The server wipes subscription state when a client disconnects, so
+     * we need to re-register everything to resume receiving updates.
+     */
+    private resubscribeAll(): void {
+        console.log(`[WS] Re-subscribing: ${this.collectionSubscriptions.size} collection(s), ${this.entitySubscriptions.size} entity(ies)`);
+
+        // Re-subscribe collection subscriptions
+        for (const [key, sub] of this.collectionSubscriptions.entries()) {
+            // Generate a fresh backend ID since the old one is no longer valid on the server
+            const oldBackendId = sub.backendSubscriptionId;
+            const newBackendId = `collection_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+            sub.backendSubscriptionId = newBackendId;
+
+            // Update reverse lookup
+            this.backendToCollectionKey.delete(oldBackendId);
+            this.backendToCollectionKey.set(newBackendId, key);
+
+            this.sendMessage({
+                type: "subscribe_collection",
+                payload: {
+                    ...sub.props,
+                    subscriptionId: newBackendId
+                }
+            }).catch(error => {
+                console.error("[WS] Failed to re-subscribe collection:", key, error);
+            });
+        }
+
+        // Re-subscribe entity subscriptions
+        for (const [key, sub] of this.entitySubscriptions.entries()) {
+            const oldBackendId = sub.backendSubscriptionId;
+            const newBackendId = `entity_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+            sub.backendSubscriptionId = newBackendId;
+
+            this.backendToEntityKey.delete(oldBackendId);
+            this.backendToEntityKey.set(newBackendId, key);
+
+            this.sendMessage({
+                type: "subscribe_entity",
+                payload: {
+                    ...sub.props,
+                    subscriptionId: newBackendId
+                }
+            }).catch(error => {
+                console.error("[WS] Failed to re-subscribe entity:", key, error);
+            });
+        }
     }
 
     private createCollectionSubscriptionKey(props: FetchCollectionProps): string {
