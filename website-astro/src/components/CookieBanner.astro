@@ -107,36 +107,91 @@ const tp = useTranslatedPath(lang);
             document.cookie = `cookie-consent=${value}; path=/; max-age=${maxAge}${domain}; samesite=lax; secure`;
         }
 
+        // Helper: check if the banner is actually visible and interactive
+        // Ad blockers may hide it via display:none, visibility:hidden, or remove it from DOM
+        function isBannerUsable(el) {
+            if (!el || !el.isConnected) return false;
+            const style = window.getComputedStyle(el);
+            if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') return false;
+            // Check if it has dimensions (not collapsed)
+            const rect = el.getBoundingClientRect();
+            return rect.width > 0 && rect.height > 0;
+        }
+
         // Check if user has already made a choice
         const cookieConsent = getCookie("cookie-consent");
         const banner = document.getElementById("cookie-banner");
 
-        if (!banner) return;
+        if (!banner) {
+            // Banner element missing (removed by ad blocker) — ensure scroll is not locked
+            document.body.classList.remove("cookie-modal-open");
+            return;
+        }
 
-        // Helper to close modal immediately (no animation)
+        // Helper to close modal and unlock scroll
         function closeModal() {
             banner.classList.add("hidden");
             document.body.classList.remove("cookie-modal-open");
         }
 
+        // Safety: unlock scroll if the banner gets hidden/removed by an ad blocker after we show it
+        function watchForAdBlocker() {
+            // 1. MutationObserver: detect if banner gets removed or hidden
+            const observer = new MutationObserver(() => {
+                if (!isBannerUsable(banner)) {
+                    // Ad blocker hid or removed the banner — treat as "declined" and unlock scroll
+                    document.body.classList.remove("cookie-modal-open");
+                    setConsentCookie("declined");
+                    observer.disconnect();
+                }
+            });
+
+            // Watch the banner itself and its parent for attribute/child changes
+            observer.observe(banner, { attributes: true, attributeFilter: ['style', 'class'] });
+            if (banner.parentNode) {
+                observer.observe(banner.parentNode, { childList: true });
+            }
+
+            // 2. Safety timeout: if the banner is still showing after 5s but isn't usable, unlock
+            setTimeout(() => {
+                observer.disconnect();
+                if (document.body.classList.contains("cookie-modal-open") && !isBannerUsable(banner)) {
+                    document.body.classList.remove("cookie-modal-open");
+                    setConsentCookie("declined");
+                }
+            }, 5000);
+        }
+
         if (!cookieConsent) {
             // Show modal and block scrolling
             banner.classList.remove("hidden");
-            document.body.classList.add("cookie-modal-open");
-            
-            // Trigger reflow
-            banner.offsetHeight;
-            
-            // Animate in
-            const modalContent = banner.querySelector(".opacity-0");
-            const ursula = banner.querySelector(".ursula-peek");
-            if (modalContent) {
-                modalContent.classList.remove("opacity-0", "scale-95");
-                modalContent.classList.add("opacity-100", "scale-100");
-            }
-            if (ursula) {
-                ursula.classList.remove("opacity-0", "-translate-y-4");
-            }
+
+            // Verify the banner is actually visible after un-hiding it (ad blocker might override)
+            // Use requestAnimationFrame to let the browser paint first
+            requestAnimationFrame(() => {
+                if (!isBannerUsable(banner)) {
+                    // Ad blocker is preventing the banner from showing — don't lock scroll
+                    banner.classList.add("hidden");
+                    setConsentCookie("declined");
+                    return;
+                }
+
+                document.body.classList.add("cookie-modal-open");
+
+                // Animate in
+                const modalContent = banner.querySelector(".opacity-0");
+                const ursula = banner.querySelector(".ursula-peek");
+                if (modalContent) {
+                    modalContent.classList.remove("opacity-0", "scale-95");
+                    modalContent.classList.add("opacity-100", "scale-100");
+                }
+                if (ursula) {
+                    ursula.classList.remove("opacity-0", "-translate-y-4");
+                }
+
+                // Start watching for ad blocker interference
+                watchForAdBlocker();
+            });
         } else {
             // Ensure banner stays hidden if consent was already given
             banner.classList.add("hidden");
