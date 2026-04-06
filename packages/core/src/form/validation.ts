@@ -132,7 +132,7 @@ export function getZodMapObjectSchema({
 
     let schema: ZodTypeAny = z.object(shape).passthrough();
     if (validation?.required) {
-        schema = schema.nullable().refine(
+        schema = schema.nullable().optional().refine(
             (value) => value !== undefined,
             { message: validation?.requiredMessage ? validation.requiredMessage : "Required" }
         );
@@ -156,7 +156,7 @@ function getZodStringSchema({
 
     if (property.enum) {
         if (isRequired) {
-            schema = z.string().nullable().refine(
+            schema = z.string().nullable().optional().refine(
                 (value) => value !== undefined && value !== null && value !== "",
                 { message: validation?.requiredMessage ? validation.requiredMessage : "Required" }
             );
@@ -315,7 +315,7 @@ function getZodGeoPointSchema({
     name,
     entityId
 }: PropertyContext<GeopointProperty>): ZodTypeAny {
-    let schema: ZodTypeAny = z.object({}).passthrough().nullable();
+    let schema: ZodTypeAny = z.object({}).passthrough().nullable().optional();
     const validation = property.validation;
 
     if (validation?.unique && customFieldValidator && name)
@@ -346,13 +346,13 @@ function getZodDateSchema({
     entityId
 }: PropertyContext<DateProperty>): ZodTypeAny {
     if (property.autoValue) {
-        return z.date().nullable();
+        return z.date().nullable().optional();
     }
     // Accept Date objects and null, reject everything else
-    let schema: ZodTypeAny = z.custom<Date | null>(
-        (v) => v === null || v instanceof Date,
+    let schema: ZodTypeAny = z.custom<Date | null | undefined>(
+        (v) => v === null || v === undefined || v instanceof Date,
         { message: "Expected a Date" }
-    );
+    ).optional();
     const validation = property.validation;
 
     if (validation) {
@@ -392,7 +392,7 @@ function getZodReferenceSchema({
     name,
     entityId
 }: PropertyContext<ReferenceProperty>): ZodTypeAny {
-    let schema: ZodTypeAny = z.object({}).passthrough().nullable();
+    let schema: ZodTypeAny = z.object({}).passthrough().nullable().optional();
     const validation = property.validation;
 
     if (validation) {
@@ -426,8 +426,8 @@ function getZodRelationSchema({
 }: PropertyContext<RelationProperty>): ZodTypeAny {
     const isMany = property.relation?.cardinality === "many";
     let schema: ZodTypeAny = isMany
-        ? z.array(z.object({}).passthrough()).nullable()
-        : z.object({}).passthrough().nullable();
+        ? z.array(z.object({}).passthrough()).nullable().optional()
+        : z.object({}).passthrough().nullable().optional();
     const validation = property.validation;
 
     if (validation) {
@@ -464,7 +464,7 @@ function getZodBooleanSchema({
     name,
     entityId
 }: PropertyContext<BooleanProperty>): ZodTypeAny {
-    let schema: ZodTypeAny = z.boolean().nullable();
+    let schema: ZodTypeAny = z.boolean().nullable().optional();
     const validation = property.validation;
 
     if (validation) {
@@ -507,7 +507,7 @@ function getZodArraySchema({
     entityId
 }: PropertyContext<ArrayProperty>): ZodTypeAny {
 
-    let arraySchema: ZodTypeAny = z.array(z.any()).nullable();
+    let arraySchema: ZodTypeAny = z.array(z.any()).nullable().optional();
 
     if (property.of) {
         if (Array.isArray(property.of)) {
@@ -543,7 +543,7 @@ function getZodArraySchema({
                         }
                     }
                 })
-            ).nullable();
+            ).nullable().optional();
         } else {
             try {
                 const ofSchema = mapPropertyToZod({
@@ -551,13 +551,13 @@ function getZodArraySchema({
                     parentProperty: property,
                     entityId
                 });
-                arraySchema = z.array(ofSchema).nullable();
+                arraySchema = z.array(ofSchema).nullable().optional();
             } catch (e: unknown) {
                 console.error(`Error creating validation schema for array of property:`, e);
                 arraySchema = z.array(z.any().refine(
                     () => false,
                     { message: `Validation error: ${e instanceof Error ? e.message : "Unknown error"}` }
-                )).nullable();
+                )).nullable().optional();
             }
             const arrayUniqueFields = hasUniqueInArrayModifier(property.of);
             if (arrayUniqueFields) {

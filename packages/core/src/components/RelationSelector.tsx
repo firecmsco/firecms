@@ -88,6 +88,7 @@ export const RelationSelector = React.forwardRef<
 
         const [isPopoverOpen, setIsPopoverOpen] = useState(false);
         const [selectedItems, setSelectedItems] = useState<RelationItem[]>([]);
+        const [isLoadingSelectedItems, setIsLoadingSelectedItems] = useState(false);
         const [searchString, setSearchString] = useState<string>("");
 
         const {
@@ -136,8 +137,14 @@ export const RelationSelector = React.forwardRef<
 
         useEffect(() => {
             let active = true;
+            if (value && (!Array.isArray(value) || value.length > 0)) {
+                setIsLoadingSelectedItems(true);
+            }
             computeSelectedItems(value || undefined).then(resolved => {
-                if (active) setSelectedItems(resolved);
+                if (active) {
+                    setSelectedItems(resolved);
+                    setIsLoadingSelectedItems(false);
+                }
             });
             return () => {
                 active = false;
@@ -301,7 +308,12 @@ export const RelationSelector = React.forwardRef<
                             )}
                         >
                             <div className="flex justify-between items-center w-full">
-                                {selectedItems.length > 0 ? (
+                                {isLoadingSelectedItems ? (
+                                    <div className="flex items-center gap-2">
+                                        <CircularProgress size="smallest" />
+                                        <span className="text-sm text-text-secondary dark:text-text-secondary-dark">{loadingText}</span>
+                                    </div>
+                                ) : selectedItems.length > 0 ? (
                                     <div
                                         className="flex flex-wrap items-center gap-1.5 text-start flex-1 min-w-0 mr-2">
                                         {selectedItems.map((item) => {

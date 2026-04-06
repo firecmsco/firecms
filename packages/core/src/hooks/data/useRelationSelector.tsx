@@ -65,13 +65,19 @@ export function useRelationSelector<M extends Record<string, any> = any>(
 
     const [items, setItems] = useState<RelationItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const isLoadingRef = useRef(false);
     const [error, setError] = useState<Error | undefined>();
     const [hasMore, setHasMore] = useState(true);
     const [currentSearch, setCurrentSearch] = useState<string>("");
-    const [lastEntity, setLastEntity] = useState<Entity<M> | undefined>(undefined);
+    const [limit, setLimit] = useState<number>(pageSize);
 
     const unsubscribeRef = useRef<(() => void) | null>(null);
     const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const setLoading = useCallback((loading: boolean) => {
+        isLoadingRef.current = loading;
+        setIsLoading(loading);
+    }, []);
 
     // Function to convert entity to RelationItem
     const entityToRelationItem = useCallback((entity: Entity<M>, relation?: EntityRelation): RelationItem => {
@@ -120,10 +126,10 @@ export function useRelationSelector<M extends Record<string, any> = any>(
         }
     }, []);
 
-    const fetchData = useCallback((searchString: string | undefined, loadMore: boolean = false) => {
+    const fetchData = useCallback(() => {
         cleanupSubscription();
         setError(undefined);
-        setIsLoading(true);
+        setLoading(true);
 
         // Convert forceFilter to PostgREST where clause
         const whereMap: Record<string, string> = {};
@@ -144,53 +150,38 @@ export function useRelationSelector<M extends Record<string, any> = any>(
             });
         }
         const whereParams = Object.keys(whereMap).length > 0 ? whereMap : undefined;
-
-        const offset = loadMore ? items.length : 0;
         
         const onEntitiesUpdate = (res: { data: Entity<M>[], meta: { hasMore: boolean } }) => {
             const newItems = res.data.map((e) => entityToRelationItem(e));
-
-            if (loadMore) {
-                setItems(prev => {
-                    const existingIds = new Set(prev.map(i => i.id));
-                    const uniqueNewItems = newItems.filter(i => !existingIds.has(i.id));
-                    return [...prev, ...uniqueNewItems];
-                });
-            } else {
-                setItems(newItems);
-            }
-
+            setItems(newItems);
             setHasMore(res.meta.hasMore);
-            setIsLoading(false);
+            setLoading(false);
         };
 
         const onErrorUpdate = (fetchError: Error) => {
             console.error("useRelationSelector: Error fetching data:", fetchError);
             setError(fetchError);
-            setIsLoading(false);
+            setLoading(false);
         };
 
         const accessor = dataClient.collection(path);
         
         let unsubscribe: (() => void) | undefined;
         
-        // Use find because pagination state (offset) is easier to track statically,
-        // and relation selectors usually don't strictly need real-time listing if they're paginated
-        // However, if we do want to use listen:
-        if (accessor.listen && offset === 0 && !searchString) {
+        if (accessor.listen) {
             unsubscribe = accessor.listen({
                 where: whereParams,
-                limit: pageSize,
-                orderBy: undefined, // default asc
-                searchString
+                limit: limit,
+                orderBy: undefined,
+                searchString: currentSearch
             }, onEntitiesUpdate, onErrorUpdate);
         } else {
             accessor.find({
                 where: whereParams,
-                limit: pageSize,
-                offset: offset,
+                limit: limit,
+                offset: 0,
                 orderBy: undefined,
-                searchString
+                searchString: currentSearch
             })
                 .then(onEntitiesUpdate)
                 .catch(onErrorUpdate);
@@ -198,12 +189,10 @@ export function useRelationSelector<M extends Record<string, any> = any>(
         }
 
         unsubscribeRef.current = unsubscribe || null;
-    }, [dataClient, path, forceFilter, pageSize, entityToRelationItem, cleanupSubscription, items.length]);
+    }, [dataClient, path, forceFilter, limit, currentSearch, entityToRelationItem, cleanupSubscription, setLoading]);
 
     // Search function with debouncing
     const search = useCallback((searchString: string) => {
-        setCurrentSearch(searchString);
-
         // Clear existing timeout
         if (searchTimeoutRef.current) {
             clearTimeout(searchTimeoutRef.current);
@@ -211,29 +200,35 @@ export function useRelationSelector<M extends Record<string, any> = any>(
 
         // Debounce search
         searchTimeoutRef.current = setTimeout(() => {
-            setLastEntity(undefined);
-            fetchData(searchString, false);
+            setLimit(pageSize);
+            setCurrentSearch(searchString);
         }, searchString.trim() ? 300 : 0);
-    }, [fetchData]);
+    }, [pageSize]);
 
     // Load more function
     const loadMore = useCallback(() => {
-        if (!isLoading && hasMore && items.length > 0) {
-            fetchData(currentSearch, true);
+        if (!isLoadingRef.current && hasMore && items.length > 0) {
+            setLoading(true);
+            setLimit(prev => prev + pageSize);
         }
-    }, [isLoading, hasMore, items.length, fetchData, currentSearch]);
+    }, [hasMore, items.length, pageSize, setLoading]);
 
-    // Load initial data
+    // Load initial data and update upon changes
     useEffect(() => {
-        fetchData(undefined, false);
+        fetchData();
 
         return () => {
             cleanupSubscription();
+        };
+    }, [fetchData]);
+
+    useEffect(() => {
+        return () => {
             if (searchTimeoutRef.current) {
                 clearTimeout(searchTimeoutRef.current);
             }
         };
-    }, [path, collection.slug, forceFilter]);
+    }, []);
 
     return {
         items,

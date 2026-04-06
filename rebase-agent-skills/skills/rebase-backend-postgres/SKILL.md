@@ -94,7 +94,7 @@ const app = new Hono<HonoEnv>();
 const server = createServer(/* ... */);
 const { db } = createPostgresDatabaseConnection(process.env.DATABASE_URL!);
 
-// Initialize backend (auth, storage, realtime, WebSocket, REST, GraphQL)
+// Initialize backend (auth, storage, realtime, WebSocket, REST)
 const backend = await initializeRebaseBackend({
     server,
     app,
@@ -104,7 +104,6 @@ const backend = await initializeRebaseBackend({
     },
     auth: { jwtSecret: process.env.JWT_SECRET! },
     storage: { type: "local", basePath: "./uploads" },
-    enableGraphQL: true,   // serves GraphQL at /api/data/graphql
 });
 
 server.listen(3001);

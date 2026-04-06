@@ -203,14 +203,6 @@ export interface RebaseBackendConfig {
     history?: boolean | HistoryConfig;
 
     /**
-     * Enable GraphQL API endpoint at `{basePath}/data/graphql`.
-     * Also serves GraphiQL IDE in non-production environments.
-     *
-     * @default false
-     */
-    enableGraphQL?: boolean;
-
-    /**
      * Enable OpenAPI spec and Swagger UI at `{basePath}/data/docs`
      * and `{basePath}/data/swagger` (dev only).
      *
@@ -644,46 +636,6 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             console.log(`✅ Entity history endpoints: ${basePath}/data/:slug/:entityId/history`);
         }
 
-        // GraphQL endpoint (optional — dependencies loaded lazily)
-        if (config.enableGraphQL) {
-            const { GraphQLSchemaGenerator } = await import("./api/graphql/graphql-schema-generator");
-            const { graphqlServer } = await import("@hono/graphql-server");
-
-            const schemaGenerator = new GraphQLSchemaGenerator(activeCollections, defaultDataDriverDelegate);
-            const schema = schemaGenerator.generateSchema();
-
-            dataRouter.use("/graphql", graphqlServer({ schema }));
-            console.log(`✅ GraphQL endpoint: ${basePath}/data/graphql`);
-
-            // GraphiQL IDE (dev only)
-            if (process.env.NODE_ENV !== "production") {
-                dataRouter.get("/graphiql", (c) => {
-                    return c.html(`<!DOCTYPE html>
-<html>
-<head>
-  <meta charset=utf-8/>
-  <title>Rebase GraphiQL</title>
-  <link rel="stylesheet" href="https://unpkg.com/graphiql/graphiql.min.css" />
-  <style>body,html,#graphiql{height:100%;margin:0;width:100%;}</style>
-</head>
-<body>
-<div id="graphiql">Loading...</div>
-<script crossorigin src="https://unpkg.com/react/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/graphiql/graphiql.min.js"></script>
-<script>
-  const fetcher = GraphiQL.createFetcher({ url: '${basePath}/data/graphql' });
-  ReactDOM.render(
-    React.createElement(GraphiQL, { fetcher }),
-    document.getElementById('graphiql'),
-  );
-</script>
-</body>
-</html>`);
-                });
-                console.log(`✅ GraphiQL IDE: ${basePath}/data/graphiql`);
-            }
-        }
 
         // OpenAPI spec and Swagger UI (optional)
         if (config.enableSwagger) {

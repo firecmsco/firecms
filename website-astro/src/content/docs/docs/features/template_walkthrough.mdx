@@ -127,7 +127,6 @@ const backend = await initializeRebaseBackend({
         type: "local",
         basePath: path.resolve(__dirname, "../../uploads")
     },
-    enableGraphQL: true,  // optional: serves GraphQL at /api/data/graphql
 });
 ```
 
@@ -137,7 +136,8 @@ const backend = await initializeRebaseBackend({
 - **Storage routes** for file uploads
 - **Admin routes** for schema management
 - **REST CRUD** at `/api/data/:slug` — list, get, create, update, delete
-- **GraphQL** at `/api/data/graphql` (when `enableGraphQL: true`)
+
+GraphQL is available as an opt-in add-on. Import `GraphQLSchemaGenerator` from `@rebasepro/backend` and mount it on any route you like.
 
 ---
 

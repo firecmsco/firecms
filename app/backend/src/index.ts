@@ -84,9 +84,18 @@ async function startServer() {
                 type: "local",
                 basePath: path.resolve(__dirname, "../../uploads")
             },
-            enableGraphQL: true,
         });
 
+        // ─── GraphQL (optional) ──────────────────────────────────────
+        // Uncomment to expose a GraphQL API alongside the REST API.
+        // Requires: pnpm add @hono/graphql-server graphql
+        //
+        // import { GraphQLSchemaGenerator } from "@rebasepro/backend";
+        // import { graphqlServer } from "@hono/graphql-server";
+        //
+        // const collections = backend.collectionRegistry.getCollections();
+        // const gqlSchema = new GraphQLSchemaGenerator(collections, backend.driver).generateSchema();
+        // app.use("/api/data/graphql", graphqlServer({ schema: gqlSchema }));
 
         // ─── Your custom routes ──────────────────────────────────────
         // Add any custom endpoints here. This is a plain Hono app,
@@ -126,8 +135,7 @@ async function startServer() {
         // ─── Listen ─────────────────────────────────────────────────
         server.listen(PORT, () => {
             console.log(`🚀 Server running at http://localhost:${PORT}`);
-            console.log(`   • REST API:     http://localhost:${PORT}/api/data`);
-            console.log(`   • GraphQL:      http://localhost:${PORT}/api/data/graphql`);
+            console.log(`   • API Base:     http://localhost:${PORT}/api`);
             console.log(`   • Health:       http://localhost:${PORT}/health`);
         });
     } catch (err) {
