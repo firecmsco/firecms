@@ -27,8 +27,10 @@ export function createHistoryRoutes(params: {
     router.get("/:slug/:entityId/history", async (c) => {
         const slug = c.req.param("slug");
         const entityId = c.req.param("entityId");
-        const limit = parseInt(c.req.query("limit") ?? "20", 10);
-        const offset = parseInt(c.req.query("offset") ?? "0", 10);
+        const parsedLimit = parseInt(c.req.query("limit") ?? "20", 10);
+        const parsedOffset = parseInt(c.req.query("offset") ?? "0", 10);
+        const limit = Number.isNaN(parsedLimit) ? 20 : parsedLimit;
+        const offset = Number.isNaN(parsedOffset) ? 0 : parsedOffset;
 
         // Resolve the collection to get the actual table name
         const collection = registry.getCollections().find(
@@ -88,6 +90,12 @@ export function createHistoryRoutes(params: {
 
         if (!historyEntry) {
             throw ApiError.notFound(`History entry '${historyId}' not found`);
+        }
+
+        // Verify the history entry belongs to this entity (prevent cross-entity revert)
+        const tableName = collection.dbPath || collection.slug;
+        if (historyEntry.entity_id !== String(entityId) || historyEntry.table_name !== tableName) {
+            throw ApiError.badRequest("History entry does not belong to this entity");
         }
 
         if (!historyEntry.values) {

@@ -6,7 +6,7 @@ import { FilterOperator, QueryBuilder } from "./query_builder";
 
 function parseWhereFilter(where?: Record<string, string>): FilterValues<any> | undefined {
     if (!where) return undefined;
-    const filters: any = {};
+    const filters: Record<string, [WhereFilterOp, unknown]> = {};
     for (const [key, value] of Object.entries(where)) {
         const dotIndex = value.indexOf(".");
         if (dotIndex > 0) {
@@ -106,7 +106,7 @@ export function createCollectionClient<M extends Record<string, any> = any>(tran
         },
 
         async create(data: Partial<M>, id?: string | number) {
-            const body: any = { ...data };
+            const body: Record<string, unknown> = { ...data };
             if (id !== undefined) {
                 body.id = id;
             }

@@ -21,18 +21,15 @@ import {
     RebaseRoutes,
     SnackbarProvider,
     ContentHomePage,
-    useBackendStorageSource,
     useBuildCMSUrlController,
     useBuildCollectionRegistryController,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationStateController
 } from "@rebasepro/core";
-import { usePostgresClientDriver } from "@rebasepro/postgresql";
 import { collections } from "virtual:rebase-collections";
 import { Route, Outlet } from "react-router-dom";
 import { createRebaseClient } from "@rebasepro/client";
-import { buildRebaseData } from "@rebasepro/common";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -42,37 +39,19 @@ export function App() {
     const modeController = useBuildModeController();
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
+    const rebaseClient = React.useMemo(() => createRebaseClient({
+        baseUrl: API_URL,
+        websocketUrl: API_URL.replace(/^http/, "ws")
+    }), [API_URL]);
+
     const authController = useRebaseAuthController({
-        apiUrl: API_URL,
+        client: rebaseClient,
         googleClientId: GOOGLE_CLIENT_ID
     });
 
-    const storageSource = useBackendStorageSource({
-        apiUrl: API_URL,
-        getAuthToken: authController.getAuthToken
-    });
-
     const userManagement = useBackendUserManagement({
-        apiUrl: API_URL,
-        getAuthToken: authController.getAuthToken,
+        client: rebaseClient,
         currentUser: authController.user
-    });
-
-    const rebaseClient = React.useMemo(() => createRebaseClient({
-        baseUrl: API_URL,
-        websocketUrl: API_URL.replace(/^http/, "ws"),
-        auth: {}
-    }), [API_URL]);
-
-    if (rebaseClient.ws) {
-         rebaseClient.ws.setAuthTokenGetter(async () => {
-             const token = await authController.getAuthToken();
-             return token ?? "";
-         });
-    }
-
-    const postgresDelegate = usePostgresClientDriver({
-        wsClient: rebaseClient.ws
     });
 
     const collectionsBuilder = useCallback(() => {
@@ -89,7 +68,7 @@ export function App() {
     const navigationStateController = useBuildNavigationStateController({
         collections: collectionsBuilder,
         authController,
-        data: buildRebaseData(postgresDelegate),
+        data: rebaseClient.data,
         collectionRegistryController,
         cmsUrlController,
         userManagement
@@ -99,13 +78,14 @@ export function App() {
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
                 <Rebase
+                    client={rebaseClient}
+                    apiUrl={API_URL}
                     collectionRegistryController={collectionRegistryController}
                     cmsUrlController={cmsUrlController}
                     navigationStateController={navigationStateController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}
-                    driver={postgresDelegate}
-                    storageSource={storageSource}
+                    storageSource={rebaseClient.storage}
                 >
                     {({ loading }) => {
                         if (loading || authController.initialLoading) {

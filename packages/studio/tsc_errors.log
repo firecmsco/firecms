@@ -1,0 +1,16 @@
+src/ui/collection_editor/CollectionEditorDialog.tsx(663,17): error TS2322: Type 'FormexController<PersistedCollection<M>>' is not assignable to type 'FormexController<Record<string, unknown>>'.
+  Types of property 'setValues' are incompatible.
+    Type '(values: PersistedCollection<M>) => void' is not assignable to type '(values: Record<string, unknown>) => void'.
+      Types of parameters 'values' and 'values' are incompatible.
+        Type 'Record<string, unknown>' is not assignable to type 'PersistedCollection<M>'.
+          Type 'Record<string, unknown>' is missing the following properties from type 'Omit<EntityCollection<M, any>, "subcollections">': slug, name, dbPath, properties
+src/ui/collection_editor/EnumForm.tsx(84,20): error TS2322: Type 'FormexController<{ enum: EnumValueConfig[]; }>' is not assignable to type 'FormexController<Record<string, unknown>>'.
+  Types of property 'setValues' are incompatible.
+    Type '(values: { enum: EnumValueConfig[]; }) => void' is not assignable to type '(values: Record<string, unknown>) => void'.
+      Types of parameters 'values' and 'values' are incompatible.
+        Property 'enum' is missing in type 'Record<string, unknown>' but required in type '{ enum: EnumValueConfig[]; }'.
+src/ui/collection_editor/PropertyEditView.tsx(211,24): error TS2322: Type 'FormexController<PropertyWithId>' is not assignable to type 'FormexController<Record<string, unknown>>'.
+  Types of property 'values' are incompatible.
+    Type 'PropertyWithId' is not assignable to type 'Record<string, unknown>'.
+      Type 'StringProperty & { id?: string | undefined; }' is not assignable to type 'Record<string, unknown>'.
+        Index signature for type 'string' is missing in type 'StringProperty & { id?: string | undefined; }'.

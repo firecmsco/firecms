@@ -3,6 +3,21 @@ import NavigationDropdown from "./NavigationDropdown.astro";
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "");
 
+// Mapping from icon identifiers to Material Symbols names
+const iconMap: Record<string, string> = {
+    "layers": "layers",
+    "layout-dashboard": "dashboard",
+    "server": "dns",
+    "bot": "smart_toy",
+    "code": "code",
+    "terminal": "terminal",
+    "square-terminal": "terminal",
+    "shield-check": "verified_user",
+    "rocket": "rocket_launch",
+    "git-compare-arrows": "compare_arrows",
+    "briefcase": "work",
+};
+
 const navLinks = [
     {
         href: "/features",
@@ -100,10 +115,10 @@ const navLinks = [
             ],
         ]
     },
-    // {
-    //     href: "/docs",
-    //     label: "Docs"
-    // },
+    {
+        href: "/docs",
+        label: "Docs"
+    },
 ];
 ---
 <header class="bg-black/40 backdrop-blur sticky top-0 z-20">
@@ -125,11 +140,10 @@ const navLinks = [
                                                 {column.map(subLink => (
                                                         <a href={subLink.href}
                                                            class="flex items-start gap-4 p-3 rounded-lg hover:bg-surface-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60">
-                                                            <img
-                                                                    src={`https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${subLink.icon}.svg`}
-                                                                    alt=""
-                                                                    class="h-6 w-6 text-primary filter invert"
-                                                            />
+                                                            <span
+                                                                    class="material-symbols-rounded text-primary"
+                                                                    style="font-size:24px"
+                                                            >{iconMap[subLink.icon] || subLink.icon}</span>
                                                             <div>
                                                                 <p class="font-semibold text-white">{subLink.label}</p>
                                                                 <p class="text-surface-400 text-sm">{subLink.description}</p>
@@ -160,11 +174,7 @@ const navLinks = [
                     id="header-start-building-desktop"
             >
                 Get Early Access
-                <img
-                        src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
-                        alt=""
-                        class="h-4 w-4 text-white filter invert"
-                />
+                <span class="material-symbols-rounded text-white" style="font-size:16px">arrow_forward</span>
             </a>
             <!-- Mobile menu button -->
             <button
@@ -246,11 +256,7 @@ const navLinks = [
                         id="header-start-building-mobile"
                 >
                     Get Early Access
-                    <img
-                            src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg"
-                            alt=""
-                            class="h-5 w-5 text-white filter invert"
-                    />
+                    <span class="material-symbols-rounded text-white" style="font-size:20px">arrow_forward</span>
                 </a>
             </nav>
         </div>

@@ -28,7 +28,7 @@ export function ArrayOfRelationsPreview({
                     const entityRelation = (relation instanceof EntityRelation)
                         ? relation
                         : (relation && typeof relation === "object" && (relation.__type === "relation" || relation.isEntityRelation?.()))
-                            ? new EntityRelation(relation.id, relation.path)
+                            ? new EntityRelation(relation.id, relation.path, relation.data)
                             : null;
 
                     if (!entityRelation) return null;

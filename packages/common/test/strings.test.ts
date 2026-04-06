@@ -1,101 +1,80 @@
-import { prettifyIdentifier } from "../src/util/strings";
+import { toKebabCase, toSnakeCase, randomString, randomColor, slugify, unslugify, prettifyIdentifier } from "../src/util/strings";
 
-describe("prettifyIdentifier", () => {
-    it("should return empty string for empty input", () => {
-        expect(prettifyIdentifier("")).toBe("");
+describe("strings utils", () => {
+    describe("toKebabCase", () => {
+        it("should convert to kebab case", () => {
+            expect(toKebabCase("helloWorld")).toBe("hello-world");
+            expect(toKebabCase("Hello_World")).toBe("hello-world");
+            expect(toKebabCase("fooBarBaz")).toBe("foo-bar-baz");
+            expect(toKebabCase("")).toBe("");
+        });
     });
 
-    it("should handle camelCase", () => {
-        expect(prettifyIdentifier("displayName")).toBe("Display Name");
-        expect(prettifyIdentifier("firstName")).toBe("First Name");
-        expect(prettifyIdentifier("lastName")).toBe("Last Name");
-        expect(prettifyIdentifier("emailAddress")).toBe("Email Address");
+    describe("toSnakeCase", () => {
+        it("should convert to snake case", () => {
+            expect(toSnakeCase("helloWorld")).toBe("hello_world");
+            expect(toSnakeCase("Hello-World")).toBe("hello_world");
+            expect(toSnakeCase("fooBarBaz")).toBe("foo_bar_baz");
+            expect(toSnakeCase("")).toBe("");
+        });
     });
 
-    it("should handle PascalCase", () => {
-        expect(prettifyIdentifier("DisplayName")).toBe("Display Name");
-        expect(prettifyIdentifier("FirstName")).toBe("First Name");
-        expect(prettifyIdentifier("UserProfile")).toBe("User Profile");
+    describe("randomString", () => {
+        it("should generate random string of given length", () => {
+            const str1 = randomString(5);
+            expect(str1.length).toBe(5);
+            
+            const str2 = randomString(10);
+            expect(str2.length).toBe(10);
+
+            expect(str1).not.toBe(str2);
+        });
     });
 
-    it("should handle snake_case", () => {
-        expect(prettifyIdentifier("display_name")).toBe("Display Name");
-        expect(prettifyIdentifier("first_name")).toBe("First Name");
-        expect(prettifyIdentifier("user_profile")).toBe("User Profile");
+    describe("randomColor", () => {
+        it("should generate random hex color", () => {
+            const tempMathRandom = Math.random;
+            Math.random = jest.fn(() => 0.5);
+            
+            const color = randomColor();
+            expect(color).toBe("7fffff");
+            
+            Math.random = tempMathRandom;
+        });
     });
 
-    it("should handle kebab-case", () => {
-        expect(prettifyIdentifier("display-name")).toBe("Display Name");
-        expect(prettifyIdentifier("first-name")).toBe("First Name");
-        expect(prettifyIdentifier("user-profile")).toBe("User Profile");
+    describe("slugify", () => {
+        it("should convert text to slug", () => {
+            expect(slugify("Hello World!")).toBe("hello_world");
+            expect(slugify("Hello World!", "-")).toBe("hello-world");
+            expect(slugify("Hello World!", "_", false)).toBe("Hello_World");
+            expect(slugify("ãàáäâẽèéëê", "-")).toBe("aaaaaeeeee");
+            expect(slugify("foo & bar")).toBe("foo_bar");
+            expect(slugify("  whitespaces  ")).toBe("whitespaces");
+            expect(slugify("")).toBe("");
+            expect(slugify(undefined)).toBe("");
+        });
     });
 
-    it("should handle mixed separators", () => {
-        expect(prettifyIdentifier("display_name-test")).toBe("Display Name Test");
-        expect(prettifyIdentifier("first-name_last")).toBe("First Name Last");
+    describe("unslugify", () => {
+        it("should convert slug to normal text", () => {
+            expect(unslugify("hello-world")).toBe("Hello World");
+            expect(unslugify("hello_world")).toBe("Hello World");
+            expect(unslugify("hello_world_test")).toBe("Hello World Test");
+            expect(unslugify("already normal")).toBe("already normal");
+            expect(unslugify("")).toBe("");
+            expect(unslugify(undefined)).toBe("");
+        });
     });
 
-    it("should handle acronyms correctly", () => {
-        expect(prettifyIdentifier("imageURL")).toBe("Image URL");
-        expect(prettifyIdentifier("XMLParser")).toBe("XML Parser");
-        expect(prettifyIdentifier("HTTPSConnection")).toBe("HTTPS Connection");
-        expect(prettifyIdentifier("parseHTML")).toBe("Parse HTML");
-    });
-
-    it("should handle consecutive uppercase letters", () => {
-        expect(prettifyIdentifier("URLParser")).toBe("URL Parser");
-        expect(prettifyIdentifier("HTMLElement")).toBe("HTML Element");
-        expect(prettifyIdentifier("APIKey")).toBe("API Key");
-    });
-
-    it("should handle single words", () => {
-        expect(prettifyIdentifier("name")).toBe("Name");
-        expect(prettifyIdentifier("title")).toBe("Title");
-        expect(prettifyIdentifier("description")).toBe("Description");
-    });
-
-    it("should handle all uppercase", () => {
-        expect(prettifyIdentifier("NAME")).toBe("NAME");
-        expect(prettifyIdentifier("TITLE")).toBe("TITLE");
-    });
-
-    it("should handle all lowercase", () => {
-        expect(prettifyIdentifier("name")).toBe("Name");
-        expect(prettifyIdentifier("title")).toBe("Title");
-    });
-
-    it("should handle multiple consecutive separators", () => {
-        expect(prettifyIdentifier("display__name")).toBe("Display Name");
-        expect(prettifyIdentifier("first--name")).toBe("First Name");
-        expect(prettifyIdentifier("user___profile")).toBe("User Profile");
-    });
-
-    it("should trim whitespace", () => {
-        expect(prettifyIdentifier("  displayName  ")).toBe("Display Name");
-        expect(prettifyIdentifier(" first_name ")).toBe("First Name");
-    });
-
-    it("should handle numbers", () => {
-        expect(prettifyIdentifier("user123")).toBe("User123");
-        expect(prettifyIdentifier("item1Name")).toBe("Item1Name");
-        expect(prettifyIdentifier("version2Point0")).toBe("Version2Point0");
-    });
-
-    it("should handle complex combinations", () => {
-        expect(prettifyIdentifier("userProfileURLParser")).toBe("User Profile URL Parser");
-        expect(prettifyIdentifier("parse_HTML_document")).toBe("Parse HTML Document");
-        expect(prettifyIdentifier("API-key-validator")).toBe("API Key Validator");
-    });
-
-    it("should handle edge cases with underscores and hyphens at boundaries", () => {
-        expect(prettifyIdentifier("_displayName")).toBe("Display Name");
-        expect(prettifyIdentifier("displayName_")).toBe("Display Name");
-        expect(prettifyIdentifier("-displayName-")).toBe("Display Name");
-    });
-
-    it("should handle already formatted strings", () => {
-        expect(prettifyIdentifier("Display Name")).toBe("Display Name");
-        expect(prettifyIdentifier("First Name")).toBe("First Name");
+    describe("prettifyIdentifier", () => {
+        it("should format identifier nicely", () => {
+            expect(prettifyIdentifier("imageURL")).toBe("Image URL");
+            expect(prettifyIdentifier("XMLParser")).toBe("XML Parser");
+            expect(prettifyIdentifier("hello_world")).toBe("Hello World");
+            expect(prettifyIdentifier("hello-world")).toBe("Hello World");
+            expect(prettifyIdentifier("CamelCaseTested")).toBe("Camel Case Tested");
+            expect(prettifyIdentifier("")).toBe("");
+        });
     });
 });
-

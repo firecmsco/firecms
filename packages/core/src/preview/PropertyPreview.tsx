@@ -236,7 +236,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
                         const entityRelation: EntityRelation | null = (item instanceof EntityRelation)
                             ? item
                             : (item && typeof item === "object" && (itemObj.__type === "relation" || ("isEntityRelation" in itemObj && typeof itemObj.isEntityRelation === "function" && itemObj.isEntityRelation())))
-                                ? new EntityRelation(itemObj.id as string | number, itemObj.path as string)
+                                ? new EntityRelation(itemObj.id as string | number, itemObj.path as string, itemObj.data as any)
                                 : null;
                         if (!entityRelation) return null;
                         return (
@@ -261,7 +261,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
             const relationValue: EntityRelation | null = (value instanceof EntityRelation)
                 ? value
                 : (typeof rawValue === "object" && (rawValue.__type === "relation" || ("isEntityRelation" in rawValue && typeof rawValue.isEntityRelation === "function" && rawValue.isEntityRelation())))
-                    ? new EntityRelation(rawValue.id as string | number, rawValue.path as string)
+                    ? new EntityRelation(rawValue.id as string | number, rawValue.path as string, rawValue.data as any)
                     : null;
             if (relationValue) {
                 content = <RelationPreview

@@ -54,287 +54,187 @@ export default defineConfig({
                         },
                         {
                             label: "Quickstart",
-                            slug: "docs/self"
+                            slug: "docs/getting-started/quickstart"
                         },
                         {
-                            label: "Database Setup",
-                            slug: "docs/database_setup"
+                            label: "Project Structure",
+                            slug: "docs/getting-started/project-structure"
                         },
                         {
-                            label: "Template Walkthrough",
-                            slug: "docs/features/template_walkthrough"
-                        },
-                        {
-                            label: "Authentication",
-                            slug: "docs/self/auth_self_hosted"
+                            label: "Configuration",
+                            slug: "docs/getting-started/configuration"
                         },
                         {
                             label: "Deployment",
-                            slug: "docs/self/deployment"
+                            slug: "docs/getting-started/deployment"
+                        },
+                    ],
+                },
+                {
+                    label: "Architecture",
+                    collapsed: false,
+                    items: [
+                        {
+                            label: "Overview",
+                            slug: "docs/architecture"
+                        },
+                        {
+                            label: "Schema as Code",
+                            slug: "docs/architecture/schema-as-code"
+                        },
+                    ],
+                },
+                {
+                    label: "Collections",
+                    collapsed: false,
+                    items: [
+                        {
+                            label: "Overview",
+                            slug: "docs/collections"
+                        },
+                        {
+                            label: "Properties",
+                            slug: "docs/collections/properties"
+                        },
+                        {
+                            label: "Relations",
+                            slug: "docs/collections/relations"
+                        },
+                        {
+                            label: "Security Rules (RLS)",
+                            slug: "docs/collections/security-rules"
+                        },
+                        {
+                            label: "Entity Callbacks",
+                            slug: "docs/collections/callbacks"
+                        },
+                    ],
+                },
+                {
+                    label: "Backend",
+                    collapsed: false,
+                    items: [
+                        {
+                            label: "Overview",
+                            slug: "docs/backend"
+                        },
+                        {
+                            label: "Entity History",
+                            slug: "docs/backend/history"
+                        },
+                    ],
+                },
+                {
+                    label: "Authentication",
+                    collapsed: false,
+                    items: [
+                        {
+                            label: "Overview",
+                            slug: "docs/auth"
+                        },
+                    ],
+                },
+                {
+                    label: "Storage",
+                    collapsed: true,
+                    items: [
+                        {
+                            label: "Overview",
+                            slug: "docs/storage"
                         },
                     ],
                 },
                 {
                     label: "Client SDK",
-                    collapsed: false,
-                    items: [
-                        {
-                            label: "Client SDK overview",
-                            slug: "docs/sdk"
-                        }
-                    ],
-                },
-                {
-                    label: "Core Concepts",
-                    collapsed: false,
-                    items: [
-                        {
-                            label: "Collections",
-                            slug: "docs/collections/index"
-                        },
-                        {
-                            label: "View Modes",
-                            slug: "docs/collections/view_modes"
-                        },
-                        {
-                            label: "Callbacks",
-                            slug: "docs/collections/callbacks"
-                        },
-                        {
-                            label: "Entity Views",
-                            slug: "docs/collections/entity_views"
-                        },
-                        {
-                            label: "Permissions",
-                            slug: "docs/collections/permissions"
-                        },
-                        {
-                            label: "Additional Columns",
-                            slug: "docs/collections/additional_columns"
-                        },
-                        {
-                            label: "Text Search",
-                            slug: "docs/collections/text_search"
-                        },
-                        {
-                            label: "Dynamic Collections",
-                            slug: "docs/collections/dynamic_collections"
-                        },
-                        {
-                            label: "Entity Actions",
-                            slug: "docs/collections/entity_actions"
-                        },
-                        {
-                            label: "Collection Actions",
-                            slug: "docs/collections/collection_actions"
-                        },
-                        {
-                            label: "Exporting Data",
-                            slug: "docs/collections/exporting_data"
-                        },
-                    ],
-                },
-                {
-                    label: "Properties",
                     collapsed: true,
                     items: [
                         {
-                            label: "Properties Introduction",
-                            slug: "docs/properties/index"
+                            label: "Overview",
+                            slug: "docs/sdk"
+                        },
+                    ],
+                },
+                {
+                    label: "Frontend (React)",
+                    collapsed: true,
+                    items: [
+                        {
+                            label: "Overview",
+                            slug: "docs/frontend"
                         },
                         {
-                            label: "Fields",
-                            collapsed: true,
-                            items: [
-                                {
-                                    label: "Text Fields",
-                                    slug: "docs/properties/fields/text_fields"
-                                },
-                                {
-                                    label: "Selects",
-                                    slug: "docs/properties/fields/selects"
-                                },
-                                {
-                                    label: "File Upload",
-                                    slug: "docs/properties/fields/file_upload"
-                                },
-                                {
-                                    label: "Switch",
-                                    slug: "docs/properties/fields/switch"
-                                },
-                                {
-                                    label: "Date & Time",
-                                    slug: "docs/properties/fields/date_time"
-                                },
-                                {
-                                    label: "References",
-                                    slug: "docs/properties/fields/references"
-                                },
-                                {
-                                    label: "Group",
-                                    slug: "docs/properties/fields/group"
-                                },
-                                {
-                                    label: "Key Value",
-                                    slug: "docs/properties/fields/key_value"
-                                },
-                                {
-                                    label: "Repeat",
-                                    slug: "docs/properties/fields/repeat"
-                                },
-                                {
-                                    label: "Block",
-                                    slug: "docs/properties/fields/block"
-                                },
-                            ],
-                        },
-                        {
-                            label: "Config",
-                            collapsed: true,
-                            items: [
-                                {
-                                    label: "Properties Common",
-                                    slug: "docs/properties/config/properties_common"
-                                },
-                                {
-                                    label: "String",
-                                    slug: "docs/properties/config/string"
-                                },
-                                {
-                                    label: "Number",
-                                    slug: "docs/properties/config/number"
-                                },
-                                {
-                                    label: "Boolean",
-                                    slug: "docs/properties/config/boolean"
-                                },
-                                {
-                                    label: "Reference",
-                                    slug: "docs/properties/config/reference"
-                                },
-                                {
-                                    label: "Date",
-                                    slug: "docs/properties/config/date"
-                                },
-                                {
-                                    label: "Array",
-                                    slug: "docs/properties/config/array"
-                                },
-                                {
-                                    label: "Map",
-                                    slug: "docs/properties/config/map"
-                                },
-                                {
-                                    label: "Geopoint",
-                                    slug: "docs/properties/config/geopoint"
-                                },
-                            ],
-                        },
-                        {
-                            label: "Conditional Fields",
-                            slug: "docs/properties/conditional_fields"
+                            label: "View Modes",
+                            slug: "docs/frontend/view-modes"
                         },
                         {
                             label: "Custom Fields",
-                            slug: "docs/properties/custom_fields"
+                            slug: "docs/frontend/custom-fields"
                         },
                         {
-                            label: "Custom Previews",
-                            slug: "docs/properties/custom_previews"
+                            label: "Entity Views",
+                            slug: "docs/frontend/entity-views"
                         },
                         {
-                            label: "Reusing Properties",
-                            slug: "docs/properties/reusing_properties"
+                            label: "Entity Actions",
+                            slug: "docs/frontend/entity-actions"
+                        },
+                        {
+                            label: "Additional Columns",
+                            slug: "docs/frontend/additional-columns"
+                        },
+                    ],
+                },
+                {
+                    label: "Hooks Reference",
+                    collapsed: true,
+                    items: [
+                        {
+                            label: "All Hooks",
+                            slug: "docs/hooks"
+                        },
+                    ],
+                },
+                {
+                    label: "Plugins",
+                    collapsed: true,
+                    items: [
+                        {
+                            label: "Plugin System",
+                            slug: "docs/plugins"
+                        },
+                    ],
+                },
+                {
+                    label: "Studio Tools",
+                    collapsed: true,
+                    items: [
+                        {
+                            label: "Overview",
+                            slug: "docs/studio"
+                        },
+                    ],
+                },
+                {
+                    label: "CLI",
+                    collapsed: true,
+                    items: [
+                        {
+                            label: "Commands",
+                            slug: "docs/cli"
                         },
                     ],
                 },
                 {
                     label: "Features",
-                    collapsed: false,
+                    collapsed: true,
                     items: [
                         {
-                            label: "Collection Editor",
-                            slug: "docs/features/collection_editor"
-                        },
-                        {
                             label: "Data Import",
-                            slug: "docs/features/data_import"
+                            slug: "docs/features/data-import"
                         },
                         {
                             label: "Data Export",
-                            slug: "docs/features/data_export"
-                        },
-                        {
-                            label: "Entity History",
-                            slug: "docs/features/entity_history"
-                        },
-                        {
-                            label: "User Management",
-                            slug: "docs/features/user_management"
-                        },
-                        {
-                            label: "SDK Generator",
-                            slug: "docs/features/sdk_generator"
-                        },
-                    ],
-                },
-                {
-                    label: "Customization",
-                    collapsed: true,
-                    items: [
-                        {
-                            label: "Main Components",
-                            slug: "docs/self/main_components"
-                        },
-                        {
-                            label: "Styling Rebase",
-                            slug: "docs/self/styling_rebase"
-                        },
-                        {
-                            label: "Custom Storage",
-                            slug: "docs/self/custom_storage"
-                        },
-                        {
-                            label: "Controllers",
-                            slug: "docs/self/controllers"
-                        },
-                    ],
-                },
-                {
-                    label: "Provided Hooks",
-                    collapsed: true,
-                    items: [
-                        {
-                            label: "useAuthController",
-                            slug: "docs/hooks/use_auth_controller"
-                        },
-                        {
-                            label: "useSideEntityController",
-                            slug: "docs/hooks/use_side_entity_controller"
-                        },
-                        {
-                            label: "useSnackbarController",
-                            slug: "docs/hooks/use_snackbar_controller"
-                        },
-                        {
-                            label: "useReferenceDialog",
-                            slug: "docs/hooks/use_reference_dialog"
-                        },
-                        {
-                            label: "useRebaseContext",
-                            slug: "docs/hooks/use_rebase_context"
-                        },
-                        {
-                            label: "useDataSource",
-                            slug: "docs/hooks/use_data_source"
-                        },
-                        {
-                            label: "useStorageSource",
-                            slug: "docs/hooks/use_storage_source"
-                        },
-                        {
-                            label: "useModeController",
-                            slug: "docs/hooks/use_mode_controller"
+                            slug: "docs/features/data-export"
                         },
                     ],
                 },
@@ -343,12 +243,16 @@ export default defineConfig({
                     collapsed: true,
                     items: [
                         {
-                            label: "Data Type Adapter",
-                            slug: "docs/recipes/data_type_adapter"
+                            label: "Blog CMS",
+                            slug: "docs/recipes/blog-cms"
                         },
                         {
-                            label: "Entity Callbacks",
-                            slug: "docs/recipes/entity_callbacks"
+                            label: "Custom Dashboard",
+                            slug: "docs/recipes/custom-dashboard"
+                        },
+                        {
+                            label: "Webhook Integration",
+                            slug: "docs/recipes/webhooks"
                         },
                     ],
                 },

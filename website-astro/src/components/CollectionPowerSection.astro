@@ -41,7 +41,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             admin UI, forms, database schema, REST &amp; GraphQL APIs, and TypeScript types.
         </p>
         <div class="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-surface-700 bg-surface-900/60 text-surface-300 text-sm font-medium">
-            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/sparkles.svg" alt="" class="h-4 w-4 filter invert opacity-60"/>
+            <span class="material-symbols-rounded text-surface-300" style="font-size:16px">auto_awesome</span>
             Code as Truth
         </div>
     </div>
@@ -158,11 +158,11 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                     <span class="text-sm text-white font-medium">Products</span>
                     <div class="flex items-center gap-1.5">
                         <div class="h-7 bg-surface-800/60 rounded-md px-2.5 flex items-center gap-1.5">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/search.svg" alt="" class="h-3 w-3 filter invert opacity-40"/>
+                            <span class="material-symbols-rounded text-surface-400" style="font-size:12px">search</span>
                             <span class="text-[11px] text-surface-500">Search…</span>
                         </div>
                         <div class="w-7 h-7 rounded-md flex items-center justify-center bg-surface-800/60 hover:bg-surface-700/60">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/plus.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                            <span class="material-symbols-rounded text-white opacity-50" style="font-size:14px">add</span>
                         </div>
                     </div>
                 </div>
@@ -206,7 +206,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                     <div class="flex items-center justify-between">
                         <span class="text-base font-medium text-white">Wireless Headphones</span>
                         <span class="inline-flex items-center gap-1 text-[10px] font-medium text-green-400 bg-green-950/60 border border-green-800/40 px-1.5 py-0.5 rounded-full">
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/check.svg" alt="" class="h-2.5 w-2.5 filter" style="filter: invert(73%) sepia(60%) saturate(500%) hue-rotate(85deg) brightness(95%) contrast(95%)"/>
+                            <span class="material-symbols-rounded text-green-400" style="font-size:10px">check</span>
                             Saved
                         </span>
                     </div>
@@ -225,7 +225,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                         <span class="absolute top-1.5 left-3 text-[10px] text-surface-400 font-medium">Category</span>
                         <div class="px-3 pt-6 pb-2 flex items-center justify-between">
                             <span class="rounded-md px-1.5 py-0.5 text-[10px] font-medium bg-blue-950 text-blue-300">Electronics</span>
-                            <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/chevron-down.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-30"/>
+                            <span class="material-symbols-rounded text-white opacity-30" style="font-size:14px">expand_more</span>
                         </div>
                     </div>
                     {/* Price field */}
@@ -276,15 +276,15 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                 <p class="text-xs text-surface-500 font-mono">→ generates all of the following</p>
                 <div class="flex flex-wrap justify-center gap-2">
                     {[
-                        { icon: "table-2",           label: "Admin views" },
-                        { icon: "layout-panel-left", label: "Entity Form" },
+                        { icon: "table_chart",       label: "Admin views" },
+                        { icon: "dashboard",         label: "Entity Form" },
                         { icon: "database",          label: "DB Schema" },
-                        { icon: "code-2",            label: "Typed SDK" },
-                        { icon: "globe",             label: "REST API" },
-                        { icon: "git-branch",        label: "GraphQL" },
+                        { icon: "code",              label: "Typed SDK" },
+                        { icon: "language",           label: "REST API" },
+                        { icon: "fork_right",        label: "GraphQL" },
                     ].map(item => (
                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-surface-800 bg-surface-900/60 text-surface-400 text-[11px]">
-                            <img src={`https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/${item.icon}.svg`} alt="" class="h-3 w-3 filter invert opacity-50"/>
+                            <span class="material-symbols-rounded text-surface-400" style="font-size:12px">{item.icon}</span>
                             {item.label}
                         </span>
                     ))}
@@ -297,7 +297,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             {/* DB Schema — offset up */}
             <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl xl:-mt-10 w-[270px] xl:w-[310px] ml-2 xl:ml-6">
                 <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/database.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                    <span class="material-symbols-rounded text-surface-400" style="font-size:14px">database</span>
                     <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">DB Schema</span>
                     <img src="https://www.postgresql.org/media/img/about/press/elephant.png" class="h-3 opacity-35 grayscale filter brightness-200 ml-auto" alt="postgres"/>
                 </div>
@@ -319,7 +319,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
             {/* Typed SDK */}
             <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl w-[350px] xl:w-[420px] ml-4 xl:ml-8 relative z-10">
                 <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code-2.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                    <span class="material-symbols-rounded text-surface-400" style="font-size:14px">code</span>
                     <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">Typed SDK</span>
                     <span class="ml-auto text-[10px] font-bold text-blue-400 font-mono">TS</span>
                 </div>
@@ -350,7 +350,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                 {/* REST API */}
                 <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl w-[185px] xl:w-[200px] shrink-0">
                     <div class="flex items-center gap-2 px-3 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/globe.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="material-symbols-rounded text-surface-400" style="font-size:14px">language</span>
                         <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">REST API</span>
                     </div>
                     <div class="divide-y divide-surface-800/50">
@@ -371,7 +371,7 @@ const codeHtml = `<span class="text-primary-light">import</span> { buildCollecti
                 {/* GraphQL */}
                 <div data-card class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl flex-1 max-w-[260px]">
                     <div class="flex items-center gap-2 px-4 py-2.5 border-b border-surface-800 bg-surface-900/60">
-                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/git-branch.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
+                        <span class="material-symbols-rounded text-surface-400" style="font-size:14px">fork_right</span>
                         <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">GraphQL</span>
                         <span class="ml-auto text-[10px] font-bold text-pink-400 font-mono">GQL</span>
                     </div>

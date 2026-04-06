@@ -22,6 +22,18 @@ import { useAuthController } from "../../hooks";
 import { UserChip } from "./UserChip";
 import { HistoryEntryData } from "../../hooks/useEntityHistory";
 
+/**
+ * Shallow-deep equality: uses JSON.stringify for objects, strict equality for primitives.
+ */
+function deepEqual(a: unknown, b: unknown): boolean {
+    if (a === b) return true;
+    if (a == null || b == null) return a === b;
+    if (typeof a === "object" && typeof b === "object") {
+        return JSON.stringify(a) === JSON.stringify(b);
+    }
+    return false;
+}
+
 export type EntityHistoryEntryProps = {
     size: PreviewSize;
     actions?: React.ReactNode;
@@ -142,7 +154,7 @@ export function EntityHistoryEntry({
                                 {key}
                             </Typography>
                             <div className="w-4/5">
-                                {previousValueInPath !== undefined && previousValueInPath !== valueInPath &&
+                                {previousValueInPath !== undefined && !deepEqual(previousValueInPath, valueInPath) &&
                                     <PreviousValueView previousValueInPath={previousValueInPath}
                                         childProperty={childProperty as Property}
                                         propertyKey={key} />

@@ -143,7 +143,7 @@ export function getReferenceFrom<M extends Record<string, any>>(entity: Entity<M
 }
 
 export function getRelationFrom<M extends Record<string, any>>(entity: Entity<M>): EntityRelation {
-    return new EntityRelation(entity.id, entity.path);
+    return new EntityRelation(entity.id, entity.path, entity);
 }
 
 export function traverseValuesProperties<M extends Record<string, any>>(

@@ -24,14 +24,14 @@ const Component = link ? 'a' : 'div';
 
   <div class="relative z-10">
     <div class="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
-      <img src={icon} alt="" class="h-5 w-5 filter invert" />
+      <span class="material-symbols-rounded text-primary" style="font-size:20px">{icon}</span>
     </div>
     <h3 class="text-xl font-semibold text-white mb-4">{title}</h3>
     <p class="text-surface-400 mb-6">{description}</p>
     {link && (
       <span class="inline-flex items-center gap-x-2 text-primary-light group-hover:text-primary font-semibold transition-colors">
         {link.text}
-        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/arrow-right.svg" alt="" class="h-4 w-4 filter brightness-0 invert" style="filter: invert(40%) sepia(100%) saturate(2000%) hue-rotate(195deg) brightness(100%);" />
+        <span class="material-symbols-rounded text-primary" style="font-size:16px">arrow_forward</span>
       </span>
     )}
   </div>

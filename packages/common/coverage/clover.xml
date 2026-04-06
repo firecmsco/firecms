@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1775450777634" clover="3.2.0">
+  <project timestamp="1775450777634" name="All files">
+    <metrics statements="35" coveredstatements="33" conditionals="12" coveredconditionals="12" methods="2" coveredmethods="2" elements="49" coveredelements="47" complexity="0" loc="35" ncloc="35" packages="1" files="1" classes="1"/>
+    <file name="plurals.ts" path="/Users/francesco/firecms_v4/packages/common/src/util/plurals.ts">
+      <metrics statements="35" coveredstatements="33" conditionals="12" coveredconditionals="12" methods="2" coveredmethods="2"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="9" count="36" type="cond" truecount="3" falsecount="0"/>
+      <line num="10" count="2" type="stmt"/>
+      <line num="12" count="34" type="stmt"/>
+      <line num="32" count="34" type="stmt"/>
+      <line num="42" count="34" type="stmt"/>
+      <line num="70" count="34" type="cond" truecount="1" falsecount="0"/>
+      <line num="71" count="5" type="stmt"/>
+      <line num="74" count="29" type="stmt"/>
+      <line num="75" count="215" type="stmt"/>
+      <line num="76" count="215" type="stmt"/>
+      <line num="77" count="215" type="cond" truecount="1" falsecount="0"/>
+      <line num="78" count="6" type="stmt"/>
+      <line num="82" count="23" type="stmt"/>
+      <line num="83" count="233" type="stmt"/>
+      <line num="84" count="233" type="cond" truecount="1" falsecount="0"/>
+      <line num="85" count="23" type="stmt"/>
+      <line num="88" count="0" type="stmt"/>
+      <line num="98" count="1" type="stmt"/>
+      <line num="99" count="33" type="cond" truecount="3" falsecount="0"/>
+      <line num="100" count="2" type="stmt"/>
+      <line num="102" count="31" type="stmt"/>
+      <line num="132" count="31" type="stmt"/>
+      <line num="142" count="31" type="stmt"/>
+      <line num="170" count="31" type="cond" truecount="1" falsecount="0"/>
+      <line num="171" count="4" type="stmt"/>
+      <line num="174" count="27" type="stmt"/>
+      <line num="175" count="199" type="stmt"/>
+      <line num="176" count="199" type="cond" truecount="1" falsecount="0"/>
+      <line num="177" count="6" type="stmt"/>
+      <line num="181" count="21" type="stmt"/>
+      <line num="182" count="312" type="stmt"/>
+      <line num="183" count="312" type="cond" truecount="1" falsecount="0"/>
+      <line num="184" count="21" type="stmt"/>
+      <line num="187" count="0" type="stmt"/>
+    </file>
+  </project>
+</coverage>

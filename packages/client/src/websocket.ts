@@ -489,7 +489,7 @@ export class RebaseWebSocketClient {
         }
 
         // Try to authenticate with retries
-        let lastError: Error | null = null;
+        let lastError: unknown = null;
 
         for (let attempt = 0; attempt < retryCount; attempt++) {
             try {
@@ -500,12 +500,13 @@ export class RebaseWebSocketClient {
                 this.authPromise = null;
                 console.log("WebSocket authenticated on demand");
                 return; // Success
-            } catch (error: any) {
+            } catch (error: unknown) {
                 this.authPromise = null;
                 lastError = error;
 
+                const errMsg = error instanceof Error ? error.message : String(error);
                 // Check if this is a "not logged in" error - don't retry, just fail
-                if (error?.message?.includes("not logged in") || error?.message?.includes("Session expired")) {
+                if (errMsg.includes("not logged in") || errMsg.includes("Session expired")) {
                     console.warn("WebSocket auth failed: user not logged in");
                     throw error;
                 }

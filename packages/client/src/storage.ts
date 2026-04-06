@@ -80,8 +80,8 @@ export function createStorage(transport: Transport): StorageSource {
 
             urlsCache.set(cacheKey, downloadConfig);
             return downloadConfig;
-        } catch (e: any) {
-            if (e.status === 404) {
+        } catch (e: unknown) {
+            if (e instanceof Error && 'status' in e && (e as { status: number }).status === 404) {
                 return { url: null, fileNotFound: true };
             }
             throw e;
@@ -134,8 +134,8 @@ export function createStorage(transport: Transport): StorageSource {
 
         try {
             await transport.request(`/storage/file/${filePath}`, { method: "DELETE" });
-        } catch (e: any) {
-            if (e.status !== 404) throw e;
+        } catch (e: unknown) {
+            if (!(e instanceof Error && 'status' in e && (e as { status: number }).status === 404)) throw e;
         }
 
         urlsCache.delete(bucket ? `${bucket}/${path}` : path);

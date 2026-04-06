@@ -1,0 +1,12 @@
+src/export/ExportCollectionAction.tsx(109,33): error TS2322: Type 'RebaseContext<USER, AuthController<USER>>' is not assignable to type 'RebaseContext'.
+  Type 'RebaseContext<USER, AuthController<USER>>' is not assignable to type '{ navigation?: NavigationController | undefined; sideEntityController?: SideEntityController | undefined; sideDialogsController?: SideDialogsController | undefined; ... 8 more ...; databaseAdmin?: DatabaseAdmin | undefined; }'.
+    Types of property 'authController' are incompatible.
+      Type 'AuthController<USER> | undefined' is not assignable to type 'AuthController<User> | undefined'.
+        Type 'AuthController<USER>' is not assignable to type 'AuthController<User>'.
+          Types of property 'setUser' are incompatible.
+            Type '((user: USER | null) => void) | undefined' is not assignable to type '((user: User | null) => void) | undefined'.
+              Type '(user: USER | null) => void' is not assignable to type '(user: User | null) => void'.
+                Types of parameters 'user' and 'user' are incompatible.
+                  Type 'User | null' is not assignable to type 'USER | null'.
+                    Type 'User' is not assignable to type 'USER'.
+                      'User' is assignable to the constraint of type 'USER', but 'USER' could be instantiated with a different subtype of constraint 'User'.

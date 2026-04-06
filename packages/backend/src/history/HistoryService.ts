@@ -74,6 +74,11 @@ export class HistoryService {
             ? findChangedFields(previousValues, values)
             : null;
 
+        // Skip recording if this is an update with zero actual changes
+        if (action === "update" && changedFields !== null && changedFields.length === 0) {
+            return;
+        }
+
         try {
             await this.db.execute(sql`
                 INSERT INTO rebase.entity_history 
@@ -82,7 +87,7 @@ export class HistoryService {
                     ${tableName},
                     ${String(entityId)},
                     ${action},
-                    ${changedFields ? sql`${changedFields}::text[]` : sql`NULL`},
+                    ${changedFields ? sql`${JSON.stringify(changedFields)}::jsonb::text[]` : sql`NULL`},
                     ${values ? sql`${JSON.stringify(values)}::jsonb` : sql`NULL`},
                     ${previousValues ? sql`${JSON.stringify(previousValues)}::jsonb` : sql`NULL`},
                     ${updatedBy ?? null}
@@ -207,7 +212,7 @@ export class HistoryService {
 function findChangedFields(
     oldValues: Record<string, unknown>,
     newValues: Record<string, unknown>
-): string[] {
+): string[] | null {
     const changed: string[] = [];
     const allKeys = new Set([
         ...Object.keys(oldValues),
@@ -236,5 +241,5 @@ function findChangedFields(
         }
     }
 
-    return changed;
+    return changed.length > 0 ? changed : null;
 }

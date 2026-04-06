@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useApiConfig } from "./ApiConfigContext";
 
 export interface HistoryEntryData {
@@ -43,7 +43,13 @@ export function useEntityHistory(params: {
     const [error, setError] = useState<Error | undefined>();
     const [offset, setOffset] = useState(0);
 
-    const fetchEntries = useCallback(async (currentOffset: number) => {
+    // Track the current entity identity so we can detect stale responses
+    const currentEntityRef = useRef<string | undefined>(undefined);
+
+    const fetchEntries = useCallback(async (
+        currentOffset: number,
+        signal?: AbortSignal
+    ) => {
         if (!apiConfig?.apiUrl || !entityId || !enabled) return;
 
         setIsLoading(true);
@@ -57,7 +63,12 @@ export function useEntityHistory(params: {
             if (token) headers["Authorization"] = `Bearer ${token}`;
 
             const url = `${apiConfig.apiUrl}/api/data/${slug}/${entityId}/history?limit=${pageSize}&offset=${currentOffset}`;
-            const response = await fetch(url, { headers });
+            const response = await fetch(url, { headers, signal });
+
+            // Check if the request was aborted or the entity changed while in-flight
+            if (signal?.aborted) return;
+            const entityKey = `${slug}/${entityId}`;
+            if (currentEntityRef.current !== entityKey) return;
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ error: { message: response.statusText } }));
@@ -75,32 +86,46 @@ export function useEntityHistory(params: {
             setTotal(result.meta.total);
             setHasMore(result.meta.hasMore);
         } catch (err) {
+            // Don't set error state for intentional aborts
+            if (err instanceof DOMException && err.name === "AbortError") return;
             setError(err instanceof Error ? err : new Error(String(err)));
         } finally {
             setIsLoading(false);
         }
     }, [apiConfig, slug, entityId, enabled, pageSize]);
 
-    // Fetch on mount and when offset changes
+    // Single unified effect: reset state when entity changes, fetch when offset changes.
+    // Uses AbortController to cancel stale requests on entity change or unmount.
     useEffect(() => {
-        if (enabled && entityId) {
-            fetchEntries(offset);
-        }
-    }, [fetchEntries, offset, enabled, entityId]);
+        const entityKey = `${slug}/${entityId}`;
+        const isNewEntity = currentEntityRef.current !== entityKey;
 
-    // Reset when entity changes
-    useEffect(() => {
-        setEntries([]);
-        setTotal(0);
-        setOffset(0);
-        setHasMore(true);
-    }, [slug, entityId]);
+        if (isNewEntity) {
+            // Reset state for new entity
+            currentEntityRef.current = entityKey;
+            setEntries([]);
+            setTotal(0);
+            setHasMore(true);
+            setOffset(0);
+        }
+
+        if (!enabled || !entityId) return;
+
+        const abortController = new AbortController();
+        // When entity changed, always fetch from offset 0
+        const effectiveOffset = isNewEntity ? 0 : offset;
+        fetchEntries(effectiveOffset, abortController.signal);
+
+        return () => {
+            abortController.abort();
+        };
+    }, [fetchEntries, offset, enabled, entityId, slug]);
 
     const loadMore = useCallback(() => {
-        if (!isLoading && hasMore) {
+        if (!isLoading && hasMore && offset + entries.length < total) {
             setOffset(prev => prev + pageSize);
         }
-    }, [isLoading, hasMore, pageSize]);
+    }, [isLoading, hasMore, pageSize, offset, entries.length, total]);
 
     const revert = useCallback(async (historyId: string) => {
         if (!apiConfig?.apiUrl || !entityId) {
@@ -121,11 +146,15 @@ export function useEntityHistory(params: {
             throw new Error(errorData.error?.message || `Failed to revert (${response.status})`);
         }
 
-        // Refresh the history list after revert
-        setOffset(0);
+        // Refresh the history list after revert by resetting to page 0.
+        // Setting offset to 0 will re-trigger the fetch effect.
         setEntries([]);
-        await fetchEntries(0);
-    }, [apiConfig, slug, entityId, fetchEntries]);
+        setTotal(0);
+        setHasMore(true);
+        // Force a re-fetch by invalidating the entity ref so the effect treats it as "new"
+        currentEntityRef.current = undefined;
+        setOffset(0);
+    }, [apiConfig, slug, entityId]);
 
     return {
         entries,

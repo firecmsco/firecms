@@ -1,92 +1,99 @@
 ---
-title: Getting started
-sidebar_label: Getting started
+title: Introduction
+sidebar_label: Introduction
 slug: docs/index
-description: Welcome to Rebase, the open-source Postgres admin panel and headless CMS built for developers. Define your schema as TypeScript collections, and Rebase generates a full CRUD UI with tables, forms, relations, and validation — all backed by real-time WebSocket sync.
+description: Rebase is an open-source Backend-as-a-Service and admin panel built with React and TypeScript. Define your schema in TypeScript, and Rebase generates a full CRUD UI, REST API, authentication, storage, and real-time sync — all backed by PostgreSQL.
 ---
 
 <video className="intro_video" loop autoPlay muted>
     <source src="/img/full_screen_dark.mp4" type="video/mp4"/>
 </video>
 
-:::important
-Rebase is an **open-source Postgres admin panel and headless CMS** built with React and TypeScript. It connects directly to your **PostgreSQL** database to provide a powerful, intuitive, and type-safe interface for managing your data.
+## What is Rebase?
+
+Rebase is an **open-source Backend-as-a-Service (BaaS)** and **admin panel** built with React and TypeScript. It gives you everything you need to build production-ready back-office applications on top of **PostgreSQL**:
+
+- **Schema as Code** — Define your data models as TypeScript collections. Rebase generates PostgreSQL tables, a full CRUD UI, REST API endpoints, and type-safe client SDKs from a single source of truth.
+- **Instant Admin Panel** — A beautiful, fast React-based admin UI with spreadsheet tables, forms, Kanban boards, inline editing, and real-time sync.
+- **Integrated Backend** — Authentication (JWT + Google OAuth), file storage (local or S3), Row Level Security, entity history, and WebSocket real-time — all built in.
+- **Radically Extensible** — If you can build it in React, you can add it to Rebase. Custom fields, custom views, plugins, and full access to internal hooks.
+
+:::tip
+Rebase is **not** a hosted SaaS. You self-host it, you own your data, and you own your code. Think of it as an open-source alternative to Supabase or Retool that you control end-to-end.
 :::
 
-Rebase is designed to be the fastest way to build a production-ready back-office on top of Postgres. It generates full CRUD (Create, Read, Update, Delete) views from your TypeScript collection definitions, supports **relations**, **Row Level Security (RLS)**, and can be set up in minutes.
+## How It Works
 
-## Getting Started
-
-Scaffold a new project with the CLI:
-
-```bash
-npx create-rebase-app
+```
+┌──────────────────────────────────────────────────────┐
+│                 Client Applications                  │
+│  ┌──────────────┐  ┌───────────────────────────────┐ │
+│  │   Your App   │  │   Rebase Admin UI             │ │
+│  │  (Any Tech)  │  │   Tables / Forms / Kanban     │ │
+│  └──────┬───────┘  └──────────────┬────────────────┘ │
+└─────────┼──────────────────────────┼─────────────────┘
+          │  HTTP + WebSocket        │
+          ▼                          ▼
+┌──────────────────────────────────────────────────────┐
+│              Rebase Backend (Node.js + Hono)          │
+│  ┌─────────┐ ┌──────┐ ┌─────────┐ ┌───────────────┐ │
+│  │ REST API│ │ Auth │ │ Storage │ │ WebSocket RT  │ │
+│  └────┬────┘ └──┬───┘ └────┬────┘ └──────┬────────┘ │
+└───────┼─────────┼──────────┼─────────────┼───────────┘
+        │         │          │             │
+        ▼         ▼          ▼             ▼
+┌──────────────────────────────────────────────────────┐
+│              PostgreSQL (via Drizzle ORM)             │
+└──────────────────────────────────────────────────────┘
 ```
 
-This generates a project with three packages:
+## Quick Start
 
-- **`frontend/`** — React SPA (Vite + TypeScript) with the Rebase admin UI
-- **`backend/`** — Node.js + Express server with PostgreSQL, Drizzle ORM, and WebSocket sync
-- **`shared/`** — TypeScript collection definitions shared between frontend and backend
+```bash
+npx create-rebase-app my-app
+cd my-app
+```
 
 Configure your database in `.env`:
 
 ```bash
-DATABASE_URL=postgresql://username:password@localhost:5432/your_database
+DATABASE_URL=postgresql://user:password@localhost:5432/mydb
+JWT_SECRET=your-secret-key
 ```
 
-Start the dev servers:
+Start everything:
 
 ```bash
 pnpm dev
 ```
 
-That's it. Your admin panel is running. Follow the [**Quickstart guide**](/docs/self) for the full walkthrough.
+That's it. Your admin panel is running at `http://localhost:5173` and the API at `http://localhost:3001`.
 
-## What Can You Build?
-
-Rebase is flexible enough to be the admin panel for any Postgres-backed project. Common use cases include:
-
-  * **Custom Admin Panels:** Create a type-safe UI for managing your application's data (e.g., users, products, orders) without the frontend hassle.
-  * **Internal Tools:** Build bespoke tools for your operations, sales, or support teams to manage workflows, track data, and run internal processes.
-  * **Headless CMS:** Power your websites, mobile apps, and marketing content from a single, powerful admin interface backed by Postgres.
+→ Follow the full [Quickstart guide](/docs/getting-started/quickstart) for a complete walkthrough.
 
 ## Core Features
 
-### Schema as Code
-
-Define your data models as TypeScript collections. Each collection maps to a Postgres table and supports typed properties, relations, enums, and security rules. Your code becomes the single source of truth, enabling version control, type-safety, and a seamless git-based workflow.
-
-### Instant CRUD UI
-
-Rebase reads your schema and automatically generates a full-featured, performant, and beautiful CRUD interface with tables, forms, validation, relations, and more.
-
-### Real-time Sync
-
-Rebase uses WebSockets to provide real-time data synchronization. When data changes in Postgres, your admin panel updates instantly.
-
-### Radical Extensibility
-
-If you can build it in React, you can build it in Rebase. Create custom form fields, entirely new top-level views (like SQL consoles or RLS editors), or replace any part of the UI with your own components. No black boxes.
-
-### Built-in Tools
-
-Every Rebase project includes:
-
-- **Collection Editor** — create and edit collections through a visual UI
-- **Data Import/Export** — import JSON, CSV, and Excel; export to JSON and CSV
-- **User & Role Management** — role-based access control stored in your database
-- **Entity History** — track every change with full audit trail
-- **SQL Console** — run queries directly against your database
-- **RLS Policy Editor** — manage Row Level Security policies visually
-- **REST & GraphQL API** — auto-generated from your collections
-- **AI Data Enhancement** — LLM-powered autocompletion for your fields
-
------
+| Feature | Description |
+|---------|-------------|
+| **Spreadsheet Views** | Fast, virtualized table with inline editing, filtering, sorting, and text search |
+| **Kanban Board** | Drag-and-drop board view grouped by any enum property |
+| **Relations** | One-to-one, one-to-many, many-to-many with junction tables and multi-hop joins |
+| **Row Level Security** | Supabase-style RLS policies defined in your collection config |
+| **Authentication** | JWT + refresh tokens, Google OAuth, role-based access control |
+| **File Storage** | Local filesystem or S3-compatible with upload fields and browser |
+| **Real-time Sync** | WebSocket-powered live updates across all connected clients |
+| **Entity History** | Full audit trail for every create, update, and delete |
+| **REST API** | Auto-generated CRUD endpoints for every collection |
+| **Data Import/Export** | CSV, JSON, and Excel import with field mapping; CSV/JSON export |
+| **Collection Editor** | Visual schema editor that generates TypeScript via AST manipulation |
+| **Client SDK** | Type-safe JavaScript SDK for your frontend apps |
+| **Plugin System** | Extend every part of the UI — toolbar, forms, fields, home page |
+| **AI Data Enhancement** | LLM-powered autocompletion for text fields |
 
 ## Next Steps
 
-  * **🚀 Quickstart:** Follow the [**Quickstart guide**](/docs/self) to get your project running locally with `npx`.
-  * **📖 Template Walkthrough:** Understand the generated code with the [**Template Walkthrough**](/docs/pro/template_walkthrough).
-  * **📚 Collections:** Learn how Rebase maps [**Collections**](/docs/collections) to your Postgres tables.
-  * **🗄️ Database Setup:** Set up your PostgreSQL database with the [**Database Setup guide**](/docs/database_setup).
+- **[Quickstart](/docs/getting-started/quickstart)** — Get running in 2 minutes
+- **[Project Structure](/docs/getting-started/project-structure)** — Understand the generated code
+- **[Collections](/docs/collections)** — Define your data schema
+- **[Backend](/docs/backend)** — Configure auth, storage, and the API
+- **[Architecture](/docs/architecture)** — Understand how it all fits together

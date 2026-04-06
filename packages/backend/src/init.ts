@@ -571,11 +571,9 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             allowRegistration: config.auth.allowRegistration ?? false
         });
         config.app.route(`${basePath}/auth`, authRoutes);
-        console.log(`✅ Auth endpoints: ${basePath}/auth/*`);
 
         const adminRoutes = createAdminRoutes({ db: defaultDb });
         config.app.route(`${basePath}/admin`, adminRoutes);
-        console.log(`✅ Admin endpoints: ${basePath}/admin/*`);
     }
 
     if (storageController) {
@@ -584,7 +582,6 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             requireAuth: config.auth?.requireAuth ?? true
         });
         config.app.route(`${basePath}/storage`, storageRoutes);
-        console.log(`✅ Storage endpoints: ${basePath}/storage/*`);
     }
 
     // ============ Mount data routes ============
@@ -633,7 +630,6 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
                 driver: defaultDataDriverDelegate
             });
             dataRouter.route("/", historyRoutes);
-            console.log(`✅ Entity history endpoints: ${basePath}/data/:slug/:entityId/history`);
         }
 
 
@@ -676,7 +672,6 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         dataRouter.onError(errorHandler);
 
         config.app.route(`${basePath}/data`, dataRouter);
-        console.log(`✅ Data endpoints: ${basePath}/data/* (${activeCollections.length} collections)`);
     }
 
     // ============ Create WebSocket with auth support ============

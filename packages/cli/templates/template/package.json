@@ -4,11 +4,6 @@
     "description": "Rebase application with PostgreSQL backend",
     "private": true,
     "type": "module",
-    "workspaces": [
-        "frontend",
-        "backend",
-        "shared"
-    ],
     "scripts": {
         "dev": "rebase dev",
         "dev:frontend": "cd frontend && pnpm run dev",

@@ -78,7 +78,7 @@ export function createAuth(transport: Transport, options?: CreateAuthOptions) {
 
     let currentSession: RebaseSession | null = null;
     const listeners = new Set<(event: AuthChangeEvent, session: RebaseSession | null) => void>();
-    let refreshTimeout: any = null;
+    let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
 
     function authUrl(endpoint: string) {
         return transport.baseUrl + transport.apiPath + authPath + endpoint;
@@ -88,7 +88,7 @@ export function createAuth(transport: Transport, options?: CreateAuthOptions) {
         return transport.fetchFn || globalThis.fetch;
     }
 
-    function throwApiError(status: number, body: any, statusText: string): never {
+    function throwApiError(status: number, body: { error?: { message?: string; code?: string; details?: unknown }; message?: string; code?: string; details?: unknown } | undefined, statusText: string): never {
         throw new RebaseApiError(
             status,
             body?.error?.message || body?.message || statusText,
@@ -174,7 +174,7 @@ export function createAuth(transport: Transport, options?: CreateAuthOptions) {
 
     async function signUp(email: string, password: string, displayName?: string) {
         const fetchFn = getFetch();
-        const payload: any = { email, password };
+        const payload: Record<string, string> = { email, password };
         if (displayName !== undefined) payload.displayName = displayName;
         const res = await fetchFn(authUrl("/register"), {
             method: "POST",
@@ -314,7 +314,7 @@ export function createAuth(transport: Transport, options?: CreateAuthOptions) {
     }
 
     async function getSessions() {
-        const data = await transport.request<{ sessions: any[] }>(authPath + "/sessions", { method: "GET" });
+        const data = await transport.request<{ sessions: Record<string, unknown>[] }>(authPath + "/sessions", { method: "GET" });
         return data.sessions;
     }
 

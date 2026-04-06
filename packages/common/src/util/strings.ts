@@ -37,13 +37,13 @@ export function slugify(text?: string, separator = "_", lowercase = true) {
 
     text = text
         .toString() // Cast to string
+        .trim() // Remove whitespace from both sides of a string
+        .replace(/^\s+|\s+$/g, "")
         .replace(/\s+/g, separator) // Replace spaces with separator
         .replace(/&/g, separator) // Replace & with separator
         .replace(/[^\w\\-]+/g, "") // Remove all non-word chars
         .replace(new RegExp("\\" + separator + "\\" + separator + "+", "g"),
-            separator) // Replace multiple separators with single one
-        .trim() // Remove whitespace from both sides of a string
-        .replace(/^\s+|\s+$/g, "");
+            separator); // Replace multiple separators with single one
 
     return lowercase
         ? text.toLowerCase() // Convert the string to lowercase letters
