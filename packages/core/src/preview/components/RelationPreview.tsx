@@ -83,13 +83,15 @@ function RelationPreviewExisting<M extends Record<string, any> = any>({
     collection: EntityCollection<M>
 }) {
 
+    const passedEntity = (relation as any).data;
+
     const {
         entity,
         dataLoading,
         dataLoadingError
     } = useEntityFetch({
         path: relation.path,
-        entityId: relation.id,
+        entityId: passedEntity ? undefined : relation.id,
         collection,
         useCache: true
     });
@@ -98,7 +100,7 @@ function RelationPreviewExisting<M extends Record<string, any> = any>({
         relationsCache.set(relation.pathWithId, entity);
     }
 
-    const usedEntity = entity ?? relationsCache.get(relation.pathWithId);
+    const usedEntity = passedEntity ?? entity ?? relationsCache.get(relation.pathWithId);
 
     let body: React.ReactNode;
 

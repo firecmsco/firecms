@@ -121,7 +121,10 @@ export const RelationSelector = React.forwardRef<
                 const path = isPrimitive ? collection.slug : rel.path;
                 
                 try {
-                    const entity = await dataClient.collection(path).findById(relId);
+                    let entity = (rel as any)?.data;
+                    if (!entity) {
+                        entity = await dataClient.collection(path).findById(relId);
+                    }
                     if (entity) return entityToRelationItem(entity, isPrimitive ? new EntityRelation(relId, path) : rel);
                 } catch (e) {
                     console.warn("RelationSelector: could not fetch entity for relation", rel, e);

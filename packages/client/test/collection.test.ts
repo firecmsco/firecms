@@ -46,7 +46,7 @@ describe("createCollectionClient", () => {
                 data: [{ id: 1, path: "posts", values: { title: "Hello" } }],
                 meta: { total: 1, limit: 10, offset: 20, hasMore: false }
             });
-            expect(mockRequest).toHaveBeenCalledWith("/posts?limit=10&offset=20", { method: "GET" });
+            expect(mockRequest).toHaveBeenCalledWith("/data/posts?limit=10&offset=20", { method: "GET" });
         });
 
         it("calls GET /slug without query string if no params are passed", async () => {
@@ -55,7 +55,7 @@ describe("createCollectionClient", () => {
 
             const result = await client.find();
             expect(result.data).toEqual([]);
-            expect(mockRequest).toHaveBeenCalledWith("/posts", { method: "GET" });
+            expect(mockRequest).toHaveBeenCalledWith("/data/posts", { method: "GET" });
         });
     });
 
@@ -66,7 +66,7 @@ describe("createCollectionClient", () => {
 
             const result = await client.findById("123");
             expect(result).toEqual({ id: "123", path: "posts", values: { title: "Test" } });
-            expect(mockRequest).toHaveBeenCalledWith("/posts/123", { method: "GET" });
+            expect(mockRequest).toHaveBeenCalledWith("/data/posts/123", { method: "GET" });
         });
 
         it("returns undefined when backend returns falsy", async () => {
@@ -82,7 +82,7 @@ describe("createCollectionClient", () => {
             mockRequest.mockResolvedValueOnce({ id: "a/b", title: "Encoded" });
 
             await client.findById("a/b");
-            expect(mockRequest).toHaveBeenCalledWith("/posts/a%2Fb", { method: "GET" });
+            expect(mockRequest).toHaveBeenCalledWith("/data/posts/a%2Fb", { method: "GET" });
         });
     });
 
@@ -95,7 +95,7 @@ describe("createCollectionClient", () => {
             const result = await client.create(input);
 
             expect(result).toEqual({ id: 1, path: "posts", values: { title: "New" } });
-            expect(mockRequest).toHaveBeenCalledWith("/posts", { method: "POST", body: JSON.stringify(input) });
+            expect(mockRequest).toHaveBeenCalledWith("/data/posts", { method: "POST", body: JSON.stringify(input) });
         });
 
         it("includes id in POST body when provided", async () => {
@@ -106,7 +106,7 @@ describe("createCollectionClient", () => {
             const result = await client.create(input, "custom-id");
 
             expect(result).toEqual({ id: "custom-id", path: "posts", values: { title: "Custom" } });
-            expect(mockRequest).toHaveBeenCalledWith("/posts", {
+            expect(mockRequest).toHaveBeenCalledWith("/data/posts", {
                 method: "POST",
                 body: JSON.stringify({ title: "Custom", id: "custom-id" })
             });
@@ -122,7 +122,7 @@ describe("createCollectionClient", () => {
             const result = await client.update(1, patch);
 
             expect(result).toEqual({ id: 1, path: "posts", values: { title: "Updated" } });
-            expect(mockRequest).toHaveBeenCalledWith("/posts/1", { method: "PUT", body: JSON.stringify(patch) });
+            expect(mockRequest).toHaveBeenCalledWith("/data/posts/1", { method: "PUT", body: JSON.stringify(patch) });
         });
     });
 
@@ -132,7 +132,7 @@ describe("createCollectionClient", () => {
             mockRequest.mockResolvedValueOnce(undefined);
 
             await client.delete(42);
-            expect(mockRequest).toHaveBeenCalledWith("/posts/42", { method: "DELETE" });
+            expect(mockRequest).toHaveBeenCalledWith("/data/posts/42", { method: "DELETE" });
         });
     });
 });

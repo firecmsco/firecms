@@ -163,9 +163,16 @@ export class EntityRelation {
      */
     readonly path: string;
 
-    constructor(id: string | number, path: string) {
+    /**
+     * Pre-fetched data payload to eliminate N+1 queries.
+     * When present, clients can use this directly instead of fetching.
+     */
+    readonly data?: Entity;
+
+    constructor(id: string | number, path: string, data?: Entity) {
         this.id = id;
         this.path = path;
+        this.data = data;
     }
 
     get pathWithId() {

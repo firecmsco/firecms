@@ -177,10 +177,19 @@ export class EntityFetchService {
                         }
                     }
 
+                    const relId = String(targetEntity[targetIdField] ?? targetEntity.id ?? targetEntity[Object.keys(targetEntity)[0]]);
+                    const targetValues = normalizeDbValues(targetEntity, targetCollection);
+
                     return {
-                        id: String(targetEntity[targetIdField] ?? targetEntity.id ?? targetEntity[Object.keys(targetEntity)[0]]),
+                        id: relId,
                         path: targetPath,
-                        __type: "relation" as const
+                        __type: "relation" as const,
+                        data: {
+                            id: relId,
+                            path: targetPath,
+                            values: targetValues,
+                            databaseId
+                        }
                     };
                 });
             } else if (relation.cardinality === "one" && typeof relData === "object" && !Array.isArray(relData)) {
@@ -190,10 +199,19 @@ export class EntityFetchService {
                 const targetIdField = targetPks[0].fieldName;
                 const relObj = relData as Record<string, unknown>;
 
+                const relId = String(relObj[targetIdField] ?? relObj.id ?? relObj[Object.keys(relObj)[0]]);
+                const targetValues = normalizeDbValues(relObj, targetCollection);
+
                 (normalizedValues as Record<string, unknown>)[key] = {
-                    id: String(relObj[targetIdField] ?? relObj.id ?? relObj[Object.keys(relObj)[0]]),
+                    id: relId,
                     path: targetPath,
-                    __type: "relation" as const
+                    __type: "relation" as const,
+                    data: {
+                        id: relId,
+                        path: targetPath,
+                        values: targetValues,
+                        databaseId
+                    }
                 };
             }
         }
