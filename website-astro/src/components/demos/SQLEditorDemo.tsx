@@ -199,6 +199,103 @@ export function SQLEditorDemo() {
 
     const activeTab = tabs.find(t => t.id === activeTabId) ?? tabs[0];
 
+    // Animation Loop
+    useEffect(() => {
+        let isMounted = true;
+        let timer: any = null;
+
+        const loop = async () => {
+            while (isMounted) {
+                // Wait 3s
+                await new Promise(r => { timer = setTimeout(r, 3000); });
+                if (!isMounted) return;
+
+                // Open users schema tab
+                setExpandedTables(prev => new Set([...prev, "users"]));
+                await new Promise(r => { timer = setTimeout(r, 1000); });
+                if (!isMounted) return;
+
+                // Let's clear SQL and type something new
+                setResult(null);
+                const targetSQL = "SELECT *\nFROM users\nORDER BY created_at DESC\nLIMIT 10;";
+                let currentSQL = "";
+                
+                for (let i = 0; i < targetSQL.length; i++) {
+                    currentSQL += targetSQL[i];
+                    setTabs(prev => prev.map(t => t.id === "1" ? { ...t, sql: currentSQL } : t));
+                    await new Promise(r => { timer = setTimeout(r, 30 + Math.random() * 40); });
+                    if (!isMounted) return;
+                }
+
+                // Wait 0.5s before run
+                await new Promise(r => { timer = setTimeout(r, 500); });
+                if (!isMounted) return;
+                
+                setIsRunning(true);
+                await new Promise(r => { timer = setTimeout(r, 600); });
+                if (!isMounted) return;
+                
+                setIsRunning(false);
+                setResult(MOCK_RESULTS.users);
+
+                // Wait 3s
+                await new Promise(r => { timer = setTimeout(r, 3000); });
+                if (!isMounted) return;
+
+                // Let's clear SQL and type something new for products
+                setResult(null);
+                const targetSQL2 = "SELECT name, price, stock\nFROM products\nWHERE category = 'peripherals';";
+                currentSQL = "";
+                
+                for (let i = 0; i < targetSQL2.length; i++) {
+                    currentSQL += targetSQL2[i];
+                    setTabs(prev => prev.map(t => t.id === "1" ? { ...t, sql: currentSQL } : t));
+                    await new Promise(r => { timer = setTimeout(r, 30 + Math.random() * 40); });
+                    if (!isMounted) return;
+                }
+
+                await new Promise(r => { timer = setTimeout(r, 500); });
+                if (!isMounted) return;
+                
+                setIsRunning(true);
+                await new Promise(r => { timer = setTimeout(r, 600); });
+                if (!isMounted) return;
+                
+                setIsRunning(false);
+                setResult(MOCK_RESULTS.products);
+
+                // Wait 3s
+                await new Promise(r => { timer = setTimeout(r, 3000); });
+                if (!isMounted) return;
+
+                // Restore default
+                setResult(null);
+                currentSQL = "";
+                for (let i = 0; i < DEFAULT_SQL.length; i += 3) {
+                    currentSQL += DEFAULT_SQL.substring(i, i + 3);
+                    setTabs(prev => prev.map(t => t.id === "1" ? { ...t, sql: currentSQL } : t));
+                    await new Promise(r => { timer = setTimeout(r, 10); });
+                    if (!isMounted) return;
+                }
+                
+                await new Promise(r => { timer = setTimeout(r, 500); });
+                if (!isMounted) return;
+                setIsRunning(true);
+                await new Promise(r => { timer = setTimeout(r, 600); });
+                if (!isMounted) return;
+                setIsRunning(false);
+                setResult(MOCK_RESULTS.default);
+            }
+        };
+
+        loop();
+
+        return () => {
+            isMounted = false;
+            clearTimeout(timer);
+        };
+    }, []);
+
     const handleRun = useCallback(() => {
         setIsRunning(true);
         setTimeout(() => {
@@ -248,7 +345,7 @@ export function SQLEditorDemo() {
     };
 
     return (
-        <div className="flex h-[560px] w-full rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl text-surface-300 text-sm">
+        <div className="flex h-[560px] w-full rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl text-surface-300 text-sm pointer-events-none select-none">
             {/* ── Sidebar ── */}
             <div className="w-[200px] border-r border-surface-800/40 flex flex-col shrink-0">
                 {/* Sidebar tabs */}

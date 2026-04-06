@@ -78,36 +78,34 @@ The `drizzle.config.ts` is configured to:
 
 ## Backend Initialization
 
-The backend is initialized using two functions from `@rebasepro/backend`:
+The backend is initialized using `initializeRebaseBackend` from `@rebasepro/backend`:
 
 ```typescript
-import express from "express";
+import { Hono } from "hono";
 import { createServer } from "http";
 import {
     createPostgresDatabaseConnection,
     initializeRebaseBackend,
-    initializeRebaseAPI
+    HonoEnv
 } from "@rebasepro/backend";
 import { tables, enums, relations } from "./schema.generated";
 
-const app = express();
-const server = createServer(app);
-const db = createPostgresDatabaseConnection(process.env.DATABASE_URL!);
+const app = new Hono<HonoEnv>();
+const server = createServer(/* ... */);
+const { db } = createPostgresDatabaseConnection(process.env.DATABASE_URL!);
 
-// 1. Initialize backend (auth, storage, realtime, WebSocket)
+// Initialize backend (auth, storage, realtime, WebSocket, REST, GraphQL)
 const backend = await initializeRebaseBackend({
     server,
     app,
-    datasource: {
+    driver: {
         connection: db,
         schema: { tables, enums, relations }
     },
     auth: { jwtSecret: process.env.JWT_SECRET! },
     storage: { type: "local", basePath: "./uploads" },
+    enableGraphQL: true,   // serves GraphQL at /api/data/graphql
 });
-
-// 2. Initialize REST/GraphQL API (optional, for external integrations)
-await initializeRebaseAPI(app, backend);
 
 server.listen(3001);
 ```

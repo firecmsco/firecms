@@ -6220,9 +6220,9 @@ Defined in: [types/src/types/translations.ts:587](https://github.com/rebasepro/r
 
 ***
 
-### welcome\_to\_rebase
+### welcome\_to\rebase
 
-> **welcome\_to\_rebase**: `string`
+> **welcome\_to\rebase**: `string`
 
 Defined in: [types/src/types/translations.ts:577](https://github.com/rebasepro/rebase/blob/main/packages/types/src/types/translations.ts)
 

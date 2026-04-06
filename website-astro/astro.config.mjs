@@ -62,7 +62,7 @@ export default defineConfig({
                         },
                         {
                             label: "Template Walkthrough",
-                            slug: "docs/pro/template_walkthrough"
+                            slug: "docs/features/template_walkthrough"
                         },
                         {
                             label: "Authentication",
@@ -254,27 +254,27 @@ export default defineConfig({
                     items: [
                         {
                             label: "Collection Editor",
-                            slug: "docs/pro/collection_editor"
+                            slug: "docs/features/collection_editor"
                         },
                         {
                             label: "Data Import",
-                            slug: "docs/pro/data_import"
+                            slug: "docs/features/data_import"
                         },
                         {
                             label: "Data Export",
-                            slug: "docs/pro/data_export"
+                            slug: "docs/features/data_export"
                         },
                         {
                             label: "Entity History",
-                            slug: "docs/pro/entity_history"
+                            slug: "docs/features/entity_history"
                         },
                         {
                             label: "User Management",
-                            slug: "docs/pro/user_management"
+                            slug: "docs/features/user_management"
                         },
                         {
                             label: "SDK Generator",
-                            slug: "docs/pro/sdk_generator"
+                            slug: "docs/features/sdk_generator"
                         },
                     ],
                 },

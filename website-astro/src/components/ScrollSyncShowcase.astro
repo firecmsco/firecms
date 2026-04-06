@@ -3,6 +3,10 @@
 // A two-column scroll-sync section with a sticky index on the left
 // Uses Tailwind classes available in the site. Pure placeholders.
 
+import { EntityViewDemo } from './demos/EntityViewDemo';
+import { SchemaEditorDemo } from './SchemaEditorDemo';
+import { SQLEditorDemo } from './demos/SQLEditorDemo';
+
 ---
 
 <section id="scroll-sync-showcase" class="relative isolate bg-black py-24 sm:py-32">
@@ -81,15 +85,7 @@
                             <div class="relative rounded-2xl p-[1px]">
                                 <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950">
                                     <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>
-                                    <video
-                                            class="w-full h-auto"
-                                            style="pointer-events: none;"
-                                            loop
-                                            autoplay
-                                            muted
-                                            playsinline>
-                                        <source src="/img/landing_1080.webm" type="video/webm"/>
-                                    </video>
+                                    <EntityViewDemo client:load />
                                 </div>
                             </div>
                         </section>
@@ -102,15 +98,7 @@
                             <div class="relative rounded-2xl p-[1px]">
                                 <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950">
                                     <div class="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>
-                                    <video
-                                            class="w-full h-auto"
-                                            style="pointer-events: none;"
-                                            loop
-                                            autoplay
-                                            muted
-                                            playsinline>
-                                        <source src="/img/data_enhancement.webm" type="video/webm"/>
-                                    </video>
+                                    <SQLEditorDemo client:load />
                                 </div>
                             </div>
                         </section>
@@ -122,15 +110,7 @@
                         <section data-screen class="w-full will-change-transform">
                             <div class="relative rounded-2xl p-[1px]">
                                 <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950">
-                                    <video
-                                            class="w-full h-auto"
-                                            style="pointer-events: none;"
-                                            loop
-                                            autoplay
-                                            muted
-                                            playsinline>
-                                        <source src="/img/editor_demo_dark.webm" type="video/webm"/>
-                                    </video>
+                                    <SchemaEditorDemo client:load />
                                 </div>
                             </div>
                         </section>

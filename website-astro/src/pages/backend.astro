@@ -10,23 +10,24 @@ const breadcrumbs = [
     { name: "Backend & APIs", url: "https://rebase.pro/backend" }
 ];
 
-const honoCode = `<span class="text-blue-400">import</span> { RebaseApiServer } <span class="text-blue-400">from</span> <span class="text-emerald-400">"@rebasepro/backend"</span>;
-<span class="text-blue-400">import</span> { PostgresDataDriver } <span class="text-blue-400">from</span> <span class="text-emerald-400">"@rebasepro/backend"</span>;
+const honoCode = `<span class="text-blue-400">import</span> { initializeRebaseBackend } <span class="text-blue-400">from</span> <span class="text-emerald-400">"@rebasepro/backend"</span>;
 
-<span class="text-blue-400">const</span> driver = <span class="text-blue-400">new</span> <span class="text-amber-400">PostgresDataDriver</span>(db);
-
-<span class="text-blue-400">const</span> server = <span class="text-blue-400">await</span> RebaseApiServer.<span class="text-amber-400">create</span>({
-  driver,
-  collectionsDir: <span class="text-emerald-400">"./collections"</span>,
-  enableREST: <span class="text-amber-400">true</span>,
-  enableGraphQL: <span class="text-amber-400">true</span>,
+<span class="text-blue-400">const</span> backend = <span class="text-blue-400">await</span> <span class="text-amber-400">initializeRebaseBackend</span>({
+  server,
+  app,
+  driver: {
+    connection: db,
+    schema: { tables, enums, relations },
+  },
+  auth: {
+    jwtSecret: process.env.<span class="text-amber-400">JWT_SECRET</span>,
+  },
+  storage: { type: <span class="text-emerald-400">"local"</span>, basePath: <span class="text-emerald-400">"./uploads"</span> },
 });
-
-server.<span class="text-amber-400">listen</span>(<span class="text-amber-400">3001</span>);
-<span class="text-surface-500">// REST:    /api/posts, /api/users, …</span>
-<span class="text-surface-500">// GraphQL: /api/graphql</span>
-<span class="text-surface-500">// Swagger: /api/swagger</span>
-<span class="text-surface-500">// Docs:    /api/docs</span>`;
+<span class="text-surface-500">// ✅ REST, WebSocket, Auth, Storage — all ready</span>
+<span class="text-surface-500">// Data:    /api/data/:collection</span>
+<span class="text-surface-500">// Auth:    /api/auth/*</span>
+<span class="text-surface-500">// Storage: /api/storage/*</span>`;
 
 const drizzleCode = `<span class="text-surface-500">// Your collection definition:</span>
 <span class="text-blue-400">const</span> postsCollection = {

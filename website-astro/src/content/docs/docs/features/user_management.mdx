@@ -1,5 +1,5 @@
 ---
-slug: docs/pro/user_management
+slug: docs/features/user_management
 title: User Management
 description: Add role-based access control to your PostgreSQL admin panel with the Rebase User Management plugin. Manage users, roles, and permissions in your database.
 ---
@@ -31,7 +31,7 @@ yarn add @rebasepro/user_management
 
 The plugin requires several configurations, including paths for storing user and role data.
 
-The default config of the plugin will be saved to your database in the `__rebase_users` and `__rebase_roles` tables,
+The default config of the plugin will be saved to your database in the `_rebase_users` and `_rebase_roles` tables,
 but you can customize the table names as needed.
 
 ### User Management Parameters
@@ -39,8 +39,8 @@ but you can customize the table names as needed.
 Below are the parameters you can configure:
 
 - **dataSource**: The data source to use for user management.
-- **usersPath**: Path/table where user configurations are stored. Default is `__rebase_users`.
-- **rolesPath**: Path/table where role configurations are stored. Default is `__rebase_roles`.
+- **usersPath**: Path/table where user configurations are stored. Default is `_rebase_users`.
+- **rolesPath**: Path/table where role configurations are stored. Default is `_rebase_roles`.
 - **allowDefaultRolesCreation**: If there are no roles in the database, show a button to create default roles. Default is `true`.
 
 ### Hook Usage
@@ -53,8 +53,8 @@ import {useBuildUserManagement} from "@rebasepro/user_management";
 
 const userManagement = useBuildUserManagement({
     dataSource,
-    usersPath: "__rebase_users",
-    rolesPath: "__rebase_roles",
+    usersPath: "_rebase_users",
+    rolesPath: "_rebase_roles",
     allowDefaultRolesCreation: true,
 });
 ```
@@ -80,8 +80,8 @@ function App() {
 
     const userManagement = useBuildUserManagement({
         dataSource,
-        usersPath: "__rebase_users",
-        rolesPath: "__rebase_roles",
+        usersPath: "_rebase_users",
+        rolesPath: "_rebase_roles",
         allowDefaultRolesCreation: true,
         includeCollectionConfigPermissions: true,
     });

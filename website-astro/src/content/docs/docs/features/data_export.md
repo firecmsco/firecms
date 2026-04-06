@@ -1,5 +1,5 @@
 ---
-slug: docs/pro/data_export
+slug: docs/features/data_export
 title: Data Export
 description: Export your Postgres collections to JSON or CSV with the Rebase Data Export plugin. Ideal for backups, migrations, and data analysis.
 ---

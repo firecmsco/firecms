@@ -6,7 +6,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import {
     createPostgresDatabaseConnection,
-    initializeRebaseAPI,
     initializeRebaseBackend,
     serveSPA,
     HonoEnv
@@ -84,18 +83,10 @@ async function startServer() {
             storage: {
                 type: "local",
                 basePath: path.resolve(__dirname, "../../uploads")
-            }
+            },
+            enableGraphQL: true,
         });
 
-        // ─── Initialize Public REST & GraphQL API (optional) ────────
-        // This exposes a public API for third-party integrations.
-        // You can skip this — the client SDK and CMS will still work.
-        await initializeRebaseAPI(app, backend, {
-            basePath: "/api",
-            collectionsDir: path.resolve(__dirname, "../../shared/collections"),
-            enableGraphQL: true,
-            enableREST: true,
-        });
 
         // ─── Your custom routes ──────────────────────────────────────
         // Add any custom endpoints here. This is a plain Hono app,
@@ -135,10 +126,8 @@ async function startServer() {
         // ─── Listen ─────────────────────────────────────────────────
         server.listen(PORT, () => {
             console.log(`🚀 Server running at http://localhost:${PORT}`);
-            console.log(`   • SDK data:    http://localhost:${PORT}/api/data`);
-            console.log(`   • Public REST:  http://localhost:${PORT}/api`);
-            console.log(`   • GraphQL:      http://localhost:${PORT}/api/graphql`);
-            console.log(`   • Swagger docs: http://localhost:${PORT}/api/swagger`);
+            console.log(`   • REST API:     http://localhost:${PORT}/api/data`);
+            console.log(`   • GraphQL:      http://localhost:${PORT}/api/data/graphql`);
             console.log(`   • Health:       http://localhost:${PORT}/health`);
         });
     } catch (err) {

@@ -1,5 +1,5 @@
 ---
-slug: docs/pro/sdk_generator
+slug: docs/features/sdk_generator
 title: TypeScript SDK Generator
 description: Generate a type-safe TypeScript SDK from your Rebase collection definitions. Get perfect auto-complete, typed CRUD methods, authentication, and admin management.
 ---

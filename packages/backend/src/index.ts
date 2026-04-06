@@ -34,8 +34,7 @@ export { BackendCollectionRegistry, PostgresCollectionRegistry } from "./collect
 // Utilities
 export { DrizzleConditionBuilder, PostgresConditionBuilder } from "./utils/drizzle-conditions";
 
-// API Server
-export * from "./api/server";
+// API types (HonoEnv, ApiConfig, etc.)
 export * from "./api/types";
 
 // API Generation

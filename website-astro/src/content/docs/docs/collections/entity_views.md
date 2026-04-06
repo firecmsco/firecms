@@ -95,7 +95,7 @@ export function SecondaryForm({
 Then just add your custom view to the collection:
 
 ```tsx
-export const testCollection = buildCollection<any>({
+export const testCollection = buildCollection({
     id: "users",
     path: "users",
     name: "Users",

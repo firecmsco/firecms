@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 // ─── Types ───────────────────────────────────────────────
 interface EntityField {
@@ -88,6 +88,7 @@ export function EntityViewDemo() {
     const [isSaving, setIsSaving] = useState(false);
     const [formDirty, setFormDirty] = useState(false);
     const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+    const [activeView, setActiveView] = useState<"list" | "board">("list");
 
     const panelOpen = selectedEntityId !== null;
 
@@ -118,8 +119,97 @@ export function EntityViewDemo() {
         setFormDirty(false);
     }, []);
 
+    // Animation Loop
+    useEffect(() => {
+        let isMounted = true;
+        let timer: any = null;
+
+        const loop = async () => {
+            while (isMounted) {
+                // Wait 1.5s then hover row
+                await new Promise(r => { timer = setTimeout(r, 1500); });
+                if (!isMounted) return;
+                setHoveredRow("1410");
+
+                // Wait 0.5s then open panel
+                await new Promise(r => { timer = setTimeout(r, 500); });
+                if (!isMounted) return;
+                openEntity("1410");
+
+                // Wait 1.5s then change status
+                await new Promise(r => { timer = setTimeout(r, 1500); });
+                if (!isMounted) return;
+                handleFieldChange("status", "review");
+
+                // Wait 1.5s then save
+                await new Promise(r => { timer = setTimeout(r, 1500); });
+                if (!isMounted) return;
+                setIsSaving(true);
+
+                // Save takes 0.8s
+                await new Promise(r => { timer = setTimeout(r, 800); });
+                if (!isMounted) return;
+                setIsSaving(false);
+                setFormDirty(false);
+
+                // Wait 1s then close
+                await new Promise(r => { timer = setTimeout(r, 1000); });
+                if (!isMounted) return;
+                closePanel();
+                setHoveredRow(null);
+
+                // Switch to BOARD view
+                await new Promise(r => { timer = setTimeout(r, 1000); });
+                if (!isMounted) return;
+                setActiveView("board");
+
+                // Hover a board card or just wait showing the board
+                await new Promise(r => { timer = setTimeout(r, 4000); });
+                if (!isMounted) return;
+
+                // Back to LIST view
+                setActiveView("list");
+                await new Promise(r => { timer = setTimeout(r, 1000); });
+                if (!isMounted) return;
+
+                // Wait 1s then do another row
+                await new Promise(r => { timer = setTimeout(r, 1000); });
+                if (!isMounted) return;
+
+                setHoveredRow("20");
+                await new Promise(r => { timer = setTimeout(r, 500); });
+                if (!isMounted) return;
+                openEntity("20");
+
+                await new Promise(r => { timer = setTimeout(r, 1500); });
+                if (!isMounted) return;
+                handleFieldChange("published_at", "2025-05-01");
+
+                await new Promise(r => { timer = setTimeout(r, 1500); });
+                if (!isMounted) return;
+                setIsSaving(true);
+                await new Promise(r => { timer = setTimeout(r, 800); });
+                if (!isMounted) return;
+                setIsSaving(false);
+                setFormDirty(false);
+
+                await new Promise(r => { timer = setTimeout(r, 1000); });
+                if (!isMounted) return;
+                closePanel();
+                setHoveredRow(null);
+            }
+        };
+
+        loop();
+
+        return () => {
+            isMounted = false;
+            clearTimeout(timer);
+        };
+    }, [openEntity, closePanel, handleFieldChange]);
+
     return (
-        <div className="relative h-[600px] w-full rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl text-surface-300 text-sm">
+        <div className="relative h-[600px] w-full rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl text-surface-300 text-sm pointer-events-none select-none">
             {/* ── Full-width Table ── */}
             <div className="flex flex-col h-full">
                 {/* Collection toolbar — matches real product: breadcrumb + LIST/FILTERS + actions */}
@@ -133,11 +223,23 @@ export function EntityViewDemo() {
                         </div>
                         {/* View mode toggles */}
                         <div className="flex items-center gap-0.5 rounded bg-surface-800/40 p-0.5">
-                            <button className="flex items-center gap-1 px-2 py-1 rounded text-[10px] font-semibold text-white bg-surface-700/80 transition-colors">
+                            <button
+                                className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-semibold transition-colors ${
+                                    activeView === "list" ? "text-white bg-surface-700/80" : "text-surface-500 hover:text-surface-300"
+                                }`}
+                            >
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
                                 LIST
                             </button>
-                            <button className="flex items-center gap-1 px-2 py-1 rounded text-[10px] text-surface-500 hover:text-surface-300 transition-colors">
+                            <button
+                                className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-semibold transition-colors ${
+                                    activeView === "board" ? "text-white bg-surface-700/80" : "text-surface-500 hover:text-surface-300"
+                                }`}
+                            >
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="13" rx="1"/></svg>
+                                BOARD
+                            </button>
+                            <button className="flex items-center gap-1 px-2 py-1 rounded text-[10px] text-surface-500 hover:text-surface-300 transition-colors border-l border-surface-700/40 ml-0.5 pl-2.5">
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
                                 FILTERS
                             </button>
@@ -169,115 +271,164 @@ export function EntityViewDemo() {
                     </div>
                 </div>
 
-                {/* Table header row — with column icons and filter/sort per col */}
-                <div className="flex items-center border-b border-surface-800/40 bg-surface-900/40 text-[10px] uppercase tracking-wider text-surface-500 shrink-0 select-none">
-                    {/* Actions col header */}
-                    <div className="w-[100px] shrink-0 flex items-center px-2 py-2">
-                        <span className="font-bold">ID</span>
-                        <svg className="w-3 h-3 ml-1 text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    </div>
-                    <div className="w-[60px] shrink-0 flex items-center justify-center px-2 py-2">
-                        <span className="font-bold"># ID</span>
-                    </div>
-                    {/* Title */}
-                    <div className="flex-1 min-w-[200px] flex items-center px-3 py-2 gap-1">
-                        <svg className="w-3 h-3 text-surface-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ICON.text}/></svg>
-                        <span className="font-bold">Title</span>
-                        <svg className="w-3 h-3 ml-auto text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
-                    </div>
-                    {/* Status */}
-                    <div className="w-[110px] shrink-0 flex items-center px-3 py-2 gap-1">
-                        <svg className="w-3 h-3 text-surface-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ICON.select}/></svg>
-                        <span className="font-bold">Status</span>
-                        <svg className="w-3 h-3 ml-auto text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
-                    </div>
-                    {/* Author */}
-                    <div className="w-[180px] shrink-0 flex items-center px-3 py-2 gap-1">
-                        <svg className="w-3 h-3 text-surface-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ICON.email}/></svg>
-                        <span className="font-bold">Author</span>
-                        <svg className="w-3 h-3 ml-auto text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
-                    </div>
-                    {/* Views */}
-                    <div className="w-[90px] shrink-0 flex items-center px-3 py-2 gap-1">
-                        <svg className="w-3 h-3 text-surface-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ICON.number}/></svg>
-                        <span className="font-bold">Views</span>
-                    </div>
-                    {/* Published */}
-                    <div className="w-[120px] shrink-0 flex items-center px-3 py-2 gap-1">
-                        <svg className="w-3 h-3 text-surface-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ICON.date}/></svg>
-                        <span className="font-bold">Published</span>
-                    </div>
-                    {/* Add column */}
-                    <div className="w-[40px] shrink-0 flex items-center justify-center px-2 py-2">
-                        <svg className="w-3.5 h-3.5 text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/></svg>
-                    </div>
-                </div>
-
-                {/* Table body */}
-                <div className="flex-1 overflow-auto">
-                    {MOCK_ENTITIES.map(entity => (
-                        <div
-                            key={entity.id}
-                            onClick={() => openEntity(entity.id)}
-                            onMouseEnter={() => setHoveredRow(entity.id)}
-                            onMouseLeave={() => setHoveredRow(null)}
-                            className={`flex items-center border-b border-surface-800/20 cursor-pointer transition-colors min-h-[64px] ${
-                                selectedEntityId === entity.id ? "bg-primary/5" : "hover:bg-surface-800/20"
-                            }`}
-                        >
-                            {/* Action column: edit pencil, kebab, checkbox */}
-                            <div className="w-[100px] shrink-0 flex items-center gap-1 px-2">
-                                <button
-                                    className={`p-1 rounded transition-opacity ${hoveredRow === entity.id ? "opacity-100" : "opacity-30"} hover:bg-surface-700/60 text-surface-400 hover:text-white`}
-                                    onClick={e => { e.stopPropagation(); openEntity(entity.id); }}
-                                    title="Edit"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                                </button>
-                                <button
-                                    className={`p-1 rounded transition-opacity ${hoveredRow === entity.id ? "opacity-100" : "opacity-30"} hover:bg-surface-700/60 text-surface-400 hover:text-white`}
-                                    onClick={e => e.stopPropagation()}
-                                    title="More"
-                                >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
-                                </button>
-                                <input
-                                    type="checkbox"
-                                    className="w-4 h-4 rounded border-surface-600 cursor-pointer accent-primary ml-0.5"
-                                    onClick={e => e.stopPropagation()}
-                                />
+                {/* Main Content Area */}
+                {activeView === "list" && (
+                    <>
+                        {/* Table header row — with column icons and filter/sort per col */}
+                        <div className="flex items-center border-b border-surface-800/40 bg-surface-900/40 text-[10px] uppercase tracking-wider text-surface-500 shrink-0 select-none">
+                            {/* Actions col header */}
+                            <div className="w-[100px] shrink-0 flex items-center px-2 py-2">
+                                <span className="font-bold">ID</span>
+                                <svg className="w-3 h-3 ml-1 text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                             </div>
-                            {/* ID */}
-                            <div className="w-[60px] shrink-0 px-2 text-xs text-surface-500 font-mono text-center">
-                                {entity.id}
+                            <div className="w-[60px] shrink-0 flex items-center justify-center px-2 py-2">
+                                <span className="font-bold"># ID</span>
                             </div>
                             {/* Title */}
-                            <div className="flex-1 min-w-[200px] px-3 py-3 text-sm text-surface-200 font-medium truncate">
-                                {entity.values.title}
+                            <div className="flex-1 min-w-[200px] flex items-center px-3 py-2 gap-1">
+                                <svg className="w-3 h-3 text-surface-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ICON.text}/></svg>
+                                <span className="font-bold">Title</span>
+                                <svg className="w-3 h-3 ml-auto text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
                             </div>
                             {/* Status */}
-                            <div className="w-[110px] shrink-0 px-3 py-3">
-                                <span className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${STATUS_BADGE[entity.values.status] ?? STATUS_BADGE.draft}`}>
-                                    {entity.values.status}
-                                </span>
+                            <div className="w-[110px] shrink-0 flex items-center px-3 py-2 gap-1">
+                                <svg className="w-3 h-3 text-surface-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ICON.select}/></svg>
+                                <span className="font-bold">Status</span>
+                                <svg className="w-3 h-3 ml-auto text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
                             </div>
                             {/* Author */}
-                            <div className="w-[180px] shrink-0 px-3 py-3 text-xs text-surface-400 truncate">
-                                {entity.values.author_email}
+                            <div className="w-[180px] shrink-0 flex items-center px-3 py-2 gap-1">
+                                <svg className="w-3 h-3 text-surface-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ICON.email}/></svg>
+                                <span className="font-bold">Author</span>
+                                <svg className="w-3 h-3 ml-auto text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
                             </div>
                             {/* Views */}
-                            <div className="w-[90px] shrink-0 px-3 py-3 text-xs text-surface-400 font-mono text-right">
-                                {entity.values.view_count?.toLocaleString()}
+                            <div className="w-[90px] shrink-0 flex items-center px-3 py-2 gap-1">
+                                <svg className="w-3 h-3 text-surface-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ICON.number}/></svg>
+                                <span className="font-bold">Views</span>
                             </div>
                             {/* Published */}
-                            <div className="w-[120px] shrink-0 px-3 py-3 text-xs text-surface-500">
-                                {entity.values.published_at ?? "—"}
+                            <div className="w-[120px] shrink-0 flex items-center px-3 py-2 gap-1">
+                                <svg className="w-3 h-3 text-surface-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={ICON.date}/></svg>
+                                <span className="font-bold">Published</span>
                             </div>
-                            {/* Spacer for + col */}
-                            <div className="w-[40px] shrink-0" />
+                            {/* Add column */}
+                            <div className="w-[40px] shrink-0 flex items-center justify-center px-2 py-2">
+                                <svg className="w-3.5 h-3.5 text-surface-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/></svg>
+                            </div>
                         </div>
-                    ))}
-                </div>
+
+                        {/* Table body */}
+                        <div className="flex-1 overflow-auto">
+                            {MOCK_ENTITIES.map(entity => (
+                                <div
+                                    key={entity.id}
+                                    onClick={() => openEntity(entity.id)}
+                                    onMouseEnter={() => setHoveredRow(entity.id)}
+                                    onMouseLeave={() => setHoveredRow(null)}
+                                    className={`flex items-center border-b border-surface-800/20 cursor-pointer transition-colors min-h-[64px] ${
+                                        selectedEntityId === entity.id ? "bg-primary/5" : "hover:bg-surface-800/20"
+                                    }`}
+                                >
+                                    {/* Action column: edit pencil, kebab, checkbox */}
+                                    <div className="w-[100px] shrink-0 flex items-center gap-1 px-2">
+                                        <button
+                                            className={`p-1 rounded transition-opacity ${hoveredRow === entity.id ? "opacity-100" : "opacity-30"} hover:bg-surface-700/60 text-surface-400 hover:text-white`}
+                                            onClick={e => { e.stopPropagation(); openEntity(entity.id); }}
+                                            title="Edit"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                        </button>
+                                        <button
+                                            className={`p-1 rounded transition-opacity ${hoveredRow === entity.id ? "opacity-100" : "opacity-30"} hover:bg-surface-700/60 text-surface-400 hover:text-white`}
+                                            onClick={e => e.stopPropagation()}
+                                            title="More"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
+                                        </button>
+                                        <input
+                                            type="checkbox"
+                                            className="w-4 h-4 rounded border-surface-600 cursor-pointer accent-primary ml-0.5"
+                                            onClick={e => e.stopPropagation()}
+                                        />
+                                    </div>
+                                    {/* ID */}
+                                    <div className="w-[60px] shrink-0 px-2 text-xs text-surface-500 font-mono text-center">
+                                        {entity.id}
+                                    </div>
+                                    {/* Title */}
+                                    <div className="flex-1 min-w-[200px] px-3 py-3 text-sm text-surface-200 font-medium truncate">
+                                        {entity.values.title}
+                                    </div>
+                                    {/* Status */}
+                                    <div className="w-[110px] shrink-0 px-3 py-3">
+                                        <span className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${STATUS_BADGE[entity.values.status] ?? STATUS_BADGE.draft}`}>
+                                            {entity.values.status}
+                                        </span>
+                                    </div>
+                                    {/* Author */}
+                                    <div className="w-[180px] shrink-0 px-3 py-3 text-xs text-surface-400 truncate">
+                                        {entity.values.author_email}
+                                    </div>
+                                    {/* Views */}
+                                    <div className="w-[90px] shrink-0 px-3 py-3 text-xs text-surface-400 font-mono text-right">
+                                        {entity.values.view_count?.toLocaleString()}
+                                    </div>
+                                    {/* Published */}
+                                    <div className="w-[120px] shrink-0 px-3 py-3 text-xs text-surface-500">
+                                        {entity.values.published_at ?? "—"}
+                                    </div>
+                                    {/* Spacer for + col */}
+                                    <div className="w-[40px] shrink-0" />
+                                </div>
+                            ))}
+                        </div>
+                    </>
+                )}
+
+                {/* Board view */}
+                {activeView === "board" && (
+                    <div className="flex-1 overflow-x-auto p-4 bg-surface-950/50 flex gap-4">
+                        {(["draft", "review", "published"] as const).map(statusCategory => {
+                            const columnEntities = MOCK_ENTITIES.filter(e => e.values.status === statusCategory);
+                            return (
+                                <div key={statusCategory} className="flex-shrink-0 w-[280px] flex flex-col gap-3">
+                                    {/* Column Header */}
+                                    <div className="flex items-center justify-between px-1">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-2 h-2 rounded-full ${statusCategory === 'draft' ? "bg-surface-400" : statusCategory === 'review' ? "bg-amber-400" : "bg-green-400"}`} />
+                                            <span className="font-semibold text-xs text-surface-300 uppercase tracking-widest">{statusCategory}</span>
+                                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-surface-800 text-surface-400">{columnEntities.length}</span>
+                                        </div>
+                                        <button className="text-surface-500 hover:text-white transition-colors">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/></svg>
+                                        </button>
+                                    </div>
+                                    {/* Column Body */}
+                                    <div className="flex-1 flex flex-col gap-2">
+                                        {columnEntities.map(entity => (
+                                            <div 
+                                                key={entity.id}
+                                                className={`p-3 rounded-lg bg-surface-900 border ${selectedEntityId === entity.id ? "border-primary" : "border-surface-700/50"} shadow-md cursor-pointer hover:border-surface-600 transition-colors`}
+                                                onClick={() => openEntity(entity.id)}
+                                            >
+                                                <h4 className="text-sm font-medium text-surface-200 line-clamp-2 mb-2 leading-relaxed">{entity.values.title}</h4>
+                                                <div className="flex items-center justify-between mt-3 text-[10px] text-surface-500">
+                                                    <span className="font-mono bg-surface-800/60 px-1 py-0.5 rounded">{entity.id.substring(0, 4)}</span>
+                                                    {entity.values.author_email && (
+                                                        <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary ring-1 ring-primary/30">
+                                                            {entity.values.author_email.substring(0, 2).toUpperCase()}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
 
             {/* ── Side panel overlay (drawer from right) ── */}

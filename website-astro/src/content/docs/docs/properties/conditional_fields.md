@@ -44,7 +44,7 @@ type Product = {
     }
 }
 
-export const productCollection: EntityCollection = buildCollection<Partial<Product>>({
+export const productCollection = buildCollection({
     name: "Product",
     properties: {
         available: {
@@ -82,17 +82,7 @@ import {
     buildProperties
 } from "@rebasepro/core";
 
-type User = {
-    source: {
-        type: "facebook",
-        facebookId: string
-    } | {
-        type: "apple",
-        appleId: number
-    }
-}
-
-export const userSchema: EntityCollection = buildCollection<User>({
+export const userSchema = buildCollection({
     name: "User",
     properties: {
         source: ({ values }) => {
@@ -107,11 +97,11 @@ export const userSchema: EntityCollection = buildCollection<User>({
             });
 
             if (values.source) {
-                if ((values.source as any).type === "facebook") {
+                if (values.source.type === "facebook") {
                     properties["facebookId"] = buildProperty({
                         dataType: "string"
                     });
-                } else if ((values.source as any).type === "apple") {
+                } else if (values.source.type === "apple") {
                     properties["appleId"] = buildProperty({
                         dataType: "number"
                     });

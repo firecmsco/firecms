@@ -1,5 +1,5 @@
 ---
-slug: docs/pro/collection_editor
+slug: docs/features/collection_editor
 title: Collection Editor UI
 ---
 
@@ -46,19 +46,19 @@ example of RLS policies that permit authenticated users to access the collection
 ```sql
 -- Allow authenticated users to read collection configurations
 CREATE POLICY "Allow read access to collection configs"
-ON "__rebase_config"
+ON "_rebase_config"
 FOR SELECT
 TO authenticated
 USING (true);
 
 -- Allow admin users to write collection configurations
 CREATE POLICY "Allow write access for admins"
-ON "__rebase_config"
+ON "_rebase_config"
 FOR ALL
 TO authenticated
 USING (
   EXISTS (
-    SELECT 1 FROM "__rebase_users"
+    SELECT 1 FROM "_rebase_users"
     WHERE uid = auth.uid() AND role = 'admin'
   )
 );

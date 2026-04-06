@@ -342,7 +342,7 @@ export function SchemaEditorDemo() {
     ];
 
     return (
-        <div className="grid grid-cols-12 gap-2 h-full bg-surface dark:bg-surface-dark relative">
+        <div className="grid grid-cols-12 gap-2 h-[600px] bg-surface dark:bg-surface-dark relative pointer-events-none select-none rounded-xl overflow-hidden ring-1 ring-surface-700 shadow-2xl">
             {/* Left Panel - Properties List */}
             <div
                 className="bg-surface-50 dark:bg-surface-900 p-4 md:p-8 pb-20 col-span-12 lg:col-span-5 h-full overflow-hidden border-r border-opacity-40 dark:border-opacity-40 border-surface-200/40 dark:border-surface-700/40">

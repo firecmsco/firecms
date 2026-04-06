@@ -10,7 +10,7 @@ import { DriverRegistry, DEFAULT_DRIVER_ID, DefaultDriverRegistry } from "./serv
 import { DatabasePoolManager } from "./services/databasePoolManager";
 import { Server } from "http";
 import { createPostgresWebSocket } from "./websocket";
-import { ApiConfig, RebaseApiServer } from "./api";
+
 import { RestApiGenerator } from "./api/rest/api-generator";
 import { createAuthMiddleware } from "./auth/middleware";
 import { errorHandler } from "./api/errors";
@@ -201,6 +201,22 @@ export interface RebaseBackendConfig {
      * Requires a PostgreSQL default driver (creates `rebase.entity_history` table).
      */
     history?: boolean | HistoryConfig;
+
+    /**
+     * Enable GraphQL API endpoint at `{basePath}/data/graphql`.
+     * Also serves GraphiQL IDE in non-production environments.
+     *
+     * @default false
+     */
+    enableGraphQL?: boolean;
+
+    /**
+     * Enable OpenAPI spec and Swagger UI at `{basePath}/data/docs`
+     * and `{basePath}/data/swagger` (dev only).
+     *
+     * @default false
+     */
+    enableSwagger?: boolean;
 }
 
 /**
@@ -579,15 +595,15 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         console.log(`✅ Storage endpoints: ${basePath}/storage/*`);
     }
 
-    // ============ Mount internal data routes (always-on) ============
-    // These power the client SDK (@rebasepro/client). They are always
-    // available regardless of whether the public API layer is enabled.
+    // ============ Mount data routes ============
+    // These power the client SDK (@rebasepro/client), the CMS, and
+    // any third-party REST/GraphQL consumers. One unified surface.
     const defaultDataDriverDelegate = driverRegistry.getDefault();
 
     if (activeCollections.length > 0) {
         const dataRouter = new Hono<HonoEnv>();
 
-        // Auth middleware for internal data routes
+        // Auth middleware for data routes
         dataRouter.use("/*", createAuthMiddleware({
             driver: defaultDataDriverDelegate,
             requireAuth: config.auth?.requireAuth !== false && !!config.auth?.jwtSecret
@@ -628,10 +644,87 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             console.log(`✅ Entity history endpoints: ${basePath}/data/:slug/:entityId/history`);
         }
 
+        // GraphQL endpoint (optional — dependencies loaded lazily)
+        if (config.enableGraphQL) {
+            const { GraphQLSchemaGenerator } = await import("./api/graphql/graphql-schema-generator");
+            const { graphqlServer } = await import("@hono/graphql-server");
+
+            const schemaGenerator = new GraphQLSchemaGenerator(activeCollections, defaultDataDriverDelegate);
+            const schema = schemaGenerator.generateSchema();
+
+            dataRouter.use("/graphql", graphqlServer({ schema }));
+            console.log(`✅ GraphQL endpoint: ${basePath}/data/graphql`);
+
+            // GraphiQL IDE (dev only)
+            if (process.env.NODE_ENV !== "production") {
+                dataRouter.get("/graphiql", (c) => {
+                    return c.html(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8/>
+  <title>Rebase GraphiQL</title>
+  <link rel="stylesheet" href="https://unpkg.com/graphiql/graphiql.min.css" />
+  <style>body,html,#graphiql{height:100%;margin:0;width:100%;}</style>
+</head>
+<body>
+<div id="graphiql">Loading...</div>
+<script crossorigin src="https://unpkg.com/react/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/graphiql/graphiql.min.js"></script>
+<script>
+  const fetcher = GraphiQL.createFetcher({ url: '${basePath}/data/graphql' });
+  ReactDOM.render(
+    React.createElement(GraphiQL, { fetcher }),
+    document.getElementById('graphiql'),
+  );
+</script>
+</body>
+</html>`);
+                });
+                console.log(`✅ GraphiQL IDE: ${basePath}/data/graphiql`);
+            }
+        }
+
+        // OpenAPI spec and Swagger UI (optional)
+        if (config.enableSwagger) {
+            const { generateOpenApiSpec } = await import("./api/openapi-generator");
+
+            dataRouter.get("/docs", (c) => {
+                const openApiSpec = generateOpenApiSpec(activeCollections, `${basePath}/data`);
+                return c.json(openApiSpec);
+            });
+            console.log(`✅ OpenAPI spec: ${basePath}/data/docs`);
+
+            if (process.env.NODE_ENV !== "production") {
+                dataRouter.get("/swagger", (c) => {
+                    return c.html(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Rebase API Documentation</title>
+                            <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui.css" />
+                        </head>
+                        <body>
+                            <div id="swagger-ui"></div>
+                            <script src="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui-bundle.js"></script>
+                            <script>
+                                SwaggerUIBundle({
+                                    url: '${basePath}/data/docs',
+                                    dom_id: '#swagger-ui'
+                                });
+                            </script>
+                        </body>
+                        </html>
+                    `);
+                });
+                console.log(`✅ Swagger UI: ${basePath}/data/swagger`);
+            }
+        }
+
         dataRouter.onError(errorHandler);
 
         config.app.route(`${basePath}/data`, dataRouter);
-        console.log(`✅ Internal data endpoints: ${basePath}/data/* (${activeCollections.length} collections)`);
+        console.log(`✅ Data endpoints: ${basePath}/data/* (${activeCollections.length} collections)`);
     }
 
     // ============ Create WebSocket with auth support ============
@@ -747,67 +840,3 @@ function isBackendStorageConfig(obj: unknown): obj is BackendStorageConfig {
         config.type === "local" || config.type === "s3"
     );
 }
-
-/**
- * Initialize the **public** REST/GraphQL API layer.
- *
- * This is **optional** and separate from the core data plane. The core
- * backend (`initializeRebaseBackend`) already mounts:
- *   - Internal CRUD endpoints at `/api/data/:slug` (used by the client SDK)
- *   - Auth endpoints at `/api/auth/*`
- *   - Admin endpoints at `/api/admin/*`
- *   - Storage endpoints at `/api/storage/*`
- *   - WebSocket for realtime subscriptions and CMS admin operations
- *
- * Call this function only if you want to expose a **public** REST and/or
- * GraphQL API for third-party integrations, mobile apps, or external
- * consumers. The `enableREST` and `enableGraphQL` flags control which
- * public API flavors are available.
- *
- * @param app Hono application instance
- * @param backend Rebase backend instance from initializeRebaseBackend
- * @param config API configuration options
- * @returns API server instance
- */
-export async function initializeRebaseAPI(
-    app: Hono<HonoEnv>,
-    backend: RebaseBackendInstance,
-    config: Partial<ApiConfig> = {}
-): Promise<RebaseApiServer> {
-    if ((backend as unknown as Record<string, unknown>).__failed) {
-        console.warn("⚠️ Skipping public API initialization because backend initialization failed.");
-        // Return a dummy api server
-        const { Hono } = await import("hono");
-        return { getRouter: () => new Hono<HonoEnv>() } as unknown as RebaseApiServer;
-    }
-
-    console.log("🌐 Initializing public REST/GraphQL API (for third-party integrations)");
-
-    // Get collections from the backend's registry instance
-    const collections = backend.collectionRegistry.getCollections();
-
-    const apiServer = await RebaseApiServer.create({
-        collections,
-        collectionsDir: config.collectionsDir,
-        driver: backend.driver,
-        basePath: config.basePath || "/api",
-        enableGraphQL: config.enableGraphQL ?? true,
-        enableREST: config.enableREST ?? true,
-        cors: config.cors,
-        requireAuth: config.requireAuth !== undefined ? config.requireAuth : (backend.userService ? true : false),
-        pagination: config.pagination
-    });
-
-    // Mount API router on the provided Hono app
-    const apiRouter = apiServer.getRouter();
-    app.route("/", apiRouter);
-
-    const basePath = config.basePath || "/api";
-    if (config.enableGraphQL !== false) console.log(`✅ Public GraphQL: ${basePath}/graphql`);
-    if (config.enableREST !== false) console.log(`✅ Public REST: ${basePath}/:collection`);
-    console.log(`✅ API docs: ${basePath}/swagger`);
-
-    return apiServer;
-}
-
-

@@ -2,6 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
 import { RebaseEditorDemo } from "../components/RebaseEditorDemo";
+import { SQLEditorDemo } from "../components/demos/SQLEditorDemo";
+import { RLSEditorDemo } from "../components/demos/RLSEditorDemo";
 import "../styles/editor.css";
 
 const title = "Rebase Studio — Visual Admin Panel & Schema Editor";
@@ -103,78 +105,9 @@ const collectionEditorHtml = `<span class="text-primary-light">import</span> { b
             </ul>
           </div>
 
-          <!-- SQL Editor code-based "screenshot" -->
+          <!-- Interactive SQL Editor Demo -->
           <div class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl">
-            <!-- Toolbar -->
-            <div class="flex items-center justify-between px-3 py-2.5 border-b border-surface-700/40 bg-surface-900/60">
-              <div class="flex items-center gap-2">
-                <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/terminal.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
-                <span class="text-[11px] uppercase tracking-wider font-semibold text-surface-400 font-mono">SQL Editor</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="px-2 py-1 rounded-md bg-surface-800/60 text-[10px] text-surface-500 font-mono">History</div>
-                <div class="px-2 py-1 rounded-md bg-surface-800/60 text-[10px] text-surface-500 font-mono">Snippets</div>
-                <div class="px-2.5 py-1 rounded-md bg-primary/20 text-primary text-[10px] font-semibold">▶ Run</div>
-              </div>
-            </div>
-            <!-- Editor area + line numbers -->
-            <div class="flex">
-              <div class="py-3 px-2 text-right text-[11px] font-mono text-surface-600 leading-[1.6rem] select-none border-r border-surface-800/40">
-                <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div>
-              </div>
-              <pre class="py-3 px-4 text-[12px] font-mono leading-[1.6rem] text-surface-300 overflow-x-auto flex-1"><span class="text-purple-400">SELECT</span>
-  p.<span class="text-blue-300">title</span>,
-  p.<span class="text-blue-300">status</span>,
-  u.<span class="text-blue-300">display_name</span> <span class="text-purple-400">AS</span> <span class="text-green-400">author</span>,
-  <span class="text-amber-400">COUNT</span>(c.<span class="text-blue-300">id</span>) <span class="text-purple-400">AS</span> <span class="text-green-400">comments</span>
-<span class="text-purple-400">FROM</span> <span class="text-white">posts</span> p
-<span class="text-purple-400">JOIN</span> <span class="text-white">users</span> u <span class="text-purple-400">ON</span> p.author_id = u.id
-<span class="text-purple-400">LEFT JOIN</span> <span class="text-white">comments</span> c <span class="text-purple-400">ON</span> c.post_id = p.id
-<span class="text-purple-400">GROUP BY</span> p.id, u.id
-<span class="text-purple-400">LIMIT</span> <span class="text-amber-400">5</span>;</pre>
-            </div>
-            <!-- Execution info -->
-            <div class="flex items-center justify-between px-4 py-1.5 bg-surface-900/40 border-t border-b border-surface-800/40 text-[10px]">
-              <span class="text-green-400 font-medium">✓ 5 rows · 12ms</span>
-              <span class="text-surface-500 font-mono">public.posts</span>
-            </div>
-            <!-- Result table -->
-            <div class="flex text-[10px] font-semibold text-surface-500 tracking-wider uppercase border-b border-surface-700/40 bg-surface-900/30">
-              <div class="px-3 py-2 flex-1">title</div>
-              <div class="px-3 py-2 w-20">status</div>
-              <div class="px-3 py-2 w-28">author</div>
-              <div class="px-3 py-2 w-20 text-right">comments</div>
-            </div>
-            <div class="flex text-sm border-b border-surface-800/40 hover:bg-surface-800/20">
-              <div class="px-3 py-2.5 text-surface-200 flex-1 truncate text-xs">Getting Started with Rebase</div>
-              <div class="px-3 py-2.5 w-20"><span class="rounded-md px-1.5 py-0.5 text-[9px] font-medium bg-green-950 text-green-300">published</span></div>
-              <div class="px-3 py-2.5 w-28 text-surface-400 text-xs truncate">Alice Chen</div>
-              <div class="px-3 py-2.5 w-20 text-right text-surface-400 font-mono text-xs">24</div>
-            </div>
-            <div class="flex text-sm border-b border-surface-800/40 hover:bg-surface-800/20">
-              <div class="px-3 py-2.5 text-surface-200 flex-1 truncate text-xs">Schema Migrations Guide</div>
-              <div class="px-3 py-2.5 w-20"><span class="rounded-md px-1.5 py-0.5 text-[9px] font-medium bg-green-950 text-green-300">published</span></div>
-              <div class="px-3 py-2.5 w-28 text-surface-400 text-xs truncate">Bob Park</div>
-              <div class="px-3 py-2.5 w-20 text-right text-surface-400 font-mono text-xs">18</div>
-            </div>
-            <div class="flex text-sm border-b border-surface-800/40 hover:bg-surface-800/20">
-              <div class="px-3 py-2.5 text-surface-200 flex-1 truncate text-xs">Custom Views Tutorial</div>
-              <div class="px-3 py-2.5 w-20"><span class="rounded-md px-1.5 py-0.5 text-[9px] font-medium bg-amber-950 text-amber-300">draft</span></div>
-              <div class="px-3 py-2.5 w-28 text-surface-400 text-xs truncate">Alice Chen</div>
-              <div class="px-3 py-2.5 w-20 text-right text-surface-400 font-mono text-xs">7</div>
-            </div>
-            <div class="flex text-sm border-b border-surface-800/40 hover:bg-surface-800/20">
-              <div class="px-3 py-2.5 text-surface-200 flex-1 truncate text-xs">RLS Best Practices</div>
-              <div class="px-3 py-2.5 w-20"><span class="rounded-md px-1.5 py-0.5 text-[9px] font-medium bg-green-950 text-green-300">published</span></div>
-              <div class="px-3 py-2.5 w-28 text-surface-400 text-xs truncate">Eve Müller</div>
-              <div class="px-3 py-2.5 w-20 text-right text-surface-400 font-mono text-xs">31</div>
-            </div>
-            <div class="flex text-sm hover:bg-surface-800/20">
-              <div class="px-3 py-2.5 text-surface-200 flex-1 truncate text-xs">REST API Deep Dive</div>
-              <div class="px-3 py-2.5 w-20"><span class="rounded-md px-1.5 py-0.5 text-[9px] font-medium bg-amber-950 text-amber-300">draft</span></div>
-              <div class="px-3 py-2.5 w-28 text-surface-400 text-xs truncate">Bob Park</div>
-              <div class="px-3 py-2.5 w-20 text-right text-surface-400 font-mono text-xs">3</div>
-            </div>
+            <SQLEditorDemo client:only="react" />
           </div>
         </div>
       </div>
@@ -198,132 +131,9 @@ const collectionEditorHtml = `<span class="text-primary-light">import</span> { b
             </ul>
           </div>
 
-          <!-- RLS Editor code-based "screenshot" -->
+          <!-- Interactive RLS Editor Demo -->
           <div class="rounded-xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl">
-            <div class="flex h-[460px]">
-              <!-- Sidebar -->
-              <div class="w-[160px] border-r border-surface-800/40 flex flex-col shrink-0">
-                <div class="px-3 py-2.5 border-b border-surface-800/40 bg-surface-900/40">
-                  <div class="flex items-center justify-between">
-                    <span class="text-[10px] uppercase tracking-wider font-semibold text-surface-500">Tables</span>
-                    <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/refresh-cw.svg" alt="" class="h-3 w-3 filter invert opacity-30"/>
-                  </div>
-                </div>
-                <div class="flex-1 overflow-y-auto p-1.5 space-y-0.5">
-                  <div class="text-[10px] font-semibold text-surface-500 px-1.5 py-1 tracking-wider">▾ public</div>
-                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-surface-400 hover:bg-surface-800/40 cursor-pointer">
-                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-green-500"></div>
-                    <span class="truncate flex-1 font-mono text-[11px]">posts</span>
-                    <span class="text-[10px] opacity-40">2</span>
-                  </div>
-                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs bg-primary/10 text-primary cursor-pointer">
-                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-green-500"></div>
-                    <span class="truncate flex-1 font-mono text-[11px]">users</span>
-                    <span class="text-[10px] opacity-40">3</span>
-                  </div>
-                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-surface-400 hover:bg-surface-800/40 cursor-pointer">
-                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-green-500"></div>
-                    <span class="truncate flex-1 font-mono text-[11px]">comments</span>
-                    <span class="text-[10px] opacity-40">1</span>
-                  </div>
-                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-surface-400 hover:bg-surface-800/40 cursor-pointer">
-                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-orange-400 opacity-50"></div>
-                    <span class="truncate flex-1 font-mono text-[11px]">orders</span>
-                    <span class="text-[10px] opacity-40">0</span>
-                  </div>
-                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-surface-400 hover:bg-surface-800/40 cursor-pointer">
-                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-green-500"></div>
-                    <span class="truncate flex-1 font-mono text-[11px]">products</span>
-                    <span class="text-[10px] opacity-40">2</span>
-                  </div>
-                  <div class="flex items-center gap-1.5 px-2 py-1.5 rounded text-xs text-surface-400 hover:bg-surface-800/40 cursor-pointer">
-                    <div class="w-1.5 h-1.5 rounded-full shrink-0 bg-orange-400 opacity-50"></div>
-                    <span class="truncate flex-1 font-mono text-[11px]">sessions</span>
-                    <span class="text-[10px] opacity-40">0</span>
-                  </div>
-                </div>
-              </div>
-              <!-- Main panel -->
-              <div class="flex-1 flex flex-col min-w-0">
-                <!-- Table header -->
-                <div class="flex items-center justify-between px-4 py-2.5 border-b border-surface-800/40 bg-surface-900/30">
-                  <div class="flex items-center gap-2">
-                    <span class="text-sm font-mono text-surface-300">public.users</span>
-                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-900/30 text-green-400 border border-green-800/40 font-medium">RLS ENABLED</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="text-[10px] px-2 py-1 rounded-md bg-surface-800/60 text-surface-500 cursor-pointer">Disable RLS</span>
-                    <span class="text-[10px] px-2 py-1 rounded-md bg-primary/20 text-primary font-semibold cursor-pointer">+ Create Policy</span>
-                  </div>
-                </div>
-                <!-- Policies -->
-                <div class="flex-1 overflow-y-auto p-4 space-y-3 bg-surface-900/20">
-                  <!-- Policy 1 -->
-                  <div class="p-3 rounded-lg border border-surface-800/50 bg-surface-950/80">
-                    <div class="flex items-center justify-between mb-2.5">
-                      <div class="flex items-center gap-2">
-                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/key-round.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
-                        <span class="text-sm text-white font-medium">users_read_own</span>
-                        <span class="text-[8px] px-1.5 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800/40 font-bold uppercase">SELECT</span>
-                      </div>
-                      <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-900/20 text-green-400 border border-green-800/30 font-medium">Live + Code</span>
-                    </div>
-                    <div class="flex flex-wrap gap-1.5">
-                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
-                        <span class="text-surface-500 uppercase font-semibold">Using:</span>
-                        <code class="text-amber-300 font-mono">auth.uid() = id</code>
-                      </div>
-                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
-                        <span class="text-surface-500 uppercase font-semibold">Roles:</span>
-                        <span class="text-surface-300 font-mono">public</span>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Policy 2 -->
-                  <div class="p-3 rounded-lg border border-surface-800/50 bg-surface-950/80">
-                    <div class="flex items-center justify-between mb-2.5">
-                      <div class="flex items-center gap-2">
-                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/key-round.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
-                        <span class="text-sm text-white font-medium">users_update_own</span>
-                        <span class="text-[8px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800/40 font-bold uppercase">UPDATE</span>
-                      </div>
-                      <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-900/20 text-green-400 border border-green-800/30 font-medium">Live + Code</span>
-                    </div>
-                    <div class="flex flex-wrap gap-1.5">
-                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
-                        <span class="text-surface-500 uppercase font-semibold">Using:</span>
-                        <code class="text-amber-300 font-mono">auth.uid() = id</code>
-                      </div>
-                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
-                        <span class="text-surface-500 uppercase font-semibold">Check:</span>
-                        <code class="text-amber-300 font-mono">auth.uid() = id</code>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Policy 3 -->
-                  <div class="p-3 rounded-lg border border-primary/20 bg-primary/5">
-                    <div class="flex items-center justify-between mb-2.5">
-                      <div class="flex items-center gap-2">
-                        <img src="https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/key-round.svg" alt="" class="h-3.5 w-3.5 filter invert opacity-50"/>
-                        <span class="text-sm text-white font-medium">admin_full_access</span>
-                        <span class="text-[8px] px-1.5 py-0.5 rounded bg-green-950 text-green-300 border border-green-800/40 font-bold uppercase">ALL</span>
-                      </div>
-                      <span class="text-[9px] px-1.5 py-0.5 rounded bg-primary/10 text-primary border border-primary/20 font-medium">Unapplied</span>
-                    </div>
-                    <div class="flex flex-wrap gap-1.5">
-                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
-                        <span class="text-surface-500 uppercase font-semibold">Using:</span>
-                        <code class="text-amber-300 font-mono">auth.role() = 'admin'</code>
-                      </div>
-                      <div class="flex items-center gap-1 px-2 py-1 rounded bg-surface-800/60 text-[10px]">
-                        <span class="text-surface-500 uppercase font-semibold">Roles:</span>
-                        <span class="text-surface-300 font-mono">admin</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <RLSEditorDemo client:only="react" />
           </div>
         </div>
       </div>
