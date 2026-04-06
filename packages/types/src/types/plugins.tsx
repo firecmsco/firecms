@@ -171,7 +171,7 @@ export type RebasePlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollect
 
         /**
          * If you add this callback to your plugin, an add button will be added to the collection table.
-         * TODO: Only the first plugin that defines this callback will be used, at the moment.
+         * Note that multiple plugins can render this simultaneously.
          */
         AddColumnComponent?: React.ComponentType<{
             path: string,

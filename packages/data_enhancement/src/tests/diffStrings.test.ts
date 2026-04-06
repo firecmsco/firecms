@@ -3,9 +3,7 @@
 
 import { Change, diffStrings } from "../utils/diffStrings";
 
-// TODO: These tests are currently skipped because the diffStrings function has regression bugs
-// that produce incorrect output. The function needs to be fixed before re-enabling tests.
-describe.skip("diffStrings", () => {
+describe("diffStrings", () => {
     test("equal strings", () => {
         const oldStr = "This is a test string";
         const newStr = "This is a test string";

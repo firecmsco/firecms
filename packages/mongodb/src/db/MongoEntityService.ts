@@ -6,7 +6,7 @@
  */
 
 import { Db, ObjectId, Collection, Document, FindOptions, Filter } from "mongodb";
-import { Entity, FilterValues, EntityRepository } from "@rebasepro/types";
+import { Entity, FilterValues, EntityRepository, EntityCollection } from "@rebasepro/types";
 import { MongoConditionBuilder } from "./MongoConditionBuilder";
 
 /**
@@ -182,6 +182,7 @@ export class MongoEntityService implements EntityRepository {
             startAfter?: any;
             searchString?: string;
             databaseId?: string;
+            collection?: EntityCollection;
         } = {}
     ): Promise<Entity<M>[]> {
         const collection = this.getCollection(collectionPath);
@@ -190,7 +191,7 @@ export class MongoEntityService implements EntityRepository {
         const query = MongoConditionBuilder.buildQuery<M>({
             filter: options.filter,
             searchString: options.searchString,
-            properties: {} // TODO: Pass actual properties for better search
+            properties: options.collection?.properties ?? {}
         });
 
         // Build find options
@@ -229,6 +230,7 @@ export class MongoEntityService implements EntityRepository {
             order?: "desc" | "asc";
             limit?: number;
             databaseId?: string;
+            collection?: EntityCollection;
         } = {}
     ): Promise<Entity<M>[]> {
         return this.fetchCollection<M>(collectionPath, {

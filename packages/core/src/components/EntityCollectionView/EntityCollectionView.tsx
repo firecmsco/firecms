@@ -391,17 +391,14 @@ export const EntityCollectionView = React.memo(
             setLastDeleteTimestamp(Date.now());
         };
 
-        let AddColumnComponent: React.ComponentType<{
-            path: string,
-            parentCollectionIds: string[],
-            collection: EntityCollection;
-            tableController: EntityTableController;
-        }> | undefined
-
-        // we are only using the first plugin that implements this
-        if (customizationController?.plugins) {
-            AddColumnComponent = customizationController.plugins.find(plugin => plugin.collectionView?.AddColumnComponent)?.collectionView?.AddColumnComponent;
-        }
+        const pluginAddColumnComponents = (customizationController?.plugins ?? [])
+            .map(plugin => plugin.collectionView?.AddColumnComponent)
+            .filter(Boolean) as React.ComponentType<{
+                path: string,
+                parentCollectionIds: string[],
+                collection: EntityCollection;
+                tableController: EntityTableController;
+            }>[];
 
         const onCollectionModifiedForUser = useCallback((path: string, partialCollection: PartialEntityCollection<M>) => {
             if (userConfigPersistence) {
@@ -778,14 +775,21 @@ export const EntityCollectionView = React.memo(
             </>;
         }, [customizationController.plugins, path, parentCollectionIds]);
 
-        const addColumnComponentInternal = AddColumnComponent
+        const addColumnComponentInternal = pluginAddColumnComponents.length > 0
             ? function () {
-                if (typeof AddColumnComponent === "function")
-                    return <AddColumnComponent path={path}
-                        parentCollectionIds={parentCollectionIds ?? []}
-                        collection={collection}
-                        tableController={tableController} />;
-                return null;
+                return (
+                    <div className="flex flex-row items-center gap-2">
+                        {pluginAddColumnComponents.map((AddComp, i) => (
+                            <AddComp 
+                                key={`plugin_add_col_${i}`}
+                                path={path}
+                                parentCollectionIds={parentCollectionIds ?? []}
+                                collection={collection}
+                                tableController={tableController} 
+                            />
+                        ))}
+                    </div>
+                );
             }
             : undefined;
 

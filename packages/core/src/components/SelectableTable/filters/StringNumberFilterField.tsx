@@ -78,7 +78,13 @@ export function StringNumberFilterField({
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
         if (prevOpIsArray !== newOpIsArray) {
-            newValue = newOpIsArray ? (typeof val === "string" || typeof val === "number" ? [val] : []) : undefined;
+            if (newOpIsArray) {
+                if (typeof val === "string") newValue = [val];
+                else if (typeof val === "number") newValue = [val];
+                else newValue = [];
+            } else {
+                newValue = undefined;
+            }
         }
 
         if (typeof newValue === "number" && isNaN(newValue))

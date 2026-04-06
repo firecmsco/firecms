@@ -27,7 +27,7 @@ export function convertDataToEntity(authController: AuthController,
         delete flatObject[idColumn];
     const mappedKeysObject = Object.entries(flatObject)
         .map(([key, value]) => {
-            const mappedKey = getIn(headersMapping, key) ?? key;
+            const mappedKey = (getIn(headersMapping, key) as string | undefined) ?? key;
 
             const mappedProperty = getPropertyInPath(properties, mappedKey);
             if (!mappedProperty) {

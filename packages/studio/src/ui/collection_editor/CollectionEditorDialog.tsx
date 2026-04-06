@@ -570,12 +570,15 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         submitCount
     } = formController;
 
-    // TODO: getting data is only working in root collections with this code
     const usedPath = values.dbPath;
-    const updatedFullPath = path?.includes("/") ? path?.split("/").slice(0, -1).join("/") + "/" + usedPath : usedPath; // TODO: this path is wrong
     const pathError = validatePath(usedPath, isNewCollection, existingPaths, values.slug);
 
     const parentPaths = !pathError && parentCollectionIds ? collectionRegistry.convertIdsToPaths(parentCollectionIds) : undefined;
+    
+    const updatedFullPath = parentPaths && parentPaths.length > 0
+        ? [...parentPaths, usedPath].join("/fake_id/")
+        : (path?.includes("/") ? path.split("/").slice(0, -1).join("/") + "/" + usedPath : usedPath);
+
     const resolvedPath = !pathError ? urlController.resolveDatabasePathsFrom(updatedFullPath) : undefined;
     const getDataWithPath = resolvedPath && getData ? async () => {
         const data = await getData!(resolvedPath, parentPaths ?? []);

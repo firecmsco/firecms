@@ -228,6 +228,7 @@ function StorageUpload({
                     child = (
                         <TableStorageItemPreview
                             key={`storage_preview_${index}`}
+                            propertyKey={name}
                             property={renderProperty}
                             value={entry.storagePathOrDownloadUrl}
                             entity={entity}
@@ -281,6 +282,7 @@ function StorageUpload({
 }
 
 interface TableStorageItemPreviewProps {
+    propertyKey: string;
     property: StringProperty;
     value: string,
     size: PreviewSize;
@@ -288,6 +290,7 @@ interface TableStorageItemPreviewProps {
 }
 
 export function TableStorageItemPreview({
+    propertyKey,
     property,
     value,
     size,
@@ -302,7 +305,7 @@ export function TableStorageItemPreview({
             {value &&
                 <ErrorBoundary>
                     <PropertyPreview
-                        propertyKey={"ignore"} // TODO: Fix this
+                        propertyKey={propertyKey}
                         value={value}
                         property={property}
                         // entity={entity}

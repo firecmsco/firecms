@@ -215,12 +215,12 @@ function FieldInternal<CustomProps, M extends Record<string, any>>
 
     const customFieldProps: any = property.customProps;
     const value = formexFieldProps.field.value;
-    const error = getIn(formexFieldProps.form.errors, propertyKey);
-    const touched = getIn(formexFieldProps.form.touched, propertyKey);
+    const error = getIn(formexFieldProps.form.errors, propertyKey) as string | string[] | undefined;
+    const touched = getIn(formexFieldProps.form.touched, propertyKey) as boolean | undefined;
 
-    const showError: boolean = error &&
+    const showError: boolean = Boolean(error &&
         (formexFieldProps.form.submitCount > 0 || property.validation?.unique) &&
-        (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
+        (!Array.isArray(error) || !!error.filter((e: any) => !!e).length));
 
     const WrappedComponent: ComponentType<FieldProps<any, any, M>> | null = useWrappedComponent({
         path: context.path,
@@ -249,7 +249,7 @@ function FieldInternal<CustomProps, M extends Record<string, any>>
         value,
         setValue,
         setFieldValue,
-        error,
+        error: error as string | undefined,
         touched,
         showError,
         isSubmitting,

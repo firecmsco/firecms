@@ -434,12 +434,12 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         // Calculate and set new order value (only if orderProperty is configured)
         if (orderProperty) {
             const newOrder = calculateNewOrder(items, moveInfo?.itemId ?? "", moveInfo?.targetColumn ?? "");
-            updatedValues = setIn(updatedValues, orderProperty, newOrder);
+            updatedValues = setIn(updatedValues, orderProperty, newOrder) as M;
         }
 
         // Update column if it changed
         if (isColumnChange) {
-            updatedValues = setIn(updatedValues, columnProperty, moveInfo.targetColumn);
+            updatedValues = setIn(updatedValues, columnProperty, moveInfo.targetColumn) as M;
         }
 
         const saveProps: SaveEntityProps = {

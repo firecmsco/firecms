@@ -70,7 +70,8 @@ export class MongoDriver implements DataDriver {
             startAfter,
             orderBy,
             order,
-            searchString
+            searchString,
+            collection
         });
     }
 

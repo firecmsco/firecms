@@ -38,6 +38,8 @@ import {
     setDoc,
     startAfter as startAfterClause,
     Timestamp,
+    VectorValue,
+    vector,
     where as whereClause
 } from "@firebase/firestore";
 import { FirebaseApp } from "@firebase/app";
@@ -179,8 +181,6 @@ export function useFirestoreDriver({
 
         const databaseId = collection?.databaseId;
         const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
-        // FIXME: resolveDatabasePathsFrom is moved to CMSUrlController, we need to extract this or skip resolving? 
-        // For now, assume it's left as path.
         const resolvedPath = path;
 
         return onSnapshot(
@@ -668,7 +668,10 @@ export function firestoreToCMSModel(data: any): any {
         return data;
     }
     if (typeof data === "object" && "__type__" in data && data.__type__ === "__vector__") {
-        return undefined; // TODO: removing vector for now, since they break when being saved
+        return data; // already translated
+    }
+    if (data instanceof VectorValue || (typeof data === "object" && data !== null && typeof data.toArray === "function" && data.constructor?.name === "VectorValue")) {
+        return { __type__: "__vector__", value: data.toArray() };
     }
 
     if (data instanceof FirestoreGeoPoint) {
@@ -720,7 +723,7 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore, inArray = f
     } else if (data instanceof Date) {
         return Timestamp.fromDate(data);
     } else if (data && typeof data === "object" && "__type__" in data && data.__type__ === "__vector__") {
-        return undefined; // TODO: removing vector for now, since they break when being saved
+        return vector(data.value || []);
     } else if (data && typeof data === "object") {
         return Object.entries(data)
             .map(([key, v]) => {

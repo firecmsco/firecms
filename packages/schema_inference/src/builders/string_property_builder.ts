@@ -69,7 +69,7 @@ export function buildStringProperty({
             const fileType = probableFileType(valuesResult, totalDocsCount);
             if (fileType) {
                 config.storage = {
-                    acceptedFiles: [fileType as FileType],
+                    acceptedFiles: fileType as FileType[],
                     storagePath: findCommonInitialStringInPath(valuesResult) ?? "/"
                 };
             }
@@ -85,24 +85,31 @@ export function buildStringProperty({
     return stringProperty;
 }
 
-// TODO: support returning multiple types
-function probableFileType(valuesCount: ValuesCountEntry, totalDocsCount: number): boolean | FileType {
-    const probablyAnImage = valuesCount.values
-        .filter((value) => typeof value === "string" &&
-            IMAGE_EXTENSIONS.some((extension) => value.toString().endsWith(extension))).length > totalDocsCount / 3 * 2;
+function probableFileType(valuesCount: ValuesCountEntry, totalDocsCount: number): false | FileType[] {
+    const isImage = (value: string) => IMAGE_EXTENSIONS.some((extension) => value.toString().endsWith(extension));
+    const isAudio = (value: string) => AUDIO_EXTENSIONS.some((extension) => value.toString().endsWith(extension));
+    const isVideo = (value: string) => VIDEO_EXTENSIONS.some((extension) => value.toString().endsWith(extension));
 
-    const probablyAudio = valuesCount.values
-        .filter((value) => typeof value === "string" &&
-            AUDIO_EXTENSIONS.some((extension) => value.toString().endsWith(extension))).length > totalDocsCount / 3 * 2;
+    const stringValues = valuesCount.values.filter((v): v is string => typeof v === "string");
+    
+    let imageCount = 0;
+    let audioCount = 0;
+    let videoCount = 0;
 
-    const probablyVideo = valuesCount.values
-        .filter((value) => typeof value === "string" &&
-            VIDEO_EXTENSIONS.some((extension) => value.toString().endsWith(extension))).length > totalDocsCount / 3 * 2;
+    for (const value of stringValues) {
+        if (isImage(value)) imageCount++;
+        else if (isAudio(value)) audioCount++;
+        else if (isVideo(value)) videoCount++;
+    }
 
-    const fileType: boolean | FileType = probablyAnImage
-        ? "image/*"
-        : probablyAudio
-            ? "audio/*"
-            : probablyVideo ? "video/*" : false;
-    return fileType;
+    const totalMediaCount = imageCount + audioCount + videoCount;
+    if (totalMediaCount > (totalDocsCount * 2) / 3) {
+        const fileTypes: FileType[] = [];
+        if (imageCount > 0) fileTypes.push("image/*");
+        if (audioCount > 0) fileTypes.push("audio/*");
+        if (videoCount > 0) fileTypes.push("video/*");
+        return fileTypes.length > 0 ? fileTypes : false;
+    }
+
+    return false;
 }

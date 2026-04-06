@@ -49,6 +49,7 @@ export interface FetchCollectionOptions<M extends Record<string, any> = any> {
     startAfter?: unknown;
     searchString?: string;
     databaseId?: string;
+    collection?: EntityCollection;
 }
 
 /**
@@ -60,6 +61,7 @@ export interface SearchOptions<M extends Record<string, any> = any> {
     order?: "desc" | "asc";
     limit?: number;
     databaseId?: string;
+    collection?: EntityCollection;
 }
 
 /**
