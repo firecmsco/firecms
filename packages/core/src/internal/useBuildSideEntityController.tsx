@@ -1,17 +1,6 @@
+import type { CustomizationController, EntityCollection, EntitySidePanelProps, SideDialogPanelProps, SideDialogsController, SideEntityController, CMSUrlController, NavigationStateController, Property } from "@rebasepro/types/cms";
 import { useCallback, useEffect, useRef } from "react";
-import {
-    AuthController,
-    CustomizationController,
-    EntityCollection,
-    EntitySidePanelProps,
-    SideDialogPanelProps,
-    SideDialogsController,
-    SideEntityController,
-    CollectionRegistryController,
-    CMSUrlController,
-    NavigationStateController,
-    Property
-} from "@rebasepro/types";
+import { AuthController, CollectionRegistryController } from "@rebasepro/types";
 import { useLocation } from "react-router-dom";
 import {
     getNavigationEntriesFromPath,
@@ -78,7 +67,7 @@ function calculateCollectionDesiredWidth(collection: EntityCollection<any>): str
 
 function getNestedPropertiesDepth(property: Property, accumulator: number = 0): number {
     if (property.type === "map" && property.properties) {
-        const values = Object.values(property.properties).flatMap((property) => getNestedPropertiesDepth(property, accumulator + 1));
+        const values = Object.values(property.properties).flatMap((childProperty) => getNestedPropertiesDepth(childProperty as Readonly<Property>, accumulator + 1));
         return Math.max(...values);
     } else if (property.type === "array" && property.oneOf) {
         return accumulator + 3;

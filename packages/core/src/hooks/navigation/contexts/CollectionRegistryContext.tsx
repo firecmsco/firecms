@@ -1,5 +1,6 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { createContext } from "react";
-import { CollectionRegistryController, EntityCollection, EntityReference } from "@rebasepro/types";
+import { CollectionRegistryController, EntityReference } from "@rebasepro/types";
 
 export const CollectionRegistryContext = createContext<CollectionRegistryController>({
     getCollection: () => undefined,

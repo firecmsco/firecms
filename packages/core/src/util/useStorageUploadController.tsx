@@ -1,16 +1,8 @@
+import type { ArrayProperty, Property, StringProperty } from "@rebasepro/types/cms";
 import Compressor from "compressorjs";
 import { deepEqual as equal } from "fast-equals";
 
-import {
-    ArrayProperty,
-    EntityValues,
-    ImageResize,
-    PreviewSize,
-    Property,
-    StorageConfig,
-    StorageSource,
-    StringProperty
-} from "@rebasepro/types";
+import { EntityValues, ImageResize, PreviewSize, StorageConfig, StorageSource } from "@rebasepro/types";
 import { useCallback, useEffect, useState } from "react";
 import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@rebasepro/common";
 import { useAuthController } from "../hooks";

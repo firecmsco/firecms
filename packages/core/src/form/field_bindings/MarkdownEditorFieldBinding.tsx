@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-    ArrayProperty,
     FieldHelperText,
-    FieldProps,
     getIconForProperty,
     LabelWithIconAndTooltip,
-    StringProperty,
     useAuthController,
     useStorageSource
 } from "../../index";
+import type { ArrayProperty, FieldProps, StringProperty } from "@rebasepro/types/cms";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@rebasepro/ui";
 import { RebaseEditor, RebaseEditorProps } from "../../editor";
 import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@rebasepro/common";

@@ -1,5 +1,6 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import { useEffect, useState } from "react";
-import { Entity, EntityCollection, FilterValues, User } from "@rebasepro/types";
+import { Entity, FilterValues, User } from "@rebasepro/types";
 import { useData } from "./useData";
 import { useCMSUrlController } from "../navigation/contexts";
 

@@ -1,16 +1,9 @@
+import type { CustomizationController, RebasePlugin, RebaseProps, SlotContribution } from "@rebasepro/types/cms";
 "use client";
 
 import React, { useMemo } from "react";
 import { CenteredView, Typography } from "@rebasepro/ui";
-import {
-    CustomizationController,
-    RebaseContext,
-    RebasePlugin,
-    RebaseProps,
-    SlotContribution,
-    User,
-    UserManagementDelegate
-} from "@rebasepro/types";
+import { RebaseContext, User, UserManagementDelegate } from "@rebasepro/types";
 import { PluginProviderStack } from "./PluginProviderStack";
 import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";

@@ -1,10 +1,10 @@
+import type { EntityCollection, Property, MapProperty } from "@rebasepro/types/cms";
 import { useMemo } from "react";
-import { EntityCollection, Property } from "@rebasepro/types";
+;
 import { getPropertyInPath } from "../../util";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
 import { PropertyColumnConfig } from "../EntityCollectionTable/EntityCollectionTableProps";
 import { getSubcollections } from "@rebasepro/common";
-
 
 export function useColumnIds<M extends Record<string, any>>(collection: EntityCollection<M>, includeSubcollections: boolean): PropertyColumnConfig[] {
     return useMemo(() => {
@@ -111,7 +111,6 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: EntityColl
             }
         }
 
-
         return [null];
     }).filter(Boolean) as PropertyColumnConfig[];
 
@@ -128,7 +127,7 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: EntityColl
 
         if (property.type === "map" && property.spreadChildren && property.properties) {
             // For spread maps, add all children that weren't already added
-            const allChildConfigs = getColumnKeysForProperty(property, propKey);
+            const allChildConfigs = getColumnKeysForProperty(property as MapProperty, propKey);
             for (const childConfig of allChildConfigs) {
                 if (!processedPropertyKeys.has(childConfig.key)) {
                     result.push(childConfig);
@@ -165,7 +164,6 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: E
         columnIds.push(...subCollectionIds.filter((subColId) => !columnIds.includes(subColId)));
     }
 
-
     return hideAndExpandKeys(collection, columnIds);
 }
 
@@ -173,7 +171,7 @@ export function getColumnKeysForProperty(property: Property, key: string, disabl
     if (property.type === "map" && property.spreadChildren && property.properties) {
         return Object.entries(property.properties)
             .flatMap(([childKey, childProperty]) => getColumnKeysForProperty(
-                childProperty,
+                childProperty as Readonly<Property>,
                 `${key}.${childKey}`,
                 disabled || Boolean(property.disabled) || Boolean(property.readOnly))
             );

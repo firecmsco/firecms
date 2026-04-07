@@ -1,9 +1,10 @@
+import type { NavigationEntry, NavigationResult } from "@rebasepro/types/cms";
 import React from "react";
 
 import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController, useAdminModeController, useEffectiveRoleController, useTranslation, useSlot, useRebaseContext } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
-import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@rebasepro/types";
+import { CMSAnalyticsEvent } from "@rebasepro/types";
 import { cls, Tooltip, Typography } from "@rebasepro/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { DrawerNavigationGroup } from "./DrawerNavigationGroup";

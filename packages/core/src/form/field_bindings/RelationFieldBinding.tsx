@@ -1,5 +1,6 @@
+import type { FieldProps, RelationProperty } from "@rebasepro/types/cms";
 import React, { useCallback } from "react";
-import { Entity, FieldProps, RelationProperty } from "@rebasepro/types";
+import { Entity } from "@rebasepro/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EntityPreviewContainer, ErrorView } from "../../components";
 import { getIconForProperty, IconForView } from "../../util";

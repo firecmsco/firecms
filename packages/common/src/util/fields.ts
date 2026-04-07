@@ -1,4 +1,4 @@
-import { DefaultFieldConfig } from "@rebasepro/types";
+import type { DefaultFieldConfig } from "@rebasepro/types/cms";
 
 export function isDefaultFieldConfigId(id: string): id is DefaultFieldConfig {
     return ["text_field",

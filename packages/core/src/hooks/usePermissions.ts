@@ -1,5 +1,6 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import { useAuthController } from "./useAuthController";
-import { EntityCollection, Entity } from "@rebasepro/types";
+import { Entity } from "@rebasepro/types";
 import { canCreateEntity, canEditEntity, canDeleteEntity, canReadCollection } from "@rebasepro/common";
 import { useCallback } from "react";
 

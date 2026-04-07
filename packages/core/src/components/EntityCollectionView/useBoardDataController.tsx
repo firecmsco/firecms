@@ -1,5 +1,6 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Entity, EntityCollection, FilterValues } from "@rebasepro/types";
+import { Entity, FilterValues } from "@rebasepro/types";
 import { useData, useRebaseContext } from "../../hooks";
 
 const DEFAULT_PAGE_SIZE = 20;

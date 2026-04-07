@@ -1,5 +1,6 @@
+import type { FieldProps, MapProperty } from "@rebasepro/types/cms";
 import React, { useEffect, useState } from "react";
-import { DataType, FieldProps, GeoPoint, MapProperty } from "@rebasepro/types";
+import { DataType, GeoPoint } from "@rebasepro/types";
 
 import { ArrayContainer } from "../../components";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";

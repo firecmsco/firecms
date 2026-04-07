@@ -1,14 +1,6 @@
+import type { EntityAction, EntityActionClickProps, EntityCollection, FormContext, SideEntityController } from "@rebasepro/types/cms";
 import React, { useMemo } from "react";
-import {
-    Entity,
-    EntityAction,
-    EntityActionClickProps,
-    EntityCollection,
-    EntityFormActionsProps,
-    RebaseContext,
-    FormContext,
-    SideEntityController
-} from "@rebasepro/types";
+import { Entity, EntityFormActionsProps, RebaseContext } from "@rebasepro/types";
 
 import { copyEntityAction, deleteEntityAction } from "../components";
 import { mergeEntityActions, resolveEntityAction } from "@rebasepro/common";

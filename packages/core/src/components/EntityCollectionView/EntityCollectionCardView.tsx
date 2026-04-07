@@ -1,11 +1,6 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useRef } from "react";
-import {
-    CollectionSize,
-    Entity,
-    EntityCollection,
-    EntityTableController,
-    SelectionController
-} from "@rebasepro/types";
+import { CollectionSize, Entity, EntityTableController, SelectionController } from "@rebasepro/types";
 import { EntityCard } from "./EntityCard";
 import {
     cls,

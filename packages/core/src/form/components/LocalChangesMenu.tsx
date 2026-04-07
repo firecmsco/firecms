@@ -1,3 +1,4 @@
+import type { Properties } from "@rebasepro/types/cms";
 import React, { useState } from "react";
 import {
     Button,
@@ -19,7 +20,7 @@ import { FormexController } from "@rebasepro/formex";
 import { useSnackbarController, useTranslation } from "../../hooks";
 import { mergeDeep } from "@rebasepro/common";
 import { flattenKeys, removeEntityFromCache } from "../../util/entity_cache";
-import { Properties } from "@rebasepro/types";
+;
 import { PropertyCollectionView } from "../../components/PropertyCollectionView";
 
 interface LocalChangesMenuProps<M extends Record<string, any>> {

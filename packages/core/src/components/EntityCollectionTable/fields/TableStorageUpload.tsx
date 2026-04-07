@@ -1,7 +1,8 @@
+import type { ArrayProperty, StringProperty } from "@rebasepro/types/cms";
 import * as React from "react";
 import { useMemo } from "react";
 
-import { ArrayProperty, Entity, PreviewSize, StorageConfig, StringProperty } from "@rebasepro/types";
+import { Entity, PreviewSize, StorageConfig } from "@rebasepro/types";
 import { useDropzone } from "react-dropzone";
 import { PropertyPreview } from "../../../preview";
 import { ErrorBoundary } from "../../ErrorBoundary";

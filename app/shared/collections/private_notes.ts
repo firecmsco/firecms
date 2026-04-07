@@ -1,4 +1,4 @@
-import { EntityCollection } from "@rebasepro/types";
+import { EntityCollection } from "@rebasepro/types/cms";
 
 const privateNotesCollection: EntityCollection = {
     name: "Private Notes",

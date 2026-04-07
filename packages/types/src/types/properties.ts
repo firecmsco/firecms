@@ -1,8 +1,8 @@
 import React from "react";
-import { FieldProps } from "./fields";
+
 import { EntityReference, EntityRelation, EntityValues, GeoPoint, Entity } from "./entities";
 import { FilterValues } from "./collections";
-import { PropertyPreviewProps } from "../components";
+
 import { ColorKey, ColorScheme } from "./chips";
 import { AuthController } from "../controllers";
 import { Relation } from "./relations";
@@ -169,21 +169,7 @@ export interface BaseProperty<CustomProps = any> {
      */
     customProps?: CustomProps;
 
-    /**
-     * If you need to render a custom field, you can create a component that
-     * takes `FieldProps` as props. You receive the value, a function to
-     * update the value and additional utility props such as if there is an error.
-     * You can customize it by passing custom props that are received
-     * in the component.
-     */
-    Field?: React.ComponentType<FieldProps<any, CustomProps>>;
 
-    /**
-     * Configure how a property is displayed as a preview, e.g. in the collection
-     * view. You can customize it by passing custom props that are received
-     * in the component.
-     */
-    Preview?: React.ComponentType<PropertyPreviewProps<any, CustomProps>>;
 
     /**
      * Use this to define dynamic properties that change based on certain conditions

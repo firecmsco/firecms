@@ -1,15 +1,10 @@
+import type { Properties } from "@rebasepro/types/cms";
+import type { EntityCollection, FormContext, Property, PropertyFieldBindingProps } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 
 import * as Portal from "@radix-ui/react-portal";
 
-import {
-    Entity,
-    EntityCollection,
-    EntityValues,
-    FormContext, Properties,
-    Property,
-    PropertyFieldBindingProps,
-} from "@rebasepro/types";
+import { Entity, EntityValues } from "@rebasepro/types";
 import { PluginProviderStack } from "../../../../core/PluginProviderStack";
 import { Formex, FormexController, useCreateFormex } from "@rebasepro/formex";
 import { useDraggable } from "./useDraggable";

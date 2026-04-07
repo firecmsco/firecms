@@ -1,12 +1,5 @@
-import {
-    DeleteEntityProps,
-    Entity,
-    EntityCallbacks,
-    EntityCollection,
-    EntityBeforeDeleteProps,
-    RebaseContext,
-    User
-} from "@rebasepro/types";
+import type { EntityCollection } from "@rebasepro/types/cms";
+import { DeleteEntityProps, Entity, EntityCallbacks, EntityBeforeDeleteProps, RebaseContext, User } from "@rebasepro/types";
 import { RebaseData } from "@rebasepro/types";
 
 /**

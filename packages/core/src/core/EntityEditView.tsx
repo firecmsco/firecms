@@ -1,15 +1,6 @@
+import type { EntityCollection, FormContext, PluginFormActionProps } from "@rebasepro/types/cms";
 import React, { useEffect, useMemo, useState } from "react";
-import {
-    Entity,
-    EntityCollection,
-    EntityRelation,
-    EntityStatus,
-    EntityValues,
-    FormContext,
-    PluginFormActionProps,
-    Relation,
-    User
-} from "@rebasepro/types";
+import { Entity, EntityRelation, EntityStatus, EntityValues, Relation, User } from "@rebasepro/types";
 import { PluginProviderStack } from "./PluginProviderStack";
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary, ErrorView } from "../components";
@@ -462,7 +453,6 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                         className={"text-sm min-w-[90px]"}>
                         {collection.singularName ?? collection.name}
                     </Tab>
-
 
                     {customViewTabsEnd}
 

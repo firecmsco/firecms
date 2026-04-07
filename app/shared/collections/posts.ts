@@ -1,4 +1,4 @@
-import { EntityCollection } from "@rebasepro/types";
+import { EntityCollection } from "@rebasepro/types/cms";
 import authorsCollection from "./authors";
 import profilesCollection from "./profiles";
 import tagsCollection from "./tags";
@@ -62,6 +62,7 @@ const postsCollection: EntityCollection = {
             relationName: "author",
             relation: {
                 relationName: "author",
+                target: () => authorsCollection,
                 cardinality: "one",
                 direction: "owning"
             }
@@ -72,6 +73,7 @@ const postsCollection: EntityCollection = {
             relationName: "author_profile",
             relation: {
                 relationName: "author_profile",
+                target: () => profilesCollection,
                 cardinality: "one",
                 direction: "inverse",
                 joinPath: [
@@ -98,6 +100,7 @@ const postsCollection: EntityCollection = {
             relationName: "tags",
             relation: {
                 relationName: "tags",
+                target: () => tagsCollection,
                 cardinality: "many",
                 direction: "owning"
             }

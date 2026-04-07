@@ -1,4 +1,5 @@
-import { SideDialogsController } from "@rebasepro/types";
+import type { SideDialogsController } from "@rebasepro/types/cms";
+;
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
 import { useContext } from "react";
 

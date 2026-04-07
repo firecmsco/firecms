@@ -1,4 +1,4 @@
-import { CollectionRegistryController } from "./navigation";
+import { CollectionRegistryController } from "./collection_registry";
 import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues, TableMetadata } from "../types";
 import { RebaseContext } from "../rebase_context";
 

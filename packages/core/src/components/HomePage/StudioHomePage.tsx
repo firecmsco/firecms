@@ -1,3 +1,4 @@
+import type { CMSView, HomePageSection, NavigationEntry, PluginGenericProps } from "@rebasepro/types/cms";
 import React, { useEffect, useMemo } from "react";
 import { Container, Typography } from "@rebasepro/ui";
 import {
@@ -8,13 +9,7 @@ import {
     useSlot
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
-import {
-    CMSAnalyticsEvent,
-    CMSView,
-    HomePageSection,
-    NavigationEntry,
-    PluginGenericProps
-} from "@rebasepro/types";
+import { CMSAnalyticsEvent } from "@rebasepro/types";
 import { NavigationCardBinding } from "./NavigationCardBinding";
 
 export function StudioHomePage({
@@ -145,7 +140,6 @@ export function StudioHomePage({
                         </div>
                     </div>
                 </div>
-
 
                 {sections && sections.map((section) => (
                     <div key={section.key} className="flex flex-col gap-4 mt-8">

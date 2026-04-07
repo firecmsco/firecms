@@ -1,7 +1,7 @@
+import type { SnackbarMessageType } from "@rebasepro/types/cms";
 import React, { useCallback, useMemo } from "react";
 import { useSnackbar } from "notistack";
-import { SnackbarMessageType } from "@rebasepro/types";
-
+;
 
 /**
  * Hook to retrieve the SnackbarContext.

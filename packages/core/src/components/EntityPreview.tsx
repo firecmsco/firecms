@@ -1,7 +1,8 @@
+import type { EntityCollection, Property } from "@rebasepro/types/cms";
 import * as React from "react";
 import { useEffect, useMemo } from "react";
 
-import { Entity, EntityCollection, PreviewSize, Property } from "@rebasepro/types";
+import { Entity, PreviewSize } from "@rebasepro/types";
 
 import { getEntityImagePreviewPropertyKey, getValueInPath } from "@rebasepro/common";
 import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@rebasepro/ui";

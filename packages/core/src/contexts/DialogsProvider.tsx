@@ -1,5 +1,6 @@
+import type { DialogControllerEntryProps, DialogsController } from "@rebasepro/types/cms";
 import React, { PropsWithChildren, useCallback, useRef, useState } from "react";
-import { DialogControllerEntryProps, DialogsController } from "@rebasepro/types";
+;
 
 export const DialogsControllerContext = React.createContext<DialogsController>({} as DialogsController);
 

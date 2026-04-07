@@ -1,15 +1,6 @@
-import {
-    AuthController,
-    CMSView,
-    CMSViewsBuilder,
-    DataDriver,
-    EntityCollection,
-    EntityCollectionsBuilder,
-    EntityCustomView,
-    RebasePlugin,
-    User,
-    RebaseData
-} from "@rebasepro/types";
+import type { CMSView, CMSViewsBuilder, EntityCollection, EntityCustomView, RebasePlugin } from "@rebasepro/types/cms";
+import { AuthController, DataDriver,  User, RebaseData } from "@rebasepro/types";
+import type { EntityCollectionsBuilder } from "@rebasepro/types/cms";
 import { canReadCollection } from "@rebasepro/common";
 import { EntityHistoryView } from "../../components/history/EntityHistoryView";
 

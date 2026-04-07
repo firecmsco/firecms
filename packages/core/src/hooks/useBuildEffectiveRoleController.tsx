@@ -1,5 +1,6 @@
+import type { EffectiveRoleController } from "@rebasepro/types/cms";
 import { useCallback, useState } from "react";
-import { EffectiveRoleController } from "@rebasepro/types";
+;
 
 /**
  * Use this hook to build an effective role controller that determines

@@ -1,6 +1,7 @@
+import type { DialogsController } from "@rebasepro/types/cms";
 import { useContext } from "react";
 import { DialogsControllerContext } from "../contexts/DialogsProvider";
-import { DialogsController } from "@rebasepro/types";
+;
 
 /**
  * Use this hook to open a dialog imperatively.

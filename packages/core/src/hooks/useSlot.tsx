@@ -1,5 +1,6 @@
+import type { SlotName, SlotRegistry } from "@rebasepro/types/cms";
 import React, { useMemo } from "react";
-import { SlotName, SlotRegistry } from "@rebasepro/types";
+;
 import { useCustomizationController } from "./useCustomizationController";
 import { ErrorBoundary } from "../components";
 

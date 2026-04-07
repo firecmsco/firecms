@@ -1,25 +1,26 @@
 import React from "react";
-import { ArrayProperty, MapProperty, Property } from "./properties";
+import { ArrayProperty, MapProperty, Property, StringProperty, NumberProperty, BooleanProperty, DateProperty, GeopointProperty, ReferenceProperty, RelationProperty } from "../types";
+import { BaseProperty } from "./properties";
 
-import { BooleanProperty, DateProperty, GeopointProperty, NumberProperty, ReferenceProperty, RelationProperty, StringProperty } from "./properties";
+type CMSBasePropertyNoName = Omit<BaseProperty, "name">;
 
 export type ConfigProperty =
-    | (Omit<StringProperty, "name"> & { name?: string })
-    | (Omit<NumberProperty, "name"> & { name?: string })
-    | (Omit<BooleanProperty, "name"> & { name?: string })
-    | (Omit<DateProperty, "name"> & { name?: string })
-    | (Omit<GeopointProperty, "name"> & { name?: string })
-    | (Omit<ReferenceProperty, "name"> & { name?: string })
-    | (Omit<RelationProperty, "name"> & { name?: string })
+    | (Omit<StringProperty, "name"> & { name?: string } & CMSBasePropertyNoName)
+    | (Omit<NumberProperty, "name"> & { name?: string } & CMSBasePropertyNoName)
+    | (Omit<BooleanProperty, "name"> & { name?: string } & CMSBasePropertyNoName)
+    | (Omit<DateProperty, "name"> & { name?: string } & CMSBasePropertyNoName)
+    | (Omit<GeopointProperty, "name"> & { name?: string } & CMSBasePropertyNoName)
+    | (Omit<ReferenceProperty, "name"> & { name?: string } & CMSBasePropertyNoName)
+    | (Omit<RelationProperty, "name"> & { name?: string } & CMSBasePropertyNoName)
     | (Omit<ArrayProperty, "name" | "of" | "oneOf"> & {
         name?: string;
         of?: ConfigProperty | ConfigProperty[];
         oneOf?: { properties: Record<string, ConfigProperty>; typeField?: string; valueField?: string; propertiesOrder?: string[] }
-    })
+    } & CMSBasePropertyNoName)
     | (Omit<MapProperty, "name" | "properties"> & {
         name?: string;
         properties?: Record<string, ConfigProperty>
-    });
+    } & CMSBasePropertyNoName);
 
 /**
  * This is the configuration object for a property.

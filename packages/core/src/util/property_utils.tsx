@@ -1,6 +1,8 @@
+import type { Properties } from "@rebasepro/types/cms";
+import type { EntityCollection, MapProperty, Property, PropertyConfig } from "@rebasepro/types/cms";
 import React from "react";
 
-import { EntityCollection, MapProperty, Properties, Property, PropertyConfig, } from "@rebasepro/types";
+;
 import { isPropertyBuilder } from "@rebasepro/common";
 import { CircleIcon, FunctionsIcon } from "@rebasepro/ui";
 import { getFieldConfig } from "../core";

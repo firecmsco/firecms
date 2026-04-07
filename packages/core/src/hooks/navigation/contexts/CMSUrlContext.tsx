@@ -1,7 +1,8 @@
+import type { CMSUrlController } from "@rebasepro/types/cms";
 import React, { createContext } from "react";
 import { NavigateOptions } from "react-router-dom";
 
-import { CMSUrlController } from "@rebasepro/types";
+;
 
 export const CMSUrlContext = createContext<CMSUrlController>({
     basePath: "/",

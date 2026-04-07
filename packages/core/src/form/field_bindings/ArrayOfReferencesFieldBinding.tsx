@@ -1,5 +1,6 @@
+import type { ArrayProperty, EntityCollection, FieldProps, Property } from "@rebasepro/types/cms";
 import React, { useCallback, useMemo } from "react";
-import { ArrayProperty, Entity, EntityCollection, EntityReference, FieldProps, Property } from "@rebasepro/types";
+import { Entity, EntityReference } from "@rebasepro/types";
 import { ReferencePreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";

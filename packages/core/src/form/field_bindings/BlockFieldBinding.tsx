@@ -1,3 +1,4 @@
+import type { ArrayProperty, FieldProps, FormContext, Property, PropertyFieldBindingProps } from "@rebasepro/types/cms";
 import React, { useEffect, useState } from "react";
 
 import { Field, useFormex } from "@rebasepro/formex";
@@ -5,7 +6,7 @@ import { Field, useFormex } from "@rebasepro/formex";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
-import { ArrayProperty, FieldProps, FormContext, Property, PropertyFieldBindingProps } from "@rebasepro/types";
+;
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE, getDefaultValueFor, mergeDeep, } from "@rebasepro/common";
 import { getIconForProperty, } from "../../util";
 import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@rebasepro/ui";

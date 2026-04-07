@@ -1,5 +1,6 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
-import { CollectionSize, Entity, EntityCollection, FilterValues } from "@rebasepro/types";
+import { CollectionSize, Entity, FilterValues } from "@rebasepro/types";
 
 import {
     EntityCollectionRowActions,

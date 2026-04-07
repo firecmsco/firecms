@@ -1,16 +1,10 @@
+import type { EntityCollection, FieldProps, RebasePlugin, PluginFieldBuilderParams, Property, PropertyFieldBindingProps } from "@rebasepro/types/cms";
 import React, { ComponentType, ReactElement, useCallback, useRef } from "react";
 import { deepEqual as equal } from "fast-equals"
 
 import { Field, FieldProps as FormexFieldProps, getIn } from "@rebasepro/formex";
 
-import {
-    EntityCollection,
-    FieldProps,
-    RebasePlugin,
-    PluginFieldBuilderParams,
-    Property,
-    PropertyFieldBindingProps
-} from "@rebasepro/types";
+;
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
 import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "@rebasepro/common";
@@ -99,7 +93,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
             {(fieldProps) => {
 
                 let Component: ComponentType<FieldProps> | undefined;
-                const resolvedProperty: Property | null = resolveProperty({
+                const resolvedProperty = resolveProperty({
                     propertyKey,
                     property: property,
                     values: fieldProps.form.values,
@@ -108,7 +102,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
                     propertyConfigs: customizationController.propertyConfigs,
                     index,
                     authController
-                });
+                }) as Property | null;
 
                 const readOnly = resolvedProperty ? isReadOnly(resolvedProperty) : true;
                 const disabled = disabledProp || readOnly || Boolean(resolvedProperty?.disabled) || context.disabled;
@@ -142,7 +136,7 @@ function PropertyFieldBindingInternal<M extends Record<string, any> = any>
                         propertyConfigs: customizationController.propertyConfigs,
                         index,
                         authController
-                    });
+                    }) as Property | null;
                     Component = configProperty?.Field as ComponentType<FieldProps> | undefined;
                 }
                 if (!Component) {
@@ -291,7 +285,7 @@ const shouldPropertyReRender = (property: Property, plugins?: RebasePlugin[]): b
     const defAProperty = property as Property;
     const rerenderThisProperty = Boolean(defAProperty.Field);
     if (defAProperty.type === "map" && defAProperty.properties) {
-        return Boolean(rerenderThisProperty || Object.values(defAProperty.properties).some((childProperty) => shouldPropertyReRender(childProperty, plugins)));
+        return Boolean(rerenderThisProperty || Object.values(defAProperty.properties).some((childProperty) => shouldPropertyReRender(childProperty as Property, plugins)));
     } else {
         return Boolean(rerenderThisProperty);
     }

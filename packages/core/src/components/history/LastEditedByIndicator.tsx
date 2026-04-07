@@ -1,5 +1,6 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { useEffect, useState, useCallback } from "react";
-import { EntityCollection } from "@rebasepro/types";
+;
 import { useApiConfig } from "../../hooks/ApiConfigContext";
 import { useAuthController } from "../../hooks";
 import { HistoryEntryData } from "../../hooks/useEntityHistory";

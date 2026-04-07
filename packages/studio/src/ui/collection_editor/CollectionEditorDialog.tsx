@@ -657,7 +657,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     };
 
     return <div className="h-full w-full flex flex-col bg-white dark:bg-surface-950">
-        <Formex value={formController as any}>
+        <Formex value={formController}>
 
             <>
                 {!isNewCollection && <div className={cls("px-4 py-2 w-full flex shrink-0 items-center justify-between gap-4 bg-white dark:bg-surface-950 border-b", defaultBorderMixin)}>
@@ -963,12 +963,12 @@ function applyPropertiesConfig(property: Property, propertyConfigs: Record<strin
     let internalProperty = property;
     if (propertyConfigs && internalProperty && typeof internalProperty === "object" && internalProperty.propertyConfig) {
         const propertyConfig = propertyConfigs[internalProperty.propertyConfig];
-        if (propertyConfig && isPropertyBuilder(propertyConfig.property as any)) {
+        if (propertyConfig && isPropertyBuilder(propertyConfig.property)) {
             internalProperty = propertyConfig.property as unknown as Property;
         } else {
 
             if (propertyConfig) {
-                internalProperty = mergeDeep(propertyConfig.property as any, internalProperty);
+                internalProperty = mergeDeep(propertyConfig.property as Property, internalProperty);
             }
 
             if (!isPropertyBuilder(internalProperty) && internalProperty.type === "map" && internalProperty.properties) {

@@ -1,18 +1,21 @@
 import {
     AnalyticsController,
     AuthController,
-    CustomizationController,
-    DialogsController,
-    SideDialogsController,
-    SideEntityController,
-    SnackbarController,
     StorageSource,
     UserConfigurationPersistence,
     DatabaseAdmin
 } from "./controllers";
+import {
+    CustomizationController,
+    DialogsController,
+    SideDialogsController,
+    SideEntityController,
+    SnackbarController
+} from "./cms/controllers";
 import { RebaseData } from "./controllers/data";
 import { User } from "./users";
-import { UserManagementDelegate, EffectiveRoleController } from "./types";
+import { UserManagementDelegate } from "./types/user_management_delegate";
+import { EffectiveRoleController } from "./cms/rebase";
 
 /**
  * Context that is provided to entity callbacks (hooks).
@@ -63,17 +66,17 @@ export type RebaseContext<USER extends User = User, AuthControllerType extends A
     /**
      * Controller in charge of URL/navigation
      */
-    cmsUrlController?: import("./controllers/navigation").CMSUrlController;
+    cmsUrlController?: import("./cms/controllers/navigation").CMSUrlController;
 
     /**
      * Controller mapping strings to collections
      */
-    collectionRegistryController?: import("./controllers/navigation").CollectionRegistryController;
+    collectionRegistryController?: import("./controllers/collection_registry").CollectionRegistryController;
 
     /**
      * Controller tracking navigation tree state
      */
-    navigationStateController?: import("./controllers/navigation").NavigationStateController;
+    navigationStateController?: import("./cms/controllers/navigation").NavigationStateController;
 
     /**
      * Controller used to open regular dialogs

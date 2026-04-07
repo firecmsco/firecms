@@ -1,6 +1,7 @@
+import type { EntityCollection, EntitySidePanelProps } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useMemo } from "react";
 
-import { EntityCollection, EntitySidePanelProps, OnUpdateParams } from "@rebasepro/types";
+import { OnUpdateParams } from "@rebasepro/types";
 import { useCollectionRegistryController, useSideEntityController } from "../hooks";
 import { useCMSUrlController } from "../hooks/navigation/contexts";
 

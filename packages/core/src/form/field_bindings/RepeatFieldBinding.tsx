@@ -1,5 +1,6 @@
+import type { ArrayProperty, FieldProps, PropertyFieldBindingProps } from "@rebasepro/types/cms";
 import React, { useState } from "react";
-import { ArrayProperty, FieldProps, PropertyFieldBindingProps } from "@rebasepro/types";
+;
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorBoundary } from "../../components";
 import { getArrayResolvedProperties, getDefaultValueFor, mergeDeep } from "@rebasepro/common";

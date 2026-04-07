@@ -1,7 +1,9 @@
+import type { Properties } from "@rebasepro/types/cms";
+import type { Property } from "@rebasepro/types/cms";
 import React from "react";
 import { defaultBorderMixin, Typography } from "@rebasepro/ui";
 import { PropertyPreview } from "../preview";
-import { PreviewSize, Properties, Property } from "@rebasepro/types";
+import { PreviewSize } from "@rebasepro/types";
 import { getValueInPath } from "@rebasepro/common";
 
 /**

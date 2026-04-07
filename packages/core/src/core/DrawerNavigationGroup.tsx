@@ -1,6 +1,7 @@
+import type { NavigationEntry } from "@rebasepro/types/cms";
 import React from "react";
 import { cls, ExpandMoreIcon, Typography } from "@rebasepro/ui";
-import { NavigationEntry } from "@rebasepro/types";
+;
 import { IconForView } from "../util";
 import { DrawerNavigationItem } from "./DrawerNavigationItem";
 import { useTranslation } from "../hooks";

@@ -19,7 +19,7 @@ export function isReadOnly(property: Property): boolean {
             return true;
     }
     if (property.type === "reference") {
-        return !property.path && !property.Field;
+        return !property.path && !("Field" in property && property.Field);
     }
     return false;
 }

@@ -1,6 +1,7 @@
+import type { ArrayProperty, Property } from "@rebasepro/types/cms";
 import React from "react";
 
-import { ArrayProperty, PreviewSize, Property, PropertyPreviewProps } from "@rebasepro/types";
+import { PreviewSize, PropertyPreviewProps } from "@rebasepro/types";
 
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
@@ -35,7 +36,7 @@ export function ArrayOfStorageComponentsPreview({
     return (
         <div className={"flex flex-wrap gap-2"}>
             {value &&
-                value.map((v, index) =>
+                value.map((v: any, index: number) =>
                     <ErrorBoundary key={`preview_array_storage_${propertyKey}_${index}`}>
                         <PropertyPreview
                             propertyKey={propertyKey}

@@ -1,6 +1,7 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import * as React from "react";
 
-import { Entity, EntityCollection, EntityReference, PreviewSize } from "@rebasepro/types";
+import { Entity, EntityReference, PreviewSize } from "@rebasepro/types";
 import { useCustomizationController, useEntityFetch, useCollectionRegistryController } from "../../hooks";
 import { Skeleton } from "@rebasepro/ui";
 import { ErrorBoundary, ErrorView } from "../../components";

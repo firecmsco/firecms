@@ -1,4 +1,4 @@
-import { EntityCollection } from "@rebasepro/types";
+import { EntityCollection } from "@rebasepro/types/cms";
 import profilesCollection from "./profiles";
 import postsCollection from "./posts";
 

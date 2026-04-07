@@ -1,9 +1,10 @@
+import type { StringProperty } from "@rebasepro/types/cms";
 import React from "react";
 import { useInternalUserManagementController } from "../../hooks";
 import { UserDisplay } from "../../components/UserDisplay";
 import { EmptyValue } from "./EmptyValue";
 import { Typography } from "@rebasepro/ui";
-import { PropertyPreviewProps, StringProperty, User } from "@rebasepro/types";
+import { PropertyPreviewProps, User } from "@rebasepro/types";
 
 /**
  * Preview component for displaying user information.

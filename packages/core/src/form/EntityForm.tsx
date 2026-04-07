@@ -1,19 +1,6 @@
+import type { EntityCollection, EntityCustomViewParams, FormContext, PluginFormActionProps, PropertyConfig, PropertyFieldBindingProps } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-    AuthController,
-    CMSAnalyticsEvent,
-    Entity,
-    EntityCollection,
-    EntityCustomViewParams,
-    EntityStatus,
-    EntityValues,
-    FormContext,
-    PluginFormActionProps,
-    PropertyConfig,
-    PropertyFieldBindingProps,
-    EntityFormProps,
-    OnUpdateParams,
-} from "@rebasepro/types";
+import { AuthController, CMSAnalyticsEvent, Entity, EntityStatus, EntityValues, EntityFormProps, OnUpdateParams } from "@rebasepro/types";
 import { deepEqual as equal } from "fast-equals";
 
 import { ErrorBoundary, getFormFieldKeys } from "../components";
@@ -48,7 +35,6 @@ import { CustomFieldValidator, getEntitySchema } from "./validation";
 import { EntityFormActions } from "./EntityFormActions";
 import { EntityFormActionsProps } from "@rebasepro/types";
 import { LocalChangesMenu } from "./components/LocalChangesMenu";
-
 
 import { useDebouncedCallback } from "../util";
 import { getEntityTitlePropertyKey } from "../util/previews";
@@ -189,12 +175,7 @@ export function EntityForm<M extends Record<string, any>>({
     const context = useRebaseContext();
     const analyticsController = useAnalyticsController();
 
-
-
     const [underlyingChanges] = useState<Partial<EntityValues<M>>>({});
-
-
-
 
     const initialEntityId: string | number | undefined = useMemo(() => {
         if (status === "new" || status === "copy") {
@@ -223,8 +204,6 @@ export function EntityForm<M extends Record<string, any>>({
     const manualApplyLocalChanges = localChangesBackup === "manual_apply";
 
     const onSubmit = (values: EntityValues<M>, formexController: FormexController<EntityValues<M>>) => {
-
-
 
         setSavingError(undefined);
         setEntityIdError(false);
@@ -482,8 +461,6 @@ export function EntityForm<M extends Record<string, any>>({
         onFormContextReady?.(formContext);
     }, [formex.version, collection, entityId, path]);
 
-
-
     const actionsDisabled = disabled || formex.isSubmitting || (status === "existing" && !formex.dirty) || Boolean(disabledProp);
     const parentCollectionIds = collectionRegistryController.getParentCollectionIds(path);
 
@@ -506,8 +483,6 @@ export function EntityForm<M extends Record<string, any>>({
     const title = (formex.values && titlePropertyKey ? getValueInPath(formex.values, titlePropertyKey) as React.ReactNode : undefined)
         ?? collection.singularName
         ?? collection.name;
-
-
 
     useEffect(() => {
         if (!autoSave) {

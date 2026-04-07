@@ -1,4 +1,5 @@
-import { ArrayProperty, DefaultFieldConfig, NumberProperty, Property, PropertyConfig, StringProperty } from "@rebasepro/types";
+import type { ArrayProperty, DefaultFieldConfig, NumberProperty, Property, PropertyConfig, StringProperty } from "@rebasepro/types/cms";
+;
 import {
     ArrayCustomShapedFieldBinding,
     ArrayOfReferencesFieldBinding,
@@ -41,7 +42,6 @@ import {
 } from "@rebasepro/ui";
 import { RelationFieldBinding } from "../form/field_bindings/RelationFieldBinding";
 import { UserSelectFieldBinding } from "../form/field_bindings/UserSelectFieldBinding";
-
 
 export const DEFAULT_FIELD_CONFIGS: Record<DefaultFieldConfig, PropertyConfig> = {
     text_field: {

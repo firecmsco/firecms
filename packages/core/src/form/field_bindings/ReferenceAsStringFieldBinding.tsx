@@ -1,5 +1,6 @@
+import type { EntityCollection, FieldProps, Property, StringProperty } from "@rebasepro/types/cms";
 import React, { useCallback, useMemo } from "react";
-import { Entity, EntityCollection, EntityReference, FieldProps, Property, StringProperty } from "@rebasepro/types";
+import { Entity, EntityReference } from "@rebasepro/types";
 import { useEntitySelectionDialog, useCollectionRegistryController } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";

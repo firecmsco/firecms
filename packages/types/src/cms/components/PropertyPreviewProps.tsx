@@ -1,4 +1,5 @@
-import { InferPropertyType, Property } from "../types";
+import { InferPropertyType } from "../../types";
+import { Property } from "../properties";
 
 /**
  * @group Preview components
@@ -8,16 +9,13 @@ export type PreviewSize = "small" | "medium" | "large";
 /**
  * @group Preview components
  */
-export interface PropertyPreviewProps<P extends Property, CustomProps = unknown> {
+export interface PropertyPreviewProps<P extends Property | Property, CustomProps = unknown> {
     /**
      * Name of the property
      */
     propertyKey?: string;
 
-    /**
-     * Current value of the property, inferred from the property schema P
-     */
-    value: InferPropertyType<P>;
+    value: any;
 
     /**
      * Property this display is related to, now strongly typed to P

@@ -1,7 +1,8 @@
-import { InferPropertyType, Property } from "./properties";
-import { Entity } from "./entities";
-import { FormexController } from "../components/formex";
+import { InferPropertyType } from "../types";
+import { Entity } from "../types";
+import { FormexController } from "./components/formex";
 import { EntityCollection } from "./collections";
+import { Property } from "./properties";
 
 export type DefaultFieldConfig =
     | "text_field"
@@ -36,7 +37,7 @@ export type DefaultFieldConfig =
  * @group Form custom fields
  */
 export interface FieldProps<
-    P extends Property = Property,
+    P extends Property | Property = Property,
     CustomProps = any,
     M extends Record<string, any> = any> {
 
@@ -49,12 +50,12 @@ export interface FieldProps<
     /**
      * Current value of this field, inferred from the property type P
      */
-    value: InferPropertyType<P>;
+    value: any;
 
     /**
      * Set value of field directly
      */
-    setValue: (value: InferPropertyType<P> | null, shouldValidate?: boolean) => void;
+    setValue: (value: any | null, shouldValidate?: boolean) => void;
 
     /**
      * Set value of a different field directly

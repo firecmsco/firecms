@@ -1,4 +1,5 @@
-import { Entity, EntityCollection } from "../types";
+import { Entity } from "../../types";
+import { EntityCollection } from "../collections";
 import { EntityFormProps } from "../components";
 
 /**

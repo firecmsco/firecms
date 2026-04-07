@@ -1,4 +1,5 @@
-import { SideEntityController } from "@rebasepro/types";
+import type { SideEntityController } from "@rebasepro/types/cms";
+;
 import { useContext } from "react";
 import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
 

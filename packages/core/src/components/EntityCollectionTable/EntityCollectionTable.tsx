@@ -1,5 +1,6 @@
+import type { AdditionalFieldDelegate } from "@rebasepro/types/cms";
 import React, { useCallback, useMemo, useRef } from "react";
-import { AdditionalFieldDelegate, CollectionSize, Entity, RebaseContext, User } from "@rebasepro/types";
+import { CollectionSize, Entity, RebaseContext, User } from "@rebasepro/types";
 import { PropertyTableCell } from "./PropertyTableCell";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { useRebaseContext, useLargeLayout } from "../../hooks";

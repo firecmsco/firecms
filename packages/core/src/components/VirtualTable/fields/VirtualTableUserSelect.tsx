@@ -1,6 +1,7 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect } from "react";
 import { MultiSelect, MultiSelectItem, Select, SelectItem } from "@rebasepro/ui";
-import { EntityCollection, User, UserManagementDelegate } from "@rebasepro/types";
+import { User, UserManagementDelegate } from "@rebasepro/types";
 import { useInternalUserManagementController } from "../../../hooks";
 import { UserDisplay } from "../../UserDisplay";
 

@@ -1,5 +1,6 @@
+import type { EntityAction } from "@rebasepro/types/cms";
 import { DeleteIcon, EditIcon, FileCopyIcon } from "@rebasepro/ui";
-import { EntityAction } from "@rebasepro/types";
+;
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
 import { addRecentId } from "../EntityCollectionView/utils";
 import { navigateToEntity, resolveDefaultSelectedView } from "@rebasepro/common";

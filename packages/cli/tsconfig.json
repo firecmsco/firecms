@@ -7,7 +7,7 @@
     ],
     "module": "ESNEXT",
     "target": "ESNEXT",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "declaration": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

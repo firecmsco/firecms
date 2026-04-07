@@ -1,21 +1,22 @@
 import React from "react";
 import { EntityCollection, EntityCustomView } from "./collections";
 import { PropertyConfig } from "./property_config";
-import { Locale } from "./locales";
-import { EntityLinkBuilder } from "./entity_link_builder";
+import { Locale } from "../types/locales";
+import { EntityLinkBuilder } from "../types/entity_link_builder";
 import { RebasePlugin } from "./plugins";
 import { SlotContribution } from "./slots";
 import { EntityAction } from "./entity_actions";
 import { User } from "../users";
 import {
-    AuthController, CMSAnalyticsEvent, CMSView, DataDriver, StorageSource,
-    UserConfigurationPersistence, CollectionRegistryController, CMSUrlController, NavigationStateController,
+    AuthController, CMSAnalyticsEvent, DataDriver, StorageSource,
+    UserConfigurationPersistence, CollectionRegistryController,
     DatabaseAdmin
 } from "../controllers";
+import { CMSView, CMSUrlController, NavigationStateController } from "./controllers";
 import { RebaseData } from "../controllers/data";
 import { RebaseClient } from "../controllers/client";
 import { RebaseContext } from "../rebase_context";
-import { UserManagementDelegate } from "./user_management_delegate";
+import { UserManagementDelegate } from "../types/user_management_delegate";
 
 /**
  * Controller to simulate different roles when dev mode is active.

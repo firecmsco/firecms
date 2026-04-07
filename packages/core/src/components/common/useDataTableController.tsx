@@ -1,21 +1,10 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { useData, useRebaseContext } from "../../hooks";
 import { useDataOrder } from "../../hooks/data/useDataOrder";
-import {
-    Entity,
-    EntityCollection,
-    EntityReference,
-    EntityRelation,
-    EntityTableController,
-    FilterValues,
-    RebaseContext,
-    SelectedCellProps,
-    User,
-    WhereFilterOp,
-    FindResponse
-} from "@rebasepro/types";
+import { Entity, EntityReference, EntityRelation, EntityTableController, FilterValues, RebaseContext, SelectedCellProps, User, WhereFilterOp, FindResponse } from "@rebasepro/types";
 import { ScrollRestorationController } from "./useScrollRestoration";
 
 export const DEFAULT_PAGE_SIZE = 50;

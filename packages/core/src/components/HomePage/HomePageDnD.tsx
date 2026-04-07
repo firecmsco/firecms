@@ -1,3 +1,4 @@
+import type { NavigationEntry } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     Active,
@@ -28,7 +29,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 
 import { NavigationCardBinding } from "./NavigationCardBinding";
-import { NavigationEntry } from "@rebasepro/types";
+;
 import { cls } from "@rebasepro/ui";
 
 const animateLayoutChanges: AnimateLayoutChanges = (args) =>

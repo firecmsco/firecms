@@ -1,4 +1,5 @@
-import { ArrayProperty, PreviewSize, PropertyPreviewProps, ReferenceProperty } from "@rebasepro/types";
+import type { ArrayProperty, ReferenceProperty } from "@rebasepro/types/cms";
+import { PreviewSize, PropertyPreviewProps } from "@rebasepro/types";
 import { ReferencePreview } from "../components/ReferencePreview";
 
 /**
@@ -23,7 +24,7 @@ export function ArrayOfReferencesPreview({
     return (
         <div className="flex flex-col w-full">
             {value &&
-                value.map((reference, index) => {
+                value.map((reference: any, index: number) => {
                     const ofProperty = property.of as ReferenceProperty;
                     return <div className="mt-1 mb-1 w-full"
                         key={`preview_array_ref_${propertyKey}_${index}`}>

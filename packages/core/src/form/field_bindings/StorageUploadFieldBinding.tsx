@@ -1,6 +1,7 @@
+import type { ArrayProperty, FieldProps, StringProperty } from "@rebasepro/types/cms";
 import React, { useCallback, useState } from "react";
 
-import { ArrayProperty, FieldProps, PreviewSize, StorageConfig, StringProperty } from "@rebasepro/types";
+import { PreviewSize, StorageConfig } from "@rebasepro/types";
 import { useDropzone } from "react-dropzone";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
@@ -42,7 +43,6 @@ const nonActiveDropClasses = fieldBackgroundHoverMixin
 const activeDropClasses = "pt-0 border-2 border-solid"
 const acceptDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-green-500"
 const rejectDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-red-500"
-
 
 export function StorageUploadFieldBinding({
     propertyKey,

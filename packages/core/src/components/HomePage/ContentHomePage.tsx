@@ -1,3 +1,4 @@
+import type { HomePageSection, NavigationEntry, NavigationGroupMapping, PluginGenericProps } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Fuse from "fuse.js";
 import { Container, SearchBar } from "@rebasepro/ui";
@@ -10,13 +11,7 @@ import {
     useSlot
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
-import {
-    CMSAnalyticsEvent,
-    HomePageSection,
-    NavigationEntry,
-    NavigationGroupMapping,
-    PluginGenericProps
-} from "@rebasepro/types";
+import { CMSAnalyticsEvent } from "@rebasepro/types";
 import { FavouritesView } from "./FavouritesView";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
@@ -247,7 +242,6 @@ export function ContentHomePage({
     ], [items, adminGroupData]);
 
     const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupNames, "home");
-
 
     const {
         sensors,
@@ -537,7 +531,6 @@ export function ContentHomePage({
                         </div>
                     </NavigationGroup>
                 )}
-
 
                 {sections && sections.map((section) => (
                     <NavigationGroup

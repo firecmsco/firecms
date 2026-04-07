@@ -1,7 +1,8 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React from "react";
 
 import { useAuthController, useRebaseContext, useLargeLayout, useTranslation, useSlot } from "../../hooks";
-import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController, ViewMode } from "@rebasepro/types";
+import { CollectionActionsProps, EntityTableController, SelectionController, ViewMode } from "@rebasepro/types";
 import {
     AddIcon,
     Button,
@@ -95,7 +96,6 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 {button}
             </Tooltip>
     }
-
 
     const actionProps: CollectionActionsProps = {
         path,

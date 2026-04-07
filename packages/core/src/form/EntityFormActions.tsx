@@ -1,13 +1,6 @@
+import type { EntityAction, EntityCollection, FormContext, SideEntityController } from "@rebasepro/types/cms";
 import React from "react";
-import {
-    Entity,
-    EntityAction,
-    EntityCollection,
-    EntityFormActionsProps,
-    RebaseContext,
-    FormContext,
-    SideEntityController
-} from "@rebasepro/types";
+import { Entity, EntityFormActionsProps, RebaseContext } from "@rebasepro/types";
 import {
     Button,
     cls,

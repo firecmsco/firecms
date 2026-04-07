@@ -1,4 +1,6 @@
-import { Entity, EntityCollection, EntityCustomViewParams, EntityStatus, FormContext } from "../types";
+import { Entity, EntityStatus } from "../../types";
+import { EntityCollection, EntityCustomViewParams } from "../collections";
+import { FormContext } from "../fields";
 import { FormexController } from "./formex";
 import { EntityFormActionsProps } from "./EntityFormActionsProps";
 

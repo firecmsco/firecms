@@ -1,4 +1,5 @@
-import { CMSView } from "@rebasepro/types";
+import type { CMSView } from "@rebasepro/types/cms";
+;
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { useCMSUrlController } from "../hooks";
 import { useEffect } from "react";

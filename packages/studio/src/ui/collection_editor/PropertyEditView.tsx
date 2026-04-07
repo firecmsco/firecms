@@ -209,7 +209,7 @@ export const PropertyForm = React.memo(
             getController?.(formexController);
         }, [formexController, getController]);
 
-        return <Formex value={formexController as any}>
+        return <Formex value={formexController}>
             <PropertyEditFormFields
                 onPropertyChanged={onPropertyChangedImmediate
                     ? doOnPropertyChanged
@@ -654,7 +654,7 @@ function WidgetSelectView({
     const allSupportedFields = Object.entries(supportedFields).concat(Object.entries(propertyConfigs));
 
     const displayedWidgets = (inArray
-        ? allSupportedFields.filter(([_, propertyConfig]) => !isPropertyBuilder(propertyConfig.property as any) && (propertyConfig.property as any)?.type !== "array")
+        ? allSupportedFields.filter(([_, propertyConfig]) => !isPropertyBuilder(propertyConfig.property) && (propertyConfig.property as Property)?.type !== "array")
         : allSupportedFields)
         .map(([key, propertyConfig]) => ({
             [key]: propertyConfig
@@ -669,7 +669,7 @@ function WidgetSelectView({
     const key = value;
     const propertyConfig = key ? (DEFAULT_FIELD_CONFIGS[key] ?? propertyConfigs[key]) : undefined;
     const baseProperty = propertyConfig?.property;
-    const baseFieldConfig = baseProperty && !isPropertyBuilder(baseProperty as any) ? getFieldConfig(baseProperty as any, propertyConfigs) : undefined;
+    const baseFieldConfig = baseProperty && !isPropertyBuilder(baseProperty) ? getFieldConfig(baseProperty as Property, propertyConfigs) : undefined;
     const computedFieldConfig = baseFieldConfig && propertyConfig ? mergeDeep(baseFieldConfig, propertyConfig) : propertyConfig;
 
     const groups: string[] = [...new Set(Object.keys(displayedWidgets).map(key => {
@@ -770,7 +770,7 @@ export function WidgetSelectViewItem({
     existing
 }: PropertySelectItemProps) {
     const baseProperty = propertyConfig.property;
-    const shouldWarnChangingtype = existing && !isPropertyBuilder(baseProperty as any) && (baseProperty as any).type !== initialProperty?.type;
+    const shouldWarnChangingtype = existing && !isPropertyBuilder(baseProperty) && (baseProperty as Property).type !== initialProperty?.type;
 
     return <Card
         onClick={onClick}

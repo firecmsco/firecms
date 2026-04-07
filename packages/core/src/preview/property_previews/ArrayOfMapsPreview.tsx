@@ -1,6 +1,7 @@
+import type { ArrayProperty, Property } from "@rebasepro/types/cms";
 import React from "react";
 import { ErrorBoundary } from "../../components";
-import { ArrayProperty, Property, PropertyPreviewProps } from "@rebasepro/types";
+import { PropertyPreviewProps } from "@rebasepro/types";
 import { PropertyPreview } from "../PropertyPreview";
 
 /**
@@ -42,7 +43,7 @@ export function ArrayOfMapsPreview({
         <div className="table-auto text-xs">
             <div>
                 {values &&
-                    values.map((v, index) => {
+                    values.map((v: any, index: number) => {
                         return (
                             <div key={`table_${v}_${index}`}
                                 className="border-b last:border-b-0 py-2">

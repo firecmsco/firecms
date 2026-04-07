@@ -1,5 +1,6 @@
+import type { EntityCustomViewParams } from "@rebasepro/types/cms";
 import { useRef, useEffect } from "react";
-import { EntityCustomViewParams } from "@rebasepro/types";
+;
 import {
     cls,
     HistoryIcon,

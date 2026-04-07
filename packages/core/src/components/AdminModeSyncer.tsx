@@ -1,6 +1,7 @@
+import type { CMSView } from "@rebasepro/types/cms";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { CMSView } from "@rebasepro/types";
+;
 import { useAdminModeController, useCMSUrlController } from "../hooks";
 
 export interface AdminModeSyncerProps {

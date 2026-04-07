@@ -1,5 +1,6 @@
+import type { PluginFormActionProps } from "@rebasepro/types/cms";
 import React from "react";
-import { PluginFormActionProps } from "@rebasepro/types";
+;
 import { LastEditedByIndicator } from "./LastEditedByIndicator";
 
 /**

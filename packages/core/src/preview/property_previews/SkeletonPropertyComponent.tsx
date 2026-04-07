@@ -1,4 +1,6 @@
-import { ArrayProperty, MapProperty, PreviewSize, Properties, Property, StringProperty } from "@rebasepro/types";
+import type { Properties } from "@rebasepro/types/cms";
+import type { ArrayProperty, MapProperty, Property, StringProperty } from "@rebasepro/types/cms";
+import { PreviewSize } from "@rebasepro/types";
 import React from "react";
 import { Skeleton } from "@rebasepro/ui";
 import { getThumbnailMeasure } from "../util";

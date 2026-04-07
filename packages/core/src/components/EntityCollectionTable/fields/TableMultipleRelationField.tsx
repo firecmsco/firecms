@@ -1,3 +1,4 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { useCallback } from "react";
 import { deepEqual as equal } from "fast-equals";
 
@@ -5,7 +6,7 @@ import { cls, EditIcon } from "@rebasepro/ui";
 import { getRelationFrom, normalizeToEntityRelation } from "@rebasepro/common";
 
 import { RelationPreview } from "../../../preview";
-import { CollectionSize, Entity, EntityCollection, EntityRelation, FilterValues, Relation } from "@rebasepro/types";
+import { CollectionSize, Entity, EntityRelation, FilterValues, Relation } from "@rebasepro/types";
 import { useEntitySelectionDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { EntityPreviewContainer } from "../../EntityPreview";

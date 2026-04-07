@@ -1,6 +1,8 @@
+import type { Properties } from "@rebasepro/types/cms";
+import type { Property } from "@rebasepro/types/cms";
 import React from "react";
 import { getTableCellAlignment, getTablePropertyColumnWidth } from "./internal/common";
-import { FilterValues, Properties, Property } from "@rebasepro/types";
+import { FilterValues } from "@rebasepro/types";
 import { VirtualTableColumn } from "../VirtualTable";
 import { getIconForProperty, getResolvedPropertyInPath } from "../../util";
 import { getColumnKeysForProperty } from "../common/useColumnsIds";

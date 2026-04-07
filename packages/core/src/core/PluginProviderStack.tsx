@@ -1,5 +1,6 @@
+import type { RebasePlugin } from "@rebasepro/types/cms";
 import React from "react";
-import { RebasePlugin } from "@rebasepro/types";
+;
 
 /**
  * Wraps children with all provider components from plugins that match the given scope.

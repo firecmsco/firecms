@@ -1,14 +1,13 @@
+export * from "./collection_registry";
 export * from "./analytics_controller";
 export * from "./auth";
-export * from "./customization_controller";
+
 export * from "./data";
 export * from "./database_admin";
 export * from "./data_driver";
-export * from "./dialogs_controller";
+
 export * from "./local_config_persistence";
-export * from "./navigation";
-export * from "./side_dialogs_controller";
-export * from "./side_entity_controller";
-export * from "./snackbar";
+
+
 export * from "./storage";
 export * from "./client";

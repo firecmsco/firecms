@@ -1,4 +1,5 @@
-import { EntityCollection, CMSUrlController, SideEntityController } from "@rebasepro/types";
+import { EntityCollection } from "@rebasepro/types";
+import type { CMSUrlController, SideEntityController } from "@rebasepro/types/cms";
 import { getSubcollections } from "./resolutions";
 
 export function removeInitialAndTrailingSlashes(s: string): string {

@@ -1,5 +1,6 @@
+import type { ArrayProperty, Property } from "@rebasepro/types/cms";
 import React from "react";
-import { ArrayProperty, PreviewSize, Property, PropertyPreviewProps } from "@rebasepro/types";
+import { PreviewSize, PropertyPreviewProps } from "@rebasepro/types";
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin } from "@rebasepro/ui";

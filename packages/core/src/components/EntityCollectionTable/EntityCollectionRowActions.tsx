@@ -1,6 +1,7 @@
+import type { EntityAction, EntityCollection } from "@rebasepro/types/cms";
 import React, { MouseEvent, useCallback } from "react";
 
-import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "@rebasepro/types";
+import { CollectionSize, Entity, SelectionController } from "@rebasepro/types";
 import { Badge, Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip } from "@rebasepro/ui";
 import { useRebaseContext, useLargeLayout, useTranslation } from "../../hooks";
 import { getEntityFromCache } from "../../util/entity_cache";

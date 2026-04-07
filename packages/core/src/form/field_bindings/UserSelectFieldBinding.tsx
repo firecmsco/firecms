@@ -1,3 +1,4 @@
+import type { FieldProps, StringProperty } from "@rebasepro/types/cms";
 import React, { useCallback } from "react";
 
 import { FieldHelperText, LabelWithIcon } from "../components";
@@ -6,7 +7,7 @@ import { CloseIcon, cls, IconButton, Select, SelectItem } from "@rebasepro/ui";
 import { PropertyIdCopyTooltip } from "../../components";
 import { useInternalUserManagementController } from "../../hooks";
 import { UserDisplay } from "../../components/UserDisplay";
-import { FieldProps, StringProperty, User } from "@rebasepro/types";
+import { User } from "@rebasepro/types";
 
 type UserSelectProps = FieldProps<StringProperty>;
 

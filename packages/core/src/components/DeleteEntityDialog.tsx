@@ -1,4 +1,5 @@
-import { Entity, EntityCallbacks, EntityCollection } from "@rebasepro/types";
+import type { EntityCollection } from "@rebasepro/types/cms";
+import { Entity, EntityCallbacks } from "@rebasepro/types";
 import React, { useCallback, useMemo, useState } from "react";
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle } from "@rebasepro/ui";
 import {
@@ -67,8 +68,6 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
         console.error("Error deleting entity");
         console.error(e);
     }, [collection.name]);
-
-
 
     const performDelete = useCallback((entity: Entity<M>): Promise<boolean> =>
         deleteEntityWithCallbacks({

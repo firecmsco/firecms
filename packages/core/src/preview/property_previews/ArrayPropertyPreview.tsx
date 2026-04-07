@@ -1,6 +1,7 @@
+import type { ArrayProperty, Property } from "@rebasepro/types/cms";
 import React from "react";
 
-import { ArrayProperty, PreviewSize, Property, PropertyPreviewProps } from "@rebasepro/types";
+import { PreviewSize, PropertyPreviewProps } from "@rebasepro/types";
 import { useAuthController, useCustomizationController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin } from "@rebasepro/ui";
@@ -42,7 +43,7 @@ export function ArrayPropertyPreview({
     return (
         <div className="w-full flex flex-col gap-2">
             {values &&
-                values.map((value, index) => {
+                values.map((value: any, index: number) => {
                     if (!resolvedProperties) {
                         throw Error("Property resolvedProperties is undefined");
                     }

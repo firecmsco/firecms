@@ -1,12 +1,12 @@
+import type { BooleanProperty, FieldProps } from "@rebasepro/types/cms";
 import React from "react";
 
-import { BooleanProperty, FieldProps } from "@rebasepro/types";
+;
 import { getIconForProperty } from "../../util";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { BooleanSwitchWithLabel } from "@rebasepro/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components";
-
 
 /**
  * Simple boolean switch biding to a boolean property.

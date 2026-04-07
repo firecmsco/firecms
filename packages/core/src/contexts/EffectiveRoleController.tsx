@@ -1,5 +1,6 @@
+import type { EffectiveRoleController } from "@rebasepro/types/cms";
 import React from "react";
-import { EffectiveRoleController } from "@rebasepro/types";
+;
 
 const DEFAULT_EFFECTIVE_ROLE_STATE: EffectiveRoleController = {
     effectiveRole: null,

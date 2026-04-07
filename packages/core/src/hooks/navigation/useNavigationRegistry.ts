@@ -1,6 +1,7 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import { useCallback, useRef } from "react";
 import { CollectionRegistry, getParentReferencesFromPath, getSubcollections, mergeDeep, removeInitialAndTrailingSlashes } from "@rebasepro/common";
-import { EntityCollection, EntityReference, UserConfigurationPersistence } from "@rebasepro/types";
+import { EntityReference, UserConfigurationPersistence } from "@rebasepro/types";
 
 export function useNavigationRegistry(userConfigPersistence?: UserConfigurationPersistence) {
     const collectionRegistryRef = useRef<CollectionRegistry>(new CollectionRegistry());

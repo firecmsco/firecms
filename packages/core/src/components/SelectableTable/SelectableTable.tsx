@@ -1,12 +1,6 @@
+import type { Property } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import {
-    CollectionSize,
-    Entity,
-    EntityTableController,
-    FilterValues,
-    Property,
-    SelectedCellProps
-} from "@rebasepro/types";
+import { CollectionSize, Entity, EntityTableController, FilterValues, SelectedCellProps } from "@rebasepro/types";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
 import { enumToObjectEntries } from "@rebasepro/common";
 import { DEFAULT_PAGE_SIZE, EntityCollectionTableController, OnCellValueChange, OnColumnResizeParams } from "../common";

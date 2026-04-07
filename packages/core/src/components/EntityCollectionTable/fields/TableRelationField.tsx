@@ -1,8 +1,9 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { useCallback } from "react";
 import { deepEqual as equal } from "fast-equals"
 
 import { RelationPreview } from "../../../preview";
-import { CollectionSize, Entity, EntityCollection, EntityRelation, FilterValues, Relation } from "@rebasepro/types";
+import { CollectionSize, Entity, EntityRelation, FilterValues, Relation } from "@rebasepro/types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
 import { useEntitySelectionDialog } from "../../../hooks";

@@ -11,11 +11,11 @@ import {
     MapProperty,
     NumberProperty, Properties,
     Property,
-    PropertyConfig,
     ReferenceProperty,
     StringProperty,
     User
 } from "@rebasepro/types";
+import type { PropertyConfig } from "@rebasepro/types/cms";
 
 /**
  * Identity function we use to defeat the type system of Typescript and build

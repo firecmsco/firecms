@@ -1,6 +1,7 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import { useState } from "react";
 
-import { EntityCollection } from "@rebasepro/types";
+;
 import { useCustomizationController, useRebaseContext } from "../../hooks";
 
 export interface UseTableSearchHelperParams<M extends Record<string, any>> {

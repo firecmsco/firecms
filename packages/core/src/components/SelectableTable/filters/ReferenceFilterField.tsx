@@ -1,6 +1,7 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { useMemo, useState } from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { Entity, EntityCollection, EntityReference } from "@rebasepro/types";
+import { Entity, EntityReference } from "@rebasepro/types";
 import { ReferencePreview } from "../../../preview";
 import { useCollectionRegistryController, useEntitySelectionDialog } from "../../../hooks";
 import { Button, Checkbox, Label, Select, SelectItem } from "@rebasepro/ui";

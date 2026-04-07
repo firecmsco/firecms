@@ -17,6 +17,7 @@
         "generate:sdk": "rebase generate-sdk"
     },
     "devDependencies": {
+        "@rebasepro/cli": "0.0.1",
         "concurrently": "^8.2.2",
         "typescript": "^5.9.2"
     },

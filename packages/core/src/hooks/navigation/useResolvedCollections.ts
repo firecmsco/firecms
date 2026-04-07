@@ -1,14 +1,8 @@
+import type { EntityCollection, RebasePlugin } from "@rebasepro/types/cms";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import {
-    AuthController,
-    CollectionRegistryController,
-    RebaseData,
-    EntityCollection,
-    EntityCollectionsBuilder,
-    RebasePlugin,
-    User
-} from "@rebasepro/types";
+import { AuthController, CollectionRegistryController, RebaseData,  User } from "@rebasepro/types";
+import type { EntityCollectionsBuilder } from "@rebasepro/types/cms";
 import { CollectionRegistry } from "@rebasepro/common";
 
 import { resolveCollections } from "./useNavigationResolution";

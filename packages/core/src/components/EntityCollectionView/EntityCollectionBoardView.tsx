@@ -1,14 +1,6 @@
+import type { EntityCollection, Property } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-    Entity,
-    EntityCollection,
-    EntityTableController,
-    EnumValueConfig,
-    FilterValues,
-    Property,
-    SaveEntityProps,
-    SelectionController
-} from "@rebasepro/types";
+import { Entity, EntityTableController, EnumValueConfig, FilterValues, SaveEntityProps, SelectionController } from "@rebasepro/types";
 import { Board } from "./Board";
 import { BoardItem, BoardItemViewProps, ColumnLoadingState } from "./board_types";
 import { EntityBoardCard } from "./EntityBoardCard";

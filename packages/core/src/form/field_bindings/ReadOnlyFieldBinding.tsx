@@ -1,6 +1,7 @@
+import type { FieldProps, Property } from "@rebasepro/types/cms";
 import React from "react";
 
-import { FieldProps, Property } from "@rebasepro/types";
+;
 
 import { PropertyPreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";

@@ -3,8 +3,6 @@ import { Entity, EntityStatus, EntityValues } from "./entities";
 import { EntityCallbacks } from "./entity_callbacks";
 
 import { EnumValues, Properties } from "./properties";
-import { FormContext } from "./fields";
-import { EntityAction } from "./entity_actions";
 import { ExportConfig } from "./export_import";
 import { EntityOverrides } from "./entity_overrides";
 import { User } from "../users";
@@ -147,16 +145,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
 
 
 
-    /**
-     * Icon key to use in this collection.
-     * You can use any of the icons in the Material specs:
-     * https://fonts.google.com/icons
-     * e.g. 'account_tree' or 'person'.
-     * Find all the icons in https://rebase.pro/docs/icons
-     * You can also pass a React node if you want to render a custom icon.
-     * If not specified, a default icon will be used.
-     */
-    icon?: string | React.ReactNode;
+
 
     /**
      * Optional field used to group top level navigation entries under a~
@@ -243,39 +232,8 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      */
     callbacks?: EntityCallbacks<M, USER>;
 
-    /**
-     * Builder for rendering additional components such as buttons in the
-     * collection toolbar
-     */
-    Actions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
 
-    /**
-     * You can define additional actions that can be performed on the entities
-     * in this collection. These actions can be displayed in the collection
-     * view or in the entity view.
-     *
-     * You can use the `onClick` method to implement your own logic.
-     * In the `context` prop you can access all the controllers of Rebase.
-     *
-     * ```
-     * const archiveEntityAction: EntityAction = {
-     *     icon: <ArchiveIcon/>,
-     *     name: "Archive",
-     *     onClick({
-     *                 entity,
-     *                 collection,
-     *                 context,
-     *             }): Promise<void> {
-     *         // Add your code here
-     *         return Promise.resolve(undefined);
-     *     }
-     * }
-     * ```
-     *
-     * You can also pass the action as a string that represents the `key`, in which case it will
-     * use the action defined in the main configuration under `entityActions`.
-     */
-    entityActions?: (EntityAction<M, USER> | string)[];
+
 
     /**
      * Pass your own selection controller if you want to control selected
@@ -308,13 +266,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      */
     sort?: [Extract<keyof M, string>, "asc" | "desc"];
 
-    /**
-     * Array of builders for rendering additional panels in an entity view.
-     * Useful if you need to render custom views.
-     * You can either define the custom view inline or pass a reference to
-     * a custom view defined in the main configuration under `entityViews`
-     */
-    entityViews?: (string | EntityCustomView<M>)[];
+
 
     /**
      * You can add additional fields to the collection view by implementing
@@ -610,10 +562,7 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
      */
     width?: number;
 
-    /**
-     * Builder for the content of the cell for this column
-     */
-    Builder?: React.ComponentType<AdditionalFieldDelegateProps<M, USER>>;
+
 
     /**
      * If this column needs to update dynamically based on other properties,
@@ -638,81 +587,6 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
     }) => string | number | Promise<string | number> | undefined;
 }
 
-/**
- * You can use this builder to render a custom panel in the entity detail view.
- * It gets rendered as a tab.
- * @group Models
- */
-export type EntityCustomView<M extends Record<string, any> = any> =
-    {
-        /**
-         * Key of this custom view.
-         */
-        key: string;
-
-        /**
-         * Name of this custom view.
-         */
-        name: string;
-
-        /**
-         * Render this custom view in the tab of the entity view, instead of the name
-         */
-        tabComponent?: React.ReactNode;
-
-        /**
-         * If set to true, the actions of the entity (save, discard,delete) will be
-         * included in the view. By default the actions are located in the right or bottom,
-         * based on the screen size. You can force the actions to be located at the bottom
-         * by setting this prop to "bottom".
-         */
-        includeActions?: boolean | "bottom";
-
-        /**
-         * Builder for rendering the custom view
-         */
-        Builder?: React.ComponentType<EntityCustomViewParams<M>>;
-
-        /**
-         * Position of this tab in the entity view. Defaults to `end`.
-         */
-        position?: "start" | "end";
-    };
-
-/**
- * Parameters passed to the builder in charge of rendering a custom panel for
- * an entity view.
- * @group Models
- */
-export interface EntityCustomViewParams<M extends Record<string, any> = any> {
-
-    /**
-     * collection used by this entity
-     */
-    collection: EntityCollection<M>;
-
-    /**
-     * Entity that this view refers to. It can be undefined if the entity is new
-     */
-    entity?: Entity<M>;
-
-    /**
-     * Modified values in the form that have not been saved yet.
-     * If the entity is not new and the values are not modified, these values
-     * are the same as in `entity`
-     */
-    modifiedValues?: EntityValues<M>;
-
-    /**
-     * Use the form context to access the form state and methods
-     */
-    formContext: FormContext;
-
-    /**
-     * If this is a subcollection, this is the path of the parent collections
-     */
-    parentCollectionIds?: string[];
-}
 
 export type InferCollectionType<S extends EntityCollection> = S extends EntityCollection<infer M> ? M : never;
 

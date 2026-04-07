@@ -1,4 +1,5 @@
-import { ArrayProperty, EntityRelation, PropertyPreviewProps, RelationProperty } from "@rebasepro/types";
+import type { ArrayProperty, RelationProperty } from "@rebasepro/types/cms";
+import { EntityRelation, PropertyPreviewProps } from "@rebasepro/types";
 import { normalizeToEntityRelation } from "@rebasepro/common";
 import { RelationPreview } from "../components/RelationPreview";
 

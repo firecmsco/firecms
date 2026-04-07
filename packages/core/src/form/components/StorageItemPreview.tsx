@@ -1,6 +1,7 @@
+import type { StringProperty } from "@rebasepro/types/cms";
 import React from "react";
 
-import { PreviewSize, StringProperty } from "@rebasepro/types";
+import { PreviewSize } from "@rebasepro/types";
 import { PropertyPreview } from "../../preview";
 
 import { cls, DescriptionIcon, IconButton, paperMixin, RemoveIcon, Tooltip } from "@rebasepro/ui";
@@ -73,7 +74,6 @@ export function StorageItemPreview({
                     <DescriptionIcon className="text-surface-700 dark:text-surface-300" />
                 </div>
             }
-
 
         </div>
     );

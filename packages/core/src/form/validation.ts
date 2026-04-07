@@ -1,16 +1,6 @@
-import {
-    ArrayProperty,
-    MapProperty,
-    NumberProperty,
-    Property,
-    BooleanProperty,
-    DateProperty,
-    GeopointProperty,
-    Properties,
-    ReferenceProperty,
-    RelationProperty,
-    StringProperty
-} from "@rebasepro/types";
+import type { Properties } from "@rebasepro/types/cms";
+import type { ArrayProperty, MapProperty, NumberProperty, Property, BooleanProperty, DateProperty, GeopointProperty, ReferenceProperty, RelationProperty, StringProperty } from "@rebasepro/types/cms";
+;
 import { z, ZodTypeAny } from "zod";
 import { enumToObjectEntries, getValueInPath, hydrateRegExp, isPropertyBuilder } from "@rebasepro/common";
 
@@ -112,10 +102,11 @@ export function getZodMapObjectSchema({
     const shape: Record<string, ZodTypeAny> = {};
     const validation = property.validation;
     if (property.properties)
-        Object.entries(property.properties).forEach(([childName, childProperty]: [string, Property]) => {
+        Object.entries(property.properties).forEach(([childName, childProperty]) => {
+            const typedChildProperty = childProperty as Readonly<Property>;
             try {
                 shape[childName] = mapPropertyToZod({
-                    property: childProperty,
+                    property: typedChildProperty,
                     parentProperty: property as MapProperty,
                     customFieldValidator,
                     name: `${name}[${childName}]`,
@@ -494,7 +485,7 @@ function hasUniqueInArrayModifier(property: Property): boolean | [string, Proper
         return true;
     } else if (property.type === "map" && property.properties) {
         return Object.entries(property.properties)
-            .filter(([key, childProperty]) => childProperty.validation?.uniqueInArray);
+            .filter(([key, childProperty]) => (childProperty as Readonly<Property>).validation?.uniqueInArray) as [string, Property][];
     }
     return false;
 }

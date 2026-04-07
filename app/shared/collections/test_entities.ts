@@ -1,4 +1,4 @@
-import { EntityCollection } from "@rebasepro/types";
+import { EntityCollection } from "@rebasepro/types/cms";
 import tagsCollection from "./tags";
 
 const testEntitiesCollection: EntityCollection = {

@@ -1,3 +1,4 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import { Blocker, useBlocker, useLocation } from "react-router";
 import { EntityEditView } from "../core/EntityEditView";
 import { useCollectionRegistryController, useCMSUrlController } from "../hooks";
@@ -7,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { EntityCollectionView, NotFoundPage } from "../components";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
-import { EntityCollection } from "@rebasepro/types";
+;
 import {
     getNavigationEntriesFromPath,
     NavigationViewCollectionInternal, NavigationViewEntityCustomInternal,

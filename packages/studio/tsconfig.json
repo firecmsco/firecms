@@ -8,7 +8,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true,
     "declaration": true,
@@ -39,6 +39,9 @@
       ],
       "@rebasepro/types": [
         "../types/src"
+      ],
+      "@rebasepro/types/cms": [
+        "../types/src/cms"
       ],
       "@rebasepro/schema_inference": [
         "../schema_inference/src"

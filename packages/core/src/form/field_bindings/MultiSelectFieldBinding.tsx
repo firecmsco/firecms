@@ -1,6 +1,7 @@
+import type { ArrayProperty, FieldProps, Property } from "@rebasepro/types/cms";
 import React, { useCallback } from "react";
 
-import { ArrayProperty, FieldProps, Property } from "@rebasepro/types";
+;
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty } from "../../util";
@@ -72,7 +73,7 @@ export function MultiSelectFieldBinding({
                 onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setValue((value ?? []).filter(v => v !== enumKey));
+                    setValue((value ?? []).filter((v: any) => v !== enumKey));
                 }}
             >
                 <CloseIcon size="smallest" />

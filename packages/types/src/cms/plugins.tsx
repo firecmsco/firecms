@@ -1,13 +1,12 @@
 import React, { PropsWithChildren } from "react";
 
-import { CollectionActionsProps, EntityCollection, EntityTableController } from "./collections";
+import { EntityCollection } from "./collections";
+import { CollectionActionsProps, EntityTableController, Property, EntityStatus } from "../types";
 import { FieldProps, FormContext } from "./fields";
-import { Property } from "./properties";
-import { EntityStatus } from "./entities";
 import { RebaseContext } from "../rebase_context";
-import { NavigationGroupMapping, CMSView } from "../controllers";
+import { NavigationGroupMapping, CMSView } from "./controllers";
+import { UserManagementDelegate } from "../types/user_management_delegate";
 import { User } from "../users";
-import { UserManagementDelegate } from "./user_management_delegate";
 import { SlotContribution } from "./slots";
 
 // ── Plugin ────────────────────────────────────────────────────────────

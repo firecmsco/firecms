@@ -1,16 +1,8 @@
+import type { ArrayProperty, MapProperty, NumberProperty, Property, StringProperty } from "@rebasepro/types/cms";
 import React, { createElement } from "react";
 import { deepEqual as equal } from "fast-equals"
 
-import {
-    ArrayProperty,
-    EntityReference,
-    EntityRelation,
-    MapProperty,
-    NumberProperty,
-    Property,
-    PropertyPreviewProps,
-    StringProperty
-} from "@rebasepro/types";
+import { EntityReference, EntityRelation, PropertyPreviewProps } from "@rebasepro/types";
 
 import { resolveProperty, normalizeToEntityRelation } from "@rebasepro/common";
 import { useAuthController, useCustomizationController } from "../hooks";
@@ -60,7 +52,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
         property: inputProperty,
         propertyConfigs: customizationController.propertyConfigs,
         authController
-    });
+    }) as Property | null;
 
     if (property === null) {
         content = <EmptyValue />;

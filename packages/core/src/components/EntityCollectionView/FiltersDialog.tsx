@@ -1,9 +1,6 @@
+import type { Property } from "@rebasepro/types/cms";
 import React, { useCallback, useMemo, useState } from "react";
-import {
-    FilterValues,
-    Property,
-    WhereFilterOp
-} from "@rebasepro/types";
+import { FilterValues, WhereFilterOp } from "@rebasepro/types";
 import {
     Button,
     cls,

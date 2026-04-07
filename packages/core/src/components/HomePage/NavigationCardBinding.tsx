@@ -1,7 +1,8 @@
+import type { NavigationEntry } from "@rebasepro/types/cms";
 import { useNavigate } from "react-router-dom";
 
 import { useCustomizationController, useRebaseContext, useSlot } from "../../hooks";
-import { NavigationEntry } from "@rebasepro/types";
+;
 import { IconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
 import { IconButton, StarIcon, Tooltip, WarningIcon } from "@rebasepro/ui";

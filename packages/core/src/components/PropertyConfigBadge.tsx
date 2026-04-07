@@ -1,4 +1,5 @@
-import { PropertyConfig } from "@rebasepro/types";
+import type { PropertyConfig } from "@rebasepro/types/cms";
+;
 import { getDefaultFieldConfig } from "../core";
 import { getIconForWidget } from "../util";
 

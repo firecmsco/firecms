@@ -1,6 +1,8 @@
+import type { Properties } from "@rebasepro/types/cms";
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { useState } from "react";
 import { useAuthController, useRebaseContext, useLargeLayout, useTranslation, useSlot } from "../../hooks";
-import { CollectionActionsProps, EntityCollection, EntityTableController, Properties, SelectionController } from "@rebasepro/types";
+import { CollectionActionsProps, EntityTableController, SelectionController } from "@rebasepro/types";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { ClearFilterSortButton } from "../ClearFilterSortButton";
 import { toArray } from "@rebasepro/common";

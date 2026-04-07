@@ -1,3 +1,4 @@
+import type { EntityCollection, Property } from "@rebasepro/types/cms";
 import * as React from "react";
 
 import {
@@ -8,11 +9,7 @@ import {
     Tooltip,
     Typography
 } from "@rebasepro/ui";
-import {
-    EntityCollection,
-    PreviewSize,
-    Property
-} from "@rebasepro/types";
+import { PreviewSize } from "@rebasepro/types";
 import {
     getValueInPath
 } from "@rebasepro/common";

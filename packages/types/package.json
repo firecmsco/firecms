@@ -46,36 +46,16 @@
             "import": "./dist/index.es.js",
             "require": "./dist/index.umd.js"
         },
+        "./cms": {
+            "types": "./dist/cms/index.d.ts",
+            "development": "./src/cms/index.ts",
+            "import": "./dist/cms.es.js",
+            "require": "./dist/cms.umd.js"
+        },
         "./package.json": "./package.json"
     },
-    "dependencies": {
-        "@dnd-kit/core": "^6.3.1",
-        "@dnd-kit/modifiers": "^9.0.0",
-        "@dnd-kit/sortable": "^10.0.0",
-        "@radix-ui/react-portal": "^1.1.5",
-        "@rebasepro/formex": "0.0.1",
-        "@rebasepro/ui": "0.0.1",
-        "clsx": "^2.1.1",
-        "date-fns": "^3.6.0",
-        "fast-equals": "5.3.0",
-        "fuse.js": "^7.1.0",
-        "history": "^5.3.0",
-        "markdown-it": "^14.1.0",
-        "notistack": "^3.0.2",
-        "object-hash": "^3.0.0",
-        "prism-react-renderer": "^2.4.1",
-        "react-dropzone": "^14.3.8",
-        "react-image-file-resizer": "^0.4.8",
-        "react-transition-group": "^4.4.5",
-        "react-use-measure": "^2.1.7",
-        "react-window": "^1.8.11"
-    },
-    "peerDependencies": {
-        "react": ">=19.0.0",
-        "react-dom": ">=19.0.0",
-        "react-router": "^6.28.0",
-        "react-router-dom": "^6.28.0"
-    },
+    "dependencies": {},
+    "peerDependencies": {},
     "devDependencies": {
         "@jest/globals": "^29.7.0",
         "@testing-library/react": "^16.3.0",

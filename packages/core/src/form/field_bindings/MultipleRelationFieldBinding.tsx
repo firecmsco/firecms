@@ -1,5 +1,6 @@
+import type { FieldProps, RelationProperty } from "@rebasepro/types/cms";
 import React, { useCallback } from "react";
-import { Entity, FieldProps, RelationProperty } from "@rebasepro/types";
+import { Entity } from "@rebasepro/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty } from "../../util";
@@ -139,7 +140,6 @@ export function MultipleRelationFieldBinding({
                 title={title}>
                 {body}
             </ExpandablePanel>
-
 
             <FieldHelperText includeDescription={includeDescription}
                 showError={showError}

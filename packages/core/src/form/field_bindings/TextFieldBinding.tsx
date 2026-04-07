@@ -1,7 +1,8 @@
+import type { FieldProps, NumberProperty, StringProperty } from "@rebasepro/types/cms";
 import React, { useCallback } from "react";
 
 import { CloseIcon, Collapse, IconButton, TextField, TextareaAutosize, fieldBackgroundHoverMixin, fieldBackgroundMixin, cls } from "@rebasepro/ui";
-import { FieldProps, NumberProperty, PreviewType, StringProperty } from "@rebasepro/types";
+import { PreviewType } from "@rebasepro/types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { PropertyPreview } from "../../preview";
 import { useClearRestoreValue } from "../useClearRestoreValue";

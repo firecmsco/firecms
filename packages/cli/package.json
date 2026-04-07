@@ -38,7 +38,8 @@
     "execa": "^4.1.0",
     "inquirer": "12.11.1",
     "jiti": "^2.4.2",
-    "ncp": "^2.0.0"
+    "ncp": "^2.0.0",
+    "pnpm": "^9.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.19.17",

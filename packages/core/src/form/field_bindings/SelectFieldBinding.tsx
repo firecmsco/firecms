@@ -1,6 +1,7 @@
+import type { FieldProps, NumberProperty, StringProperty } from "@rebasepro/types/cms";
 import React, { useCallback } from "react";
 
-import { FieldProps, NumberProperty, StringProperty } from "@rebasepro/types";
+;
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty } from "../../util";

@@ -1,7 +1,8 @@
+import type { StringProperty } from "@rebasepro/types/cms";
 import React from "react";
 
 import { EnumValuesChip } from "../components/EnumValuesChip";
-import { PreviewType, PropertyPreviewProps, StringProperty } from "@rebasepro/types";
+import { PreviewType, PropertyPreviewProps } from "@rebasepro/types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
 import { ErrorBoundary } from "../../components";
 import { Chip, cls, getColorSchemeForSeed } from "@rebasepro/ui";
@@ -43,7 +44,7 @@ export function StringPropertyPreview({
         const lines = value.split("\n");
         return value && value.includes("\n")
             ? <div className={cls("overflow-x-scroll overflow-hidden", size === "small" ? "text-sm" : "")}>
-                {lines.map((str, index) =>
+                {lines.map((str: any, index: number) =>
                     <React.Fragment key={`string_preview_${index}`}>
                         <span>{str}</span>
                         {index !== lines.length - 1 && <br />}

@@ -1,6 +1,7 @@
+import type { CMSUrlController, NavigateOptions } from "@rebasepro/types/cms";
 import { useCallback, useMemo } from "react";
 import { removeInitialAndTrailingSlashes, resolveCollectionPathIds } from "@rebasepro/common";
-import { CMSUrlController, NavigateOptions, CollectionRegistryController } from "@rebasepro/types";
+import { CollectionRegistryController } from "@rebasepro/types";
 import { useNavigate } from "react-router-dom";
 
 export function useBuildCMSUrlController(props: {

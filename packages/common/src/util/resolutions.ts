@@ -1,20 +1,17 @@
 import {
     ArrayProperty,
     AuthController,
-    CustomizationController,
-    EntityAction,
     EntityCollection,
-    EntityCustomView,
     EnumValueConfig,
     EnumValues,
     NumberProperty,
     Properties,
     Property,
-    PropertyConfig,
     Relation,
     RelationProperty,
     StringProperty
 } from "@rebasepro/types";
+import type { CustomizationController, EntityAction, EntityCustomView, PropertyConfig } from "@rebasepro/types/cms";
 import { isDefaultFieldConfigId } from "./fields";
 import { isPropertyBuilder } from "./entities";
 import { getIn, mergeDeep } from "./objects";
@@ -268,7 +265,7 @@ export function resolveArrayProperties<M>({
             }).filter(e => Boolean(e)) as Property[]
             : [];
         return resolvedProperties;
-    } else if (!property.Field) {
+    } else if (!("Field" in property && property.Field)) {
         throw Error(`The array property (${propertyKey}) needs to declare an 'of' or a 'oneOf' property, or provide a custom \`Field\` component`);
     } else {
         return [];

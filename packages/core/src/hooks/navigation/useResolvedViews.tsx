@@ -1,16 +1,8 @@
+import type { CMSView, CMSViewsBuilder, EffectiveRoleController, EntityCollection, RebasePlugin } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { deepEqual as equal } from "fast-equals";
 
-import {
-    AuthController,
-    CMSView,
-    CMSViewsBuilder,
-    RebaseData,
-    EffectiveRoleController,
-    EntityCollection,
-    RebasePlugin,
-    User
-} from "@rebasepro/types";
+import { AuthController, RebaseData, User } from "@rebasepro/types";
 import { UserManagementDelegate } from "@rebasepro/types";
 
 import { resolveCMSViews } from "./useNavigationResolution";

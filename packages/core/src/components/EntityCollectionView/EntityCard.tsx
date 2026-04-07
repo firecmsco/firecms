@@ -1,9 +1,6 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { useMemo } from "react";
-import {
-    CollectionSize,
-    Entity,
-    EntityCollection
-} from "@rebasepro/types";
+import { CollectionSize, Entity } from "@rebasepro/types";
 import {
     getEntityImagePreviewPropertyKey,
     getValueInPath,
@@ -117,7 +114,6 @@ export function EntityCard<M extends Record<string, any> = any>({
     const handleSelectionChange = (checked: boolean) => {
         onSelectionChange?.(entity, checked);
     };
-
 
     return (
         <Card

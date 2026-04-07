@@ -1,5 +1,6 @@
+import type { ArrayProperty, FieldProps, Property } from "@rebasepro/types/cms";
 import React from "react";
-import { ArrayProperty, FieldProps, Property } from "@rebasepro/types";
+;
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@rebasepro/ui";

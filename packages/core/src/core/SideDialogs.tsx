@@ -1,6 +1,7 @@
+import type { EntitySidePanelProps, SideDialogPanelProps } from "@rebasepro/types/cms";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks";
-import { EntitySidePanelProps, SideDialogPanelProps } from "@rebasepro/types";
+;
 import { Sheet } from "@rebasepro/ui";
 import { useUnsavedChangesDialog } from "../hooks";
 import { ErrorBoundary } from "../components";

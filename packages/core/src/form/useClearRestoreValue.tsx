@@ -1,5 +1,6 @@
+import type { Property } from "@rebasepro/types/cms";
 import { useEffect, useRef } from "react";
-import { Property } from "@rebasepro/types";
+;
 
 /**
  * Hook we use to restore a value after it has been cleared

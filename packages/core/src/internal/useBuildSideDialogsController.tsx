@@ -1,6 +1,7 @@
+import type { SideDialogPanelProps, SideDialogsController } from "@rebasepro/types/cms";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SideDialogPanelProps, SideDialogsController } from "@rebasepro/types";
+;
 import { deepEqual as equal } from "fast-equals"
 import { Location } from "react-router-dom";
 

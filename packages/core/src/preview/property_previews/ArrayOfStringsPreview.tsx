@@ -1,5 +1,6 @@
+import type { ArrayProperty, StringProperty } from "@rebasepro/types/cms";
 import React from "react";
-import { ArrayProperty, PropertyPreviewProps, StringProperty } from "@rebasepro/types";
+import { PropertyPreviewProps } from "@rebasepro/types";
 
 import { StringPropertyPreview } from "../../preview";
 import { ErrorBoundary } from "../../components";
@@ -29,7 +30,7 @@ export function ArrayOfStringsPreview({
     return (
         <div className="flex flex-col gap-2">
             {value &&
-                value.map((v, index) =>
+                value.map((v: any, index: number) =>
                     <div key={`preview_array_strings_${propertyKey}_${index}`}>
                         <ErrorBoundary>
                             <StringPropertyPreview propertyKey={propertyKey}

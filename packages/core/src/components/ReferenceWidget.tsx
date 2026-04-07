@@ -1,6 +1,7 @@
+import type { EntityCollection } from "@rebasepro/types/cms";
 import React, { useCallback, useMemo } from "react";
 
-import { Entity, EntityCollection, EntityReference, FilterValues, PreviewSize } from "@rebasepro/types";
+import { Entity, EntityReference, FilterValues, PreviewSize } from "@rebasepro/types";
 import { getReferenceFrom } from "@rebasepro/common";
 import { ReferencePreview } from "../preview";
 import { useCollectionRegistryController, useEntitySelectionDialog } from "../hooks";

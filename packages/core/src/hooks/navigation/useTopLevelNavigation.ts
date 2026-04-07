@@ -1,16 +1,8 @@
+import type { CMSView, CMSUrlController, EntityCollection, RebasePlugin, NavigationEntry, NavigationGroupMapping, NavigationResult } from "@rebasepro/types/cms";
 import { useCallback, useMemo, useRef } from "react";
 import { deepEqual as equal } from "fast-equals";
 
-import {
-    CMSView,
-    CMSUrlController,
-    EntityCollection,
-    RebasePlugin,
-    NavigationEntry,
-    NavigationGroupMapping,
-    NavigationResult,
-    CollectionRegistryController
-} from "@rebasepro/types";
+import { CollectionRegistryController } from "@rebasepro/types";
 import { CollectionRegistry } from "@rebasepro/common";
 
 import { computeNavigationGroups, getGroup, NAVIGATION_ADMIN_GROUP_NAME, NAVIGATION_DEFAULT_GROUP_NAME } from "./utils";

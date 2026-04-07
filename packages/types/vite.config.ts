@@ -16,9 +16,12 @@ export default defineConfig(() => ({
     },
     build: {
         lib: {
-            entry: path.resolve(__dirname, "src/index.ts"),
+            entry: {
+                index: path.resolve(__dirname, "src/index.ts"),
+                cms: path.resolve(__dirname, "src/cms/index.ts")
+            },
             name: "Rebase Types",
-            fileName: (format) => `index.${format}.js`
+            fileName: (format, entryName) => `${entryName}.${format}.js`
         },
         target: "ESNEXT",
         minify: false,

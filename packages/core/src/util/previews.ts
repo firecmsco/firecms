@@ -1,4 +1,5 @@
-import { AuthController, EntityCollection, Property, PropertyConfig } from "@rebasepro/types";
+import type { EntityCollection, Property, PropertyConfig } from "@rebasepro/types/cms";
+import { AuthController } from "@rebasepro/types";
 import { isPropertyBuilder } from "@rebasepro/common";
 import { isReferenceProperty, isRelationProperty } from "./property_utils";
 import { getFieldConfig } from "../core";

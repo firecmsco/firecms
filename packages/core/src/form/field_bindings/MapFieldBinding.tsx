@@ -1,5 +1,7 @@
+import type { Properties } from "@rebasepro/types/cms";
+import type { FieldProps, MapProperty, PropertyFieldBindingProps } from "@rebasepro/types/cms";
 import React from "react";
-import { FieldProps, MapProperty, Properties, PropertyFieldBindingProps } from "@rebasepro/types";
+;
 import { useTranslation } from "../../hooks";
 
 import { ErrorBoundary } from "../../components";

@@ -1,6 +1,7 @@
+import type { DateProperty, FieldProps } from "@rebasepro/types/cms";
 import React from "react";
 
-import { DateProperty, FieldProps } from "@rebasepro/types";
+;
 
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useCustomizationController } from "../../hooks";

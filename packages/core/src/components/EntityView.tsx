@@ -1,7 +1,9 @@
+import type { Properties } from "@rebasepro/types/cms";
+import type { EntityCollection, CustomizationController } from "@rebasepro/types/cms";
 import React from "react";
-import { Entity, EntityCollection, Properties } from "@rebasepro/types";
+import { Entity } from "@rebasepro/types";
 import { cls, defaultBorderMixin, IconButton, OpenInNewIcon, Typography } from "@rebasepro/ui";
-import { CustomizationController } from "@rebasepro/types";
+;
 import { useCustomizationController } from "../hooks/useCustomizationController";
 import { useAuthController } from "../hooks";
 import { PropertyCollectionView } from "./PropertyCollectionView";

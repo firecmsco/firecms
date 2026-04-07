@@ -1,21 +1,9 @@
+import type { AdditionalFieldDelegate, EntityAction, EntityCollection, Property } from "@rebasepro/types/cms";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { deepEqual as equal } from "fast-equals"
 
-import {
-    AdditionalFieldDelegate,
-    CollectionSize,
-    Entity,
-    EntityAction,
-    EntityCollection,
-    EntityReference,
-    EntityTableController,
-    FilterValues,
-    PartialEntityCollection,
-    Property,
-    SaveEntityProps,
-    ViewMode
-} from "@rebasepro/types";
+import { CollectionSize, Entity, EntityReference, EntityTableController, FilterValues, PartialEntityCollection, SaveEntityProps, ViewMode } from "@rebasepro/types";
 import {
     EntityCollectionRowActions,
     EntityCollectionTable,
@@ -761,7 +749,6 @@ export const EntityCollectionView = React.memo(
             onCountChange={setDocsCount}
         />;
 
-
         const { resolvedSlots } = customizationController;
 
         // Pre-compute header action slot contributions (avoid useSlot inside callback)
@@ -1116,7 +1103,6 @@ function EntitiesCount({
     // Count is now displayed in the breadcrumb bar, this component only fetches and reports
     return null;
 }
-
 
 function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityCollection {
     if (key.includes(".")) {

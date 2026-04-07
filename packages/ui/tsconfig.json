@@ -10,7 +10,7 @@
         ],
         "emitDeclarationOnly": true,
         "allowImportingTsExtensions": true,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "jsx": "react-jsx",
         "noFallthroughCasesInSwitch": true,
         "declaration": true,

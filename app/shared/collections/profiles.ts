@@ -1,4 +1,4 @@
-import { EntityCollection } from "@rebasepro/types";
+import { EntityCollection } from "@rebasepro/types/cms";
 import authorsCollection from "./authors";
 
 const profilesCollection: EntityCollection = {
