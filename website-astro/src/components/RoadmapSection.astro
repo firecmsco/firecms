@@ -1,0 +1,138 @@
+---
+---
+<section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden border-t border-surface-800/40">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-20 animate-on-scroll fade-in-up">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-6">
+                <span class="material-symbols-rounded text-primary" style="font-size:16px">explore</span>
+                Roadmap
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">What's next for Rebase</h2>
+            <p class="mt-4 text-surface-400 text-lg">We ship fast. Here is where we are going in the coming months.</p>
+        </div>
+
+        <div class="relative max-w-3xl mx-auto">
+            <!-- Connecting Vertical Lines -->
+            <!-- Background dashed line -->
+            <div class="absolute left-[27px] sm:left-[39px] top-8 bottom-8 w-px border-l-[2px] border-dashed border-surface-800"></div>
+            <!-- Glowing gradient line filling part of the timeline -->
+            <div class="absolute left-[27px] sm:left-[39px] top-8 h-[60%] w-[2px] bg-linear-to-b from-emerald-500 via-primary to-transparent blur-[3px]"></div>
+            <div class="absolute left-[28px] sm:left-[40px] top-8 h-[55%] w-[1px] bg-linear-to-b from-emerald-400 via-primary to-transparent"></div>
+
+            <!-- Phase 1: Now -->
+            <div class="relative pl-16 sm:pl-24 pb-16 animate-on-scroll fade-in-up">
+                <!-- Glowing Dot -->
+                <div class="absolute left-[21px] sm:left-[33px] top-6 flex h-4 w-4 items-center justify-center">
+                    <span class="absolute h-full w-full animate-ping rounded-full bg-emerald-500 opacity-40"></span>
+                    <span class="h-3 w-3 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)] z-10"></span>
+                </div>
+                
+                <div class="relative rounded-2xl bg-surface-900/40 ring-1 ring-inset ring-surface-800 p-6 sm:p-8 hover:ring-emerald-500/30 transition-all duration-300 group">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+                        <h3 class="text-2xl font-semibold text-white">Now</h3>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-xs font-medium ring-1 ring-emerald-500/20 w-fit">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                            Available
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-emerald-500 shrink-0 mt-0.5" style="font-size: 18px">check_circle</span>
+                            <span class="text-surface-300 text-sm">Postgres introspection & auto-CMS</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-emerald-500 shrink-0 mt-0.5" style="font-size: 18px">check_circle</span>
+                            <span class="text-surface-300 text-sm">Isomorphic TypeScript SDK</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-emerald-500 shrink-0 mt-0.5" style="font-size: 18px">check_circle</span>
+                            <span class="text-surface-300 text-sm">Instant REST & GraphQL APIs</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-emerald-500 shrink-0 mt-0.5" style="font-size: 18px">check_circle</span>
+                            <span class="text-surface-300 text-sm">Row-Level Security (RLS)</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-emerald-500 shrink-0 mt-0.5" style="font-size: 18px">check_circle</span>
+                            <span class="text-surface-300 text-sm">Real-time WebSocket subscriptions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 2: Next -->
+            <div class="relative pl-16 sm:pl-24 pb-16 animate-on-scroll fade-in-up delay-100">
+                <!-- Highlight Dot -->
+                <div class="absolute left-[16px] sm:left-[28px] top-5 flex h-6 w-6 items-center justify-center rounded-full bg-surface-950 ring-2 ring-primary z-10">
+                    <span class="h-2 w-2 rounded-full bg-primary shadow-[0_0_10px_rgba(var(--color-primary-rgb),1)] animate-pulse"></span>
+                </div>
+
+                <div class="relative rounded-2xl bg-surface-900/60 ring-1 ring-inset ring-primary/30 p-6 sm:p-8 shadow-[0_0_30px_-10px_rgba(var(--color-primary-rgb),0.3)] hover:ring-primary/50 transition-all duration-300 group">
+                    <div class="absolute -top-px left-10 right-10 h-px bg-linear-to-r from-transparent via-primary/70 to-transparent"></div>
+                    
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+                        <h3 class="text-2xl font-semibold text-white">Next</h3>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/10 text-primary text-xs font-medium ring-1 ring-primary/30 w-fit">
+                            <span class="material-symbols-rounded" style="font-size: 14px">hourglass_bottom</span>
+                            In Progress
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-primary shrink-0 mt-0.5" style="font-size: 18px">smart_toy</span>
+                            <span class="text-white font-medium text-sm">AI SQL generation in editor</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-surface-400 shrink-0 mt-0.5" style="font-size: 18px">cloud</span>
+                            <span class="text-surface-300 text-sm">Hosted Rebase Cloud infrastructure</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-surface-400 shrink-0 mt-0.5" style="font-size: 18px">group_add</span>
+                            <span class="text-surface-300 text-sm">Multiplayer cursors in Studio</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-surface-400 shrink-0 mt-0.5" style="font-size: 18px">folder_open</span>
+                            <span class="text-surface-300 text-sm">Native file storage (S3 / R2)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 3: Later -->
+            <div class="relative pl-16 sm:pl-24 animate-on-scroll fade-in-up delay-200">
+                <!-- Inactive Dot -->
+                <div class="absolute left-[19px] sm:left-[31px] top-6 flex h-[18px] w-[18px] items-center justify-center rounded-full bg-surface-950 ring-2 ring-surface-700 z-10">
+                    <span class="h-1.5 w-1.5 rounded-full bg-surface-600"></span>
+                </div>
+
+                <div class="relative rounded-2xl bg-surface-900/20 ring-1 ring-inset ring-surface-800 p-6 sm:p-8 opacity-80 hover:opacity-100 hover:ring-surface-700 transition-all duration-300 group">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+                        <h3 class="text-2xl font-semibold text-white">Later</h3>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-surface-800/50 text-surface-400 text-xs font-medium ring-1 ring-surface-700 w-fit">
+                            Planning
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-primary/70 shrink-0 mt-0.5" style="font-size: 18px">bar_chart</span>
+                            <span class="text-surface-300 text-sm">Conversational analytics & charts bot</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-surface-600 shrink-0 mt-0.5" style="font-size: 18px">auto_awesome</span>
+                            <span class="text-surface-400 text-sm">Text-to-Schema AI generation</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-surface-600 shrink-0 mt-0.5" style="font-size: 18px">code_blocks</span>
+                            <span class="text-surface-400 text-sm">Edge functions / Serverless logic</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-rounded text-surface-600 shrink-0 mt-0.5" style="font-size: 18px">move_up</span>
+                            <span class="text-surface-400 text-sm">Advanced migration pipelines</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

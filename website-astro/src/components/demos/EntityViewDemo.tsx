@@ -93,6 +93,60 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
   Archived: { bg: "rgb(255, 158, 183)", text: "rgb(76, 12, 28)" },
 };
 
+// ─── Kanban Data (for TAGS collection) ───────────────────
+// Matches production EntityBoardCard: thumbnail + title + ID
+interface KanbanCard {
+  id: string;
+  title: string;
+  image?: string | null;
+}
+
+interface KanbanColumn {
+  id: string;
+  title: string;
+  color: string;
+  cards: KanbanCard[];
+}
+
+const KANBAN_COLUMNS: KanbanColumn[] = [
+  {
+    id: "backlog",
+    title: "Backlog",
+    color: "rgb(156, 163, 175)",
+    cards: [
+      { id: "871492", title: "Dark mode", image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=80&h=80&fit=crop" },
+      { id: "871388", title: "Search indexing", image: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=80&h=80&fit=crop" },
+      { id: "871204", title: "API documentation", image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=80&h=80&fit=crop" },
+    ],
+  },
+  {
+    id: "in_progress",
+    title: "In Progress",
+    color: "rgb(251, 191, 36)",
+    cards: [
+      { id: "871090", title: "Auth middleware refactor", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=80&h=80&fit=crop" },
+      { id: "870984", title: "Onboarding flow", image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=80&h=80&fit=crop" },
+    ],
+  },
+  {
+    id: "review",
+    title: "Review",
+    color: "rgb(96, 165, 250)",
+    cards: [
+      { id: "870812", title: "RLS policies", image: "https://images.unsplash.com/photo-1563986768609-322da13575f2?w=80&h=80&fit=crop" },
+    ],
+  },
+  {
+    id: "done",
+    title: "Done",
+    color: "rgb(74, 222, 128)",
+    cards: [
+      { id: "870650", title: "CI/CD pipeline", image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=80&h=80&fit=crop" },
+      { id: "870511", title: "Export to CSV", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=80&h=80&fit=crop" },
+    ],
+  },
+];
+
 /* ─── Material icon helper ─── */
 function MI({
   children,
@@ -352,6 +406,16 @@ export function EntityViewDemo() {
   const [highlightedCell, setHighlightedCell] = useState<{ entityId: number; field: string } | null>(null);
   // Also highlight form fields
   const [highlightedFormField, setHighlightedFormField] = useState<string | null>(null);
+  // Active collection (for switching between list/kanban)
+  const [activeCollection, setActiveCollection] = useState<"posts" | "tags">("posts");
+  // Kanban drag animation state
+  const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [kanbanHighlight, setKanbanHighlight] = useState<string | null>(null);
+  // Which column the dragged card is hovering over (for spacer)
+  const [dropTargetColumn, setDropTargetColumn] = useState<string | null>(null);
+  // Source column of the dragged card (to compute overlay position)
+  const [dragSourceColumn, setDragSourceColumn] = useState<string | null>(null);
 
   const flashCell = useCallback((entityId: number, field: string, durationMs = 1000) => {
     setHighlightedCell({ entityId, field });
@@ -396,9 +460,23 @@ export function EntityViewDemo() {
       });
     const guard = () => isMounted;
 
+    const animateKanbanDrag = async (targetX: number, targetY: number, steps = 30) => {
+      for (let i = 0; i <= steps; i++) {
+        const progress = i / steps;
+        // Ease-out curve
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const x = ease * targetX;
+        const y = ease * targetY + Math.sin(progress * Math.PI) * -8;
+        setDragOffset({ x, y });
+        await new Promise(r => { timer = setTimeout(r, 16); });
+        if (!isMounted) return;
+      }
+    };
+
     const loop = async () => {
       while (isMounted) {
         // ── Phase 1: Browse rows, then inline-edit status in table ──
+        setActiveCollection("posts");
         setHoveredRow(43);
         await wait(350); if (!guard()) return;
         setHoveredRow(42);
@@ -458,12 +536,68 @@ export function EntityViewDemo() {
         closePanel();
         await wait(350); if (!guard()) return;
 
-        // ── Phase 4: Inline edit entity 43 status in table ──
-        setHoveredRow(39);
+        // ── Phase 4: Switch to TAGS collection → Kanban mode ──
+        setHoveredRow(null);
+        setTableOverrides({});
+        setActiveCollection("tags");
+        await wait(800); if (!guard()) return;
+
+        // Hover over cards briefly
+        setKanbanHighlight("871090");
+        await wait(500); if (!guard()) return;
+        setKanbanHighlight("870984");
+        await wait(400); if (!guard()) return;
+        setKanbanHighlight(null);
+        await wait(300); if (!guard()) return;
+
+        // Drag card from "In Progress" to "Review" column
+        setDragSourceColumn("in_progress");
+        setDraggedCardId("870984");
+        setDragOffset({ x: 0, y: 0 });
         await wait(200); if (!guard()) return;
-        setHoveredRow(40);
+        setDropTargetColumn("review");
+        await animateKanbanDrag(260, -60);
+        if (!guard()) return;
+        await wait(300); if (!guard()) return;
+        setDraggedCardId(null);
+        setDragOffset({ x: 0, y: 0 });
+        setDropTargetColumn(null);
+        setDragSourceColumn(null);
+        await wait(600); if (!guard()) return;
+
+        // Highlight another card
+        setKanbanHighlight("871492");
+        await wait(500); if (!guard()) return;
+        setKanbanHighlight("871388");
+        await wait(400); if (!guard()) return;
+        setKanbanHighlight(null);
+        await wait(300); if (!guard()) return;
+
+        // Drag card from "Backlog" to "In Progress"
+        setDragSourceColumn("backlog");
+        setDraggedCardId("871388");
+        setDragOffset({ x: 0, y: 0 });
+        await wait(200); if (!guard()) return;
+        setDropTargetColumn("in_progress");
+        await animateKanbanDrag(240, -30);
+        if (!guard()) return;
+        await wait(300); if (!guard()) return;
+        setDraggedCardId(null);
+        setDragOffset({ x: 0, y: 0 });
+        setDropTargetColumn(null);
+        setDragSourceColumn(null);
+        await wait(800); if (!guard()) return;
+
+        // ── Phase 5: Switch back to POSTS ──
+        setActiveCollection("posts");
+        await wait(400); if (!guard()) return;
+
+        // Quick browse
+        setHoveredRow(43);
         await wait(200); if (!guard()) return;
         setHoveredRow(42);
+        await wait(200); if (!guard()) return;
+        setHoveredRow(40);
         await wait(200); if (!guard()) return;
         setHoveredRow(43);
         await wait(350); if (!guard()) return;
@@ -473,7 +607,7 @@ export function EntityViewDemo() {
         flashCell(43, "status");
         await wait(600); if (!guard()) return;
 
-        // ── Phase 5: Open entity 43 to see the change ──
+        // Open entity 43 to see the change
         openEntity(43);
         setHoveredRow(null);
         await wait(500); if (!guard()) return;
@@ -489,7 +623,6 @@ export function EntityViewDemo() {
         await wait(450); if (!guard()) return;
         setIsSaving(false);
         setFormDirty(false);
-        // Also revert table override
         setTableOverrides((prev) => ({ ...prev, 43: { status: "Published" } }));
         await wait(350); if (!guard()) return;
 
@@ -497,15 +630,8 @@ export function EntityViewDemo() {
         closePanel();
         await wait(400); if (!guard()) return;
 
-        // ── Phase 6: Quick browse, reset overrides ──
-        setHoveredRow(43);
-        await wait(200); if (!guard()) return;
-        setHoveredRow(42);
-        await wait(200); if (!guard()) return;
-        setHoveredRow(40);
-        await wait(200); if (!guard()) return;
+        // Reset
         setHoveredRow(null);
-        // Reset all table overrides for next loop
         setTableOverrides({});
         await wait(300); if (!guard()) return;
       }
@@ -520,9 +646,9 @@ export function EntityViewDemo() {
 
   /* ── Drawer nav items (production-identical: DrawerNavigationItem.tsx) ── */
   const NAV_ITEMS = [
-    { icon: "folder", label: "POSTS", active: true },
-    { icon: "person", label: "AUTHORS", active: false },
-    { icon: "sell", label: "TAGS", active: false },
+    { icon: "folder", label: "POSTS", key: "posts" as const, active: activeCollection === "posts" },
+    { icon: "person", label: "AUTHORS", key: "authors" as const, active: false },
+    { icon: "sell", label: "TAGS", key: "tags" as const, active: activeCollection === "tags" },
   ];
 
   return (
@@ -546,9 +672,9 @@ export function EntityViewDemo() {
             <span className="text-xs text-text-secondary dark:text-surface-500">/</span>
             {/* Breadcrumb entry */}
             <div className="flex flex-row items-center gap-2 whitespace-nowrap">
-              <span className="text-sm text-surface-900 dark:text-surface-200">Posts</span>
+              <span className="text-sm text-surface-900 dark:text-surface-200">{activeCollection === "posts" ? "Posts" : "Tags"}</span>
               <span className="text-xs text-surface-accent-500 dark:text-surface-accent-400 bg-surface-100 dark:bg-surface-700 px-1 py-0 rounded">
-                9
+                {activeCollection === "posts" ? "9" : "8"}
               </span>
             </div>
           </div>
@@ -671,8 +797,8 @@ export function EntityViewDemo() {
             {/* Left side */}
             <div className="flex items-center gap-1 mr-4">
               <button className="flex items-center gap-1.5 px-2 py-1 rounded-md text-sm bg-surface-100 dark:bg-surface-800 hover:bg-surface-200 dark:hover:bg-surface-700 text-surface-900 dark:text-white">
-                <MI size={18}>list</MI>
-                <span className="ml-1 text-sm">List</span>
+                <MI size={18}>{activeCollection === "posts" ? "list" : "view_kanban"}</MI>
+                <span className="ml-1 text-sm">{activeCollection === "posts" ? "List" : "Board"}</span>
               </button>
               <button className="p-1.5 rounded-full text-surface-500 hover:bg-surface-200/50 dark:hover:bg-surface-800">
                 <MI size={18}>filter_list</MI>
@@ -697,43 +823,188 @@ export function EntityViewDemo() {
             </div>
           </div>
 
-          {/* ── Table ── */}
-          <div className="h-full w-full flex flex-col bg-white dark:bg-surface-950 overflow-auto">
-            {/* Table header */}
-            <div
-              className="sticky top-0 z-10 flex min-w-fit border-b border-surface-200/20 dark:border-surface-700/30 bg-surface-50 dark:bg-surface-900"
-              style={{ height: 44 }}
-            >
-              <ColHeader label="" width={138} showFilter={false} align="center" />
-              <ColHeader icon="short_text" label="Title" width={280} />
-              <ColHeader icon="image" label="Image" width={120} showFilter={false} align="center" />
-              <ColHeader icon="list" label="Status" width={140} />
-              <ColHeader icon="add_link" label="Author" width={200} />
-              <ColHeader icon="add_link" label="Tags" width={240} />
-              <div className="flex items-center justify-center w-16 text-surface-400">
-                <MI size={22}>add</MI>
+          {/* ── Content Area ── */}
+          {activeCollection === "posts" ? (
+            /* ── Table (List view for Posts) ── */
+            <div className="h-full w-full flex flex-col bg-white dark:bg-surface-950 overflow-auto">
+              {/* Table header */}
+              <div
+                className="sticky top-0 z-10 flex min-w-fit border-b border-surface-200/20 dark:border-surface-700/30 bg-surface-50 dark:bg-surface-900"
+                style={{ height: 44 }}
+              >
+                <ColHeader label="" width={138} showFilter={false} align="center" />
+                <ColHeader icon="short_text" label="Title" width={280} />
+                <ColHeader icon="image" label="Image" width={120} showFilter={false} align="center" />
+                <ColHeader icon="list" label="Status" width={140} />
+                <ColHeader icon="add_link" label="Author" width={200} />
+                <ColHeader icon="add_link" label="Tags" width={240} />
+                <div className="flex items-center justify-center w-16 text-surface-400">
+                  <MI size={22}>add</MI>
+                </div>
+              </div>
+
+              {/* Table body */}
+              <div className="flex-1">
+                {MOCK_ENTITIES.map((entity) => {
+                  const merged = { ...entity, ...tableOverrides[entity.id] } as Entity;
+                  return (
+                    <EntityRow
+                      key={entity.id}
+                      entity={merged}
+                      isHovered={hoveredRow === entity.id}
+                      isSelected={selectedEntityId === entity.id}
+                      highlightedField={highlightedCell?.entityId === entity.id ? highlightedCell.field : null}
+                      onHover={() => setHoveredRow(entity.id)}
+                      onLeave={() => setHoveredRow(null)}
+                      onClick={() => openEntity(entity.id)}
+                    />
+                  );
+                })}
               </div>
             </div>
+          ) : (
+            /* ── Kanban Board — matches production Board.tsx + BoardColumn.tsx + EntityBoardCard.tsx ── */
+            <div className="flex-1 overflow-auto no-scrollbar relative">
+              <div className="p-2 md:p-3 lg:p-4 h-full min-w-full inline-flex">
+                {KANBAN_COLUMNS.map((col) => {
+                  const colHasDraggedCard = col.cards.some(c => c.id === draggedCardId);
 
-            {/* Table body */}
-            <div className="flex-1">
-              {MOCK_ENTITIES.map((entity) => {
-                const merged = { ...entity, ...tableOverrides[entity.id] } as Entity;
+                  return (
+                    <div
+                      key={col.id}
+                      className="border h-full w-80 min-w-80 mx-2 flex flex-col rounded-md border-surface-200 dark:border-surface-700/50"
+                    >
+                      {/* Column header */}
+                      <div className="flex items-center justify-between px-2 rounded-t-md bg-surface-50 dark:bg-surface-950">
+                        <h4 className="py-3 px-3 flex-grow select-none flex items-center gap-3 text-sm font-semibold text-surface-800 dark:text-surface-200">
+                          <div
+                            className="w-3 h-3 rounded-full flex-shrink-0"
+                            style={{ backgroundColor: col.color }}
+                          />
+                          {col.title}
+                        </h4>
+                        <span className="text-xs text-surface-500 dark:text-surface-400 mr-1">
+                          {col.cards.length}
+                        </span>
+                        <button className="p-1 rounded-full opacity-60 hover:opacity-100 text-surface-500 dark:text-surface-400">
+                          <MI size={18}>add</MI>
+                        </button>
+                      </div>
+
+                      {/* Cards list */}
+                      <div className="flex-1 overflow-y-auto px-2 pb-2">
+                        {col.cards.map((card) => {
+                          const isDragged = draggedCardId === card.id;
+                          const isHighlighted = kanbanHighlight === card.id;
+
+                          // Don't render the card inline if it's being dragged — it's rendered as an overlay
+                          if (isDragged) {
+                            return (
+                              <div key={card.id} className="py-1">
+                                {/* Ghost placeholder */}
+                                <div className="h-[56px] rounded-lg border-2 border-dashed border-surface-300/40 dark:border-surface-700/50 bg-surface-100/30 dark:bg-surface-800/10 transition-all duration-200" />
+                              </div>
+                            );
+                          }
+
+                          return (
+                            <div key={card.id} className="py-1">
+                              <div
+                                className={`p-2 flex items-start border rounded-lg cursor-pointer transition-colors border-surface-200 dark:border-surface-700/50 ${
+                                  isHighlighted
+                                    ? "bg-white dark:bg-surface-900 ring-2 ring-primary"
+                                    : "bg-white dark:bg-surface-900 hover:bg-surface-100 dark:hover:bg-surface-800"
+                                }`}
+                              >
+                                {card.image ? (
+                                  <div className="w-10 h-10 rounded-md overflow-hidden shrink-0 mr-2">
+                                    <img src={card.image} alt={card.title} className="w-full h-full object-cover" loading="lazy" />
+                                  </div>
+                                ) : (
+                                  <div className="w-10 h-10 rounded-md bg-surface-100 dark:bg-surface-800 shrink-0 mr-2 flex items-center justify-center">
+                                    <MI size={18} className="text-surface-400">sell</MI>
+                                  </div>
+                                )}
+                                <div className="flex-1 min-w-0">
+                                  <div className="line-clamp-2 text-sm font-medium text-surface-900 dark:text-white">{card.title}</div>
+                                  <div className="text-xs text-surface-500 font-mono truncate">{card.id}</div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+
+                        {/* Drop target spacer — shows "make room" in target column */}
+                        {dropTargetColumn === col.id && !colHasDraggedCard && (
+                          <div className="py-1">
+                            <div className="h-[56px] rounded-lg border-2 border-dashed border-primary/40 bg-primary/5 dark:bg-primary/10 transition-all duration-300" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Drag overlay — rendered outside columns so it can float freely */}
+              {draggedCardId && (() => {
+                // Find the dragged card data
+                let draggedCard: KanbanCard | null = null;
+                let sourceColIndex = 0;
+                let cardIndexInCol = 0;
+                for (let ci = 0; ci < KANBAN_COLUMNS.length; ci++) {
+                  const idx = KANBAN_COLUMNS[ci].cards.findIndex(c => c.id === draggedCardId);
+                  if (idx !== -1) {
+                    draggedCard = KANBAN_COLUMNS[ci].cards[idx];
+                    sourceColIndex = ci;
+                    cardIndexInCol = idx;
+                    break;
+                  }
+                }
+                if (!draggedCard) return null;
+
+                // Calculate approximate position based on column index and card index
+                // Column: p-4 (16px) + col index * (w-80=320px + mx-2*2=16px) + px-2 (8px)
+                const colLeft = 16 + sourceColIndex * (320 + 16) + 8;
+                // Card: header ~48px + card index * (56px card + 8px py-1*2)
+                const cardTop = 48 + cardIndexInCol * 64 + 4;
+
                 return (
-                  <EntityRow
-                    key={entity.id}
-                    entity={merged}
-                    isHovered={hoveredRow === entity.id}
-                    isSelected={selectedEntityId === entity.id}
-                    highlightedField={highlightedCell?.entityId === entity.id ? highlightedCell.field : null}
-                    onHover={() => setHoveredRow(entity.id)}
-                    onLeave={() => setHoveredRow(null)}
-                    onClick={() => openEntity(entity.id)}
-                  />
+                  <div
+                    className="absolute z-50 w-[304px] pointer-events-none"
+                    style={{
+                      left: colLeft,
+                      top: cardTop,
+                      transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) rotate(3deg)`,
+                      transition: "none",
+                    }}
+                  >
+                    <div
+                      className="p-2 flex items-start border rounded-lg ring-2 ring-primary bg-white dark:bg-surface-900 border-surface-200 dark:border-surface-700/50"
+                      style={{
+                        boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+                        opacity: 0.95,
+                      }}
+                    >
+                      {draggedCard.image ? (
+                        <div className="w-10 h-10 rounded-md overflow-hidden shrink-0 mr-2">
+                          <img src={draggedCard.image} alt={draggedCard.title} className="w-full h-full object-cover" />
+                        </div>
+                      ) : (
+                        <div className="w-10 h-10 rounded-md bg-surface-100 dark:bg-surface-800 shrink-0 mr-2 flex items-center justify-center">
+                          <MI size={18} className="text-surface-400">sell</MI>
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="line-clamp-2 text-sm font-medium text-surface-900 dark:text-white">{draggedCard.title}</div>
+                        <div className="text-xs text-surface-500 font-mono truncate">{draggedCard.id}</div>
+                      </div>
+                    </div>
+                  </div>
                 );
-              })}
+              })()}
             </div>
-          </div>
+          )}
         </div>
       </main>
 
@@ -774,14 +1045,14 @@ export function EntityViewDemo() {
             <div className="flex-1 overflow-y-auto">
               <div className="flex flex-col w-full pt-6 pb-16 px-4 sm:px-6">
                 {/* Dirty badge */}
-                <div className="flex justify-end mb-2">
+                <div className="flex justify-end mb-2" style={{ minHeight: 22 }}>
                   {formDirty ? (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-semibold border border-amber-500/20">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-semibold border border-amber-500/20" style={{ minWidth: 72 }}>
                       <MI size={12}>edit</MI> Modified
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-100 dark:bg-surface-800 text-surface-500 dark:text-surface-300 text-[10px] font-semibold">
-                      <MI size={12}>check</MI>
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-100 dark:bg-surface-800 text-surface-500 dark:text-surface-300 text-[10px] font-semibold border border-transparent" style={{ minWidth: 72 }}>
+                      <MI size={12}>check</MI> Saved
                     </span>
                   )}
                 </div>

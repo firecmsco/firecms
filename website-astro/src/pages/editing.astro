@@ -1,7 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
-import { RebaseEditorDemo } from "../components/RebaseEditorDemo";
 import { KanbanDemo } from "../components/demos/KanbanDemo";
 import "../styles/editor.css";
 
@@ -80,7 +79,7 @@ const breadcrumbs = [
             </ul>
           </div>
           <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 shadow-2xl shadow-violet-500/5">
-            <RebaseEditorDemo client:only="react"/>
+            <img src="/img/subcollections.png" alt="Blog entry editor with rich text toolbar, header image upload, and live preview panel — all in dark mode" class="w-full h-auto" loading="lazy"/>
           </div>
         </div>
       </div>
@@ -167,7 +166,7 @@ const breadcrumbs = [
             </ul>
           </div>
           <div class="rounded-2xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl">
-            <img src="/img/new_editor.png" alt="Slash command menu showing block types like Code, Image, Quote, and AI Autocomplete" class="w-full h-auto" loading="lazy"/>
+            <img src="/img/form_editing.webp" alt="CMS entity editor with markdown toolbar, rich text fields, file upload areas, and inline product images — fully dark mode" class="w-full h-auto" loading="lazy"/>
           </div>
         </div>
       </div>
@@ -218,7 +217,7 @@ const breadcrumbs = [
           </div>
           <div class="rounded-2xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl">
             <video autoplay muted loop playsinline class="w-full h-auto">
-              <source src="/img/inline_table_editing.mp4" type="video/mp4"/>
+              <source src="/img/full_screen_dark.mp4" type="video/mp4"/>
             </video>
           </div>
         </div>
@@ -300,7 +299,7 @@ const breadcrumbs = [
 
           <div class="relative rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 overflow-hidden flex flex-col">
             <div class="aspect-[16/10] overflow-hidden">
-              <img src="/img/entity_view.png" alt="Entity detail view with custom preview panel and product images" class="w-full h-full object-cover object-top" loading="lazy"/>
+              <img src="/img/product_details_view.png" alt="Product detail view with Custom Preview tab showing product images and rich description — dark mode" class="w-full h-full object-cover object-top" loading="lazy"/>
             </div>
             <div class="p-6">
               <div class="flex items-center gap-3 mb-3">
