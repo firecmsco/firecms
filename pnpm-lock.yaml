@@ -66,6 +66,9 @@ importers:
 
   app:
     devDependencies:
+      '@rebasepro/cli':
+        specifier: workspace:*
+        version: link:../packages/cli
       '@rebasepro/types':
         specifier: 0.0.1
         version: link:../packages/types
@@ -160,9 +163,6 @@ importers:
       '@rebasepro/datatalk':
         specifier: 0.0.1
         version: link:../../packages/datatalk
-      '@rebasepro/entity_history':
-        specifier: 0.0.1
-        version: link:../../packages/entity_history
       '@rebasepro/firebase':
         specifier: 0.0.1
         version: link:../../packages/firebase
@@ -415,7 +415,7 @@ importers:
         version: 7.2.2
       ts-jest:
         specifier: 29.4.1
-        version: 29.4.1(@babel/core@7.29.0)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@29.7.0(@babel/core@7.29.0))(jest-util@30.3.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.1(@babel/core@7.29.0)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@29.7.0(@babel/core@7.29.0))(esbuild@0.25.12)(jest-util@30.3.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3)
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
@@ -1396,7 +1396,7 @@ importers:
         version: 10.4.3(socks@2.8.7)
       ts-jest:
         specifier: 29.4.1
-        version: 29.4.1(@babel/core@7.29.0)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@29.7.0(@babel/core@7.29.0))(jest-util@30.3.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3)
+        version: 29.4.1(@babel/core@7.29.0)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@29.7.0(@babel/core@7.29.0))(esbuild@0.25.12)(jest-util@30.3.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3)
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
@@ -23524,7 +23524,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  ts-jest@29.4.1(@babel/core@7.29.0)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@29.7.0(@babel/core@7.29.0))(jest-util@30.3.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3):
+  ts-jest@29.4.1(@babel/core@7.29.0)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@29.7.0(@babel/core@7.29.0))(esbuild@0.25.12)(jest-util@30.3.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
@@ -23542,6 +23542,7 @@ snapshots:
       '@jest/transform': 30.3.0
       '@jest/types': 30.3.0
       babel-jest: 29.7.0(@babel/core@7.29.0)
+      esbuild: 0.25.12
       jest-util: 30.3.0
 
   ts-jest@29.4.6(@babel/core@7.29.0)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@29.7.0(@babel/core@7.29.0))(jest-util@30.3.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3):

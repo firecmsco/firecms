@@ -146,6 +146,31 @@ export function getRelationFrom<M extends Record<string, any>>(entity: Entity<M>
     return new EntityRelation(entity.id, entity.path, entity);
 }
 
+/**
+ * Normalize a value into a proper EntityRelation instance.
+ * Handles EntityRelation class instances, and plain objects
+ * with `__type === "relation"` or an `isEntityRelation()` method.
+ *
+ * Returns null if the value cannot be coerced.
+ */
+export function normalizeToEntityRelation(value: unknown): EntityRelation | null {
+    if (value instanceof EntityRelation) return value;
+    if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+
+    const obj = value as Record<string, unknown>;
+    const isRelationLike =
+        obj.__type === "relation" ||
+        (typeof obj.isEntityRelation === "function" && (obj.isEntityRelation as () => boolean)());
+
+    if (!isRelationLike) return null;
+
+    return new EntityRelation(
+        obj.id as string | number,
+        obj.path as string,
+        obj.data as Entity | undefined
+    );
+}
+
 export function traverseValuesProperties<M extends Record<string, any>>(
     inputValues: Partial<EntityValues<M>>,
     properties: Properties,

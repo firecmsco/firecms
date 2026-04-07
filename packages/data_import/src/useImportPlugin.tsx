@@ -1,18 +1,22 @@
 import { useMemo } from "react";
-import { RebasePlugin } from "@rebasepro/core";
+import { RebasePlugin } from "@rebasepro/types";
 import { ImportCollectionAction } from "./import";
 
 /**
- *
+ * Plugin to import collection data from CSV, Excel or JSON files.
  */
-export function useImportPlugin(props?: ImportPluginProps): RebasePlugin<any, any, any, ImportPluginProps> {
+export function useImportPlugin(props?: ImportPluginProps): RebasePlugin {
 
     return useMemo(() => ({
         key: "import",
-        collectionView: {
-            CollectionActions: [ImportCollectionAction],
-            collectionActionsProps: props
-        }
+        slots: [
+            {
+                slot: "collection.actions",
+                Component: ImportCollectionAction,
+                props: props,
+                order: 60,
+            },
+        ],
     }), [props]);
 }
 

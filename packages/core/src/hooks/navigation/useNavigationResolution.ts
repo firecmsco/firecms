@@ -98,12 +98,12 @@ export async function resolveCollections(
 
     if (plugins) {
         for (const plugin of plugins) {
-            if (plugin.collection?.modifyCollection) {
-                resolvedCollections = applyPluginModifyCollection(resolvedCollections, plugin.collection.modifyCollection);
+            if (plugin.hooks?.modifyCollection) {
+                resolvedCollections = applyPluginModifyCollection(resolvedCollections, plugin.hooks.modifyCollection);
             }
 
-            if (plugin.collection?.injectCollections) {
-                resolvedCollections = plugin.collection.injectCollections(resolvedCollections ?? []);
+            if (plugin.hooks?.injectCollections) {
+                resolvedCollections = plugin.hooks.injectCollections(resolvedCollections ?? []);
             }
         }
     }

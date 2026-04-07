@@ -9,9 +9,10 @@ const postsCollection: EntityCollection = {
     slug: "posts",
     dbPath: "posts",
     icon: "Article",
+    history: true,
     properties: {
         id: {
-            name: "ID",
+            name: "IDt",
             type: "number",
             validation: {
                 required: true
@@ -137,8 +138,7 @@ const postsCollection: EntityCollection = {
                 }
             ]
         }
-    ],
-    securityRules: []
+    ]
 };
 
 export default postsCollection;

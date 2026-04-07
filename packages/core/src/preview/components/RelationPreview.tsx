@@ -83,7 +83,7 @@ function RelationPreviewExisting<M extends Record<string, any> = any>({
     collection: EntityCollection<M>
 }) {
 
-    const passedEntity = (relation as any).data;
+    const passedEntity = relation.data;
 
     const {
         entity,

@@ -7,9 +7,9 @@ export interface Props {
 const { title, href } = Astro.props;
 ---
 
-<div class="p-4 relative inline-block" data-dropdown-container>
+<div class="relative" data-dropdown-container>
     <a href={href}
-       class="p-4 text-surface-300 hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded px-1 py-0.5"
+       class="px-3 py-2 text-surface-300 hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded"
        data-dropdown-trigger
        aria-haspopup="true"
        aria-expanded="false"
@@ -17,7 +17,7 @@ const { title, href } = Astro.props;
         {title}
     </a>
     <div
-            class={`absolute top-full left-0 w-screen bg-surface-950/95 backdrop-blur-xl shadow-2xl z-50 transition-opacity duration-150 ease-in-out border-b border-surface-800 hidden`}
+            class="nav-dropdown-panel absolute left-0 w-screen bg-surface-950/95 backdrop-blur-xl shadow-2xl z-50 border-b border-surface-800 pointer-events-none opacity-0 transition-opacity duration-150 ease-in-out"
             role="navigation"
             aria-label={title + " navigation panel"}
             data-dropdown-panel
@@ -28,56 +28,146 @@ const { title, href } = Astro.props;
     </div>
 </div>
 
+<style>
+    /* Invisible bridge from trigger to panel — prevents hover dead-zone */
+    .nav-dropdown-panel::before {
+        content: '';
+        position: absolute;
+        top: -1.5rem;
+        left: 0;
+        width: 100%;
+        height: 1.5rem;
+    }
+</style>
+
 <script>
     document.addEventListener('astro:page-load', () => {
-        const dropdowns = document.querySelectorAll('[data-dropdown-container]');
+        const allContainers = Array.from(document.querySelectorAll('[data-dropdown-container]'));
+        if (!allContainers.length) return;
 
-        dropdowns.forEach(container => {
+        // Skip if already initialized
+        if ((allContainers[0] as HTMLElement).dataset.navInit) return;
+        allContainers.forEach(c => (c as HTMLElement).dataset.navInit = '1');
+
+        let activeContainer: Element | null = null;
+        let closeTimer: number = 0;
+
+        // Find the header element once — panels will be positioned at its bottom edge
+        const headerEl = document.querySelector('header');
+
+        function positionPanel(container: Element, panel: HTMLElement) {
+            const containerRect = container.getBoundingClientRect();
+            // X: offset so the panel starts at left edge of viewport
+            const translateX = -containerRect.left;
+            // Y: position at the bottom of the header, flush
+            if (headerEl) {
+                const headerRect = headerEl.getBoundingClientRect();
+                const offsetY = headerRect.bottom - containerRect.bottom;
+                panel.style.transform = `translateX(${translateX}px) translateY(${offsetY}px)`;
+            } else {
+                panel.style.transform = `translateX(${translateX}px)`;
+            }
+            panel.style.top = '100%';
+        }
+
+        function openDropdown(container: Element) {
+            if (activeContainer === container) {
+                clearTimeout(closeTimer);
+                return;
+            }
+
+            if (activeContainer) {
+                closeDropdownInstant(activeContainer);
+            }
+
+            clearTimeout(closeTimer);
+
             const trigger = container.querySelector('[data-dropdown-trigger]') as HTMLElement;
             const panel = container.querySelector('[data-dropdown-panel]') as HTMLElement;
-            let hideTimeout: number;
-
             if (!trigger || !panel) return;
 
-            const calculateOffset = () => {
-                if (panel.offsetParent) {
-                    const rect = container.getBoundingClientRect();
-                    panel.style.transform = `translateX(-${rect.left}px) translateY(1rem)`;
-                }
-            };
+            panel.style.pointerEvents = 'auto';
+            panel.style.opacity = '1';
+            trigger.setAttribute('aria-expanded', 'true');
+            positionPanel(container, panel);
+            activeContainer = container;
+        }
 
-            const show = () => {
-                clearTimeout(hideTimeout);
-                panel.classList.remove('hidden');
-                trigger.setAttribute('aria-expanded', 'true');
-                calculateOffset();
-                window.addEventListener('resize', calculateOffset);
-                window.addEventListener('scroll', calculateOffset, true);
-            };
+        function closeDropdownInstant(container: Element) {
+            const trigger = container.querySelector('[data-dropdown-trigger]') as HTMLElement;
+            const panel = container.querySelector('[data-dropdown-panel]') as HTMLElement;
+            if (!trigger || !panel) return;
 
-            const hide = () => {
-                panel.classList.add('hidden');
-                trigger.setAttribute('aria-expanded', 'false');
-                window.removeEventListener('resize', calculateOffset);
-                window.removeEventListener('scroll', calculateOffset, true);
-            };
+            panel.style.pointerEvents = 'none';
+            panel.style.opacity = '0';
+            trigger.setAttribute('aria-expanded', 'false');
 
-            const hideDelayed = () => {
-                hideTimeout = window.setTimeout(hide, 150);
-            };
+            if (activeContainer === container) {
+                activeContainer = null;
+            }
+        }
 
-            container.addEventListener('mouseenter', show);
-            container.addEventListener('mouseleave', hideDelayed);
-            trigger.addEventListener('focus', show);
-            container.addEventListener('focusout', (e) => {
-                if (!container.contains((e as FocusEvent).relatedTarget as Node)) {
-                    hide();
+        function scheduleClose(container: Element) {
+            clearTimeout(closeTimer);
+            closeTimer = window.setTimeout(() => {
+                closeDropdownInstant(container);
+            }, 250);
+        }
+
+        function onReposition() {
+            if (!activeContainer) return;
+            const panel = activeContainer.querySelector('[data-dropdown-panel]') as HTMLElement;
+            if (panel) positionPanel(activeContainer, panel);
+        }
+
+        window.addEventListener('resize', onReposition);
+        window.addEventListener('scroll', onReposition, true);
+
+        allContainers.forEach(container => {
+            const trigger = container.querySelector('[data-dropdown-trigger]') as HTMLElement;
+            const panel = container.querySelector('[data-dropdown-panel]') as HTMLElement;
+            if (!trigger || !panel) return;
+
+            // Open on trigger hover — instant
+            trigger.addEventListener('mouseenter', () => {
+                openDropdown(container);
+            });
+
+            // Panel hover → cancel any pending close
+            panel.addEventListener('mouseenter', () => {
+                clearTimeout(closeTimer);
+                if (activeContainer !== container) {
+                    activeContainer = container;
                 }
             });
 
+            // Leaving the container → schedule close with grace period
+            container.addEventListener('mouseleave', () => {
+                if (activeContainer === container) {
+                    scheduleClose(container);
+                }
+            });
+
+            // Also listen on the panel itself for mouseleave (since it extends outside the container)
+            panel.addEventListener('mouseleave', (e) => {
+                // Only close if the mouse didn't go back into a dropdown container
+                const related = (e as MouseEvent).relatedTarget as Element;
+                if (related && related.closest?.('[data-dropdown-container]')) {
+                    return; // Moving to another trigger — let its mouseenter handle it
+                }
+                scheduleClose(container);
+            });
+
+            // Keyboard / focus support
+            trigger.addEventListener('focus', () => openDropdown(container));
+            container.addEventListener('focusout', (e) => {
+                if (!container.contains((e as FocusEvent).relatedTarget as Node)) {
+                    closeDropdownInstant(container);
+                }
+            });
             container.addEventListener('keydown', (e) => {
                 if ((e as KeyboardEvent).key === 'Escape') {
-                    hide();
+                    closeDropdownInstant(container);
                     trigger.focus();
                 }
             });

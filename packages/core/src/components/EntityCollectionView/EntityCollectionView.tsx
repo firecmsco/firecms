@@ -43,7 +43,8 @@ import {
     useCMSUrlController,
     useSideEntityController,
     usePermissions,
-    useTranslation
+    useTranslation,
+    useSlot
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
@@ -85,6 +86,7 @@ import { useSelectionController } from "./useSelectionController";
 import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartActions";
 import { addRecentId, getRecentIds } from "./utils";
 import { useScrollRestoration } from "../common/useScrollRestoration";
+import { ErrorBoundary } from "../ErrorBoundary";
 
 const DEFAULT_ENTITY_OPEN_MODE: "side_panel" | "full_screen" = "side_panel";
 
@@ -391,14 +393,28 @@ export const EntityCollectionView = React.memo(
             setLastDeleteTimestamp(Date.now());
         };
 
-        const pluginAddColumnComponents = (customizationController?.plugins ?? [])
-            .map(plugin => plugin.collectionView?.AddColumnComponent)
-            .filter(Boolean) as React.ComponentType<{
-                path: string,
-                parentCollectionIds: string[],
-                collection: EntityCollection;
-                tableController: EntityTableController;
-            }>[];
+        const pluginAddColumnComponents = useSlot("collection.add-column", {
+            path,
+            parentCollectionIds: parentCollectionIds ?? [],
+            collection,
+            tableController
+        });
+
+        const pluginToolbarWidgets = useSlot("collection.toolbar", {
+            path,
+            parentCollectionIds: parentCollectionIds ?? [],
+            collection,
+            tableController,
+            selectionController: usedSelectionController
+        });
+
+        const pluginEmptyStates = useSlot("collection.empty-state", {
+            path,
+            parentCollectionIds: parentCollectionIds ?? [],
+            collection,
+            canCreate: canCreateEntities,
+            onNewClick
+        });
 
         const onCollectionModifiedForUser = useCallback((path: string, partialCollection: PartialEntityCollection<M>) => {
             if (userConfigPersistence) {
@@ -746,6 +762,13 @@ export const EntityCollectionView = React.memo(
         />;
 
 
+        const { resolvedSlots } = customizationController;
+
+        // Pre-compute header action slot contributions (avoid useSlot inside callback)
+        const headerActionContributions = resolvedSlots
+            .filter(s => s.slot === "collection.header.action")
+            .sort((a, b) => (a.order ?? 50) - (b.order ?? 50));
+
         const buildAdditionalHeaderWidget = useCallback(({
             property,
             propertyKey,
@@ -756,38 +779,27 @@ export const EntityCollectionView = React.memo(
             onHover: boolean
         }) => {
             const collection = collectionRef.current;
-            if (!customizationController.plugins)
-                return null;
-            return <>
-                {customizationController.plugins.filter(plugin => plugin.collectionView?.HeaderAction)
-                    .map((plugin, i) => {
-                        const HeaderAction = plugin.collectionView!.HeaderAction!;
-                        return <HeaderAction
-                            onHover={onHover}
-                            key={`plugin_header_action_${i}`}
-                            propertyKey={propertyKey}
-                            property={property}
-                            path={path}
-                            collection={collection}
-                            tableController={tableController}
-                            parentCollectionIds={parentCollectionIds ?? []} />;
-                    })}
-            </>;
-        }, [customizationController.plugins, path, parentCollectionIds]);
+            const headerSlotProps = {
+                property,
+                propertyKey,
+                onHover,
+                path,
+                collection,
+                tableController,
+                parentCollectionIds: parentCollectionIds ?? []
+            };
+            return <>{headerActionContributions.map((s, i) => (
+                <ErrorBoundary key={`header_action_${propertyKey}_${i}`}>
+                    <s.Component {...headerSlotProps} {...(s.props ?? {})} />
+                </ErrorBoundary>
+            ))}</>;
+        }, [headerActionContributions, path, parentCollectionIds]);
 
         const addColumnComponentInternal = pluginAddColumnComponents.length > 0
             ? function () {
                 return (
                     <div className="flex flex-row items-center gap-2">
-                        {pluginAddColumnComponents.map((AddComp, i) => (
-                            <AddComp 
-                                key={`plugin_add_col_${i}`}
-                                path={path}
-                                parentCollectionIds={parentCollectionIds ?? []}
-                                collection={collection}
-                                tableController={tableController} 
-                            />
-                        ))}
+                        {pluginAddColumnComponents}
                     </div>
                 );
             }
@@ -823,22 +835,32 @@ export const EntityCollectionView = React.memo(
         );
 
         // Compute plugin-provided error view for collection loading errors
-        const pluginErrorView = useMemo(() => {
-            const error = tableController.dataLoadingError;
-            if (!error || !customizationController.plugins) return null;
-            for (const plugin of customizationController.plugins) {
-                if (plugin.collectionView?.CollectionError) {
-                    const CollectionError = plugin.collectionView.CollectionError;
-                    return <CollectionError
-                        path={path}
-                        collection={collection}
-                        parentCollectionIds={parentCollectionIds}
-                        error={error}
-                    />;
-                }
-            }
-            return null;
-        }, [tableController.dataLoadingError, customizationController.plugins, path, collection, parentCollectionIds]);
+        const pluginErrorViews = useSlot("collection.error", {
+            path,
+            collection,
+            parentCollectionIds,
+            error: tableController.dataLoadingError as Error
+        });
+        const pluginErrorView = tableController.dataLoadingError && pluginErrorViews.length > 0
+            ? pluginErrorViews[0]
+            : null;
+
+        // Shared empty state — plugin slot takes priority, then default
+        const isFilteredOrSorted = tableController.filterValues !== undefined || tableController.sortBy !== undefined;
+        const emptyComponent = pluginEmptyStates.length > 0
+            ? <>{pluginEmptyStates}</>
+            : canCreateEntities && !isFilteredOrSorted
+                ? <div className="flex flex-col items-center justify-center">
+                    <Typography variant={"subtitle2"}>{t("so_empty")}</Typography>
+                    <Button
+                        onClick={onNewClick}
+                        className="mt-4"
+                    >
+                        <AddIcon />
+                        {t("create_your_first_entry")}
+                    </Button>
+                </div>
+                : <Typography variant={"label"}>{t("no_results_filter_sort")}</Typography>;
 
         return (
             <div className={cls("overflow-hidden h-full w-full rounded-md flex flex-col", className)}
@@ -861,18 +883,21 @@ export const EntityCollectionView = React.memo(
                         selectionController={usedSelectionController}
                         collectionEntitiesCount={docsCount}
                         resolvedProperties={resolvedCollection.properties} />}
-                    actions={<EntityCollectionViewActions
-                        parentCollectionIds={parentCollectionIds ?? []}
-                        collection={collection}
-                        tableController={tableController}
-                        onMultipleDeleteClick={onMultipleDeleteClick}
-                        onNewClick={onNewClick}
-                        path={path}
-                        relativePath={collection.dbPath}
-                        selectionController={usedSelectionController}
-                        selectionEnabled={selectionEnabled}
-                        collectionEntitiesCount={docsCount}
-                    />}
+                    actions={<>
+                        {pluginToolbarWidgets}
+                        <EntityCollectionViewActions
+                            parentCollectionIds={parentCollectionIds ?? []}
+                            collection={collection}
+                            tableController={tableController}
+                            onMultipleDeleteClick={onMultipleDeleteClick}
+                            onNewClick={onNewClick}
+                            path={path}
+                            relativePath={collection.dbPath}
+                            selectionController={usedSelectionController}
+                            selectionEnabled={selectionEnabled}
+                            collectionEntitiesCount={docsCount}
+                        />
+                    </>}
                 />
 
                 {/* View content - only the view-specific content changes */}
@@ -889,19 +914,7 @@ export const EntityCollectionView = React.memo(
                         selectionEnabled={selectionEnabled}
                         highlightedEntities={highlightedEntity ? [highlightedEntity] : []}
                         deletedEntities={deletedEntities}
-                        emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
-                            ? <div className="flex flex-col items-center justify-center">
-                                <Typography variant={"subtitle2"}>{t("so_empty")}</Typography>
-                                <Button
-                                    onClick={onNewClick}
-                                    className="mt-4"
-                                >
-                                    <AddIcon />
-                                    {t("create_your_first_entry")}
-                                </Button>
-                            </div>
-                            : <Typography variant={"label"}>{t("no_results_filter_sort")}</Typography>
-                        }
+                        emptyComponent={emptyComponent}
                     />
                 ) : viewMode === "cards" ? (
                     <EntityCollectionCardView
@@ -915,19 +928,7 @@ export const EntityCollectionView = React.memo(
                         onScroll={tableController.onScroll}
                         initialScroll={tableController.initialScroll}
                         size={cardSize}
-                        emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
-                            ? <div className="flex flex-col items-center justify-center">
-                                <Typography variant={"subtitle2"}>{t("so_empty")}</Typography>
-                                <Button
-                                    onClick={onNewClick}
-                                    className="mt-4"
-                                >
-                                    <AddIcon />
-                                    {t("create_your_first_entry")}
-                                </Button>
-                            </div>
-                            : <Typography variant={"label"}>{t("no_results_filter_sort")}</Typography>
-                        }
+                        emptyComponent={emptyComponent}
                     />
                 ) : (
                     <EntityCollectionTable
@@ -952,19 +953,7 @@ export const EntityCollectionView = React.memo(
                         onScroll={tableController.onScroll}
                         initialScroll={tableController.initialScroll}
                         textSearchLoading={textSearchLoading}
-                        emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
-                            ? <div className="flex flex-col items-center justify-center">
-                                <Typography variant={"subtitle2"}>{t("so_empty")}</Typography>
-                                <Button
-                                    onClick={onNewClick}
-                                    className="mt-4"
-                                >
-                                    <AddIcon />
-                                    {t("create_your_first_entry")}
-                                </Button>
-                            </div>
-                            : <Typography variant={"label"}>{t("no_results_filter_sort")}</Typography>
-                        }
+                        emptyComponent={emptyComponent}
                         hoverRow={hoverRow}
                         inlineEditing={checkInlineEditing()}
                         AdditionalHeaderWidget={buildAdditionalHeaderWidget}
@@ -995,9 +984,9 @@ export const EntityCollectionView = React.memo(
                             // Call each plugin's onColumnsReorder callback
                             if (customizationController?.plugins) {
                                 customizationController.plugins
-                                    .filter(plugin => plugin.collectionView?.onColumnsReorder)
+                                    .filter(plugin => plugin.hooks?.onColumnsReorder)
                                     .forEach(plugin => {
-                                        plugin.collectionView!.onColumnsReorder!({
+                                        plugin.hooks!.onColumnsReorder!({
                                             fullPath: path,
                                             parentCollectionIds: parentCollectionIds ?? [],
                                             collection,

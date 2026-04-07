@@ -28,7 +28,8 @@ import {
     useCollectionRegistryController,
     useSideEntityController,
     useSnackbarController,
-    useTranslation
+    useTranslation,
+    useSlot
 } from "../hooks";
 import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, Typography } from "@rebasepro/ui";
 import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@rebasepro/formex";
@@ -483,32 +484,23 @@ export function EntityForm<M extends Record<string, any>>({
 
 
 
-    const pluginActions: React.ReactNode[] = [];
-    const pluginBeforeTitle: React.ReactNode[] = [];
-    const plugins = customizationController.plugins;
-
     const actionsDisabled = disabled || formex.isSubmitting || (status === "existing" && !formex.dirty) || Boolean(disabledProp);
     const parentCollectionIds = collectionRegistryController.getParentCollectionIds(path);
 
-    if (plugins && collection) {
-        const actionProps: PluginFormActionProps = {
-            entityId,
-            parentCollectionIds,
-            path: path,
-            status,
-            collection,
-            context,
-            formContext,
-            openEntityMode,
-            disabled: actionsDisabled,
-        };
-        pluginActions.push(...plugins.map((plugin) => (
-            plugin.form?.Actions
-                ? <plugin.form.Actions
-                    key={`actions_${plugin.key}`} {...actionProps} />
-                : null
-        )).filter(Boolean));
-    }
+    const formActionProps: PluginFormActionProps = {
+        entityId,
+        parentCollectionIds,
+        path: path,
+        status,
+        collection: collection!,
+        context,
+        formContext,
+        openEntityMode,
+        disabled: actionsDisabled,
+    };
+    const pluginFormActions = useSlot("form.actions", formActionProps);
+    const pluginFormBefore = useSlot("form.before", formActionProps);
+    const pluginFormAfter = useSlot("form.after", formActionProps);
 
     const titlePropertyKey = getEntityTitlePropertyKey(collection, customizationController.propertyConfigs);
     const title = (formex.values && titlePropertyKey ? getValueInPath(formex.values, titlePropertyKey) as React.ReactNode : undefined)
@@ -658,7 +650,7 @@ export function EntityForm<M extends Record<string, any>>({
 
     const formView = <ErrorBoundary>
         <>
-            {pluginBeforeTitle}
+            {pluginFormBefore}
 
             {!Builder && <div className={"w-full flex flex-col items-start my-4 lg:my-6"}>
                 <Typography
@@ -693,6 +685,8 @@ export function EntityForm<M extends Record<string, any>>({
                 </div>
             </>}
 
+            {pluginFormAfter}
+
             {forceActionsAtTheBottom && <div className="h-16" />}
         </>
     </ErrorBoundary>;
@@ -715,7 +709,7 @@ export function EntityForm<M extends Record<string, any>>({
         formex={formex}
         disabled={actionsDisabled}
         status={status}
-        pluginActions={pluginActions ?? []}
+        pluginActions={pluginFormActions ?? []}
         openEntityMode={openEntityMode}
         showDefaultActions={showDefaultActions}
         navigateBack={navigateBack}

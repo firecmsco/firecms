@@ -282,7 +282,7 @@ function FieldInternal<CustomProps, M extends Record<string, any>>
 }
 
 const shouldPropertyReRender = (property: Property, plugins?: RebasePlugin[]): boolean => {
-    if (plugins?.some((plugin) => plugin.form?.fieldBuilder)) {
+    if (plugins?.some((plugin) => plugin.fieldBuilder)) {
         return true;
     }
     if (isPropertyBuilder(property)) {
@@ -322,7 +322,7 @@ function useWrappedComponent<T, M extends Record<string, any> = any>(
         if (plugins) {
             plugins.forEach((plugin) => {
                 const fieldId = getFieldId(property);
-                if (fieldId && plugin.form?.fieldBuilder) {
+                if (fieldId && plugin.fieldBuilder) {
                     const params: PluginFieldBuilderParams = {
                         fieldConfigId: fieldId,
                         propertyKey,
@@ -332,9 +332,9 @@ function useWrappedComponent<T, M extends Record<string, any> = any>(
                         path,
                         collection,
                     };
-                    const enabled = plugin.form?.fieldBuilderEnabled?.(params);
+                    const enabled = plugin.fieldBuilder.enabled?.(params);
                     if (enabled === undefined || enabled)
-                        Wrapper = plugin.form.fieldBuilder(params) || Wrapper;
+                        Wrapper = plugin.fieldBuilder.wrap(params) || Wrapper;
                 }
                 if (!fieldId) {
                     console.warn("INTERNAL: Field id not found for property", property);

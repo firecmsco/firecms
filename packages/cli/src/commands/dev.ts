@@ -54,6 +54,34 @@ export async function devCommand(rawArgs: string[]): Promise<void> {
 
     const children: ExecaChildProcess[] = [];
 
+    // --- State for printing the banner ---
+    let frontendUrl = "";
+    let backendUrl = "";
+    let debounceSummary: NodeJS.Timeout | null = null;
+    let bannerPrinted = false;
+
+    // Use regex to strip ANSI codes before matching
+    const stripAnsi = (str: string) => str.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
+
+    function printSummary() {
+        if (!frontendUrl || !backendUrl) return;
+        if (debounceSummary) clearTimeout(debounceSummary);
+        debounceSummary = setTimeout(() => {
+            if (bannerPrinted) return;
+            console.log("");
+            console.log(chalk.cyan("┌────────────────────────────────────────────────────────────┐"));
+            console.log(chalk.cyan("│                                                            │"));
+            console.log(chalk.cyan("│   ✨ Rebase Admin App is ready!                            │"));
+            const cleanUrl = stripAnsi(frontendUrl);
+            const paddedUrl = cleanUrl.padEnd(40);
+            console.log(chalk.cyan(`│   👉 Frontend URL: `) + chalk.white(paddedUrl) + chalk.cyan(`│`));
+            console.log(chalk.cyan("│                                                            │"));
+            console.log(chalk.cyan("└────────────────────────────────────────────────────────────┘"));
+            console.log("");
+            bannerPrinted = true;
+        }, 500);
+    }
+
     // Handle graceful shutdown
     const cleanup = () => {
         children.forEach((child) => {
@@ -108,6 +136,11 @@ export async function devCommand(rawArgs: string[]): Promise<void> {
             const lines = data.toString().split("\n").filter(Boolean);
             lines.forEach((line: string) => {
                 console.log(`${chalk.cyan.bold("[backend]")}  ${line}`);
+                const cleanLine = stripAnsi(line);
+                if (cleanLine.includes("Server running at http://")) {
+                    backendUrl = "started";
+                    printSummary();
+                }
             });
         });
 
@@ -143,6 +176,12 @@ export async function devCommand(rawArgs: string[]): Promise<void> {
             const lines = data.toString().split("\n").filter(Boolean);
             lines.forEach((line: string) => {
                 console.log(`${chalk.magenta.bold("[frontend]")} ${line}`);
+                const cleanLine = stripAnsi(line);
+                const urlMatch = cleanLine.match(/(http:\/\/(?:localhost|127\.0\.0\.1):\d+)/);
+                if (cleanLine.includes("Local:") && urlMatch) {
+                    frontendUrl = urlMatch[1];
+                    printSummary();
+                }
             });
         });
 

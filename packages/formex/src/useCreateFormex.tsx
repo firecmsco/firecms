@@ -4,7 +4,7 @@ import { deepEqual as equal } from "fast-equals";
 
 import { FormexController, FormexResetProps } from "./types";
 
-export function useCreateFormex<T extends object>({
+export function useCreateFormex<T = any>({
     initialValues,
     initialErrors,
     initialDirty,

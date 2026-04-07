@@ -6,7 +6,8 @@ import {
     useCustomizationController,
     useRebaseContext,
     useNavigationStateController,
-    useTranslation
+    useTranslation,
+    useSlot
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import {
@@ -14,10 +15,10 @@ import {
     HomePageSection,
     NavigationEntry,
     NavigationGroupMapping,
-    PluginGenericProps,
-    PluginHomePageAdditionalCardsProps
+    PluginGenericProps
 } from "@rebasepro/types";
 import { FavouritesView } from "./FavouritesView";
+import { ErrorBoundary } from "../ErrorBoundary";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
 import { NavigationGroup } from "./NavigationGroup";
 import {
@@ -53,6 +54,7 @@ export function ContentHomePage({
 
     const context = useRebaseContext();
     const customizationController = useCustomizationController();
+    const { resolvedSlots } = customizationController;
     const navigationStateController = useNavigationStateController();
     const breadcrumbs = useBreadcrumbsController();
     const { t } = useTranslation();
@@ -125,8 +127,8 @@ export function ContentHomePage({
             (entriesByGroup[g] ??= []).push(e);
         });
 
-        // Check if there are custom actions from plugins that should show in the default group
-        const hasPluginAdditionalCards = customizationController.plugins?.some(p => p.homePage?.AdditionalCards);
+        // Check if there are custom additional card components from plugins
+        const hasPluginAdditionalCards = customizationController.resolvedSlots.some(s => s.slot === "home.cards");
 
         let allProcessed: { name: string; entries: NavigationEntry[] }[];
 
@@ -177,7 +179,7 @@ export function ContentHomePage({
             adminGroupData: admin || null,
             items: allProcessed.filter((g) => g.name !== ADMIN_GROUP_NAME && !hiddenGroups?.includes(g.name))
         };
-    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.plugins, hiddenGroups]);
+    }, [filteredNavigationEntries, performingSearch, groupOrderFromNavController, customizationController.resolvedSlots, hiddenGroups]);
 
     // Update state only when processedGroups actually changes
     // Skip update if DnD just made a local change (dirty flag is set)
@@ -297,74 +299,17 @@ export function ContentHomePage({
         ? [restrictToVerticalAxis, restrictToWindowEdges]
         : [restrictToWindowEdges];
 
-    /* ───────────────────────────────────────────────────────────────
-       Plugin extras
-       ─────────────────────────────────────────────────────────────── */
-    let additionalPluginChildrenStart: React.ReactNode | undefined;
-    let additionalPluginChildrenEnd: React.ReactNode | undefined;
-    let additionalPluginSections: React.ReactNode | undefined;
-    let additionalPluginActions: React.ReactNode | undefined;
+    const sectionProps: PluginGenericProps = { context };
+    const additionalPluginChildrenStart = useSlot("home.children.start", sectionProps);
+    const additionalPluginChildrenEnd = useSlot("home.children.end", sectionProps);
+    const additionalPluginActions = useSlot("home.actions", sectionProps);
 
-    if (customizationController.plugins) {
-        const sectionProps: PluginGenericProps = { context };
-
-        additionalPluginSections = (
-            <>
-                {customizationController.plugins
-                    .filter((p) => p.homePage?.includeSection)
-                    .map((plugin) => {
-                        const section = plugin.homePage!.includeSection!(
-                            sectionProps
-                        );
-                        return (
-                            <NavigationGroup
-                                group={section.title}
-                                key={`plugin_section_${plugin.key}`}
-                            >
-                                {section.children}
-                            </NavigationGroup>
-                        );
-                    })}
-            </>
-        );
-
-        additionalPluginChildrenStart = (
-            <div className="flex flex-col gap-2">
-                {customizationController.plugins
-                    .filter((p) => p.homePage?.additionalChildrenStart)
-                    .map((plugin, i) => (
-                        <div key={`plugin_children_start_${i}`}>
-                            {plugin.homePage!.additionalChildrenStart}
-                        </div>
-                    ))}
-            </div>
-        );
-
-        additionalPluginChildrenEnd = (
-            <div className="flex flex-col gap-2">
-                {customizationController.plugins
-                    .filter((p) => p.homePage?.additionalChildrenEnd)
-                    .map((plugin, i) => (
-                        <div key={`plugin_children_end_${i}`}>
-                            {plugin.homePage!.additionalChildrenEnd}
-                        </div>
-                    ))}
-            </div>
-        );
-
-        // Collect additionalActions from plugins
-        additionalPluginActions = (
-            <>
-                {customizationController.plugins
-                    .filter((p) => p.homePage?.additionalActions)
-                    .map((plugin, i) => (
-                        <React.Fragment key={`plugin_actions_${i}`}>
-                            {plugin.homePage!.additionalActions}
-                        </React.Fragment>
-                    ))}
-            </>
-        );
-    }
+    // Pre-compute home.cards slot contributions (cannot call useSlot inside .map loop)
+    const homeCardContributions = useMemo(() => {
+        return resolvedSlots
+            .filter(s => s.slot === "home.cards")
+            .sort((a, b) => (a.order ?? 50) - (b.order ?? 50));
+    }, [resolvedSlots]);
 
     /* ───────────────────────────────────────────────────────────────
        Render
@@ -418,26 +363,23 @@ export function ContentHomePage({
                             const groupKey = groupData.name;
                             const entriesInGroup = groupData.entries;
 
-                            const AdditionalCards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] =
-                                [];
-                            customizationController.plugins?.forEach((p) => {
-                                if (p.homePage?.AdditionalCards)
-                                    AdditionalCards.push(
-                                        ...toArray(p.homePage.AdditionalCards)
-                                    );
-                            });
-
-                            const actionProps: PluginHomePageAdditionalCardsProps = {
+                            const homeCardsProps = {
                                 group:
                                     groupKey === DEFAULT_GROUP_NAME
                                         ? undefined
                                         : groupKey,
                                 context
                             };
+                            // Render home.cards contributions inline (no hook call inside loop)
+                            const additionalCards = homeCardContributions.map((s, i) => (
+                                <ErrorBoundary key={`home_cards_${groupKey}_${i}`}>
+                                    <s.Component {...homeCardsProps} {...(s.props ?? {})} />
+                                </ErrorBoundary>
+                            ));
 
                             if (
                                 entriesInGroup.length === 0 &&
-                                (AdditionalCards.length === 0 || performingSearch)
+                                (additionalCards.length === 0 || performingSearch)
                             )
                                 return null;
 
@@ -518,14 +460,7 @@ export function ContentHomePage({
                                                 {!performingSearch &&
                                                     groupKey.toLowerCase() !==
                                                     ADMIN_GROUP_NAME.toLowerCase() &&
-                                                    AdditionalCards.map(
-                                                        (C, i) => (
-                                                            <C
-                                                                key={`extra_${groupKey}_${i}`}
-                                                                {...actionProps}
-                                                            />
-                                                        )
-                                                    )}
+                                                    additionalCards}
                                             </div>
                                         </NavigationGroupDroppable>
                                     </NavigationGroup>
@@ -603,7 +538,6 @@ export function ContentHomePage({
                     </NavigationGroup>
                 )}
 
-                {additionalPluginSections}
 
                 {sections && sections.map((section) => (
                     <NavigationGroup

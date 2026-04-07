@@ -18,7 +18,7 @@ export interface FieldInputProps<Value> {
     onBlur: (event: React.FocusEvent) => void,
 }
 
-export interface FormexFieldProps<Value = unknown, FormValues extends object = object> {
+export interface FormexFieldProps<Value = any, FormValues extends object = object> {
     field: FieldInputProps<Value>;
     form: FormexController<FormValues>;
 }

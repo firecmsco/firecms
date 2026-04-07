@@ -2,7 +2,7 @@ import { DataDriver, EntityCollection } from "@rebasepro/types";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { BackendCollectionRegistry } from "./collections/BackendCollectionRegistry";
 import { loadCollectionsFromDirectory } from "./collections/loader";
-import { getTableName, isTable, Relations } from "drizzle-orm";
+import { getTableName, isTable, Relations, sql } from "drizzle-orm";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { PostgresDataDriver } from "./services/postgresDataDriver";
 import { RealtimeService } from "./services/realtimeService";
@@ -27,7 +27,9 @@ import {
     createAuthRoutes,
     ensureAuthTablesExist,
     RoleService,
-    UserService
+    UserService,
+    requireAuth,
+    requireAdmin
 } from "./auth";
 import { createEmailService, EmailConfig, EmailService } from "./email";
 import {
@@ -395,6 +397,15 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             const rawClient = ("$client" in db ? (db as Record<string, unknown>).$client : db) as import("pg").Pool;
             const schemaAwareDb = createDrizzle(rawClient, { schema: mergedSchema });
 
+            console.log(`⏳ Verifying database connection to "${driverId}"...`);
+
+            try {
+                await schemaAwareDb.execute(sql`SELECT 1`);
+            } catch (err) {
+                console.error(`❌ Failed to connect to database for driver "${driverId}":`, err);
+                throw err;
+            }
+
             // Create realtime service and driver delegate, using schema-aware db
             const realtimeService = new RealtimeService(schemaAwareDb, collectionRegistry);
             const poolManager = adminConnectionString ? new DatabasePoolManager(adminConnectionString) : undefined;
@@ -425,6 +436,20 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
 
     // Register collections
     activeCollections.forEach(collection => collectionRegistry.register(collection));
+
+    // Warn about collections missing database tables for Postgres drivers
+    for (const driverId of Object.keys(rawDriverConfigs)) {
+        if (isPostgresDriverConfig(rawDriverConfigs[driverId])) {
+            const missing = collectionRegistry.getCollectionsWithoutTables(driverId);
+            if (missing.length > 0) {
+                console.warn(`\x1b[33m⚠️ Driver "${driverId}": ${missing.length} collection(s) do not have a corresponding table in the schema.\x1b[0m`);
+                missing.forEach(c => {
+                    console.warn(`\x1b[33m   - ${c.name} (expected table: "${c.dbPath}")\x1b[0m`);
+                });
+                console.warn(`\x1b[33m   Run 'npm run db:generate' and 'npm run db:migrate' to sync your schema.\x1b[0m`);
+            }
+        }
+    }
 
     // ============ Get default driver for auth ============
     // Auth requires PostgreSQL, so we need to find the default db connection
@@ -576,6 +601,25 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         config.app.route(`${basePath}/admin`, adminRoutes);
     }
 
+    // ============ Schema Editor ============
+    if (config.collectionsDir) {
+        if (process.env.NODE_ENV === "production") {
+            console.warn("⚠️ Schema Editor is disabled in production environments for security.");
+        } else {
+            console.log("🛠️ Configuring Schema Editor...");
+            const { createSchemaEditorRoutes } = await import("./api/schema-editor-routes");
+            const schemaEditorRoutes = createSchemaEditorRoutes(config.collectionsDir);
+            
+            // Rebase CMS expects these routes at /api/schema-editor
+            if (config.auth?.requireAuth !== false && !!config.auth?.jwtSecret) {
+                schemaEditorRoutes.use("/*", requireAuth, requireAdmin);
+            }
+            
+            config.app.route(`${basePath}/schema-editor`, schemaEditorRoutes);
+            console.log(`✅ Schema Editor mounted at ${basePath}/schema-editor`);
+        }
+    }
+
     if (storageController) {
         const storageRoutes = createStorageRoutes({
             controller: storageController,
@@ -599,13 +643,20 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         }));
 
         // Collections metadata endpoint
-        dataRouter.get("/collections", (c) => {
+        const collectionsRouter = new Hono<HonoEnv>();
+        collectionsRouter.use("/*", createAuthMiddleware({
+            driver: defaultDataDriverDelegate,
+            requireAuth: config.auth?.requireAuth !== false && !!config.auth?.jwtSecret
+        }));
+        
+        collectionsRouter.get("/", (c) => {
             const collectionsMetadata = activeCollections.map((col) => ({
                 slug: col.slug,
                 name: col.name,
                 singularName: col.singularName,
                 description: col.description,
                 dbPath: col.dbPath,
+                isTableMissing: !collectionRegistry.hasTableForCollection(col.dbPath),
                 properties: Object.keys(col.properties),
                 relations: col.relations?.map((r) => ({
                     relationName: r.relationName,
@@ -616,6 +667,8 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
             }));
             return c.json({ data: collectionsMetadata });
         });
+        
+        config.app.route(`${basePath}/collections`, collectionsRouter);
 
         // CRUD routes for each collection
         const restGenerator = new RestApiGenerator(activeCollections, defaultDataDriverDelegate);

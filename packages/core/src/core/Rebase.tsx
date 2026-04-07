@@ -7,13 +7,15 @@ import {
     RebaseContext,
     RebasePlugin,
     RebaseProps,
+    SlotContribution,
     User,
     UserManagementDelegate
 } from "@rebasepro/types";
+import { PluginProviderStack } from "./PluginProviderStack";
 import { AuthControllerContext } from "../contexts";
 import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
 import { useCustomizationController, useRebaseContext, useAuthSubscription } from "../hooks";
-import { ApiConfigProvider } from "../hooks/ApiConfigContext";
+import { ApiConfigProvider, useApiConfig } from "../hooks/ApiConfigContext";
 import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { ErrorView } from "../components";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
@@ -58,7 +60,8 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         driver: driverProp,
         data: dataProp,
         databaseAdmin,
-        plugins: _pluginsProp,
+        plugins: pluginsProp,
+        slots: directSlots = [],
         onAnalyticsEvent,
         propertyConfigs,
         entityViews,
@@ -73,11 +76,22 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         apiUrl
     } = props;
 
-    if (_pluginsProp) {
-        console.warn("The `plugins` prop is deprecated in the Rebase component. You should pass your plugins to `useBuildNavigationStateController` instead.");
+    const plugins = navigationStateController.plugins ?? pluginsProp;
+
+    // Validate plugin key uniqueness
+    if (plugins) {
+        const keys = plugins.map(p => p.key);
+        if (new Set(keys).size !== keys.length) {
+            console.error("Duplicate plugin keys detected:", keys.filter((k, i) => keys.indexOf(k) !== i));
+        }
     }
 
-    const plugins = navigationStateController.plugins ?? _pluginsProp;
+    // Merge direct slots with plugin slots
+    const resolvedSlots: SlotContribution[] = useMemo(() => [
+        ...directSlots,
+        ...((plugins ?? []).flatMap(p => p.slots ?? [])),
+    ], [directSlots, plugins]);
+
     const userManagement = plugins?.find((p: RebasePlugin) => p.userManagement)?.userManagement
         ?? _userManagement
         ?? {
@@ -89,7 +103,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     const sideDialogsController = useBuildSideDialogsController();
     
     // Auth fallback logic
-    const clientAuthController = useAuthSubscription(client?.auth);
+    const clientAuthController = useAuthSubscription(authControllerProp ? undefined : client?.auth);
     const authController = authControllerProp ?? clientAuthController;
     
     // Data fallback logic
@@ -117,6 +131,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         locale,
         entityLinkBuilder,
         plugins,
+        resolvedSlots,
         entityViews: entityViews ?? [],
         entityActions: entityActions ?? [],
         propertyConfigs: propertyConfigs ?? {},
@@ -224,24 +239,79 @@ function RebaseInternal({
     const context = useRebaseContext();
     const customizationController = useCustomizationController();
 
-    let childrenResult = children({
+    const childrenResult = children({
         context,
         loading
     });
 
     const plugins = customizationController.plugins;
-    if (!loading && plugins) {
-        plugins.forEach((plugin: RebasePlugin) => {
-            if (plugin.provider) {
-                childrenResult = (
-                    <plugin.provider.Component {...plugin.provider.props}
-                        context={context}>
-                        {childrenResult}
-                    </plugin.provider.Component>
-                );
-            }
-        });
+    if (!loading && plugins && plugins.length > 0) {
+        return (
+            <PluginProviderStack
+                plugins={plugins}
+                scope="root"
+                scopeProps={{ context }}>
+                {childrenResult}
+            </PluginProviderStack>
+        );
     }
 
-    return <>{childrenResult}</>;
+    return (
+        <>
+            {childrenResult}
+            <CollectionsMetadataSyncer />
+        </>
+    );
+}
+
+function CollectionsMetadataSyncer() {
+    const apiConfig = useApiConfig();
+    const registryController = React.useContext(CollectionRegistryContext);
+    const navigationStateController = React.useContext(NavigationStateContext);
+
+    React.useEffect(() => {
+        if (!apiConfig?.apiUrl) return;
+
+        let cancelled = false;
+        const fetchMetadata = async () => {
+            try {
+                const token = apiConfig.getAuthToken ? await apiConfig.getAuthToken() : null;
+                const headers: Record<string, string> = { "Content-Type": "application/json" };
+                if (token) headers["Authorization"] = `Bearer ${token}`;
+
+                const res = await fetch(`${apiConfig.apiUrl.replace(/\/$/, "")}/api/collections`, { headers });
+                if (res.ok && !cancelled) {
+                    const { data } = await res.json();
+                    if (!data || !Array.isArray(data)) return;
+
+                    let changed = false;
+                    // Get raw un-normalized collections as well to update both maps if necessary
+                    const refreshCollections = (registryController as any)?.collectionRegistryRef?.current?.getCollections() ?? [];
+                    
+                    for (const c of refreshCollections) {
+                        const meta = data.find((m: any) => m.slug === c.slug || m.dbPath === c.dbPath);
+                         if (meta && c.isTableMissing !== meta.isTableMissing) {
+                             c.isTableMissing = meta.isTableMissing;
+                             changed = true;
+                         }
+                    }
+
+                    // Force navigation state to reload if things changed
+                    if (changed && navigationStateController?.refreshNavigation) {
+                        navigationStateController.refreshNavigation();
+                    }
+                }
+            } catch (e) {
+                console.debug("Could not fetch collections metadata", e);
+            }
+        };
+
+        fetchMetadata();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [apiConfig?.apiUrl, apiConfig?.getAuthToken, registryController, navigationStateController]);
+
+    return null;
 }

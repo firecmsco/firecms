@@ -112,7 +112,7 @@ export type NavigationStateController = {
     /**
      * Plugin system allowing to extend the CMS functionality.
      */
-    plugins?: RebasePlugin<any, any, any>[];
+    plugins?: RebasePlugin[];
 };
 
 /**

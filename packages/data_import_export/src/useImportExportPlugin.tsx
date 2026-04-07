@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { EntityCollection, RebasePlugin } from "@rebasepro/core";
+import { EntityCollection, RebasePlugin } from "@rebasepro/types";
 import { ImportCollectionAction } from "@rebasepro/data_import";
 import { ExportCollectionAction } from "@rebasepro/data_export";
 
@@ -8,16 +8,26 @@ import { ExportCollectionAction } from "@rebasepro/data_export";
  * Please use useImportPlugin and useExportPlugin separately
  * @deprecated
  */
-export function useImportExportPlugin(props?: ImportExportPluginProps): RebasePlugin<any, any, any, ImportExportPluginProps> {
+export function useImportExportPlugin(props?: ImportExportPluginProps): RebasePlugin {
 
     console.warn("useImportExportPlugin is deprecated. Please use useImportPlugin and useExportPlugin separately");
 
     return useMemo(() => ({
         key: "import_export",
-        collectionView: {
-            CollectionActions: [ImportCollectionAction, ExportCollectionAction],
-            collectionActionsProps: props
-        }
+        slots: [
+            {
+                slot: "collection.actions",
+                Component: ImportCollectionAction,
+                props: props,
+                order: 60,
+            },
+            {
+                slot: "collection.actions",
+                Component: ExportCollectionAction,
+                props: props,
+                order: 70,
+            },
+        ],
     }), [props]);
 }
 

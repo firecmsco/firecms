@@ -5,12 +5,12 @@ import {
     EntityRelation,
     EntityStatus,
     EntityValues,
-    RebasePlugin,
     FormContext,
     PluginFormActionProps,
     Relation,
     User
 } from "@rebasepro/types";
+import { PluginProviderStack } from "./PluginProviderStack";
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary, ErrorView } from "../components";
 import {
@@ -24,7 +24,8 @@ import {
     useCustomizationController,
     useEntityFetch,
     useRebaseContext,
-    useLargeLayout
+    useLargeLayout,
+    useSlot
 } from "../hooks";
 import { getEntityFromMemoryCache } from "../util/entity_cache";
 import { EntityForm } from "../form";
@@ -177,27 +178,19 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const customizationController = useCustomizationController();
     const plugins = customizationController.plugins;
-    const pluginActionsTop: any[] = [];
 
-    if (plugins && collection) {
-        const actionProps: PluginFormActionProps = {
-            entityId,
-            parentCollectionIds,
-            path: path,
-            status,
-            collection,
-            context,
-            formContext,
-            openEntityMode: layout,
-            disabled: false
-        };
-        pluginActionsTop.push(...plugins.map((plugin) => (
-            plugin.form?.ActionsTop
-                ? <plugin.form.ActionsTop
-                    key={`actions_${plugin.key}`} {...actionProps} />
-                : null
-        )).filter(Boolean));
-    }
+    const formActionTopProps: PluginFormActionProps = {
+        entityId,
+        parentCollectionIds,
+        path: path,
+        status,
+        collection: collection!,
+        context,
+        formContext,
+        openEntityMode: layout,
+        disabled: false
+    };
+    const pluginActionsTop = useSlot("form.actions.top", formActionTopProps);
 
     const defaultSelectedView = useMemo(() => resolveDefaultSelectedView(
         collection ? collection.defaultSelectedView : undefined,
@@ -495,23 +488,22 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     </div>;
 
-    if (plugins) {
-        plugins.forEach((plugin: RebasePlugin) => {
-            if (plugin.form?.provider) {
-                result = (
-                    <plugin.form.provider.Component
-                        status={status}
-                        path={path}
-                        collection={collection}
-                        entity={usedEntity}
-                        context={context}
-                        formContext={formContext}
-                        {...plugin.form.provider.props}>
-                        {result}
-                    </plugin.form.provider.Component>
-                );
-            }
-        });
+    if (plugins && plugins.length > 0) {
+        result = (
+            <PluginProviderStack
+                plugins={plugins}
+                scope="form"
+                scopeProps={{
+                    status,
+                    path,
+                    collection,
+                    entity: usedEntity,
+                    context,
+                    formContext
+                }}>
+                {result}
+            </PluginProviderStack>
+        );
     }
 
     return result;

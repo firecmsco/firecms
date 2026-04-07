@@ -65,7 +65,38 @@ export class CollectionRegistry {
         this.reset();
 
         const normalizedCollections = collections.map(c => this.normalizeCollection({ ...c }));
-        normalizedCollections.forEach((c, index) => this.register(c, collections[index]));
+
+        // Phase 1: Register all top-level collections first (without recursion).
+        // This ensures that injected entityViews (e.g. History tab) are preserved.
+        // Without this, _registerRecursively could register a relation-target collection
+        // (e.g. Tags from Posts.relations) using the raw module object (without injected views)
+        // before the top-level Tags collection (with injected views) gets its turn.
+        normalizedCollections.forEach((c, index) => {
+            const raw = cloneDeep(collections[index]);
+            this.rootCollections.push(c);
+            this.rawRootCollections.push(raw);
+
+            const normalized = this.normalizeCollection(c);
+            this.collectionsByDbPath.set(normalized.dbPath, normalized);
+            this.rawCollectionsByDbPath.set(raw.dbPath, raw);
+            if (normalized.slug) {
+                this.collectionsBySlug.set(normalized.slug, normalized);
+            }
+            if (raw.slug) {
+                this.rawCollectionsBySlug.set(raw.slug, raw);
+            }
+        });
+
+        // Phase 2: Now recurse into subcollections (relations, etc.)
+        normalizedCollections.forEach((c, index) => {
+            const subcollections = getSubcollections(c);
+            const rawSubcollections = getSubcollections(collections[index]);
+            if (subcollections && rawSubcollections) {
+                subcollections.forEach((subCollection, subIndex) => {
+                    this._registerRecursively(this.normalizeCollection(subCollection), cloneDeep(rawSubcollections[subIndex]));
+                });
+            }
+        });
 
         // Store the snapshot for future comparisons
         this.lastRawInputSnapshot = rawSnapshot;

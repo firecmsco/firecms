@@ -524,7 +524,7 @@ function PropertyEditFormFields({
                         propertyConfigs={propertyConfigs}
                         inArray={inArray} />
 
-                    {selectedWidgetError &&
+                    {!!selectedWidgetError &&
                         <Typography variant="caption"
                             className={"ml-3.5"}
                             color={"error"}>Required</Typography>}

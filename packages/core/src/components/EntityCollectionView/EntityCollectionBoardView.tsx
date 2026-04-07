@@ -35,7 +35,8 @@ import {
     useData,
     useRebaseContext,
     useSideEntityController,
-    useTranslation
+    useTranslation,
+    useSlot
 } from "../../hooks";
 import { useAnalyticsController } from "../../hooks/useAnalyticsController";
 import { setIn } from "@rebasepro/formex";
@@ -218,7 +219,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     }, [boardDataController.columnData, columns]);
 
     const allowColumnReorder = useMemo(() => {
-        return plugins.some(plugin => plugin.collectionView?.onKanbanColumnsReorder);
+        return plugins.some(plugin => plugin.hooks?.onKanbanColumnsReorder);
     }, [plugins]);
 
     const handleColumnReorder = useCallback((newColumns: string[]) => {
@@ -229,9 +230,9 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         setHasUserReordered(true);
         setLocalColumnsOrder(newColumns);
         plugins
-            .filter(plugin => plugin.collectionView?.onKanbanColumnsReorder)
+            .filter(plugin => plugin.hooks?.onKanbanColumnsReorder)
             .forEach(plugin => {
-                plugin.collectionView!.onKanbanColumnsReorder!({
+                plugin.hooks!.onKanbanColumnsReorder!({
                     fullPath,
                     parentCollectionIds,
                     collection,
@@ -566,25 +567,22 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
         );
     }, [collection, handleEntityClick, isEntitySelected, handleSelectionChange, selectionEnabled]);
 
-    // Get KanbanSetupComponent from plugins
-    const KanbanSetupComponent = useMemo(() => {
-        for (const plugin of plugins) {
-            if (plugin.collectionView?.KanbanSetupComponent) {
-                return plugin.collectionView.KanbanSetupComponent;
-            }
-        }
-        return null;
-    }, [plugins]);
+    // Get KanbanSetupComponent from plugin slots
+    const kanbanSetupSlots = useSlot("kanban.setup", {
+        collection,
+        fullPath,
+        parentCollectionIds
+    });
+    const KanbanSetupComponent = kanbanSetupSlots.length > 0 ? () => <>{kanbanSetupSlots[0]}</> : null;
 
-    // Get AddKanbanColumnComponent from plugins
-    const AddKanbanColumnComponent = useMemo(() => {
-        for (const plugin of plugins) {
-            if (plugin.collectionView?.AddKanbanColumnComponent) {
-                return plugin.collectionView.AddKanbanColumnComponent;
-            }
-        }
-        return null;
-    }, [plugins]);
+    // Get AddKanbanColumnComponent from plugin slots
+    const addKanbanColumnSlots = useSlot("kanban.add-column", {
+        collection,
+        fullPath,
+        parentCollectionIds,
+        columnProperty
+    });
+    const AddKanbanColumnComponent = addKanbanColumnSlots.length > 0 ? () => <>{addKanbanColumnSlots[0]}</> : null;
 
     // Check for loading error
     const hasError = Boolean(dataLoadingError);
@@ -601,13 +599,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                 <Typography variant="body2" color="secondary" className="text-center max-w-md">
                     {t("kanban_view_requires_enum")}
                 </Typography>
-                {KanbanSetupComponent && (
-                    <KanbanSetupComponent
-                        collection={collection}
-                        fullPath={fullPath}
-                        parentCollectionIds={parentCollectionIds}
-                    />
-                )}
+                {kanbanSetupSlots.length > 0 && kanbanSetupSlots[0]}
             </div>
         );
     }
@@ -707,14 +699,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                             }
                         });
                     }}
-                    AddColumnComponent={AddKanbanColumnComponent && (
-                        <AddKanbanColumnComponent
-                            collection={collection}
-                            fullPath={fullPath}
-                            parentCollectionIds={parentCollectionIds}
-                            columnProperty={columnProperty}
-                        />
-                    )}
+                    AddColumnComponent={addKanbanColumnSlots.length > 0 ? addKanbanColumnSlots[0] : undefined}
                 />
             </div>
 

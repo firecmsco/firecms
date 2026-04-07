@@ -30,8 +30,8 @@ export function computeNavigationGroups({
     // Merge plugin navigation entries
     // IMPORTANT: Deep clone the groups to avoid mutating the original input
     result = plugins ? plugins?.reduce((acc, plugin) => {
-        if (plugin.homePage?.navigationEntries) {
-            plugin.homePage.navigationEntries.forEach((entry) => {
+        if (plugin.hooks?.navigationEntries) {
+            plugin.hooks.navigationEntries.forEach((entry) => {
                 const {
                     name,
                     entries

@@ -1,5 +1,6 @@
 import React from "react";
 import { EntityAction, EntityCustomView, EntityLinkBuilder, RebasePlugin, Locale, PropertyConfig } from "../types";
+import { SlotContribution } from "../types/slots";
 
 export type CustomizationController = {
 
@@ -12,6 +13,11 @@ export type CustomizationController = {
      * Use plugins to modify the behaviour of the CMS.
      */
     plugins?: RebasePlugin[];
+
+    /**
+     * Pre-merged slots from plugins + direct slot contributions.
+     */
+    resolvedSlots: SlotContribution[];
 
     /**
      * List of additional custom views for entities.

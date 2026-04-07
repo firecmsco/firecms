@@ -453,18 +453,17 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         }
     };
 
-    const onSubmit = (newCollectionState: PersistedCollection<M>, formexController: FormexController<PersistedCollection<M>>) => {
+    const onSubmit = async (newCollectionState: PersistedCollection<M>, formexController: FormexController<PersistedCollection<M>>) => {
         console.debug("Submitting collection", newCollectionState);
         try {
 
             if (!isNewCollection) {
-                saveCollection(newCollectionState).then((success) => {
-                    if (success) {
-                        aiModifiedPaths?.clearAllPaths();
-                        formexController.resetForm({ values: newCollectionState });
-                        handleClose(newCollectionState);
-                    }
-                });
+                const success = await saveCollection(newCollectionState);
+                if (success) {
+                    aiModifiedPaths?.clearAllPaths();
+                    formexController.resetForm({ values: newCollectionState });
+                    handleClose(newCollectionState);
+                }
                 return;
             }
 
@@ -476,18 +475,15 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                     formexController.resetForm({ values: newCollectionState });
                     setNextMode();
                 } else if (isNewCollection) {
-                    inferCollectionFromData(newCollectionState)
-                        .then((values) => {
-                            formexController.resetForm({
-                                values: values ?? newCollectionState,
-                                touched: {
-                                    path: true,
-                                    name: true
-                                }
-                            });
-                        }).finally(() => {
-                            setNextMode();
-                        });
+                    const values = await inferCollectionFromData(newCollectionState);
+                    formexController.resetForm({
+                        values: values ?? newCollectionState,
+                        touched: {
+                            path: true,
+                            name: true
+                        }
+                    });
+                    setNextMode();
                 } else {
                     formexController.resetForm({ values: newCollectionState });
                     setNextMode();
@@ -500,13 +496,12 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             } else if (currentView === "import_data_preview") {
                 setNextMode();
             } else if (currentView === "properties") {
-                saveCollection(newCollectionState).then((success) => {
-                    if (success) {
-                        formexController.resetForm({ values: initialValues });
-                        setNextMode();
-                        handleClose(newCollectionState);
-                    }
-                });
+                const success = await saveCollection(newCollectionState);
+                if (success) {
+                    formexController.resetForm({ values: initialValues });
+                    setNextMode();
+                    handleClose(newCollectionState);
+                }
             } else {
                 setNextMode();
                 formexController.resetForm({ values: newCollectionState });

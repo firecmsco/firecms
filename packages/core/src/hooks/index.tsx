@@ -39,6 +39,7 @@ export * from "./useInternalUserManagementController";
 export * from "./useEntitySelectionDialog";
 export * from "./useBrowserTitleAndIcon";
 export * from "./useCustomizationController";
+export * from "./useSlot";
 
 export * from "./useBuildLocalConfigurationPersistence";
 export * from "./useBuildModeController";

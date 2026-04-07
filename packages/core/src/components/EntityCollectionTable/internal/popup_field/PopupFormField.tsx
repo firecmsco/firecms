@@ -6,11 +6,11 @@ import {
     Entity,
     EntityCollection,
     EntityValues,
-    RebasePlugin,
     FormContext, Properties,
     Property,
     PropertyFieldBindingProps,
 } from "@rebasepro/types";
+import { PluginProviderStack } from "../../../../core/PluginProviderStack";
 import { Formex, FormexController, useCreateFormex } from "@rebasepro/formex";
 import { useDraggable } from "./useDraggable";
 import { CustomFieldValidator, getEntitySchema } from "../../../../form/validation";
@@ -341,24 +341,23 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     </>;
 
     const plugins = customizationController.plugins;
-    if (plugins) {
-        plugins.forEach((plugin: RebasePlugin) => {
-            if (plugin.form?.provider) {
-                internalForm = (
-                    <plugin.form.provider.Component
-                        status={"existing"}
-                        path={path}
-                        collection={collection}
-                        entity={entity}
-                        context={rebaseContext}
-                        currentEntityId={entityId}
-                        formContext={formContext}
-                        {...plugin.form.provider.props}>
-                        {internalForm}
-                    </plugin.form.provider.Component>
-                );
-            }
-        });
+    if (plugins && plugins.length > 0) {
+        internalForm = (
+            <PluginProviderStack
+                plugins={plugins}
+                scope="form"
+                scopeProps={{
+                    status: "existing",
+                    path,
+                    collection,
+                    entity,
+                    context: rebaseContext,
+                    currentEntityId: entityId,
+                    formContext
+                }}>
+                {internalForm}
+            </PluginProviderStack>
+        );
     }
     const form = <div
         className={`text-surface-900 dark:text-white overflow-auto rounded-xs rounded-md bg-white dark:bg-surface-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>

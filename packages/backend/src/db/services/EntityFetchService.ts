@@ -83,6 +83,11 @@ export class EntityFetchService {
 
             const drizzleRelName = relation.relationName || key;
 
+            // Skip relations that use joinPath as they are not mapped in Drizzle schemas
+            if (relation.joinPath && relation.joinPath.length > 0) {
+                continue;
+            }
+
             // Detect many-to-many junction tables:
             // If the relation goes through a junction table (relation.through exists or
             // the Drizzle schema maps to a junction table), we need two-level with.
@@ -141,7 +146,8 @@ export class EntityFetchService {
         collection: EntityCollection,
         collectionPath: string,
         idInfo: { fieldName: string; type: "string" | "number" },
-        databaseId?: string
+        databaseId?: string,
+        idInfoArray?: { fieldName: string; type: "string" | "number" }[]
     ): Entity<M> {
         const resolvedRelations = resolveCollectionRelations(collection);
         const propertyKeys = new Set(Object.keys(collection.properties || {}));
@@ -217,7 +223,7 @@ export class EntityFetchService {
         }
 
         return {
-            id: String(row[idInfo.fieldName]),
+            id: (idInfoArray && idInfoArray.length > 1) ? buildCompositeId(row as Record<string, any>, idInfoArray) : String(row[idInfo.fieldName]),
             path: collectionPath,
             values: normalizedValues as M,
             databaseId
@@ -230,9 +236,10 @@ export class EntityFetchService {
     private drizzleResultToRestRow(
         row: Record<string, unknown>,
         collection: EntityCollection,
-        idInfo: { fieldName: string; type: "string" | "number" }
+        idInfo: { fieldName: string; type: "string" | "number" },
+        idInfoArray?: { fieldName: string; type: "string" | "number" }[]
     ): Record<string, unknown> {
-        const flat: Record<string, unknown> = { id: String(row[idInfo.fieldName]) };
+        const flat: Record<string, unknown> = { id: (idInfoArray && idInfoArray.length > 1) ? buildCompositeId(row as Record<string, any>, idInfoArray) : String(row[idInfo.fieldName]) };
         const resolvedRelations = resolveCollectionRelations(collection);
 
         for (const [k, v] of Object.entries(row)) {
@@ -419,7 +426,7 @@ export class EntityFetchService {
 
                 if (!row) return undefined;
 
-                return this.drizzleResultToEntity<M>(row, collection, collectionPath, idInfo, databaseId);
+                return this.drizzleResultToEntity<M>(row, collection, collectionPath, idInfo, databaseId, idInfoArray);
             } catch (e) {
                 console.warn(`[EntityFetchService] db.query.findFirst failed for ${collectionPath}, falling back to db.select:`, e);
             }
@@ -531,7 +538,7 @@ export class EntityFetchService {
                 const results = await qb.findMany(queryOpts as any);
 
                 return (results as Record<string, unknown>[]).map(row =>
-                    this.drizzleResultToEntity<M>(row, collection, collectionPath, idInfo, options.databaseId)
+                    this.drizzleResultToEntity<M>(row, collection, collectionPath, idInfo, options.databaseId, idInfoArray)
                 );
             } catch (e) {
                 console.warn(`[EntityFetchService] db.query.findMany failed for ${collectionPath}, falling back to db.select:`, e);
@@ -584,7 +591,7 @@ export class EntityFetchService {
 
         const results = await query;
 
-        return this.processEntityResults<M>(results, collection, collectionPath, idInfo, options.databaseId, false);
+        return this.processEntityResults<M>(results, collection, collectionPath, idInfo, options.databaseId, false, idInfoArray);
     }
 
     /**
@@ -600,7 +607,8 @@ export class EntityFetchService {
         collectionPath: string,
         idInfo: { fieldName: string; type: "string" | "number" },
         databaseId?: string,
-        skipRelations: boolean = false
+        skipRelations: boolean = false,
+        idInfoArray?: { fieldName: string; type: "string" | "number" }[]
     ): Promise<Entity<M>[]> {
         if (results.length === 0) return [];
 
@@ -610,7 +618,7 @@ export class EntityFetchService {
             return {
                 entity,
                 values,
-                id: String(entity[idInfo.fieldName]),
+                id: (idInfoArray && idInfoArray.length > 1) ? buildCompositeId(entity as Record<string, any>, idInfoArray!) : String(entity[idInfo.fieldName]),
                 path: collectionPath
             };
         }));
@@ -623,9 +631,12 @@ export class EntityFetchService {
             for (const [key, relation] of Object.entries(resolvedRelations)) {
                 if (!propertyKeys.has(key) || relation.cardinality !== "one") continue;
 
-                const entitiesMissingRelation = entitiesWithValues.filter(item =>
-                    (item.values as Record<string, unknown>)[key] == null
-                );
+                const entitiesMissingRelation = entitiesWithValues.filter(item => {
+                    const val = (item.values as Record<string, unknown>)[key];
+                    if (val == null) return true;
+                    if (typeof val === "object" && !Array.isArray(val) && (val as any).__type === "relation" && (val as any).data == null) return true;
+                    return false;
+                });
 
                 if (entitiesMissingRelation.length === 0) continue;
 
@@ -645,7 +656,8 @@ export class EntityFetchService {
                             (item.values as Record<string, unknown>)[key] = {
                                 id: relatedEntity.id,
                                 path: relatedEntity.path,
-                                __type: "relation"
+                                __type: "relation",
+                                data: relatedEntity
                             };
                         }
                     });
@@ -669,7 +681,8 @@ export class EntityFetchService {
                             (item.values as Record<string, unknown>)[key] = relatedEntities.map(e => ({
                                 id: e.id,
                                 path: e.path,
-                                __type: "relation"
+                                __type: "relation",
+                                data: e
                             }));
                         } catch (e) {
                             console.warn(`Could not resolve many relation property: ${key}`, e);
@@ -954,7 +967,7 @@ export class EntityFetchService {
                 const results = await qb.findMany(queryOpts as any);
 
                 return (results as Record<string, unknown>[]).map(row =>
-                    this.drizzleResultToRestRow(row, collection, idInfo)
+                    this.drizzleResultToRestRow(row, collection, idInfo, idInfoArray)
                 );
             } catch (e) {
                 console.warn(`[fetchCollectionForRest] db.query.findMany failed for ${collectionPath}, falling back:`, e);
@@ -966,7 +979,7 @@ export class EntityFetchService {
 
         if (!include || include.length === 0) {
             return entities.map(entity => ({
-                id: String(entity[idInfo.fieldName]),
+                id: (idInfoArray.length > 1) ? buildCompositeId(entity as Record<string, any>, idInfoArray) : String(entity[idInfo.fieldName]),
                 ...entity
             }));
         }
@@ -1016,7 +1029,7 @@ export class EntityFetchService {
         }
 
         return entities.map(entity => ({
-            id: String(entity[idInfo.fieldName]),
+            id: (idInfoArray.length > 1) ? buildCompositeId(entity as Record<string, any>, idInfoArray) : String(entity[idInfo.fieldName]),
             ...entity
         }));
     }
@@ -1058,7 +1071,7 @@ export class EntityFetchService {
 
                 if (!row) return null;
 
-                return this.drizzleResultToRestRow(row, collection, idInfo);
+                return this.drizzleResultToRestRow(row, collection, idInfo, idInfoArray);
             } catch (e) {
                 console.warn(`[fetchEntityForRest] db.query.findFirst failed for ${collectionPath}, falling back:`, e);
             }
@@ -1074,7 +1087,7 @@ export class EntityFetchService {
         if (result.length === 0) return null;
 
         const raw = result[0] as Record<string, unknown>;
-        const flatEntity: Record<string, unknown> = { id: String(raw[idInfo.fieldName]), ...raw };
+        const flatEntity: Record<string, unknown> = { id: (idInfoArray.length > 1) ? buildCompositeId(raw as Record<string, any>, idInfoArray) : String(raw[idInfo.fieldName]), ...raw };
 
         if (!include || include.length === 0) {
             return flatEntity;
@@ -1208,7 +1221,8 @@ export class EntityFetchService {
             limit?: number;
         },
         include: string[],
-        idInfo: { fieldName: string; type: "string" | "number" }
+        idInfo: { fieldName: string; type: "string" | "number" },
+        idInfoArray?: { fieldName: string; type: "string" | "number" }[]
     ): Promise<Record<string, unknown>[] | null> {
         try {
             
@@ -1256,7 +1270,7 @@ export class EntityFetchService {
 
             // Flatten the nested Drizzle results into REST format
             return results.map((row: Record<string, unknown>) => {
-                const flat: Record<string, unknown> = { id: String(row[idInfo.fieldName]) };
+                const flat: Record<string, unknown> = { id: (idInfoArray && idInfoArray.length > 1) ? buildCompositeId(row as Record<string, any>, idInfoArray) : String(row[idInfo.fieldName]) };
                 for (const [k, v] of Object.entries(row)) {
                     if (k === idInfo.fieldName) continue;
                     if (Array.isArray(v)) {

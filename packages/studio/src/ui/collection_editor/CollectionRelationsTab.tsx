@@ -1,15 +1,36 @@
 import React, { useState } from "react";
 import {
     Button, IconButton, Typography, Table, TableHeader, TableCell, TableBody, TableRow,
-    TextField, Select, SelectItem, Container, DeleteIcon
+    TextField, Select, SelectItem, Container, DeleteIcon, Dialog, DialogTitle, DialogContent, DialogActions
 } from "@rebasepro/ui";
 import { useFormex } from "@rebasepro/formex";
 import { PersistedCollection } from "../../types/persisted_collection";
 import { Relation } from "@rebasepro/types";
+import { useCollectionsConfigController } from "../../useCollectionsConfigController";
 
 export function CollectionRelationsTab() {
     const { values, setFieldValue } = useFormex<PersistedCollection>();
-    const [editingRelation, setEditingRelation] = useState<Relation | "new" | null>(null);
+    const { collections } = useCollectionsConfigController();
+    const [editingRelationIndex, setEditingRelationIndex] = useState<number | null>(null);
+    const [editingRelationState, setEditingRelationState] = useState<Partial<Relation> | null>(null);
+
+    const getTargetSlug = (target: any) => {
+        if (typeof target === 'string') {
+            const match = target.match(/\(\)\s*=>\s*([a-zA-Z0-9_]+)/);
+            return match ? match[1] : target;
+        }
+        if (typeof target === 'function') {
+            try {
+                // If we attached a slug manually
+                if (target.slug) return target.slug;
+                const col = target();
+                return col?.slug || col?.dbPath || col?.name || "";
+            } catch (e) {
+                return "";
+            }
+        }
+        return "";
+    };
 
     const relations = values.relations || [];
 
@@ -19,56 +40,35 @@ export function CollectionRelationsTab() {
         setFieldValue("relations", newRelations);
     };
 
-    if (editingRelation) {
-        return (
-            <div className="h-full w-full bg-surface-50 dark:bg-surface-900 border-l border-r border-b dark:border-surface-800 rounded-b-lg p-0 flex flex-col">
-                <div className="flex-grow p-6 overflow-auto">
-                    <Typography variant="h5" className="mb-6">
-                        {editingRelation === "new" ? "New Relation" : "Edit Relation"}
-                    </Typography>
-                    <div className="flex flex-col gap-4 max-w-2xl">
-                        <TextField 
-                            label="Relation Name" 
-                            name="relationName" 
-                            placeholder="e.g. posts"
-                            value={editingRelation !== "new" ? editingRelation.relationName : ""}
-                            onChange={() => {}} 
-                            disabled 
-                        />
-                        <TextField 
-                            label="Target Collection" 
-                            name="target" 
-                            value={""}
-                            onChange={() => {}} 
-                            disabled 
-                        />
-                        <Select label="Cardinality" value={editingRelation !== "new" ? editingRelation.cardinality || "many" : "many"} onValueChange={() => {}} disabled>
-                            <SelectItem value="many">Many</SelectItem>
-                            <SelectItem value="one">One</SelectItem>
-                        </Select>
-                        <Select label="Direction" value={editingRelation !== "new" ? editingRelation.direction || "owning" : "owning"} onValueChange={() => {}} disabled>
-                            <SelectItem value="owning">Owning</SelectItem>
-                            <SelectItem value="inverse">Inverse</SelectItem>
-                        </Select>
-                        <Typography variant="label" color="secondary" className="mt-4">
-                            Full relation editing is coming soon.
-                        </Typography>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2 p-4 border-t dark:border-surface-800 bg-surface-100 dark:bg-surface-800">
-                    <Button variant="text" onClick={() => setEditingRelation(null)}>Cancel</Button>
-                    <Button variant="filled" color="primary" disabled>Save</Button>
-                </div>
-            </div>
-        );
-    }
+    const handleSave = () => {
+        if (!editingRelationState) return;
+        
+        const newRelations = [...relations];
+        if (editingRelationIndex === -1) {
+            newRelations.push(editingRelationState as Relation);
+        } else if (editingRelationIndex !== null) {
+            newRelations[editingRelationIndex] = editingRelationState as Relation;
+        }
+        setFieldValue("relations", newRelations);
+        
+        setEditingRelationIndex(null);
+        setEditingRelationState(null);
+    };
+
+    const handleCancel = () => {
+        setEditingRelationIndex(null);
+        setEditingRelationState(null);
+    };
 
     return (
         <div className="overflow-auto my-auto h-full w-full">
             <Container maxWidth="4xl" className="flex flex-col gap-4 p-8 m-auto h-full">
                 <div className="flex items-center justify-between mb-8">
                     <Typography variant="h5">Relations</Typography>
-                    <Button variant="filled" color="neutral" onClick={() => setEditingRelation("new")}>
+                    <Button variant="filled" color="neutral" onClick={() => {
+                        setEditingRelationIndex(-1);
+                        setEditingRelationState({ relationName: "", target: "" as any, cardinality: "many", direction: "owning" });
+                    }}>
                         ADD RELATION
                     </Button>
                 </div>
@@ -87,7 +87,10 @@ export function CollectionRelationsTab() {
                                 {relations.map((relation, index) => (
                                     <TableRow key={index} 
                                               className="cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800"
-                                              onClick={() => setEditingRelation(relation)}>
+                                              onClick={() => {
+                                                  setEditingRelationIndex(index);
+                                                  setEditingRelationState(relation);
+                                              }}>
                                         <TableCell style={{ width: "64px" }}>
                                             <IconButton size="small" onClick={(e) => {
                                                 e.stopPropagation();
@@ -97,7 +100,7 @@ export function CollectionRelationsTab() {
                                             </IconButton>
                                         </TableCell>
                                         <TableCell className="font-medium">{relation.relationName}</TableCell>
-                                        <TableCell>{typeof relation.target === 'string' ? relation.target : 'Function'}</TableCell>
+                                        <TableCell>{getTargetSlug(relation.target) || 'Function'}</TableCell>
                                         <TableCell>{relation.cardinality}</TableCell>
                                         <TableCell>{relation.direction || "owning"}</TableCell>
                                     </TableRow>
@@ -108,9 +111,114 @@ export function CollectionRelationsTab() {
                 ) : (
                     <div className="flex-grow flex flex-col border border-dashed dark:border-surface-700 rounded-lg items-center justify-center text-text-disabled py-20">
                         <Typography variant="body2" className="mb-4">No relations defined for this collection.</Typography>
-                        <Button variant="text" onClick={() => setEditingRelation("new")}>Create your first relation</Button>
+                        <Button variant="text" onClick={() => {
+                            setEditingRelationIndex(-1);
+                            setEditingRelationState({ relationName: "", target: "" as any, cardinality: "many", direction: "owning" });
+                        }}>Create your first relation</Button>
                     </div>
                 )}
+                
+                <Dialog open={!!editingRelationState} onOpenChange={(open) => !open && handleCancel()} maxWidth="2xl">
+                    {editingRelationState && (
+                        <>
+                            <DialogTitle className="flex justify-between items-center w-full" variant="h6">
+                                {editingRelationIndex === -1 ? "New Relation" : "Edit Relation"}
+                            </DialogTitle>
+                            <DialogContent includeMargin={false} className="p-4 md:p-6 border-t dark:border-surface-800 bg-surface-50 dark:bg-surface-950">
+                                <div className="flex flex-col gap-4 max-w-2xl mx-auto">
+                                    <TextField 
+                                        label="Relation Name" 
+                                        name="relationName" 
+                                        placeholder="e.g. posts"
+                                        value={editingRelationState.relationName || ""}
+                                        onChange={(e) => setEditingRelationState(prev => prev ? { ...prev, relationName: e.target.value } : null)} 
+                                    />
+                                    <Select 
+                                        fullWidth
+                                        label="Target Collection" 
+                                        value={getTargetSlug(editingRelationState.target)} 
+                                        onValueChange={(val) => {
+                                            setEditingRelationState(prev => {
+                                                if (!prev) return null;
+                                                const targetFn = () => collections?.find(c => c.slug === val) || { slug: val };
+                                                (targetFn as any).slug = val;
+                                                return { ...prev, target: targetFn as any };
+                                            });
+                                        }}
+                                    >
+                                        {collections?.map(col => (
+                                            <SelectItem key={col.slug || col.dbPath} value={col.slug}>{col.name || col.slug}</SelectItem>
+                                        ))}
+                                    </Select>
+                                    <Select 
+                                        fullWidth
+                                        label="Cardinality" 
+                                        value={editingRelationState.cardinality || "many"} 
+                                        onValueChange={(val) => setEditingRelationState(prev => prev ? { ...prev, cardinality: val as any } : null)}
+                                    >
+                                        <SelectItem value="many">Many</SelectItem>
+                                        <SelectItem value="one">One</SelectItem>
+                                    </Select>
+                                    <Select 
+                                        fullWidth
+                                        label="Direction" 
+                                        value={editingRelationState.direction || "owning"} 
+                                        onValueChange={(val) => setEditingRelationState(prev => prev ? { ...prev, direction: val as any } : null)}
+                                    >
+                                        <SelectItem value="owning">Owning</SelectItem>
+                                        <SelectItem value="inverse">Inverse</SelectItem>
+                                    </Select>
+                                    
+                                    {editingRelationState.cardinality === "many" && editingRelationState.direction === "owning" && (
+                                        <div className="flex flex-col gap-4 mt-4 pt-4 border-t dark:border-surface-800">
+                                            <Typography variant="subtitle2" className="text-text-primary">Intermediate Table</Typography>
+                                            <Typography variant="body2" className="text-text-secondary -mt-3">
+                                                Required for many-to-many relationships. This defines the junction table linking both collections.
+                                            </Typography>
+                                            
+                                            <TextField 
+                                                label="Table Name" 
+                                                name="throughTable" 
+                                                placeholder="e.g. user_roles"
+                                                value={editingRelationState.through?.table || ""}
+                                                onChange={(e) => setEditingRelationState(prev => prev ? { ...prev, through: { ...(prev.through || { sourceColumn: "", targetColumn: "" }), table: e.target.value } } : null)} 
+                                            />
+                                            <div className="flex gap-4">
+                                                <TextField 
+                                                    className="flex-1"
+                                                    label="Source Column" 
+                                                    name="sourceColumn" 
+                                                    placeholder="FK to this collection"
+                                                    value={editingRelationState.through?.sourceColumn || ""}
+                                                    onChange={(e) => setEditingRelationState(prev => prev ? { ...prev, through: { ...(prev.through || { table: "", targetColumn: "" }), sourceColumn: e.target.value } } : null)} 
+                                                />
+                                                <TextField 
+                                                    className="flex-1"
+                                                    label="Target Column" 
+                                                    name="targetColumn" 
+                                                    placeholder="FK to target collection"
+                                                    value={editingRelationState.through?.targetColumn || ""}
+                                                    onChange={(e) => setEditingRelationState(prev => prev ? { ...prev, through: { ...(prev.through || { table: "", sourceColumn: "" }), targetColumn: e.target.value } } : null)} 
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button variant="text" onClick={handleCancel}>Cancel</Button>
+                                <Button 
+                                    variant="filled" 
+                                    color="primary" 
+                                    onClick={handleSave}
+                                    disabled={!editingRelationState.relationName || !editingRelationState.target}
+                                >
+                                    Save
+                                </Button>
+                            </DialogActions>
+                        </>
+                    )}
+                </Dialog>
             </Container>
         </div>
     );

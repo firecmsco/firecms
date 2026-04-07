@@ -5,14 +5,18 @@ import { ExportCollectionAction } from "./export";
 /**
  * Use this plugin to be able to export collections data as JSON or CSV
  */
-export function useExportPlugin(props?: ExportPluginProps): RebasePlugin<any, any, any, ExportPluginProps> {
+export function useExportPlugin(props?: ExportPluginProps): RebasePlugin {
 
     return useMemo(() => ({
         key: "export",
-        collectionView: {
-            CollectionActions: [ExportCollectionAction],
-            collectionActionsProps: props
-        }
+        slots: [
+            {
+                slot: "collection.actions",
+                Component: ExportCollectionAction,
+                props: props,
+                order: 70,
+            },
+        ],
     }), [props]);
 }
 

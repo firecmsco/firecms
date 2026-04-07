@@ -61,7 +61,7 @@ const description = "The admin panel that respects your code. Connect Postgres, 
         <section class="bg-black py-4 sm:py-8">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
                 <div class="mx-auto max-w-[1000px] animate-on-scroll fade-in-up">
-                    <div class="aspect-[607/373] overflow-hidden bg-surface-950 border border-surface-800 rounded-xl flex flex-col items-center justify-center shadow-2xl shadow-primary/5 pointer-events-none">
+                    <div class="w-full overflow-hidden bg-surface-950 border border-surface-800 rounded-xl flex flex-col shadow-2xl shadow-primary/5 pointer-events-none">
                         <EntityViewDemo client:load />
                     </div>
                 </div>
@@ -131,6 +131,92 @@ const description = "The admin panel that respects your code. Connect Postgres, 
                         </div>
                     </div>
 
+                </div>
+            </div>
+        </section>
+
+        <!-- Isomorphic SDK -->
+        <section class="relative isolate bg-black py-24 sm:py-32 overflow-hidden border-t border-surface-800/40">
+            <SectionBackgroundAccents blob={{ position: "top", size: "md" }}/>
+            <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                <div class="mx-auto max-w-2xl text-center mb-16 animate-on-scroll fade-in-up">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-6">
+                        <span class="material-symbols-rounded text-primary" style="font-size:16px">sync_alt</span>
+                        Isomorphic
+                    </div>
+                    <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">One SDK. Every environment.</h2>
+                    <p class="mt-4 text-lg text-surface-400">The same <code class="text-sm bg-surface-800 px-1.5 py-0.5 rounded text-surface-300">@rebasepro/client</code> runs in your CMS plugins, your user-facing apps, and your Node.js backend. No wrappers, no adapters — one API everywhere.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto animate-on-scroll fade-in-up delay-100">
+                    <!-- CMS -->
+                    <div class="group relative rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-primary/40 transition-all duration-300 p-6 flex flex-col">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10 ring-1 ring-blue-500/20">
+                                <span class="material-symbols-rounded text-blue-400" style="font-size:16px">dashboard_customize</span>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-white">CMS Plugin</div>
+                                <div class="text-xs text-surface-500">Admin panel extension</div>
+                            </div>
+                        </div>
+                        <div class="rounded-xl bg-[#1e1e1e] p-4 ring-1 ring-white/5 font-mono text-[11px] leading-relaxed flex-1">
+                            <div class="text-[#6A9955] mb-1">// CMS custom view</div>
+                            <div><span class="text-[#569cd6]">const</span> <span class="text-[#d4d4d4]">{"{ data } ="}</span> <span class="text-[#c586c0]">await</span></div>
+                            <div class="ml-2"><span class="text-[#9cdcfe]">rebase</span>.<span class="text-[#9cdcfe]">data</span>.<span class="text-[#9cdcfe]">posts</span>.<span class="text-[#dcdcaa]">find</span>({"{"}</div>
+                            <div class="ml-4"><span class="text-[#9cdcfe]">orderBy</span>: <span class="text-[#ce9178]">"createdAt:desc"</span></div>
+                            <div class="ml-2">{"}"});</div>
+                        </div>
+                    </div>
+
+                    <!-- Frontend App -->
+                    <div class="group relative rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-primary/40 transition-all duration-300 p-6 flex flex-col">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 ring-1 ring-emerald-500/20">
+                                <span class="material-symbols-rounded text-emerald-400" style="font-size:16px">devices</span>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-white">Frontend App</div>
+                                <div class="text-xs text-surface-500">React, Next.js, Vue…</div>
+                            </div>
+                        </div>
+                        <div class="rounded-xl bg-[#1e1e1e] p-4 ring-1 ring-white/5 font-mono text-[11px] leading-relaxed flex-1">
+                            <div class="text-[#6A9955] mb-1">// User-facing app</div>
+                            <div><span class="text-[#569cd6]">const</span> <span class="text-[#d4d4d4]">{"{ data } ="}</span> <span class="text-[#c586c0]">await</span></div>
+                            <div class="ml-2"><span class="text-[#9cdcfe]">rebase</span>.<span class="text-[#9cdcfe]">data</span>.<span class="text-[#9cdcfe]">posts</span>.<span class="text-[#dcdcaa]">find</span>({"{"}</div>
+                            <div class="ml-4"><span class="text-[#9cdcfe]">orderBy</span>: <span class="text-[#ce9178]">"createdAt:desc"</span></div>
+                            <div class="ml-2">{"}"});</div>
+                        </div>
+                    </div>
+
+                    <!-- Backend -->
+                    <div class="group relative rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-primary/40 transition-all duration-300 p-6 flex flex-col">
+                        <div class="flex items-center gap-3 mb-5">
+                            <div class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 ring-1 ring-amber-500/20">
+                                <span class="material-symbols-rounded text-amber-400" style="font-size:16px">dns</span>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-white">Node.js Backend</div>
+                                <div class="text-xs text-surface-500">API routes, cron jobs…</div>
+                            </div>
+                        </div>
+                        <div class="rounded-xl bg-[#1e1e1e] p-4 ring-1 ring-white/5 font-mono text-[11px] leading-relaxed flex-1">
+                            <div class="text-[#6A9955] mb-1">// Server-side script</div>
+                            <div><span class="text-[#569cd6]">const</span> <span class="text-[#d4d4d4]">{"{ data } ="}</span> <span class="text-[#c586c0]">await</span></div>
+                            <div class="ml-2"><span class="text-[#9cdcfe]">rebase</span>.<span class="text-[#9cdcfe]">data</span>.<span class="text-[#9cdcfe]">posts</span>.<span class="text-[#dcdcaa]">find</span>({"{"}</div>
+                            <div class="ml-4"><span class="text-[#9cdcfe]">orderBy</span>: <span class="text-[#ce9178]">"createdAt:desc"</span></div>
+                            <div class="ml-2">{"}"});</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-10 text-center animate-on-scroll fade-in-up delay-200">
+                    <p class="text-surface-500 text-sm">Same types. Same queries. Same auth. Zero platform-specific code.</p>
+                    <a href="/sdk"
+                       class="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-white hover:text-primary transition-colors">
+                        Explore the SDK
+                        <span class="material-symbols-rounded text-white" style="font-size:16px">arrow_forward</span>
+                    </a>
                 </div>
             </div>
         </section>

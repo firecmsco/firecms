@@ -1,2 +1,16 @@
 @import "tailwindcss";
-@import "@rebasepro/ui/index.css";
+@import "@rebasepro/ui/index.css" layer(base);
+
+@source "../node_modules/@rebasepro";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer utilities {
+    body {
+        @apply w-full min-h-screen bg-surface-50 dark:bg-surface-900 flex flex-col items-center justify-center;
+    }
+
+    a {
+        @apply text-primary dark:text-primary;
+    }
+}

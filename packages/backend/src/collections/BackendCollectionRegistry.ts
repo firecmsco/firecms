@@ -23,6 +23,23 @@ export class BackendCollectionRegistry extends CollectionRegistry implements Col
         return this.tables.get(dbPath);
     }
 
+    /**
+     * Checks if a specific collection has a registered table
+     */
+    hasTableForCollection(dbPath: string): boolean {
+        return this.tables.has(dbPath);
+    }
+
+    /**
+     * Finds collections assigned to a specific driver that do not have a registered table.
+     */
+    getCollectionsWithoutTables(driverId: string = "(default)"): any[] {
+        const collections = this.getCollections().filter(
+            c => c.driver === driverId || (!c.driver && driverId === "(default)")
+        );
+        return collections.filter(c => !this.tables.has(c.dbPath));
+    }
+
     registerEnums(enums: Record<string, PgEnum<any>>) {
         Object.entries(enums).forEach(([name, value]) => this.enums.set(name, value));
     }

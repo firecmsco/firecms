@@ -7,6 +7,7 @@ const tagsCollection: EntityCollection = {
     slug: "tags",
     dbPath: "tags",
     icon: "Tag",
+    history: true,
     properties: {
         id: {
             name: "ID",

@@ -1,6 +1,6 @@
 import React, { FormEvent } from "react";
 
-export type FormexController<T extends object> = {
+export type FormexController<T = any> = {
     values: T;
     initialValues: T;
     setValues: (values: T) => void;
@@ -37,7 +37,7 @@ export type FormexController<T extends object> = {
     canRedo: boolean;
 }
 
-export type FormexResetProps<T extends object> = {
+export type FormexResetProps<T = any> = {
     values?: T;
     submitCount?: number;
     errors?: Record<string, string>;

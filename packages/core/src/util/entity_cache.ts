@@ -38,7 +38,8 @@ function customReplacer(this: Record<string, unknown>, key: string): unknown {
         return {
             __type: "EntityRelation",
             id: value.id,
-            path: value.path
+            path: value.path,
+            data: value.data
         };
     }
 
@@ -77,7 +78,7 @@ function customReviver(_key: string, value: unknown): unknown {
                     databaseId: record.databaseId as string | undefined
                 });
             case "EntityRelation":
-                return new EntityRelation(record.id as string, record.path as string);
+                return new EntityRelation(record.id as string, record.path as string, record.data as any);
             case "GeoPoint":
                 return new GeoPoint(record.latitude as number, record.longitude as number);
             case "Vector":

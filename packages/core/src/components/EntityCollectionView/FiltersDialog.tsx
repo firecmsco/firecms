@@ -174,8 +174,8 @@ export function FiltersDialog({
             fullWidth
             containerClassName={isAnyFieldHidden ? "hidden" : undefined}
         >
-            <DialogTitle className="flex items-center gap-2">
-                <Typography variant="h6">{t("filters")}</Typography>
+            <DialogTitle className="flex items-center gap-2" variant="h6">
+                {t("filters")}
                 {activeFilterCount > 0 && (
                     <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-primary text-white">
                         {activeFilterCount}

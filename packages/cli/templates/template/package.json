@@ -6,13 +6,15 @@
     "type": "module",
     "scripts": {
         "dev": "rebase dev",
-        "dev:frontend": "cd frontend && pnpm run dev",
-        "dev:backend": "cd backend && pnpm run dev",
-        "build": "pnpm run build:shared && pnpm run build:frontend && pnpm run build:backend",
-        "build:shared": "cd shared && pnpm run build",
-        "build:frontend": "cd frontend && pnpm run build",
-        "build:backend": "cd backend && pnpm run build",
-        "start": "cd backend && pnpm start"
+        "build": "pnpm -r run build",
+        "start": "pnpm --filter \"*-backend\" start",
+        "db:generate": "rebase db generate",
+        "db:migrate": "rebase db migrate",
+        "db:pull": "rebase db pull",
+        "db:push": "rebase db push",
+        "db:studio": "rebase db studio",
+        "schema:generate": "rebase schema generate",
+        "generate:sdk": "rebase generate-sdk"
     },
     "devDependencies": {
         "concurrently": "^8.2.2",

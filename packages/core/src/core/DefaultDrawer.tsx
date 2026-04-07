@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController, useAdminModeController, useEffectiveRoleController, useTranslation } from "../hooks";
+import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController, useAdminModeController, useEffectiveRoleController, useTranslation, useSlot, useRebaseContext } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "@rebasepro/types";
@@ -51,6 +51,7 @@ export function DefaultDrawer({
 
     const analyticsController = useAnalyticsController();
     const navigationState = useNavigationStateController();
+    const context = useRebaseContext();
 
     const tooltipsOpen = drawerHovered && !drawerOpen && !adminMenuOpen;
     const largeLayout = useLargeLayout();
@@ -105,6 +106,8 @@ export function DefaultDrawer({
                     drawerHovered={drawerHovered}
                 />
 
+                {useSlot("navigation.header", { drawerOpen, drawerHovered, context })}
+
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
@@ -134,6 +137,8 @@ export function DefaultDrawer({
                     })}
 
                 </div>
+
+                {useSlot("navigation.footer", { drawerOpen, drawerHovered, context })}
 
                 <DrawerToggle
                     drawerOpen={drawerOpen}

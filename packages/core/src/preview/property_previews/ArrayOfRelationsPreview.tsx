@@ -1,4 +1,5 @@
 import { ArrayProperty, EntityRelation, PropertyPreviewProps, RelationProperty } from "@rebasepro/types";
+import { normalizeToEntityRelation } from "@rebasepro/common";
 import { RelationPreview } from "../components/RelationPreview";
 
 /**
@@ -23,13 +24,8 @@ export function ArrayOfRelationsPreview({
     return (
         <div className="flex flex-col w-full gap-0.5">
             {value &&
-                value.map((relation: any, index: number) => {
-                    // Support both EntityRelation instances and plain objects with __type === "relation"
-                    const entityRelation = (relation instanceof EntityRelation)
-                        ? relation
-                        : (relation && typeof relation === "object" && (relation.__type === "relation" || relation.isEntityRelation?.()))
-                            ? new EntityRelation(relation.id, relation.path, relation.data)
-                            : null;
+                value.map((relation: unknown, index: number) => {
+                    const entityRelation = normalizeToEntityRelation(relation);
 
                     if (!entityRelation) return null;
 

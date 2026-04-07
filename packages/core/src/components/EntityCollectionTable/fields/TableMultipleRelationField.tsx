@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { deepEqual as equal } from "fast-equals";
 
 import { cls, EditIcon } from "@rebasepro/ui";
-import { getRelationFrom } from "@rebasepro/common";
+import { getRelationFrom, normalizeToEntityRelation } from "@rebasepro/common";
 
 import { RelationPreview } from "../../../preview";
 import { CollectionSize, Entity, EntityCollection, EntityRelation, FilterValues, Relation } from "@rebasepro/types";
@@ -75,7 +75,12 @@ export const TableMultipleRelationFieldInternal = React.memo(
         const buildMultipleRelationField = () => {
             if (Array.isArray(internalValue))
                 return <>
-                    {internalValue.map((relationItem, index) =>
+                    {internalValue.map((item, index) => {
+                        const relationItem = normalizeToEntityRelation(item);
+                        
+                        if (!relationItem) return null;
+
+                        return (
                         <div className="w-full my-0.5"
                             key={`preview_array_ref_${name}_${index}`}>
                             <RelationPreview
@@ -88,7 +93,8 @@ export const TableMultipleRelationFieldInternal = React.memo(
                                 includeEntityLink={includeEntityLink}
                             />
                         </div>
-                    )
+                        );
+                    })
                     }
                 </>;
             else

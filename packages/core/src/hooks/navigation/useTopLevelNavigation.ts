@@ -55,7 +55,7 @@ export function useTopLevelNavigation(
     } = props;
 
     const pluginGroups = useMemo(() => {
-        const allPluginGroups = plugins?.flatMap(plugin => plugin.homePage?.navigationEntries ? plugin.homePage.navigationEntries.map(e => e.name) : []) ?? [];
+        const allPluginGroups = plugins?.flatMap(plugin => plugin.hooks?.navigationEntries ? plugin.hooks.navigationEntries.map(e => e.name) : []) ?? [];
         return [...new Set(allPluginGroups)];
     }, [plugins]);
 
@@ -71,10 +71,10 @@ export function useTopLevelNavigation(
         const filteredEntries = entries.filter(entry => entry.entries.length > 0);
 
         // Persist to backend via plugins
-        if (plugins.some((plugin: RebasePlugin) => plugin.homePage?.onNavigationEntriesUpdate)) {
+        if (plugins.some((plugin: RebasePlugin) => plugin.hooks?.onNavigationEntriesUpdate)) {
             plugins.forEach((plugin: RebasePlugin) => {
-                if (plugin.homePage?.onNavigationEntriesUpdate) {
-                    plugin.homePage.onNavigationEntriesUpdate(filteredEntries);
+                if (plugin.hooks?.onNavigationEntriesUpdate) {
+                    plugin.hooks.onNavigationEntriesUpdate(filteredEntries);
                 }
             });
         }
@@ -226,7 +226,7 @@ export function useTopLevelNavigation(
         const uniqueGroups = [...nonAdminGroups, ...adminGroups] as string[];
 
         const computedTopLevelNav = {
-            allowDragAndDrop: plugins?.some((plugin: RebasePlugin) => plugin.homePage?.allowDragAndDrop) ?? false,
+            allowDragAndDrop: plugins?.some((plugin: RebasePlugin) => plugin.hooks?.allowDragAndDrop) ?? false,
             navigationEntries,
             groups: uniqueGroups,
             onNavigationEntriesUpdate: onNavigationEntriesOrderUpdate,

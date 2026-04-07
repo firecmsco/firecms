@@ -12,7 +12,7 @@ import {
     StringProperty
 } from "@rebasepro/types";
 
-import { resolveProperty } from "@rebasepro/common";
+import { resolveProperty, normalizeToEntityRelation } from "@rebasepro/common";
 import { useAuthController, useCustomizationController } from "../hooks";
 import { EmptyValue } from "./components/EmptyValue";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";
@@ -232,12 +232,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
             content = (
                 <div className="flex flex-col w-full gap-0.5">
                     {(value as unknown[]).map((item: unknown, index: number) => {
-                        const itemObj = item as Record<string, unknown>;
-                        const entityRelation: EntityRelation | null = (item instanceof EntityRelation)
-                            ? item
-                            : (item && typeof item === "object" && (itemObj.__type === "relation" || ("isEntityRelation" in itemObj && typeof itemObj.isEntityRelation === "function" && itemObj.isEntityRelation())))
-                                ? new EntityRelation(itemObj.id as string | number, itemObj.path as string, itemObj.data as any)
-                                : null;
+                        const entityRelation = normalizeToEntityRelation(item);
                         if (!entityRelation) return null;
                         return (
                             <div className="w-full"
@@ -257,12 +252,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<P extends Pro
             );
         } else {
             // Single-cardinality relation
-            const rawValue = value as Record<string, unknown>;
-            const relationValue: EntityRelation | null = (value instanceof EntityRelation)
-                ? value
-                : (typeof rawValue === "object" && (rawValue.__type === "relation" || ("isEntityRelation" in rawValue && typeof rawValue.isEntityRelation === "function" && rawValue.isEntityRelation())))
-                    ? new EntityRelation(rawValue.id as string | number, rawValue.path as string, rawValue.data as any)
-                    : null;
+            const relationValue = normalizeToEntityRelation(value);
             if (relationValue) {
                 content = <RelationPreview
                     disabled={!property.relation}

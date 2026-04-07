@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuthController, useCustomizationController, useRebaseContext, useLargeLayout, useTranslation } from "../../hooks";
+import { useAuthController, useRebaseContext, useLargeLayout, useTranslation, useSlot } from "../../hooks";
 import { CollectionActionsProps, EntityCollection, EntityTableController, Properties, SelectionController } from "@rebasepro/types";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { ClearFilterSortButton } from "../ClearFilterSortButton";
@@ -33,8 +33,6 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
 }: EntityCollectionViewStartActionsProps<M>) {
 
     const context = useRebaseContext();
-    const customizationController = useCustomizationController();
-    const plugins = customizationController.plugins ?? [];
     const largeLayout = useLargeLayout();
     const { t } = useTranslation();
 
@@ -98,22 +96,12 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
             enabled={!collection.forceFilter} />
     ];
 
-    if (plugins) {
-        plugins.forEach((plugin, i) => {
-            if (plugin.collectionView?.CollectionActionsStart) {
-                actions.push(...toArray(plugin.collectionView?.CollectionActionsStart)
-                    .map((Action, j) => (
-                        <ErrorBoundary key={`plugin_actions_${i}_${j}`}>
-                            <Action {...actionProps} {...plugin.collectionView?.collectionActionsStartProps} />
-                        </ErrorBoundary>
-                    )));
-            }
-        });
-    }
+    const pluginActionsStart = useSlot("collection.actions.start", actionProps);
 
     return (
         <>
             {actions}
+            {pluginActionsStart}
 
             {/* Filters Dialog */}
             {resolvedProperties && tableController.setFilterValues && (

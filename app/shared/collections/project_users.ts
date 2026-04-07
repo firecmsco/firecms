@@ -5,7 +5,7 @@ const projectUsersCollection: EntityCollection = {
     singularName: "Project User",
     slug: "project_users",
     dbPath: "project_users",
-
+    history: true,
     properties: {
         project_id: {
             name: "Project ID",

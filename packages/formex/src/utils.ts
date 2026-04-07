@@ -23,11 +23,11 @@ export const isNaN = (obj: unknown): boolean => obj !== obj;
  * Deeply get a value from an object via its path.
  */
 export function getIn(
-    obj: Record<string, unknown> | unknown[] | undefined,
+    obj: any,
     key: string | string[],
     def?: unknown,
     p = 0
-): unknown {
+): any {
     const path = toPath(key);
     let current: unknown = obj;
     while (current && p < path.length) {
@@ -42,7 +42,7 @@ export function getIn(
     return current === undefined ? def : current;
 }
 
-export function setIn(obj: Record<string, unknown>, path: string, value: unknown): Record<string, unknown> {
+export function setIn(obj: any, path: string, value: unknown): any {
     const res = clone(obj) as Record<string, unknown>; // this keeps inheritance when obj is a class
     let resVal: Record<string, unknown> = res;
     let i = 0;

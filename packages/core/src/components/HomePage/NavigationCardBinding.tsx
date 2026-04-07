@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
-import { useCustomizationController, useRebaseContext } from "../../hooks";
-import { NavigationEntry, PluginHomePageActionsProps } from "@rebasepro/types";
+import { useCustomizationController, useRebaseContext, useSlot } from "../../hooks";
+import { NavigationEntry } from "@rebasepro/types";
 import { IconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
-import { IconButton, StarIcon } from "@rebasepro/ui";
+import { IconButton, StarIcon, Tooltip, WarningIcon } from "@rebasepro/ui";
 import { NavigationCard } from "./NavigationCard";
 import { SmallNavigationCard } from "./SmallNavigationCard";
 import React from "react";
@@ -71,25 +71,25 @@ export function NavigationCardBinding({
         ]
         : [];
 
-    if (customizationController.plugins && collection) {
-        const actionProps: PluginHomePageActionsProps = {
-            slug: slug,
-            collection,
-            context
-        };
-        customizationController.plugins.forEach((plugin, i) => (
-            actionsArray.push(plugin.homePage?.CollectionActions
-                ? <plugin.homePage.CollectionActions
-                    key={`actions_${i}`}
-                    {...actionProps}
-                    extraProps={plugin.homePage.extraProps}
-                />
-                : null
-            )))
+    const pluginCardActions = useSlot("home.collection.actions", {
+        slug: slug,
+        collection: collection!,
+        context
+    });
+
+    if (collection?.isTableMissing) {
+        actionsArray.unshift(
+            <Tooltip key="warning" title={`Table "${collection?.dbPath}" is missing in the database. Run migrations.`}>
+                <div>
+                    <WarningIcon size="small" className="text-red-600 dark:text-red-400" />
+                </div>
+            </Tooltip>
+        );
     }
 
     const actions: React.ReactNode | undefined = <>
         {actionsArray}
+        {pluginCardActions}
     </>
 
     return <NavigationCard

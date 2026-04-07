@@ -1,4 +1,5 @@
 export * from "./Rebase";
+export * from "./PluginProviderStack";
 
 export * from "./DefaultDrawer";
 export * from "./DrawerNavigationItem";

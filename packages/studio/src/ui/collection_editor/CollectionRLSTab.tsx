@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, IconButton, Typography, cls, defaultBorderMixin, Chip, KeyIcon, DeleteIcon, Paper, Container, Tooltip, CircularProgress } from "@rebasepro/ui";
+import { Button, IconButton, Typography, cls, defaultBorderMixin, Chip, KeyIcon, DeleteIcon, Paper, Container, Tooltip, CircularProgress, Dialog } from "@rebasepro/ui";
 import { PostgresPolicy } from "../../components/RLSEditor/RLSEditor";
 import { PolicyEditor } from "../../components/RLSEditor/PolicyEditor";
 import { useFormex } from "@rebasepro/formex";
@@ -103,19 +103,7 @@ export function CollectionRLSTab() {
         setEditingPolicy(null);
     };
 
-    if (editingPolicy) {
-        return (
-            <div className="h-full w-full bg-surface-50 dark:bg-surface-900 border-l border-r border-b dark:border-surface-800 rounded-b-lg p-0">
-                <PolicyEditor
-                    policy={editingPolicy === "new" ? undefined : editingPolicy}
-                    schema={"public"}
-                    table={values.id || values.dbPath || values.alias || "your_table"}
-                    onSave={handleSave}
-                    onCancel={() => setEditingPolicy(null)}
-                />
-            </div>
-        );
-    }
+
 
     return (
         <div className={"overflow-auto my-auto"}>
@@ -222,6 +210,17 @@ export function CollectionRLSTab() {
                     </div>
                 )}
                 </div>
+                <Dialog open={!!editingPolicy} onOpenChange={(open) => !open && setEditingPolicy(null)} maxWidth="4xl">
+                    {editingPolicy && (
+                        <PolicyEditor
+                            policy={editingPolicy === "new" ? undefined : editingPolicy}
+                            schema={"public"}
+                            table={values.id || values.dbPath || values.alias || "your_table"}
+                            onSave={handleSave}
+                            onCancel={() => setEditingPolicy(null)}
+                        />
+                    )}
+                </Dialog>
             </Container>
         </div>
     );

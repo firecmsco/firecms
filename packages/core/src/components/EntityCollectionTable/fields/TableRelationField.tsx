@@ -9,7 +9,7 @@ import { useEntitySelectionDialog } from "../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { cls, EditIcon } from "@rebasepro/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
-import { getRelationFrom } from "@rebasepro/common";
+import { getRelationFrom, normalizeToEntityRelation } from "@rebasepro/common";
 import { TableMultipleRelationField } from "./TableMultipleRelationField";
 
 type TableRelationFieldProps = {
@@ -106,11 +106,13 @@ export const TableRelationFieldInternal = React.memo(
         const valueNotSet = !internalValue || (Array.isArray(internalValue) && internalValue.length === 0);
 
         const buildSingleRelationField = () => {
-            if (internalValue && !Array.isArray(internalValue) && internalValue.isEntityRelation() && internalValue.isEntityRelation())
+            const normalizedRelation = normalizeToEntityRelation(internalValue);
+
+            if (normalizedRelation)
                 return <RelationPreview
                     onClick={disabled ? undefined : handleOpen}
                     size={getPreviewSizeFrom(size)}
-                    relation={internalValue as EntityRelation}
+                    relation={normalizedRelation}
                     hover={!disabled}
                     previewProperties={previewProperties}
                     includeId={includeId}

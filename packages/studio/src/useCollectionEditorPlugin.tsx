@@ -89,48 +89,97 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
         includeIntroView = true,
         pathSuggestions,
         generateCollection
-    }: CollectionConfigControllerProps<EC, USER>): RebasePlugin<any, any, PersistedCollection> {
+    }: CollectionConfigControllerProps<EC, USER>): RebasePlugin {
 
     return React.useMemo(() => ({
         key: "collection_editor",
         loading: collectionConfigController.loading,
-        provider: {
-            Component: ConfigControllerProvider as any,
-            props: {
-                collectionConfigController,
-                configPermissions,
-                collectionInference,
-                reservedGroups,
-                extraView,
-                getUser,
-                getData,
-                onAnalyticsEvent,
-                pathSuggestions,
-                generateCollection
+        providers: [
+            {
+                scope: "root" as const,
+                Component: ConfigControllerProvider,
+                props: {
+                    collectionConfigController,
+                    configPermissions,
+                    collectionInference,
+                    reservedGroups,
+                    extraView,
+                    getUser,
+                    getData,
+                    onAnalyticsEvent,
+                    pathSuggestions,
+                    generateCollection
+                }
             }
-        },
-        homePage: {
-            additionalActions: <NewCollectionButton />,
-            additionalChildrenStart: includeIntroView ? <IntroWidget /> : undefined,
-            CollectionActions: HomePageEditorCollectionAction,
-            AdditionalCards: NewCollectionCard,
+        ],
+        slots: [
+            // Home page slots
+            {
+                slot: "home.actions",
+                Component: NewCollectionButton,
+                order: 50,
+            },
+            ...(includeIntroView ? [{
+                slot: "home.children.start" as const,
+                Component: IntroWidget,
+                order: 50,
+            }] : []),
+            {
+                slot: "home.collection.actions",
+                Component: HomePageEditorCollectionAction,
+                order: 50,
+            },
+            {
+                slot: "home.cards",
+                Component: NewCollectionCard,
+                order: 50,
+            },
+            // Collection view slots
+            {
+                slot: "collection.actions.start",
+                Component: EditorCollectionActionStart,
+                order: 50,
+            },
+            {
+                slot: "collection.actions",
+                Component: EditorCollectionAction,
+                order: 50,
+            },
+            {
+                slot: "collection.header.action",
+                Component: CollectionViewHeaderAction,
+                order: 50,
+            },
+            {
+                slot: "collection.add-column",
+                Component: PropertyAddColumnComponent,
+                order: 50,
+            },
+            // Kanban slots
+            {
+                slot: "kanban.setup",
+                Component: KanbanSetupAction,
+                order: 50,
+            },
+            {
+                slot: "kanban.add-column",
+                Component: AddKanbanColumnAction,
+                order: 50,
+            },
+            // Form slots
+            {
+                slot: "form.actions.top",
+                Component: EditorEntityAction,
+                order: 50,
+            },
+        ],
+        hooks: {
+            onColumnsReorder: collectionConfigController.updatePropertiesOrder,
+            onKanbanColumnsReorder: collectionConfigController.updateKanbanColumnsOrder,
             allowDragAndDrop: true,
             navigationEntries: collectionConfigController.navigationEntries,
             onNavigationEntriesUpdate: collectionConfigController.saveNavigationEntries,
         },
-        collectionView: {
-            CollectionActionsStart: EditorCollectionActionStart,
-            CollectionActions: EditorCollectionAction,
-            HeaderAction: CollectionViewHeaderAction,
-            AddColumnComponent: PropertyAddColumnComponent,
-            onColumnsReorder: collectionConfigController.updatePropertiesOrder,
-            onKanbanColumnsReorder: collectionConfigController.updateKanbanColumnsOrder,
-            KanbanSetupComponent: KanbanSetupAction,
-            AddKanbanColumnComponent: AddKanbanColumnAction
-        },
-        form: {
-            ActionsTop: EditorEntityAction,
-        }
     }), [
         collectionConfigController.loading,
         collectionConfigController,

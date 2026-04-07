@@ -32,7 +32,16 @@ const app = new Hono<HonoEnv>();
 // In production: replace with your actual domain(s).
 const allowedOrigins = process.env.NODE_ENV === "production"
     ? [process.env.FRONTEND_URL || "https://yourdomain.com"]
-    : ["http://localhost:5173", "http://localhost:3000"];
+    : (origin: string | undefined, c: any) => {
+        if (!origin) return "http://localhost:5173";
+        try {
+            const url = new URL(origin);
+            if (url.hostname === "localhost" || url.hostname === "127.0.0.1") {
+                return origin;
+            }
+        } catch (_) {}
+        return "http://localhost:5173";
+    };
 
 app.use("/*", cors({
     origin: allowedOrigins,

@@ -57,25 +57,28 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Re
 
     return {
         key: "data_enhancement",
-        form: {
-            Actions: FormEnhanceAction,
-            provider: {
+        slots: [
+            {
+                slot: "form.actions",
+                Component: FormEnhanceAction,
+                order: 40,
+            },
+        ],
+        providers: [
+            {
+                scope: "form" as const,
                 Component: DataEnhancementControllerProvider,
                 props: {
                     apiKey,
                     getConfigForPath,
                     host: props?.host
                 }
-            },
-            fieldBuilder,
-            fieldBuilderEnabled
-        },
-        homePage: {
-            // CollectionActions: EnhanceCollectionIcon,
-            extraProps: {
-                getConfigForPath
             }
-        }
+        ],
+        fieldBuilder: {
+            wrap: fieldBuilder,
+            enabled: fieldBuilderEnabled
+        },
         // loading: configController.loading,
     };
 }

@@ -13,6 +13,7 @@ import {
     IconButton,
     HelpOutlineIcon,
     Dialog,
+    DialogTitle,
     DialogContent,
     DialogActions
 } from "@rebasepro/ui";
@@ -183,33 +184,20 @@ export const PolicyEditor = ({
     };
 
     return (
-        <div className="flex-grow flex flex-col h-full bg-surface-50 dark:bg-surface-950 text-text-primary dark:text-text-primary-dark">
-            {/* Header */}
-            <div className={cls("p-4 bg-surface-50 dark:bg-surface-950 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sticky top-0 z-10", defaultBorderMixin)}>
-                <div className="flex items-center gap-3">
-                    <div>
-                        <Typography variant="subtitle1" className="">
-                            {policy ? t("studio_policy_edit") : t("studio_policy_create")}
-                        </Typography>
-                        <Typography variant="caption" className="text-text-secondary dark:text-text-secondary-dark mt-1">
-                            {t("studio_policy_defining_rules")} <span className="font-mono text-primary bg-primary-bg dark:bg-primary-bg-dark px-1 py-0.5 rounded">{schema}.{table}</span>
-                        </Typography>
+        <>
+            <DialogTitle className="flex justify-between items-center w-full" variant="h6">
+                <div>
+                    <div>{policy ? t("studio_policy_edit") : t("studio_policy_create")}</div>
+                    <div className="text-sm font-normal text-text-secondary dark:text-text-secondary-dark tracking-wide mt-1">
+                        {t("studio_policy_defining_rules")} <span className="font-mono text-primary bg-primary-bg dark:bg-primary-bg-dark px-1 py-0.5 rounded">{schema}.{table}</span>
                     </div>
-                    <IconButton size="small" onClick={() => setHelpOpen(true)}>
-                        <HelpOutlineIcon size="small" />
-                    </IconButton>
                 </div>
-                <div className="flex gap-2">
-                    <Button size="small" variant="text" color="neutral" onClick={onCancel}>
-                        {t("studio_policy_cancel")}
-                    </Button>
-                    <Button size="small" variant="filled" color="primary" onClick={handleSave} disabled={!name}>
-                        {t("studio_policy_save")}
-                    </Button>
-                </div>
-            </div>
+                <IconButton size="small" onClick={() => setHelpOpen(true)}>
+                    <HelpOutlineIcon size="small" />
+                </IconButton>
+            </DialogTitle>
 
-            <div className="flex-grow p-4 md:p-6 overflow-y-auto">
+            <DialogContent className="p-4 md:p-6 border-t dark:border-surface-800 bg-surface-50 dark:bg-surface-950" includeMargin={false}>
                 <div className="max-w-4xl mx-auto">
                 <Paper className={cls("p-4 md:p-6 flex flex-col gap-6 bg-white dark:bg-surface-900 border-none sm:border-solid rounded-none sm:rounded-xl", defaultBorderMixin)}>
 
@@ -357,7 +345,16 @@ export const PolicyEditor = ({
                 </div>
 
                 </div>
-            </div >
+            </DialogContent>
+
+            <DialogActions>
+                <Button size="small" variant="text" color="neutral" onClick={onCancel}>
+                    {t("studio_policy_cancel")}
+                </Button>
+                <Button size="small" variant="filled" color="primary" onClick={handleSave} disabled={!name}>
+                    {t("studio_policy_save")}
+                </Button>
+            </DialogActions>
 
             <Dialog open={helpOpen} onOpenChange={setHelpOpen} maxWidth="3xl">
                 <DialogContent className="p-4 sm:p-6 lg:p-8 flex flex-col gap-6">
@@ -457,6 +454,6 @@ export const PolicyEditor = ({
                     <Button onClick={() => setHelpOpen(false)} variant="filled" color="primary">{t("studio_policy_help_got_it")}</Button>
                 </DialogActions>
             </Dialog>
-        </div >
+        </>
     );
 };

@@ -92,20 +92,21 @@ function collectionToCode(collection: EntityCollection): object {
         if (typeof valueCopy === "object") {
             if (valueCopy === null)
                 return valueCopy;
-            Object.keys(valueCopy).forEach((key) => {
-                if (!isEmptyObject(valueCopy)) {
-                    const childRes = propertyCleanup(valueCopy[key]);
+            const obj = valueCopy as Record<string, any>;
+            Object.keys(obj).forEach((key) => {
+                if (!isEmptyObject(obj)) {
+                    const childRes = propertyCleanup(obj[key]);
                     if (childRes !== null && childRes !== undefined && childRes !== false && !isEmptyObject(childRes)) {
-                        valueCopy[key] = childRes;
+                        obj[key] = childRes;
                     } else {
-                        delete valueCopy[key];
+                        delete obj[key];
                     }
                 }
             });
-            delete valueCopy.resolved;
-            delete valueCopy.propertiesOrder;
-            delete valueCopy.propertyConfig;
-            delete valueCopy.editable;
+            delete obj.resolved;
+            delete obj.propertiesOrder;
+            delete obj.propertyConfig;
+            delete obj.editable;
 
         }
 

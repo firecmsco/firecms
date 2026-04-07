@@ -4,7 +4,8 @@ import {
     useCollapsedGroups,
     useCustomizationController,
     useRebaseContext,
-    useNavigationStateController
+    useNavigationStateController,
+    useSlot
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import {
@@ -62,78 +63,10 @@ export function StudioHomePage({
             }));
     }, [rawNavigationEntries, hiddenGroups]);
 
-    /* ───────────────────────────────────────────────────────────────
-       Plugin extras
-       ─────────────────────────────────────────────────────────────── */
-    let additionalPluginChildrenStart: React.ReactNode | undefined;
-    let additionalPluginChildrenEnd: React.ReactNode | undefined;
-    let additionalPluginSections: React.ReactNode | undefined;
-    let additionalPluginActions: React.ReactNode | undefined;
-
-    if (customizationController.plugins) {
-        const sectionProps: PluginGenericProps = { context };
-
-        additionalPluginSections = (
-            <>
-                {customizationController.plugins
-                    .filter((p) => p.homePage?.includeSection)
-                    .map((plugin) => {
-                        const section = plugin.homePage!.includeSection!(
-                            sectionProps
-                        );
-                        return (
-                            <div key={`plugin_section_${plugin.key}`} className="flex flex-col gap-4 mt-8">
-                                <Typography
-                                    variant="caption"
-                                    color="secondary"
-                                    className="px-4 py-2 font-medium uppercase text-sm text-surface-600 dark:text-surface-400"
-                                >
-                                    {section.title}
-                                </Typography>
-                                {section.children}
-                            </div>
-                        );
-                    })}
-            </>
-        );
-
-        additionalPluginChildrenStart = (
-            <div className="flex flex-col gap-2">
-                {customizationController.plugins
-                    .filter((p) => p.homePage?.additionalChildrenStart)
-                    .map((plugin, i) => (
-                        <div key={`plugin_children_start_${i}`}>
-                            {plugin.homePage!.additionalChildrenStart}
-                        </div>
-                    ))}
-            </div>
-        );
-
-        additionalPluginChildrenEnd = (
-            <div className="flex flex-col gap-2">
-                {customizationController.plugins
-                    .filter((p) => p.homePage?.additionalChildrenEnd)
-                    .map((plugin, i) => (
-                        <div key={`plugin_children_end_${i}`}>
-                            {plugin.homePage!.additionalChildrenEnd}
-                        </div>
-                    ))}
-            </div>
-        );
-
-        // Collect additionalActions from plugins
-        additionalPluginActions = (
-            <>
-                {customizationController.plugins
-                    .filter((p) => p.homePage?.additionalActions)
-                    .map((plugin, i) => (
-                        <React.Fragment key={`plugin_actions_${i}`}>
-                            {plugin.homePage!.additionalActions}
-                        </React.Fragment>
-                    ))}
-            </>
-        );
-    }
+    const sectionProps: PluginGenericProps = { context };
+    const additionalPluginChildrenStart = useSlot("home.children.start", sectionProps);
+    const additionalPluginChildrenEnd = useSlot("home.children.end", sectionProps);
+    const additionalPluginActions = useSlot("home.actions", sectionProps);
 
     /* ───────────────────────────────────────────────────────────────
        Render
@@ -213,7 +146,6 @@ export function StudioHomePage({
                     </div>
                 </div>
 
-                {additionalPluginSections}
 
                 {sections && sections.map((section) => (
                     <div key={section.key} className="flex flex-col gap-4 mt-8">

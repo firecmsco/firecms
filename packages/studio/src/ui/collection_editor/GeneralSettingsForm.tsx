@@ -24,7 +24,8 @@ import {
     SelectItem,
     TextField,
     Tooltip,
-    Typography
+    Typography,
+    WarningIcon
 } from "@rebasepro/ui";
 import { Field, getIn, useFormex } from "@rebasepro/formex";
 import { useCollectionsConfigController } from "../../useCollectionsConfigController";
@@ -146,6 +147,16 @@ export function GeneralSettingsForm({
                                     ? errors.dbPath
                                     : isSubcollection ? "Relative path to the parent (no need to include the parent path)" : "Path that this collection is stored in, in the database"}
                             </FieldCaption>
+                            
+                            {values.isTableMissing && (
+                                <div className="mt-2 p-3 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800/30 rounded-md text-sm font-medium flex gap-2">
+                                    <div className="mt-0.5"><WarningIcon size="smallest" /></div>
+                                    <span>
+                                        The table <b>"{values.dbPath}"</b> does not exist in the database schema. 
+                                        If you've recently created it, make sure to generate and run your database migrations.
+                                    </span>
+                                </div>
+                            )}
                         </div>
 
                         {/* Singular Name */}

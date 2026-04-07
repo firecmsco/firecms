@@ -8,294 +8,196 @@ import { RebaseContext } from "../rebase_context";
 import { NavigationGroupMapping, CMSView } from "../controllers";
 import { User } from "../users";
 import { UserManagementDelegate } from "./user_management_delegate";
+import { SlotContribution } from "./slots";
+
+// ── Plugin ────────────────────────────────────────────────────────────
 
 /**
  * Interface used to define plugins for Rebase.
- * NOTE: This is a work in progress and the API is not stable yet.
+ * Plugins contribute UI via **slots**, wrap subtrees with **providers**,
+ * and inject behavioral logic via **hooks**.
  * @group Core
  */
-export type RebasePlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection, COL_ACTIONS_PROPS = any, COL_ACTIONS_START__PROPS = any> = {
-
+export interface RebasePlugin {
     /**
-     * Key of the plugin. This is used to identify the plugin in the CMS.
+     * Unique key identifying this plugin.
      */
     key: string;
 
     /**
-     * If this flag is set to true, no content will be shown in the CMS
-     * until the plugin is fully loaded.
+     * If true, no CMS content is shown until this plugin finishes loading.
      */
     loading?: boolean;
 
     /**
-     * You can use this prop to add higher order components to the CMS.
-     * The components will be added to the root of the CMS, so any component
-     * rendered underneath by this plugin will have access to the context
-     * provided by this HOC.
-     * Anyhow, this is rendered below the {@link RebaseContext} provider, so
-     * you can use the hooks provided by the CMS.
-     * @param props
+     * UI slot contributions rendered at the matching extension points.
      */
-    provider?: {
-        Component: React.ComponentType<PropsWithChildren<PROPS & {
-            context: RebaseContext
-        }>>;
-        props?: PROPS;
-    };
+    slots?: SlotContribution[];
 
-    userManagement?: UserManagementDelegate;
+    /**
+     * HOC providers wrapping root or form content.
+     * Providers with `scope: "root"` wrap the entire CMS below RebaseContext.
+     * Providers with `scope: "form"` wrap each entity form/edit view.
+     */
+    providers?: PluginProvider[];
+
+    /**
+     * Behavioral hooks (non-UI) — collection modification, search blocking,
+     * column reordering, navigation entries, etc.
+     */
+    hooks?: PluginHooks;
+
+    /**
+     * Field wrapping for custom field rendering (e.g. data enhancement).
+     */
+    fieldBuilder?: FieldBuilderConfig;
 
     /**
      * Views to be automatically added to the navigation.
-     * These views will be merged with the views provided to useBuildNavigationStateController.
      */
     views?: CMSView[];
 
-    homePage?: {
-
-        /**
-         * Additional actions to be rendered in the home page, close to the search bar.
-         */
-        additionalActions?: React.ReactNode;
-
-        /**
-         * Additional children to be rendered in the beginning of the home page.
-         */
-        additionalChildrenStart?: React.ReactNode;
-
-        /**
-         * Additional children to be rendered at the end of the home page.
-         */
-        additionalChildrenEnd?: React.ReactNode;
-
-        /**
-         * Use this component to add custom actions to the navigation card
-         * in the home page.
-         */
-        CollectionActions?: React.ComponentType<PluginHomePageActionsProps>;
-
-        /**
-         * Additional props passed to `CollectionActions`
-         */
-        extraProps?: Record<string, unknown>;
-
-        /**
-         * Add additional cards to each collection group in the home page.
-         */
-        AdditionalCards?: React.ComponentType<PluginHomePageAdditionalCardsProps> | React.ComponentType<PluginHomePageAdditionalCardsProps>[];
-
-        /**
-         * Include a section in the home page with a custom component and title.
-         * @param props
-         */
-        includeSection?: (props: PluginGenericProps) => {
-            title: string;
-            children: React.ReactNode;
-        }
-
-        /**
-         * Allow reordering with drag and drop of the collections in the home page.
-         */
-        allowDragAndDrop?: boolean;
-
-        navigationEntries?: NavigationGroupMapping[];
-
-        /**
-         * This method will be called when the entries are updated in the home page.
-         * group => navigationEntriesOrder (path)
-         * @param entries
-         */
-        onNavigationEntriesUpdate?: (entries: NavigationGroupMapping[]) => void;
-
-    }
-
-    collectionView?: {
-
-        /**
-         * Custom component to render when a collection loading error occurs.
-         * If provided, this replaces the default error view in all collection view modes
-         * (table, card, kanban).
-         * Return `null` from the component to fall back to the default error view.
-         */
-        CollectionError?: React.ComponentType<{
-            path: string;
-            collection: EC;
-            parentCollectionIds?: string[];
-            error: Error;
-        }>;
-
-        /**
-         * Use this component to add custom actions to the entity collections
-         * toolbar.
-         */
-        CollectionActions?: React.ComponentType<CollectionActionsProps<Record<string, unknown>, User, EC> & COL_ACTIONS_PROPS> | React.ComponentType<CollectionActionsProps<Record<string, unknown>, User, EC> & COL_ACTIONS_PROPS>[];
-        collectionActionsProps?: COL_ACTIONS_PROPS;
-
-        CollectionActionsStart?: React.ComponentType<CollectionActionsProps<Record<string, unknown>, User, EC> & COL_ACTIONS_START__PROPS> | React.ComponentType<CollectionActionsProps<Record<string, unknown>, User, EC> & COL_ACTIONS_START__PROPS>[];
-        collectionActionsStartProps?: COL_ACTIONS_START__PROPS;
-
-        blockSearch?: (props: {
-            context: RebaseContext,
-            path: string,
-            collection: EC,
-            parentCollectionIds?: string[]
-        }) => boolean;
-
-        showTextSearchBar?: (props: {
-            context: RebaseContext,
-            path: string,
-            collection: EC,
-            parentCollectionIds?: string[]
-        }) => boolean;
-
-        onTextSearchClick?: (props: {
-            context: RebaseContext,
-            path: string,
-            collection: EC,
-            parentCollectionIds?: string[]
-        }) => Promise<boolean>;
-
-        /**
-         * Use this method to inject widgets to the entity collections header
-         * @param props
-         */
-        HeaderAction?: React.ComponentType<{
-            property: Property,
-            propertyKey: string,
-            path: string,
-            parentCollectionIds: string[],
-            onHover: boolean,
-            collection: EC;
-            tableController: EntityTableController;
-        }>;
-
-        /**
-         * If you add this callback to your plugin, an add button will be added to the collection table.
-         * Note that multiple plugins can render this simultaneously.
-         */
-        AddColumnComponent?: React.ComponentType<{
-            path: string,
-            parentCollectionIds: string[],
-            collection: EC;
-            tableController: EntityTableController;
-        }>;
-
-        /**
-         * Callback called when columns are reordered via drag and drop.
-         * Used by plugins to persist the new column order.
-         */
-        onColumnsReorder?: (props: {
-            fullPath: string;
-            parentCollectionIds: string[];
-            collection: EC;
-            newPropertiesOrder: string[];
-        }) => void;
-
-        /**
-         * Callback called when Kanban board columns are reordered via drag and drop.
-         * Used by plugins to persist the new Kanban column order.
-         */
-        onKanbanColumnsReorder?: (props: {
-            fullPath: string;
-            parentCollectionIds: string[];
-            collection: EC;
-            kanbanColumnProperty: string;
-            newColumnsOrder: string[];
-        }) => void;
-
-        /**
-         * Component to render when Kanban view is missing configuration.
-         * Used to provide a CTA to open the collection editor to configure Kanban.
-         */
-        KanbanSetupComponent?: React.ComponentType<{
-            collection: EC;
-            fullPath: string;
-            parentCollectionIds: string[];
-        }>;
-
-        /**
-         * Component to render an "Add Column" button at the end of the Kanban board.
-         * Used to allow adding new enum values to the column property.
-         */
-        AddKanbanColumnComponent?: React.ComponentType<{
-            collection: EC;
-            fullPath: string;
-            parentCollectionIds: string[];
-            columnProperty: string;
-        }>;
-    }
-
-    form?: {
-        provider?: {
-            Component: React.ComponentType<PropsWithChildren<FORM_PROPS & PluginFormActionProps<User, EC>>>;
-            props?: FORM_PROPS;
-        }
-
-        /**
-         * Add custom actions to the default ones ("Save", "Discard"...)
-         */
-        Actions?: React.ComponentType<PluginFormActionProps<User, EC>>;
-
-        /**
-         * Add custom actions to the top of the form
-         */
-        ActionsTop?: React.ComponentType<PluginFormActionProps<User, EC>>;
-
-        /**
-         * Add custom content above the entity title in the form view
-         */
-        BeforeTitle?: React.ComponentType<PluginFormActionProps<User, EC>>;
-
-        fieldBuilder?: <T>(props: PluginFieldBuilderParams<Record<string, unknown>, EC>) => React.ComponentType<FieldProps<any>> | null;
-
-        fieldBuilderEnabled?: <T>(props: PluginFieldBuilderParams) => boolean;
-    }
-
-    collection?: {
-
-        /**
-         * Use this method to modify a single collection before it is rendered.
-         * @param collection
-         */
-        modifyCollection?: (collection: EntityCollection) => EntityCollection;
-
-        /**
-         * Use this method to modify, add or remove collections.
-         * @param collections
-         */
-        injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
-
-    }
-
+    /**
+     * User management delegate from this plugin.
+     */
+    userManagement?: UserManagementDelegate;
 }
 
+// ── Provider ──────────────────────────────────────────────────────────
+
 /**
- * Props passed to the {@link RebasePlugin.homePage.CollectionActions} method.
- * You can use it to add custom actions to the navigation card of each collection.
- *
+ * A HOC provider that wraps a subtree of the CMS.
+ * @group Plugins
+ */
+export interface PluginProvider {
+    /**
+     * `"root"` — wraps the entire CMS below RebaseContext.
+     * `"form"` — wraps each entity form / edit view.
+     */
+    scope: "root" | "form";
+
+    /**
+     * The provider component. Must accept `children`.
+     * Typed loosely because extra props are passed via the `props` field;
+     * strict signatures cause contravariance issues.
+     */
+    Component: React.ComponentType<any>;
+
+    /**
+     * Additional props passed to the Component.
+     */
+    props?: Record<string, any>;
+}
+
+// ── Hooks ─────────────────────────────────────────────────────────────
+
+/**
+ * Behavioral hooks that a plugin can provide.
+ * These are non-UI extension points for modifying CMS behavior.
+ * @group Plugins
+ */
+export interface PluginHooks {
+    /**
+     * Modify a single collection before it is rendered.
+     */
+    modifyCollection?: (collection: EntityCollection) => EntityCollection;
+
+    /**
+     * Modify, add or remove collections.
+     */
+    injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
+
+    /**
+     * Block text search for a collection.
+     */
+    blockSearch?: (props: {
+        context: RebaseContext;
+        path: string;
+        collection: EntityCollection;
+        parentCollectionIds?: string[];
+    }) => boolean;
+
+    /**
+     * Callback when the text search button is clicked.
+     */
+    onTextSearchClick?: (props: {
+        context: RebaseContext;
+        path: string;
+        collection: EntityCollection;
+        parentCollectionIds?: string[];
+    }) => Promise<boolean>;
+
+    /**
+     * Callback called when columns are reordered via drag and drop.
+     */
+    onColumnsReorder?: (props: {
+        fullPath: string;
+        parentCollectionIds: string[];
+        collection: EntityCollection;
+        newPropertiesOrder: string[];
+    }) => void;
+
+    /**
+     * Callback called when Kanban board columns are reordered.
+     */
+    onKanbanColumnsReorder?: (props: {
+        fullPath: string;
+        parentCollectionIds: string[];
+        collection: EntityCollection;
+        kanbanColumnProperty: string;
+        newColumnsOrder: string[];
+    }) => void;
+
+    /**
+     * Navigation entries contributed by this plugin.
+     */
+    navigationEntries?: NavigationGroupMapping[];
+
+    /**
+     * Callback when navigation entry order changes (e.g. drag-and-drop).
+     */
+    onNavigationEntriesUpdate?: (entries: NavigationGroupMapping[]) => void;
+
+    /**
+     * Allow reordering collections in the home page via drag and drop.
+     */
+    allowDragAndDrop?: boolean;
+}
+
+// ── Field Builder ─────────────────────────────────────────────────────
+
+/**
+ * Configuration for wrapping form field components.
+ * @group Plugins
+ */
+export interface FieldBuilderConfig {
+    /**
+     * Returns a wrapped field component, or null to skip wrapping.
+     */
+    wrap: <T>(params: PluginFieldBuilderParams) => React.ComponentType<FieldProps<any>> | null;
+
+    /**
+     * Optional guard — return false to skip wrapping for this field.
+     */
+    enabled?: (params: PluginFieldBuilderParams) => boolean;
+}
+
+// ── Prop interfaces ───────────────────────────────────────────────────
+
+/**
+ * Props passed to home page collection card action components.
  * @group Models
  */
 export interface PluginHomePageActionsProps<EP extends object = object, M extends Record<string, any> = any, USER extends User = User, EC extends EntityCollection<M> = EntityCollection<M>> {
-    /**
-     * Collection path of this entity. This is the full path, like
-     * `users/1234/addresses`
-     */
     slug: string;
-
-    /**
-     * The collection configuration
-     */
     collection: EC;
-
-    /**
-     * Context of the app status
-     */
     context: RebaseContext<USER>;
-
-    extraProps?: EP;
-
 }
 
+/**
+ * Props passed to form action components in entity edit/form views.
+ * @group Models
+ */
 export interface PluginFormActionProps<USER extends User = User, EC extends EntityCollection = EntityCollection> {
     entityId?: string | number;
     path: string;
@@ -308,6 +210,10 @@ export interface PluginFormActionProps<USER extends User = User, EC extends Enti
     openEntityMode: "side_panel" | "full_screen";
 }
 
+/**
+ * Parameters passed to the field builder wrap function.
+ * @group Models
+ */
 export type PluginFieldBuilderParams<M extends Record<string, any> = any, EC extends EntityCollection<M> = EntityCollection<M>> = {
     fieldConfigId: string;
     propertyKey: string;
@@ -318,10 +224,18 @@ export type PluginFieldBuilderParams<M extends Record<string, any> = any, EC ext
     collection?: EC;
 };
 
+/**
+ * Generic props passed to plugin components that just need CMS context.
+ * @group Models
+ */
 export interface PluginGenericProps<USER extends User = User> {
     context: RebaseContext<USER>;
 }
 
+/**
+ * Props for additional card components in the home page.
+ * @group Models
+ */
 export interface PluginHomePageAdditionalCardsProps<USER extends User = User> {
     group?: string;
     context: RebaseContext<USER>;

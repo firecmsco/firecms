@@ -32,10 +32,10 @@ export function useTableSearchHelper<M extends Record<string, any>>({
     };
 
     const searchBlocked = customizationController.plugins?.find(p => {
-        return p.collectionView?.blockSearch?.(props);
+        return p.hooks?.blockSearch?.(props);
     });
 
-    const addTextSearchClickListener = customizationController.plugins?.find(p => Boolean(p.collectionView?.onTextSearchClick));
+    const addTextSearchClickListener = customizationController.plugins?.find(p => Boolean(p.hooks?.onTextSearchClick));
 
     if (addTextSearchClickListener) {
 
@@ -45,8 +45,8 @@ export function useTableSearchHelper<M extends Record<string, any>>({
                 const promises: Promise<boolean>[] = [];
                 if (searchBlocked) {
                     customizationController.plugins?.forEach(p => {
-                        if (p.collectionView?.onTextSearchClick)
-                            promises.push(p.collectionView.onTextSearchClick({
+                        if (p.hooks?.onTextSearchClick)
+                            promises.push(p.hooks.onTextSearchClick({
                                 context,
                                 path,
                                 collection,

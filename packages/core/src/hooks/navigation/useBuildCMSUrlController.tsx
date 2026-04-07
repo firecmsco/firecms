@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { removeInitialAndTrailingSlashes } from "@rebasepro/common";
+import { removeInitialAndTrailingSlashes, resolveCollectionPathIds } from "@rebasepro/common";
 import { CMSUrlController, NavigateOptions, CollectionRegistryController } from "@rebasepro/types";
 import { useNavigate } from "react-router-dom";
 
@@ -44,10 +44,7 @@ export function useBuildCMSUrlController(props: {
     }, [basePath, baseCollectionPath]);
 
     const resolveDatabasePathsFrom = useCallback((path: string): string => {
-        const pathSegments = removeInitialAndTrailingSlashes(path).split("/");
-        const resolvedPaths = collectionRegistryController.convertIdsToPaths(pathSegments);
-        return resolvedPaths.join("/");
-
+        return resolveCollectionPathIds(path, collectionRegistryController.collections ?? []);
     }, [collectionRegistryController]);
 
     const navigateTo = useCallback((to: string, options?: NavigateOptions) => {

@@ -1,0 +1,341 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SectionBackgroundAccents from "../components/SectionBackgroundAccents.astro";
+import { RebaseEditorDemo } from "../components/RebaseEditorDemo";
+import { KanbanDemo } from "../components/demos/KanbanDemo";
+import "../styles/editor.css";
+
+const title = "Editing Experience — Notion-Style Rich Text & Beyond | Rebase";
+const description = "A block-based rich text editor, Kanban boards, inline editing, and a fully extensible content experience — all built into Rebase and backed by Postgres.";
+
+const breadcrumbs = [
+    { name: "Home", url: "https://rebase.pro" },
+    { name: "Editing Experience", url: "https://rebase.pro/editing" }
+];
+---
+
+<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
+  <main>
+
+    <!-- Hero -->
+    <section class="relative isolate overflow-hidden bg-linear-to-br from-black to-surface-950 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:pt-40 lg:pb-24">
+      <SectionBackgroundAccents topLine={true} blob={{ position: "top", size: "lg", opacity: 60 }}/>
+      <div class="pointer-events-none absolute inset-0 -z-10">
+        <div class="absolute -bottom-40 left-1/4 w-[700px] h-[700px] rounded-full bg-violet-500/5 blur-3xl opacity-50"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:40px_40px] opacity-10"></div>
+      </div>
+      <div class="px-4 mx-auto max-w-7xl text-center lg:px-12">
+        <div class="inline-flex items-center py-1.5 px-3 mb-6 text-sm rounded-full bg-surface-800/40 text-surface-400 ring-1 ring-inset ring-white/10 mx-auto">
+          <span class="text-sm font-medium">Rich Text · Blocks · Kanban · Inline</span>
+        </div>
+        <h1 class="mb-6 text-5xl font-extrabold tracking-tight leading-none md:text-6xl text-white font-sans">
+          The editing experience<br/>your team deserves.
+        </h1>
+        <p class="mb-10 text-lg leading-8 text-surface-300 lg:text-xl sm:px-16 xl:px-48">
+          A Notion-style block editor, drag-and-drop Kanban boards, spreadsheet views, and fully extensible custom fields — all writing directly to your Postgres database.
+        </p>
+        <div class="flex items-center justify-center gap-x-4">
+          <a href="https://demo.rebase.pro" target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+            Try It Live
+            <span class="material-symbols-rounded text-white" style="font-size:20px">arrow_forward</span>
+          </a>
+          <a href="/docs" class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+            Read the Docs
+            <span class="material-symbols-rounded text-white" style="font-size:16px">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Full-width editor video showcase -->
+    <section class="bg-black">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-700 shadow-2xl shadow-primary/5">
+          <video autoplay muted loop playsinline class="w-full h-auto">
+            <source src="/img/editing_demo_dark.mp4" type="video/mp4"/>
+          </video>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Live Rich Text Editor Demo -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-violet-500/10 text-violet-400 ring-1 ring-inset ring-violet-500/20">
+              Block Editor
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Notion-style rich text, built in.</h2>
+            <p class="text-lg text-surface-400 mb-6">Not just a textarea — a full block-based editor powered by TipTap and ProseMirror. Headings, code blocks, tables, task lists, images, and slash commands. All the content blocks your team expects, zero configuration required.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> Markdown shortcuts (type <code class="text-xs bg-surface-800/60 px-1.5 py-0.5 rounded text-primary-light"># heading</code> or <code class="text-xs bg-surface-800/60 px-1.5 py-0.5 rounded text-primary-light">**bold**</code>)</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Slash command menu for blocks, images, tables & more</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Drag-and-drop block reordering</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Inline image uploads with storage integration</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Task lists, code fences, blockquotes, horizontal rules</li>
+            </ul>
+          </div>
+          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 shadow-2xl shadow-violet-500/5">
+            <RebaseEditorDemo client:only="react"/>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Editor Features Strip -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">Every block you need.</h2>
+          <p class="mt-4 text-surface-400 text-lg">The editor supports a comprehensive set of content blocks — from simple text to complex embeds. All stored as structured data in your database.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <div class="group relative p-6 pb-8 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-violet-500/30 transition-all duration-300 flex flex-col">
+            <div class="h-12 w-12 rounded-xl bg-violet-500/10 flex items-center justify-center mb-5 ring-1 ring-violet-500/20">
+              <span class="material-symbols-rounded text-violet-400" style="font-size:24px">title</span>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-2">Rich Text & Headings</h3>
+            <p class="text-sm text-surface-400">Bold, italic, strikethrough, inline code, and 3 heading levels. Markdown shortcuts auto-convert as you type.</p>
+          </div>
+
+          <div class="group relative p-6 pb-8 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-violet-500/30 transition-all duration-300 flex flex-col">
+            <div class="h-12 w-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-5 ring-1 ring-cyan-500/20">
+              <span class="material-symbols-rounded text-cyan-400" style="font-size:24px">code</span>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-2">Code Blocks</h3>
+            <p class="text-sm text-surface-400">Fenced code blocks with syntax highlighting for 100+ languages. Perfect for technical documentation and developer content.</p>
+          </div>
+
+          <div class="group relative p-6 pb-8 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-violet-500/30 transition-all duration-300 flex flex-col">
+            <div class="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-5 ring-1 ring-amber-500/20">
+              <span class="material-symbols-rounded text-amber-400" style="font-size:24px">image</span>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-2">Image Uploads</h3>
+            <p class="text-sm text-surface-400">Drag-and-drop or paste images directly into the editor. Files are stored via your configured storage provider.</p>
+          </div>
+
+          <div class="group relative p-6 pb-8 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-violet-500/30 transition-all duration-300 flex flex-col">
+            <div class="h-12 w-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-5 ring-1 ring-emerald-500/20">
+              <span class="material-symbols-rounded text-emerald-400" style="font-size:24px">check_box</span>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-2">Task Lists</h3>
+            <p class="text-sm text-surface-400">Interactive checkboxes for TODO lists and checklists. Track progress right inside your content.</p>
+          </div>
+
+          <div class="group relative p-6 pb-8 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-violet-500/30 transition-all duration-300 flex flex-col">
+            <div class="h-12 w-12 rounded-xl bg-rose-500/10 flex items-center justify-center mb-5 ring-1 ring-rose-500/20">
+              <span class="material-symbols-rounded text-rose-400" style="font-size:24px">table</span>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-2">Tables</h3>
+            <p class="text-sm text-surface-400">Inline editable tables with row and column controls. Add structured data directly inside rich text content.</p>
+          </div>
+
+          <div class="group relative p-6 pb-8 rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 hover:ring-violet-500/30 transition-all duration-300 flex flex-col">
+            <div class="h-12 w-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-5 ring-1 ring-blue-500/20">
+              <span class="material-symbols-rounded text-blue-400" style="font-size:24px">drag_indicator</span>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-2">Drag & Drop</h3>
+            <p class="text-sm text-surface-400">Reorder any block by dragging. Move paragraphs, images, and code blocks to restructure your content visually.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Slash Commands Animated Demo -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div class="lg:order-last">
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-emerald-500/10 text-emerald-400 ring-1 ring-inset ring-emerald-500/20">
+              Slash Commands
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Type <code class="text-primary">/</code> to do anything.</h2>
+            <p class="text-lg text-surface-400 mb-6">A contextual command palette appears when you type <code class="text-xs bg-surface-800/60 px-1.5 py-0.5 rounded text-primary-light">/</code> — just like Notion. Insert images, code blocks, tables, dividers, and more without lifting your fingers from the keyboard.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> Fuzzy search across all available block types</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Register custom slash commands from your code</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Keyboard navigable — never leave your flow</li>
+            </ul>
+          </div>
+          <div class="rounded-2xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl">
+            <img src="/img/new_editor.png" alt="Slash command menu showing block types like Code, Image, Quote, and AI Autocomplete" class="w-full h-auto" loading="lazy"/>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Kanban View -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-amber-500/10 text-amber-400 ring-1 ring-inset ring-amber-500/20">
+              Kanban Board
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Drag cards, update your database.</h2>
+            <p class="text-lg text-surface-400 mb-6">Every collection with an enum or status field automatically gets a Kanban view. Drag cards between columns to update records — no code, no config. Backed by real Postgres writes.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> Auto-generated from any enum or status property</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Drag-and-drop with optimistic database updates</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Filterable, sortable, and fully responsive</li>
+            </ul>
+          </div>
+          <div class="rounded-2xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl" style="height:260px">
+            <KanbanDemo client:only="react" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Inline Spreadsheet Editing -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div class="lg:order-last">
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-cyan-500/10 text-cyan-400 ring-1 ring-inset ring-cyan-500/20">
+              Spreadsheet View
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Edit like a spreadsheet. Save like a database.</h2>
+            <p class="text-lg text-surface-400 mb-6">Click any cell and start typing. Changes are persisted directly to Postgres. Sort, filter, bulk-select, and export — all from a familiar grid interface that non-technical users love.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> Click-to-edit cells with type-aware inputs</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Multi-row selection and bulk actions</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Column resizing, reordering, and visibility toggles</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> CSV / JSON export with one click</li>
+            </ul>
+          </div>
+          <div class="rounded-2xl overflow-hidden ring-1 ring-surface-700 bg-surface-950 shadow-2xl">
+            <video autoplay muted loop playsinline class="w-full h-auto">
+              <source src="/img/inline_table_editing.mp4" type="video/mp4"/>
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Extensibility: Custom Fields -->
+    <section class="bg-black py-16 sm:py-24">
+      <SectionBackgroundAccents topLine={true}/>
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <div class="inline-flex items-center py-1 px-2.5 mb-4 text-xs font-medium rounded-full bg-indigo-500/10 text-indigo-400 ring-1 ring-inset ring-indigo-500/20">
+              Extensible
+            </div>
+            <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">20+ fields. Or build your own.</h2>
+            <p class="text-lg text-surface-400 mb-6">Text, numbers, dates, enums, arrays, maps, references, file uploads, rich text, JSON, and more — all pre-built. Need a color picker, a rating widget, or a map selector? Build it in React and plug it in.</p>
+            <ul class="space-y-3 text-surface-300">
+              <li class="flex gap-3"><span class="text-primary">✓</span> 20+ built-in field types with custom rendering</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Custom field widgets via standard React components</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Conditional field logic and validation rules</li>
+              <li class="flex gap-3"><span class="text-primary">✓</span> Preview panels for real-time content previews</li>
+            </ul>
+          </div>
+          <div class="flex flex-col gap-6">
+            <div class="rounded-2xl overflow-hidden ring-1 ring-surface-700 shadow-2xl">
+              <img src="/img/widgets.png" alt="Property widget picker showing Text, Markdown, URL, Email, Switch, Select, and Multi-select field types" class="w-full h-auto" loading="lazy"/>
+            </div>
+            <div class="rounded-2xl overflow-hidden ring-1 ring-surface-700 shadow-2xl">
+              <video autoplay muted loop playsinline class="w-full h-auto">
+                <source src="/img/custom_fields_dark_wide.mp4" type="video/mp4"/>
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Full-Width Feature Strip: Data Formats -->
+    <section class="bg-black py-16 sm:py-24">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center mb-16">
+          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">One editor. Every content type.</h2>
+          <p class="mt-4 text-surface-400 text-lg">From blog posts to product descriptions to internal docs — Rebase adapts to how your team works.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+
+          <div class="relative rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 overflow-hidden flex flex-col">
+            <div class="aspect-[16/10] overflow-hidden">
+              <img src="/img/blog_example.webp" alt="Blog entry editor with preview panel showing rich content" class="w-full h-full object-cover object-top" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="h-8 w-8 rounded-lg bg-violet-500/10 flex items-center justify-center ring-1 ring-violet-500/20">
+                  <span class="material-symbols-rounded text-violet-400" style="font-size:18px">article</span>
+                </div>
+                <h3 class="text-base font-semibold text-white">Content Teams</h3>
+              </div>
+              <p class="text-sm text-surface-400 leading-relaxed">Write blog posts with the rich text editor. Drag blocks, insert media, and preview — no developer needed.</p>
+            </div>
+          </div>
+
+          <div class="relative rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 overflow-hidden flex flex-col">
+            <div class="aspect-[16/10] overflow-hidden">
+              <img src="/img/users_table.png" alt="Users table view with inline editing, relations, and entity actions" class="w-full h-full object-cover object-top" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="h-8 w-8 rounded-lg bg-cyan-500/10 flex items-center justify-center ring-1 ring-cyan-500/20">
+                  <span class="material-symbols-rounded text-cyan-400" style="font-size:18px">inventory_2</span>
+                </div>
+                <h3 class="text-base font-semibold text-white">Operations</h3>
+              </div>
+              <p class="text-sm text-surface-400 leading-relaxed">Manage data with spreadsheet views and Kanban boards. Bulk edit, filter, and export to CSV in seconds.</p>
+            </div>
+          </div>
+
+          <div class="relative rounded-2xl bg-surface-900/50 ring-1 ring-inset ring-surface-800 overflow-hidden flex flex-col">
+            <div class="aspect-[16/10] overflow-hidden">
+              <img src="/img/entity_view.png" alt="Entity detail view with custom preview panel and product images" class="w-full h-full object-cover object-top" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="h-8 w-8 rounded-lg bg-emerald-500/10 flex items-center justify-center ring-1 ring-emerald-500/20">
+                  <span class="material-symbols-rounded text-emerald-400" style="font-size:18px">code</span>
+                </div>
+                <h3 class="text-base font-semibold text-white">Developers</h3>
+              </div>
+              <p class="text-sm text-surface-400 leading-relaxed">Build custom entity views, preview panels, and field widgets — all in standard React and TypeScript.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- CTA -->
+    <section class="bg-black py-24 sm:py-32">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">See the editor in action.</h2>
+        <p class="text-lg text-surface-400 mb-8 max-w-xl mx-auto">Try the live demo or start a project and have a full editing experience running in under 5 minutes.</p>
+        <div class="flex items-center justify-center gap-x-6">
+          <a href="https://demo.rebase.pro" target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
+            Open Live Demo
+            <span class="material-symbols-rounded text-white" style="font-size:20px">arrow_forward</span>
+          </a>
+          <a href="/developers" class="inline-flex items-center gap-x-2 text-white hover:text-primary transition-colors font-semibold">
+            Developer Docs
+            <span class="material-symbols-rounded text-white" style="font-size:16px">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</Layout>

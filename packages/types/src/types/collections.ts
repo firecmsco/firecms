@@ -55,6 +55,12 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     dbPath: string;
 
     /**
+     * Set by the backend when the `dbPath` doesn't match an actual database 
+     * table in the provided driver schema.
+     */
+    isTableMissing?: boolean;
+
+    /**
      * Which driver handles this collection.
      * Use this to route collections to different backends:
      * - `"postgres"` - Route to PostgreSQL backend

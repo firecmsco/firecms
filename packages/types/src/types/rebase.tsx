@@ -4,6 +4,7 @@ import { PropertyConfig } from "./property_config";
 import { Locale } from "./locales";
 import { EntityLinkBuilder } from "./entity_link_builder";
 import { RebasePlugin } from "./plugins";
+import { SlotContribution } from "./slots";
 import { EntityAction } from "./entity_actions";
 import { User } from "../users";
 import {
@@ -182,12 +183,15 @@ export type RebaseProps<USER extends User> = {
     userConfigPersistence?: UserConfigurationPersistence;
 
     /**
-     * Use plugins to modify the behaviour of the CMS.
-     * DEPRECATED: use the `plugins` prop in the `useBuildNavigationController` instead.
-     * This prop will work as a fallback for the `plugins` prop in the `useBuildNavigationController`.
-     * @deprecated
+     * Direct slot contributions (no plugin needed).
+     * These are merged with any slots provided by plugins.
      */
-    plugins?: RebasePlugin<any, any, any>[];
+    slots?: SlotContribution[];
+
+    /**
+     * Use plugins to modify the behaviour of the CMS.
+     */
+    plugins?: RebasePlugin[];
 
     /**
      * Callback used to get analytics events from the CMS

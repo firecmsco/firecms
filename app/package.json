@@ -10,17 +10,20 @@
         "shared"
     ],
     "scripts": {
-        "dev": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:frontend\"",
-        "dev:frontend": "cd frontend && pnpm run dev",
-        "dev:backend": "cd backend && pnpm run dev",
-        "build": "pnpm run build:shared && pnpm run build:frontend && pnpm run build:backend",
-        "build:shared": "cd shared && pnpm run build",
-        "build:frontend": "cd frontend && pnpm run build",
-        "build:backend": "cd backend && pnpm run build",
-        "start": "cd backend && pnpm start",
+        "dev": "rebase dev",
+        "build": "pnpm -r run build",
+        "start": "pnpm --filter \"*-backend\" start",
+        "db:generate": "rebase db generate",
+        "db:migrate": "rebase db migrate",
+        "db:pull": "rebase db pull",
+        "db:push": "rebase db push",
+        "db:studio": "rebase db studio",
+        "schema:generate": "rebase schema generate",
+        "generate:sdk": "rebase generate-sdk",
         "deploy": "pnpm run build && pnpm run start"
     },
     "devDependencies": {
+        "@rebasepro/cli": "workspace:*",
         "@rebasepro/types": "0.0.1",
         "concurrently": "^8.2.2",
         "typescript": "^5.0.0"

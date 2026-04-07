@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useAuthController, useCustomizationController, useRebaseContext, useLargeLayout, useTranslation } from "../../hooks";
+import { useAuthController, useRebaseContext, useLargeLayout, useTranslation, useSlot } from "../../hooks";
 import { CollectionActionsProps, EntityCollection, EntityTableController, SelectionController, ViewMode } from "@rebasepro/types";
 import {
     AddIcon,
@@ -40,9 +40,6 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
 }: EntityCollectionViewActionsProps<M>) {
 
     const context = useRebaseContext();
-
-    const customizationController = useCustomizationController();
-    const plugins = customizationController.plugins ?? [];
 
     const { canCreate, canDelete } = usePermissions();
 
@@ -118,23 +115,13 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             </ErrorBoundary>
         ));
 
-    if (plugins) {
-        plugins.forEach((plugin, i) => {
-            if (plugin.collectionView?.CollectionActions) {
-                actions.push(...toArray(plugin.collectionView?.CollectionActions)
-                    .map((Action, j) => (
-                        <ErrorBoundary key={`plugin_actions_${i}_${j}`}>
-                            <Action {...actionProps} {...plugin.collectionView?.collectionActionsProps} />
-                        </ErrorBoundary>
-                    )));
-            }
-        });
-    }
+    const pluginActions = useSlot("collection.actions", actionProps);
 
     return (
         <>
             <ErrorBoundary>
                 {actions}
+                {pluginActions}
             </ErrorBoundary>
             {multipleDeleteButton}
             {addButton}

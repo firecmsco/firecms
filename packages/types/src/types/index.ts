@@ -13,6 +13,7 @@ export * from "./user_management_delegate";
 export * from "./entity_callbacks";
 export * from "./entity_overrides";
 export * from "./plugins";
+export * from "./slots";
 export * from "./rebase";
 export * from "./export_import";
 export * from "./modify_collections";
