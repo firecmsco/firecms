@@ -22,6 +22,7 @@ export {
     EntityCollectionRowActions,
     VirtualTableInput,
     ArrayContainer,
+    type ArrayEntryParams,
     ReferenceWidget,
     SearchIconsView,
     FieldCaption,

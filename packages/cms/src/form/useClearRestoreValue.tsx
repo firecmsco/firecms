@@ -1,4 +1,5 @@
-import type { Property } from "@rebasepro/types";import { useEffect, useRef } from "react";
+import type { Property } from "@rebasepro/types";
+import { useEffect, useRef } from "react";
 ;
 
 /**

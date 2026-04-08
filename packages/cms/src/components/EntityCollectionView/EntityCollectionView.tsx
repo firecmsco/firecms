@@ -1,5 +1,6 @@
 import type { AdditionalFieldDelegate, EntityCollection } from "../../types/collections";
-import type { EntityAction, Property } from "@rebasepro/types";import React, { useCallback, useEffect, useMemo, useState } from "react";
+import type { EntityAction, Property } from "@rebasepro/types";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { deepEqual as equal } from "fast-equals"
 

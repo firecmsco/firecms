@@ -1,5 +1,6 @@
 import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";
-import type { StringProperty } from "@rebasepro/types";import React from "react";
+import type { StringProperty } from "@rebasepro/types";
+import React from "react";
 import { useInternalUserManagementController } from "@rebasepro/core";
 import { UserDisplay } from "@rebasepro/core";
 import { EmptyValue } from "./EmptyValue";

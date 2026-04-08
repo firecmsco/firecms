@@ -1,5 +1,6 @@
 import { useEntitySelectionDialog } from "../../../hooks/useEntitySelectionDialog";
-import type { EntityCollection } from "../../../types/collections";import React, { useMemo, useState } from "react";
+import type { EntityCollection } from "../../../types/collections";
+import React, { useMemo, useState } from "react";
 import { VirtualTableWhereFilterOp } from "@rebasepro/ui";
 import { Entity, EntityReference } from "@rebasepro/types";
 import { ReferencePreview } from "../../../preview";

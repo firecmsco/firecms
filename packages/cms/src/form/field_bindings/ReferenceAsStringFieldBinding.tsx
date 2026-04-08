@@ -1,7 +1,8 @@
 import { useEntitySelectionDialog } from "../../hooks/useEntitySelectionDialog";
 import type { EntityCollection } from "../../types/collections";
 import type { FieldProps } from "../../types/fields";
-import type { Property, StringProperty } from "@rebasepro/types";import React, { useCallback, useMemo } from "react";
+import type { Property, StringProperty } from "@rebasepro/types";
+import React, { useCallback, useMemo } from "react";
 import { Entity, EntityReference } from "@rebasepro/types";
 import { useCollectionRegistryController } from "@rebasepro/core";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";

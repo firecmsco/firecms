@@ -951,7 +951,7 @@ function applyPropertiesConfig(property: Property, propertyConfigs: Record<strin
     let internalProperty = property;
     if (propertyConfigs && internalProperty && typeof internalProperty === "object" && internalProperty.propertyConfig) {
         const propertyConfig = propertyConfigs[internalProperty.propertyConfig];
-        if (propertyConfig && isPropertyBuilder(propertyConfig.property)) {
+        if (propertyConfig && isPropertyBuilder(propertyConfig.property as Property)) {
             internalProperty = propertyConfig.property as unknown as Property;
         } else {
 

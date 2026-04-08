@@ -1,7 +1,10 @@
-import type { Properties } from "@rebasepro/types";import type { Property } from "@rebasepro/types";import React from "react";
+import type { Properties } from "@rebasepro/types";
+import type { Property } from "@rebasepro/types";
+import React from "react";
 import { defaultBorderMixin, Typography } from "@rebasepro/ui";
 import { PropertyPreview } from "../preview";
-import { PreviewSize } from "../types/components/PropertyPreviewProps";import { getValueInPath } from "@rebasepro/common";
+import { PreviewSize } from "../types/components/PropertyPreviewProps";
+import { getValueInPath } from "@rebasepro/common";
 
 /**
  * Build a readable label for a path and resolve the property

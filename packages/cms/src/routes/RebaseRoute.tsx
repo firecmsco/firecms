@@ -1,4 +1,5 @@
-import type { EntityCollection } from "../types/collections";import { Blocker, useBlocker, useLocation } from "react-router";
+import type { EntityCollection } from "../types/collections";
+import { Blocker, useBlocker, useLocation } from "react-router";
 import { EntityEditView } from "../components/EntityEditView";
 import { useCollectionRegistryController, useCMSUrlController } from "@rebasepro/core";
 import { useEffect, useRef, useState } from "react";

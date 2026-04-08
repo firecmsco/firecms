@@ -1,7 +1,8 @@
 import React from "react";
 
 import { EnumValueConfig } from "@rebasepro/types";
-import type { PreviewSize } from "../../types/components/PropertyPreviewProps";import { EnumValuesChip } from "./EnumValuesChip";
+import type { PreviewSize } from "../../types/components/PropertyPreviewProps";
+import { EnumValuesChip } from "./EnumValuesChip";
 import { ErrorBoundary } from "@rebasepro/ui";
 
 /**

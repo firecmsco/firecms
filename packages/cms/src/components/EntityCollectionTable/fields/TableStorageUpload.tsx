@@ -1,4 +1,5 @@
-import type { ArrayProperty, StringProperty } from "@rebasepro/types";import * as React from "react";
+import type { ArrayProperty, StringProperty } from "@rebasepro/types";
+import * as React from "react";
 import { useMemo } from "react";
 
 import { Entity, StorageConfig } from "@rebasepro/types";

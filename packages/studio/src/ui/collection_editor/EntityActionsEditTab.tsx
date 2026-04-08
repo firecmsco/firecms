@@ -3,8 +3,8 @@ import {
     ConfirmationDialog,
     useCustomizationController
 } from "@rebasepro/core";
-import { resolveEntityAction } from "@rebasepro/cms";
-import { EntityAction, EntityCollection } from "@rebasepro/types";
+import { resolveEntityAction, type EntityCollection } from "@rebasepro/cms";
+import { EntityAction } from "@rebasepro/types";
 import {
     AddIcon,
     Alert,
@@ -42,10 +42,10 @@ export function EntityActionsEditTab({
         setFieldValue
     } = useFormex<EntityCollection>();
 
-    const resolvedEntityActions = values.entityActions?.filter((e): e is string => typeof e === "string")
-        .map(e => resolveEntityAction(e, contextEntityActions))
+    const resolvedEntityActions = values.entityActions?.filter((e: string | EntityAction<any>): e is string => typeof e === "string")
+        .map((e: string) => resolveEntityAction(e, contextEntityActions))
         .filter(Boolean) as EntityAction<any>[] ?? [];
-    const hardCodedEntityActions = collection.entityActions?.filter((e): e is EntityAction<any> => typeof e !== "string") ?? [];
+    const hardCodedEntityActions = collection.entityActions?.filter((e: string | EntityAction<any>): e is EntityAction<any> => typeof e !== "string") ?? [];
     const totalEntityActions = resolvedEntityActions.length + hardCodedEntityActions.length;
 
     const content = (
@@ -84,7 +84,7 @@ export function EntityActionsEditTab({
                                         </TableCell>
                                     </TableRow>
                                 ))}
-                                {hardCodedEntityActions.map((action) => (
+                                {hardCodedEntityActions.map((action: EntityAction<any>) => (
                                     <TableRow key={action.key}>
                                         <TableCell
                                             align="left">
@@ -136,7 +136,7 @@ export function EntityActionsEditTab({
             {actionToDelete &&
                 <ConfirmationDialog open={Boolean(actionToDelete)}
                     onAccept={() => {
-                        setFieldValue("entityActions", values.entityActions?.filter(e => e !== actionToDelete));
+                        setFieldValue("entityActions", values.entityActions?.filter((e: string | EntityAction<any>) => e !== actionToDelete));
                         setActionToDelete(undefined);
                     }}
                     onCancel={() => setActionToDelete(undefined)}
@@ -152,7 +152,7 @@ export function EntityActionsEditTab({
                         console.log("Selected action key:", selectedActionKey);
                         const value = [...(values.entityActions ?? []), selectedActionKey]
                             // only actions that are defined in the registry
-                            .filter((e): e is string => typeof e === "string" && (contextEntityActions ?? []).some(action => action.key === e));
+                            .filter((e: string | EntityAction<any>): e is string => typeof e === "string" && (contextEntityActions ?? []).some(action => action.key === e));
                         ;
                         setFieldValue("entityActions", value);
                     }

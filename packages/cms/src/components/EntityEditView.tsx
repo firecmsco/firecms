@@ -1,6 +1,7 @@
 import type { EntityCollection } from "../types/collections";
 import type { FormContext } from "../types/fields";
-import type { PluginFormActionProps } from "@rebasepro/types";import React, { useEffect, useMemo, useState } from "react";
+import type { PluginFormActionProps } from "@rebasepro/types";
+import React, { useEffect, useMemo, useState } from "react";
 import { Entity, EntityRelation, EntityStatus, EntityValues, Relation, User } from "@rebasepro/types";
 import { PluginProviderStack } from "@rebasepro/core";
 
@@ -24,7 +25,8 @@ import {
 } from "@rebasepro/core";
 import { getEntityFromMemoryCache } from "@rebasepro/core";
 import { EntityForm } from "../form";
-import type { EntityFormProps, OnUpdateParams } from "../types/components/EntityFormProps";import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
+import type { EntityFormProps, OnUpdateParams } from "../types/components/EntityFormProps";
+import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
 import { EntityJsonPreview } from "../components/EntityJsonPreview";
 import { createFormexStub, getEntityFromCache } from "@rebasepro/core";
 import { usePermissions } from "@rebasepro/core";

@@ -1,5 +1,6 @@
 import type { EntityCollection } from "../../types/collections";
-import type { Property } from "@rebasepro/types";import * as React from "react";
+import type { Property } from "@rebasepro/types";
+import * as React from "react";
 
 import {
     Chip,
@@ -9,7 +10,8 @@ import {
     Tooltip,
     Typography
 } from "@rebasepro/ui";
-import { PreviewSize } from "../../types/components/PropertyPreviewProps";import {
+import { PreviewSize } from "../../types/components/PropertyPreviewProps";
+import {
     getValueInPath
 } from "@rebasepro/common";
 import { getPropertyInPath } from "@rebasepro/core";

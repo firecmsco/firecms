@@ -1,4 +1,5 @@
-import type { Property } from "@rebasepro/types";import React, { useCallback, useMemo, useState } from "react";
+import type { Property } from "@rebasepro/types";
+import React, { useCallback, useMemo, useState } from "react";
 import { FilterValues, WhereFilterOp } from "@rebasepro/types";
 import {
     Button,

@@ -1,6 +1,8 @@
-import type { StringProperty } from "@rebasepro/types";import React from "react";
+import type { StringProperty } from "@rebasepro/types";
+import React from "react";
 
-import { PreviewSize } from "../../types/components/PropertyPreviewProps";import { PropertyPreview } from "../../preview";
+import { PreviewSize } from "../../types/components/PropertyPreviewProps";
+import { PropertyPreview } from "../../preview";
 
 import { cls, DescriptionIcon, IconButton, paperMixin, RemoveIcon, Tooltip } from "@rebasepro/ui";
 import { ErrorBoundary } from "@rebasepro/ui";

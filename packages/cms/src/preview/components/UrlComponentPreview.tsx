@@ -2,7 +2,8 @@ import React, { useMemo } from "react";
 
 import { ImagePreview } from "./ImagePreview";
 import { PreviewType } from "@rebasepro/types";
-import type { PreviewSize } from "../../types/components/PropertyPreviewProps";import { cls, DescriptionIcon, OpenInNewIcon, Tooltip, Typography } from "@rebasepro/ui";
+import type { PreviewSize } from "../../types/components/PropertyPreviewProps";
+import { cls, DescriptionIcon, OpenInNewIcon, Tooltip, Typography } from "@rebasepro/ui";
 import { EmptyValue } from "./EmptyValue";
 import { getThumbnailMeasure } from "../util";
 

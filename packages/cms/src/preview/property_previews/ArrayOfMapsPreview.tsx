@@ -1,6 +1,8 @@
-import type { ArrayProperty, Property } from "@rebasepro/types";import React from "react";
+import type { ArrayProperty, Property } from "@rebasepro/types";
+import React from "react";
 import { ErrorBoundary } from "@rebasepro/ui";
-import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";import { PropertyPreview } from "../PropertyPreview";
+import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";
+import { PropertyPreview } from "../PropertyPreview";
 
 /**
  * @group Preview components

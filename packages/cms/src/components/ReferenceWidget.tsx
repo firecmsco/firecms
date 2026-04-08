@@ -1,8 +1,10 @@
 import { useEntitySelectionDialog } from "../hooks/useEntitySelectionDialog";
-import type { EntityCollection } from "../types/collections";import React, { useCallback, useMemo } from "react";
+import type { EntityCollection } from "../types/collections";
+import React, { useCallback, useMemo } from "react";
 
 import { Entity, EntityReference, FilterValues } from "@rebasepro/types";
-import type { PreviewSize } from "../types/components/PropertyPreviewProps";import { getReferenceFrom } from "@rebasepro/common";
+import type { PreviewSize } from "../types/components/PropertyPreviewProps";
+import { getReferenceFrom } from "@rebasepro/common";
 import { ReferencePreview } from "../preview";
 import { useCollectionRegistryController } from "@rebasepro/core";
 import { Button, cls } from "@rebasepro/ui";

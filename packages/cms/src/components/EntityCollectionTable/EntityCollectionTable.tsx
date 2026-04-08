@@ -1,4 +1,5 @@
-import type { AdditionalFieldDelegate } from "../../types/collections";import React, { useCallback, useMemo, useRef } from "react";
+import type { AdditionalFieldDelegate } from "../../types/collections";
+import React, { useCallback, useMemo, useRef } from "react";
 import { CollectionSize, Entity, RebaseContext, User } from "@rebasepro/types";
 import { PropertyTableCell } from "./PropertyTableCell";
 import { ErrorBoundary } from "@rebasepro/ui";

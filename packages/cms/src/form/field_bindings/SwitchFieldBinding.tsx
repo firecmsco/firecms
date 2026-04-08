@@ -1,5 +1,6 @@
 import type { FieldProps } from "../../types/fields";
-import type { BooleanProperty } from "@rebasepro/types";import React from "react";
+import type { BooleanProperty } from "@rebasepro/types";
+import React from "react";
 
 ;
 import { getIconForProperty } from "@rebasepro/core";

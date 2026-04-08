@@ -1,4 +1,5 @@
-import type { EntityCollection } from "../../types/collections";import React, { useEffect, useState, useCallback } from "react";
+import type { EntityCollection } from "../../types/collections";
+import React, { useEffect, useState, useCallback } from "react";
 ;
 import { useApiConfig } from "@rebasepro/core";
 import { useAuthController } from "@rebasepro/core";

@@ -1,5 +1,7 @@
-import type { Properties } from "@rebasepro/types";import type { EntityCollection } from "../types/collections";
-import type { CustomizationController } from "@rebasepro/types";import React from "react";
+import type { Properties } from "@rebasepro/types";
+import type { EntityCollection } from "../types/collections";
+import type { CustomizationController } from "@rebasepro/types";
+import React from "react";
 import { Entity } from "@rebasepro/types";
 import { cls, defaultBorderMixin, IconButton, OpenInNewIcon, Typography } from "@rebasepro/ui";
 ;

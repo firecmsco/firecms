@@ -1,5 +1,5 @@
 import type { EntityCollection } from "../../../types/collections";
-import type { ArrayProperty, Property } from "@rebasepro/types";;
+import type { ArrayProperty, Property } from "@rebasepro/types";
 
 export function getTableCellAlignment(property: Property): "right" | "left" | "center" {
     if (property.type === "boolean") {

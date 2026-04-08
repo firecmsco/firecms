@@ -1,7 +1,8 @@
 import React, { CSSProperties, useMemo } from "react";
 
 import { ContentCopyIcon, IconButton, OpenInNewIcon, Tooltip } from "@rebasepro/ui";
-import { PreviewSize } from "../../types/components/PropertyPreviewProps";import { getThumbnailMeasure } from "../util";
+import { PreviewSize } from "../../types/components/PropertyPreviewProps";
+import { getThumbnailMeasure } from "../util";
 import { useTranslation } from "@rebasepro/core";
 
 /**

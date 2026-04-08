@@ -1,5 +1,6 @@
 import type { EntityCollection } from "../../types/collections";
-import type { EntityAction } from "@rebasepro/types";import React, { MouseEvent, useCallback } from "react";
+import type { EntityAction } from "@rebasepro/types";
+import React, { MouseEvent, useCallback } from "react";
 
 import { CollectionSize, Entity, SelectionController } from "@rebasepro/types";
 import { Badge, Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleton, Tooltip } from "@rebasepro/ui";

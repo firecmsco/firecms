@@ -4,4 +4,5 @@ export type PersistedCollection<M extends Record<string, any> = any> = Omit<Enti
         ownerId?: string;
         subcollections?: () => PersistedCollection[];
         editable?: boolean;
+        entityActions?: any[];
     }

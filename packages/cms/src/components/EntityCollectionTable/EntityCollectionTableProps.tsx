@@ -1,5 +1,7 @@
-import type { Properties } from "@rebasepro/types";import type { AdditionalFieldDelegate } from "../../types/collections";
-import type { Property } from "@rebasepro/types";import React from "react";
+import type { Properties } from "@rebasepro/types";
+import type { AdditionalFieldDelegate } from "../../types/collections";
+import type { Property } from "@rebasepro/types";
+import React from "react";
 import { CollectionSize, Entity, EntityTableController, FilterValues, SelectionController, User } from "@rebasepro/types";
 import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from "@rebasepro/core";
 import { VirtualTableColumn } from "@rebasepro/ui";

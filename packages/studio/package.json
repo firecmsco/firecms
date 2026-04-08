@@ -14,7 +14,6 @@
         "@rebasepro/core": "0.0.1",
         "@rebasepro/data_export": "0.0.1",
         "@rebasepro/data_import": "0.0.1",
-        "@rebasepro/data_import_export": "0.0.1",
         "@rebasepro/formex": "0.0.1",
         "@rebasepro/schema_inference": "0.0.1",
         "@rebasepro/types": "0.0.1",
@@ -27,8 +26,8 @@
     "peerDependencies": {
         "react": ">=19.0.0",
         "react-dom": ">=19.0.0",
-        "react-router": "^6.28.0",
-        "react-router-dom": "^6.28.0"
+        "react-router": "^7.0.0",
+        "react-router-dom": "^7.0.0"
     },
     "exports": {
         ".": {

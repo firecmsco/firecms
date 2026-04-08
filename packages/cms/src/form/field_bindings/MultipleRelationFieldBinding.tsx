@@ -1,6 +1,7 @@
 import { useEntitySelectionDialog } from "../../hooks/useEntitySelectionDialog";
 import type { FieldProps } from "../../types/fields";
-import type { RelationProperty } from "@rebasepro/types";import React, { useCallback } from "react";
+import type { RelationProperty } from "@rebasepro/types";
+import React, { useCallback } from "react";
 import { Entity } from "@rebasepro/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams } from "../../components/ArrayContainer";

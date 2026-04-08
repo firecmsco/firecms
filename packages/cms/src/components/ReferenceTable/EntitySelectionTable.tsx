@@ -1,4 +1,5 @@
-import type { EntityCollection } from "../../types/collections";import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
+import type { EntityCollection } from "../../types/collections";
+import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
 import { CollectionSize, Entity, FilterValues } from "@rebasepro/types";
 
 import {

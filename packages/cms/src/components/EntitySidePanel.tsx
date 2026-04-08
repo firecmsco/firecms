@@ -1,7 +1,9 @@
 import type { EntityCollection } from "../types/collections";
-import type { EntitySidePanelProps } from "@rebasepro/types";import React, { useCallback, useEffect, useMemo } from "react";
+import type { EntitySidePanelProps } from "@rebasepro/types";
+import React, { useCallback, useEffect, useMemo } from "react";
 
-import type { OnUpdateParams } from "../types/components/EntityFormProps";import { useCollectionRegistryController, useSideEntityController } from "@rebasepro/core";
+import type { OnUpdateParams } from "../types/components/EntityFormProps";
+import { useCollectionRegistryController, useSideEntityController } from "@rebasepro/core";
 import { useCMSUrlController } from "@rebasepro/core";
 
 import { ErrorBoundary } from "@rebasepro/ui";

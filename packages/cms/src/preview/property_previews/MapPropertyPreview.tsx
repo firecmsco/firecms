@@ -1,6 +1,8 @@
-import type { MapProperty } from "@rebasepro/types";import React from "react";
+import type { MapProperty } from "@rebasepro/types";
+import React from "react";
 
-import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";import { PropertyPreview } from "../PropertyPreview";
+import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";
+import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin, Typography } from "@rebasepro/ui";
 import { ErrorBoundary } from "@rebasepro/ui";
 import { EmptyValue } from "../components/EmptyValue";

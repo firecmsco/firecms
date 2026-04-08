@@ -1,5 +1,7 @@
-import type { Properties } from "@rebasepro/types";import type { FieldProps, PropertyFieldBindingProps } from "../../types/fields";
-import type { MapProperty } from "@rebasepro/types";import React from "react";
+import type { Properties } from "@rebasepro/types";
+import type { FieldProps, PropertyFieldBindingProps } from "../../types/fields";
+import type { MapProperty } from "@rebasepro/types";
+import React from "react";
 ;
 import { useTranslation } from "@rebasepro/core";
 

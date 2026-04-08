@@ -1,5 +1,6 @@
 import type { EntityCollection } from "../types/collections";
-import type { CustomizationController, EntitySidePanelProps, SideDialogPanelProps, SideDialogsController, SideEntityController, CMSUrlController, NavigationStateController, Property } from "@rebasepro/types";import { useCallback, useEffect, useRef } from "react";
+import type { CustomizationController, EntitySidePanelProps, SideDialogPanelProps, SideDialogsController, SideEntityController, CMSUrlController, NavigationStateController, Property } from "@rebasepro/types";
+import { useCallback, useEffect, useRef } from "react";
 import { AuthController, CollectionRegistryController } from "@rebasepro/types";
 import { useLocation } from "react-router-dom";
 import {

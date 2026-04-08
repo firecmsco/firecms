@@ -1,6 +1,7 @@
 import type { EntityCollection } from "../types/collections";
 import type { FieldProps, PropertyFieldBindingProps } from "../types/fields";
-import type { RebasePlugin, PluginFieldBuilderParams, Property } from "@rebasepro/types";import React, { ComponentType, ReactElement, useCallback, useRef } from "react";
+import type { RebasePlugin, PluginFieldBuilderParams, Property } from "@rebasepro/types";
+import React, { ComponentType, ReactElement, useCallback, useRef } from "react";
 import { deepEqual as equal } from "fast-equals"
 
 import { Field, FieldProps as FormexFieldProps, getIn } from "@rebasepro/formex";

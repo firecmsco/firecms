@@ -1,8 +1,10 @@
 import type { EntityCollection, EntityCustomViewParams } from "../types/collections";
 import type { FormContext, PropertyFieldBindingProps } from "../types/fields";
-import type { PluginFormActionProps, PropertyConfig } from "@rebasepro/types";import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { PluginFormActionProps, PropertyConfig } from "@rebasepro/types";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AuthController, CMSAnalyticsEvent, Entity, EntityStatus, EntityValues } from "@rebasepro/types";
-import type { EntityFormProps, OnUpdateParams } from "../types/components/EntityFormProps";import { deepEqual as equal } from "fast-equals";
+import type { EntityFormProps, OnUpdateParams } from "../types/components/EntityFormProps";
+import { deepEqual as equal } from "fast-equals";
 
 import { ErrorBoundary } from "@rebasepro/ui";
 import { getDefaultValuesFor, getLocalChangesBackup, getValueInPath, isHidden, isObject, isReadOnly, mergeDeep } from "@rebasepro/common";
@@ -35,7 +37,8 @@ import {
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomFieldValidator, getEntitySchema } from "./validation";
 import { EntityFormActions } from "./EntityFormActions";
-import type { EntityFormActionsProps } from "../types/components/EntityFormActionsProps";import { LocalChangesMenu } from "./components/LocalChangesMenu";
+import type { EntityFormActionsProps } from "../types/components/EntityFormActionsProps";
+import { LocalChangesMenu } from "./components/LocalChangesMenu";
 
 import { useDebouncedCallback } from "@rebasepro/ui";
 import { getEntityTitlePropertyKey } from "@rebasepro/core";

@@ -1,4 +1,5 @@
-import type { Property } from "@rebasepro/types";import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import type { Property } from "@rebasepro/types";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { CollectionSize, Entity, EntityTableController, FilterValues, SelectedCellProps } from "@rebasepro/types";
 import { CellRendererParams, VirtualTable, VirtualTableColumn } from "@rebasepro/ui";
 import { enumToObjectEntries } from "@rebasepro/common";

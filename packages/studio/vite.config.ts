@@ -36,7 +36,6 @@ export default defineConfig(() => ({
             "@rebasepro/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
             "@rebasepro/data_import": path.resolve(__dirname, "../data_import/src"),
             "@rebasepro/data_export": path.resolve(__dirname, "../data_export/src"),
-            "@rebasepro/data_import_export": path.resolve(__dirname, "../data_import_export/src"),
         }
     },
     plugins: [

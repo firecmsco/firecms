@@ -1,4 +1,6 @@
-import type { ArrayProperty, NumberProperty, StringProperty } from "@rebasepro/types";import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
+import type { ArrayProperty, NumberProperty, StringProperty } from "@rebasepro/types";
+import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";
+import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
 import { resolveEnumValues } from "@rebasepro/common";
 
 /**

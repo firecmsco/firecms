@@ -1,4 +1,5 @@
-import type { EntityCollection } from "../../types/collections";import React from "react";
+import type { EntityCollection } from "../../types/collections";
+import React from "react";
 
 import { useAuthController, useRebaseContext, useLargeLayout, useTranslation, useSlot } from "@rebasepro/core";
 import { CollectionActionsProps, EntityTableController, SelectionController, ViewMode } from "@rebasepro/types";

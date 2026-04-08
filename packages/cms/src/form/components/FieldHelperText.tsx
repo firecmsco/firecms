@@ -1,4 +1,4 @@
-import type { Property } from "@rebasepro/types";;
+import type { Property } from "@rebasepro/types";
 import { IconButton, InfoIcon, Tooltip, Typography } from "@rebasepro/ui";
 
 /**

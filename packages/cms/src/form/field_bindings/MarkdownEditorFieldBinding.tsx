@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { getIconForProperty, useAuthController, useStorageSource } from "@rebasepro/core";
 import type { FieldProps } from "../../types/fields";
-import type { ArrayProperty, StringProperty } from "@rebasepro/types";import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@rebasepro/ui";
+import type { ArrayProperty, StringProperty } from "@rebasepro/types";
+import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@rebasepro/ui";
 import { RebaseEditor, RebaseEditorProps } from "../../editor";
 import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@rebasepro/common";
 

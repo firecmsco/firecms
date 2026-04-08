@@ -33,7 +33,7 @@
     ],
     "scripts": {
         "watch": "vite build --watch",
-        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json && npx esbuild src/vitePlugin.ts --platform=node --format=esm --outfile=dist/vitePlugin.js",
+        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
         "prepublishOnly": "run-s build",
         "test:lint": "eslint \"src/**\" --quiet",
         "test": "jest --passWithNoTests",

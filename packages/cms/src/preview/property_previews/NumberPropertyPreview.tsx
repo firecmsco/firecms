@@ -1,7 +1,9 @@
-import type { NumberProperty } from "@rebasepro/types";import React from "react";
+import type { NumberProperty } from "@rebasepro/types";
+import React from "react";
 
 import { EnumValuesChip } from "../../preview";
-import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";import { enumToObjectEntries } from "@rebasepro/common";
+import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";
+import { enumToObjectEntries } from "@rebasepro/common";
 
 /**
  * @group Preview components

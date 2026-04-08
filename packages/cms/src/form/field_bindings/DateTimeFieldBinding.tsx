@@ -1,5 +1,6 @@
 import type { FieldProps } from "../../types/fields";
-import type { DateProperty } from "@rebasepro/types";import React from "react";
+import type { DateProperty } from "@rebasepro/types";
+import React from "react";
 
 ;
 

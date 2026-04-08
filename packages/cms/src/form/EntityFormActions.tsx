@@ -1,8 +1,10 @@
 import type { EntityCollection } from "../types/collections";
 import type { FormContext } from "../types/fields";
-import type { EntityAction, SideEntityController } from "@rebasepro/types";import React from "react";
+import type { EntityAction, SideEntityController } from "@rebasepro/types";
+import React from "react";
 import { Entity, RebaseContext } from "@rebasepro/types";
-import type { EntityFormActionsProps } from "../types/components/EntityFormActionsProps";import {
+import type { EntityFormActionsProps } from "../types/components/EntityFormActionsProps";
+import {
     Button,
     cls,
     defaultBorderMixin,

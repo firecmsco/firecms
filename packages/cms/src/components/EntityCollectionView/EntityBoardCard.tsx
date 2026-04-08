@@ -1,5 +1,6 @@
 import type { EntityCollection } from "../../types/collections";
-import type { Property } from "@rebasepro/types";import React, { memo, useCallback, useMemo } from "react";
+import type { Property } from "@rebasepro/types";
+import React, { memo, useCallback, useMemo } from "react";
 import { Entity } from "@rebasepro/types";
 import { getValueInPath, getEntityImagePreviewPropertyKey } from "@rebasepro/common";
 import { getEntityTitlePropertyKey } from "@rebasepro/core";

@@ -1,5 +1,6 @@
 import type { FieldProps } from "../../types/fields";
-import type { ArrayProperty, Property } from "@rebasepro/types";import React, { useCallback } from "react";
+import type { ArrayProperty, Property } from "@rebasepro/types";
+import React, { useCallback } from "react";
 
 ;
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";

@@ -1,6 +1,8 @@
-import type { Properties } from "@rebasepro/types";import type { EntityCollection } from "../../../../types/collections";
+import type { Properties } from "@rebasepro/types";
+import type { EntityCollection } from "../../../../types/collections";
 import type { FormContext, PropertyFieldBindingProps } from "../../../../types/fields";
-import type { Property } from "@rebasepro/types";import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import type { Property } from "@rebasepro/types";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 
 import * as Portal from "@radix-ui/react-portal";
 

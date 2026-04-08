@@ -1,4 +1,5 @@
-import type { ArrayProperty, StringProperty } from "@rebasepro/types";import React from "react";
+import type { ArrayProperty, StringProperty } from "@rebasepro/types";
+import React from "react";
 import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";
 import { StringPropertyPreview } from "../../preview";
 import { ErrorBoundary } from "@rebasepro/ui";

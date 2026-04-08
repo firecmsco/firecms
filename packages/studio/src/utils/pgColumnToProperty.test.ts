@@ -196,7 +196,7 @@ describe("pgColumnToProperty Inference Logic", () => {
             
             const prop = collection.properties!.tags as ArrayProperty;
             expect(prop.type).toBe("array");
-            expect(prop.of?.type).toBe("string");
+            expect(!Array.isArray(prop.of) && prop.of?.type).toBe("string");
         });
 
         it("maps USER-DEFINED enums properly to StringProperty with enum configs", () => {

@@ -1,4 +1,5 @@
-import type { ArrayProperty, MapProperty, NumberProperty, Property, StringProperty } from "@rebasepro/types";import React, { createElement } from "react";
+import type { ArrayProperty, MapProperty, NumberProperty, Property, StringProperty } from "@rebasepro/types";
+import React, { createElement } from "react";
 import { deepEqual as equal } from "fast-equals"
 
 import { EntityReference, EntityRelation } from "@rebasepro/types";

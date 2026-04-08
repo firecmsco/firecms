@@ -1,8 +1,10 @@
-import type { StringProperty } from "@rebasepro/types";import React from "react";
+import type { StringProperty } from "@rebasepro/types";
+import React from "react";
 
 import { EnumValuesChip } from "../components/EnumValuesChip";
 import { PreviewType } from "@rebasepro/types";
-import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";import { UrlComponentPreview } from "../components/UrlComponentPreview";
+import type { PropertyPreviewProps } from "../../types/components/PropertyPreviewProps";
+import { UrlComponentPreview } from "../components/UrlComponentPreview";
 import { ErrorBoundary } from "@rebasepro/ui";
 import { Chip, cls, getColorSchemeForSeed } from "@rebasepro/ui";
 

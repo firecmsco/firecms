@@ -1,4 +1,5 @@
-import type { EntityCustomViewParams } from "../../types/collections";import { useRef, useEffect } from "react";
+import type { EntityCustomViewParams } from "../../types/collections";
+import { useRef, useEffect } from "react";
 ;
 import {
     cls,

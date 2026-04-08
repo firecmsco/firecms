@@ -1,8 +1,10 @@
 import type { FieldProps } from "../../types/fields";
-import type { ArrayProperty, StringProperty } from "@rebasepro/types";import React, { useCallback, useState } from "react";
+import type { ArrayProperty, StringProperty } from "@rebasepro/types";
+import React, { useCallback, useState } from "react";
 
 import { StorageConfig } from "@rebasepro/types";
-import type { PreviewSize } from "../../types/components/PropertyPreviewProps";import { useDropzone } from "react-dropzone";
+import type { PreviewSize } from "../../types/components/PropertyPreviewProps";
+import { useDropzone } from "react-dropzone";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 
 import { isReadOnly } from "@rebasepro/common";

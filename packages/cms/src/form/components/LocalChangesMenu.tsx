@@ -1,4 +1,5 @@
-import type { Properties } from "@rebasepro/types";import React, { useState } from "react";
+import type { Properties } from "@rebasepro/types";
+import React, { useState } from "react";
 import {
     Button,
     CancelIcon,
