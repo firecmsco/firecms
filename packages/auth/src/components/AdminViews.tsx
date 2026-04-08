@@ -1,5 +1,12 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { CMSView, EntityCollection, FieldCaption, Role, SecurityRule, User, useSnackbarController, ConfirmationDialog, useAuthController, useCollectionRegistryController } from "@rebasepro/core";
+import {
+    FieldCaption,
+    useSnackbarController,
+    ConfirmationDialog,
+    useAuthController,
+    useCollectionRegistryController
+} from "@rebasepro/core";
+import { CMSView, EntityCollection, Role, SecurityRule, User } from "@rebasepro/types";
 
 import {
     AddIcon,

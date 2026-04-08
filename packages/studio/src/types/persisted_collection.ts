@@ -1,4 +1,4 @@
-import { EntityCollection, User } from "@rebasepro/core";
+import { EntityCollection, User } from "@rebasepro/types";
 
 export type PersistedCollection<M extends Record<string, any> = any> = Omit<EntityCollection<M>, "subcollections"> & {
         ownerId?: string;

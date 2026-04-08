@@ -1,4 +1,5 @@
-import { Entity, EntityCollection, useData } from "@rebasepro/core";
+import { useData } from "@rebasepro/core";
+import { Entity, EntityCollection } from "@rebasepro/types";
 import { RebaseData } from "@rebasepro/types";
 import { Button, CenteredView, CircularProgress, Typography, } from "@rebasepro/ui";
 import { useEffect, useRef, useState } from "react";

@@ -10,6 +10,8 @@
     "node_modules",
     "dist",
     "src/test",
-    "src/scripts"
+    "src/scripts",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

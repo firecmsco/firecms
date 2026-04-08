@@ -1,4 +1,9 @@
-import { PluginFormActionProps, useAuthController, useCollectionRegistryController, useTranslation } from "@rebasepro/core";
+import {
+    useAuthController,
+    useCollectionRegistryController,
+    useTranslation
+} from "@rebasepro/core";
+import { PluginFormActionProps } from "@rebasepro/types";
 import { IconButton, SettingsIcon, Tooltip, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";

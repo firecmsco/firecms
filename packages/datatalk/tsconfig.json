@@ -57,6 +57,12 @@
 
       "@rebasepro/data_import_export": [
         "../data_import_export/src"
+      ],
+      "@rebasepro/cms": [
+        "../cms/src"
+      ],
+      "@rebasepro/common": [
+        "../common/src"
       ]
     }
   }

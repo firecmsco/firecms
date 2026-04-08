@@ -1,4 +1,4 @@
-import type { CMSUrlController } from "@rebasepro/types/cms";
+import type { CMSUrlController } from "@rebasepro/types";
 import React, { createContext } from "react";
 import { NavigateOptions } from "react-router-dom";
 

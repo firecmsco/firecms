@@ -1,4 +1,4 @@
-import type { NavigationEntry } from "@rebasepro/types/cms";
+import type { NavigationEntry } from "@rebasepro/types";
 import React from "react";
 import { cls, ExpandMoreIcon, Typography } from "@rebasepro/ui";
 ;

@@ -1,4 +1,4 @@
-import type { EntityCollection } from "@rebasepro/types/cms";
+import type { EntityCollection } from "@rebasepro/types";
 import { useEffect, useState } from "react";
 import { Entity, RebaseContext, User } from "@rebasepro/types";
 import { useData } from "./useData";

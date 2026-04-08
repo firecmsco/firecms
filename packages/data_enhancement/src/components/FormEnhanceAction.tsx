@@ -15,14 +15,10 @@ import {
 } from "@rebasepro/ui";
 import {
     AIIcon,
-    EntityStatus,
-    isPropertyBuilder,
-    PluginFormActionProps,
-    Properties,
-    Property,
-    stripCollectionPath,
-    useLargeLayout,
+    useLargeLayout
 } from "@rebasepro/core";
+import { EntityStatus, PluginFormActionProps, Properties, Property } from "@rebasepro/types";
+import { isPropertyBuilder, stripCollectionPath } from "@rebasepro/common";
 import { useDataEnhancementController } from "./DataEnhancementControllerProvider";
 import { SamplePrompt } from "../types/data_enhancement_controller";
 

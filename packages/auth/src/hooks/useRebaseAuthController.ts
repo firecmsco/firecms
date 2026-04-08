@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from "react";
-import { User } from "@rebasepro/core";
+import { User } from "@rebasepro/types";
 import * as authApi from "../api";
 import { AuthConfigResponse } from "../api";
 import {

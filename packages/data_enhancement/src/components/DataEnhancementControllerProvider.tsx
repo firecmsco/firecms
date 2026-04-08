@@ -7,15 +7,13 @@ import {
     InputProperty
 } from "../types/data_enhancement_controller";
 import {
-    DataDriver,
-    Entity,
-    EntityCollection, getValueInPath,
-    PluginFormActionProps,
     useAuthController,
     useCustomizationController,
     useCMSUrlController,
     useSnackbarController
 } from "@rebasepro/core";
+import { DataDriver, Entity, EntityCollection, PluginFormActionProps } from "@rebasepro/types";
+import { getValueInPath } from "@rebasepro/common";
 
 import { enhanceDataAPIStream, fetchEntityPromptSuggestion } from "../api";
 import { getAppendableSuggestion } from "../utils/suggestions";

@@ -49,6 +49,9 @@
       ],
       "@rebasepro/formex": [
         "../formex/src"
+      ],
+      "@rebasepro/cms": [
+        "../cms/src"
       ]
     }
   },

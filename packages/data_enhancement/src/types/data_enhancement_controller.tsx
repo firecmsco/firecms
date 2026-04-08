@@ -1,5 +1,5 @@
 import { EntityValues } from "@rebasepro/types";
-import { EditorAIController } from "@rebasepro/core";
+import { EditorAIController } from "@rebasepro/cms";
 
 export type EnhanceParams<M extends object> = {
     entityId?: string | number;

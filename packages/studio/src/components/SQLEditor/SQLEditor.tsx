@@ -30,9 +30,12 @@ import {
     EditIcon,
     MoreVertIcon,
     NotesIcon,
-    PlayArrowIcon
+    PlayArrowIcon,
+    VirtualTable,
+    VirtualTableColumn,
 } from "@rebasepro/ui";
-import { useRebaseContext, useSnackbarController, useCollectionRegistryController, useSideEntityController, VirtualTable, VirtualTableColumn, VirtualTableInput, ConfirmationDialog, ErrorView, IconForView, useTranslation } from "@rebasepro/core";
+import { VirtualTableInput } from "@rebasepro/cms";
+import { useRebaseContext, useSnackbarController, useCollectionRegistryController, ConfirmationDialog, ErrorView, IconForView, useTranslation } from "@rebasepro/core";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
 import { parseFirst } from "pgsql-ast-parser";
@@ -81,10 +84,10 @@ const STORAGE_KEY_TABS = "rebase_sql_tabs";
 const STORAGE_KEY_ACTIVE_TAB = "rebase_sql_active_tab";
 
 export const SQLEditor = () => {
-    const { databaseAdmin } = useRebaseContext();
+    const { databaseAdmin, sideEntityController } = useRebaseContext();
     const snackbarController = useSnackbarController();
     const collectionRegistry = useCollectionRegistryController();
-    const sideEntityController = useSideEntityController();
+
     const { t } = useTranslation();
 
     // Schema state
@@ -912,7 +915,7 @@ export const SQLEditor = () => {
                                                     className="text-surface-400 dark:text-surface-500 hover:text-surface-600 dark:hover:text-surface-300 transition-colors"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        sideEntityController.open({
+                                                        sideEntityController?.open({
                                                             path: ra.collection.collection.slug,
                                                             entityId: ra.entityId,
                                                             collection: ra.collection.collection,
@@ -945,7 +948,7 @@ export const SQLEditor = () => {
                                                     key={ra.collection.tableName}
                                                     dense
                                                     onClick={() => {
-                                                        sideEntityController.open({
+                                                        sideEntityController?.open({
                                                             path: ra.collection.collection.slug,
                                                             entityId: ra.entityId,
                                                             collection: ra.collection.collection,

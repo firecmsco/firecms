@@ -1,8 +1,7 @@
-import type { EntityCollection, Property, PropertyConfig } from "@rebasepro/types/cms";
+import type { EntityCollection, Property, PropertyConfig } from "@rebasepro/types";
 import { AuthController } from "@rebasepro/types";
 import { isPropertyBuilder } from "@rebasepro/common";
 import { isReferenceProperty, isRelationProperty } from "./property_utils";
-import { getFieldConfig } from "../core";
 
 export function getEntityPreviewKeys(
     authController: AuthController,
@@ -40,8 +39,8 @@ export function getEntityTitlePropertyKey<M extends Record<string, any>>(collect
     for (const key in collection.properties) {
         const property = collection.properties[key];
         if (!isPropertyBuilder(property)) {
-            const field = getFieldConfig(property as Property, propertyConfigs);
-            if (field?.key === "text_field") {
+            const prop = property as Property;
+            if (prop.type === "string" && !prop.multiline && !prop.markdown && !prop.storage && !prop.isId) {
                 return key;
             }
         }

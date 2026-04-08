@@ -1,4 +1,4 @@
-import { DataType } from "@rebasepro/core";
+import { DataType } from "@rebasepro/types";
 
 export function getInferenceType(value: any): DataType {
     if (typeof value === "number")

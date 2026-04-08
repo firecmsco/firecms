@@ -1,4 +1,9 @@
-import { EntityTableController, getDefaultPropertiesOrder, useAuthController, useTranslation } from "@rebasepro/core";
+import {
+    getDefaultPropertiesOrder,
+    useAuthController,
+    useTranslation
+} from "@rebasepro/core";
+import { EntityTableController } from "@rebasepro/types";
 import { AddIcon, Tooltip } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { PersistedCollection } from "../types/persisted_collection";

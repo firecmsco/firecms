@@ -1,11 +1,17 @@
-import type { EntityCollection, Property, MapProperty } from "@rebasepro/types/cms";
+import type { EntityCollection, Property, MapProperty } from "@rebasepro/types";
 import { useMemo } from "react";
 ;
 import { getPropertyInPath } from "../../util";
-import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
-import { PropertyColumnConfig } from "../EntityCollectionTable/EntityCollectionTableProps";
 import { getSubcollections } from "@rebasepro/common";
 
+export type PropertyColumnConfig = {
+    key: string;
+    disabled: boolean;
+};
+
+export function getSubcollectionColumnId(collection: EntityCollection<any>) {
+    return `subcollection:${collection.slug}`;
+}
 export function useColumnIds<M extends Record<string, any>>(collection: EntityCollection<M>, includeSubcollections: boolean): PropertyColumnConfig[] {
     return useMemo(() => {
         if (collection.propertiesOrder) {

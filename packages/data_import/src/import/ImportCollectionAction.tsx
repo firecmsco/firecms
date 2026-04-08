@@ -1,21 +1,20 @@
 import React, { useCallback, useEffect } from "react";
 import {
-    CollectionActionsProps,
-    EntityCollectionTable,
-    getFieldConfig,
     getPropertiesWithPropertiesOrder,
     getPropertyInPath,
-    Properties,
-    Property,
-    PropertyConfigBadge,
-    slugify,
     useAuthController,
     useCustomizationController,
     useCollectionRegistryController,
-    User,
-    useSelectionController,
     useSnackbarController
 } from "@rebasepro/core";
+import { CollectionActionsProps, Properties, Property, User } from "@rebasepro/types";
+import { slugify } from "@rebasepro/common";
+import {
+    EntityCollectionTable,
+    getFieldConfig,
+    PropertyConfigBadge,
+    useSelectionController
+} from "@rebasepro/cms";
 import {
     Button,
     cls,

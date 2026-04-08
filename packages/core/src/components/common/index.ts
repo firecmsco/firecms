@@ -3,4 +3,5 @@ export * from "./useDebouncedData";
 export * from "./useColumnsIds";
 export * from "./useDataTableController";
 export * from "./useTableSearchHelper";
-export * from "./default_entity_actions";
+export * from "./useScrollRestoration";
+export * from "./table_height";

@@ -13,13 +13,8 @@ import {
     DebouncedTextField,
     BooleanSwitchWithLabel
 } from "@rebasepro/ui";
-import {
-    Properties,
-    Property,
-    getFieldConfig,
-    DEFAULT_FIELD_CONFIGS,
-    EnumValueConfig
-} from "@rebasepro/core";
+import { getFieldConfig, DEFAULT_FIELD_CONFIGS } from "@rebasepro/cms";
+import { Properties, Property, EnumValueConfig } from "@rebasepro/types";
 import { isPropertyBuilder } from "@rebasepro/common";
 import { PropertyWithId } from "../../PropertyEditView";
 import { getPropertyPaths } from "./property_paths";

@@ -46,6 +46,9 @@
       ],
       "@rebasepro/formex": [
         "../formex/src"
+      ],
+      "@rebasepro/common": [
+        "../common/src"
       ]
     }
   },

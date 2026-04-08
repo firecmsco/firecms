@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FieldCaption, MapProperty, Property, PropertyConfig, } from "@rebasepro/core";
+import { FieldCaption } from "@rebasepro/core";
+import { MapProperty, Property, PropertyConfig } from "@rebasepro/types";
 import { AddIcon, BooleanSwitchWithLabel, Button, Paper, Typography } from "@rebasepro/ui";
 import { PropertyFormDialog } from "../PropertyEditView";
 import { getIn, useFormex } from "@rebasepro/formex";

@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 
-import { EntityCollection, RebasePlugin, PluginFieldBuilderParams, useAuthController, User } from "@rebasepro/core";
+import { useAuthController } from "@rebasepro/core";
+import { EntityCollection, RebasePlugin, PluginFieldBuilderParams, User } from "@rebasepro/types";
 import { DataEnhancementControllerProvider } from "./components/DataEnhancementControllerProvider";
 import { fieldBuilder } from "./components/field_builder";
 import { FormEnhanceAction } from "./components/FormEnhanceAction";

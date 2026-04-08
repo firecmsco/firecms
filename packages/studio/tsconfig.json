@@ -40,8 +40,8 @@
       "@rebasepro/types": [
         "../types/src"
       ],
-      "@rebasepro/types/cms": [
-        "../types/src/cms"
+      "@rebasepro/cms": [
+        "../cms/src"
       ],
       "@rebasepro/schema_inference": [
         "../schema_inference/src"

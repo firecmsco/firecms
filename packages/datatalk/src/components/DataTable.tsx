@@ -1,8 +1,7 @@
 import React, { useMemo } from "react";
-import { CellRendererParams, VirtualTable, VirtualTableColumn } from "@rebasepro/core";
+import { CellRendererParams, VirtualTable, VirtualTableColumn, FileDownloadIcon, IconButton, Paper, Typography } from "@rebasepro/ui";
 import { getIn } from "@rebasepro/formex";
 import { DataTableCell } from "./DataTableCell";
-import { FileDownloadIcon, IconButton, Paper, Typography } from "@rebasepro/ui";
 import { downloadDataAsCsv } from "@rebasepro/data_export";
 
 export type type = "string" | "number" | "date" | "object" | "array";

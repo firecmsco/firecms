@@ -1,5 +1,5 @@
 import { EntityCollection } from "@rebasepro/types";
-import type { CMSUrlController, SideEntityController } from "@rebasepro/types/cms";
+
 import { getSubcollections } from "./resolutions";
 
 export function removeInitialAndTrailingSlashes(s: string): string {
@@ -167,57 +167,4 @@ export function getCollectionPathsCombinations(subpaths: string[]): string[] {
         result.push(entries.slice(0, i).join("/"));
     }
     return result;
-
-}
-
-export function navigateToEntity({
-    openEntityMode,
-    collection,
-    entityId,
-    copy,
-    path,
-    selectedTab,
-    sideEntityController,
-    onClose,
-    navigation
-}:
-
-    {
-        openEntityMode: "side_panel" | "full_screen";
-        collection?: EntityCollection;
-        entityId?: string | number;
-        selectedTab?: string;
-        copy?: boolean;
-        path: string;
-        sideEntityController: SideEntityController;
-        onClose?: () => void;
-        navigation: CMSUrlController
-    }) {
-
-    if (openEntityMode === "side_panel") {
-
-        sideEntityController.open({
-            entityId,
-            path: path,
-            copy,
-            selectedTab,
-            collection,
-            updateUrl: true,
-            onClose
-        });
-
-    } else {
-        let to = navigation.buildUrlCollectionPath(entityId ? `${path ?? path}/${entityId}` : path ?? path);
-        if (entityId && selectedTab) {
-            to += `/${selectedTab}`;
-        }
-        if (!entityId) {
-            to += "#new";
-        }
-        if (copy) {
-            to += "#copy";
-        }
-        navigation.navigate(to);
-    }
-
 }

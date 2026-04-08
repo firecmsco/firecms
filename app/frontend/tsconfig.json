@@ -62,6 +62,9 @@
       "@rebasepro/common": [
         "../../packages/common/src"
       ],
+      "@rebasepro/cms": [
+        "../../packages/cms/src"
+      ],
       "@rebasepro/client": [
         "../../packages/client/src"
       ],

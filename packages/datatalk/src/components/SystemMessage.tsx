@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { EntityCollection } from "@rebasepro/core";
+import { EntityCollection } from "@rebasepro/types";
 import { MarkdownElement, parseMarkdown } from "../utils/parser";
 import { CodeBlock } from "./CodeBlock";
 import {

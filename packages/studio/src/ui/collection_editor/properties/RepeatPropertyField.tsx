@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { ArrayProperty, getFieldConfig, Property, PropertyConfig } from "@rebasepro/core";
+import { getFieldConfig } from "@rebasepro/cms";
+import { ArrayProperty, Property, PropertyConfig } from "@rebasepro/types";
 import { Button, Paper, Typography } from "@rebasepro/ui";
 import { Field, getIn, useFormex } from "@rebasepro/formex";
 import { PropertyFormDialog } from "../PropertyEditView";

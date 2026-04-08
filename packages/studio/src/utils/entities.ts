@@ -1,4 +1,5 @@
-import { isPropertyBuilder, Properties, Property } from "@rebasepro/core";
+import { Properties, Property } from "@rebasepro/types";
+import { isPropertyBuilder } from "@rebasepro/common";
 
 export function editableProperty(property: Property): boolean {
     if (isPropertyBuilder(property))

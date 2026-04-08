@@ -1,11 +1,10 @@
 import React from "react";
 import {
     ConfirmationDialog,
-    EntityAction,
-    EntityCollection,
-    resolveEntityAction,
     useCustomizationController
 } from "@rebasepro/core";
+import { resolveEntityAction } from "@rebasepro/cms";
+import { EntityAction, EntityCollection } from "@rebasepro/types";
 import {
     AddIcon,
     Alert,

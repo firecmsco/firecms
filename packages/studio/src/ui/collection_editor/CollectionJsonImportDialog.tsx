@@ -9,7 +9,7 @@ import {
     DialogTitle,
     Typography
 } from "@rebasepro/ui";
-import { EntityCollection } from "@rebasepro/core";
+import { EntityCollection } from "@rebasepro/types";
 import { validateCollectionJson, CollectionValidationError } from "../../utils/validateCollectionJson";
 
 const EXAMPLE_JSON = `{

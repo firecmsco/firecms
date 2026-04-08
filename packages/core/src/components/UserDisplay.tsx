@@ -1,5 +1,4 @@
 import { AccountCircleIcon, cls, defaultBorderMixin } from "@rebasepro/ui";
-import { EmptyValue } from "../preview";
 import { User } from "@rebasepro/types";
 
 /**
@@ -9,7 +8,7 @@ export function UserDisplay({
     user,
 }: { user: User | null }) {
     if (!user) {
-        return <EmptyValue />;
+        return <span className={cls("italic", "text-text-disabled dark:text-text-disabled-dark", "text-sm")}>Not set</span>;
     }
 
     const avatarSizeClass = "w-6 h-6";

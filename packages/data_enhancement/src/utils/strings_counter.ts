@@ -1,4 +1,4 @@
-import { EntityValues, Properties, Property } from "@rebasepro/core";
+import { EntityValues, Properties, Property } from "@rebasepro/types";
 
 export function countStringCharacters(values: EntityValues<any>, properties: Properties) {
     let count = 0;

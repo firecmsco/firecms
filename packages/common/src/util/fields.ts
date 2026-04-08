@@ -1,6 +1,6 @@
-import type { DefaultFieldConfig } from "@rebasepro/types/cms";
 
-export function isDefaultFieldConfigId(id: string): id is DefaultFieldConfig {
+
+export function isDefaultFieldConfigId(id: string): boolean {
     return ["text_field",
         "multiline",
         "markdown",

@@ -1,4 +1,4 @@
-import type { Property } from "@rebasepro/types/cms";
+import type { Property } from "@rebasepro/types";
 import { CollectionSize, SelectedCellProps } from "@rebasepro/types";
 
 export type EntityCollectionTableController<M extends Record<string, any>> = {

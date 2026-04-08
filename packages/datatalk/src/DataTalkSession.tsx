@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { EntityCollection, randomString } from "@rebasepro/core";
+import { EntityCollection } from "@rebasepro/types";
+import { randomString } from "@rebasepro/common";
 import { Button, Checkbox, Label, SendIcon, TextareaAutosize, Tooltip } from "@rebasepro/ui";
 import { MessageLayout } from "./components/MessageLayout";
 import { streamDataTalkCommand } from "./api";

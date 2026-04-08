@@ -16,6 +16,7 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
+        "@rebasepro/cms": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/types": "0.0.1",
         "@rebasepro/ui": "0.0.1"

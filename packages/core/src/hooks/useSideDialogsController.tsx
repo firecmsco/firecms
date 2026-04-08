@@ -1,5 +1,4 @@
-import type { SideDialogsController } from "@rebasepro/types/cms";
-;
+import React from "react";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
 import { useContext } from "react";
 
@@ -19,4 +18,8 @@ import { useContext } from "react";
  *
  * @group Hooks and utilities
  */
+import { SideDialogPanelProps, SideDialogsController } from "@rebasepro/types";
+
+export type { SideDialogPanelProps, SideDialogsController };
+
 export const useSideDialogsController = (): SideDialogsController => useContext(SideDialogsControllerContext);

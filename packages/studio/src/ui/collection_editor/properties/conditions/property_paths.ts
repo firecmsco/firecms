@@ -1,4 +1,4 @@
-import { Properties, Property } from "@rebasepro/core";
+import { Properties, Property } from "@rebasepro/types";
 import { isPropertyBuilder } from "@rebasepro/common";
 
 /**

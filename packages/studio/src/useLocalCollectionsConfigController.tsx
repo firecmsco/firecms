@@ -1,5 +1,6 @@
 import { CollectionsConfigController, SaveCollectionParams, UpdateCollectionParams, DeleteCollectionParams, SavePropertyParams, DeletePropertyParams, UpdatePropertiesOrderParams } from "./types/config_controller";
-import { EntityCollection, Properties, getSubcollections } from "@rebasepro/core";
+import { EntityCollection, Properties } from "@rebasepro/types";
+import { getSubcollections } from "@rebasepro/common";
 import { PersistedCollection } from "./types/persisted_collection";
 
 

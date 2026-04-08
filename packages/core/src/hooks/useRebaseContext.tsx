@@ -2,7 +2,6 @@ import { AuthController, RebaseContext, User } from "@rebasepro/types";
 import { useAuthController } from "./useAuthController";
 import { useSideDialogsController } from "./useSideDialogsController";
 import { useCollectionRegistryController, useNavigationStateController, useCMSUrlController } from "./navigation/contexts";
-import { useSideEntityController } from "./useSideEntityController";
 
 import { useData } from "./data/useData";
 import { useStorageSource } from "./useStorageSource";
@@ -33,7 +32,6 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
 
     const authController = useAuthController<USER, AuthControllerType>();
     const sideDialogsController = useSideDialogsController();
-    const sideEntityController = useSideEntityController();
     const collectionRegistry = useCollectionRegistryController();
     const navigationState = useNavigationStateController();
     const cmsUrlController = useCMSUrlController();
@@ -54,7 +52,6 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
     const rebaseContextRef = React.useRef<RebaseContext<USER, AuthControllerType>>({
         authController,
         sideDialogsController,
-        sideEntityController,
         cmsUrlController,
         collectionRegistryController: collectionRegistry,
         navigationStateController: navigationState,
@@ -74,7 +71,6 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
         rebaseContextRef.current = {
             authController,
             sideDialogsController,
-            sideEntityController,
             cmsUrlController,
             collectionRegistryController: collectionRegistry,
             navigationStateController: navigationState,

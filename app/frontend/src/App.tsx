@@ -12,12 +12,10 @@ import {
     AdminModeControllerProvider,
     AdminModeSyncer,
     AppBar,
-    CircularProgressCenter,
     ContentHomePage,
     StudioHomePage,
     Drawer,
     Rebase,
-    RebaseRoute,
     ModeControllerProvider,
     NotFoundPage,
     RebaseI18nProvider,
@@ -34,9 +32,10 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationStateController,
-    UIReferenceView,
-    CustomCMSRoute
+    UIReferenceView
 } from "@rebasepro/core";
+import { RebaseRoute, CustomCMSRoute } from "@rebasepro/cms";
+import { CircularProgressCenter } from "@rebasepro/ui";
 import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
 import { CollectionsStudioView, JSEditor, RLSEditor, SQLEditor, StorageView, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
 import { CMSView } from "@rebasepro/types";

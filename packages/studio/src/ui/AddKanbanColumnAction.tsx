@@ -1,15 +1,12 @@
 import React, { useCallback, useMemo, useState } from "react";
 import {
-    EntityCollection,
-    EnumValueConfig,
     getPropertyInPath,
-    StringProperty,
-    resolveEnumValues,
-    toSnakeCase,
     useAuthController,
     useCustomizationController,
     useTranslation
 } from "@rebasepro/core";
+import { EntityCollection, EnumValueConfig, StringProperty } from "@rebasepro/types";
+import { resolveEnumValues, toSnakeCase } from "@rebasepro/common";
 import {
     AddIcon,
     Button,
@@ -121,7 +118,7 @@ export function AddKanbanColumnAction({
             await configController.saveProperty({
                 path: fullPath,
                 propertyKey: columnProperty,
-                property: updatedProperty as any,
+                property: updatedProperty as StringProperty,
                 parentCollectionIds
             });
 

@@ -1,9 +1,6 @@
 import { deleteField, DocumentSnapshot } from "@firebase/firestore";
-import {
-    Properties,
-    Property,
-    sortProperties,
-} from "@rebasepro/core";
+import { Properties, Property } from "@rebasepro/types";
+import { sortProperties } from "@rebasepro/common";
 import { PersistedCollection } from "@rebasepro/studio";
 import { COLLECTION_PATH_SEPARATOR, stripCollectionPath } from "@rebasepro/common";
 

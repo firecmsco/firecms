@@ -1,8 +1,8 @@
-import type { SlotName, SlotRegistry } from "@rebasepro/types/cms";
+import type { SlotName, SlotRegistry } from "@rebasepro/types";
 import React, { useMemo } from "react";
 ;
 import { useCustomizationController } from "./useCustomizationController";
-import { ErrorBoundary } from "../components";
+import { ErrorBoundary } from "@rebasepro/ui";
 
 /**
  * Hook that retrieves and renders all slot contributions for a given slot name.
@@ -31,7 +31,7 @@ export function useSlot<K extends SlotName>(
             .sort((a, b) => (a.order ?? 50) - (b.order ?? 50))
             .map((s, i) => (
                 <ErrorBoundary key={`${slot}_${i}`}>
-                    <s.Component {...props as any} {...(s.props ?? {})} />
+                    <s.Component {...(props as unknown as Record<string, unknown>)} {...(s.props ?? {})} />
                 </ErrorBoundary>
             ));
     }, [resolvedSlots, slot, props]);

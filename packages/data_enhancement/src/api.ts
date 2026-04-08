@@ -5,7 +5,7 @@ import {
     InputProperty,
     SamplePromptsResult
 } from "./types/data_enhancement_controller";
-import { EntityValues } from "@rebasepro/core";
+import { EntityValues } from "@rebasepro/types";
 import { flatMapEntityValues } from "./utils/values";
 
 // const DEFAULT_SERVER = "http://localhost:5001/rebase-dev-2da42/europe-west3/api"; // Local

@@ -1,6 +1,8 @@
 import React, { useMemo } from "react";
 import { getIn, useFormex } from "@rebasepro/formex";
-import { EnumValueConfig, resolveEnumValues, useSnackbarController } from "@rebasepro/core";
+import { useSnackbarController } from "@rebasepro/core";
+import { EnumValueConfig } from "@rebasepro/types";
+import { resolveEnumValues } from "@rebasepro/common";
 import { Select, SelectItem } from "@rebasepro/ui";
 import { EnumForm } from "../EnumForm";
 import { StringPropertyValidation } from "./validation/StringPropertyValidation";

@@ -38,7 +38,7 @@ export function RelationPropertyField({
         values,
         errors,
         setFieldValue
-    } = useFormex<RelationProperty & { id?: string }>();
+    } = useFormex<RelationProperty & { id?: string; _relationConfig?: Record<string, unknown> }>();
 
     const collectionRegistry = useCollectionRegistryController();
 
@@ -56,18 +56,19 @@ export function RelationPropertyField({
     const relationName = values.relationName ?? "";
     // Transient config object stored on the property for editor use.
     // Contains standard Relation fields plus `_targetSlug` for the UI dropdown.
-    const relationConfig: Record<string, any> = (values as any)._relationConfig ?? {};
+    const relationConfig: Record<string, unknown> = ((values as unknown as Record<string, unknown>)._relationConfig as Record<string, unknown>) ?? {};
 
-    const targetSlug = relationConfig._targetSlug ?? "";
-    const cardinality = relationConfig.cardinality ?? "one";
-    const direction = relationConfig.direction ?? "owning";
-    const localKey = relationConfig.localKey ?? "";
-    const foreignKeyOnTarget = relationConfig.foreignKeyOnTarget ?? "";
-    const throughTable = relationConfig.through?.table ?? "";
-    const throughSourceColumn = relationConfig.through?.sourceColumn ?? "";
-    const throughTargetColumn = relationConfig.through?.targetColumn ?? "";
-    const onUpdate = relationConfig.onUpdate ?? "no action";
-    const onDelete = relationConfig.onDelete ?? "no action";
+    const targetSlug = (relationConfig._targetSlug as string) ?? "";
+    const cardinality = (relationConfig.cardinality as string) ?? "one";
+    const direction = (relationConfig.direction as string) ?? "owning";
+    const localKey = (relationConfig.localKey as string) ?? "";
+    const foreignKeyOnTarget = (relationConfig.foreignKeyOnTarget as string) ?? "";
+    const through = relationConfig.through as Record<string, string> | undefined;
+    const throughTable = through?.table ?? "";
+    const throughSourceColumn = through?.sourceColumn ?? "";
+    const throughTargetColumn = through?.targetColumn ?? "";
+    const onUpdate = (relationConfig.onUpdate as string) ?? "no action";
+    const onDelete = (relationConfig.onDelete as string) ?? "no action";
 
     // Whether to show the junction table section
     const showThrough = cardinality === "many" && direction === "owning";
@@ -77,18 +78,18 @@ export function RelationPropertyField({
     const showForeignKey = direction === "inverse";
 
     const updateRelationConfig = useCallback(
-        (patch: Record<string, any>) => {
-            const current = (values as any)._relationConfig ?? {};
-            setFieldValue("_relationConfig" as any, { ...current, ...patch });
+        (patch: Record<string, unknown>) => {
+            const current = ((values as unknown as Record<string, unknown>)._relationConfig as Record<string, unknown>) ?? {};
+            setFieldValue("_relationConfig" as keyof (RelationProperty & { _relationConfig?: unknown }), { ...current, ...patch });
         },
         [values, setFieldValue]
     );
 
     const updateThrough = useCallback(
-        (patch: Record<string, any>) => {
-            const current = (values as any)._relationConfig ?? {};
-            const currentThrough = current.through ?? {};
-            setFieldValue("_relationConfig" as any, {
+        (patch: Record<string, unknown>) => {
+            const current = ((values as unknown as Record<string, unknown>)._relationConfig as Record<string, unknown>) ?? {};
+            const currentThrough = (current.through as Record<string, unknown>) ?? {};
+            setFieldValue("_relationConfig" as keyof (RelationProperty & { _relationConfig?: unknown }), {
                 ...current,
                 through: { ...currentThrough, ...patch }
             });

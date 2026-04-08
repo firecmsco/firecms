@@ -143,7 +143,7 @@ function UploadDialog({
                 <div className="p-4">
                     {/* Drop Zone */}
                     <FileUpload
-                        accept={{} as any}
+                        accept={{} as Record<string, string[]>}
                         onFilesAdded={handleFilesAdded}
                         size="large"
                         uploadDescription={

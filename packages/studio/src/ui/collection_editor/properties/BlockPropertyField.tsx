@@ -10,7 +10,7 @@ import {
     namespaceToPropertiesPath
 } from "../util";
 import { PropertyTree } from "../PropertyTree";
-import { ArrayProperty, PropertyConfig } from "@rebasepro/core";
+import { ArrayProperty, PropertyConfig } from "@rebasepro/types";
 
 export function BlockPropertyField({
     disabled,

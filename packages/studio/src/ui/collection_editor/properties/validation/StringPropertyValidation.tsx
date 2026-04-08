@@ -1,7 +1,8 @@
 import React from "react";
 
 import { Field, FormexFieldProps, getIn, useFormex } from "@rebasepro/formex";
-import { FieldCaption, serializeRegExp } from "@rebasepro/core";
+import { FieldCaption } from "@rebasepro/core";
+import { serializeRegExp } from "@rebasepro/common";
 import { DebouncedTextField, } from "@rebasepro/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 import { SwitchControl } from "../../SwitchControl";

@@ -1,5 +1,10 @@
 import React from "react";
-import { RebasePlugin, useAuthController, useCollectionRegistryController, useNavigationStateController, User } from "@rebasepro/core";
+import {
+    useAuthController,
+    useCollectionRegistryController,
+    useNavigationStateController
+} from "@rebasepro/core";
+import { RebasePlugin, User } from "@rebasepro/types";
 import { ConfigControllerProvider } from "./ConfigControllerProvider";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { EditorCollectionAction } from "./ui/EditorCollectionAction";

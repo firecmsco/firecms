@@ -1,4 +1,4 @@
-import type { NavigationEntry } from "@rebasepro/types/cms";
+import type { NavigationEntry } from "@rebasepro/types";
 import { useNavigate } from "react-router-dom";
 import { useNavigationStateController } from "../../hooks";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";

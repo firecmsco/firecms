@@ -8,6 +8,7 @@ import { EntityOverrides } from "./entity_overrides";
 import { User } from "../users";
 import { RebaseContext } from "../rebase_context";
 import { Relation } from "./relations";
+import { EntityCustomView } from "./entity_views";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -148,19 +149,25 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
 
 
     /**
-     * Optional field used to group top level navigation entries under a~
-     * navigation view. If you set this value in a subcollection it has no
-     * effect.
-     * @deprecated This prop is deprecated and will be removed in the future.
-     * You can apply grouping by using the `navigationGroupMappings` prop in the
-     * {@link useBuildNavigationController} hook instead.
+     * Set of properties that compose an entity
+     */
+    properties: Properties;
+
+    /**
+     * Icon for the navigation sidebar or cards.
+     */
+    icon?: string | React.ReactNode;
+
+    /**
+     * Navigation group for this collection.
      */
     group?: string;
 
     /**
-     * Set of properties that compose an entity
+     * Array of entity views that this collection has.
+     * Can be an array of `EntityCustomView` or a string representing the key of a global `EntityCustomView`.
      */
-    properties: Properties;
+    entityViews?: (string | EntityCustomView<any>)[];
 
     /**
      * Default preview properties displayed when this collection is referenced to.

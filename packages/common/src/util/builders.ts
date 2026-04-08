@@ -15,7 +15,7 @@ import {
     StringProperty,
     User
 } from "@rebasepro/types";
-import type { PropertyConfig } from "@rebasepro/types/cms";
+
 
 /**
  * Identity function we use to defeat the type system of Typescript and build
@@ -125,14 +125,4 @@ export function buildAdditionalFieldDelegate<M extends Record<string, any>, USER
     return additionalFieldDelegate;
 }
 
-/**
- * Identity function we use to defeat the type system of Typescript and build
- * additional field delegates views with all its properties
- * @param propertyConfig
- * @group Builder
- */
-export function buildFieldConfig(
-    propertyConfig: PropertyConfig
-): PropertyConfig {
-    return propertyConfig;
-}
+

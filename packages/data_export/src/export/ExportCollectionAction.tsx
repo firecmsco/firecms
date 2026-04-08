@@ -1,19 +1,14 @@
 import React, { useCallback } from "react";
 
 import {
-    CollectionActionsProps,
-    Entity,
-    EntityCollection,
-    ExportConfig,
-    getDefaultValuesFor,
-    RebaseContext,
     useAuthController,
     useCustomizationController,
     useData,
     useRebaseContext,
-    useCMSUrlController,
-    User
+    useCMSUrlController
 } from "@rebasepro/core";
+import { CollectionActionsProps, Entity, EntityCollection, ExportConfig, RebaseContext, User } from "@rebasepro/types";
+import { getDefaultValuesFor } from "@rebasepro/common";
 import {
     Alert,
     BooleanSwitchWithLabel,

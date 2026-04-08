@@ -1,4 +1,5 @@
-import { EntityTableController, Property, useTranslation } from "@rebasepro/core";
+import { useTranslation } from "@rebasepro/core";
+import { EntityTableController, Property } from "@rebasepro/types";
 import { IconButton, SettingsIcon, Tooltip } from "@rebasepro/ui";
 import React from "react";
 import { useCollectionEditorController } from "../useCollectionEditorController";

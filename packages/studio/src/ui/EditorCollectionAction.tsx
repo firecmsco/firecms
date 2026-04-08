@@ -1,4 +1,9 @@
-import { CollectionActionsProps, useAuthController, useCollectionRegistryController, useTranslation } from "@rebasepro/core";
+import {
+    useAuthController,
+    useCollectionRegistryController,
+    useTranslation
+} from "@rebasepro/core";
+import { CollectionActionsProps } from "@rebasepro/types";
 import { IconButton, SettingsIcon, Tooltip, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";

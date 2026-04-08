@@ -46,12 +46,6 @@
             "import": "./dist/index.es.js",
             "require": "./dist/index.umd.js"
         },
-        "./cms": {
-            "types": "./dist/cms/index.d.ts",
-            "development": "./src/cms/index.ts",
-            "import": "./dist/cms.es.js",
-            "require": "./dist/cms.umd.js"
-        },
         "./package.json": "./package.json"
     },
     "dependencies": {},

@@ -1,14 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { deepEqual as equal } from "fast-equals"
 
-import {
-    FieldProps,
-    MarkdownEditorFieldBinding,
-    NumberProperty,
-    PluginFieldBuilderParams,
-    Property,
-    StringProperty,
-} from "@rebasepro/core";
+import { MarkdownEditorFieldBinding } from "@rebasepro/cms";
+import { FieldProps, NumberProperty, PluginFieldBuilderParams, Property, StringProperty } from "@rebasepro/types";
 import {
     AutoAwesomeIcon,
     CircularProgress,
@@ -26,7 +20,7 @@ import { SUPPORTED_FIELDS_ENHANCEMENT } from "../utils/fields";
 import { EnhanceTextFieldBinding } from "./fields/EnhanceTextField";
 import { EnhancedDataResult, EnhanceParams } from "../types/data_enhancement_controller";
 import { countStringCharacters } from "../utils/strings_counter";
-import { EditorAIController } from "@rebasepro/core";
+import { EditorAIController } from "@rebasepro/cms";
 
 export function fieldBuilder<P extends Property = Property>
     (params: PluginFieldBuilderParams<P>): React.ComponentType<FieldProps<P>> | null {

@@ -1,4 +1,4 @@
-import { EntityCollection } from "@rebasepro/types/cms";
+import { EntityCollection } from "@rebasepro/types";
 import profilesCollection from "./profiles";
 import postsCollection from "./posts";
 
@@ -103,7 +103,7 @@ const authorsCollection: EntityCollection = {
         afterSave: ({ values }) => {
         }
     },
-    Actions: [],
+
     filter: undefined,
     sort: [
         "email",

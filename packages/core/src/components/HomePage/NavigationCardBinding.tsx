@@ -1,7 +1,7 @@
-import type { NavigationEntry } from "@rebasepro/types/cms";
+import type { NavigationEntry } from "@rebasepro/types";
 import { useNavigate } from "react-router-dom";
 
-import { useCustomizationController, useRebaseContext, useSlot } from "../../hooks";
+import { useRebaseContext, useSlot } from "../../hooks";
 ;
 import { IconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
@@ -43,7 +43,6 @@ export function NavigationCardBinding({
 
     const navigate = useNavigate();
     const context = useRebaseContext();
-    const customizationController = useCustomizationController();
 
     const favourite = (userConfigurationPersistence?.favouritePaths ?? []).includes(slug);
 

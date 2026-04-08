@@ -1,16 +1,6 @@
 import React from "react";
 
-import {
-    Authenticator,
-    CMSAnalyticsEvent,
-    CMSView,
-    CMSViewsBuilder,
-    EntityCollection,
-    EntityCollectionsBuilder,
-    RebasePlugin,
-    Locale,
-    PropertyConfig
-} from "@rebasepro/core";
+import { Authenticator, CMSAnalyticsEvent, CMSView, CMSViewsBuilder, EntityCollection, EntityCollectionsBuilder, RebasePlugin, Locale, PropertyConfig } from "@rebasepro/types";
 import { UserManagementDelegate } from "@rebasepro/types";
 import { FirebaseApp } from "@firebase/app";
 import { FirebaseLoginViewProps } from "./FirebaseLoginView";

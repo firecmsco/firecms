@@ -1,32 +1,20 @@
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import {
-    CircularProgressCenter,
     ConfirmationDialog,
-    Entity,
-    EntityCollection,
     ErrorView,
-    getSubcollections,
-    isPropertyBuilder,
-    MapProperty,
-    mergeDeep,
-    NavigationResult,
-    Properties,
-    Property,
-    PropertyConfig,
-    randomString,
-    removeInitialAndTrailingSlashes,
-    removeUndefined,
     useAuthController,
     useCustomizationController,
     useNavigationStateController,
     useCollectionRegistryController,
     useCMSUrlController,
-    User,
     useSnackbarController,
     useUnsavedChangesDialog,
     UnsavedChangesDialog
 } from "@rebasepro/core";
+import { CircularProgressCenter } from "@rebasepro/ui";
+import { Entity, EntityCollection, MapProperty, NavigationResult, Properties, Property, PropertyConfig, User } from "@rebasepro/types";
+import { getSubcollections, isPropertyBuilder, mergeDeep, randomString, removeInitialAndTrailingSlashes, removeUndefined } from "@rebasepro/common";
 import {
     ArrowBackIcon,
     Button,

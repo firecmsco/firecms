@@ -1,4 +1,9 @@
-import { ErrorView, prettifyIdentifier, useCollectionRegistryController, useTranslation } from "@rebasepro/core";
+import {
+    ErrorView,
+    useCollectionRegistryController,
+    useTranslation
+} from "@rebasepro/core";
+import { prettifyIdentifier } from "@rebasepro/common";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { Button } from "@rebasepro/ui";
 

@@ -1,4 +1,4 @@
-import type { SnackbarMessageType } from "@rebasepro/types/cms";
+import type { SnackbarMessageType } from "@rebasepro/types";
 import React, { useCallback, useMemo } from "react";
 import { useSnackbar } from "notistack";
 ;

@@ -1,11 +1,8 @@
-import {
-    ErrorBoundary,
-    getFieldConfig,
-    isPropertyBuilder,
-    Property,
-    PropertyConfigBadge,
-    useCustomizationController,
-} from "@rebasepro/core";
+import { useCustomizationController } from "@rebasepro/core";
+import { getFieldConfig, PropertyConfigBadge } from "@rebasepro/cms";
+import { ErrorBoundary } from "@rebasepro/ui";
+import { Property } from "@rebasepro/types";
+import { isPropertyBuilder } from "@rebasepro/common";
 import {
     cls,
     DoNotDisturbOnIcon,

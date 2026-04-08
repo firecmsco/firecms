@@ -1,4 +1,4 @@
-import { EntityCollection } from "@rebasepro/core";
+import { EntityCollection } from "@rebasepro/types";
 
 export interface GenerateCollectionRequest {
     /** User's natural language description of what they want */

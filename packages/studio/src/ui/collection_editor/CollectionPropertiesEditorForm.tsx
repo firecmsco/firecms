@@ -2,17 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { Field, getIn, useFormex } from "@rebasepro/formex";
 import {
-    EntityCollection,
-    ErrorBoundary,
-    isPropertyBuilder,
-    MapProperty,
-    Properties,
-    Property,
-    PropertyConfig,
     useLargeLayout,
-    User,
     useSnackbarController
 } from "@rebasepro/core";
+import { ErrorBoundary } from "@rebasepro/ui";
+import { EntityCollection, MapProperty, Properties, Property, PropertyConfig, User } from "@rebasepro/types";
+import { isPropertyBuilder } from "@rebasepro/common";
 import {
     AddIcon,
     Button,

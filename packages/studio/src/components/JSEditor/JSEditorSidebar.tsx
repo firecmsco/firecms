@@ -93,7 +93,7 @@ export const JSEditorSidebar = ({
 
     return (
         <div className={cls("flex flex-col h-full w-full bg-white dark:bg-surface-950 border-r", defaultBorderMixin)}>
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} variant="boxy" className="border-b border-surface-200 dark:border-surface-800">
+            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "collections" | "snippets" | "history" | "reference")} variant="boxy" className="border-b border-surface-200 dark:border-surface-800">
                 <Tab value="collections">
                     <Tooltip title="Browse collections">
                         <span className="text-xs">Collections</span>

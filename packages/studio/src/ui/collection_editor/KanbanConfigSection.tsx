@@ -1,14 +1,12 @@
 import React, { useMemo, useRef, useState } from "react";
 import {
-    EntityCollection,
     FieldCaption,
-    getFieldConfig,
-    Property,
-    PropertyConfigBadge,
-    unslugify,
     useAuthController,
     useCustomizationController
 } from "@rebasepro/core";
+import { EntityCollection, Property } from "@rebasepro/types";
+import { unslugify } from "@rebasepro/common";
+import { PropertyConfigBadge, getFieldConfig } from "@rebasepro/cms";
 import {
     CloseIcon,
     IconButton,

@@ -30,7 +30,7 @@
       "@rebasepro/types": [
         "../types/src"
       ],
-      "@rebasepro/types/cms": [
+      "@rebasepro/cms": [
         "../types/src/cms"
       ],
       "@rebasepro/common": [

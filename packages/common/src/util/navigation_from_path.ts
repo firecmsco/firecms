@@ -1,5 +1,5 @@
 import { EntityCollection } from "@rebasepro/types";
-import type { EntityCustomView } from "@rebasepro/types/cms";
+type EntityCustomView<M extends Record<string, any> = any> = { key: string; [key: string]: any };
 import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
 import { getSubcollections } from "./resolutions";
 
@@ -82,11 +82,11 @@ export function getNavigationEntriesFromPath(props: {
                     if (!collection) {
                         throw Error("collection not found resolving path: " + collection);
                     }
-                    const entityViews = (collection as any).entityViews;
+                    const entityViews = collection.entityViews;
                     const customView = entityViews && entityViews
-                        .map((entry: any) => resolveEntityView(entry, props.contextEntityViews))
-                        .filter(Boolean)
-                        .find((entry: any) => entry!.key === newPath);
+                        .map((entry) => resolveEntityView(entry, props.contextEntityViews))
+                        .filter((v): v is EntityCustomView => v != null)
+                        .find((entry) => entry.key === newPath);
                     const subcollections = getSubcollections(collection);
                     if (customView) {
                         result.push({

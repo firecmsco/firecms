@@ -1,12 +1,11 @@
 import { convertDataToEntity, ImportConfig } from "@rebasepro/data_import";
 import {
-    CircularProgressCenter,
-    EntityCollectionTable,
-    Properties,
     useAuthController,
-    useCollectionRegistryController,
-    useSelectionController
+    useCollectionRegistryController
 } from "@rebasepro/core";
+import { EntityCollectionTable, useSelectionController } from "@rebasepro/cms";
+import { CircularProgressCenter } from "@rebasepro/ui";
+import { Properties } from "@rebasepro/types";
 import { useEffect, useState } from "react";
 import { Typography } from "@rebasepro/ui";
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Role, User } from "@rebasepro/core";
+import { Role, User } from "@rebasepro/types";
 
 /**
  * UserManagement interface - compatible with @rebasepro/user_management

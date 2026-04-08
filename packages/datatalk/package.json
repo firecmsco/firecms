@@ -31,6 +31,7 @@
     },
     "dependencies": {
         "@monaco-editor/react": "^4.7.0",
+        "@rebasepro/cms": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/data_export": "0.0.1",
         "@rebasepro/data_import": "0.0.1",

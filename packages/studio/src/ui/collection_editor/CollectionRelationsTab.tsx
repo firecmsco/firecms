@@ -67,7 +67,7 @@ export function CollectionRelationsTab() {
                     <Typography variant="h5">Relations</Typography>
                     <Button variant="filled" color="neutral" onClick={() => {
                         setEditingRelationIndex(-1);
-                        setEditingRelationState({ relationName: "", target: "" as any, cardinality: "many", direction: "owning" });
+                        setEditingRelationState({ relationName: "", target: "" as unknown as Relation['target'], cardinality: "many", direction: "owning" });
                     }}>
                         ADD RELATION
                     </Button>
@@ -113,7 +113,7 @@ export function CollectionRelationsTab() {
                         <Typography variant="body2" className="mb-4">No relations defined for this collection.</Typography>
                         <Button variant="text" onClick={() => {
                             setEditingRelationIndex(-1);
-                            setEditingRelationState({ relationName: "", target: "" as any, cardinality: "many", direction: "owning" });
+                            setEditingRelationState({ relationName: "", target: "" as unknown as Relation['target'], cardinality: "many", direction: "owning" });
                         }}>Create your first relation</Button>
                     </div>
                 )}
@@ -141,8 +141,8 @@ export function CollectionRelationsTab() {
                                             setEditingRelationState(prev => {
                                                 if (!prev) return null;
                                                 const targetFn = () => collections?.find(c => c.slug === val) || { slug: val };
-                                                (targetFn as any).slug = val;
-                                                return { ...prev, target: targetFn as any };
+                                                (targetFn as { slug?: string }).slug = val;
+                                                return { ...prev, target: targetFn as unknown as Relation['target'] };
                                             });
                                         }}
                                     >
@@ -154,7 +154,7 @@ export function CollectionRelationsTab() {
                                         fullWidth
                                         label="Cardinality" 
                                         value={editingRelationState.cardinality || "many"} 
-                                        onValueChange={(val) => setEditingRelationState(prev => prev ? { ...prev, cardinality: val as any } : null)}
+                                        onValueChange={(val) => setEditingRelationState(prev => prev ? { ...prev, cardinality: val as Relation['cardinality'] } : null)}
                                     >
                                         <SelectItem value="many">Many</SelectItem>
                                         <SelectItem value="one">One</SelectItem>
@@ -163,7 +163,7 @@ export function CollectionRelationsTab() {
                                         fullWidth
                                         label="Direction" 
                                         value={editingRelationState.direction || "owning"} 
-                                        onValueChange={(val) => setEditingRelationState(prev => prev ? { ...prev, direction: val as any } : null)}
+                                        onValueChange={(val) => setEditingRelationState(prev => prev ? { ...prev, direction: val as Relation['direction'] } : null)}
                                     >
                                         <SelectItem value="owning">Owning</SelectItem>
                                         <SelectItem value="inverse">Inverse</SelectItem>

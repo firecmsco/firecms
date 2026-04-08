@@ -1,12 +1,11 @@
-import type { EntitySidePanelProps, SideDialogPanelProps } from "@rebasepro/types/cms";
+import type { SideDialogPanelProps } from "../hooks/useSideDialogsController";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks";
 ;
 import { Sheet } from "@rebasepro/ui";
 import { useUnsavedChangesDialog } from "../hooks";
-import { ErrorBoundary } from "../components";
+import { ErrorBoundary } from "@rebasepro/ui";
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
-import { EntitySidePanel } from "./EntitySidePanel";
 
 export type SideDialogController = {
     blocked: boolean,
@@ -170,8 +169,7 @@ function SideDialogView({
                         }}
                     >
                         <ErrorBoundary>
-                            {/* Lazy render EntitySidePanel from props for better performance */}
-                            {panel.component ?? (panel.additional ? <EntitySidePanel {...(panel.additional as EntitySidePanelProps)} /> : null)}
+                            {panel.component}
                         </ErrorBoundary>
                     </div>}
 

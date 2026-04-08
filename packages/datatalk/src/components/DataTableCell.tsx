@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import useMeasure from "react-use-measure";
 
-import { cls, RemoveCircleIcon, Tooltip } from "@rebasepro/ui";
-import { ErrorBoundary } from "@rebasepro/core";
+import { cls, ErrorBoundary, RemoveCircleIcon, Tooltip } from "@rebasepro/ui";
 
 interface DataTableCellProps {
     children: React.ReactNode;

@@ -1,4 +1,4 @@
-import type { EntityCollection } from "@rebasepro/types/cms";
+import type { EntityCollection } from "@rebasepro/types";
 import React, { createContext } from "react";
 import { CollectionRegistryController, EntityReference } from "@rebasepro/types";
 

@@ -1,4 +1,4 @@
-import type { NavigationEntry } from "@rebasepro/types/cms";
+import type { NavigationEntry } from "@rebasepro/types";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     Active,

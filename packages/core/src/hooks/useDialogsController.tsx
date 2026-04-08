@@ -1,4 +1,4 @@
-import type { DialogsController } from "@rebasepro/types/cms";
+import type { DialogsController } from "@rebasepro/types";
 import { useContext } from "react";
 import { DialogsControllerContext } from "../contexts/DialogsProvider";
 ;

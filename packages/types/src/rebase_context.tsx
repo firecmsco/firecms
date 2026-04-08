@@ -5,17 +5,11 @@ import {
     UserConfigurationPersistence,
     DatabaseAdmin
 } from "./controllers";
-import {
-    CustomizationController,
-    DialogsController,
-    SideDialogsController,
-    SideEntityController,
-    SnackbarController
-} from "./cms/controllers";
+
 import { RebaseData } from "./controllers/data";
 import { User } from "./users";
 import { UserManagementDelegate } from "./types/user_management_delegate";
-import { EffectiveRoleController } from "./cms/rebase";
+
 
 /**
  * Context that is provided to entity callbacks (hooks).
@@ -50,23 +44,7 @@ export type RebaseCallContext<USER extends User = User> = {
  */
 export type RebaseContext<USER extends User = User, AuthControllerType extends AuthController<USER> = AuthController<USER>> = RebaseCallContext<USER> & {
 
-    /**
-     * Controller to open the side dialog displaying entity forms
-     * @see useSideEntityController
-     */
-    sideEntityController?: SideEntityController;
-
-    /**
-     * Controller used to open side dialogs
-     * This is the controller used internally by side entity dialogs
-     * or reference dialogs.
-     */
-    sideDialogsController?: SideDialogsController;
-
-    /**
-     * Controller in charge of URL/navigation
-     */
-    cmsUrlController?: import("./cms/controllers/navigation").CMSUrlController;
+    authController: AuthControllerType;
 
     /**
      * Controller mapping strings to collections
@@ -74,29 +52,39 @@ export type RebaseContext<USER extends User = User, AuthControllerType extends A
     collectionRegistryController?: import("./controllers/collection_registry").CollectionRegistryController;
 
     /**
-     * Controller tracking navigation tree state
+     * Controller for navigation state
      */
-    navigationStateController?: import("./cms/controllers/navigation").NavigationStateController;
+    navigationStateController?: import("./controllers/navigation").NavigationStateController;
 
     /**
-     * Controller used to open regular dialogs
+     * Controller for side dialogs (side sheets)
      */
-    dialogsController?: DialogsController;
+    sideDialogsController?: import("./controllers/side_dialogs_controller").SideDialogsController;
 
     /**
-     * Used auth controller
+     * Controller to open the side dialog displaying entity forms
      */
-    authController?: AuthControllerType;
+    sideEntityController?: import("./controllers/side_entity_controller").SideEntityController;
 
     /**
-     * This controller holds the customization options for the CMS.
+     * Controller resolving URLs in the CMS
      */
-    customizationController?: CustomizationController;
+    cmsUrlController?: import("./controllers/navigation").CMSUrlController;
 
     /**
-     * Use this controller to display snackbars
+     * Controller to handle simple confirmation and alert dialogs
      */
-    snackbarController?: SnackbarController;
+    dialogsController?: import("./controllers/dialogs_controller").DialogsController;
+
+    /**
+     * Controller for CMS customization
+     */
+    customizationController?: import("./controllers/customization_controller").CustomizationController;
+
+    /**
+     * Controller for effective role
+     */
+    effectiveRoleController?: { effectiveRole: string | null, setEffectiveRole: (role: string | null) => void };
 
     /**
      * Use this controller to access data stored in the browser for the user
@@ -125,14 +113,14 @@ export type RebaseContext<USER extends User = User, AuthControllerType extends A
     userManagement?: UserManagementDelegate<USER>;
 
     /**
-     * Controller to simulate different roles when dev mode is active.
-     */
-    effectiveRoleController?: EffectiveRoleController;
-
-    /**
      * Administrative database operations (SQL, schema discovery).
      * Only available in developer/admin contexts.
      */
     databaseAdmin?: DatabaseAdmin;
+
+    /**
+     * Controller for snackbars
+     */
+    snackbarController?: import("./controllers/snackbar").SnackbarController;
 
 };

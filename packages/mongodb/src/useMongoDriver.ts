@@ -1,22 +1,7 @@
 import { useCallback } from "react";
 
 import { App, BSON } from "realm-web";
-import {
-    DataDriver,
-    DeleteEntityProps,
-    Entity,
-    EntityCollection,
-    EntityReference,
-    EntityValues,
-    FetchCollectionProps,
-    FetchEntityProps,
-    FilterValues,
-    ListenCollectionProps,
-    ListenEntityProps,
-    PropertyConfig,
-    SaveEntityProps,
-    WhereFilterOp
-} from "@rebasepro/core";
+import { DataDriver, DeleteEntityProps, Entity, EntityCollection, EntityReference, EntityValues, FetchCollectionProps, FetchEntityProps, FilterValues, ListenCollectionProps, ListenEntityProps, PropertyConfig, SaveEntityProps, WhereFilterOp } from "@rebasepro/types";
 import { addValueAtIndex, getEntityIndex, removeValueAtIndex, replaceValueAtIndex, updateValueAtIndex } from "./utils";
 
 type ChangeEvent = any;

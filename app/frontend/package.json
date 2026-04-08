@@ -10,6 +10,7 @@
         "@fontsource/noto-serif": "^5.2.6",
         "@rebasepro/auth": "0.0.1",
         "@rebasepro/client": "workspace:*",
+        "@rebasepro/cms": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/data_enhancement": "0.0.1",
         "@rebasepro/data_export": "0.0.1",

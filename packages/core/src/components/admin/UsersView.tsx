@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { User, useSnackbarController, useAuthController, useTranslation } from "../../index";
+import { User } from "@rebasepro/types";
+import { useSnackbarController, useAuthController, useTranslation } from "../../index";
 import {
     AddIcon,
     Button,

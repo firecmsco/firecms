@@ -8,6 +8,7 @@
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "dependencies": {
+        "@rebasepro/cms": "0.0.1",
         "@rebasepro/common": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/formex": "0.0.1",

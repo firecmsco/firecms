@@ -26,7 +26,10 @@ import {
     DownloadIcon,
     PlayArrowIcon,
     MoreVertIcon,
-    EditIcon
+    EditIcon,
+    VirtualTable,
+    VirtualTableColumn,
+    CellRendererParams,
 } from "@rebasepro/ui";
 import {
     useRebaseContext,
@@ -36,8 +39,6 @@ import {
     useApiConfig,
     useTranslation,
     useModeController,
-    VirtualTable,
-    VirtualTableColumn,
     ErrorView,
     IconForView,
     UserSelectPopover,
@@ -496,7 +497,7 @@ export function JSEditor() {
     // ─── Table columns for array data ────────────────────────────
 
     const tableData = useMemo(() => {
-        if (!result?.value) return { columns: [] as VirtualTableColumn[], data: [] as any[] };
+        if (!result?.value) return { columns: [] as VirtualTableColumn[], data: [] as Record<string, unknown>[] };
 
         let rows: any[] = [];
         if (result.value?.data && Array.isArray(result.value.data)) {
@@ -509,7 +510,7 @@ export function JSEditor() {
             rows = result.value;
         }
 
-        if (rows.length === 0) return { columns: [] as VirtualTableColumn[], data: [] as any[] };
+        if (rows.length === 0) return { columns: [] as VirtualTableColumn[], data: [] as Record<string, unknown>[] };
 
         const keys = new Set<string>();
         rows.slice(0, 20).forEach(row => {
@@ -720,7 +721,7 @@ export function JSEditor() {
                                                     <>
                                                         <div className="flex-grow" />
 
-                                                        <Tabs value={resultView} onValueChange={(val) => setResultView(val as any)} variant="pill" className="w-[unset] mr-2">
+                                                        <Tabs value={resultView} onValueChange={(val) => setResultView(val as "json" | "table" | "console")} variant="pill" className="w-[unset] mr-2">
                                                             <Tab value="json">JSON</Tab>
                                                             {tableData.data.length > 0 && <Tab value="table">Table</Tab>}
                                                             {result.console.length > 0 && <Tab value="console">Console ({result.console.length})</Tab>}
@@ -806,7 +807,7 @@ export function JSEditor() {
                                                                 }
                                                                 rowHeight={32}
                                                                 headerHeight={32}
-                                                                cellRenderer={({ rowData, column, rowIndex }) => {
+                                                                cellRenderer={({ rowData, column, rowIndex }: CellRendererParams<Record<string, unknown>>) => {
                                                                     // Entity action column
                                                                     if (column.key === "__entity_action__") {
                                                                         const rowActions = getRowEntityActions(rowData);

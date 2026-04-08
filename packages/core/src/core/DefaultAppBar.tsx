@@ -1,7 +1,8 @@
 import React from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-import { ErrorBoundary, RebaseLogo } from "../components";
+import { RebaseLogo } from "../components";
+import { ErrorBoundary } from "@rebasepro/ui";
 import { LanguageToggle } from "../components/LanguageToggle";
 import {
     Avatar,

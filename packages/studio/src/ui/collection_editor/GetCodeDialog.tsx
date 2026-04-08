@@ -1,4 +1,6 @@
-import { EntityCollection, isEmptyObject, useSnackbarController } from "@rebasepro/core";
+import { useSnackbarController } from "@rebasepro/core";
+import { EntityCollection } from "@rebasepro/types";
+import { isEmptyObject } from "@rebasepro/common";
 import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@rebasepro/ui";
 import React from "react";
 import JSON5 from "json5";

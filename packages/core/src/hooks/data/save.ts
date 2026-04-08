@@ -1,4 +1,4 @@
-import type { EntityCollection } from "@rebasepro/types/cms";
+import type { EntityCollection } from "@rebasepro/types";
 import { DataDriver, Entity, EntityValues, RebaseContext, SaveEntityProps } from "@rebasepro/types";
 import { RebaseData } from "@rebasepro/types";
 

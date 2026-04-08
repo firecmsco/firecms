@@ -2,19 +2,10 @@ import React, { useDeferredValue, useEffect, useRef, useState } from "react";
 import { deepEqual as equal } from "fast-equals"
 
 import { Formex, FormexController, getIn, useCreateFormex } from "@rebasepro/formex";
-import {
-    ConfirmationDialog,
-    DEFAULT_FIELD_CONFIGS,
-    getFieldConfig,
-    getFieldId,
-    isPropertyBuilder,
-    isValidRegExp,
-    mergeDeep,
-    Property,
-    PropertyConfig,
-    PropertyConfigBadge,
-    PropertyConfigId,
-} from "@rebasepro/core";
+import { ConfirmationDialog } from "@rebasepro/core";
+import { DEFAULT_FIELD_CONFIGS, getFieldConfig, getFieldId, PropertyConfigBadge } from "@rebasepro/cms";
+import { Property, PropertyConfig, PropertyConfigId } from "@rebasepro/types";
+import { isPropertyBuilder, isValidRegExp, mergeDeep } from "@rebasepro/common";
 import {
     Button,
     Card,

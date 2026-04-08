@@ -2,7 +2,8 @@ import { Field, getIn, useFormex } from "@rebasepro/formex";
 import { DebouncedTextField } from "@rebasepro/ui";
 import { PropertyWithId } from "../PropertyEditView";
 import React from "react";
-import { FieldCaption, prettifyIdentifier, toSnakeCase } from "@rebasepro/core";
+import { FieldCaption } from "@rebasepro/core";
+import { prettifyIdentifier, toSnakeCase } from "@rebasepro/common";
 
 type CommonPropertyFieldsProps = {
     showErrors: boolean,

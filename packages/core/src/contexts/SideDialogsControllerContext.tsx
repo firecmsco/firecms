@@ -1,4 +1,4 @@
-import type { SideDialogsController } from "@rebasepro/types/cms";
+import type { SideDialogsController } from "@rebasepro/types";
 import React from "react";
 ;
 

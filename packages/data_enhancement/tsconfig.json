@@ -39,6 +39,15 @@
       ],
       "@rebasepro/ui": [
         "../ui/src"
+      ],
+      "@rebasepro/cms": [
+        "../cms/src"
+      ],
+      "@rebasepro/common": [
+        "../common/src"
+      ],
+      "@rebasepro/formex": [
+        "../formex/src"
       ]
     }
   },

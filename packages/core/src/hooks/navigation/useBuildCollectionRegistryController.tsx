@@ -1,4 +1,4 @@
-import type { EntityCollection } from "@rebasepro/types/cms";
+import type { EntityCollection } from "@rebasepro/types";
 import { useCallback, useRef, useState } from "react";
 import { CollectionRegistry, getParentReferencesFromPath as commonGetParentReferencesFromPath, removeInitialAndTrailingSlashes, mergeDeep, getSubcollections } from "@rebasepro/common";
 import { EntityReference, UserConfigurationPersistence, CollectionRegistryController } from "@rebasepro/types";

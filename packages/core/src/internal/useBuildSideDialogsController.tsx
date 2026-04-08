@@ -1,4 +1,4 @@
-import type { SideDialogPanelProps, SideDialogsController } from "@rebasepro/types/cms";
+import type { SideDialogPanelProps, SideDialogsController } from "../hooks/useSideDialogsController";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 ;

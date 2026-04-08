@@ -1,6 +1,6 @@
 import { ApplicationVerifier, ConfirmationResult, User as FirebaseUser } from "@firebase/auth";
 
-import { AuthController, Role, User } from "@rebasepro/core";
+import { AuthController, Role, User } from "@rebasepro/types";
 
 /**
  * @group Firebase

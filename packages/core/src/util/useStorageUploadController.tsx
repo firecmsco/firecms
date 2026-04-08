@@ -1,11 +1,12 @@
-import type { ArrayProperty, Property, StringProperty } from "@rebasepro/types/cms";
+import type { ArrayProperty, Property, StringProperty } from "@rebasepro/types";
 import Compressor from "compressorjs";
 import { deepEqual as equal } from "fast-equals";
 
-import { EntityValues, ImageResize, PreviewSize, StorageConfig, StorageSource } from "@rebasepro/types";
-import { useCallback, useEffect, useState } from "react";
+import { EntityValues, ImageResize, StorageConfig, StorageSource } from "@rebasepro/types";import { useCallback, useEffect, useState } from "react";
 import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@rebasepro/common";
 import { useAuthController } from "../hooks";
+
+export type StorageFieldSize = "smallest" | "small" | "medium" | "large" | number;
 
 /**
  * Internal representation of an item in the storage
@@ -19,7 +20,7 @@ export interface StorageFieldItem {
     file?: File;
     fileName?: string;
     metadata?: any,
-    size: PreviewSize
+    size: StorageFieldSize
 }
 
 export function useStorageUploadController<M extends object>({
@@ -242,7 +243,7 @@ export function useStorageUploadController<M extends object>({
 function getInternalInitialValue(multipleFilesSupported: boolean,
     value: string | string[] | null,
     metadata: Record<string, any> | undefined,
-    size: PreviewSize): StorageFieldItem[] {
+    size: StorageFieldSize): StorageFieldItem[] {
     let strings: string[] = [];
     if (multipleFilesSupported) {
         if (Array.isArray(value) && value.every((v) => typeof v === "string")) {

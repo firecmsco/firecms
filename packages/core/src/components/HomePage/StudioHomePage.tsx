@@ -1,4 +1,4 @@
-import type { CMSView, HomePageSection, NavigationEntry, PluginGenericProps } from "@rebasepro/types/cms";
+import type { CMSView, HomePageSection, NavigationEntry, PluginGenericProps } from "@rebasepro/types";
 import React, { useEffect, useMemo } from "react";
 import { Container, Typography } from "@rebasepro/ui";
 import {

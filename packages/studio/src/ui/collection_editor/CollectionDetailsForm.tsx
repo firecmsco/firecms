@@ -1,5 +1,13 @@
 import React, { useMemo, useState } from "react";
-import { EntityCollection, FieldCaption, getFieldConfig, IconForView, Property, PropertyConfigBadge, SearchIconsView, singular, toSnakeCase, unslugify, useAuthController, useCustomizationController } from "@rebasepro/core";
+import {
+    FieldCaption,
+    IconForView,
+    useAuthController,
+    useCustomizationController
+} from "@rebasepro/core";
+import { getFieldConfig, PropertyConfigBadge, SearchIconsView } from "@rebasepro/cms";
+import { EntityCollection, Property } from "@rebasepro/types";
+import { singular, toSnakeCase, unslugify } from "@rebasepro/common";
 import {
     BooleanSwitchWithLabel,
     Chip,

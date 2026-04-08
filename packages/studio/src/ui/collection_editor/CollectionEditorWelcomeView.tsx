@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { AIIcon, EntityCollection, prettifyIdentifier, } from "@rebasepro/core";
+import { AIIcon } from "@rebasepro/core";
+import { EntityCollection } from "@rebasepro/types";
+import { prettifyIdentifier } from "@rebasepro/common";
 import { Button, Card, Chip, cls, CodeIcon, Container, Icon, Tooltip, Typography, } from "@rebasepro/ui";
 import { CollectionJsonImportDialog } from "./CollectionJsonImportDialog";
 

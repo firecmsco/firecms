@@ -15,16 +15,7 @@ import {
     startAt
 } from "@firebase/database";
 import { useCallback } from "react";
-import {
-    DataDriver,
-    DeleteEntityProps,
-    Entity,
-    FetchCollectionProps,
-    FetchEntityProps,
-    ListenCollectionProps,
-    ListenEntityProps,
-    SaveEntityProps
-} from "@rebasepro/core";
+import { DataDriver, DeleteEntityProps, Entity, FetchCollectionProps, FetchEntityProps, ListenCollectionProps, ListenEntityProps, SaveEntityProps } from "@rebasepro/types";
 
 export function useFirebaseRTDBDelegate({ firebaseApp }: { firebaseApp?: FirebaseApp }): DataDriver {
 

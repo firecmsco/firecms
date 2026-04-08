@@ -1,4 +1,4 @@
-import type { NavigationEntry, NavigationResult } from "@rebasepro/types/cms";
+import type { NavigationEntry, NavigationResult } from "@rebasepro/types";
 import React from "react";
 
 import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController, useAdminModeController, useEffectiveRoleController, useTranslation, useSlot, useRebaseContext } from "../hooks";

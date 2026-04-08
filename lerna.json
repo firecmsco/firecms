@@ -12,6 +12,7 @@
     "packages/auth",
     "packages/cli",
     "packages/studio",
+    "packages/cms",
     "packages/postgresql",
     "packages/mongodb",
     "packages/firebase",

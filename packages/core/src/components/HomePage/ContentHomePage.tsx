@@ -1,4 +1,4 @@
-import type { HomePageSection, NavigationEntry, NavigationGroupMapping, PluginGenericProps } from "@rebasepro/types/cms";
+import type { HomePageSection, NavigationEntry, NavigationGroupMapping, PluginGenericProps } from "@rebasepro/types";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Fuse from "fuse.js";
 import { Container, SearchBar } from "@rebasepro/ui";
@@ -13,7 +13,7 @@ import {
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
 import { CMSAnalyticsEvent } from "@rebasepro/types";
 import { FavouritesView } from "./FavouritesView";
-import { ErrorBoundary } from "../ErrorBoundary";
+import { ErrorBoundary } from "@rebasepro/ui";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
 import { NavigationGroup } from "./NavigationGroup";
 import {

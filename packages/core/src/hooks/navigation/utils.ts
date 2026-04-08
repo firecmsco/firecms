@@ -1,4 +1,4 @@
-import type { CMSView, EntityCollection, RebasePlugin, NavigationGroupMapping } from "@rebasepro/types/cms";
+import type { CMSView, EntityCollection, RebasePlugin, NavigationGroupMapping } from "@rebasepro/types";
 ;
 import { getSubcollections } from "@rebasepro/common";
 import { deepEqual as equal } from "fast-equals";

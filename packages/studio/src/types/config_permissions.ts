@@ -1,4 +1,4 @@
-import { EntityCollection } from "@rebasepro/core";
+import { EntityCollection } from "@rebasepro/types";
 
 export type CollectionEditorPermissionsBuilder<USER = any, EC extends EntityCollection = EntityCollection> = (params: { user: USER | null, collection?: EC }) => CollectionEditorPermissions;
 

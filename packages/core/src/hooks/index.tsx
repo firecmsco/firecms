@@ -26,7 +26,6 @@ export * from "./useAdminModeController";
 export * from "./useBuildAdminModeController";
 export * from "./useEffectiveRoleController";
 export * from "./useBuildEffectiveRoleController";
-export * from "./useSideEntityController";
 export * from "./useRebaseContext";
 export * from "./useSnackbarController";
 export * from "./useModeController";
@@ -36,10 +35,9 @@ export * from "./useCollapsedGroups";
 
 export * from "./useInternalUserManagementController";
 
-export * from "./useEntitySelectionDialog";
 export * from "./useBrowserTitleAndIcon";
-export * from "./useCustomizationController";
 export * from "./useSlot";
+export * from "./useCustomizationController";
 
 export * from "./useBuildLocalConfigurationPersistence";
 export * from "./useBuildModeController";
@@ -56,3 +54,8 @@ export * from "./useTranslation";
 export * from "./useRebaseClient";
 
 export * from "./useEntityHistory";
+
+export * from "./useSideEntityController";
+export * from "./useAnalyticsController";
+export * from "./useBreadcrumbsController";
+export * from "./useUserConfigurationPersistence";

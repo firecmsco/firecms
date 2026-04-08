@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import {
-    EntityCollection,
     FieldCaption,
     IconForView,
-    SearchIconsView,
-    singular,
-    toSnakeCase,
     useAuthController,
     useCustomizationController
 } from "@rebasepro/core";
+import { SearchIconsView } from "@rebasepro/cms";
+import { EntityCollection } from "@rebasepro/types";
+import { singular, toSnakeCase } from "@rebasepro/common";
 import {
     BooleanSwitchWithLabel,
     Chip,

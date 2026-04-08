@@ -3,12 +3,10 @@ import { GoogleAuthProvider } from "@firebase/auth";
 
 import {
     AppBar,
-    CircularProgressCenter,
     Drawer,
     Rebase,
-    RebaseRoute,
+    RebaseRoutes,
     ModeControllerProvider,
-    PropertyConfig,
     Scaffold,
     SideDialogs,
     SnackbarProvider,
@@ -22,6 +20,8 @@ import {
     useBuildNavigationStateController,
     useValidateAuthenticator
 } from "@rebasepro/core";
+import { PropertyConfig } from "@rebasepro/types";
+import { CenteredView, CircularProgressCenter } from "@rebasepro/ui";
 import { buildRebaseData } from "@rebasepro/common";
 import { Route, Routes, Outlet } from "react-router-dom";
 
@@ -34,7 +34,7 @@ import {
     useFirestoreDriver,
     useInitialiseFirebase,
 } from "../hooks";
-import { CenteredView } from "@rebasepro/ui";
+
 import { FirebaseAuthController } from "../types";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
@@ -250,7 +250,7 @@ export function RebaseFirebaseApp({
                                                 </Scaffold>
                                             }>
                                                 {components?.HomePage && <Route path="/" element={<components.HomePage />} />}
-                                                <Route path="/c/*" element={<RebaseRoute />} />
+                                                <Route path="/c/*" element={<RebaseRoutes />} />
                                             </Route>
                                         </Routes>
                                     );

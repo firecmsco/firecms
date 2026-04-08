@@ -1,12 +1,12 @@
-import type { CustomizationController, RebasePlugin, RebaseProps, SlotContribution } from "@rebasepro/types/cms";
+import type { RebaseProps } from "./RebaseProps";
+import type { CustomizationController, RebasePlugin, SlotContribution } from "@rebasepro/types";
 "use client";
 
 import React, { useMemo } from "react";
 import { CenteredView, Typography } from "@rebasepro/ui";
-import { RebaseContext, User, UserManagementDelegate } from "@rebasepro/types";
+import { RebaseContext, User, UserManagementDelegate, CollectionRegistryController } from "@rebasepro/types";
 import { PluginProviderStack } from "./PluginProviderStack";
 import { AuthControllerContext } from "../contexts";
-import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
 import { useCustomizationController, useRebaseContext, useAuthSubscription } from "../hooks";
 import { ApiConfigProvider, useApiConfig } from "../hooks/ApiConfigContext";
 import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
@@ -16,11 +16,10 @@ import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurati
 import { RebaseDataContext } from "../contexts/RebaseDataContext";
 import { DatabaseAdminContext } from "../contexts/DatabaseAdminContext";
 import { RebaseClientInstanceContext } from "../contexts/RebaseClientInstanceContext";
-import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
 import { CollectionRegistryContext, NavigationStateContext, CMSUrlContext } from "../hooks/navigation/contexts";
 import { DialogsProvider } from "../contexts/DialogsProvider";
-import { buildRebaseData } from "@rebasepro/common";
+import { buildRebaseData, CollectionRegistry } from "@rebasepro/common";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
 import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
@@ -73,7 +72,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
 
     // Validate plugin key uniqueness
     if (plugins) {
-        const keys = plugins.map(p => p.key);
+        const keys = plugins.map((p) => p.key);
         if (new Set(keys).size !== keys.length) {
             console.error("Duplicate plugin keys detected:", keys.filter((k, i) => keys.indexOf(k) !== i));
         }
@@ -82,10 +81,10 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     // Merge direct slots with plugin slots
     const resolvedSlots: SlotContribution[] = useMemo(() => [
         ...directSlots,
-        ...((plugins ?? []).flatMap(p => p.slots ?? [])),
+        ...((plugins ?? []).flatMap((p) => p.slots ?? [])),
     ], [directSlots, plugins]);
 
-    const userManagement = plugins?.find((p: RebasePlugin) => p.userManagement)?.userManagement
+    const userManagement = plugins?.find((p) => p.userManagement)?.userManagement
         ?? _userManagement
         ?? {
             loading: false,
@@ -113,9 +112,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     // Database fallback logic
     const resolvedDatabaseAdmin = databaseAdmin ?? (client?.ws as unknown as typeof databaseAdmin);
 
-    const sideEntityController = useBuildSideEntityController(collectionRegistryController, cmsUrlController, navigationStateController, sideDialogsController, authController);
-
-    const pluginsLoading = plugins?.some((p: RebasePlugin) => p.loading) ?? false;
+    const pluginsLoading = plugins?.some((p) => p.loading) ?? false;
 
     const loading = authController.initialLoading || navigationStateController.loading || pluginsLoading;
 
@@ -172,10 +169,8 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                                 value={resolvedDatabaseAdmin}>
                                 <AuthControllerContext.Provider
                                     value={authController}>
-                                        <SideDialogsControllerContext.Provider
-                                            value={sideDialogsController}>
-                                            <SideEntityControllerContext.Provider
-                                                value={sideEntityController}>
+                                            <SideDialogsControllerContext.Provider
+                                                value={sideDialogsController}>
                                                 <CollectionRegistryContext.Provider value={collectionRegistryController}>
                                                     <NavigationStateContext.Provider value={navigationStateController}>
                                                         <CMSUrlContext.Provider value={cmsUrlController}>
@@ -194,8 +189,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                                                         </CMSUrlContext.Provider>
                                                     </NavigationStateContext.Provider>
                                                 </CollectionRegistryContext.Provider>
-                                            </SideEntityControllerContext.Provider>
-                                        </SideDialogsControllerContext.Provider>
+                                            </SideDialogsControllerContext.Provider>
                                 </AuthControllerContext.Provider>
                             </DatabaseAdminContext.Provider>
                         </RebaseDataContext.Provider>
@@ -279,10 +273,11 @@ function CollectionsMetadataSyncer() {
 
                     let changed = false;
                     // Get raw un-normalized collections as well to update both maps if necessary
-                    const refreshCollections = (registryController as any)?.collectionRegistryRef?.current?.getCollections() ?? [];
+                    const registryWithRef = registryController as CollectionRegistryController & { collectionRegistryRef?: React.MutableRefObject<CollectionRegistry> };
+                    const refreshCollections = registryWithRef?.collectionRegistryRef?.current?.getCollections() ?? [];
                     
                     for (const c of refreshCollections) {
-                        const meta = data.find((m: any) => m.slug === c.slug || m.dbPath === c.dbPath);
+                        const meta = data.find((m: { slug?: string; dbPath?: string; isTableMissing?: boolean }) => m.slug === c.slug || m.dbPath === c.dbPath);
                          if (meta && c.isTableMissing !== meta.isTableMissing) {
                              c.isTableMissing = meta.isTableMissing;
                              changed = true;

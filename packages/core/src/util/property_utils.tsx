@@ -1,11 +1,10 @@
-import type { Properties } from "@rebasepro/types/cms";
-import type { EntityCollection, MapProperty, Property, PropertyConfig } from "@rebasepro/types/cms";
+import type { Properties } from "@rebasepro/types";
+import type { EntityCollection, MapProperty, Property, PropertyConfig } from "@rebasepro/types";
 import React from "react";
 
 ;
 import { isPropertyBuilder } from "@rebasepro/common";
 import { CircleIcon, FunctionsIcon } from "@rebasepro/ui";
-import { getFieldConfig } from "../core";
 
 export function isReferenceProperty(property: Property) {
 
@@ -43,13 +42,14 @@ export function getIconForProperty(
     size: "smallest" | "small" | "medium" | "large" | number = "small",
     fields: Record<string, PropertyConfig> = {}
 ): React.ReactNode {
-
     if (isPropertyBuilder(property)) {
         return <FunctionsIcon size={size} />;
-    } else {
-        const widget = getFieldConfig(property, fields);
-        return getIconForWidget(widget, size);
     }
+    
+    // Fallback simple property to icon mapping if we don't have getFieldConfig
+    const configId = property.propertyConfig || undefined;
+    const widget = configId ? fields[configId] : undefined;
+    return getIconForWidget(widget, size);
 }
 
 /**

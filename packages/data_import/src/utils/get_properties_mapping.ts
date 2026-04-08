@@ -1,4 +1,8 @@
-// import { type, getPropertyInPath, Properties, Property } from "@rebasepro/core";
+// import {
+//     type,
+//     getPropertyInPath
+// } from "@rebasepro/core";
+import { Properties, Property } from "@rebasepro/types";
 // import { typeMapping } from "@rebasepro/types";
 //
 // export function getPropertiesMapping(originProperties: Properties,

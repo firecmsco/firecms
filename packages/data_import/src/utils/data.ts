@@ -1,14 +1,6 @@
-import {
-    AuthController,
-    Entity,
-    EntityCollection,
-    EntityReference,
-    getPropertyInPath,
-    isPropertyBuilder,
-    CollectionRegistryController,
-    Properties,
-    Property,
-} from "@rebasepro/core";
+import { getPropertyInPath } from "@rebasepro/core";
+import { AuthController, Entity, EntityCollection, EntityReference, CollectionRegistryController, Properties, Property } from "@rebasepro/types";
+import { isPropertyBuilder } from "@rebasepro/common";
 import { unflattenObject } from "./file_to_json";
 import { getIn } from "@rebasepro/formex";
 import { inferTypeFromValue } from "@rebasepro/schema_inference";
@@ -85,12 +77,12 @@ export function processValueMapping(authController: AuthController, value: any, 
     const from = inferTypeFromValue(value);
     const to = usedProperty.type;
 
-    if (from === "array" && to === "array" && Array.isArray(value) && usedProperty.of && !isPropertyBuilder(usedProperty.of)) {
+    if (from === "array" && to === "array" && Array.isArray(value) && usedProperty.of && !Array.isArray(usedProperty.of) && !isPropertyBuilder(usedProperty.of)) {
         return value.map(v => processValueMapping(authController, v, navigation, usedProperty.of as Property));
     } else if (from === "string" && to === "number" && typeof value === "string") {
         return Number(value);
-    } else if (from === "string" && to === "array" && typeof value === "string" && usedProperty.of && !isPropertyBuilder(usedProperty.of)) {
-        return value.split(",").map((v: string) => processValueMapping(authController, v, navigation, usedProperty.of));
+    } else if (from === "string" && to === "array" && typeof value === "string" && usedProperty.of && !Array.isArray(usedProperty.of) && !isPropertyBuilder(usedProperty.of)) {
+        return value.split(",").map((v: string) => processValueMapping(authController, v, navigation, usedProperty.of as Property));
     } else if (from === "string" && to === "boolean") {
         return value === "true";
     } else if (from === "number" && to === "boolean") {

@@ -1,19 +1,4 @@
-import {
-    DataDriver,
-    DeleteEntityProps,
-    Entity,
-    EntityCollection,
-    EntityReference,
-    FetchCollectionProps,
-    FetchEntityProps,
-    FilterCombination,
-    FilterValues,
-    GeoPoint,
-    ListenCollectionProps,
-    ListenEntityProps,
-    SaveEntityProps,
-    WhereFilterOp
-} from "@rebasepro/core";
+import { DataDriver, DeleteEntityProps, Entity, EntityCollection, EntityReference, FetchCollectionProps, FetchEntityProps, FilterCombination, FilterValues, GeoPoint, ListenCollectionProps, ListenEntityProps, SaveEntityProps, WhereFilterOp } from "@rebasepro/types";
 import {
     collection as collectionClause,
     CollectionReference,

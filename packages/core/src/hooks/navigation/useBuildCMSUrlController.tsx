@@ -1,4 +1,4 @@
-import type { CMSUrlController, NavigateOptions } from "@rebasepro/types/cms";
+import type { CMSUrlController, NavigateOptions } from "@rebasepro/types";
 import { useCallback, useMemo } from "react";
 import { removeInitialAndTrailingSlashes, resolveCollectionPathIds } from "@rebasepro/common";
 import { CollectionRegistryController } from "@rebasepro/types";

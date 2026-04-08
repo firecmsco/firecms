@@ -1,23 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { doc, DocumentReference, getFirestore, QuerySnapshot, setDoc } from "@firebase/firestore";
 import {
-    CollectionSize,
+    OnCellValueChange,
+    useAuthController,
+    useCustomizationController,
+    useCollectionRegistryController
+} from "@rebasepro/core";
+import { CollectionSize, Entity, EntityAction, EntityCollection, Properties } from "@rebasepro/types";
+import {
     copyEntityAction,
     deleteEntityAction,
     editEntityAction,
-    Entity,
-    EntityAction,
-    EntityCollection,
     EntityCollectionRowActions,
     EntityCollectionTable,
     mergeEntityActions,
-    OnCellValueChange,
-    Properties,
-    useAuthController,
-    useCustomizationController,
-    useCollectionRegistryController,
     useSelectionController
-} from "@rebasepro/core";
+} from "@rebasepro/cms";
 import { setIn } from "@rebasepro/formex";
 import { cmsToFirestoreModel, firestoreToCMSModel } from "@rebasepro/firebase";
 import { Typography } from "@rebasepro/ui";
@@ -146,7 +144,7 @@ export function QueryTableResults({
         frozen?: boolean
     }) => {
 
-        const customEntityActions = (resolvedCollection?.entityActions ?? [])
+        const customEntityActions = ((resolvedCollection as EntityCollection & { entityActions?: EntityAction[] })?.entityActions ?? [])
             .map((action: any) => {
                 if (typeof action === "string") {
                     return customizationController.entityActions?.find((entry) => entry.key === action);

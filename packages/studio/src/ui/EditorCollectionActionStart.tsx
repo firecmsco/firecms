@@ -1,6 +1,12 @@
 import { deepEqual as equal } from "fast-equals"
 
-import { CollectionActionsProps, mergeDeep, useAuthController, useSnackbarController, useTranslation } from "@rebasepro/core";
+import {
+    useAuthController,
+    useSnackbarController,
+    useTranslation
+} from "@rebasepro/core";
+import { CollectionActionsProps } from "@rebasepro/types";
+import { mergeDeep } from "@rebasepro/common";
 import { Button, SaveIcon, Tooltip, UndoIcon, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";

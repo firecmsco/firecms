@@ -1,4 +1,4 @@
-import type { EntityCollection, EntityCustomView } from "@rebasepro/types/cms";
+import type { EntityCollection, EntityCustomView } from "@rebasepro/types";
 import { Entity, RebaseContext, User } from "@rebasepro/types";
 import { useEffect, useState } from "react";
 import { useRebaseContext } from "./useRebaseContext";

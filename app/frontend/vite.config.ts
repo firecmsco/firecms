@@ -54,6 +54,8 @@ export default defineConfig({
             "@rebasepro/collection_editor": path.resolve(__dirname, "../../packages/collection_editor/src"),
             "@rebasepro/user_management": path.resolve(__dirname, "../../packages/user_management/src"),
             "@rebasepro/auth": path.resolve(__dirname, "../../packages/auth/src"),
+            "@rebasepro/cms": path.resolve(__dirname, "../../packages/cms/src"),
+            "@rebasepro/studio": path.resolve(__dirname, "../../packages/studio/src"),
             "shared": path.resolve(__dirname, "../shared")
         }
     }

@@ -634,7 +634,7 @@ export class EntityFetchService {
                 const entitiesMissingRelation = entitiesWithValues.filter(item => {
                     const val = (item.values as Record<string, unknown>)[key];
                     if (val == null) return true;
-                    if (typeof val === "object" && !Array.isArray(val) && (val as any).__type === "relation" && (val as any).data == null) return true;
+                    if (typeof val === "object" && !Array.isArray(val) && (val as Record<string, unknown>).__type === "relation" && (val as Record<string, unknown>).data == null) return true;
                     return false;
                 });
 

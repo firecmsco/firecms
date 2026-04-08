@@ -1,4 +1,5 @@
-import { Properties, slugify } from "@rebasepro/core";
+import { Properties } from "@rebasepro/types";
+import { slugify } from "@rebasepro/common";
 import { ImportConfig } from "@rebasepro/data_import";
 
 export function cleanPropertiesFromImport(properties: Properties, parentSlug = ""): {

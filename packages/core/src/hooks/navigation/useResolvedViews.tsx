@@ -1,4 +1,4 @@
-import type { CMSView, CMSViewsBuilder, EffectiveRoleController, EntityCollection, RebasePlugin } from "@rebasepro/types/cms";
+import type { CMSView, CMSViewsBuilder, EffectiveRoleController, EntityCollection, RebasePlugin } from "@rebasepro/types";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { deepEqual as equal } from "fast-equals";
 

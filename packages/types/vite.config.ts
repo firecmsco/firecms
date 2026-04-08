@@ -17,8 +17,7 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: {
-                index: path.resolve(__dirname, "src/index.ts"),
-                cms: path.resolve(__dirname, "src/cms/index.ts")
+                index: path.resolve(__dirname, "src/index.ts")
             },
             name: "Rebase Types",
             fileName: (format, entryName) => `${entryName}.${format}.js`

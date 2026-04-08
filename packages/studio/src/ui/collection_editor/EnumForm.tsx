@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import { deepEqual as equal } from "fast-equals"
 
-import { ArrayContainer, ArrayEntryParams, EnumValueConfig, EnumValues, FieldCaption, } from "@rebasepro/core";
+import { FieldCaption } from "@rebasepro/core";
+import { EnumValueConfig, EnumValues } from "@rebasepro/types";
+import { ArrayContainer, ArrayEntryParams } from "@rebasepro/cms";
 import {
     AutorenewIcon,
     Badge,
@@ -81,7 +83,7 @@ export function EnumForm({
         }
     }, [values.enum]);
 
-    return <Formex value={formex as any}>
+    return <Formex value={formex as ReturnType<typeof useCreateFormex>}>
         <EnumFormFields enumValuesPath={"enumValues"}
             values={values}
             errors={errors}
@@ -203,7 +205,7 @@ function EnumFormFields({
                     buildEntry={buildEntry}
                     onInternalIdAdded={setLastInternalIdAdded}
                     canAddElements={true}
-                    onValueChange={(value) => setFieldValue(enumValuesPath, value)}
+                    onValueChange={(value: EnumValueConfig[]) => setFieldValue(enumValuesPath, value)}
                     newDefaultEntry={{
                         id: "",
                         label: ""

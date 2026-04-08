@@ -1,12 +1,11 @@
 import React from "react";
 import {
     ConfirmationDialog,
-    EntityCollection,
-    EntityCustomView, getSubcollections,
-    resolveEntityView,
-    useCustomizationController,
-    User
+    useCustomizationController
 } from "@rebasepro/core";
+import { resolveEntityView } from "@rebasepro/cms";
+import { EntityCollection, EntityCustomView, User } from "@rebasepro/types";
+import { getSubcollections } from "@rebasepro/common";
 import {
     AddIcon,
     Alert,

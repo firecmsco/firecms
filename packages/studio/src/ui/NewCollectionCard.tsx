@@ -1,4 +1,8 @@
-import { PluginHomePageAdditionalCardsProps, useAuthController, useTranslation } from "@rebasepro/core";
+import {
+    useAuthController,
+    useTranslation
+} from "@rebasepro/core";
+import { PluginHomePageAdditionalCardsProps } from "@rebasepro/types";
 import { AddIcon, Card, cls, Typography } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 

@@ -2,7 +2,7 @@ import { AutoFixHighIcon, Avatar, Menu, MenuItem, PersonIcon } from "@rebasepro/
 import React, { useEffect, useRef, useState } from "react";
 import { ChatMessage, FeedbackSlug } from "../types";
 import { SystemMessage } from "./SystemMessage";
-import { EntityCollection } from "@rebasepro/core";
+import { EntityCollection } from "@rebasepro/types";
 
 export function MessageLayout({
     message,

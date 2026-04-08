@@ -1,4 +1,5 @@
-import { EntityCollection, Properties, Property, isPropertyBuilder } from "@rebasepro/core";
+import { EntityCollection, Properties, Property } from "@rebasepro/types";
+import { isPropertyBuilder } from "@rebasepro/common";
 
 /**
  * Schema context passed to the DataTalk API for understanding collection structures.
@@ -128,8 +129,8 @@ function buildSchemaProperty(property: Property): SchemaProperty | null {
                 ...base,
                 dataType: "array"
             };
-            if ("of" in property && property.of && !isPropertyBuilder(property.of)) {
-                const ofProperty = buildSchemaProperty(property.of as Property);
+            if ("of" in property && property.of && !Array.isArray(property.of) && !isPropertyBuilder(property.of)) {
+                const ofProperty = buildSchemaProperty(property.of);
                 if (ofProperty) {
                     schemaProperty.of = ofProperty;
                 }

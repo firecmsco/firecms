@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import * as firestoreLibrary from "@firebase/firestore";
-import { CircularProgressCenter, EntityCollection } from "@rebasepro/core";
-import { Button, cls, Paper, useDebounceValue } from "@rebasepro/ui";
+import { EntityCollection } from "@rebasepro/types";
+import { Button, CircularProgressCenter, cls, Paper, useDebounceValue } from "@rebasepro/ui";
 import { AutoHeightEditor } from "./AutoHeightEditor";
 import { extractStringLiterals } from "../utils/extract_literals";
 import { QueryTableResults } from "./QueryTableResults";

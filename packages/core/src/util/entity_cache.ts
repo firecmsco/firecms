@@ -1,5 +1,5 @@
 import { isObject, isPlainObject } from "@rebasepro/common";
-import { EntityReference, EntityRelation, GeoPoint, Vector } from "@rebasepro/types";
+import { Entity, EntityReference, EntityRelation, GeoPoint, Vector } from "@rebasepro/types";
 
 // Define a unique prefix for entity keys in sessionStorage to avoid key collisions
 const LOCAL_STORAGE_PREFIX = "entity_cache::";
@@ -78,7 +78,7 @@ function customReviver(_key: string, value: unknown): unknown {
                     databaseId: record.databaseId as string | undefined
                 });
             case "EntityRelation":
-                return new EntityRelation(record.id as string, record.path as string, record.data as any);
+                return new EntityRelation(record.id as string, record.path as string, record.data as Entity | undefined);
             case "GeoPoint":
                 return new GeoPoint(record.latitude as number, record.longitude as number);
             case "Vector":

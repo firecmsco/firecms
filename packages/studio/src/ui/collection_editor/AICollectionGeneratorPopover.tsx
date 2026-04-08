@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { EntityCollection, useCollectionRegistryController, useSnackbarController, AIIcon } from "@rebasepro/core";
+import {
+    useCollectionRegistryController,
+    useSnackbarController,
+    AIIcon
+} from "@rebasepro/core";
+import { EntityCollection } from "@rebasepro/types";
 import {
     Button,
     CircularProgress,

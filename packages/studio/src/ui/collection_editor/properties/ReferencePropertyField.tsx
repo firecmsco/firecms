@@ -1,6 +1,11 @@
 import React from "react";
 import { Field, getIn, useFormex } from "@rebasepro/formex";
-import { FieldCaption, IconForView, NumberProperty, StringProperty, useCollectionRegistryController } from "@rebasepro/core";
+import {
+    FieldCaption,
+    IconForView,
+    useCollectionRegistryController
+} from "@rebasepro/core";
+import { NumberProperty, StringProperty } from "@rebasepro/types";
 import { CircularProgress, Select, SelectGroup, SelectItem, Typography, } from "@rebasepro/ui";
 
 export function ReferencePropertyField({

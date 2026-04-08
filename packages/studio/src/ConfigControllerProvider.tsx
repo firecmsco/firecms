@@ -4,15 +4,13 @@ import { deepEqual as equal } from "fast-equals";
 
 import { CollectionsConfigController } from "./types/config_controller";
 import {
-    Entity,
-    Property,
     useCustomizationController,
     useCMSUrlController,
     useRebaseContext,
     useAuthController,
-    User,
     useSnackbarController
 } from "@rebasepro/core";
+import { Entity, Property, User } from "@rebasepro/types";
 import { CollectionEditorDialog } from "./ui/collection_editor/CollectionEditorDialog";
 import { useNavigate } from "react-router";
 import { CollectionEditorController } from "./types/collection_editor_controller";

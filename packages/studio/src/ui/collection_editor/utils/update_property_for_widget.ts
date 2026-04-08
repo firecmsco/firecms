@@ -1,14 +1,5 @@
-import {
-    ArrayProperty,
-    BooleanProperty,
-    DateProperty,
-    MapProperty,
-    mergeDeep,
-    NumberProperty,
-    Property,
-    PropertyConfig,
-    StringProperty
-} from "@rebasepro/core";
+import { ArrayProperty, BooleanProperty, DateProperty, MapProperty, NumberProperty, Property, PropertyConfig, StringProperty } from "@rebasepro/types";
+import { mergeDeep } from "@rebasepro/common";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- propertyData is a partial property shape built incrementally via mergeDeep
 export function updatePropertyFromWidget(propertyData: any,

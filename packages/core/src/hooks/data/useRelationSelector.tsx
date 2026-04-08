@@ -1,8 +1,14 @@
-import type { EntityCollection } from "@rebasepro/types/cms";
+import type { EntityCollection } from "@rebasepro/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useData } from "./useData";
 import { Entity, EntityRelation, FilterValues } from "@rebasepro/types";
-import { RelationItem } from "../../components/RelationSelector";
+export interface RelationItem {
+    id: string | number;
+    label: string;
+    description?: string;
+    data: Entity<any>;
+    relation: EntityRelation;
+}
 
 export interface UseRelationSelectorProps<M extends Record<string, any> = any> {
     /**

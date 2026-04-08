@@ -1,4 +1,4 @@
-import type { EntityCollection } from "@rebasepro/types/cms";
+import type { EntityCollection } from "@rebasepro/types";
 import { StorageSource } from "@rebasepro/types";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
 import { useContext } from "react";

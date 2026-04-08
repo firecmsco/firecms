@@ -1,12 +1,11 @@
-import type { CMSView, EntityCollection, NavigationResult, RebasePlugin, CMSViewsBuilder, NavigationStateController, CMSUrlController, NavigationGroupMapping, EffectiveRoleController } from "@rebasepro/types/cms";
+import type { CMSView, EntityCollection, NavigationResult, RebasePlugin, NavigationStateController, CMSUrlController, NavigationGroupMapping } from "@rebasepro/types";
 import { useCallback } from "react";
 
 import { AuthController,  RebaseData, CollectionRegistryController, User } from "@rebasepro/types";
-import type { EntityCollectionsBuilder } from "@rebasepro/types/cms";
+import type { EntityCollectionsBuilder, CMSViewsBuilder, EffectiveRoleController } from "@rebasepro/types";
 import { CollectionRegistry } from "@rebasepro/common";
 
 import { UserManagementDelegate } from "@rebasepro/types";
-
 
 import { useResolvedCollections } from "./useResolvedCollections";
 import { useResolvedViews } from "./useResolvedViews";

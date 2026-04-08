@@ -8,7 +8,7 @@ import {
     ref,
     uploadBytesResumable
 } from "@firebase/storage";
-import { DownloadConfig, DownloadMetadata, StorageListResult, StorageSource, UploadFileProps } from "@rebasepro/core";
+import { DownloadConfig, DownloadMetadata, StorageListResult, StorageSource, UploadFileProps } from "@rebasepro/types";
 
 /**
  * @group Firebase

@@ -1,4 +1,4 @@
-import { AuthController, Role, User } from "@rebasepro/core";
+import { AuthController, Role, User } from "@rebasepro/types";
 
 /**
  * Auth controller that extends the base AuthController

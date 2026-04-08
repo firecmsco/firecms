@@ -1,7 +1,9 @@
 import React from "react";
 import { deepEqual as equal } from "fast-equals"
 
-import { AdditionalFieldDelegate, isPropertyBuilder, Properties, Property, AIModifiedIndicator } from "@rebasepro/core";
+import { AIModifiedIndicator } from "@rebasepro/core";
+import { AdditionalFieldDelegate, Properties, Property } from "@rebasepro/types";
+import { isPropertyBuilder } from "@rebasepro/common";
 import {
     FindInPageIcon,
     defaultBorderMixin,

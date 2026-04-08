@@ -196,6 +196,18 @@ export interface BaseProperty<CustomProps = any> {
      * Callbacks/Hooks for this property field to transform and sanitize data during its lifecycle.
      */
     callbacks?: PropertyCallbacks;
+
+    /**
+     * Custom field component to render this property in forms.
+     * Used by the CMS layer.
+     */
+    Field?: React.ComponentType<any>;
+
+    /**
+     * Custom preview component to render this property in previews/tables.
+     * Used by the CMS layer.
+     */
+    Preview?: React.ComponentType<any>;
 }
 
 /**
@@ -496,7 +508,7 @@ export interface ArrayProperty extends BaseProperty {
      * You can leave this field empty only if you are providing a custom field,
      * or using the `oneOf` prop, otherwise an error will be thrown.
      */
-    of?: Property;
+    of?: Property | Property[];
     /**
      * Use this field if you would like to have an array of typed objects.
      * It is useful if you need to have values of different types in the same

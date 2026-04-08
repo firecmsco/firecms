@@ -10,6 +10,8 @@ export * from "./CenteredView";
 export * from "./Container";
 export * from "./Collapse";
 export * from "./CircularProgress";
+export * from "./CircularProgressCenter";
+export * from "./ErrorBoundary";
 export * from "./Checkbox";
 export * from "./Chip";
 export * from "./ColorPicker";
@@ -48,4 +50,4 @@ export * from "./Badge";
 export * from "./DebouncedTextField";
 export * from "./Skeleton";
 export * from "./ToggleButtonGroup";
-
+export * from "./VirtualTable";

@@ -1,8 +1,7 @@
-import type { CMSView, CMSViewsBuilder, EntityCollection, EntityCustomView, RebasePlugin } from "@rebasepro/types/cms";
+import type { CMSView, CMSViewsBuilder, EntityCollection, EntityCustomView, RebasePlugin } from "@rebasepro/types";
 import { AuthController, DataDriver,  User, RebaseData } from "@rebasepro/types";
-import type { EntityCollectionsBuilder } from "@rebasepro/types/cms";
+import type { EntityCollectionsBuilder } from "@rebasepro/types";
 import { canReadCollection } from "@rebasepro/common";
-import { EntityHistoryView } from "../../components/history/EntityHistoryView";
 
 /**
  * Auto-inject the "History" tab into any collection that has `history: true`.
@@ -19,15 +18,9 @@ function injectHistoryViews(collections: EntityCollection[]): EntityCollection[]
             );
 
             if (!alreadyHasHistory) {
-                const historyView: EntityCustomView = {
-                    key: "__rebase_history",
-                    name: "History",
-                    Builder: EntityHistoryView,
-                    position: "end"
-                };
                 modified = {
                     ...collection,
-                    entityViews: [...existing, historyView]
+                    entityViews: [...existing, "__rebase_history"]
                 };
             }
         }

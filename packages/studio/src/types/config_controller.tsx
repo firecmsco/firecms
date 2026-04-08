@@ -1,4 +1,4 @@
-import { EntityCollection, NavigationGroupMapping, Property } from "@rebasepro/core";
+import { EntityCollection, NavigationGroupMapping, Property } from "@rebasepro/types";
 import { PersistedCollection } from "./persisted_collection";
 
 export interface CollectionsSetupInfo {

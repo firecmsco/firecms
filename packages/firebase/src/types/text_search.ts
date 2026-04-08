@@ -1,6 +1,6 @@
 import { User as FirebaseUser } from "@firebase/auth";
 import { FirebaseApp } from "@firebase/app";
-import { EntityCollection } from "@rebasepro/core";
+import { EntityCollection } from "@rebasepro/types";
 
 export type FirestoreTextSearchControllerBuilder = (props: {
     firebaseApp: FirebaseApp;

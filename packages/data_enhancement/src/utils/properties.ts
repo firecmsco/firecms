@@ -1,11 +1,6 @@
-import {
-    EnumValues,
-    getFieldId,
-    getValueInPath,
-    isPropertyBuilder,
-    Properties,
-    Property
-} from "@rebasepro/core";
+import { getFieldId } from "@rebasepro/cms";
+import { EnumValues, Properties, Property } from "@rebasepro/types";
+import { getValueInPath, isPropertyBuilder } from "@rebasepro/common";
 import { InputProperty } from "../types/data_enhancement_controller";
 
 export function getSimplifiedProperties<M extends Record<string, any>>(properties: Properties, values: M, path = ""): Record<string, InputProperty> {

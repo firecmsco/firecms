@@ -1,4 +1,4 @@
-import type { CMSView, CMSUrlController, EntityCollection, RebasePlugin, NavigationEntry, NavigationGroupMapping, NavigationResult } from "@rebasepro/types/cms";
+import type { CMSView, CMSUrlController, EntityCollection, RebasePlugin, NavigationEntry, NavigationGroupMapping, NavigationResult } from "@rebasepro/types";
 import { useCallback, useMemo, useRef } from "react";
 import { deepEqual as equal } from "fast-equals";
 

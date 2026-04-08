@@ -1,0 +1,344 @@
+import type { EntityCollection } from "../types/collections";
+import type { FormContext } from "../types/fields";
+import type { EntityAction, EntityActionClickProps, SideEntityController } from "@rebasepro/types";import React, { useMemo } from "react";
+import { Entity, RebaseContext } from "@rebasepro/types";
+import type { EntityFormActionsProps } from "../types/components/EntityFormActionsProps";
+import { copyEntityAction, deleteEntityAction } from "../components";
+import { mergeEntityActions } from "../util/entity_actions";
+import { resolveEntityAction } from "../util/resolutions";
+import {
+    Button,
+    CircularProgress,
+    cls,
+    defaultBorderMixin,
+    DialogActions,
+    ErrorIcon,
+    IconButton,
+    LoadingButton,
+    Tooltip,
+    Typography
+} from "@rebasepro/ui";
+import {
+    useCustomizationController,
+    useRebaseContext,
+    useSideEntityController,
+    useSnackbarController,
+    useTranslation
+} from "@rebasepro/core";
+import { SideDialogController, useSideDialogContext } from "@rebasepro/core";
+import { FormexController } from "@rebasepro/formex";
+import { ErrorTooltip } from "@rebasepro/core";
+import { usePermissions } from "@rebasepro/core";
+
+export function EntityEditViewFormActions({
+    collection,
+    path,
+    entity,
+    layout,
+    savingError,
+    formex,
+    disabled,
+    status,
+    pluginActions,
+    openEntityMode,
+    showDefaultActions = true,
+    navigateBack,
+    formContext
+}: EntityFormActionsProps) {
+
+    const { canCreate, canDelete } = usePermissions();
+    const context = useRebaseContext();
+    const sideEntityController = useSideEntityController();
+    const sideDialogContext = useSideDialogContext();
+    const customizationController = useCustomizationController();
+    const { t } = useTranslation();
+
+    const entityActions = useMemo((): EntityAction[] => {
+        const customEntityActions = (collection.entityActions ?? [])
+            .map(action => resolveEntityAction(action, customizationController.entityActions))
+            .filter(Boolean) as EntityAction[];
+        const createEnabled = canCreate(collection, path);
+        const deleteEnabled = entity ? canDelete(collection, path, entity) : false;
+        const actions: EntityAction[] = [];
+        if (createEnabled)
+            actions.push(copyEntityAction);
+        if (deleteEnabled)
+            actions.push(deleteEntityAction);
+        if (customEntityActions)
+            return mergeEntityActions(actions, customEntityActions);
+        return actions;
+    }, [canCreate, canDelete, collection, path, customizationController.entityActions?.length, entity]);
+
+    const formActions = showDefaultActions ? entityActions.filter(a => a.includeInForm === undefined || a.includeInForm) : [];
+
+    return layout === "bottom"
+        ? buildBottomActions({
+            savingError,
+            entity,
+            formActions,
+            collection,
+            context,
+            sideEntityController,
+            disabled,
+            status,
+            sideDialogContext,
+            pluginActions,
+            openEntityMode,
+            navigateBack,
+            formContext,
+            formex,
+            t
+        })
+        : buildSideActions({
+            savingError,
+            entity,
+            formActions,
+            collection,
+            context,
+            sideEntityController,
+            sideDialogContext,
+            disabled,
+            status,
+            pluginActions,
+            openEntityMode,
+            navigateBack,
+            formContext,
+            formex,
+            t
+        });
+}
+
+type ActionsViewProps<M extends object> = {
+    savingError: Error | undefined,
+    entity: Entity<M> | undefined,
+    formActions: EntityAction[],
+    collection: EntityCollection,
+    context: RebaseContext,
+    sideEntityController: SideEntityController,
+    disabled: boolean,
+    status: "new" | "existing" | "copy",
+    sideDialogContext: SideDialogController,
+    pluginActions?: any[],
+    openEntityMode: "side_panel" | "full_screen";
+    navigateBack: () => void;
+    formContext: FormContext,
+    formex: FormexController<any>;
+    t: (key: string, vars?: Record<string, string>) => string;
+};
+
+function buildBottomActions<M extends object>({
+    savingError,
+    entity,
+    formActions,
+    collection,
+    context,
+    sideEntityController,
+    disabled,
+    status,
+    sideDialogContext,
+    pluginActions,
+    openEntityMode,
+    navigateBack,
+    formContext,
+    formex,
+    t
+}: ActionsViewProps<M>) {
+
+    const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
+    const canClose = openEntityMode === "side_panel";
+    return <DialogActions
+        position={"absolute"}>
+        {savingError &&
+            <div className="text-right">
+                <Typography color={"error"}>{savingError.message}</Typography>
+            </div>
+        }
+
+        {formActions.length > 0 && <div className="grow flex overflow-auto no-scrollbar">
+            {formActions.map(action => {
+
+                const props = {
+                    view: "form",
+                    entity,
+                    path: collection.slug,
+                    collection: collection,
+                    context,
+                    sideEntityController,
+                    openEntityMode,
+                    navigateBack,
+                    formContext
+                } satisfies EntityActionClickProps<any>;
+
+                const isEnabled = !action.isEnabled || action.isEnabled(props);
+                return (
+                    <EntityActionButton
+                        key={action.key}
+                        action={action}
+                        enabled={isEnabled}
+                        props={props}
+                    />
+                );
+            })}
+        </div>}
+
+        {pluginActions}
+
+        {hasErrors ?
+            <ErrorTooltip title={"This form has errors"}>
+                <ErrorIcon className="ml-4" color="error" size={"smallest"} />
+            </ErrorTooltip> : null}
+        <Button variant="text"
+            color="primary"
+            disabled={disabled || formex.isSubmitting}
+            type="reset">
+            {status === "existing" ? t("discard") : t("clear")}
+        </Button>
+        <Button variant={canClose ? "text" : "filled"}
+            color="primary"
+            type="submit"
+            disabled={disabled || formex.isSubmitting}
+            onClick={() => {
+                sideDialogContext.setPendingClose(false);
+            }}>
+            {status === "existing" && t("save")}
+            {status === "copy" && t("create_copy")}
+            {status === "new" && t("create")}
+        </Button>
+        {canClose && <LoadingButton variant="filled"
+            color="primary"
+            type="submit"
+            loading={formex.isSubmitting}
+            disabled={disabled}
+            onClick={() => {
+                sideDialogContext.setPendingClose?.(true);
+            }}>
+            {status === "existing" && t("save_and_close")}
+            {status === "copy" && t("create_copy_and_close")}
+            {status === "new" && t("create_and_close")}
+        </LoadingButton>}
+    </DialogActions>;
+}
+
+function buildSideActions<M extends object>({
+    savingError,
+    entity,
+    formActions,
+    collection,
+    context,
+    sideEntityController,
+    disabled,
+    status,
+    sideDialogContext,
+    pluginActions,
+    openEntityMode,
+    navigateBack,
+    formContext,
+    formex,
+    t
+}: ActionsViewProps<M>) {
+
+    const hasErrors = Object.keys(formex.errors).length > 0 && formex.submitCount > 0;
+    return <div
+        className={cls("overflow-auto h-full flex flex-col gap-2 w-80 2xl:w-96 px-4 py-16 sticky top-0 border-l", defaultBorderMixin)}>
+        <LoadingButton fullWidth={true}
+            variant="filled"
+            color="primary"
+            type="submit"
+            startIcon={hasErrors ? <ErrorIcon /> : undefined}
+            disabled={disabled || formex.isSubmitting}
+            onClick={() => {
+                sideDialogContext.setPendingClose?.(false);
+            }}>
+            {status === "existing" && t("save")}
+            {status === "copy" && t("create_copy")}
+            {status === "new" && t("create")}
+        </LoadingButton>
+
+        <Button fullWidth={true} variant="text" disabled={disabled || formex.isSubmitting} type="reset">
+            {status === "existing" ? t("discard") : t("clear")}
+        </Button>
+
+        {pluginActions}
+
+        {formActions.length > 0 && <div className="flex flex-row flex-wrap mt-2">
+            {formActions.map(action => {
+                const props = {
+                    view: "form",
+                    entity,
+                    path: collection.slug,
+                    collection: collection,
+                    context,
+                    sideEntityController,
+                    openEntityMode,
+                    navigateBack,
+                    formContext
+                } satisfies EntityActionClickProps<any>;
+                const isEnabled = !action.isEnabled || action.isEnabled(props);
+                return (
+                    <EntityActionButton key={action.key} action={action} enabled={isEnabled} props={props} />
+                );
+            })}
+        </div>}
+
+        {savingError &&
+            <div className="text-right">
+                <Typography color={"error"}>{savingError.message}</Typography>
+            </div>
+        }
+    </div>;
+}
+
+function EntityActionButton({
+    action,
+    enabled,
+    props
+}: {
+    action: EntityAction,
+    enabled: boolean,
+    props: EntityActionClickProps<any, any>
+}) {
+    const snackbarController = useSnackbarController();
+    const [loading, setLoading] = React.useState(false);
+    return <Tooltip
+        title={action.name}>
+        <IconButton
+            color="primary"
+            disabled={!enabled}
+            onClick={(event) => {
+                console.debug("Executing action", action.key, props);
+                try {
+                    event.stopPropagation();
+                    if (props.entity) {
+                        const onClick = action.onClick(props);
+                        // If the action returns a promise, we can handle it
+                        if (onClick instanceof Promise) {
+                            setLoading(true);
+                            onClick
+                                .catch((error) => {
+                                    console.error("Error executing action", action.key, error);
+                                    snackbarController.open({
+                                        message: `Error executing action: ${error.message}`,
+                                        type: "error"
+                                    })
+                                })
+                                .finally(() => setLoading(false));
+                        } else {
+                            snackbarController.open({
+                                message: `Action ${action.name} executed successfully`,
+                                type: "success"
+                            });
+                        }
+
+                    }
+                } catch (e: unknown) {
+                    console.error("Error executing action", action.key, e);
+                    snackbarController.open({
+                        message: `Error executing action: ${e instanceof Error ? e.message : String(e)}`,
+                        type: "error"
+                    });
+                }
+            }}>
+            {loading ? <CircularProgress size={"smallest"} /> : action.icon}
+        </IconButton>
+    </Tooltip>;
+}

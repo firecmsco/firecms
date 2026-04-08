@@ -1,4 +1,4 @@
-import type { RebasePlugin } from "@rebasepro/types/cms";
+import type { RebasePlugin } from "@rebasepro/types";
 import React from "react";
 ;
 

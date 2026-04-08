@@ -24,7 +24,7 @@ import {
 } from "@firebase/auth";
 import { FirebaseApp } from "@firebase/app";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, FirebaseUserWrapper } from "../types";
-import { Role, User } from "@rebasepro/core";
+import { Role, User } from "@rebasepro/types";
 
 export interface FirebaseAuthControllerProps {
     loading?: boolean;

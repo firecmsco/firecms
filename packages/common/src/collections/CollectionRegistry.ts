@@ -1,4 +1,5 @@
 import {
+    ArrayProperty,
     EntityCollection,
     NumberProperty,
     Properties,
@@ -160,10 +161,16 @@ export class CollectionRegistry {
         if (newProperty.type === "map" && newProperty.properties) {
             newProperty.properties = this.normalizeProperties(newProperty.properties, relations);
         } else if (newProperty.type === "array") {
-            if (newProperty.of) {
-                newProperty.of = this.normalizeProperty(newProperty.of, relations);
-            } else if (newProperty.oneOf && newProperty.oneOf.properties) {
-                newProperty.oneOf.properties = this.normalizeProperties(newProperty.oneOf.properties, relations);
+            // Cast via unknown to get a properly typed mutable reference
+            const arrayProp = newProperty as unknown as ArrayProperty;
+            if (arrayProp.of) {
+                if (Array.isArray(arrayProp.of)) {
+                    (arrayProp as { of: Property | Property[] }).of = arrayProp.of.map(p => this.normalizeProperty(p, relations));
+                } else {
+                    arrayProp.of = this.normalizeProperty(arrayProp.of, relations);
+                }
+            } else if (arrayProp.oneOf && arrayProp.oneOf.properties) {
+                arrayProp.oneOf.properties = this.normalizeProperties(arrayProp.oneOf.properties, relations);
             }
         } else if ((newProperty.type === "string" || newProperty.type === "number") && newProperty.enum) {
             const stringOrNumberProperty = newProperty as StringProperty | NumberProperty;

@@ -1,10 +1,10 @@
 import {
     ConfirmationDialog,
-    PluginHomePageActionsProps,
     useAuthController,
     useSnackbarController,
     useTranslation
 } from "@rebasepro/core";
+import { PluginHomePageActionsProps } from "@rebasepro/types";
 import { ContentCopyIcon, DeleteIcon, IconButton, Menu, MenuItem, MoreVertIcon, SettingsIcon, } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useState } from "react";
