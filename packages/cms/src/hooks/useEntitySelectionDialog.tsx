@@ -1,8 +1,8 @@
-import { useSideDialogsController } from "@rebasepro/core";
 import { EntitySelectionProps, EntitySelectionTable } from "../components";
 import type { EntityCollection } from "@rebasepro/types";
 import { useCallback } from "react";
-import { useCollectionRegistryController } from "@rebasepro/core";
+import { useSideDialogsController } from "../index";
+import { useCollectionRegistryController } from "../index";
 
 /**
  * This hook is used to open a side dialog that allows the selection

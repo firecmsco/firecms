@@ -10,11 +10,11 @@ import {
     Typography
 } from "@rebasepro/ui";
 import { EntityHistoryEntry } from "./EntityHistoryEntry";
-import { useEntityHistory } from "@rebasepro/core";
 import { useSnackbarController, useAuthController } from "@rebasepro/core";
 import { ConfirmationDialog } from "@rebasepro/core";
 import { ErrorBoundary } from "@rebasepro/ui";
 import { useState } from "react";
+import { useEntityHistory } from "../../index";
 
 /**
  * Entity history tab view. Shows a paginated list of entity revisions

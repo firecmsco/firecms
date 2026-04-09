@@ -10,8 +10,9 @@ import {
 } from "@rebasepro/types";
 import { deepEqual } from "fast-equals";
 
-import { enumToObjectEntries, getSubcollections, removeFunctions, resolveCollectionRelations } from "../util";
+import { enumToObjectEntries, getSubcollections, resolveCollectionRelations } from "../util";
 import cloneDeep from "lodash/cloneDeep.js";
+import { removeFunctions } from "@rebasepro/utils";
 
 export class CollectionRegistry {
 

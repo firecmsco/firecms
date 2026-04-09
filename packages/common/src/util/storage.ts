@@ -1,5 +1,5 @@
 import { ArrayProperty, EntityValues, StorageConfig, StringProperty, UploadedFileContext } from "@rebasepro/types";
-import { randomString } from "./strings";
+import { randomString } from "@rebasepro/utils";
 
 interface ResolveFilenameStringParams<M extends object> {
     input: string | ((context: UploadedFileContext) => (Promise<string> | string));

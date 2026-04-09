@@ -1,8 +1,5 @@
-import {
-    useAuthController,
-    useCollectionRegistryController,
-    useTranslation
-} from "@rebasepro/core";
+import { useCollectionRegistryController } from "@rebasepro/cms";
+import { useAuthController, useTranslation } from "@rebasepro/core";
 import { EntityCollection, CollectionActionsProps } from "@rebasepro/types";
 import { IconButton, SettingsIcon, Tooltip, } from "@rebasepro/ui";
 

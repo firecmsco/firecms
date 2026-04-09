@@ -3,9 +3,9 @@ import { doc, DocumentReference, getFirestore, QuerySnapshot, setDoc } from "@fi
 import {
     OnCellValueChange,
     useAuthController,
-    useCustomizationController,
-    useCollectionRegistryController
+    useCustomizationController
 } from "@rebasepro/core";
+import { useCollectionRegistryController } from "@rebasepro/cms";
 import { CollectionSize, Entity, EntityAction, EntityCollection, Properties } from "@rebasepro/types";
 import {
     copyEntityAction,

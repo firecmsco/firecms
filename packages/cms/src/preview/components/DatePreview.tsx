@@ -3,7 +3,7 @@ import React from "react";
 import { format } from "date-fns";
 import * as locales from "date-fns/locale";
 import { useCustomizationController } from "@rebasepro/core";
-import { defaultDateFormat } from "@rebasepro/common";
+import { defaultDateFormat } from "@rebasepro/utils";
 
 export interface DatePreviewProps {
     date: Date;

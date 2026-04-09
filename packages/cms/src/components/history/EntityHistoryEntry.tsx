@@ -11,14 +11,12 @@ import {
     Typography
 } from "@rebasepro/ui";
 import { PreviewSize } from "../../types/components/PropertyPreviewProps";
-import {
-    getValueInPath
-} from "@rebasepro/common";
 import { getPropertyInPath } from "@rebasepro/core";
 import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
 import { useAuthController } from "@rebasepro/core";
 import { UserChip } from "./UserChip";
-import { HistoryEntryData } from "@rebasepro/core";
+import { HistoryEntryData } from "../../hooks";
+import { getValueInPath } from "@rebasepro/utils";
 
 /**
  * Shallow-deep equality: uses JSON.stringify for objects, strict equality for primitives.
@@ -128,7 +126,7 @@ export function EntityHistoryEntry({
 
             <div className={"flex flex-col grow w-full m-1 shrink min-w-0"}>
 
-                {changedFields && collection && changedFields.map((key) => {
+                {changedFields && collection && changedFields.map((key: string) => {
                     const childProperty = getPropertyInPath(collection.properties, key);
                     const valueInPath = entry.values ? getValueInPath(entry.values, key) : undefined;
                     const previousValueInPath = previousValues ? getValueInPath(previousValues, key) : undefined;

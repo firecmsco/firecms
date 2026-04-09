@@ -1,3 +1,4 @@
+import { useCollectionRegistryController } from "@rebasepro/cms";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
     Paper,
@@ -20,7 +21,7 @@ import {
     Tabs,
     Tab
 } from "@rebasepro/ui";
-import { useRebaseContext, useSnackbarController, useCollectionRegistryController, ErrorView, useTranslation } from "@rebasepro/core";
+import { useRebaseContext, useSnackbarController, ErrorView, useTranslation } from "@rebasepro/core";
 import { PolicyEditor } from "./PolicyEditor";
 
 export interface PostgresPolicy {

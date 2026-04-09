@@ -1,3 +1,6 @@
+import { IconForView } from "@rebasepro/core";
+;
+import { useUrlController } from "@rebasepro/cms";
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -7,9 +10,9 @@ import {
     Typography,
     IconButton,
     AddIcon,
-    StorageIcon,
+    Button,
 } from "@rebasepro/ui";
-import { useUrlController, IconForView } from "@rebasepro/core";
+;
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionStudioView } from "./CollectionStudioView";
 
@@ -114,9 +117,16 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                                 collectionId={activeCollectionId}
                             />
                         ) : (
-                            <div className="flex flex-col items-center justify-center h-full text-text-disabled dark:text-text-disabled-dark">
-                                <StorageIcon className="opacity-20 mb-4 h-16 w-16" />
-                                <Typography variant="body1">Select a collection or create a new one to start editing.</Typography>
+                            <div className="flex flex-col items-center justify-center h-full gap-4">
+                                <Typography variant="label">
+                                    Select a collection or create a new one to start editing
+                                </Typography>
+                                <Button
+                                    onClick={() => navigate(urlController.buildAppUrlPath("schema/new"))}
+                                >
+                                    <AddIcon />
+                                    Add new collection
+                                </Button>
                             </div>
                         )}
                     </div>

@@ -3,8 +3,9 @@ import Compressor from "compressorjs";
 import { deepEqual as equal } from "fast-equals";
 
 import { EntityValues, ImageResize, StorageConfig, StorageSource } from "@rebasepro/types";import { useCallback, useEffect, useState } from "react";
-import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@rebasepro/common";
+import { resolveStorageFilenameString, resolveStoragePathString } from "@rebasepro/common";
 import { useAuthController } from "../hooks";
+import { randomString } from "@rebasepro/utils";
 
 export type StorageFieldSize = "smallest" | "small" | "medium" | "large" | number;
 

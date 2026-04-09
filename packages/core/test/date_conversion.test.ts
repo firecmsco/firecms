@@ -9,8 +9,9 @@
  */
 import { describe, expect, it } from "@jest/globals";
 import { updateDateAutoValues, traverseValuesProperties } from "@rebasepro/common";
-import { mergeDeep, removeFunctions, removeUndefined } from "@rebasepro/common";
 import { Properties, DateProperty, EntityReference, GeoPoint } from "@rebasepro/types";
+import { mergeDeep, removeFunctions, removeUndefined } from "@rebasepro/utils";
+
 // Entity cache functions have internal JSON serialization that we need to test
 
 // Helper to create a date property with autoValue

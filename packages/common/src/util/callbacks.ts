@@ -1,5 +1,5 @@
 import { EntityCallbacks, Properties } from "@rebasepro/types";
-import { mergeDeep } from "./objects";
+import { mergeDeep } from "@rebasepro/utils";
 
 /**
  * Helper function to recursively check if there are any callbacks in the properties.

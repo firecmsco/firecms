@@ -5,9 +5,9 @@ import { useAuthController, useRebaseContext, useLargeLayout, useTranslation, us
 import { CollectionActionsProps, EntityTableController, SelectionController } from "@rebasepro/types";
 import { ErrorBoundary } from "@rebasepro/ui";
 import { ClearFilterSortButton } from "../ClearFilterSortButton";
-import { toArray } from "@rebasepro/common";
 import { FiltersDialog } from "./FiltersDialog";
 import { Badge, Button, cls, FilterListIcon, IconButton, Tooltip } from "@rebasepro/ui";
+import { toArray } from "@rebasepro/utils";
 
 export type EntityCollectionViewStartActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

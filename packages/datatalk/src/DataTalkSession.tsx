@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { EntityCollection } from "@rebasepro/types";
-import { randomString } from "@rebasepro/common";
 import { Button, Checkbox, Label, SendIcon, TextareaAutosize, Tooltip } from "@rebasepro/ui";
 import { MessageLayout } from "./components/MessageLayout";
 import { streamDataTalkCommand } from "./api";
 import { ChatMessage, FeedbackSlug, Session } from "./types";
 import { buildSchemaContext } from "./utils/schemaContext";
 import { IntroComponent } from "./components/IntroComponent";
+import { randomString } from "@rebasepro/utils";
 
 const DEFAULT_API_ENDPOINT = "https://api.rebase.pro";
 

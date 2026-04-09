@@ -5,7 +5,7 @@ import { DatabasePoolManager } from "./databasePoolManager";
 import { DrizzleClient } from "../db/interfaces";
 import { User } from "@rebasepro/types";
 import { sql as drizzleSql } from "drizzle-orm";
-import { buildPropertyCallbacks, mergeDeep } from "@rebasepro/common";
+import { buildPropertyCallbacks } from "@rebasepro/common";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 import {
     DataDriver,
@@ -27,6 +27,7 @@ import {
 } from "@rebasepro/types";
 import { buildRebaseData } from "@rebasepro/common";
 import { HistoryService } from "../history/HistoryService";
+import { mergeDeep } from "@rebasepro/utils";
 
 export class PostgresDataDriver implements DataDriver {
     key = "postgres";

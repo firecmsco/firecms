@@ -51,11 +51,11 @@
     },
     "dependencies": {
         "@rebasepro/types": "0.0.1",
+        "@rebasepro/utils": "workspace:*",
         "fast-equals": "5.3.0",
         "json-logic-js": "^2.0.5",
         "object-hash": "^3.0.0"
     },
-    "peerDependencies": {},
     "devDependencies": {
         "@jest/globals": "^29.7.0",
         "@testing-library/react": "^16.3.0",

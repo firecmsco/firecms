@@ -7,7 +7,7 @@ import type { EntityFormProps, OnUpdateParams } from "../types/components/Entity
 import { deepEqual as equal } from "fast-equals";
 
 import { ErrorBoundary } from "@rebasepro/ui";
-import { getDefaultValuesFor, getLocalChangesBackup, getValueInPath, isHidden, isObject, isReadOnly, mergeDeep } from "@rebasepro/common";
+import { getDefaultValuesFor, getLocalChangesBackup, isHidden, isReadOnly } from "@rebasepro/common";
 
 import {
     getFormFieldKeys,
@@ -16,8 +16,6 @@ import {
     useCustomizationController,
     useData,
     useRebaseContext,
-    useCollectionRegistryController,
-    useSideEntityController,
     useSnackbarController,
     useTranslation,
     useSlot
@@ -42,6 +40,8 @@ import { LocalChangesMenu } from "./components/LocalChangesMenu";
 
 import { useDebouncedCallback } from "@rebasepro/ui";
 import { getEntityTitlePropertyKey } from "@rebasepro/core";
+import { getValueInPath, isObject, mergeDeep } from "@rebasepro/utils";
+import { useCollectionRegistryController, useSideEntityController } from "../index";
 
 // extract touched values for nested touched trees and map to current values
 export function extractTouchedValues(values: any, touched: Record<string, boolean>): Record<string, any> {

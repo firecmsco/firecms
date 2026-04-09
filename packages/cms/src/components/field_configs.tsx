@@ -15,7 +15,7 @@ import { SelectFieldBinding } from "../form/field_bindings/SelectFieldBinding";
 import { StorageUploadFieldBinding } from "../form/field_bindings/StorageUploadFieldBinding";
 import { SwitchFieldBinding } from "../form/field_bindings/SwitchFieldBinding";
 import { TextFieldBinding } from "../form/field_bindings/TextFieldBinding";
-import { isPropertyBuilder, mergeDeep } from "@rebasepro/common";
+import { isPropertyBuilder } from "@rebasepro/common";
 
 import {
     AddLinkIcon,
@@ -40,6 +40,7 @@ import {
 } from "@rebasepro/ui";
 import { RelationFieldBinding } from "../form/field_bindings/RelationFieldBinding";
 import { UserSelectFieldBinding } from "../form/field_bindings/UserSelectFieldBinding";
+import { mergeDeep } from "@rebasepro/utils";
 
 export const DEFAULT_FIELD_CONFIGS: Record<DefaultFieldConfig, PropertyConfig> = {
     text_field: {

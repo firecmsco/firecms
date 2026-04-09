@@ -13,11 +13,11 @@ import {
 } from "@rebasepro/types";
 
 type PropertyConfig = { property: any; [key: string]: any };
-import { isDefaultFieldConfigId } from "./fields";
 import { isPropertyBuilder } from "./entities";
-import { getIn, mergeDeep } from "./objects";
 import { enumToObjectEntries } from "./enums";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
+import { isDefaultFieldConfigId } from "@rebasepro/utils";
+import { getIn, mergeDeep } from "@rebasepro/utils";
 
 /**
  * Resolve property builders, enums and arrays.

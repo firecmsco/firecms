@@ -1,12 +1,12 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
-    "paths": {}
+    "sourceMap": true
   },
   "exclude": [
     "node_modules",
     "dist",
-    "../core/src",
-    "../ui/src"
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

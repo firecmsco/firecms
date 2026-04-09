@@ -5,7 +5,8 @@ import type { FieldProps } from "../../types/fields";
 import type { ArrayProperty, StringProperty } from "@rebasepro/types";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@rebasepro/ui";
 import { RebaseEditor, RebaseEditorProps } from "../../editor";
-import { randomString, resolveStorageFilenameString, resolveStoragePathString } from "@rebasepro/common";
+import { resolveStorageFilenameString, resolveStoragePathString } from "@rebasepro/common";
+import { randomString } from "@rebasepro/utils";
 
 interface MarkdownEditorFieldProps {
     highlight?: { from: number, to: number };

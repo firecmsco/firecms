@@ -5,12 +5,13 @@ import React, { useState } from "react";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams } from "../../components/ArrayContainer";
 import { ErrorBoundary } from "@rebasepro/ui";
-import { getArrayResolvedProperties, getDefaultValueFor, mergeDeep } from "@rebasepro/common";
+import { getArrayResolvedProperties, getDefaultValueFor } from "@rebasepro/common";
 import { getIconForProperty } from "@rebasepro/core";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { ExpandablePanel, Typography } from "@rebasepro/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { useAuthController, useTranslation } from "@rebasepro/core";
+import { mergeDeep } from "@rebasepro/utils";
 
 /**
  * Generic array field that allows reordering and renders the child property

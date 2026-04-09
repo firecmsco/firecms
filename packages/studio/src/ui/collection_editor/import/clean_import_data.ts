@@ -1,6 +1,6 @@
 import { Properties } from "@rebasepro/types";
-import { slugify } from "@rebasepro/common";
 import { ImportConfig } from "@rebasepro/data_import";
+import { slugify } from "@rebasepro/utils";
 
 export function cleanPropertiesFromImport(properties: Properties, parentSlug = ""): {
     headersMapping: ImportConfig["headersMapping"],

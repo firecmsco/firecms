@@ -11,10 +11,7 @@ import {
 } from "../EntityCollectionTable";
 import { CollectionTableToolbar } from "../EntityCollectionTable/internal/CollectionTableToolbar";
 
-import {
-    getSubcollections,
-    mergeDeep,
-} from "@rebasepro/common";
+import { getSubcollections } from "@rebasepro/common";
 import { navigateToEntity } from "../../util/navigation_utils";
 import { mergeEntityActions } from "../../util/entity_actions";
 import { resolveEntityAction } from "../../util/resolutions";
@@ -28,14 +25,10 @@ import {
     useDataTableController,
     useRebaseContext,
     useLargeLayout,
-    useCollectionRegistryController,
-    useUrlController,
-    useSideEntityController,
     usePermissions,
     useTranslation,
     useSlot
 } from "@rebasepro/core";
-import { useBreadcrumbsController } from "@rebasepro/core";
 import { useUserConfigurationPersistence } from "@rebasepro/core";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { EntityCollectionCardView } from "./EntityCollectionCardView";
@@ -78,6 +71,9 @@ import { EntityCollectionViewStartActions } from "./EntityCollectionViewStartAct
 import { addRecentId, getRecentIds } from "./utils";
 import { useScrollRestoration } from "@rebasepro/core";
 import { ErrorBoundary } from "@rebasepro/ui";
+import { mergeDeep } from "@rebasepro/utils";
+import { useCollectionRegistryController, useUrlController, useSideEntityController } from "../../index";
+import { useBreadcrumbsController } from "../../index";
 
 const DEFAULT_ENTITY_OPEN_MODE: "side_panel" | "full_screen" = "side_panel";
 

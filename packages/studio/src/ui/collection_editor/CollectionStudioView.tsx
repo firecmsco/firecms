@@ -1,15 +1,13 @@
+import { useUnsavedChangesDialog, UnsavedChangesDialog } from "@rebasepro/core";
+import { useUrlController } from "@rebasepro/cms";
 import * as React from "react";
 import { useState, useMemo, useEffect } from "react";
 import {
-    cls,
-    defaultBorderMixin,
-    ResizablePanels,
     Typography,
     Button,
     AddIcon,
-    StorageIcon,
 } from "@rebasepro/ui";
-import { useSnackbarController, useUrlController, useUnsavedChangesDialog, UnsavedChangesDialog } from "@rebasepro/core";
+import { useSnackbarController } from "@rebasepro/core";
 import { CollectionEditorDialogProps } from "./CollectionEditorDialog";
 import { AIModifiedPathsProvider } from "./AIModifiedPathsContext";
 import { CollectionEditor } from "./CollectionEditorDialog";
@@ -72,8 +70,16 @@ export function CollectionStudioView({ collectionId, ...props }: CollectionStudi
                         setFormDirty={setFormDirty}
                     />
                 ) : (
-                    <div className="flex-grow flex items-center justify-center text-text-disabled h-full">
-                        <Typography variant="body2">Select a collection or create a new one</Typography>
+                    <div className="flex-grow flex flex-col items-center justify-center h-full gap-4">
+                        <Typography variant="label">
+                            Select a collection or create a new one
+                        </Typography>
+                        <Button
+                            onClick={() => navigate(urlController.buildAppUrlPath("schema/new"))}
+                        >
+                            <AddIcon />
+                            Add new collection
+                        </Button>
                     </div>
                 )}
                 

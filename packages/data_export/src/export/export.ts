@@ -1,5 +1,5 @@
 import { Entity, EntityReference, Properties, Property } from "@rebasepro/types";
-import { ArrayValuesCount, getArrayValuesCount, getValueInPath } from "@rebasepro/common";
+import { ArrayValuesCount, getArrayValuesCount, getValueInPath } from "@rebasepro/utils";
 
 interface Header {
     key: string;

@@ -1,10 +1,7 @@
 import type { EntityCollection } from "@rebasepro/types";
 import React, { useMemo } from "react";
 import { CollectionSize, Entity } from "@rebasepro/types";
-import {
-    getEntityImagePreviewPropertyKey,
-    getValueInPath,
-} from "@rebasepro/common";
+import { getEntityImagePreviewPropertyKey } from "@rebasepro/common";
 import {
     Card,
     Checkbox,
@@ -18,13 +15,13 @@ import {
 import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
 import {
     useAuthController,
-    useCustomizationController,
-    useCollectionRegistryController,
-    useSideEntityController
+    useCustomizationController
 } from "@rebasepro/core";
 import { useAnalyticsController } from "@rebasepro/core";
 import { getEntityTitlePropertyKey, getEntityPreviewKeys } from "@rebasepro/core";
 import { IconForView } from "@rebasepro/core";
+import { getValueInPath } from "@rebasepro/utils";
+import { useCollectionRegistryController, useSideEntityController } from "../../index";
 
 export type EntityCardProps<M extends Record<string, any> = any> = {
     entity: Entity<M>;

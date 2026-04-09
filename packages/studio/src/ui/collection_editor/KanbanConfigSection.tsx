@@ -1,11 +1,7 @@
+import { FieldCaption } from "@rebasepro/cms";
 import React, { useMemo, useRef, useState } from "react";
-import {
-    FieldCaption,
-    useAuthController,
-    useCustomizationController
-} from "@rebasepro/core";
+import { useAuthController, useCustomizationController } from "@rebasepro/core";
 import { EntityCollection, Property } from "@rebasepro/types";
-import { unslugify } from "@rebasepro/common";
 import { PropertyConfigBadge, getFieldConfig } from "@rebasepro/cms";
 import {
     CloseIcon,
@@ -17,6 +13,7 @@ import {
 } from "@rebasepro/ui";
 import { useFormex } from "@rebasepro/formex";
 import { PropertyFormDialog } from "./PropertyEditView";
+import { unslugify } from "@rebasepro/utils";
 
 export function KanbanConfigSection({
     className,

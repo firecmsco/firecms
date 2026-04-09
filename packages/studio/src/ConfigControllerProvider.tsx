@@ -1,15 +1,10 @@
+import { useUrlController } from "@rebasepro/cms";
 import React, { useCallback, useEffect, useState } from "react";
 import { Entity, EntityCollection, Property, TableMetadata, User } from "@rebasepro/types";
 import { deepEqual as equal } from "fast-equals";
 
 import { CollectionsConfigController } from "./types/config_controller";
-import {
-    useCustomizationController,
-    useUrlController,
-    useRebaseContext,
-    useAuthController,
-    useSnackbarController
-} from "@rebasepro/core";
+import { useCustomizationController, useRebaseContext, useAuthController, useSnackbarController } from "@rebasepro/core";
 import { CollectionEditorDialog } from "./ui/collection_editor/CollectionEditorDialog";
 import { useNavigate } from "react-router";
 import { CollectionEditorController } from "./types/collection_editor_controller";

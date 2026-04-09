@@ -6,7 +6,7 @@ import {
     useTranslation
 } from "@rebasepro/core";
 import { EntityCollection, EnumValueConfig, StringProperty } from "@rebasepro/types";
-import { resolveEnumValues, toSnakeCase } from "@rebasepro/common";
+import { resolveEnumValues } from "@rebasepro/common";
 import {
     AddIcon,
     Button,
@@ -20,6 +20,7 @@ import {
     Typography
 } from "@rebasepro/ui";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
+import { toSnakeCase } from "@rebasepro/utils";
 
 /**
  * Component rendered at the end of the Kanban board to add new columns (enum values).

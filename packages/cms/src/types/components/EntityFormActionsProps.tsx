@@ -1,5 +1,5 @@
 import { Entity } from "@rebasepro/types";
-import { EntityCollection } from "../collections";
+import { EntityCollection } from "@rebasepro/types";
 import { FormContext } from "../fields";
 import { FormexController } from "./formex";
 

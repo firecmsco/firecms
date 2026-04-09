@@ -5,19 +5,19 @@ import { useEffect, useMemo } from "react";
 
 import { Entity } from "@rebasepro/types";
 import type { PreviewSize } from "../types/components/PropertyPreviewProps";
-import { getEntityImagePreviewPropertyKey, getValueInPath } from "@rebasepro/common";
+import { getEntityImagePreviewPropertyKey } from "@rebasepro/common";
 import { cls, defaultBorderMixin, IconButton, KeyboardTabIcon, Skeleton, Tooltip, Typography } from "@rebasepro/ui";
 import { PropertyPreview, SkeletonPropertyComponent } from "../preview";
 import {
     useAuthController,
     useCustomizationController,
-    useCollectionRegistryController,
-    useSideEntityController,
     useData
 } from "@rebasepro/core";
 import { useAnalyticsController } from "@rebasepro/core";
 import { getPropertyInPath, IconForView } from "@rebasepro/core";
 import { getEntityPreviewKeys, getEntityTitlePropertyKey } from "@rebasepro/core";
+import { getValueInPath } from "@rebasepro/utils";
+import { useCollectionRegistryController, useSideEntityController } from "../index";
 
 export type EntityPreviewProps = {
     size?: PreviewSize,

@@ -47,20 +47,7 @@ export type RebaseProps<USER extends User> = {
      */
     apiUrl?: string;
 
-    /**
-     * This controller is in charge of resolving the collection and entity paths.
-     */
-    collectionRegistryController: CollectionRegistryController;
 
-    /**
-     * This controller is in charge of resolving the URL configurations map and building paths
-     */
-    urlController: UrlController;
-
-    /**
-     * This controller is in charge of resolving the navigation views and state
-     */
-    navigationStateController: NavigationStateController;
 
     /**
      * Format of the dates in the CMS.

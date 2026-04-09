@@ -9,7 +9,7 @@ import {
     Property,
 } from "@rebasepro/types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
-import { mergeDeep } from "./objects";
+import { mergeDeep } from "@rebasepro/utils";
 
 export function isReadOnly(property: Property): boolean {
     if (property.readOnly)

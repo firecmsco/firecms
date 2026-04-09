@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 ;
 import { useApiConfig } from "@rebasepro/core";
 import { useAuthController } from "@rebasepro/core";
-import { HistoryEntryData } from "@rebasepro/core";
+import { HistoryEntryData } from "../../hooks";
 
 function getRelativeTimeString(date: Date): string {
     const now = new Date();

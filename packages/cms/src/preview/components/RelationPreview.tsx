@@ -3,9 +3,10 @@ import * as React from "react";
 
 import { Entity, EntityRelation } from "@rebasepro/types";
 import type { PreviewSize } from "../../types/components/PropertyPreviewProps";
-import { useCustomizationController, useEntityFetch, useCollectionRegistryController, ErrorView } from "@rebasepro/core";
+import { useCustomizationController, useEntityFetch, ErrorView } from "@rebasepro/core";
 import { Skeleton } from "@rebasepro/ui";
 import { EntityPreview, EntityPreviewContainer } from "../../components";
+import { useCollectionRegistryController } from "../../index";
 
 export type RelationPreviewProps = {
     disabled?: boolean;

@@ -3,15 +3,14 @@ import type { EntitySidePanelProps } from "@rebasepro/types";
 import React, { useCallback, useEffect, useMemo } from "react";
 
 import type { OnUpdateParams } from "../types/components/EntityFormProps";
-import { useCollectionRegistryController, useSideEntityController } from "@rebasepro/core";
-import { useUrlController } from "@rebasepro/core";
-
 import { ErrorBoundary } from "@rebasepro/ui";
 import { EntityEditView } from "./EntityEditView";
-import { useSideDialogContext } from "@rebasepro/core";
+import { useSideDialogContext } from "./SideDialogs";
 import { CloseIcon, IconButton, OpenInFullIcon } from "@rebasepro/ui";
 import { useLocation, useNavigate } from "react-router-dom";
 import { saveEntityToMemoryCache } from "@rebasepro/core";
+import { useCollectionRegistryController, useSideEntityController } from "../index";
+import { useUrlController } from "../index";
 
 /**
  * This is the component in charge of rendering the side dialog used

@@ -7,10 +7,11 @@ import { useTranslation } from "@rebasepro/core";
 
 import { ErrorBoundary } from "@rebasepro/ui";
 import { getIconForProperty } from "@rebasepro/core";
-import { isHidden, isReadOnly, pick } from "@rebasepro/common";
+import { isHidden, isReadOnly } from "@rebasepro/common";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { cls, ExpandablePanel, InputLabel, Select, SelectItem } from "@rebasepro/ui";
+import { pick } from "@rebasepro/utils";
 
 /**
  * Field that renders the children property fields

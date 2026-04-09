@@ -1,21 +1,16 @@
 import type { EntityCollection } from "@rebasepro/types";
 import { Blocker, useBlocker, useLocation } from "react-router";
 import { EntityEditView } from "../components/EntityEditView";
-import { useCollectionRegistryController, useUrlController } from "@rebasepro/core";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { useBreadcrumbsController } from "@rebasepro/core";
 import { EntityCollectionView } from "../components";
 import { NotFoundPage } from "@rebasepro/core";
 import { UnsavedChangesDialog } from "@rebasepro/core";
 ;
-import {
-    getNavigationEntriesFromPath,
-    NavigationViewCollectionInternal, NavigationViewEntityCustomInternal,
-    NavigationViewInternal,
-    toArray
-} from "@rebasepro/common";
+import { getNavigationEntriesFromPath, NavigationViewCollectionInternal, NavigationViewEntityCustomInternal, NavigationViewInternal } from "@rebasepro/common";
+import { toArray } from "@rebasepro/utils";
+import { useCollectionRegistryController, useUrlController } from "../index";
+import { useBreadcrumbsController } from "../index";
 
 export function RebaseRoute() {
 

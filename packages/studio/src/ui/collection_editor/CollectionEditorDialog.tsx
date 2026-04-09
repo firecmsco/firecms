@@ -1,20 +1,11 @@
+import { useUnsavedChangesDialog, UnsavedChangesDialog } from "@rebasepro/core";
+import { useNavigationStateController, useCollectionRegistryController, useUrlController } from "@rebasepro/cms";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import {
-    ConfirmationDialog,
-    ErrorView,
-    useAuthController,
-    useCustomizationController,
-    useNavigationStateController,
-    useCollectionRegistryController,
-    useUrlController,
-    useSnackbarController,
-    useUnsavedChangesDialog,
-    UnsavedChangesDialog
-} from "@rebasepro/core";
+import { ConfirmationDialog, ErrorView, useAuthController, useCustomizationController, useSnackbarController } from "@rebasepro/core";
 import { CircularProgressCenter } from "@rebasepro/ui";
 import { Entity, EntityCollection, MapProperty, NavigationResult, Properties, Property, PropertyConfig, User } from "@rebasepro/types";
-import { getSubcollections, isPropertyBuilder, mergeDeep, randomString, removeInitialAndTrailingSlashes, removeUndefined } from "@rebasepro/common";
+import { getSubcollections, isPropertyBuilder, removeInitialAndTrailingSlashes } from "@rebasepro/common";
 import {
     ArrowBackIcon,
     Button,
@@ -53,6 +44,8 @@ import { CollectionOperation, CollectionGenerationCallback } from "../../api/gen
 import { CollectionRLSTab } from "./CollectionRLSTab";
 import { buildCollectionFromTableMetadata } from "../../utils/pgColumnToProperty";
 import { TableMetadata } from "@rebasepro/types";
+import { mergeDeep, randomString, removeUndefined } from "@rebasepro/utils";
+
 export interface CollectionEditorDialogProps {
     open: boolean;
     isNewCollection: boolean;

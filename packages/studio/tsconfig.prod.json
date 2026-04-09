@@ -1,16 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "paths": {}
+    "sourceMap": true
   },
   "exclude": [
     "node_modules",
     "dist",
     "src/test",
-    "../core/src",
-    "../formex/src",
-    "../schema_inference/src",
-    "../data_import_export/src",
-    "../ui/src"
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

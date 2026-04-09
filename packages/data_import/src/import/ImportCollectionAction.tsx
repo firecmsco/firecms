@@ -4,16 +4,15 @@ import {
     getPropertyInPath,
     useAuthController,
     useCustomizationController,
-    useCollectionRegistryController,
     useSnackbarController
 } from "@rebasepro/core";
 import { CollectionActionsProps, Properties, Property, User } from "@rebasepro/types";
-import { slugify } from "@rebasepro/common";
 import {
     EntityCollectionTable,
     getFieldConfig,
     PropertyConfigBadge,
-    useSelectionController
+    useSelectionController,
+    useCollectionRegistryController
 } from "@rebasepro/cms";
 import {
     Button,
@@ -35,6 +34,7 @@ import { useImportConfig } from "../hooks";
 import { convertDataToEntity, getInferenceType } from "../utils";
 import { DataNewPropertiesMapping, ImportFileUpload, ImportSaveInProgress } from "../components";
 import { ImportConfig } from "../types";
+import { slugify } from "@rebasepro/utils";
 
 type ImportState = "initial" | "mapping" | "preview" | "import_data_saving";
 
@@ -80,7 +80,7 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
 
         if (data.length > 0) {
             const originProperties = await buildEntityPropertiesFromData(data, getInferenceType);
-            importConfig.setOriginProperties(originProperties);
+            importConfig.setOriginProperties(originProperties as any);
 
             const headersMapping = buildHeadersMappingFromData(data, collection?.properties);
             importConfig.setHeadersMapping(headersMapping);

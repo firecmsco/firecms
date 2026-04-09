@@ -1,8 +1,8 @@
 import type { AppView } from "@rebasepro/types";
 ;
-import { useBreadcrumbsController } from "@rebasepro/core";
-import { useUrlController } from "@rebasepro/core";
 import { useEffect } from "react";
+import { useBreadcrumbsController } from "../index";
+import { useUrlController } from "../index";
 
 export function CustomViewRoute({ view }: {
     view: AppView

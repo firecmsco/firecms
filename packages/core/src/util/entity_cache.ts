@@ -1,5 +1,5 @@
-import { isObject, isPlainObject } from "@rebasepro/common";
 import { Entity, EntityReference, EntityRelation, GeoPoint, Vector } from "@rebasepro/types";
+import { isObject, isPlainObject } from "@rebasepro/utils";
 
 // Define a unique prefix for entity keys in sessionStorage to avoid key collisions
 const LOCAL_STORAGE_PREFIX = "entity_cache::";

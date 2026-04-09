@@ -8,12 +8,13 @@ import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 ;
-import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE, getDefaultValueFor, mergeDeep, } from "@rebasepro/common";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE, getDefaultValueFor } from "@rebasepro/common";
 import { getIconForProperty, } from "@rebasepro/core";
 import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@rebasepro/ui";
 import { useTranslation } from "@rebasepro/core";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { ArrayContainer, ArrayEntryParams } from "../../components/ArrayContainer";
+import { mergeDeep } from "@rebasepro/utils";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as

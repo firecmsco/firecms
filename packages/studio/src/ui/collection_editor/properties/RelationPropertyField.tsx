@@ -1,9 +1,7 @@
+import { FieldCaption, useCollectionRegistryController } from "@rebasepro/cms";
 import React, { useCallback, useEffect } from "react";
 import { useFormex } from "@rebasepro/formex";
-import {
-    FieldCaption,
-    useCollectionRegistryController
-} from "@rebasepro/core";
+;
 import {
     Select,
     SelectItem,

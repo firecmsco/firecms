@@ -4,7 +4,7 @@ import { isPropertyBuilder } from "@rebasepro/common";
 import { unflattenObject } from "./file_to_json";
 import { getIn } from "@rebasepro/formex";
 import { inferTypeFromValue } from "@rebasepro/schema_inference";
-import { mergeDeep } from "@rebasepro/common";
+import { mergeDeep } from "@rebasepro/utils";
 
 export function convertDataToEntity(authController: AuthController,
     navigation: CollectionRegistryController,
@@ -101,8 +101,8 @@ export function processValueMapping(authController: AuthController, value: any, 
         } catch (e) {
             return value;
         }
-    } else if (from === "date" && to === "string") {
-        return value instanceof Date && value.toISOString();
+    } else if (value instanceof Date && to === "string") {
+        return value.toISOString();
     } else if (from === "number" && to === "date" && typeof value === "number") {
         try {
             return new Date(value);

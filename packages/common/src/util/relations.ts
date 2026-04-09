@@ -1,6 +1,6 @@
 import { EntityCollection, Property, Relation } from "@rebasepro/types";
-import { toSnakeCase } from "./strings";
-import { generateForeignKeyName } from "./names";
+import { toSnakeCase } from "@rebasepro/utils";
+import { generateForeignKeyName } from "@rebasepro/utils";
 
 export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: EntityCollection): Relation {
     if (!relation.target) {

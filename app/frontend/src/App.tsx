@@ -1,3 +1,6 @@
+import { AdminModeSyncer, AppBar, ContentHomePage, StudioHomePage, Drawer, RolesView, Scaffold, UsersView } from "@rebasepro/cms";
+import { useBuildNavigationStateController } from "@rebasepro/cms";
+import { SideDialogs, useBuildUrlController, useBuildCollectionRegistryController } from "@rebasepro/cms";
 import React from "react";
 
 import "@fontsource/jetbrains-mono";
@@ -8,33 +11,8 @@ import {
     useBackendUserManagement,
     useRebaseAuthController
 } from "@rebasepro/auth";
-import {
-    AdminModeControllerProvider,
-    AdminModeSyncer,
-    AppBar,
-    ContentHomePage,
-    StudioHomePage,
-    Drawer,
-    Rebase,
-    ModeControllerProvider,
-    NotFoundPage,
-    RebaseI18nProvider,
-    RolesView,
-    Scaffold,
-    SideDialogs,
-    RebaseRoutes,
-    SnackbarProvider,
-    UserSettingsView,
-    UsersView,
-    useBuildAdminModeController,
-    useBuildUrlController,
-    useBuildCollectionRegistryController,
-    useBuildLocalConfigurationPersistence,
-    useBuildModeController,
-    useBuildNavigationStateController,
-    UIReferenceView
-} from "@rebasepro/core";
-import { RebaseRoute, CustomViewRoute, SideEntityProvider } from "@rebasepro/cms";
+import { AdminModeControllerProvider, Rebase, ModeControllerProvider, NotFoundPage, RebaseI18nProvider, RebaseRoutes, SnackbarProvider, UserSettingsView, useBuildAdminModeController, useBuildLocalConfigurationPersistence, useBuildModeController, UIReferenceView } from "@rebasepro/core";
+import { RebaseRoute, CustomViewRoute, SideEntityProvider, CollectionRegistryContext, UrlContext, NavigationStateContext } from "@rebasepro/cms";
 import { CircularProgressCenter } from "@rebasepro/ui";
 import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
 import { CollectionsStudioView, JSEditor, RLSEditor, SQLEditor, StorageView, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
@@ -150,16 +128,16 @@ export function App() {
         <SnackbarProvider>
             <ModeControllerProvider value={modeController}>
                 <AdminModeControllerProvider value={adminModeController}>
-                    <Rebase
-                        apiUrl={API_URL}
-                        client={rebaseClient}
-                        collectionRegistryController={collectionRegistryController}
-                        urlController={urlController}
-                        navigationStateController={navigationStateController}
-                        authController={authController}
-                        userConfigPersistence={userConfigPersistence}
-                        storageSource={rebaseClient.storage}
-                    >
+                    <CollectionRegistryContext.Provider value={collectionRegistryController}>
+                        <UrlContext.Provider value={urlController}>
+                            <NavigationStateContext.Provider value={navigationStateController}>
+                                <Rebase
+                                    apiUrl={API_URL}
+                                    client={rebaseClient}
+                                    authController={authController}
+                                    userConfigPersistence={userConfigPersistence}
+                                    storageSource={rebaseClient.storage}
+                                >
                         {({ loading }) => {
                             if (loading || authController.initialLoading) {
                                 return <CircularProgressCenter size={"large"} />;
@@ -222,7 +200,10 @@ export function App() {
                                 </SideEntityProvider>
                             );
                         }}
-                    </Rebase>
+                                </Rebase>
+                            </NavigationStateContext.Provider>
+                        </UrlContext.Provider>
+                    </CollectionRegistryContext.Provider>
                 </AdminModeControllerProvider>
             </ModeControllerProvider>
         </SnackbarProvider>

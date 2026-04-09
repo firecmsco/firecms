@@ -12,8 +12,6 @@ import {
     useData,
     useDataTableController,
     useLargeLayout,
-    useUrlController,
-    useSideEntityController,
     usePermissions
 } from "@rebasepro/core";
 import { ErrorView } from "@rebasepro/core";
@@ -21,8 +19,9 @@ import { AddIcon, Button, DialogActions, Typography } from "@rebasepro/ui";
 import { IconForView } from "@rebasepro/core";
 import { useSelectionController } from "../EntityCollectionView/useSelectionController";
 import { useColumnIds, useTableSearchHelper } from "@rebasepro/core";
-import { useSideDialogContext } from "@rebasepro/core";
+import { useSideDialogContext } from "../SideDialogs";
 import { useAnalyticsController } from "@rebasepro/core";
+import { useUrlController, useSideEntityController } from "../../index";
 
 /**
  * @group Components

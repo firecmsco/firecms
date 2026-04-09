@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { useApp, useUrlController } from "@rebasepro/core";
+import { useApp, useUrlController } from "@rebasepro/cms";
 import { useDataTalk } from "../DataTalkProvider";
 import { cls, ManageSearchIcon, Typography } from "@rebasepro/ui";
 

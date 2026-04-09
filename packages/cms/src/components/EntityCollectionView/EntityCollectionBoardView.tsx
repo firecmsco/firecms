@@ -27,13 +27,13 @@ import {
     useCustomizationController,
     useData,
     useRebaseContext,
-    useSideEntityController,
     useTranslation,
     useSlot
 } from "@rebasepro/core";
 import { useAnalyticsController } from "@rebasepro/core";
 import { setIn } from "@rebasepro/formex";
 import { useBoardDataController } from "./useBoardDataController";
+import { useSideEntityController } from "../../index";
 
 export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> = {
     collection: EntityCollection<M>;

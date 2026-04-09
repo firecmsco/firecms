@@ -1,10 +1,8 @@
 import React, { useCallback, useMemo, useState } from "react";
 import {
-    FieldCaption,
     useSnackbarController,
     ConfirmationDialog,
-    useAuthController,
-    useCollectionRegistryController
+    useAuthController
 } from "@rebasepro/core";
 import { AppView, EntityCollection, Role, SecurityRule, User } from "@rebasepro/types";
 
@@ -44,12 +42,13 @@ interface AdminViewsProps {
     userManagement: UserManagement;
     apiUrl: string;
     getAuthToken: () => Promise<string>;
+    collections?: EntityCollection[];
 }
 
 /**
  * Create admin views for user and role management
  */
-export function createUserManagementAdminViews({ userManagement, apiUrl, getAuthToken }: AdminViewsProps): AppView[] {
+export function createUserManagementAdminViews({ userManagement, apiUrl, getAuthToken, collections = [] }: AdminViewsProps): AppView[] {
     return [
         {
             slug: "dev/users",
@@ -63,7 +62,7 @@ export function createUserManagementAdminViews({ userManagement, apiUrl, getAuth
             name: "Roles",
             group: "Admin",
             icon: "gpp_good",
-            view: <RolesView userManagement={userManagement} />
+            view: <RolesView userManagement={userManagement} collections={collections} />
         }
     ];
 }
@@ -423,7 +422,7 @@ function UserDetailsForm({
 // ============================================
 // RolesView Component
 // ============================================
-export function RolesView({ userManagement }: { userManagement: UserManagement }) {
+export function RolesView({ userManagement, collections = [] }: { userManagement: UserManagement, collections?: EntityCollection[] }) {
     const { roles, saveRole, deleteRole, loading, allowDefaultRolesCreation } = userManagement;
     const snackbarController = useSnackbarController();
 
@@ -550,6 +549,7 @@ export function RolesView({ userManagement }: { userManagement: UserManagement }
                 role={selectedRole}
                 saveRole={saveRole}
                 handleClose={handleClose}
+                collections={collections}
             />
 
             {/* Delete Confirmation */}
@@ -572,12 +572,14 @@ function RoleDetailsForm({
     open,
     role: roleProp,
     saveRole,
-    handleClose
+    handleClose,
+    collections = []
 }: {
     open: boolean;
     role?: Role;
     saveRole: (role: Role) => Promise<void>;
     handleClose: () => void;
+    collections?: EntityCollection[];
 }) {
     const snackbarController = useSnackbarController();
     const isNewRole = !roleProp;
@@ -671,7 +673,7 @@ function RoleDetailsForm({
 
                         {/* Permissions matrix */}
                         <div className="col-span-12">
-                            <CollectionPermissionsMatrix roleId={roleId} isAdmin={isAdmin} />
+                            <CollectionPermissionsMatrix roleId={roleId} isAdmin={isAdmin} collections={collections} />
                         </div>
                     </div>
                 </DialogContent>
@@ -737,9 +739,7 @@ function PermCell({ granted }: { granted: boolean }) {
     );
 }
 
-function CollectionPermissionsMatrix({ roleId, isAdmin }: { roleId: string; isAdmin: boolean }) {
-    const { collections } = useCollectionRegistryController();
-
+function CollectionPermissionsMatrix({ roleId, isAdmin, collections }: { roleId: string; isAdmin: boolean; collections: EntityCollection[] }) {
     if (!collections || collections.length === 0) {
         return (
             <div className="mt-4">
@@ -798,5 +798,16 @@ function CollectionPermissionsMatrix({ roleId, isAdmin }: { roleId: string; isAd
                 </Typography>
             )}
         </div>
+    );
+}
+
+// ============================================
+// Internal Components
+// ============================================
+function FieldCaption({ children }: React.PropsWithChildren) {
+    return (
+        <Typography variant="caption" className="text-surface-500 mt-1.5 ml-1 block">
+            {children}
+        </Typography>
     );
 }

@@ -1,8 +1,9 @@
-import type { Properties } from "../types";
-import type { ArrayProperty, MapProperty, NumberProperty, Property, BooleanProperty, DateProperty, GeopointProperty, ReferenceProperty, RelationProperty, StringProperty } from "../types";
+import type { Properties } from "@rebasepro/types";
+import type { ArrayProperty, MapProperty, NumberProperty, Property, BooleanProperty, DateProperty, GeopointProperty, ReferenceProperty, RelationProperty, StringProperty } from "@rebasepro/types";
 ;
 import { z, ZodTypeAny } from "zod";
-import { enumToObjectEntries, getValueInPath, hydrateRegExp, isPropertyBuilder } from "@rebasepro/common";
+import { enumToObjectEntries, isPropertyBuilder } from "@rebasepro/common";
+import { getValueInPath, hydrateRegExp } from "@rebasepro/utils";
 
 export type CustomFieldValidator = (props: {
     name: string,

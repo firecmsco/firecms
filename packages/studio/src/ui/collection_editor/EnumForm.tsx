@@ -1,7 +1,8 @@
+import { FieldCaption } from "@rebasepro/cms";
 import React, { useEffect } from "react";
 import { deepEqual as equal } from "fast-equals"
 
-import { FieldCaption } from "@rebasepro/core";
+;
 import { EnumValueConfig, EnumValues } from "@rebasepro/types";
 import { ArrayContainer, ArrayEntryParams } from "@rebasepro/cms";
 import {

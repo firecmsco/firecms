@@ -9,20 +9,16 @@ import { PluginProviderStack } from "./PluginProviderStack";
 import { AuthControllerContext } from "../contexts";
 import { useCustomizationController, useRebaseContext, useAuthSubscription } from "../hooks";
 import { ApiConfigProvider, useApiConfig } from "../hooks/ApiConfigContext";
-import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { ErrorView } from "../components";
 import { StorageSourceContext } from "../contexts/StorageSourceContext";
 import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
 import { RebaseDataContext } from "../contexts/RebaseDataContext";
 import { DatabaseAdminContext } from "../contexts/DatabaseAdminContext";
 import { RebaseClientInstanceContext } from "../contexts/RebaseClientInstanceContext";
-import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
-import { CollectionRegistryContext, NavigationStateContext, UrlContext } from "../hooks/navigation/contexts";
 import { DialogsProvider } from "../contexts/DialogsProvider";
 import { buildRebaseData, CollectionRegistry } from "@rebasepro/common";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
 import { AnalyticsContext } from "../contexts/AnalyticsContext";
-import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { InternalUserManagementContext } from "../contexts/InternalUserManagementContext";
 import { EffectiveRoleControllerContext } from "../contexts/EffectiveRoleController";
 import { useBuildEffectiveRoleController } from "../hooks/useBuildEffectiveRoleController";
@@ -59,16 +55,13 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         entityViews,
         entityActions,
         components,
-        collectionRegistryController,
-        urlController,
-        navigationStateController,
         apiKey,
         userManagement: _userManagement,
         effectiveRoleController,
         apiUrl
     } = props;
 
-    const plugins = navigationStateController.plugins ?? pluginsProp;
+    const plugins = pluginsProp;
 
     // Validate plugin key uniqueness
     if (plugins) {
@@ -92,8 +85,6 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
             getUser: (uid: string) => null
         } as unknown as UserManagementDelegate<USER>;
 
-    const sideDialogsController = useBuildSideDialogsController();
-    
     // Auth fallback logic
     const clientAuthController = useAuthSubscription(authControllerProp ? undefined : client?.auth);
     const authController = authControllerProp ?? clientAuthController;
@@ -114,7 +105,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
 
     const pluginsLoading = plugins?.some((p) => p.loading) ?? false;
 
-    const loading = authController.initialLoading || navigationStateController.loading || pluginsLoading;
+    const loading = authController.initialLoading || pluginsLoading;
 
     const customizationController: CustomizationController = {
         dateTimeFormat,
@@ -134,16 +125,6 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
 
     const fallbackEffectiveRoleController = useBuildEffectiveRoleController();
     const activeEffectiveRoleController = effectiveRoleController ?? fallbackEffectiveRoleController;
-
-    if (navigationStateController.navigationLoadingError) {
-        return (
-            <CenteredView maxWidth={"md"}>
-                <ErrorView
-                    title={"Error loading navigation"}
-                    error={navigationStateController.navigationLoadingError as Error | string} />
-            </CenteredView>
-        );
-    }
 
     if (authController.authError) {
         return (
@@ -169,27 +150,16 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                                 value={resolvedDatabaseAdmin}>
                                 <AuthControllerContext.Provider
                                     value={authController}>
-                                            <SideDialogsControllerContext.Provider
-                                                value={sideDialogsController}>
-                                                <CollectionRegistryContext.Provider value={collectionRegistryController}>
-                                                    <NavigationStateContext.Provider value={navigationStateController}>
-                                                        <UrlContext.Provider value={urlController}>
-                                                            <InternalUserManagementContext.Provider value={userManagement}>
-                                                                <EffectiveRoleControllerContext.Provider value={activeEffectiveRoleController}>
-                                                                    <DialogsProvider>
-                                                                        <BreadcrumbsProvider>
-                                                                            <RebaseInternal
-                                                                                loading={loading}>
-                                                                                {children}
-                                                                            </RebaseInternal>
-                                                                        </BreadcrumbsProvider>
-                                                                    </DialogsProvider>
-                                                                </EffectiveRoleControllerContext.Provider>
-                                                            </InternalUserManagementContext.Provider>
-                                                        </UrlContext.Provider>
-                                                    </NavigationStateContext.Provider>
-                                                </CollectionRegistryContext.Provider>
-                                            </SideDialogsControllerContext.Provider>
+                                    <InternalUserManagementContext.Provider value={userManagement}>
+                                        <EffectiveRoleControllerContext.Provider value={activeEffectiveRoleController}>
+                                            <DialogsProvider>
+                                                <RebaseInternal
+                                                    loading={loading}>
+                                                    {children}
+                                                </RebaseInternal>
+                                            </DialogsProvider>
+                                        </EffectiveRoleControllerContext.Provider>
+                                    </InternalUserManagementContext.Provider>
                                 </AuthControllerContext.Provider>
                             </DatabaseAdminContext.Provider>
                         </RebaseDataContext.Provider>
@@ -243,63 +213,6 @@ function RebaseInternal({
         );
     }
 
-    return (
-        <>
-            {childrenResult}
-            <CollectionsMetadataSyncer />
-        </>
-    );
+    return childrenResult;
 }
 
-function CollectionsMetadataSyncer() {
-    const apiConfig = useApiConfig();
-    const registryController = React.useContext(CollectionRegistryContext);
-    const navigationStateController = React.useContext(NavigationStateContext);
-
-    React.useEffect(() => {
-        if (!apiConfig?.apiUrl) return;
-
-        let cancelled = false;
-        const fetchMetadata = async () => {
-            try {
-                const token = apiConfig.getAuthToken ? await apiConfig.getAuthToken() : null;
-                const headers: Record<string, string> = { "Content-Type": "application/json" };
-                if (token) headers["Authorization"] = `Bearer ${token}`;
-
-                const res = await fetch(`${apiConfig.apiUrl.replace(/\/$/, "")}/api/collections`, { headers });
-                if (res.ok && !cancelled) {
-                    const { data } = await res.json();
-                    if (!data || !Array.isArray(data)) return;
-
-                    let changed = false;
-                    // Get raw un-normalized collections as well to update both maps if necessary
-                    const registryWithRef = registryController as CollectionRegistryController & { collectionRegistryRef?: React.MutableRefObject<CollectionRegistry> };
-                    const refreshCollections = registryWithRef?.collectionRegistryRef?.current?.getCollections() ?? [];
-                    
-                    for (const c of refreshCollections) {
-                        const meta = data.find((m: { slug?: string; dbPath?: string; isTableMissing?: boolean }) => m.slug === c.slug || m.dbPath === c.dbPath);
-                         if (meta && c.isTableMissing !== meta.isTableMissing) {
-                             c.isTableMissing = meta.isTableMissing;
-                             changed = true;
-                         }
-                    }
-
-                    // Force navigation state to reload if things changed
-                    if (changed && navigationStateController?.refreshNavigation) {
-                        navigationStateController.refreshNavigation();
-                    }
-                }
-            } catch (e) {
-                console.debug("Could not fetch collections metadata", e);
-            }
-        };
-
-        fetchMetadata();
-
-        return () => {
-            cancelled = true;
-        };
-    }, [apiConfig?.apiUrl, apiConfig?.getAuthToken, registryController, navigationStateController]);
-
-    return null;
-}

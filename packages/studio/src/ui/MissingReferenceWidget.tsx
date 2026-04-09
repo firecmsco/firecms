@@ -1,11 +1,8 @@
-import {
-    ErrorView,
-    useCollectionRegistryController,
-    useTranslation
-} from "@rebasepro/core";
-import { prettifyIdentifier } from "@rebasepro/common";
+import { useCollectionRegistryController } from "@rebasepro/cms";
+import { ErrorView, useTranslation } from "@rebasepro/core";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { Button } from "@rebasepro/ui";
+import { prettifyIdentifier } from "@rebasepro/utils";
 
 export function MissingReferenceWidget({ path: pathProp }: {
     path: string

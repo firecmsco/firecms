@@ -9,6 +9,7 @@ import { User } from "../users";
 import { RebaseContext } from "../rebase_context";
 import { Relation } from "./relations";
 import { EntityCustomView } from "./entity_views";
+import { EntityAction } from "./entity_actions";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -412,6 +413,17 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * and can be used for general ordering purposes.
      */
     orderProperty?: Extract<keyof M, string>;
+
+    /**
+     * Actions that can be performed on the entities in this collection.
+     */
+    entityActions?: EntityAction<M, USER>[];
+
+    /**
+     * Builder for the collection actions rendered in the toolbar
+     */
+    Actions?: React.ComponentType<CollectionActionsProps<M, USER>>[];
+
 
 }
 

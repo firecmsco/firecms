@@ -1,5 +1,5 @@
 import { InferPropertyType } from "@rebasepro/types";
-import { Property } from "../properties";
+import { Property } from "@rebasepro/types";
 
 /**
  * @group Preview components

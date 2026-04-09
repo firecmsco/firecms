@@ -1,3 +1,6 @@
+import { IconForView } from "@rebasepro/core";
+;
+import { useCollectionRegistryController } from "@rebasepro/cms";
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
     Button,
@@ -35,7 +38,7 @@ import {
     VirtualTableColumn,
 } from "@rebasepro/ui";
 import { VirtualTableInput } from "@rebasepro/cms";
-import { useRebaseContext, useSnackbarController, useCollectionRegistryController, ConfirmationDialog, ErrorView, IconForView, useTranslation } from "@rebasepro/core";
+import { useRebaseContext, useSnackbarController, ConfirmationDialog, ErrorView, useTranslation } from "@rebasepro/core";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
 import { parseFirst } from "pgsql-ast-parser";

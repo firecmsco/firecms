@@ -6,9 +6,8 @@
  */
 import { describe, expect, it } from "@jest/globals";
 import { EntityReference, GeoPoint } from "@rebasepro/types";
-import { mergeDeep } from "@rebasepro/common";
 import { updateDateAutoValues } from "@rebasepro/common";
-
+import { mergeDeep } from "@rebasepro/utils";
 
 // Real EntityReference class for testing
 class TestEntityReference extends EntityReference {

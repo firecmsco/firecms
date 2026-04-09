@@ -18,10 +18,10 @@ import {
 } from "@rebasepro/ui";
 import { FormexController } from "@rebasepro/formex";
 import { useSnackbarController, useTranslation } from "@rebasepro/core";
-import { mergeDeep } from "@rebasepro/common";
 import { flattenKeys, removeEntityFromCache } from "@rebasepro/core";
 ;
 import { PropertyCollectionView } from "../../components/PropertyCollectionView";
+import { mergeDeep } from "@rebasepro/utils";
 
 interface LocalChangesMenuProps<M extends Record<string, any>> {
     cacheKey: string;

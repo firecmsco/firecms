@@ -11,8 +11,8 @@ import {
     Tooltip
 } from "@rebasepro/ui";
 import { ErrorBoundary } from "@rebasepro/ui";
-import { toArray } from "@rebasepro/common";
 import { usePermissions } from "@rebasepro/core";
+import { toArray } from "@rebasepro/utils";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

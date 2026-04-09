@@ -1,5 +1,5 @@
 import { Entity, EntityStatus } from "@rebasepro/types";
-import { EntityCollection, EntityCustomViewParams } from "../collections";
+import { EntityCollection, EntityCustomViewParams } from "@rebasepro/types";
 import { FormContext } from "../fields";
 import { FormexController } from "./formex";
 import { EntityFormActionsProps } from "./EntityFormActionsProps";

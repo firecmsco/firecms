@@ -4,7 +4,7 @@ import React from "react";
 import { defaultBorderMixin, Typography } from "@rebasepro/ui";
 import { PropertyPreview } from "../preview";
 import { PreviewSize } from "../types/components/PropertyPreviewProps";
-import { getValueInPath } from "@rebasepro/common";
+import { getValueInPath } from "@rebasepro/utils";
 
 /**
  * Build a readable label for a path and resolve the property

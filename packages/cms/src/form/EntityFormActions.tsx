@@ -14,8 +14,9 @@ import {
     LoadingButton,
     Typography
 } from "@rebasepro/ui";
-import { useRebaseContext, useSideEntityController, useTranslation } from "@rebasepro/core";
+import { useRebaseContext, useTranslation } from "@rebasepro/core";
 import { FormexController } from "@rebasepro/formex";
+import { useSideEntityController } from "../index";
 
 export function EntityFormActions({
     path,

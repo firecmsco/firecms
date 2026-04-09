@@ -1,13 +1,9 @@
+import { IconForView } from "@rebasepro/core";
+import { FieldCaption } from "@rebasepro/cms";
 import React, { useMemo, useState } from "react";
-import {
-    FieldCaption,
-    IconForView,
-    useAuthController,
-    useCustomizationController
-} from "@rebasepro/core";
+import { useAuthController, useCustomizationController } from "@rebasepro/core";
 import { getFieldConfig, PropertyConfigBadge, SearchIconsView } from "@rebasepro/cms";
 import { EntityCollection, Property } from "@rebasepro/types";
-import { singular, toSnakeCase, unslugify } from "@rebasepro/common";
 import {
     BooleanSwitchWithLabel,
     Chip,
@@ -33,6 +29,7 @@ import { LayoutModeSwitch } from "./LayoutModeSwitch";
 import { ViewModeSwitch } from "./ViewModeSwitch";
 import { KanbanConfigSection } from "./KanbanConfigSection";
 import { PropertyFormDialog } from "./PropertyEditView";
+import { singular, toSnakeCase, unslugify } from "@rebasepro/utils";
 
 export function CollectionDetailsForm({
     isNewCollection,

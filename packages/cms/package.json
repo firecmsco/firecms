@@ -84,7 +84,8 @@
         "prosemirror-view": "^1.33.8",
         "react-dropzone": "^14.3.8",
         "react-use-measure": "^2.1.7",
-        "zod": "^3.25.0"
+        "zod": "^3.25.0",
+        "@rebasepro/utils": "workspace:*"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

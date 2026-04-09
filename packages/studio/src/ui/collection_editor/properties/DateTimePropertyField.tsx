@@ -1,6 +1,7 @@
+import { FieldCaption } from "@rebasepro/cms";
 import React from "react";
 import { getIn, useFormex } from "@rebasepro/formex";
-import { FieldCaption } from "@rebasepro/core";
+;
 import { NumberProperty, StringProperty } from "@rebasepro/types";
 import { Select, SelectItem } from "@rebasepro/ui";
 import { GeneralPropertyValidation } from "./validation/GeneralPropertyValidation";

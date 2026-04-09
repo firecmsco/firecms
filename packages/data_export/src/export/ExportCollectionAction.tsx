@@ -4,8 +4,7 @@ import {
     useAuthController,
     useCustomizationController,
     useData,
-    useRebaseContext,
-    useUrlController
+    useRebaseContext
 } from "@rebasepro/core";
 import { CollectionActionsProps, Entity, EntityCollection, ExportConfig, RebaseContext, User } from "@rebasepro/types";
 import { getDefaultValuesFor } from "@rebasepro/common";
@@ -29,7 +28,7 @@ const DOCS_LIMIT = 500;
 
 export function ExportCollectionAction<M extends Record<string, any>, USER extends User>({
     collection,
-    path: inputPath,
+    path,
     collectionEntitiesCount,
     onAnalyticsEvent,
     exportAllowed,
@@ -51,9 +50,6 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
     const context = useRebaseContext<USER>();
     const dataClient = useData();
-    const urlController = useUrlController();
-
-    const path = urlController.resolveDatabasePathsFrom(inputPath);
 
     const canExport = !exportAllowed || exportAllowed({
         collectionEntitiesCount: collectionEntitiesCount ?? 0,

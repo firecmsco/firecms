@@ -1,10 +1,8 @@
+import { IconForView } from "@rebasepro/core";
+import { FieldCaption, useCollectionRegistryController } from "@rebasepro/cms";
 import React from "react";
 import { Field, getIn, useFormex } from "@rebasepro/formex";
-import {
-    FieldCaption,
-    IconForView,
-    useCollectionRegistryController
-} from "@rebasepro/core";
+;
 import { NumberProperty, StringProperty } from "@rebasepro/types";
 import { CircularProgress, Select, SelectGroup, SelectItem, Typography, } from "@rebasepro/ui";
 

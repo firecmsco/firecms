@@ -31,19 +31,8 @@ import {
     VirtualTableColumn,
     CellRendererParams,
 } from "@rebasepro/ui";
-import {
-    useRebaseContext,
-    useSnackbarController,
-    useCollectionRegistryController,
-    useSideEntityController,
-    useApiConfig,
-    useTranslation,
-    useModeController,
-    ErrorView,
-    IconForView,
-    UserSelectPopover,
-    SelectableUser,
-} from "@rebasepro/core";
+import { useUrlController, useCollectionRegistryController, useSideEntityController } from "@rebasepro/cms";
+import { useRebaseContext, useSnackbarController, useApiConfig, useTranslation, useModeController, ErrorView, UserSelectPopover, SelectableUser, IconForView } from "@rebasepro/core";
 import { EntityCollection } from "@rebasepro/types";
 import { createRebaseClient } from "@rebasepro/client";
 import { JSMonacoEditor } from "./JSMonacoEditor";

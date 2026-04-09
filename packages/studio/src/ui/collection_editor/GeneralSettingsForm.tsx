@@ -1,13 +1,9 @@
+import { IconForView } from "@rebasepro/core";
+import { FieldCaption } from "@rebasepro/cms";
 import React, { useState } from "react";
-import {
-    FieldCaption,
-    IconForView,
-    useAuthController,
-    useCustomizationController
-} from "@rebasepro/core";
+import { useAuthController, useCustomizationController } from "@rebasepro/core";
 import { SearchIconsView } from "@rebasepro/cms";
 import { EntityCollection } from "@rebasepro/types";
-import { singular, toSnakeCase } from "@rebasepro/common";
 import {
     BooleanSwitchWithLabel,
     Chip,
@@ -28,6 +24,7 @@ import {
 } from "@rebasepro/ui";
 import { Field, getIn, useFormex } from "@rebasepro/formex";
 import { useCollectionsConfigController } from "../../useCollectionsConfigController";
+import { singular, toSnakeCase } from "@rebasepro/utils";
 
 export function GeneralSettingsForm({
     isNewCollection,

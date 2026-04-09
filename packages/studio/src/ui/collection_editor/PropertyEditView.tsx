@@ -5,7 +5,7 @@ import { Formex, FormexController, getIn, useCreateFormex } from "@rebasepro/for
 import { ConfirmationDialog } from "@rebasepro/core";
 import { DEFAULT_FIELD_CONFIGS, getFieldConfig, getFieldId, PropertyConfigBadge } from "@rebasepro/cms";
 import { Property, PropertyConfig, PropertyConfigId } from "@rebasepro/types";
-import { isPropertyBuilder, isValidRegExp, mergeDeep } from "@rebasepro/common";
+import { isPropertyBuilder } from "@rebasepro/common";
 import {
     Button,
     Card,
@@ -43,6 +43,7 @@ import { updatePropertyFromWidget } from "./utils/update_property_for_widget";
 import { UrlPropertyField } from "./properties/UrlPropertyField";
 import { supportedFields } from "./utils/supported_fields";
 import { MarkdownPropertyField } from "./properties/MarkdownPropertyField";
+import { isValidRegExp, mergeDeep } from "@rebasepro/utils";
 
 export type PropertyWithId = Property & {
     id?: string

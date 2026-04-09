@@ -1,8 +1,7 @@
 import React from "react";
 import { coolIconKeys, Icon, IconColor, iconKeys } from "@rebasepro/ui";
 import { deepEqual as equal } from "fast-equals"
-
-import { hashString, slugify } from "@rebasepro/common";
+import { hashString, slugify } from "@rebasepro/utils";
 
 export function getIcon(iconKey?: string | React.ReactNode,
     className?: string,

@@ -2,13 +2,14 @@ import type { EntityCollection } from "@rebasepro/types";
 import type { Property } from "@rebasepro/types";
 import React, { memo, useCallback, useMemo } from "react";
 import { Entity } from "@rebasepro/types";
-import { getValueInPath, getEntityImagePreviewPropertyKey } from "@rebasepro/common";
+import { getEntityImagePreviewPropertyKey } from "@rebasepro/common";
 import { getEntityTitlePropertyKey } from "@rebasepro/core";
 import { IconForView } from "@rebasepro/core";
 import { Checkbox, cls, defaultBorderMixin } from "@rebasepro/ui";
 import { PropertyPreview } from "../../preview";
 import { useCustomizationController } from "@rebasepro/core";
 import { BoardItemViewProps } from "./board_types";
+import { getValueInPath } from "@rebasepro/utils";
 
 export type EntityBoardCardProps<M extends Record<string, any> = any> = BoardItemViewProps<M> & {
     collection: EntityCollection<M>;

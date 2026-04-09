@@ -15,7 +15,8 @@
         "@rebasepro/schema_inference": "0.0.1",
         "@rebasepro/types": "0.0.1",
         "@rebasepro/ui": "0.0.1",
-        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
+        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
+        "@rebasepro/utils": "workspace:*"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

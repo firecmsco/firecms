@@ -5,7 +5,6 @@ import { PropertyTableCell } from "./PropertyTableCell";
 import { ErrorBoundary } from "@rebasepro/ui";
 import { useRebaseContext, useLargeLayout } from "@rebasepro/core";
 import { CellRendererParams, VirtualTableColumn } from "@rebasepro/ui";
-import { getValueInPath } from "@rebasepro/common";
 import { EntityCollectionRowActions } from "./EntityCollectionRowActions";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
@@ -17,6 +16,7 @@ import { ErrorView } from "@rebasepro/core";
 import { SelectableTable } from "../SelectableTable/SelectableTable";
 import { cls } from "@rebasepro/ui";
 import { getRowHeight } from "@rebasepro/core";
+import { getValueInPath } from "@rebasepro/utils";
 
 /**
  * This component is in charge of rendering a collection table with a high

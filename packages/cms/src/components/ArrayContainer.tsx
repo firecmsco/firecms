@@ -12,7 +12,6 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 import { SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { getHashValue } from "@rebasepro/common";
 import {
     AddIcon,
     Button,
@@ -29,6 +28,7 @@ import {
     useOutsideAlerter
 } from "@rebasepro/ui";
 import { useTranslation } from "@rebasepro/core";
+import { getHashValue } from "@rebasepro/utils";
 
 export type ArrayEntryParams = {
     index: number;

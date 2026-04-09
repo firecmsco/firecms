@@ -1,11 +1,12 @@
+import { FieldCaption } from "@rebasepro/cms";
 import React from "react";
 
 import { Field, FormexFieldProps, getIn, useFormex } from "@rebasepro/formex";
-import { FieldCaption } from "@rebasepro/core";
-import { serializeRegExp } from "@rebasepro/common";
+;
 import { DebouncedTextField, } from "@rebasepro/ui";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 import { SwitchControl } from "../../SwitchControl";
+import { serializeRegExp } from "@rebasepro/utils";
 
 export function StringPropertyValidation({
     length,

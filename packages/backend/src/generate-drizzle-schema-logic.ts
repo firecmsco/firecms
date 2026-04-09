@@ -1,12 +1,7 @@
 import { EntityCollection, NumberProperty, Property, Relation, RelationProperty, SecurityOperation, SecurityRule, StringProperty } from "@rebasepro/types";
 import { getPrimaryKeys } from "./db/services/entity-helpers";
-import {
-    getEnumVarName,
-    getTableName,
-    getTableVarName,
-    resolveCollectionRelations,
-    toSnakeCase
-} from "@rebasepro/common";
+import { getEnumVarName, getTableName, getTableVarName, resolveCollectionRelations } from "@rebasepro/common";
+import { toSnakeCase } from "@rebasepro/utils";
 
 // --- Helper Functions ---
 

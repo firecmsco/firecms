@@ -1,9 +1,7 @@
+import { AIIcon } from "@rebasepro/core";
+import { useCollectionRegistryController } from "@rebasepro/cms";
 import React, { useState } from "react";
-import {
-    useCollectionRegistryController,
-    useSnackbarController,
-    AIIcon
-} from "@rebasepro/core";
+import { useSnackbarController } from "@rebasepro/core";
 import { EntityCollection } from "@rebasepro/types";
 import {
     Button,

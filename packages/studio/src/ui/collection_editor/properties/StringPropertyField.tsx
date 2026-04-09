@@ -1,8 +1,9 @@
+import { FieldCaption } from "@rebasepro/cms";
 import React from "react";
 import { StringPropertyValidation } from "./validation/StringPropertyValidation";
 import { ValidationPanel } from "./validation/ValidationPanel";
 import { getIn, useFormex } from "@rebasepro/formex";
-import { FieldCaption } from "@rebasepro/core";
+;
 import { Select, SelectItem, TextField } from "@rebasepro/ui";
 
 export function StringPropertyField({

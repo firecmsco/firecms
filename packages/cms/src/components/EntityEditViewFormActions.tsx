@@ -22,14 +22,14 @@ import {
 import {
     useCustomizationController,
     useRebaseContext,
-    useSideEntityController,
     useSnackbarController,
     useTranslation
 } from "@rebasepro/core";
-import { SideDialogController, useSideDialogContext } from "@rebasepro/core";
+import { SideDialogController, useSideDialogContext } from "./SideDialogs";
 import { FormexController } from "@rebasepro/formex";
 import { ErrorTooltip } from "@rebasepro/core";
 import { usePermissions } from "@rebasepro/core";
+import { useSideEntityController } from "../index";
 
 export function EntityEditViewFormActions({
     collection,

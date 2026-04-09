@@ -1,7 +1,8 @@
-import React, { useState } from "react";
 import { AIIcon } from "@rebasepro/core";
+;
+import React, { useState } from "react";
+;
 import { EntityCollection } from "@rebasepro/types";
-import { prettifyIdentifier } from "@rebasepro/common";
 import { Button, Card, Chip, cls, CodeIcon, Container, Icon, Tooltip, Typography, } from "@rebasepro/ui";
 import { CollectionJsonImportDialog } from "./CollectionJsonImportDialog";
 
@@ -14,6 +15,7 @@ import { useFormex } from "@rebasepro/formex";
 import { useCollectionEditorController } from "../../useCollectionEditorController";
 import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
 import { CollectionGenerationCallback } from "../../api/generateCollectionApi";
+import { prettifyIdentifier } from "@rebasepro/utils";
 
 export function CollectionEditorWelcomeView({
     path,

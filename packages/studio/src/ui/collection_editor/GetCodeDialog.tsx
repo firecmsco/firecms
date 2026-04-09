@@ -1,12 +1,12 @@
 import { useSnackbarController } from "@rebasepro/core";
 import { EntityCollection } from "@rebasepro/types";
-import { isEmptyObject } from "@rebasepro/common";
 import { Button, ContentCopyIcon, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@rebasepro/ui";
 import React from "react";
 import JSON5 from "json5";
 import { Highlight, themes } from "prism-react-renderer"
 import { camelCase } from "./utils/strings";
 import { clone } from "@rebasepro/formex";
+import { isEmptyObject } from "@rebasepro/utils";
 
 export function GetCodeDialog({
     collection,

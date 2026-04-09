@@ -2,7 +2,6 @@ import type { EntityCollection } from "@rebasepro/types";
 import { useEffect, useState } from "react";
 import { Entity, RebaseContext, User } from "@rebasepro/types";
 import { useData } from "./useData";
-import { useUrlController } from "../navigation/contexts";
 import { useRebaseContext } from "../useRebaseContext";
 
 /**
@@ -39,7 +38,7 @@ const CACHE: Record<string, Entity<any> | undefined> = {};
 
 export function useEntityFetch<M extends Record<string, any>, USER extends User>(
     {
-        path: inputPath,
+        path,
         entityId,
         collection,
         databaseId,
@@ -47,9 +46,6 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
     }: EntityFetchProps<M, USER>): EntityFetchResult<M> {
 
     const dataClient = useData();
-    const urlController = useUrlController();
-
-    const path = urlController.resolveDatabasePathsFrom(inputPath);
 
     const context: RebaseContext<USER> = useRebaseContext();
 

@@ -4,7 +4,6 @@ import type { FieldProps } from "../../types/fields";
 import type { Property, StringProperty } from "@rebasepro/types";
 import React, { useCallback, useMemo } from "react";
 import { Entity, EntityReference } from "@rebasepro/types";
-import { useCollectionRegistryController } from "@rebasepro/core";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ErrorView } from "@rebasepro/core";
@@ -13,6 +12,7 @@ import { getIconForProperty, IconForView } from "@rebasepro/core";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { EntityPreviewContainer } from "../../components/EntityPreview";
 import { cls } from "@rebasepro/ui";
+import { useCollectionRegistryController } from "../../index";
 
 /**
  * Field that opens a reference selection dialog and stores the entity ID as a string.

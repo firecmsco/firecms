@@ -2,8 +2,6 @@ import type { EntityCollection } from "@rebasepro/types";
 import { useEffect, useState } from "react";
 import { Entity, FilterValues, User } from "@rebasepro/types";
 import { useData } from "./useData";
-import { useUrlController } from "../navigation/contexts";
-
 /**
  * @group Hooks and utilities
  */
@@ -62,7 +60,7 @@ export interface CollectionFetchResult<M extends Record<string, any>> {
  */
 export function useCollectionFetch<M extends Record<string, any>, USER extends User>(
     {
-        path: inputPath,
+        path,
         collection,
         filterValues,
         sortBy,
@@ -70,9 +68,6 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
         searchString
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
     const dataClient = useData();
-    const urlController = useUrlController();
-
-    const path = urlController.resolveDatabasePathsFrom(inputPath);
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;

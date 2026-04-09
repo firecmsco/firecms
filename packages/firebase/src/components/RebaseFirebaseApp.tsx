@@ -2,24 +2,29 @@ import React from "react";
 import { GoogleAuthProvider } from "@firebase/auth";
 
 import {
-    AppBar,
-    Drawer,
     Rebase,
-    RebaseRoutes,
     ModeControllerProvider,
-    Scaffold,
-    SideDialogs,
     SnackbarProvider,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildAdminModeController,
     AdminModeControllerProvider,
+    useValidateAuthenticator,
+    RebaseRoutes
+} from "@rebasepro/core";
+import {
+    AppBar,
+    Drawer,
+    Scaffold,
+    SideDialogs,
     useBuildCollectionRegistryController,
     useBuildUrlController,
     useBuildNavigationStateController,
-    useValidateAuthenticator
-} from "@rebasepro/core";
+    CollectionRegistryContext,
+    UrlContext,
+    NavigationStateContext
+} from "@rebasepro/cms";
 import { PropertyConfig } from "@rebasepro/types";
 import { CenteredView, CircularProgressCenter } from "@rebasepro/ui";
 import { buildRebaseData } from "@rebasepro/common";
@@ -200,12 +205,12 @@ export function RebaseFirebaseApp({
             <ModeControllerProvider value={modeController}>
                 <AdminModeControllerProvider value={adminModeController}>
 
-                    <Rebase
-                        authController={authController}
-                        collectionRegistryController={collectionRegistryController}
-                        urlController={urlController}
-                        navigationStateController={navigationStateController}
-                        userConfigPersistence={userConfigPersistence}
+                    <CollectionRegistryContext.Provider value={collectionRegistryController}>
+                        <UrlContext.Provider value={urlController}>
+                            <NavigationStateContext.Provider value={navigationStateController}>
+                                <Rebase
+                                    authController={authController}
+                                    userConfigPersistence={userConfigPersistence}
                         dateTimeFormat={dateTimeFormat}
                         driver={firestoreDelegate}
                         storageSource={storageSource}
@@ -259,7 +264,10 @@ export function RebaseFirebaseApp({
 
                             return component;
                         }}
-                    </Rebase>
+                                </Rebase>
+                            </NavigationStateContext.Provider>
+                        </UrlContext.Provider>
+                    </CollectionRegistryContext.Provider>
                 </AdminModeControllerProvider>
             </ModeControllerProvider>
         </SnackbarProvider>

@@ -6,8 +6,8 @@ import { Entity, EntityReference, FilterValues } from "@rebasepro/types";
 import type { PreviewSize } from "../types/components/PropertyPreviewProps";
 import { getReferenceFrom } from "@rebasepro/common";
 import { ReferencePreview } from "../preview";
-import { useCollectionRegistryController } from "@rebasepro/core";
 import { Button, cls } from "@rebasepro/ui";
+import { useCollectionRegistryController } from "../index";
 
 export type ReferenceWidgetProps<M extends Record<string, any>> = {
     name?: string,

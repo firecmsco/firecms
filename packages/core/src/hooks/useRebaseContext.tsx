@@ -1,8 +1,5 @@
 import { AuthController, RebaseContext, User } from "@rebasepro/types";
 import { useAuthController } from "./useAuthController";
-import { useSideDialogsController } from "./useSideDialogsController";
-import { useCollectionRegistryController, useNavigationStateController, useUrlController } from "./navigation/contexts";
-
 import { useData } from "./data/useData";
 import { useStorageSource } from "./useStorageSource";
 import { useSnackbarController } from "./useSnackbarController";
@@ -31,11 +28,6 @@ import { DatabaseAdminContext } from "../contexts/DatabaseAdminContext";
 export const useRebaseContext = <USER extends User = User, AuthControllerType extends AuthController<USER> = AuthController<USER>>(): RebaseContext<USER, AuthControllerType> => {
 
     const authController = useAuthController<USER, AuthControllerType>();
-    const sideDialogsController = useSideDialogsController();
-    const collectionRegistry = useCollectionRegistryController();
-    const navigationState = useNavigationStateController();
-    const urlController = useUrlController();
-
     const data = useData();
     const storageSource = useStorageSource();
     const snackbarController = useSnackbarController();
@@ -51,10 +43,6 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
 
     const rebaseContextRef = React.useRef<RebaseContext<USER, AuthControllerType>>({
         authController,
-        sideDialogsController,
-        urlController,
-        collectionRegistryController: collectionRegistry,
-        navigationStateController: navigationState,
         data,
         storageSource,
         snackbarController,
@@ -70,10 +58,6 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
     React.useEffect(() => {
         rebaseContextRef.current = {
             authController,
-            sideDialogsController,
-            urlController,
-            collectionRegistryController: collectionRegistry,
-            navigationStateController: navigationState,
             data,
             storageSource,
             snackbarController,
@@ -85,7 +69,7 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
             effectiveRoleController,
             databaseAdmin
         };
-    }, [authController, dialogsController, sideDialogsController, effectiveRoleController, data, databaseAdmin, urlController, collectionRegistry, navigationState]);
+    }, [authController, dialogsController, effectiveRoleController, data, databaseAdmin]);
 
     return rebaseContextRef.current;
 }

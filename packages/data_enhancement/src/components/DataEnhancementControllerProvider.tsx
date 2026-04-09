@@ -9,16 +9,15 @@ import {
 import {
     useAuthController,
     useCustomizationController,
-    useUrlController,
     useSnackbarController
 } from "@rebasepro/core";
+import { useUrlController } from "@rebasepro/cms";
 import { DataDriver, Entity, EntityCollection, PluginFormActionProps } from "@rebasepro/types";
-import { getValueInPath } from "@rebasepro/common";
-
 import { enhanceDataAPIStream, fetchEntityPromptSuggestion } from "../api";
 import { getAppendableSuggestion } from "../utils/suggestions";
 import { getSimplifiedProperties } from "../utils/properties";
 import { useEditorAIController } from "../editor/useEditorAIController";
+import { getValueInPath } from "@rebasepro/utils";
 
 export const DataEnhancementControllerContext = React.createContext<DataEnhancementController>(null! as DataEnhancementController);
 

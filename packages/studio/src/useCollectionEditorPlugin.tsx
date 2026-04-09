@@ -1,9 +1,6 @@
+import { useCollectionRegistryController, useNavigationStateController } from "@rebasepro/cms";
 import React from "react";
-import {
-    useAuthController,
-    useCollectionRegistryController,
-    useNavigationStateController
-} from "@rebasepro/core";
+import { useAuthController } from "@rebasepro/core";
 import { EntityCollection, RebasePlugin, User } from "@rebasepro/types";
 import { ConfigControllerProvider } from "./ConfigControllerProvider";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";

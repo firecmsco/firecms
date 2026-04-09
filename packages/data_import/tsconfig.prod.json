@@ -1,15 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-
-    "paths": {}
+    "sourceMap": true
   },
   "exclude": [
     "node_modules",
     "dist",
     "src/test",
-    "../core/src",
-    "../schema_inference/src",
-    "../ui/src",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

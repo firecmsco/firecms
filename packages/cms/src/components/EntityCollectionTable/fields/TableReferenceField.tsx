@@ -7,11 +7,12 @@ import { ReferencePreview } from "../../../preview";
 import { CollectionSize, Entity, EntityReference, FilterValues } from "@rebasepro/types";
 
 import { getPreviewSizeFrom } from "../../../preview/util";
-import { useCustomizationController, useCollectionRegistryController } from "@rebasepro/core";
+import { useCustomizationController } from "@rebasepro/core";
 import { ErrorView } from "@rebasepro/core";
 import { cls, EditIcon } from "@rebasepro/ui";
 import { EntityPreviewContainer } from "../../EntityPreview";
 import { getReferenceFrom } from "@rebasepro/common";
+import { useCollectionRegistryController } from "../../../index";
 
 type TableReferenceFieldProps = {
     name: string;

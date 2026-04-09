@@ -1,4 +1,4 @@
-import type { Properties, Property } from "../../types";
+import type { Properties, Property } from "@rebasepro/types";
 import React from "react";
 import { getTableCellAlignment, getTablePropertyColumnWidth } from "./internal/common";
 import { FilterValues } from "@rebasepro/types";

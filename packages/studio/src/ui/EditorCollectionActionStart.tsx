@@ -6,11 +6,11 @@ import {
     useTranslation
 } from "@rebasepro/core";
 import { EntityCollection, CollectionActionsProps } from "@rebasepro/types";
-import { mergeDeep } from "@rebasepro/common";
 import { Button, SaveIcon, Tooltip, UndoIcon, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
+import { mergeDeep } from "@rebasepro/utils";
 
 export function EditorCollectionActionStart({
     path,

@@ -1,12 +1,8 @@
+import { FieldCaption } from "@rebasepro/cms";
 import React, { useMemo, useState } from "react";
-import {
-    FieldCaption,
-    useAuthController,
-    useCustomizationController
-} from "@rebasepro/core";
+import { useAuthController, useCustomizationController } from "@rebasepro/core";
 import { getFieldConfig, PropertyConfigBadge } from "@rebasepro/cms";
 import { EntityCollection, Property } from "@rebasepro/types";
-import { unslugify } from "@rebasepro/common";
 import {
     BooleanSwitchWithLabel,
     CloseIcon,
@@ -25,6 +21,7 @@ import { ViewModeSwitch } from "./ViewModeSwitch";
 import { KanbanConfigSection } from "./KanbanConfigSection";
 import { PropertyFormDialog } from "./PropertyEditView";
 import { useCollectionsConfigController } from "../../useCollectionsConfigController";
+import { unslugify } from "@rebasepro/utils";
 
 export function DisplaySettingsForm({
     expandKanban

@@ -10,9 +10,10 @@ import { ArrayContainer, ArrayEntryParams } from "../../components/ArrayContaine
 import { getIconForProperty } from "@rebasepro/core";
 import { getReferenceFrom } from "@rebasepro/common";
 
-import { useCollectionRegistryController, useTranslation, ErrorView } from "@rebasepro/core";
+import { useTranslation, ErrorView } from "@rebasepro/core";
 import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@rebasepro/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
+import { useCollectionRegistryController } from "../../index";
 
 type ArrayOfReferencesFieldProps = FieldProps<ArrayProperty, EntityReference[]>;
 

@@ -1,12 +1,10 @@
 export * from "./core";
-export * from "./app";
-
 export * from "./hooks";
-export * from "./components/admin";
 export * from "./components";
 export * from "./util";
 export * from "./contexts";
 export * from "./internal/common";
+export * from "./internal/useRestoreScroll";
 export { useUnsavedChangesDialog } from "./hooks/useUnsavedChangesDialog";
 export type { UnsavedChangesDialogProps } from "./components/UnsavedChangesDialog";
 export { UnsavedChangesDialog } from "./components/UnsavedChangesDialog";

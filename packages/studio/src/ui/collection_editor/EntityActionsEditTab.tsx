@@ -3,7 +3,8 @@ import {
     ConfirmationDialog,
     useCustomizationController
 } from "@rebasepro/core";
-import { resolveEntityAction, type EntityCollection } from "@rebasepro/cms";
+import { resolveEntityAction } from "@rebasepro/cms";
+import { type EntityCollection } from "@rebasepro/types";
 import { EntityAction } from "@rebasepro/types";
 import {
     AddIcon,
@@ -41,7 +42,8 @@ export function EntityActionsEditTab({
         setFieldValue
     } = useFormex<EntityCollection>();
 
-    const resolvedEntityActions = values.entityActions?.filter((e: string | EntityAction<any>): e is string => typeof e === "string")
+    const resolvedEntityActions = ((values.entityActions ?? []) as any[])
+        .filter((e: any): e is string => typeof e === "string")
         .map((e: string) => resolveEntityAction(e, contextEntityActions))
         .filter(Boolean) as EntityAction<any>[] ?? [];
     const hardCodedEntityActions = collection.entityActions?.filter((e: string | EntityAction<any>): e is EntityAction<any> => typeof e !== "string") ?? [];
