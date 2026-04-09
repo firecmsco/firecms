@@ -59,18 +59,6 @@ import { SQLEditorDemo } from './demos/SQLEditorDemo';
                                 </div>
                             </a>
                         </li>
-                        <li>
-                            <a href="#screen-4" data-index-item class="group block" data-active="false">
-                                <div class="flex items-center gap-3">
-                                    <span class="text-2xl font-medium tracking-tight text-white sm:text-3xl transition-opacity group-data-[active=false]:opacity-40 group-data-[active=true]:opacity-100">One command to start</span>
-                                </div>
-                                <div class="overflow-hidden transition-all duration-300 ease-out group-data-[active=false]:max-h-0 group-data-[active=true]:max-h-60">
-                                    <p class="text-base text-surface-400 pt-2 pb-1 opacity-0 group-data-[active=true]:opacity-100 transition-opacity duration-300 delay-75">
-                                        <code class="text-surface-300">npx create-rebase-app</code> — that's it. Self-host on your own infrastructure,
-                                        keep full control of your data, and extend with pure React and TypeScript.</p>
-                                </div>
-                            </a>
-                        </li>
                     </ol>
                 </nav>
             </aside>
@@ -116,70 +104,6 @@ import { SQLEditorDemo } from './demos/SQLEditorDemo';
                         </section>
                     </div>
 
-                    <!-- Screen 4: Easy Integration -->
-                    <div id="screen-4" class="scroll-mt-32">
-                        <h3 class="lg:hidden text-2xl font-medium tracking-tight text-white mb-6">One command to start</h3>
-                        <section data-screen class="w-full will-change-transform">
-                            <div class="relative rounded-2xl p-[1px]">
-                                {/* Apply min-height and flex classes here */}
-                                <div class="relative rounded-2xl overflow-hidden ring-1 ring-white/10 bg-surface-950 flex flex-col min-h-[600px]"> {/* ADJUST min-h-[700px] AS NEEDED */}
-
-                                    {/* Added flex-grow to allow content spacing to expand */}
-                                    <div class="p-6 sm:p-8 flex-grow flex flex-col justify-center"> {/* Optional: justify-center centers content vertically */}
-                                        <div class="space-y-16">
-                                            {/* --- NPM Install --- */}
-                                            <div class="flex items-start gap-6">
-                                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
-                                                    <span class="material-symbols-rounded text-white" style="font-size:20px">code</span>
-                                                </div>
-                                                <div>
-                                                    <div class="text-lg font-semibold text-white mb-2">Simple NPM
-                                                        Install
-                                                    </div>
-                                                    <p class="text-surface-400 text-sm mb-3">Add Rebase to your project
-                                                        with a single command</p>
-                                                    <div class="bg-surface-900/50 rounded-lg p-4 font-mono text-sm text-surface-300 ring-1 ring-surface-700/50">
-                                                        npx create-rebase-app
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {/* --- Self Hosted --- */}
-                                            <div class="flex items-start gap-6">
-                                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
-                                                    <span class="material-symbols-rounded text-white" style="font-size:20px">dns</span>
-                                                </div>
-                                                <div>
-                                                    <div class="text-lg font-semibold text-white mb-2">Self-host Rebase
-                                                    </div>
-                                                    <p class="text-surface-400 text-sm mb-4">Deploy Rebase on your own
-                                                        infrastructure. Full control over your data, your deployment,
-                                                        and your performance.</p>
-                                                    <div class="flex items-center gap-4">
-                                                        <a href="/docs"
-                                                           class="text-sm font-semibold text-white hover:text-primary transition-colors">Read
-                                                            Docs <span aria-hidden="true">&rarr;</span></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {/* --- TypeScript Support --- */}
-                                            <div class="flex items-start gap-6">
-                                                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20 flex-shrink-0">
-                                                    <span class="material-symbols-rounded text-white" style="font-size:20px">bolt</span>
-                                                </div>
-                                                <div>
-                                                    <div class="text-lg font-semibold text-white mb-2">Full TypeScript
-                                                        Support
-                                                    </div>
-                                                    <p class="text-surface-400 text-sm">Built with TypeScript from the
-                                                        ground up for the best developer experience and type safety.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
                 </div>
             </div>
         </div>

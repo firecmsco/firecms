@@ -8,7 +8,7 @@ description: Create a new Rebase project and get it running locally in under 2 m
 ## Create a New Project
 
 ```bash
-npx create-rebase-app my-app
+git clone https://github.com/rebasepro/rebase-starter my-app
 ```
 
 This scaffolds a project with three packages:

@@ -12,13 +12,6 @@ const breadcrumbs = [
 
 const commands = [
     {
-        command: "npx create-rebase-app ./my-app",
-        label: "Create",
-        description: "Scaffold a new Rebase project with frontend, backend, and shared collections. Interactive prompts for database URL and options.",
-        badge: "@rebasepro/create",
-        color: "emerald"
-    },
-    {
         command: "rebase schema generate",
         label: "Schema Generate",
         description: "Read your TypeScript collection definitions and generate a Drizzle ORM schema file. Run this after adding or modifying collections.",
@@ -99,38 +92,6 @@ const commands = [
       </div>
     </section>
 
-    <!-- Quick Start -->
-    <section class="bg-black py-16 sm:py-24">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-3xl text-center mb-16">
-          <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl">From zero to admin panel in 60 seconds</h2>
-        </div>
-        <div class="max-w-3xl mx-auto">
-          <div class="relative rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-8">
-            <pre class="text-sm font-mono overflow-x-auto"><code class="text-surface-300"><span class="text-surface-500"># 1. Scaffold a new project</span>
-<span class="text-emerald-400">$</span> npx create-rebase-app ./my-admin
-
-<span class="text-surface-500"># 2. Configure your DATABASE_URL in .env</span>
-<span class="text-emerald-400">$</span> echo "DATABASE_URL=postgres://..." > .env
-
-<span class="text-surface-500"># 3. Generate schema from your database</span>
-<span class="text-emerald-400">$</span> rebase db pull
-<span class="text-amber-400">✓</span> Introspected 12 tables, 3 enums
-
-<span class="text-surface-500"># 4. Generate the client SDK types</span>
-<span class="text-emerald-400">$</span> rebase generate-sdk
-<span class="text-amber-400">✓</span> Generated database.types.ts
-
-<span class="text-surface-500"># 5. Start developing</span>
-<span class="text-emerald-400">$</span> rebase dev
-<span class="text-emerald-400">✓</span> Frontend:  http://localhost:5173
-<span class="text-emerald-400">✓</span> Backend:   http://localhost:3001
-<span class="text-emerald-400">✓</span> GraphiQL:  http://localhost:3001/api/graphiql
-<span class="text-emerald-400">✓</span> Swagger:   http://localhost:3001/api/swagger</code></pre>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- Command Reference -->
     <section class="bg-black py-16 sm:py-24">
@@ -212,10 +173,7 @@ const commands = [
     <!-- CTA -->
     <section class="bg-black py-24 sm:py-32">
       <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-4">Get started in one command</h2>
-        <div class="inline-block rounded-2xl overflow-hidden ring-1 ring-surface-800 bg-surface-900 p-6 mb-8 text-left">
-          <pre class="text-sm font-mono"><code class="text-surface-300"><span class="text-emerald-400">$</span> npx create-rebase-app ./my-app</code></pre>
-        </div>
+        <h2 class="text-3xl font-medium tracking-tight text-white sm:text-4xl mb-8">Get started with your project</h2>
         <div class="flex items-center justify-center gap-x-6">
           <a href="/sdk"
              class="inline-flex items-center gap-x-2 rounded-md bg-primary px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-dark transition-all duration-200 ease-in-out btn-glow">
