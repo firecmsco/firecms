@@ -1,5 +1,5 @@
 import { EntityCollection } from "@rebasepro/types";
-import type { CMSUrlController, SideEntityController } from "@rebasepro/types";
+import type { UrlController, SideEntityController } from "@rebasepro/types";
 import { getSubcollections } from "@rebasepro/common";
 
 export function removeInitialAndTrailingSlashes(s: string): string {
@@ -191,7 +191,7 @@ export function navigateToEntity({
         path: string;
         sideEntityController: SideEntityController;
         onClose?: () => void;
-        navigation: CMSUrlController
+        navigation: UrlController
     }) {
 
     if (openEntityMode === "side_panel") {

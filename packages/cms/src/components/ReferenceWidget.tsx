@@ -1,5 +1,5 @@
 import { useEntitySelectionDialog } from "../hooks/useEntitySelectionDialog";
-import type { EntityCollection } from "../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import React, { useCallback, useMemo } from "react";
 
 import { Entity, EntityReference, FilterValues } from "@rebasepro/types";

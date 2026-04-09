@@ -9,7 +9,7 @@ import {
     AddIcon,
     StorageIcon,
 } from "@rebasepro/ui";
-import { useCMSUrlController, IconForView } from "@rebasepro/core";
+import { useUrlController, IconForView } from "@rebasepro/core";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionStudioView } from "./CollectionStudioView";
 
@@ -19,11 +19,11 @@ export interface CollectionsStudioViewProps {
 
 export function CollectionsStudioView({ configController }: CollectionsStudioViewProps) {
     const navigate = useNavigate();
-    const urlController = useCMSUrlController();
+    const urlController = useUrlController();
     const location = useLocation();
 
     // Determine the active collection from the URL segment after "schema/"
-    const basePath = urlController.buildCMSUrlPath("schema");
+    const basePath = urlController.buildAppUrlPath("schema");
     const relativePath = location.pathname.replace(basePath, "").replace(/^\//, "");
 
     // The collectionId could be "new", empty (no selection), or a collection slug
@@ -61,7 +61,7 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                             </Typography>
                             <IconButton
                                 size="small"
-                                onClick={() => navigate(urlController.buildCMSUrlPath("schema/new"))}
+                                onClick={() => navigate(urlController.buildAppUrlPath("schema/new"))}
                                 className={activeCollectionId === "new" ? "text-primary dark:text-primary-dark" : "text-text-secondary dark:text-text-secondary-dark"}
                             >
                                 <AddIcon size="small" />
@@ -82,7 +82,7 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                                 return (
                                     <div
                                         key={collectionKey}
-                                        onClick={() => navigate(urlController.buildCMSUrlPath(`schema/${collectionKey}`))}
+                                        onClick={() => navigate(urlController.buildAppUrlPath(`schema/${collectionKey}`))}
                                         className={cls(
                                             "flex items-center gap-3 px-3 py-2 cursor-pointer rounded-md text-sm transition-colors",
                                             isSelected

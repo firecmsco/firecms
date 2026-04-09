@@ -1,5 +1,5 @@
 import type { Properties } from "@rebasepro/types";
-import type { EntityCollection } from "../../../../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import type { FormContext, PropertyFieldBindingProps } from "../../../../types/fields";
 import type { Property } from "@rebasepro/types";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";

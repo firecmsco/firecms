@@ -1,7 +1,7 @@
 // import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 //
 // import {
-//     CMSAnalyticsEvent,
+//     AnalyticsEvent,
 //     Entity,
 //     EntityAction,
 //     EntityCollection,
@@ -217,7 +217,7 @@
 //             closeAfterSave: closeAfterSaveRef.current,
 //             autoSave: autoSave ?? false
 //         }).then(_ => {
-//             const eventName: CMSAnalyticsEvent = status === "new"
+//             const eventName: AnalyticsEvent = status === "new"
 //                 ? "new_entity_saved"
 //                 : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
 //             analyticsController.onAnalyticsEvent?.(eventName, { path });

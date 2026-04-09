@@ -1,5 +1,5 @@
 import type { Properties } from "@rebasepro/types";
-import type { AdditionalFieldDelegate } from "../../types/collections";
+import type { AdditionalFieldDelegate } from "@rebasepro/types";
 import type { Property } from "@rebasepro/types";
 import React from "react";
 import { CollectionSize, Entity, EntityTableController, FilterValues, SelectionController, User } from "@rebasepro/types";

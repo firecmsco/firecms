@@ -4,7 +4,7 @@
 
 import { renderHook } from "@testing-library/react";
 import { useTopLevelNavigation } from "../../src/hooks/navigation/useTopLevelNavigation";
-import { CMSUrlController, CollectionRegistryController, EntityCollection, NavigationResult } from "@rebasepro/types";
+import { UrlController, CollectionRegistryController, EntityCollection, NavigationResult } from "@rebasepro/types";
 import { CollectionRegistry } from "@rebasepro/common";
 import { jest } from "@jest/globals";
 import { deepEqual } from "fast-equals";
@@ -13,10 +13,10 @@ describe("useTopLevelNavigation", () => {
 
     const mockCmsUrlController = {
         buildUrlCollectionPath: (path: string) => `/c/${path}`,
-        buildCMSUrlPath: (path: string) => `/${path}`,
+        buildAppUrlPath: (path: string) => `/${path}`,
         basePath: "/",
         baseCollectionPath: "/c",
-    } as Partial<CMSUrlController> as CMSUrlController;
+    } as Partial<UrlController> as UrlController;
 
     const mockCollectionRegistryController = {
         collectionRegistryRef: { current: new CollectionRegistry() },
@@ -33,7 +33,7 @@ describe("useTopLevelNavigation", () => {
             collections: [],
             views: undefined,
             adminViews: undefined,
-            cmsUrlController: mockCmsUrlController,
+            urlController: mockCmsUrlController,
             collectionRegistryController: mockCollectionRegistryController
         }));
 
@@ -45,7 +45,7 @@ describe("useTopLevelNavigation", () => {
             collections,
             views: [],
             adminViews: [],
-            cmsUrlController: mockCmsUrlController,
+            urlController: mockCmsUrlController,
             collectionRegistryController: mockCollectionRegistryController
         }));
 
@@ -65,7 +65,7 @@ describe("useTopLevelNavigation", () => {
             ],
             views: [],
             adminViews: [],
-            cmsUrlController: mockCmsUrlController,
+            urlController: mockCmsUrlController,
             collectionRegistryController: mockCollectionRegistryController
         }));
 
@@ -81,7 +81,7 @@ describe("useTopLevelNavigation", () => {
             collections: currentCollections,
             views: [],
             adminViews: [],
-            cmsUrlController: mockCmsUrlController,
+            urlController: mockCmsUrlController,
             collectionRegistryController: mockCollectionRegistryController,
             // Pass an unstable array reference which would normally break useMemo
             plugins: []
@@ -107,7 +107,7 @@ describe("useTopLevelNavigation", () => {
                 collections: currentCollections,
                 views: [],
                 adminViews: [],
-                cmsUrlController: mockCmsUrlController,
+                urlController: mockCmsUrlController,
                 collectionRegistryController: mockCollectionRegistryController,
             }
         });
@@ -119,7 +119,7 @@ describe("useTopLevelNavigation", () => {
             collections: [...collections, { id: "new", name: "New", path: "new", slug: "new" }],
             views: [],
             adminViews: [],
-            cmsUrlController: mockCmsUrlController,
+            urlController: mockCmsUrlController,
             collectionRegistryController: mockCollectionRegistryController,
         });
 
@@ -134,7 +134,7 @@ describe("useTopLevelNavigation", () => {
             collections: [],
             views: [{ name: "My View", slug: "my-view", view: null! }],
             adminViews: [{ name: "Admin Setup", slug: "setup", view: null! }],
-            cmsUrlController: mockCmsUrlController,
+            urlController: mockCmsUrlController,
             collectionRegistryController: mockCollectionRegistryController
         }));
 

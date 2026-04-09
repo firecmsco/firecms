@@ -34,8 +34,5 @@
         "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
     },
     "gitHead": "d935eefa5aa8d1009a2398cfac2c1e4ee9aeb6b6",
-    "dependencies": {
-        "axios": "1.13.5",
-        "vite-plugin-static-copy": "3.1.4"
-    }
+    "dependencies": {}
 }

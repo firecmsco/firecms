@@ -2,7 +2,7 @@ import React from "react";
 import { useBuildSideEntityController } from "../hooks/useBuildSideEntityController";
 import {
     useCollectionRegistryController,
-    useCMSUrlController,
+    useUrlController,
     useAuthController,
     SideEntityControllerContext,
 } from "@rebasepro/core";
@@ -21,27 +21,27 @@ import { useNavigationStateController, useSideDialogsController } from "@rebasep
  * ```tsx
  * <Rebase ...>
  *   {({ loading }) => (
- *     <CMSSideEntityProvider>
+ *     <SideEntityProvider>
  *       <RebaseRoutes>
  *         ...
  *       </RebaseRoutes>
- *     </CMSSideEntityProvider>
+ *     </SideEntityProvider>
  *   )}
  * </Rebase>
  * ```
  *
  * @group Components
  */
-export function CMSSideEntityProvider({ children }: { children: React.ReactNode }) {
+export function SideEntityProvider({ children }: { children: React.ReactNode }) {
     const collectionRegistryController = useCollectionRegistryController();
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
     const navigationStateController = useNavigationStateController();
     const sideDialogsController = useSideDialogsController();
     const authController = useAuthController();
 
     const sideEntityController = useBuildSideEntityController(
         collectionRegistryController,
-        cmsUrlController,
+        urlController,
         navigationStateController,
         sideDialogsController,
         authController,

@@ -1,5 +1,5 @@
 import React from "react";
-import { Locale, User, AuthController, CMSAnalyticsEvent, DataDriver, StorageSource, UserConfigurationPersistence, CollectionRegistryController, DatabaseAdmin, CMSUrlController, NavigationStateController, RebaseData, RebaseClient, RebaseContext, UserManagementDelegate, EntityLinkBuilder, RebasePlugin, SlotContribution, PropertyConfig, EntityCustomView, EntityAction } from "@rebasepro/types";
+import { Locale, User, AuthController, AnalyticsEvent, DataDriver, StorageSource, UserConfigurationPersistence, CollectionRegistryController, DatabaseAdmin, UrlController, NavigationStateController, RebaseData, RebaseClient, RebaseContext, UserManagementDelegate, EntityLinkBuilder, RebasePlugin, SlotContribution, PropertyConfig, EntityCustomView, EntityAction } from "@rebasepro/types";
 
 /**
  * Controller to simulate different roles when dev mode is active.
@@ -55,7 +55,7 @@ export type RebaseProps<USER extends User> = {
     /**
      * This controller is in charge of resolving the URL configurations map and building paths
      */
-    cmsUrlController: CMSUrlController;
+    urlController: UrlController;
 
     /**
      * This controller is in charge of resolving the navigation views and state
@@ -113,7 +113,7 @@ export type RebaseProps<USER extends User> = {
     /**
      * Callback used to get analytics events from the CMS
      */
-    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+    onAnalyticsEvent?: (event: AnalyticsEvent, data?: object) => void;
 
     /**
      * Optional link builder you can add to generate a button in your entity forms.

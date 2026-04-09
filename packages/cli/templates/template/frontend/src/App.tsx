@@ -10,10 +10,8 @@ import {
 } from "@rebasepro/auth";
 import {
     AppBar,
-    CircularProgressCenter,
     Drawer,
     Rebase,
-    RebaseRoute,
     ModeControllerProvider,
     NotFoundPage,
     Scaffold,
@@ -21,12 +19,14 @@ import {
     RebaseRoutes,
     SnackbarProvider,
     ContentHomePage,
-    useBuildCMSUrlController,
+    useBuildUrlController,
     useBuildCollectionRegistryController,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationStateController
 } from "@rebasepro/core";
+import { RebaseRoute } from "@rebasepro/cms";
+import { CircularProgressCenter } from "@rebasepro/ui";
 import { collections } from "virtual:rebase-collections";
 import { Route, Outlet } from "react-router-dom";
 import { createRebaseClient } from "@rebasepro/client";
@@ -59,7 +59,7 @@ export function App() {
     }, []);
 
     const collectionRegistryController = useBuildCollectionRegistryController({ userConfigPersistence });
-    const cmsUrlController = useBuildCMSUrlController({
+    const urlController = useBuildUrlController({
         basePath: "/",
         baseCollectionPath: "/c",
         collectionRegistryController
@@ -70,7 +70,7 @@ export function App() {
         authController,
         data: rebaseClient.data,
         collectionRegistryController,
-        cmsUrlController,
+        urlController,
         userManagement
     });
 
@@ -81,7 +81,7 @@ export function App() {
                     client={rebaseClient}
                     apiUrl={API_URL}
                     collectionRegistryController={collectionRegistryController}
-                    cmsUrlController={cmsUrlController}
+                    urlController={urlController}
                     navigationStateController={navigationStateController}
                     authController={authController}
                     userConfigPersistence={userConfigPersistence}

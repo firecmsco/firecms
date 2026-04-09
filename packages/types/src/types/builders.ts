@@ -1,7 +1,7 @@
 import { AuthController, RebaseData } from "../controllers";
 import { User } from "../users";
 import { EntityCollection } from "./collections";
-import { CMSView } from "../controllers/navigation";
+import { AppView } from "../controllers/navigation";
 
 export type EntityCollectionsBuilder<EC extends EntityCollection = EntityCollection> = (params: {
     user: User | null,
@@ -9,8 +9,8 @@ export type EntityCollectionsBuilder<EC extends EntityCollection = EntityCollect
     data: RebaseData
 }) => EC[] | Promise<EC[]>;
 
-export type CMSViewsBuilder = (params: {
+export type AppViewsBuilder = (params: {
     user: User | null,
     authController: AuthController,
     data: RebaseData
-}) => CMSView[] | Promise<CMSView[]>;
+}) => AppView[] | Promise<AppView[]>;

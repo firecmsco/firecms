@@ -1,8 +1,8 @@
-import type { EntityCollection, EntityCustomViewParams } from "../types/collections";
+import type { EntityCollection, EntityCustomViewParams } from "@rebasepro/types";
 import type { FormContext, PropertyFieldBindingProps } from "../types/fields";
 import type { PluginFormActionProps, PropertyConfig } from "@rebasepro/types";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AuthController, CMSAnalyticsEvent, Entity, EntityStatus, EntityValues } from "@rebasepro/types";
+import { AuthController, AnalyticsEvent, Entity, EntityStatus, EntityValues } from "@rebasepro/types";
 import type { EntityFormProps, OnUpdateParams } from "../types/components/EntityFormProps";
 import { deepEqual as equal } from "fast-equals";
 
@@ -432,7 +432,7 @@ export function EntityForm<M extends Record<string, any>>({
             previousValues: entity?.values,
             autoSave: autoSave ?? false
         }).then((savedEntity) => {
-            const eventName: CMSAnalyticsEvent = status === "new"
+            const eventName: AnalyticsEvent = status === "new"
                 ? "new_entity_saved"
                 : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
             analyticsController.onAnalyticsEvent?.(eventName, { path });

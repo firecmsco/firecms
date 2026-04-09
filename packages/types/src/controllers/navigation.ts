@@ -6,7 +6,7 @@ import { RebasePlugin } from "../types/plugins";
  * Controller that handles URL path building and resolution.
  * @group Models
  */
-export type CMSUrlController = {
+export type UrlController = {
     /**
      * Default path under the navigation routes of the CMS will be created.
      * Defaults to '/'. You may want to change this `basepath` to 'admin' for example.
@@ -51,7 +51,7 @@ export type CMSUrlController = {
      * Build a URL path for the CMS (e.g. for custom views)
      * @param path
      */
-    buildCMSUrlPath: (path: string) => string;
+    buildAppUrlPath: (path: string) => string;
 
     /**
      * Turn a path with collection ids into a resolved path.
@@ -79,13 +79,13 @@ export type NavigationStateController = {
      * Custom additional views created by the developer, added to the main
      * navigation
      */
-    views?: CMSView[];
+    views?: AppView[];
 
     /**
      * Custom additional views created by the developer, added to the admin
      * navigation
      */
-    adminViews?: CMSView[];
+    adminViews?: AppView[];
 
     /**
      * Configuration for the views that should be displayed at the top
@@ -138,7 +138,7 @@ export type NavigationBlocker = {
  * navigation.
  * @group Models
  */
-export interface CMSView {
+export interface AppView {
 
     /**
      * CMS Path you can reach this view from.
@@ -235,7 +235,7 @@ export interface NavigationEntry {
     slug: string;
     type: "collection" | "view" | "admin";
     collection?: EntityCollection;
-    view?: CMSView;
+    view?: AppView;
     description?: string;
     group: string;
 }

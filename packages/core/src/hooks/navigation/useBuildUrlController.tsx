@@ -1,14 +1,14 @@
-import type { CMSUrlController, NavigateOptions } from "@rebasepro/types";
+import type { UrlController, NavigateOptions } from "@rebasepro/types";
 import { useCallback, useMemo } from "react";
 import { removeInitialAndTrailingSlashes, resolveCollectionPathIds } from "@rebasepro/common";
 import { CollectionRegistryController } from "@rebasepro/types";
 import { useNavigate } from "react-router-dom";
 
-export function useBuildCMSUrlController(props: {
+export function useBuildUrlController(props: {
     basePath: string,
     baseCollectionPath: string,
     collectionRegistryController: CollectionRegistryController
-}): CMSUrlController {
+}): UrlController {
 
     const { basePath, baseCollectionPath, collectionRegistryController } = props;
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ export function useBuildCMSUrlController(props: {
         return fullPath.replace(/\/\//g, "/");
     }, [basePath, baseCollectionPath]);
 
-    const buildCMSUrlPath = useCallback((path: string): string => {
+    const buildAppUrlPath = useCallback((path: string): string => {
         const fullPath = basePath === "/" ? `/${path}` : `${basePath}/${path}`;
         return fullPath.replace(/\/\//g, "/");
     }, [basePath]);
@@ -59,8 +59,8 @@ export function useBuildCMSUrlController(props: {
         homeUrl,
         isUrlCollectionPath,
         buildUrlCollectionPath,
-        buildCMSUrlPath,
+        buildAppUrlPath,
         resolveDatabasePathsFrom,
         navigate: navigateTo
-    }), [basePath, baseCollectionPath, urlPathToDataPath, homeUrl, isUrlCollectionPath, buildUrlCollectionPath, buildCMSUrlPath, resolveDatabasePathsFrom, navigateTo]);
+    }), [basePath, baseCollectionPath, urlPathToDataPath, homeUrl, isUrlCollectionPath, buildUrlCollectionPath, buildAppUrlPath, resolveDatabasePathsFrom, navigateTo]);
 }

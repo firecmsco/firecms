@@ -9,7 +9,7 @@ import {
     AddIcon,
     StorageIcon,
 } from "@rebasepro/ui";
-import { useSnackbarController, useCMSUrlController, useUnsavedChangesDialog, UnsavedChangesDialog } from "@rebasepro/core";
+import { useSnackbarController, useUrlController, useUnsavedChangesDialog, UnsavedChangesDialog } from "@rebasepro/core";
 import { CollectionEditorDialogProps } from "./CollectionEditorDialog";
 import { AIModifiedPathsProvider } from "./AIModifiedPathsContext";
 import { CollectionEditor } from "./CollectionEditorDialog";
@@ -22,7 +22,7 @@ export type CollectionStudioViewProps = Omit<CollectionEditorDialogProps, "open"
 export function CollectionStudioView({ collectionId, ...props }: CollectionStudioViewProps) {
     const snackbarController = useSnackbarController();
     const navigate = useNavigate();
-    const urlController = useCMSUrlController();
+    const urlController = useUrlController();
 
     // Form state from the editor
     const [formDirty, setFormDirty] = useState<boolean>(false);
@@ -38,7 +38,7 @@ export function CollectionStudioView({ collectionId, ...props }: CollectionStudi
 
     const handleCancelClick = () => {
         if (!formDirty) {
-            navigate(urlController.buildCMSUrlPath("/"));
+            navigate(urlController.buildAppUrlPath("/"));
         } else {
             setCancelRequested(true);
             triggerDialog();
@@ -65,7 +65,7 @@ export function CollectionStudioView({ collectionId, ...props }: CollectionStudi
                                     message: `Collection ${savedCollection.name || savedCollection.slug || savedCollection.dbPath} saved`
                                 });
                                 if (activeCollectionId === "new") {
-                                    navigate(urlController.buildCMSUrlPath(`s/schema/${savedCollection.slug || savedCollection.dbPath}`));
+                                    navigate(urlController.buildAppUrlPath(`s/schema/${savedCollection.slug || savedCollection.dbPath}`));
                                 }
                             }
                         }}
@@ -82,7 +82,7 @@ export function CollectionStudioView({ collectionId, ...props }: CollectionStudi
                     handleOk={() => {
                         dialogProps.handleOk();
                         if (cancelRequested) {
-                            navigate(urlController.buildCMSUrlPath("/"));
+                            navigate(urlController.buildAppUrlPath("/"));
                             setCancelRequested(false);
                         }
                     }}

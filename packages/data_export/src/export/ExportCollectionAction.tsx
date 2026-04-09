@@ -5,7 +5,7 @@ import {
     useCustomizationController,
     useData,
     useRebaseContext,
-    useCMSUrlController
+    useUrlController
 } from "@rebasepro/core";
 import { CollectionActionsProps, Entity, EntityCollection, ExportConfig, RebaseContext, User } from "@rebasepro/types";
 import { getDefaultValuesFor } from "@rebasepro/common";
@@ -51,9 +51,9 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
     const context = useRebaseContext<USER>();
     const dataClient = useData();
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
 
-    const path = cmsUrlController.resolveDatabasePathsFrom(inputPath);
+    const path = urlController.resolveDatabasePathsFrom(inputPath);
 
     const canExport = !exportAllowed || exportAllowed({
         collectionEntitiesCount: collectionEntitiesCount ?? 0,

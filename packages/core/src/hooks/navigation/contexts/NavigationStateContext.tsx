@@ -1,4 +1,4 @@
-import type { NavigationStateController, CMSView, NavigationResult, RebasePlugin } from "@rebasepro/types";
+import type { NavigationStateController, AppView, NavigationResult, RebasePlugin } from "@rebasepro/types";
 import React, { createContext } from "react";
 ;
 

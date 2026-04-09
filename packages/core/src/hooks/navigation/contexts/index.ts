@@ -9,6 +9,6 @@ export {
 } from "./NavigationStateContext";
 
 export {
-    CMSUrlContext,
-    useCMSUrlController
-} from "./CMSUrlContext";
+    UrlContext,
+    useUrlController
+} from "./UrlContext";

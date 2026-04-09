@@ -27,18 +27,18 @@ import {
     UserSettingsView,
     UsersView,
     useBuildAdminModeController,
-    useBuildCMSUrlController,
+    useBuildUrlController,
     useBuildCollectionRegistryController,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     useBuildNavigationStateController,
     UIReferenceView
 } from "@rebasepro/core";
-import { RebaseRoute, CustomCMSRoute, CMSSideEntityProvider } from "@rebasepro/cms";
+import { RebaseRoute, CustomViewRoute, SideEntityProvider } from "@rebasepro/cms";
 import { CircularProgressCenter } from "@rebasepro/ui";
 import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
 import { CollectionsStudioView, JSEditor, RLSEditor, SQLEditor, StorageView, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
-import { CMSView } from "@rebasepro/types";
+import { AppView } from "@rebasepro/types";
 import { createRebaseClient } from "@rebasepro/client";
 import { collections } from "virtual:rebase-collections";
 import { Route, Outlet } from "react-router-dom";
@@ -82,13 +82,13 @@ export function App() {
     const collectionsBuilder = () => [...collections];
 
     const collectionRegistryController = useBuildCollectionRegistryController({ userConfigPersistence });
-    const cmsUrlController = useBuildCMSUrlController({
+    const urlController = useBuildUrlController({
         basePath: "/",
         baseCollectionPath: "/c",
         collectionRegistryController
     });
 
-    const devViews: CMSView[] = React.useMemo(() => [
+    const devViews: AppView[] = React.useMemo(() => [
         {
             slug: "sql",
             name: "SQL Console",
@@ -140,7 +140,7 @@ export function App() {
         authController,
         data: rebaseClient.data,
         collectionRegistryController,
-        cmsUrlController,
+        urlController,
         adminMode: adminModeController.mode,
         userManagement: userManagement
     });
@@ -154,7 +154,7 @@ export function App() {
                         apiUrl={API_URL}
                         client={rebaseClient}
                         collectionRegistryController={collectionRegistryController}
-                        cmsUrlController={cmsUrlController}
+                        urlController={urlController}
                         navigationStateController={navigationStateController}
                         authController={authController}
                         userConfigPersistence={userConfigPersistence}
@@ -176,7 +176,7 @@ export function App() {
                             }
 
                             return (
-                                <CMSSideEntityProvider>
+                                <SideEntityProvider>
                                     <RebaseRoutes>
                                         <Route element={
                                             <Scaffold autoOpenDrawer={false}>
@@ -205,11 +205,11 @@ export function App() {
                                                 const slugs = Array.isArray(view.slug) ? view.slug : [view.slug];
                                                 return slugs.flatMap(slug => {
                                                     const routes = [
-                                                        <Route key={slug} path={slug} element={<CustomCMSRoute cmsView={view} />} />
+                                                        <Route key={slug} path={slug} element={<CustomViewRoute view={view} />} />
                                                     ];
                                                     if (view.nestedRoutes) {
                                                         routes.push(
-                                                            <Route key={slug + "/*"} path={slug + "/*"} element={<CustomCMSRoute cmsView={view} />} />
+                                                            <Route key={slug + "/*"} path={slug + "/*"} element={<CustomViewRoute view={view} />} />
                                                         );
                                                     }
                                                     return routes;
@@ -219,7 +219,7 @@ export function App() {
                                             <Route path={"*"} element={<NotFoundPage />} />
                                         </Route>
                                     </RebaseRoutes>
-                                </CMSSideEntityProvider>
+                                </SideEntityProvider>
                             );
                         }}
                     </Rebase>

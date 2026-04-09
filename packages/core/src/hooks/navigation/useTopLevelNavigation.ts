@@ -1,4 +1,4 @@
-import type { CMSView, CMSUrlController, EntityCollection, RebasePlugin, NavigationEntry, NavigationGroupMapping, NavigationResult } from "@rebasepro/types";
+import type { AppView, UrlController, EntityCollection, RebasePlugin, NavigationEntry, NavigationGroupMapping, NavigationResult } from "@rebasepro/types";
 import { useCallback, useMemo, useRef } from "react";
 import { deepEqual as equal } from "fast-equals";
 
@@ -9,12 +9,12 @@ import { computeNavigationGroups, getGroup, NAVIGATION_ADMIN_GROUP_NAME, NAVIGAT
 
 export type UseTopLevelNavigationProps = {
     collections: EntityCollection[];
-    views: CMSView[] | undefined;
-    adminViews: CMSView[] | undefined;
+    views: AppView[] | undefined;
+    adminViews: AppView[] | undefined;
     plugins?: RebasePlugin[];
     navigationGroupMappings?: NavigationGroupMapping[];
     viewsOrder?: string[];
-    cmsUrlController: CMSUrlController;
+    urlController: UrlController;
     adminMode?: "content" | "studio" | "settings";
     collectionRegistryController: CollectionRegistryController<any> & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> };
 };
@@ -41,7 +41,7 @@ export function useTopLevelNavigation(
         plugins,
         navigationGroupMappings,
         viewsOrder,
-        cmsUrlController,
+        urlController,
         adminMode,
         collectionRegistryController
     } = props;
@@ -108,7 +108,7 @@ export function useTopLevelNavigation(
 
                 acc.push({
                     id: `collection:${pathKey}`,
-                    url: cmsUrlController.buildUrlCollectionPath(pathKey),
+                    url: urlController.buildUrlCollectionPath(pathKey),
                     type: "collection",
                     name: collection.name.trim(),
                     slug: pathKey,
@@ -137,7 +137,7 @@ export function useTopLevelNavigation(
                 const basePathKey = Array.isArray(pathKey) ? pathKey[0] : pathKey;
                 acc.push({
                     id: `view:${pathKey}`,
-                    url: cmsUrlController.buildCMSUrlPath(basePathKey),
+                    url: urlController.buildAppUrlPath(basePathKey),
                     name: view.name.trim(),
                     type: "view",
                     slug: view.slug,
@@ -165,7 +165,7 @@ export function useTopLevelNavigation(
 
                 acc.push({
                     id: `admin:${pathKey}`,
-                    url: cmsUrlController.buildCMSUrlPath(pathKey),
+                    url: urlController.buildAppUrlPath(pathKey),
                     name: adminView.name.trim(),
                     type: "admin",
                     slug: adminView.slug,
@@ -242,8 +242,8 @@ export function useTopLevelNavigation(
         views,
         adminViews,
         navigationGroupMappings,
-        cmsUrlController.buildCMSUrlPath,
-        cmsUrlController.buildUrlCollectionPath,
+        urlController.buildAppUrlPath,
+        urlController.buildUrlCollectionPath,
         pluginGroups,
         plugins,
         adminMode,

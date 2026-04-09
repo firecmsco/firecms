@@ -1,4 +1,4 @@
-import type { CMSView, HomePageSection, NavigationEntry, PluginGenericProps } from "@rebasepro/types";
+import type { AppView, HomePageSection, NavigationEntry, PluginGenericProps } from "@rebasepro/types";
 import React, { useEffect, useMemo } from "react";
 import { Container, Typography } from "@rebasepro/ui";
 import {
@@ -9,7 +9,7 @@ import {
     useSlot
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
-import { CMSAnalyticsEvent } from "@rebasepro/types";
+import { AnalyticsEvent } from "@rebasepro/types";
 import { NavigationCardBinding } from "./NavigationCardBinding";
 
 export function StudioHomePage({
@@ -94,7 +94,7 @@ export function StudioHomePage({
                                         key={entry.url}
                                         {...entry}
                                         onClick={() => {
-                                            let event: CMSAnalyticsEvent = "unmapped_event";
+                                            let event: AnalyticsEvent = "unmapped_event";
                                             if (entry.type === "collection") event = "home_navigate_to_collection";
                                             else if (entry.type === "view") event = "home_navigate_to_view";
                                             else if (entry.type === "admin") event = "home_navigate_to_admin_view";
@@ -123,7 +123,7 @@ export function StudioHomePage({
                                 url="/users"
                                 name="Users"
                                 description="Manage developers & roles in the workspace"
-                                view={{ icon: "group" } as Partial<CMSView> as CMSView}
+                                view={{ icon: "group" } as Partial<AppView> as AppView}
                                 type="admin"
                             />
 
@@ -134,7 +134,7 @@ export function StudioHomePage({
                                 url="/roles"
                                 name="Roles"
                                 description="Manage fine-grained access configurations"
-                                view={{ icon: "admin_panel_settings" } as Partial<CMSView> as CMSView}
+                                view={{ icon: "admin_panel_settings" } as Partial<AppView> as AppView}
                                 type="admin"
                             />
                         </div>

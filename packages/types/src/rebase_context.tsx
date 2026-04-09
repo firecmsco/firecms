@@ -69,7 +69,7 @@ export type RebaseContext<USER extends User = User, AuthControllerType extends A
     /**
      * Controller resolving URLs in the CMS
      */
-    cmsUrlController?: import("./controllers/navigation").CMSUrlController;
+    urlController?: import("./controllers/navigation").UrlController;
 
     /**
      * Controller to handle simple confirmation and alert dialogs

@@ -281,7 +281,7 @@ describe("Property Conditions", () => {
                 name: "Category",
                 resolved: true,
                 fromBuilder: false,
-                enumValues: [
+                enum: [
                     { id: "electronics", label: "Electronics" },
                     { id: "clothing", label: "Clothing" },
                     { id: "food", label: "Food" }
@@ -293,8 +293,8 @@ describe("Property Conditions", () => {
 
             const result = applyPropertyConditions(property, baseContext);
 
-            expect((result as Record<string, unknown>)['enumValues']).toHaveLength(2);
-            expect(((result as Record<string, unknown>)['enumValues'] as EnumValueConfig[]).map((e) => e.id)).toEqual(["electronics", "clothing"]);
+            expect((result as Record<string, unknown>)['enum']).toHaveLength(2);
+            expect(((result as Record<string, unknown>)['enum'] as EnumValueConfig[]).map((e) => e.id)).toEqual(["electronics", "clothing"]);
         });
 
         it("should apply enum conditions with object format (Firestore workaround)", () => {
@@ -303,7 +303,7 @@ describe("Property Conditions", () => {
                 name: "Category",
                 resolved: true,
                 fromBuilder: false,
-                enumValues: [
+                enum: [
                     { id: "electronics", label: "Electronics" },
                     { id: "clothing", label: "Clothing" },
                     { id: "food", label: "Food" }
@@ -321,8 +321,8 @@ describe("Property Conditions", () => {
 
             const result = applyPropertyConditions(property, baseContext);
 
-            expect((result as Record<string, unknown>)['enumValues']).toHaveLength(2);
-            expect(((result as Record<string, unknown>)['enumValues'] as EnumValueConfig[]).map((e) => e.id)).toEqual(["electronics", "clothing"]);
+            expect((result as Record<string, unknown>)['enum']).toHaveLength(2);
+            expect(((result as Record<string, unknown>)['enum'] as EnumValueConfig[]).map((e) => e.id)).toEqual(["electronics", "clothing"]);
         });
 
         it("should apply excludedEnumValues to remove specific values", () => {
@@ -331,7 +331,7 @@ describe("Property Conditions", () => {
                 name: "Status",
                 resolved: true,
                 fromBuilder: false,
-                enumValues: [
+                enum: [
                     { id: "draft", label: "Draft" },
                     { id: "published", label: "Published" },
                     { id: "archived", label: "Archived" }
@@ -344,8 +344,8 @@ describe("Property Conditions", () => {
 
             const result = applyPropertyConditions(property, baseContext);
 
-            expect((result as Record<string, unknown>)['enumValues']).toHaveLength(2);
-            expect(((result as Record<string, unknown>)['enumValues'] as EnumValueConfig[]).map((e) => e.id)).toEqual(["draft", "archived"]);
+            expect((result as Record<string, unknown>)['enum']).toHaveLength(2);
+            expect(((result as Record<string, unknown>)['enum'] as EnumValueConfig[]).map((e) => e.id)).toEqual(["draft", "archived"]);
         });
 
         it("should apply enum conditions to disable specific values", () => {
@@ -354,7 +354,7 @@ describe("Property Conditions", () => {
                 name: "Status",
                 resolved: true,
                 fromBuilder: false,
-                enumValues: [
+                enum: [
                     { id: "draft", label: "Draft" },
                     { id: "published", label: "Published" },
                     { id: "archived", label: "Archived" }
@@ -369,12 +369,12 @@ describe("Property Conditions", () => {
             } as unknown as Property;
 
             const result = applyPropertyConditions(property, baseContext);
-            const archivedOption = ((result as Record<string, unknown>)['enumValues'] as EnumValueConfig[]).find((e) => e.id === "archived");
+            const archivedOption = ((result as Record<string, unknown>)['enum'] as EnumValueConfig[]).find((e) => e.id === "archived");
             expect(archivedOption!.disabled).toBeFalsy();
 
             const contextDraft = { ...baseContext, values: { status: "draft" } };
             const resultDraft = applyPropertyConditions(property, contextDraft);
-            const archivedOptionDraft = ((resultDraft as Record<string, unknown>)['enumValues'] as EnumValueConfig[]).find((e) => e.id === "archived");
+            const archivedOptionDraft = ((resultDraft as Record<string, unknown>)['enum'] as EnumValueConfig[]).find((e) => e.id === "archived");
             expect(archivedOptionDraft!.disabled).toBe(true);
         });
 

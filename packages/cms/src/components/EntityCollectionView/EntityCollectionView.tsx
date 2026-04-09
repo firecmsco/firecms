@@ -1,4 +1,4 @@
-import type { AdditionalFieldDelegate, EntityCollection } from "../../types/collections";
+import type { AdditionalFieldDelegate, EntityCollection } from "@rebasepro/types";
 import type { EntityAction, Property } from "@rebasepro/types";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
@@ -29,7 +29,7 @@ import {
     useRebaseContext,
     useLargeLayout,
     useCollectionRegistryController,
-    useCMSUrlController,
+    useUrlController,
     useSideEntityController,
     usePermissions,
     useTranslation,
@@ -151,7 +151,7 @@ export const EntityCollectionView = React.memo(
         const { t } = useTranslation();
         const context = useRebaseContext();
         const collectionRegistry = useCollectionRegistryController();
-        const cmsUrlController = useCMSUrlController();
+        const urlController = useUrlController();
         const breadcrumbs = useBreadcrumbsController();
         const path = pathProp ?? collectionProp.dbPath;
         const dataClient = useData();
@@ -332,7 +332,7 @@ export const EntityCollectionView = React.memo(
 
             const entityPath = path ?? clickedEntity.path;
             navigateToEntity({
-                navigation: cmsUrlController,
+                navigation: urlController,
                 path: entityPath,
                 sideEntityController,
                 openEntityMode,
@@ -353,7 +353,7 @@ export const EntityCollectionView = React.memo(
                 entityId: undefined,
                 path: path,
                 sideEntityController,
-                navigation: cmsUrlController,
+                navigation: urlController,
                 onClose: unselectNavigatedEntity
             })
         }, [path, sideEntityController]);
@@ -644,7 +644,7 @@ export const EntityCollectionView = React.memo(
                                     entityId: entity.id,
                                     selectedTab: subcollection.slug ?? subcollection.dbPath,
                                     path: path,
-                                    navigation: cmsUrlController,
+                                    navigation: urlController,
                                     sideEntityController
                                 })
                             }}>
@@ -1126,7 +1126,7 @@ function EntityIdHeaderWidget({
 }) {
 
     const { t } = useTranslation();
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
     const [openPopup, setOpenPopup] = React.useState(false);
     const [searchString, setSearchString] = React.useState("");
     const [recentIds, setRecentIds] = React.useState<string[]>(getRecentIds(collection.slug).map(String));
@@ -1163,7 +1163,7 @@ function EntityIdHeaderWidget({
                                 path,
 
                                 sideEntityController,
-                                navigation: cmsUrlController
+                                navigation: urlController
                             })
                         }}
                         className={"w-96 max-w-full"}>
@@ -1198,7 +1198,7 @@ function EntityIdHeaderWidget({
                                         path,
 
                                         sideEntityController,
-                                        navigation: cmsUrlController
+                                        navigation: urlController
                                     })
                                 }}
                                 includeEntityLink={false}

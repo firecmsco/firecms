@@ -1,7 +1,7 @@
-import type { EntityCollection } from "../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import { Blocker, useBlocker, useLocation } from "react-router";
 import { EntityEditView } from "../components/EntityEditView";
-import { useCollectionRegistryController, useCMSUrlController } from "@rebasepro/core";
+import { useCollectionRegistryController, useUrlController } from "@rebasepro/core";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +21,7 @@ export function RebaseRoute() {
 
     const location = useLocation();
     const collectionRegistry = useCollectionRegistryController();
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
     const breadcrumbs = useBreadcrumbsController();
 
     const hash = location.hash;
@@ -30,7 +30,7 @@ export function RebaseRoute() {
     const isCopy = hash.includes("#copy");
 
     const pathname = location.pathname;
-    const navigationPath = cmsUrlController.urlPathToDataPath(pathname);
+    const navigationPath = urlController.urlPathToDataPath(pathname);
 
     const navigationEntries = getNavigationEntriesFromPath({
         path: navigationPath,
@@ -48,13 +48,13 @@ export function RebaseRoute() {
                 if (entry.type === "entity") {
                     return ({
                         title: String(entry.entityId),
-                        url: cmsUrlController.buildUrlCollectionPath(entry.path)
+                        url: urlController.buildUrlCollectionPath(entry.path)
                         // count: undefined (not applicable for entities)
                     });
                 } else if (entry.type === "custom_view") {
                     return ({
                         title: entry.view.name,
-                        url: cmsUrlController.buildUrlCollectionPath(entry.path)
+                        url: urlController.buildUrlCollectionPath(entry.path)
                         // count: undefined (not applicable for custom views)
                     });
                 } else if (entry.type === "collection") {
@@ -63,7 +63,7 @@ export function RebaseRoute() {
                     const showCount = isLastEntry && isViewingCollection;
                     return ({
                         title: entry.collection.name,
-                        url: cmsUrlController.buildUrlCollectionPath(entry.path),
+                        url: urlController.buildUrlCollectionPath(entry.path),
                         id: entry.path,
                         ...(showCount ? { count: null } : {}) // null = loading, undefined = no badge
                     });
@@ -154,10 +154,10 @@ function EntityFullScreenRoute({
 }) {
 
     const collectionRegistry = useCollectionRegistryController();
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
     const navigate = useNavigate();
 
-    const navigationPath = cmsUrlController.urlPathToDataPath(pathname);
+    const navigationPath = urlController.urlPathToDataPath(pathname);
 
     // is navigating away blocked
     const blocked = useRef(false);
@@ -214,7 +214,7 @@ function EntityFullScreenRoute({
         ? (lastCollectionEntry && "collection" in lastCollectionEntry ? lastCollectionEntry.collection : undefined)!
         : (lastEntityEntry && "parentCollection" in lastEntityEntry ? lastEntityEntry.parentCollection : undefined)!;
     const fullIdPath = isNew ? lastCollectionEntry!.slug : lastEntityEntry!.slug;
-    const collectionPath = cmsUrlController.resolveDatabasePathsFrom(fullIdPath);
+    const collectionPath = urlController.resolveDatabasePathsFrom(fullIdPath);
     return <>
         <EntityEditView
             key={collection.slug + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}

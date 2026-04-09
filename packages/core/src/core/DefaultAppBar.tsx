@@ -19,7 +19,7 @@ import {
     SettingsIcon,
     HomeIcon
 } from "@rebasepro/ui";
-import { useAuthController, useLargeLayout, useModeController, useCMSUrlController, useAdminModeController, useTranslation } from "../hooks";
+import { useAuthController, useLargeLayout, useModeController, useUrlController, useAdminModeController, useTranslation } from "../hooks";
 import { User } from "@rebasepro/types";
 import { useApp } from "../app/useApp";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
@@ -82,7 +82,7 @@ export const DefaultAppBar = function DefaultAppBar({
 
     const logo = logoProp ?? appLogo;
 
-    const navigation = useCMSUrlController();
+    const navigation = useUrlController();
 
     const breadcrumbs = useBreadcrumbsController();
 

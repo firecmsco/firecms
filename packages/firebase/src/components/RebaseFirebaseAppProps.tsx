@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Authenticator, CMSAnalyticsEvent, CMSView, CMSViewsBuilder, EntityCollection, EntityCollectionsBuilder, RebasePlugin, Locale, PropertyConfig } from "@rebasepro/types";
+import { Authenticator, AnalyticsEvent, AppView, AppViewsBuilder, EntityCollection, EntityCollectionsBuilder, RebasePlugin, Locale, PropertyConfig } from "@rebasepro/types";
 import { UserManagementDelegate } from "@rebasepro/types";
 import { FirebaseApp } from "@firebase/app";
 import { FirebaseLoginViewProps } from "./FirebaseLoginView";
@@ -47,13 +47,13 @@ export type RebaseFirebaseAppProps = {
      * Custom additional views created by the developer, added to the main
      * navigation
      */
-    views?: CMSView[] | CMSViewsBuilder;
+    views?: AppView[] | AppViewsBuilder;
 
     /**
      * Custom additional views created by the developer, added to the admin
      * navigation
      */
-    adminViews?: CMSView[] | CMSViewsBuilder;
+    adminViews?: AppView[] | AppViewsBuilder;
 
     /**
      * Record of custom form fields to be used in the CMS.
@@ -136,7 +136,7 @@ export type RebaseFirebaseAppProps = {
     /**
      * Callback used to get analytics events from the CMS
      */
-    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+    onAnalyticsEvent?: (event: AnalyticsEvent, data?: object) => void;
 
     /**
      * Use plugins to modify the behaviour of the CMS.

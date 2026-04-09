@@ -133,7 +133,7 @@ const KANBAN_COLUMNS: KanbanColumn[] = [
     title: "Review",
     color: "rgb(96, 165, 250)",
     cards: [
-      { id: "870812", title: "RLS policies", image: "https://images.unsplash.com/photo-1563986768609-322da13575f2?w=80&h=80&fit=crop" },
+      { id: "870812", title: "RLS policies", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=80&h=80&fit=crop" },
     ],
   },
   {

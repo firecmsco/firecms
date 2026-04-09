@@ -1,8 +1,8 @@
-import type { CMSView, EntityCollection, NavigationResult, RebasePlugin, NavigationStateController, CMSUrlController, NavigationGroupMapping } from "@rebasepro/types";
+import type { AppView, EntityCollection, NavigationResult, RebasePlugin, NavigationStateController, UrlController, NavigationGroupMapping } from "@rebasepro/types";
 import { useCallback } from "react";
 
 import { AuthController,  RebaseData, CollectionRegistryController, User } from "@rebasepro/types";
-import type { EntityCollectionsBuilder, CMSViewsBuilder, EffectiveRoleController } from "@rebasepro/types";
+import type { EntityCollectionsBuilder, AppViewsBuilder, EffectiveRoleController } from "@rebasepro/types";
 import { CollectionRegistry } from "@rebasepro/common";
 
 import { UserManagementDelegate } from "@rebasepro/types";
@@ -14,15 +14,15 @@ import { useTopLevelNavigation } from "./useTopLevelNavigation";
 export type BuildNavigationStateProps<EC extends EntityCollection, USER extends User> = {
     authController: AuthController<USER>;
     collections?: EC[] | EntityCollectionsBuilder<EC>;
-    views?: CMSView[] | CMSViewsBuilder;
-    adminViews?: CMSView[] | CMSViewsBuilder;
+    views?: AppView[] | AppViewsBuilder;
+    adminViews?: AppView[] | AppViewsBuilder;
     data: RebaseData;
     plugins?: RebasePlugin[];
     navigationGroupMappings?: NavigationGroupMapping[];
     disabled?: boolean;
     viewsOrder?: string[];
     collectionRegistryController: CollectionRegistryController<EC> & { collectionRegistryRef: React.MutableRefObject<CollectionRegistry> };
-    cmsUrlController: CMSUrlController;
+    urlController: UrlController;
     adminMode?: "content" | "studio" | "settings";
     effectiveRoleController?: EffectiveRoleController;
     userManagement?: UserManagementDelegate;
@@ -53,7 +53,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         disabled,
         navigationGroupMappings,
         collectionRegistryController,
-        cmsUrlController,
+        urlController,
         adminMode = "content",
         effectiveRoleController,
         userManagement
@@ -100,7 +100,7 @@ export function useBuildNavigationStateController<EC extends EntityCollection, U
         plugins,
         navigationGroupMappings,
         viewsOrder,
-        cmsUrlController,
+        urlController,
         adminMode,
         collectionRegistryController
     });

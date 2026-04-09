@@ -1,4 +1,4 @@
-import type { EntityCollection } from "../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import type { FieldProps, PropertyFieldBindingProps } from "../types/fields";
 import type { RebasePlugin, PluginFieldBuilderParams, Property } from "@rebasepro/types";
 import React, { ComponentType, ReactElement, useCallback, useRef } from "react";

@@ -1,4 +1,4 @@
-import type { EntityCustomViewParams } from "../../types/collections";
+import type { EntityCustomViewParams } from "@rebasepro/types";
 import { useRef, useEffect } from "react";
 ;
 import {

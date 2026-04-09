@@ -1,4 +1,4 @@
-import type { EntityCustomView, EntityCollection } from "../types/collections";
+import type { EntityCustomView, EntityCollection } from "@rebasepro/types";
 import type { CustomizationController, EntityAction } from "@rebasepro/types";
 
 export function resolveEntityView(

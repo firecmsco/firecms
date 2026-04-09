@@ -1,8 +1,6 @@
 import { deleteField, DocumentSnapshot } from "@firebase/firestore";
-import { Properties, Property } from "@rebasepro/types";
-import { sortProperties } from "@rebasepro/common";
-import { PersistedCollection } from "@rebasepro/studio";
-import { COLLECTION_PATH_SEPARATOR, stripCollectionPath } from "@rebasepro/common";
+import { EntityCollection, Properties, Property } from "@rebasepro/types";
+import { COLLECTION_PATH_SEPARATOR, sortProperties, stripCollectionPath } from "@rebasepro/common";
 
 export function buildCollectionId(idOrPath: string, parentCollectionIds?: string[]): string {
     if (!parentCollectionIds)
@@ -12,7 +10,7 @@ export function buildCollectionId(idOrPath: string, parentCollectionIds?: string
 
 
 
-export const docsToCollectionTree = (docs: DocumentSnapshot[]): PersistedCollection[] => {
+export const docsToCollectionTree = (docs: DocumentSnapshot[]): EntityCollection[] => {
 
     const collectionsMap = docs.map((doc) => {
         const id: string = doc.id;
@@ -36,7 +34,7 @@ export const docsToCollectionTree = (docs: DocumentSnapshot[]): PersistedCollect
     return Object.values(collectionsMap);
 }
 
-export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
+export const docToCollection = (doc: DocumentSnapshot): EntityCollection => {
     const data = doc.data();
     if (!data)
         throw Error("Entity collection has not been persisted correctly");
@@ -50,7 +48,7 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
         ...data,
         properties: sortedProperties,
         slug: data.id ?? data.alias ?? data.slug
-    } as PersistedCollection;
+    } as EntityCollection;
 }
 
 

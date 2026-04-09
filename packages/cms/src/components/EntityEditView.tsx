@@ -1,4 +1,4 @@
-import type { EntityCollection } from "../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import type { FormContext } from "../types/fields";
 import type { PluginFormActionProps } from "@rebasepro/types";
 import React, { useEffect, useMemo, useState } from "react";

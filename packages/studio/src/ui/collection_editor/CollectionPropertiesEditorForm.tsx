@@ -377,7 +377,8 @@ export function CollectionPropertiesEditorForm({
 
     const initialErrors = selectedPropertyKey && propertyErrorsRef?.current?.properties ? propertyErrorsRef.current.properties[selectedPropertyKey] : undefined;
 
-    const emptyCollection = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
+    const emptyCollection = (values?.propertiesOrder === undefined || values.propertiesOrder.length === 0)
+        && (!values?.properties || Object.keys(values.properties).length === 0);
 
     const usedPropertiesOrder = (values.propertiesOrder
         ? values.propertiesOrder

@@ -1,8 +1,8 @@
 import { InferPropertyType } from "@rebasepro/types";
 import { Entity } from "@rebasepro/types";
 import { FormexController } from "./components/formex";
-import { EntityCollection } from "./collections";
-import { Property } from "./properties";
+import { EntityCollection } from "@rebasepro/types";
+import { Property } from "@rebasepro/types";
 
 export type DefaultFieldConfig =
     | "text_field"

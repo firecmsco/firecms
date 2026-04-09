@@ -1,10 +1,10 @@
 import type { NavigationEntry, NavigationResult } from "@rebasepro/types";
 import React from "react";
 
-import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useCMSUrlController, useAdminModeController, useEffectiveRoleController, useTranslation, useSlot, useRebaseContext } from "../hooks";
+import { useCollapsedGroups, useLargeLayout, useNavigationStateController, useUrlController, useAdminModeController, useEffectiveRoleController, useTranslation, useSlot, useRebaseContext } from "../hooks";
 
 import { Link, useNavigate } from "react-router-dom";
-import { CMSAnalyticsEvent } from "@rebasepro/types";
+import { AnalyticsEvent } from "@rebasepro/types";
 import { cls, Tooltip, Typography } from "@rebasepro/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { DrawerNavigationGroup } from "./DrawerNavigationGroup";
@@ -81,7 +81,7 @@ export function DefaultDrawer({
     const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupsToRender, "drawer");
 
     const onItemClick = (view: NavigationEntry) => {
-        const eventName: CMSAnalyticsEvent = view.type === "collection"
+        const eventName: AnalyticsEvent = view.type === "collection"
             ? "drawer_navigate_to_collection"
             : (view.type === "view" ? "drawer_navigate_to_view" : "unmapped_event");
         analyticsController.onAnalyticsEvent?.(eventName, { url: view.url });
@@ -173,7 +173,7 @@ export function DrawerLogo({
     drawerHovered: boolean;
 }) {
 
-    const urlController = useCMSUrlController();
+    const urlController = useUrlController();
     const showFullContent = drawerOpen || (drawerHovered && !drawerOpen);
 
     return (

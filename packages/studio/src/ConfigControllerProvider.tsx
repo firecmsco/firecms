@@ -5,7 +5,7 @@ import { deepEqual as equal } from "fast-equals";
 import { CollectionsConfigController } from "./types/config_controller";
 import {
     useCustomizationController,
-    useCMSUrlController,
+    useUrlController,
     useRebaseContext,
     useAuthController,
     useSnackbarController
@@ -97,7 +97,7 @@ export const ConfigControllerProvider = React.memo(
             return databaseAdmin?.fetchTableMetadata?.(tableName);
         }, [databaseAdmin]);
 
-        const urlController = useCMSUrlController();
+        const urlController = useUrlController();
         const navigate = useNavigate();
         const snackbarController = useSnackbarController();
         const { propertyConfigs } = useCustomizationController();

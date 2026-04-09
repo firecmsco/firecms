@@ -11,7 +11,7 @@ import {
     useSlot
 } from "../../hooks";
 import { useBreadcrumbsController } from "../../hooks/useBreadcrumbsController";
-import { CMSAnalyticsEvent } from "@rebasepro/types";
+import { AnalyticsEvent } from "@rebasepro/types";
 import { FavouritesView } from "./FavouritesView";
 import { ErrorBoundary } from "@rebasepro/ui";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
@@ -420,7 +420,7 @@ export function ContentHomePage({
                                                             key={entry.url}
                                                             entry={entry}
                                                             onClick={() => {
-                                                                let event: CMSAnalyticsEvent =
+                                                                let event: AnalyticsEvent =
                                                                     "unmapped_event";
                                                                 if (
                                                                     entry.type ===
@@ -510,7 +510,7 @@ export function ContentHomePage({
                                     key={entry.url}
                                     {...entry}
                                     onClick={() => {
-                                        let event: CMSAnalyticsEvent =
+                                        let event: AnalyticsEvent =
                                             "unmapped_event";
                                         if (entry.type === "collection")
                                             event =

@@ -1,4 +1,4 @@
-import type { EntityCollection } from "../../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
 import { CollectionSize, Entity, FilterValues } from "@rebasepro/types";
 
@@ -12,7 +12,7 @@ import {
     useData,
     useDataTableController,
     useLargeLayout,
-    useCMSUrlController,
+    useUrlController,
     useSideEntityController,
     usePermissions
 } from "@rebasepro/core";
@@ -105,10 +105,10 @@ export function EntitySelectionTable<M extends Record<string, any>>(
 
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
     const analyticsController = useAnalyticsController();
 
-    const path = cmsUrlController.resolveDatabasePathsFrom(pathInput);
+    const path = urlController.resolveDatabasePathsFrom(pathInput);
 
     const dataClient = useData();
 

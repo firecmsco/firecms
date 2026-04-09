@@ -1,5 +1,5 @@
 import type { Properties } from "@rebasepro/types";
-import type { EntityCollection } from "../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import type { CustomizationController } from "@rebasepro/types";
 import React from "react";
 import { Entity } from "@rebasepro/types";

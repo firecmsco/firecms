@@ -1,10 +1,10 @@
-import type { EntityCollection } from "../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import type { EntitySidePanelProps } from "@rebasepro/types";
 import React, { useCallback, useEffect, useMemo } from "react";
 
 import type { OnUpdateParams } from "../types/components/EntityFormProps";
 import { useCollectionRegistryController, useSideEntityController } from "@rebasepro/core";
-import { useCMSUrlController } from "@rebasepro/core";
+import { useUrlController } from "@rebasepro/core";
 
 import { ErrorBoundary } from "@rebasepro/ui";
 import { EntityEditView } from "./EntityEditView";
@@ -43,7 +43,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     const sideEntityController = useSideEntityController();
     const collectionRegistryController = useCollectionRegistryController();
     const sideDialogsController = useSideDialogContext();
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
 
     const onClose = () => {
         if (props.onClose) {
@@ -141,12 +141,12 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                                     setBlockedNavigationMessage(undefined);
                                     // IMPORTANT: useLocation() returns the frozen base_location from RebaseRoutes
                                     // (the collection URL), not the actual browser URL.
-                                    // Build the full-screen URL directly from props using cmsUrlController.
+                                    // Build the full-screen URL directly from props using urlController.
                                     if (entityId) {
-                                        const fullScreenUrl = cmsUrlController.buildUrlCollectionPath(`${path}/${entityId}`);
+                                        const fullScreenUrl = urlController.buildUrlCollectionPath(`${path}/${entityId}`);
                                         navigate(fullScreenUrl, { state: null });
                                     } else {
-                                        const fullScreenUrl = cmsUrlController.buildUrlCollectionPath(path);
+                                        const fullScreenUrl = urlController.buildUrlCollectionPath(path);
                                         navigate(fullScreenUrl + "#new", { state: null });
                                     }
                                 }}>

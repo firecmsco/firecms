@@ -1,5 +1,5 @@
 import type { Properties } from "@rebasepro/types";
-import type { EntityCollection } from "../../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import React, { useState } from "react";
 import { useAuthController, useRebaseContext, useLargeLayout, useTranslation, useSlot } from "@rebasepro/core";
 import { CollectionActionsProps, EntityTableController, SelectionController } from "@rebasepro/types";

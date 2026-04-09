@@ -16,7 +16,7 @@ import {
     useBuildAdminModeController,
     AdminModeControllerProvider,
     useBuildCollectionRegistryController,
-    useBuildCMSUrlController,
+    useBuildUrlController,
     useBuildNavigationStateController,
     useValidateAuthenticator
 } from "@rebasepro/core";
@@ -166,7 +166,7 @@ export function RebaseFirebaseApp({
         userConfigPersistence
     });
 
-    const cmsUrlController = useBuildCMSUrlController({
+    const urlController = useBuildUrlController({
         basePath: basePath ?? "/",
         baseCollectionPath: baseCollectionPath ?? "/c",
         collectionRegistryController
@@ -180,7 +180,7 @@ export function RebaseFirebaseApp({
         data: buildRebaseData(firestoreDelegate),
         plugins,
         collectionRegistryController,
-        cmsUrlController,
+        urlController,
         adminMode: adminModeController.mode,
         userManagement
     });
@@ -203,7 +203,7 @@ export function RebaseFirebaseApp({
                     <Rebase
                         authController={authController}
                         collectionRegistryController={collectionRegistryController}
-                        cmsUrlController={cmsUrlController}
+                        urlController={urlController}
                         navigationStateController={navigationStateController}
                         userConfigPersistence={userConfigPersistence}
                         dateTimeFormat={dateTimeFormat}

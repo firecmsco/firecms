@@ -570,6 +570,11 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
      */
     width?: number;
 
+    /**
+     * Builder for the custom field
+     */
+    Builder?: React.ComponentType<{ entity: Entity<M>, context: RebaseContext<USER> }>;
+
 
 
     /**

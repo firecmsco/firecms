@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import { useApp, useCMSUrlController } from "@rebasepro/core";
+import { useApp, useUrlController } from "@rebasepro/core";
 import { useDataTalk } from "../DataTalkProvider";
 import { cls, ManageSearchIcon, Typography } from "@rebasepro/ui";
 
@@ -14,7 +14,7 @@ export function DataTalkDrawer() {
         closeDrawer
     } = useApp();
 
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
 
     const { sessions } = useDataTalk();
     return (
@@ -44,7 +44,7 @@ export function DataTalkDrawer() {
                                 "font-medium text-sm",
                                 isActive ? "bg-surface-accent-200/60 bg-surface-accent-200/60 dark:bg-surface-800/30 dark:bg-surface-800/30" : ""
                             )}
-                            to={cmsUrlController.homeUrl + "/datatalk/" + session.id}
+                            to={urlController.homeUrl + "/datatalk/" + session.id}
                         >
                             <Typography variant={"label"}
                                 className={"whitespace-nowrap"}>{firstChars}{(firstMessage?.text ?? "").length > charsLimit ? "..." : ""}</Typography>

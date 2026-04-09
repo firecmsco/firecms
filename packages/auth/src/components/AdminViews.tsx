@@ -6,7 +6,7 @@ import {
     useAuthController,
     useCollectionRegistryController
 } from "@rebasepro/core";
-import { CMSView, EntityCollection, Role, SecurityRule, User } from "@rebasepro/types";
+import { AppView, EntityCollection, Role, SecurityRule, User } from "@rebasepro/types";
 
 import {
     AddIcon,
@@ -49,7 +49,7 @@ interface AdminViewsProps {
 /**
  * Create admin views for user and role management
  */
-export function createUserManagementAdminViews({ userManagement, apiUrl, getAuthToken }: AdminViewsProps): CMSView[] {
+export function createUserManagementAdminViews({ userManagement, apiUrl, getAuthToken }: AdminViewsProps): AppView[] {
     return [
         {
             slug: "dev/users",

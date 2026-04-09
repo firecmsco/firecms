@@ -16,7 +16,7 @@ export function useNavigationURLs(basePath: string, baseCollectionPath: string, 
     const homeUrl = cleanBasePath ? `/${cleanBasePath}` : "/";
     const fullCollectionPath = cleanBasePath ? `/${cleanBasePath}/${cleanBaseCollectionPath}` : `/${cleanBaseCollectionPath}`;
 
-    const buildCMSUrlPath = useCallback((path: string): string => {
+    const buildAppUrlPath = useCallback((path: string): string => {
         // Strip trailing /* wildcard from paths (used for nested routes in React Router)
         const cleanPath = path.replace(/\/\*$/, "");
         return cleanBasePath ? `/${cleanBasePath}/${encodePath(cleanPath)}` : `/${encodePath(cleanPath)}`;
@@ -47,7 +47,7 @@ export function useNavigationURLs(basePath: string, baseCollectionPath: string, 
     return {
         homeUrl,
         fullCollectionPath,
-        buildCMSUrlPath,
+        buildAppUrlPath,
         buildUrlCollectionPath,
         isUrlCollectionPath,
         urlPathToDataPath,

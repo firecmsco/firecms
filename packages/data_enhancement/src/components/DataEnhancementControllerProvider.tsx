@@ -9,7 +9,7 @@ import {
 import {
     useAuthController,
     useCustomizationController,
-    useCMSUrlController,
+    useUrlController,
     useSnackbarController
 } from "@rebasepro/core";
 import { DataDriver, Entity, EntityCollection, PluginFormActionProps } from "@rebasepro/types";
@@ -102,7 +102,7 @@ export function DataEnhancementControllerProvider({
     }, [getConfigForPath, updateConfig]);
 
 
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
 
     const clearSuggestion = useCallback((propertyKey: string) => {
         setSuggestions((prev) => {
@@ -214,7 +214,7 @@ export function DataEnhancementControllerProvider({
             return Promise.reject(new Error("Not logged in"));
         }
 
-        const resolvedPath = cmsUrlController.resolveDatabasePathsFrom(path);
+        const resolvedPath = urlController.resolveDatabasePathsFrom(path);
         const firebaseToken = await authController.getAuthToken();
 
         if (props.propertyKey) {

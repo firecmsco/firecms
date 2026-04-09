@@ -39,7 +39,7 @@ export const EnhanceTextFieldBinding = React.memo(function EnhanceTextFieldBindi
         setValue
     });
 
-    const internalValue: string | number | null = value ?? (property.type === "string" ? "" : value === 0 ? 0 : "");
+    const internalValue: string | number = value ?? (property.type === "string" ? "" : value === 0 ? 0 : "");
 
     return (
         <>

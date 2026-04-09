@@ -6,7 +6,7 @@ Object.assign(global, { TextDecoder, TextEncoder });
 
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { useBuildNavigationStateController } from "../../src/hooks/navigation/useBuildNavigationStateController";
-import { AuthController, CMSUrlController, CollectionRegistryController, DataDriver, EntityCollection } from "@rebasepro/types";
+import { AuthController, UrlController, CollectionRegistryController, DataDriver, EntityCollection } from "@rebasepro/types";
 import { CollectionRegistry } from "@rebasepro/common";
 import { jest } from "@jest/globals";
 
@@ -25,10 +25,10 @@ describe("useBuildNavigationStateController", () => {
 
     const mockCmsUrlController = {
         buildUrlCollectionPath: (path: string) => `/c/${path}`,
-        buildCMSUrlPath: (path: string) => `/${path}`,
+        buildAppUrlPath: (path: string) => `/${path}`,
         basePath: "/",
         baseCollectionPath: "/c",
-    } as Partial<CMSUrlController> as CMSUrlController;
+    } as Partial<UrlController> as UrlController;
 
     it("should aggregate loading states from collections and views", async () => {
         let authLoading = true;
@@ -43,7 +43,7 @@ describe("useBuildNavigationStateController", () => {
             views: undefined,
             driver: mockDataDriver,
             collectionRegistryController: mockCollectionRegistryController,
-            cmsUrlController: mockCmsUrlController
+            urlController: mockCmsUrlController
         }));
 
         // Initially loading because auth is loading
@@ -77,7 +77,7 @@ describe("useBuildNavigationStateController", () => {
             views: undefined,
             driver: mockDataDriver,
             collectionRegistryController: mockCollectionRegistryController,
-            cmsUrlController: mockCmsUrlController
+            urlController: mockCmsUrlController
         }));
 
         await waitFor(() => {
@@ -113,7 +113,7 @@ describe("useBuildNavigationStateController", () => {
             views: undefined,
             driver: mockDataDriver,
             collectionRegistryController: mockCollectionRegistryController,
-            cmsUrlController: mockCmsUrlController
+            urlController: mockCmsUrlController
         }));
 
         await waitFor(() => {

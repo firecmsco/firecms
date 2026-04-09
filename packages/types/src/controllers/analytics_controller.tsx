@@ -3,11 +3,11 @@ export type AnalyticsController = {
     /**
      * Callback used to get analytics events from the CMS
      */
-    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+    onAnalyticsEvent?: (event: AnalyticsEvent, data?: object) => void;
 
 }
 
-export type CMSAnalyticsEvent =
+export type AnalyticsEvent =
     | "entity_click"
     | "entity_click_from_reference"
 

@@ -5,7 +5,7 @@ import { EntityStatus } from "./entities";
 import { Property } from "./properties";
 import { FormContext } from "./entity_views";
 import { RebaseContext } from "../rebase_context";
-import { NavigationGroupMapping, CMSView } from "../controllers";
+import { NavigationGroupMapping, AppView } from "../controllers";
 import { UserManagementDelegate } from "./user_management_delegate";
 import { User } from "../users";
 import { SlotContribution } from "./slots";
@@ -57,7 +57,7 @@ export interface RebasePlugin {
     /**
      * Views to be automatically added to the navigation.
      */
-    views?: CMSView[];
+    views?: AppView[];
 
     /**
      * User management delegate from this plugin.

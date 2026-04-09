@@ -1,18 +1,18 @@
-import type { CMSView, CMSViewsBuilder, EffectiveRoleController, EntityCollection, RebasePlugin } from "@rebasepro/types";
+import type { AppView, AppViewsBuilder, EffectiveRoleController, EntityCollection, RebasePlugin } from "@rebasepro/types";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { deepEqual as equal } from "fast-equals";
 
 import { AuthController, RebaseData, User } from "@rebasepro/types";
 import { UserManagementDelegate } from "@rebasepro/types";
 
-import { resolveCMSViews } from "./useNavigationResolution";
+import { resolveAppViews } from "./useNavigationResolution";
 import { NAVIGATION_ADMIN_GROUP_NAME } from "./utils";
 import { UsersView, RolesView } from "../../components/admin";
 
 export type UseResolvedViewsProps<USER extends User> = {
     authController: AuthController<USER>;
-    views?: CMSView[] | CMSViewsBuilder;
-    adminViews?: CMSView[] | CMSViewsBuilder;
+    views?: AppView[] | AppViewsBuilder;
+    adminViews?: AppView[] | AppViewsBuilder;
     data: RebaseData;
     plugins?: RebasePlugin[];
     adminMode?: "content" | "studio" | "settings";
@@ -21,8 +21,8 @@ export type UseResolvedViewsProps<USER extends User> = {
 };
 
 export type UseResolvedViewsResult = {
-    views: CMSView[] | undefined;
-    adminViews: CMSView[] | undefined;
+    views: AppView[] | undefined;
+    adminViews: AppView[] | undefined;
     loading: boolean;
     error: Error | undefined;
     refresh: () => void;
@@ -30,7 +30,7 @@ export type UseResolvedViewsResult = {
 
 /**
  * Hook that resolves view and admin view props (which may be async builders or arrays)
- * into concrete CMSView[]. Also injects Users/Roles admin views when userManagement
+ * into concrete AppView[]. Also injects Users/Roles admin views when userManagement
  * is provided.
  *
  * Uses refs for potentially-unstable dependencies (driver, authController,
@@ -53,8 +53,8 @@ export function useResolvedViews<USER extends User>(
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | undefined>(undefined);
-    const [resolvedViews, setResolvedViews] = useState<CMSView[] | undefined>(undefined);
-    const [resolvedAdminViews, setResolvedAdminViews] = useState<CMSView[] | undefined>(undefined);
+    const [resolvedViews, setResolvedViews] = useState<AppView[] | undefined>(undefined);
+    const [resolvedAdminViews, setResolvedAdminViews] = useState<AppView[] | undefined>(undefined);
 
     // Track the trigger count to allow force-refresh
     const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -64,8 +64,8 @@ export function useResolvedViews<USER extends User>(
     }, []);
 
     // Refs for change-detection (avoids state updates when views haven't changed)
-    const viewsRef = useRef<CMSView[] | undefined>(undefined);
-    const adminViewsRef = useRef<CMSView[] | undefined>(undefined);
+    const viewsRef = useRef<AppView[] | undefined>(undefined);
+    const adminViewsRef = useRef<AppView[] | undefined>(undefined);
 
     // Use refs for values that may be new objects each render but shouldn't
     // re-trigger the effect. The effect reads them at execution time.
@@ -104,8 +104,8 @@ export function useResolvedViews<USER extends User>(
         [userManagement]
     );
 
-    const injectedAdminViews: CMSView[] = useMemo(() => {
-        const views: CMSView[] = [];
+    const injectedAdminViews: AppView[] = useMemo(() => {
+        const views: AppView[] = [];
         if (userManagement && usersViewElement) {
             views.push({
                 slug: "users",
@@ -142,8 +142,8 @@ export function useResolvedViews<USER extends User>(
         (async () => {
             try {
                 const [newViews, newAdminViewsProp] = await Promise.all([
-                    resolveCMSViews(viewsProp, resolvedAuthControllerRef.current, dataRef.current, pluginsRef.current),
-                    resolveCMSViews(adminViewsProp, resolvedAuthControllerRef.current, dataRef.current)
+                    resolveAppViews(viewsProp, resolvedAuthControllerRef.current, dataRef.current, pluginsRef.current),
+                    resolveAppViews(adminViewsProp, resolvedAuthControllerRef.current, dataRef.current)
                 ]);
 
                 if (cancelled) return;

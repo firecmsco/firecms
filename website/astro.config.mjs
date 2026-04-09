@@ -276,6 +276,7 @@ export default defineConfig({
             alias: {
                 "@rebasepro/ui": path.resolve(new URL(".", import.meta.url).pathname, "../packages/ui/src"),
                 "@rebasepro/editor": path.resolve(new URL(".", import.meta.url).pathname, "../packages/editor/src"),
+                "@rebasepro/cms": path.resolve(new URL(".", import.meta.url).pathname, "../packages/cms/src"),
             }
         },
         server: {

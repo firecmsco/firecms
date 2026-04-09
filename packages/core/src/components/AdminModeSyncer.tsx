@@ -1,15 +1,15 @@
-import type { CMSView } from "@rebasepro/types";
+import type { AppView } from "@rebasepro/types";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 ;
-import { useAdminModeController, useCMSUrlController } from "../hooks";
+import { useAdminModeController, useUrlController } from "../hooks";
 
 export interface AdminModeSyncerProps {
     /**
      * Map of views designated as 'Studio' views.
      * Navigating to any of these views will automatically flag the admin mode as "studio".
      */
-    devViews?: CMSView[];
+    devViews?: AppView[];
 }
 
 /**
@@ -22,7 +22,7 @@ export interface AdminModeSyncerProps {
  */
 export function AdminModeSyncer({ devViews }: AdminModeSyncerProps) {
     const location = useLocation();
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
     const adminModeController = useAdminModeController();
 
     // Keep track of the current mode using a ref to avoid adding it to the dependency array
@@ -31,9 +31,9 @@ export function AdminModeSyncer({ devViews }: AdminModeSyncerProps) {
 
     useEffect(() => {
         const path = location.pathname;
-        const isContentRoute = cmsUrlController.isUrlCollectionPath(path) || path === cmsUrlController.basePath;
+        const isContentRoute = urlController.isUrlCollectionPath(path) || path === urlController.basePath;
         const isStudioRoute = path.startsWith("/s/") || path === "/s" || devViews?.some(view => {
-            const viewPath = cmsUrlController.buildCMSUrlPath(view.slug);
+            const viewPath = urlController.buildAppUrlPath(view.slug);
             return path.startsWith(`${viewPath}/`) || path === viewPath;
         });
 
@@ -42,7 +42,7 @@ export function AdminModeSyncer({ devViews }: AdminModeSyncerProps) {
         } else if (isContentRoute && currentModeRef.current !== "content") {
             adminModeController.setMode("content");
         }
-    }, [location.pathname, cmsUrlController, devViews, adminModeController]);
+    }, [location.pathname, urlController, devViews, adminModeController]);
 
     return null;
 }

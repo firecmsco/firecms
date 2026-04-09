@@ -1,4 +1,4 @@
-import type { CMSView, CMSViewsBuilder, EntityCollection, EntityCustomView, RebasePlugin } from "@rebasepro/types";
+import type { AppView, AppViewsBuilder, EntityCollection, EntityCustomView, RebasePlugin } from "@rebasepro/types";
 import { AuthController, DataDriver,  User, RebaseData } from "@rebasepro/types";
 import type { EntityCollectionsBuilder } from "@rebasepro/types";
 import { canReadCollection } from "@rebasepro/common";
@@ -99,13 +99,13 @@ export async function resolveCollections(
     return resolvedCollections;
 }
 
-export async function resolveCMSViews(
-    baseViews: CMSView[] | CMSViewsBuilder | undefined,
+export async function resolveAppViews(
+    baseViews: AppView[] | AppViewsBuilder | undefined,
     authController: AuthController,
     data: RebaseData,
     plugins?: RebasePlugin[]
 ) {
-    let resolvedViews: CMSView[] = [];
+    let resolvedViews: AppView[] = [];
     if (typeof baseViews === "function") {
         resolvedViews = await baseViews({
             user: authController.user,

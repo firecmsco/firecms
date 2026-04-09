@@ -6,7 +6,7 @@ Object.assign(global, { TextDecoder, TextEncoder });
 
 import { renderHook, waitFor } from "@testing-library/react";
 import { useResolvedViews } from "../../src/hooks/navigation/useResolvedViews";
-import { AuthController, CMSView, DataDriver } from "@rebasepro/types";
+import { AuthController, AppView, DataDriver } from "@rebasepro/types";
 import { jest } from "@jest/globals";
 
 describe("useResolvedViews", () => {
@@ -20,7 +20,7 @@ describe("useResolvedViews", () => {
             user: { uid: "test-user" }
         } as unknown as AuthController;
 
-        const mockViews: CMSView[] = [
+        const mockViews: AppView[] = [
             { name: "My View", slug: "my-view", view: null! }
         ];
 

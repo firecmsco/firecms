@@ -1,4 +1,4 @@
-import type { EntityCollection } from "../../../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import type { ArrayProperty, Property } from "@rebasepro/types";
 
 export function getTableCellAlignment(property: Property): "right" | "left" | "center" {

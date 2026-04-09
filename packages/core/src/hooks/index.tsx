@@ -8,7 +8,7 @@ export * from "./data/delete";
 
 export * from "./navigation/contexts";
 export * from "./navigation/useBuildCollectionRegistryController";
-export * from "./navigation/useBuildCMSUrlController";
+export * from "./navigation/useBuildUrlController";
 export * from "./navigation/useBuildNavigationStateController";
 export * from "./navigation/useResolvedCollections";
 export * from "./navigation/useResolvedViews";

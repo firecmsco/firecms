@@ -17,7 +17,7 @@ import { RebaseDataContext } from "../contexts/RebaseDataContext";
 import { DatabaseAdminContext } from "../contexts/DatabaseAdminContext";
 import { RebaseClientInstanceContext } from "../contexts/RebaseClientInstanceContext";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
-import { CollectionRegistryContext, NavigationStateContext, CMSUrlContext } from "../hooks/navigation/contexts";
+import { CollectionRegistryContext, NavigationStateContext, UrlContext } from "../hooks/navigation/contexts";
 import { DialogsProvider } from "../contexts/DialogsProvider";
 import { buildRebaseData, CollectionRegistry } from "@rebasepro/common";
 import { CustomizationControllerContext } from "../contexts/CustomizationControllerContext";
@@ -60,7 +60,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         entityActions,
         components,
         collectionRegistryController,
-        cmsUrlController,
+        urlController,
         navigationStateController,
         apiKey,
         userManagement: _userManagement,
@@ -173,7 +173,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                                                 value={sideDialogsController}>
                                                 <CollectionRegistryContext.Provider value={collectionRegistryController}>
                                                     <NavigationStateContext.Provider value={navigationStateController}>
-                                                        <CMSUrlContext.Provider value={cmsUrlController}>
+                                                        <UrlContext.Provider value={urlController}>
                                                             <InternalUserManagementContext.Provider value={userManagement}>
                                                                 <EffectiveRoleControllerContext.Provider value={activeEffectiveRoleController}>
                                                                     <DialogsProvider>
@@ -186,7 +186,7 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                                                                     </DialogsProvider>
                                                                 </EffectiveRoleControllerContext.Provider>
                                                             </InternalUserManagementContext.Provider>
-                                                        </CMSUrlContext.Provider>
+                                                        </UrlContext.Provider>
                                                     </NavigationStateContext.Provider>
                                                 </CollectionRegistryContext.Provider>
                                             </SideDialogsControllerContext.Provider>

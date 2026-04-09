@@ -9,7 +9,7 @@
         "build": "astro build",
         "preview": "astro preview",
         "astro": "astro",
-        "deploy": "run-s build && firebase deploy --only hosting --project rebase-578f2",
+        "deploy": "run-s build && npx firebase-tools deploy --only hosting --project rebase-578f2",
         "generate-llms": "node scripts/generate_llms_txt.js",
         "genAPI": "typedoc && node scripts/add_api_frontmatter.js"
     },
@@ -22,6 +22,7 @@
         "@firebase/analytics": "^0.10.18",
         "@firebase/app-check": "^0.11.0",
         "@rebasepro/core": "0.0.1",
+        "@rebasepro/cms": "0.0.1",
         "@rebasepro/data_enhancement": "0.0.1",
         "@rebasepro/firebase": "0.0.1",
         "@rebasepro/ui": "0.0.1",

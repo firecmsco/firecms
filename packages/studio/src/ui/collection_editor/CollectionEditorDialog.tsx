@@ -7,7 +7,7 @@ import {
     useCustomizationController,
     useNavigationStateController,
     useCollectionRegistryController,
-    useCMSUrlController,
+    useUrlController,
     useSnackbarController,
     useUnsavedChangesDialog,
     UnsavedChangesDialog
@@ -324,7 +324,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 ) {
 
     const importConfig = useImportConfig();
-    const urlController = useCMSUrlController();
+    const urlController = useUrlController();
     const collectionRegistry = useCollectionRegistryController();
     const snackbarController = useSnackbarController();
 

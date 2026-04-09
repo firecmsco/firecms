@@ -1,4 +1,4 @@
-import type { EntityCollection } from "../../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import React, { useMemo } from "react";
 import { CollectionSize, Entity } from "@rebasepro/types";
 import {

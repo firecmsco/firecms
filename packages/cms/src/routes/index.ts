@@ -1,2 +1,2 @@
-export * from "./CustomCMSRoute";
+export * from "./CustomViewRoute";
 export * from "./RebaseRoute";

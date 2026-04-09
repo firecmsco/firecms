@@ -1,4 +1,4 @@
-import type { EntityCollection } from "../../types/collections";
+import type { EntityCollection } from "@rebasepro/types";
 import type { Property } from "@rebasepro/types";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Entity, EntityTableController, EnumValueConfig, FilterValues, SaveEntityProps, SelectionController } from "@rebasepro/types";

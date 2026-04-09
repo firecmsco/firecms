@@ -1,4 +1,4 @@
-import type { CMSView, EntityCollection, RebasePlugin, NavigationGroupMapping } from "@rebasepro/types";
+import type { AppView, EntityCollection, RebasePlugin, NavigationGroupMapping } from "@rebasepro/types";
 ;
 import { getSubcollections } from "@rebasepro/common";
 import { deepEqual as equal } from "fast-equals";
@@ -6,7 +6,7 @@ import { deepEqual as equal } from "fast-equals";
 export const NAVIGATION_DEFAULT_GROUP_NAME = "Views";
 export const NAVIGATION_ADMIN_GROUP_NAME = "Admin";
 
-export function getGroup(collectionOrView: EntityCollection<any, any> | CMSView) {
+export function getGroup(collectionOrView: EntityCollection<any, any> | AppView) {
     const trimmed = collectionOrView.group?.trim();
     if (!trimmed || trimmed === "") {
         return NAVIGATION_DEFAULT_GROUP_NAME;
@@ -22,7 +22,7 @@ export function computeNavigationGroups({
 }: {
     navigationGroupMappings?: NavigationGroupMapping[],
     collections?: EntityCollection[],
-    views?: CMSView[],
+    views?: AppView[],
     plugins?: RebasePlugin[]
 }): NavigationGroupMapping[] {
 

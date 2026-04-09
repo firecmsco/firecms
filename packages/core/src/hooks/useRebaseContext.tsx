@@ -1,7 +1,7 @@
 import { AuthController, RebaseContext, User } from "@rebasepro/types";
 import { useAuthController } from "./useAuthController";
 import { useSideDialogsController } from "./useSideDialogsController";
-import { useCollectionRegistryController, useNavigationStateController, useCMSUrlController } from "./navigation/contexts";
+import { useCollectionRegistryController, useNavigationStateController, useUrlController } from "./navigation/contexts";
 
 import { useData } from "./data/useData";
 import { useStorageSource } from "./useStorageSource";
@@ -34,7 +34,7 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
     const sideDialogsController = useSideDialogsController();
     const collectionRegistry = useCollectionRegistryController();
     const navigationState = useNavigationStateController();
-    const cmsUrlController = useCMSUrlController();
+    const urlController = useUrlController();
 
     const data = useData();
     const storageSource = useStorageSource();
@@ -52,7 +52,7 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
     const rebaseContextRef = React.useRef<RebaseContext<USER, AuthControllerType>>({
         authController,
         sideDialogsController,
-        cmsUrlController,
+        urlController,
         collectionRegistryController: collectionRegistry,
         navigationStateController: navigationState,
         data,
@@ -71,7 +71,7 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
         rebaseContextRef.current = {
             authController,
             sideDialogsController,
-            cmsUrlController,
+            urlController,
             collectionRegistryController: collectionRegistry,
             navigationStateController: navigationState,
             data,
@@ -85,7 +85,7 @@ export const useRebaseContext = <USER extends User = User, AuthControllerType ex
             effectiveRoleController,
             databaseAdmin
         };
-    }, [authController, dialogsController, sideDialogsController, effectiveRoleController, data, databaseAdmin, cmsUrlController, collectionRegistry, navigationState]);
+    }, [authController, dialogsController, sideDialogsController, effectiveRoleController, data, databaseAdmin, urlController, collectionRegistry, navigationState]);
 
     return rebaseContextRef.current;
 }
