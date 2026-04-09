@@ -1,4 +1,4 @@
-export * from "./property_utils";
+
 export * from "./icon_list";
 export * from "./icon_synonyms";
 export * from "./icons";

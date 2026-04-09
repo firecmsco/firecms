@@ -41,7 +41,6 @@ export {
     Drawer,
     AdminModeSyncer,
     ContentHomePage,
-    StudioHomePage,
     UsersView,
     RolesView,
     SideDialogs,
@@ -67,4 +66,21 @@ export {
     mergeEntityActions,
     resolveEntityAction,
     resolveEntityView,
+    // Property utilities (moved from @rebasepro/core — property-aware logic belongs in CMS)
+    isReferenceProperty,
+    isRelationProperty,
+    getIconForWidget,
+    getIconForProperty,
+    getPropertyInPath,
+    getResolvedPropertyInPath,
+    getBracketNotation,
+    getPropertiesWithPropertiesOrder,
+    getDefaultPropertiesOrder,
+    // Preview utilities (moved from @rebasepro/core — property-aware logic belongs in CMS)
+    getEntityPreviewKeys,
+    getEntityTitlePropertyKey,
 } from "./util";
+
+// Data import/export — merged from former standalone packages
+export * from "./data_import";
+export * from "./data_export";

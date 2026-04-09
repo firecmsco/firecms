@@ -3,6 +3,7 @@ import { useBuildSideEntityController } from "../hooks/useBuildSideEntityControl
 import { useBuildSideDialogsController } from "../hooks/useBuildSideDialogsController";
 import { SideEntityControllerContext } from "../hooks/useSideEntityController";
 import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
+import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
 import { useCollectionRegistryController, useUrlController } from "../index";
 import { useNavigationStateController } from "../index";
 import { useAuthController } from "@rebasepro/core";
@@ -47,10 +48,12 @@ export function SideEntityProvider({ children }: { children: React.ReactNode }) 
     );
 
     return (
-        <SideDialogsControllerContext.Provider value={sideDialogsController}>
-            <SideEntityControllerContext.Provider value={sideEntityController}>
-                {children}
-            </SideEntityControllerContext.Provider>
-        </SideDialogsControllerContext.Provider>
+        <BreadcrumbsProvider>
+            <SideDialogsControllerContext.Provider value={sideDialogsController}>
+                <SideEntityControllerContext.Provider value={sideEntityController}>
+                    {children}
+                </SideEntityControllerContext.Provider>
+            </SideDialogsControllerContext.Provider>
+        </BreadcrumbsProvider>
     );
 }

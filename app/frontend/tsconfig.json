@@ -47,12 +47,6 @@
         "../../packages/data_enhancement/src"
       ],
 
-      "@rebasepro/data_import": [
-        "../../packages/data_import/src"
-      ],
-      "@rebasepro/data_export": [
-        "../../packages/data_export/src"
-      ],
       "@rebasepro/user_management": [
         "../../packages/user_management/src"
       ],
@@ -70,9 +64,6 @@
       ],
       "@rebasepro/formex": [
         "../../packages/formex/src"
-      ],
-      "@rebasepro/data_import_export": [
-        "../../packages/data_import_export/src"
       ],
       "@rebasepro/schema_inference": [
         "../../packages/schema_inference/src"

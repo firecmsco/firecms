@@ -3,7 +3,7 @@ import type { StringProperty } from "@rebasepro/types";
 import React, { useCallback } from "react";
 
 import { FieldHelperText, LabelWithIcon } from "../components";
-import { getIconForProperty } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import { CloseIcon, cls, IconButton, Select, SelectItem } from "@rebasepro/ui";
 import { PropertyIdCopyTooltip } from "../../components/PropertyIdCopyTooltip";
 import { useInternalUserManagementController } from "@rebasepro/core";

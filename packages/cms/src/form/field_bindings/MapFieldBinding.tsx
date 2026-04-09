@@ -6,7 +6,7 @@ import React from "react";
 import { useTranslation } from "@rebasepro/core";
 
 import { ErrorBoundary } from "@rebasepro/ui";
-import { getIconForProperty } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import { isHidden, isReadOnly } from "@rebasepro/common";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";

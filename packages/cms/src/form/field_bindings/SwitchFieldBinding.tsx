@@ -3,7 +3,7 @@ import type { BooleanProperty } from "@rebasepro/types";
 import React from "react";
 
 ;
-import { getIconForProperty } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { BooleanSwitchWithLabel } from "@rebasepro/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";

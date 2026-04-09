@@ -1,5 +1,5 @@
 import { useCollectionRegistryController } from "@rebasepro/cms";
-import { convertDataToEntity, ImportConfig } from "@rebasepro/data_import";
+import { convertDataToEntity, ImportConfig } from "@rebasepro/cms";
 import { useAuthController } from "@rebasepro/core";
 import { EntityCollectionTable, useSelectionController } from "@rebasepro/cms";
 import { CircularProgressCenter } from "@rebasepro/ui";

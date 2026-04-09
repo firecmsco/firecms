@@ -33,7 +33,7 @@ export function EditorEntityAction({
         title={canEditCollection ? (isDirty ? t("studio_editor_entity_save_first") : t("studio_editor_entity_edit_schema")) : t("studio_editor_entity_no_permission")}>
         <IconButton
             color={"primary"}
-            disabled={!canEditCollection || isDirty}
+            disabled={Boolean(!canEditCollection || isDirty)}
             onClick={canEditCollection
                 ? () => collectionEditorController?.editCollection({
                     id: collection.slug,

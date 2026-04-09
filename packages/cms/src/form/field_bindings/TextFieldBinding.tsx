@@ -8,7 +8,7 @@ import { FieldHelperText, LabelWithIcon } from "../components";
 import { PropertyPreview } from "../../preview";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components/PropertyIdCopyTooltip";
-import { getIconForProperty } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 
 /**
  * Generic text field.

@@ -67,6 +67,7 @@ const SECTIONS = [
     { id: "appbar", label: "App Bar" },
     { id: "tabs", label: "Tabs" },
     { id: "editor-sidebar", label: "Editor Sidebar" },
+    { id: "empty-states", label: "Empty States" },
     { id: "typography", label: "Typography" },
     { id: "buttons", label: "Buttons" },
     { id: "inputs", label: "Form Inputs" },
@@ -482,6 +483,67 @@ export function UIReferenceView() {
                                             <span className="truncate flex-1">{c.name}</span>
                                         </div>
                                     ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </SectionBlock>
+
+                {/* ═══════════════════════════════════════════════
+                    SECTION: Empty States
+                ═══════════════════════════════════════════════ */}
+                <SectionBlock id="empty-states" title="Empty States — Canonical Pattern">
+                    <Typography variant="body2" color="secondary" className="mb-4">
+                        All empty / placeholder states share the same layout: a centered <code className="font-mono text-xs">flex-col</code> container
+                        with <code className="font-mono text-xs">Typography variant="label"</code> for the message and a <code className="font-mono text-xs">Button</code> with <code className="font-mono text-xs">AddIcon</code> for the primary action.
+                        Sources: <code className="font-mono text-xs">CollectionPropertiesEditorForm</code>, <code className="font-mono text-xs">CollectionsStudioView</code>, <code className="font-mono text-xs">CollectionStudioView</code>.
+                    </Typography>
+
+                    <div className="flex gap-6 flex-wrap">
+                        {/* Property editor empty state */}
+                        <div>
+                            <Typography variant="caption" color="secondary" className="block mb-1">Property Editor (no selection)</Typography>
+                            <div className={cls("flex flex-col items-center justify-center h-48 w-[320px] border rounded-lg", defaultBorderMixin)}>
+                                <div className="flex flex-col items-center justify-center h-full gap-4">
+                                    <Typography variant="label">
+                                        Select a property to edit it
+                                    </Typography>
+                                    <Button>
+                                        <AddIcon />
+                                        Add new property
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Property editor empty collection state */}
+                        <div>
+                            <Typography variant="caption" color="secondary" className="block mb-1">Property Editor (empty collection)</Typography>
+                            <div className={cls("flex flex-col items-center justify-center h-48 w-[320px] border rounded-lg", defaultBorderMixin)}>
+                                <div className="flex flex-col items-center justify-center h-full gap-4">
+                                    <Typography variant="label">
+                                        Now you can add your first property
+                                    </Typography>
+                                    <Button>
+                                        <AddIcon />
+                                        Add new property
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Collection list empty state */}
+                        <div>
+                            <Typography variant="caption" color="secondary" className="block mb-1">Collection List (no selection)</Typography>
+                            <div className={cls("flex flex-col items-center justify-center h-48 w-[320px] border rounded-lg", defaultBorderMixin)}>
+                                <div className="flex flex-col items-center justify-center h-full gap-4">
+                                    <Typography variant="label">
+                                        Select a collection or create a new one to start editing
+                                    </Typography>
+                                    <Button>
+                                        <AddIcon />
+                                        Add new collection
+                                    </Button>
                                 </div>
                             </div>
                         </div>

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AdminModeController } from "./index";
 
 /**
@@ -17,8 +17,8 @@ export function useBuildAdminModeController(): AdminModeController {
         setMode(newMode);
     }, []);
 
-    return {
+    return useMemo(() => ({
         mode,
         setMode: setModeInternal
-    };
+    }), [mode, setModeInternal]);
 }

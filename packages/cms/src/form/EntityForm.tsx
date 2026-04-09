@@ -9,17 +9,8 @@ import { deepEqual as equal } from "fast-equals";
 import { ErrorBoundary } from "@rebasepro/ui";
 import { getDefaultValuesFor, getLocalChangesBackup, isHidden, isReadOnly } from "@rebasepro/common";
 
-import {
-    getFormFieldKeys,
-    saveEntityWithCallbacks,
-    useAuthController,
-    useCustomizationController,
-    useData,
-    useRebaseContext,
-    useSnackbarController,
-    useTranslation,
-    useSlot
-} from "@rebasepro/core";
+import { saveEntityWithCallbacks, useAuthController, useCustomizationController, useData, useRebaseContext, useSnackbarController, useTranslation, useSlot } from "@rebasepro/core";
+import { getFormFieldKeys } from "@rebasepro/core";
 import { Alert, CheckIcon, Chip, cls, EditIcon, NotesIcon, paperMixin, Tooltip, Typography } from "@rebasepro/ui";
 import { Formex, FormexController, getIn, setIn, useCreateFormex } from "@rebasepro/formex";
 import { useAnalyticsController } from "@rebasepro/core";
@@ -39,7 +30,7 @@ import type { EntityFormActionsProps } from "../types/components/EntityFormActio
 import { LocalChangesMenu } from "./components/LocalChangesMenu";
 
 import { useDebouncedCallback } from "@rebasepro/ui";
-import { getEntityTitlePropertyKey } from "@rebasepro/core";
+import { getEntityTitlePropertyKey } from "../util/previews";
 import { getValueInPath, isObject, mergeDeep } from "@rebasepro/utils";
 import { useCollectionRegistryController, useSideEntityController } from "../index";
 

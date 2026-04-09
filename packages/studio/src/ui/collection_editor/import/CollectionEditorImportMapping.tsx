@@ -3,7 +3,7 @@ import {
     getInferenceType,
     ImportConfig,
     ImportNewPropertyFieldPreview
-} from "@rebasepro/data_import";
+} from "@rebasepro/cms";
 import { getIn, useFormex } from "@rebasepro/formex";
 
 import { getFieldConfig, getFieldId, PropertyConfigBadge } from "@rebasepro/cms";

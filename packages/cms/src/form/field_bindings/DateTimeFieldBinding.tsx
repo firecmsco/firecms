@@ -6,7 +6,7 @@ import React from "react";
 
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useCustomizationController } from "@rebasepro/core";
-import { getIconForProperty } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import { DateTimeField } from "@rebasepro/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components/PropertyIdCopyTooltip";

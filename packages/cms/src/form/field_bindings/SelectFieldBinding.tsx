@@ -5,7 +5,7 @@ import React, { useCallback } from "react";
 ;
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { EnumValuesChip } from "../../preview";
-import { getIconForProperty } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import { CloseIcon, cls, IconButton, Select, SelectItem } from "@rebasepro/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components/PropertyIdCopyTooltip";

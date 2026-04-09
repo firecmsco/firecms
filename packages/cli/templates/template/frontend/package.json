@@ -7,8 +7,6 @@
         "@rebasepro/auth": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/data_enhancement": "0.0.1",
-        "@rebasepro/data_export": "0.0.1",
-        "@rebasepro/data_import": "0.0.1",
         "@rebasepro/client": "0.0.1",
         "@rebasepro/studio": "0.0.1",
         "@rebasepro/types": "0.0.1",

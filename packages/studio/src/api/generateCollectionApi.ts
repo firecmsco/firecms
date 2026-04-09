@@ -74,7 +74,7 @@ export interface BuildCollectionGenerationCallbackProps {
  *
  * @example
  * ```typescript
- * import { useCollectionEditorPlugin, buildCollectionGenerationCallback } from "@rebasepro/collection_editor";
+ * import { useCollectionEditorPlugin, buildCollectionGenerationCallback } from "@rebasepro/studio";
  * import { useFirebaseAuthController } from "@rebasepro/firebase";
  *
  * const authController = useFirebaseAuthController({ firebaseApp });

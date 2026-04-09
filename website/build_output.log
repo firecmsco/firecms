@@ -1,0 +1,48 @@
+
+> website-astro-v2@0.0.1 prebuild /Users/francesco/rebase/website
+> node scripts/copy_changelog.js && node scripts/generate_llms_txt.js
+
+✓ Successfully copied CHANGELOG.md to docs with frontmatter
+Found 32 pages in sidebar
+Processing 33 documentation files...
+✓ Successfully generated ./public/llms.txt with 32 pages
+
+> website-astro-v2@0.0.1 build /Users/francesco/rebase/website
+> astro build
+
+23:43:52 [content] Syncing content
+23:43:52 [content] Synced content
+23:43:52 [types] Generated 282ms
+23:43:52 [build] output: "static"
+23:43:52 [build] mode: "static"
+23:43:52 [build] directory: /Users/francesco/rebase/website/dist/
+23:43:52 [build] Collecting build info...
+23:43:52 [build] ✓ Completed in 415ms.
+23:43:52 [build] Building static entrypoints...
+23:43:54 [WARN] [vite] 
+/img/grid.svg referenced in /img/grid.svg didn't resolve at build time, it will remain unchanged to be resolved at runtime
+23:43:54 [WARN] [vite] "matchHostname", "matchPathname", "matchPort" and "matchProtocol" are imported from external module "@astrojs/internal-helpers/remote" but never used in "node_modules/astro/dist/assets/utils/remotePattern.js" and "node_modules/astro/dist/assets/services/service.js".
+23:43:55 [vite] ✓ built in 2.73s
+23:43:55 [build] ✓ Completed in 2.75s.
+
+ building client (vite) 
+23:43:55 [vite] transforming...
+23:43:57 [vite] ✓ 3889 modules transformed.
+23:43:57 [ERROR] [vite] ✗ Build failed in 2.37s
+src/components/RebaseEditorDemo.tsx (1:9): "RebaseEditor" is not exported by "../packages/core/dist/index.es.js", imported by "src/components/RebaseEditorDemo.tsx".
+file: /Users/francesco/rebase/website/src/components/RebaseEditorDemo.tsx:1:9
+
+1: import { RebaseEditor } from "@rebasepro/core";
+            ^
+2: 
+3: const sampleContent = `# Getting Started with Rebase
+
+  Location:
+    /Users/francesco/rebase/website/src/components/RebaseEditorDemo.tsx:1:9
+  Stack trace:
+    at getRollupError (file:///Users/francesco/rebase/website/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at Module.error (file:///Users/francesco/rebase/website/node_modules/rollup/dist/es/shared/node-entry.js:16938:16)
+    at ModuleScope.findVariable (file:///Users/francesco/rebase/website/node_modules/rollup/dist/es/shared/node-entry.js:15060:39)
+    at FunctionBodyScope.findVariable (file:///Users/francesco/rebase/website/node_modules/rollup/dist/es/shared/node-entry.js:5642:38)
+    at CallExpression.bind (file:///Users/francesco/rebase/website/node_modules/rollup/dist/es/shared/node-entry.js:2800:28)
+ ELIFECYCLE  Command failed with exit code 1.

@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { CellRendererParams, VirtualTable, VirtualTableColumn, FileDownloadIcon, IconButton, Paper, Typography } from "@rebasepro/ui";
 import { getIn } from "@rebasepro/formex";
 import { DataTableCell } from "./DataTableCell";
-import { downloadDataAsCsv } from "@rebasepro/data_export";
+import { downloadDataAsCsv } from "@rebasepro/cms";
 
 export type type = "string" | "number" | "date" | "object" | "array";
 

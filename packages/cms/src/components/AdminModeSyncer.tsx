@@ -29,20 +29,28 @@ export function AdminModeSyncer({ devViews }: AdminModeSyncerProps) {
     const currentModeRef = React.useRef(adminModeController.mode);
     currentModeRef.current = adminModeController.mode;
 
+    // Stable ref for setMode so it doesn't trigger the effect
+    const setModeRef = React.useRef(adminModeController.setMode);
+    setModeRef.current = adminModeController.setMode;
+
     useEffect(() => {
         const path = location.pathname;
         const isContentRoute = urlController.isUrlCollectionPath(path) || path === urlController.basePath;
-        const isStudioRoute = path.startsWith("/s/") || path === "/s" || devViews?.some(view => {
+
+        // Check both devViews slugs AND the studio home path (/s or basePath/s)
+        const studioHomePath = urlController.basePath === "/" ? "/s" : `${urlController.basePath}/s`;
+        const isStudioRoute = path === studioHomePath || path.startsWith(studioHomePath + "/") || devViews?.some(view => {
             const viewPath = urlController.buildAppUrlPath(view.slug);
             return path.startsWith(`${viewPath}/`) || path === viewPath;
         });
 
         if (isStudioRoute && currentModeRef.current !== "studio") {
-            adminModeController.setMode("studio");
+            setModeRef.current("studio");
         } else if (isContentRoute && currentModeRef.current !== "content") {
-            adminModeController.setMode("content");
+            setModeRef.current("content");
         }
-    }, [location.pathname, urlController, devViews, adminModeController]);
+    }, [location.pathname, urlController, devViews]);
 
     return null;
 }
+

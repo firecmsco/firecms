@@ -14,8 +14,9 @@ import {
     useData
 } from "@rebasepro/core";
 import { useAnalyticsController } from "@rebasepro/core";
-import { getPropertyInPath, IconForView } from "@rebasepro/core";
-import { getEntityPreviewKeys, getEntityTitlePropertyKey } from "@rebasepro/core";
+import { IconForView } from "@rebasepro/core";
+import { getPropertyInPath } from "../util/property_utils";
+import { getEntityPreviewKeys, getEntityTitlePropertyKey } from "../util/previews";
 import { getValueInPath } from "@rebasepro/utils";
 import { useCollectionRegistryController, useSideEntityController } from "../index";
 

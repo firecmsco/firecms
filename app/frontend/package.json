@@ -13,8 +13,6 @@
         "@rebasepro/cms": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/data_enhancement": "0.0.1",
-        "@rebasepro/data_export": "0.0.1",
-        "@rebasepro/data_import": "0.0.1",
         "@rebasepro/datatalk": "0.0.1",
         "@rebasepro/firebase": "0.0.1",
         "@rebasepro/formex": "0.0.1",

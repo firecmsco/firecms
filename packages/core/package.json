@@ -2,7 +2,7 @@
     "name": "@rebasepro/core",
     "type": "module",
     "version": "0.0.1",
-    "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+    "description": "Rebase core — framework-agnostic runtime for data-driven admin panels",
     "funding": {
         "url": "https://github.com/sponsors/rebaseco"
     },
@@ -56,9 +56,7 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
-        "@dnd-kit/core": "^6.3.1",
-        "@dnd-kit/modifiers": "^9.0.0",
-        "@dnd-kit/sortable": "^10.0.0",
+
         "@rebasepro/client": "0.0.1",
         "@rebasepro/common": "0.0.1",
         "@rebasepro/formex": "0.0.1",

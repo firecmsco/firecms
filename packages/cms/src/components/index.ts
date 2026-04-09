@@ -39,7 +39,6 @@ export * from "./DefaultDrawer";
 export * from "./DrawerNavigationItem";
 export * from "./DrawerNavigationGroup";
 export * from "./HomePage/ContentHomePage";
-export * from "./HomePage/StudioHomePage";
 export * from "./SideDialogs";
 
 export * from "./app/useApp";

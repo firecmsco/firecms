@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useState } from "react";
 import {
-    getPropertyInPath,
     useAuthController,
     useCustomizationController,
     useTranslation
 } from "@rebasepro/core";
+import { getPropertyInPath } from "@rebasepro/cms";
 import { EntityCollection, EnumValueConfig, StringProperty } from "@rebasepro/types";
 import { resolveEnumValues } from "@rebasepro/common";
 import {

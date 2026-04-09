@@ -19,7 +19,7 @@ import {
 import { setIn } from "@rebasepro/formex";
 import { cmsToFirestoreModel, firestoreToCMSModel } from "@rebasepro/firebase";
 import { Typography } from "@rebasepro/ui";
-import { BasicExportAction } from "@rebasepro/data_export";
+import { BasicExportAction } from "@rebasepro/cms";
 import { buildPropertiesOrder, buildEntityPropertiesFromData, inferTypeFromValue } from "@rebasepro/schema_inference";
 
 export function QueryTableResults({

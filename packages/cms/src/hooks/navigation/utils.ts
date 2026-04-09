@@ -26,34 +26,35 @@ export function computeNavigationGroups({
     plugins?: RebasePlugin[]
 }): NavigationGroupMapping[] {
 
-    let result = navigationGroupMappings;
+    // Deep clone the input groups upfront to avoid mutating the caller's data
+    let result = navigationGroupMappings
+        ? navigationGroupMappings.map(g => ({ name: g.name, entries: [...g.entries] }))
+        : navigationGroupMappings;
 
     // Merge plugin navigation entries
-    // IMPORTANT: Deep clone the groups to avoid mutating the original input
-    result = plugins ? plugins?.reduce((acc, plugin) => {
-        if (plugin.hooks?.navigationEntries) {
-            plugin.hooks.navigationEntries.forEach((entry) => {
-                const {
-                    name,
-                    entries
-                } = entry;
-                const existingGroup = acc.find(g => g.name === name);
-                if (existingGroup) {
-                    existingGroup.entries.push(...entries);
-                } else {
-                    acc.push({
+    if (plugins) {
+        result = plugins.reduce((acc, plugin) => {
+            if (plugin.hooks?.navigationEntries) {
+                plugin.hooks.navigationEntries.forEach((entry) => {
+                    const {
                         name,
-                        entries: [...entries]
-                    });
-                }
-            });
+                        entries
+                    } = entry;
+                    const existingGroup = acc.find(g => g.name === name);
+                    if (existingGroup) {
+                        existingGroup.entries.push(...entries);
+                    } else {
+                        acc.push({
+                            name,
+                            entries: [...entries]
+                        });
+                    }
+                });
 
-        }
-        return acc;
-    }, (result ?? []).map(g => ({
-        name: g.name,
-        entries: [...g.entries]
-    }))) : result;
+            }
+            return acc;
+        }, result ?? []);
+    }
 
     // Track all entries that are already assigned to groups
     const assignedEntries = new Set<string>();

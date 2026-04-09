@@ -13,6 +13,8 @@ import {
 import { ErrorBoundary } from "@rebasepro/ui";
 import { usePermissions } from "@rebasepro/core";
 import { toArray } from "@rebasepro/utils";
+import { ImportCollectionAction } from "../../data_import/import";
+import { ExportCollectionAction } from "../../data_export/export";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -122,6 +124,12 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             <ErrorBoundary>
                 {actions}
                 {pluginActions}
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <ImportCollectionAction {...actionProps} />
+            </ErrorBoundary>
+            <ErrorBoundary>
+                <ExportCollectionAction {...actionProps} />
             </ErrorBoundary>
             {multipleDeleteButton}
             {addButton}

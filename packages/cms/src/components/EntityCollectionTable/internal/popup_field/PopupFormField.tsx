@@ -12,7 +12,7 @@ import { Formex, FormexController, useCreateFormex } from "@rebasepro/formex";
 import { useDraggable } from "./useDraggable";
 import { CustomFieldValidator, getEntitySchema } from "../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
-import { getPropertyInPath } from "@rebasepro/core";
+import { getPropertyInPath } from "../../../../util/property_utils";
 import { Button, CloseIcon, DialogActions, IconButton, Typography } from "@rebasepro/ui";
 import { PropertyFieldBinding, zodToFormErrors } from "../../../../form";
 import { useAuthController, useCustomizationController, useData, useRebaseContext } from "@rebasepro/core";

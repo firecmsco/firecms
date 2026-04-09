@@ -21,7 +21,7 @@ import {
     TextField,
     Typography
 } from "@rebasepro/ui";
-import { getIconForProperty } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import { useCustomizationController, useTranslation } from "@rebasepro/core";
 import { getIn } from "@rebasepro/formex";
 import { getDefaultValueFortype } from "@rebasepro/common";

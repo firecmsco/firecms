@@ -1,6 +1,6 @@
 import type { PropertyConfig } from "@rebasepro/types";
 import { getDefaultFieldConfig } from "./field_configs";
-import { getIconForWidget } from "@rebasepro/core";
+import { getIconForWidget } from "../util/property_utils";
 
 export function PropertyConfigBadge({
     propertyConfig,

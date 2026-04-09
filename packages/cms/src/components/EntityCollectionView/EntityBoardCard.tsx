@@ -3,7 +3,7 @@ import type { Property } from "@rebasepro/types";
 import React, { memo, useCallback, useMemo } from "react";
 import { Entity } from "@rebasepro/types";
 import { getEntityImagePreviewPropertyKey } from "@rebasepro/common";
-import { getEntityTitlePropertyKey } from "@rebasepro/core";
+import { getEntityTitlePropertyKey } from "../../util/previews";
 import { IconForView } from "@rebasepro/core";
 import { Checkbox, cls, defaultBorderMixin } from "@rebasepro/ui";
 import { PropertyPreview } from "../../preview";

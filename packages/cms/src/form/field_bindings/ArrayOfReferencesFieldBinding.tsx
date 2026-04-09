@@ -7,7 +7,7 @@ import { Entity, EntityReference } from "@rebasepro/types";
 import { ReferencePreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams } from "../../components/ArrayContainer";
-import { getIconForProperty } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import { getReferenceFrom } from "@rebasepro/common";
 
 import { useTranslation, ErrorView } from "@rebasepro/core";

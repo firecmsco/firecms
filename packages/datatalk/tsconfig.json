@@ -48,16 +48,6 @@
       "@rebasepro/schema_inference": [
         "../schema_inference/src"
       ],
-      "@rebasepro/data_import": [
-        "../data_import/src"
-      ],
-      "@rebasepro/data_export": [
-        "../data_export/src"
-      ],
-
-      "@rebasepro/data_import_export": [
-        "../data_import_export/src"
-      ],
       "@rebasepro/cms": [
         "../cms/src"
       ],

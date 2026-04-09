@@ -1,4 +1,4 @@
-import { AdminModeSyncer, AppBar, ContentHomePage, StudioHomePage, Drawer, RolesView, Scaffold, UsersView } from "@rebasepro/cms";
+import { AdminModeSyncer, AppBar, ContentHomePage, Drawer, RolesView, Scaffold, UsersView } from "@rebasepro/cms";
 import { useBuildNavigationStateController } from "@rebasepro/cms";
 import { SideDialogs, useBuildUrlController, useBuildCollectionRegistryController } from "@rebasepro/cms";
 import React from "react";
@@ -15,7 +15,7 @@ import { AdminModeControllerProvider, Rebase, ModeControllerProvider, NotFoundPa
 import { RebaseRoute, CustomViewRoute, SideEntityProvider, CollectionRegistryContext, UrlContext, NavigationStateContext } from "@rebasepro/cms";
 import { CircularProgressCenter } from "@rebasepro/ui";
 import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
-import { CollectionsStudioView, JSEditor, RLSEditor, SQLEditor, StorageView, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
+import { CollectionsStudioView, JSEditor, RLSEditor, SQLEditor, StorageView, StudioHomePage, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
 import { AppView } from "@rebasepro/types";
 import { createRebaseClient } from "@rebasepro/client";
 import { collections } from "virtual:rebase-collections";

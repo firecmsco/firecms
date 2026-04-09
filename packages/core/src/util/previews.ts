@@ -1,7 +1,26 @@
 import type { EntityCollection, Property, PropertyConfig } from "@rebasepro/types";
 import { AuthController } from "@rebasepro/types";
 import { isPropertyBuilder } from "@rebasepro/common";
-import { isReferenceProperty, isRelationProperty } from "./property_utils";
+
+function isReferenceProperty(property: Property) {
+    if (!property) return null;
+    if (property.type === "reference") return true;
+    if (property.type === "array") {
+        if (Array.isArray(property.of)) return false;
+        else return property.of?.type === "reference";
+    }
+    return false;
+}
+
+function isRelationProperty(property: Property) {
+    if (!property) return null;
+    if (property.type === "relation") return true;
+    if (property.type === "array") {
+        if (Array.isArray(property.of)) return false;
+        else return property.of?.type === "relation";
+    }
+    return false;
+}
 
 export function getEntityPreviewKeys(
     authController: AuthController,

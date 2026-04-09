@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
-import { getIconForProperty, useAuthController, useStorageSource } from "@rebasepro/core";
+import { useAuthController, useStorageSource } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import type { FieldProps } from "../../types/fields";
 import type { ArrayProperty, StringProperty } from "@rebasepro/types";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@rebasepro/ui";

@@ -2,7 +2,7 @@
     "name": "@rebasepro/cms",
     "type": "module",
     "version": "0.0.1",
-    "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+    "description": "Rebase CMS — content management views, forms, and routing",
     "funding": {
         "url": "https://github.com/sponsors/rebaseco"
     },
@@ -84,7 +84,9 @@
         "prosemirror-view": "^1.33.8",
         "react-dropzone": "^14.3.8",
         "react-use-measure": "^2.1.7",
+        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
         "zod": "^3.25.0",
+        "@rebasepro/schema_inference": "0.0.1",
         "@rebasepro/utils": "workspace:*"
     },
     "peerDependencies": {
@@ -146,11 +148,7 @@
         ],
         "testEnvironment": "jsdom",
         "testPathIgnorePatterns": [
-            "/node_modules/",
-            "/src/components/",
-            "objects.test.ts",
-            "navigation.test.ts",
-            "resolutions.test.ts"
+            "/node_modules/"
         ],
         "setupFilesAfterEnv": [
             "<rootDir>/test/setupTests.ts"
@@ -158,9 +156,11 @@
         "moduleNameMapper": {
             "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
             "^@rebasepro/ui$": "<rootDir>/../ui/src/index.ts",
+            "^@rebasepro/core$": "<rootDir>/../core/src/index.ts",
             "^@rebasepro/common$": "<rootDir>/../common/src/index.ts",
             "^@rebasepro/types$": "<rootDir>/../types/src/index.ts",
-            "^@rebasepro/formex$": "<rootDir>/../formex/src/index.ts"
+            "^@rebasepro/formex$": "<rootDir>/../formex/src/index.ts",
+            "^@rebasepro/utils$": "<rootDir>/../utils/src/index.ts"
         }
     }
 }

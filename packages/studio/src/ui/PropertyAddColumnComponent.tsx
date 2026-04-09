@@ -1,8 +1,8 @@
 import {
-    getDefaultPropertiesOrder,
     useAuthController,
     useTranslation
 } from "@rebasepro/core";
+import { getDefaultPropertiesOrder } from "@rebasepro/cms";
 import { EntityCollection, EntityTableController } from "@rebasepro/types";
 import { AddIcon, Tooltip } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";

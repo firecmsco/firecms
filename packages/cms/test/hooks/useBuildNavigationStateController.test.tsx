@@ -1,9 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-import { TextEncoder, TextDecoder } from "util";
-Object.assign(global, { TextDecoder, TextEncoder });
-
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { useBuildNavigationStateController } from "../../src/hooks/navigation/useBuildNavigationStateController";
 import { AuthController, UrlController, CollectionRegistryController, DataDriver, EntityCollection } from "@rebasepro/types";

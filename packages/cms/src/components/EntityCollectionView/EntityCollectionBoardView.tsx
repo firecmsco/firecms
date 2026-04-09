@@ -20,7 +20,7 @@ import {
     Typography
 } from "@rebasepro/ui";
 import { resolveEnumValues } from "@rebasepro/common";
-import { getPropertyInPath } from "@rebasepro/core";
+import { getPropertyInPath } from "../../util/property_utils";
 import {
     saveEntityWithCallbacks,
     useAuthController,

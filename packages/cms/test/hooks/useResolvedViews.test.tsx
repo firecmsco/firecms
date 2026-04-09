@@ -1,9 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-import { TextEncoder, TextDecoder } from "util";
-Object.assign(global, { TextDecoder, TextEncoder });
-
 import { renderHook, waitFor } from "@testing-library/react";
 import { useResolvedViews } from "../../src/hooks/navigation/useResolvedViews";
 import { AuthController, AppView, DataDriver } from "@rebasepro/types";

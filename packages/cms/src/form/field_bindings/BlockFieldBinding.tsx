@@ -9,7 +9,7 @@ import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 ;
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE, getDefaultValueFor } from "@rebasepro/common";
-import { getIconForProperty, } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@rebasepro/ui";
 import { useTranslation } from "@rebasepro/core";
 import { useClearRestoreValue } from "../useClearRestoreValue";

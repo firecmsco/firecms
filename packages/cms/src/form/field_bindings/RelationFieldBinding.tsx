@@ -5,7 +5,8 @@ import React, { useCallback } from "react";
 import { Entity } from "@rebasepro/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EntityPreviewContainer } from "../../components/EntityPreview";
-import { getIconForProperty, IconForView } from "@rebasepro/core";
+import { IconForView } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import { getRelationFrom, resolveRelationProperty } from "@rebasepro/common";
 
 import { ErrorView } from "@rebasepro/core";

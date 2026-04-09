@@ -40,6 +40,7 @@ export default defineConfig(() => ({
             "@rebasepro/common": path.resolve(__dirname, "../common/src"),
             "@rebasepro/core": path.resolve(__dirname, "../core/src"),
             "@rebasepro/formex": path.resolve(__dirname, "../formex/src"),
+            "@rebasepro/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
             "@rebasepro/types": path.resolve(__dirname, "../types/src"),
             "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
         }

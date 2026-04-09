@@ -11,7 +11,7 @@ import {
     Typography
 } from "@rebasepro/ui";
 import { PreviewSize } from "../../types/components/PropertyPreviewProps";
-import { getPropertyInPath } from "@rebasepro/core";
+import { getPropertyInPath } from "../../util/property_utils";
 import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
 import { useAuthController } from "@rebasepro/core";
 import { UserChip } from "./UserChip";

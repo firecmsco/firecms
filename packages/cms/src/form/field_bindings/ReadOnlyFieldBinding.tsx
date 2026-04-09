@@ -7,7 +7,7 @@ import React from "react";
 import { PropertyPreview } from "../../preview";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ErrorBoundary } from "@rebasepro/ui";
-import { getIconForProperty } from "@rebasepro/core";
+import { getIconForProperty } from "../../util/property_utils";
 import { cls, paperMixin } from "@rebasepro/ui";
 
 /**

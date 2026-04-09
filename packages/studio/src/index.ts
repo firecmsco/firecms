@@ -68,4 +68,5 @@ export * from "./components/JSEditor/JSEditor";
 export * from "./components/RLSEditor/RLSEditor";
 export * from "./components/RLSEditor/PolicyEditor";
 export * from "./components/StorageView/StorageView";
+export * from "./components/StudioHomePage";
 export * from "./utils/sql_utils";

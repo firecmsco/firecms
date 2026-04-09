@@ -42,8 +42,8 @@ export function EntityActionsEditTab({
         setFieldValue
     } = useFormex<EntityCollection>();
 
-    const resolvedEntityActions = ((values.entityActions ?? []) as any[])
-        .filter((e: any): e is string => typeof e === "string")
+    const resolvedEntityActions = ((values.entityActions ?? []) as (string | EntityAction<any>)[])
+        .filter((e): e is string => typeof e === "string")
         .map((e: string) => resolveEntityAction(e, contextEntityActions))
         .filter(Boolean) as EntityAction<any>[] ?? [];
     const hardCodedEntityActions = collection.entityActions?.filter((e: string | EntityAction<any>): e is EntityAction<any> => typeof e !== "string") ?? [];

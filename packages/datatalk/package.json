@@ -33,7 +33,6 @@
         "@monaco-editor/react": "^4.7.0",
         "@rebasepro/cms": "0.0.1",
         "@rebasepro/core": "0.0.1",
-        "@rebasepro/data_export": "0.0.1",
         "@rebasepro/firebase": "0.0.1",
         "@rebasepro/formex": "0.0.1",
         "@rebasepro/schema_inference": "0.0.1",

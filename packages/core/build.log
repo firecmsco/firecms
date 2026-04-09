@@ -1,0 +1,30 @@
+src/components/common/useColumnsIds.tsx(5,42): error TS2307: Cannot find module '../EntityCollectionTable/internal/common' or its corresponding type declarations.
+src/components/common/useColumnsIds.tsx(6,38): error TS2307: Cannot find module '../EntityCollectionTable/EntityCollectionTableProps' or its corresponding type declarations.
+src/components/UserDisplay.tsx(2,28): error TS2307: Cannot find module '../preview' or its corresponding type declarations.
+src/core/Rebase.tsx(55,9): error TS2339: Property 'plugins' does not exist on type 'RebaseProps<USER>'.
+src/core/Rebase.tsx(56,9): error TS2339: Property 'slots' does not exist on type 'RebaseProps<USER>'.
+src/core/Rebase.tsx(58,9): error TS2339: Property 'propertyConfigs' does not exist on type 'RebaseProps<USER>'.
+src/core/Rebase.tsx(59,9): error TS2339: Property 'entityViews' does not exist on type 'RebaseProps<USER>'.
+src/core/Rebase.tsx(60,9): error TS2339: Property 'entityActions' does not exist on type 'RebaseProps<USER>'.
+src/core/RebaseProps.tsx(122,25): error TS2304: Cannot find name 'EntityLinkBuilder'.
+src/core/RebaseRouter.tsx(2,10): error TS2305: Module '"@rebasepro/common"' has no exported member 'removeInitialAndTrailingSlashes'.
+src/core/RebaseRoutes.tsx(4,32): error TS2307: Cannot find module '../routes/CustomCMSRoute' or its corresponding type declarations.
+src/hooks/data/useRelationSelector.tsx(5,30): error TS2307: Cannot find module '../../components/RelationSelector' or its corresponding type declarations.
+src/hooks/navigation/useBuildCMSUrlController.tsx(3,10): error TS2305: Module '"@rebasepro/common"' has no exported member 'removeInitialAndTrailingSlashes'.
+src/hooks/navigation/useBuildCMSUrlController.tsx(3,43): error TS2724: '"@rebasepro/common"' has no exported member named 'resolveCollectionPathIds'. Did you mean 'resolveCollectionRelations'?
+src/hooks/navigation/useBuildCollectionRegistryController.tsx(3,96): error TS2305: Module '"@rebasepro/common"' has no exported member 'removeInitialAndTrailingSlashes'.
+src/hooks/navigation/useNavigationRegistry.ts(3,89): error TS2305: Module '"@rebasepro/common"' has no exported member 'removeInitialAndTrailingSlashes'.
+src/hooks/navigation/useNavigationResolution.ts(5,35): error TS2307: Cannot find module '../../components/history/EntityHistoryView' or its corresponding type declarations.
+src/hooks/navigation/useNavigationResolution.ts(16,42): error TS2339: Property 'entityViews' does not exist on type 'EntityCollection<any, any>'.
+src/hooks/navigation/useNavigationResolution.ts(30,21): error TS2353: Object literal may only specify known properties, and 'entityViews' does not exist in type 'EntityCollection<any, any>'.
+src/hooks/navigation/useNavigationURLs.ts(2,10): error TS2305: Module '"@rebasepro/common"' has no exported member 'removeInitialAndTrailingSlashes'.
+src/hooks/navigation/useNavigationURLs.ts(2,43): error TS2724: '"@rebasepro/common"' has no exported member named 'resolveCollectionPathIds'. Did you mean 'resolveCollectionRelations'?
+src/hooks/useRebaseContext.tsx(5,41): error TS2307: Cannot find module './useSideEntityController' or its corresponding type declarations.
+src/hooks/useRebaseContext.tsx(56,9): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(initialValue: RebaseContext<USER, AuthControllerType>): RefObject<RebaseContext<USER, AuthControllerType>>', gave the following error.
+    Object literal may only specify known properties, and 'sideDialogsController' does not exist in type 'RebaseContext<USER, AuthControllerType>'.
+  Overload 2 of 3, '(initialValue: RebaseContext<USER, AuthControllerType> | null): RefObject<RebaseContext<USER, AuthControllerType> | null>', gave the following error.
+    Object literal may only specify known properties, and 'sideDialogsController' does not exist in type 'RebaseContext<USER, AuthControllerType>'.
+  Overload 3 of 3, '(initialValue: RebaseContext<USER, AuthControllerType> | undefined): RefObject<RebaseContext<USER, AuthControllerType> | undefined>', gave the following error.
+    Object literal may only specify known properties, and 'sideDialogsController' does not exist in type 'RebaseContext<USER, AuthControllerType>'.
+src/hooks/useRebaseContext.tsx(76,13): error TS2353: Object literal may only specify known properties, and 'sideDialogsController' does not exist in type 'RebaseContext<USER, AuthControllerType>'.

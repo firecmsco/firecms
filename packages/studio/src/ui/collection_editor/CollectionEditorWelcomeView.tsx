@@ -9,7 +9,7 @@ import { CollectionJsonImportDialog } from "./CollectionJsonImportDialog";
 import { productsCollectionTemplate } from "./templates/products_template";
 import { blogCollectionTemplate } from "./templates/blog_template";
 import { usersCollectionTemplate } from "./templates/users_template";
-import { ImportFileUpload } from "@rebasepro/data_import";
+import { ImportFileUpload } from "@rebasepro/cms";
 import { pagesCollectionTemplate } from "./templates/pages_template";
 import { useFormex } from "@rebasepro/formex";
 import { useCollectionEditorController } from "../../useCollectionEditorController";

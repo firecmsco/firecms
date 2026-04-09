@@ -3,7 +3,8 @@ import React from "react";
 import { getTableCellAlignment, getTablePropertyColumnWidth } from "./internal/common";
 import { FilterValues } from "@rebasepro/types";
 import { VirtualTableColumn } from "@rebasepro/ui";
-import { getIconForProperty, getResolvedPropertyInPath, getColumnKeysForProperty } from "@rebasepro/core";
+import { getIconForProperty, getResolvedPropertyInPath } from "../../util/property_utils";
+import { getColumnKeysForProperty } from "@rebasepro/core";
 
 export function buildIdColumn(largeLayout?: boolean): VirtualTableColumn {
     return {

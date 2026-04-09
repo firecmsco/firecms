@@ -15,7 +15,7 @@ import { getSubcollections } from "@rebasepro/common";
 import { navigateToEntity } from "../../util/navigation_utils";
 import { mergeEntityActions } from "../../util/entity_actions";
 import { resolveEntityAction } from "../../util/resolutions";
-import { getPropertyInPath } from "@rebasepro/core";
+import { getPropertyInPath } from "../../util/property_utils";
 import { ReferencePreview } from "../../preview";
 import {
     saveEntityWithCallbacks,
@@ -55,13 +55,8 @@ import {
     deleteEntityAction,
     editEntityAction,
 } from "../common/default_entity_actions";
-import {
-    OnCellValueChange,
-    OnColumnResizeParams,
-    UniqueFieldValidator,
-    useColumnIds,
-    useTableSearchHelper
-} from "@rebasepro/core";
+import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator, useTableSearchHelper } from "@rebasepro/core";
+import { useColumnIds } from "@rebasepro/core";
 import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
 import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";
 import { DeleteEntityDialog } from "../DeleteEntityDialog";
