@@ -14,8 +14,7 @@ export function RepeatPropertyField({
     disabled,
     getData,
     allowDataInference,
-    propertyConfigs,
-    collectionEditable
+    propertyConfigs
 }: {
     showErrors: boolean,
     existing: boolean,
@@ -23,7 +22,6 @@ export function RepeatPropertyField({
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
     propertyConfigs: Record<string, PropertyConfig>,
-    collectionEditable: boolean;
 }) {
 
     const {
@@ -88,7 +86,7 @@ export function RepeatPropertyField({
                                 onPropertyChanged={onPropertyChanged}
                                 forceShowErrors={showErrors}
                                 propertyConfigs={propertyConfigs}
-                                collectionEditable={collectionEditable}
+
                             />
                         </Paper>
                     )}

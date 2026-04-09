@@ -20,7 +20,6 @@ import {
     Tooltip,
     Typography,
 } from "@rebasepro/ui";
-import { PersistedCollection } from "../../types/persisted_collection";
 import { useFormex } from "@rebasepro/formex";
 import { EntityActionsSelectDialog } from "./EntityActionsSelectDialog";
 
@@ -28,7 +27,7 @@ export function EntityActionsEditTab({
     collection,
     embedded = false
 }: {
-    collection: PersistedCollection,
+    collection: EntityCollection,
     embedded?: boolean;
 }) {
 

@@ -173,7 +173,8 @@ export function KanbanConfigSection({
                         inArray={false}
                         allowDataInference={false}
                         propertyConfigs={customizationController.propertyConfigs}
-                        collectionEditable={true}
+
+
                         existingPropertyKeys={Object.keys(values.properties ?? {})}
                         onPropertyChanged={({ id, property }) => {
                             const newProperties = {

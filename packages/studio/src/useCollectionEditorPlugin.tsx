@@ -4,12 +4,11 @@ import {
     useCollectionRegistryController,
     useNavigationStateController
 } from "@rebasepro/core";
-import { RebasePlugin, User } from "@rebasepro/types";
+import { EntityCollection, RebasePlugin, User } from "@rebasepro/types";
 import { ConfigControllerProvider } from "./ConfigControllerProvider";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { EditorCollectionAction } from "./ui/EditorCollectionAction";
 import { HomePageEditorCollectionAction } from "./ui/HomePageEditorCollectionAction";
-import { PersistedCollection } from "./types/persisted_collection";
 import { CollectionInference } from "./types/collection_inference";
 import { CollectionsConfigController } from "./types/config_controller";
 import { CollectionGenerationCallback } from "./api/generateCollectionApi";
@@ -24,7 +23,7 @@ import { EditorEntityAction } from "./ui/EditorEntityAction";
 import { KanbanSetupAction } from "./ui/KanbanSetupAction";
 import { AddKanbanColumnAction } from "./ui/AddKanbanColumnAction";
 
-export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, USER extends User = User> {
+export interface CollectionConfigControllerProps<EC extends EntityCollection = EntityCollection, USER extends User = User> {
 
     /**
      * Firebase app where the configuration is saved.
@@ -81,7 +80,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection 
  * @param getUser
  * @param collectionInference
  */
-export function useCollectionEditorPlugin<EC extends PersistedCollection = PersistedCollection, USER extends User = User>
+export function useCollectionEditorPlugin<EC extends EntityCollection = EntityCollection, USER extends User = User>
     ({
         collectionConfigController,
         configPermissions,

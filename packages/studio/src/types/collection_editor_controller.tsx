@@ -1,7 +1,6 @@
 import { CollectionEditorPermissionsBuilder } from "./config_permissions";
 import { CollectionsConfigController } from "./config_controller";
-import { Entity, Property } from "@rebasepro/types";
-import { PersistedCollection } from "./persisted_collection";
+import { Entity, EntityCollection, Property } from "@rebasepro/types";
 
 /**
  * Controller to open the collection editor dialog.
@@ -13,7 +12,7 @@ export interface CollectionEditorController {
         id?: string,
         path?: string,
         parentCollectionIds: string[],
-        parentCollection?: PersistedCollection,
+        parentCollection?: EntityCollection,
         existingEntities?: Entity<any>[],
         /**
          * Initial view to open: "general", "display", or "properties"
@@ -36,9 +35,9 @@ export interface CollectionEditorController {
          * A collection to duplicate from. If provided, the new collection will be
          * pre-populated with the same properties (but with empty name, path, and id).
          */
-        copyFrom?: PersistedCollection,
+        copyFrom?: EntityCollection,
         parentCollectionIds: string[],
-        parentCollection?: PersistedCollection,
+        parentCollection?: EntityCollection,
         redirect: boolean,
         sourceClick?: string
     }) => void;
@@ -49,7 +48,7 @@ export interface CollectionEditorController {
         currentPropertiesOrder?: string[],
         editedCollectionId: string,
         parentCollectionIds: string[],
-        collection: PersistedCollection,
+        collection: EntityCollection,
         existingEntities: Entity<any>[]
     }) => void;
 

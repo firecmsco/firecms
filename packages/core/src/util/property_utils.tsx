@@ -2,9 +2,24 @@ import type { Properties } from "@rebasepro/types";
 import type { EntityCollection, MapProperty, Property, PropertyConfig } from "@rebasepro/types";
 import React from "react";
 
-;
 import { isPropertyBuilder } from "@rebasepro/common";
-import { CircleIcon, FunctionsIcon } from "@rebasepro/ui";
+import {
+    AddLinkIcon,
+    BallotIcon,
+    CircleIcon,
+    FlagIcon,
+    FunctionsIcon,
+    HttpIcon,
+    LinkIcon,
+    MailIcon,
+    NumbersIcon,
+    RepeatIcon,
+    ScheduleIcon,
+    ShortTextIcon,
+    SubjectIcon,
+    UploadFileIcon,
+    ViewStreamIcon
+} from "@rebasepro/ui";
 
 export function isReferenceProperty(property: Property) {
 
@@ -37,6 +52,47 @@ export function getIconForWidget(widget: PropertyConfig | undefined,
     return <Icon size={size} />;
 }
 
+/**
+ * Returns a default icon component based on property type.
+ * This provides a sensible fallback when no PropertyConfig is available.
+ */
+function getDefaultIconForProperty(property: Property): React.ComponentType<{ size: "smallest" | "small" | "medium" | "large" | number }> {
+    switch (property.type) {
+        case "string": {
+            if ((property as any).storage) return UploadFileIcon;
+            if ((property as any).url) return HttpIcon;
+            if ((property as any).email) return MailIcon;
+            if ((property as any).multiline || (property as any).markdown) return SubjectIcon;
+            if ((property as any).reference) return LinkIcon;
+            return ShortTextIcon;
+        }
+        case "number":
+            return NumbersIcon;
+        case "boolean":
+            return FlagIcon;
+        case "date":
+            return ScheduleIcon;
+        case "map":
+            return BallotIcon;
+        case "array": {
+            const of = (property as any).of;
+            const oneOf = (property as any).oneOf;
+            if (oneOf) return ViewStreamIcon;
+            if (of && !Array.isArray(of)) {
+                if (of.type === "reference") return AddLinkIcon;
+                if (of.type === "string" && of.storage) return UploadFileIcon;
+            }
+            return RepeatIcon;
+        }
+        case "reference":
+            return LinkIcon;
+        case "relation":
+            return AddLinkIcon;
+        default:
+            return CircleIcon;
+    }
+}
+
 export function getIconForProperty(
     property: Property,
     size: "smallest" | "small" | "medium" | "large" | number = "small",
@@ -45,11 +101,17 @@ export function getIconForProperty(
     if (isPropertyBuilder(property)) {
         return <FunctionsIcon size={size} />;
     }
-    
-    // Fallback simple property to icon mapping if we don't have getFieldConfig
+
+    // Try to look up a custom PropertyConfig icon first
     const configId = property.propertyConfig || undefined;
     const widget = configId ? fields[configId] : undefined;
-    return getIconForWidget(widget, size);
+    if (widget?.Icon) {
+        return getIconForWidget(widget, size);
+    }
+
+    // Fall back to a type-based default icon
+    const Icon = getDefaultIconForProperty(property);
+    return <Icon size={size} />;
 }
 
 /**

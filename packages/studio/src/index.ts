@@ -12,9 +12,7 @@ export {
     useLocalCollectionsConfigController
 } from "./useLocalCollectionsConfigController";
 
-export {
-    editableProperty, removeNonEditableProperties
-} from "./utils/entities";
+
 
 export {
     validateCollectionJson,
@@ -31,10 +29,6 @@ export type {
 export type {
     CollectionEditorPermissions, CollectionEditorPermissionsBuilder
 } from "./types/config_permissions";
-export type {
-    PersistedCollection
-} from "./types/persisted_collection";
-
 export type {
     CollectionInference
 } from "./types/collection_inference";

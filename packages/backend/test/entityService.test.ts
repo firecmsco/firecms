@@ -1,7 +1,8 @@
 import { EntityService } from "../src/db/entityService";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { EntityCollection } from "@rebasepro/types";
-import { collectionRegistry } from "../src/collections/registry";
+import { BackendCollectionRegistry } from "../src/collections/BackendCollectionRegistry";
+const collectionRegistry = new BackendCollectionRegistry();
 
 // --- Mock Drizzle ORM table definitions ---
 const mockAuthorsTable = {
@@ -159,7 +160,7 @@ describe("EntityService", () => {
             transaction: jest.fn((callback) => callback(db)),
         } as unknown as jest.Mocked<NodePgDatabase>;
 
-        entityService = new EntityService(db);
+        entityService = new EntityService(db, collectionRegistry);
     });
 
     afterEach(() => {
@@ -596,7 +597,7 @@ describe("EntityService - Comprehensive Tests", () => {
         // Add a then method to make the db object awaitable when the query chain ends
         (db as unknown as Record<string, jest.Mock>).then = jest.fn((resolve) => resolve([]));
 
-        entityService = new EntityService(db);
+        entityService = new EntityService(db, collectionRegistry);
     });
 
     describe("fetchEntity - Edge Cases", () => {

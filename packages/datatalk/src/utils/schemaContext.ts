@@ -77,8 +77,8 @@ function buildSchemaProperty(property: Property): SchemaProperty | null {
                 dataType: "string"
             };
             // Handle enum values
-            if ("enumValues" in property && property.enumValues) {
-                schemaProperty.enumValues = extractEnumValues(property.enumValues);
+            if ("enum" in property && property.enum) {
+                schemaProperty.enumValues = extractEnumValues(property.enum);
             }
             return schemaProperty;
         }
@@ -89,8 +89,8 @@ function buildSchemaProperty(property: Property): SchemaProperty | null {
                 dataType: "number"
             };
             // Handle enum values for numbers too
-            if ("enumValues" in property && property.enumValues) {
-                schemaProperty.enumValues = extractEnumValues(property.enumValues);
+            if ("enum" in property && property.enum) {
+                schemaProperty.enumValues = extractEnumValues(property.enum);
             }
             return schemaProperty;
         }

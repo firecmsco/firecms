@@ -1,5 +1,4 @@
 import { EntityCollection, NavigationGroupMapping, Property } from "@rebasepro/types";
-import { PersistedCollection } from "./persisted_collection";
 
 export interface CollectionsSetupInfo {
     status: "ongoing" | "complete" | "error";
@@ -14,7 +13,7 @@ export interface CollectionsConfigController {
 
     loading: boolean;
 
-    collections?: PersistedCollection[];
+    collections?: EntityCollection[];
 
     /**
      * If true, the configuration cannot be modified.
@@ -33,7 +32,7 @@ export interface CollectionsConfigController {
      */
     collectionsSetup?: CollectionsSetupInfo;
 
-    getCollection: (id: string) => PersistedCollection;
+    getCollection: (id: string) => EntityCollection;
 
     saveCollection: <M extends { [Key: string]: any }>(params: SaveCollectionParams<M>) => Promise<void>;
     updateCollection: <M extends { [Key: string]: any }>(params: UpdateCollectionParams<M>) => Promise<void>;
@@ -60,14 +59,14 @@ export interface CollectionsConfigController {
 
 export type UpdateCollectionParams<M extends Record<string, any> = any> = {
     id: string,
-    collectionData: Partial<PersistedCollection<M>>,
+    collectionData: Partial<EntityCollection<M>>,
     previousId?: string,
     parentCollectionIds?: string[]
 }
 
 export type SaveCollectionParams<M extends Record<string, any> = any> = {
     id: string,
-    collectionData: PersistedCollection<M>,
+    collectionData: EntityCollection<M>,
     previousId?: string,
     parentCollectionIds?: string[]
 }

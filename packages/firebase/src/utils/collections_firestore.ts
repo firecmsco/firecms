@@ -112,10 +112,10 @@ function normalizePropertiesEnumValues(
         if (typeof property === "object" && property !== null) {
             const normalizedProperty = { ...property } as Record<string, unknown>;
 
-            // Handle direct enumValues
-            if (normalizedProperty.enumValues) {
-                normalizedProperty.enumValues = normalizeEnumValuesToArray(
-                    normalizedProperty.enumValues,
+            // Handle direct enum values
+            if (normalizedProperty.enum) {
+                normalizedProperty.enum = normalizeEnumValuesToArray(
+                    normalizedProperty.enum,
                     sortObjectFormat
                 );
             }
@@ -123,11 +123,11 @@ function normalizePropertiesEnumValues(
             // Handle array properties with enum values in "of"
             if (normalizedProperty.dataType === "array" && typeof normalizedProperty.of === "object" && normalizedProperty.of !== null) {
                 const ofProp = normalizedProperty.of as Record<string, unknown>;
-                if (ofProp.enumValues) {
+                if (ofProp.enum) {
                     normalizedProperty.of = {
                         ...ofProp,
-                        enumValues: normalizeEnumValuesToArray(
-                            ofProp.enumValues,
+                        enum: normalizeEnumValuesToArray(
+                            ofProp.enum,
                             sortObjectFormat
                         )
                     };

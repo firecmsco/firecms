@@ -45,7 +45,6 @@ import { buildEntityPropertiesFromData } from "@rebasepro/schema_inference";
 import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMapping";
 import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview";
 import { cleanPropertiesFromImport } from "./import/clean_import_data";
-import { PersistedCollection } from "../../types/persisted_collection";
 import { Formex, FormexController, useCreateFormex } from "@rebasepro/formex";
 import { getFullIdPath } from "./util";
 import { AICollectionGeneratorPopover } from "./AICollectionGeneratorPopover";
@@ -66,7 +65,7 @@ export interface CollectionEditorDialogProps {
      * A collection to duplicate from. If provided, the new collection will be
      * pre-populated with the same properties (but with empty name, path, and id).
      */
-    copyFrom?: PersistedCollection;
+    copyFrom?: EntityCollection;
     editedCollectionId?: string;
     path?: string; // full path of this particular collection, like `products/123/locales`
     parentCollectionIds?: string[]; // path ids of the parent collection, like [`products`]
@@ -82,7 +81,7 @@ export interface CollectionEditorDialogProps {
     };
     getUser?: (uid: string) => User | null;
     getData?: (path: string, parentPaths: string[]) => Promise<object[]>;
-    parentCollection?: PersistedCollection;
+    parentCollection?: EntityCollection;
     existingEntities?: Entity<any>[];
     /**
      * Initial view to open when editing: "general", "display", or "properties".
@@ -197,7 +196,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
     const collectionsInThisLevel = (props.parentCollection ? getSubcollections(props.parentCollection) : collections) ?? [];
     const existingPaths = collectionsInThisLevel.map(col => col.dbPath.trim().toLowerCase());
     const existingIds = collectionsInThisLevel.map(col => col.slug?.trim().toLowerCase()).filter(Boolean) as string[];
-    const [collection, setCollection] = React.useState<PersistedCollection<any> | undefined>();
+    const [collection, setCollection] = React.useState<EntityCollection<any> | undefined>();
     const [initialLoadingCompleted, setInitialLoadingCompleted] = React.useState(false);
 
     useEffect(() => {
@@ -210,7 +209,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
                     const dbPath = [...(props.parentCollectionIds ?? []), props.editedCollectionId]
                         .reduce((acc, segment, i) => i === 0 ? segment : `${acc}/fake_id/${segment}`, "");
 
-                    setCollection(collectionRegistry.getRawCollection(dbPath) as PersistedCollection<any>);
+                    setCollection(collectionRegistry.getRawCollection(dbPath) as EntityCollection<any>);
                 } else {
                     setCollection(undefined);
                 }
@@ -237,7 +236,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
         : undefined;
 
     // Build initial values - handle copyFrom for duplication
-    const initialValues: PersistedCollection<any> = initialCollection
+    const initialValues: EntityCollection<any> = initialCollection
         ? applyPropertyConfigs(initialCollection, propertyConfigs)
         : copyFromProp
             ? {
@@ -313,12 +312,12 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 }: CollectionEditorDialogProps & {
     handleCancel: () => void,
     setFormDirty: (dirty: boolean) => void,
-    initialValues: PersistedCollection<M>,
+    initialValues: EntityCollection<M>,
     existingPaths: string[],
     existingIds: string[],
     includeTemplates: boolean,
-    collection: PersistedCollection<M> | undefined,
-    setCollection: (collection: PersistedCollection<M>) => void,
+    collection: EntityCollection<M> | undefined,
+    setCollection: (collection: EntityCollection<M>) => void,
     propertyConfigs: Record<string, PropertyConfig>,
     groups: string[],
 }
@@ -339,7 +338,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     const [error, setError] = React.useState<Error | undefined>();
 
-    const saveCollection = (updatedCollection: PersistedCollection<M>): Promise<boolean> => {
+    const saveCollection = (updatedCollection: EntityCollection<M>): Promise<boolean> => {
         const id = updatedCollection.slug;
 
         return configController.saveCollection({
@@ -386,7 +385,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
     };
 
-    const doCollectionInference = collectionInference ? (collection: PersistedCollection<any>) => {
+    const doCollectionInference = collectionInference ? (collection: EntityCollection<any>) => {
         if (!collectionInference) return undefined;
         return collectionInference?.(
             collection.dbPath,
@@ -395,7 +394,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         );
     } : undefined;
 
-    const inferCollectionFromData = async (newCollection: PersistedCollection<M>) => {
+    const inferCollectionFromData = async (newCollection: EntityCollection<M>) => {
 
         try {
             if (!doCollectionInference) {
@@ -441,7 +440,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         }
     };
 
-    const onSubmit = async (newCollectionState: PersistedCollection<M>, formexController: FormexController<PersistedCollection<M>>) => {
+    const onSubmit = async (newCollectionState: EntityCollection<M>, formexController: FormexController<EntityCollection<M>>) => {
         console.debug("Submitting collection", newCollectionState);
         try {
 
@@ -504,7 +503,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         }
     };
 
-    const validation = (col: PersistedCollection) => {
+    const validation = (col: EntityCollection) => {
 
         let errors: Record<string, string> = {};
         const schema = (currentView === "properties" || currentView === "relations" || currentView === "general") && CollectionEditorSchema;
@@ -538,7 +537,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         return errors;
     };
 
-    const formController = useCreateFormex<PersistedCollection<M>>({
+    const formController = useCreateFormex<EntityCollection<M>>({
         initialValues,
         onSubmit,
         validation,
@@ -607,10 +606,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         setNextMode();
     };
 
-    const editable = collection?.editable === undefined || collection?.editable === true;
-    // @ts-ignore
-    const isMergedCollection = collection?.merged ?? false;
-    const collectionEditable = editable || isNewCollection;
+
 
     const [deleteRequested, setDeleteRequested] = useState(false);
 
@@ -638,7 +634,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const aiModifiedPaths = useAIModifiedPaths();
 
     const handleAIGenerated = (generatedCollection: EntityCollection, operations?: CollectionOperation[]) => {
-        formController.setValues(generatedCollection as PersistedCollection<M>);
+        formController.setValues(generatedCollection as EntityCollection<M>);
         if (operations && aiModifiedPaths) {
             aiModifiedPaths.addModifiedPaths(operations);
         }
@@ -727,7 +723,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                         formController.setValues({
                                             ...formController.values,
                                             ...collectionData
-                                        } as PersistedCollection<M>);
+                                        } as EntityCollection<M>);
                                         onWelcomeScreenContinue();
                                     } catch (e: unknown) {
                                         console.error("Error importing table:", e);
@@ -740,7 +736,6 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
                         {currentView === "import_data_mapping" && importConfig &&
                             <CollectionEditorImportMapping importConfig={importConfig}
-                                collectionEditable={collectionEditable}
                                 propertyConfigs={propertyConfigs} />}
 
                         {currentView === "import_data_preview" && importConfig &&
@@ -799,7 +794,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                                 getData={getDataWithPath}
                                 doCollectionInference={doCollectionInference}
                                 propertyConfigs={propertyConfigs}
-                                collectionEditable={collectionEditable}
+
                                 extraIcon={extraView?.icon &&
                                     <IconButton
                                         color={"primary"}
@@ -927,7 +922,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
 
 }
 
-function applyPropertyConfigs<M extends Record<string, any> = any>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig>): PersistedCollection<M> {
+function applyPropertyConfigs<M extends Record<string, any> = any>(collection: EntityCollection<M>, propertyConfigs: Record<string, PropertyConfig>): EntityCollection<M> {
     const {
         properties,
         ...rest

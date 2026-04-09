@@ -16,14 +16,12 @@ export function BlockPropertyField({
     disabled,
     getData,
     allowDataInference,
-    propertyConfigs,
-    collectionEditable
+    propertyConfigs
 }: {
     disabled: boolean;
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
     propertyConfigs: Record<string, PropertyConfig>,
-    collectionEditable: boolean;
 }) {
 
     const {
@@ -96,7 +94,7 @@ export function BlockPropertyField({
                         properties={values.oneOf?.properties ?? {}}
                         propertiesOrder={values.oneOf?.propertiesOrder}
                         errors={{}}
-                        collectionEditable={collectionEditable}
+
                         onPropertyClick={disabled
                             ? undefined
                             : (propertyKey, namespace) => {
@@ -132,7 +130,7 @@ export function BlockPropertyField({
                     setSelectedPropertyKey(undefined);
                     setSelectedPropertyNamespace(undefined);
                 }}
-                collectionEditable={collectionEditable}
+
                 onDelete={deleteProperty}
                 propertyKey={selectedPropertyKey}
                 propertyNamespace={selectedPropertyNamespace}

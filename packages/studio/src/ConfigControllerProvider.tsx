@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { TableMetadata } from "@rebasepro/types";
+import { Entity, EntityCollection, Property, TableMetadata, User } from "@rebasepro/types";
 import { deepEqual as equal } from "fast-equals";
 
 import { CollectionsConfigController } from "./types/config_controller";
@@ -10,14 +10,12 @@ import {
     useAuthController,
     useSnackbarController
 } from "@rebasepro/core";
-import { Entity, Property, User } from "@rebasepro/types";
 import { CollectionEditorDialog } from "./ui/collection_editor/CollectionEditorDialog";
 import { useNavigate } from "react-router";
 import { CollectionEditorController } from "./types/collection_editor_controller";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { CollectionInference } from "./types/collection_inference";
 import { PropertyFormDialog } from "./ui/collection_editor/PropertyEditView";
-import { PersistedCollection } from "./types/persisted_collection";
 import { CollectionGenerationCallback } from "./api/generateCollectionApi";
 
 export const ConfigControllerContext = React.createContext<CollectionsConfigController>({} as CollectionsConfigController);
@@ -106,7 +104,7 @@ export const ConfigControllerProvider = React.memo(
 
         const [currentDialog, setCurrentDialog] = React.useState<{
             isNewCollection: boolean,
-            parentCollection?: PersistedCollection,
+            parentCollection?: EntityCollection,
             editedCollectionId?: string,
             path?: string,
             parentCollectionIds: string[],
@@ -115,7 +113,7 @@ export const ConfigControllerProvider = React.memo(
                 group?: string,
                 name?: string
             },
-            copyFrom?: PersistedCollection,
+            copyFrom?: EntityCollection,
             redirect: boolean,
             existingEntities?: Entity[],
             pathSuggestions?: string[];
@@ -127,14 +125,14 @@ export const ConfigControllerProvider = React.memo(
             propertyKey?: string,
             property?: Property,
             namespace?: string,
-            parentCollection?: PersistedCollection,
+            parentCollection?: EntityCollection,
             currentPropertiesOrder?: string[],
             editedCollectionId: string,
             path?: string,
             parentCollectionIds: string[],
-            collectionEditable: boolean;
+
             existingEntities?: Entity[];
-            collection?: PersistedCollection;
+            collection?: EntityCollection;
         }>();
 
         const defaultConfigPermissions: CollectionEditorPermissionsBuilder = useCallback(() => ({
@@ -155,7 +153,7 @@ export const ConfigControllerProvider = React.memo(
             id?: string,
             path?: string,
             parentCollectionIds: string[],
-            parentCollection?: PersistedCollection,
+            parentCollection?: EntityCollection,
             existingEntities?: Entity[],
             initialView?: "general" | "display" | "properties",
             expandKanban?: boolean
@@ -193,7 +191,7 @@ export const ConfigControllerProvider = React.memo(
             currentPropertiesOrder?: string[],
             editedCollectionId: string,
             parentCollectionIds: string[],
-            collection: PersistedCollection,
+            collection: EntityCollection,
             existingEntities?: Entity[]
         }) => {
             console.debug("Edit property", propertyKey, property, editedCollectionId, currentPropertiesOrder, parentCollectionIds, collection);
@@ -215,7 +213,7 @@ export const ConfigControllerProvider = React.memo(
                 currentPropertiesOrder,
                 editedCollectionId,
                 parentCollectionIds,
-                collectionEditable: collection?.editable === undefined || collection?.editable === true,
+
                 existingEntities,
                 collection
             });
@@ -230,13 +228,13 @@ export const ConfigControllerProvider = React.memo(
             sourceClick
         }: {
             parentCollectionIds: string[],
-            parentCollection?: PersistedCollection
+            parentCollection?: EntityCollection
             initialValues?: {
                 group?: string,
                 path?: string,
                 name?: string
             },
-            copyFrom?: PersistedCollection,
+            copyFrom?: EntityCollection,
             redirect: boolean,
             sourceClick?: string
         }) => {
@@ -312,7 +310,8 @@ export const ConfigControllerProvider = React.memo(
                         autoUpdateId={!currentPropertyDialog ? false : !currentPropertyDialog?.propertyKey}
                         autoOpenTypeSelect={!currentPropertyDialog ? false : !currentPropertyDialog?.propertyKey}
                         inArray={false}
-                        collectionEditable={currentPropertyDialog?.collectionEditable ?? false}
+
+
                         getData={currentPropertyDialog?.existingEntities || (getData && currentPropertyDialog?.editedCollectionId)
                             ? async () => {
                                 let data: object[] = [];

@@ -36,7 +36,7 @@ import { NumberPropertyField } from "./properties/NumberPropertyField";
 import { ReferencePropertyField } from "./properties/ReferencePropertyField";
 import { DateTimePropertyField } from "./properties/DateTimePropertyField";
 import { AdvancedPropertyValidation } from "./properties/advanced/AdvancedPropertyValidation";
-import { editableProperty } from "../../utils/entities";
+
 import { KeyValuePropertyField } from "./properties/KeyValuePropertyField";
 import { RelationPropertyField } from "./properties/RelationPropertyField";
 import { updatePropertyFromWidget } from "./utils/update_property_for_widget";
@@ -76,7 +76,7 @@ export type PropertyFormProps = {
     getData?: () => Promise<object[]>;
     getController?: (formex: FormexController<PropertyWithId>) => void;
     propertyConfigs: Record<string, PropertyConfig>;
-    collectionEditable: boolean;
+
 };
 
 export const PropertyForm = React.memo(
@@ -103,7 +103,6 @@ export const PropertyForm = React.memo(
             getController,
             getData,
             propertyConfigs,
-            collectionEditable
         } = props;
 
         const initialValue: PropertyWithId = {
@@ -111,7 +110,7 @@ export const PropertyForm = React.memo(
             name: ""
         } as PropertyWithId;
 
-        const disabled = (Boolean(property && !editableProperty(property)) || !collectionEditable);
+        const disabled = Boolean(property && isPropertyBuilder(property));
 
         const lastSubmittedProperty = useRef<OnPropertyChangedParams | undefined>(property ? {
             id: propertyKey,
@@ -219,7 +218,6 @@ export const PropertyForm = React.memo(
                 getData={getData}
                 allowDataInference={allowDataInference}
                 propertyConfigs={propertyConfigs}
-                collectionEditable={collectionEditable}
                 {...formexController} />
         </Formex>;
     }, (a, b) =>
@@ -239,7 +237,6 @@ export function PropertyFormDialog({
     onOkClicked,
     onPropertyChanged,
     getData,
-    collectionEditable,
     ...formProps
 }: PropertyFormProps & {
     open?: boolean;
@@ -272,7 +269,7 @@ export function PropertyFormDialog({
                         onPropertyChanged?.(params);
                         onOkClicked?.();
                     }}
-                    collectionEditable={collectionEditable}
+
                     onPropertyChangedImmediate={false}
                     getController={getController}
                     getData={getData}
@@ -317,8 +314,7 @@ function PropertyEditFormFields({
     inArray,
     getData,
     allowDataInference,
-    propertyConfigs,
-    collectionEditable
+    propertyConfigs
 }: {
     includeIdAndTitle?: boolean;
     existing: boolean;
@@ -335,7 +331,7 @@ function PropertyEditFormFields({
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
     propertyConfigs: Record<string, PropertyConfig>;
-    collectionEditable: boolean;
+
 } & FormexController<PropertyWithId>) {
 
     const [selectOpen, setSelectOpen] = useState(autoOpenTypeSelect);
@@ -437,12 +433,10 @@ function PropertyEditFormFields({
     } else if (selectedFieldConfigId === "group") {
         childComponent =
             <MapPropertyField disabled={disabled} getData={getData} allowDataInference={allowDataInference}
-                collectionEditable={collectionEditable}
                 propertyConfigs={propertyConfigs} />;
     } else if (selectedFieldConfigId === "block") {
         childComponent =
             <BlockPropertyField disabled={disabled} getData={getData} allowDataInference={allowDataInference}
-                collectionEditable={collectionEditable}
                 propertyConfigs={propertyConfigs} />;
     } else if (selectedFieldConfigId === "reference") {
         childComponent =
@@ -472,7 +466,6 @@ function PropertyEditFormFields({
                 getData={getData}
                 allowDataInference={allowDataInference}
                 disabled={disabled}
-                collectionEditable={collectionEditable}
                 propertyConfigs={propertyConfigs} />;
     } else if (selectedFieldConfigId === "key_value") {
         childComponent =
@@ -492,7 +485,7 @@ function PropertyEditFormFields({
                 <Typography>This property can&apos;t be edited</Typography>
                 <Typography variant={"caption"}>
                     You may not have permission to
-                    edit it or it is defined in code with the <code>editable</code> flag set to <code>false</code>.
+                    edit it or it is defined in code and cannot be modified.
                 </Typography>
             </InfoLabel>}
 

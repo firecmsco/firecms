@@ -3,10 +3,9 @@ import {
     useAuthController,
     useTranslation
 } from "@rebasepro/core";
-import { EntityTableController } from "@rebasepro/types";
+import { EntityCollection, EntityTableController } from "@rebasepro/types";
 import { AddIcon, Tooltip } from "@rebasepro/ui";
 import { useCollectionEditorController } from "../useCollectionEditorController";
-import { PersistedCollection } from "../types/persisted_collection";
 
 export function PropertyAddColumnComponent({
     path,
@@ -16,7 +15,7 @@ export function PropertyAddColumnComponent({
 }: {
     path: string,
     parentCollectionIds: string[],
-    collection: PersistedCollection;
+    collection: EntityCollection;
     tableController: EntityTableController;
 }) {
 

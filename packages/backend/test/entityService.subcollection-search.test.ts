@@ -1,7 +1,8 @@
 import { EntityService } from "../src/db/entityService";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { EntityCollection } from "@rebasepro/types";
-import { collectionRegistry } from "../src/collections/registry";
+import { BackendCollectionRegistry } from "../src/collections/BackendCollectionRegistry";
+const collectionRegistry = new BackendCollectionRegistry();
 import { DrizzleConditionBuilder } from "../src/utils/drizzle-conditions";
 
 describe("EntityService - Subcollection Search Tests", () => {
@@ -180,7 +181,7 @@ describe("EntityService - Subcollection Search Tests", () => {
             transaction: jest.fn()
         } as any;
 
-        entityService = new EntityService(db);
+        entityService = new EntityService(db, collectionRegistry);
 
         // Mock collection registry
         jest.spyOn(collectionRegistry, 'getCollectionByPath').mockImplementation((path: string) => {

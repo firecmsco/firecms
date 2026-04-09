@@ -20,14 +20,13 @@ import {
     CollectionGenerationApiError,
     CollectionOperation
 } from "../../api/generateCollectionApi";
-import { PersistedCollection } from "../../types/persisted_collection";
 import { useCollectionsConfigController } from "../../useCollectionsConfigController";
 
 export interface AICollectionGeneratorPopoverProps {
     /**
      * Current collection being edited (if modifying an existing collection)
      */
-    existingCollection?: PersistedCollection;
+    existingCollection?: EntityCollection;
 
     /**
      * Callback when a collection is generated or modified.

@@ -26,3 +26,5 @@ export * from "./EntityPreview";
 export * from "./history";
 export * from "./common";
 export * from "./field_configs";
+
+export * from "./CMSSideEntityProvider";

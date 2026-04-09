@@ -119,11 +119,11 @@ function validateProperty(
         }
     }
 
-    // Validate enumValues if present
-    if (property.enumValues !== undefined) {
-        if (!Array.isArray(property.enumValues) && typeof property.enumValues !== "object") {
+    // Validate enum if present
+    if (property.enum !== undefined) {
+        if (!Array.isArray(property.enum) && typeof property.enum !== "object") {
             errors.push({
-                path: `${path}.enumValues`,
+                path: `${path}.enum`,
                 message: "Must be an array or object"
             });
         }
@@ -183,7 +183,6 @@ function validateOptionalFields(
         "hideIdFromForm",
         "hideIdFromCollection",
         "formAutoSave",
-        "editable",
         "alwaysApplyDefaultValues",
         "includeJsonView",
         "history"

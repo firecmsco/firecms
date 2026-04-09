@@ -3,11 +3,10 @@ import {
     useCollectionRegistryController,
     useTranslation
 } from "@rebasepro/core";
-import { CollectionActionsProps } from "@rebasepro/types";
+import { EntityCollection, CollectionActionsProps } from "@rebasepro/types";
 import { IconButton, SettingsIcon, Tooltip, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
-import { PersistedCollection } from "../types/persisted_collection";
 
 export function EditorCollectionAction({
     path,
@@ -46,7 +45,7 @@ export function EditorCollectionAction({
                     id: collection.slug,
                     path,
                     parentCollectionIds,
-                    parentCollection: parentCollection as PersistedCollection,
+                    parentCollection: parentCollection as EntityCollection,
                     existingEntities: tableController?.data ?? []
                 })
                 : undefined}>

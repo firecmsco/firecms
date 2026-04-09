@@ -1,9 +1,8 @@
 import { useTranslation } from "@rebasepro/core";
-import { EntityTableController, Property } from "@rebasepro/types";
+import { EntityCollection, EntityTableController, Property } from "@rebasepro/types";
 import { IconButton, SettingsIcon, Tooltip } from "@rebasepro/ui";
 import React from "react";
 import { useCollectionEditorController } from "../useCollectionEditorController";
-import { PersistedCollection } from "../types/persisted_collection";
 
 export function CollectionViewHeaderAction({
     propertyKey,
@@ -19,7 +18,7 @@ export function CollectionViewHeaderAction({
     onHover: boolean,
     path: string,
     parentCollectionIds: string[],
-    collection: PersistedCollection;
+    collection: EntityCollection;
     tableController: EntityTableController;
 }) {
 

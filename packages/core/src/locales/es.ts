@@ -287,7 +287,7 @@ export const es: RebaseTranslations = {
     copied: "Copiado",
 
     property_cant_be_edited: "Esta propiedad no se puede editar",
-    property_not_editable_description: "Puede que no tengas permisos para editarla o que esté definida en código como no editable.",
+    property_not_editable_description: "Puede que no tengas permisos para editarla o que esté definida en código y no se pueda modificar.",
     delete_this_property: "¿Eliminar esta propiedad?",
     delete_property_warning: "Esto no eliminará datos, sólo modificará la configuración de la colección.",
     error_must_specify_id: "Debes especificar un id para el campo",

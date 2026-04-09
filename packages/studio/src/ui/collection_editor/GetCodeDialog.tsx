@@ -108,7 +108,7 @@ function collectionToCode(collection: EntityCollection): object {
             delete obj.resolved;
             delete obj.propertiesOrder;
             delete obj.propertyConfig;
-            delete obj.editable;
+
 
         }
 
@@ -121,7 +121,7 @@ function collectionToCode(collection: EntityCollection): object {
         singularName: collection.singularName,
         path: collection.dbPath,
         description: collection.description,
-        editable: true,
+
         icon: collection.icon,
         group: collection.group,
         filter: collection.filter,

@@ -5,13 +5,12 @@ import {
     useSnackbarController,
     useTranslation
 } from "@rebasepro/core";
-import { CollectionActionsProps } from "@rebasepro/types";
+import { EntityCollection, CollectionActionsProps } from "@rebasepro/types";
 import { mergeDeep } from "@rebasepro/common";
 import { Button, SaveIcon, Tooltip, UndoIcon, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
 import { useCollectionsConfigController } from "../useCollectionsConfigController";
-import { PersistedCollection } from "../types/persisted_collection";
 
 export function EditorCollectionActionStart({
     path,
@@ -47,7 +46,7 @@ export function EditorCollectionActionStart({
                         ?.saveCollection({
                             id: collection.slug,
                             parentCollectionIds,
-                            collectionData: mergeDeep(collection as PersistedCollection,
+                            collectionData: mergeDeep(collection as EntityCollection,
                                 {
                                     filter: tableController.filterValues ?? null,
                                     sort: tableController.sortBy ?? null

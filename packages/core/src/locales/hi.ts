@@ -279,7 +279,7 @@ export const hi: RebaseTranslations = {
     copied: "कॉपी किया गया",
 
     property_cant_be_edited: "इस विशेषता को संपादित नहीं किया जा सकता",
-    property_not_editable_description: "आपके पास इसे संपादित करने की अनुमति नहीं हो सकती है या इसे कोड में 'editable' ध्वज (flag) के 'false' पर सेट होने के साथ परिभाषित किया गया है।",
+    property_not_editable_description: "आपके पास इसे संपादित करने की अनुमति नहीं हो सकती है या इसे कोड में परिभाषित किया गया है और इसे संशोधित नहीं किया जा सकता।",
     delete_this_property: "यह विशेषता हटाएँ?",
     delete_property_warning: "यह कोई डेटा नहीं हटाएगा, केवल संग्रह को संशोधित करेगा।",
     error_must_specify_id: "आपको फ़ील्ड के लिए एक id निर्दिष्ट करना होगा",

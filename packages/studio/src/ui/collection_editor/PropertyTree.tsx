@@ -37,7 +37,7 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 import { CSS } from "@dnd-kit/utilities";
 import { getFullId, getFullIdPath } from "./util";
-import { editableProperty } from "../../utils/entities";
+
 import { useAIModifiedPaths } from "./AIModifiedPathsContext";
 
 export const PropertyTree = React.memo(
@@ -54,8 +54,7 @@ export const PropertyTree = React.memo(
         onPropertyMove,
         onPropertyRemove,
         className,
-        inferredPropertyKeys,
-        collectionEditable
+        inferredPropertyKeys
     }: {
         namespace?: string;
         selectedPropertyKey?: string;
@@ -68,7 +67,6 @@ export const PropertyTree = React.memo(
         onPropertyRemove?: (propertyKey: string, namespace?: string) => void;
         className?: string;
         inferredPropertyKeys?: string[];
-        collectionEditable: boolean;
     }) {
 
         // Filter propertiesOrder to only include top-level keys (no dots) that exist in properties
@@ -167,7 +165,7 @@ export const PropertyTree = React.memo(
                                         onPropertyRemove={onPropertyRemove}
                                         onPropertyClick={onPropertyClick}
                                         selectedPropertyKey={selectedPropertyKey}
-                                        collectionEditable={collectionEditable}
+
                                     />
                                 );
                             }).filter(Boolean)}
@@ -191,8 +189,7 @@ export function PropertyTreeEntry({
     onPropertyClick,
     onPropertyMove,
     onPropertyRemove,
-    inferredPropertyKeys,
-    collectionEditable
+    inferredPropertyKeys
 }: {
     id: string;
     propertyKey: string;
@@ -206,7 +203,6 @@ export function PropertyTreeEntry({
     onPropertyMove?: (propertiesOrder: string[], namespace?: string) => void;
     onPropertyRemove?: (propertyKey: string, namespace?: string) => void;
     inferredPropertyKeys?: string[];
-    collectionEditable: boolean;
 }) {
 
     const {
@@ -246,13 +242,12 @@ export function PropertyTreeEntry({
                 onPropertyMove={onPropertyMove}
                 onPropertyRemove={onPropertyRemove}
                 inferredPropertyKeys={inferredPropertyKeys}
-                collectionEditable={collectionEditable}
             />
         }
     }
 
     const selected = selectedPropertyKey === fullId;
-    const editable = property && ((collectionEditable && !isPropertyBuilder(property)) || editableProperty(property));
+    const editable = property && !isPropertyBuilder(property);
 
     // Check if this property was AI-modified
     const aiModifiedPaths = useAIModifiedPaths();

@@ -279,7 +279,7 @@ export const it: RebaseTranslations = {
     copied: "Copiato",
 
     property_cant_be_edited: "Non è possibile modificare questa proprietà",
-    property_not_editable_description: "Potresti non disporre dei permessi per modificarla o potrebbe essere stata impostata nel codice come 'non modificabile' (editable: false).",
+    property_not_editable_description: "Potresti non disporre dei permessi per modificarla o potrebbe essere definita nel codice e non modificabile.",
     delete_this_property: "Desideri eliminare questa proprietà?",
     delete_property_warning: "Questo non cancellerà i dati associati, modificherà semplicemente la configurazione della collezione.",
     error_must_specify_id: "È d'obbligo specificare un id per questo campo",

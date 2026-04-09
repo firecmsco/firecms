@@ -25,7 +25,7 @@
         "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
         "prepublishOnly": "run-s build",
         "test:lint": "eslint \"src/**\" --quiet",
-        "test": "jest --passWithNoTests",
+        "test": "jest --passWithNoTests --forceExit",
         "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
     },
     "exports": {

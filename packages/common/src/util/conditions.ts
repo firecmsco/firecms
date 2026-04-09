@@ -233,9 +233,9 @@ export function applyPropertyConditions(
     // ENUM CONDITIONS
     // ═══════════════════════════════════════════════════════════════════════
 
-    if ("enumValues" in result && result.enumValues && (conditions.enumConditions || conditions.allowedEnumValues || conditions.excludedEnumValues)) {
-        (result as Record<string, unknown>).enumValues = applyEnumConditions(
-            result.enumValues as EnumValueConfig[],
+    if ("enum" in result && result.enum && (conditions.enumConditions || conditions.allowedEnumValues || conditions.excludedEnumValues)) {
+        (result as Record<string, unknown>).enum = applyEnumConditions(
+            result.enum as EnumValueConfig[],
             conditions,
             context
         );

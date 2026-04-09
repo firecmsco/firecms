@@ -11,7 +11,7 @@ import {
     Typography,
 } from "@rebasepro/ui";
 
-import { editableProperty } from "../../utils/entities";
+
 
 export function PropertyFieldPreview({
     property,
@@ -33,7 +33,7 @@ export function PropertyFieldPreview({
 
     const { propertyConfigs } = useCustomizationController();
     const propertyConfig = getFieldConfig(property, propertyConfigs);
-    const disabled = !editableProperty(property);
+
 
     const borderColorClass = hasError
         ? "border-red-500 dark:border-red-500 border-red-500/100 dark:border-red-500/100 ring-0 dark:ring-0"

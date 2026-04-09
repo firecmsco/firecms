@@ -34,7 +34,7 @@ import {
     useBuildNavigationStateController,
     UIReferenceView
 } from "@rebasepro/core";
-import { RebaseRoute, CustomCMSRoute } from "@rebasepro/cms";
+import { RebaseRoute, CustomCMSRoute, CMSSideEntityProvider } from "@rebasepro/cms";
 import { CircularProgressCenter } from "@rebasepro/ui";
 import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
 import { CollectionsStudioView, JSEditor, RLSEditor, SQLEditor, StorageView, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
@@ -176,48 +176,50 @@ export function App() {
                             }
 
                             return (
-                                <RebaseRoutes>
-                                    <Route element={
-                                        <Scaffold autoOpenDrawer={false}>
-                                            <AdminModeSyncer devViews={devViews} />
-                                            <AppBar />
-                                            <Drawer
-                                                title={"Rebase"}
-                                                logoDestination={adminModeController.mode === "studio" ? "/s" : "/"}
-                                            />
-                                            <Outlet />
-                                            <SideDialogs />
-                                        </Scaffold>
-                                    }>
-                                        <Route path={"/"} element={<ContentHomePage />} />
-                                        <Route path={"/s"} element={<StudioHomePage />} />
+                                <CMSSideEntityProvider>
+                                    <RebaseRoutes>
+                                        <Route element={
+                                            <Scaffold autoOpenDrawer={false}>
+                                                <AdminModeSyncer devViews={devViews} />
+                                                <AppBar />
+                                                <Drawer
+                                                    title={"Rebase"}
+                                                    logoDestination={adminModeController.mode === "studio" ? "/s" : "/"}
+                                                />
+                                                <Outlet />
+                                                <SideDialogs />
+                                            </Scaffold>
+                                        }>
+                                            <Route path={"/"} element={<ContentHomePage />} />
+                                            <Route path={"/s"} element={<StudioHomePage />} />
 
-                                        <Route path={"/c/*"} element={<RebaseRoute />} />
-                                        <Route path={"/settings"} element={<UserSettingsView />} />
-                                        <Route path={"/roles"} element={<RolesView userManagement={userManagement} />} />
-                                        <Route path={"/users"} element={<UsersView userManagement={userManagement} />} />
+                                            <Route path={"/c/*"} element={<RebaseRoute />} />
+                                            <Route path={"/settings"} element={<UserSettingsView />} />
+                                            <Route path={"/roles"} element={<RolesView userManagement={userManagement} />} />
+                                            <Route path={"/users"} element={<UsersView userManagement={userManagement} />} />
 
-                                        {/* Hidden debug route — not in sidebar */}
-                                        <Route path={"/debug/ui"} element={<UIReferenceView />} />
+                                            {/* Hidden debug route — not in sidebar */}
+                                            <Route path={"/debug/ui"} element={<UIReferenceView />} />
 
-                                        {[...(navigationStateController.views ?? []), ...(navigationStateController.adminViews ?? [])].map(view => {
-                                            const slugs = Array.isArray(view.slug) ? view.slug : [view.slug];
-                                            return slugs.flatMap(slug => {
-                                                const routes = [
-                                                    <Route key={slug} path={slug} element={<CustomCMSRoute cmsView={view} />} />
-                                                ];
-                                                if (view.nestedRoutes) {
-                                                    routes.push(
-                                                        <Route key={slug + "/*"} path={slug + "/*"} element={<CustomCMSRoute cmsView={view} />} />
-                                                    );
-                                                }
-                                                return routes;
-                                            });
-                                        })}
+                                            {[...(navigationStateController.views ?? []), ...(navigationStateController.adminViews ?? [])].map(view => {
+                                                const slugs = Array.isArray(view.slug) ? view.slug : [view.slug];
+                                                return slugs.flatMap(slug => {
+                                                    const routes = [
+                                                        <Route key={slug} path={slug} element={<CustomCMSRoute cmsView={view} />} />
+                                                    ];
+                                                    if (view.nestedRoutes) {
+                                                        routes.push(
+                                                            <Route key={slug + "/*"} path={slug + "/*"} element={<CustomCMSRoute cmsView={view} />} />
+                                                        );
+                                                    }
+                                                    return routes;
+                                                });
+                                            })}
 
-                                        <Route path={"*"} element={<NotFoundPage />} />
-                                    </Route>
-                                </RebaseRoutes>
+                                            <Route path={"*"} element={<NotFoundPage />} />
+                                        </Route>
+                                    </RebaseRoutes>
+                                </CMSSideEntityProvider>
                             );
                         }}
                     </Rebase>

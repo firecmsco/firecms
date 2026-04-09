@@ -46,7 +46,7 @@ export function buildPropertyFromData(
             increaseValuesCount(valuesCount, "inferred_prop", entry, getType);
         });
     }
-    const enumValues = "enumValues" in property ? resolveEnumValues(property["enumValues"] as EnumValues) : undefined;
+    const enumValues = "enum" in property ? resolveEnumValues(property["enum"] as EnumValues) : undefined;
     if (enumValues) {
         const newEnumValues = extractEnumFromValues(Array.from(valuesCount["inferred_prop"].valuesCount.keys()));
         return {

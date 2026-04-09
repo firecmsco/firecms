@@ -10,7 +10,7 @@ import {
 } from "../src/auth/jwt";
 
 describe("JWT Utilities", () => {
-    const testSecret = "test-secret-key-for-jwt-testing-12345";
+    const testSecret = "test-secret-key-for-jwt-testing-1234567890";
 
     beforeEach(() => {
         // Reset JWT config before each test
@@ -23,7 +23,7 @@ describe("JWT Utilities", () => {
 
     describe("configureJwt", () => {
         it("should configure JWT with provided secret", () => {
-            configureJwt({ secret: "new-secret" });
+            configureJwt({ secret: "new-secret-key-that-is-at-least-32-chars" });
             // Configuration is internal, but we can verify it works by generating a token
             expect(() => generateAccessToken("user-1", ["admin"])).not.toThrow();
         });
@@ -45,10 +45,9 @@ describe("JWT Utilities", () => {
             expect(token.split(".")).toHaveLength(3);
         });
 
-        it("should throw error if secret is not configured", () => {
-            configureJwt({ secret: "" });
-            expect(() => generateAccessToken("user-1", ["admin"]))
-                .toThrow("JWT secret not configured");
+        it("should throw error if secret is empty", () => {
+            expect(() => configureJwt({ secret: "" }))
+                .toThrow("JWT secret is too short");
         });
 
         it("should include userId and roles in payload", () => {
@@ -84,7 +83,7 @@ describe("JWT Utilities", () => {
 
         it("should return null for token signed with different secret", () => {
             const token = generateAccessToken("user-123", ["admin"]);
-            configureJwt({ secret: "different-secret" });
+            configureJwt({ secret: "different-secret-that-is-at-least-32-chars-long" });
             const payload = verifyAccessToken(token);
             expect(payload).toBeNull();
         });
@@ -94,11 +93,9 @@ describe("JWT Utilities", () => {
             expect(payload).toBeNull();
         });
 
-        it("should throw error if secret is not configured", () => {
-            const token = generateAccessToken("user-1", ["admin"]);
-            configureJwt({ secret: "" });
-            expect(() => verifyAccessToken(token))
-                .toThrow("JWT secret not configured");
+        it("should throw error if secret is empty", () => {
+            expect(() => configureJwt({ secret: "" }))
+                .toThrow("JWT secret is too short");
         });
     });
 

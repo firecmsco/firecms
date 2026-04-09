@@ -1,7 +1,8 @@
 import { EntityService } from "../src/db/entityService";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { EntityCollection } from "@rebasepro/types";
-import { collectionRegistry } from "../src/collections/registry";
+import { BackendCollectionRegistry } from "../src/collections/BackendCollectionRegistry";
+const collectionRegistry = new BackendCollectionRegistry();
 
 describe("EntityService - Error Handling & Edge Cases", () => {
     let entityService: EntityService;
@@ -57,7 +58,7 @@ describe("EntityService - Error Handling & Edge Cases", () => {
         // Add a then method to make the db object awaitable when the query chain ends
         (db as any).then = jest.fn((resolve) => resolve([]));
 
-        entityService = new EntityService(db);
+        entityService = new EntityService(db, collectionRegistry);
     });
 
     describe("Collection Registry Errors", () => {

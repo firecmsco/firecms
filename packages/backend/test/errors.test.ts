@@ -1,6 +1,27 @@
-import { Request, Response, NextFunction } from "express";
-import { ApiError, errorHandler, asyncHandler } from "../src/api/errors";
+import { ApiError, errorHandler } from "../src/api/errors";
 
+// ── Minimal Hono-context mock ────────────────────────────────────────────
+function createMockContext(method = "GET", path = "/test") {
+    let capturedStatus: number | undefined;
+    let capturedBody: any;
+
+    const c = {
+        req: { method, path },
+        json: (body: any, status?: number) => {
+            capturedBody = body;
+            capturedStatus = status ?? 200;
+            return new Response(JSON.stringify(body), { status: capturedStatus });
+        },
+    } as any;
+
+    return {
+        c,
+        getStatus: () => capturedStatus,
+        getBody: () => capturedBody,
+    };
+}
+
+// ── ApiError class ────────────────────────────────────────────────────────
 describe("ApiError", () => {
     describe("constructor", () => {
         it("should create an error with statusCode, code, message, and details", () => {
@@ -70,36 +91,25 @@ describe("ApiError", () => {
     });
 });
 
+// ── errorHandler (Hono ErrorHandler) ──────────────────────────────────────
 describe("errorHandler", () => {
-    let mockReq: Request;
-    let mockRes: Response;
-    let mockNext: NextFunction;
-    let statusFn: jest.Mock;
-    let jsonFn: jest.Mock;
-
-    beforeEach(() => {
-        mockReq = {} as Request;
-        jsonFn = jest.fn();
-        statusFn = jest.fn().mockReturnValue({ json: jsonFn });
-        mockRes = { status: statusFn } as unknown as Response;
-        mockNext = jest.fn();
-    });
-
     it("should format ApiError with statusCode, code, message", () => {
+        const { c, getStatus, getBody } = createMockContext();
         const err = ApiError.notFound("User not found");
-        errorHandler(err, mockReq, mockRes, mockNext);
+        errorHandler(err, c);
 
-        expect(statusFn).toHaveBeenCalledWith(404);
-        expect(jsonFn).toHaveBeenCalledWith({
+        expect(getStatus()).toBe(404);
+        expect(getBody()).toEqual({
             error: { message: "User not found", code: "NOT_FOUND" }
         });
     });
 
     it("should include details when present", () => {
+        const { c, getBody } = createMockContext();
         const err = ApiError.badRequest("Validation failed", "VALIDATION", { fields: ["email"] });
-        errorHandler(err, mockReq, mockRes, mockNext);
+        errorHandler(err, c);
 
-        expect(jsonFn).toHaveBeenCalledWith({
+        expect(getBody()).toEqual({
             error: {
                 message: "Validation failed",
                 code: "VALIDATION",
@@ -109,61 +119,32 @@ describe("errorHandler", () => {
     });
 
     it("should handle plain Error with code property", () => {
+        const { c, getStatus, getBody } = createMockContext();
         const err = Object.assign(new Error("Not found"), { code: "NOT_FOUND" });
-        errorHandler(err, mockReq, mockRes, mockNext);
+        errorHandler(err, c);
 
-        expect(statusFn).toHaveBeenCalledWith(404);
-        expect(jsonFn).toHaveBeenCalledWith({
+        expect(getStatus()).toBe(404);
+        expect(getBody()).toEqual({
             error: { message: "Not found", code: "NOT_FOUND" }
         });
     });
 
     it("should default to 500 for unknown errors", () => {
+        const { c, getStatus, getBody } = createMockContext();
         const err = new Error("Something broke");
-        errorHandler(err, mockReq, mockRes, mockNext);
+        errorHandler(err, c);
 
-        expect(statusFn).toHaveBeenCalledWith(500);
-        expect(jsonFn).toHaveBeenCalledWith({
+        expect(getStatus()).toBe(500);
+        expect(getBody()).toEqual({
             error: { message: "Something broke", code: "INTERNAL_ERROR" }
         });
     });
 
     it("should use statusCode from error if present", () => {
+        const { c, getStatus } = createMockContext();
         const err = Object.assign(new Error("Rate limited"), { statusCode: 429, code: "RATE_LIMITED" });
-        errorHandler(err, mockReq, mockRes, mockNext);
+        errorHandler(err, c);
 
-        expect(statusFn).toHaveBeenCalledWith(429);
-    });
-});
-
-describe("asyncHandler", () => {
-    it("should call next with error when async function throws", async () => {
-        const next = jest.fn();
-        const handler = asyncHandler(async () => {
-            throw new ApiError(400, "BAD", "test error");
-        });
-
-        await handler({} as Request, {} as Response, next);
-
-        // Give the microtask a tick
-        await new Promise(resolve => setImmediate(resolve));
-
-        expect(next).toHaveBeenCalledWith(expect.any(ApiError));
-    });
-
-    it("should not call next when function succeeds", async () => {
-        const next = jest.fn();
-        const jsonFn = jest.fn();
-        const res = { json: jsonFn } as unknown as Response;
-
-        const handler = asyncHandler(async (_req, res) => {
-            (res as any).json({ ok: true });
-        });
-
-        await handler({} as Request, res, next);
-        await new Promise(resolve => setImmediate(resolve));
-
-        expect(next).not.toHaveBeenCalled();
-        expect(jsonFn).toHaveBeenCalledWith({ ok: true });
+        expect(getStatus()).toBe(429);
     });
 });

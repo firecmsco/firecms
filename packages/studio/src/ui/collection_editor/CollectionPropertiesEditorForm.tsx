@@ -25,7 +25,6 @@ import {
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "./util";
 import { OnPropertyChangedParams, PropertyForm, PropertyFormDialog } from "./PropertyEditView";
 import { PropertyTree } from "./PropertyTree";
-import { PersistedCollection } from "../../types/persisted_collection";
 import { GetCodeDialog } from "./GetCodeDialog";
 import { useAIModifiedPaths } from "./AIModifiedPathsContext";
 import { useCollectionsConfigController } from "../../useCollectionsConfigController";
@@ -42,9 +41,9 @@ type CollectionEditorFormProps = {
     extraIcon: React.ReactNode | any;
     getUser?: (uid: string) => User | null;
     getData?: () => Promise<object[]>;
-    doCollectionInference?: (collection: PersistedCollection) => Promise<Partial<EntityCollection> | null> | undefined;
+    doCollectionInference?: (collection: EntityCollection) => Promise<Partial<EntityCollection> | null> | undefined;
     propertyConfigs: Record<string, PropertyConfig>;
-    collectionEditable: boolean;
+
 };
 
 export function CollectionPropertiesEditorForm({
@@ -59,7 +58,7 @@ export function CollectionPropertiesEditorForm({
     getData,
     doCollectionInference,
     propertyConfigs,
-    collectionEditable
+
 }: CollectionEditorFormProps) {
 
     const {
@@ -69,7 +68,7 @@ export function CollectionPropertiesEditorForm({
         setFieldTouched,
         errors,
         dirty
-    } = useFormex<PersistedCollection>();
+    } = useFormex<EntityCollection>();
 
     const snackbarController = useSnackbarController();
     const configController = useCollectionsConfigController();
@@ -477,7 +476,7 @@ export function CollectionPropertiesEditorForm({
                         onPropertyClick={onPropertyClick}
                         onPropertyMove={onPropertyMove}
                         onPropertyRemove={(isNewCollection || (inferredPropertyKeys && inferredPropertyKeys.length > 0)) && !configController?.readOnly ? deleteProperty : undefined}
-                        collectionEditable={collectionEditable && !configController?.readOnly}
+
                         errors={errors} />
                 </ErrorBoundary>
 
@@ -516,7 +515,7 @@ export function CollectionPropertiesEditorForm({
                                 initialErrors={initialErrors}
                                 getData={getData}
                                 propertyConfigs={propertyConfigs}
-                                collectionEditable={collectionEditable && !configController?.readOnly}
+        
                             />}
 
                         {!selectedProperty &&
@@ -560,7 +559,8 @@ export function CollectionPropertiesEditorForm({
                 initialErrors={initialErrors}
                 getData={getData}
                 propertyConfigs={propertyConfigs}
-                collectionEditable={collectionEditable && !configController?.readOnly}
+
+
                 onCancel={closePropertyDialog}
                 onOkClicked={asDialog
                     ? closePropertyDialog
@@ -586,7 +586,6 @@ export function CollectionPropertiesEditorForm({
             getData={getData}
             allowDataInference={!isNewCollection}
             propertyConfigs={propertyConfigs}
-            collectionEditable={collectionEditable && !configController?.readOnly}
             existingPropertyKeys={values.propertiesOrder as string[]} />
 
         <ErrorBoundary>

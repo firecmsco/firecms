@@ -7,25 +7,22 @@ import {
 import { getIn, useFormex } from "@rebasepro/formex";
 
 import { getFieldConfig, getFieldId, PropertyConfigBadge } from "@rebasepro/cms";
-import { Properties, Property, PropertyConfig } from "@rebasepro/types";
+import { EntityCollection, Properties, Property, PropertyConfig } from "@rebasepro/types";
 import { cls, Container, Select, SelectItem, Tooltip, Typography } from "@rebasepro/ui";
 import React, { useState } from "react";
 import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../PropertyEditView";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
-import { PersistedCollection } from "../../../types/persisted_collection";
 import { updatePropertyFromWidget } from "../utils/update_property_for_widget";
 import { supportedFields } from "../utils/supported_fields";
 import { buildPropertyFromData } from "@rebasepro/schema_inference";
 
 export function CollectionEditorImportMapping({
     importConfig,
-    propertyConfigs,
-    collectionEditable
+    propertyConfigs
 }:
     {
         importConfig: ImportConfig,
         propertyConfigs: Record<string, PropertyConfig>,
-        collectionEditable: boolean
     }) {
 
     // const {
@@ -40,7 +37,7 @@ export function CollectionEditorImportMapping({
         setFieldValue,
         setFieldTouched,
         values
-    } = useFormex<PersistedCollection>();
+    } = useFormex<EntityCollection>();
     const [selectedProperty, setSelectedProperty] = useState<PropertyWithId | undefined>(undefined);
 
     const currentPropertiesOrderRef = React.useRef<{
@@ -187,7 +184,7 @@ export function CollectionEditorImportMapping({
                 autoUpdateId={false}
                 onPropertyChanged={onPropertyChanged}
                 allowDataInference={false}
-                collectionEditable={collectionEditable}
+
                 onOkClicked={() => {
                     setSelectedProperty(undefined);
                 }}

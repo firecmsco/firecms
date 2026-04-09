@@ -3,11 +3,10 @@ import {
     useCollectionRegistryController,
     useTranslation
 } from "@rebasepro/core";
-import { PluginFormActionProps } from "@rebasepro/types";
+import { EntityCollection, PluginFormActionProps } from "@rebasepro/types";
 import { IconButton, SettingsIcon, Tooltip, } from "@rebasepro/ui";
 
 import { useCollectionEditorController } from "../useCollectionEditorController";
-import { PersistedCollection } from "../types/persisted_collection";
 
 export function EditorEntityAction({
     path,
@@ -43,7 +42,7 @@ export function EditorEntityAction({
                     id: collection.slug,
                     path,
                     parentCollectionIds,
-                    parentCollection: parentCollection as PersistedCollection,
+                    parentCollection: parentCollection as EntityCollection,
                 })
                 : undefined}>
             <SettingsIcon size={"small"} />

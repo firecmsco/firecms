@@ -1,10 +1,10 @@
+import { EntityCollection } from "@rebasepro/types";
 import React, { useState, useEffect } from "react";
 import { Button, IconButton, Typography, cls, defaultBorderMixin, Chip, KeyIcon, DeleteIcon, Paper, Container, Tooltip, CircularProgress, Dialog } from "@rebasepro/ui";
 import { PostgresPolicy } from "../../components/RLSEditor/RLSEditor";
 import { PolicyEditor } from "../../components/RLSEditor/PolicyEditor";
 import { useFormex } from "@rebasepro/formex";
 import { useRebaseContext } from "@rebasepro/core";
-import { PersistedCollection } from "../../types/persisted_collection";
 
 interface SecurityRule {
     name: string;
@@ -15,7 +15,7 @@ interface SecurityRule {
     roles?: string[];
 }
 
-type CollectionWithSecurity = PersistedCollection & {
+type CollectionWithSecurity = EntityCollection & {
     securityRules?: SecurityRule[];
     id?: string;
     dbPath?: string;

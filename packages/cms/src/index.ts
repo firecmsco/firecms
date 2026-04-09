@@ -35,6 +35,7 @@ export {
     editEntityAction,
     copyEntityAction,
     deleteEntityAction,
+    CMSSideEntityProvider,
 } from "./components";
 export type {
     EntityViewProps,

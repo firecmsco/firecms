@@ -1,7 +1,8 @@
 import { EntityService } from "../src/db/entityService";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { EntityCollection } from "@rebasepro/types";
-import { collectionRegistry } from "../src/collections/registry";
+import { BackendCollectionRegistry } from "../src/collections/BackendCollectionRegistry";
+const collectionRegistry = new BackendCollectionRegistry();
 
 describe("EntityService - Relation Types Tests", () => {
     let entityService: EntityService;
@@ -185,7 +186,7 @@ describe("EntityService - Relation Types Tests", () => {
             then: jest.fn((resolve) => resolve([]))
         } as any;
 
-        entityService = new EntityService(db);
+        entityService = new EntityService(db, collectionRegistry);
     });
 
     describe("One-to-Many Relations (Inverse)", () => {

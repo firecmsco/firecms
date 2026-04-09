@@ -107,7 +107,7 @@ export function updatePropertyFromWidget(propertyData: any,
                 markdown: undefined,
                 email: undefined,
                 url: undefined,
-                enum: propertyData.enumValues ?? [],
+                enum: propertyData.enum ?? [],
                 userSelect: undefined
             } as StringProperty
         );
@@ -138,7 +138,7 @@ export function updatePropertyFromWidget(propertyData: any,
             {
                 type: "number",
                 propertyConfig: "number_select",
-                enum: propertyData.enumValues ?? []
+                enum: propertyData.enum ?? []
             } as NumberProperty
         );
     } else if (selectedWidgetId === "multi_number_select") {

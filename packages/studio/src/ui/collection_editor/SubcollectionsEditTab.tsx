@@ -23,7 +23,6 @@ import {
 } from "@rebasepro/ui";
 import { CollectionEditorDialog } from "./CollectionEditorDialog";
 import { CollectionsConfigController } from "../../types/config_controller";
-import { PersistedCollection } from "../../types/persisted_collection";
 import { CollectionInference } from "../../types/collection_inference";
 import { EntityCustomViewsSelectDialog } from "./EntityCustomViewsSelectDialog";
 import { useFormex } from "@rebasepro/formex";
@@ -36,7 +35,7 @@ export function SubcollectionsEditTab({
     getUser,
     parentCollectionIds
 }: {
-    collection: PersistedCollection,
+    collection: EntityCollection,
     parentCollection?: EntityCollection,
     configController: CollectionsConfigController;
     collectionInference?: CollectionInference;

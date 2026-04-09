@@ -1,7 +1,6 @@
 import { CollectionsConfigController, SaveCollectionParams, UpdateCollectionParams, DeleteCollectionParams, SavePropertyParams, DeletePropertyParams, UpdatePropertiesOrderParams } from "./types/config_controller";
 import { EntityCollection, Properties } from "@rebasepro/types";
 import { getSubcollections } from "@rebasepro/common";
-import { PersistedCollection } from "./types/persisted_collection";
 
 
 
@@ -70,7 +69,7 @@ export function useLocalCollectionsConfigController(
         readOnlyReason: "Local collection editing is only available in development mode.",
         collections: parsedCollections,
         getCollection: (id: string) => {
-            const found = parsedCollections.find(c => (c as PersistedCollection & { id?: string }).id === id || c.slug === id);
+            const found = parsedCollections.find(c => (c as EntityCollection & { id?: string }).id === id || c.slug === id);
             if (found) return found;
             throw Error(`Collection ${id} not found in local mode`);
         },
@@ -99,7 +98,7 @@ export function useLocalCollectionsConfigController(
         },
 
         updatePropertiesOrder: async ({ collection, fullPath, newPropertiesOrder }: UpdatePropertiesOrderParams) => {
-            const collectionId = (collection as PersistedCollection & { id?: string }).id || fullPath.split("/").pop();
+            const collectionId = (collection as EntityCollection & { id?: string }).id || fullPath.split("/").pop();
             await request("/collection/save", { collectionId, collectionData: { propertiesOrder: newPropertiesOrder } });
         },
         updateKanbanColumnsOrder: async () => {

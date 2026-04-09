@@ -13,6 +13,8 @@ import { resolvedSelectedEntityView } from "../util/resolutions";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "@rebasepro/core";
 import { useCustomizationController, useLargeLayout } from "@rebasepro/core";
 import { JSON_TAB_VALUE } from "../components/EntityEditView";
+import React from "react";
+import { EntitySidePanel } from "../components/EntitySidePanel";
 
 const NEW_URL_HASH = "new_side";
 const SIDE_URL_HASH = "side";
@@ -290,7 +292,7 @@ const propsToSidePanel = (props: EntitySidePanelProps,
     const entityViewWidth = getEntityViewWidth(props, smallLayout, customizationController);
     return {
         key: `${props.path}/${props.entityId}`,
-        component: undefined, // Lazy render in SideDialogs for better performance
+        component: <EntitySidePanel {...resolvedPanelProps} />,
         urlPath: urlPath,
         parentUrlPath: parentUrlPath,
         width: entityViewWidth,

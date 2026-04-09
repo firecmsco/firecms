@@ -412,6 +412,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * and can be used for general ordering purposes.
      */
     orderProperty?: Extract<keyof M, string>;
+
 }
 
 /**

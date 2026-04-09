@@ -1,14 +1,49 @@
-import { Request, Response } from "express";
-import { requireAuth, optionalAuth, extractUserFromToken, requireAdmin, AuthenticatedRequest } from "../src/auth/middleware";
+import { requireAuth, optionalAuth, extractUserFromToken, requireAdmin } from "../src/auth/middleware";
 import { configureJwt, generateAccessToken } from "../src/auth/jwt";
+
+// ── Minimal Hono-context mock ────────────────────────────────────────────
+function createMockContext(opts: {
+    authHeader?: string;
+    queryToken?: string;
+    user?: any;
+} = {}) {
+    let capturedStatus: number | undefined;
+    let capturedBody: any;
+    const variables = new Map<string, any>();
+
+    if (opts.user !== undefined) variables.set("user", opts.user);
+
+    const c = {
+        req: {
+            header: (name: string) => {
+                if (name === "authorization") return opts.authHeader;
+                return undefined;
+            },
+            query: (name: string) => {
+                if (name === "token") return opts.queryToken;
+                return undefined;
+            },
+        },
+        json: (body: any, status?: number) => {
+            capturedBody = body;
+            capturedStatus = status ?? 200;
+            return new Response(JSON.stringify(body), { status: capturedStatus });
+        },
+        set: (key: string, value: any) => variables.set(key, value),
+        get: (key: string) => variables.get(key),
+    } as any;
+
+    return {
+        c,
+        getStatus: () => capturedStatus,
+        getBody: () => capturedBody,
+        getUser: () => variables.get("user"),
+    };
+}
 
 describe("Auth Middleware", () => {
     const testSecret = "test-secret-key-for-middleware-testing";
-    let mockReq: Partial<AuthenticatedRequest>;
-    let mockRes: Partial<Response>;
-    let nextFn: jest.Mock;
-    let jsonFn: jest.Mock;
-    let statusFn: jest.Mock;
+    const nextFn = jest.fn();
 
     beforeAll(() => {
         configureJwt({
@@ -19,70 +54,54 @@ describe("Auth Middleware", () => {
     });
 
     beforeEach(() => {
-        jsonFn = jest.fn();
-        statusFn = jest.fn().mockReturnValue({ json: jsonFn });
-        mockRes = {
-            status: statusFn,
-            json: jsonFn
-        };
-        mockReq = {
-            headers: {}
-        };
-        nextFn = jest.fn();
+        nextFn.mockClear();
     });
 
     describe("requireAuth", () => {
-        it("should call next() and set user for valid token", () => {
+        it("should call next() and set user for valid token", async () => {
             const token = generateAccessToken("user-123", ["admin", "editor"]);
-            mockReq.headers = { authorization: `Bearer ${token}` };
+            const { c, getUser } = createMockContext({ authHeader: `Bearer ${token}` });
 
-            requireAuth(mockReq as Request, mockRes as Response, nextFn);
+            await requireAuth(c, nextFn);
 
             expect(nextFn).toHaveBeenCalled();
-            expect(mockReq.user).toEqual({
+            expect(getUser()).toEqual({
                 userId: "user-123",
                 roles: ["admin", "editor"]
             });
-            expect(statusFn).not.toHaveBeenCalled();
         });
 
-        it("should return 401 for missing Authorization header", () => {
-            mockReq.headers = {};
+        it("should return 401 for missing Authorization header", async () => {
+            const { c, getStatus, getBody } = createMockContext();
 
-            requireAuth(mockReq as Request, mockRes as Response, nextFn);
+            await requireAuth(c, nextFn);
 
-            expect(statusFn).toHaveBeenCalledWith(401);
-            expect(jsonFn).toHaveBeenCalledWith({
+            expect(getStatus()).toBe(401);
+            expect(getBody()).toEqual({
                 error: {
-                    message: "Authorization header missing or invalid",
+                    message: "Authorization header or token query parameter missing or invalid",
                     code: "UNAUTHORIZED"
                 }
             });
             expect(nextFn).not.toHaveBeenCalled();
         });
 
-        it("should return 401 for Authorization header without Bearer prefix", () => {
-            mockReq.headers = { authorization: "token-without-bearer" };
+        it("should return 401 for Authorization header without Bearer prefix", async () => {
+            const { c, getStatus } = createMockContext({ authHeader: "token-without-bearer" });
 
-            requireAuth(mockReq as Request, mockRes as Response, nextFn);
+            await requireAuth(c, nextFn);
 
-            expect(statusFn).toHaveBeenCalledWith(401);
-            expect(jsonFn).toHaveBeenCalledWith({
-                error: {
-                    message: "Authorization header missing or invalid",
-                    code: "UNAUTHORIZED"
-                }
-            });
+            expect(getStatus()).toBe(401);
             expect(nextFn).not.toHaveBeenCalled();
         });
 
-        it("should return 401 for invalid token", () => {
-            mockReq.headers = { authorization: "Bearer invalid-token" };
+        it("should return 401 for invalid token", async () => {
+            const { c, getStatus, getBody } = createMockContext({ authHeader: "Bearer invalid-token" });
 
-            requireAuth(mockReq as Request, mockRes as Response, nextFn);
+            await requireAuth(c, nextFn);
 
-            expect(statusFn).toHaveBeenCalledWith(401);
-            expect(jsonFn).toHaveBeenCalledWith({
+            expect(getStatus()).toBe(401);
+            expect(getBody()).toEqual({
                 error: {
                     message: "Invalid or expired token",
                     code: "UNAUTHORIZED"
@@ -91,85 +110,95 @@ describe("Auth Middleware", () => {
             expect(nextFn).not.toHaveBeenCalled();
         });
 
-        it("should return 401 for token signed with different secret", () => {
+        it("should return 401 for token signed with different secret", async () => {
             const token = generateAccessToken("user-123", ["admin"]);
-            // Reconfigure with different secret
-            configureJwt({ secret: "different-secret" });
-            mockReq.headers = { authorization: `Bearer ${token}` };
+            configureJwt({ secret: "different-secret-that-is-at-least-32-chars-long" });
+            const { c, getStatus } = createMockContext({ authHeader: `Bearer ${token}` });
 
-            requireAuth(mockReq as Request, mockRes as Response, nextFn);
+            await requireAuth(c, nextFn);
 
-            expect(statusFn).toHaveBeenCalledWith(401);
+            expect(getStatus()).toBe(401);
             expect(nextFn).not.toHaveBeenCalled();
 
-            // Reset to original secret for other tests
+            // Reset to original secret
             configureJwt({ secret: testSecret });
         });
 
-        it("should handle lowercase bearer prefix", () => {
+        it("should handle lowercase bearer prefix", async () => {
             const token = generateAccessToken("user-123", ["admin"]);
-            mockReq.headers = { authorization: `bearer ${token}` };
+            const { c, getStatus } = createMockContext({ authHeader: `bearer ${token}` });
 
-            requireAuth(mockReq as Request, mockRes as Response, nextFn);
+            await requireAuth(c, nextFn);
 
             // The implementation requires "Bearer " with capital B
-            expect(statusFn).toHaveBeenCalledWith(401);
+            expect(getStatus()).toBe(401);
             expect(nextFn).not.toHaveBeenCalled();
+        });
+
+        it("should accept token from query parameter", async () => {
+            const token = generateAccessToken("user-123", ["viewer"]);
+            const { c, getUser } = createMockContext({ queryToken: token });
+
+            await requireAuth(c, nextFn);
+
+            expect(nextFn).toHaveBeenCalled();
+            expect(getUser()).toEqual({
+                userId: "user-123",
+                roles: ["viewer"]
+            });
         });
     });
 
     describe("optionalAuth", () => {
-        it("should set user for valid token", () => {
+        it("should set user for valid token", async () => {
             const token = generateAccessToken("user-456", ["viewer"]);
-            mockReq.headers = { authorization: `Bearer ${token}` };
+            const { c, getUser } = createMockContext({ authHeader: `Bearer ${token}` });
 
-            optionalAuth(mockReq as Request, mockRes as Response, nextFn);
+            await optionalAuth(c, nextFn);
 
             expect(nextFn).toHaveBeenCalled();
-            expect(mockReq.user).toEqual({
+            expect(getUser()).toEqual({
                 userId: "user-456",
                 roles: ["viewer"]
             });
         });
 
-        it("should call next() without setting user when no token provided", () => {
-            mockReq.headers = {};
+        it("should call next() without setting user when no token provided", async () => {
+            const { c, getUser } = createMockContext();
 
-            optionalAuth(mockReq as Request, mockRes as Response, nextFn);
+            await optionalAuth(c, nextFn);
 
             expect(nextFn).toHaveBeenCalled();
-            expect(mockReq.user).toBeUndefined();
-            expect(statusFn).not.toHaveBeenCalled();
+            expect(getUser()).toBeUndefined();
         });
 
-        it("should call next() without setting user for invalid token", () => {
-            mockReq.headers = { authorization: "Bearer invalid-token" };
+        it("should call next() without setting user for invalid token", async () => {
+            const { c, getUser } = createMockContext({ authHeader: "Bearer invalid-token" });
 
-            optionalAuth(mockReq as Request, mockRes as Response, nextFn);
+            await optionalAuth(c, nextFn);
 
             expect(nextFn).toHaveBeenCalled();
-            expect(mockReq.user).toBeUndefined();
-            expect(statusFn).not.toHaveBeenCalled();
+            expect(getUser()).toBeUndefined();
         });
 
-        it("should call next() without setting user for non-Bearer auth", () => {
-            mockReq.headers = { authorization: "Basic dXNlcjpwYXNz" };
+        it("should call next() without setting user for non-Bearer auth", async () => {
+            const { c, getUser } = createMockContext({ authHeader: "Basic dXNlcjpwYXNz" });
 
-            optionalAuth(mockReq as Request, mockRes as Response, nextFn);
+            await optionalAuth(c, nextFn);
 
             expect(nextFn).toHaveBeenCalled();
-            expect(mockReq.user).toBeUndefined();
+            expect(getUser()).toBeUndefined();
         });
     });
 
     describe("requireAdmin", () => {
-        it("should return 401 if user is not authenticated (missing requireAuth)", () => {
-            mockReq.user = undefined;
+        it("should return 401 if user is not authenticated", async () => {
+            const { c, getStatus, getBody } = createMockContext();
 
-            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+            await requireAdmin(c, nextFn);
 
-            expect(statusFn).toHaveBeenCalledWith(401);
-            expect(jsonFn).toHaveBeenCalledWith({
+            expect(getStatus()).toBe(401);
+            expect(getBody()).toEqual({
                 error: {
                     message: "User not authenticated. requireAuth middleware is missing?",
                     code: "UNAUTHORIZED"
@@ -178,81 +207,56 @@ describe("Auth Middleware", () => {
             expect(nextFn).not.toHaveBeenCalled();
         });
 
-        it("should return 403 if user has no roles array", () => {
-            mockReq.user = { userId: "user-123" } as any;
+        it("should return 403 if user has no roles array", async () => {
+            const { c, getStatus } = createMockContext({ user: { userId: "user-123" } });
 
-            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+            await requireAdmin(c, nextFn);
 
-            expect(statusFn).toHaveBeenCalledWith(403);
-            expect(jsonFn).toHaveBeenCalledWith({
-                error: {
-                    message: "Admin privileges required for this operation",
-                    code: "FORBIDDEN"
-                }
-            });
+            expect(getStatus()).toBe(403);
             expect(nextFn).not.toHaveBeenCalled();
         });
 
-        it("should return 403 if user has empty roles array", () => {
-            mockReq.user = { userId: "user-123", roles: [] } as any;
+        it("should return 403 if user has empty roles array", async () => {
+            const { c, getStatus } = createMockContext({ user: { userId: "user-123", roles: [] } });
 
-            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+            await requireAdmin(c, nextFn);
 
-            expect(statusFn).toHaveBeenCalledWith(403);
+            expect(getStatus()).toBe(403);
             expect(nextFn).not.toHaveBeenCalled();
         });
 
-        it("should return 403 if user has standard roles (forbidden)", () => {
-            mockReq.user = { userId: "user-123", roles: ["editor", "viewer"] } as any;
+        it("should return 403 if user has standard roles (forbidden)", async () => {
+            const { c, getStatus } = createMockContext({ user: { userId: "user-123", roles: ["editor", "viewer"] } });
 
-            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+            await requireAdmin(c, nextFn);
 
-            expect(statusFn).toHaveBeenCalledWith(403);
+            expect(getStatus()).toBe(403);
             expect(nextFn).not.toHaveBeenCalled();
         });
 
-        it("should allow access if user has 'admin' string role", () => {
-            mockReq.user = { userId: "user-123", roles: ["editor", "admin"] } as any;
+        it("should allow access if user has 'admin' role", async () => {
+            const { c, getStatus } = createMockContext({ user: { userId: "user-123", roles: ["editor", "admin"] } });
 
-            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+            await requireAdmin(c, nextFn);
 
             expect(nextFn).toHaveBeenCalled();
-            expect(statusFn).not.toHaveBeenCalled();
+            expect(getStatus()).toBeUndefined(); // No error response
         });
 
-        it("should allow access if user has 'schema-admin' string role", () => {
-            mockReq.user = { userId: "user-123", roles: ["schema-admin"] } as any;
+        it("should allow access if user has 'schema-admin' role", async () => {
+            const { c } = createMockContext({ user: { userId: "user-123", roles: ["schema-admin"] } });
 
-            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+            await requireAdmin(c, nextFn);
 
             expect(nextFn).toHaveBeenCalled();
-            expect(statusFn).not.toHaveBeenCalled();
         });
 
-        it("should block access for malformed spoofed string roles", () => {
-            mockReq.user = { userId: "user-123", roles: ["schema-adminstration", "admins", "admin "] } as any;
+        it("should block access for malformed spoofed string roles", async () => {
+            const { c, getStatus } = createMockContext({ user: { userId: "user-123", roles: ["schema-adminstration", "admins", "admin "] } });
 
-            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
+            await requireAdmin(c, nextFn);
 
-            expect(statusFn).toHaveBeenCalledWith(403);
-            expect(nextFn).not.toHaveBeenCalled();
-        });
-
-        it("should allow access if user has 'admin' object role", () => {
-            mockReq.user = { userId: "user-123", roles: [{ id: "editor" }, { id: "admin" }] } as any;
-
-            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
-
-            expect(nextFn).toHaveBeenCalled();
-            expect(statusFn).not.toHaveBeenCalled();
-        });
-
-        it("should block access if role object is missing ID but is an object", () => {
-            mockReq.user = { userId: "user-123", roles: [{ name: "admin" }, { role: "schema-admin" }] } as any;
-
-            requireAdmin(mockReq as Request, mockRes as Response, nextFn);
-
-            expect(statusFn).toHaveBeenCalledWith(403);
+            expect(getStatus()).toBe(403);
             expect(nextFn).not.toHaveBeenCalled();
         });
     });

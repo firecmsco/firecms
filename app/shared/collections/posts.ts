@@ -12,7 +12,7 @@ const postsCollection: EntityCollection = {
     history: true,
     properties: {
         id: {
-            name: "IDt",
+            name: "ID",
             type: "number",
             validation: {
                 required: true
@@ -62,9 +62,9 @@ const postsCollection: EntityCollection = {
             relationName: "author",
             relation: {
                 relationName: "author",
-                target: () => authorsCollection,
                 cardinality: "one",
-                direction: "owning"
+                direction: "owning",
+                target: () => authorsCollection
             }
         },
         profile: {
@@ -73,7 +73,6 @@ const postsCollection: EntityCollection = {
             relationName: "author_profile",
             relation: {
                 relationName: "author_profile",
-                target: () => profilesCollection,
                 cardinality: "one",
                 direction: "inverse",
                 joinPath: [
@@ -91,7 +90,8 @@ const postsCollection: EntityCollection = {
                             to: "profiles.author_id"
                         }
                     }
-                ]
+                ],
+                target: () => profilesCollection
             }
         },
         tags: {
@@ -100,9 +100,9 @@ const postsCollection: EntityCollection = {
             relationName: "tags",
             relation: {
                 relationName: "tags",
-                target: () => tagsCollection,
                 cardinality: "many",
-                direction: "owning"
+                direction: "owning",
+                target: () => tagsCollection
             }
         }
     },
@@ -141,6 +141,9 @@ const postsCollection: EntityCollection = {
                 }
             ]
         }
+    ],
+    entityViews: [
+        "__rebase_history"
     ]
 };
 

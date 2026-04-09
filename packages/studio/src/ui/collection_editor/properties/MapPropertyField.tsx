@@ -7,12 +7,11 @@ import { getIn, useFormex } from "@rebasepro/formex";
 import { PropertyTree } from "../PropertyTree";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath, namespaceToPropertiesPath } from "../util";
 
-export function MapPropertyField({ disabled, getData, allowDataInference, propertyConfigs, collectionEditable }: {
+export function MapPropertyField({ disabled, getData, allowDataInference, propertyConfigs }: {
     disabled: boolean;
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
     propertyConfigs: Record<string, PropertyConfig>,
-    collectionEditable: boolean;
 }) {
 
     const {
@@ -87,7 +86,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
                         properties={values.properties ?? {}}
                         propertiesOrder={propertiesOrder}
                         errors={{}}
-                        collectionEditable={collectionEditable}
+
                         onPropertyClick={(propertyKey, namespace) => {
                             setSelectedPropertyKey(propertyKey);
                             setSelectedPropertyNamespace(namespace);
@@ -122,7 +121,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, proper
                 forceShowErrors={false}
                 open={propertyDialogOpen}
                 allowDataInference={allowDataInference}
-                collectionEditable={collectionEditable}
+
                 onCancel={() => {
                     setPropertyDialogOpen(false);
                     setSelectedPropertyKey(undefined);

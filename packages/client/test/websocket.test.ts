@@ -61,7 +61,11 @@ describe("RebaseWebSocketClient", () => {
     });
 
     afterEach(() => {
+        // Clear all pending timers so reconnection/open callbacks don't fire
+        // after the test is done.
+        jest.clearAllTimers();
         jest.useRealTimers();
+        MockWebSocket.instances = [];
     });
 
     // -----------------------------------------------------------------------

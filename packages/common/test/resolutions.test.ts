@@ -1,11 +1,9 @@
 import {
     resolvePropertyEnum,
     resolveEnumValues,
-    resolveEntityView,
-    resolveEntityAction,
     getSubcollections,
 } from "../src/util/resolutions";
-import { EntityCustomView, EntityAction, EntityCollection, NumberProperty, StringProperty, EnumValueConfig } from "@rebasepro/types";
+import { EntityCollection, NumberProperty, StringProperty, EnumValueConfig } from "@rebasepro/types";
 
 // ─────────────────────────────────────────────────────────────
 // resolvePropertyEnum
@@ -98,58 +96,7 @@ describe("resolveEnumValues", () => {
     });
 });
 
-// ─────────────────────────────────────────────────────────────
-// resolveEntityView
-// ─────────────────────────────────────────────────────────────
-describe("resolveEntityView", () => {
-    const contextViews: EntityCustomView<any>[] = [
-        { key: "analytics", name: "Analytics", Builder: () => null } as EntityCustomView<any>,
-        { key: "preview", name: "Preview", Builder: () => null } as EntityCustomView<any>,
-    ];
 
-    it("resolves a string key to a view", () => {
-        const result = resolveEntityView("analytics", contextViews);
-        expect(result?.key).toBe("analytics");
-        expect(result?.name).toBe("Analytics");
-    });
-
-    it("returns undefined for non-existent key", () => {
-        expect(resolveEntityView("nonexistent", contextViews)).toBeUndefined();
-    });
-
-    it("returns EntityCustomView object as-is", () => {
-        const view: EntityCustomView<any> = { key: "custom", name: "Custom", Builder: () => null };
-        expect(resolveEntityView(view)).toBe(view);
-    });
-
-    it("handles undefined contextViews", () => {
-        expect(resolveEntityView("analytics", undefined)).toBeUndefined();
-    });
-});
-
-// ─────────────────────────────────────────────────────────────
-// resolveEntityAction
-// ─────────────────────────────────────────────────────────────
-describe("resolveEntityAction", () => {
-    const contextActions: EntityAction<any>[] = [
-        { key: "publish", name: "Publish", onClick: () => {} } as EntityAction<any>,
-        { key: "archive", name: "Archive", onClick: () => {} } as EntityAction<any>,
-    ];
-
-    it("resolves a string key to an action", () => {
-        const result = resolveEntityAction("publish", contextActions);
-        expect(result?.key).toBe("publish");
-    });
-
-    it("returns EntityAction object as-is", () => {
-        const action: EntityAction<any> = { key: "custom", name: "Custom", onClick: () => {} };
-        expect(resolveEntityAction(action)).toBe(action);
-    });
-
-    it("returns undefined for non-existent key", () => {
-        expect(resolveEntityAction("nonexistent", contextActions)).toBeUndefined();
-    });
-});
 
 // ─────────────────────────────────────────────────────────────
 // getSubcollections
