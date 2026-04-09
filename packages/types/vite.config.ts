@@ -31,6 +31,7 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
+
         }
     },
     plugins: [

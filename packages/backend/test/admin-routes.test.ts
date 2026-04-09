@@ -1,283 +1,573 @@
-import { Router, Request, Response } from "express";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { UserService, RoleService, Role } from "../src/auth/services";
+/**
+ * Admin Routes — Integration Tests (Hono)
+ *
+ * Tests the full Hono request → admin route handler → JSON response cycle.
+ * Replaces the previous Express-based mock tests that only tested service calls.
+ */
 
-// Mock the services
+import { Hono } from "hono";
+import type { HonoEnv } from "../src/api/types";
+import { errorHandler } from "../src/api/errors";
+import { createAdminRoutes } from "../src/auth/admin-routes";
+import { configureJwt, generateAccessToken } from "../src/auth/jwt";
+import type { AuthModuleConfig } from "../src/auth/routes";
+
+// ── Mocks ───────────────────────────────────────────────────────────────────
+
 jest.mock("../src/auth/services");
 jest.mock("../src/auth/password");
 
-// Import after mocking
-import { hashPassword } from "../src/auth/password";
+import { UserService, RoleService } from "../src/auth/services";
+import { hashPassword, validatePasswordStrength } from "../src/auth/password";
 
-describe("Admin Routes", () => {
-    let db: jest.Mocked<NodePgDatabase>;
-    let mockUserService: jest.Mocked<UserService>;
-    let mockRoleService: jest.Mocked<RoleService>;
-    let mockReq: Partial<Request> & { user?: { userId: string; roles: string[] } };
-    let mockRes: Partial<Response>;
-    let jsonFn: jest.Mock;
-    let statusFn: jest.Mock;
-    let nextFn: jest.Mock;
+// ── Helpers ─────────────────────────────────────────────────────────────────
 
-    const adminUser = { userId: "admin-1", roles: ["admin"] };
-    const regularUser = { userId: "user-1", roles: ["editor"] };
+const TEST_SECRET = "admin-test-secret-key-that-is-definitely-32-chars-long!!!!!";
+
+function mockUser(overrides: Partial<{ id: string; email: string; displayName: string | null; photoUrl: string | null; provider: string }> = {}) {
+    return {
+        id: overrides.id ?? "user-1",
+        email: overrides.email ?? "test@example.com",
+        passwordHash: "salt:hash",
+        displayName: overrides.displayName ?? "Test User",
+        photoUrl: overrides.photoUrl ?? null,
+        provider: overrides.provider ?? "email",
+        googleId: null,
+        emailVerified: false,
+        emailVerificationToken: null,
+        emailVerificationSentAt: null,
+        createdAt: new Date("2024-01-01"),
+        updatedAt: new Date("2024-01-01"),
+    };
+}
+
+function mockRole(id: string, isAdmin = false) {
+    return { id, name: id.charAt(0).toUpperCase() + id.slice(1), isAdmin, defaultPermissions: null, collectionPermissions: null, config: null };
+}
+
+let mockUserSvc: jest.Mocked<UserService>;
+let mockRoleSvc: jest.Mocked<RoleService>;
+
+function createApp() {
+    mockUserSvc = new UserService(null as any) as jest.Mocked<UserService>;
+    mockRoleSvc = new RoleService(null as any) as jest.Mocked<RoleService>;
+
+    (UserService as jest.Mock).mockReturnValue(mockUserSvc);
+    (RoleService as jest.Mock).mockReturnValue(mockRoleSvc);
+
+    // Default mocks
+    mockUserSvc.getUserById = jest.fn().mockResolvedValue(null);
+    mockUserSvc.getUserByEmail = jest.fn().mockResolvedValue(null);
+    mockUserSvc.listUsers = jest.fn().mockResolvedValue([]);
+    mockUserSvc.createUser = jest.fn().mockImplementation((data) =>
+        Promise.resolve(mockUser({ email: data.email, displayName: data.displayName }))
+    );
+    mockUserSvc.updateUser = jest.fn().mockImplementation((id, data) =>
+        Promise.resolve(mockUser({ id, ...data }))
+    );
+    mockUserSvc.deleteUser = jest.fn().mockResolvedValue(undefined);
+    mockUserSvc.getUserRoleIds = jest.fn().mockResolvedValue(["editor"]);
+    mockUserSvc.setUserRoles = jest.fn().mockResolvedValue(undefined);
+    mockUserSvc.assignDefaultRole = jest.fn().mockResolvedValue(undefined);
+    mockUserSvc.getUserWithRoles = jest.fn().mockImplementation(async (userId) => {
+        return { user: mockUser({ id: userId }), roles: [mockRole("editor")] };
+    });
+
+    mockRoleSvc.getRoleById = jest.fn().mockResolvedValue(null);
+    mockRoleSvc.listRoles = jest.fn().mockResolvedValue([]);
+    mockRoleSvc.createRole = jest.fn().mockImplementation((data) =>
+        Promise.resolve({ ...data, isAdmin: data.isAdmin ?? false, defaultPermissions: null, collectionPermissions: null, config: null })
+    );
+    mockRoleSvc.updateRole = jest.fn().mockImplementation((id, data) =>
+        Promise.resolve({ id, name: data.name ?? "Updated", isAdmin: false, defaultPermissions: null, collectionPermissions: null, config: null })
+    );
+    mockRoleSvc.deleteRole = jest.fn().mockResolvedValue(undefined);
+
+    // Password mocks
+    (validatePasswordStrength as jest.Mock).mockReturnValue({ valid: true, errors: [] });
+    (hashPassword as jest.Mock).mockResolvedValue("hashed-pw");
+
+    const config: AuthModuleConfig = {
+        db: {} as any,
+    };
+
+    const app = new Hono<HonoEnv>();
+    app.onError(errorHandler);
+    app.route("/admin", createAdminRoutes(config));
+    return app;
+}
+
+function adminAuth(userId = "admin-1") {
+    return { Authorization: `Bearer ${generateAccessToken(userId, ["admin"])}` };
+}
+
+function editorAuth(userId = "editor-1") {
+    return { Authorization: `Bearer ${generateAccessToken(userId, ["editor"])}` };
+}
+
+function json(body: Record<string, unknown>) {
+    return {
+        method: "POST" as const,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+    };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TESTS
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe("Admin Routes (Integration)", () => {
+    beforeAll(() => {
+        configureJwt({ secret: TEST_SECRET, accessExpiresIn: "1h" });
+    });
 
     beforeEach(() => {
         jest.clearAllMocks();
-
-        jsonFn = jest.fn();
-        statusFn = jest.fn().mockReturnValue({ json: jsonFn });
-        mockRes = {
-            status: statusFn,
-            json: jsonFn
-        };
-        nextFn = jest.fn();
-
-        mockUserService = {
-            getUserById: jest.fn(),
-            getUserByEmail: jest.fn(),
-            listUsers: jest.fn(),
-            createUser: jest.fn(),
-            updateUser: jest.fn(),
-            deleteUser: jest.fn(),
-            getUserRoles: jest.fn(),
-            setUserRoles: jest.fn(),
-            getUserWithRoles: jest.fn()
-        } as unknown as jest.Mocked<UserService>;
-
-        mockRoleService = {
-            getRoleById: jest.fn(),
-            listRoles: jest.fn(),
-            createRole: jest.fn(),
-            updateRole: jest.fn(),
-            deleteRole: jest.fn()
-        } as unknown as jest.Mocked<RoleService>;
     });
 
-    describe("requireAdmin middleware", () => {
-        // Import the actual middleware
-        const { requireAdmin } = jest.requireActual("../src/auth/admin-routes");
-
-        it("should allow admin users to proceed", () => {
-            mockReq = { user: adminUser };
-            mockRoleService.getRoleById.mockResolvedValue({ id: "admin", isAdmin: true } as Role);
-
-            // We need to simulate the admin check
-            // The middleware checks if user.roles includes an admin role
-            const mockAdminReq = {
-                user: adminUser
-            } as unknown as Request;
-
-            // Since requireAdmin checks roles array, admin should pass
-            expect(mockAdminReq.user.roles).toContain("admin");
+    // ── Auth barriers ───────────────────────────────────────────────────
+    describe("Authorization", () => {
+        it("returns 401 for unauthenticated requests", async () => {
+            const app = createApp();
+            const res = await app.request("/admin/users");
+            expect(res.status).toBe(401);
         });
 
-        it("should block non-admin users", () => {
-            mockReq = { user: regularUser };
-
-            // Non-admin users should not have 'admin' role
-            expect(mockReq.user?.roles).not.toContain("admin");
+        it("returns 403 for non-admin users on admin-only endpoints", async () => {
+            const app = createApp();
+            const res = await app.request("/admin/users", {
+                headers: { ...editorAuth() },
+            });
+            expect(res.status).toBe(403);
         });
 
-        it("should return 401 for unauthenticated requests", () => {
-            mockReq = {};
+        it("allows admin users through", async () => {
+            const app = createApp();
+            const res = await app.request("/admin/users", {
+                headers: { ...adminAuth() },
+            });
+            expect(res.status).toBe(200);
+        });
 
-            // No user means unauthenticated
-            expect(mockReq.user).toBeUndefined();
+        it("allows schema-admin users through", async () => {
+            const app = createApp();
+            const res = await app.request("/admin/users", {
+                headers: { Authorization: `Bearer ${generateAccessToken("sa-1", ["schema-admin"])}` },
+            });
+            expect(res.status).toBe(200);
         });
     });
 
-    describe("User Management Endpoints", () => {
+    // ── Bootstrap ───────────────────────────────────────────────────────
+    describe("POST /admin/bootstrap", () => {
+        it("promotes current user to admin when no admins exist", async () => {
+            const app = createApp();
+            mockUserSvc.listUsers.mockResolvedValueOnce([mockUser({ id: "user-1" })]);
+            mockUserSvc.getUserRoleIds.mockResolvedValueOnce(["editor"]); // no admin
+
+            const res = await app.request("/admin/bootstrap", {
+                method: "POST",
+                headers: { ...adminAuth("user-1") },
+            });
+            expect(res.status).toBe(200);
+            const body = await res.json() as any;
+            expect(body.user.roles).toContain("admin");
+            expect(mockUserSvc.setUserRoles).toHaveBeenCalledWith("user-1", ["admin"]);
+        });
+
+        it("returns 403 when admin already exists", async () => {
+            const app = createApp();
+            const adminUser = mockUser({ id: "existing-admin" });
+            mockUserSvc.listUsers.mockResolvedValueOnce([adminUser]);
+            mockUserSvc.getUserRoleIds.mockResolvedValueOnce(["admin"]); // admin exists
+
+            const res = await app.request("/admin/bootstrap", {
+                method: "POST",
+                headers: { ...adminAuth("user-1") },
+            });
+            expect(res.status).toBe(403);
+            const body = await res.json() as any;
+            expect(body.error.message).toContain("Admin users already exist");
+        });
+    });
+
+    // ── User CRUD ───────────────────────────────────────────────────────
+    describe("User Management", () => {
         describe("GET /admin/users", () => {
-            it("should require authentication", () => {
-                mockReq = { user: undefined };
-                expect(mockReq.user).toBeUndefined();
-            });
+            it("returns list of users with roles", async () => {
+                const app = createApp();
+                mockUserSvc.listUsers.mockResolvedValueOnce([
+                    mockUser({ id: "u1", email: "a@test.com" }),
+                    mockUser({ id: "u2", email: "b@test.com" }),
+                ]);
+                mockUserSvc.getUserRoleIds
+                    .mockResolvedValueOnce(["admin"])
+                    .mockResolvedValueOnce(["editor"]);
 
-            it("should return list of users for authenticated user", async () => {
-                const mockUsers = [
-                    { id: "user-1", email: "user1@example.com", displayName: "User 1" },
-                    { id: "user-2", email: "user2@example.com", displayName: "User 2" }
-                ];
-                mockUserService.listUsers.mockResolvedValue(mockUsers);
-
-                const users = await mockUserService.listUsers();
-
-                expect(users).toHaveLength(2);
-                expect(users[0].email).toBe("user1@example.com");
-            });
-        });
-
-        describe("GET /admin/users/:id", () => {
-            it("should return user with roles", async () => {
-                const mockUser = { id: "user-1", email: "test@example.com" };
-                const mockRoles = [{ id: "editor", name: "Editor", isAdmin: false }];
-                mockUserService.getUserWithRoles.mockResolvedValue({ user: mockUser as unknown as Parameters<typeof mockUserService.getUserWithRoles>[0] extends string ? ReturnType<typeof mockUserService.getUserById> : never, roles: mockRoles as unknown as Role[] });
-
-                const result = await mockUserService.getUserWithRoles("user-1");
-
-                expect(result?.user.id).toBe("user-1");
-                expect(result?.roles).toHaveLength(1);
-            });
-
-            it("should return null for non-existent user", async () => {
-                mockUserService.getUserWithRoles.mockResolvedValue(null);
-
-                const result = await mockUserService.getUserWithRoles("nonexistent");
-
-                expect(result).toBeNull();
+                const res = await app.request("/admin/users", { headers: { ...adminAuth() } });
+                expect(res.status).toBe(200);
+                const body = await res.json() as any;
+                expect(body.users).toHaveLength(2);
+                expect(body.users[0].roles).toContain("admin");
+                expect(body.users[1].roles).toContain("editor");
             });
         });
 
-        describe("POST /admin/users (admin required)", () => {
-            it("should create user when admin", async () => {
-                const newUser = { email: "new@example.com", displayName: "New User" };
-                const createdUser = { id: "new-user-id", ...newUser };
-                mockUserService.createUser.mockResolvedValue(createdUser as unknown as Awaited<ReturnType<typeof mockUserService.createUser>>);
+        describe("GET /admin/users/:userId", () => {
+            it("returns user with roles", async () => {
+                const app = createApp();
+                mockUserSvc.getUserWithRoles.mockResolvedValueOnce({
+                    user: mockUser({ id: "u1" }),
+                    roles: [mockRole("editor"), mockRole("viewer")],
+                });
 
-                const result = await mockUserService.createUser(newUser as unknown as Parameters<typeof mockUserService.createUser>[0]);
-
-                expect(result.id).toBe("new-user-id");
-                expect(result.email).toBe("new@example.com");
+                const res = await app.request("/admin/users/u1", { headers: { ...adminAuth() } });
+                expect(res.status).toBe(200);
+                const body = await res.json() as any;
+                expect(body.user.uid).toBe("u1");
+                expect(body.user.roles).toEqual(["editor", "viewer"]);
             });
 
-            it("should hash password when provided", async () => {
-                (hashPassword as jest.Mock).mockResolvedValue("hashed-password");
+            it("returns 404 for non-existent user", async () => {
+                const app = createApp();
+                mockUserSvc.getUserWithRoles.mockResolvedValueOnce(null);
 
-                const hashedPw = await hashPassword("password123");
-
-                expect(hashPassword).toHaveBeenCalledWith("password123");
-                expect(hashedPw).toBe("hashed-password");
-            });
-        });
-
-        describe("PUT /admin/users/:id (admin required)", () => {
-            it("should update user", async () => {
-                const updatedUser = { id: "user-1", email: "test@example.com", displayName: "Updated Name" };
-                mockUserService.updateUser.mockResolvedValue(updatedUser as unknown as Awaited<ReturnType<typeof mockUserService.updateUser>>);
-
-                const result = await mockUserService.updateUser("user-1", { displayName: "Updated Name" } as unknown as Parameters<typeof mockUserService.updateUser>[1]);
-
-                expect(result?.displayName).toBe("Updated Name");
-            });
-
-            it("should return null for non-existent user", async () => {
-                mockUserService.updateUser.mockResolvedValue(null);
-
-                const result = await mockUserService.updateUser("nonexistent", {} as unknown as Parameters<typeof mockUserService.updateUser>[1]);
-
-                expect(result).toBeNull();
+                const res = await app.request("/admin/users/missing", { headers: { ...adminAuth() } });
+                expect(res.status).toBe(404);
             });
         });
 
-        describe("DELETE /admin/users/:id (admin required)", () => {
-            it("should delete user", async () => {
-                mockUserService.deleteUser.mockResolvedValue(undefined);
+        describe("POST /admin/users", () => {
+            it("creates a new user", async () => {
+                const app = createApp();
 
-                await mockUserService.deleteUser("user-1");
+                const res = await app.request("/admin/users", {
+                    ...json({ email: "new@test.com", displayName: "New", password: "StrongPass1", roles: ["editor"] }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(res.status).toBe(201);
+                const body = await res.json() as any;
+                expect(body.user.email).toBe("new@test.com");
+                expect(mockUserSvc.createUser).toHaveBeenCalledWith(expect.objectContaining({
+                    email: "new@test.com",
+                }));
+            });
 
-                expect(mockUserService.deleteUser).toHaveBeenCalledWith("user-1");
+            it("hashes password when provided", async () => {
+                const app = createApp();
+
+                await app.request("/admin/users", {
+                    ...json({ email: "pw@test.com", password: "StrongPass1" }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(hashPassword).toHaveBeenCalledWith("StrongPass1");
+            });
+
+            it("returns 400 for missing email", async () => {
+                const app = createApp();
+
+                const res = await app.request("/admin/users", {
+                    ...json({ displayName: "No Email" }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(res.status).toBe(400);
+            });
+
+            it("returns 409 when email already exists", async () => {
+                const app = createApp();
+                mockUserSvc.getUserByEmail.mockResolvedValueOnce(mockUser());
+
+                const res = await app.request("/admin/users", {
+                    ...json({ email: "existing@test.com" }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(res.status).toBe(409);
+                const body = await res.json() as any;
+                expect(body.error.code).toBe("EMAIL_EXISTS");
+            });
+
+            it("returns 400 for weak password", async () => {
+                const app = createApp();
+                (validatePasswordStrength as jest.Mock).mockReturnValueOnce({ valid: false, errors: ["Too short"] });
+
+                const res = await app.request("/admin/users", {
+                    ...json({ email: "weak@test.com", password: "weak" }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(res.status).toBe(400);
+                const body = await res.json() as any;
+                expect(body.error.code).toBe("WEAK_PASSWORD");
+            });
+
+            it("assigns default editor role when no roles specified", async () => {
+                const app = createApp();
+
+                await app.request("/admin/users", {
+                    ...json({ email: "norole@test.com" }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(mockUserSvc.assignDefaultRole).toHaveBeenCalledWith(expect.any(String), "editor");
+            });
+
+            it("assigns specified roles", async () => {
+                const app = createApp();
+
+                await app.request("/admin/users", {
+                    ...json({ email: "withroles@test.com", roles: ["admin", "editor"] }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(mockUserSvc.setUserRoles).toHaveBeenCalledWith(expect.any(String), ["admin", "editor"]);
             });
         });
 
-        describe("PUT /admin/users/:id/roles (admin required)", () => {
-            it("should update user roles", async () => {
-                mockUserService.setUserRoles.mockResolvedValue(undefined);
+        describe("PUT /admin/users/:userId", () => {
+            it("updates user profile", async () => {
+                const app = createApp();
+                mockUserSvc.getUserById.mockResolvedValueOnce(mockUser({ id: "u1" }));
+                mockUserSvc.getUserWithRoles.mockResolvedValueOnce({
+                    user: mockUser({ id: "u1", displayName: "Updated" }),
+                    roles: [mockRole("editor")],
+                });
 
-                await mockUserService.setUserRoles("user-1", ["admin", "editor"]);
+                const res = await app.request("/admin/users/u1", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json", ...adminAuth() },
+                    body: JSON.stringify({ displayName: "Updated" }),
+                });
+                expect(res.status).toBe(200);
+                const body = await res.json() as any;
+                expect(body.user.displayName).toBe("Updated");
+            });
 
-                expect(mockUserService.setUserRoles).toHaveBeenCalledWith("user-1", ["admin", "editor"]);
+            it("updates roles when specified", async () => {
+                const app = createApp();
+                mockUserSvc.getUserById.mockResolvedValueOnce(mockUser({ id: "u1" }));
+                mockUserSvc.getUserWithRoles.mockResolvedValueOnce({
+                    user: mockUser({ id: "u1" }),
+                    roles: [mockRole("admin")],
+                });
+
+                await app.request("/admin/users/u1", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json", ...adminAuth() },
+                    body: JSON.stringify({ roles: ["admin"] }),
+                });
+                expect(mockUserSvc.setUserRoles).toHaveBeenCalledWith("u1", ["admin"]);
+            });
+
+            it("returns 404 for non-existent user", async () => {
+                const app = createApp();
+                mockUserSvc.getUserById.mockResolvedValueOnce(null);
+
+                const res = await app.request("/admin/users/missing", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json", ...adminAuth() },
+                    body: JSON.stringify({ displayName: "Updated" }),
+                });
+                expect(res.status).toBe(404);
+            });
+        });
+
+        describe("DELETE /admin/users/:userId", () => {
+            it("deletes a user", async () => {
+                const app = createApp();
+                mockUserSvc.getUserById.mockResolvedValueOnce(mockUser({ id: "u1" }));
+
+                const res = await app.request("/admin/users/u1", {
+                    method: "DELETE",
+                    headers: { ...adminAuth("admin-1") },
+                });
+                expect(res.status).toBe(200);
+                expect(mockUserSvc.deleteUser).toHaveBeenCalledWith("u1");
+            });
+
+            it("prevents self-deletion", async () => {
+                const app = createApp();
+
+                const res = await app.request("/admin/users/admin-1", {
+                    method: "DELETE",
+                    headers: { ...adminAuth("admin-1") },
+                });
+                expect(res.status).toBe(400);
+                const body = await res.json() as any;
+                expect(body.error.code).toBe("SELF_DELETE");
+            });
+
+            it("returns 404 for non-existent user", async () => {
+                const app = createApp();
+                mockUserSvc.getUserById.mockResolvedValueOnce(null);
+
+                const res = await app.request("/admin/users/missing", {
+                    method: "DELETE",
+                    headers: { ...adminAuth() },
+                });
+                expect(res.status).toBe(404);
             });
         });
     });
 
-    describe("Role Management Endpoints", () => {
+    // ── Role CRUD ───────────────────────────────────────────────────────
+    describe("Role Management", () => {
         describe("GET /admin/roles", () => {
-            it("should return list of roles", async () => {
-                const mockRoles = [
-                    { id: "admin", name: "Admin", isAdmin: true },
-                    { id: "editor", name: "Editor", isAdmin: false }
-                ];
-                mockRoleService.listRoles.mockResolvedValue(mockRoles as unknown as Awaited<ReturnType<typeof mockRoleService.listRoles>>);
+            it("returns list of roles", async () => {
+                const app = createApp();
+                mockRoleSvc.listRoles.mockResolvedValueOnce([
+                    mockRole("admin", true),
+                    mockRole("editor"),
+                    mockRole("viewer"),
+                ]);
 
-                const roles = await mockRoleService.listRoles();
-
-                expect(roles).toHaveLength(2);
+                const res = await app.request("/admin/roles", { headers: { ...adminAuth() } });
+                expect(res.status).toBe(200);
+                const body = await res.json() as any;
+                expect(body.roles).toHaveLength(3);
+                expect(body.roles[0].isAdmin).toBe(true);
             });
         });
 
-        describe("GET /admin/roles/:id", () => {
-            it("should return role by ID", async () => {
-                const mockRole = { id: "admin", name: "Admin", isAdmin: true };
-                mockRoleService.getRoleById.mockResolvedValue(mockRole as unknown as Role);
+        describe("GET /admin/roles/:roleId", () => {
+            it("returns role by ID", async () => {
+                const app = createApp();
+                mockRoleSvc.getRoleById.mockResolvedValueOnce(mockRole("admin", true));
 
-                const role = await mockRoleService.getRoleById("admin");
-
-                expect(role?.id).toBe("admin");
-                expect(role?.isAdmin).toBe(true);
+                const res = await app.request("/admin/roles/admin", { headers: { ...adminAuth() } });
+                expect(res.status).toBe(200);
+                const body = await res.json() as any;
+                expect(body.role.id).toBe("admin");
+                expect(body.role.isAdmin).toBe(true);
             });
 
-            it("should return null for non-existent role", async () => {
-                mockRoleService.getRoleById.mockResolvedValue(null);
+            it("returns 404 for non-existent role", async () => {
+                const app = createApp();
+                mockRoleSvc.getRoleById.mockResolvedValueOnce(null);
 
-                const role = await mockRoleService.getRoleById("nonexistent");
-
-                expect(role).toBeNull();
-            });
-        });
-
-        describe("POST /admin/roles (admin required)", () => {
-            it("should create a new role", async () => {
-                const newRole = { id: "custom", name: "Custom Role" };
-                const createdRole = { ...newRole, isAdmin: false, defaultPermissions: null, collectionPermissions: null, config: null };
-                mockRoleService.createRole.mockResolvedValue(createdRole as unknown as Role);
-
-                const role = await mockRoleService.createRole(newRole as unknown as Parameters<typeof mockRoleService.createRole>[0]);
-
-                expect(role.id).toBe("custom");
-                expect(role.name).toBe("Custom Role");
+                const res = await app.request("/admin/roles/missing", { headers: { ...adminAuth() } });
+                expect(res.status).toBe(404);
             });
         });
 
-        describe("PUT /admin/roles/:id (admin required)", () => {
-            it("should update an existing role", async () => {
-                const updatedRole = { id: "editor", name: "Super Editor", isAdmin: false };
-                mockRoleService.updateRole.mockResolvedValue(updatedRole as unknown as Role);
+        describe("POST /admin/roles", () => {
+            it("creates a new role", async () => {
+                const app = createApp();
 
-                const role = await mockRoleService.updateRole("editor", { name: "Super Editor" });
+                const res = await app.request("/admin/roles", {
+                    ...json({ id: "custom", name: "Custom Role" }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(res.status).toBe(201);
+                const body = await res.json() as any;
+                expect(body.role.id).toBe("custom");
+            });
 
-                expect(role?.name).toBe("Super Editor");
+            it("returns 400 for missing id or name", async () => {
+                const app = createApp();
+
+                const res = await app.request("/admin/roles", {
+                    ...json({ id: "nope" }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(res.status).toBe(400);
+            });
+
+            it("returns 409 when role already exists", async () => {
+                const app = createApp();
+                mockRoleSvc.getRoleById.mockResolvedValueOnce(mockRole("custom"));
+
+                const res = await app.request("/admin/roles", {
+                    ...json({ id: "custom", name: "Dup" }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(res.status).toBe(409);
+                const body = await res.json() as any;
+                expect(body.error.code).toBe("ROLE_EXISTS");
             });
         });
 
-        describe("DELETE /admin/roles/:id (admin required)", () => {
-            it("should delete a role", async () => {
-                mockRoleService.deleteRole.mockResolvedValue(undefined);
+        describe("PUT /admin/roles/:roleId", () => {
+            it("updates an existing role", async () => {
+                const app = createApp();
+                mockRoleSvc.getRoleById.mockResolvedValueOnce(mockRole("editor"));
 
-                await mockRoleService.deleteRole("custom");
+                const res = await app.request("/admin/roles/editor", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json", ...adminAuth() },
+                    body: JSON.stringify({ name: "Super Editor" }),
+                });
+                expect(res.status).toBe(200);
+                expect(mockRoleSvc.updateRole).toHaveBeenCalledWith("editor", expect.objectContaining({
+                    name: "Super Editor",
+                }));
+            });
 
-                expect(mockRoleService.deleteRole).toHaveBeenCalledWith("custom");
+            it("returns 404 for non-existent role", async () => {
+                const app = createApp();
+                mockRoleSvc.getRoleById.mockResolvedValueOnce(null);
+
+                const res = await app.request("/admin/roles/missing", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json", ...adminAuth() },
+                    body: JSON.stringify({ name: "Nope" }),
+                });
+                expect(res.status).toBe(404);
             });
         });
-    });
 
-    describe("Permission Checks", () => {
-        it("should allow read operations for authenticated users", () => {
-            // Authenticated users (editor role) can read
-            mockReq = { user: regularUser };
-            expect(mockReq.user).toBeDefined();
-        });
+        describe("DELETE /admin/roles/:roleId", () => {
+            it("deletes a custom role", async () => {
+                const app = createApp();
+                mockRoleSvc.getRoleById.mockResolvedValueOnce(mockRole("custom"));
 
-        it("should block write operations for non-admin users", () => {
-            // Non-admin users should not be able to create/update/delete
-            mockReq = { user: regularUser };
-            expect(mockReq.user?.roles).not.toContain("admin");
-        });
+                const res = await app.request("/admin/roles/custom", {
+                    method: "DELETE",
+                    headers: { ...adminAuth() },
+                });
+                expect(res.status).toBe(200);
+                expect(mockRoleSvc.deleteRole).toHaveBeenCalledWith("custom");
+            });
 
-        it("should allow write operations for admin users", () => {
-            // Admin users can perform all operations
-            mockReq = { user: adminUser };
-            expect(mockReq.user?.roles).toContain("admin");
+            it("prevents deletion of built-in admin role", async () => {
+                const app = createApp();
+
+                const res = await app.request("/admin/roles/admin", {
+                    method: "DELETE",
+                    headers: { ...adminAuth() },
+                });
+                expect(res.status).toBe(400);
+                const body = await res.json() as any;
+                expect(body.error.code).toBe("BUILTIN_ROLE");
+            });
+
+            it("prevents deletion of built-in editor role", async () => {
+                const app = createApp();
+
+                const res = await app.request("/admin/roles/editor", {
+                    method: "DELETE",
+                    headers: { ...adminAuth() },
+                });
+                expect(res.status).toBe(400);
+            });
+
+            it("prevents deletion of built-in viewer role", async () => {
+                const app = createApp();
+
+                const res = await app.request("/admin/roles/viewer", {
+                    method: "DELETE",
+                    headers: { ...adminAuth() },
+                });
+                expect(res.status).toBe(400);
+            });
+
+            it("returns 404 for non-existent role", async () => {
+                const app = createApp();
+                mockRoleSvc.getRoleById.mockResolvedValueOnce(null);
+
+                const res = await app.request("/admin/roles/ghost", {
+                    method: "DELETE",
+                    headers: { ...adminAuth() },
+                });
+                expect(res.status).toBe(404);
+            });
         });
     });
 });

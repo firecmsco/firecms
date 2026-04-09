@@ -24,8 +24,9 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
+            "@rebasepro/backend": path.resolve(__dirname, "../backend/src"),
+            "@rebasepro/core": path.resolve(__dirname, "../core/src"),
             "@rebasepro/types": path.resolve(__dirname, "../types/src"),
-            "@rebasepro/backend": path.resolve(__dirname, "../backend/src")
         }
     }
 }));

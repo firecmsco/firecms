@@ -29,6 +29,11 @@ export default defineConfig(() => ({
             external: isExternal
         }
     },
+    resolve: {
+        alias: {
+            "@rebasepro/types": path.resolve(__dirname, "../types/src"),
+        }
+    },
     plugins: [
         preserveDirectives() as Plugin,
         react({

@@ -197,7 +197,7 @@ export function createAuthMiddleware(options: AuthMiddlewareOptions): Middleware
                         const user = { uid: payload.userId, roles: payload.roles };
                         c.set("driver", await scopeDataDriver(driver, user));
                     } else {
-                        console.error("[AUTH] Token payload empty or invalid for token: " + token.substring(0, 10));
+                        console.error("[AUTH] Token payload empty or invalid (length: " + token.length + ")");
                         c.set("driver", driver);
                     }
                 } else {

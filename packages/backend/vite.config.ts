@@ -29,8 +29,8 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
+            "@rebasepro/common": path.resolve(__dirname, "../common/src"),
             "@rebasepro/types": path.resolve(__dirname, "../types/src"),
-            "@rebasepro/common": path.resolve(__dirname, "../common/src")
         }
     },
     plugins: [

@@ -1,66 +1,67 @@
 {
-  "name": "@rebasepro/cli",
-  "version": "0.0.1",
-  "description": "Developer tools for Rebase projects",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.es.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
-  "source": "src/index.ts",
-  "bin": {
-    "rebase": "bin/rebase.js"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.json",
-    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
-  },
-  "keywords": [
-    "cli",
-    "create-rebase-app",
-    "rebase",
-    "cms",
-    "react",
-    "typescript",
-    "postgresql"
-  ],
-  "author": "rebase.pro",
-  "license": "MIT",
-  "dependencies": {
-    "@rebasepro/sdk_generator": "0.0.1",
-    "@rebasepro/types": "0.0.1",
-    "arg": "^5.0.2",
-    "chalk": "^4.1.2",
-    "dotenv": "^16.0.0",
-    "execa": "^4.1.0",
-    "inquirer": "12.11.1",
-    "jiti": "^2.4.2",
-    "ncp": "^2.0.0",
-    "pnpm": "^9.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.19.17",
-    "typescript": "^5.9.3",
-    "vite": "^7.2.4"
-  },
-  "files": [
-    "bin/",
-    "dist/",
-    "templates/"
-  ],
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "exclude": [
-    "node_modules",
-    "templates/template/node_modules"
-  ],
-  "gitHead": "d935eefa5aa8d1009a2398cfac2c1e4ee9aeb6b6"
+    "name": "@rebasepro/cli",
+    "version": "0.0.1",
+    "description": "Developer tools for Rebase projects",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.es.js",
+    "types": "./dist/index.d.ts",
+    "type": "module",
+    "source": "src/index.ts",
+    "bin": {
+        "rebase": "bin/rebase.js"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 0",
+        "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.json",
+        "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+    },
+    "keywords": [
+        "cli",
+        "create-rebase-app",
+        "rebase",
+        "cms",
+        "react",
+        "typescript",
+        "postgresql"
+    ],
+    "author": "rebase.pro",
+    "license": "MIT",
+    "dependencies": {
+        "@rebasepro/sdk_generator": "0.0.1",
+        "@rebasepro/types": "0.0.1",
+        "arg": "^5.0.2",
+        "chalk": "^4.1.2",
+        "dotenv": "^16.0.0",
+        "execa": "^4.1.0",
+        "inquirer": "12.11.1",
+        "jiti": "^2.4.2",
+        "ncp": "^2.0.0",
+        "pnpm": "^9.0.0",
+        "@rebasepro/backend": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/node": "^20.19.17",
+        "typescript": "^5.9.3",
+        "vite": "^7.2.4"
+    },
+    "files": [
+        "bin/",
+        "dist/",
+        "templates/"
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.es.js",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "exclude": [
+        "node_modules",
+        "templates/template/node_modules"
+    ],
+    "gitHead": "d935eefa5aa8d1009a2398cfac2c1e4ee9aeb6b6"
 }

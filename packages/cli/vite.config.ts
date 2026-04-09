@@ -27,5 +27,12 @@ export default defineConfig(() => ({
             external: isExternal
         }
     },
+        resolve: {
+        alias: {
+            "@rebasepro/backend": path.resolve(__dirname, "../backend/src"),
+            "@rebasepro/sdk_generator": path.resolve(__dirname, "../sdk_generator/src"),
+            "@rebasepro/types": path.resolve(__dirname, "../types/src"),
+        }
+    },
     plugins: []
 }));

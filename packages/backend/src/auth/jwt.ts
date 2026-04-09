@@ -67,7 +67,8 @@ export function generateAccessToken(userId: string, roles: string[]): string {
     const payload: AccessTokenPayload = { userId, roles };
 
     return jwt.sign(payload, jwtConfig.secret, {
-        expiresIn: jwtConfig.accessExpiresIn as jwt.SignOptions["expiresIn"]
+        expiresIn: jwtConfig.accessExpiresIn as jwt.SignOptions["expiresIn"],
+        algorithm: "HS256"
     });
 }
 
@@ -111,7 +112,7 @@ export function verifyAccessToken(token: string): AccessTokenPayload | null {
     }
 
     try {
-        const decoded = jwt.verify(token, jwtConfig.secret) as jwt.JwtPayload & AccessTokenPayload;
+        const decoded = jwt.verify(token, jwtConfig.secret, { algorithms: ["HS256"] }) as jwt.JwtPayload & AccessTokenPayload;
         return {
             userId: decoded.userId,
             roles: decoded.roles

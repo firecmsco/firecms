@@ -36,10 +36,12 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
+            "@rebasepro/client": path.resolve(__dirname, "../client/src"),
             "@rebasepro/common": path.resolve(__dirname, "../common/src"),
+            "@rebasepro/core": path.resolve(__dirname, "../core/src"),
+            "@rebasepro/formex": path.resolve(__dirname, "../formex/src"),
             "@rebasepro/types": path.resolve(__dirname, "../types/src"),
-            "@rebasepro/formex": path.resolve(__dirname, "../formex/src")
+            "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
         }
     },
     plugins: [
