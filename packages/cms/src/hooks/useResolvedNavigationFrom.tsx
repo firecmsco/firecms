@@ -1,8 +1,8 @@
 import type { EntityCollection, EntityCustomView } from "@rebasepro/types";
 import { Entity, RebaseContext, User } from "@rebasepro/types";
 import { useEffect, useState } from "react";
-import { useRebaseContext } from "@rebasepro/core";
 import { getNavigationEntriesFromPath } from "@rebasepro/common";
+import { useCMSContext } from "./useCMSContext";
 
 /**
  * @see resolveNavigationFrom
@@ -123,22 +123,23 @@ export interface NavigationFrom<M extends Record<string, any>> {
  * in any React component that lives under `Rebase`
  * @group Hooks and utilities
  */
-export function useResolvedNavigationFrom<M extends Record<string, any>, USER extends User>(
+export function useResolvedNavigationFrom<M extends Record<string, any>>(
     {
         path
     }: NavigationFromProps): NavigationFrom<M> {
 
-    const context: RebaseContext<USER> = useRebaseContext();
+    const context = useCMSContext();
+    const { navigationStateController, collectionRegistryController } = context;
 
     const [data, setData] = useState<ResolvedNavigationEntry<M>[] | undefined>();
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
 
     useEffect(() => {
-        if (context.navigationStateController && context.collectionRegistryController) {
+        if (navigationStateController && collectionRegistryController) {
             setDataLoading(true);
             setDataLoadingError(undefined);
-            resolveNavigationFrom<M, USER>({ path, context })
+            resolveNavigationFrom<M, User>({ path, context })
                 .then(setData)
                 .catch((e) => setDataLoadingError(e))
                 .finally(() => setDataLoading(false));
@@ -146,7 +147,7 @@ export function useResolvedNavigationFrom<M extends Record<string, any>, USER ex
 
     }, [path, context]);
 
-    if (!context.navigationStateController) {
+    if (!navigationStateController) {
         return { dataLoading: true };
     }
 

@@ -7,6 +7,7 @@ import { Badge, Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleto
 import { useRebaseContext, useLargeLayout, useTranslation } from "@rebasepro/core";
 import { getEntityFromCache } from "@rebasepro/core";
 import { getLocalChangesBackup } from "@rebasepro/common";
+import { useSideEntityController, useCMSContext } from "../../index";
 
 /**
  *
@@ -69,7 +70,8 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
 
     const largeLayout = useLargeLayout();
 
-    const context = useRebaseContext();
+    const context = useCMSContext();
+    const sideEntityCtrl = context.sideEntityController;
     const { t } = useTranslation();
 
     const onCheckedChange = useCallback((checked: boolean) => {
@@ -118,6 +120,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                     path,
                                     collection,
                                     context,
+                                    sideEntityController: sideEntityCtrl,
                                     selectionController,
                                     highlightEntity,
                                     unhighlightEntity,
@@ -161,6 +164,7 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
                                             path,
                                             collection,
                                             context,
+                                            sideEntityController: sideEntityCtrl,
                                             selectionController,
                                             highlightEntity,
                                             unhighlightEntity,

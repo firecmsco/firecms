@@ -29,7 +29,7 @@ import { SideDialogController, useSideDialogContext } from "./SideDialogs";
 import { FormexController } from "@rebasepro/formex";
 import { ErrorTooltip } from "@rebasepro/core";
 import { usePermissions } from "@rebasepro/core";
-import { useSideEntityController } from "../index";
+import { useCMSContext } from "../index";
 
 export function EntityEditViewFormActions({
     collection,
@@ -48,8 +48,8 @@ export function EntityEditViewFormActions({
 }: EntityFormActionsProps) {
 
     const { canCreate, canDelete } = usePermissions();
-    const context = useRebaseContext();
-    const sideEntityController = useSideEntityController();
+    const context = useCMSContext();
+    const sideEntityController = context.sideEntityController;
     const sideDialogContext = useSideDialogContext();
     const customizationController = useCustomizationController();
     const { t } = useTranslation();

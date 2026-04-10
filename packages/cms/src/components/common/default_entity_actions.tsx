@@ -17,6 +17,7 @@ export const editEntityAction: EntityAction = {
         collection,
         path,
         context,
+        sideEntityController,
         highlightEntity,
         unhighlightEntity,
         openEntityMode
@@ -24,6 +25,10 @@ export const editEntityAction: EntityAction = {
 
         if (!entity) {
             throw new Error("INTERNAL: editEntityAction: Entity is undefined");
+        }
+
+        if (!sideEntityController) {
+            throw new Error("INTERNAL: editEntityAction: sideEntityController is undefined");
         }
 
         highlightEntity?.(entity);
@@ -50,7 +55,7 @@ export const editEntityAction: EntityAction = {
             collection,
             entityId: entity.id,
             path: newFullIdPath,
-            sideEntityController: context.sideEntityController!,
+            sideEntityController,
             onClose: () => unhighlightEntity?.(entity),
             navigation: context.urlController!,
             selectedTab: defaultSelectedView
@@ -70,12 +75,16 @@ export const copyEntityAction: EntityAction = {
         collection,
         context,
         path,
+        sideEntityController,
         highlightEntity,
         unhighlightEntity,
         openEntityMode
     }): Promise<void> {
         if (!entity) {
             throw new Error("INTERNAL: copyEntityAction: Entity is undefined");
+        }
+        if (!sideEntityController) {
+            throw new Error("INTERNAL: copyEntityAction: sideEntityController is undefined");
         }
         highlightEntity?.(entity);
         context.analyticsController?.onAnalyticsEvent?.("copy_entity_click", {
@@ -90,7 +99,7 @@ export const copyEntityAction: EntityAction = {
             entityId: entity.id,
             path: usedPath,
             copy: true,
-            sideEntityController: context.sideEntityController!,
+            sideEntityController,
             onClose: () => unhighlightEntity?.(entity),
             navigation: context.urlController!
         });

@@ -56,7 +56,6 @@
         "@floating-ui/dom": "^1.7.4",
         "@radix-ui/react-portal": "^1.1.10",
         "@radix-ui/react-slot": "^1.2.4",
-        "@rebasepro/client": "0.0.1",
         "@rebasepro/common": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/formex": "0.0.1",

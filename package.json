@@ -25,8 +25,7 @@
         "packages/mongodb",
         "packages/firebase",
         "packages/datatalk",
-        "packages/data_import",
-        "packages/data_export",
+
         "packages/data_enhancement",
         "packages/schema_inference",
         "packages/sdk_generator",

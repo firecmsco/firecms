@@ -331,6 +331,14 @@ export function JSEditor() {
     // ─── Create an authenticated client for execution ────────────
 
     const buildClient = useCallback(async () => {
+        // If not running as another user safely reuse the application's global client.
+        if (!selectedUser || (currentUser && selectedUser.uid === currentUser.uid)) {
+            if (!rebaseContext.client) {
+                throw new Error("Application client is not initialized.");
+            }
+            return { client: rebaseContext.client, isScoped: false };
+        }
+
         const apiUrl = apiConfig?.apiUrl;
         const getAuthToken = apiConfig?.getAuthToken;
 
@@ -348,14 +356,15 @@ export function JSEditor() {
             throw new Error("No auth token available. Please sign in first.");
         }
 
-        // Create a fresh client with the token
+        // Create a fresh 'scoped' client. This enables us to attach custom auth later for this specific execution
+        // without mutating the global client.
         const client = createRebaseClient({
             baseUrl: apiUrl,
             token,
         });
 
-        return client;
-    }, [apiConfig]);
+        return { client, isScoped: true };
+    }, [apiConfig, rebaseContext.client, selectedUser, currentUser]);
 
     // ─── Execution engine ────────────────────────────────────────
 
@@ -374,6 +383,7 @@ export function JSEditor() {
 
         const consoleEntries: ConsoleEntry[] = [];
         const startTime = performance.now();
+        let scopedClientToCleanUp: any = null;
 
         // Capture console methods
         const originalConsole = {
@@ -395,7 +405,10 @@ export function JSEditor() {
             console.info = captureConsole("info");
 
             // Build an authenticated client
-            const client = await buildClient();
+            const { client, isScoped } = await buildClient();
+            if (isScoped) {
+                scopedClientToCleanUp = client;
+            }
 
             // Build context object with useful info about selected user
             const context = {
@@ -447,6 +460,11 @@ export function JSEditor() {
             console.error = originalConsole.error;
             console.info = originalConsole.info;
             setIsRunning(false);
+
+            if (scopedClientToCleanUp) {
+                // Ensure we disconnect WebSockets to prevent leaking connections
+                scopedClientToCleanUp.ws?.disconnect();
+            }
         }
     }, [activeTab?.code, buildClient, selectedUser, currentUser, collectionInfos]);
 
@@ -616,7 +634,7 @@ export function JSEditor() {
                                                         <IconButton
                                                             size="smallest"
                                                             onClick={(e) => { e.stopPropagation(); closeTab(tab.id); }}
-                                                            className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
+                                                            className="ml-1 !p-0.5 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
                                                         >
                                                             <CloseIcon size="smallest" />
                                                         </IconButton>

@@ -11,7 +11,6 @@
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "dependencies": {
-        "@rebasepro/client": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/types": "0.0.1",
         "@rebasepro/ui": "0.0.1"

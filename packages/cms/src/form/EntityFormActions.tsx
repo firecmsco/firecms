@@ -14,9 +14,9 @@ import {
     LoadingButton,
     Typography
 } from "@rebasepro/ui";
-import { useRebaseContext, useTranslation } from "@rebasepro/core";
+import { useTranslation } from "@rebasepro/core";
 import { FormexController } from "@rebasepro/formex";
-import { useSideEntityController } from "../index";
+import { useCMSContext } from "../index";
 
 export function EntityFormActions({
     path,
@@ -33,8 +33,8 @@ export function EntityFormActions({
     formContext
 }: EntityFormActionsProps) {
 
-    const context = useRebaseContext();
-    const sideEntityController = useSideEntityController();
+    const context = useCMSContext();
+    const sideEntityController = context.sideEntityController;
     const { t } = useTranslation();
 
     return layout === "bottom"

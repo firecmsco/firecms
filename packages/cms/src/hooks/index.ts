@@ -12,3 +12,4 @@ export * from "./navigation/useResolvedViews";
 export * from "./navigation/useTopLevelNavigation";
 export * from "./useSideDialogsController";
 export * from "./useBreadcrumbsController";
+export * from "./useCMSContext";

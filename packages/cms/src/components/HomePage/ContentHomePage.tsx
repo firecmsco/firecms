@@ -19,10 +19,9 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifiers";
 import { RenameGroupDialog } from "./RenameGroupDialog";
 import { toArray } from "@rebasepro/utils";
-import { useCollapsedGroups, useCustomizationController, useRebaseContext, useTranslation, useSlot } from "@rebasepro/core";
+import { useCollapsedGroups, useCustomizationController, useTranslation, useSlot } from "@rebasepro/core";
 import { useRestoreScroll } from "@rebasepro/core";
-import { useNavigationStateController } from "../../index";
-import { useBreadcrumbsController } from "../../index";
+import { useBreadcrumbsController, useCMSContext } from "../../index";
 
 export const DEFAULT_GROUP_NAME = "Views";
 export const ADMIN_GROUP_NAME = "Admin";
@@ -41,10 +40,10 @@ export function ContentHomePage({
     hiddenGroups?: string[];
 }) {
 
-    const context = useRebaseContext();
+    const context = useCMSContext();
+    const { navigationStateController } = context;
     const customizationController = useCustomizationController();
     const { resolvedSlots } = customizationController;
-    const navigationStateController = useNavigationStateController();
     const breadcrumbs = useBreadcrumbsController();
     const { t } = useTranslation();
 

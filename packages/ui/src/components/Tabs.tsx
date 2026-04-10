@@ -156,10 +156,11 @@ export function Tab({
                 "disabled:pointer-events-none disabled:opacity-50",
                 variant === "standard" && "rounded-sm px-3 py-1.5 data-[state=active]:bg-white data-[state=active]:text-surface-900 dark:data-[state=active]:bg-surface-950 dark:data-[state=active]:text-surface-50",
                 variant === "boxy" && cls(
-                    "flex-shrink-0 flex items-center gap-1.5 px-3.5 py-2 border-r border-surface-200 dark:border-surface-800 cursor-pointer text-[12px] font-medium transition-colors group relative",
+                    "flex-shrink-0 flex items-center gap-1.5 px-3.5 h-9 border-r border-surface-200 dark:border-surface-800 cursor-pointer text-[12px] font-medium transition-colors group relative box-border overflow-hidden",
+                    "border-b-2 border-b-transparent",
                     "data-[state=active]:bg-surface-50 dark:data-[state=active]:bg-surface-800",
                     "data-[state=active]:text-text-primary dark:data-[state=active]:text-text-primary-dark",
-                    "data-[state=active]:border-b-2 data-[state=active]:border-b-primary",
+                    "data-[state=active]:border-b-primary",
                     "text-text-secondary dark:text-text-secondary-dark hover:bg-surface-100 dark:hover:bg-surface-800"
                 ),
                 variant === "pill" && cls(

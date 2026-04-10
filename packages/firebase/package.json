@@ -14,10 +14,8 @@
         "@rebasepro/cms": "workspace:*",
         "@rebasepro/common": "0.0.1",
         "@rebasepro/core": "0.0.1",
-        "@rebasepro/studio": "0.0.1",
         "@rebasepro/types": "0.0.1",
         "@rebasepro/ui": "0.0.1",
-        "react-router": "^7.13.1",
         "react-router-dom": "^7.13.1"
     },
     "peerDependencies": {

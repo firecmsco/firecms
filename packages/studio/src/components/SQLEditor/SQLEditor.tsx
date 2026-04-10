@@ -1,6 +1,6 @@
 import { IconForView } from "@rebasepro/core";
 ;
-import { useCollectionRegistryController } from "@rebasepro/cms";
+import { useCollectionRegistryController, useSideEntityController } from "@rebasepro/cms";
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
     Button,
@@ -87,7 +87,8 @@ const STORAGE_KEY_TABS = "rebase_sql_tabs";
 const STORAGE_KEY_ACTIVE_TAB = "rebase_sql_active_tab";
 
 export const SQLEditor = () => {
-    const { databaseAdmin, sideEntityController } = useRebaseContext();
+    const { databaseAdmin } = useRebaseContext();
+    const sideEntityController = useSideEntityController();
     const snackbarController = useSnackbarController();
     const collectionRegistry = useCollectionRegistryController();
 
@@ -1113,7 +1114,7 @@ export const SQLEditor = () => {
                                                     <IconButton
                                                         size="smallest"
                                                         onClick={(e) => handleCloseTab(tab.id, e)}
-                                                        className="ml-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
+                                                        className="ml-1 !p-0.5 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
                                                     >
                                                         <CloseIcon size="smallest" />
                                                     </IconButton>
