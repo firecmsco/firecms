@@ -11,3 +11,6 @@ export { UnsavedChangesDialog } from "./components/UnsavedChangesDialog";
 export * from "./i18n/RebaseI18nProvider";
 export * from "./locales/en";
 export * from "./locales/es";
+
+// Studio Bridge — shared context for optional CMS↔Studio integration
+export * from "./hooks/useStudioBridge";

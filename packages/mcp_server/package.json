@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.2.0",
-    "@rebasepro/client": "0.0.1",
+    "@rebasepro/client-rebase": "0.0.1",
     "dotenv": "^16.0.0"
   },
   "devDependencies": {

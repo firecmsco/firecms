@@ -22,8 +22,8 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@rebasepro/auth": [
-        "../../packages/auth/src"
+      "@rebasepro/auth-rebase": [
+        "../../packages/auth-rebase/src"
       ],
       "@rebasepro/core": [
         "../../packages/core/src"
@@ -47,9 +47,6 @@
         "../../packages/data_enhancement/src"
       ],
 
-      "@rebasepro/user_management": [
-        "../../packages/user_management/src"
-      ],
       "@rebasepro/studio": [
         "../../packages/studio/src"
       ],
@@ -59,8 +56,8 @@
       "@rebasepro/cms": [
         "../../packages/cms/src"
       ],
-      "@rebasepro/client": [
-        "../../packages/client/src"
+      "@rebasepro/client-rebase": [
+        "../../packages/client-rebase/src"
       ],
       "@rebasepro/formex": [
         "../../packages/formex/src"

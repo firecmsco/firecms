@@ -1,4 +1,4 @@
-import { useCollectionRegistryController } from "@rebasepro/cms";
+import { useStudioCollectionRegistry } from "@rebasepro/core";
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
     Paper,
@@ -45,7 +45,7 @@ export interface TableRLSStatus {
 export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
     const { databaseAdmin } = useRebaseContext();
     const snackbarController = useSnackbarController();
-    const collectionRegistry = useCollectionRegistryController();
+    const collectionRegistry = useStudioCollectionRegistry();
     const { t } = useTranslation();
 
     const [isLoading, setIsLoading] = useState(true);

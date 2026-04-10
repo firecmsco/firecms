@@ -6,18 +6,21 @@ import { SQLEditor } from "./SQLEditor/SQLEditor";
 import { JSEditor } from "./JSEditor/JSEditor";
 import { RLSEditor } from "./RLSEditor/RLSEditor";
 import { StorageView } from "./StorageView/StorageView";
-import { CollectionsStudioView } from "../ui/collection_editor/CollectionsStudioView";
 
 /**
  * Declarative component to configure the Studio in Rebase.
  * Renders nothing — purely registers config into the RebaseRegistry.
+ *
+ * The "schema" tool (collection editor) is no longer built-in.
+ * It now lives in `@rebasepro/cms` and can be injected via the
+ * `additionalViews` prop.
  */
-export function RebaseStudio({ configController, tools, homePage }: RebaseStudioConfig) {
+export function RebaseStudio({ configController, tools, homePage, additionalViews }: RebaseStudioConfig & { additionalViews?: AppView[] }) {
     const dispatch = useRebaseRegistryDispatch();
     
     const devViews: AppView[] = useMemo(() => {
         const views: AppView[] = [];
-        const activeTools = tools ?? ["sql", "js", "rls", "schema", "storage"];
+        const activeTools = tools ?? ["sql", "js", "rls", "storage"];
         
         if (activeTools.includes("sql")) {
             views.push({ slug: "sql", name: "SQL Console", group: "Database", icon: "terminal", description: "Execute SQL queries", view: <SQLEditor /> });
@@ -28,14 +31,15 @@ export function RebaseStudio({ configController, tools, homePage }: RebaseStudio
         if (activeTools.includes("rls")) {
             views.push({ slug: "rls", name: "RLS Policies", group: "Database", icon: "security", description: "Row Level Security", view: <RLSEditor /> });
         }
-        if (activeTools.includes("schema")) {
-            views.push({ slug: "schema", name: "Edit collections", group: "Schema", icon: "view_list", nestedRoutes: true, view: <CollectionsStudioView configController={configController} /> });
-        }
         if (activeTools.includes("storage")) {
             views.push({ slug: "storage", name: "Storage", group: "Storage", icon: "cloud", description: "Manage storage files", view: <StorageView /> });
         }
+        // Append any additional views (e.g. schema editor from CMS)
+        if (additionalViews) {
+            views.push(...additionalViews);
+        }
         return views;
-    }, [tools, configController]);
+    }, [tools, configController, additionalViews]);
 
     useLayoutEffect(() => {
         dispatch.registerStudio({ configController, tools, homePage, devViews });

@@ -482,6 +482,13 @@ export interface RebaseTranslations {
     failed_to_bootstrap_admin: string;
     user_deleted_successfully: string;
     error_deleting_user: string;
+    user_created_successfully?: string;
+    invitation_sent?: string;
+    invitation_sent_title?: string;
+    temporary_password?: string;
+    temporary_password_description?: string;
+    copy_password?: string;
+    password_copied?: string;
 
     /** Editor table-bubble */
     add_row_before: string;

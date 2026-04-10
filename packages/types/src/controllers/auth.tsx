@@ -3,6 +3,22 @@ import { Role, User } from "../users";
 import { RebaseData } from "./data";
 
 /**
+ * Capabilities advertised by an auth provider.
+ * UI components use this to show/hide features dynamically
+ * (e.g. password reset, registration, session management).
+ * @group Hooks and utilities
+ */
+export interface AuthCapabilities {
+    emailPasswordLogin?: boolean;
+    googleLogin?: boolean;
+    registration?: boolean;
+    passwordReset?: boolean;
+    sessionManagement?: boolean;
+    profileUpdate?: boolean;
+    emailVerification?: boolean;
+}
+
+/**
  * Controller for retrieving the logged user or performing auth related operations.
  * Note that if you are implementing your AuthController, you probably will want
  * to do it as the result of a hook.
@@ -63,7 +79,38 @@ export type AuthController<USER extends User = any, ExtraData = unknown> = {
 
     setUserRoles?: (roles: Role[]) => void;
 
+    /**
+     * Capabilities advertised by the auth provider.
+     * UI components use this to feature-detect what the backend supports.
+     */
+    capabilities?: AuthCapabilities;
+
 };
+
+/**
+ * Extended auth controller with common optional auth methods.
+ * Backend implementations (Rebase backend, Firebase, Supabase, etc.)
+ * extend this with their own backend-specific extras.
+ * @group Hooks and utilities
+ */
+export interface AuthControllerExtended<USER extends User = any, ExtraData = unknown> extends AuthController<USER, ExtraData> {
+    /** Login with email and password */
+    emailPasswordLogin?: (email: string, password: string) => Promise<void>;
+    /** Login with a Google ID token or trigger Google popup */
+    googleLogin?: (idToken: string) => Promise<void>;
+    /** Register a new user */
+    register?: (email: string, password: string, displayName?: string) => Promise<void>;
+    /** Skip login (for anonymous access if enabled) */
+    skipLogin?: () => void;
+    /** Request password reset email */
+    forgotPassword?: (email: string) => Promise<void>;
+    /** Reset password using a token */
+    resetPassword?: (token: string, password: string) => Promise<void>;
+    /** Change password for the authenticated user */
+    changePassword?: (oldPassword: string, newPassword: string) => Promise<void>;
+    /** Update user profile */
+    updateProfile?: (displayName?: string, photoURL?: string) => Promise<USER>;
+}
 
 /**
  * Implement this function to allow access to specific users.

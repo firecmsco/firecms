@@ -2,13 +2,20 @@ import React from "react";
 import "@fontsource/jetbrains-mono";
 import "typeface-rubik";
 
-import { useRebaseAuthController, useBackendUserManagement, RebaseAuth } from "@rebasepro/auth";
+import { useRebaseAuthController, useBackendUserManagement, RebaseAuth } from "@rebasepro/auth-rebase";
 import { Rebase } from "@rebasepro/core";
-import { RebaseCMS, RebaseShell } from "@rebasepro/cms";
+import {
+    RebaseCMS,
+    RebaseShell,
+    useCollectionEditorPlugin,
+    useLocalCollectionsConfigController,
+    CollectionsStudioView,
+} from "@rebasepro/cms";
 import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
-import { RebaseStudio, useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
-import { createRebaseClient } from "@rebasepro/client";
+import { RebaseStudio } from "@rebasepro/studio";
+import { createRebaseClient } from "@rebasepro/client-rebase";
 import { collections } from "virtual:rebase-collections";
+import type { AppView } from "@rebasepro/types";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
@@ -44,6 +51,16 @@ export function App() {
 
     const plugins = React.useMemo(() => [dataEnhancementPlugin, collectionEditorPlugin], [dataEnhancementPlugin, collectionEditorPlugin]);
 
+    // Schema editor view: provided by CMS, injected into Studio
+    const schemaView: AppView = React.useMemo(() => ({
+        slug: "schema",
+        name: "Edit collections",
+        group: "Schema",
+        icon: "view_list",
+        nestedRoutes: true,
+        view: <CollectionsStudioView configController={collectionConfigController} />,
+    }), [collectionConfigController]);
+
     return (
         <Rebase
             apiUrl={API_URL}
@@ -54,7 +71,10 @@ export function App() {
         >
             <RebaseAuth />
             <RebaseCMS collections={collections} />
-            <RebaseStudio configController={collectionConfigController} />
+            <RebaseStudio
+                configController={collectionConfigController}
+                additionalViews={[schemaView]}
+            />
             <RebaseShell title="Rebase" />
         </Rebase>
     );

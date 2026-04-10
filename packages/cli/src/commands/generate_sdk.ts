@@ -178,7 +178,7 @@ export async function generateSdkCommand(args: GenerateSDKArgs): Promise<void> {
     console.log(chalk.green.bold("  ✓ SDK generated successfully!"));
     console.log("");
     console.log(chalk.gray("  Usage:"));
-    console.log(chalk.gray(`    import { createRebaseClient } from '@rebasepro/client';`));
+    console.log(chalk.gray(`    import { createRebaseClient } from '@rebasepro/client-rebase';`));
     console.log(chalk.gray(`    import type { Database } from './${path.relative(cwd, path.join(resolvedOutput, "database.types"))}';`));
     console.log("");
     console.log(chalk.gray("    const rebase = createRebaseClient<Database>({"));

@@ -67,7 +67,7 @@
         "./package.json": "./package.json"
     },
     "dependencies": {
-        "@rebasepro/client": "0.0.1",
+        "@rebasepro/client-rebase": "0.0.1",
         "@rebasepro/types": "0.0.1"
     },
     "peerDependencies": {

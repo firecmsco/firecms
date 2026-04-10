@@ -1,6 +1,5 @@
 import { IconForView } from "@rebasepro/core";
-;
-import { useCollectionRegistryController, useSideEntityController } from "@rebasepro/cms";
+import { useStudioCollectionRegistry, useStudioSideEntityController } from "@rebasepro/core";
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
     Button,
@@ -37,7 +36,13 @@ import {
     VirtualTable,
     VirtualTableColumn,
 } from "@rebasepro/ui";
-import { VirtualTableInput } from "@rebasepro/cms";
+// VirtualTableInput is conditionally loaded from CMS when available
+let VirtualTableInput: React.ComponentType<any> | null = null;
+try {
+    // @ts-ignore — optional peer dependency
+    const cms = require("@rebasepro/cms");
+    VirtualTableInput = cms.VirtualTableInput;
+} catch { /* CMS not available */ }
 import { useRebaseContext, useSnackbarController, ConfirmationDialog, ErrorView, useTranslation } from "@rebasepro/core";
 import { MonacoEditor } from "./MonacoEditor";
 import { SQLEditorSidebar, Snippet } from "./SQLEditorSidebar";
@@ -88,9 +93,9 @@ const STORAGE_KEY_ACTIVE_TAB = "rebase_sql_active_tab";
 
 export const SQLEditor = () => {
     const { databaseAdmin } = useRebaseContext();
-    const sideEntityController = useSideEntityController();
+    const sideEntityController = useStudioSideEntityController();
     const snackbarController = useSnackbarController();
-    const collectionRegistry = useCollectionRegistryController();
+    const collectionRegistry = useStudioCollectionRegistry();
 
     const { t } = useTranslation();
 
@@ -976,17 +981,36 @@ export const SQLEditor = () => {
                             if (isEditing) {
                                 return (
                                     <div className="absolute inset-x-0 -inset-y-0.5 z-10 bg-surface-50 dark:bg-surface-900 border border-primary dark:border-primary-dark shadow-md overflow-y-auto max-h-[200px] flex px-2 py-1 items-start text-[13px] font-mono">
-                                        <VirtualTableInput
-                                            error={undefined}
-                                            value={displayValue}
-                                            multiline={true}
-                                            focused={true}
-                                            disabled={false}
-                                            updateValue={(newValue: string | null) => {
-                                                handleCellSave(newValue, rowData, column.key, rowIndex);
-                                            }}
-                                            onBlur={() => setEditingCell(null)}
-                                        />
+                                        {VirtualTableInput ? (
+                                            <VirtualTableInput
+                                                error={undefined}
+                                                value={displayValue}
+                                                multiline={true}
+                                                focused={true}
+                                                disabled={false}
+                                                updateValue={(newValue: string | null) => {
+                                                    handleCellSave(newValue, rowData, column.key, rowIndex);
+                                                }}
+                                                onBlur={() => setEditingCell(null)}
+                                            />
+                                        ) : (
+                                            <input
+                                                className="w-full bg-transparent outline-none font-mono text-[13px]"
+                                                defaultValue={displayValue}
+                                                autoFocus
+                                                onBlur={(e) => {
+                                                    handleCellSave(e.target.value || null, rowData, column.key, rowIndex);
+                                                    setEditingCell(null);
+                                                }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter") {
+                                                        handleCellSave((e.target as HTMLInputElement).value || null, rowData, column.key, rowIndex);
+                                                        setEditingCell(null);
+                                                    }
+                                                    if (e.key === "Escape") setEditingCell(null);
+                                                }}
+                                            />
+                                        )}
                                     </div>
                                 );
                             }

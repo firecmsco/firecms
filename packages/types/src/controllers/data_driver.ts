@@ -1,6 +1,7 @@
 import { CollectionRegistryController } from "./collection_registry";
-import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues, TableMetadata } from "../types";
+import { Entity, EntityCollection, EntityStatus, EntityValues, FilterValues } from "../types";
 import { RebaseContext } from "../rebase_context";
+import { TableMetadata } from "../types/websockets";
 
 /**
  * @internal
@@ -180,38 +181,41 @@ export interface DataDriver {
     }) => Promise<boolean>;
 
     /**
-     * Execute raw SQL (if supported by the driver)
+     * Flag to indicate if the driver has requested the initialization of the text search index
      */
-    executeSql?(sql: string, options?: { database?: string, role?: string }): Promise<Record<string, unknown>[]>;
+    needsInitTextSearch?: boolean;
+
+    // ── Optional database-admin methods (implemented by postgres driver) ──
 
     /**
-     * Fetch the available databases (if supported by the driver)
+     * Execute raw SQL against the database.
+     * Only available for SQL-based drivers (e.g. PostgreSQL).
+     */
+    executeSql?(sql: string, options?: { database?: string; role?: string }): Promise<Record<string, unknown>[]>;
+
+    /**
+     * List available databases on the server.
      */
     fetchAvailableDatabases?(): Promise<string[]>;
 
     /**
-     * Fetch the available roles (if supported by the driver)
+     * List available database roles.
      */
     fetchAvailableRoles?(): Promise<string[]>;
 
     /**
-     * Fetch the current database name (if supported by the driver)
+     * Return the name of the currently connected database.
      */
     fetchCurrentDatabase?(): Promise<string | undefined>;
 
     /**
-     * Fetch database tables not yet mapped to a collection (if supported)
+     * Fetch public tables not yet mapped to a collection.
      */
     fetchUnmappedTables?(mappedPaths?: string[]): Promise<string[]>;
 
     /**
-     * Fetch metadata for a given table (if supported)
+     * Fetch column/FK/policy metadata for a single table.
      */
     fetchTableMetadata?(tableName: string): Promise<TableMetadata>;
-
-    /**
-     * Flag to indicate if the driver has requested the initialization of the text search index
-     */
-    needsInitTextSearch?: boolean;
 
 }

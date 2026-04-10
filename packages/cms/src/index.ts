@@ -86,3 +86,6 @@ export {
 // Data import/export — merged from former standalone packages
 export * from "./data_import";
 export * from "./data_export";
+
+// Collection editor — moved from @rebasepro/studio (CMS-dependent visual schema editor)
+export * from "./collection_editor";

@@ -105,12 +105,12 @@ importers:
       '@fontsource/jetbrains-mono':
         specifier: ^5.2.5
         version: 5.2.8
-      '@rebasepro/auth':
+      '@rebasepro/auth-rebase':
         specifier: 0.0.1
-        version: link:../../packages/auth
-      '@rebasepro/client':
+        version: link:../../packages/auth-rebase
+      '@rebasepro/client-rebase':
         specifier: workspace:*
-        version: link:../../packages/client
+        version: link:../../packages/client-rebase
       '@rebasepro/cms':
         specifier: 0.0.1
         version: link:../../packages/cms
@@ -207,7 +207,7 @@ importers:
         specifier: ^5.9.2
         version: 5.9.3
 
-  packages/auth:
+  packages/auth-rebase:
     dependencies:
       '@rebasepro/core':
         specifier: 0.0.1
@@ -298,9 +298,15 @@ importers:
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
+      '@types/jsonwebtoken':
+        specifier: ^9.0.0
+        version: 9.0.10
       '@types/node':
         specifier: ^20.10.5
         version: 20.19.17
+      '@types/nodemailer':
+        specifier: ^6.4.0
+        version: 6.4.23
       '@types/pg':
         specifier: ^8.6.5
         version: 8.18.0
@@ -375,7 +381,7 @@ importers:
         specifier: ^7.2.4
         version: 7.3.1(@types/node@20.19.17)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/client:
+  packages/client-rebase:
     dependencies:
       '@rebasepro/types':
         specifier: 0.0.1
@@ -462,6 +468,9 @@ importers:
       fast-equals:
         specifier: 5.3.0
         version: 5.3.0
+      json5:
+        specifier: ^2.2.3
+        version: 2.2.3
       markdown-it:
         specifier: ^14.1.0
         version: 14.1.1
@@ -1033,9 +1042,9 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.2.0
         version: 1.29.0(zod@4.3.6)
-      '@rebasepro/client':
+      '@rebasepro/client-rebase':
         specifier: 0.0.1
-        version: link:../client
+        version: link:../client-rebase
       dotenv:
         specifier: ^16.0.0
         version: 16.6.1
@@ -1086,9 +1095,9 @@ importers:
 
   packages/postgresql:
     dependencies:
-      '@rebasepro/client':
+      '@rebasepro/client-rebase':
         specifier: 0.0.1
-        version: link:../client
+        version: link:../client-rebase
       '@rebasepro/types':
         specifier: 0.0.1
         version: link:../types
@@ -1138,9 +1147,9 @@ importers:
 
   packages/sdk_generator:
     dependencies:
-      '@rebasepro/client':
+      '@rebasepro/client-rebase':
         specifier: workspace:*
-        version: link:../client
+        version: link:../client-rebase
     devDependencies:
       '@rebasepro/common':
         specifier: 0.0.1
@@ -1172,9 +1181,9 @@ importers:
       '@monaco-editor/react':
         specifier: ^4.7.0
         version: 4.7.0(monaco-editor@0.55.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@rebasepro/client':
+      '@rebasepro/client-rebase':
         specifier: 0.0.1
-        version: link:../client
+        version: link:../client-rebase
       '@rebasepro/cms':
         specifier: 0.0.1
         version: link:../cms
@@ -1184,12 +1193,6 @@ importers:
       '@rebasepro/core':
         specifier: 0.0.1
         version: link:../core
-      '@rebasepro/formex':
-        specifier: 0.0.1
-        version: link:../formex
-      '@rebasepro/schema_inference':
-        specifier: 0.0.1
-        version: link:../schema_inference
       '@rebasepro/types':
         specifier: 0.0.1
         version: link:../types
@@ -1199,9 +1202,6 @@ importers:
       '@rebasepro/utils':
         specifier: workspace:*
         version: link:../utils
-      json5:
-        specifier: ^2.2.3
-        version: 2.2.3
       pgsql-ast-parser:
         specifier: 12.0.2
         version: 12.0.2
@@ -1214,9 +1214,6 @@ importers:
       react-dom:
         specifier: '>=19.0.0'
         version: 19.2.4(react@19.2.4)
-      zod:
-        specifier: ^3.25.0
-        version: 3.25.76
     devDependencies:
       '@jest/globals':
         specifier: ^30.2.0
@@ -4647,6 +4644,9 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
+  '@types/jsonwebtoken@9.0.10':
+    resolution: {integrity: sha512-asx5hIG9Qmf/1oStypjanR7iKTv0gXQ1Ov/jfrX6kS/EO0OFni8orbmGCn0672NHR3kXHwpAwR+B368ZGN/2rA==}
+
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
 
@@ -4665,11 +4665,17 @@ packages:
   '@types/minimist@1.2.5':
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
 
+  '@types/ms@2.1.0':
+    resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
+
   '@types/node@20.19.17':
     resolution: {integrity: sha512-gfehUI8N1z92kygssiuWvLiwcbOB3IRktR6hTDgJlXMYh5OvkPSRmgfoBUmfZt+vhwJtX7v1Yw4KvvAf7c5QKQ==}
 
   '@types/node@24.12.2':
     resolution: {integrity: sha512-A1sre26ke7HDIuY/M23nd9gfB+nrmhtYyMINbjI1zHJxYteKR6qSMX56FsmjMcDb3SMcjJg5BiRRgOCC/yBD0g==}
+
+  '@types/nodemailer@6.4.23':
+    resolution: {integrity: sha512-aFV3/NsYFLSx9mbb5gtirBSXJnAlrusoKNuPbxsASWc7vrKLmIrTQRpdcxNcSFL3VW2A2XpeLEavwb2qMi6nlQ==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -11787,7 +11793,7 @@ snapshots:
       proggy: 3.0.0
       promise-all-reject-late: 1.0.1
       promise-call-limit: 3.0.2
-      semver: 7.7.2
+      semver: 7.7.4
       ssri: 12.0.0
       treeverse: 3.0.0
       walk-up-path: 4.0.0
@@ -11796,7 +11802,7 @@ snapshots:
 
   '@npmcli/fs@4.0.0':
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.4
 
   '@npmcli/fs@5.0.0':
     dependencies:
@@ -11810,7 +11816,7 @@ snapshots:
       npm-pick-manifest: 10.0.0
       proc-log: 5.0.0
       promise-retry: 2.0.1
-      semver: 7.7.2
+      semver: 7.7.4
       which: 5.0.0
 
   '@npmcli/git@7.0.2':
@@ -11821,7 +11827,7 @@ snapshots:
       lru-cache: 11.2.6
       npm-pick-manifest: 11.0.3
       proc-log: 6.1.0
-      semver: 7.7.2
+      semver: 7.7.4
       which: 6.0.1
 
   '@npmcli/installed-package-contents@3.0.0':
@@ -11847,7 +11853,7 @@ snapshots:
       json-parse-even-better-errors: 5.0.0
       pacote: 21.5.0
       proc-log: 6.1.0
-      semver: 7.7.2
+      semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
 
@@ -11866,7 +11872,7 @@ snapshots:
       hosted-git-info: 9.0.2
       json-parse-even-better-errors: 5.0.0
       proc-log: 6.1.0
-      semver: 7.7.2
+      semver: 7.7.4
       validate-npm-package-license: 3.0.4
 
   '@npmcli/promise-spawn@8.0.3':
@@ -11901,7 +11907,7 @@ snapshots:
       enquirer: 2.3.6
       minimatch: 10.2.4
       nx: 22.5.4
-      semver: 7.7.2
+      semver: 7.7.4
       tslib: 2.8.1
       yargs-parser: 21.1.1
 
@@ -13283,6 +13289,11 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
+  '@types/jsonwebtoken@9.0.10':
+    dependencies:
+      '@types/ms': 2.1.0
+      '@types/node': 20.19.17
+
   '@types/linkify-it@5.0.0': {}
 
   '@types/lodash@4.17.24': {}
@@ -13298,6 +13309,8 @@ snapshots:
 
   '@types/minimist@1.2.5': {}
 
+  '@types/ms@2.1.0': {}
+
   '@types/node@20.19.17':
     dependencies:
       undici-types: 6.21.0
@@ -13306,6 +13319,10 @@ snapshots:
     dependencies:
       undici-types: 7.16.0
     optional: true
+
+  '@types/nodemailer@6.4.23':
+    dependencies:
+      '@types/node': 20.19.17
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -14135,7 +14152,7 @@ snapshots:
       handlebars: 4.7.8
       json-stringify-safe: 5.0.1
       meow: 8.1.2
-      semver: 7.7.2
+      semver: 7.7.4
       split: 1.0.1
 
   conventional-commits-filter@3.0.0:
@@ -15305,7 +15322,7 @@ snapshots:
   git-semver-tags@5.0.1:
     dependencies:
       meow: 8.1.2
-      semver: 7.7.2
+      semver: 7.7.4
 
   git-up@7.0.0:
     dependencies:
@@ -15567,7 +15584,7 @@ snapshots:
       npm-package-arg: 13.0.1
       promzard: 2.0.0
       read: 4.1.0
-      semver: 7.7.2
+      semver: 7.7.4
       validate-npm-package-license: 3.0.4
       validate-npm-package-name: 6.0.2
 
@@ -16578,7 +16595,7 @@ snapshots:
       npm-package-arg: 13.0.1
       npm-registry-fetch: 19.1.0
       proc-log: 5.0.0
-      semver: 7.7.2
+      semver: 7.7.4
       sigstore: 4.1.0
       ssri: 12.0.0
     transitivePeerDependencies:
@@ -16738,7 +16755,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.4
 
   make-error@1.3.6: {}
 
@@ -17066,9 +17083,9 @@ snapshots:
       make-fetch-happen: 15.0.2
       nopt: 9.0.0
       proc-log: 6.1.0
-      semver: 7.7.2
+      semver: 7.7.4
       tar: 7.5.8
-      tinyglobby: 0.2.12
+      tinyglobby: 0.2.15
       which: 6.0.1
     transitivePeerDependencies:
       - supports-color
@@ -17124,7 +17141,7 @@ snapshots:
 
   npm-install-checks@7.1.2:
     dependencies:
-      semver: 7.7.2
+      semver: 7.7.4
 
   npm-install-checks@8.0.0:
     dependencies:
@@ -17138,14 +17155,14 @@ snapshots:
     dependencies:
       hosted-git-info: 8.1.0
       proc-log: 5.0.0
-      semver: 7.7.2
+      semver: 7.7.4
       validate-npm-package-name: 6.0.2
 
   npm-package-arg@13.0.1:
     dependencies:
       hosted-git-info: 9.0.2
       proc-log: 5.0.0
-      semver: 7.7.2
+      semver: 7.7.4
       validate-npm-package-name: 6.0.2
 
   npm-packlist@10.0.3:
@@ -17158,14 +17175,14 @@ snapshots:
       npm-install-checks: 7.1.2
       npm-normalize-package-bin: 4.0.0
       npm-package-arg: 12.0.2
-      semver: 7.7.2
+      semver: 7.7.4
 
   npm-pick-manifest@11.0.3:
     dependencies:
       npm-install-checks: 8.0.0
       npm-normalize-package-bin: 5.0.0
       npm-package-arg: 13.0.1
-      semver: 7.7.2
+      semver: 7.7.4
 
   npm-registry-fetch@19.1.0:
     dependencies:
@@ -17226,7 +17243,7 @@ snapshots:
       ora: 5.3.0
       picocolors: 1.1.1
       resolve.exports: 2.0.3
-      semver: 7.7.2
+      semver: 7.7.4
       string-width: 4.2.3
       tar-stream: 2.2.0
       tmp: 0.2.5

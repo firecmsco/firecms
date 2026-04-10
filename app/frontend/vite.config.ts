@@ -40,7 +40,7 @@ export default defineConfig({
             "@rebasepro/core": path.resolve(__dirname, "../../packages/core/src"),
             "@rebasepro/types": path.resolve(__dirname, "../../packages/types/src"),
             "@rebasepro/common": path.resolve(__dirname, "../../packages/common/src"),
-            "@rebasepro/client": path.resolve(__dirname, "../../packages/client/src"),
+            "@rebasepro/client-rebase": path.resolve(__dirname, "../../packages/client-rebase/src"),
             "@rebasepro/ui": path.resolve(__dirname, "../../packages/ui/src"),
             "@rebasepro/ui/index.css": path.resolve(__dirname, "../../packages/ui/index.css"),
             "@rebasepro/formex": path.resolve(__dirname, "../../packages/formex/src"),
@@ -50,8 +50,7 @@ export default defineConfig({
             "@rebasepro/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
             "@rebasepro/schema_inference": path.resolve(__dirname, "../../packages/schema_inference/src"),
 
-            "@rebasepro/user_management": path.resolve(__dirname, "../../packages/user_management/src"),
-            "@rebasepro/auth": path.resolve(__dirname, "../../packages/auth/src"),
+            "@rebasepro/auth-rebase": path.resolve(__dirname, "../../packages/auth-rebase/src"),
             "@rebasepro/cms": path.resolve(__dirname, "../../packages/cms/src"),
             "@rebasepro/studio": path.resolve(__dirname, "../../packages/studio/src"),
             "shared": path.resolve(__dirname, "../shared")

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { ArrowForwardIcon, Card, cls, Container, Typography } from "@rebasepro/ui";
 import { IconForView, useRebaseContext, useRestoreScroll, useSlot } from "@rebasepro/core";
 import { useNavigate } from "react-router-dom";
-import { useBreadcrumbsController } from "@rebasepro/cms";
+import { useStudioBreadcrumbs } from "@rebasepro/core";
 
 /* ═══════════════════════════════════════════════════════════════
    Static studio tool definitions
@@ -70,7 +70,7 @@ export function StudioHomePage({
     hiddenGroups?: string[];
 }) {
     const context = useRebaseContext();
-    const breadcrumbs = useBreadcrumbsController();
+    const breadcrumbs = useStudioBreadcrumbs();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -260,7 +260,7 @@ function SyntaxHighlightedSnippet() {
             <span className={tx}>{" } "}</span>
             <span className={kw}>from</span>
             <span className={tx}> </span>
-            <span className={str}>'@rebasepro/client'</span>
+            <span className={str}>'@rebasepro/client-rebase'</span>
             <span className={op}>;</span>
             {"\n"}
 

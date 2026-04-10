@@ -12,7 +12,7 @@ import {
     SaveEntityProps,
     TableMetadata
 } from "@rebasepro/types";
-import { RebaseWebSocketClient } from "@rebasepro/client";
+import { RebaseWebSocketClient } from "@rebasepro/client-rebase";
 
 export interface PostgresDataDriverConfig {
     wsClient?: RebaseWebSocketClient;

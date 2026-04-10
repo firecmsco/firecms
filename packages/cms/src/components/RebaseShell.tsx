@@ -9,10 +9,11 @@ import {
     UserSettingsView,
     UIReferenceView,
     NotFoundPage,
-    useInternalUserManagementController
+    useInternalUserManagementController,
+    StudioBridgeProvider,
 } from "@rebasepro/core";
 import { CircularProgressCenter } from "@rebasepro/ui";
-import { RebaseLoginView } from "@rebasepro/auth";
+import { LoginView } from "@rebasepro/core";
 
 import { useBuildNavigationStateController } from "../hooks/navigation/useBuildNavigationStateController";
 import { useBuildUrlController } from "../hooks/navigation/useBuildUrlController";
@@ -27,12 +28,15 @@ import { Scaffold } from "./app/Scaffold";
 import { AppBar } from "./app/AppBar";
 import { Drawer } from "./app/Drawer";
 import { SideDialogs } from "./SideDialogs";
+import { CollectionEditorDialogs } from "./CollectionEditorDialogs";
 import { AdminModeSyncer } from "./AdminModeSyncer";
 import { ContentHomePage } from "./HomePage/ContentHomePage";
 import { UsersView } from "./admin/UsersView";
 import { RolesView } from "./admin/RolesView";
 import { RebaseRoute } from "../routes/RebaseRoute";
 import { CustomViewRoute } from "../routes/CustomViewRoute";
+import { useSideEntityController } from "../hooks/useSideEntityController";
+import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import type { AppView } from "@rebasepro/types";
 
 export interface RebaseShellProps {
@@ -104,7 +108,7 @@ export function RebaseShell(props: RebaseShellProps) {
     if (!authController?.user) {
         // Use custom login view if provided, otherwise default to RebaseLoginView
         const ActiveLoginView = registry.authConfig?.loginView ?? (
-            <RebaseLoginView authController={authController as any} />
+            <LoginView authController={authController as any} />
         );
         return <>{ActiveLoginView}</>;
     }
@@ -128,6 +132,11 @@ export function RebaseShell(props: RebaseShellProps) {
             <UrlContext.Provider value={urlController}>
                 <NavigationStateContext.Provider value={navigationStateController}>
                     <SideEntityProvider>
+                        <StudioBridgeAutoProvider
+                            collectionRegistryController={collectionRegistryController}
+                            urlController={urlController}
+                            navigationStateController={navigationStateController}
+                        >
                         <RebaseRoutes>
                             {/* Inner App Shell Route */}
                             <Route element={
@@ -175,9 +184,45 @@ export function RebaseShell(props: RebaseShellProps) {
                                 <Route path={"*"} element={<NotFoundPage />} />
                             </Route>
                         </RebaseRoutes>
+                        </StudioBridgeAutoProvider>
+                        <CollectionEditorDialogs />
                     </SideEntityProvider>
                 </NavigationStateContext.Provider>
             </UrlContext.Provider>
         </CollectionRegistryContext.Provider>
+    );
+}
+
+/**
+ * Internal component that reads CMS controllers from context and feeds them
+ * into the Studio Bridge. This enables Studio tools (SQL/JS/RLS editors)
+ * to optionally use CMS features (side entity forms, collection registry, etc.).
+ */
+function StudioBridgeAutoProvider({
+    collectionRegistryController,
+    urlController,
+    navigationStateController,
+    children,
+}: {
+    collectionRegistryController: any;
+    urlController: any;
+    navigationStateController: any;
+    children: React.ReactNode;
+}) {
+    const sideEntity = useSideEntityController();
+    const breadcrumbs = useBreadcrumbsController();
+    
+    const bridgeValue = useMemo(() => ({
+        collectionRegistry: collectionRegistryController,
+        sideEntityController: sideEntity,
+        urlController,
+        navigationState: navigationStateController,
+        breadcrumbs,
+    }), [collectionRegistryController, sideEntity, urlController, navigationStateController, breadcrumbs]);
+    
+    return (
+        <StudioBridgeProvider value={bridgeValue}>
+            {children}
+        </StudioBridgeProvider>
     );
 }

@@ -23,10 +23,13 @@ import {
     Tooltip,
     MultiSelect,
     MultiSelectItem,
-    LoadingButton
+    LoadingButton,
+    ContentCopyIcon,
+    CheckCircleIcon,
+    EmailIcon
 } from "@rebasepro/ui";
 import { RoleChip } from "./RoleChip";
-import { UserManagementDelegate, Role } from "@rebasepro/types";
+import { UserManagementDelegate, Role, UserCreationResult } from "@rebasepro/types";
 import { ConfirmationDialog } from "@rebasepro/core";
 
 // ============================================
@@ -35,7 +38,7 @@ import { ConfirmationDialog } from "@rebasepro/core";
 export function UsersView({ userManagement }: {
     userManagement: UserManagementDelegate;
 }) {
-    const { users, roles, saveUser, deleteUser, loading, bootstrapAdmin } = userManagement;
+    const { users, roles, saveUser, createUser, deleteUser, loading, bootstrapAdmin } = userManagement;
     const snackbarController = useSnackbarController();
     const { user: loggedInUser } = useAuthController();
     const { t } = useTranslation();
@@ -47,6 +50,9 @@ export function UsersView({ userManagement }: {
     const [deleteInProgress, setDeleteInProgress] = useState(false);
     const [formKey, setFormKey] = useState(0);
     const [bootstrapping, setBootstrapping] = useState(false);
+
+    // Creation result state
+    const [creationResult, setCreationResult] = useState<UserCreationResult | null>(null);
 
     // Check if any admin exists
     const hasAdmin = users.some(u => u.roles?.includes("admin"));
@@ -191,7 +197,17 @@ export function UsersView({ userManagement }: {
                     user={selectedUser}
                     roles={roles}
                     saveUser={saveUser}
+                    createUser={createUser}
                     handleClose={handleClose}
+                    onCreationResult={setCreationResult}
+                />
+            )}
+
+            {/* Creation Result Dialog */}
+            {creationResult && (
+                <CreationResultDialog
+                    result={creationResult}
+                    onClose={() => setCreationResult(null)}
                 />
             )}
 
@@ -209,6 +225,124 @@ export function UsersView({ userManagement }: {
 }
 
 // ============================================
+// CreationResultDialog Component
+// ============================================
+function CreationResultDialog({
+    result,
+    onClose
+}: {
+    result: UserCreationResult;
+    onClose: () => void;
+}) {
+    const { t } = useTranslation();
+    const snackbarController = useSnackbarController();
+    const [copied, setCopied] = useState(false);
+
+    const handleCopyPassword = async () => {
+        if (!result.temporaryPassword) return;
+        try {
+            await navigator.clipboard.writeText(result.temporaryPassword);
+            setCopied(true);
+            snackbarController.open({ type: "success", message: t("password_copied") ?? "Password copied to clipboard" });
+            setTimeout(() => setCopied(false), 3000);
+        } catch {
+            // Fallback for older browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = result.temporaryPassword;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 3000);
+        }
+    };
+
+    if (result.invitationSent) {
+        // Invitation sent via email
+        return (
+            <Dialog open={true} onOpenChange={(open) => !open ? onClose() : undefined} maxWidth="xl">
+                <DialogTitle variant="h5" gutterBottom={false}>
+                    <div className="flex items-center gap-3">
+                        <EmailIcon />
+                        {t("invitation_sent_title") ?? "Invitation Sent"}
+                    </div>
+                </DialogTitle>
+                <DialogContent>
+                    <div className="flex flex-col gap-4 py-2">
+                        <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                            <Typography className="text-green-800 dark:text-green-200">
+                                {(t("invitation_sent") ?? "An invitation email has been sent to {{email}}. They can use the link to set their password.")
+                                    .replace("{{email}}", result.user.email ?? "")}
+                            </Typography>
+                        </div>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="filled" onClick={onClose}>
+                        {t("ok")}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
+    }
+
+    if (result.temporaryPassword) {
+        // No email — show temporary password
+        return (
+            <Dialog open={true} onOpenChange={(open) => !open ? onClose() : undefined} maxWidth="xl">
+                <DialogTitle variant="h5" gutterBottom={false}>
+                    {t("temporary_password") ?? "Temporary Password"}
+                </DialogTitle>
+                <DialogContent>
+                    <div className="flex flex-col gap-4 py-2">
+                        <div className="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                            <Typography className="text-amber-800 dark:text-amber-200" variant="body2">
+                                {t("temporary_password_description") ??
+                                    "Email is not configured. Share this temporary password with the user securely. It will not be shown again."}
+                            </Typography>
+                        </div>
+
+                        <div>
+                            <Typography variant="caption" color="secondary" className="mb-1">
+                                {t("email")}
+                            </Typography>
+                            <Typography>
+                                {result.user.email}
+                            </Typography>
+                        </div>
+
+                        <div>
+                            <Typography variant="caption" color="secondary" className="mb-1">
+                                {t("temporary_password") ?? "Temporary Password"}
+                            </Typography>
+                            <div className="flex items-center gap-2 mt-1">
+                                <code className="flex-grow bg-surface-100 dark:bg-surface-800 border border-surface-300 dark:border-surface-600 rounded px-3 py-2 font-mono text-base select-all">
+                                    {result.temporaryPassword}
+                                </code>
+                                <Tooltip title={t("copy_password") ?? "Copy password"} asChild>
+                                    <IconButton onClick={handleCopyPassword}>
+                                        {copied ? <CheckCircleIcon className="text-green-600" /> : <ContentCopyIcon />}
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
+                        </div>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="filled" onClick={onClose}>
+                        {t("ok")}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
+    }
+
+    // Shouldn't happen, but fallback
+    return null;
+}
+
+// ============================================
 // UserDetailsForm Component
 // ============================================
 function UserDetailsForm({
@@ -216,13 +350,17 @@ function UserDetailsForm({
     user: userProp,
     roles,
     saveUser,
-    handleClose
+    createUser,
+    handleClose,
+    onCreationResult
 }: {
     open: boolean;
     user?: User;
     roles?: Role[];
     saveUser: (user: User) => Promise<User>;
+    createUser?: (user: User) => Promise<UserCreationResult>;
     handleClose: () => void;
+    onCreationResult?: (result: UserCreationResult) => void;
 }) {
     const snackbarController = useSnackbarController();
     const { t } = useTranslation();
@@ -264,8 +402,16 @@ function UserDetailsForm({
                 isAnonymous: userProp?.isAnonymous || false,
                 roles: userRoles
             };
-            await saveUser(userToSave);
-            handleClose();
+
+            if (isNewUser && createUser && onCreationResult) {
+                // Use createUser for new users to get invitation/password info
+                const result = await createUser(userToSave);
+                handleClose();
+                onCreationResult(result);
+            } else {
+                await saveUser(userToSave);
+                handleClose();
+            }
         } catch (error: unknown) {
             snackbarController.open({ type: "error", message: error instanceof Error ? error.message : "Failed to save user" });
         } finally {

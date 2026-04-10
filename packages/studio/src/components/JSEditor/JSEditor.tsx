@@ -31,10 +31,10 @@ import {
     VirtualTableColumn,
     CellRendererParams,
 } from "@rebasepro/ui";
-import { useUrlController, useCollectionRegistryController, useSideEntityController } from "@rebasepro/cms";
-import { useRebaseContext, useSnackbarController, useApiConfig, useTranslation, useModeController, ErrorView, UserSelectPopover, SelectableUser, IconForView } from "@rebasepro/core";
+import { useStudioUrlController, useStudioCollectionRegistry, useStudioSideEntityController } from "@rebasepro/core";
+import { useRebaseContext, useRebaseClient, useSnackbarController, useApiConfig, useTranslation, useModeController, ErrorView, UserSelectPopover, SelectableUser, IconForView } from "@rebasepro/core";
 import { EntityCollection } from "@rebasepro/types";
-import { createRebaseClient } from "@rebasepro/client";
+import { createRebaseClient } from "@rebasepro/client-rebase";
 import { JSMonacoEditor } from "./JSMonacoEditor";
 import { JSEditorSidebar, JSSnippet } from "./JSEditorSidebar";
 
@@ -191,10 +191,11 @@ function detectCollectionsInResult(
 export function JSEditor() {
     // Contexts
     const rebaseContext = useRebaseContext();
+    const rebaseClient = useRebaseClient();
     const apiConfig = useApiConfig();
     const snackbar = useSnackbarController();
-    const collectionRegistry = useCollectionRegistryController();
-    const sideEntityController = useSideEntityController();
+    const collectionRegistry = useStudioCollectionRegistry();
+    const sideEntityController = useStudioSideEntityController();
     const { t } = useTranslation();
 
     // User management for the "Run as" picker
@@ -333,10 +334,10 @@ export function JSEditor() {
     const buildClient = useCallback(async () => {
         // If not running as another user safely reuse the application's global client.
         if (!selectedUser || (currentUser && selectedUser.uid === currentUser.uid)) {
-            if (!rebaseContext.client) {
+            if (!rebaseClient) {
                 throw new Error("Application client is not initialized.");
             }
-            return { client: rebaseContext.client, isScoped: false };
+            return { client: rebaseClient, isScoped: false };
         }
 
         const apiUrl = apiConfig?.apiUrl;
@@ -364,7 +365,7 @@ export function JSEditor() {
         });
 
         return { client, isScoped: true };
-    }, [apiConfig, rebaseContext.client, selectedUser, currentUser]);
+    }, [apiConfig, rebaseClient, selectedUser, currentUser]);
 
     // ─── Execution engine ────────────────────────────────────────
 

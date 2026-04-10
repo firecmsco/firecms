@@ -51,7 +51,7 @@ export function generateSDK(
 
 2. Initialize with your generated types:
    \`\`\`typescript
-   import { createRebaseClient } from '@rebasepro/client';
+   import { createRebaseClient } from '@rebasepro/client-rebase';
    import type { Database } from './database.types';
 
    const rebase = createRebaseClient<Database>({

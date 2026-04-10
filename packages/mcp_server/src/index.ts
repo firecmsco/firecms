@@ -15,7 +15,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 // The client SDK ships compiled .d.ts that reference @rebasepro/types (which
 // drags in React peer-deps).  By importing at runtime only we keep the MCP
 // server build clean.
-const CLIENT_PKG = "@rebasepro/client";
+const CLIENT_PKG = "@rebasepro/client-rebase";
 async function loadClientSdk(): Promise<(opts: Record<string, unknown>) => unknown> {
     const mod = await import(/* webpackIgnore: true */ CLIENT_PKG);
     return mod.createRebaseClient;

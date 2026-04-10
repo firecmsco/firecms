@@ -84,6 +84,7 @@
         "react-dropzone": "^14.3.8",
         "react-use-measure": "^2.1.7",
         "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
+        "json5": "^2.2.3",
         "zod": "^3.25.0",
         "@rebasepro/schema_inference": "0.0.1",
         "@rebasepro/utils": "workspace:*"

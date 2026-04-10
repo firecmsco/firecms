@@ -105,8 +105,41 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     // Storage fallback logic
     const resolvedStorage = storageSourceProp ?? client?.storage;
 
-    // Database fallback logic
-    const resolvedDatabaseAdmin = databaseAdmin ?? (client?.ws as unknown as typeof databaseAdmin);
+    // Database admin — use explicit prop, or derive from client.ws / driver when available
+    const resolvedDatabaseAdmin = useMemo(() => {
+        if (databaseAdmin) return databaseAdmin;
+        // Auto-derive from the client's WebSocket connection (Rebase backend)
+        const ws = (client as any)?.ws;
+        if (ws && typeof ws.executeSql === "function") {
+            return {
+                executeSql: ws.executeSql.bind(ws),
+                fetchAvailableDatabases: ws.fetchAvailableDatabases?.bind(ws),
+                fetchAvailableRoles: ws.fetchAvailableRoles?.bind(ws),
+                fetchCurrentDatabase: ws.fetchCurrentDatabase?.bind(ws),
+                fetchUnmappedTables: ws.fetchUnmappedTables?.bind(ws),
+                fetchTableMetadata: ws.fetchTableMetadata?.bind(ws),
+            };
+        }
+        // Also derive from the DataDriver if it implements admin methods
+        if (driverProp && typeof driverProp.executeSql === "function") {
+            return {
+                executeSql: driverProp.executeSql.bind(driverProp),
+                fetchAvailableDatabases: driverProp.fetchAvailableDatabases?.bind(driverProp),
+                fetchAvailableRoles: driverProp.fetchAvailableRoles?.bind(driverProp),
+                fetchCurrentDatabase: driverProp.fetchCurrentDatabase?.bind(driverProp),
+                fetchUnmappedTables: driverProp.fetchUnmappedTables?.bind(driverProp),
+                fetchTableMetadata: driverProp.fetchTableMetadata?.bind(driverProp),
+            };
+        }
+        return undefined;
+    }, [databaseAdmin, client, driverProp]);
+
+    if (!resolvedStorage && typeof console !== "undefined") {
+        console.warn(
+            "[Rebase] No storageSource provided. File upload features will not work. " +
+            "Provide storageSource via props or through a RebaseClient."
+        );
+    }
 
     const pluginsLoading = plugins?.some((p) => p.loading) ?? false;
 

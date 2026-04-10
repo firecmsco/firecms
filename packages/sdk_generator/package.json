@@ -46,6 +46,6 @@
     },
     "gitHead": "d935eefa5aa8d1009a2398cfac2c1e4ee9aeb6b6",
     "dependencies": {
-        "@rebasepro/client": "workspace:*"
+        "@rebasepro/client-rebase": "workspace:*"
     }
 }

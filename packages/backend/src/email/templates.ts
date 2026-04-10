@@ -220,3 +220,82 @@ If you didn't create an account with ${appName}, you can safely ignore this emai
 
     return { subject, html, text };
 }
+
+/**
+ * Default user invitation email template
+ * Sent when an admin creates a new user account
+ */
+export function getUserInvitationTemplate(
+    setPasswordUrl: string,
+    user: TemplateUser,
+    appName: string = "Rebase"
+): { subject: string; html: string; text: string } {
+    const greeting = getGreeting(user);
+
+    const subject = `You've been invited to ${appName}`;
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${subject}</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f8fafc;">
+    <div style="${styles.container}">
+        <div style="${styles.card}">
+            <h1 style="${styles.heading}">Welcome to ${appName}!</h1>
+            
+            <p style="${styles.paragraph}">
+                Hi ${greeting},
+            </p>
+            
+            <p style="${styles.paragraph}">
+                An account has been created for you on ${appName}. 
+                Click the button below to set your password and get started:
+            </p>
+            
+            <div style="text-align: center;">
+                <a href="${setPasswordUrl}" style="${styles.button}">Set Your Password</a>
+            </div>
+            
+            <p style="${styles.paragraph}">
+                Or copy and paste this link into your browser:
+            </p>
+            <p style="color: #3b82f6; word-break: break-all; font-size: 14px;">
+                ${setPasswordUrl}
+            </p>
+            
+            <div style="${styles.warning}">
+                ⏰ This link will expire in 1 hour for security reasons.
+            </div>
+            
+            <div style="${styles.footer}">
+                <p style="margin: 0;">
+                    If you weren't expecting this invitation, you can safely ignore this email.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+    `.trim();
+
+    const text = `
+Welcome to ${appName}!
+
+Hi ${greeting},
+
+An account has been created for you on ${appName}.
+
+Click this link to set your password and get started:
+${setPasswordUrl}
+
+This link will expire in 1 hour for security reasons.
+
+If you weren't expecting this invitation, you can safely ignore this email.
+    `.trim();
+
+    return { subject, html, text };
+}

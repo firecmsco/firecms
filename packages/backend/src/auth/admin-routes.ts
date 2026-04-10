@@ -1,12 +1,54 @@
 import { Hono } from "hono";
 import { ApiError } from "../api/errors";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { UserService, RoleService } from "./services";
+import { UserService, RoleService, PasswordResetTokenService } from "./services";
 import { NewUser } from "../db/auth-schema";
 import { requireAuth, requireAdmin } from "./middleware";
 import { hashPassword, validatePasswordStrength } from "./password";
 import { AuthModuleConfig } from "./routes";
 import { HonoEnv } from "../api/types";
+import { randomBytes, createHash } from "crypto";
+import { getUserInvitationTemplate } from "../email/templates";
+
+/**
+ * Generate a cryptographically secure random password that meets strength requirements.
+ */
+function generateSecurePassword(): string {
+    const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    const lower = "abcdefghjkmnpqrstuvwxyz";
+    const digits = "23456789";
+    const all = upper + lower + digits;
+
+    // Guarantee at least one of each required class
+    const pick = (chars: string) => chars[Math.floor(Math.random() * chars.length)];
+    const parts = [pick(upper), pick(lower), pick(digits)];
+
+    // Fill remaining with random chars (16 total)
+    for (let i = parts.length; i < 16; i++) {
+        parts.push(pick(all));
+    }
+
+    // Shuffle
+    for (let i = parts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [parts[i], parts[j]] = [parts[j], parts[i]];
+    }
+    return parts.join("");
+}
+
+/**
+ * Generate a secure random token
+ */
+function generateSecureToken(): string {
+    return randomBytes(40).toString("hex");
+}
+
+/**
+ * Hash a token for database storage
+ */
+function hashToken(token: string): string {
+    return createHash("sha256").update(token).digest("hex");
+}
 
 /**
  * Create admin routes for user and role management
@@ -15,6 +57,8 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
     const router = new Hono<HonoEnv>();
     const userService = new UserService(config.db);
     const roleService = new RoleService(config.db);
+    const passwordResetTokenService = new PasswordResetTokenService(config.db);
+    const { emailService, emailConfig } = config;
 
     // Apply auth middleware to all routes
     router.use("/*", requireAuth);
@@ -111,20 +155,20 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.conflict("Email already exists", "EMAIL_EXISTS");
         }
 
-        let passwordHash: string | undefined;
-        if (password) {
-            const validation = validatePasswordStrength(password);
-            if (!validation.valid) {
-                throw ApiError.badRequest(validation.errors.join(". "), "WEAK_PASSWORD");
-            }
-            passwordHash = await hashPassword(password);
+        // Use provided password or auto-generate one
+        const clearPassword = password || generateSecurePassword();
+
+        const validation = validatePasswordStrength(clearPassword);
+        if (!validation.valid) {
+            throw ApiError.badRequest(validation.errors.join(". "), "WEAK_PASSWORD");
         }
+        const passwordHash = await hashPassword(clearPassword);
 
         const user = await userService.createUser({
             email: email.toLowerCase(),
             displayName: displayName || null,
             passwordHash,
-            provider: password ? "email" : "admin_created"
+            provider: "email"
         });
 
         if (roles && Array.isArray(roles) && roles.length > 0) {
@@ -135,13 +179,56 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
         const userRoles = await userService.getUserRoleIds(user.id);
 
+        // Determine if we can send an invitation email
+        const isEmailConfigured = !!(emailService && emailService.isConfigured());
+        let invitationSent = false;
+        let temporaryPassword: string | undefined;
+
+        if (isEmailConfigured && !password) {
+            // Send invitation email via password-reset token flow
+            try {
+                const token = generateSecureToken();
+                const tokenHash = hashToken(token);
+                const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+                await passwordResetTokenService.createToken(user.id, tokenHash, expiresAt);
+
+                const baseUrl = emailConfig?.resetPasswordUrl || "";
+                const setPasswordUrl = `${baseUrl}/reset-password?token=${token}`;
+
+                const appName = emailConfig?.appName || "Rebase";
+                const templateFn = emailConfig?.templates?.userInvitation;
+                const emailContent = templateFn
+                    ? templateFn(setPasswordUrl, { email: user.email, displayName: user.displayName })
+                    : getUserInvitationTemplate(setPasswordUrl, { email: user.email, displayName: user.displayName }, appName);
+
+                await emailService!.send({
+                    to: user.email,
+                    subject: emailContent.subject,
+                    html: emailContent.html,
+                    text: emailContent.text
+                });
+                invitationSent = true;
+            } catch (emailError: unknown) {
+                console.error("Failed to send invitation email:", emailError instanceof Error ? emailError.message : emailError);
+                // Fall back to returning the temporary password
+                temporaryPassword = clearPassword;
+            }
+        } else if (!password) {
+            // No email service — return the auto-generated password one-time
+            temporaryPassword = clearPassword;
+        }
+        // If admin provided a password explicitly, don't return it or send email
+
         return c.json({
             user: {
                 uid: user.id,
                 email: user.email,
                 displayName: user.displayName,
                 roles: userRoles
-            }
+            },
+            invitationSent,
+            ...(temporaryPassword ? { temporaryPassword } : {})
         }, 201);
     });
 

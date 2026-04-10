@@ -8,25 +8,26 @@
     "source": "src/index.ts",
     "dependencies": {
         "@monaco-editor/react": "^4.7.0",
-        "@rebasepro/client": "0.0.1",
-        "@rebasepro/cms": "0.0.1",
+        "@rebasepro/client-rebase": "0.0.1",
         "@rebasepro/common": "0.0.1",
         "@rebasepro/core": "0.0.1",
-        "@rebasepro/formex": "0.0.1",
-        "@rebasepro/schema_inference": "0.0.1",
         "@rebasepro/types": "0.0.1",
         "@rebasepro/ui": "0.0.1",
-        "json5": "^2.2.3",
         "pgsql-ast-parser": "12.0.2",
         "prism-react-renderer": "^2.4.1",
-        "zod": "^3.25.0",
         "@rebasepro/utils": "workspace:*"
     },
     "peerDependencies": {
         "react": ">=19.0.0",
         "react-dom": ">=19.0.0",
         "react-router": "^7.0.0",
-        "react-router-dom": "^7.0.0"
+        "react-router-dom": "^7.0.0",
+        "@rebasepro/cms": "0.0.1"
+    },
+    "peerDependenciesMeta": {
+        "@rebasepro/cms": {
+            "optional": true
+        }
     },
     "exports": {
         ".": {

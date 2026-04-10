@@ -57,6 +57,14 @@ export type EmailVerificationTemplateFunction = (
 ) => { subject: string; html: string; text?: string };
 
 /**
+ * Template function for user invitation emails
+ */
+export type UserInvitationTemplateFunction = (
+    setPasswordUrl: string,
+    user: { email: string; displayName?: string | null }
+) => { subject: string; html: string; text?: string };
+
+/**
  * Complete email configuration
  */
 export interface EmailConfig {
@@ -99,5 +107,6 @@ export interface EmailConfig {
     templates?: {
         passwordReset?: PasswordResetTemplateFunction;
         emailVerification?: EmailVerificationTemplateFunction;
+        userInvitation?: UserInvitationTemplateFunction;
     };
 }

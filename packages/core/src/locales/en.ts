@@ -458,6 +458,13 @@ export const en: RebaseTranslations = {
     failed_to_bootstrap_admin: "Failed to bootstrap admin",
     user_deleted_successfully: "User deleted successfully",
     error_deleting_user: "Error deleting user",
+    user_created_successfully: "User created successfully",
+    invitation_sent: "An invitation email has been sent to {{email}}. They can use the link to set their password.",
+    invitation_sent_title: "Invitation Sent",
+    temporary_password: "Temporary Password",
+    temporary_password_description: "Email is not configured. Share this temporary password with the user securely. It will not be shown again.",
+    copy_password: "Copy password",
+    password_copied: "Password copied to clipboard",
 
     /** Editor table-bubble */
     add_row_before: "Add row before",
