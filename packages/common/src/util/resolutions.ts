@@ -9,7 +9,9 @@ import {
     Property,
     Relation,
     RelationProperty,
-    StringProperty
+    StringProperty,
+    isPostgresCollection,
+    isFirebaseCollection,
 } from "@rebasepro/types";
 
 type PropertyConfig = { property: any; [key: string]: any };
@@ -330,13 +332,17 @@ export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefi
 
 export function getSubcollections<M extends Record<string, any> = any>(collection: EntityCollection<M>) {
     const subcollections: EntityCollection<any>[] = [];
-    subcollections.push(...(collection.subcollections?.() ?? []));
-    subcollections.push(...((collection.relations ?? [])
-        .filter((rel) => rel.cardinality === "many")
-        .map(relation => {
-            const targetCollection = relation.target();
-            const overrides = relation.overrides;
-            return overrides ? mergeDeep(targetCollection, overrides) : targetCollection;
-        }) ?? []));
+    if (isFirebaseCollection(collection)) {
+        subcollections.push(...(collection.subcollections?.() ?? []));
+    }
+    if (isPostgresCollection(collection)) {
+        subcollections.push(...((collection.relations ?? [])
+            .filter((rel) => rel.cardinality === "many")
+            .map(relation => {
+                const targetCollection = relation.target();
+                const overrides = relation.overrides;
+                return overrides ? mergeDeep(targetCollection, overrides) : targetCollection;
+            }) ?? []));
+    }
     return subcollections;
 }

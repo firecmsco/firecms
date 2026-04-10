@@ -1,4 +1,4 @@
-import { AuthController, Entity, EntityCollection, SecurityRule, User } from "@rebasepro/types";
+import { AuthController, Entity, EntityCollection, isPostgresCollection, SecurityRule, User } from "@rebasepro/types";
 
 function evaluateAST(sqlString: string, auth: AuthController, entity: Entity<any> | null): boolean {
     // This is a client-side SQL evaluator used *only* for optimistic UI updates.
@@ -141,14 +141,15 @@ function checkOperation(
     entity: Entity<any> | null,
     targetOperation: "select" | "insert" | "update" | "delete"
 ): boolean {
-    if (!collection.securityRules || collection.securityRules.length === 0) {
+    const securityRules = isPostgresCollection(collection) ? collection.securityRules : undefined;
+    if (!securityRules || securityRules.length === 0) {
         // According to our plan: Postgres RLS implicitly denies if enabled without rules.
         // But for Rebase we default to true if securityRules is undefined,
         // so as not to break everything without rules. Let's assume true for now.
         return true;
     }
 
-    const applicableRules = collection.securityRules.filter(r =>
+    const applicableRules = securityRules.filter((r: SecurityRule) =>
         r.operation === targetOperation ||
         r.operation === "all" ||
         r.operations?.includes(targetOperation) ||

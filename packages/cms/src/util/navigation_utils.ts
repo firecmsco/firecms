@@ -142,7 +142,7 @@ export function getCollectionBySlugWithin(slugOrPath: string, collections: Entit
 
             if (subpathCombination === slugOrPath) {
                 result = navigationEntry;
-            } else if (navigationEntry.subcollections) {
+            } else if (getSubcollections(navigationEntry).length > 0) {
                 const newPath = slugOrPath.replace(subpathCombination, "").split("/").slice(2).join("/");
                 if (newPath.length > 0)
                     result = getCollectionBySlugWithin(newPath, getSubcollections(navigationEntry));

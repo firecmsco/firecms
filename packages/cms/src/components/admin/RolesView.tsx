@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useCollectionRegistryController } from "../../index";
 import { useSnackbarController, useTranslation } from "@rebasepro/core";
-import { Role, SecurityRule, UserManagementDelegate } from "@rebasepro/types";
+import { isPostgresCollection, Role, SecurityRule, UserManagementDelegate } from "@rebasepro/types";
 import {
     AddIcon,
     Button,
@@ -381,7 +381,8 @@ function CollectionPermissionsMatrix({ roleId, isAdmin }: { roleId: string; isAd
                     </TableHeader>
                     <TableBody>
                         {topLevel.map((collection) => {
-                            const noRules = !collection.securityRules || collection.securityRules.length === 0;
+                            const rules = isPostgresCollection(collection) ? collection.securityRules : undefined;
+                            const noRules = !rules || rules.length === 0;
                             return (
                                 <TableRow key={collection.slug}>
                                     <TableCell>
@@ -397,7 +398,7 @@ function CollectionPermissionsMatrix({ roleId, isAdmin }: { roleId: string; isAd
                                     </TableCell>
                                     {CRUD_OPS.map(({ op }) => (
                                         <TableCell key={op} align="center" className="w-20">
-                                            <PermCell granted={isAdmin || hasRoleAccess(collection.securityRules, roleId, op)} />
+                                            <PermCell granted={isAdmin || hasRoleAccess(rules, roleId, op)} />
                                         </TableCell>
                                     ))}
                                 </TableRow>

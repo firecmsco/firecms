@@ -23,15 +23,21 @@ export default defineConfig(() => ({
     },
     build: {
         lib: {
-            entry: path.resolve(__dirname, "src/index.ts"),
-            name: "Rebase Core",
-            fileName: (format) => `index.${format}.js`
+            entry: {
+                index: path.resolve(__dirname, "src/index.ts"),
+                collection_editor_ui: path.resolve(__dirname, "src/collection_editor_ui.ts"),
+            },
+            name: "Rebase CMS",
+            formats: ["es"],
         },
         target: "ESNEXT",
         minify: false,
         sourcemap: true,
         rollupOptions: {
-            external: isExternal
+            external: isExternal,
+            output: {
+                preserveModules: false,
+            }
         }
     },
     resolve: {

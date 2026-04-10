@@ -146,6 +146,7 @@ describe("resolveCollectionPathIds", () => {
             slug: "users",
             dbPath: "users_table",
             properties: {},
+            driver: "firestore",
             subcollections: () => [
                 {
                     id: "orders",
@@ -207,6 +208,7 @@ describe("getCollectionBySlugWithin", () => {
             path: "products",
             slug: "products",
             properties: {},
+            driver: "firestore",
             subcollections: () => [
                 {
                     id: "reviews",

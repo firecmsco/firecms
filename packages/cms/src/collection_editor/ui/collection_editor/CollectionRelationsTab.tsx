@@ -4,11 +4,11 @@ import {
     TextField, Select, SelectItem, Container, DeleteIcon, Dialog, DialogTitle, DialogContent, DialogActions
 } from "@rebasepro/ui";
 import { useFormex } from "@rebasepro/formex";
-import { EntityCollection, Relation } from "@rebasepro/types";
+import { PostgresCollection, Relation } from "@rebasepro/types";
 import { useCollectionsConfigController } from "../../useCollectionsConfigController";
 
 export function CollectionRelationsTab() {
-    const { values, setFieldValue } = useFormex<EntityCollection>();
+    const { values, setFieldValue } = useFormex<PostgresCollection>();
     const { collections } = useCollectionsConfigController();
     const [editingRelationIndex, setEditingRelationIndex] = useState<number | null>(null);
     const [editingRelationState, setEditingRelationState] = useState<Partial<Relation> | null>(null);

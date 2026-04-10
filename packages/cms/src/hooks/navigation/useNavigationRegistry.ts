@@ -45,13 +45,15 @@ export function useNavigationRegistry(userConfigPersistence?: UserConfigurationP
         if (!overriddenCollection) return undefined;
 
         let result: Partial<EntityCollection> | undefined = overriddenCollection;
-        const subcollections = overriddenCollection.subcollections;
+        const subcollections = 'subcollections' in overriddenCollection ? overriddenCollection.subcollections : undefined;
         const callbacks = overriddenCollection.callbacks;
         result = {
             ...result,
-            subcollections: result?.subcollections ?? subcollections,
             callbacks: result?.callbacks ?? callbacks
         };
+        if (subcollections && 'subcollections' in result) {
+            (result as any).subcollections = (result as any).subcollections ?? subcollections;
+        }
 
         return { ...overriddenCollection, ...result } as EntityCollection;
 

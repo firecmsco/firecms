@@ -9,8 +9,8 @@ import {
     RebaseShell,
     useCollectionEditorPlugin,
     useLocalCollectionsConfigController,
-    CollectionsStudioView,
 } from "@rebasepro/cms";
+import { CollectionsStudioView } from "@rebasepro/cms/collection_editor_ui";
 import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
 import { RebaseStudio } from "@rebasepro/studio";
 import { createRebaseClient } from "@rebasepro/client-rebase";

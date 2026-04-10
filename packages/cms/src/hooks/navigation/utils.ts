@@ -158,22 +158,14 @@ export function areCollectionsEqual(a: EntityCollection, b: EntityCollection, vi
     }
     const newVisited = [...visitedSlugs, a.slug];
 
-    const {
-        subcollections: subcollectionsA,
-        ...restA
-    } = a;
-    const {
-        subcollections: subcollectionsB,
-        ...restB
-    } = b;
     if (!areCollectionListsEqual(getSubcollections(a), getSubcollections(b), newVisited)) {
         return false;
     }
     const restAWithoutFunctions = Object.fromEntries(
-        Object.entries(restA).filter(([_, v]) => typeof v !== 'function')
+        Object.entries(a).filter(([k, v]) => typeof v !== 'function' && k !== 'subcollections')
     );
     const restBWithoutFunctions = Object.fromEntries(
-        Object.entries(restB).filter(([_, v]) => typeof v !== 'function')
+        Object.entries(b).filter(([k, v]) => typeof v !== 'function' && k !== 'subcollections')
     );
     return equal(restAWithoutFunctions, restBWithoutFunctions);
 }

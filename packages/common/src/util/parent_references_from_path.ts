@@ -40,7 +40,7 @@ export function getParentReferencesFromPath(props: {
                     if (!collection) {
                         throw Error("collection not found resolving path: " + collection);
                     }
-                    if (collection.subcollections) {
+                    if (getSubcollections(collection).length > 0) {
                         result.push(...getParentReferencesFromPath({
                             path: newPath,
                             collections: getSubcollections(collection),

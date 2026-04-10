@@ -1,14 +1,18 @@
 import { getNavigationEntriesFromPath } from "../src/util/navigation_from_path";
-import { EntityCollection, EntityCustomView } from "@rebasepro/types";
+import { EntityCollection, FirebaseCollection, EntityCustomView } from "@rebasepro/types";
 
-function makeCollection(overrides: Partial<EntityCollection> = {}): EntityCollection {
-    return {
+function makeCollection(overrides: Record<string, any> = {}): EntityCollection {
+    const base = {
         name: "Products",
         slug: "products",
         dbPath: "products",
         properties: {},
         ...overrides,
     };
+    if ('subcollections' in base) {
+        return { ...base, driver: "firestore" } as FirebaseCollection;
+    }
+    return base as EntityCollection;
 }
 
 describe("getNavigationEntriesFromPath", () => {

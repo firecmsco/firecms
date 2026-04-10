@@ -1,5 +1,11 @@
 // Collection Editor — moved from @rebasepro/studio
 // This module provides the visual schema/collection editor for the CMS.
+//
+// IMPORTANT: Heavy UI components (CollectionEditorDialog, CollectionStudioView,
+// CollectionsStudioView, PropertyForm, PropertyFormDialog) are NOT re-exported
+// here to keep the main CMS bundle lean. Import them from
+// "@rebasepro/cms/collection_editor_ui" instead — they live in a separate chunk
+// that is loaded on demand.
 
 export {
     useCollectionEditorPlugin
@@ -56,13 +62,8 @@ export { MissingReferenceWidget } from "./ui/MissingReferenceWidget";
 
 export * from "./ui/collection_editor/util";
 
-export { CollectionEditorDialog, type CollectionEditorDialogProps } from "./ui/collection_editor/CollectionEditorDialog";
-export { CollectionStudioView, type CollectionStudioViewProps } from "./ui/collection_editor/CollectionStudioView";
-export { CollectionsStudioView, type CollectionsStudioViewProps } from "./ui/collection_editor/CollectionsStudioView";
-
-export {
-    PropertyForm,
-    PropertyFormDialog,
-    type PropertyFormProps,
-    type OnPropertyChangedParams
-} from "./ui/collection_editor/PropertyEditView";
+// Re-export types only from heavy UI components (runtime code is in the separate chunk)
+export type { CollectionEditorDialogProps } from "./ui/collection_editor/CollectionEditorDialog";
+export type { CollectionStudioViewProps } from "./ui/collection_editor/CollectionStudioView";
+export type { CollectionsStudioViewProps } from "./ui/collection_editor/CollectionsStudioView";
+export type { PropertyFormProps, OnPropertyChangedParams } from "./ui/collection_editor/PropertyEditView";

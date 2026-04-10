@@ -12,13 +12,14 @@ import { EntityCustomView } from "./entity_views";
 import { EntityAction } from "./entity_actions";
 
 /**
- * This interface represents a view that includes a collection of entities.
- * It can be in the root level of the configuration, defining the main
- * menu navigation. You can also find it as a subcollection of a different one.
+ * Base interface containing all driver-agnostic collection properties.
+ * Use {@link PostgresCollection} or {@link FirebaseCollection} for
+ * driver-specific type safety, or {@link EntityCollection} when you
+ * need to handle any collection regardless of backend.
  *
  * @group Models
  */
-export interface EntityCollection<M extends Record<string, any> = any, USER extends User = any> {
+export interface BaseEntityCollection<M extends Record<string, any> = any, USER extends User = any> {
 
     /**
      * You can set an alias that will be used internally instead of the `path`.
@@ -27,9 +28,6 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * Note that you can use this value in reference properties too.
      */
     slug: string;
-
-
-
 
     /**
      * Name of the collection, typically plural.
@@ -55,7 +53,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     dbPath: string;
 
     /**
-     * Set by the backend when the `dbPath` doesn't match an actual database 
+     * Set by the backend when the `dbPath` doesn't match an actual database
      * table in the provided driver schema.
      */
     isTableMissing?: boolean;
@@ -91,63 +89,6 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * If not specified, the default database of the driver is used.
      */
     databaseId?: string;
-
-    /**
-     * Security rules for this collection (Supabase-style Row Level Security).
-     * When defined, the schema generator will enable RLS on the table and
-     * create the corresponding PostgreSQL policies.
-     *
-     * Supports three levels of expressiveness:
-     * 1. **Convenience shortcuts** — `ownerField`, `access`, `roles`
-     * 2. **Raw SQL** — `using` and `withCheck` for full PostgreSQL power
-     * 3. **Combined** — mix shortcuts with `roles` for common patterns
-     *
-     * The authenticated user context is available in raw SQL via:
-     * - `auth.uid()`   — the current user's ID
-     * - `auth.roles()` — comma-separated app role IDs
-     * - `auth.jwt()`   — full JWT claims as JSONB
-     *
-     * @example
-     * // Simple: only owners can access their own rows
-     * securityRules: [
-     *   { operation: "all", ownerField: "user_id" }
-     * ]
-     *
-     * @example
-     * // Public read, owner-only write (using operations array to reduce boilerplate)
-     * securityRules: [
-     *   { operation: "select", access: "public" },
-     *   { operations: ["insert", "update", "delete"], ownerField: "created_by" }
-     * ]
-     *
-     * @example
-     * // Role-based: admins read all rows, users read own
-     * securityRules: [
-     *   { operation: "select", roles: ["admin"], using: "true" },
-     *   { operation: "all", ownerField: "user_id" }
-     * ]
-     *
-     * @example
-     * // Raw SQL: cross-table check with subquery
-     * securityRules: [
-     *   {
-     *     operation: "select",
-     *     using: "EXISTS (SELECT 1 FROM org_members WHERE org_members.org_id = {org_id} AND org_members.user_id = auth.uid())"
-     *   }
-     * ]
-     *
-     * @example
-     * // Restrictive policy with both USING and WITH CHECK to constrain old AND new row states
-     * securityRules: [
-     *   { operation: "all", ownerField: "user_id" },
-     *   { operation: "update", mode: "restrictive", using: "{is_locked} = false", withCheck: "{is_locked} = false" }
-     * ]
-     */
-    securityRules?: SecurityRule[];
-
-
-
-
 
     /**
      * Set of properties that compose an entity
@@ -222,26 +163,11 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     selectionEnabled?: boolean;
 
     /**
-     * You can add subcollections to your entity in the same way you define the root
-     * collections. The collections added here will be displayed when opening
-     * the side dialog of an entity.
-     */
-    subcollections?: () => EntityCollection<any>[];
-
-    /**
-     * For SQL databases, you can define the relations between collections here.
-     */
-    relations?: Relation[];
-
-    /**
      * This interface defines all the callbacks that can be used when an entity
      * is being created, updated or deleted.
      * Useful for adding your own logic or blocking the execution of the operation.
      */
     callbacks?: EntityCallbacks<M, USER>;
-
-
-
 
     /**
      * Pass your own selection controller if you want to control selected
@@ -253,7 +179,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     /**
      * Force a filter in this view. If applied, the rest of the filters will
      * be disabled. Filters applied with this prop cannot be changed.
-     * e.g. `forceFilter: { age: [">=", 18] }`
+     * e.g. `forceFilter: { age: [">", 18] }`
      * e.g. `forceFilter: { related_user: ["==", new EntityReference("sdc43dsw2", "users")] }`
      */
     forceFilter?: FilterValues<Extract<keyof M, string>>;
@@ -261,7 +187,7 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     /**
      * Initial filters applied to the collection this collection is related to.
      * Defaults to none. Filters applied with this prop can be changed.
-     * e.g. `filter: { age: [">=", 18] }`
+     * e.g. `filter: { age: [">", 18] }`
      * e.g. `filter: { related_user: ["==", new EntityReference("sdc43dsw2", "users")] }`
      */
     filter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining collections by code
@@ -273,8 +199,6 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      * e.g. `sort: ["order", "asc"]`
      */
     sort?: [Extract<keyof M, string>, "asc" | "desc"];
-
-
 
     /**
      * You can add additional fields to the collection view by implementing
@@ -424,8 +348,111 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
      */
     Actions?: React.ComponentType<CollectionActionsProps<M, USER>>[];
 
-
 }
+
+// ── Driver-specific collection types ──────────────────────────────────
+
+/**
+ * A collection backed by PostgreSQL (or any SQL database).
+ * Adds support for SQL-style relations (JOINs) and Row Level Security.
+ *
+ * Use this type instead of {@link EntityCollection} when you want
+ * compile-time safety that only SQL-relevant fields appear.
+ *
+ * @group Models
+ */
+export interface PostgresCollection<M extends Record<string, any> = any, USER extends User = any>
+    extends BaseEntityCollection<M, USER> {
+
+    /**
+     * The driver for this collection. For Postgres collections this
+     * can be omitted (Postgres is the default) or set to `"postgres"`.
+     */
+    driver?: "postgres" | undefined;
+
+    /**
+     * For SQL databases, you can define the relations between collections here.
+     * Relations describe JOINs, foreign keys, and junction tables.
+     */
+    relations?: Relation[];
+
+    /**
+     * Security rules for this collection (Supabase-style Row Level Security).
+     * When defined, the schema generator will enable RLS on the table and
+     * create the corresponding PostgreSQL policies.
+     *
+     * Supports three levels of expressiveness:
+     * 1. **Convenience shortcuts** — `ownerField`, `access`, `roles`
+     * 2. **Raw SQL** — `using` and `withCheck` for full PostgreSQL power
+     * 3. **Combined** — mix shortcuts with `roles` for common patterns
+     *
+     * The authenticated user context is available in raw SQL via:
+     * - `auth.uid()`   — the current user's ID
+     * - `auth.roles()` — comma-separated app role IDs
+     * - `auth.jwt()`   — full JWT claims as JSONB
+     */
+    securityRules?: SecurityRule[];
+}
+
+/**
+ * A collection backed by Firebase / Firestore.
+ * Adds support for subcollections (nested document collections).
+ *
+ * Use this type instead of {@link EntityCollection} when you want
+ * compile-time safety that only Firestore-relevant fields appear.
+ *
+ * @group Models
+ */
+export interface FirebaseCollection<M extends Record<string, any> = any, USER extends User = any>
+    extends BaseEntityCollection<M, USER> {
+
+    /**
+     * The driver for this collection. Must be set to `"firestore"`.
+     */
+    driver: "firestore";
+
+    /**
+     * You can add subcollections to your entity in the same way you define the root
+     * collections. The collections added here will be displayed when opening
+     * the side dialog of an entity.
+     */
+    subcollections?: () => EntityCollection<any>[];
+}
+
+/**
+ * A collection backed by any data source.
+ * This is a discriminated union — use {@link PostgresCollection} or
+ * {@link FirebaseCollection} for driver-specific type safety.
+ *
+ * @group Models
+ */
+export type EntityCollection<M extends Record<string, any> = any, USER extends User = any> =
+    | PostgresCollection<M, USER>
+    | FirebaseCollection<M, USER>;
+
+// ── Type guards ───────────────────────────────────────────────────────
+
+/**
+ * Type guard for PostgreSQL collections.
+ * Returns true if the collection uses the Postgres driver (or the default driver).
+ * @group Models
+ */
+export function isPostgresCollection<M extends Record<string, any> = any, USER extends User = any>(
+    collection: EntityCollection<M, USER>
+): collection is PostgresCollection<M, USER> {
+    return !collection.driver || collection.driver === "postgres";
+}
+
+/**
+ * Type guard for Firebase / Firestore collections.
+ * @group Models
+ */
+export function isFirebaseCollection<M extends Record<string, any> = any, USER extends User = any>(
+    collection: EntityCollection<M, USER>
+): collection is FirebaseCollection<M, USER> {
+    return collection.driver === "firestore";
+}
+
 
 /**
  * Configuration for Kanban board view mode.

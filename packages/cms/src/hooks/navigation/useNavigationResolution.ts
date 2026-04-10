@@ -1,4 +1,4 @@
-import type { AppView, AppViewsBuilder, EntityCollection, EntityCustomView, RebasePlugin } from "@rebasepro/types";
+import type { AppView, AppViewsBuilder, EntityCollection, EntityCustomView, FirebaseCollection, RebasePlugin } from "@rebasepro/types";
 import { AuthController, DataDriver,  User, RebaseData } from "@rebasepro/types";
 import type { EntityCollectionsBuilder } from "@rebasepro/types";
 import { canReadCollection } from "@rebasepro/common";
@@ -26,12 +26,12 @@ function injectHistoryViews(collections: EntityCollection[]): EntityCollection[]
         }
 
         // Recurse into subcollections
-        if (modified.subcollections) {
+        if ('subcollections' in modified && modified.subcollections) {
             const originalSubcollections = modified.subcollections;
             return {
                 ...modified,
                 subcollections: () => injectHistoryViews(originalSubcollections() ?? [])
-            };
+            } as FirebaseCollection;
         }
 
         return modified;
@@ -42,22 +42,22 @@ export function filterOutNotAllowedCollections(resolvedCollections: EntityCollec
     return resolvedCollections
         .filter((c) => canReadCollection(c, authController))
         .map((c) => {
-            if (!c.subcollections) return c;
+            if (!('subcollections' in c) || !c.subcollections) return c;
             return {
                 ...c,
-                subcollections: () => filterOutNotAllowedCollections(c.subcollections?.() ?? [], authController)
-            }
+                subcollections: () => filterOutNotAllowedCollections((c as FirebaseCollection).subcollections?.() ?? [], authController)
+            } as FirebaseCollection;
         });
 }
 
 export function applyPluginModifyCollection(resolvedCollections: EntityCollection[], modifyCollection: (collection: EntityCollection) => EntityCollection) {
     return resolvedCollections.map((collection: EntityCollection): EntityCollection => {
         const modifiedCollection = modifyCollection(collection);
-        if (modifiedCollection.subcollections) {
+        if ('subcollections' in modifiedCollection && modifiedCollection.subcollections) {
             return {
                 ...modifiedCollection,
-                subcollections: () => applyPluginModifyCollection(modifiedCollection.subcollections?.() ?? [], modifyCollection)
-            } satisfies EntityCollection;
+                subcollections: () => applyPluginModifyCollection((modifiedCollection as FirebaseCollection).subcollections?.() ?? [], modifyCollection)
+            } as FirebaseCollection;
         }
         return modifiedCollection;
     });

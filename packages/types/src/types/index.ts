@@ -21,3 +21,4 @@ export * from "./slots";
 export * from "./entity_actions";
 export * from "./property_config";
 export * from "./entity_views";
+export * from "./data_source";

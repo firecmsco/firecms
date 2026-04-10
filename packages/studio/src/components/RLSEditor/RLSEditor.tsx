@@ -22,6 +22,7 @@ import {
     Tab
 } from "@rebasepro/ui";
 import { useRebaseContext, useSnackbarController, ErrorView, useTranslation } from "@rebasepro/core";
+import { isPostgresCollection } from "@rebasepro/types";
 import { PolicyEditor } from "./PolicyEditor";
 
 export interface PostgresPolicy {
@@ -231,7 +232,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
         });
 
         // Merge code-based policies
-        if (activeCollection && activeCollection.securityRules) {
+        if (activeCollection && isPostgresCollection(activeCollection) && activeCollection.securityRules) {
             activeCollection.securityRules.forEach((rule: { name?: string, mode?: string, operation?: string, roles?: string[], using?: string, withCheck?: string }) => {
                 const ruleName = rule.name;
                 if (!ruleName) return;
@@ -513,7 +514,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                         roles: newPolicy.roles
                                     };
 
-                                    const existingRules = activeCollection.securityRules || [];
+                                    const existingRules = (isPostgresCollection(activeCollection) ? activeCollection.securityRules : undefined) || [];
                                     let newRules;
                                     if (editingPolicy === "new") {
                                         newRules = [...existingRules, rule];
@@ -631,7 +632,7 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
                                                                         roles: policy.roles
                                                                     };
 
-                                                                    const existingRules = activeCollection.securityRules || [];
+                                                                    const existingRules = (isPostgresCollection(activeCollection) ? activeCollection.securityRules : undefined) || [];
                                                                     const newRules = [...existingRules, rule];
 
                                                                     try {

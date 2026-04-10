@@ -4,7 +4,7 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { ConfirmationDialog, ErrorView, useAuthController, useCustomizationController, useSnackbarController } from "@rebasepro/core";
 import { CircularProgressCenter } from "@rebasepro/ui";
-import { Entity, EntityCollection, MapProperty, Properties, Property, PropertyConfig, User } from "@rebasepro/types";
+import { Entity, EntityCollection, MapProperty, Properties, Property, PropertyConfig, User, getDataSourceCapabilities } from "@rebasepro/types";
 import { getSubcollections, isPropertyBuilder, removeInitialAndTrailingSlashes } from "@rebasepro/common";
 import {
     ArrowBackIcon,
@@ -226,13 +226,15 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
     const initialValues: EntityCollection<any> = initialCollection
         ? applyPropertyConfigs(initialCollection, propertyConfigs)
         : copyFromProp
-            ? {
+            ? (() => {
                 // When duplicating, copy all properties but clear identifiers
-                ...copyFromProp,
-                name: "",
-                subcollections: undefined, // Don't copy subcollections
-                ownerId: authController.user?.uid ?? ""
-            }
+                const { subcollections: _sub, ...rest } = copyFromProp as any;
+                return {
+                    ...rest,
+                    name: "",
+                    ownerId: authController.user?.uid ?? ""
+                } as EntityCollection<any>;
+            })()
             : {
                 slug: initialValuesProp?.slug ?? randomString(16),
                 dbPath: initialValuesProp?.slug ?? "",
@@ -645,12 +647,12 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             <Tab value={"properties"}>
                                 Properties
                             </Tab>
-                            <Tab value={"rls"}>
+                            {getDataSourceCapabilities(values.driver).supportsRLS && <Tab value={"rls"}>
                                 RLS
-                            </Tab>
-                            <Tab value={"relations"}>
+                            </Tab>}
+                            {getDataSourceCapabilities(values.driver).supportsRelations && <Tab value={"relations"}>
                                 Relations
-                            </Tab>
+                            </Tab>}
                         </Tabs>
                     </div>
                     <div className="flex items-center gap-4">
@@ -756,11 +758,11 @@ function CollectionEditorInternal<M extends Record<string, any>>({
                             <DisplaySettingsForm expandKanban={expandKanban} />
                         }
 
-                        {currentView === "relations" &&
+                        {currentView === "relations" && getDataSourceCapabilities(values.driver).supportsRelations &&
                             <CollectionRelationsTab />
                         }
 
-                        {currentView === "rls" &&
+                        {currentView === "rls" && getDataSourceCapabilities(values.driver).supportsRLS &&
                             <CollectionRLSTab />
                         }
 

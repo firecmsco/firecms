@@ -13,8 +13,8 @@
         "url": "https://github.com/rebasepro/rebase.git",
         "directory": "packages/cms"
     },
-    "main": "./dist/index.umd.js",
-    "module": "./dist/index.es.js",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "engines": {
@@ -44,8 +44,12 @@
         ".": {
             "types": "./dist/index.d.ts",
             "development": "./src/index.ts",
-            "import": "./dist/index.es.js",
-            "require": "./dist/index.umd.js"
+            "import": "./dist/index.js"
+        },
+        "./collection_editor_ui": {
+            "types": "./dist/collection_editor_ui.d.ts",
+            "development": "./src/collection_editor_ui.ts",
+            "import": "./dist/collection_editor_ui.js"
         },
         "./package.json": "./package.json"
     },

@@ -1,7 +1,10 @@
 import {
     ArrayProperty,
     EntityCollection,
+    isPostgresCollection,
+    isFirebaseCollection,
     NumberProperty,
+    PostgresCollection,
     Properties,
     Property,
     Relation,
@@ -142,7 +145,8 @@ export class CollectionRegistry {
     }
 
     public normalizeCollection(collection: EntityCollection): EntityCollection {
-        const properties: Properties = this.normalizeProperties(collection.properties, collection.relations ?? []);
+        const relations = isPostgresCollection(collection) ? (collection.relations ?? []) : [];
+        const properties: Properties = this.normalizeProperties(collection.properties, relations);
 
         collection.properties = properties;
         return collection;
@@ -241,6 +245,9 @@ export class CollectionRegistry {
             const relationKey = pathSegments[i];
 
             // Get relations for current collection
+            if (!isPostgresCollection(currentCollection)) {
+                throw new Error(`Relation path navigation requires a PostgreSQL collection, but '${currentCollection.slug || currentCollection.dbPath}' uses driver '${currentCollection.driver}'`);
+            }
             const resolvedRelations = resolveCollectionRelations(currentCollection);
             const relation = resolvedRelations[relationKey];
 
@@ -306,7 +313,7 @@ export class CollectionRegistry {
 
             if (i + 1 < pathSegments.length) {
                 const subcollectionSlug = pathSegments[i + 1];
-                const subcollections: EntityCollection[] | undefined = currentCollection.subcollections?.();
+                const subcollections: EntityCollection[] | undefined = isFirebaseCollection(currentCollection) ? currentCollection.subcollections?.() : undefined;
                 if (!subcollections) {
                     throw new Error(`No subcollections found for ${currentCollection.slug || currentCollection.dbPath} in path: ${path}`);
                 }
@@ -343,14 +350,15 @@ function areCollectionListsEqual(a: EntityCollection[], b: EntityCollection[]) {
 }
 
 function areCollectionsEqual(a: EntityCollection, b: EntityCollection) {
-    const {
-        subcollections: subcollectionsA,
-        ...restA
-    } = a;
-    const {
-        subcollections: subcollectionsB,
-        ...restB
-    } = b;
+    const hasSubA = isFirebaseCollection(a);
+    const hasSubB = isFirebaseCollection(b);
+    const subcollectionsA = hasSubA ? a.subcollections : undefined;
+    const subcollectionsB = hasSubB ? b.subcollections : undefined;
+    const { driver: _dA, ...restA } = a as Record<string, any>;
+    const { driver: _dB, ...restB } = b as Record<string, any>;
+    // Remove subcollections from comparison objects (already handled above)
+    delete restA.subcollections;
+    delete restB.subcollections;
     if (!areCollectionListsEqual(subcollectionsA?.() ?? [], subcollectionsB?.() ?? [])) {
         return false;
     }

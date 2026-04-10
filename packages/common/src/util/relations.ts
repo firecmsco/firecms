@@ -1,8 +1,8 @@
-import { EntityCollection, Property, Relation } from "@rebasepro/types";
+import { EntityCollection, PostgresCollection, Property, Relation } from "@rebasepro/types";
 import { toSnakeCase } from "@rebasepro/utils";
 import { generateForeignKeyName } from "@rebasepro/utils";
 
-export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: EntityCollection): Relation {
+export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: PostgresCollection): Relation {
     if (!relation.target) {
         throw new Error("Relation is missing a `target` collection.");
     }
@@ -41,7 +41,7 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
 
                 try {
                     // Look for an owning relation on the target that points back to this collection
-                    const targetRelations = targetCollection.relations || [];
+                    const targetRelations = (targetCollection as PostgresCollection).relations || [];
                     for (const targetRel of targetRelations) {
                         if (targetRel.direction === "owning" &&
                             targetRel.cardinality === "one" &&
@@ -86,7 +86,7 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
                     // Note: we intentionally do NOT require `through` here because the raw (unsanitized)
                     // relations won't have `through` populated yet — sanitizeRelation fills it in later.
                     // `cardinality: "many" + direction: "owning"` is sufficient to identify owning M2M.
-                    const targetRelations = targetCollection.relations || [];
+                    const targetRelations = (targetCollection as PostgresCollection).relations || [];
                     for (const targetRel of targetRelations) {
                         if (targetRel.cardinality === "many" &&
                             (targetRel.direction === "owning" || !targetRel.direction) &&
@@ -134,7 +134,7 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
 }
 
 export function resolveCollectionRelations(
-    collection: EntityCollection,
+    collection: PostgresCollection,
 ): Record<string, Relation> {
     const relations: Record<string, Relation> = {};
 
@@ -180,11 +180,11 @@ export function resolvePropertyRelation({
 }: {
     propertyKey: string;
     property: Property;
-    sourceCollection: EntityCollection;
+    sourceCollection: PostgresCollection;
 }): Relation | undefined {
     if (property.type !== "relation") return undefined;
 
-    const relation = sourceCollection.relations?.find((rel) => rel.relationName === property.relationName)
+    const relation = (sourceCollection.relations ?? []).find((rel: Relation) => rel.relationName === property.relationName)
     if (!relation) {
         console.warn(`Unrecognized relation format for property '${propertyKey}' in collection '${sourceCollection.slug || sourceCollection.dbPath}'`);
         return undefined;

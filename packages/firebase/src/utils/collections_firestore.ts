@@ -1,5 +1,5 @@
 import { deleteField, DocumentSnapshot } from "@firebase/firestore";
-import { EntityCollection, Properties, Property } from "@rebasepro/types";
+import { EntityCollection, FirebaseCollection, Properties, Property } from "@rebasepro/types";
 import { COLLECTION_PATH_SEPARATOR, sortProperties, stripCollectionPath } from "@rebasepro/common";
 
 export function buildCollectionId(idOrPath: string, parentCollectionIds?: string[]): string {
@@ -26,7 +26,7 @@ export const docsToCollectionTree = (docs: DocumentSnapshot[]): EntityCollection
             const parentId = id.split(COLLECTION_PATH_SEPARATOR).slice(0, -1).join(COLLECTION_PATH_SEPARATOR);
             const parentCollection = collectionsMap[parentId];
             if (parentCollection)
-                parentCollection.subcollections = () => [...(parentCollection.subcollections?.() ?? []), collection];
+                (parentCollection as FirebaseCollection).subcollections = () => [...((parentCollection as FirebaseCollection).subcollections?.() ?? []), collection];
             delete collectionsMap[id];
         }
     });

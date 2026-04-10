@@ -12,7 +12,7 @@ export function NewCollectionCard({
 }: PluginHomePageAdditionalCardsProps) {
 
     if (!context.navigationStateController?.topLevelNavigation)
-        throw Error("Navigation not ready in RebaseHomePage");
+        return null;
 
     const authController = useAuthController();
 

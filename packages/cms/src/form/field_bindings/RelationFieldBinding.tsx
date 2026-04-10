@@ -2,7 +2,7 @@ import { useEntitySelectionDialog } from "../../hooks/useEntitySelectionDialog";
 import type { FieldProps } from "../../types/fields";
 import type { RelationProperty } from "@rebasepro/types";
 import React, { useCallback } from "react";
-import { Entity } from "@rebasepro/types";
+import { Entity, isPostgresCollection } from "@rebasepro/types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EntityPreviewContainer } from "../../components/EntityPreview";
 import { IconForView } from "@rebasepro/core";
@@ -34,10 +34,11 @@ export function RelationFieldBinding({
     if (property.type !== "relation") {
         throw Error("RelationFieldBinding expected a property containing a relation");
     }
-    if (!context.collection?.relations) {
-        throw Error("RelationFieldBinding expected a collection with relations");
+    const collection = context.collection;
+    if (!collection || !isPostgresCollection(collection) || !collection.relations) {
+        throw Error("RelationFieldBinding expected a PostgreSQL collection with relations");
     }
-    const resolvedProperty = resolveRelationProperty(property, context.collection?.relations)
+    const resolvedProperty = resolveRelationProperty(property, collection.relations)
     const relation = resolvedProperty.relation;
 
     const manyRelation = relation?.cardinality === "many";
