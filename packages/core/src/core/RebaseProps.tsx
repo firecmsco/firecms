@@ -18,22 +18,22 @@ export interface EffectiveRoleController {
 export type RebaseProps<USER extends User> = {
 
     /**
-     * Use this function to return the components you want to render under
-     * Rebase
-     * @param props
+     * The root components of your application. Use RebaseAuth, RebaseCMS, RebaseStudio, and RebaseShell.
+     * Note: This accepts standard React components instead of a render prop in the new architecture.
      */
-    children: (props: {
-        /**
-         * Context of the app
-         */
-        context: RebaseContext;
-        /**
-         * Is one of the main processes, auth and navigation resolving, currently
-         * loading. If you are building your custom implementation, you probably
-         * want to show a loading indicator if this flag is `true`
-         */
-        loading: boolean;
-    }) => React.ReactNode;
+    children: React.ReactNode;
+
+    /**
+     * Optional base path for the entire Rebase app.
+     * Defaults to "/"
+     */
+    basePath?: string;
+
+    /**
+     * Optional base path for the CMS collections.
+     * Defaults to "/c"
+     */
+    baseCollectionPath?: string;
 
     /**
      * If you have a custom API key, you can use it here.

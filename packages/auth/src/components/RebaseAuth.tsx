@@ -1,0 +1,23 @@
+import React, { useLayoutEffect, useRef } from "react";
+import { useRebaseRegistryDispatch } from "@rebasepro/core";
+import type { RebaseAuthConfig } from "@rebasepro/types";
+
+/**
+ * Declarative component to configure authentication in Rebase.
+ * Renders nothing — purely registers config into the RebaseRegistry.
+ */
+export function RebaseAuth({ loginView }: RebaseAuthConfig) {
+    const dispatch = useRebaseRegistryDispatch();
+    const registeredRef = useRef(false);
+
+    useLayoutEffect(() => {
+        dispatch.registerAuth({ loginView });
+        registeredRef.current = true;
+        return () => {
+            registeredRef.current = false;
+            dispatch.unregisterAuth();
+        };
+    }, [dispatch, loginView]);
+
+    return null;
+}

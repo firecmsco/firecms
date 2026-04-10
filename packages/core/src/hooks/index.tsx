@@ -33,7 +33,7 @@ export * from "./useBuildLocalConfigurationPersistence";
 export * from "./useBuildModeController";
 
 export * from "./useValidateAuthenticator";
-
+export * from "./useRebaseRegistry";
 export * from "./useBackendStorageSource";
 export * from "./usePermissions";
 

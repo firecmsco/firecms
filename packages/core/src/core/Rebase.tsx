@@ -14,6 +14,11 @@ import { StorageSourceContext } from "../contexts/StorageSourceContext";
 import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
 import { RebaseDataContext } from "../contexts/RebaseDataContext";
 import { DatabaseAdminContext } from "../contexts/DatabaseAdminContext";
+import { ModeControllerProvider, AdminModeControllerProvider, SnackbarProvider } from "../contexts";
+import { RebaseI18nProvider } from "../i18n/RebaseI18nProvider";
+import { RebaseRegistryProvider } from "../hooks/useRebaseRegistry";
+import { useBuildModeController } from "../hooks/useBuildModeController";
+import { useBuildAdminModeController } from "../hooks/useBuildAdminModeController";
 import { RebaseClientInstanceContext } from "../contexts/RebaseClientInstanceContext";
 import { DialogsProvider } from "../contexts/DialogsProvider";
 import { buildRebaseData, CollectionRegistry } from "@rebasepro/common";
@@ -126,6 +131,9 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     const fallbackEffectiveRoleController = useBuildEffectiveRoleController();
     const activeEffectiveRoleController = effectiveRoleController ?? fallbackEffectiveRoleController;
 
+    const modeController = useBuildModeController();
+    const adminModeController = useBuildAdminModeController();
+
     if (authController.authError) {
         return (
             <CenteredView maxWidth={"md"}>
@@ -137,6 +145,10 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     }
 
     const content = (
+        <RebaseI18nProvider locale={locale}>
+        <SnackbarProvider>
+        <ModeControllerProvider value={modeController}>
+        <AdminModeControllerProvider value={adminModeController}>
         <RebaseClientInstanceContext.Provider value={client}>
         <AnalyticsContext.Provider value={analyticsController}>
             <CustomizationControllerContext.Provider value={customizationController}>
@@ -153,10 +165,12 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                                     <InternalUserManagementContext.Provider value={userManagement}>
                                         <EffectiveRoleControllerContext.Provider value={activeEffectiveRoleController}>
                                             <DialogsProvider>
-                                                <RebaseInternal
-                                                    loading={loading}>
-                                                    {children}
-                                                </RebaseInternal>
+                                                <RebaseRegistryProvider>
+                                                    <RebaseInternal
+                                                        loading={loading}>
+                                                        {children}
+                                                    </RebaseInternal>
+                                                </RebaseRegistryProvider>
                                             </DialogsProvider>
                                         </EffectiveRoleControllerContext.Provider>
                                     </InternalUserManagementContext.Provider>
@@ -168,6 +182,10 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
             </CustomizationControllerContext.Provider>
         </AnalyticsContext.Provider>
         </RebaseClientInstanceContext.Provider>
+        </AdminModeControllerProvider>
+        </ModeControllerProvider>
+        </SnackbarProvider>
+        </RebaseI18nProvider>
     );
 
     if (apiUrl) {
@@ -187,19 +205,16 @@ function RebaseInternal({
     children
 }: {
     loading: boolean;
-    children: (props: {
-        context: RebaseContext;
-        loading: boolean;
-    }) => React.ReactNode;
+    children: React.ReactNode | ((props: { context: RebaseContext; loading: boolean; }) => React.ReactNode);
 }) {
 
     const context = useRebaseContext();
     const customizationController = useCustomizationController();
 
-    const childrenResult = children({
+    const childrenResult = typeof children === "function" ? children({
         context,
         loading
-    });
+    }) : children;
 
     const plugins = customizationController.plugins;
     if (!loading && plugins && plugins.length > 0) {

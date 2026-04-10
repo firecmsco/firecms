@@ -43,6 +43,8 @@ export {
     ContentHomePage,
     UsersView,
     RolesView,
+    RebaseCMS,
+    RebaseShell,
     SideDialogs,
     useApp,
 } from "./components";

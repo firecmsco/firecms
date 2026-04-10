@@ -17,3 +17,4 @@ export * from "./side_entity_controller";
 export * from "./side_dialogs_controller";
 export * from "./dialogs_controller";
 export * from "./snackbar";
+export * from "./registry";
