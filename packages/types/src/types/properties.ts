@@ -800,13 +800,6 @@ export type StorageConfig = {
     acceptedFiles?: FileType[];
 
     /**
-     * Use client side image compression and resizing
-     * Will only be applied to these MIME types: image/jpeg, image/png and image/webp
-     * @deprecated Use `imageResize` instead
-     */
-    imageCompression?: ImageResize;
-
-    /**
      * Advanced image resizing and cropping configuration.
      * Applied before upload to optimize storage and bandwidth.
      * Only applies to image MIME types: image/jpeg, image/png, image/webp

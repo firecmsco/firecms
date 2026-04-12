@@ -20,7 +20,7 @@ export interface DatabaseConnection {
     readonly isConnected?: boolean;
 
     /**
-     * Close the database connection
+     * Close the database connection and release resources.
      */
     close?(): Promise<void>;
 }
@@ -332,6 +332,161 @@ export interface DataTransformer {
 }
 
 // =============================================================================
+// DATABASE ADMIN — CAPABILITY-SPECIFIC INTERFACES (1.3)
+// =============================================================================
+
+/**
+ * Administrative operations for SQL-based databases (PostgreSQL, MySQL, etc.).
+ * Used by the SQL Editor, RLS Editor, and schema browser.
+ *
+ * @group Admin
+ */
+export interface SQLAdmin {
+    /**
+     * Execute raw SQL against the database.
+     */
+    executeSql(sql: string, options?: { database?: string; role?: string }): Promise<Record<string, unknown>[]>;
+
+    /**
+     * Fetch the available databases on the server.
+     */
+    fetchAvailableDatabases?(): Promise<string[]>;
+
+    /**
+     * Fetch the available database roles.
+     */
+    fetchAvailableRoles?(): Promise<string[]>;
+
+    /**
+     * Fetch the current database name.
+     */
+    fetchCurrentDatabase?(): Promise<string | undefined>;
+}
+
+/**
+ * Administrative operations for document-based databases (MongoDB, Firestore, etc.).
+ * Used by future document administration tools.
+ *
+ * @group Admin
+ */
+export interface DocumentAdmin {
+    /**
+     * Execute an aggregation pipeline or equivalent query.
+     */
+    executeAggregate?(pipeline: Record<string, unknown>[]): Promise<Record<string, unknown>[]>;
+
+    /**
+     * Fetch statistics for a collection (document count, size, etc.).
+     */
+    fetchCollectionStats?(collectionName: string): Promise<{ count: number; sizeBytes?: number }>;
+}
+
+/**
+ * Administrative operations for schema management.
+ * Shared across SQL and document databases.
+ *
+ * @group Admin
+ */
+export interface SchemaAdmin {
+    /**
+     * Fetch database tables/collections not yet mapped to a Rebase collection.
+     */
+    fetchUnmappedTables?(mappedPaths?: string[]): Promise<string[]>;
+
+    /**
+     * Fetch column/field metadata for a single table/collection.
+     * The return type is generic — SQL backends return TableMetadata,
+     * document backends may return a different shape.
+     */
+    fetchTableMetadata?(tableName: string): Promise<unknown>;
+}
+
+/**
+ * Union type for all admin capabilities.
+ * A backend may implement any combination of these interfaces.
+ *
+ * Use type guards (`isSQLAdmin`, `isDocumentAdmin`, `isSchemaAdmin`)
+ * to safely narrow the type before calling methods.
+ *
+ * @group Admin
+ */
+export type DatabaseAdmin = Partial<SQLAdmin> & Partial<DocumentAdmin> & Partial<SchemaAdmin>;
+
+/**
+ * Type guard: does this admin support SQL operations?
+ * @group Admin
+ */
+export function isSQLAdmin(admin: DatabaseAdmin | undefined): admin is SQLAdmin {
+    return !!admin && typeof (admin as SQLAdmin).executeSql === "function";
+}
+
+/**
+ * Type guard: does this admin support document operations?
+ * @group Admin
+ */
+export function isDocumentAdmin(admin: DatabaseAdmin | undefined): admin is DocumentAdmin {
+    return !!admin && (
+        typeof (admin as DocumentAdmin).executeAggregate === "function" ||
+        typeof (admin as DocumentAdmin).fetchCollectionStats === "function"
+    );
+}
+
+/**
+ * Type guard: does this admin support schema management?
+ * @group Admin
+ */
+export function isSchemaAdmin(admin: DatabaseAdmin | undefined): admin is SchemaAdmin {
+    return !!admin && (
+        typeof (admin as SchemaAdmin).fetchUnmappedTables === "function" ||
+        typeof (admin as SchemaAdmin).fetchTableMetadata === "function"
+    );
+}
+
+// =============================================================================
+// LIFECYCLE INTERFACES (1.4)
+// =============================================================================
+
+/**
+ * Health check result returned by `healthCheck()`.
+ * @group Lifecycle
+ */
+export interface HealthCheckResult {
+    /** Whether the backend is healthy and able to serve requests. */
+    healthy: boolean;
+    /** Round-trip latency to the database in milliseconds. */
+    latencyMs: number;
+    /** Optional details (e.g., pool stats, replication lag). */
+    details?: Record<string, unknown>;
+}
+
+/**
+ * Lifecycle contract for backend components that hold resources
+ * (database connections, WebSocket pools, timers, etc.).
+ *
+ * All methods are optional — simple backends (e.g., in-memory) can skip them.
+ * @group Lifecycle
+ */
+export interface BackendLifecycle {
+    /**
+     * Initialize the backend: open connections, run migrations, seed data.
+     * Called once during startup. Idempotent.
+     */
+    initialize?(): Promise<void>;
+
+    /**
+     * Check whether the backend is healthy and reachable.
+     * Should be fast (< 1 s) and safe to call frequently.
+     */
+    healthCheck?(): Promise<HealthCheckResult>;
+
+    /**
+     * Gracefully shut down: close connections, flush buffers, cancel timers.
+     * After calling `destroy()`, no other methods should be called.
+     */
+    destroy?(): Promise<void>;
+}
+
+// =============================================================================
 // BACKEND FACTORY INTERFACES
 // =============================================================================
 
@@ -356,9 +511,11 @@ export interface BackendConfig {
 }
 
 /**
- * A complete backend instance with all required services
+ * A complete backend instance with all required services.
+ *
+ * Now includes optional lifecycle management and admin capabilities.
  */
-export interface BackendInstance {
+export interface BackendInstance extends BackendLifecycle {
     /**
      * Entity repository for CRUD operations
      */
@@ -378,6 +535,13 @@ export interface BackendInstance {
      * The underlying database connection
      */
     connection: DatabaseConnection;
+
+    /**
+     * Administrative operations (SQL, schema, documents).
+     * What's available depends on the backend type — use type guards
+     * (`isSQLAdmin`, `isSchemaAdmin`, etc.) to narrow.
+     */
+    admin?: DatabaseAdmin;
 }
 
 /**
@@ -385,3 +549,113 @@ export interface BackendInstance {
  */
 export type BackendFactory<TConfig extends BackendConfig = BackendConfig> =
     (config: TConfig) => BackendInstance;
+
+// =============================================================================
+// BACKEND BOOTSTRAPPER (1.2)
+// =============================================================================
+
+/**
+ * A `BackendBootstrapper` encapsulates all driver-specific initialization logic.
+ *
+ * Instead of hard-coding Postgres setup into `initializeRebaseBackend()`,
+ * each database backend provides its own bootstrapper that knows how to:
+ * - Create the DataDriver from a config object
+ * - Optionally initialize auth tables
+ * - Optionally create a realtime service
+ * - Mount driver-specific API routes
+ *
+ * The main `initializeRebaseBackend()` becomes a **coordinator** that iterates
+ * registered bootstrappers, calls their hooks, and wires the results together.
+ *
+ * @group Backend
+ *
+ * @example
+ * ```typescript
+ * // Third-party MySQL bootstrapper
+ * const mysqlBootstrapper: BackendBootstrapper = {
+ *   type: "mysql",
+ *   initializeDriver: async (config) => new MySQLDataDriver(config.connection),
+ *   initializeRealtime: async (config) => new MySQLChangeStreamRealtime(config.connection),
+ * };
+ * 
+ * initializeRebaseBackend({
+ *   ...config,
+ *   bootstrappers: [postgresBootstrapper, mysqlBootstrapper]
+ * });
+ * ```
+ */
+export interface BackendBootstrapper {
+    /**
+     * Which driver type this bootstrapper handles.
+     * Must match the `type` field on the driver config object
+     * (e.g., `"postgres"`, `"mongodb"`, `"mysql"`).
+     */
+    type: string;
+
+    /**
+     * Create a DataDriver from the given config.
+     * This is the only **required** method.
+     */
+    initializeDriver(config: unknown): Promise<InitializedDriver>;
+
+    /**
+     * Initialize auth tables / services if this driver supports them.
+     * Return undefined if auth is not supported by this backend.
+     */
+    initializeAuth?(config: unknown, driverResult: InitializedDriver): Promise<BootstrappedAuth | undefined>;
+
+    /**
+     * Create a realtime provider for this driver.
+     * Return undefined if the driver does not support realtime.
+     */
+    initializeRealtime?(config: unknown, driverResult: InitializedDriver): Promise<RealtimeProvider | undefined>;
+
+    /**
+     * Mount any driver-specific HTTP routes (e.g., custom admin endpoints).
+     * Called after all drivers are initialized.
+     */
+    mountRoutes?(app: unknown, basePath: string, driverResult: InitializedDriver): void;
+
+    /**
+     * Return admin capabilities for this driver.
+     */
+    getAdmin?(driverResult: InitializedDriver): DatabaseAdmin | undefined;
+}
+
+/**
+ * Result of `BackendBootstrapper.initializeDriver()`.
+ * @group Backend
+ */
+export interface InitializedDriver {
+    /** The DataDriver instance, ready for use. */
+    driver: import("../controllers/data_driver").DataDriver;
+
+    /** The realtime service, if the driver created one during init. */
+    realtimeProvider?: RealtimeProvider;
+
+    /** A collection registry to register schema / tables into. */
+    collectionRegistry?: CollectionRegistryInterface;
+
+    /** The underlying database connection (for lifecycle management). */
+    connection?: DatabaseConnection;
+
+    /**
+     * Opaque handle that the bootstrapper can use in subsequent hooks
+     * (e.g., `initializeAuth`, `mountRoutes`) to access driver internals.
+     * Not used by the coordinator.
+     */
+    internals?: unknown;
+}
+
+/**
+ * Result of `BackendBootstrapper.initializeAuth()`.
+ * @group Backend
+ */
+export interface BootstrappedAuth {
+    /** User management service. */
+    userService: unknown;
+    /** Role management service. */
+    roleService: unknown;
+    /** Email service (optional). */
+    emailService?: unknown;
+}

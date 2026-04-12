@@ -134,7 +134,4 @@ export class DataTalkApiError extends Error {
     }
 }
 
-/**
- * @deprecated Use DataTalkApiError instead
- */
-export const ApiError = DataTalkApiError;
+

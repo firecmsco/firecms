@@ -88,7 +88,7 @@ export const ConfigControllerProvider = React.memo(
         }, [databaseAdmin, authController.initialLoading, authController.user, collectionConfigController.collections]);
 
         const onFetchTableMetadata = useCallback(async (tableName: string): Promise<TableMetadata | undefined> => {
-            return databaseAdmin?.fetchTableMetadata?.(tableName);
+            return databaseAdmin?.fetchTableMetadata?.(tableName) as Promise<TableMetadata | undefined>;
         }, [databaseAdmin]);
 
         const urlController = useUrlController();

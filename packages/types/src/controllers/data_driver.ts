@@ -185,37 +185,38 @@ export interface DataDriver {
      */
     needsInitTextSearch?: boolean;
 
-    // ── Optional database-admin methods (implemented by postgres driver) ──
+    // ── Admin capabilities ─────────────────────────────────────────────
+    //
+    // Admin operations are now modelled as capability-specific interfaces
+    // (SQLAdmin, DocumentAdmin, SchemaAdmin) in `@rebasepro/types/backend`.
+    //
+    // Drivers that support admin features should expose them here.
+    // Consumers should use the `isSQLAdmin()`, `isSchemaAdmin()` etc.
+    // type guards to safely narrow the type before calling methods.
 
     /**
-     * Execute raw SQL against the database.
-     * Only available for SQL-based drivers (e.g. PostgreSQL).
+     * Return the admin capabilities of this driver.
+     * @see SQLAdmin
+     * @see DocumentAdmin
+     * @see SchemaAdmin
      */
+    admin?: import("../types/backend").DatabaseAdmin;
+
+    // ── Direct admin methods ────────────────────────────────────────────
+    // These convenience methods are kept on the driver interface for
+    // simple use cases. For capability-based access, use `driver.admin`
+    // with `isSQLAdmin()` / `isSchemaAdmin()` type guards.
+
     executeSql?(sql: string, options?: { database?: string; role?: string }): Promise<Record<string, unknown>[]>;
 
-    /**
-     * List available databases on the server.
-     */
     fetchAvailableDatabases?(): Promise<string[]>;
 
-    /**
-     * List available database roles.
-     */
     fetchAvailableRoles?(): Promise<string[]>;
 
-    /**
-     * Return the name of the currently connected database.
-     */
     fetchCurrentDatabase?(): Promise<string | undefined>;
 
-    /**
-     * Fetch public tables not yet mapped to a collection.
-     */
     fetchUnmappedTables?(mappedPaths?: string[]): Promise<string[]>;
 
-    /**
-     * Fetch column/FK/policy metadata for a single table.
-     */
     fetchTableMetadata?(tableName: string): Promise<TableMetadata>;
 
 }

@@ -43,10 +43,7 @@ export function getEntitySchema<M extends Record<string, any>>(
     return z.object(shape).passthrough();
 }
 
-/**
- * @deprecated Use getEntitySchema instead
- */
-export const getYupEntitySchema = getEntitySchema;
+
 
 export function mapPropertyToZod(propertyContext: PropertyContext<Property>): ZodTypeAny {
 
@@ -89,10 +86,7 @@ export function mapPropertyToZod(propertyContext: PropertyContext<Property>): Zo
     );
 }
 
-/**
- * @deprecated Use mapPropertyToZod instead
- */
-export const mapPropertyToYup = mapPropertyToZod;
+
 
 export function getZodMapObjectSchema({
     property,

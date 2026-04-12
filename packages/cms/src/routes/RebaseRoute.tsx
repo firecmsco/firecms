@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { EntityCollectionView } from "../components";
 import { NotFoundPage } from "@rebasepro/core";
 import { UnsavedChangesDialog } from "@rebasepro/core";
-;
+import { CircularProgressCenter } from "@rebasepro/ui";
 import { getNavigationEntriesFromPath, NavigationViewCollectionInternal, NavigationViewEntityCustomInternal, NavigationViewInternal } from "@rebasepro/common";
 import { toArray } from "@rebasepro/utils";
 import { useCollectionRegistryController, useUrlController } from "../index";
@@ -83,8 +83,12 @@ export function RebaseRoute() {
         collection = collectionRegistry.getCollection(navigationEntries[0].id);
         if (!collection)
             collection = collectionRegistry.getCollection(navigationEntries[0].slug);
-        if (!collection)
+        if (!collection) {
+            if (!collectionRegistry.initialised) {
+                return <CircularProgressCenter />;
+            }
             return null;
+        }
         return <EntityCollectionView
             key={`collection_view_${collection.slug}`}
             parentCollectionIds={[]}
@@ -102,8 +106,12 @@ export function RebaseRoute() {
             collection = collectionRegistry.getCollection(firstEntry.id);
             if (!collection)
                 collection = collectionRegistry.getCollection(firstEntry.slug);
-            if (!collection)
+            if (!collection) {
+                if (!collectionRegistry.initialised) {
+                    return <CircularProgressCenter />;
+                }
                 return null;
+            }
             return <EntityCollectionView
                 key={`collection_view_${collection.slug}`}
                 parentCollectionIds={[]}
@@ -202,6 +210,9 @@ function EntityFullScreenRoute({
     }
 
     if (!isNew && !lastEntityEntry) {
+        if (!collectionRegistry.initialised) {
+            return <CircularProgressCenter />;
+        }
         return <NotFoundPage />;
     }
 

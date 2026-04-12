@@ -122,16 +122,16 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                     barActions={({
                         status,
                         values
-                    }) => <>
+                    }) => <div className="flex gap-1">
                             <IconButton
                                 className="self-center"
-                                size={"smallest"}
+                                size={"small"}
                                 onClick={onClose}>
-                                <CloseIcon size={"smallest"} />
+                                <CloseIcon size={"small"} />
                             </IconButton>
                             {allowFullScreen && <IconButton
                                 className="self-center"
-                                size={"smallest"}
+                                size={"small"}
                                 onClick={() => {
                                     const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
                                     saveEntityToMemoryCache(key, values);
@@ -151,7 +151,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                                 }}>
                                 <OpenInFullIcon size={"smallest"} />
                             </IconButton>}
-                        </>}
+                        </div>}
                     onTabChange={({
                         entityId,
                         selectedTab,

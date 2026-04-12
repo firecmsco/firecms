@@ -595,7 +595,7 @@ export class EntityFetchService {
     }
 
     /**
-     * @deprecated Only used in the fallback path when db.query is unavailable.
+     * Fallback path used when db.query is unavailable.
      * The primary path uses drizzleResultToEntity which handles relation
      * mapping without N+1 queries.
      *
@@ -1183,11 +1183,9 @@ export class EntityFetchService {
     }
 
     /**
-     * @deprecated Superseded by inline `this.db.query?.[tableName]` checks in fetchCollectionForRest/fetchEntityForRest.
-     * Kept for backward compatibility only.
-     *
      * Check if the Drizzle instance has the relational query API available
      * for a given collection path.
+     * Note: Primary path now uses inline `getQueryBuilder()` checks.
      */
     private hasDrizzleQueryAPI(collectionPath: string): boolean {
         
@@ -1203,13 +1201,10 @@ export class EntityFetchService {
     }
 
     /**
-     * @deprecated Superseded by the new `buildWithConfig` + `buildDrizzleQueryOptions` approach
-     * used directly in fetchCollectionForRest/fetchEntityForRest.
-     * Kept for backward compatibility only.
-     *
      * Attempt to use Drizzle's relational query API (db.query.<table>.findMany)
      * for efficient JOIN-based relation loading.
      * Returns null if the API is not available or the query fails.
+     * Note: Primary path now uses `buildWithConfig` + `buildDrizzleQueryOptions`.
      */
     private async fetchWithDrizzleQuery<M extends Record<string, any>>(
         collectionPath: string,
@@ -1303,7 +1298,7 @@ export class EntityFetchService {
     }
 
     /**
-     * @deprecated Only used in the fallback path when db.query is unavailable.
+     * Fallback path used when db.query is unavailable.
      * The primary path uses db.query.findMany with `with` config, which
      * loads all relations in a single query.
      *

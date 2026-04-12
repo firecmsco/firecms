@@ -6,6 +6,7 @@ import React, { useMemo } from "react";
 import { CenteredView, Typography } from "@rebasepro/ui";
 import { RebaseContext, User, UserManagementDelegate, CollectionRegistryController } from "@rebasepro/types";
 import { PluginProviderStack } from "./PluginProviderStack";
+import { PluginLifecycleManager } from "./PluginLifecycleManager";
 import { AuthControllerContext } from "../contexts";
 import { useCustomizationController, useRebaseContext, useAuthSubscription } from "../hooks";
 import { ApiConfigProvider, useApiConfig } from "../hooks/ApiConfigContext";
@@ -105,10 +106,15 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
     // Storage fallback logic
     const resolvedStorage = storageSourceProp ?? client?.storage;
 
-    // Database admin — use explicit prop, or derive from client.ws / driver when available
+    // Database admin — use explicit prop, or derive from client.ws / driver when available.
+    // Prefers the new `driver.admin` capability object, falls back to legacy per-method derivation.
     const resolvedDatabaseAdmin = useMemo(() => {
         if (databaseAdmin) return databaseAdmin;
-        // Auto-derive from the client's WebSocket connection (Rebase backend)
+
+        // 1. New path: DataDriver exposes `.admin` capability object
+        if (driverProp?.admin) return driverProp.admin;
+
+        // 2. Auto-derive from the client's WebSocket connection (Rebase backend)
         const ws = (client as any)?.ws;
         if (ws && typeof ws.executeSql === "function") {
             return {
@@ -120,7 +126,8 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
                 fetchTableMetadata: ws.fetchTableMetadata?.bind(ws),
             };
         }
-        // Also derive from the DataDriver if it implements admin methods
+
+        // 3. Legacy: derive from deprecated per-method properties on DataDriver
         if (driverProp && typeof driverProp.executeSql === "function") {
             return {
                 executeSql: driverProp.executeSql.bind(driverProp),
@@ -256,6 +263,7 @@ function RebaseInternal({
                 plugins={plugins}
                 scope="root"
                 scopeProps={{ context }}>
+                <PluginLifecycleManager plugins={plugins} context={context} />
                 {childrenResult}
             </PluginProviderStack>
         );

@@ -61,7 +61,7 @@ export const productsCollection: EntityCollection = {
                 metadata: {
                     cacheControl: "max-age=1000000"
                 },
-                imageCompression: {
+                imageResize: {
                     maxHeight: 200
                 }
             },

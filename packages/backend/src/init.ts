@@ -1,4 +1,4 @@
-import { DataDriver, EntityCollection } from "@rebasepro/types";
+import { DataDriver, EntityCollection, BackendBootstrapper } from "@rebasepro/types";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { BackendCollectionRegistry } from "./collections/BackendCollectionRegistry";
 import { loadCollectionsFromDirectory } from "./collections/loader";
@@ -211,6 +211,34 @@ export interface RebaseBackendConfig {
      * @default false
      */
     enableSwagger?: boolean;
+
+    /**
+     * Pluggable backend bootstrappers.
+     *
+     * When provided, the coordinator uses these to initialize drivers
+     * instead of the built-in Postgres-specific logic. This enables
+     * non-Postgres backends (MongoDB, MySQL, etc.) to participate in
+     * the full `initializeRebaseBackend()` lifecycle — auth, routes,
+     * realtime, and admin — without forking the coordinator.
+     *
+     * Pass `createPostgresBootstrapper()` (from `@rebasepro/backend`)
+     * to get the same behaviour as the built-in Postgres init.
+     *
+     * @example
+     * ```typescript
+     * import { createPostgresBootstrapper } from "@rebasepro/backend";
+     * import { createMongoBootstrapper } from "@rebasepro/mongodb";
+     *
+     * initializeRebaseBackend({
+     *   ...config,
+     *   bootstrappers: [
+     *     createPostgresBootstrapper(),
+     *     createMongoBootstrapper()
+     *   ]
+     * });
+     * ```
+     */
+    bootstrappers?: BackendBootstrapper[];
 }
 
 /**

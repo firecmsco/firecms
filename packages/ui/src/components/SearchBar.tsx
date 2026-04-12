@@ -19,10 +19,6 @@ interface SearchBarProps {
      * @default "medium"
      */
     size?: "smallest" | "small" | "medium";
-    /**
-     * @deprecated Use size="medium" or size="small" instead. This prop will be removed in a future version.
-     */
-    large?: boolean;
     innerClassName?: string;
     className?: string;
     autoFocus?: boolean;
@@ -37,7 +33,6 @@ export function SearchBar({
     placeholder = "Search",
     expandable = false,
     size = "medium",
-    large,
     innerClassName,
     className,
     autoFocus,

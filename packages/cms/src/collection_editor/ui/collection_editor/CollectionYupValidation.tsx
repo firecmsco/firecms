@@ -6,7 +6,4 @@ export const CollectionEditorSchema = z.object({
     dbPath: z.string().min(1, "Required")
 });
 
-/**
- * @deprecated Use CollectionEditorSchema instead
- */
-export const YupSchema = CollectionEditorSchema;
+

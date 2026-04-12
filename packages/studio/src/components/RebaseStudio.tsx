@@ -6,16 +6,17 @@ import { SQLEditor } from "./SQLEditor/SQLEditor";
 import { JSEditor } from "./JSEditor/JSEditor";
 import { RLSEditor } from "./RLSEditor/RLSEditor";
 import { StorageView } from "./StorageView/StorageView";
+import { StudioHomePage } from "./StudioHomePage";
 
 /**
  * Declarative component to configure the Studio in Rebase.
  * Renders nothing — purely registers config into the RebaseRegistry.
  *
- * The "schema" tool (collection editor) is no longer built-in.
- * It now lives in `@rebasepro/cms` and can be injected via the
- * `additionalViews` prop.
+ * The "schema" tool (collection editor view) is now a built-in CMS feature.
+ * When `<RebaseCMS collectionEditor={...}>` is used, the schema view is
+ * automatically injected into Studio — no manual wiring needed.
  */
-export function RebaseStudio({ configController, tools, homePage, additionalViews }: RebaseStudioConfig & { additionalViews?: AppView[] }) {
+export function RebaseStudio({ tools, homePage = <StudioHomePage /> }: RebaseStudioConfig) {
     const dispatch = useRebaseRegistryDispatch();
     
     const devViews: AppView[] = useMemo(() => {
@@ -34,17 +35,15 @@ export function RebaseStudio({ configController, tools, homePage, additionalView
         if (activeTools.includes("storage")) {
             views.push({ slug: "storage", name: "Storage", group: "Storage", icon: "cloud", description: "Manage storage files", view: <StorageView /> });
         }
-        // Append any additional views (e.g. schema editor from CMS)
-        if (additionalViews) {
-            views.push(...additionalViews);
-        }
+        // Note: "schema" tool is auto-injected by RebaseShell when collectionEditor is enabled.
+        // It is NOT registered here anymore.
         return views;
-    }, [tools, configController, additionalViews]);
+    }, [tools]);
 
     useLayoutEffect(() => {
-        dispatch.registerStudio({ configController, tools, homePage, devViews });
+        dispatch.registerStudio({ tools, homePage, devViews });
         return () => dispatch.unregisterStudio();
-    }, [dispatch, configController, tools, homePage, devViews]);
+    }, [dispatch, tools, homePage, devViews]);
 
     return null;
 }

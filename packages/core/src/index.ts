@@ -14,3 +14,6 @@ export * from "./locales/es";
 
 // Studio Bridge — shared context for optional CMS↔Studio integration
 export * from "./hooks/useStudioBridge";
+
+// Self-assembling bridge registration hook
+export { useBridgeRegistration } from "./hooks/useBridgeRegistration";

@@ -141,9 +141,6 @@ const postsCollection: EntityCollection = {
                 }
             ]
         }
-    ],
-    entityViews: [
-        "__rebase_history"
     ]
 };
 

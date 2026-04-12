@@ -67,15 +67,14 @@ export interface CollectionConfigControllerProps<EC extends EntityCollection = E
 }
 
 /**
- * Use this hook to initialise the Collection Editor plugin.
- * This is likely the only hook you will need to use.
- * @param firebaseApp Firebase app where your project data lives.
- * @param configPermissions
- * @param reservedGroups
- * @param extraView
- * @param getData
- * @param getUser
- * @param collectionInference
+ * Build a collection editor plugin that provides visual schema editing
+ * capabilities within the CMS.
+ *
+ * Prefer using `<RebaseCMS collectionEditor={{ ... }}>` for automatic
+ * setup. Use this hook directly only when you need fine-grained control
+ * over plugin registration.
+ *
+ * @see RebaseCMS
  */
 export function useCollectionEditorPlugin<EC extends EntityCollection = EntityCollection, USER extends User = User>
     ({

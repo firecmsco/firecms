@@ -24,7 +24,4 @@ export function performAlgoliaTextSearch(client: any, indexName: string, query: 
         });
 }
 
-/**
- * @deprecated Use `buildExternalSearchController` instead
- */
-export const buildAlgoliaSearchController = buildExternalSearchController;
+

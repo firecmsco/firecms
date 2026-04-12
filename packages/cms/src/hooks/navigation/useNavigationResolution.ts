@@ -14,7 +14,8 @@ function injectHistoryViews(collections: EntityCollection[]): EntityCollection[]
         if (collection.history) {
             const existing = (collection.entityViews ?? []) as (string | EntityCustomView)[];
             const alreadyHasHistory = existing.some(
-                v => typeof v === "object" && v.name === "History"
+                v => (typeof v === "string" && v === "__rebase_history") ||
+                     (typeof v === "object" && v.name === "History")
             );
 
             if (!alreadyHasHistory) {

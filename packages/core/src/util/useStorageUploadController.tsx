@@ -2,7 +2,7 @@ import type { ArrayProperty, Property, StringProperty } from "@rebasepro/types";
 import Compressor from "compressorjs";
 import { deepEqual as equal } from "fast-equals";
 
-import { EntityValues, ImageResize, StorageConfig, StorageSource } from "@rebasepro/types";import { useCallback, useEffect, useState } from "react";
+import { EntityValues, StorageConfig, StorageSource } from "@rebasepro/types";import { useCallback, useEffect, useState } from "react";
 import { resolveStorageFilenameString, resolveStoragePathString } from "@rebasepro/common";
 import { useAuthController } from "../hooks";
 import { randomString } from "@rebasepro/utils";
@@ -65,9 +65,7 @@ export function useStorageUploadController<M extends object>({
     const metadata: Record<string, any> | undefined = storage?.metadata;
     const size = multipleFilesSupported ? "medium" : "large";
 
-    // Support both new imageResize and deprecated imageCompression
     const imageResize = storage?.imageResize;
-    const legacyCompression = storage?.imageCompression;
 
     const internalInitialValue: StorageFieldItem[] =
         getInternalInitialValue(multipleFilesSupported, value, metadata, size);
@@ -196,8 +194,8 @@ export function useStorageUploadController<M extends object>({
         if (multipleFilesSupported) {
             newInternalValue = [...internalValue,
             ...(await Promise.all(acceptedFiles.map(async file => {
-                if ((imageResize || legacyCompression) && isImageFile(file)) {
-                    file = await resizeImage(file, imageResize, legacyCompression);
+                if (imageResize && isImageFile(file)) {
+                    file = await resizeImage(file, imageResize);
                 }
 
                 return {
@@ -210,8 +208,8 @@ export function useStorageUploadController<M extends object>({
             })))];
         } else {
             let file = acceptedFiles[0];
-            if ((imageResize || legacyCompression) && isImageFile(file)) {
-                file = await resizeImage(file, imageResize, legacyCompression);
+            if (imageResize && isImageFile(file)) {
+                file = await resizeImage(file, imageResize);
             }
 
             newInternalValue = [{
@@ -226,7 +224,7 @@ export function useStorageUploadController<M extends object>({
         // Remove either storage path or file duplicates
         newInternalValue = removeDuplicates(newInternalValue);
         setInternalValue(newInternalValue);
-    }, [disabled, fileNameBuilder, internalValue, metadata, multipleFilesSupported, size, imageResize, legacyCompression]);
+    }, [disabled, fileNameBuilder, internalValue, metadata, multipleFilesSupported, size, imageResize]);
 
     return {
         internalValue,
@@ -291,17 +289,14 @@ function isImageFile(file: File): boolean {
 
 /**
  * Resize and compress an image using compressorjs.
- * Supports both the new imageResize API and legacy imageCompression for backward compatibility.
  */
 async function resizeImage(
     file: File,
-    imageResize?: StorageConfig["imageResize"],
-    legacyCompression?: ImageResize
+    imageResize?: StorageConfig["imageResize"]
 ): Promise<File> {
-    // Determine configuration (new API takes precedence)
-    const maxWidth = imageResize?.maxWidth ?? legacyCompression?.maxWidth;
-    const maxHeight = imageResize?.maxHeight ?? legacyCompression?.maxHeight;
-    const quality = (imageResize?.quality ?? legacyCompression?.quality ?? 80) / 100;
+    const maxWidth = imageResize?.maxWidth;
+    const maxHeight = imageResize?.maxHeight;
+    const quality = (imageResize?.quality ?? 80) / 100;
     const mode = imageResize?.mode ?? "contain";
 
     // Determine output format

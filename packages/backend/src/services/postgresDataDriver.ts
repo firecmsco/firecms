@@ -23,7 +23,10 @@ import {
     TableColumnInfo,
     TableForeignKeyInfo,
     TableJunctionInfo,
-    TablePolicyInfo
+    TablePolicyInfo,
+    SQLAdmin,
+    SchemaAdmin,
+    DatabaseAdmin
 } from "@rebasepro/types";
 import { buildRebaseData } from "@rebasepro/common";
 import { HistoryService } from "../history/HistoryService";
@@ -64,7 +67,23 @@ export class PostgresDataDriver implements DataDriver {
         this.historyService = historyService;
         this.user = user;
         this.data = buildRebaseData(this);
+
+        // Expose SQL + schema admin capabilities via the new typed `admin` property.
+        // The individual methods on `this` are kept for backwards compatibility.
+        this.admin = {
+            executeSql: this.executeSql.bind(this),
+            fetchAvailableDatabases: this.fetchAvailableDatabases.bind(this),
+            fetchAvailableRoles: this.fetchAvailableRoles.bind(this),
+            fetchCurrentDatabase: this.fetchCurrentDatabase.bind(this),
+            fetchUnmappedTables: this.fetchUnmappedTables.bind(this),
+            fetchTableMetadata: this.fetchTableMetadata.bind(this),
+        } satisfies SQLAdmin & SchemaAdmin;
     }
+
+    /**
+     * Typed admin capabilities (SQLAdmin + SchemaAdmin).
+     */
+    admin: DatabaseAdmin;
 
 
 
@@ -842,7 +861,15 @@ export class AuthenticatedPostgresDataDriver implements DataDriver {
     ) {
         this.user = user;
         this.data = buildRebaseData(this);
+
+        // Delegate admin ops to the base driver (no RLS wrapping for admin)
+        this.admin = delegate.admin;
     }
+
+    /**
+     * Typed admin capabilities — delegates to the base driver.
+     */
+    admin: DatabaseAdmin;
 
     private async withTransaction<T>(
         operation: (delegate: PostgresDataDriver) => Promise<T>

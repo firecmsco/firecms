@@ -84,6 +84,7 @@ async function startServer() {
                 type: "local",
                 basePath: path.resolve(__dirname, "../../uploads")
             },
+            history: true,
         });
 
         // ─── GraphQL (optional) ──────────────────────────────────────

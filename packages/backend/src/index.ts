@@ -90,3 +90,6 @@ export * from "./factory";
 
 // SPA serving helper
 export * from "./serve-spa";
+
+// Backend bootstrappers (pluggable driver initialization)
+export * from "./bootstrappers";

@@ -44,3 +44,9 @@ export * from "./SideDialogs";
 export * from "./app/useApp";
 export * from "./RebaseCMS";
 export * from "./RebaseShell";
+
+// Composable shell layers — each independently usable
+export * from "./RebaseAuthGate";
+export * from "./RebaseNavigation";
+export * from "./RebaseLayout";
+export * from "./RebaseRouteDefs";

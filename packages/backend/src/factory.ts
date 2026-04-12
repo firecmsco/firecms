@@ -10,7 +10,7 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { PgEnum, PgTable } from "drizzle-orm/pg-core";
 import { getTableName, isTable, Relations } from "drizzle-orm";
-import { DataDriver, EntityCollection } from "@rebasepro/types";
+import { DataDriver, EntityCollection, DatabaseAdmin, HealthCheckResult } from "@rebasepro/types";
 
 import { EntityService } from "./db/entityService";
 import { RealtimeService, PostgresRealtimeProvider } from "./services/realtimeService";
@@ -34,14 +34,22 @@ import {
  */
 export class PostgresConnection implements DatabaseConnection {
     readonly type = "postgres";
-    readonly isConnected = true;
 
     constructor(public readonly db: NodePgDatabase) { }
 
+    get isConnected(): boolean {
+        return true; // Drizzle does not expose connection state directly
+    }
+
     async close(): Promise<void> {
-        // Note: The actual pool closing is handled by the pg Pool instance
-        // This is a placeholder for interface compliance
-        console.log("PostgresConnection close requested");
+        try {
+            const pool = ("$client" in this.db ? (this.db as Record<string, unknown>).$client : null) as import("pg").Pool | null;
+            if (pool && typeof pool.end === "function") {
+                await pool.end();
+            }
+        } catch (e) {
+            console.warn("[PostgresConnection] Error closing pool:", e);
+        }
     }
 }
 
@@ -75,6 +83,8 @@ export interface PostgresBackendInstance extends BackendInstance {
     driver: DataDriver;
     /** Entity service for direct database operations */
     entityService: EntityService;
+    /** Admin capabilities (SQLAdmin + SchemaAdmin) */
+    admin: DatabaseAdmin;
 }
 
 // =============================================================================
@@ -150,6 +160,25 @@ export function createPostgresBackend(config: PostgresBackendConfig): PostgresBa
         entityRepository: entityService,
         realtimeProvider: realtimeService,
         collectionRegistry: collectionRegistry,
+        admin: driver.admin,
+
+        // Lifecycle
+        async initialize() {
+            // Connection is already established via Drizzle constructor
+        },
+        async healthCheck(): Promise<HealthCheckResult> {
+            const { sql: rawSql } = await import("drizzle-orm");
+            const start = Date.now();
+            try {
+                await db.execute(rawSql`SELECT 1`);
+                return { healthy: true, latencyMs: Date.now() - start };
+            } catch {
+                return { healthy: false, latencyMs: Date.now() - start };
+            }
+        },
+        async destroy() {
+            await postgresConnection.close();
+        },
 
         // PostgreSQL-specific accessors
         db,

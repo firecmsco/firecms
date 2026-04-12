@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
 import type {
     CollectionRegistryController,
     SideEntityController,
@@ -148,4 +148,68 @@ export function useStudioNavigationState(): NavigationStateController {
 /** Breadcrumbs controller — returns noop if CMS is not present. */
 export function useStudioBreadcrumbs(): BreadcrumbsController {
     return useContext(StudioBridgeContext).breadcrumbs;
+}
+
+// ─── Self-Assembling Bridge Registry ────────────────────────────────
+
+/**
+ * Registry that controllers use to self-register their implementations
+ * into the Studio bridge. Each controller calls `register(key, value)`
+ * on mount and `unregister(key)` on unmount.
+ */
+export interface StudioBridgeRegistry {
+    register: <K extends keyof StudioBridge>(key: K, value: StudioBridge[K]) => void;
+    unregister: (key: keyof StudioBridge) => void;
+}
+
+export const StudioBridgeRegistryContext = createContext<StudioBridgeRegistry | null>(null);
+
+/**
+ * Provider that creates a self-assembling bridge.
+ *
+ * Mount this above the controller providers. Each controller calls
+ * `useBridgeRegistration(key, value)` to inject its implementation.
+ * The bridge context value is automatically kept in sync.
+ *
+ * ```tsx
+ * <StudioBridgeRegistryProvider>
+ *     <CollectionRegistryProvider>   // auto-registers
+ *     <SideEntityProvider>           // auto-registers
+ *     <UrlProvider>                  // auto-registers
+ *         <RebaseStudio />           // consumes bridge
+ *     </UrlProvider>
+ *     </SideEntityProvider>
+ *     </CollectionRegistryProvider>
+ * </StudioBridgeRegistryProvider>
+ * ```
+ */
+export function StudioBridgeRegistryProvider({ children }: { children: React.ReactNode }) {
+    const [version, setVersion] = useState(0);
+    const slicesRef = useRef<Partial<StudioBridge>>({});
+
+    const register = useCallback(<K extends keyof StudioBridge>(key: K, value: StudioBridge[K]) => {
+        slicesRef.current[key] = value;
+        setVersion(v => v + 1);
+    }, []);
+
+    const unregister = useCallback((key: keyof StudioBridge) => {
+        delete slicesRef.current[key];
+        setVersion(v => v + 1);
+    }, []);
+
+    const registry = useMemo<StudioBridgeRegistry>(() => ({ register, unregister }), [register, unregister]);
+
+    const bridgeValue = useMemo<StudioBridge>(() => ({
+        ...NOOP_BRIDGE,
+        ...slicesRef.current,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }), [version]);
+
+    return (
+        <StudioBridgeRegistryContext.Provider value={registry}>
+            <StudioBridgeContext.Provider value={bridgeValue}>
+                {children}
+            </StudioBridgeContext.Provider>
+        </StudioBridgeRegistryContext.Provider>
+    );
 }

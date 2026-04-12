@@ -12,7 +12,7 @@ import { MongoEntityService } from "./db/MongoEntityService";
 import { MongoRealtimeService } from "./services/MongoRealtimeService";
 import { MongoDriver } from "./services/MongoDriver";
 import { MongoDBConnection } from "./connection";
-import { BackendConfig, BackendInstance, CollectionRegistryInterface, EntityRepository, RealtimeProvider, DatabaseConnection } from "@rebasepro/types";
+import { BackendConfig, BackendInstance, CollectionRegistryInterface, EntityRepository, RealtimeProvider, DatabaseConnection, DatabaseAdmin, DocumentAdmin, SchemaAdmin, HealthCheckResult } from "@rebasepro/types";
 
 /**
  * Configuration for creating a MongoDB backend.
@@ -41,6 +41,8 @@ export interface MongoBackendInstance extends BackendInstance {
     entityService: MongoEntityService;
     /** Realtime service for subscriptions */
     realtimeService: MongoRealtimeService;
+    /** Admin capabilities (DocumentAdmin + SchemaAdmin) */
+    admin: DatabaseAdmin;
 }
 
 // =============================================================================
@@ -125,12 +127,67 @@ export function createMongoBackend(config: MongoBackendConfig): MongoBackendInst
     const driver = new MongoDriver(db, realtimeService);
     const mongoConnection = new MongoDBConnection(db, client);
 
+    // Build admin capabilities for MongoDB
+    const admin: DatabaseAdmin = {
+        async executeAggregate(pipeline: Record<string, unknown>[]) {
+            // Run aggregation on a collection — requires a target collection 
+            // from the pipeline's $match or $lookup stage:
+            const firstStage = pipeline[0];
+            const collName = (firstStage as any)?.$from ?? "__admin__";
+            const cursor = db.collection(collName).aggregate(pipeline);
+            return await cursor.toArray() as Record<string, unknown>[];
+        },
+        async fetchCollectionStats(collectionName: string) {
+            const stats = await db.command({ collStats: collectionName }) as { count: number; size: number };
+            return { count: stats.count, sizeBytes: stats.size };
+        },
+        async fetchUnmappedTables(mappedPaths?: string[]) {
+            const allCollections = await db.listCollections().toArray();
+            const names = allCollections.map(c => c.name).filter(n => !n.startsWith("system."));
+            if (!mappedPaths || mappedPaths.length === 0) return names;
+            const mappedSet = new Set(mappedPaths.map(p => p.toLowerCase()));
+            return names.filter(n => !mappedSet.has(n.toLowerCase()));
+        },
+        async fetchTableMetadata(collectionName: string) {
+            // Sample a document to infer fields
+            const sample = await db.collection(collectionName).findOne();
+            if (!sample) return { columns: [], foreignKeys: [], junctions: [], policies: [] };
+            const columns = Object.entries(sample).map(([key, value]) => ({
+                column_name: key,
+                data_type: typeof value,
+                udt_name: typeof value,
+                is_nullable: "YES",
+                column_default: null,
+                character_maximum_length: null,
+            }));
+            return { columns, foreignKeys: [], junctions: [], policies: [] };
+        },
+    } satisfies DocumentAdmin & SchemaAdmin;
+
     return {
         // Abstract interface implementations
         connection: mongoConnection,
         entityRepository: entityService,
         realtimeProvider: realtimeService,
         collectionRegistry: collectionRegistry,
+        admin,
+
+        // Lifecycle
+        async initialize() {
+            // Connection is already established via the MongoClient constructor
+        },
+        async healthCheck(): Promise<HealthCheckResult> {
+            const start = Date.now();
+            try {
+                await db.command({ ping: 1 });
+                return { healthy: true, latencyMs: Date.now() - start };
+            } catch {
+                return { healthy: false, latencyMs: Date.now() - start };
+            }
+        },
+        async destroy() {
+            await client.close();
+        },
 
         // MongoDB-specific accessors
         db,

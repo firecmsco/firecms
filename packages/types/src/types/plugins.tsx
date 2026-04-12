@@ -63,6 +63,12 @@ export interface RebasePlugin {
      * User management delegate from this plugin.
      */
     userManagement?: UserManagementDelegate;
+
+    /**
+     * Optional lifecycle hooks. Called by the Rebase runtime
+     * at appropriate points in the app lifecycle.
+     */
+    lifecycle?: PluginLifecycle;
 }
 
 // ── Provider ──────────────────────────────────────────────────────────
@@ -100,9 +106,16 @@ export interface PluginProvider {
  */
 export interface PluginHooks {
     /**
-     * Modify a single collection before it is rendered.
+     * Modify a single collection before it is rendered (synchronous).
      */
     modifyCollection?: (collection: EntityCollection) => EntityCollection;
+
+    /**
+     * Async version of modifyCollection — supports fetching remote config.
+     * Runs during navigation resolution. If provided alongside `modifyCollection`,
+     * the sync version runs first, then the async version.
+     */
+    modifyCollectionAsync?: (collection: EntityCollection) => Promise<EntityCollection>;
 
     /**
      * Modify, add or remove collections.
@@ -164,6 +177,39 @@ export interface PluginHooks {
      * Allow reordering collections in the home page via drag and drop.
      */
     allowDragAndDrop?: boolean;
+}
+
+// ── Plugin Lifecycle ──────────────────────────────────────────────────
+
+/**
+ * Lifecycle hooks for plugins. Called by the Rebase runtime
+ * at appropriate points in the app lifecycle.
+ * @group Plugins
+ */
+export interface PluginLifecycle {
+    /**
+     * Called once when the plugin is mounted in the Rebase tree.
+     * Can return a Promise for async initialization.
+     */
+    onMount?: (context: RebaseContext) => void | Promise<void>;
+
+    /**
+     * Called when the plugin is unmounted from the Rebase tree.
+     * Use this for cleanup (subscriptions, timers, etc.).
+     */
+    onUnmount?: () => void;
+
+    /**
+     * Called whenever the authentication state changes.
+     * Receives the new user (or null on sign-out).
+     */
+    onAuthStateChange?: (user: User | null) => void;
+
+    /**
+     * Called when a collection's visible entities change.
+     * Useful for analytics, caching, or cross-plugin coordination.
+     */
+    onCollectionChange?: (slug: string, entities: any[]) => void;
 }
 
 // ── Field Builder ─────────────────────────────────────────────────────

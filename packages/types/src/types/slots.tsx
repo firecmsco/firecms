@@ -1,7 +1,9 @@
 import React from "react";
-import { CollectionActionsProps, EntityTableController, SelectionController } from "./collections";import { EntityCollection } from "./collections";
+import { CollectionActionsProps, EntityTableController, SelectionController, EntityCollection } from "./collections";
+import { Entity } from "./entities";
 import { PluginFormActionProps, PluginGenericProps, PluginHomePageActionsProps, PluginHomePageAdditionalCardsProps } from "./plugins";
-import { Property } from "./properties";import { RebaseContext } from "../rebase_context";
+import { Property } from "./properties";
+import { RebaseContext } from "../rebase_context";
 
 /**
  * Registry mapping slot names to their component prop types.
@@ -40,6 +42,30 @@ export interface SlotRegistry {
     "form.before": PluginFormActionProps;
     /** Rendered after the form field list. */
     "form.after": PluginFormActionProps;
+
+    // ── Entity row actions ────────────────────────────────────────────
+    /** Per-row actions in entity tables (e.g. bulk actions, row context menus). */
+    "entity.row.actions": EntityRowActionsProps;
+
+    // ── Entity field decoration ───────────────────────────────────────
+    /** Inject UI before an individual form field. */
+    "entity.field.before": EntityFieldSlotProps;
+    /** Inject UI after an individual form field. */
+    "entity.field.after": EntityFieldSlotProps;
+
+    // ── Collection filter panel ───────────────────────────────────────
+    /** Custom filter sidebar for a collection. */
+    "collection.filter-panel": CollectionFilterPanelProps;
+
+    // ── Dashboard ─────────────────────────────────────────────────────
+    /** Widget rendered on the dashboard / home page. */
+    "dashboard.widget": DashboardWidgetProps;
+
+    // ── Global ────────────────────────────────────────────────────────
+    /** Cross-collection search bar component. */
+    "global.search": GlobalSearchProps;
+    /** Top-level toolbar actions rendered in the shell toolbar area. */
+    "shell.toolbar": ShellToolbarProps;
 
     // ── Kanban ────────────────────────────────────────────────────────
     "kanban.setup": KanbanSetupProps;
@@ -171,4 +197,75 @@ export interface KanbanAddColumnProps {
     fullPath: string;
     parentCollectionIds: string[];
     columnProperty: string;
+}
+
+// ── New slot prop interfaces ──────────────────────────────────────────
+
+/**
+ * Props for `entity.row.actions` slot.
+ * Rendered for each row in an entity collection table.
+ * @group Plugins
+ */
+export interface EntityRowActionsProps {
+    entity: Entity;
+    entityId: string;
+    path: string;
+    collection: EntityCollection;
+    parentCollectionIds: string[];
+    selectionController: SelectionController;
+    context: RebaseContext;
+}
+
+/**
+ * Props for `entity.field.before` and `entity.field.after` slots.
+ * Rendered around individual form fields in the entity edit view.
+ * @group Plugins
+ */
+export interface EntityFieldSlotProps {
+    propertyKey: string;
+    property: Property;
+    path: string;
+    entityId?: string | number;
+    collection: EntityCollection;
+    context: RebaseContext;
+}
+
+/**
+ * Props for `collection.filter-panel` slot.
+ * Custom filter sidebar rendered alongside the collection table.
+ * @group Plugins
+ */
+export interface CollectionFilterPanelProps {
+    path: string;
+    collection: EntityCollection;
+    parentCollectionIds: string[];
+    tableController: EntityTableController;
+    context: RebaseContext;
+}
+
+/**
+ * Props for `dashboard.widget` slot.
+ * Widgets rendered on the home / dashboard page.
+ * @group Plugins
+ */
+export interface DashboardWidgetProps {
+    context: RebaseContext;
+}
+
+/**
+ * Props for `global.search` slot.
+ * Cross-collection search bar rendered in the app shell.
+ * @group Plugins
+ */
+export interface GlobalSearchProps {
+    context: RebaseContext;
+}
+
+/**
+ * Props for `shell.toolbar` slot.
+ * Actions rendered in the top-level toolbar / app bar area.
+ * @group Plugins
+ */
+export interface ShellToolbarProps {
+    context: RebaseContext;
 }

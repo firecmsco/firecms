@@ -777,10 +777,7 @@ export function zodToFormErrors(zodError: z.ZodError): Record<string, any> {
     return errors;
 }
 
-/**
- * @deprecated Use zodToFormErrors instead
- */
-export const yupToFormErrors = zodToFormErrors;
+
 
 function useOnAutoSave(autoSave: undefined | boolean, formex: FormexController<any>, lastSavedValues: any, save: (values: EntityValues<any>) => Promise<Entity<any> | void>) {
     if (!autoSave) return;

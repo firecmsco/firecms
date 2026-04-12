@@ -35,8 +35,4 @@ export const authJwt = (): SQL => {
     return sql`auth.jwt()`;
 };
 
-/** @deprecated Use {@link authUid} instead. */
-export const sqlGetCurrentUser = authUid;
 
-/** @deprecated Use {@link authRoles} instead. */
-export const sqlGetCurrentUserRoles = authRoles;

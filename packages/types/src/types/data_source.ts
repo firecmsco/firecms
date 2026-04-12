@@ -34,6 +34,16 @@ export interface DataSourceCapabilities {
 
     /** Does this source support real-time listeners? */
     supportsRealtime: boolean;
+
+    // ── Admin capability flags ───────────────────────────────────────
+    /** Does this source support SQL admin operations (SQL editor, EXPLAIN, etc.)? */
+    supportsSQLAdmin: boolean;
+
+    /** Does this source support document admin operations (aggregation, stats)? */
+    supportsDocumentAdmin: boolean;
+
+    /** Does this source support schema admin (unmapped tables, table metadata)? */
+    supportsSchemaAdmin: boolean;
 }
 
 /**
@@ -49,6 +59,9 @@ export type DataSourceFeatures = Pick<
     | "supportsReferences"
     | "supportsColumnTypes"
     | "supportsRealtime"
+    | "supportsSQLAdmin"
+    | "supportsDocumentAdmin"
+    | "supportsSchemaAdmin"
 >;
 
 // ── Built-in driver capabilities ─────────────────────────────────────
@@ -63,6 +76,9 @@ export const POSTGRES_CAPABILITIES: DataSourceCapabilities = {
     supportsReferences: false,
     supportsColumnTypes: true,
     supportsRealtime: true,
+    supportsSQLAdmin: true,
+    supportsDocumentAdmin: false,
+    supportsSchemaAdmin: true,
 };
 
 /** @group Models */
@@ -75,6 +91,9 @@ export const FIREBASE_CAPABILITIES: DataSourceCapabilities = {
     supportsReferences: true,
     supportsColumnTypes: false,
     supportsRealtime: true,
+    supportsSQLAdmin: false,
+    supportsDocumentAdmin: false,
+    supportsSchemaAdmin: false,
 };
 
 /** @group Models */
@@ -87,6 +106,9 @@ export const MONGODB_CAPABILITIES: DataSourceCapabilities = {
     supportsReferences: true,
     supportsColumnTypes: false,
     supportsRealtime: false,
+    supportsSQLAdmin: false,
+    supportsDocumentAdmin: true,
+    supportsSchemaAdmin: true,
 };
 
 /**
@@ -103,6 +125,9 @@ export const DEFAULT_CAPABILITIES: DataSourceCapabilities = {
     supportsReferences: true,
     supportsColumnTypes: true,
     supportsRealtime: true,
+    supportsSQLAdmin: true,
+    supportsDocumentAdmin: true,
+    supportsSchemaAdmin: true,
 };
 
 const CAPABILITIES_REGISTRY: Record<string, DataSourceCapabilities> = {

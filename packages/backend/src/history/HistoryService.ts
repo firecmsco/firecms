@@ -74,8 +74,20 @@ export class HistoryService {
             ? findChangedFields(previousValues, values)
             : null;
 
+        try {
+            require('fs').appendFileSync(
+                '/Users/francesco/rebase/packages/backend/history_diff.log', 
+                `[recordHistory: ${tableName}/${entityId} - ${action}]\n` +
+                `CHANGED FIELDS: ${JSON.stringify(changedFields)}\n` +
+                `PREVIOUS: ${JSON.stringify(previousValues, null, 2)}\n` +
+                `NEW:      ${JSON.stringify(values, null, 2)}\n\n`
+            );
+        } catch (e) {
+            console.error("DEBUG FILE WRITE ERROR:", e);
+        }
+
         // Skip recording if this is an update with zero actual changes
-        if (action === "update" && changedFields !== null && changedFields.length === 0) {
+        if (action === "update" && (!changedFields || changedFields.length === 0)) {
             return;
         }
 
@@ -87,7 +99,7 @@ export class HistoryService {
                     ${tableName},
                     ${String(entityId)},
                     ${action},
-                    ${changedFields ? sql`${JSON.stringify(changedFields)}::jsonb::text[]` : sql`NULL`},
+                    ${changedFields ? sql`ARRAY[${sql.join(changedFields.map(f => sql`${f}`), sql`, `)}]::text[]` : sql`NULL`},
                     ${values ? sql`${JSON.stringify(values)}::jsonb` : sql`NULL`},
                     ${previousValues ? sql`${JSON.stringify(previousValues)}::jsonb` : sql`NULL`},
                     ${updatedBy ?? null}
