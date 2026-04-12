@@ -7,12 +7,6 @@
 // "@rebasepro/cms/collection_editor_ui" instead — they live in a separate chunk
 // that is loaded on demand.
 
-export {
-    useCollectionEditorPlugin
-} from "./useCollectionEditorPlugin";
-export type {
-    CollectionConfigControllerProps
-} from "./useCollectionEditorPlugin";
 
 export {
     useCollectionEditorController

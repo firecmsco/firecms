@@ -32,8 +32,7 @@ yarn add @rebasepro/collection_editor_firebase
 
 ```tsx
 import React from "react";
-import { Rebase } from "@rebasepro/core";
-import { useCollectionEditorPlugin } from "@rebasepro/collection_editor";
+import { RebaseCMS } from "@rebasepro/cms";
 import { useFirestoreCollectionsConfigController } from "@rebasepro/collection_editor_firebase";
 
 export default function App() {
@@ -42,67 +41,61 @@ export default function App() {
         firebaseApp
     });
     
-    // Initialize the collection editor plugin
-    const collectionEditorPlugin = useCollectionEditorPlugin({
-        collectionConfigController
-    });
-    
-    const navigationController = useBuildNavigationStateController({
-        // Your other config options
-        plugins: [collectionEditorPlugin]
-    });
-    
-    return <Rebase
+    return <RebaseCMS
         name={"My CMS"}
-        navigationController={navigationController}
         authentication={myAuthenticator}
         firebaseConfig={firebaseConfig}
+        collectionEditor={{
+            collectionConfigController
+        }}
     />;
 }
 ```
 
 ## Advanced Configuration
 
-You can customize collection editor behavior with these options:
+You can customize collection editor behavior with these options using the `collectionEditor` prop on `RebaseCMS`:
 
 ```tsx
-const collectionEditorPlugin = useCollectionEditorPlugin({
-    collectionConfigController, // Required: controller that handles persistence
-    
-    // Define permissions for collection operations
-    configPermissions: ({ user }) => ({
-        createCollections: user.roles?.includes("admin") ?? false,
-        editCollections: user.roles?.includes("admin") ?? false,
-        deleteCollections: user.roles?.includes("admin") ?? false
-    }),
-    
-    // Prevent these group names from being used
-    reservedGroups: ["admin", "system"],
-    
-    // Optional custom view to add to the editor
-    extraView: {
-        View: MyCustomView,
-        icon: <CustomIcon />
-    },
-    
-    // Function to infer collection structure from existing data
-    collectionInference: async ({ path }) => {
-        // Return inferred schema based on data at path
-    },
-    
-    // Function to get sample data for a collection
-    getData: async (path, parentPaths) => {
-        // Return sample data for the specified path
-    },
-    
-    // Track collection editor events
-    onAnalyticsEvent: (event, params) => {
-        console.log("Collection editor event:", event, params);
-    },
-    
-    // Include introduction widget when no collections exist
-    includeIntroView: true
-});
+<RebaseCMS
+    collectionEditor={{
+        collectionConfigController, // Required: controller that handles persistence
+        
+        // Define permissions for collection operations
+        configPermissions: ({ user }) => ({
+            createCollections: user.roles?.includes("admin") ?? false,
+            editCollections: user.roles?.includes("admin") ?? false,
+            deleteCollections: user.roles?.includes("admin") ?? false
+        }),
+        
+        // Prevent these group names from being used
+        reservedGroups: ["admin", "system"],
+        
+        // Optional custom view to add to the editor
+        extraView: {
+            View: MyCustomView,
+            icon: <CustomIcon />
+        },
+        
+        // Function to infer collection structure from existing data
+        collectionInference: async ({ path }) => {
+            // Return inferred schema based on data at path
+        },
+        
+        // Function to get sample data for a collection
+        getData: async (path, parentPaths) => {
+            // Return sample data for the specified path
+        },
+        
+        // Track collection editor events
+        onAnalyticsEvent: (event, params) => {
+            console.log("Collection editor event:", event, params);
+        },
+        
+        // Include introduction widget when no collections exist
+        includeIntroView: true
+    }}
+/>
 ```
 
 ## Integration with Code-Defined Collections
@@ -110,7 +103,8 @@ const collectionEditorPlugin = useCollectionEditorPlugin({
 You can combine collections defined in code with those created in the UI:
 
 ```tsx
-import { mergeCollections } from "@rebasepro/collection_editor";
+import { mergeCollections } from "@rebasepro/cms/collection_editor";
+
 
 const collectionsBuilder = useCallback(() => {
     // Collections defined in code

@@ -73,18 +73,24 @@ export interface BuildCollectionGenerationCallbackProps {
  * generation feature.
  *
  * @example
- * ```typescript
- * import { useCollectionEditorPlugin, buildCollectionGenerationCallback } from "@rebasepro/studio";
+ * ```tsx
+ * import { RebaseCMS } from "@rebasepro/cms";
+ * import { buildCollectionGenerationCallback } from "@rebasepro/cms/collection_editor";
  * import { useFirebaseAuthController } from "@rebasepro/firebase";
  *
  * const authController = useFirebaseAuthController({ firebaseApp });
  *
- * const collectionEditorPlugin = useCollectionEditorPlugin({
- *     // ... other props
- *     generateCollection: buildCollectionGenerationCallback({
- *         getAuthToken: authController.getAuthToken
- *     })
- * });
+ * export function App() {
+ *     return (
+ *         <RebaseCMS
+ *             collectionEditor={{
+ *                 generateCollection: buildCollectionGenerationCallback({
+ *                     getAuthToken: authController.getAuthToken
+ *                 })
+ *             }}
+ *         />
+ *     );
+ * }
  * ```
  */
 export function buildCollectionGenerationCallback({

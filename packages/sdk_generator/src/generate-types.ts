@@ -1,4 +1,4 @@
-import { EntityCollection, Property, Properties, MapProperty, ArrayProperty, RelationProperty, StringProperty, NumberProperty } from "@rebasepro/types";
+import { EntityCollection, PostgresCollection, Property, Properties, MapProperty, ArrayProperty, RelationProperty, StringProperty, NumberProperty } from "@rebasepro/types";
 import { resolveCollectionRelations } from "@rebasepro/common";
 import { toPascalCase, toSafeIdentifier } from "./utils";
 
@@ -73,7 +73,7 @@ export function generateTypedefs(collections: EntityCollection[]): string {
         // Resolve relations
         let resolvedRelations: Record<string, any> = {};
         try {
-            resolvedRelations = resolveCollectionRelations(collection);
+            resolvedRelations = resolveCollectionRelations(collection as PostgresCollection);
         } catch { /* ignore */ }
 
         lines.push(`  ${toSafeIdentifier(collection.slug)}: {`);
