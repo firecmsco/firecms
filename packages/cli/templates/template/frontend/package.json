@@ -12,7 +12,7 @@
         "@rebasepro/types": "0.0.1",
         "@rebasepro/ui": "0.0.1",
         "@fontsource/jetbrains-mono": "^5.2.5",
-        "{{PROJECT_NAME}}-shared": "workspace:*",
+        "{{PROJECT_NAME}}-shared": "0.0.1",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-router": "^7.0.0",

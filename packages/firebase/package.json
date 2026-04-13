@@ -11,7 +11,7 @@
     "source": "src/index.ts",
     "dependencies": {
         "@firebase/auth": "*",
-        "@rebasepro/cms": "workspace:*",
+        "@rebasepro/cms": "0.0.1",
         "@rebasepro/common": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/types": "0.0.1",

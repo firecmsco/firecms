@@ -57,7 +57,7 @@ importers:
   app:
     devDependencies:
       '@rebasepro/cli':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../packages/cli
       '@rebasepro/types':
         specifier: 0.0.1
@@ -75,8 +75,11 @@ importers:
         specifier: ^1.11.0
         version: 1.19.12(hono@4.12.10)
       '@rebasepro/backend':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../../packages/backend
+      '@rebasepro/postgresql-backend':
+        specifier: 0.0.1
+        version: link:../../packages/postgresql-backend
       dotenv:
         specifier: ^16.0.0
         version: 16.6.1
@@ -109,7 +112,7 @@ importers:
         specifier: 0.0.1
         version: link:../../packages/auth-rebase
       '@rebasepro/client-rebase':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../../packages/client-rebase
       '@rebasepro/cms':
         specifier: 0.0.1
@@ -262,11 +265,8 @@ importers:
         specifier: 0.0.1
         version: link:../types
       '@rebasepro/utils':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../utils
-      drizzle-orm:
-        specifier: ^0.44.4
-        version: 0.44.7(@types/pg@8.18.0)(pg@8.20.0)
       google-auth-library:
         specifier: ^9.0.0
         version: 9.15.1(encoding@0.1.13)
@@ -282,12 +282,6 @@ importers:
       nodemailer:
         specifier: ^6.9.0
         version: 6.10.1
-      pg:
-        specifier: ^8.11.3
-        version: 8.20.0
-      ts-morph:
-        specifier: 27.0.2
-        version: 27.0.2
       ws:
         specifier: ^8.16.0
         version: 8.19.0
@@ -307,9 +301,6 @@ importers:
       '@types/nodemailer':
         specifier: ^6.4.0
         version: 6.4.23
-      '@types/pg':
-        specifier: ^8.6.5
-        version: 8.18.0
       '@types/react':
         specifier: ^19.0.8
         version: 19.2.14
@@ -319,9 +310,6 @@ importers:
       '@types/ws':
         specifier: ^8.5.10
         version: 8.18.1
-      drizzle-kit:
-        specifier: ^0.31.4
-        version: 0.31.9
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3))
@@ -338,7 +326,7 @@ importers:
   packages/cli:
     dependencies:
       '@rebasepro/backend':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../backend
       '@rebasepro/sdk_generator':
         specifier: 0.0.1
@@ -460,7 +448,7 @@ importers:
         specifier: 0.0.1
         version: link:../ui
       '@rebasepro/utils':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../utils
       date-fns:
         specifier: ^3.6.0
@@ -617,7 +605,7 @@ importers:
         specifier: 0.0.1
         version: link:../types
       '@rebasepro/utils':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../utils
       fast-equals:
         specifier: 5.3.0
@@ -705,7 +693,7 @@ importers:
         specifier: 0.0.1
         version: link:../ui
       '@rebasepro/utils':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../utils
       compressorjs:
         specifier: ^1.2.1
@@ -805,7 +793,7 @@ importers:
         specifier: 0.0.1
         version: link:../cms
       '@rebasepro/common':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../common
       '@rebasepro/core':
         specifier: 0.0.1
@@ -817,7 +805,7 @@ importers:
         specifier: 0.0.1
         version: link:../ui
       '@rebasepro/utils':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../utils
       firebase:
         specifier: ^10.12.2 || ^11.0.0 || ^12.0.0
@@ -872,71 +860,13 @@ importers:
         specifier: ^7.2.4
         version: 7.3.1(@types/node@24.12.2)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/datatalk:
-    dependencies:
-      '@monaco-editor/react':
-        specifier: ^4.7.0
-        version: 4.7.0(monaco-editor@0.55.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@rebasepro/cms':
-        specifier: 0.0.1
-        version: link:../cms
-      '@rebasepro/common':
-        specifier: workspace:*
-        version: link:../common
-      '@rebasepro/core':
-        specifier: 0.0.1
-        version: link:../core
-      '@rebasepro/firebase':
-        specifier: 0.0.1
-        version: link:../firebase
-      '@rebasepro/formex':
-        specifier: 0.0.1
-        version: link:../formex
-      '@rebasepro/schema_inference':
-        specifier: 0.0.1
-        version: link:../schema_inference
-      '@rebasepro/types':
-        specifier: 0.0.1
-        version: link:../types
-      '@rebasepro/ui':
-        specifier: 0.0.1
-        version: link:../ui
-      '@rebasepro/utils':
-        specifier: workspace:*
-        version: link:../utils
-      react:
-        specifier: '>=19.0.0'
-        version: 19.2.4
-      react-dom:
-        specifier: '>=19.0.0'
-        version: 19.2.4(react@19.2.4)
-      react-use-measure:
-        specifier: ^2.1.7
-        version: 2.1.7(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-    devDependencies:
-      '@types/node':
-        specifier: 20.19.17
-        version: 20.19.17
-      '@types/react':
-        specifier: ^19.0.8
-        version: 19.2.14
-      '@types/react-dom':
-        specifier: ^19.0.3
-        version: 19.2.3(@types/react@19.2.14)
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-      vite:
-        specifier: ^7.2.4
-        version: 7.3.1(@types/node@20.19.17)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2)
-
   packages/firebase:
     dependencies:
       '@firebase/auth':
         specifier: '*'
         version: 1.12.1(@firebase/app@0.14.9)
       '@rebasepro/cms':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../cms
       '@rebasepro/common':
         specifier: 0.0.1
@@ -1130,6 +1060,58 @@ importers:
         specifier: ^5.0.0
         version: 5.4.21(@types/node@24.12.2)(lightningcss@1.31.1)
 
+  packages/postgresql-backend:
+    dependencies:
+      '@rebasepro/common':
+        specifier: 0.0.1
+        version: link:../common
+      '@rebasepro/types':
+        specifier: 0.0.1
+        version: link:../types
+      '@rebasepro/utils':
+        specifier: 0.0.1
+        version: link:../utils
+      arg:
+        specifier: ^5.0.2
+        version: 5.0.2
+      chalk:
+        specifier: ^4.1.2
+        version: 4.1.2
+      drizzle-orm:
+        specifier: ^0.44.4
+        version: 0.44.7(@types/pg@8.18.0)(pg@8.20.0)
+      execa:
+        specifier: ^4.1.0
+        version: 4.1.0
+      pg:
+        specifier: ^8.11.3
+        version: 8.20.0
+    devDependencies:
+      '@types/jest':
+        specifier: ^29.5.14
+        version: 29.5.14
+      '@types/node':
+        specifier: ^20.10.5
+        version: 20.19.17
+      '@types/pg':
+        specifier: ^8.6.5
+        version: 8.18.0
+      drizzle-kit:
+        specifier: ^0.31.4
+        version: 0.31.9
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3))
+      ts-jest:
+        specifier: ^29.4.5
+        version: 29.4.6(@babel/core@7.29.0)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@29.7.0(@babel/core@7.29.0))(jest-util@30.3.0)(jest@29.7.0(@types/node@20.19.17)(ts-node@10.9.2(@types/node@20.19.17)(typescript@5.9.3)))(typescript@5.9.3)
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+      vite:
+        specifier: ^5.0.0
+        version: 5.4.21(@types/node@20.19.17)(lightningcss@1.31.1)
+
   packages/schema_inference:
     devDependencies:
       '@rebasepro/types':
@@ -1148,7 +1130,7 @@ importers:
   packages/sdk_generator:
     dependencies:
       '@rebasepro/client-rebase':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../client-rebase
     devDependencies:
       '@rebasepro/common':
@@ -1200,7 +1182,7 @@ importers:
         specifier: 0.0.1
         version: link:../ui
       '@rebasepro/utils':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../utils
       pgsql-ast-parser:
         specifier: 12.0.2
@@ -1363,7 +1345,7 @@ importers:
         specifier: ^1.2.4
         version: 1.2.4(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@rebasepro/types':
-        specifier: workspace:*
+        specifier: 0.0.1
         version: link:../types
       clsx:
         specifier: ^2.1.1

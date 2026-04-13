@@ -58,6 +58,47 @@ export function findBackendDir(projectRoot: string): string | null {
 }
 
 /**
+ * Detect the active backend plugin (e.g. @rebasepro/postgresql-backend) from the backend's package.json.
+ */
+export function getActiveBackendPlugin(backendDir: string): string | null {
+    const pkgPath = path.join(backendDir, "package.json");
+    if (!fs.existsSync(pkgPath)) return null;
+
+    try {
+        const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
+        const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+        
+        // Find the first dependency that matches @rebasepro/*-backend, but isn't just @rebasepro/backend
+        for (const dep of Object.keys(deps)) {
+            if (dep.startsWith("@rebasepro/") && dep.endsWith("-backend") && dep !== "@rebasepro/backend") {
+                return dep;
+            }
+        }
+    } catch {
+        // Ignore parse errors
+    }
+    return null;
+}
+
+/**
+ * Resolve the active plugin's CLI script.
+ */
+export function resolvePluginCliScript(backendDir: string, pluginName: string): string | null {
+    const candidates = [
+        path.join(backendDir, "node_modules", pluginName, "src", "cli.ts"),
+        path.join(backendDir, "node_modules", pluginName, "dist", "cli.js"),
+        // For monorepo dev mode:
+        path.resolve(backendDir, "..", "..", "packages", pluginName.replace("@rebasepro/", ""), "src", "cli.ts"),
+        path.resolve(backendDir, "..", "packages", pluginName.replace("@rebasepro/", ""), "src", "cli.ts"),
+    ];
+
+    for (const candidate of candidates) {
+        if (fs.existsSync(candidate)) return candidate;
+    }
+    return null;
+}
+
+/**
  * Locate the frontend directory within the project root.
  */
 export function findFrontendDir(projectRoot: string): string | null {
@@ -109,33 +150,6 @@ export function resolveLocalBin(projectRoot: string, binName: string): string | 
         if (globalPath && fs.existsSync(globalPath)) return globalPath;
     } catch {
         // not found globally
-    }
-
-    return null;
-}
-
-/**
- * Resolve the generate-drizzle-schema.ts script.
- *
- * Checks two locations:
- * 1. Installed package: backend/node_modules/@rebasepro/backend/src/generate-drizzle-schema.ts
- * 2. Monorepo dev: ../../packages/backend/src/generate-drizzle-schema.ts (relative to backend)
- */
-export function resolveSchemaGeneratorScript(projectRoot: string): string | null {
-    const backendDir = findBackendDir(projectRoot);
-    if (!backendDir) return null;
-
-    const candidates = [
-        // Installed via npm (published projects)
-        path.join(backendDir, "node_modules", "@rebasepro", "backend", "src", "generate-drizzle-schema.ts"),
-        // Monorepo development (relative from backend up to packages)
-        path.resolve(backendDir, "..", "..", "packages", "backend", "src", "generate-drizzle-schema.ts"),
-        // Direct sibling packages (e.g. project root has a packages/ folder)
-        path.resolve(projectRoot, "packages", "backend", "src", "generate-drizzle-schema.ts"),
-    ];
-
-    for (const candidate of candidates) {
-        if (fs.existsSync(candidate)) return candidate;
     }
 
     return null;

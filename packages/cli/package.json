@@ -40,7 +40,7 @@
         "jiti": "^2.4.2",
         "ncp": "^2.0.0",
         "pnpm": "^9.0.0",
-        "@rebasepro/backend": "workspace:*"
+        "@rebasepro/backend": "0.0.1"
     },
     "devDependencies": {
         "@types/node": "^20.19.17",

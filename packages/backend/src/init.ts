@@ -1,315 +1,45 @@
-import { DataDriver, EntityCollection, BackendBootstrapper } from "@rebasepro/types";
-import { PgEnum, PgTable } from "drizzle-orm/pg-core";
+import { DataDriver, EntityCollection, BackendBootstrapper, BootstrappedAuth, RealtimeProvider } from "@rebasepro/types";
 import { BackendCollectionRegistry } from "./collections/BackendCollectionRegistry";
 import { loadCollectionsFromDirectory } from "./collections/loader";
-import { getTableName, isTable, Relations, sql } from "drizzle-orm";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { PostgresDataDriver } from "./services/postgresDataDriver";
-import { RealtimeService } from "./services/realtimeService";
 import { DriverRegistry, DEFAULT_DRIVER_ID, DefaultDriverRegistry } from "./services/driver-registry";
-import { DatabasePoolManager } from "./services/databasePoolManager";
 import { Server } from "http";
-import { createPostgresWebSocket } from "./websocket";
 
 import { RestApiGenerator } from "./api/rest/api-generator";
 import { createAuthMiddleware } from "./auth/middleware";
 import { errorHandler } from "./api/errors";
 import { Hono } from "hono";
 import { HonoEnv } from "./api/types";
-import * as fs from "fs";
-import * as path from "path";
-import { pathToFileURL } from "url";
 import { configureLogLevel } from "./utils/logging";
-import {
-    configureGoogleOAuth,
-    configureJwt,
-    createAdminRoutes,
-    createAuthRoutes,
-    ensureAuthTablesExist,
-    RoleService,
-    UserService,
-    requireAuth,
-    requireAdmin
-} from "./auth";
-import { createEmailService, EmailConfig, EmailService } from "./email";
-import {
-    createStorageController,
-    createStorageRoutes,
-    DEFAULT_STORAGE_ID,
-    DefaultStorageRegistry,
-    BackendStorageConfig,
-    StorageController,
-    StorageRegistry
-} from "./storage";
-import { HistoryService, ensureHistoryTableExists, createHistoryRoutes } from "./history";
-
-/**
- * Authentication configuration for Rebase backend
- */
-export interface AuthConfig {
-    /** JWT secret key - required for auth */
-    jwtSecret: string;
-    /** Access token expiration (e.g., '1h', '30m') */
-    accessExpiresIn?: string;
-    /** Refresh token expiration (e.g., '30d', '7d') */
-    refreshExpiresIn?: string;
-    /** Google OAuth configuration (optional) */
-    google?: {
-        clientId: string;
-    };
-    /** Email configuration for password reset and email verification (optional) */
-    email?: EmailConfig;
-    /** Whether auth is required for all API requests (default: true) */
-    requireAuth?: boolean;
-    /** Seed default roles on startup (default: true on first run) */
-    seedDefaultRoles?: boolean;
-    /** Allow new user registration (default: false). First user can always register for bootstrap. */
-    allowRegistration?: boolean;
-}
-
-/**
- * Configuration for a PostgreSQL driver.
- * Use with `createPostgresDelegate()` to create a DataDriver.
- */
-export interface PostgresDriverConfig {
-    /** Drizzle database connection */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    connection: NodePgDatabase<any>;
-    /** Database schema */
-    schema: {
-        /** Database tables (Drizzle schema) */
-        tables: Record<string, PgTable>;
-        /** Database enums (optional) */
-        enums?: Record<string, PgEnum<any>>;
-        /** Database relations (optional) */
-        relations?: Record<string, Relations>;
-    };
-    /** Explicit cluster connection string to enable cross-database queries 
-        and administrative pool generation. */
-    adminConnectionString?: string;
-    /**
-     * Raw Postgres connection string for the LISTEN/NOTIFY client.
-     * When provided, enables **cross-instance realtime**: multiple backend
-     * instances (e.g. Cloud Run replicas) will broadcast entity changes to
-     * each other via Postgres LISTEN/NOTIFY so all connected WebSocket
-     * clients receive updates regardless of which instance handled the write.
-     *
-     * This creates one dedicated Postgres connection (outside the pool) for
-     * the LISTEN channel.
-     *
-     * Omit to run in single-instance mode (the default).
-     */
-    connectionString?: string;
-}
-
-/**
- * Configuration for a single driver.
- *
- * You can provide either:
- * - A `DataDriver` directly (for any database type)
- * - A `PostgresDriverConfig` (convenience for PostgreSQL)
- *
- * @example
- * // PostgreSQL (using config object)
- * { connection: db, schema: { tables, enums, relations } }
- *
- * // Any database (using delegate directly)
- * myFirestoreDelegate
- */
-export type DriverConfig = DataDriver | PostgresDriverConfig;
+import { createAdminRoutes, createAuthRoutes, requireAuth, requireAdmin } from "./auth";
+import { createStorageController, createStorageRoutes, DEFAULT_STORAGE_ID, DefaultStorageRegistry, BackendStorageConfig, StorageController, StorageRegistry } from "./storage";
+import { createHistoryRoutes } from "./history";
 
 export interface RebaseBackendConfig {
     collections?: EntityCollection[];
     collectionsDir?: string;
     server: Server;
-    /** Hono app for mounting auth/storage routes */
     app: Hono<HonoEnv>;
-    /** Base path for API routes (default: '/api') */
     basePath?: string;
-
-    /**
-     * Driver configuration. Supports two formats:
-     *
-     * **Single driver (most common):**
-     * ```typescript
-     * driver: {
-     *     connection: db,
-     *     schema: { tables, enums, relations }
-     * }
-     * ```
-     *
-     * **Multiple drivers:**
-     * ```typescript
-     * driver: {
-     *     "(default)": { connection: db, schema: { tables } },
-     *     "analytics": { connection: analyticsDb, schema: { analyticsTables } }
-     * }
-     * ```
-     *
-     * **Using delegates directly (for non-PostgreSQL):**
-     * ```typescript
-     * driver: {
-     *     "(default)": postgresDelegate,
-     *     "firestore": firestoreDelegate
-     * }
-     * ```
-     *
-     * Collections use `driver` property to specify which to use.
-     * Collections without `driver` use "(default)".
-     */
-    driver: DriverConfig | Record<string, DriverConfig>;
-
+    bootstrappers: BackendBootstrapper[];
     logging?: {
         level?: "error" | "warn" | "info" | "debug";
     };
-    /** Authentication configuration */
-    auth?: AuthConfig;
-
-    /**
-     * Storage configuration. Supports two formats:
-     *
-     * 1. Single storage (maps to "(default)"):
-     *    ```
-     *    storage: { type: 'local', basePath: './uploads' }
-     *    ```
-     *
-     * 2. Multiple storages (keyed by storageId):
-     *    ```
-     *    storage: {
-     *        "(default)": { type: 'local', basePath: './uploads' },
-     *        "media": { type: 's3', bucket: 'my-media-bucket', ... }
-     *    }
-     *    ```
-     *
-     * String properties use `storageId` in their config to specify which storage.
-     * Properties without `storageId` use "(default)".
-     */
+    auth?: unknown;
     storage?: BackendStorageConfig | Record<string, BackendStorageConfig>;
-
-    /**
-     * Enable entity change history.
-     * When `true`, the backend will automatically record a snapshot of entity
-     * values on every create, update, and delete for collections that have
-     * `history: true` in their definition.
-     *
-     * Pass an object to customise retention:
-     * ```ts
-     * history: {
-     *     maxEntries: 200,   // per entity, oldest pruned first (default 200)
-     *     ttlDays: 90        // entries older than this are pruned  (default 90)
-     * }
-     * ```
-     *
-     * Requires a PostgreSQL default driver (creates `rebase.entity_history` table).
-     */
-    history?: boolean | HistoryConfig;
-
-    /**
-     * Enable OpenAPI spec and Swagger UI at `{basePath}/data/docs`
-     * and `{basePath}/data/swagger` (dev only).
-     *
-     * @default false
-     */
+    history?: unknown;
     enableSwagger?: boolean;
-
-    /**
-     * Pluggable backend bootstrappers.
-     *
-     * When provided, the coordinator uses these to initialize drivers
-     * instead of the built-in Postgres-specific logic. This enables
-     * non-Postgres backends (MongoDB, MySQL, etc.) to participate in
-     * the full `initializeRebaseBackend()` lifecycle — auth, routes,
-     * realtime, and admin — without forking the coordinator.
-     *
-     * Pass `createPostgresBootstrapper()` (from `@rebasepro/backend`)
-     * to get the same behaviour as the built-in Postgres init.
-     *
-     * @example
-     * ```typescript
-     * import { createPostgresBootstrapper } from "@rebasepro/backend";
-     * import { createMongoBootstrapper } from "@rebasepro/mongodb";
-     *
-     * initializeRebaseBackend({
-     *   ...config,
-     *   bootstrappers: [
-     *     createPostgresBootstrapper(),
-     *     createMongoBootstrapper()
-     *   ]
-     * });
-     * ```
-     */
-    bootstrappers?: BackendBootstrapper[];
-}
-
-/**
- * Retention policy for entity history.
- * Controls how many entries are kept per entity and how old they can be.
- */
-export interface HistoryConfig {
-    /**
-     * Maximum number of history entries to keep per entity.
-     * When exceeded, the oldest entries are pruned.
-     * @default 200
-     */
-    maxEntries?: number;
-
-    /**
-     * Number of days to retain history entries.
-     * Entries older than this are pruned.
-     * @default 90
-     */
-    ttlDays?: number;
 }
 
 export interface RebaseBackendInstance {
-    /**
-     * Registry for accessing multiple drivers by ID.
-     * Use `driverRegistry.getOrDefault(databaseId)` to get a driver.
-     */
     driverRegistry: DriverRegistry;
-
-    /**
-     * Default driver delegate (convenience accessor).
-     * Equivalent to `driverRegistry.getDefault()`.
-     */
     driver: DataDriver;
-
-    /**
-     * Realtime services keyed by driver ID.
-     * Use `realtimeServices[databaseId]` to get the realtime service for a driver.
-     */
-    realtimeServices: Record<string, RealtimeService>;
-
-    /**
-     * Default realtime service (convenience accessor for "(default)" driver).
-     */
-    realtimeService: RealtimeService;
-
-    userService?: UserService;
-    roleService?: RoleService;
-    emailService?: EmailService;
-
-    /**
-     * Registry for accessing multiple storage controllers by ID.
-     * Use `storageRegistry.getOrDefault(storageId)` to get a storage controller.
-     */
+    realtimeServices: Record<string, RealtimeProvider>;
+    realtimeService: RealtimeProvider;
+    auth?: BootstrappedAuth;
+    history?: any;
     storageRegistry?: StorageRegistry;
-
-    /**
-     * Default storage controller (convenience accessor).
-     * Equivalent to `storageRegistry?.getDefault()`.
-     */
     storageController?: StorageController;
-
-    /**
-     * Collection registry instance used by this backend.
-     */
     collectionRegistry: BackendCollectionRegistry;
-
-    /**
-     * Entity history service (only present when `history: true` in config).
-     */
-    historyService?: HistoryService;
 }
 
 export async function initializeRebaseBackend(config: RebaseBackendConfig): Promise<RebaseBackendInstance> {
@@ -322,287 +52,118 @@ export async function initializeRebaseBackend(config: RebaseBackendConfig): Prom
         config.app.use(`${basePath}/*`, async (c) => {
             return c.json({
                 error: {
-                    message: "Backend initialization failed. Please check the backend server logs for more details. This is usually caused by a database connection failure.",
+                    message: "Backend initialization failed. Please check the backend server logs.",
                     code: "backend-init-failed"
                 }
             }, 503);
         });
 
-        // Return a mocked instance so the server still starts and serves the 503 errors
         return {
             __failed: true,
             driverRegistry: DefaultDriverRegistry.create({}),
             driver: {} as unknown as DataDriver,
             realtimeServices: {},
-            realtimeService: {} as unknown as RealtimeService,
+            realtimeService: {} as unknown as RealtimeProvider,
         } as unknown as RebaseBackendInstance;
     }
 }
 
 async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<RebaseBackendInstance> {
-    // Configure logging level automatically
     if (config.logging?.level) {
         configureLogLevel(config.logging.level);
     } else {
-        // Use environment variable by default
         configureLogLevel();
     }
 
-    console.log("🔥 Initializing Rebase Backend");
+    console.log("🔥 Initializing Rebase Backend (Bootstrapper Protocol V2)");
 
-    // Create a fresh registry for this backend instance (no singleton)
     const collectionRegistry = new BackendCollectionRegistry();
-
-    // ============ Load collections dynamically if needed ============
     let activeCollections = config.collections || [];
     if (config.collectionsDir && activeCollections.length === 0) {
         activeCollections = await loadCollectionsFromDirectory(config.collectionsDir);
         console.log(`📁 Auto-discovered ${activeCollections.length} collections from ${config.collectionsDir}`);
     }
 
-    // ============ Parse driver configuration ============
+    const realtimeServices: Record<string, RealtimeProvider> = {};
+    const delegates: Record<string, DataDriver> = {};
+    const bootstrappers = config.bootstrappers || [];
 
-    let rawDriverConfigs: Record<string, DriverConfig>;
-
-    if (isDriverConfig(config.driver)) {
-        // Single driver (most common)
-        rawDriverConfigs = { [DEFAULT_DRIVER_ID]: config.driver };
-    } else {
-        // Record of drivers
-        rawDriverConfigs = config.driver;
+    if (bootstrappers.length === 0) {
+        throw new Error("No bootstrappers provided. Cannot initialize database drivers.");
     }
 
-    // ============ Initialize drivers ============
+    let defaultDriverId = DEFAULT_DRIVER_ID;
 
-    const realtimeServices: Record<string, RealtimeService> = {};
-    const delegates: Record<string, DataDriver> = {};
+    let defaultDriverResult: import("@rebasepro/types").InitializedDriver | undefined = undefined;
 
-    for (const [driverId, dsConfig] of Object.entries(rawDriverConfigs)) {
-        console.log(`📦 Initializing driver: "${driverId}"`);
+    // 1. Initialize all drivers
+    for (const bootstrapper of bootstrappers) {
+        const b = bootstrapper as any;
+        console.log(`📦 Running bootstrapper for driver: "${b.id || bootstrapper.type}"`);
+        if (b.isDefault) {
+            defaultDriverId = b.id || bootstrapper.type;
+        }
 
-        // Resolve the DataDriver from the config
-        const {
-            delegate,
-            db,
-            schema,
-            adminConnectionString,
-            connectionString
-        } = resolveDriverConfig(dsConfig);
+        const driverResult = await bootstrapper.initializeDriver({ collections: activeCollections, collectionRegistry });
+        delegates[b.id || bootstrapper.type] = driverResult.driver;
+        
+        if ((b.id || bootstrapper.type) === defaultDriverId || !defaultDriverResult) {
+            defaultDriverResult = driverResult;
+        }
 
-        if (delegate) {
-            // Direct delegate - just use it
-            delegates[driverId] = delegate;
-
-            // For non-Postgres delegates, we don't have a RealtimeService
-            // They handle their own real-time (e.g., Firestore)
-        } else if (db && schema) {
-            // PostgreSQL config - create delegate
-
-            // Register tables for this driver
-            Object.values(schema.tables).forEach((table) => {
-                if (isTable(table)) {
-                    const tableName = getTableName(table);
-                    const matchingCollection = activeCollections.find(
-                        c => c.dbPath === tableName && (
-                            c.driver === driverId ||
-                            (!c.driver && driverId === DEFAULT_DRIVER_ID)
-                        )
-                    );
-                    collectionRegistry.registerTable(table, matchingCollection?.dbPath ?? tableName);
-                }
-            });
-
-            if (schema.enums) collectionRegistry.registerEnums(schema.enums);
-            if (schema.relations) collectionRegistry.registerRelations(schema.relations);
-
-            // Build a merged schema object and re-create Drizzle with it.
-            // This enables db.query.<table>.findMany({ with: { ... } }) for relational queries.
-            const mergedSchema: Record<string, unknown> = {
-                ...schema.tables,
-                ...(schema.relations || {})
-            };
-            const { drizzle: createDrizzle } = await import("drizzle-orm/node-postgres");
-            const rawClient = ("$client" in db ? (db as Record<string, unknown>).$client : db) as import("pg").Pool;
-            const schemaAwareDb = createDrizzle(rawClient, { schema: mergedSchema });
-
-            console.log(`⏳ Verifying database connection to "${driverId}"...`);
-
-            try {
-                await schemaAwareDb.execute(sql`SELECT 1`);
-            } catch (err) {
-                console.error(`❌ Failed to connect to database for driver "${driverId}":`, err);
-                throw err;
-            }
-
-            // Create realtime service and driver delegate, using schema-aware db
-            const realtimeService = new RealtimeService(schemaAwareDb, collectionRegistry);
-            const poolManager = adminConnectionString ? new DatabasePoolManager(adminConnectionString) : undefined;
-            const driver = new PostgresDataDriver(schemaAwareDb, realtimeService, collectionRegistry, undefined, poolManager);
-            realtimeService.setDataDriver(driver);
-
-            // Enable cross-instance realtime ONLY if connectionString is explicitly provided.
-            // This is an opt-in feature — omit connectionString to run in single-instance mode.
-            if (connectionString) {
-                try {
-                    await realtimeService.startListening(connectionString);
-                } catch (err) {
-                    console.warn(`⚠️ Cross-instance realtime could not be started for driver "${driverId}":`, err);
-                }
-            }
-
-            realtimeServices[driverId] = realtimeService;
-            delegates[driverId] = driver;
-        } else {
-            console.warn(`⚠️ Skipping driver "${driverId}" - invalid configuration`);
+        if (bootstrapper.initializeRealtime) {
+            const realtime = await bootstrapper.initializeRealtime({}, driverResult);
+            realtimeServices[b.id || bootstrapper.type] = realtime as RealtimeProvider;
         }
     }
 
-    // Create the registry
     const driverRegistry = DefaultDriverRegistry.create(delegates);
-
-    console.log(`✅ Initialized ${Object.keys(delegates).length} driver(s): ${Object.keys(delegates).join(", ")}`);
-
-    // Register collections
     activeCollections.forEach(collection => collectionRegistry.register(collection));
 
-    // Warn about collections missing database tables for Postgres drivers
-    for (const driverId of Object.keys(rawDriverConfigs)) {
-        if (isPostgresDriverConfig(rawDriverConfigs[driverId])) {
-            const missing = collectionRegistry.getCollectionsWithoutTables(driverId);
-            if (missing.length > 0) {
-                console.warn(`\x1b[33m⚠️ Driver "${driverId}": ${missing.length} collection(s) do not have a corresponding table in the schema.\x1b[0m`);
-                missing.forEach(c => {
-                    console.warn(`\x1b[33m   - ${c.name} (expected table: "${c.dbPath}")\x1b[0m`);
-                });
-                console.warn(`\x1b[33m   Run 'npm run db:generate' and 'npm run db:migrate' to sync your schema.\x1b[0m`);
-            }
-        }
+    const defaultDriver = driverRegistry.getOrDefault(defaultDriverId);
+    if (!defaultDriver || !defaultDriverResult) {
+        throw new Error("Default driver not initialized by bootstrappers");
     }
+    const defaultBootstrapper = bootstrappers.find(b => (b as any).id === defaultDriverId || b.type === defaultDriverId) || bootstrappers[0];
+    const defaultRealtimeService = realtimeServices[defaultDriverId];
 
-    // ============ Get default driver for auth ============
-    // Auth requires PostgreSQL, so we need to find the default db connection
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let defaultDb: NodePgDatabase<any> | undefined;
-    const defaultConfig = rawDriverConfigs[DEFAULT_DRIVER_ID];
-    if (defaultConfig) {
-        const resolved = resolveDriverConfig(defaultConfig);
-        defaultDb = resolved.db;
-    }
-
-    // ============ Initialize auth if configured ============
-    let userService: UserService | undefined;
-    let roleService: RoleService | undefined;
-    let emailService: EmailService | undefined;
-
+    // 2. Initialize Auth & History via the default driver's bootstrapper
+    let authConfigResult: BootstrappedAuth | undefined = undefined;
     if (config.auth) {
-        if (!defaultDb) {
-            console.warn(
-                "⚠️ Auth requires a PostgreSQL database. No default PostgreSQL driver found. " +
-                "Auth will not be initialized. Make sure your default driver uses PostgresDriverConfig."
-            );
+        if (defaultBootstrapper.initializeAuth) {
+            console.log("🔐 Bootstrapping authentication via driver protocol...");
+            authConfigResult = await defaultBootstrapper.initializeAuth(config.auth, defaultDriverResult);
+            console.log("✅ Authentication initialized");
         } else {
-            console.log("🔐 Configuring authentication...");
-
-            // Ensure auth tables exist (auto-create if needed)
-            await ensureAuthTablesExist(defaultDb);
-
-            // Configure JWT
-            configureJwt({
-                secret: config.auth.jwtSecret,
-                accessExpiresIn: config.auth.accessExpiresIn || "1h",
-                refreshExpiresIn: config.auth.refreshExpiresIn || "30d"
-            });
-
-            // Configure Google OAuth if provided
-            if (config.auth.google?.clientId) {
-                configureGoogleOAuth(config.auth.google.clientId);
-                console.log("✅ Google OAuth configured");
-            }
-
-            // Configure email service if provided
-            if (config.auth.email) {
-                emailService = createEmailService(config.auth.email);
-                if (emailService.isConfigured()) {
-                    console.log("✅ Email service configured");
-                } else {
-                    console.warn("⚠️ Email config provided but service not fully configured (missing SMTP or sendEmail)");
-                }
-            }
-
-            // Create services using default database
-            userService = new UserService(defaultDb);
-            roleService = new RoleService(defaultDb);
-
-            console.log("✅ Authentication configured");
+            console.warn("⚠️ Auth requested but default bootstrapper does not support initializeAuth");
         }
     }
 
-    // ============ Initialize history if configured ============
-    let historyService: HistoryService | undefined;
-
+    let historyConfigResult: any = undefined;
     if (config.history) {
-        if (!defaultDb) {
-            console.warn(
-                "⚠️ History requires a PostgreSQL database. No default PostgreSQL driver found. " +
-                "History will not be initialized."
-            );
+        if ((defaultBootstrapper as any).initializeHistory) {
+            console.log("📜 Bootstrapping entity history via driver protocol...");
+            historyConfigResult = await (defaultBootstrapper as any).initializeHistory(defaultDriver, config.history);
+            console.log("✅ Entity history initialized");
         } else {
-            console.log("📜 Configuring entity history...");
-            await ensureHistoryTableExists(defaultDb);
-
-            // Resolve retention config: `true` → defaults, object → merge
-            const retentionConfig = typeof config.history === "object"
-                ? config.history
-                : undefined;
-            historyService = new HistoryService(defaultDb, retentionConfig);
-
-            // Inject the history service into the default driver
-            const defaultDriver = delegates[DEFAULT_DRIVER_ID];
-            if (defaultDriver instanceof PostgresDataDriver) {
-                defaultDriver.historyService = historyService;
-            }
-
-            // Periodic global TTL prune (every 6 hours)
-            const PRUNE_INTERVAL_MS = 6 * 60 * 60 * 1000;
-            const pruneTimer = setInterval(() => {
-                historyService!.pruneExpired().then(deleted => {
-                    if (deleted > 0) {
-                        console.log(`🧹 Pruned ${deleted} expired history entries`);
-                    }
-                }).catch(err => {
-                    console.error("History prune sweep failed:", err);
-                });
-            }, PRUNE_INTERVAL_MS);
-            // Don't prevent process exit
-            pruneTimer.unref();
-
-            const { maxEntries, ttlDays } = historyService.retention;
-            console.log(`✅ Entity history configured (retain ${maxEntries} entries / ${ttlDays} days)`);
+            console.warn("⚠️ History requested but default bootstrapper does not support initializeHistory");
         }
     }
 
-    // ============ Initialize storage if configured ============
+    // 3. Initialize Storage
     let storageRegistry: StorageRegistry | undefined;
     let storageController: StorageController | undefined;
 
     if (config.storage) {
         console.log("📁 Configuring storage...");
-
         const controllers: Record<string, StorageController> = {};
 
-        if (isBackendStorageConfig(config.storage)) {
-            // Single storage config → maps to "(default)"
-            const controller = createStorageController(config.storage);
+        if (typeof config.storage === "object" && "type" in config.storage) {
+            const controller = createStorageController(config.storage as any);
             controllers[DEFAULT_STORAGE_ID] = controller;
-            console.log(`✅ Storage configured (${config.storage.type})`);
         } else {
-            // Map of storage configs
-            for (const [storageId, storageConfig] of Object.entries(config.storage)) {
-                if (isBackendStorageConfig(storageConfig)) {
-                    const controller = createStorageController(storageConfig);
-                    controllers[storageId] = controller;
-                    console.log(`✅ Storage "${storageId}" configured (${storageConfig.type})`);
-                }
+            for (const [storageId, storageConfig] of Object.entries(config.storage as Record<string, any>)) {
+                controllers[storageId] = createStorageController(storageConfig);
             }
         }
 
@@ -613,33 +174,32 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         }
     }
 
-    // ============ Mount core routes (auth, admin, storage, data) ============
     const basePath = config.basePath || "/api";
 
-    if (config.auth && defaultDb && userService && roleService) {
+    // 4. Mount API Routes
+    if (config.auth && authConfigResult) {
         const authRoutes = createAuthRoutes({
-            db: defaultDb,
-            emailService,
-            emailConfig: config.auth.email,
-            allowRegistration: config.auth.allowRegistration ?? false
+            authRepo: (authConfigResult as any).authRepository ?? (authConfigResult as any).userService,
+            emailService: authConfigResult.emailService as any,
+            emailConfig: (config.auth as any).email,
+            allowRegistration: (config.auth as any).allowRegistration ?? false
         });
         config.app.route(`${basePath}/auth`, authRoutes);
 
-        const adminRoutes = createAdminRoutes({ db: defaultDb });
+        const adminRoutes = createAdminRoutes({ 
+            authRepo: (authConfigResult as any).authRepository ?? (authConfigResult as any).userService,
+            emailService: authConfigResult.emailService as any,
+            emailConfig: (config.auth as any).email,
+        });
         config.app.route(`${basePath}/admin`, adminRoutes);
     }
 
-    // ============ Schema Editor ============
     if (config.collectionsDir) {
-        if (process.env.NODE_ENV === "production") {
-            console.warn("⚠️ Schema Editor is disabled in production environments for security.");
-        } else {
-            console.log("🛠️ Configuring Schema Editor...");
+        if (process.env.NODE_ENV !== "production") {
             const { createSchemaEditorRoutes } = await import("./api/schema-editor-routes");
             const schemaEditorRoutes = createSchemaEditorRoutes(config.collectionsDir);
             
-            // Rebase CMS expects these routes at /api/schema-editor
-            if (config.auth?.requireAuth !== false && !!config.auth?.jwtSecret) {
+            if ((config.auth as any)?.requireAuth !== false && !!(config.auth as any)?.jwtSecret) {
                 schemaEditorRoutes.use("/*", requireAuth, requireAdmin);
             }
             
@@ -651,220 +211,49 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
     if (storageController) {
         const storageRoutes = createStorageRoutes({
             controller: storageController,
-            requireAuth: config.auth?.requireAuth ?? true
+            requireAuth: (config.auth as any)?.requireAuth ?? true
         });
         config.app.route(`${basePath}/storage`, storageRoutes);
     }
 
-    // ============ Mount data routes ============
-    // These power the client SDK (@rebasepro/client), the CMS, and
-    // any third-party REST/GraphQL consumers. One unified surface.
-    const defaultDataDriverDelegate = driverRegistry.getDefault();
-
     if (activeCollections.length > 0) {
         const dataRouter = new Hono<HonoEnv>();
 
-        // Auth middleware for data routes
         dataRouter.use("/*", createAuthMiddleware({
-            driver: defaultDataDriverDelegate,
-            requireAuth: config.auth?.requireAuth !== false && !!config.auth?.jwtSecret
+            driver: defaultDriver,
+            requireAuth: (config.auth as any)?.requireAuth !== false && !!(config.auth as any)?.jwtSecret
         }));
 
-        // Collections metadata endpoint
-        const collectionsRouter = new Hono<HonoEnv>();
-        collectionsRouter.use("/*", createAuthMiddleware({
-            driver: defaultDataDriverDelegate,
-            requireAuth: config.auth?.requireAuth !== false && !!config.auth?.jwtSecret
-        }));
-        
-        collectionsRouter.get("/", (c) => {
-            const collectionsMetadata = activeCollections.map((col) => ({
-                slug: col.slug,
-                name: col.name,
-                singularName: col.singularName,
-                description: col.description,
-                dbPath: col.dbPath,
-                isTableMissing: !collectionRegistry.hasTableForCollection(col.dbPath),
-                properties: Object.keys(col.properties),
-                relations: col.relations?.map((r) => ({
-                    relationName: r.relationName,
-                    target: typeof r.target === 'function' ? r.target().slug : r.target,
-                    cardinality: r.cardinality,
-                    direction: r.direction
-                })) || []
-            }));
-            return c.json({ data: collectionsMetadata });
-        });
-        
-        config.app.route(`${basePath}/collections`, collectionsRouter);
+        const restGenerator = new RestApiGenerator(activeCollections, defaultDriver);
+        dataRouter.route("/", restGenerator.generateRoutes());
 
-        // CRUD routes for each collection
-        const restGenerator = new RestApiGenerator(activeCollections, defaultDataDriverDelegate);
-        const restRoutes = restGenerator.generateRoutes();
-        dataRouter.route("/", restRoutes);
-
-        // History routes (only when enabled)
-        if (historyService && defaultDataDriverDelegate instanceof PostgresDataDriver) {
+        if (historyConfigResult && historyConfigResult.historyService) {
             const historyRoutes = createHistoryRoutes({
-                historyService,
+                historyService: historyConfigResult.historyService as any,
                 registry: collectionRegistry,
-                driver: defaultDataDriverDelegate
+                driver: defaultDriver
             });
             dataRouter.route("/", historyRoutes);
         }
 
-
-        // OpenAPI spec and Swagger UI (optional)
-        if (config.enableSwagger) {
-            const { generateOpenApiSpec } = await import("./api/openapi-generator");
-
-            dataRouter.get("/docs", (c) => {
-                const openApiSpec = generateOpenApiSpec(activeCollections, `${basePath}/data`);
-                return c.json(openApiSpec);
-            });
-            console.log(`✅ OpenAPI spec: ${basePath}/data/docs`);
-
-            if (process.env.NODE_ENV !== "production") {
-                dataRouter.get("/swagger", (c) => {
-                    return c.html(`
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <title>Rebase API Documentation</title>
-                            <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui.css" />
-                        </head>
-                        <body>
-                            <div id="swagger-ui"></div>
-                            <script src="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui-bundle.js"></script>
-                            <script>
-                                SwaggerUIBundle({
-                                    url: '${basePath}/data/docs',
-                                    dom_id: '#swagger-ui'
-                                });
-                            </script>
-                        </body>
-                        </html>
-                    `);
-                });
-                console.log(`✅ Swagger UI: ${basePath}/data/swagger`);
-            }
-        }
-
-        dataRouter.onError(errorHandler);
-
         config.app.route(`${basePath}/data`, dataRouter);
     }
 
-    // ============ Create WebSocket with auth support ============
-    // Use the default realtime service and driver delegate
-    const defaultRealtimeService = realtimeServices[DEFAULT_DRIVER_ID];
-
-    createPostgresWebSocket(
-        config.server,
-        defaultRealtimeService,
-        defaultDataDriverDelegate as PostgresDataDriver,
-        config.auth
-    );
+    if ((defaultBootstrapper as any).initializeWebsockets) {
+        await (defaultBootstrapper as any).initializeWebsockets(config.server, defaultRealtimeService, defaultDriver, config.auth);
+    }
 
     console.log("✅ Rebase Backend Initialized");
 
     return {
         driverRegistry,
-        driver: defaultDataDriverDelegate,
+        driver: defaultDriver,
         realtimeServices,
         realtimeService: defaultRealtimeService,
-        userService,
-        roleService,
-        emailService,
+        auth: authConfigResult,
+        history: historyConfigResult,
         storageRegistry,
         storageController,
-        collectionRegistry,
-        historyService
+        collectionRegistry
     };
-}
-
-/**
- * Type guard to check if an object is a DataDriver
- */
-function isDataDriverDelegate(obj: unknown): obj is DataDriver {
-    if (typeof obj !== "object" || obj === null) {
-        return false;
-    }
-    const delegate = obj as DataDriver;
-    return (
-        typeof delegate.key === "string" &&
-        typeof delegate.fetchCollection === "function" &&
-        typeof delegate.fetchEntity === "function" &&
-        typeof delegate.saveEntity === "function" &&
-        typeof delegate.deleteEntity === "function"
-    );
-}
-
-/**
- * Type guard to check if an object is a PostgresDriverConfig (new format)
- */
-function isPostgresDriverConfig(obj: unknown): obj is PostgresDriverConfig {
-    if (typeof obj !== "object" || obj === null) {
-        return false;
-    }
-    const config = obj as PostgresDriverConfig;
-    return (
-        config.connection !== undefined &&
-        typeof config.schema === "object" &&
-        config.schema !== null &&
-        typeof config.schema.tables === "object"
-    );
-}
-
-/**
- * Type guard to check if a value is a single DriverConfig
- * (either a DataDriver or PostgresDriverConfig)
- * vs a Record<string, DriverConfig>
- */
-function isDriverConfig(obj: unknown): obj is DriverConfig {
-    return isDataDriverDelegate(obj) || isPostgresDriverConfig(obj);
-}
-
-/**
- * Resolve a DriverConfig into its components
- */
-function resolveDriverConfig(config: DriverConfig): {
-    delegate?: DataDriver;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    db?: NodePgDatabase<any>;
-    schema?: PostgresDriverConfig["schema"];
-    adminConnectionString?: string;
-    connectionString?: string;
-} {
-    // If it's a DataDriver directly
-    if (isDataDriverDelegate(config)) {
-        return { delegate: config };
-    }
-
-    // If it's a PostgresDriverConfig
-    if (isPostgresDriverConfig(config)) {
-        return {
-            db: config.connection,
-            schema: config.schema,
-            adminConnectionString: config.adminConnectionString,
-            connectionString: config.connectionString
-        };
-    }
-
-    return {};
-}
-
-/**
- * Type guard to check if an object is a BackendStorageConfig (single storage)
- * vs a Record<string, BackendStorageConfig> (multiple storages)
- */
-function isBackendStorageConfig(obj: unknown): obj is BackendStorageConfig {
-    if (typeof obj !== "object" || obj === null) {
-        return false;
-    }
-    const config = obj as BackendStorageConfig;
-    // A BackendStorageConfig has a `type` property that is 'local' or 's3'
-    return (
-        config.type === "local" || config.type === "s3"
-    );
 }

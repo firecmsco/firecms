@@ -658,4 +658,6 @@ export interface BootstrappedAuth {
     roleService: unknown;
     /** Email service (optional). */
     emailService?: unknown;
+    /** Combined Auth Repository for unified token and user management. */
+    authRepository?: unknown;
 }

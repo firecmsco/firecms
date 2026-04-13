@@ -16,8 +16,7 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 export function App() {
     const rebaseClient = React.useMemo(() => createRebaseClient({
-        baseUrl: API_URL,
-        websocketUrl: API_URL.replace(/^http/, "ws")
+        baseUrl: API_URL
     }), []);
 
     const authController = useRebaseAuthController({
@@ -34,7 +33,6 @@ export function App() {
 
     return (
         <Rebase
-            apiUrl={API_URL}
             client={rebaseClient}
             authController={authController}
             userManagement={userManagement}

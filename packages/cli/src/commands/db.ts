@@ -1,28 +1,16 @@
 /**
  * CLI command: rebase db <action>
- *
- * Subcommands:
- *   push     — Apply schema directly to database (development)
- *   pull     — Introspect database → Drizzle schema
- *   generate — Generate SQL migration files (runs schema generate first)
- *   migrate  — Run pending migrations
- *   studio   — Open Drizzle Studio
  */
-import arg from "arg";
 import chalk from "chalk";
 import execa from "execa";
-import path from "path";
 import {
     requireProjectRoot,
     requireBackendDir,
-    resolveLocalBin,
-    findEnvFile,
+    getActiveBackendPlugin,
+    resolvePluginCliScript,
+    resolveTsx,
+    findEnvFile
 } from "../utils/project";
-import { schemaCommand } from "./schema";
-
-type DbAction = "push" | "pull" | "generate" | "migrate" | "studio";
-
-const VALID_ACTIONS: DbAction[] = ["push", "pull", "generate", "migrate", "studio"];
 
 export async function dbCommand(subcommand: string | undefined, rawArgs: string[]): Promise<void> {
     if (!subcommand || subcommand === "--help") {
@@ -30,60 +18,19 @@ export async function dbCommand(subcommand: string | undefined, rawArgs: string[
         return;
     }
 
-    if (!VALID_ACTIONS.includes(subcommand as DbAction)) {
-        console.error(chalk.red(`Unknown db command: ${subcommand}`));
-        console.log("");
-        printDbHelp();
-        process.exit(1);
-    }
-
-    const action = subcommand as DbAction;
-
-    if (action === "generate") {
-        await dbGenerate(rawArgs);
-    } else {
-        await runDrizzleKit(action, rawArgs);
-    }
-}
-
-/**
- * `rebase db generate` — runs schema generation first, then drizzle-kit generate.
- */
-async function dbGenerate(rawArgs: string[]): Promise<void> {
-    console.log("");
-    console.log(chalk.bold("  📦 Rebase DB Generate"));
-    console.log(chalk.gray("  Step 1/2: Generating Drizzle schema from collections..."));
-    console.log("");
-
-    // Run schema generate first
-    await schemaCommand("generate", rawArgs);
-
-    console.log("");
-    console.log(chalk.gray("  Step 2/2: Generating SQL migration files..."));
-    console.log("");
-
-    // Then run drizzle-kit generate
-    await runDrizzleKit("generate", rawArgs);
-
-    console.log("");
-    console.log(
-        `  You can now run ${chalk.bold.green("rebase db migrate")} to apply the migrations to your database.`
-    );
-    console.log("");
-}
-
-/**
- * Run a drizzle-kit command with the correct CWD and environment.
- */
-async function runDrizzleKit(action: string, _rawArgs: string[]): Promise<void> {
     const projectRoot = requireProjectRoot();
     const backendDir = requireBackendDir(projectRoot);
 
-    // Resolve drizzle-kit binary
-    const drizzleKitBin = resolveLocalBin(projectRoot, "drizzle-kit");
-    if (!drizzleKitBin) {
-        console.error(chalk.red("✗ Could not find drizzle-kit binary."));
-        console.error(chalk.gray("  Install it with: pnpm add -D drizzle-kit"));
+    const activePlugin = getActiveBackendPlugin(backendDir);
+    if (!activePlugin) {
+        console.error(chalk.red("✗ Could not detect an active database plugin."));
+        console.error(chalk.gray("  Make sure a package like @rebasepro/postgresql-backend is installed in backend/package.json."));
+        process.exit(1);
+    }
+
+    const pluginCli = resolvePluginCliScript(backendDir, activePlugin);
+    if (!pluginCli) {
+        console.error(chalk.red(`✗ Could not find CLI entry point for ${activePlugin}.`));
         process.exit(1);
     }
 
@@ -94,15 +41,29 @@ async function runDrizzleKit(action: string, _rawArgs: string[]): Promise<void> 
         env.DOTENV_CONFIG_PATH = envFile;
     }
 
-    // Shell out to drizzle-kit
     try {
-        await execa(drizzleKitBin, [action], {
-            cwd: backendDir,
-            stdio: "inherit",
-            env,
-        });
+        const isTs = pluginCli.endsWith(".ts");
+        if (isTs) {
+            const tsxBin = resolveTsx(projectRoot);
+            if (!tsxBin) {
+                console.error(chalk.red("✗ Could not find tsx binary."));
+                process.exit(1);
+            }
+            await execa(tsxBin, [pluginCli, "db", subcommand, ...rawArgs.slice(2)], {
+                cwd: backendDir,
+                stdio: "inherit",
+                env,
+            });
+        } else {
+            await execa("node", [pluginCli, "db", subcommand, ...rawArgs.slice(2)], {
+                cwd: backendDir,
+                stdio: "inherit",
+                env,
+            });
+        }
     } catch (err: unknown) {
-        console.error(chalk.red(`✗ Failed to run drizzle-kit ${action}: ${err instanceof Error ? err.message : String(err)}`));
+        // If the process exits with an error code, execa will throw, 
+        // but inherit stdio means the user already saw the output.
         process.exit(1);
     }
 }
@@ -115,11 +76,12 @@ ${chalk.green.bold("Usage")}
   rebase db ${chalk.blue("<command>")} [options]
 
 ${chalk.green.bold("Commands")}
+  ${chalk.gray("(Commands are provided by your active database driver plugin)")}
   ${chalk.blue.bold("push")}       Apply schema directly to database (development)
-  ${chalk.blue.bold("pull")}       Introspect database → Drizzle schema
-  ${chalk.blue.bold("generate")}   Generate SQL migration files (runs schema generate first)
+  ${chalk.blue.bold("pull")}       Introspect database → Schema
+  ${chalk.blue.bold("generate")}   Generate migration files
   ${chalk.blue.bold("migrate")}    Run pending migrations
-  ${chalk.blue.bold("studio")}     Open Drizzle Studio
+  ${chalk.blue.bold("studio")}     Open Studio viewer
 
 ${chalk.green.bold("Examples")}
   ${chalk.gray("# Quick development workflow")}

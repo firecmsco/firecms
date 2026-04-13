@@ -1,2 +1,1 @@
-export { createPostgresBootstrapper } from "./PostgresBootstrapper";
-export type { PostgresDriverInternals } from "./PostgresBootstrapper";
+// PostgresBootstrapper was moved to @rebasepro/postgresql-backend

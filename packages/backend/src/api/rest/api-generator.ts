@@ -3,8 +3,7 @@ import { DataDriver, Entity, EntityCollection, FetchCollectionProps } from "@reb
 import { QueryOptions, HonoEnv } from "../types";
 import { ApiError } from "../errors";
 import { parseQueryOptions } from "./query-parser";
-import { EntityFetchService } from "../../db/services/EntityFetchService";
-import { PostgresDataDriver } from "../../services/postgresDataDriver";
+
 
 /**
  * Lightweight REST API generator that leverages existing Rebase DataDriver.
@@ -32,11 +31,14 @@ export class RestApiGenerator {
     }
 
     /**
-     * Get the EntityFetchService from a PostgresDataDriver (for include support)
+     * Get the EntityFetchService from a driver if it exposes one (for include support)
      */
-    private getFetchService(driver: DataDriver): EntityFetchService | null {
-        if (driver instanceof PostgresDataDriver) {
-            return driver.entityService.getFetchService();
+    private getFetchService(driver: DataDriver): any {
+        if ("entityService" in driver && typeof driver.entityService === "object" && driver.entityService) {
+            const es = driver.entityService as any;
+            if (typeof es.getFetchService === "function") {
+                return es.getFetchService();
+            }
         }
         return null;
     }

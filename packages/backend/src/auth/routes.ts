@@ -1,8 +1,7 @@
 import { Hono } from "hono";
 import { ApiError } from "../api/errors";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { randomBytes, createHash } from "crypto";
-import { UserService, RoleService, RefreshTokenService, PasswordResetTokenService } from "./services";
+import type { AuthRepository } from "./interfaces";
 import { generateAccessToken, generateRefreshToken, hashRefreshToken, getRefreshTokenExpiry, getAccessTokenExpiry } from "./jwt";
 import { hashPassword, verifyPassword, validatePasswordStrength } from "./password";
 import { verifyGoogleIdToken, isGoogleOAuthConfigured } from "./google-oauth";
@@ -17,7 +16,7 @@ import { z } from "zod";
  * Shared configuration for auth and admin route factories.
  */
 export interface AuthModuleConfig {
-    db: NodePgDatabase;
+    authRepo: AuthRepository;
     emailService?: EmailService;
     emailConfig?: EmailConfig;
     /** Allow new user registration (default: false). First user can always register for bootstrap. */
@@ -28,7 +27,7 @@ export interface AuthModuleConfig {
  * Helper to build standard auth response output
  */
 function buildAuthResponse(
-    user: { id: string; email: string; displayName: string | null; photoUrl: string | null },
+    user: { id: string; email: string; displayName?: string | null; photoUrl?: string | null },
     roleIds: string[],
     accessToken: string,
     refreshToken: string
@@ -37,8 +36,8 @@ function buildAuthResponse(
         user: {
             uid: user.id,
             email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoUrl,
+            displayName: user.displayName ?? null,
+            photoURL: user.photoUrl ?? null,
             roles: roleIds
         },
         tokens: {
@@ -72,10 +71,7 @@ function getPasswordResetExpiry(): Date {
 
 export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
     const router = new Hono<HonoEnv>();
-    const userService = new UserService(config.db);
-    const roleService = new RoleService(config.db);
-    const refreshTokenService = new RefreshTokenService(config.db);
-    const passwordResetTokenService = new PasswordResetTokenService(config.db);
+    const authRepo = config.authRepo;
     const { emailService, emailConfig, allowRegistration = false } = config;
 
     // ── Zod input schemas ──────────────────────────────────────────────
@@ -136,7 +132,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
     async function isRegistrationAllowed(): Promise<boolean> {
         if (allowRegistration) return true;
         // Always allow first user registration for bootstrap
-        const allUsers = await userService.listUsers();
+        const allUsers = await authRepo.listUsers();
         return allUsers.length === 0;
     }
 
@@ -160,28 +156,28 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         }
 
         // Check if email already exists
-        const existingUser = await userService.getUserByEmail(email);
+        const existingUser = await authRepo.getUserByEmail(email);
         if (existingUser) {
             throw ApiError.conflict("Email already registered", "EMAIL_EXISTS");
         }
 
         // Create user
         const passwordHash = await hashPassword(password);
-        const user = await userService.createUser({
+        const user = await authRepo.createUser({
             email: email.toLowerCase(),
             passwordHash,
-            displayName: displayName || null,
+            displayName: displayName || undefined,
             provider: "email"
         });
 
         // Check if this is the first user - make them admin
-        const allUsers = await userService.listUsers();
+        const allUsers = await authRepo.listUsers();
         const isFirstUser = allUsers.length === 1;
         const defaultRole = isFirstUser ? "admin" : "editor";
-        await userService.assignDefaultRole(user.id, defaultRole);
+        await authRepo.assignDefaultRole(user.id, defaultRole);
 
         // Generate tokens
-        const roles = await userService.getUserRoles(user.id);
+        const roles = await authRepo.getUserRoles(user.id);
         const roleIds = roles.map(r => r.id);
         const accessToken = generateAccessToken(user.id, roleIds);
         const refreshToken = generateRefreshToken();
@@ -190,7 +186,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         const userAgent = c.req.header("user-agent") || "unknown";
         const ipAddress = c.req.header("x-forwarded-for") || "unknown";
         
-        await refreshTokenService.createToken(
+        await authRepo.createRefreshToken(
             user.id,
             hashRefreshToken(refreshToken),
             getRefreshTokenExpiry(),
@@ -208,7 +204,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
     router.post("/login", defaultAuthLimiter, async (c) => {
         const { email, password } = parseBody(loginSchema, await c.req.json());
 
-        const user = await userService.getUserByEmail(email);
+        const user = await authRepo.getUserByEmail(email);
         if (!user) {
             throw ApiError.unauthorized("Invalid email or password", "INVALID_CREDENTIALS");
         }
@@ -223,7 +219,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         }
 
         // Generate tokens
-        const roles = await userService.getUserRoles(user.id);
+        const roles = await authRepo.getUserRoles(user.id);
         const roleIds = roles.map(r => r.id);
 
         const accessToken = generateAccessToken(user.id, roleIds);
@@ -233,7 +229,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         const userAgent = c.req.header("user-agent") || "unknown";
         const ipAddress = c.req.header("x-forwarded-for") || "unknown";
         
-        await refreshTokenService.createToken(
+        await authRepo.createRefreshToken(
             user.id,
             hashRefreshToken(refreshToken),
             getRefreshTokenExpiry(),
@@ -261,40 +257,40 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         }
 
         // Find or create user
-        let user = await userService.getUserByGoogleId(googleUser.googleId);
+        let user = await authRepo.getUserByGoogleId(googleUser.googleId);
 
         if (!user) {
             // Check if email exists (link accounts)
-            user = await userService.getUserByEmail(googleUser.email);
+            user = await authRepo.getUserByEmail(googleUser.email);
 
             if (user) {
                 // Link Google to existing account
-                await userService.updateUser(user.id, { googleId: googleUser.googleId });
+                await authRepo.updateUser(user.id, { googleId: googleUser.googleId });
             } else {
                 // Create new user
-                user = await userService.createUser({
+                user = await authRepo.createUser({
                     email: googleUser.email.toLowerCase(),
-                    displayName: googleUser.displayName,
-                    photoUrl: googleUser.photoUrl,
+                    displayName: googleUser.displayName || undefined,
+                    photoUrl: googleUser.photoUrl || undefined,
                     provider: "google",
                     googleId: googleUser.googleId
                 });
                 // Check if this is the first user - make them admin
-                const allUsers = await userService.listUsers();
+                const allUsers = await authRepo.listUsers();
                 const isFirstUser = allUsers.length === 1;
                 const defaultRole = isFirstUser ? "admin" : "editor";
-                await userService.assignDefaultRole(user.id, defaultRole);
+                await authRepo.assignDefaultRole(user.id, defaultRole);
             }
         } else {
             // Update profile info from Google
-            await userService.updateUser(user.id, {
-                displayName: googleUser.displayName || user.displayName,
-                photoUrl: googleUser.photoUrl || user.photoUrl
+            await authRepo.updateUser(user.id, {
+                displayName: googleUser.displayName || user.displayName || undefined,
+                photoUrl: googleUser.photoUrl || user.photoUrl || undefined
             });
         }
 
         // Generate tokens
-        const roles = await userService.getUserRoles(user.id);
+        const roles = await authRepo.getUserRoles(user.id);
         const roleIds = roles.map(r => r.id);
         const accessToken = generateAccessToken(user.id, roleIds);
         const refreshToken = generateRefreshToken();
@@ -303,7 +299,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         const userAgent = c.req.header("user-agent") || "unknown";
         const ipAddress = c.req.header("x-forwarded-for") || "unknown";
         
-        await refreshTokenService.createToken(
+        await authRepo.createRefreshToken(
             user.id,
             hashRefreshToken(refreshToken),
             getRefreshTokenExpiry(),
@@ -328,7 +324,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
         // Always return success (security: don't reveal if email exists)
         // But only send email if user exists
-        const user = await userService.getUserByEmail(email);
+        const user = await authRepo.getUserByEmail(email);
 
         if (user) {
             // Generate reset token
@@ -336,8 +332,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             const tokenHash = hashToken(token);
             const expiresAt = getPasswordResetExpiry();
 
-            // Store hashed token
-            await passwordResetTokenService.createToken(user.id, tokenHash, expiresAt);
+            await authRepo.createPasswordResetToken(user.id, tokenHash, expiresAt);
 
             // Build reset URL
             const baseUrl = emailConfig?.resetPasswordUrl || "";
@@ -386,7 +381,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
         // Find valid token
         const tokenHash = hashToken(token);
-        const storedToken = await passwordResetTokenService.findValidByHash(tokenHash);
+        const storedToken = await authRepo.findValidPasswordResetToken(tokenHash);
 
         if (!storedToken) {
             throw ApiError.badRequest("Invalid or expired reset token", "INVALID_TOKEN");
@@ -394,13 +389,13 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
         // Update password
         const passwordHash = await hashPassword(password);
-        await userService.updatePassword(storedToken.userId, passwordHash);
+        await authRepo.updatePassword(storedToken.userId, passwordHash);
 
         // Mark token as used
-        await passwordResetTokenService.markAsUsed(tokenHash);
+        await authRepo.markPasswordResetTokenUsed(tokenHash);
 
         // Invalidate all refresh tokens (security: log out all sessions)
-        await refreshTokenService.deleteAllForUser(storedToken.userId);
+        await authRepo.deleteAllRefreshTokensForUser(storedToken.userId);
 
         return c.json({ success: true, message: "Password has been reset successfully" });
     });
@@ -418,7 +413,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         const { oldPassword, newPassword } = parseBody(changePasswordSchema, await c.req.json());
 
         // Get user
-        const user = await userService.getUserById(userCtx.userId);
+        const user = await authRepo.getUserById(userCtx.userId);
         if (!user || !user.passwordHash) {
             throw ApiError.badRequest("Cannot change password for this account", "INVALID_ACCOUNT");
         }
@@ -437,10 +432,10 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
         // Update password
         const passwordHash = await hashPassword(newPassword);
-        await userService.updatePassword(user.id, passwordHash);
+        await authRepo.updatePassword(user.id, passwordHash);
 
         // Invalidate all refresh tokens (security: log out all sessions)
-        await refreshTokenService.deleteAllForUser(user.id);
+        await authRepo.deleteAllRefreshTokensForUser(user.id);
 
         return c.json({ success: true, message: "Password has been changed successfully" });
     });
@@ -460,7 +455,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.serviceUnavailable("Email service not configured. Email verification is not available.", "EMAIL_NOT_CONFIGURED");
         }
 
-        const user = await userService.getUserById(userCtx.userId);
+        const user = await authRepo.getUserById(userCtx.userId);
         if (!user) {
             throw ApiError.notFound("User not found");
         }
@@ -473,7 +468,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         const token = generateSecureToken();
 
         // Store hashed token in user record (raw token goes in the email URL)
-        await userService.setVerificationToken(user.id, hashToken(token));
+        await authRepo.setVerificationToken(user.id, hashToken(token));
 
         // Build verification URL
         const baseUrl = emailConfig?.verifyEmailUrl || "";
@@ -509,13 +504,13 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         }
 
         // Find user by hashed verification token
-        const user = await userService.getUserByVerificationToken(hashToken(token));
+        const user = await authRepo.getUserByVerificationToken(hashToken(token));
         if (!user) {
             throw ApiError.badRequest("Invalid or expired verification token", "INVALID_TOKEN");
         }
 
         // Mark email as verified
-        await userService.setEmailVerified(user.id, true);
+        await authRepo.setEmailVerified(user.id, true);
 
         return c.json({ success: true, message: "Email verified successfully" });
     });
@@ -528,19 +523,19 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         const { refreshToken } = parseBody(refreshSchema, await c.req.json());
 
         const tokenHash = hashRefreshToken(refreshToken);
-        const storedToken = await refreshTokenService.findByHash(tokenHash);
+        const storedToken = await authRepo.findRefreshTokenByHash(tokenHash);
 
         if (!storedToken) {
             throw ApiError.unauthorized("Invalid refresh token", "INVALID_TOKEN");
         }
 
         if (new Date() > storedToken.expiresAt) {
-            await refreshTokenService.deleteByHash(tokenHash);
+            await authRepo.deleteRefreshToken(tokenHash);
             throw ApiError.unauthorized("Refresh token expired", "TOKEN_EXPIRED");
         }
 
         // Generate new tokens
-        const roles = await userService.getUserRoles(storedToken.userId);
+        const roles = await authRepo.getUserRoles(storedToken.userId);
         const roleIds = roles.map(r => r.id);
 
         const newAccessToken = generateAccessToken(storedToken.userId, roleIds);
@@ -550,8 +545,8 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         const userAgent = c.req.header("user-agent") || "unknown";
         const ipAddress = c.req.header("x-forwarded-for") || "unknown";
         
-        await refreshTokenService.deleteByHash(tokenHash);
-        await refreshTokenService.createToken(
+        await authRepo.deleteRefreshToken(tokenHash);
+        await authRepo.createRefreshToken(
             storedToken.userId,
             hashRefreshToken(newRefreshToken),
             getRefreshTokenExpiry(),
@@ -577,7 +572,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
         if (refreshToken) {
             const tokenHash = hashRefreshToken(refreshToken);
-            await refreshTokenService.deleteByHash(tokenHash);
+            await authRepo.deleteRefreshToken(tokenHash);
         }
 
         return c.json({ success: true });
@@ -596,7 +591,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         const currentRefreshToken = c.req.header("x-refresh-token") as string;
         const currentTokenHash = currentRefreshToken ? hashRefreshToken(currentRefreshToken) : null;
 
-        const sessions = await refreshTokenService.listForUser(userCtx.userId);
+        const sessions = await authRepo.listRefreshTokensForUser(userCtx.userId);
 
         const mappedSessions = sessions.map(s => ({
             id: s.id,
@@ -619,7 +614,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.unauthorized("Not authenticated");
         }
 
-        await refreshTokenService.deleteAllForUser(userCtx.userId);
+        await authRepo.deleteAllRefreshTokensForUser(userCtx.userId);
         return c.json({ success: true, message: "All sessions revoked successfully" });
     });
 
@@ -638,7 +633,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.badRequest("Session ID is required", "INVALID_INPUT");
         }
 
-        await refreshTokenService.deleteById(id, userCtx.userId);
+        await authRepo.deleteRefreshTokenById(id, userCtx.userId);
         return c.json({ success: true, message: "Session revoked successfully" });
     });
 
@@ -652,7 +647,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.unauthorized("Not authenticated");
         }
 
-        const result = await userService.getUserWithRoles(userCtx.userId);
+        const result = await authRepo.getUserWithRoles(userCtx.userId);
         if (!result) {
             throw ApiError.notFound("User not found");
         }
@@ -681,7 +676,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
         const { displayName, photoURL } = parseBody(updateProfileSchema, await c.req.json());
 
-        const updatedUser = await userService.updateUser(userCtx.userId, {
+        const updatedUser = await authRepo.updateUser(userCtx.userId, {
             displayName: displayName !== undefined ? displayName : undefined,
             photoUrl: photoURL !== undefined ? photoURL : undefined,
         });
@@ -690,7 +685,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.notFound("User not found");
         }
 
-        const result = await userService.getUserWithRoles(userCtx.userId);
+        const result = await authRepo.getUserWithRoles(userCtx.userId);
         if (!result) {
             throw ApiError.notFound("User not found");
         }
@@ -712,7 +707,7 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
      * Get public auth configuration (for frontend to know what's available)
      */
     router.get("/config", defaultAuthLimiter, async (c) => {
-        const allUsers = await userService.listUsers();
+        const allUsers = await authRepo.listUsers();
         const needsSetup = allUsers.length === 0;
         const registrationAllowed = needsSetup || allowRegistration;
         return c.json({

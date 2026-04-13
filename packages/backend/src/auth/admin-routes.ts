@@ -1,8 +1,6 @@
 import { Hono } from "hono";
 import { ApiError } from "../api/errors";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { UserService, RoleService, PasswordResetTokenService } from "./services";
-import { NewUser } from "../db/auth-schema";
+import type { AuthRepository } from "./interfaces";
 import { requireAuth, requireAdmin } from "./middleware";
 import { hashPassword, validatePasswordStrength } from "./password";
 import { AuthModuleConfig } from "./routes";
@@ -55,9 +53,7 @@ function hashToken(token: string): string {
  */
 export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
     const router = new Hono<HonoEnv>();
-    const userService = new UserService(config.db);
-    const roleService = new RoleService(config.db);
-    const passwordResetTokenService = new PasswordResetTokenService(config.db);
+    const authRepo = config.authRepo;
     const { emailService, emailConfig } = config;
 
     // Apply auth middleware to all routes
@@ -69,11 +65,11 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.unauthorized("Not authenticated");
         }
 
-        const users = await userService.listUsers();
+        const users = await authRepo.listUsers();
         let hasAdmin = false;
 
         for (const u of users) {
-            const roles = await userService.getUserRoleIds(u.id);
+            const roles = await authRepo.getUserRoleIds(u.id);
             if (roles.includes("admin")) {
                 hasAdmin = true;
                 break;
@@ -88,7 +84,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         if (!userId) {
             throw ApiError.unauthorized("User ID not found in auth context");
         }
-        await userService.setUserRoles(userId, ["admin"]);
+        await authRepo.setUserRoles(userId, ["admin"]);
 
         return c.json({
             success: true,
@@ -101,10 +97,10 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
     });
 
     router.get("/users", requireAdmin, async (c) => {
-        const users = await userService.listUsers();
+        const users = await authRepo.listUsers();
         const usersWithRoles = await Promise.all(
             users.map(async (u) => {
-                const roles = await userService.getUserRoleIds(u.id);
+                const roles = await authRepo.getUserRoleIds(u.id);
                 return {
                     uid: u.id,
                     email: u.email,
@@ -122,7 +118,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
     router.get("/users/:userId", requireAdmin, async (c) => {
         const userId = c.req.param("userId");
-        const result = await userService.getUserWithRoles(userId);
+        const result = await authRepo.getUserWithRoles(userId);
 
         if (!result) {
             throw ApiError.notFound("User not found");
@@ -150,7 +146,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.badRequest("Email is required", "INVALID_INPUT");
         }
 
-        const existing = await userService.getUserByEmail(email);
+        const existing = await authRepo.getUserByEmail(email);
         if (existing) {
             throw ApiError.conflict("Email already exists", "EMAIL_EXISTS");
         }
@@ -164,7 +160,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         }
         const passwordHash = await hashPassword(clearPassword);
 
-        const user = await userService.createUser({
+        const user = await authRepo.createUser({
             email: email.toLowerCase(),
             displayName: displayName || null,
             passwordHash,
@@ -172,12 +168,12 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         });
 
         if (roles && Array.isArray(roles) && roles.length > 0) {
-            await userService.setUserRoles(user.id, roles);
+            await authRepo.setUserRoles(user.id, roles);
         } else {
-            await userService.assignDefaultRole(user.id, "editor");
+            await authRepo.assignDefaultRole(user.id, "editor");
         }
 
-        const userRoles = await userService.getUserRoleIds(user.id);
+        const userRoles = await authRepo.getUserRoleIds(user.id);
 
         // Determine if we can send an invitation email
         const isEmailConfigured = !!(emailService && emailService.isConfigured());
@@ -191,7 +187,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
                 const tokenHash = hashToken(token);
                 const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
-                await passwordResetTokenService.createToken(user.id, tokenHash, expiresAt);
+                await authRepo.createPasswordResetToken(user.id, tokenHash, expiresAt);
 
                 const baseUrl = emailConfig?.resetPasswordUrl || "";
                 const setPasswordUrl = `${baseUrl}/reset-password?token=${token}`;
@@ -237,12 +233,12 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         const body = await c.req.json();
         const { email, displayName, password, roles } = body;
 
-        const existing = await userService.getUserById(userId);
+        const existing = await authRepo.getUserById(userId);
         if (!existing) {
             throw ApiError.notFound("User not found");
         }
 
-        const updates: Partial<NewUser> = {};
+        const updates: any = {};
         if (email !== undefined) updates.email = email.toLowerCase();
         if (displayName !== undefined) updates.displayName = displayName;
 
@@ -255,14 +251,14 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         }
 
         if (Object.keys(updates).length > 0) {
-            await userService.updateUser(userId, updates);
+            await authRepo.updateUser(userId, updates);
         }
 
         if (roles !== undefined && Array.isArray(roles)) {
-            await userService.setUserRoles(userId, roles);
+            await authRepo.setUserRoles(userId, roles);
         }
 
-        const result = await userService.getUserWithRoles(userId);
+        const result = await authRepo.getUserWithRoles(userId);
 
         return c.json({
             user: {
@@ -283,18 +279,18 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.badRequest("Cannot delete your own account", "SELF_DELETE");
         }
 
-        const existing = await userService.getUserById(userId);
+        const existing = await authRepo.getUserById(userId);
         if (!existing) {
             throw ApiError.notFound("User not found");
         }
 
-        await userService.deleteUser(userId);
+        await authRepo.deleteUser(userId);
 
         return c.json({ success: true });
     });
 
     router.get("/roles", requireAdmin, async (c) => {
-        const roles = await roleService.listRoles();
+        const roles = await authRepo.listRoles();
 
         return c.json({
             roles: roles.map(r => ({
@@ -309,7 +305,7 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
     router.get("/roles/:roleId", requireAdmin, async (c) => {
         const roleId = c.req.param("roleId");
-        const role = await roleService.getRoleById(roleId);
+        const role = await authRepo.getRoleById(roleId);
 
         if (!role) {
             throw ApiError.notFound("Role not found");
@@ -326,12 +322,12 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.badRequest("Role ID and name are required", "INVALID_INPUT");
         }
 
-        const existing = await roleService.getRoleById(id);
+        const existing = await authRepo.getRoleById(id);
         if (existing) {
             throw ApiError.conflict("Role already exists", "ROLE_EXISTS");
         }
 
-        const role = await roleService.createRole({
+        const role = await authRepo.createRole({
             id,
             name,
             isAdmin: isAdmin ?? false,
@@ -347,12 +343,12 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         const body = await c.req.json();
         const { name, isAdmin, defaultPermissions, config } = body;
 
-        const existing = await roleService.getRoleById(roleId);
+        const existing = await authRepo.getRoleById(roleId);
         if (!existing) {
             throw ApiError.notFound("Role not found");
         }
 
-        const role = await roleService.updateRole(roleId, {
+        const role = await authRepo.updateRole(roleId, {
             name,
             isAdmin,
             defaultPermissions,
@@ -369,12 +365,12 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             throw ApiError.badRequest("Cannot delete built-in roles", "BUILTIN_ROLE");
         }
 
-        const existing = await roleService.getRoleById(roleId);
+        const existing = await authRepo.getRoleById(roleId);
         if (!existing) {
             throw ApiError.notFound("Role not found");
         }
 
-        await roleService.deleteRole(roleId);
+        await authRepo.deleteRole(roleId);
 
         return c.json({ success: true });
     });

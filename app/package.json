@@ -23,7 +23,7 @@
         "deploy": "pnpm run build && pnpm run start"
     },
     "devDependencies": {
-        "@rebasepro/cli": "workspace:*",
+        "@rebasepro/cli": "0.0.1",
         "@rebasepro/types": "0.0.1",
         "concurrently": "^8.2.2",
         "typescript": "^5.0.0"

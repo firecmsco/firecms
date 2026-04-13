@@ -1,18 +1,16 @@
 import { Hono } from "hono";
 import { HonoEnv } from "../api/types";
-import { HistoryService } from "./HistoryService";
 import { BackendCollectionRegistry } from "../collections/BackendCollectionRegistry";
 import { ApiError } from "../api/errors";
-import { PostgresDataDriver } from "../services/postgresDataDriver";
-
+import { DataDriver } from "@rebasepro/types";
 /**
  * Create Hono routes for entity history.
  * Mounted at `{basePath}/data/:slug/:entityId/history`.
  */
 export function createHistoryRoutes(params: {
-    historyService: HistoryService;
+    historyService: any;
     registry: BackendCollectionRegistry;
-    driver: PostgresDataDriver;
+    driver: DataDriver;
 }): Hono<HonoEnv> {
     const { historyService, registry, driver } = params;
     const router = new Hono<HonoEnv>();

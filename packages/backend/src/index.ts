@@ -1,13 +1,10 @@
 /**
  * @rebasepro/backend
  *
- * PostgreSQL and Drizzle ORM backend implementation for Rebase
- * This package provides a complete backend solution for Rebase applications
- * using PostgreSQL as the database and Drizzle ORM for type-safe database operations.
- *
- * The package also exports abstract interfaces (EntityRepository, RealtimeProvider,
- * CollectionRegistryInterface, ConditionBuilder) that can be implemented by other
- * database backends (e.g., MongoDB, MySQL).
+ * Database-Agnostic Backend Core for Rebase.
+ * This package provides the core backend services, generic driver routing,
+ * and API layers. Database implementations (e.g., PostgreSQL) are provided
+ * by specialized driver packages like `@rebasepro/postgresql-backend`.
  */
 
 // =============================================================================
@@ -16,23 +13,11 @@
 export * from "./db/interfaces";
 export * from "./auth/interfaces";
 
-// Core database functionality
+// Core functionality
 export * from "./init";
-export * from "./db/connection";
-export * from "./db/entityService";
-
-export * from "./websocket";
 
 // Services
-export * from "./services/postgresDataDriver";
-export * from "./services/realtimeService";
 export * from "./services/driver-registry";
-
-// Collections
-export { BackendCollectionRegistry, PostgresCollectionRegistry } from "./collections/BackendCollectionRegistry";
-
-// Utilities
-export { DrizzleConditionBuilder, PostgresConditionBuilder } from "./utils/drizzle-conditions";
 
 // API types (HonoEnv, ApiConfig, etc.)
 export * from "./api/types";
@@ -46,30 +31,6 @@ export * from "./types/index";
 
 // Auth module
 export * from "./auth";
-// Re-export schema types (excluding Role to avoid conflict with auth/services.ts Role interface)
-export {
-    rebaseSchema,
-    users,
-    roles,
-    userRoles,
-    refreshTokens,
-    passwordResetTokens,
-    appConfig,
-    usersRelations,
-    rolesRelations,
-    userRolesRelations,
-    refreshTokensRelations,
-    passwordResetTokensRelations
-} from "./db/auth-schema";
-export type {
-    User,
-    NewUser,
-    NewRole,
-    UserRole,
-    RefreshToken,
-    PasswordResetToken,
-    AppConfig
-} from "./db/auth-schema";
 
 // Email module
 export * from "./email";
@@ -77,19 +38,16 @@ export * from "./email";
 // Storage module
 export * from "./storage";
 
-// Schema generation
-export * from "./generate-drizzle-schema";
 export * from "./utils/logging";
 export * from "./utils/sql";
 
 // Entity history
 export * from "./history";
 
-// Factory functions for creating backend instances
-export * from "./factory";
+
 
 // SPA serving helper
 export * from "./serve-spa";
 
 // Backend bootstrappers (pluggable driver initialization)
-export * from "./bootstrappers";
+

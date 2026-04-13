@@ -6,7 +6,7 @@
     "dependencies": {
         "@fontsource/jetbrains-mono": "^5.2.5",
         "@rebasepro/auth-rebase": "0.0.1",
-        "@rebasepro/client-rebase": "workspace:*",
+        "@rebasepro/client-rebase": "0.0.1",
         "@rebasepro/cms": "0.0.1",
         "@rebasepro/core": "0.0.1",
         "@rebasepro/data_enhancement": "0.0.1",

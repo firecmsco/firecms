@@ -118,7 +118,7 @@ export class RebaseApiServer {
                 description: col.description,
                 dbPath: col.dbPath,
                 properties: Object.keys(col.properties),
-                relations: col.relations?.map((r: Relation) => ({
+                relations: (col as EntityCollection & { relations?: Relation[] }).relations?.map((r: Relation) => ({
                     relationName: r.relationName,
                     target: typeof r.target === 'function' ? r.target().slug : r.target,
                     cardinality: r.cardinality,

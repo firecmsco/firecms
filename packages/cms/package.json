@@ -91,7 +91,7 @@
         "json5": "^2.2.3",
         "zod": "^3.25.0",
         "@rebasepro/schema_inference": "0.0.1",
-        "@rebasepro/utils": "workspace:*"
+        "@rebasepro/utils": "0.0.1"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

@@ -228,9 +228,11 @@ export function Rebase<USER extends User>(props: RebaseProps<USER>) {
         </RebaseI18nProvider>
     );
 
-    if (apiUrl) {
+    const resolvedApiUrl = apiUrl ?? client?.baseUrl;
+
+    if (resolvedApiUrl) {
         return (
-            <ApiConfigProvider apiUrl={apiUrl} getAuthToken={authController.getAuthToken}>
+            <ApiConfigProvider apiUrl={resolvedApiUrl} getAuthToken={authController.getAuthToken}>
                 {content}
             </ApiConfigProvider>
         );

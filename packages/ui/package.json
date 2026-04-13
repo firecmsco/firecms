@@ -75,7 +75,7 @@
         "react-use-measure": "^2.1.7",
         "react-window": "^1.8.11",
         "tailwind-merge": "^2.6.0",
-        "@rebasepro/types": "workspace:*"
+        "@rebasepro/types": "0.0.1"
     },
     "peerDependencies": {
         "react": ">=19.0.0",

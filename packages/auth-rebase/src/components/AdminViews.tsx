@@ -767,7 +767,8 @@ function CollectionPermissionsMatrix({ roleId, isAdmin, collections }: { roleId:
                     </TableHeader>
                     <TableBody>
                         {topLevel.map((collection) => {
-                            const noRules = !collection.securityRules || collection.securityRules.length === 0;
+                            const extCol = collection as EntityCollection & { securityRules?: SecurityRule[] };
+                            const noRules = !extCol.securityRules || extCol.securityRules.length === 0;
                             return (
                                 <TableRow key={collection.slug}>
                                     <TableCell>
@@ -783,7 +784,7 @@ function CollectionPermissionsMatrix({ roleId, isAdmin, collections }: { roleId:
                                     </TableCell>
                                     {CRUD_OPS.map(({ op }) => (
                                         <TableCell key={op} className="text-center">
-                                            <PermCell granted={isAdmin || hasRoleAccess(collection.securityRules, roleId, op)} />
+                                            <PermCell granted={isAdmin || hasRoleAccess(extCol.securityRules, roleId, op)} />
                                         </TableCell>
                                     ))}
                                 </TableRow>

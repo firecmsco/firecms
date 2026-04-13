@@ -5,11 +5,11 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import {
-    createPostgresDatabaseConnection,
     initializeRebaseBackend,
     serveSPA,
     HonoEnv
 } from "@rebasepro/backend";
+import { createPostgresDatabaseConnection, createPostgresBootstrapper } from "@rebasepro/postgresql-backend";
 
 import { enums, relations, tables } from "./schema.generated";
 
@@ -64,12 +64,14 @@ async function startServer() {
             collectionsDir: path.resolve(__dirname, "../../shared/collections"),
             server,
             app,
-            driver: {
-                connection: db,
-                schema: { tables, enums, relations },
-                adminConnectionString: process.env.ADMIN_CONNECTION_STRING || process.env.DATABASE_URL,
-                connectionString
-            },
+            bootstrappers: [
+                createPostgresBootstrapper({
+                    connection: db,
+                    schema: { tables, enums, relations },
+                    adminConnectionString: process.env.ADMIN_CONNECTION_STRING || process.env.DATABASE_URL,
+                    connectionString
+                })
+            ],
             auth: {
                 jwtSecret,
                 accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1h",

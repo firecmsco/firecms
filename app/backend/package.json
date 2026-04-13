@@ -10,7 +10,8 @@
         "start": "tsx src/index.ts"
     },
     "dependencies": {
-        "@rebasepro/backend": "workspace:*",
+        "@rebasepro/backend": "0.0.1",
+        "@rebasepro/postgresql-backend": "0.0.1",
         "hono": "^4.2.0",
         "@hono/node-server": "^1.11.0",
         "dotenv": "^16.0.0",
