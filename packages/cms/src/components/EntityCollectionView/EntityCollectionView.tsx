@@ -144,7 +144,7 @@ export const EntityCollectionView = React.memo(
         const collectionRegistry = useCollectionRegistryController();
         const urlController = useUrlController();
         const breadcrumbs = useBreadcrumbsController();
-        const path = pathProp ?? collectionProp.dbPath;
+        const path = pathProp ?? collectionProp.slug;
         const dataClient = useData();
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
@@ -633,7 +633,7 @@ export const EntityCollectionView = React.memo(
                                     openEntityMode,
                                     collection,
                                     entityId: entity.id,
-                                    selectedTab: subcollection.slug ?? subcollection.dbPath,
+                                    selectedTab: subcollection.slug,
                                     path: path,
                                     navigation: urlController,
                                     sideEntityController
@@ -860,7 +860,7 @@ export const EntityCollectionView = React.memo(
                         collection={collection}
                         tableController={tableController}
                         path={path}
-                        relativePath={collection.dbPath}
+                        relativePath={collection.slug}
                         selectionController={usedSelectionController}
                         collectionEntitiesCount={docsCount}
                         resolvedProperties={resolvedCollection.properties} />}
@@ -873,7 +873,7 @@ export const EntityCollectionView = React.memo(
                             onMultipleDeleteClick={onMultipleDeleteClick}
                             onNewClick={onNewClick}
                             path={path}
-                            relativePath={collection.dbPath}
+                            relativePath={collection.slug}
                             selectionController={usedSelectionController}
                             selectionEnabled={selectionEnabled}
                             collectionEntitiesCount={docsCount}

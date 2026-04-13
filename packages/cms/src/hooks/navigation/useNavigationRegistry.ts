@@ -129,7 +129,7 @@ export function useNavigationRegistry(userConfigPersistence?: UserConfigurationP
             const collection: EntityCollection | undefined = currentCollections.find(c => c.slug === id);
             if (!collection)
                 throw Error(`Collection with id ${id} not found`);
-            paths.push(collection.dbPath);
+            paths.push(collection.slug);
             currentCollections = getSubcollections(collection) ?? [];
         }
         return paths;

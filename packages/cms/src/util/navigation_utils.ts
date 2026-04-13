@@ -67,7 +67,7 @@ export function resolveCollectionPathIds(path: string, allCollections: EntityCol
                 match: matchString
             } = potentialMatches[0];
 
-            resolvedPathParts.push(foundCollection.dbPath); // Use the defined path
+            resolvedPathParts.push(foundCollection.slug); // Use the defined path
             remainingPath = removeInitialSlash(remainingPath.substring(matchString.length));
 
             // Check if we are at the end of the path

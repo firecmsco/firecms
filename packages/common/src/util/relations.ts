@@ -10,9 +10,9 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
 
     const newRelation: Partial<Relation> = { ...relation };
 
-    // 1. Default relationName from target collection slug or dbPath
+    // 1. Default relationName from target collection slug
     if (!newRelation.relationName) {
-        newRelation.relationName = toSnakeCase(targetCollection.slug ?? targetCollection.dbPath);
+        newRelation.relationName = toSnakeCase(targetCollection.slug);
     }
 
     // 2. Infer or default direction if absent
@@ -186,7 +186,7 @@ export function resolvePropertyRelation({
 
     const relation = (sourceCollection.relations ?? []).find((rel: Relation) => rel.relationName === property.relationName)
     if (!relation) {
-        console.warn(`Unrecognized relation format for property '${propertyKey}' in collection '${sourceCollection.slug || sourceCollection.dbPath}'`);
+        console.warn(`Unrecognized relation format for property '${propertyKey}' in collection '${sourceCollection.slug}'`);
         return undefined;
     }
 
