@@ -11,7 +11,7 @@ import {
     Tooltip,
     Typography,
 } from "@firecms/ui";
-import { EntityCollection } from "@firecms/core";
+import { EntityCollection, useTranslation } from "@firecms/core";
 import { ProjectsApi } from "../api/projects";
 
 const FIRECMS_RULE_SNIPPET = `match /{document=**} {
@@ -42,6 +42,8 @@ export function PermissionErrorView({
     projectsApi,
     onAnalyticsEvent,
 }: PermissionErrorViewProps) {
+
+    const { t } = useTranslation();
 
     const isPermissionError =
         error.message?.toLowerCase().includes("permission") ||
@@ -97,13 +99,11 @@ export function PermissionErrorView({
 
                 <div className={"flex flex-col gap-2"}>
                     <Typography variant={"h6"} className={"text-red-600 dark:text-red-400"}>
-                        Missing Firestore Security Rules
+                        {t("missing_firestore_security_rules")}
                     </Typography>
 
                     <Typography variant={"body2"} color={"secondary"}>
-                        FireCMS Cloud requires a specific security rule in your Firestore
-                        to grant access to authenticated users. The collection <strong>{path}</strong> cannot
-                        be accessed without it.
+                        {t("firecms_cloud_requires_security_rule")} <strong>{path}</strong> {t("cannot_be_accessed_without_it")}
                     </Typography>
                 </div>
 
@@ -111,7 +111,7 @@ export function PermissionErrorView({
                 <div className={"flex flex-col gap-1"}>
                     <div className={"flex items-center justify-between"}>
                         <Typography variant={"caption"} color={"secondary"}>
-                            Required security rule
+                            {t("required_security_rule")}
                         </Typography>
                         <Tooltip title={copied ? "Copied!" : "Copy rule"}>
                             <IconButton size={"small"} onClick={handleCopyRule}>
@@ -132,7 +132,7 @@ export function PermissionErrorView({
                 {/* Status messages */}
                 {fixed && (
                     <Alert color={"success"}>
-                        Security rules updated successfully! Please refresh the page to load your data.
+                        {t("security_rules_updated_successfully")}
                     </Alert>
                 )}
 
@@ -150,10 +150,10 @@ export function PermissionErrorView({
                         variant={"filled"}
                     >
                         {fixing
-                            ? <><CircularProgress size={"smallest"}/> Fixing...</>
+                            ? <><CircularProgress size={"smallest"}/> {t("sec_rules_fixing")}</>
                             : fixed
-                                ? <><CheckIcon size={"small"}/> Fixed!</>
-                                : "Fix automatically"
+                                ? <><CheckIcon size={"small"}/> {t("sec_rules_fixed")}</>
+                                : t("fix_automatically")
                         }
                     </Button>
 
@@ -164,7 +164,7 @@ export function PermissionErrorView({
                         rel={"noopener noreferrer"}
                         variant={"text"}
                     >
-                        Open Firebase Rules <OpenInNewIcon size={"small"}/>
+                        {t("open_firebase_rules")} <OpenInNewIcon size={"small"}/>
                     </Button>
                 </div>
 

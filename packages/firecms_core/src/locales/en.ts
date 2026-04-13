@@ -701,6 +701,17 @@ export const en: FireCMSTranslations = {
     settings_appcheck_updated: "AppCheck updated",
     settings_appcheck_error: "Error updating AppCheck",
 
+    // --- Permission Error View ---
+    missing_firestore_security_rules: "Missing Firestore Security Rules",
+    firecms_cloud_requires_security_rule: "FireCMS Cloud requires a specific security rule in your Firestore to grant access to authenticated users. The collection",
+    cannot_be_accessed_without_it: "cannot be accessed without it.",
+    required_security_rule: "Required security rule",
+    fix_automatically: "Fix automatically",
+    open_firebase_rules: "Open Firebase Rules",
+    security_rules_updated_successfully: "Security rules updated successfully! Please refresh the page to load your data.",
+    sec_rules_fixing: "Fixing...",
+    sec_rules_fixed: "Fixed!",
+
     // ─── GCP Marketplace ─────────────────────────────────────────
     marketplace_managed_by_gcp: "Managed via GCP Marketplace",
     marketplace_billing_note: "Your subscription is managed through Google Cloud Marketplace. Plan changes, billing, and cancellation are handled in the GCP Console.",

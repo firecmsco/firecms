@@ -83,7 +83,7 @@ export function DrawerNavigationGroup({
                         color={"secondary"}
                         className="font-medium flex-grow line-clamp-1"
                     >
-                        {(group || t("views_group")).toUpperCase()}
+                        {(group && group !== "__default__" ? group : t("views_group")).toUpperCase()}
                     </Typography>
                     {headerActions && (
                         <div onClick={(e) => e.stopPropagation()}>

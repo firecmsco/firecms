@@ -723,6 +723,17 @@ export interface FireCMSTranslations {
     settings_appcheck_updated: string;
     settings_appcheck_error: string;
 
+    // --- Permission Error View ---
+    missing_firestore_security_rules: string;
+    firecms_cloud_requires_security_rule: string;
+    cannot_be_accessed_without_it: string;
+    required_security_rule: string;
+    fix_automatically: string;
+    open_firebase_rules: string;
+    security_rules_updated_successfully: string;
+    sec_rules_fixing: string;
+    sec_rules_fixed: string;
+
     // ─── GCP Marketplace ─────────────────────────────────────────
     marketplace_managed_by_gcp: string;
     marketplace_billing_note: string;

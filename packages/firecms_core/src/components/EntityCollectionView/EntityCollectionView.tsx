@@ -904,11 +904,9 @@ export const EntityCollectionView = React.memo(
                 />
 
                 {/* View content - only the view-specific content changes */}
-                {tableController.dataLoadingError && pluginErrorView}
-                {tableController.dataLoadingError && !pluginErrorView && (
-                    <CollectionDataErrorBanner error={tableController.dataLoadingError} />
-                )}
-                {viewMode === "kanban" && enabledViews.includes("kanban") ? (
+                {tableController.dataLoadingError ? (
+                    pluginErrorView ?? <CollectionDataErrorBanner error={tableController.dataLoadingError} />
+                ) : viewMode === "kanban" && enabledViews.includes("kanban") ? (
                     <EntityCollectionBoardView
                         key={`kanban-view-${fullPath}-${selectedKanbanProperty}`}
                         collection={collection}

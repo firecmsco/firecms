@@ -678,6 +678,17 @@ export const hi: FireCMSTranslations = {
     settings_appcheck_updated: "AppCheck अपडेट किया गया",
     settings_appcheck_error: "AppCheck अपडेट करने में त्रुटि",
 
+    // --- Permission Error View ---
+    missing_firestore_security_rules: "Firestore सुरक्षा नियम गायब हैं",
+    firecms_cloud_requires_security_rule: "FireCMS Cloud को आपके Firestore में प्रमाणित उपयोगकर्ताओं को एक्सेस देने के लिए एक विशिष्ट सुरक्षा नियम की आवश्यकता है। संग्रह",
+    cannot_be_accessed_without_it: "पर इसके बिना नहीं पहुंचा जा सकता।",
+    required_security_rule: "आवश्यक सुरक्षा नियम",
+    fix_automatically: "स्वचालित रूप से ठीक करें",
+    open_firebase_rules: "Firebase नियम खोलें",
+    security_rules_updated_successfully: "सुरक्षा नियम सफलतापूर्वक अपडेट किए गए! कृपया अपना डेटा लोड करने के लिए पेज को रीफ्रेश करें।",
+    sec_rules_fixing: "ठीक किया जा रहा है...",
+    sec_rules_fixed: "ठीक हो गया!",
+
     // ─── Text Search Dialog ─────────────────────────────────────
     text_search_dialog_title: "पाठ खोज सक्षम करें",
     text_search_local_not_recommended: "बड़ी संग्रहों के लिए स्थानीय पाठ खोज की अनुशंसा नहीं की जाती है।",

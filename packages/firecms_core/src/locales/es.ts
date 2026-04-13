@@ -690,6 +690,17 @@ export const es: FireCMSTranslations = {
     settings_appcheck_updated: "AppCheck actualizado",
     settings_appcheck_error: "Error al actualizar AppCheck",
 
+    // --- Permission Error View ---
+    missing_firestore_security_rules: "Faltan Reglas de Seguridad de Firestore",
+    firecms_cloud_requires_security_rule: "FireCMS Cloud requiere una regla de seguridad específica en tu Firestore para conceder acceso a los usuarios autenticados. La colección",
+    cannot_be_accessed_without_it: "no puede ser accedida sin ella.",
+    required_security_rule: "Regla de seguridad requerida",
+    fix_automatically: "Corregir automáticamente",
+    open_firebase_rules: "Abrir Reglas de Firebase",
+    security_rules_updated_successfully: "¡Reglas de seguridad actualizadas con éxito! Por favor recarga la página para cargar tus datos.",
+    sec_rules_fixing: "Corrigiendo...",
+    sec_rules_fixed: "¡Corregido!",
+
     // ─── Text Search Dialog ─────────────────────────────────────
     text_search_dialog_title: "Activar búsqueda de texto",
     text_search_local_not_recommended: "La búsqueda de texto local no es recomendable para colecciones grandes.",
