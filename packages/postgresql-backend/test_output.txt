@@ -1,0 +1,3145 @@
+FAIL test/historyService.test.ts
+  ● HistoryService - changedFields and history insertion logic › recordHistory execution mapping › should properly structure database query on actual array changes
+
+    expect(jest.fn()).toHaveBeenCalledTimes(expected)
+
+    Expected number of calls: 1
+    Received number of calls: 3
+
+      101 |
+      102 |             // Since it's a difference, db.execute should be called.
+    > 103 |             expect(db.execute).toHaveBeenCalledTimes(1);
+          |                                ^
+      104 |             
+      105 |             const executedSql = db.execute.mock.calls[0][0] as unknown as { query: string; sql?: string; strings?: string[]; values?: unknown[] };
+      106 |             
+
+      at Object.<anonymous> (test/historyService.test.ts:103:32)
+
+  ● HistoryService - changedFields and history insertion logic › recordHistory execution mapping › should properly perform query during entity creation (insert)
+
+    expect(jest.fn()).toHaveBeenCalledTimes(expected)
+
+    Expected number of calls: 1
+    Received number of calls: 3
+
+      124 |             });
+      125 |
+    > 126 |             expect(db.execute).toHaveBeenCalledTimes(1);
+          |                                ^
+      127 |         });
+      128 |     });
+      129 | });
+
+      at Object.<anonymous> (test/historyService.test.ts:126:32)
+
+PASS test/entityService.test.ts
+  ● Console
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 2
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 4
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'author',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 5
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 5
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'posts' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'companies',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: 123
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'companies' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'companies',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: 'uuid-123'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'companies' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'project',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'assignee',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'company',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: [ '1', '2' ]
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '2'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '2'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'company',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: [ '2', '1' ]
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '2'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '2'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'company',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: [ '1', '2' ]
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '2'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '2'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'children',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'children' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '5'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '5'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'project',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'project',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'assignee',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'company',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: [ '1' ]
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'company',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: [ '1' ]
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'companies',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: 1
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'companies' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'companies',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: 1
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'companies' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'company',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tasks',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'tasks' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+PASS test/drizzle-conditions.test.ts
+  ● Console
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 1
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: [ 1, 2, 3 ]
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 20
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using inverse many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:150:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: [ 20, 21, 22 ]
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using inverse many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:150:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags_via_join',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 1
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using joinPath logic
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:121:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 2, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'missing_relation',
+        cardinality: 'one',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 1
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using joinPath logic
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:121:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'author_tags',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 1
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using joinPath logic
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:121:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 2, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'test_junction',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 1
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using joinPath logic
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:121:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 20
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using inverse many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:150:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 20
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using inverse many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:150:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 20
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using inverse many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:150:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 1
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 20
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using inverse many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:150:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 20
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using inverse many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:150:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: 'tags',
+        parentEntityId: 23
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'posts' with inverseRelationName 'tags'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Target collection: posts
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:947:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Target collection relations: [ 'tags' ]
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:951:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Found relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true
+      }
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:961:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Found matching owning relation with junction table!
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:976:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Returning junction info: {
+        table: 'posts_tags',
+        sourceColumn: 'tag_id',
+        targetColumn: 'post_id'
+      }
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:986:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Found junction info for inverse many-to-many, building junction conditions
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:167:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: 'tags',
+        parentEntityId: 5
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'posts' with inverseRelationName 'tags'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Target collection: posts
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:947:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Target collection relations: [ 'tags' ]
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:951:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Found relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true
+      }
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:961:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Found matching owning relation with junction table!
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:976:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Returning junction info: {
+        table: 'posts_tags',
+        sourceColumn: 'tag_id',
+        targetColumn: 'post_id'
+      }
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:986:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Found junction info for inverse many-to-many, building junction conditions
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:167:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: 'tags',
+        parentEntityId: 42
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'posts' with inverseRelationName 'tags'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Target collection: posts
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:947:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Target collection relations: [ 'tags' ]
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:951:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Found relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true
+      }
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:961:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Found matching owning relation with junction table!
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:976:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Returning junction info: {
+        table: 'posts_tags',
+        sourceColumn: 'tag_id',
+        targetColumn: 'post_id'
+      }
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:986:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Found junction info for inverse many-to-many, building junction conditions
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:167:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: 'nonexistent',
+        parentEntityId: 5
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'posts' with inverseRelationName 'nonexistent'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Target collection: posts
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:947:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Target collection relations: []
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:951:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No relation found with key 'nonexistent' on target collection
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:957:25)
+
+    console.error
+      🔍 [buildRelationConditions] Failed to find junction table info and no foreign key specified
+
+      185 |                 whereConditions.push(simpleCondition);
+      186 |             } else {
+    > 187 |                 console.error(`🔍 [buildRelationConditions] Failed to find junction table info and no foreign key specified`);
+          |                         ^
+      188 |                 throw new Error(`Cannot resolve inverse many relation '${relation.relationName}'. Either specify 'through' property, ensure corresponding owning relation exists with junction table configuration, or specify 'foreignKeyOnTarget' for one-to-many relationships.`);
+      189 |             }
+      190 |         } else {
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:187:25)
+      at test/drizzle-conditions.test.ts:805:41
+      at Object.<anonymous> (../../node_modules/expect/build/toThrowMatchers.js:74:11)
+      at Object.throwingMatcher [as toThrow] (../../node_modules/expect/build/index.js:320:21)
+      at Object.<anonymous> (test/drizzle-conditions.test.ts:814:16)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: 'tags',
+        parentEntityId: 7
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'posts' with inverseRelationName 'tags'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Target collection: posts
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:947:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Target collection relations: [ 'tags' ]
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:951:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Found relation: {
+        relationName: 'tags',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true
+      }
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:961:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Found matching owning relation with junction table!
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:976:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Returning junction info: {
+        table: 'posts_tags',
+        sourceColumn: 'tag_id',
+        targetColumn: 'post_id'
+      }
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:986:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Found junction info for inverse many-to-many, building junction conditions
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:167:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'posts',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: 5
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'posts' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+
+    console.error
+      🔍 [buildRelationConditions] Failed to find junction table info and no foreign key specified
+
+      185 |                 whereConditions.push(simpleCondition);
+      186 |             } else {
+    > 187 |                 console.error(`🔍 [buildRelationConditions] Failed to find junction table info and no foreign key specified`);
+          |                         ^
+      188 |                 throw new Error(`Cannot resolve inverse many relation '${relation.relationName}'. Either specify 'through' property, ensure corresponding owning relation exists with junction table configuration, or specify 'foreignKeyOnTarget' for one-to-many relationships.`);
+      189 |             }
+      190 |         } else {
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:187:25)
+      at test/drizzle-conditions.test.ts:883:41
+      at Object.<anonymous> (../../node_modules/expect/build/toThrowMatchers.js:74:11)
+      at Object.throwingMatcher [as toThrow] (../../node_modules/expect/build/index.js:320:21)
+      at Object.<anonymous> (test/drizzle-conditions.test.ts:892:16)
+
+PASS test/postgresDataDriver.test.ts
+  ● Console
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'test-user', email: 'test@example.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:61:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.fetchCollection (src/PostgresBackendDriver.ts:930:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:66:32)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'test-user-123', email: 'test@example.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:77:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.fetchCollection (src/PostgresBackendDriver.ts:930:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:82:32)
+
+    console.warn
+      [DataDriver] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object: {}
+
+      881 |             let userId = this.user?.uid;
+      882 |             if (!userId) {
+    > 883 |                 console.warn(`[DataDriver] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, this.user);
+          |                         ^
+      884 |                 userId = 'anonymous';
+      885 |             }
+      886 |
+
+      at src/PostgresBackendDriver.ts:883:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:138:24)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.fetchCollection (src/PostgresBackendDriver.ts:930:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:144:32)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: {}
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:138:24)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.fetchCollection (src/PostgresBackendDriver.ts:930:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:144:32)
+
+    console.warn
+      [DataDriver] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object: {}
+
+      881 |             let userId = this.user?.uid;
+      882 |             if (!userId) {
+    > 883 |                 console.warn(`[DataDriver] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, this.user);
+          |                         ^
+      884 |                 userId = 'anonymous';
+      885 |             }
+      886 |
+
+      at src/PostgresBackendDriver.ts:883:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:150:19)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: {}
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:150:19)
+
+    console.warn
+      [DataDriver] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object: null
+
+      881 |             let userId = this.user?.uid;
+      882 |             if (!userId) {
+    > 883 |                 console.warn(`[DataDriver] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, this.user);
+          |                         ^
+      884 |                 userId = 'anonymous';
+      885 |             }
+      886 |
+
+      at src/PostgresBackendDriver.ts:883:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:163:24)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.fetchCollection (src/PostgresBackendDriver.ts:930:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:168:32)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: null
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:163:24)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.fetchCollection (src/PostgresBackendDriver.ts:930:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:168:32)
+
+    console.warn
+      [DataDriver] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object: null
+
+      881 |             let userId = this.user?.uid;
+      882 |             if (!userId) {
+    > 883 |                 console.warn(`[DataDriver] User ID (uid) is missing for authenticated delegate. Using 'anonymous'. User object:`, this.user);
+          |                         ^
+      884 |                 userId = 'anonymous';
+      885 |             }
+      886 |
+
+      at src/PostgresBackendDriver.ts:883:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:172:19)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: null
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:172:19)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'test-user', email: 'test@example.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:194:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.saveEntity (src/PostgresBackendDriver.ts:960:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:207:32)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'test-user', email: 'test@example.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:222:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.saveEntity (src/PostgresBackendDriver.ts:960:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:234:39)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'test-user', email: 'test@example.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:246:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.saveEntity (src/PostgresBackendDriver.ts:960:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:263:47)
+
+    console.error
+      [DataDriver] Error flushing deferred notification: Error: Network Failure on Notification
+          at Object.<anonymous> (/Users/francesco/rebase/packages/postgresql-backend/test/postgresDataDriver.test.ts:260:45)
+          at Promise.then.completed (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:298:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:231:10)
+          at _callCircusTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:316:40)
+          at _runTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:252:3)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:126:9)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:121:9)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:121:9)
+          at run (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:71:3)
+          at runAndTransformResultsToJestFormat (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+          at jestAdapter (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+          at runTestInternal (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:367:16)
+          at runTest (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:444:34)
+
+      920 |                 );
+      921 |             } catch (e) {
+    > 922 |                 console.error("[DataDriver] Error flushing deferred notification:", e);
+          |                         ^
+      923 |             }
+      924 |         }
+      925 |
+
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:922:25)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:263:28)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'test-user', email: 'test@example.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:277:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:24)
+          at async Promise.all (index 0)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:293:13)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'test-user', email: 'test@example.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:277:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:24)
+          at async Promise.all (index 1)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:293:13)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: "admin'; DROP TABLE users; --", email: 'hacker@evil.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:422:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.fetchCollection (src/PostgresBackendDriver.ts:930:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:427:32)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'deleter', email: 'del@test.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:478:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.deleteEntity (src/PostgresBackendDriver.ts:964:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:483:32)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'checker', email: 'c@test.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:490:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.checkUniqueField (src/PostgresBackendDriver.ts:974:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:495:47)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'counter', email: 'c@test.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:503:30)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.countEntities (src/PostgresBackendDriver.ts:978:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:508:47)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'u1', email: 'u@t.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:534:86)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.saveEntity (src/PostgresBackendDriver.ts:960:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:546:32)
+
+    console.warn
+      [DataDriver] User roles are missing for authenticated delegate. Using empty array. User object: { uid: 'u1', email: 'u@t.com' }
+
+      887 |             let userRoles = this.user?.roles ?? [];
+      888 |             if (!this.user?.roles) {
+    > 889 |                 console.warn(`[DataDriver] User roles are missing for authenticated delegate. Using empty array. User object:`, this.user);
+          |                         ^
+      890 |             }
+      891 |             const normalizedRoles = userRoles.map((r: unknown) =>
+      892 |                 typeof r === "string" ? r : (r as Record<string, unknown>)?.id ?? String(r)
+
+      at src/PostgresBackendDriver.ts:889:25
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:534:86)
+      at AuthenticatedPostgresBackendDriver.withTransaction (src/PostgresBackendDriver.ts:880:47)
+      at AuthenticatedPostgresBackendDriver.saveEntity (src/PostgresBackendDriver.ts:960:21)
+      at Object.<anonymous> (test/postgresDataDriver.test.ts:547:32)
+
+PASS test/entityService.errors.test.ts
+PASS test/entityService.subcollection-search.test.ts
+  ● Console
+
+    console.warn
+      Unrecognized relation format for property 'posts' in collection 'tags'
+
+      187 |     const relation = (sourceCollection.relations ?? []).find((rel: Relation) => rel.relationName === property.relationName)
+      188 |     if (!relation) {
+    > 189 |         console.warn(`Unrecognized relation format for property '${propertyKey}' in collection '${sourceCollection.slug || sourceCollection.dbPath}'`);
+          |                 ^
+      190 |         return undefined;
+      191 |     }
+      192 |
+
+      at resolvePropertyRelation (../common/src/util/relations.ts:189:17)
+      at ../common/src/util/relations.ts:155:30
+          at Array.forEach (<anonymous>)
+      at resolveCollectionRelations (../common/src/util/relations.ts:154:47)
+      at EntityFetchService.fetchCollectionFromPath (src/services/EntityFetchService.ts:775:65)
+      at EntityFetchService.fetchCollection (src/services/EntityFetchService.ts:722:25)
+      at EntityService.fetchCollection (src/services/entityService.ts:70:34)
+      at Object.<anonymous> (test/entityService.subcollection-search.test.ts:450:40)
+
+PASS test/entityService.relations.test.ts
+  ● Console
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'orders',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'orders' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'orders',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '999'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'orders' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'products',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '3'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'products',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'products',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'products',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '4'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'profile',
+        cardinality: 'one',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'customer',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '5'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'products',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '5'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'products',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'orders',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'orders' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'orders',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'orders' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'products',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'customer',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'products',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.warn
+      Cannot set joinPath relation 'authorProfile' because parent FK value is null/undefined
+
+      914 |                     .where(eq(targetFKCol, parentFKValue as unknown as string));
+      915 |             } else {
+    > 916 |                 console.warn(`Cannot set joinPath relation '${relation.relationName}' because parent FK value is null/undefined`);
+          |                         ^
+      917 |                 continue;
+      918 |             }
+      919 |
+
+      at RelationService.updateJoinPathOneToOneRelations (src/services/RelationService.ts:916:25)
+      at src/services/EntityPersistService.ts:236:17
+      at EntityPersistService.saveEntity (src/services/EntityPersistService.ts:189:25)
+      at Object.<anonymous> (test/entityService.relations.test.ts:563:32)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'orders',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'orders' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'customer',
+        cardinality: 'one',
+        direction: 'owning',
+        hasThrough: false,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using simple relation logic - THIS IS WHERE THE ERROR MIGHT OCCUR
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:191:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'products',
+        cardinality: 'many',
+        direction: 'owning',
+        hasThrough: true,
+        hasForeignKeyOnTarget: false,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Using owning many-to-many with explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:138:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 1, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Building conditions for relation: {
+        relationName: 'orders',
+        cardinality: 'many',
+        direction: 'inverse',
+        hasThrough: false,
+        hasForeignKeyOnTarget: true,
+        inverseRelationName: undefined,
+        parentEntityId: '1'
+      }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:107:17)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Handling inverse many relationship without explicit through
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:162:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] Looking for junction table for inverse relation 'orders' with inverseRelationName 'undefined'
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:938:21)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [findCorrespondingJunctionTable] No inverseRelationName specified
+
+      at Function.findCorrespondingJunctionTable (src/utils/drizzle-conditions.ts:941:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] No junction table found, treating as inverse one-to-many with foreign key on target
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:177:25)
+          at Array.map (<anonymous>)
+
+    console.debug
+      🔍 [buildRelationConditions] Final result: { joinConditionsCount: 0, whereConditionsCount: 1 }
+
+      at Function.buildRelationConditions (src/utils/drizzle-conditions.ts:202:17)
+          at Array.map (<anonymous>)
+
+PASS test/auth-services.test.ts
+PASS test/generate-drizzle-schema.test.ts
+PASS test/relations.test.ts
+
+Test Suites: 1 failed, 9 passed, 10 total
+Tests:       2 failed, 258 passed, 260 total
+Snapshots:   0 total
+Time:        1.083 s
+Ran all test suites.

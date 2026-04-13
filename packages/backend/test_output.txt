@@ -1,0 +1,1133 @@
+PASS test/query-parser.test.ts
+PASS test/storage-registry.test.ts
+  ● Console
+
+    console.warn
+      [StorageRegistry] Storage "anything" not found, falling back to "(default)"
+
+      149 |
+      150 |         // Fallback to default with warning
+    > 151 |         console.warn(
+          |                 ^
+      152 |             `[StorageRegistry] Storage "${id}" not found, falling back to "${DEFAULT_STORAGE_ID}"`
+      153 |         );
+      154 |         return this.getDefault();
+
+      at DefaultStorageRegistry.getOrDefault (src/storage/storage-registry.ts:151:17)
+      at test/storage-registry.test.ts:133:44
+      at Object.<anonymous> (../../node_modules/expect/build/toThrowMatchers.js:74:11)
+      at Object.throwingMatcher [as toThrow] (../../node_modules/expect/build/index.js:320:21)
+      at Object.<anonymous> (test/storage-registry.test.ts:133:70)
+
+PASS test/jwt-security.test.ts
+PASS test/driver-registry.test.ts
+  ● Console
+
+    console.warn
+      [DriverRegistry] Driver "anything" not found, falling back to "(default)"
+
+      145 |
+      146 |         // Fallback to default with warning
+    > 147 |         console.warn(
+          |                 ^
+      148 |             `[DriverRegistry] Driver "${id}" not found, falling back to "${DEFAULT_DRIVER_ID}"`
+      149 |         );
+      150 |         return this.getDefault();
+
+      at DefaultDriverRegistry.getOrDefault (src/services/driver-registry.ts:147:17)
+      at test/driver-registry.test.ts:135:44
+      at Object.<anonymous> (../../node_modules/expect/build/toThrowMatchers.js:74:11)
+      at Object.throwingMatcher [as toThrow] (../../node_modules/expect/build/index.js:320:21)
+      at Object.<anonymous> (test/driver-registry.test.ts:135:70)
+
+    console.warn
+      [DriverRegistry] No "(default)" driver provided. Using "key" as the default.
+
+       96 |                 // If no explicit "(default)", use the first one as default
+       97 |                 const firstId = Object.keys(input)[0];
+    >  98 |                 console.warn(
+          |                         ^
+       99 |                     `[DriverRegistry] No "${DEFAULT_DRIVER_ID}" driver provided. ` +
+      100 |                     `Using "${firstId}" as the default.`
+      101 |                 );
+
+      at Function.create (src/services/driver-registry.ts:98:25)
+      at Object.<anonymous> (test/driver-registry.test.ts:275:52)
+
+PASS test/middleware.test.ts
+PASS test/jwt.test.ts
+PASS test/storage-s3.test.ts
+PASS test/auth-middleware-hono.test.ts
+  ● Console
+
+    console.error
+      [AUTH] No token found! Auth header: undefined Query: undefined Path: /test
+
+      202 |                     }
+      203 |                 } else {
+    > 204 |                     console.error("[AUTH] No token found! Auth header:", authHeader, "Query:", queryToken, "Path:", c.req.path);
+          |                             ^
+      205 |                     c.set("driver", driver);
+      206 |                 }
+      207 |             } catch (error) {
+
+      at src/auth/middleware.ts:204:29
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:23)
+      at ../../node_modules/hono/dist/cjs/compose.js:26:12
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:31
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:332:7)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/auth-middleware-hono.test.ts:196:35)
+
+    console.error
+      [AUTH] No token found! Auth header: undefined Query: undefined Path: /test
+
+      202 |                     }
+      203 |                 } else {
+    > 204 |                     console.error("[AUTH] No token found! Auth header:", authHeader, "Query:", queryToken, "Path:", c.req.path);
+          |                             ^
+      205 |                     c.set("driver", driver);
+      206 |                 }
+      207 |             } catch (error) {
+
+      at src/auth/middleware.ts:204:29
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:23)
+      at ../../node_modules/hono/dist/cjs/compose.js:26:12
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:31
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:332:7)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/auth-middleware-hono.test.ts:207:35)
+
+    console.error
+      [AUTH] Rejecting with 401. Path: /test
+
+      212 |
+      213 |         if (enforceAuth && !c.get("user")) {
+    > 214 |             console.error("[AUTH] Rejecting with 401. Path:", c.req.path);
+          |                     ^
+      215 |             return c.json({ error: { message: "Unauthorized: Invalid or missing token", code: "UNAUTHORIZED" } }, 401);
+      216 |         }
+      217 |
+
+      at src/auth/middleware.ts:214:21
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:23)
+      at ../../node_modules/hono/dist/cjs/compose.js:26:12
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:31
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:332:7)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/auth-middleware-hono.test.ts:207:35)
+
+    console.error
+      [AUTH] No token found! Auth header: undefined Query: undefined Path: /test
+
+      202 |                     }
+      203 |                 } else {
+    > 204 |                     console.error("[AUTH] No token found! Auth header:", authHeader, "Query:", queryToken, "Path:", c.req.path);
+          |                             ^
+      205 |                     c.set("driver", driver);
+      206 |                 }
+      207 |             } catch (error) {
+
+      at src/auth/middleware.ts:204:29
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:23)
+      at ../../node_modules/hono/dist/cjs/compose.js:26:12
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:31
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:332:7)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/auth-middleware-hono.test.ts:216:35)
+
+PASS test/errors.test.ts
+  ● Console
+
+    console.warn
+      ⚠️ [API] GET /test → 404 NOT_FOUND: User not found
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at Object.<anonymous> (test/errors.test.ts:99:21)
+
+    console.warn
+      ⚠️ [API] GET /test → 400 VALIDATION: Validation failed
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at Object.<anonymous> (test/errors.test.ts:110:21)
+
+    console.error
+      ❌ [API] GET /test → 404 NOT_FOUND: Not found
+
+      89 |
+      90 |     // Unexpected errors — log at error level with full stack
+    > 91 |     console.error(
+         |             ^
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+      94 |     console.error(error.stack || error);
+
+      at errorHandler (src/api/errors.ts:91:13)
+      at Object.<anonymous> (test/errors.test.ts:124:21)
+
+    console.error
+      Error: Not found
+          at Object.<anonymous> (/Users/francesco/rebase/packages/backend/test/errors.test.ts:123:35)
+          at Promise.then.completed (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:298:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:231:10)
+          at _callCircusTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:316:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:252:3)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:126:9)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:121:9)
+          at run (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:71:3)
+          at runAndTransformResultsToJestFormat (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+          at jestAdapter (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+          at runTestInternal (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:367:16)
+          at runTest (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:444:34)
+          at Object.worker (/Users/francesco/rebase/node_modules/jest-runner/build/testWorker.js:106:12)
+
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+    > 94 |     console.error(error.stack || error);
+         |             ^
+      95 |
+      96 |     return c.json({
+      97 |         error: {
+
+      at errorHandler (src/api/errors.ts:94:13)
+      at Object.<anonymous> (test/errors.test.ts:124:21)
+
+    console.error
+      ❌ [API] GET /test → 500 INTERNAL_ERROR: Something broke
+
+      89 |
+      90 |     // Unexpected errors — log at error level with full stack
+    > 91 |     console.error(
+         |             ^
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+      94 |     console.error(error.stack || error);
+
+      at errorHandler (src/api/errors.ts:91:13)
+      at Object.<anonymous> (test/errors.test.ts:135:21)
+
+    console.error
+      Error: Something broke
+          at Object.<anonymous> (/Users/francesco/rebase/packages/backend/test/errors.test.ts:134:21)
+          at Promise.then.completed (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:298:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:231:10)
+          at _callCircusTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:316:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:252:3)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:126:9)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:121:9)
+          at run (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:71:3)
+          at runAndTransformResultsToJestFormat (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+          at jestAdapter (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+          at runTestInternal (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:367:16)
+          at runTest (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:444:34)
+          at Object.worker (/Users/francesco/rebase/node_modules/jest-runner/build/testWorker.js:106:12)
+
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+    > 94 |     console.error(error.stack || error);
+         |             ^
+      95 |
+      96 |     return c.json({
+      97 |         error: {
+
+      at errorHandler (src/api/errors.ts:94:13)
+      at Object.<anonymous> (test/errors.test.ts:135:21)
+
+    console.error
+      ❌ [API] GET /test → 429 RATE_LIMITED: Rate limited
+
+      89 |
+      90 |     // Unexpected errors — log at error level with full stack
+    > 91 |     console.error(
+         |             ^
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+      94 |     console.error(error.stack || error);
+
+      at errorHandler (src/api/errors.ts:91:13)
+      at Object.<anonymous> (test/errors.test.ts:146:21)
+
+    console.error
+      Error: Rate limited
+          at Object.<anonymous> (/Users/francesco/rebase/packages/backend/test/errors.test.ts:145:35)
+          at Promise.then.completed (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:298:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:231:10)
+          at _callCircusTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:316:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:252:3)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:126:9)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:121:9)
+          at run (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:71:3)
+          at runAndTransformResultsToJestFormat (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+          at jestAdapter (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+          at runTestInternal (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:367:16)
+          at runTest (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:444:34)
+          at Object.worker (/Users/francesco/rebase/node_modules/jest-runner/build/testWorker.js:106:12)
+
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+    > 94 |     console.error(error.stack || error);
+         |             ^
+      95 |
+      96 |     return c.json({
+      97 |         error: {
+
+      at errorHandler (src/api/errors.ts:94:13)
+      at Object.<anonymous> (test/errors.test.ts:146:21)
+
+PASS test/rate-limiter.test.ts
+PASS test/errors-hono.test.ts
+  ● Console
+
+    console.warn
+      ⚠️ [API] GET /bad-request → 400 MISSING_FIELD: Missing required field
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:46:31)
+
+    console.warn
+      ⚠️ [API] GET /unauthorized → 401 TOKEN_EXPIRED: Token expired
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:56:31)
+
+    console.warn
+      ⚠️ [API] GET /forbidden → 403 FORBIDDEN: Admin only
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:64:31)
+
+    console.warn
+      ⚠️ [API] GET /not-found → 404 NOT_FOUND: Entity not found
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:72:31)
+
+    console.warn
+      ⚠️ [API] GET /conflict → 409 EMAIL_EXISTS: Email already exists
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:80:31)
+
+    console.warn
+      ⚠️ [API] GET /internal → 500 INTERNAL_ERROR: Database connection failed
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:88:31)
+
+    console.warn
+      ⚠️ [API] GET /service-unavailable → 503 SERVICE_UNAVAILABLE: Feature not configured
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:94:31)
+
+    console.error
+      ❌ [API] GET /generic-error → 500 INTERNAL_ERROR: Something went wrong
+
+      89 |
+      90 |     // Unexpected errors — log at error level with full stack
+    > 91 |     console.error(
+         |             ^
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+      94 |     console.error(error.stack || error);
+
+      at Hono.errorHandler (src/api/errors.ts:91:13)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:100:31)
+
+    console.error
+      Error: Something went wrong
+          at Array.<anonymous> (/Users/francesco/rebase/packages/backend/test/errors-hono.test.ts:33:19)
+          at Hono.#dispatch (/Users/francesco/rebase/node_modules/hono/dist/cjs/hono-base.js:309:38)
+          at Hono.fetch (/Users/francesco/rebase/node_modules/hono/dist/cjs/hono-base.js:346:26)
+          at Hono.request (/Users/francesco/rebase/node_modules/hono/dist/cjs/hono-base.js:365:17)
+          at Object.<anonymous> (/Users/francesco/rebase/packages/backend/test/errors-hono.test.ts:100:31)
+          at Promise.then.completed (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:298:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:231:10)
+          at _callCircusTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:316:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:252:3)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:126:9)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:121:9)
+          at run (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:71:3)
+          at runAndTransformResultsToJestFormat (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+          at jestAdapter (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+          at runTestInternal (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:367:16)
+          at runTest (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:444:34)
+          at Object.worker (/Users/francesco/rebase/node_modules/jest-runner/build/testWorker.js:106:12)
+
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+    > 94 |     console.error(error.stack || error);
+         |             ^
+      95 |
+      96 |     return c.json({
+      97 |         error: {
+
+      at Hono.errorHandler (src/api/errors.ts:94:13)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:100:31)
+
+    console.error
+      ❌ [API] GET /error-with-code → 500 RATE_LIMITED: Rate limited
+
+      89 |
+      90 |     // Unexpected errors — log at error level with full stack
+    > 91 |     console.error(
+         |             ^
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+      94 |     console.error(error.stack || error);
+
+      at Hono.errorHandler (src/api/errors.ts:91:13)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:109:31)
+
+    console.error
+      Error: Rate limited
+          at Array.<anonymous> (/Users/francesco/rebase/packages/backend/test/errors-hono.test.ts:36:25)
+          at Hono.#dispatch (/Users/francesco/rebase/node_modules/hono/dist/cjs/hono-base.js:309:38)
+          at Hono.fetch (/Users/francesco/rebase/node_modules/hono/dist/cjs/hono-base.js:346:26)
+          at Hono.request (/Users/francesco/rebase/node_modules/hono/dist/cjs/hono-base.js:365:17)
+          at Object.<anonymous> (/Users/francesco/rebase/packages/backend/test/errors-hono.test.ts:109:31)
+          at Promise.then.completed (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:298:28)
+          at new Promise (<anonymous>)
+          at callAsyncCircusFn (/Users/francesco/rebase/node_modules/jest-circus/build/utils.js:231:10)
+          at _callCircusTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:316:40)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+          at _runTest (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:252:3)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:126:9)
+          at _runTestsForDescribeBlock (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:121:9)
+          at run (/Users/francesco/rebase/node_modules/jest-circus/build/run.js:71:3)
+          at runAndTransformResultsToJestFormat (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)
+          at jestAdapter (/Users/francesco/rebase/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)
+          at runTestInternal (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:367:16)
+          at runTest (/Users/francesco/rebase/node_modules/jest-runner/build/runTest.js:444:34)
+          at Object.worker (/Users/francesco/rebase/node_modules/jest-runner/build/testWorker.js:106:12)
+
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+    > 94 |     console.error(error.stack || error);
+         |             ^
+      95 |
+      96 |     return c.json({
+      97 |         error: {
+
+      at Hono.errorHandler (src/api/errors.ts:94:13)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:109:31)
+
+    console.warn
+      ⚠️ [API] GET /unauthorized → 401 TOKEN_EXPIRED: Token expired
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:116:31)
+
+    console.warn
+      ⚠️ [API] GET /bad-request → 400 MISSING_FIELD: Missing required field
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:126:35)
+
+    console.warn
+      ⚠️ [API] GET /unauthorized → 401 TOKEN_EXPIRED: Token expired
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:126:35)
+
+    console.warn
+      ⚠️ [API] GET /forbidden → 403 FORBIDDEN: Admin only
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:126:35)
+
+    console.warn
+      ⚠️ [API] GET /not-found → 404 NOT_FOUND: Entity not found
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:126:35)
+
+    console.warn
+      ⚠️ [API] GET /internal → 500 INTERNAL_ERROR: Database connection failed
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:126:35)
+
+    console.error
+      ❌ [API] GET /generic-error → 500 INTERNAL_ERROR: Something went wrong
+
+      89 |
+      90 |     // Unexpected errors — log at error level with full stack
+    > 91 |     console.error(
+         |             ^
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+      94 |     console.error(error.stack || error);
+
+      at Hono.errorHandler (src/api/errors.ts:91:13)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:126:35)
+
+    console.error
+      Error: Something went wrong
+          at Array.<anonymous> (/Users/francesco/rebase/packages/backend/test/errors-hono.test.ts:33:19)
+          at Hono.#dispatch (/Users/francesco/rebase/node_modules/hono/dist/cjs/hono-base.js:309:38)
+          at Hono.fetch (/Users/francesco/rebase/node_modules/hono/dist/cjs/hono-base.js:346:26)
+          at Hono.request (/Users/francesco/rebase/node_modules/hono/dist/cjs/hono-base.js:365:17)
+          at Object.<anonymous> (/Users/francesco/rebase/packages/backend/test/errors-hono.test.ts:126:35)
+          at processTicksAndRejections (node:internal/process/task_queues:105:5)
+
+      92 |         `❌ [API] ${c.req.method} ${c.req.path} → ${statusCode} ${code}: ${error.message}`
+      93 |     );
+    > 94 |     console.error(error.stack || error);
+         |             ^
+      95 |
+      96 |     return c.json({
+      97 |         error: {
+
+      at Hono.errorHandler (src/api/errors.ts:94:13)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at Hono.#dispatch (../../node_modules/hono/dist/cjs/hono-base.js:313:33)
+      at Hono.fetch (../../node_modules/hono/dist/cjs/hono-base.js:346:26)
+      at Hono.request (../../node_modules/hono/dist/cjs/hono-base.js:365:17)
+      at Object.<anonymous> (test/errors-hono.test.ts:126:35)
+
+PASS test/storage-local.test.ts
+FAIL test/admin-routes.test.ts
+  ● Test suite failed to run
+
+    [96mtest/admin-routes.test.ts[0m:[93m93[0m:[93m59[0m - [91merror[0m[90m TS1005: [0m',' expected.
+
+    [7m93[0m         deleteRole: jest.fn().mockResolvedValue(undefined): jest.fn().mockResolvedValue(undefined)
+    [7m  [0m [91m                                                          ~[0m
+    [96mtest/admin-routes.test.ts[0m:[93m93[0m:[93m65[0m - [91merror[0m[90m TS1005: [0m',' expected.
+
+    [7m93[0m         deleteRole: jest.fn().mockResolvedValue(undefined): jest.fn().mockResolvedValue(undefined)
+    [7m  [0m [91m                                                                ~[0m
+
+PASS test/auth-routes.test.ts
+  ● Console
+
+    console.warn
+      ⚠️ [API] POST /auth/register → 409 EMAIL_EXISTS: Email already registered
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:199:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/register → 400 WEAK_PASSWORD: Too short
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:209:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/register → 400 INVALID_INPUT: email: Invalid email address
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:217:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/register → 400 INVALID_INPUT: password: Required
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:225:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/register → 403 REGISTRATION_DISABLED: Registration is disabled
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:233:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/login → 401 INVALID_CREDENTIALS: Invalid email or password
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:276:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/login → 401 INVALID_CREDENTIALS: Invalid email or password
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:287:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/login → 401 INVALID_CREDENTIALS: Invalid email or password
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:295:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/login → 400 INVALID_INPUT: email: Required
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:301:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/google → 503 NOT_CONFIGURED: Google login not configured
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:318:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/google → 401 INVALID_TOKEN: Invalid Google token
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:329:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/refresh → 401 INVALID_TOKEN: Invalid refresh token
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:317:41
+      at Object.<anonymous> (test/auth-routes.test.ts:444:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/refresh → 401 TOKEN_EXPIRED: Refresh token expired
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:317:41
+      at Object.<anonymous> (test/auth-routes.test.ts:462:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/refresh → 400 INVALID_INPUT: refreshToken: Required
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:317:41
+      at Object.<anonymous> (test/auth-routes.test.ts:471:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/forgot-password → 503 EMAIL_NOT_CONFIGURED: Email service not configured. Password reset is not available.
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:525:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/reset-password → 400 INVALID_TOKEN: Invalid or expired reset token
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:562:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/reset-password → 400 WEAK_PASSWORD: Too weak
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:572:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/change-password → 401 INVALID_CREDENTIALS: Current password is incorrect
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:609:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/change-password → 400 WEAK_PASSWORD: Too short
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:621:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/change-password → 400 INVALID_ACCOUNT: Cannot change password for this account
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:638:25)
+
+    console.warn
+      ⚠️ [API] POST /auth/send-verification → 400 ALREADY_VERIFIED: Email is already verified
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:668:29)
+
+    console.warn
+      ⚠️ [API] POST /auth/send-verification → 503 EMAIL_NOT_CONFIGURED: Email service not configured. Email verification is not available.
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+
+    console.warn
+      ⚠️ [API] GET /auth/verify-email → 400 INVALID_TOKEN: Invalid or expired verification token
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:317:41
+      at Object.<anonymous> (test/auth-routes.test.ts:707:29)
+
+    console.warn
+      ⚠️ [API] GET /auth/verify-email → 400 INVALID_INPUT: Verification token is required
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at Hono.errorHandler (src/api/errors.ts:75:17)
+      at Hono.#handleError (../../node_modules/hono/dist/cjs/hono-base.js:289:19)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:317:41
+      at Object.<anonymous> (test/auth-routes.test.ts:715:29)
+
+    console.warn
+      ⚠️ [API] GET /auth/me → 404 NOT_FOUND: User not found
+
+      73 |     if (error instanceof ApiError) {
+      74 |         // Operational errors — log at warn level
+    > 75 |         console.warn(
+         |                 ^
+      76 |             `⚠️ [API] ${c.req.method} ${c.req.path} → ${error.statusCode} ${error.code}: ${error.message}`
+      77 |         );
+      78 |         return c.json({
+
+      at errorHandler (src/api/errors.ts:75:17)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:47:25)
+      at dispatch (../../node_modules/hono/dist/cjs/compose.js:43:17)
+      at ../../node_modules/hono/dist/cjs/hono-base.js:322:25
+      at Object.<anonymous> (test/auth-routes.test.ts:744:25)
+
+PASS test/ast-schema-editor.test.ts
+PASS test/password.test.ts
+
+Test Suites: 1 failed, 15 passed, 16 total
+Tests:       333 passed, 333 total
+Snapshots:   0 total
+Time:        2.324 s
+Ran all test suites.

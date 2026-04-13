@@ -125,7 +125,7 @@ async function _initializeRebaseBackend(config: RebaseBackendConfig): Promise<Re
         throw new Error("Default driver not initialized by bootstrappers");
     }
     const defaultBootstrapper = bootstrappers.find(b => (b as any).id === defaultDriverId || b.type === defaultDriverId) || bootstrappers[0];
-    const defaultRealtimeService = realtimeServices[defaultDriverId];
+    const defaultRealtimeService = defaultDriverResult.realtimeProvider;
 
     // 2. Initialize Auth & History via the default driver's bootstrapper
     let authConfigResult: BootstrappedAuth | undefined = undefined;

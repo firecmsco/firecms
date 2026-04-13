@@ -32,25 +32,22 @@ Rebase is a full-stack platform with four layers:
 
 ## Key Components
 
-### Driver Registry
+### Bootstrapper System
 
-The backend supports multiple database drivers simultaneously. Each driver handles CRUD operations, search, and real-time notifications for its connected database.
+The backend initializes through a plugin-based bootstrapper system. Database-specific logic is decoupled into its own package, and bootstrappers handle initialization of databases, authentication, and internal services.
 
 ```typescript
-// Single driver (most common)
-driver: {
-    connection: db,
-    schema: { tables, enums, relations }
-}
+import { createPostgresBootstrapper } from "@rebasepro/postgresql-backend";
 
-// Multiple drivers
-driver: {
-    "(default)": postgresConfig,
-    "analytics": analyticsDbConfig
-}
+bootstrappers: [
+    createPostgresBootstrapper({
+        connection: db,
+        schema: { tables, enums, relations }
+    })
+]
 ```
 
-Collections specify which driver they use via the `driver` property. Collections without a `driver` use `"(default)"`.
+Collections automatically resolve against the configured bootstrapper through the internal dependency injection registry.
 
 ### Collection Registry
 
@@ -66,7 +63,7 @@ Real-time sync uses PostgreSQL's native `LISTEN/NOTIFY` mechanism:
 4. It broadcasts the change to all connected WebSocket clients
 5. React components re-render with the new data
 
-For **multi-instance deployments** (e.g., Cloud Run with multiple replicas), provide a `connectionString` in your driver config. This creates a dedicated Postgres connection for cross-instance broadcasting.
+For **multi-instance deployments** (e.g., Cloud Run with multiple replicas), provide a `connectionString` in your PostgresBootstrapper. This creates a dedicated Postgres connection for cross-instance broadcasting.
 
 ### Storage Registry
 

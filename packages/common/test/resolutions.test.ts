@@ -113,9 +113,10 @@ describe("getSubcollections", () => {
             name: "Posts",
             slug: "posts",
             dbPath: "posts",
+            driver: "firestore",
             properties: {},
             subcollections: () => [subCol],
-        };
+        } as any;
         const result = getSubcollections(collection);
         expect(result).toHaveLength(1);
         expect(result[0].name).toBe("Comments");

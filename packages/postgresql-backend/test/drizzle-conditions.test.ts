@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { eq } from "drizzle-orm";
 import { integer, pgTable, primaryKey, serial, varchar } from "drizzle-orm/pg-core";
 import { EntityCollection, Relation } from "@rebasepro/types";
-import { BackendCollectionRegistry } from "../src/collections/BackendCollectionRegistry";
+import { PostgresCollectionRegistry } from "../src/collections/PostgresCollectionRegistry";
 import { DrizzleConditionBuilder } from "../src/utils/drizzle-conditions";
 
 // Mock tables for testing
@@ -35,7 +35,7 @@ const mockPostsTagsTable = pgTable("posts_tags", {
 const createMockRegistry = () => {
     const registry = {
         getTable: jest.fn()
-    } as unknown as BackendCollectionRegistry;
+    } as unknown as PostgresCollectionRegistry;
 
     (registry.getTable as jest.Mock).mockImplementation((tableName: string) => {
         switch (tableName) {
@@ -51,7 +51,7 @@ const createMockRegistry = () => {
 };
 
 describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
-    let mockRegistry: BackendCollectionRegistry;
+    let mockRegistry: PostgresCollectionRegistry;
 
     beforeEach(() => {
         mockRegistry = createMockRegistry();
@@ -177,7 +177,7 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
             // Create a special mock registry that simulates missing direct foreign keys
             const mockRegistryForJunction = {
                 getTable: jest.fn()
-            } as unknown as BackendCollectionRegistry;
+            } as unknown as PostgresCollectionRegistry;
 
             // Create tables without the direct foreign key relationship
             const mockPostsTableNoDirect = pgTable("posts", {
@@ -332,7 +332,7 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
             // Mock the registry to return undefined for first attempts, then return junction table
             const mockRegistryWithPatterns = {
                 getTable: jest.fn()
-            } as unknown as BackendCollectionRegistry;
+            } as unknown as PostgresCollectionRegistry;
 
             (mockRegistryWithPatterns.getTable as jest.Mock)
                 .mockReturnValueOnce(mockPostsTable) // posts table

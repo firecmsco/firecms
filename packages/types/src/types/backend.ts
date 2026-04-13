@@ -620,6 +620,11 @@ export interface BackendBootstrapper {
      * Return admin capabilities for this driver.
      */
     getAdmin?(driverResult: InitializedDriver): DatabaseAdmin | undefined;
+
+    /**
+     * Initialize WebSocket server for realtime operations.
+     */
+    initializeWebsockets?(server: unknown, realtimeService: RealtimeProvider, driver: import("../controllers/data_driver").DataDriver, config?: unknown): Promise<void> | void;
 }
 
 /**

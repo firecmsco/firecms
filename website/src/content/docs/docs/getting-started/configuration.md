@@ -74,10 +74,12 @@ await initializeRebaseBackend({
     collections,
     basePath: "/api",        // Base path for all API routes (default: "/api")
 
-    driver: {                // PostgreSQL driver config
-        connection: db,
-        schema: { tables, enums, relations }
-    },
+    bootstrappers: [         // Database and service bootstrappers
+        createPostgresBootstrapper({
+            connection: db,
+            schema: { tables, enums, relations }
+        })
+    ],
 
     auth: {                  // Authentication config
         jwtSecret: process.env.JWT_SECRET!,

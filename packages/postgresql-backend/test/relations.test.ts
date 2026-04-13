@@ -1,5 +1,5 @@
 import { EntityCollection, Relation } from "@rebasepro/types";
-import { generateSchema } from "../src/generate-drizzle-schema-logic";
+import { generateSchema } from "../src/schema/generate-drizzle-schema-logic";
 import { sanitizeRelation } from "@rebasepro/common";
 
 const mockAuthorCollection: EntityCollection = {

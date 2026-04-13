@@ -63,11 +63,8 @@ Pass plugin instances to the navigation controller:
 
 ```typescript
 const dataEnhancementPlugin = useDataEnhancementPlugin();
-const collectionEditorPlugin = useCollectionEditorPlugin({
-    collectionConfigController
-});
 
-const plugins = [dataEnhancementPlugin, collectionEditorPlugin];
+const plugins = [dataEnhancementPlugin];
 
 const navigationStateController = useBuildNavigationStateController({
     plugins,
@@ -106,19 +103,7 @@ function useMyPlugin(): RebasePlugin {
 
 ## Built-in Plugins
 
-### Collection Editor Plugin
 
-Visual schema editing — add/remove fields, change types, rearrange properties:
-
-```typescript
-import { useCollectionEditorPlugin, useLocalCollectionsConfigController } from "@rebasepro/studio";
-
-const configController = useLocalCollectionsConfigController(client, collections, {
-    getAuthToken: authController.getAuthToken
-});
-
-const editorPlugin = useCollectionEditorPlugin({ collectionConfigController: configController });
-```
 
 ### Data Enhancement Plugin
 

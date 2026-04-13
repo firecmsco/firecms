@@ -23,18 +23,16 @@ A visual schema editor that lets you create and modify collections through a dra
 ![Collection editor](/img/collection_editor.png)
 
 ```tsx
-import { CollectionsStudioView, useLocalCollectionsConfigController } from "@rebasepro/studio";
+import { RebaseCMS } from "@rebasepro/cms";
 
-const configController = useLocalCollectionsConfigController(client, collections, {
-    getAuthToken: authController.getAuthToken
-});
-
-// Add as a custom view
-{
-    slug: "schema",
-    name: "Edit Collections",
-    view: <CollectionsStudioView configController={configController} />
-}
+// The Collection Editor is automatically enabled when you provide the 
+// collectionEditor configuration to your RebaseCMS component
+<RebaseCMS
+    collections={collections}
+    collectionEditor={{
+        getAuthToken: authController.getAuthToken
+    }}
+/>
 ```
 
 ### SQL Console
@@ -79,40 +77,20 @@ import { StorageView } from "@rebasepro/studio";
 
 ## Adding Studio Views
 
-Add studio tools as custom views in your `App.tsx`:
+Studio tools are automatically available when you include the `RebaseStudio` component inside your app:
 
-```typescript
-const devViews: CMSView[] = [
-    {
-        slug: "sql",
-        name: "SQL Console",
-        group: "Database",
-        icon: "terminal",
-        view: <SQLEditor />
-    },
-    {
-        slug: "rls",
-        name: "RLS Policies",
-        group: "Database",
-        icon: "security",
-        view: <RLSEditor />
-    },
-    {
-        slug: "schema",
-        name: "Edit Collections",
-        group: "Schema",
-        icon: "view_list",
-        nestedRoutes: true,
-        view: <CollectionsStudioView configController={configController} />
-    },
-    {
-        slug: "storage",
-        name: "Storage",
-        group: "Storage",
-        icon: "cloud",
-        view: <StorageView />
-    }
-];
+```tsx
+import { RebaseStudio } from "@rebasepro/studio";
+
+export function App() {
+    return (
+        <Rebase client={client} authController={authController}>
+            {/* Custom views are injected and studio mode is managed automatically */}
+            <RebaseStudio />
+            {/* ... */}
+        </Rebase>
+    );
+}
 ```
 
 These views appear in the sidebar navigation when Studio mode is active.

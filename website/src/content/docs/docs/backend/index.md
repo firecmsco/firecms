@@ -19,15 +19,18 @@ Everything is initialized with a single function:
 
 ```typescript
 import { initializeRebaseBackend } from "@rebasepro/backend";
+import { createPostgresBootstrapper } from "@rebasepro/postgresql-backend";
 
 const instance = await initializeRebaseBackend({
     app,
     server,
-    collections,
-    driver: {
-        connection: db,
-        schema: { tables, enums, relations }
-    },
+    collectionsDir: "./shared/collections",
+    bootstrappers: [
+        createPostgresBootstrapper({
+            connection: db,
+            schema: { tables, enums, relations }
+        })
+    ],
     auth: {
         jwtSecret: process.env.JWT_SECRET!,
     },
@@ -66,8 +69,8 @@ interface RebaseBackendConfig {
     collections?: EntityCollection[];  // Your collection definitions
     collectionsDir?: string;  // Auto-load collections from a directory
 
-    // Database driver (see Driver Configuration)
-    driver: DriverConfig | Record<string, DriverConfig>;
+    // Bootstrappers (Databases, Auth, Realtime, etc.)
+    bootstrappers: BackendBootstrapper[];
 
     // Authentication
     auth?: AuthConfig;
@@ -136,7 +139,7 @@ The WebSocket server attaches to the same HTTP server and provides real-time sub
 - Subscribe to **entity changes** — get notified when a specific entity changes
 - Automatic **reconnection** handling in the client SDK
 
-The backend uses PostgreSQL `LISTEN/NOTIFY` internally. For multi-instance deployments, provide a `connectionString` in your driver config to enable cross-instance broadcasting.
+The backend uses PostgreSQL `LISTEN/NOTIFY` internally. For multi-instance deployments, provide a `connectionString` in your `PostgresBootstrapper` to enable cross-instance broadcasting.
 
 ## Error Handling
 

@@ -11,14 +11,17 @@ const breadcrumbs = [
 ];
 
 const honoCode = `<span class="text-blue-400">import</span> { initializeRebaseBackend } <span class="text-blue-400">from</span> <span class="text-emerald-400">"@rebasepro/backend"</span>;
+<span class="text-blue-400">import</span> { createPostgresBootstrapper } <span class="text-blue-400">from</span> <span class="text-emerald-400">"@rebasepro/postgresql-backend"</span>;
 
 <span class="text-blue-400">const</span> backend = <span class="text-blue-400">await</span> <span class="text-amber-400">initializeRebaseBackend</span>({
   server,
   app,
-  driver: {
-    connection: db,
-    schema: { tables, enums, relations },
-  },
+  bootstrappers: [
+    <span class="text-amber-400">createPostgresBootstrapper</span>({
+      connection: db,
+      schema: { tables, enums, relations },
+    })
+  ],
   auth: {
     jwtSecret: process.env.<span class="text-amber-400">JWT_SECRET</span>,
   },

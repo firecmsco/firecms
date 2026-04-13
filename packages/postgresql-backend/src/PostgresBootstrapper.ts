@@ -86,6 +86,9 @@ export function createPostgresBootstrapper(pgConfig: PostgresDriverConfig): Back
 
             // Create a fresh registry for this driver
             const registry = new PostgresCollectionRegistry();
+            if (collections) {
+                registry.registerMultiple(collections);
+            }
 
             // Register tables
             if (pgConfig.schema?.tables) {
@@ -197,6 +200,16 @@ export function createPostgresBootstrapper(pgConfig: PostgresDriverConfig): Back
             // The coordinator handles auth/storage/data routes.
             // This hook is for driver-specific extensions only.
             // Currently Postgres doesn't need additional routes beyond what the coordinator mounts.
+        },
+
+        async initializeWebsockets(server: unknown, realtimeService: RealtimeProvider, driver: DataDriver, config?: unknown): Promise<void> {
+            const { createPostgresWebSocket } = await import("./websocket");
+            createPostgresWebSocket(
+                server as import("http").Server,
+                realtimeService as RealtimeService,
+                driver as PostgresBackendDriver,
+                config as AuthConfig
+            );
         }
     };
 }

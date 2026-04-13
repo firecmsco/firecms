@@ -1,8 +1,8 @@
-import { EntityService } from "../src/db/entityService";
+import { EntityService } from "../src/services/entityService";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { EntityCollection } from "@rebasepro/types";
-import { BackendCollectionRegistry } from "../src/collections/BackendCollectionRegistry";
-const collectionRegistry = new BackendCollectionRegistry();
+import { PostgresCollectionRegistry } from "../src/collections/PostgresCollectionRegistry";
+const collectionRegistry = new PostgresCollectionRegistry();
 
 // --- Mock Drizzle ORM table definitions ---
 const mockAuthorsTable = {

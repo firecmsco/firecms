@@ -65,6 +65,7 @@ The backend is a **Node.js server** built on [Hono](https://hono.dev/) (a fast, 
 
 ```typescript title="backend/src/index.ts"
 import { initializeRebaseBackend } from "@rebasepro/backend";
+import { createPostgresBootstrapper } from "@rebasepro/postgresql-backend";
 import { Hono } from "hono";
 
 const app = new Hono();
@@ -72,11 +73,13 @@ const app = new Hono();
 await initializeRebaseBackend({
     app,
     server,
-    collections,
-    driver: {
-        connection: db,
-        schema: { tables, enums, relations }
-    },
+    collectionsDir: "./shared/collections",
+    bootstrappers: [
+        createPostgresBootstrapper({
+            connection: db,
+            schema: { tables, enums, relations }
+        })
+    ],
     auth: {
         jwtSecret: process.env.JWT_SECRET!,
         google: { clientId: process.env.GOOGLE_CLIENT_ID },

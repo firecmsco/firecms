@@ -1,5 +1,5 @@
 import { EntityCollection } from "@rebasepro/types";
-import { generateSchema } from "../src/generate-drizzle-schema-logic";
+import { generateSchema } from "../src/schema/generate-drizzle-schema-logic";
 
 describe("generateDrizzleSchema", () => {
 

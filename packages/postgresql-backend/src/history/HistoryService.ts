@@ -221,7 +221,7 @@ export class HistoryService {
 /**
  * Shallow comparison to find top-level keys that changed between two objects.
  */
-function findChangedFields(
+export function findChangedFields(
     oldValues: Record<string, unknown>,
     newValues: Record<string, unknown>
 ): string[] | null {

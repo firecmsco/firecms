@@ -14,7 +14,6 @@ import type { AuthModuleConfig } from "../src/auth/routes";
 
 // ── Mocks ───────────────────────────────────────────────────────────────────
 
-jest.mock("../src/auth/services");
 jest.mock("../src/auth/password");
 
 import { UserService, RoleService } from "../src/auth/services";
@@ -45,50 +44,58 @@ function mockRole(id: string, isAdmin = false) {
     return { id, name: id.charAt(0).toUpperCase() + id.slice(1), isAdmin, defaultPermissions: null, collectionPermissions: null, config: null };
 }
 
-let mockUserSvc: jest.Mocked<UserService>;
-let mockRoleSvc: jest.Mocked<RoleService>;
+
+let mockAuthRepo: jest.Mocked<any>;
 
 function createApp() {
-    mockUserSvc = new UserService(null as any) as jest.Mocked<UserService>;
-    mockRoleSvc = new RoleService(null as any) as jest.Mocked<RoleService>;
-
-    (UserService as jest.Mock).mockReturnValue(mockUserSvc);
-    (RoleService as jest.Mock).mockReturnValue(mockRoleSvc);
-
-    // Default mocks
-    mockUserSvc.getUserById = jest.fn().mockResolvedValue(null);
-    mockUserSvc.getUserByEmail = jest.fn().mockResolvedValue(null);
-    mockUserSvc.listUsers = jest.fn().mockResolvedValue([]);
-    mockUserSvc.createUser = jest.fn().mockImplementation((data) =>
-        Promise.resolve(mockUser({ email: data.email, displayName: data.displayName }))
-    );
-    mockUserSvc.updateUser = jest.fn().mockImplementation((id, data) =>
-        Promise.resolve(mockUser({ id, ...data }))
-    );
-    mockUserSvc.deleteUser = jest.fn().mockResolvedValue(undefined);
-    mockUserSvc.getUserRoleIds = jest.fn().mockResolvedValue(["editor"]);
-    mockUserSvc.setUserRoles = jest.fn().mockResolvedValue(undefined);
-    mockUserSvc.assignDefaultRole = jest.fn().mockResolvedValue(undefined);
-    mockUserSvc.getUserWithRoles = jest.fn().mockImplementation(async (userId) => {
-        return { user: mockUser({ id: userId }), roles: [mockRole("editor")] };
-    });
-
-    mockRoleSvc.getRoleById = jest.fn().mockResolvedValue(null);
-    mockRoleSvc.listRoles = jest.fn().mockResolvedValue([]);
-    mockRoleSvc.createRole = jest.fn().mockImplementation((data) =>
-        Promise.resolve({ ...data, isAdmin: data.isAdmin ?? false, defaultPermissions: null, collectionPermissions: null, config: null })
-    );
-    mockRoleSvc.updateRole = jest.fn().mockImplementation((id, data) =>
-        Promise.resolve({ id, name: data.name ?? "Updated", isAdmin: false, defaultPermissions: null, collectionPermissions: null, config: null })
-    );
-    mockRoleSvc.deleteRole = jest.fn().mockResolvedValue(undefined);
+    mockAuthRepo = {
+        getUserByEmail: jest.fn().mockResolvedValue(null),
+        getUserByGoogleId: jest.fn().mockResolvedValue(null),
+        getUserById: jest.fn().mockResolvedValue(null),
+        createUser: jest.fn().mockImplementation((data) =>
+            Promise.resolve(mockUser({ email: data.email, displayName: data.displayName, passwordHash: data.passwordHash }))
+        ),
+        listUsers: jest.fn().mockResolvedValue([]),
+        getUserRoles: jest.fn().mockResolvedValue([mockRole("editor")]),
+        getUserRoleIds: jest.fn().mockResolvedValue(["editor"]),
+        assignDefaultRole: jest.fn().mockResolvedValue(undefined),
+        setUserRoles: jest.fn().mockResolvedValue(undefined),
+        updateUser: jest.fn().mockImplementation((id, data) =>
+            Promise.resolve(mockUser({ id, ...data }))
+        ),
+        deleteUser: jest.fn().mockResolvedValue(undefined),
+        updatePassword: jest.fn().mockResolvedValue(undefined),
+        setEmailVerified: jest.fn().mockResolvedValue(undefined),
+        setVerificationToken: jest.fn().mockResolvedValue(undefined),
+        getUserByVerificationToken: jest.fn().mockResolvedValue(null),
+        getUserWithRoles: jest.fn().mockImplementation(async (userId) => {
+            const user = mockUser({ id: userId });
+            return { user, roles: [mockRole("editor")] };
+        }),
+        createRefreshToken: jest.fn().mockResolvedValue(undefined),
+        findRefreshTokenByHash: jest.fn().mockResolvedValue(null),
+        deleteRefreshToken: jest.fn().mockResolvedValue(undefined),
+        deleteAllRefreshTokensForUser: jest.fn().mockResolvedValue(undefined),
+        listRefreshTokensForUser: jest.fn().mockResolvedValue([]),
+        deleteRefreshTokenById: jest.fn().mockResolvedValue(undefined),
+        createPasswordResetToken: jest.fn().mockResolvedValue(undefined),
+        findValidPasswordResetToken: jest.fn().mockResolvedValue(null),
+        markPasswordResetTokenUsed: jest.fn().mockResolvedValue(undefined),
+        deleteExpiredPasswordResetTokens: jest.fn().mockResolvedValue(undefined),
+        listRoles: jest.fn().mockResolvedValue([]),
+        getRoleById: jest.fn().mockResolvedValue(null),
+        createRole: jest.fn().mockImplementation(r => Promise.resolve({ id: r.id, name: r.name, isAdmin: r.isAdmin || false, defaultPermissions: null, collectionPermissions: null, config: null })),
+        updateRole: jest.fn().mockImplementation((id, r) => Promise.resolve({ id, name: r.name, isAdmin: r.isAdmin || false, defaultPermissions: null, collectionPermissions: null, config: null })),
+        deleteRole: jest.fn().mockResolvedValue(undefined)
+    } as unknown as jest.Mocked<AuthRepository>;
+    
 
     // Password mocks
     (validatePasswordStrength as jest.Mock).mockReturnValue({ valid: true, errors: [] });
     (hashPassword as jest.Mock).mockResolvedValue("hashed-pw");
 
     const config: AuthModuleConfig = {
-        db: {} as any,
+        authRepo: mockAuthRepo,
     };
 
     const app = new Hono<HonoEnv>();
@@ -163,8 +170,8 @@ describe("Admin Routes (Integration)", () => {
     describe("POST /admin/bootstrap", () => {
         it("promotes current user to admin when no admins exist", async () => {
             const app = createApp();
-            mockUserSvc.listUsers.mockResolvedValueOnce([mockUser({ id: "user-1" })]);
-            mockUserSvc.getUserRoleIds.mockResolvedValueOnce(["editor"]); // no admin
+            mockAuthRepo.listUsers.mockResolvedValueOnce([mockUser({ id: "user-1" })]);
+            mockAuthRepo.getUserRoleIds.mockResolvedValueOnce(["editor"]); // no admin
 
             const res = await app.request("/admin/bootstrap", {
                 method: "POST",
@@ -173,14 +180,14 @@ describe("Admin Routes (Integration)", () => {
             expect(res.status).toBe(200);
             const body = await res.json() as any;
             expect(body.user.roles).toContain("admin");
-            expect(mockUserSvc.setUserRoles).toHaveBeenCalledWith("user-1", ["admin"]);
+            expect(mockAuthRepo.setUserRoles).toHaveBeenCalledWith("user-1", ["admin"]);
         });
 
         it("returns 403 when admin already exists", async () => {
             const app = createApp();
             const adminUser = mockUser({ id: "existing-admin" });
-            mockUserSvc.listUsers.mockResolvedValueOnce([adminUser]);
-            mockUserSvc.getUserRoleIds.mockResolvedValueOnce(["admin"]); // admin exists
+            mockAuthRepo.listUsers.mockResolvedValueOnce([adminUser]);
+            mockAuthRepo.getUserRoleIds.mockResolvedValueOnce(["admin"]); // admin exists
 
             const res = await app.request("/admin/bootstrap", {
                 method: "POST",
@@ -197,11 +204,11 @@ describe("Admin Routes (Integration)", () => {
         describe("GET /admin/users", () => {
             it("returns list of users with roles", async () => {
                 const app = createApp();
-                mockUserSvc.listUsers.mockResolvedValueOnce([
+                mockAuthRepo.listUsers.mockResolvedValueOnce([
                     mockUser({ id: "u1", email: "a@test.com" }),
                     mockUser({ id: "u2", email: "b@test.com" }),
                 ]);
-                mockUserSvc.getUserRoleIds
+                mockAuthRepo.getUserRoleIds
                     .mockResolvedValueOnce(["admin"])
                     .mockResolvedValueOnce(["editor"]);
 
@@ -217,7 +224,7 @@ describe("Admin Routes (Integration)", () => {
         describe("GET /admin/users/:userId", () => {
             it("returns user with roles", async () => {
                 const app = createApp();
-                mockUserSvc.getUserWithRoles.mockResolvedValueOnce({
+                mockAuthRepo.getUserWithRoles.mockResolvedValueOnce({
                     user: mockUser({ id: "u1" }),
                     roles: [mockRole("editor"), mockRole("viewer")],
                 });
@@ -231,7 +238,7 @@ describe("Admin Routes (Integration)", () => {
 
             it("returns 404 for non-existent user", async () => {
                 const app = createApp();
-                mockUserSvc.getUserWithRoles.mockResolvedValueOnce(null);
+                mockAuthRepo.getUserWithRoles.mockResolvedValueOnce(null);
 
                 const res = await app.request("/admin/users/missing", { headers: { ...adminAuth() } });
                 expect(res.status).toBe(404);
@@ -249,7 +256,7 @@ describe("Admin Routes (Integration)", () => {
                 expect(res.status).toBe(201);
                 const body = await res.json() as any;
                 expect(body.user.email).toBe("new@test.com");
-                expect(mockUserSvc.createUser).toHaveBeenCalledWith(expect.objectContaining({
+                expect(mockAuthRepo.createUser).toHaveBeenCalledWith(expect.objectContaining({
                     email: "new@test.com",
                 }));
             });
@@ -276,7 +283,7 @@ describe("Admin Routes (Integration)", () => {
 
             it("returns 409 when email already exists", async () => {
                 const app = createApp();
-                mockUserSvc.getUserByEmail.mockResolvedValueOnce(mockUser());
+                mockAuthRepo.getUserByEmail.mockResolvedValueOnce(mockUser());
 
                 const res = await app.request("/admin/users", {
                     ...json({ email: "existing@test.com" }),
@@ -307,7 +314,7 @@ describe("Admin Routes (Integration)", () => {
                     ...json({ email: "norole@test.com" }),
                     headers: { ...json({}).headers, ...adminAuth() },
                 });
-                expect(mockUserSvc.assignDefaultRole).toHaveBeenCalledWith(expect.any(String), "editor");
+                expect(mockAuthRepo.assignDefaultRole).toHaveBeenCalledWith(expect.any(String), "editor");
             });
 
             it("assigns specified roles", async () => {
@@ -317,15 +324,15 @@ describe("Admin Routes (Integration)", () => {
                     ...json({ email: "withroles@test.com", roles: ["admin", "editor"] }),
                     headers: { ...json({}).headers, ...adminAuth() },
                 });
-                expect(mockUserSvc.setUserRoles).toHaveBeenCalledWith(expect.any(String), ["admin", "editor"]);
+                expect(mockAuthRepo.setUserRoles).toHaveBeenCalledWith(expect.any(String), ["admin", "editor"]);
             });
         });
 
         describe("PUT /admin/users/:userId", () => {
             it("updates user profile", async () => {
                 const app = createApp();
-                mockUserSvc.getUserById.mockResolvedValueOnce(mockUser({ id: "u1" }));
-                mockUserSvc.getUserWithRoles.mockResolvedValueOnce({
+                mockAuthRepo.getUserById.mockResolvedValueOnce(mockUser({ id: "u1" }));
+                mockAuthRepo.getUserWithRoles.mockResolvedValueOnce({
                     user: mockUser({ id: "u1", displayName: "Updated" }),
                     roles: [mockRole("editor")],
                 });
@@ -342,8 +349,8 @@ describe("Admin Routes (Integration)", () => {
 
             it("updates roles when specified", async () => {
                 const app = createApp();
-                mockUserSvc.getUserById.mockResolvedValueOnce(mockUser({ id: "u1" }));
-                mockUserSvc.getUserWithRoles.mockResolvedValueOnce({
+                mockAuthRepo.getUserById.mockResolvedValueOnce(mockUser({ id: "u1" }));
+                mockAuthRepo.getUserWithRoles.mockResolvedValueOnce({
                     user: mockUser({ id: "u1" }),
                     roles: [mockRole("admin")],
                 });
@@ -353,12 +360,12 @@ describe("Admin Routes (Integration)", () => {
                     headers: { "Content-Type": "application/json", ...adminAuth() },
                     body: JSON.stringify({ roles: ["admin"] }),
                 });
-                expect(mockUserSvc.setUserRoles).toHaveBeenCalledWith("u1", ["admin"]);
+                expect(mockAuthRepo.setUserRoles).toHaveBeenCalledWith("u1", ["admin"]);
             });
 
             it("returns 404 for non-existent user", async () => {
                 const app = createApp();
-                mockUserSvc.getUserById.mockResolvedValueOnce(null);
+                mockAuthRepo.getUserById.mockResolvedValueOnce(null);
 
                 const res = await app.request("/admin/users/missing", {
                     method: "PUT",
@@ -372,14 +379,14 @@ describe("Admin Routes (Integration)", () => {
         describe("DELETE /admin/users/:userId", () => {
             it("deletes a user", async () => {
                 const app = createApp();
-                mockUserSvc.getUserById.mockResolvedValueOnce(mockUser({ id: "u1" }));
+                mockAuthRepo.getUserById.mockResolvedValueOnce(mockUser({ id: "u1" }));
 
                 const res = await app.request("/admin/users/u1", {
                     method: "DELETE",
                     headers: { ...adminAuth("admin-1") },
                 });
                 expect(res.status).toBe(200);
-                expect(mockUserSvc.deleteUser).toHaveBeenCalledWith("u1");
+                expect(mockAuthRepo.deleteUser).toHaveBeenCalledWith("u1");
             });
 
             it("prevents self-deletion", async () => {
@@ -396,7 +403,7 @@ describe("Admin Routes (Integration)", () => {
 
             it("returns 404 for non-existent user", async () => {
                 const app = createApp();
-                mockUserSvc.getUserById.mockResolvedValueOnce(null);
+                mockAuthRepo.getUserById.mockResolvedValueOnce(null);
 
                 const res = await app.request("/admin/users/missing", {
                     method: "DELETE",
@@ -412,7 +419,7 @@ describe("Admin Routes (Integration)", () => {
         describe("GET /admin/roles", () => {
             it("returns list of roles", async () => {
                 const app = createApp();
-                mockRoleSvc.listRoles.mockResolvedValueOnce([
+                mockAuthRepo.listRoles.mockResolvedValueOnce([
                     mockRole("admin", true),
                     mockRole("editor"),
                     mockRole("viewer"),
@@ -429,7 +436,7 @@ describe("Admin Routes (Integration)", () => {
         describe("GET /admin/roles/:roleId", () => {
             it("returns role by ID", async () => {
                 const app = createApp();
-                mockRoleSvc.getRoleById.mockResolvedValueOnce(mockRole("admin", true));
+                mockAuthRepo.getRoleById.mockResolvedValueOnce(mockRole("admin", true));
 
                 const res = await app.request("/admin/roles/admin", { headers: { ...adminAuth() } });
                 expect(res.status).toBe(200);
@@ -440,7 +447,7 @@ describe("Admin Routes (Integration)", () => {
 
             it("returns 404 for non-existent role", async () => {
                 const app = createApp();
-                mockRoleSvc.getRoleById.mockResolvedValueOnce(null);
+                mockAuthRepo.getRoleById.mockResolvedValueOnce(null);
 
                 const res = await app.request("/admin/roles/missing", { headers: { ...adminAuth() } });
                 expect(res.status).toBe(404);
@@ -472,7 +479,7 @@ describe("Admin Routes (Integration)", () => {
 
             it("returns 409 when role already exists", async () => {
                 const app = createApp();
-                mockRoleSvc.getRoleById.mockResolvedValueOnce(mockRole("custom"));
+                mockAuthRepo.getRoleById.mockResolvedValueOnce(mockRole("custom"));
 
                 const res = await app.request("/admin/roles", {
                     ...json({ id: "custom", name: "Dup" }),
@@ -487,7 +494,7 @@ describe("Admin Routes (Integration)", () => {
         describe("PUT /admin/roles/:roleId", () => {
             it("updates an existing role", async () => {
                 const app = createApp();
-                mockRoleSvc.getRoleById.mockResolvedValueOnce(mockRole("editor"));
+                mockAuthRepo.getRoleById.mockResolvedValueOnce(mockRole("editor"));
 
                 const res = await app.request("/admin/roles/editor", {
                     method: "PUT",
@@ -495,14 +502,14 @@ describe("Admin Routes (Integration)", () => {
                     body: JSON.stringify({ name: "Super Editor" }),
                 });
                 expect(res.status).toBe(200);
-                expect(mockRoleSvc.updateRole).toHaveBeenCalledWith("editor", expect.objectContaining({
+                expect(mockAuthRepo.updateRole).toHaveBeenCalledWith("editor", expect.objectContaining({
                     name: "Super Editor",
                 }));
             });
 
             it("returns 404 for non-existent role", async () => {
                 const app = createApp();
-                mockRoleSvc.getRoleById.mockResolvedValueOnce(null);
+                mockAuthRepo.getRoleById.mockResolvedValueOnce(null);
 
                 const res = await app.request("/admin/roles/missing", {
                     method: "PUT",
@@ -516,14 +523,14 @@ describe("Admin Routes (Integration)", () => {
         describe("DELETE /admin/roles/:roleId", () => {
             it("deletes a custom role", async () => {
                 const app = createApp();
-                mockRoleSvc.getRoleById.mockResolvedValueOnce(mockRole("custom"));
+                mockAuthRepo.getRoleById.mockResolvedValueOnce(mockRole("custom"));
 
                 const res = await app.request("/admin/roles/custom", {
                     method: "DELETE",
                     headers: { ...adminAuth() },
                 });
                 expect(res.status).toBe(200);
-                expect(mockRoleSvc.deleteRole).toHaveBeenCalledWith("custom");
+                expect(mockAuthRepo.deleteRole).toHaveBeenCalledWith("custom");
             });
 
             it("prevents deletion of built-in admin role", async () => {
@@ -560,7 +567,7 @@ describe("Admin Routes (Integration)", () => {
 
             it("returns 404 for non-existent role", async () => {
                 const app = createApp();
-                mockRoleSvc.getRoleById.mockResolvedValueOnce(null);
+                mockAuthRepo.getRoleById.mockResolvedValueOnce(null);
 
                 const res = await app.request("/admin/roles/ghost", {
                     method: "DELETE",

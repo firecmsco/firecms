@@ -102,7 +102,7 @@ gcloud run deploy rebase-backend \
 ```
 
 :::caution
-Cloud Run instances are stateless. Use **S3 storage** instead of local filesystem for file uploads, and enable **cross-instance realtime** by providing a `connectionString` in your driver config so WebSocket updates propagate across replicas.
+Cloud Run instances are stateless. Use **S3 storage** instead of local filesystem for file uploads, and enable **cross-instance realtime** by providing a `connectionString` in your `PostgresBootstrapper` so WebSocket updates propagate across replicas.
 :::
 
 ## Changing the Base URL

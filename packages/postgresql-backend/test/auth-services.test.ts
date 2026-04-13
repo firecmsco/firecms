@@ -1,6 +1,6 @@
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { UserService, RoleService, RefreshTokenService, PasswordResetTokenService, Role } from "../src/auth/services";
-import { users, refreshTokens, passwordResetTokens, User } from "../src/db/auth-schema";
+import { users, refreshTokens, passwordResetTokens, User } from "../src/schema/auth-schema";
 
 // Mock the drizzle-orm functions
 jest.mock("drizzle-orm", () => ({
