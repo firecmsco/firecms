@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
+import { bodyLimit } from "hono/body-limit";
 import { getRequestListener } from "@hono/node-server";
 import { createServer } from "http";
 import path from "path";
@@ -50,11 +51,19 @@ app.use("/*", secureHeaders({
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
         imgSrc: ["'self'", "data:", "blob:", "https:"],
         connectSrc: ["'self'", "ws:", "wss:"],
-    } : false,
+    } : undefined,
     strictTransportSecurity: process.env.NODE_ENV === "production"
         ? "max-age=63072000; includeSubDomains; preload"
         : false,
     xFrameOptions: "DENY",
+}));
+
+// ─── Request body size limit ─────────────────────────────────────────
+app.use("/*", bodyLimit({
+    maxSize: 1024 * 1024, // 1 MB
+    onError: (c) => {
+        return c.json({ error: { message: "Request body too large", code: "PAYLOAD_TOO_LARGE" } }, 413);
+    }
 }));
 
 // ─── Database ────────────────────────────────────────────────────────
@@ -159,6 +168,23 @@ async function startServer() {
             console.log(`   • API Base:     http://localhost:${PORT}/api`);
             console.log(`   • Health:       http://localhost:${PORT}/health`);
         });
+
+        // ─── Graceful shutdown ───────────────────────────────────────
+        const shutdown = (signal: string) => {
+            console.log(`\n${signal} received — starting graceful shutdown...`);
+            // Stop accepting new connections
+            server.close(() => {
+                console.log("✅ HTTP server closed, all connections drained.");
+                process.exit(0);
+            });
+            // Force exit if draining takes too long
+            setTimeout(() => {
+                console.error("⚠️ Could not drain connections in time, forcing exit.");
+                process.exit(1);
+            }, 10_000).unref();
+        };
+        process.on("SIGTERM", () => shutdown("SIGTERM"));
+        process.on("SIGINT", () => shutdown("SIGINT"));
     } catch (err) {
         console.error("Failed to initialize backend:", err);
         process.exit(1);
