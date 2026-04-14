@@ -15,6 +15,8 @@ import { usePermissions } from "@rebasepro/core";
 import { toArray } from "@rebasepro/utils";
 import { ImportCollectionAction } from "../../data_import/import";
 import { ExportCollectionAction } from "../../data_export/export";
+import { EditorCollectionAction } from "../../collection_editor/ui/EditorCollectionAction";
+import { useCollectionEditorController } from "../../collection_editor/useCollectionEditorController";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -48,6 +50,10 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
 
     const largeLayout = useLargeLayout();
     const { t } = useTranslation();
+
+    // Check if the collection editor context is available (ConfigControllerProvider present)
+    const collectionEditorController = useCollectionEditorController();
+    const hasCollectionEditor = Boolean(collectionEditorController?.editCollection);
 
     const selectedEntities = selectionController.selectedEntities;
 
@@ -131,6 +137,11 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             <ErrorBoundary>
                 <ExportCollectionAction {...actionProps} />
             </ErrorBoundary>
+            {hasCollectionEditor && (
+                <ErrorBoundary>
+                    <EditorCollectionAction {...actionProps} />
+                </ErrorBoundary>
+            )}
             {multipleDeleteButton}
             {addButton}
         </>

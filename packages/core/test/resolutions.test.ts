@@ -5,7 +5,7 @@ import * as util from "util";
 
 const testCollection = buildCollection({
     slug: "test_entity",
-    dbPath: "test_entity",
+    table: "test_entity",
     name: "Test entities",
     properties: {
         mainSaturation: {

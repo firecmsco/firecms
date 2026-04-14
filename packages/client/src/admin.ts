@@ -31,6 +31,19 @@ export function createAdmin(transport: Transport, options?: CreateAdminOptions) 
         return transport.request<{ users: AdminUser[] }>(adminPath + "/users", { method: "GET" });
     }
 
+    async function listUsersPaginated(options?: { search?: string; limit?: number; offset?: number; orderBy?: string; orderDir?: "asc" | "desc" }) {
+        const params = new URLSearchParams();
+        if (options?.limit !== undefined) params.set("limit", String(options.limit));
+        if (options?.offset !== undefined) params.set("offset", String(options.offset));
+        if (options?.search) params.set("search", options.search);
+        if (options?.orderBy) params.set("orderBy", options.orderBy);
+        if (options?.orderDir) params.set("orderDir", options.orderDir);
+        const qs = params.toString();
+        return transport.request<{ users: AdminUser[]; total: number; limit: number; offset: number }>(
+            adminPath + "/users" + (qs ? "?" + qs : ""), { method: "GET" }
+        );
+    }
+
     async function getUser(userId: string) {
         return transport.request<{ user: AdminUser }>(adminPath + "/users/" + encodeURIComponent(userId), { method: "GET" });
     }
@@ -91,6 +104,7 @@ export function createAdmin(transport: Transport, options?: CreateAdminOptions) 
 
     return {
         listUsers,
+        listUsersPaginated,
         getUser,
         createUser,
         updateUser,

@@ -26,7 +26,9 @@ const CONSUMER_EXTERNALS = [
 ];
 const isExternal = (id: string) => {
     if (id.startsWith(".") || path.isAbsolute(id)) return false;
-    // Inline all @rebasepro/* packages
+    // Externalize server-core to prevent singleton duplication (e.g. JWT config, etc)
+    if (id === "@rebasepro/server-core" || id.startsWith("@rebasepro/server-core/")) return true;
+    // Inline other @rebasepro/* packages (like common, types)
     if (id.startsWith("@rebasepro/")) return false;
     // Externalize only deps the consumer app explicitly installs
     if (CONSUMER_EXTERNALS.some(ext => id === ext || id.startsWith(ext + "/"))) return true;
@@ -50,7 +52,14 @@ export default defineConfig(() => ({
         minify: false,
         sourcemap: true,
         rollupOptions: {
-            external: isExternal
+            external: isExternal,
+            output: {
+                globals: {
+                    "json-logic-js": "jsonLogic",
+                    "fast-equals": "fastEquals",
+                    "lodash/cloneDeep.js": "cloneDeep"
+                }
+            }
         }
     },
     resolve: {

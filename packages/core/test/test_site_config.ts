@@ -10,7 +10,7 @@ const locales: EnumValues = {
 
 export const productsCollection = buildCollection({
     slug: "products",
-    dbPath: "products",
+    table: "products",
     name: "Products",
     singularName: "Product",
     entityViews: [
@@ -167,7 +167,7 @@ export const productsCollection = buildCollection({
 
 const localeCollection = buildCollection({
     slug: "locales",
-    dbPath: "locales",
+    table: "locales",
     name: "Locales",
     singularName: "Locale",
     properties: {
@@ -195,7 +195,7 @@ const localeCollection = buildCollection({
 
 const pricesCollection = buildCollection({
     slug: "product_price",
-    dbPath: "prices",
+    table: "prices",
     name: "Prices",
     properties: {
         value: buildProperty({
@@ -234,7 +234,7 @@ const productCallbacks: EntityCallbacks<any> = {
 
 export const usersCollection = buildCollection({
     slug: "users",
-    dbPath: "users",
+    table: "users",
     name: "Users",
     singularName: "User",
     group: "Main",
@@ -292,7 +292,7 @@ export const siteConfig = {
     collections: [
         buildCollection({
             ...productsCollection,
-            dbPath: "products",
+            table: "products",
             callbacks: productCallbacks,
             singularName: "Products",
             subcollections: () => [localeCollection]
@@ -300,21 +300,21 @@ export const siteConfig = {
         buildCollection({
             ...productsCollection,
             slug: "p",
-            dbPath: "sites/es/products",
+            table: "sites/es/products",
             callbacks: productCallbacks,
             singularName: "Products",
             subcollections: () => [localeCollection, pricesCollection]
         }),
         buildCollection({
             ...productsCollection,
-            dbPath: "products/id/subcollection_inline",
+            table: "products/id/subcollection_inline",
             callbacks: productCallbacks,
             singularName: "Products",
             subcollections: () => [localeCollection]
         }),
         buildCollection({
             ...usersCollection,
-            dbPath: "users",
+            table: "users",
             slug: "u",
             singularName: "Users",
             subcollections: () => [buildCollection({

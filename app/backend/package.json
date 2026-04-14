@@ -6,8 +6,9 @@
     "type": "module",
     "scripts": {
         "dev": "tsx watch --watch=\"../shared/**/*\" --watch=\"../../packages/server-core/src/**/*\" --conditions development src/index.ts",
-        "build": "tsc --noEmit",
-        "start": "tsx src/index.ts"
+        "build": "tsc",
+        "start": "node dist/src/index.js",
+        "start:dev": "tsx src/index.ts"
     },
     "dependencies": {
         "@rebasepro/server-core": "0.0.1",

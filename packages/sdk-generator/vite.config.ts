@@ -28,7 +28,14 @@ export default defineConfig(() => ({
         target: "ESNEXT",
         sourcemap: true,
         rollupOptions: {
-            external: isExternal
+            external: isExternal,
+            output: {
+                globals: {
+                    "json-logic-js": "jsonLogic",
+                    "fast-equals": "fastEquals",
+                    "lodash/cloneDeep.js": "cloneDeep"
+                }
+            }
         }
     },
         resolve: {

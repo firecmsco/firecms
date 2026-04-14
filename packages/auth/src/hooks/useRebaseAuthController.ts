@@ -283,13 +283,26 @@ export function useRebaseAuthController(
             client.setAuthTokenGetter(async () => {
                 try { return await getAuthToken(); } catch { return null; }
             });
+            if (client.setOnUnauthorized) {
+                client.setOnUnauthorized(async () => {
+                    try {
+                        const newTokens = await refreshAccessToken();
+                        if (newTokens) return true;
+                        clearSessionAndSignOut();
+                        return false;
+                    } catch (e) {
+                        clearSessionAndSignOut();
+                        return false;
+                    }
+                });
+            }
             if (client.ws) {
                 client.ws.setAuthTokenGetter(async () => {
                     try { return await getAuthToken(); } catch { return ""; }
                 });
             }
         }
-    }, [client, getAuthToken]);
+    }, [client, getAuthToken, refreshAccessToken, clearSessionAndSignOut]);
 
     // Handle successful authentication
     const handleAuthSuccess = useCallback(async (userInfo: UserInfo, tokens: AuthTokens) => {

@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { secureHeaders } from "hono/secure-headers";
 import { getRequestListener } from "@hono/node-server";
 import { createServer } from "http";
 import path from "path";
@@ -37,6 +38,23 @@ const allowedOrigins = process.env.NODE_ENV === "production"
 app.use("/*", cors({
     origin: allowedOrigins,
     credentials: true
+}));
+
+// ─── Security headers ────────────────────────────────────────────────
+app.use("/*", secureHeaders({
+    crossOriginEmbedderPolicy: false,
+    contentSecurityPolicy: process.env.NODE_ENV === "production" ? {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "blob:", "https:"],
+        connectSrc: ["'self'", "ws:", "wss:"],
+    } : false,
+    strictTransportSecurity: process.env.NODE_ENV === "production"
+        ? "max-age=63072000; includeSubDomains; preload"
+        : false,
+    xFrameOptions: "DENY",
 }));
 
 // ─── Database ────────────────────────────────────────────────────────

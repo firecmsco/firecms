@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useCollectionRegistryController } from "../../index";
 import { useSnackbarController, useTranslation } from "@rebasepro/core";
 import { isPostgresCollection, Role, SecurityRule, UserManagementDelegate } from "@rebasepro/types";
+import { useBreadcrumbsController } from "../../index";
 import {
     AddIcon,
     Button,
@@ -38,6 +39,14 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
     const { roles, saveRole, deleteRole, loading, allowDefaultRolesCreation } = userManagement;
     const snackbarController = useSnackbarController();
     const { t } = useTranslation();
+    const breadcrumbs = useBreadcrumbsController();
+
+    React.useEffect(() => {
+        breadcrumbs.set({
+            breadcrumbs: [{ title: t("roles"), url: "/roles" }]
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedRole, setSelectedRole] = useState<Role | undefined>();
@@ -91,8 +100,8 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
 
     return (
         <Container className="w-full flex flex-col py-4 gap-4" maxWidth={"6xl"}>
-            <div className="flex items-center mt-12">
-                <Typography gutterBottom variant="h4" className="grow" component="h4">
+            <div className="flex items-center mt-12 mb-4 gap-4">
+                <Typography gutterBottom variant="h4" className="grow mb-0" component="h4">
                     {t("roles")}
                 </Typography>
                 <Button startIcon={<AddIcon />} onClick={handleAddRole} disabled={!saveRole}>
@@ -103,35 +112,37 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
             <div className="w-full overflow-auto">
                 <Table className="w-full">
                     <TableHeader>
-                        <TableCell header className="w-16"></TableCell>
                         <TableCell header>{t("role")}</TableCell>
                         <TableCell header className="items-center">{t("is_admin")}</TableCell>
+                        <TableCell header className="w-24 text-right">{t("actions")}</TableCell>
                     </TableHeader>
                     <TableBody>
                         {roles && roles.map((role: Role) => {
 
                             return (
                                 <TableRow key={role.id} onClick={() => saveRole && handleEditRole(role)}>
-                                    <TableCell style={{ width: "64px" }}>
-                                        {!role.isAdmin && deleteRole && (
-                                            <Tooltip asChild title={t("delete_this_role")}>
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setRoleToDelete(role);
-                                                        setDeleteConfirmOpen(true);
-                                                    }}>
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        )}
-                                    </TableCell>
                                     <TableCell>
                                         <RoleChip role={role} />
                                     </TableCell>
                                     <TableCell className="items-center">
                                         <Checkbox checked={role.isAdmin ?? false} disabled />
+                                    </TableCell>
+                                    <TableCell className="text-right whitespace-nowrap">
+                                        <div className="flex justify-end items-center gap-1">
+                                            {!role.isAdmin && deleteRole && (
+                                                <Tooltip asChild title={t("delete_this_role")}>
+                                                    <IconButton
+                                                        size="smallest"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setRoleToDelete(role);
+                                                            setDeleteConfirmOpen(true);
+                                                        }}>
+                                                        <DeleteIcon size="smallest" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            )}
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             );
@@ -139,7 +150,7 @@ export function RolesView({ userManagement }: { userManagement: UserManagementDe
 
                         {(!roles || roles.length === 0) && (
                             <TableRow>
-                                <TableCell colspan={4}>
+                                <TableCell colspan={3}>
                                     <CenteredView className="flex flex-col gap-4 my-8 items-center">
                                          <Typography variant="label">
                                             {t("no_roles_yet")}

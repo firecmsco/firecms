@@ -41,6 +41,11 @@ export type User = {
      */
     roles?: string[];
 
+    /**
+     * The date and time when the user was created.
+     */
+    createdAt?: Date | string | null;
+
     getIdToken?: (forceRefresh?: boolean) => Promise<string>;
 
 };

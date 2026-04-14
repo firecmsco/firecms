@@ -6,7 +6,7 @@ import { hashPassword, validatePasswordStrength } from "./password";
 import { AuthModuleConfig } from "./routes";
 import { HonoEnv } from "../api/types";
 import { randomBytes, createHash } from "crypto";
-import { getUserInvitationTemplate } from "../email/templates";
+import { getUserInvitationTemplate, getPasswordResetTemplate } from "../email/templates";
 
 /**
  * Generate a cryptographically secure random password that meets strength requirements.
@@ -97,6 +97,50 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
     });
 
     router.get("/users", requireAdmin, async (c) => {
+        const limitParam = c.req.query("limit");
+        const offsetParam = c.req.query("offset");
+        const search = c.req.query("search");
+        const orderBy = c.req.query("orderBy");
+        const orderDir = c.req.query("orderDir") as "asc" | "desc" | undefined;
+
+        // If pagination params are provided, use the paginated path
+        if (limitParam !== undefined || search) {
+            const limit = limitParam ? parseInt(limitParam, 10) : 25;
+            const offset = offsetParam ? parseInt(offsetParam, 10) : 0;
+
+            const result = await authRepo.listUsersPaginated({
+                limit,
+                offset,
+                search: search || undefined,
+                orderBy: orderBy || undefined,
+                orderDir: orderDir || undefined
+            });
+
+            const usersWithRoles = await Promise.all(
+                result.users.map(async (u) => {
+                    const roles = await authRepo.getUserRoleIds(u.id);
+                    return {
+                        uid: u.id,
+                        email: u.email,
+                        displayName: u.displayName,
+                        photoURL: u.photoUrl,
+                        provider: u.provider,
+                        roles,
+                        createdAt: u.createdAt,
+                        updatedAt: u.updatedAt
+                    };
+                })
+            );
+
+            return c.json({
+                users: usersWithRoles,
+                total: result.total,
+                limit: result.limit,
+                offset: result.offset
+            });
+        }
+
+        // Legacy: return all users (no pagination)
         const users = await authRepo.listUsers();
         const usersWithRoles = await Promise.all(
             users.map(async (u) => {
@@ -169,8 +213,8 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
 
         if (roles && Array.isArray(roles) && roles.length > 0) {
             await authRepo.setUserRoles(user.id, roles);
-        } else {
-            await authRepo.assignDefaultRole(user.id, "editor");
+        } else if (config.defaultRole) {
+            await authRepo.assignDefaultRole(user.id, config.defaultRole);
         }
 
         const userRoles = await authRepo.getUserRoleIds(user.id);
@@ -226,6 +270,71 @@ export function createAdminRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
             invitationSent,
             ...(temporaryPassword ? { temporaryPassword } : {})
         }, 201);
+    });
+
+    router.post("/users/:userId/reset-password", requireAdmin, async (c) => {
+        const userId = c.req.param("userId");
+        const existing = await authRepo.getUserById(userId);
+        if (!existing) {
+            throw ApiError.notFound("User not found");
+        }
+
+        const isEmailConfigured = !!(emailService && emailService.isConfigured());
+        let invitationSent = false;
+        let temporaryPassword: string | undefined;
+
+        if (isEmailConfigured) {
+            try {
+                const token = generateSecureToken();
+                const tokenHash = hashToken(token);
+                const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+                await authRepo.createPasswordResetToken(existing.id, tokenHash, expiresAt);
+
+                const baseUrl = emailConfig?.resetPasswordUrl || "";
+                const setPasswordUrl = `${baseUrl}/reset-password?token=${token}`;
+
+                const appName = emailConfig?.appName || "Rebase";
+                const templateFn = emailConfig?.templates?.passwordReset;
+                const emailContent = templateFn
+                    ? templateFn(setPasswordUrl, { email: existing.email, displayName: existing.displayName })
+                    : getPasswordResetTemplate(setPasswordUrl, { email: existing.email, displayName: existing.displayName }, appName);
+
+                await emailService!.send({
+                    to: existing.email,
+                    subject: emailContent.subject,
+                    html: emailContent.html,
+                    text: emailContent.text
+                });
+                invitationSent = true;
+            } catch (emailError: unknown) {
+                console.error("Failed to send reset email:", emailError instanceof Error ? emailError.message : emailError);
+                // Fall back to returning the temporary password
+                const clearPassword = generateSecurePassword();
+                const passwordHash = await hashPassword(clearPassword);
+                await authRepo.updatePassword(existing.id, passwordHash);
+                temporaryPassword = clearPassword;
+            }
+        } else {
+            // No email service — generate password, set it, and return one-time
+            const clearPassword = generateSecurePassword();
+            const passwordHash = await hashPassword(clearPassword);
+            await authRepo.updatePassword(existing.id, passwordHash);
+            temporaryPassword = clearPassword;
+        }
+
+        const userRoles = await authRepo.getUserRoleIds(existing.id);
+
+        return c.json({
+            user: {
+                uid: existing.id,
+                email: existing.email,
+                displayName: existing.displayName,
+                roles: userRoles
+            },
+            invitationSent,
+            ...(temporaryPassword ? { temporaryPassword } : {})
+        }, 200);
     });
 
     router.put("/users/:userId", requireAdmin, async (c) => {

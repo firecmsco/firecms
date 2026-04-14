@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import {
     CircularProgress,
@@ -6,7 +6,6 @@ import {
     defaultBorderMixin,
     SearchBar
 } from "@rebasepro/ui";
-import { CollectionSize } from "@rebasepro/types";
 import { useLargeLayout, useTranslation } from "@rebasepro/core";
 
 interface CollectionTableToolbarProps {
@@ -18,9 +17,7 @@ interface CollectionTableToolbarProps {
      */
     viewModeToggle?: React.ReactNode;
     title?: React.ReactNode,
-    onTextSearchClick?: () => void;
     onTextSearch?: (searchString?: string) => void;
-    textSearchLoading?: boolean;
 }
 
 export function CollectionTableToolbar({
@@ -28,25 +25,12 @@ export function CollectionTableToolbar({
     actionsStart,
     loading,
     onTextSearch,
-    onTextSearchClick,
-    textSearchLoading,
     title,
     viewModeToggle
 }: CollectionTableToolbarProps) {
 
-    const searchInputRef = React.useRef<HTMLInputElement>(null);
     const largeLayout = useLargeLayout();
     const { t } = useTranslation();
-
-    const searchLoading = React.useRef<boolean>(false);
-
-    useEffect(() => {
-        if (searchInputRef.current && searchLoading.current && !textSearchLoading) {
-            searchInputRef.current.focus();
-        }
-        searchLoading.current = textSearchLoading ?? false;
-    }, [textSearchLoading]);
-
 
     return (
         <div
@@ -71,16 +55,12 @@ export function CollectionTableToolbar({
                         <CircularProgress size={"smallest"} />}
                 </div>}
 
-                {(onTextSearch || onTextSearchClick) &&
+                {onTextSearch &&
                     <SearchBar
                         key={"search-bar"}
                         size={"small"}
-                        inputRef={searchInputRef}
-                        loading={textSearchLoading}
                         placeholder={t("search")}
-                        disabled={Boolean(onTextSearchClick)}
-                        onClick={onTextSearchClick}
-                        onTextSearch={onTextSearchClick ? undefined : onTextSearch}
+                        onTextSearch={onTextSearch}
                         expandable={true} />}
 
                 {actions}

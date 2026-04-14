@@ -49,6 +49,19 @@ export interface UserManagementDelegate<USER extends User = User> {
     getUser: (uid: string) => USER | null;
 
     /**
+     * Search users with server-side pagination.
+     * When provided, the CMS will use this for the users table
+     * instead of loading all users into memory.
+     */
+    searchUsers?: (options: {
+        search?: string;
+        limit?: number;
+        offset?: number;
+        orderBy?: string;
+        orderDir?: "asc" | "desc";
+    }) => Promise<{ users: USER[]; total: number }>;
+
+    /**
      * Save a user (create or update)
      * @param user 
      */
@@ -60,6 +73,13 @@ export interface UserManagementDelegate<USER extends User = User> {
      * Falls back to saveUser if not provided.
      */
     createUser?: (user: USER) => Promise<UserCreationResult<USER>>;
+
+    /**
+     * Reset the password for an existing user.
+     * Returns a temporary password if no email service is configured,
+     * or a flag indicating an email invitation was sent.
+     */
+    resetPassword?: (user: USER) => Promise<UserCreationResult<USER>>;
 
     /**
      * Delete a user

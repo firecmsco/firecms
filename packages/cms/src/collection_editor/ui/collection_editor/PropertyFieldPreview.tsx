@@ -51,7 +51,7 @@ export function PropertyFieldPreview({
         >
             <PropertyConfigBadge propertyConfig={propertyConfig} size="small" />
 
-            <div className="w-full flex flex-col pr-8">
+            <div className="flex-1 flex flex-col min-w-0 pr-8">
                 {includeName &&
                     <ErrorBoundary>
                         <div className="flex items-center gap-2">
@@ -75,13 +75,14 @@ export function PropertyFieldPreview({
                             {propertyConfig?.name}
                         </Typography>
                     </ErrorBoundary>
-                    <ErrorBoundary>
-                        <Typography variant="caption" component="span" className="text-text-disabled dark:text-text-disabled-dark font-mono bg-surface-100 dark:bg-surface-800 px-1 py-0.5 rounded">
-                            {("columnType" in property ? (property as unknown as Record<string, unknown>).columnType as string : undefined) || property.type}
-                        </Typography>
-                    </ErrorBoundary>
                 </div>
             </div>
+
+            <ErrorBoundary>
+                <Typography variant="caption" component="span" className="ml-auto shrink-0 text-text-disabled dark:text-text-disabled-dark font-mono bg-surface-100 dark:bg-surface-800 px-1.5 py-0.5 rounded mr-8">
+                    {("columnType" in property ? (property as unknown as Record<string, unknown>).columnType as string : undefined) || property.type}
+                </Typography>
+            </ErrorBoundary>
 
             {includeEditButton && <Typography variant={"button"}>EDIT</Typography>}
         </Paper>
@@ -123,7 +124,7 @@ export function NonEditablePropertyPreview({
                 <DoNotDisturbOnIcon color={"disabled"} size={"small"} className={"absolute -right-2 -top-2 bg-surface-50 dark:bg-surface-900 rounded-full"} />
             </div>
 
-            <div className="w-full flex flex-col pr-8">
+            <div className="flex-1 flex flex-col min-w-0 pr-8">
                 <Typography variant="label" component="span" className="grow pr-2">
                     {property?.name ? property.name : name}
                 </Typography>
@@ -132,12 +133,6 @@ export function NonEditablePropertyPreview({
                     {propertyConfig && <Typography variant={"caption"} component="span" className="text-text-secondary dark:text-text-secondary-dark font-medium">
                         {propertyConfig?.name}
                     </Typography>}
-
-                    {property && !isPropertyBuilder(property) && <ErrorBoundary>
-                        <Typography variant="caption" component="span" className="text-text-disabled dark:text-text-disabled-dark font-mono bg-surface-100 dark:bg-surface-800 px-1 py-0.5 rounded">
-                            {("columnType" in property ? (property as unknown as Record<string, unknown>).columnType as string : undefined) || property.type}
-                        </Typography>
-                    </ErrorBoundary>}
 
                     {property && isPropertyBuilder(property) && <ErrorBoundary>
                         <Typography variant="caption" component="span" className="text-text-disabled dark:text-text-disabled-dark">
@@ -152,6 +147,12 @@ export function NonEditablePropertyPreview({
                     </ErrorBoundary>}
                 </div>
             </div>
+
+            {property && !isPropertyBuilder(property) && <ErrorBoundary>
+                <Typography variant="caption" component="span" className="ml-auto shrink-0 text-text-disabled dark:text-text-disabled-dark font-mono bg-surface-100 dark:bg-surface-800 px-1.5 py-0.5 rounded mr-8">
+                    {("columnType" in property ? (property as unknown as Record<string, unknown>).columnType as string : undefined) || property.type}
+                </Typography>
+            </ErrorBoundary>}
         </Paper>
         </div>
     )

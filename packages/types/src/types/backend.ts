@@ -605,6 +605,12 @@ export interface BackendBootstrapper {
     initializeAuth?(config: unknown, driverResult: InitializedDriver): Promise<BootstrappedAuth | undefined>;
 
     /**
+     * Initialize history tables / services if this driver supports them.
+     * Return undefined if history is not supported by this backend.
+     */
+    initializeHistory?(config: unknown, driverResult: InitializedDriver): Promise<{ historyService: unknown } | undefined>;
+
+    /**
      * Create a realtime provider for this driver.
      * Return undefined if the driver does not support realtime.
      */

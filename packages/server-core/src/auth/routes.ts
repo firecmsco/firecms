@@ -21,6 +21,8 @@ export interface AuthModuleConfig {
     emailConfig?: EmailConfig;
     /** Allow new user registration (default: false). First user can always register for bootstrap. */
     allowRegistration?: boolean;
+    /** Default role ID to assign to new users (default: none). The first user always gets "admin". */
+    defaultRole?: string;
 }
 
 /**
@@ -173,8 +175,11 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
         // Check if this is the first user - make them admin
         const allUsers = await authRepo.listUsers();
         const isFirstUser = allUsers.length === 1;
-        const defaultRole = isFirstUser ? "admin" : "editor";
-        await authRepo.assignDefaultRole(user.id, defaultRole);
+        if (isFirstUser) {
+            await authRepo.assignDefaultRole(user.id, "admin");
+        } else if (config.defaultRole) {
+            await authRepo.assignDefaultRole(user.id, config.defaultRole);
+        }
 
         // Generate tokens
         const roles = await authRepo.getUserRoles(user.id);
@@ -278,8 +283,11 @@ export function createAuthRoutes(config: AuthModuleConfig): Hono<HonoEnv> {
                 // Check if this is the first user - make them admin
                 const allUsers = await authRepo.listUsers();
                 const isFirstUser = allUsers.length === 1;
-                const defaultRole = isFirstUser ? "admin" : "editor";
-                await authRepo.assignDefaultRole(user.id, defaultRole);
+                if (isFirstUser) {
+                    await authRepo.assignDefaultRole(user.id, "admin");
+                } else if (config.defaultRole) {
+                    await authRepo.assignDefaultRole(user.id, config.defaultRole);
+                }
             }
         } else {
             // Update profile info from Google

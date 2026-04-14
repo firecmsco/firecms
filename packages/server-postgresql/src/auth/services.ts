@@ -12,6 +12,8 @@ import {
     CreateRoleData,
     RefreshTokenInfo,
     PasswordResetTokenInfo,
+    ListUsersOptions,
+    PaginatedUsersResult,
     RoleData as Role
 // @ts-ignore
 } from "@rebasepro/server-core";
@@ -60,6 +62,76 @@ export class UserService implements UserRepository {
 
     async listUsers(): Promise<User[]> {
         return this.db.select().from(users);
+    }
+
+    async listUsersPaginated(options?: ListUsersOptions): Promise<PaginatedUsersResult> {
+        const limit = options?.limit ?? 25;
+        const offset = options?.offset ?? 0;
+        const search = options?.search?.trim() || "";
+        const orderBy = options?.orderBy || "createdAt";
+        const orderDir = options?.orderDir || "desc";
+
+        // Map camelCase field names to snake_case column names
+        const columnMap: Record<string, string> = {
+            email: "email",
+            displayName: "display_name",
+            createdAt: "created_at",
+            updatedAt: "updated_at",
+            provider: "provider"
+        };
+        const orderColumn = columnMap[orderBy] || "created_at";
+        const direction = orderDir === "asc" ? sql`ASC` : sql`DESC`;
+
+        let rows: User[];
+        let total: number;
+
+        if (search) {
+            const pattern = `%${search}%`;
+
+            const countResult = await this.db.execute(sql`
+                SELECT count(*)::int as total FROM rebase.users
+                WHERE email ILIKE ${pattern} OR display_name ILIKE ${pattern}
+            `);
+            total = (countResult.rows[0] as { total: number }).total;
+
+            const dataResult = await this.db.execute(sql`
+                SELECT * FROM rebase.users
+                WHERE email ILIKE ${pattern} OR display_name ILIKE ${pattern}
+                ORDER BY ${sql.raw(orderColumn)} ${direction}
+                LIMIT ${limit} OFFSET ${offset}
+            `);
+            rows = dataResult.rows as User[];
+        } else {
+            const countResult = await this.db.execute(sql`
+                SELECT count(*)::int as total FROM rebase.users
+            `);
+            total = (countResult.rows[0] as { total: number }).total;
+
+            const dataResult = await this.db.execute(sql`
+                SELECT * FROM rebase.users
+                ORDER BY ${sql.raw(orderColumn)} ${direction}
+                LIMIT ${limit} OFFSET ${offset}
+            `);
+            rows = dataResult.rows as User[];
+        }
+
+        // Map snake_case rows to camelCase UserData
+        const mappedUsers: User[] = rows.map((row: any) => ({
+            id: row.id,
+            email: row.email,
+            passwordHash: row.password_hash ?? row.passwordHash ?? null,
+            displayName: row.display_name ?? row.displayName ?? null,
+            photoUrl: row.photo_url ?? row.photoUrl ?? null,
+            provider: row.provider,
+            googleId: row.google_id ?? row.googleId ?? null,
+            emailVerified: row.email_verified ?? row.emailVerified ?? false,
+            emailVerificationToken: row.email_verification_token ?? row.emailVerificationToken ?? null,
+            emailVerificationSentAt: row.email_verification_sent_at ?? row.emailVerificationSentAt ?? null,
+            createdAt: row.created_at ?? row.createdAt,
+            updatedAt: row.updated_at ?? row.updatedAt
+        }));
+
+        return { users: mappedUsers, total, limit, offset };
     }
 
     /**
@@ -158,9 +230,9 @@ export class UserService implements UserRepository {
     }
 
     /**
-     * Assign default role to new user (editor by default)
+     * Assign a specific role to new user
      */
-    async assignDefaultRole(userId: string, roleId: string = "editor"): Promise<void> {
+    async assignDefaultRole(userId: string, roleId: string): Promise<void> {
         await this.db.execute(sql`
             INSERT INTO rebase.user_roles (user_id, role_id)
             VALUES (${userId}, ${roleId})
@@ -541,6 +613,10 @@ export class PostgresAuthRepository implements AuthRepository {
         return this.userService.listUsers() as Promise<UserData[]>;
     }
 
+    async listUsersPaginated(options?: ListUsersOptions): Promise<PaginatedUsersResult> {
+        return this.userService.listUsersPaginated(options);
+    }
+
     async updatePassword(id: string, passwordHash: string): Promise<void> {
         await this.userService.updatePassword(id, passwordHash);
     }
@@ -569,7 +645,7 @@ export class PostgresAuthRepository implements AuthRepository {
         await this.userService.setUserRoles(userId, roleIds);
     }
 
-    async assignDefaultRole(userId: string, roleId?: string): Promise<void> {
+    async assignDefaultRole(userId: string, roleId: string): Promise<void> {
         await this.userService.assignDefaultRole(userId, roleId);
     }
 

@@ -72,11 +72,12 @@ export function SearchBar({
     return (
         <div
             onClick={onClick}
-            className={cls("relative",
+            className={cls("relative transition-all",
                 heightClass,
                 "bg-surface-accent-50 dark:bg-surface-800 border",
                 defaultBorderMixin,
-                "rounded-lg",
+                "focus-within:ring-2 focus-within:ring-primary focus-within:border-primary",
+                "rounded-lg overflow-hidden",
                 className)}>
             <div
                 className={cls("absolute p-0 h-full pointer-events-none flex items-center justify-center top-0", iconPaddingClass)}>
@@ -99,8 +100,8 @@ export function SearchBar({
                 className={cls(
                     (disabled || loading) && "pointer-events-none",
                     "placeholder-text-disabled dark:placeholder-text-disabled-dark",
-                    "relative flex items-center rounded-lg transition-all bg-transparent outline-none appearance-none border-none",
-                    inputPaddingClass, "h-full text-current",
+                    "relative flex items-center transition-all bg-transparent outline-none focus:outline-none focus:ring-0 appearance-none border-none focus:border-transparent",
+                    inputPaddingClass, "h-full w-full text-current",
                     size === "small" ? "text-sm" : "",
                     expandable ? (active ? "w-[220px]" : "w-[180px]") : "",
                     innerClassName

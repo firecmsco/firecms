@@ -20,4 +20,4 @@ RUN pnpm run build
 # Start the app
 WORKDIR /app/app/backend
 EXPOSE 3001
-CMD ["pnpm", "start"]
+CMD ["node", "dist/src/index.js"]

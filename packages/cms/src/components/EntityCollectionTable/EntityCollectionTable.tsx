@@ -78,8 +78,6 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
         additionalIDHeaderWidget,
         emptyComponent,
         getIdColumnWidth,
-        onTextSearchClick,
-        textSearchLoading,
         enablePopupIcon,
         openEntityMode = "side_panel",
         onColumnsOrderChange,
@@ -352,8 +350,6 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
 
             {!hideToolbar && <CollectionTableToolbar
                 onTextSearch={onTextSearch}
-                textSearchLoading={textSearchLoading}
-                onTextSearchClick={onTextSearchClick}
                 title={title}
                 actionsStart={actionsStart}
                 actions={actions}

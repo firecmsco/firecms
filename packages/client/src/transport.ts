@@ -58,6 +58,7 @@ export interface Transport {
     request: <T = any>(path: string, init?: RequestInit) => Promise<T>;
     setToken: (newToken: string | null) => void;
     setAuthTokenGetter: (getter: () => Promise<string | null>) => void;
+    setOnUnauthorized: (handler: () => Promise<boolean>) => void;
     readonly baseUrl: string;
     readonly apiPath: string;
     readonly fetchFn: typeof globalThis.fetch;
@@ -70,6 +71,7 @@ export function createTransport(config: RebaseClientConfig): Transport {
     const apiPath = config.apiPath || "/api";
     let token = config.token;
     let tokenGetter: (() => Promise<string | null>) | undefined;
+    let onUnauthorizedHandler = config.onUnauthorized;
 
     function getHeaders(activeToken: string | undefined, init?: RequestInit) {
         return {
@@ -107,8 +109,8 @@ export function createTransport(config: RebaseClientConfig): Transport {
 
         const body = await res.json().catch(() => ({}));
 
-        if (res.status === 401 && config.onUnauthorized) {
-            const retried = await config.onUnauthorized();
+        if (res.status === 401 && onUnauthorizedHandler) {
+            const retried = await onUnauthorizedHandler();
             if (retried) {
                 let retryToken = token;
                 if (tokenGetter) {
@@ -151,6 +153,7 @@ export function createTransport(config: RebaseClientConfig): Transport {
         request,
         setToken(newToken: string | null) { token = newToken || undefined; },
         setAuthTokenGetter(getter: () => Promise<string | null>) { tokenGetter = getter; },
+        setOnUnauthorized(handler: () => Promise<boolean>) { onUnauthorizedHandler = handler; },
         get baseUrl() { return config.baseUrl.replace(/\/$/, ""); },
         get apiPath() { return apiPath; },
         get fetchFn() { return fetchFn; },

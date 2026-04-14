@@ -15,6 +15,11 @@ export interface UserManagement<USER extends User = User> {
         invitationSent: boolean;
         temporaryPassword?: string;
     }>;
+    resetPassword?: (user: USER) => Promise<{
+        user: USER;
+        invitationSent: boolean;
+        temporaryPassword?: string;
+    }>;
     deleteUser: (user: USER) => Promise<void>;
 
     roles: Role[];
@@ -26,6 +31,19 @@ export interface UserManagement<USER extends User = User> {
     includeCollectionConfigPermissions?: boolean;
     defineRolesFor: (user: User) => Promise<Role[] | undefined> | Role[] | undefined;
     getUser: (uid: string) => User | null;
+
+    /**
+     * Search users with server-side pagination.
+     * When provided, the CMS will use this for the users table
+     * instead of loading all users into memory.
+     */
+    searchUsers?: (options: {
+        search?: string;
+        limit?: number;
+        offset?: number;
+        orderBy?: string;
+        orderDir?: "asc" | "desc";
+    }) => Promise<{ users: USER[]; total: number }>;
 
     usersError?: Error;
     rolesError?: Error;
@@ -84,8 +102,9 @@ function convertUser(apiUser: ApiUser): User {
         photoURL: apiUser.photoURL || null,
         providerId: "custom",
         isAnonymous: false,
-        roles: apiUser.roles
-    };
+        roles: apiUser.roles,
+        createdAt: apiUser.createdAt ? new Date(apiUser.createdAt) : null
+    } as User;
 }
 
 /**
@@ -107,6 +126,8 @@ function convertRole(apiRole: ApiRole): Role {
 export function useBackendUserManagement(config: BackendUserManagementConfig): UserManagement {
     const { client, apiUrl, getAuthToken, currentUser } = config;
 
+    // We no longer load ALL users into memory.
+    // `users` now only holds admin/role-bearing users for getUser/defineRolesFor lookups.
     const [users, setUsers] = useState<User[]>([]);
     const [roles, setRoles] = useState<Role[]>([]);
     const [loading, setLoading] = useState(true);
@@ -205,22 +226,6 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
     }, [apiUrl, getAuthToken]);
 
     /**
-     * Load users from API
-     * @param availableRoles - Optional roles array to resolve role names
-     */
-    const loadUsers = useCallback(async (signal?: AbortSignal) => {
-        try {
-            const data = await apiRequest("/users", "GET", undefined, 6, signal);
-            setUsers(data.users.map((u: ApiUser) => convertUser(u)));
-            setUsersError(undefined);
-        } catch (error: unknown) {
-            if (error instanceof Error && error.name === "AbortError") return;
-            console.error("Failed to load users:", error);
-            setUsersError(error instanceof Error ? error : new Error(String(error)));
-        }
-    }, [apiRequest]);
-
-    /**
      * Load roles from API
      */
     const loadRoles = useCallback(async (signal?: AbortSignal) => {
@@ -236,8 +241,29 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
     }, [apiRequest]);
 
     /**
+     * Load admin users (users that have roles) for getUser/defineRolesFor lookups.
+     * This is intentionally a small subset — not all app users.
+     */
+    const loadAdminUsers = useCallback(async (signal?: AbortSignal) => {
+        try {
+            // Load all users — for now this is the same endpoint.
+            // In future, a dedicated endpoint could filter by "has roles" on the server.
+            const data = await apiRequest("/users", "GET", undefined, 6, signal);
+            const allUsers: User[] = data.users.map((u: ApiUser) => convertUser(u));
+            // Only keep users that have at least one role assigned
+            const adminUsers = allUsers.filter(u => u.roles && u.roles.length > 0);
+            setUsers(adminUsers);
+            setUsersError(undefined);
+        } catch (error: unknown) {
+            if (error instanceof Error && error.name === "AbortError") return;
+            console.error("Failed to load admin users:", error);
+            setUsersError(error instanceof Error ? error : new Error(String(error)));
+        }
+    }, [apiRequest]);
+
+    /**
      * Initial data load - only when user is logged in
-     * Load roles first, then users (so role names can be resolved)
+     * Load roles first, then admin users
      */
     useEffect(() => {
         // Don't load if no user is logged in
@@ -251,11 +277,9 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
         const load = async () => {
             setLoading(true);
             // Load roles first
-            let loadedRoles: Role[] = [];
             try {
                 const data = await apiRequest("/roles", "GET", undefined, 6, abortController.signal);
-                loadedRoles = data.roles.map(convertRole);
-                setRoles(loadedRoles);
+                setRoles(data.roles.map(convertRole));
                 setRolesError(undefined);
             } catch (error: unknown) {
                 if (error instanceof Error && error.name !== "AbortError") {
@@ -263,9 +287,9 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
                     setRolesError(error);
                 }
             }
-            // Then load users if not aborted
+            // Then load admin users if not aborted
             if (!abortController.signal.aborted) {
-                await loadUsers(abortController.signal);
+                await loadAdminUsers(abortController.signal);
             }
             
             if (!abortController.signal.aborted) {
@@ -277,7 +301,33 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
         return () => {
             abortController.abort();
         };
-    }, [currentUser, apiRequest, loadUsers]);
+    }, [currentUser, apiRequest, loadAdminUsers]);
+
+    /**
+     * Search users with server-side pagination.
+     * This is the primary method used by the UsersView table.
+     */
+    const searchUsers = useCallback(async (options: {
+        search?: string;
+        limit?: number;
+        offset?: number;
+        orderBy?: string;
+        orderDir?: "asc" | "desc";
+    }): Promise<{ users: User[]; total: number }> => {
+        const params = new URLSearchParams();
+        if (options.limit !== undefined) params.set("limit", String(options.limit));
+        if (options.offset !== undefined) params.set("offset", String(options.offset));
+        if (options.search) params.set("search", options.search);
+        if (options.orderBy) params.set("orderBy", options.orderBy);
+        if (options.orderDir) params.set("orderDir", options.orderDir);
+        const qs = params.toString();
+
+        const data = await apiRequest("/users" + (qs ? "?" + qs : ""), "GET");
+        return {
+            users: data.users.map((u: ApiUser) => convertUser(u)),
+            total: data.total
+        };
+    }, [apiRequest]);
 
     /**
      * Save user (create or update)
@@ -328,13 +378,34 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
             roles: roleIds
         });
         const created = convertUser(data.user);
-        setUsers(prev => [...prev, created]);
+        // Add to admin users cache if they have roles
+        if (created.roles && created.roles.length > 0) {
+            setUsers(prev => [...prev, created]);
+        }
         return {
             user: created,
             invitationSent: data.invitationSent ?? false,
             temporaryPassword: data.temporaryPassword
         };
     }, [apiRequest, roles]);
+
+    /**
+     * Reset the password for an existing user
+     */
+    const resetPassword = useCallback(async (user: User): Promise<{
+        user: User;
+        invitationSent: boolean;
+        temporaryPassword?: string;
+    }> => {
+        const data = await apiRequest(`/users/${user.uid}/reset-password`, "POST");
+        const updatedUser = convertUser(data.user);
+        setUsers(prev => prev.map(u => u.uid === updatedUser.uid ? updatedUser : u));
+        return {
+            user: updatedUser,
+            invitationSent: data.invitationSent ?? false,
+            temporaryPassword: data.temporaryPassword
+        };
+    }, [apiRequest]);
 
     /**
      * Delete user
@@ -418,18 +489,19 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
             const data = await apiRequest("/roles");
             const loadedRoles = data.roles.map(convertRole);
             setRoles(loadedRoles);
-            await loadUsers();
+            await loadAdminUsers();
         } catch (error) {
             console.error("Failed to bootstrap admin:", error);
             throw error;
         }
-    }, [apiRequest, loadUsers]);
+    }, [apiRequest, loadAdminUsers]);
 
     return {
         loading,
         users,
         saveUser,
         createUser,
+        resetPassword,
         deleteUser,
         roles,
         saveRole,
@@ -439,6 +511,7 @@ export function useBackendUserManagement(config: BackendUserManagementConfig): U
         includeCollectionConfigPermissions: true,
         defineRolesFor,
         getUser,
+        searchUsers,
         usersError,
         rolesError,
         bootstrapAdmin

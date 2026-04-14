@@ -30,7 +30,14 @@ export default defineConfig(() => ({
             fileName: (format) => `index.${format}.js`
         },
         rollupOptions: {
-            external: isExternal
+            external: isExternal,
+            output: {
+                globals: {
+                    "json-logic-js": "jsonLogic",
+                    "fast-equals": "fastEquals",
+                    "lodash/cloneDeep.js": "cloneDeep"
+                }
+            }
         }
     },
     plugins: [react({

@@ -59,7 +59,7 @@ function mockRole(id: string, isAdmin = false) {
 let mockAuthRepo: jest.Mocked<AuthRepository>;
 let mockEmailService: { send: jest.Mock; isConfigured: jest.Mock };
 
-function createApp(opts: { allowRegistration?: boolean; withEmail?: boolean } = {}) {
+function createApp(opts: { allowRegistration?: boolean; withEmail?: boolean; defaultRole?: string } = {}) {
     // Re-create mocked service instances each time
                 
     // Wire constructor mocks to return our instances
@@ -118,6 +118,7 @@ function createApp(opts: { allowRegistration?: boolean; withEmail?: boolean } = 
     const config: AuthModuleConfig = {
         authRepo: mockAuthRepo,
         allowRegistration: opts.allowRegistration ?? true,
+        defaultRole: opts.defaultRole,
         emailService: opts.withEmail ? mockEmailService as any : undefined,
         emailConfig: opts.withEmail ? { from: "test@test.com", appName: "TestApp", resetPasswordUrl: "https://app.test", verifyEmailUrl: "https://app.test" } : undefined,
     };
@@ -181,8 +182,8 @@ describe("Auth Routes (Integration)", () => {
             expect(mockAuthRepo.assignDefaultRole).toHaveBeenCalledWith(expect.any(String), "admin");
         });
 
-        it("second user gets editor role", async () => {
-            const app = createApp();
+        it("second user gets configured default role", async () => {
+            const app = createApp({ defaultRole: "editor" });
             // allowRegistration=true → isRegistrationAllowed() returns immediately
             // isFirstUser check: 2 users → not first
             mockAuthRepo.listUsers
@@ -190,6 +191,15 @@ describe("Auth Routes (Integration)", () => {
 
             await app.request("/auth/register", json({ email: "second@test.com", password: "StrongPass1" }));
             expect(mockAuthRepo.assignDefaultRole).toHaveBeenCalledWith(expect.any(String), "editor");
+        });
+
+        it("second user gets no role by default when not configured", async () => {
+            const app = createApp();
+            mockAuthRepo.listUsers
+                .mockResolvedValueOnce([mockUser(), mockUser({ id: "user-2" })]);
+
+            await app.request("/auth/register", json({ email: "third@test.com", password: "StrongPass1" }));
+            expect(mockAuthRepo.assignDefaultRole).not.toHaveBeenCalled();
         });
 
         it("returns 409 when email already exists", async () => {

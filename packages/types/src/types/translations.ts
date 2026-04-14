@@ -490,6 +490,16 @@ export interface RebaseTranslations {
     copy_password?: string;
     password_copied?: string;
 
+    /** UsersView — pagination & search */
+    search_users?: string;
+    created?: string;
+    actions?: string;
+    no_users_found?: string;
+    reset_password?: string;
+    reset_password_success?: string;
+    reset_password_confirmation?: string;
+    error_resetting_password?: string;
+
     /** Editor table-bubble */
     add_row_before: string;
     add_row_after: string;

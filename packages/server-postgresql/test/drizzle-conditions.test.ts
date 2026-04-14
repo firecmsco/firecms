@@ -621,7 +621,7 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
             // Create a more realistic mock that simulates the actual scenario
             const mockPostsCollection = {
                 slug: "posts",
-                dbPath: "posts",
+                table: "posts",
                 relations: [
                     {
                         relationName: "tags",
@@ -683,12 +683,12 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
             // Create real test collections with proper relation configurations
             const mockTagsCollection = {
                 slug: "tags",
-                dbPath: "tags"
+                table: "tags"
             };
 
             const mockPostsCollection = {
                 slug: "posts",
-                dbPath: "posts",
+                table: "posts",
                 relations: [
                     {
                         relationName: "tags",
@@ -736,12 +736,12 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
             // This is the exact scenario from the user's collection configuration
             const mockTagsCollection = {
                 slug: "tags",
-                dbPath: "tags"
+                table: "tags"
             };
 
             const mockPostsCollection = {
                 slug: "posts",
-                dbPath: "posts",
+                table: "posts",
                 relations: [
                     {
                         relationName: "tags",
@@ -788,7 +788,7 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
         it("should return appropriate error when no corresponding junction table is found", () => {
             const mockPostsCollection = {
                 slug: "posts",
-                dbPath: "posts",
+                table: "posts",
                 relations: [] // No relations - should fail to find junction table
             };
 
@@ -817,12 +817,12 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
         it("should swap source and target columns correctly for inverse relations", () => {
             const mockTagsCollection = {
                 slug: "tags",
-                dbPath: "tags"
+                table: "tags"
             };
 
             const mockPostsCollection = {
                 slug: "posts",
-                dbPath: "posts",
+                table: "posts",
                 relations: [
                     {
                         relationName: "tags",
@@ -866,7 +866,7 @@ describe("DrizzleConditionBuilder - Many-to-Many Relations", () => {
         it("should handle missing inverseRelationName gracefully", () => {
             const mockPostsCollection = {
                 slug: "posts",
-                dbPath: "posts",
+                table: "posts",
                 relations: []
             };
 

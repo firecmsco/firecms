@@ -123,26 +123,6 @@ export interface PluginHooks {
     injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
 
     /**
-     * Block text search for a collection.
-     */
-    blockSearch?: (props: {
-        context: RebaseContext;
-        path: string;
-        collection: EntityCollection;
-        parentCollectionIds?: string[];
-    }) => boolean;
-
-    /**
-     * Callback when the text search button is clicked.
-     */
-    onTextSearchClick?: (props: {
-        context: RebaseContext;
-        path: string;
-        collection: EntityCollection;
-        parentCollectionIds?: string[];
-    }) => Promise<boolean>;
-
-    /**
      * Callback called when columns are reordered via drag and drop.
      */
     onColumnsReorder?: (props: {

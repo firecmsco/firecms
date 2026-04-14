@@ -21,6 +21,7 @@ import { RebaseClient as BaseRebaseClient, RebaseData, CollectionAccessor, Stora
 export type RebaseClient<DB = any> = BaseRebaseClient<DB> & {
     setToken: (token: string | null) => void;
     setAuthTokenGetter: (getter: () => Promise<string | null>) => void;
+    setOnUnauthorized: (handler: () => Promise<boolean>) => void;
     resolveToken: () => Promise<string | null>;
     auth: ReturnType<typeof createAuth>;
     admin: ReturnType<typeof createAdmin>;
@@ -124,6 +125,7 @@ export function createRebaseClient<DB = any>(options: CreateRebaseClientOptions)
         ws,
         setToken: transport.setToken,
         setAuthTokenGetter: transport.setAuthTokenGetter,
+        setOnUnauthorized: transport.setOnUnauthorized,
         resolveToken: transport.resolveToken,
         baseUrl: transport.baseUrl,
         collection,

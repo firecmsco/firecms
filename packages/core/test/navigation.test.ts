@@ -55,22 +55,22 @@ describe("Resolving paths test", () => {
 
         const collectionViewFromPath = getCollectionBySlugWithin("products", collections);
         expect(
-            collectionViewFromPath && collectionViewFromPath.dbPath
+            collectionViewFromPath && (collectionViewFromPath as any).table
         ).toEqual("products");
 
         const collectionViewFromPath1 = getCollectionBySlugWithin("products/pid/locales", collections);
         expect(
-            collectionViewFromPath1 && collectionViewFromPath1.dbPath
+            collectionViewFromPath1 && (collectionViewFromPath1 as any).table
         ).toEqual("locales");
 
         const collectionViewFromPath2 = getCollectionBySlugWithin("p", collections);
         expect(
-            collectionViewFromPath2 && collectionViewFromPath2.dbPath
+            collectionViewFromPath2 && (collectionViewFromPath2 as any).table
         ).toEqual("sites/es/products");
 
         const collectionViewFromPath3 = getCollectionBySlugWithin("sites/es/products/pid/locales", collections);
         expect(
-            collectionViewFromPath3 && collectionViewFromPath3.dbPath
+            collectionViewFromPath3 && (collectionViewFromPath3 as any).table
         ).toEqual("locales");
 
         expect(
@@ -85,7 +85,7 @@ describe("Resolving paths test", () => {
 
         const collectionViewFromPath10 = getCollectionBySlugWithin("products/id/subcollection_inline", collections);
         expect(
-            collectionViewFromPath10 && collectionViewFromPath10.dbPath
+            collectionViewFromPath10 && (collectionViewFromPath10 as any).table
         ).toEqual("products/id/subcollection_inline");
 
     });
@@ -144,7 +144,7 @@ describe("Resolving paths test", () => {
         // Simplified locale collection
         const jointLocaleCollection = buildCollection({
             slug: "medico_v2_0_0_joint_locales",
-            dbPath: "locales",
+            table: "locales",
             name: "Translations",
             properties: {
                 name: buildProperty({
@@ -157,7 +157,7 @@ describe("Resolving paths test", () => {
         // Simplified joint movements collection
         const jointMovementsCollection = buildCollection({
             slug: "medico_v2_0_0_joint_movements",
-            dbPath: "movements",
+            table: "movements",
             name: "Joint movements",
             properties: {
                 reference_value_min: buildProperty({
@@ -171,7 +171,7 @@ describe("Resolving paths test", () => {
         // Simplified joints collection
         const jointsCollection = buildCollection({
             slug: "medico_v2_0_0_joints",
-            dbPath: "medico/v2.0.0/joints",
+            table: "medico/v2.0.0/joints",
             name: "Joint",
             properties: {
                 latin_name: buildProperty({
@@ -205,14 +205,14 @@ describe("Resolving paths test", () => {
         // Define the nested subcollection structure
         const subSubCollection = buildCollection({
             slug: "sub", // ID used in the input path
-            dbPath: "sub_path", // Actual path segment
+            table: "sub_path", // Actual path segment
             name: "Sub Sub Collection",
             properties: {}
         });
 
         const localesCollection = buildCollection({
             slug: "product_locales", // ID used in the input path
-            dbPath: "locales", // Actual path segment
+            table: "locales", // Actual path segment
             name: "Locales",
             properties: {},
             subcollections: () => [subSubCollection]
@@ -220,7 +220,7 @@ describe("Resolving paths test", () => {
 
         const productsCollection = buildCollection({
             slug: "products",
-            dbPath: "products",
+            table: "products",
             name: "Products",
             properties: {},
             subcollections:() =>  [localesCollection]

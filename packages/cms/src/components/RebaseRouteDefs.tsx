@@ -16,6 +16,21 @@ import { RebaseRoute } from "../routes/RebaseRoute";
 import { CustomViewRoute } from "../routes/CustomViewRoute";
 import { useNavigationStateController } from "../hooks/navigation/contexts/NavigationStateContext";
 import { CollectionEditorDialogs } from "./CollectionEditorDialogs";
+import { useEffect } from "react";
+import { useTranslation } from "@rebasepro/core";
+import { useBreadcrumbsController } from "../index";
+
+function SettingsView() {
+    const { t } = useTranslation();
+    const breadcrumbs = useBreadcrumbsController();
+    useEffect(() => {
+        breadcrumbs.set({
+            breadcrumbs: [{ title: t("project_settings"), url: "/settings" }]
+        });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    return <UserSettingsView />;
+}
 
 export interface RebaseRouteDefsProps {
     /** User-provided custom routes to include. */
@@ -68,7 +83,7 @@ export function RebaseRouteDefs({ children, layout }: RebaseRouteDefsProps) {
             )}
 
             <Route path={"/c/*"} element={<RebaseRoute />} />
-            <Route path={"/settings"} element={<UserSettingsView />} />
+            <Route path={"/settings"} element={<SettingsView />} />
             {userManagement && <Route path={"/roles"} element={<RolesView userManagement={userManagement} />} />}
             {userManagement && <Route path={"/users"} element={<UsersView userManagement={userManagement} />} />}
 

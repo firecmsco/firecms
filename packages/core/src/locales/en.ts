@@ -466,6 +466,16 @@ export const en: RebaseTranslations = {
     copy_password: "Copy password",
     password_copied: "Password copied to clipboard",
 
+    /** UsersView — pagination & search */
+    search_users: "Search users",
+    created: "Created",
+    actions: "Actions",
+    no_users_found: "No users found",
+    reset_password: "Reset Password",
+    reset_password_success: "Password reset successfully",
+    reset_password_confirmation: "Are you sure you want to reset this user's password?",
+    error_resetting_password: "Error resetting password",
+
     /** Editor table-bubble */
     add_row_before: "Add row before",
     add_row_after: "Add row after",

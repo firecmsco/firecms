@@ -47,7 +47,7 @@ function mockRole(id: string, isAdmin = false) {
 
 let mockAuthRepo: jest.Mocked<any>;
 
-function createApp() {
+function createApp(opts: { defaultRole?: string } = {}) {
     mockAuthRepo = {
         getUserByEmail: jest.fn().mockResolvedValue(null),
         getUserByGoogleId: jest.fn().mockResolvedValue(null),
@@ -96,6 +96,7 @@ function createApp() {
 
     const config: AuthModuleConfig = {
         authRepo: mockAuthRepo,
+        defaultRole: opts.defaultRole,
     };
 
     const app = new Hono<HonoEnv>();
@@ -307,14 +308,24 @@ describe("Admin Routes (Integration)", () => {
                 expect(body.error.code).toBe("WEAK_PASSWORD");
             });
 
-            it("assigns default editor role when no roles specified", async () => {
-                const app = createApp();
+            it("assigns configured default role when no roles specified", async () => {
+                const app = createApp({ defaultRole: "editor" });
 
                 await app.request("/admin/users", {
                     ...json({ email: "norole@test.com" }),
                     headers: { ...json({}).headers, ...adminAuth() },
                 });
                 expect(mockAuthRepo.assignDefaultRole).toHaveBeenCalledWith(expect.any(String), "editor");
+            });
+
+            it("does not assign a default role when not configured", async () => {
+                const app = createApp();
+
+                await app.request("/admin/users", {
+                    ...json({ email: "nodefault@test.com" }),
+                    headers: { ...json({}).headers, ...adminAuth() },
+                });
+                expect(mockAuthRepo.assignDefaultRole).not.toHaveBeenCalled();
             });
 
             it("assigns specified roles", async () => {

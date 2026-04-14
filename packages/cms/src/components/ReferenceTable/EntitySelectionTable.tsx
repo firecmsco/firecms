@@ -18,7 +18,7 @@ import { ErrorView } from "@rebasepro/core";
 import { AddIcon, Button, DialogActions, Typography } from "@rebasepro/ui";
 import { IconForView } from "@rebasepro/core";
 import { useSelectionController } from "../EntityCollectionView/useSelectionController";
-import { useTableSearchHelper } from "@rebasepro/core";
+
 import { useColumnIds } from "@rebasepro/core";
 import { useSideDialogContext } from "../SideDialogs";
 import { useAnalyticsController } from "@rebasepro/core";
@@ -257,15 +257,6 @@ export function EntitySelectionTable<M extends Record<string, any>>(
         updateUrl: false,
     });
 
-    const {
-        textSearchLoading,
-        textSearchInitialised,
-        onTextSearchClick
-    } =
-        useTableSearchHelper({
-            collection,
-            path,
-        });
 
     return (
 
@@ -274,8 +265,6 @@ export function EntitySelectionTable<M extends Record<string, any>>(
             <div className="grow">
                 {entitiesDisplayedFirst &&
                     <EntityCollectionTable
-                        textSearchLoading={textSearchLoading}
-                        onTextSearchClick={!textSearchInitialised ? onTextSearchClick : undefined}
                         additionalFields={collection.additionalFields}
                         displayedColumnIds={displayedColumnIds}
                         onEntityClick={onEntityClick}

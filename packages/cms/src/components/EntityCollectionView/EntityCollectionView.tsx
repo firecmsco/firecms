@@ -55,7 +55,7 @@ import {
     deleteEntityAction,
     editEntityAction,
 } from "../common/default_entity_actions";
-import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator, useTableSearchHelper } from "@rebasepro/core";
+import { OnCellValueChange, OnColumnResizeParams, UniqueFieldValidator } from "@rebasepro/core";
 import { useColumnIds } from "@rebasepro/core";
 import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
 import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";
@@ -786,15 +786,7 @@ export const EntityCollectionView = React.memo(
             }
             : undefined;
 
-        const {
-            textSearchLoading,
-            textSearchInitialised,
-            onTextSearchClick
-        } = useTableSearchHelper({
-            collection,
-            path: path,
-            parentCollectionIds
-        });
+
 
         // Popover open state managed at parent level to prevent closing when view changes
         const [viewModePopoverOpen, setViewModePopoverOpen] = useState(false);
@@ -851,9 +843,7 @@ export const EntityCollectionView = React.memo(
                 {countFetcher}
                 <CollectionTableToolbar
                     loading={tableController.dataLoading}
-                    onTextSearch={textSearchInitialised ? tableController.setSearchString : undefined}
-                    onTextSearchClick={!textSearchInitialised ? onTextSearchClick : undefined}
-                    textSearchLoading={textSearchLoading}
+                    onTextSearch={tableController.setSearchString}
                     viewModeToggle={viewModeToggleElement}
                     actionsStart={<EntityCollectionViewStartActions
                         parentCollectionIds={parentCollectionIds ?? []}
@@ -930,10 +920,8 @@ export const EntityCollectionView = React.memo(
                         defaultSize={tableSize}
                         properties={resolvedCollection.properties}
                         getPropertyFor={getPropertyFor}
-                        onTextSearchClick={textSearchInitialised ? undefined : onTextSearchClick}
                         onScroll={tableController.onScroll}
                         initialScroll={tableController.initialScroll}
-                        textSearchLoading={textSearchLoading}
                         emptyComponent={emptyComponent}
                         hoverRow={hoverRow}
                         inlineEditing={checkInlineEditing()}

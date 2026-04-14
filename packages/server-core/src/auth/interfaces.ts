@@ -97,6 +97,33 @@ export interface PasswordResetTokenInfo {
 // =============================================================================
 
 /**
+ * Options for paginated user listing
+ */
+export interface ListUsersOptions {
+    /** Max results per page (default 25) */
+    limit?: number;
+    /** Number of results to skip (default 0) */
+    offset?: number;
+    /** Search term — matches against email and displayName (case-insensitive) */
+    search?: string;
+    /** Field to sort by (default "createdAt") */
+    orderBy?: string;
+    /** Sort direction (default "desc") */
+    orderDir?: "asc" | "desc";
+}
+
+/**
+ * Result of a paginated user listing
+ */
+export interface PaginatedUsersResult {
+    users: UserData[];
+    /** Total number of users matching the filters (ignoring limit/offset) */
+    total: number;
+    limit: number;
+    offset: number;
+}
+
+/**
  * Abstract user repository interface.
  * Handles all user-related database operations.
  */
@@ -132,9 +159,14 @@ export interface UserRepository {
     deleteUser(id: string): Promise<void>;
 
     /**
-     * List all users
+     * List all users (unbounded — use listUsersPaginated for large datasets)
      */
     listUsers(): Promise<UserData[]>;
+
+    /**
+     * List users with server-side pagination, search, and sorting.
+     */
+    listUsersPaginated(options?: ListUsersOptions): Promise<PaginatedUsersResult>;
 
     /**
      * Update user's password hash
@@ -172,9 +204,9 @@ export interface UserRepository {
     setUserRoles(userId: string, roleIds: string[]): Promise<void>;
 
     /**
-     * Assign default role to a new user
+     * Assign a specific role to a new user
      */
-    assignDefaultRole(userId: string, roleId?: string): Promise<void>;
+    assignDefaultRole(userId: string, roleId: string): Promise<void>;
 
     /**
      * Get user with their roles
