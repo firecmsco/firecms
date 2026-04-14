@@ -75,7 +75,7 @@ function slugToSnakeCase(slug: string): string {
  * Resolve which collections are referenced by a SQL query.
  *
  * Parses the SQL, extracts table names, and matches each against
- * registered collections via `collection.dbPath` (falling back to
+ * registered collections via `collection.table` (falling back to
  * snake_case of `collection.slug`).
  *
  * For each matched collection, determines which result columns
@@ -110,10 +110,10 @@ export function resolveQueryCollections(
     const results: ResolvedQueryCollection[] = [];
 
     for (const table of tables) {
-        // Match table name against collection dbPath or slug->snake_case
+        // Match table name against collection table or slug->snake_case
         const matched = collections.find(c => {
-            const dbPath = c.dbPath || slugToSnakeCase(c.slug);
-            return dbPath === table.name;
+            const tableName = (c as any).table || slugToSnakeCase(c.slug);
+            return tableName === table.name;
         });
 
         if (!matched) continue;

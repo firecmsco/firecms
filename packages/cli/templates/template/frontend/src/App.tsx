@@ -7,7 +7,7 @@ import {
     RebaseLoginView,
     useBackendUserManagement,
     useRebaseAuthController
-} from "@rebasepro/auth-rebase";
+} from "@rebasepro/auth";
 import {
     AppBar,
     Drawer,
@@ -29,7 +29,7 @@ import { RebaseRoute } from "@rebasepro/cms";
 import { CircularProgressCenter } from "@rebasepro/ui";
 import { collections } from "virtual:rebase-collections";
 import { Route, Outlet } from "react-router-dom";
-import { createRebaseClient } from "@rebasepro/client-rebase";
+import { createRebaseClient } from "@rebasepro/client";
 
 // Configuration from environment
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";

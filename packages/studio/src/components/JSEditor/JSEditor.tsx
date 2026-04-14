@@ -34,7 +34,7 @@ import {
 import { useStudioUrlController, useStudioCollectionRegistry, useStudioSideEntityController } from "@rebasepro/core";
 import { useRebaseContext, useRebaseClient, useSnackbarController, useApiConfig, useTranslation, useModeController, ErrorView, UserSelectPopover, SelectableUser, IconForView } from "@rebasepro/core";
 import { EntityCollection } from "@rebasepro/types";
-import { createRebaseClient } from "@rebasepro/client-rebase";
+import { createRebaseClient } from "@rebasepro/client";
 import { JSMonacoEditor } from "./JSMonacoEditor";
 import { JSEditorSidebar, JSSnippet } from "./JSEditorSidebar";
 
@@ -171,8 +171,8 @@ function detectCollectionsInResult(
     for (const slug of mentionedSlugs) {
         const normalised = normaliseSlug(slug);
         const col = collections.find(c => {
-            const dbPath = c.dbPath || normaliseSlug(c.slug);
-            return c.slug === slug || dbPath === normalised || normaliseSlug(c.slug) === normalised;
+            const tableName = (c as any).table || normaliseSlug(c.slug);
+            return c.slug === slug || tableName === normalised || normaliseSlug(c.slug) === normalised;
         });
         if (col) {
             matched.push({

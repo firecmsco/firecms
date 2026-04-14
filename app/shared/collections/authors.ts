@@ -6,7 +6,7 @@ const authorsCollection: EntityCollection = {
     name: "Authors",
     singularName: "Author",
     slug: "authors",
-    dbPath: "authors",
+    table: "authors",
     icon: "Person",
     history: true,
     properties: {

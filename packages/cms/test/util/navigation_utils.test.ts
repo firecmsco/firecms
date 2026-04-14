@@ -136,7 +136,7 @@ describe("resolveCollectionPathIds", () => {
             name: "Products",
             path: "products_table",
             slug: "products",
-            dbPath: "products_table",
+            table: "products_table",
             properties: {}
         },
         {
@@ -144,7 +144,7 @@ describe("resolveCollectionPathIds", () => {
             name: "Users",
             path: "users_table",
             slug: "users",
-            dbPath: "users_table",
+            table: "users_table",
             properties: {},
             driver: "firestore",
             subcollections: () => [
@@ -153,7 +153,7 @@ describe("resolveCollectionPathIds", () => {
                     name: "Orders",
                     path: "orders_table",
                     slug: "orders",
-                    dbPath: "orders_table",
+                    table: "orders_table",
                     properties: {}
                 }
             ]
@@ -164,28 +164,28 @@ describe("resolveCollectionPathIds", () => {
         expect(resolveCollectionPathIds("", collections)).toBe("");
     });
 
-    it("resolves top-level collection slug to its dbPath", () => {
-        expect(resolveCollectionPathIds("products", collections)).toBe("products_table");
+    it("resolves top-level collection slug to its table name", () => {
+        expect(resolveCollectionPathIds("products", collections)).toBe("products");
     });
 
     it("resolves collection/entityId path", () => {
         // Warn is expected but we get: "users_table/abc123"
         const warnSpy = jest.spyOn(console, "warn").mockImplementation();
         const result = resolveCollectionPathIds("users/abc123", collections);
-        expect(result).toBe("users_table/abc123");
+        expect(result).toBe("users/abc123");
         warnSpy.mockRestore();
     });
 
     it("resolves nested subcollections", () => {
         const result = resolveCollectionPathIds("users/abc123/orders", collections);
-        expect(result).toBe("users_table/abc123/orders_table");
+        expect(result).toBe("users/abc123/orders");
     });
 
     it("appends remaining path when no subcollection matches", () => {
         const warnSpy = jest.spyOn(console, "warn").mockImplementation();
         const result = resolveCollectionPathIds("users/abc123/orders/xyz/nested", collections);
         // orders has no subcollections, so "nested" gets appended
-        expect(result).toContain("orders_table");
+        expect(result).toContain("orders");
         warnSpy.mockRestore();
     });
 

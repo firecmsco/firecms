@@ -46,17 +46,7 @@ export interface BaseEntityCollection<M extends Record<string, any> = any, USER 
      */
     description?: string;
 
-    /**
-     * Path or table name of the collection in the database.
-     * If not specified, the `slug` property is used, converted to snake_case.
-     */
-    dbPath: string;
 
-    /**
-     * Set by the backend when the `dbPath` doesn't match an actual database
-     * table in the provided driver schema.
-     */
-    isTableMissing?: boolean;
 
     /**
      * Which driver handles this collection.
@@ -369,6 +359,17 @@ export interface PostgresCollection<M extends Record<string, any> = any, USER ex
      * can be omitted (Postgres is the default) or set to `"postgres"`.
      */
     driver?: "postgres" | undefined;
+
+    /**
+     * The PostgreSQL table name for this collection.
+     */
+    table: string;
+
+    /**
+     * Set by the backend when the resolved table name doesn't match
+     * an actual table in the database schema.
+     */
+    isTableMissing?: boolean;
 
     /**
      * For SQL databases, you can define the relations between collections here.

@@ -30,7 +30,7 @@
     "author": "rebase.pro",
     "license": "MIT",
     "dependencies": {
-        "@rebasepro/sdk_generator": "0.0.1",
+        "@rebasepro/sdk-generator": "0.0.1",
         "@rebasepro/types": "0.0.1",
         "arg": "^5.0.2",
         "chalk": "^4.1.2",
@@ -40,7 +40,7 @@
         "jiti": "^2.4.2",
         "ncp": "^2.0.0",
         "pnpm": "^9.0.0",
-        "@rebasepro/backend": "0.0.1"
+        "@rebasepro/server-core": "0.0.1"
     },
     "devDependencies": {
         "@types/node": "^20.19.17",

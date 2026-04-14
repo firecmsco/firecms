@@ -2,7 +2,7 @@ import { EntityCollection } from "@rebasepro/types";
 
 export const pagesCollectionTemplate = {
     slug: "pages",
-    dbPath: "pages",
+    table: "pages",
     name: "Pages",
     singularName: "Page",
     icon: "insert_drive_file",

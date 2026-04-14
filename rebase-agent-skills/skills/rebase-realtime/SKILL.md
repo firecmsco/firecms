@@ -18,25 +18,34 @@ The realtime engine:
 ## Architecture
 
 ```
-[Client] ←→ [WebSocket Server] ←→ [PostgreSQL Change Detection]
+[Client] ←→ [WebSocket Server] ←→ [PostgreSQL LISTEN/NOTIFY]
 ```
 
-The backend Express server includes the WebSocket server on the same port. Changes are detected and broadcast to subscribed clients.
+The backend Hono server includes the WebSocket server on the same HTTP port. Changes are detected via PostgreSQL's LISTEN/NOTIFY mechanism and broadcast to subscribed clients.
 
 ## Server-Side Setup
 
-The realtime engine is automatically initialized when you create the Rebase backend:
+The realtime engine is automatically initialized when you create the Rebase backend with a PostgreSQL bootstrapper that has `connectionString` set:
 
 ```typescript
-import { initializeRebaseBackend } from "@rebasepro/backend";
+import { initializeRebaseBackend, HonoEnv } from "@rebasepro/server-core";
+import { createPostgresDatabaseConnection, createPostgresBootstrapper } from "@rebasepro/server-postgresql";
+
+const { db, connectionString } = createPostgresDatabaseConnection(process.env.DATABASE_URL!);
 
 const backend = await initializeRebaseBackend({
     server,
     app,
-    datasource: {
-        connection: db,
-        schema: { tables, enums, relations }
-    },
+    bootstrappers: [
+        createPostgresBootstrapper({
+            connection: db,
+            schema: { tables, enums, relations },
+            adminConnectionString: process.env.DATABASE_URL,
+            // Pass connectionString to enable cross-instance realtime
+            // via Postgres LISTEN/NOTIFY. Omit for single-instance mode.
+            connectionString
+        })
+    ],
     // Realtime (WebSocket) is automatically enabled
 });
 

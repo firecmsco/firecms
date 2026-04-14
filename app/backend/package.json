@@ -5,13 +5,13 @@
     "main": "src/index.ts",
     "type": "module",
     "scripts": {
-        "dev": "tsx watch --watch=\"../shared/**/*\" --watch=\"../../packages/backend/src/**/*\" --conditions development src/index.ts",
+        "dev": "tsx watch --watch=\"../shared/**/*\" --watch=\"../../packages/server-core/src/**/*\" --conditions development src/index.ts",
         "build": "tsc --noEmit",
         "start": "tsx src/index.ts"
     },
     "dependencies": {
-        "@rebasepro/backend": "0.0.1",
-        "@rebasepro/postgresql-backend": "0.0.1",
+        "@rebasepro/server-core": "0.0.1",
+        "@rebasepro/server-postgresql": "0.0.1",
         "hono": "^4.2.0",
         "@hono/node-server": "^1.11.0",
         "dotenv": "^16.0.0",

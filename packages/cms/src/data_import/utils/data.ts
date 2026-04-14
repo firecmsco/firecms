@@ -3,7 +3,7 @@ import { AuthController, Entity, EntityCollection, EntityReference, CollectionRe
 import { isPropertyBuilder } from "@rebasepro/common";
 import { unflattenObject } from "./file_to_json";
 import { getIn } from "@rebasepro/formex";
-import { inferTypeFromValue } from "@rebasepro/schema_inference";
+import { inferTypeFromValue } from "@rebasepro/schema-inference";
 import { mergeDeep } from "@rebasepro/utils";
 
 export function convertDataToEntity(authController: AuthController,

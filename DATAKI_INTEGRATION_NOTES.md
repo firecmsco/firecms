@@ -74,7 +74,7 @@ type: "collection" | "view" | "admin" | "dashboard"
 
 Dataki widgets = SQL query + Vega spec. Drill-down works by:
 1. **Vega signals** capture click events (data point behind clicked bar/slice)
-2. **SQL `FROM` clause** → maps to Rebase collection via `collection.path`/`dbPath`
+2. **SQL `FROM` clause** → maps to Rebase collection via `collection.path`/`table`
 3. **Clicked dimension values** → converted to Rebase `FilterValues`
 4. Navigate to collection pre-filtered
 

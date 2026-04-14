@@ -80,7 +80,7 @@ export const productsCollection: EntityCollection = {
     slug: "products",
     name: "Products",
     singularName: "Product",
-    dbPath: "products",
+    table: "products",
     properties: {
         name: {
             type: "string",

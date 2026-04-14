@@ -106,13 +106,13 @@ describe("getSubcollections", () => {
         const subCol: EntityCollection = {
             name: "Comments",
             slug: "comments",
-            dbPath: "comments",
+            table: "comments",
             properties: {},
         };
         const collection: EntityCollection = {
             name: "Posts",
             slug: "posts",
-            dbPath: "posts",
+            table: "posts",
             driver: "firestore",
             properties: {},
             subcollections: () => [subCol],
@@ -126,7 +126,7 @@ describe("getSubcollections", () => {
         const collection: EntityCollection = {
             name: "Posts",
             slug: "posts",
-            dbPath: "posts",
+            table: "posts",
             properties: {},
         };
         const result = getSubcollections(collection);
@@ -137,13 +137,13 @@ describe("getSubcollections", () => {
         const targetCol: EntityCollection = {
             name: "Tags",
             slug: "tags",
-            dbPath: "tags",
+            table: "tags",
             properties: {},
         };
         const collection: EntityCollection = {
             name: "Posts",
             slug: "posts",
-            dbPath: "posts",
+            table: "posts",
             properties: {},
             relations: [
                 {

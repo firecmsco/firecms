@@ -128,7 +128,7 @@ export function useBuildCollectionRegistryController(props: {
             const collection: EntityCollection | undefined = currentCollections.find(c => c.slug === id);
             if (!collection)
                 throw Error(`Collection with id ${id} not found`);
-            paths.push(collection.slug ?? collection.dbPath); // Fallback to dbPath if slug doesn't exist? Wait, slug is correct.
+            paths.push(collection.slug);
             currentCollections = getSubcollections(collection) ?? [];
         }
         return paths;

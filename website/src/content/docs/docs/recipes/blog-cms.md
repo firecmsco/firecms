@@ -23,7 +23,7 @@ export const authorsCollection: EntityCollection = {
     slug: "authors",
     name: "Authors",
     singularName: "Author",
-    dbPath: "authors",
+    table: "authors",
     icon: "person",
     properties: {
         name: {
@@ -62,7 +62,7 @@ export const categoriesCollection: EntityCollection = {
     slug: "categories",
     name: "Categories",
     singularName: "Category",
-    dbPath: "categories",
+    table: "categories",
     icon: "label",
     properties: {
         name: {
@@ -96,7 +96,7 @@ export const articlesCollection: EntityCollection = {
     slug: "articles",
     name: "Articles",
     singularName: "Article",
-    dbPath: "articles",
+    table: "articles",
     icon: "article",
     defaultViewMode: "table",
     history: true,

@@ -260,7 +260,7 @@ function SyntaxHighlightedSnippet() {
             <span className={tx}>{" } "}</span>
             <span className={kw}>from</span>
             <span className={tx}> </span>
-            <span className={str}>'@rebasepro/client-rebase'</span>
+            <span className={str}>'@rebasepro/client'</span>
             <span className={op}>;</span>
             {"\n"}
 

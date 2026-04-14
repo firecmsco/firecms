@@ -1,0 +1,45 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "module": "ESNEXT",
+        "target": "ESNEXT",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "moduleResolution": "bundler",
+        "jsx": "react-jsx",
+        "noFallthroughCasesInSwitch": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "baseUrl": ".",
+        "paths": {
+            "@rebasepro/types": [
+                "../types/src"
+            ],
+            "@rebasepro/server-core": [
+                "../server-core/src"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "test"
+    ]
+}

@@ -22,7 +22,7 @@ export const productsCollection: EntityCollection = {
     slug: "products",              // URL path and API endpoint
     name: "Products",              // Display name (plural)
     singularName: "Product",       // Display name (singular)
-    dbPath: "products",            // PostgreSQL table name
+    table: "products",            // PostgreSQL table name
     icon: "inventory_2",           // Material icon key
 
     properties: {
@@ -74,7 +74,7 @@ export const productsCollection: EntityCollection = {
 | `slug` | `string` | **Required.** URL-safe identifier. Used in the admin UI URL and REST API path (`/api/data/{slug}`). |
 | `name` | `string` | **Required.** Display name (plural). Shown in navigation and page headers. |
 | `singularName` | `string` | Display name for a single entity. Used in "New Product", "Edit Product", etc. |
-| `dbPath` | `string` | **Required.** PostgreSQL table name. If different from `slug`, allows you to decouple URLs from table names. |
+| `table` | `string` | **Required.** PostgreSQL table name. If different from `slug`, allows you to decouple URLs from table names. |
 | `icon` | `string` | Material icon key. See [Google Fonts Icons](https://fonts.google.com/icons). |
 
 ### Schema

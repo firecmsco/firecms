@@ -11,9 +11,9 @@ Rebase collections are the core building blocks of your data model. They define 
 
 ### Collections
 
-A collection is defined as a TypeScript object implementing the `EntityCollection` interface. Each collection maps to a database table and generates:
-- Full CRUD REST endpoints
-- GraphQL queries and mutations
+A collection is defined as a TypeScript object implementing the `EntityCollection` interface. Each collection maps to a database table (via the `table` property) and generates:
+- Full CRUD REST endpoints at `/api/data/{slug}`
+- Optional GraphQL queries and mutations
 - Admin panel views (spreadsheet, forms, cards, kanban)
 
 ### Properties
@@ -37,12 +37,14 @@ Collections are defined as standalone TypeScript files. The visual Studio edits 
 
 ## Defining a Collection
 
+The `table` property is **required** and specifies the PostgreSQL table name:
+
 ```typescript
 import { EntityCollection } from "@rebasepro/core";
 
 const productsCollection: EntityCollection = {
     name: "Products",
-    dbPath: "products",
+    table: "products",
     properties: {
         name: {
             name: "Product Name",
@@ -110,12 +112,12 @@ Collections can define relations to other collections:
 ```typescript
 const ordersCollection: EntityCollection = {
     name: "Orders",
-    dbPath: "orders",
+    table: "orders",
     properties: {
         customer_id: {
             name: "Customer",
             type: "reference",
-            path: "customers",     // References the customers collection
+            path: "customers",     // References the customers collection by slug
             previewProperties: ["name", "email"]
         },
         items: {
@@ -129,6 +131,8 @@ const ordersCollection: EntityCollection = {
     }
 };
 ```
+
+**Note:** The `path` property in references uses the collection's **slug** (not the database table name). This is the identifier used for frontend routing and API endpoints.
 
 ## Schema Migration Workflow
 

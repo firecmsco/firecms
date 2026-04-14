@@ -27,7 +27,7 @@ function makeCollection(securityRules?: SecurityRule[]): EntityCollection {
     return {
         name: "Products",
         slug: "products",
-        dbPath: "products",
+        table: "products",
         properties: {},
         securityRules,
     };

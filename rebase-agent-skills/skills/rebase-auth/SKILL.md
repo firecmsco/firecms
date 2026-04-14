@@ -46,26 +46,54 @@ Inside RLS policy expressions, you have access to:
 
 ### 1. Configure Auth in Backend
 
-Auth is configured via the `auth` field in `initializeRebaseBackend()`:
+Auth is configured via the `auth` field in `initializeRebaseBackend()`. The database driver is provided through the **bootstrapper protocol**:
 
 ```typescript
-import { initializeRebaseBackend } from "@rebasepro/backend";
+import { initializeRebaseBackend, HonoEnv } from "@rebasepro/server-core";
+import { createPostgresDatabaseConnection, createPostgresBootstrapper } from "@rebasepro/server-postgresql";
+
+const { db, connectionString } = createPostgresDatabaseConnection(process.env.DATABASE_URL!);
 
 const backend = await initializeRebaseBackend({
     server,
     app,
-    datasource: { connection: db, schema: { tables, enums, relations } },
+    bootstrappers: [
+        createPostgresBootstrapper({
+            connection: db,
+            schema: { tables, enums, relations },
+            adminConnectionString: process.env.DATABASE_URL,
+            connectionString
+        })
+    ],
     auth: {
         jwtSecret: process.env.JWT_SECRET!,
         accessExpiresIn: "1h",       // Access token TTL
         refreshExpiresIn: "30d",     // Refresh token TTL
         allowRegistration: false,    // First user can always register
+        seedDefaultRoles: true,      // Create default admin/editor/viewer roles
         google: {                    // Optional: Google OAuth
             clientId: process.env.GOOGLE_CLIENT_ID!,
         },
     },
 });
 ```
+
+> [!WARNING]
+> **JWT Dual-Package Hazard (Monorepos / pnpm)**
+> When running a backend inside a monorepo workspace (especially with tools like `tsx` and `--preserve-symlinks`), you may encounter a `RebaseApiError: JWT secret not configured. Call configureJwt() first` error. This occurs because Node.js resolves two different module instances of `@rebasepro/server-core`.
+>
+> **Prevention:** You must explicitly call `configureJwt` in your backend application's entry point (`index.ts`) before `initializeRebaseBackend`:
+> ```typescript
+> import { initializeRebaseBackend, configureJwt } from "@rebasepro/server-core";
+>
+> configureJwt({
+>     secret: process.env.JWT_SECRET!,
+>     accessExpiresIn: "1h",
+>     refreshExpiresIn: "30d"
+> });
+>
+> const backend = await initializeRebaseBackend({ ... });
+> ```
 
 Auth tables (`rebase.users`, `rebase.roles`, etc.) are auto-created on first startup.
 
@@ -88,7 +116,7 @@ RLS policies are defined per-collection to restrict data access:
 ```typescript
 const postsCollection: EntityCollection = {
     name: "Posts",
-    dbPath: "posts",
+    table: "posts",
     rlsPolicies: {
         select: "auth.uid() IS NOT NULL",  // Any authenticated user can read
         insert: "'editor' = ANY(auth.roles())",  // Only editors can create

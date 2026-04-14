@@ -64,7 +64,7 @@ Given this collection:
 ```typescript
 const productsCollection: EntityCollection = {
     slug: "products",
-    dbPath: "products",
+    table: "products",
     properties: {
         name: { type: "string", name: "Name", validation: { required: true } },
         price: { type: "number", name: "Price", columnType: "numeric" },

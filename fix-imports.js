@@ -39,13 +39,13 @@ const replacements = [
     { regex: /"\.\.\/db\/entityService"/g, replacement: '"./services/entityService"' },
     { regex: /"\.\.\/db\/connection"/g, replacement: '"./connection"' },
     { regex: /"\.\/postgresDataDriver"/g, replacement: '"./PostgresBackendDriver"' },
-    { regex: /"\.\.\/history\/HistoryService"/g, replacement: '"@rebasepro/backend"' }
+    { regex: /"\.\.\/history\/HistoryService"/g, replacement: '"@rebasepro/server-core"' }
 ];
 
 // Special auth/init overrides for websocket.ts
 const specialWebsocketReplacements = [
-    { regex: /from "\.\/auth"/g, replacement: 'from "@rebasepro/backend"' },
-    { regex: /from "\.\/init"/g, replacement: 'from "@rebasepro/backend"' }
+    { regex: /from "\.\/auth"/g, replacement: 'from "@rebasepro/server-core"' },
+    { regex: /from "\.\/init"/g, replacement: 'from "@rebasepro/server-core"' }
 ]
 
 for (const file of tsFiles) {

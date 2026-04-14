@@ -60,10 +60,10 @@ export function CollectionStudioView({ collectionId, ...props }: CollectionStudi
                             if (savedCollection) {
                                 snackbarController.open({
                                     type: "success",
-                                    message: `Collection ${savedCollection.name || savedCollection.slug || savedCollection.dbPath} saved`
+                                    message: `Collection ${savedCollection.name || savedCollection.slug} saved`
                                 });
                                 if (activeCollectionId === "new") {
-                                    navigate(urlController.buildAppUrlPath(`s/schema/${savedCollection.slug || savedCollection.dbPath}`));
+                                    navigate(urlController.buildAppUrlPath(`s/schema/${savedCollection.slug}`));
                                 }
                             }
                         }}

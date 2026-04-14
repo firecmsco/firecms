@@ -43,8 +43,8 @@
       "@rebasepro/cms": [
         "../cms/src"
       ],
-      "@rebasepro/schema_inference": [
-        "../schema_inference/src"
+      "@rebasepro/schema-inference": [
+        "../schema-inference/src"
       ],
       "@rebasepro/ui": [
         "../ui/src"

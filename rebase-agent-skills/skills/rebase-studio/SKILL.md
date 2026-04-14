@@ -50,7 +50,7 @@ When toggled to Editor Mode with an effective role set, the developer sees exact
 
 ## Visual Collection Editor
 
-The Studio's collection editor (`@rebasepro/collection_editor`) allows non-developers to:
+The Studio's collection editor allows non-developers to:
 - Add, remove, and reorder fields
 - Configure field types and validation
 - Set up enum values and references
@@ -88,14 +88,9 @@ const myCustomView = {
 |---------|-------------|
 | `@rebasepro/core` | Core framework, hooks, types |
 | `@rebasepro/studio` | Studio admin panel components |
-| `@rebasepro/collection_editor` | Visual schema editor |
-| `@rebasepro/editor` | Rich text editor (TipTap) |
-| `@rebasepro/data_import` | CSV/JSON/Excel import |
-| `@rebasepro/data_export` | CSV/JSON export |
-| `@rebasepro/entity_history` | History & audit trail |
-| `@rebasepro/data_enhancement` | AI-powered autofill |
-| `@rebasepro/datatalk` | Natural language data queries |
-| `@rebasepro/schema_inference` | Auto-infer schema from data |
+| `@rebasepro/cms` | CMS frontend application |
+| `@rebasepro/plugin-data-enhancement` | AI-powered autofill |
+| `@rebasepro/schema-inference` | Auto-infer schema from data |
 
 ## Running the Studio
 

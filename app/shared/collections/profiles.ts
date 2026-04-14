@@ -5,7 +5,7 @@ const profilesCollection: EntityCollection = {
     name: "Profiles",
     singularName: "Profile",
     slug: "profiles",
-    dbPath: "profiles",
+    table: "profiles",
     icon: "AccountCircle",
     history: true,
     properties: {

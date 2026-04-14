@@ -22,17 +22,17 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@rebasepro/auth-rebase": [
-        "../../packages/auth-rebase/src"
+      "@rebasepro/auth": [
+        "../../packages/auth/src"
       ],
       "@rebasepro/core": [
         "../../packages/core/src"
       ],
-      "@rebasepro/firebase": [
-        "../../packages/firebase/src"
+      "@rebasepro/client-firebase": [
+        "../../packages/client-firebase/src"
       ],
-      "@rebasepro/postgresql": [
-        "../../packages/postgresql/src"
+      "@rebasepro/client-postgresql": [
+        "../../packages/client-postgresql/src"
       ],
       "@rebasepro/types": [
         "../../packages/types/src"
@@ -40,11 +40,9 @@
       "@rebasepro/ui": [
         "../../packages/ui/src"
       ],
-      "@rebasepro/datatalk": [
-        "../../packages/datatalk/src"
-      ],
-      "@rebasepro/data_enhancement": [
-        "../../packages/data_enhancement/src"
+
+      "@rebasepro/plugin-data-enhancement": [
+        "../../packages/plugin-data-enhancement/src"
       ],
 
       "@rebasepro/studio": [
@@ -56,14 +54,14 @@
       "@rebasepro/cms": [
         "../../packages/cms/src"
       ],
-      "@rebasepro/client-rebase": [
-        "../../packages/client-rebase/src"
+      "@rebasepro/client": [
+        "../../packages/client/src"
       ],
       "@rebasepro/formex": [
         "../../packages/formex/src"
       ],
-      "@rebasepro/schema_inference": [
-        "../../packages/schema_inference/src"
+      "@rebasepro/schema-inference": [
+        "../../packages/schema-inference/src"
       ],
       "shared": [
         "../shared"

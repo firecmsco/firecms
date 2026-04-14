@@ -14,11 +14,21 @@ Rebase provides built-in file storage with support for S3-compatible services an
 Store files on the local filesystem. Best for development and simple deployments.
 
 ```typescript
-import { initializeRebaseBackend } from "@rebasepro/backend";
+import { initializeRebaseBackend, HonoEnv } from "@rebasepro/server-core";
+import { createPostgresDatabaseConnection, createPostgresBootstrapper } from "@rebasepro/server-postgresql";
+
+const { db, connectionString } = createPostgresDatabaseConnection(process.env.DATABASE_URL!);
 
 const backend = await initializeRebaseBackend({
     server, app,
-    datasource: { connection: db, schema: { tables, enums, relations } },
+    bootstrappers: [
+        createPostgresBootstrapper({
+            connection: db,
+            schema: { tables, enums, relations },
+            adminConnectionString: process.env.DATABASE_URL,
+            connectionString
+        })
+    ],
     storage: {
         type: "local",
         basePath: "./uploads",
@@ -35,7 +45,14 @@ Works with AWS S3, MinIO, DigitalOcean Spaces, Cloudflare R2, and any S3-compati
 ```typescript
 const backend = await initializeRebaseBackend({
     server, app,
-    datasource: { connection: db, schema: { tables, enums, relations } },
+    bootstrappers: [
+        createPostgresBootstrapper({
+            connection: db,
+            schema: { tables, enums, relations },
+            adminConnectionString: process.env.DATABASE_URL,
+            connectionString
+        })
+    ],
     storage: {
         type: "s3",
         bucket: process.env.S3_BUCKET!,
@@ -56,7 +73,14 @@ Rebase supports multiple storage backends simultaneously:
 ```typescript
 const backend = await initializeRebaseBackend({
     server, app,
-    datasource: { connection: db, schema: { tables, enums, relations } },
+    bootstrappers: [
+        createPostgresBootstrapper({
+            connection: db,
+            schema: { tables, enums, relations },
+            adminConnectionString: process.env.DATABASE_URL,
+            connectionString
+        })
+    ],
     storage: {
         "(default)": { type: "local", basePath: "./uploads" },
         "media": { type: "s3", bucket: "my-media-bucket", accessKeyId: "...", secretAccessKey: "..." },
@@ -71,7 +95,7 @@ Define file upload fields in your collections:
 ```typescript
 const productsCollection: EntityCollection = {
     name: "Products",
-    dbPath: "products",
+    table: "products",
     properties: {
         image: {
             name: "Product Image",
@@ -110,9 +134,9 @@ The `@rebasepro/studio` package includes a built-in `StorageView` component in t
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/api/v1/storage/upload` | Upload a file |
-| `GET` | `/api/v1/storage/:path` | Download a file |
-| `DELETE` | `/api/v1/storage/:path` | Delete a file |
+| `POST` | `/api/storage/upload` | Upload a file |
+| `GET` | `/api/storage/:path` | Download a file |
+| `DELETE` | `/api/storage/:path` | Delete a file |
 
 ## References
 

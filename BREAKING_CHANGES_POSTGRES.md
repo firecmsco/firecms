@@ -237,7 +237,7 @@ Kanban view is now always available. To configure columns:
 const collection: EntityCollection = {
     slug: "products",
     name: "Products",
-    dbPath: "products",
+    table: "products",
     properties: {
         status: {
             type: "string",

@@ -5,7 +5,7 @@ const testEntitiesCollection: EntityCollection = {
     name: "Test Entities",
     singularName: "Test Entity",
     slug: "test_entities",
-    dbPath: "test_entities",
+    table: "test_entities",
     icon: "BugReport",
     history: true,
     properties: {

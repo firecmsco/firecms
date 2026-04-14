@@ -21,7 +21,7 @@ import {
     SettingsIcon,
     Typography
 } from "@rebasepro/ui";
-import { extractEnumFromValues } from "@rebasepro/schema_inference";
+import { extractEnumFromValues } from "@rebasepro/schema-inference";
 import { Field, Formex, getIn, useCreateFormex, useFormex } from "@rebasepro/formex";
 
 type EnumFormProps = {

@@ -6,8 +6,8 @@ describe("CollectionRegistry Dual-Layer Store", () => {
         const postsCollection: EntityCollection = {
             id: "posts",
             name: "Posts",
-            path: "posts", // `get()` resolves against dbPath or slug!
-            dbPath: "posts",
+            path: "posts", // `get()` resolves against table or slug!
+            table: "posts",
             properties: {
                 title: { type: "string" }
             }
@@ -17,7 +17,7 @@ describe("CollectionRegistry Dual-Layer Store", () => {
             id: "authors",
             name: "Authors",
             path: "authors",
-            dbPath: "authors",
+            table: "authors",
             properties: {
                 author_posts: {
                     type: "relation",

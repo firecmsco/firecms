@@ -7,7 +7,7 @@ const postsCollection: EntityCollection = {
     name: "Posts",
     singularName: "Post",
     slug: "posts",
-    dbPath: "posts",
+    table: "posts",
     icon: "Article",
     history: true,
     properties: {

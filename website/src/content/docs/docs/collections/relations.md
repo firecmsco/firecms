@@ -20,7 +20,7 @@ Relations are defined in the `relations` array of a collection:
 const postsCollection: EntityCollection = {
     slug: "posts",
     name: "Posts",
-    dbPath: "posts",
+    table: "posts",
     properties: {
         title: { type: "string", name: "Title" },
         content: { type: "string", name: "Content", multiline: true },

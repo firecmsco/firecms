@@ -32,7 +32,7 @@ import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView";
 import { CollectionInference } from "../../types/collection_inference";
 import { getInferenceType, ImportSaveInProgress, useImportConfig } from "../../_cms_internals";
-import { buildEntityPropertiesFromData } from "@rebasepro/schema_inference";
+import { buildEntityPropertiesFromData } from "@rebasepro/schema-inference";
 import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMapping";
 import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview";
 import { cleanPropertiesFromImport } from "./import/clean_import_data";
@@ -187,7 +187,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
     // Skip templates when duplicating (copyFrom is provided)
     const includeTemplates = !copyFromProp && !initialValuesProp?.slug && (props.parentCollectionIds ?? []).length === 0;
     const collectionsInThisLevel = (props.parentCollection ? getSubcollections(props.parentCollection) : collections) ?? [];
-    const existingPaths = collectionsInThisLevel.map(col => col.dbPath.trim().toLowerCase());
+    const existingPaths = collectionsInThisLevel.map(col => (col as any).table?.trim().toLowerCase() ?? col.slug?.trim().toLowerCase()).filter(Boolean);
     const existingIds = collectionsInThisLevel.map(col => col.slug?.trim().toLowerCase()).filter(Boolean) as string[];
     const [collection, setCollection] = React.useState<EntityCollection<any> | undefined>();
     const [initialLoadingCompleted, setInitialLoadingCompleted] = React.useState(false);
@@ -199,10 +199,10 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
                     // We must use getRawCollection so the editor schema fields 
                     // aren't polluted with dynamically injected runtime `relations`.
                     // The path lookup relies on generating a fake child path to resolve through the registry
-                    const dbPath = [...(props.parentCollectionIds ?? []), props.editedCollectionId]
+                    const collectionPath = [...(props.parentCollectionIds ?? []), props.editedCollectionId]
                         .reduce((acc, segment, i) => i === 0 ? segment : `${acc}/fake_id/${segment}`, "");
 
-                    setCollection(collectionRegistry.getRawCollection(dbPath) as EntityCollection<any>);
+                    setCollection(collectionRegistry.getRawCollection(collectionPath) as EntityCollection<any>);
                 } else {
                     setCollection(undefined);
                 }
@@ -237,7 +237,7 @@ export function CollectionEditor(props: CollectionEditorDialogProps & {
             })()
             : {
                 slug: initialValuesProp?.slug ?? randomString(16),
-                dbPath: initialValuesProp?.slug ?? "",
+                table: initialValuesProp?.slug ?? "",
                 name: initialValuesProp?.name ?? "",
                 group: initialValuesProp?.group ?? "",
                 properties: {} as Properties,
@@ -377,7 +377,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
     const doCollectionInference = collectionInference ? (collection: EntityCollection<any>) => {
         if (!collectionInference) return undefined;
         return collectionInference?.(
-            collection.dbPath,
+            collection.slug,
             parentPaths ?? [],
             collection.databaseId
         );
@@ -511,7 +511,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
             errors = { ...errors, ...propertyErrorsRef.current };
         }
         if (currentView === "general") {
-            const pathError = validatePath(col.dbPath, isNewCollection, existingPaths, col.slug);
+            const pathError = validatePath((col as any).table || col.slug, isNewCollection, existingPaths, col.slug);
             if (pathError) {
                 errors.slug = pathError;
             }
@@ -541,7 +541,7 @@ function CollectionEditorInternal<M extends Record<string, any>>({
         submitCount
     } = formController;
 
-    const usedPath = values.dbPath;
+    const usedPath = (values as any).table || values.slug;
     const pathError = validatePath(usedPath, isNewCollection, existingPaths, values.slug);
 
     const parentPaths = !pathError && parentCollectionIds ? collectionRegistry.convertIdsToPaths(parentCollectionIds) : undefined;

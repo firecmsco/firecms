@@ -49,7 +49,7 @@ describe("Permissions Evaluator", () => {
     const createMockCollection = (rules?: SecurityRule[]): EntityCollection => ({
         slug: "test",
         name: "Test",
-        dbPath: "test",
+        table: "test",
         properties: {},
         securityRules: rules
     });

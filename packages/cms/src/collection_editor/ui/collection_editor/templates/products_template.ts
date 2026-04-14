@@ -2,7 +2,7 @@ import { EntityCollection } from "@rebasepro/types";
 
 export const productsCollectionTemplate = {
     slug: "products",
-    dbPath: "products",
+    table: "products",
     name: "Products",
     singularName: "Product",
     icon: "shopping_cart",

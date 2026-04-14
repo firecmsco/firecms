@@ -61,9 +61,9 @@ export function GeneralSettingsForm({
     const updateName = (name: string) => {
         setFieldValue("name", name);
 
-        const pathTouched = getIn(touched, "dbPath");
+        const pathTouched = getIn(touched, "table");
         if (!pathTouched && isNewCollection && name) {
-            setFieldValue("dbPath", toSnakeCase(name));
+            setFieldValue("table", toSnakeCase(name));
         }
 
         const idTouched = getIn(touched, "slug");
@@ -130,25 +130,25 @@ export function GeneralSettingsForm({
                             </FieldCaption>
                         </div>
 
-                        {/* dbPath */}
+                        {/* Table name */}
                         <div className={cls("col-span-12")}>
-                            <Field name={"dbPath"}
+                            <Field name={"table"}
                                 as={DebouncedTextField}
-                                label={"Path"}
+                                label={"Table name"}
                                 required
-                                error={showErrors && Boolean(errors.dbPath)} />
+                                error={showErrors && Boolean((errors as any).table)} />
 
-                            <FieldCaption error={touched.dbPath && Boolean(errors.dbPath)}>
-                                {touched.dbPath && Boolean(errors.dbPath)
-                                    ? errors.dbPath
-                                    : isSubcollection ? "Relative path to the parent (no need to include the parent path)" : "Path that this collection is stored in, in the database"}
+                            <FieldCaption error={(touched as any).table && Boolean((errors as any).table)}>
+                                {(touched as any).table && Boolean((errors as any).table)
+                                    ? (errors as any).table
+                                    : isSubcollection ? "Relative path to the parent (no need to include the parent path)" : "PostgreSQL table name for this collection"}
                             </FieldCaption>
                             
-                            {values.isTableMissing && (
+                            {(values as any).isTableMissing && (
                                 <div className="mt-2 p-3 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800/30 rounded-md text-sm font-medium flex gap-2">
                                     <div className="mt-0.5"><WarningIcon size="smallest" /></div>
                                     <span>
-                                        The table <b>"{values.dbPath}"</b> does not exist in the database schema. 
+                                        The table <b>"{(values as any).table}"</b> does not exist in the database schema. 
                                         If you've recently created it, make sure to generate and run your database migrations.
                                     </span>
                                 </div>

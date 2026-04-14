@@ -20,14 +20,17 @@
       "@rebasepro/types": [
         "../../packages/types/src"
       ],
-      "@rebasepro/backend": [
-        "../../packages/backend/src"
+      "@rebasepro/server-core": [
+        "../../packages/server-core/src"
       ],
       "@rebasepro/common": [
         "../../packages/common/src"
       ],
       "shared": [
         "../shared"
+      ],
+      "@rebasepro/server-postgresql": [
+        "../../packages/server-postgresql/src"
       ]
     }
   },

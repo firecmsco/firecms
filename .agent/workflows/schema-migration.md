@@ -50,7 +50,7 @@ Edit your collection file (e.g., `app/shared/collections.ts`):
 ```typescript
 const postsCollection: EntityCollection = {
     name: "Posts",
-    dbPath: "posts",
+    table: "posts",
     properties: {
         // ...existing properties
         

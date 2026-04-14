@@ -72,42 +72,61 @@ The `drizzle.config.ts` is configured to:
 
 | Package | Purpose |
 |---------|---------|
-| `packages/backend` | Express server, API generation, auth, storage |
-| `packages/postgresql` | PostgreSQL-specific data source implementation |
+| `packages/server-core` | Hono server coordinator, API generation, auth, storage |
+| `packages/server-postgresql` | PostgreSQL bootstrapper, data driver, realtime (LISTEN/NOTIFY) |
 | `packages/types` | Shared TypeScript type definitions |
 
-## Backend Initialization
+## Backend Initialization (Bootstrapper Protocol)
 
-The backend is initialized using `initializeRebaseBackend` from `@rebasepro/backend`:
+The backend uses the **bootstrapper protocol** — database-specific logic is encapsulated in bootstrapper objects that the server coordinator iterates over during initialization.
 
 ```typescript
 import { Hono } from "hono";
+import { getRequestListener } from "@hono/node-server";
 import { createServer } from "http";
 import {
-    createPostgresDatabaseConnection,
     initializeRebaseBackend,
     HonoEnv
-} from "@rebasepro/backend";
+} from "@rebasepro/server-core";
+import { createPostgresDatabaseConnection, createPostgresBootstrapper } from "@rebasepro/server-postgresql";
 import { tables, enums, relations } from "./schema.generated";
 
 const app = new Hono<HonoEnv>();
-const server = createServer(/* ... */);
-const { db } = createPostgresDatabaseConnection(process.env.DATABASE_URL!);
+const server = createServer(getRequestListener(app.fetch));
 
-// Initialize backend (auth, storage, realtime, WebSocket, REST)
+const { db, connectionString } = createPostgresDatabaseConnection(process.env.DATABASE_URL!);
+
 const backend = await initializeRebaseBackend({
+    collectionsDir: path.resolve(__dirname, "../../shared/collections"),
     server,
     app,
-    driver: {
-        connection: db,
-        schema: { tables, enums, relations }
+    bootstrappers: [
+        createPostgresBootstrapper({
+            connection: db,
+            schema: { tables, enums, relations },
+            adminConnectionString: process.env.DATABASE_URL,
+            connectionString  // enables cross-instance realtime via LISTEN/NOTIFY
+        })
+    ],
+    auth: {
+        jwtSecret: process.env.JWT_SECRET!,
+        accessExpiresIn: "1h",
+        refreshExpiresIn: "30d",
+        seedDefaultRoles: true,
+        allowRegistration: false,
     },
-    auth: { jwtSecret: process.env.JWT_SECRET! },
     storage: { type: "local", basePath: "./uploads" },
+    history: true,
 });
 
 server.listen(3001);
 ```
+
+### Key Concepts
+
+- **`createPostgresBootstrapper()`** — Creates a bootstrapper that registers the Postgres data driver, auth repository, realtime service, and history service.
+- **`bootstrappers: [...]`** — The `initializeRebaseBackend()` coordinator iterates over all bootstrappers, calling `initializeDriver()`, `initializeAuth()`, `initializeRealtime()`, and `initializeHistory()`.
+- **`collectionsDir`** — Auto-discovers collection definition files from the specified directory.
 
 ## Important Notes
 

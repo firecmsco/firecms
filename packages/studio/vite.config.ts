@@ -7,7 +7,11 @@ import react from "@vitejs/plugin-react"
 const ReactCompilerConfig = {
     target: "18"
 };
-const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
+const isExternal = (id: string) => {
+    if (id.startsWith(".") || path.isAbsolute(id)) return false;
+    if (id.startsWith("@rebasepro/")) return false;
+    return true;
+};
 
 export default defineConfig(() => ({
     esbuild: {
@@ -28,12 +32,12 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            "@rebasepro/client-rebase": path.resolve(__dirname, "../client/src"),
+            "@rebasepro/client": path.resolve(__dirname, "../client/src"),
             "@rebasepro/cms": path.resolve(__dirname, "../cms/src"),
             "@rebasepro/common": path.resolve(__dirname, "../common/src"),
             "@rebasepro/core": path.resolve(__dirname, "../core/src"),
             "@rebasepro/formex": path.resolve(__dirname, "../formex/src"),
-            "@rebasepro/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
+            "@rebasepro/schema-inference": path.resolve(__dirname, "../schema-inference/src"),
             "@rebasepro/types": path.resolve(__dirname, "../types/src"),
             "@rebasepro/ui": path.resolve(__dirname, "../ui/src"),
         }

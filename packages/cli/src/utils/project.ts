@@ -58,7 +58,7 @@ export function findBackendDir(projectRoot: string): string | null {
 }
 
 /**
- * Detect the active backend plugin (e.g. @rebasepro/postgresql-backend) from the backend's package.json.
+ * Detect the active backend plugin (e.g. @rebasepro/server-postgresql) from the backend's package.json.
  */
 export function getActiveBackendPlugin(backendDir: string): string | null {
     const pkgPath = path.join(backendDir, "package.json");
@@ -68,9 +68,9 @@ export function getActiveBackendPlugin(backendDir: string): string | null {
         const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
         const deps = { ...pkg.dependencies, ...pkg.devDependencies };
         
-        // Find the first dependency that matches @rebasepro/*-backend, but isn't just @rebasepro/backend
+        // Find the first dependency that matches @rebasepro/*-backend, but isn't just @rebasepro/server-core
         for (const dep of Object.keys(deps)) {
-            if (dep.startsWith("@rebasepro/") && dep.endsWith("-backend") && dep !== "@rebasepro/backend") {
+            if (dep.startsWith("@rebasepro/") && dep.endsWith("-backend") && dep !== "@rebasepro/server-core") {
                 return dep;
             }
         }

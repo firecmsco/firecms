@@ -14,7 +14,7 @@ import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
 import { updatePropertyFromWidget } from "../utils/update_property_for_widget";
 import { supportedFields } from "../utils/supported_fields";
-import { buildPropertyFromData } from "@rebasepro/schema_inference";
+import { buildPropertyFromData } from "@rebasepro/schema-inference";
 
 export function CollectionEditorImportMapping({
     importConfig,

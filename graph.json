@@ -173,12 +173,12 @@
           "implicitDependencies": []
         }
       },
-      "@rebasepro/data_enhancement": {
-        "name": "@rebasepro/data_enhancement",
+      "@rebasepro/plugin-data-enhancement": {
+        "name": "@rebasepro/plugin-data-enhancement",
         "type": "lib",
         "data": {
           "root": "packages/data_enhancement",
-          "name": "@rebasepro/data_enhancement",
+          "name": "@rebasepro/plugin-data-enhancement",
           "tags": [
             "npm:public"
           ],
@@ -192,7 +192,7 @@
               ]
             },
             "js": {
-              "packageName": "@rebasepro/data_enhancement",
+              "packageName": "@rebasepro/plugin-data-enhancement",
               "packageVersion": "0.0.1",
               "packageExports": {
                 ".": {
@@ -260,12 +260,12 @@
           "implicitDependencies": []
         }
       },
-      "@rebasepro/schema_inference": {
-        "name": "@rebasepro/schema_inference",
+      "@rebasepro/schema-inference": {
+        "name": "@rebasepro/schema-inference",
         "type": "lib",
         "data": {
           "root": "packages/schema_inference",
-          "name": "@rebasepro/schema_inference",
+          "name": "@rebasepro/schema-inference",
           "tags": [
             "npm:public"
           ],
@@ -278,7 +278,7 @@
               ]
             },
             "js": {
-              "packageName": "@rebasepro/schema_inference",
+              "packageName": "@rebasepro/schema-inference",
               "packageVersion": "0.0.1",
               "packageExports": {
                 ".": {
@@ -714,12 +714,12 @@
           "implicitDependencies": []
         }
       },
-      "@rebasepro/postgresql": {
-        "name": "@rebasepro/postgresql",
+      "@rebasepro/client-postgresql": {
+        "name": "@rebasepro/client-postgresql",
         "type": "lib",
         "data": {
           "root": "packages/postgresql",
-          "name": "@rebasepro/postgresql",
+          "name": "@rebasepro/client-postgresql",
           "tags": [
             "npm:public",
             "npm:firebase",
@@ -744,7 +744,7 @@
             },
             "description": "PostgreSQL data source client for Rebase",
             "js": {
-              "packageName": "@rebasepro/postgresql",
+              "packageName": "@rebasepro/client-postgresql",
               "packageVersion": "0.0.1",
               "packageExports": {
                 ".": {
@@ -910,12 +910,12 @@
           "implicitDependencies": []
         }
       },
-      "@rebasepro/firebase": {
-        "name": "@rebasepro/firebase",
+      "@rebasepro/client-firebase": {
+        "name": "@rebasepro/client-firebase",
         "type": "lib",
         "data": {
           "root": "packages/firebase",
-          "name": "@rebasepro/firebase",
+          "name": "@rebasepro/client-firebase",
           "tags": [
             "npm:public"
           ],
@@ -928,7 +928,7 @@
               ]
             },
             "js": {
-              "packageName": "@rebasepro/firebase",
+              "packageName": "@rebasepro/client-firebase",
               "packageVersion": "0.0.1",
               "packageExports": {
                 ".": {
@@ -984,12 +984,12 @@
           "implicitDependencies": []
         }
       },
-      "@rebasepro/backend": {
-        "name": "@rebasepro/backend",
+      "@rebasepro/server-core": {
+        "name": "@rebasepro/server-core",
         "type": "lib",
         "data": {
           "root": "packages/backend",
-          "name": "@rebasepro/backend",
+          "name": "@rebasepro/server-core",
           "tags": [
             "npm:public",
             "npm:firebase",
@@ -1015,7 +1015,7 @@
             },
             "description": "PostgreSQL and Drizzle ORM backend for Rebase",
             "js": {
-              "packageName": "@rebasepro/backend",
+              "packageName": "@rebasepro/server-core",
               "packageVersion": "0.0.1",
               "packageExports": {
                 ".": {
@@ -1107,12 +1107,12 @@
           "implicitDependencies": []
         }
       },
-      "@rebasepro/mongodb": {
-        "name": "@rebasepro/mongodb",
+      "@rebasepro/server-mongodb": {
+        "name": "@rebasepro/server-mongodb",
         "type": "lib",
         "data": {
           "root": "packages/mongodb",
-          "name": "@rebasepro/mongodb",
+          "name": "@rebasepro/server-mongodb",
           "tags": [
             "npm:public",
             "npm:firebase",
@@ -1137,7 +1137,7 @@
             },
             "description": "MongoDB backend for Rebase",
             "js": {
-              "packageName": "@rebasepro/mongodb",
+              "packageName": "@rebasepro/server-mongodb",
               "packageVersion": "0.0.1",
               "packageExports": {
                 ".": {
@@ -2873,31 +2873,31 @@
           "type": "static"
         }
       ],
-      "@rebasepro/data_enhancement": [
+      "@rebasepro/plugin-data-enhancement": [
         {
-          "source": "@rebasepro/data_enhancement",
+          "source": "@rebasepro/plugin-data-enhancement",
           "target": "@rebasepro/core",
           "type": "static"
         },
         {
-          "source": "@rebasepro/data_enhancement",
+          "source": "@rebasepro/plugin-data-enhancement",
           "target": "@rebasepro/editor",
           "type": "static"
         },
         {
-          "source": "@rebasepro/data_enhancement",
+          "source": "@rebasepro/plugin-data-enhancement",
           "target": "@rebasepro/types",
           "type": "static"
         },
         {
-          "source": "@rebasepro/data_enhancement",
+          "source": "@rebasepro/plugin-data-enhancement",
           "target": "@rebasepro/ui",
           "type": "static"
         }
       ],
-      "@rebasepro/schema_inference": [
+      "@rebasepro/schema-inference": [
         {
-          "source": "@rebasepro/schema_inference",
+          "source": "@rebasepro/schema-inference",
           "target": "@rebasepro/types",
           "type": "static"
         }
@@ -2954,7 +2954,7 @@
         },
         {
           "source": "@rebasepro/data_export",
-          "target": "@rebasepro/schema_inference",
+          "target": "@rebasepro/schema-inference",
           "type": "static"
         },
         {
@@ -2986,7 +2986,7 @@
         },
         {
           "source": "@rebasepro/data_import",
-          "target": "@rebasepro/schema_inference",
+          "target": "@rebasepro/schema-inference",
           "type": "static"
         },
         {
@@ -3000,14 +3000,14 @@
           "type": "static"
         }
       ],
-      "@rebasepro/postgresql": [
+      "@rebasepro/client-postgresql": [
         {
-          "source": "@rebasepro/postgresql",
+          "source": "@rebasepro/client-postgresql",
           "target": "@rebasepro/core",
           "type": "static"
         },
         {
-          "source": "@rebasepro/postgresql",
+          "source": "@rebasepro/client-postgresql",
           "target": "@rebasepro/types",
           "type": "static"
         }
@@ -3035,7 +3035,7 @@
         },
         {
           "source": "@rebasepro/datatalk",
-          "target": "@rebasepro/firebase",
+          "target": "@rebasepro/client-firebase",
           "type": "static"
         },
         {
@@ -3045,7 +3045,7 @@
         },
         {
           "source": "@rebasepro/datatalk",
-          "target": "@rebasepro/schema_inference",
+          "target": "@rebasepro/schema-inference",
           "type": "static"
         },
         {
@@ -3064,83 +3064,83 @@
           "type": "static"
         }
       ],
-      "@rebasepro/firebase": [
+      "@rebasepro/client-firebase": [
         {
-          "source": "@rebasepro/firebase",
+          "source": "@rebasepro/client-firebase",
           "target": "@rebasepro/common",
           "type": "static"
         },
         {
-          "source": "@rebasepro/firebase",
+          "source": "@rebasepro/client-firebase",
           "target": "@rebasepro/core",
           "type": "static"
         },
         {
-          "source": "@rebasepro/firebase",
-          "target": "@rebasepro/data_enhancement",
+          "source": "@rebasepro/client-firebase",
+          "target": "@rebasepro/plugin-data-enhancement",
           "type": "static"
         },
         {
-          "source": "@rebasepro/firebase",
+          "source": "@rebasepro/client-firebase",
           "target": "@rebasepro/data_export",
           "type": "static"
         },
         {
-          "source": "@rebasepro/firebase",
+          "source": "@rebasepro/client-firebase",
           "target": "@rebasepro/data_import",
           "type": "static"
         },
         {
-          "source": "@rebasepro/firebase",
+          "source": "@rebasepro/client-firebase",
           "target": "@rebasepro/data_import_export",
           "type": "static"
         },
         {
-          "source": "@rebasepro/firebase",
-          "target": "@rebasepro/schema_inference",
+          "source": "@rebasepro/client-firebase",
+          "target": "@rebasepro/schema-inference",
           "type": "static"
         },
         {
-          "source": "@rebasepro/firebase",
+          "source": "@rebasepro/client-firebase",
           "target": "@rebasepro/studio",
           "type": "static"
         },
         {
-          "source": "@rebasepro/firebase",
+          "source": "@rebasepro/client-firebase",
           "target": "@rebasepro/types",
           "type": "static"
         },
         {
-          "source": "@rebasepro/firebase",
+          "source": "@rebasepro/client-firebase",
           "target": "@rebasepro/ui",
           "type": "static"
         }
       ],
-      "@rebasepro/backend": [
+      "@rebasepro/server-core": [
         {
-          "source": "@rebasepro/backend",
+          "source": "@rebasepro/server-core",
           "target": "@rebasepro/common",
           "type": "static"
         },
         {
-          "source": "@rebasepro/backend",
+          "source": "@rebasepro/server-core",
           "target": "@rebasepro/types",
           "type": "static"
         }
       ],
-      "@rebasepro/mongodb": [
+      "@rebasepro/server-mongodb": [
         {
-          "source": "@rebasepro/mongodb",
-          "target": "@rebasepro/backend",
+          "source": "@rebasepro/server-mongodb",
+          "target": "@rebasepro/server-core",
           "type": "static"
         },
         {
-          "source": "@rebasepro/mongodb",
+          "source": "@rebasepro/server-mongodb",
           "target": "@rebasepro/types",
           "type": "static"
         },
         {
-          "source": "@rebasepro/mongodb",
+          "source": "@rebasepro/server-mongodb",
           "target": "@rebasepro/core",
           "type": "static"
         }
@@ -3193,7 +3193,7 @@
         },
         {
           "source": "@rebasepro/studio",
-          "target": "@rebasepro/schema_inference",
+          "target": "@rebasepro/schema-inference",
           "type": "static"
         },
         {
@@ -3289,7 +3289,7 @@
         },
         {
           "source": "rebase-app-frontend",
-          "target": "@rebasepro/data_enhancement",
+          "target": "@rebasepro/plugin-data-enhancement",
           "type": "static"
         },
         {
@@ -3319,7 +3319,7 @@
         },
         {
           "source": "rebase-app-frontend",
-          "target": "@rebasepro/firebase",
+          "target": "@rebasepro/client-firebase",
           "type": "static"
         },
         {
@@ -3329,12 +3329,12 @@
         },
         {
           "source": "rebase-app-frontend",
-          "target": "@rebasepro/postgresql",
+          "target": "@rebasepro/client-postgresql",
           "type": "static"
         },
         {
           "source": "rebase-app-frontend",
-          "target": "@rebasepro/schema_inference",
+          "target": "@rebasepro/schema-inference",
           "type": "static"
         },
         {
@@ -3358,7 +3358,7 @@
       "rebase-app-backend": [
         {
           "source": "rebase-app-backend",
-          "target": "@rebasepro/backend",
+          "target": "@rebasepro/server-core",
           "type": "static"
         },
         {

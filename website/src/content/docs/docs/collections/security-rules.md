@@ -12,7 +12,7 @@ Security rules let you define **Row Level Security (RLS)** policies for your Pos
 ```typescript
 const postsCollection: EntityCollection = {
     slug: "posts",
-    dbPath: "posts",
+    table: "posts",
     properties: { /* ... */ },
     securityRules: [
         { operation: "select", access: "public" },

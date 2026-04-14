@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rebasepro/client-rebase": "file:../../packages/client-rebase",
+    "@rebasepro/client": "file:../../packages/client",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

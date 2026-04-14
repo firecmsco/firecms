@@ -80,7 +80,7 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                                 </div>
                             )}
                             {collections.map((collection) => {
-                                const collectionKey = collection.slug || collection.dbPath;
+                                const collectionKey = collection.slug;
                                 const isSelected = activeCollectionId === collectionKey;
                                 return (
                                     <div
@@ -99,7 +99,7 @@ export function CollectionsStudioView({ configController }: CollectionsStudioVie
                                                 : "text-text-secondary dark:text-text-secondary-dark"
                                         )} />
                                         <span className="truncate flex-1">
-                                            {collection.name || collection.slug || collection.dbPath}
+                                            {collection.name || collection.slug}
                                         </span>
                                     </div>
                                 );

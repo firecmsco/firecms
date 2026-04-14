@@ -10,7 +10,11 @@ const ReactCompilerConfig = {
     target: "18"
 };
 
-const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
+const isExternal = (id: string) => {
+    if (id.startsWith(".") || path.isAbsolute(id)) return false;
+    if (id.startsWith("@rebasepro/")) return false;
+    return true;
+};
 
 export default defineConfig(() => ({
     esbuild: {

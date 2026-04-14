@@ -57,25 +57,25 @@ const mockCollections: EntityCollection[] = [
     {
         slug: "users",
         name: "Users",
-        dbPath: "users",
+        table: "users",
         properties: {}
     } as EntityCollection,
     {
         slug: "roles",
         name: "Roles",
-        dbPath: "roles",
+        table: "roles",
         properties: {}
     } as EntityCollection,
     {
         slug: "blogPosts",
         name: "Blog Posts",
-        dbPath: "blog_posts",
+        table: "blog_posts",
         properties: {}
     } as EntityCollection,
     {
-        slug: "blog-entries",   // slug with hyphen, no dbPath → falls back to snake_case "blog_entries"
+        slug: "blog-entries",   // slug with hyphen, no table → falls back to snake_case "blog_entries"
         name: "Blog Entries",
-        dbPath: "",
+        table: "",
         properties: {}
     } as EntityCollection,
 ];
@@ -207,7 +207,7 @@ describe("resolveQueryCollections", () => {
         expect(result).toHaveLength(0);
     });
 
-    it("matches collection by dbPath (not slug)", () => {
+    it("matches collection by table (not slug)", () => {
         const result = resolveQueryCollections("SELECT * FROM blog_posts", mockSchemas, mockCollections);
         expect(result).toHaveLength(1);
         expect(result[0].collection.slug).toBe("blogPosts");

@@ -2,7 +2,11 @@
 import path from "path";
 import { defineConfig } from "vite";
 
-const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
+const isExternal = (id: string) => {
+    if (id.startsWith(".") || path.isAbsolute(id)) return false;
+    if (id.startsWith("@rebasepro/")) return false;
+    return true;
+};
 
 export default defineConfig(() => ({
     esbuild: {
@@ -29,8 +33,8 @@ export default defineConfig(() => ({
     },
         resolve: {
         alias: {
-            "@rebasepro/backend": path.resolve(__dirname, "../backend/src"),
-            "@rebasepro/sdk_generator": path.resolve(__dirname, "../sdk_generator/src"),
+            "@rebasepro/server-core": path.resolve(__dirname, "../server-core/src"),
+            "@rebasepro/sdk-generator": path.resolve(__dirname, "../sdk-generator/src"),
             "@rebasepro/types": path.resolve(__dirname, "../types/src"),
         }
     },

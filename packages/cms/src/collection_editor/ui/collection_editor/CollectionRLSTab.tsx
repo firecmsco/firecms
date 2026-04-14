@@ -32,7 +32,7 @@ interface SecurityRule {
 type CollectionWithSecurity = EntityCollection & {
     securityRules?: SecurityRule[];
     id?: string;
-    dbPath?: string;
+    table?: string;
     alias?: string;
 };
 
@@ -48,7 +48,7 @@ export function CollectionRLSTab() {
 
     useEffect(() => {
         const fetchLivePolicies = async () => {
-            const tableName = values.id || values.dbPath || values.alias;
+            const tableName = values.id || values.table || values.alias;
             if (!tableName || !databaseAdmin?.executeSql) return;
 
             setIsLoadingDb(true);
@@ -93,7 +93,7 @@ export function CollectionRLSTab() {
             }
         };
         fetchLivePolicies();
-    }, [databaseAdmin, values.id, values.dbPath, values.alias]);
+    }, [databaseAdmin, values.id, values.table, values.alias]);
 
     const unmappedPolicies = dbPolicies.filter(dp => !rules.some(r => r.name === dp.policyname));
 
@@ -152,7 +152,7 @@ export function CollectionRLSTab() {
                                 <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                                     <Button size="small" variant="text" onClick={() => setEditingPolicy({
                                         policyname: rule.name,
-                                        tablename: values.id || values.dbPath || values.alias || "your_table",
+                                        tablename: values.id || values.table || values.alias || "your_table",
                                         permissive: (rule.mode || "permissive").toUpperCase() as PostgresPolicy["permissive"],
                                         cmd: (rule.operation || "ALL").toUpperCase() as PostgresPolicy["cmd"],
                                         roles: rule.roles || ["public"],
@@ -228,7 +228,7 @@ export function CollectionRLSTab() {
                     {editingPolicy && (
                         <InlinePolicyEditor
                             policy={editingPolicy === "new" ? undefined : editingPolicy}
-                            table={values.id || values.dbPath || values.alias || "your_table"}
+                            table={values.id || values.table || values.alias || "your_table"}
                             onSave={handleSave}
                             onCancel={() => setEditingPolicy(null)}
                         />

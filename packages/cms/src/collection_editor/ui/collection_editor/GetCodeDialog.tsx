@@ -119,7 +119,7 @@ function collectionToCode(collection: EntityCollection): object {
         id: collection.slug,
         name: collection.name,
         singularName: collection.singularName,
-        path: collection.dbPath,
+        path: collection.slug,
         description: collection.description,
 
         icon: collection.icon,

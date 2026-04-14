@@ -2,7 +2,7 @@ import { EntityCollection } from "@rebasepro/types";
 
 export const usersCollectionTemplate = {
     slug: "users",
-    dbPath: "users",
+    table: "users",
     name: "Users",
     singularName: "User",
     description: "Registered users in the app/web",

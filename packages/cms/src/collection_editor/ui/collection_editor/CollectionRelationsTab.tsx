@@ -23,7 +23,7 @@ export function CollectionRelationsTab() {
                 // If we attached a slug manually
                 if (target.slug) return target.slug;
                 const col = target();
-                return col?.slug || col?.dbPath || col?.name || "";
+                return col?.slug || col?.name || "";
             } catch (e) {
                 return "";
             }
@@ -146,7 +146,7 @@ export function CollectionRelationsTab() {
                                         }}
                                     >
                                         {collections?.map(col => (
-                                            <SelectItem key={col.slug || col.dbPath} value={col.slug}>{col.name || col.slug}</SelectItem>
+                                            <SelectItem key={col.slug} value={col.slug}>{col.name || col.slug}</SelectItem>
                                         ))}
                                     </Select>
                                     <Select 

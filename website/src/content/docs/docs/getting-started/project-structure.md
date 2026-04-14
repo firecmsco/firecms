@@ -109,7 +109,7 @@ import { EntityCollection } from "@rebasepro/types";
 export const productsCollection: EntityCollection = {
     slug: "products",
     name: "Products",
-    dbPath: "products",
+    table: "products",
     properties: {
         name: { type: "string", name: "Name" },
         price: { type: "number", name: "Price" }
@@ -117,7 +117,7 @@ export const productsCollection: EntityCollection = {
 };
 ```
 
-The `slug` becomes the URL path in the admin UI and the REST API endpoint (`/api/data/products`). The `dbPath` maps to the PostgreSQL table name.
+The `slug` becomes the URL path in the admin UI and the REST API endpoint (`/api/data/products`). The `table` maps to the PostgreSQL table name.
 
 ## How They Connect
 

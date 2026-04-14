@@ -76,7 +76,7 @@ export function NavigationCardBinding({
         context
     });
 
-    if (collection?.isTableMissing) {
+    if ((collection as any)?.isTableMissing) {
         actionsArray.unshift(
             <Tooltip key="warning" title={`Table mapped to "${collection?.slug || collection?.name}" is missing in the database. Run migrations.`}>
                 <div>

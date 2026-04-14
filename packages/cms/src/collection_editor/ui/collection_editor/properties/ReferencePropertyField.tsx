@@ -98,7 +98,7 @@ export function CollectionsSelect({
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFieldValue(pathPath, e.target.value)}
                 label={"Target collection"}
                 renderValue={(selected: string) => {
-                    const selectedCollection = collections.find(collection => collection.slug === selected || collection.dbPath === selected);
+                    const selectedCollection = collections.find(collection => collection.slug === selected);
                     if (!selectedCollection) return null;
                     return (
                         <div className="flex flex-row">
@@ -119,8 +119,8 @@ export function CollectionsSelect({
                             collections.filter(collection => collection.group === group)
                                 .map((collection) => {
                                     return <SelectItem
-                                        key={`${collection.slug ?? collection.dbPath}-${group}`}
-                                        value={collection.slug ?? collection.dbPath}>
+                                        key={`${collection.slug}-${group}`}
+                                        value={collection.slug}>
                                         <div className="flex flex-row">
                                             <IconForView collectionOrView={collection} />
                                             <Typography
@@ -139,8 +139,8 @@ export function CollectionsSelect({
                 {ungroupedCollections && <SelectGroup label={"Views"}>
                     {ungroupedCollections
                         .map((collection) => {
-                            return <SelectItem key={collection.slug ?? collection.dbPath}
-                                value={collection.slug ?? collection.dbPath}>
+                            return <SelectItem key={collection.slug}
+                                value={collection.slug}>
                                 <div className="flex flex-row">
                                     <IconForView collectionOrView={collection} />
                                     <Typography

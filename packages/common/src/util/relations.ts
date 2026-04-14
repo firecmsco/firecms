@@ -1,4 +1,4 @@
-import { EntityCollection, PostgresCollection, Property, Relation } from "@rebasepro/types";
+import { EntityCollection, isPostgresCollection, PostgresCollection, Property, Relation } from "@rebasepro/types";
 import { toSnakeCase } from "@rebasepro/utils";
 import { generateForeignKeyName } from "@rebasepro/utils";
 
@@ -48,8 +48,7 @@ export function sanitizeRelation(relation: Partial<Relation>, sourceCollection: 
                             targetRel.localKey) {
                             try {
                                 const targetRelTarget = targetRel.target();
-                                if (targetRelTarget.slug === sourceCollection.slug ||
-                                    targetRelTarget.dbPath === sourceCollection.dbPath) {
+                                if (targetRelTarget.slug === sourceCollection.slug) {
                                     // Found the corresponding owning relation, use its localKey
                                     newRelation.foreignKeyOnTarget = targetRel.localKey;
                                     foundForeignKey = true;
@@ -195,7 +194,10 @@ export function resolvePropertyRelation({
 }
 
 export function getTableName(collection: EntityCollection): string {
-    return collection.dbPath ?? toSnakeCase(collection.slug) ?? toSnakeCase(collection.name);
+    if (isPostgresCollection(collection)) {
+        return collection.table ?? toSnakeCase(collection.slug) ?? toSnakeCase(collection.name);
+    }
+    return toSnakeCase(collection.slug) ?? toSnakeCase(collection.name);
 }
 
 export function getTableVarName(tableName: string): string {

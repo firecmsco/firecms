@@ -24,7 +24,7 @@ export async function schemaCommand(subcommand: string | undefined, rawArgs: str
     const activePlugin = getActiveBackendPlugin(backendDir);
     if (!activePlugin) {
         console.error(chalk.red("✗ Could not detect an active database plugin."));
-        console.error(chalk.gray("  Make sure a package like @rebasepro/postgresql-backend is installed in backend/package.json."));
+        console.error(chalk.gray("  Make sure a package like @rebasepro/server-postgresql is installed in backend/package.json."));
         process.exit(1);
     }
 

@@ -11,24 +11,34 @@ Every collection defined in Rebase automatically gets full REST CRUD and GraphQL
 
 ### Endpoint Convention
 
-All REST endpoints follow the pattern:
+All REST data endpoints follow the pattern:
 
 ```
-BASE_URL/api/v1/{dbPath}
+BASE_URL/api/data/{slug}
 ```
 
-Where `dbPath` is the collection's database path (e.g., `products`, `users`, `blog-posts`).
+Where `slug` is the collection's slug (e.g., `products`, `users`, `blog-posts`).
+
+Other API categories use their own base paths:
+
+| Base Path | Purpose |
+|-----------|---------|
+| `/api/data/{slug}` | Collection CRUD (auto-generated) |
+| `/api/auth/*` | Authentication (login, register, refresh) |
+| `/api/admin/*` | User & role management |
+| `/api/storage/*` | File uploads and downloads |
+| `/api/schema-editor/*` | Visual schema editor (dev only) |
 
 ### CRUD Operations
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `GET` | `/api/v1/{dbPath}` | List documents (with filtering, sorting, pagination) |
-| `GET` | `/api/v1/{dbPath}/:id` | Get a single document by ID |
-| `POST` | `/api/v1/{dbPath}` | Create a new document |
-| `PUT` | `/api/v1/{dbPath}/:id` | Update a document (full replace) |
-| `PATCH` | `/api/v1/{dbPath}/:id` | Partial update a document |
-| `DELETE` | `/api/v1/{dbPath}/:id` | Delete a document |
+| `GET` | `/api/data/{slug}` | List documents (with filtering, sorting, pagination) |
+| `GET` | `/api/data/{slug}/:id` | Get a single document by ID |
+| `POST` | `/api/data/{slug}` | Create a new document |
+| `PUT` | `/api/data/{slug}/:id` | Update a document (full replace) |
+| `PATCH` | `/api/data/{slug}/:id` | Partial update a document |
+| `DELETE` | `/api/data/{slug}/:id` | Delete a document |
 
 ### Query Parameters (GET List)
 
@@ -83,8 +93,10 @@ Authorization: Bearer <jwt-token>
 ### Endpoint
 
 ```
-BASE_URL/api/graphql
+BASE_URL/api/data/graphql
 ```
+
+GraphQL is optional and must be explicitly enabled in `app/backend/src/index.ts` (see commented-out section in the template).
 
 ### Auto-Generated Schema
 

@@ -5,7 +5,7 @@ function makeCollection(overrides: Record<string, any> = {}): EntityCollection {
     const base = {
         name: "Products",
         slug: "products",
-        dbPath: "products",
+        table: "products",
         properties: {},
         ...overrides,
     };
@@ -44,7 +44,7 @@ describe("getNavigationEntriesFromPath", () => {
         const subCol = makeCollection({
             name: "Variants",
             slug: "variants",
-            dbPath: "variants",
+            table: "variants",
         });
         const collections = [
             makeCollection({

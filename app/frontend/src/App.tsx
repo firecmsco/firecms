@@ -2,12 +2,12 @@ import React from "react";
 import "@fontsource/jetbrains-mono";
 import "typeface-rubik";
 
-import { useRebaseAuthController, useBackendUserManagement, RebaseAuth } from "@rebasepro/auth-rebase";
+import { useRebaseAuthController, useBackendUserManagement, RebaseAuth } from "@rebasepro/auth";
 import { Rebase } from "@rebasepro/core";
 import { RebaseCMS, RebaseShell } from "@rebasepro/cms";
-import { useDataEnhancementPlugin } from "@rebasepro/data_enhancement";
+import { useDataEnhancementPlugin } from "@rebasepro/plugin-data-enhancement";
 import { RebaseStudio } from "@rebasepro/studio";
-import { createRebaseClient } from "@rebasepro/client-rebase";
+import { createRebaseClient } from "@rebasepro/client";
 import { collections } from "virtual:rebase-collections";
 
 // Configuration from environment

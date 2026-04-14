@@ -15,7 +15,7 @@ Use `afterSave` and `afterDelete` callbacks to notify external services when dat
 const ordersCollection: EntityCollection = {
     slug: "orders",
     name: "Orders",
-    dbPath: "orders",
+    table: "orders",
     callbacks: {
         afterSave: async ({ values, entityId, status }) => {
             if (status === "new") {

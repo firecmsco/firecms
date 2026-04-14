@@ -5,11 +5,11 @@ import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
 import {
-    createPostgresDatabaseConnection,
     initializeRebaseBackend,
     serveSPA,
     HonoEnv
-} from "@rebasepro/backend";
+} from "@rebasepro/server-core";
+import { createPostgresDatabaseConnection, createPostgresBootstrapper } from "@rebasepro/server-postgresql";
 
 import { enums, relations, tables } from "./schema.generated";
 
@@ -32,16 +32,7 @@ const app = new Hono<HonoEnv>();
 // In production: replace with your actual domain(s).
 const allowedOrigins = process.env.NODE_ENV === "production"
     ? [process.env.FRONTEND_URL || "https://yourdomain.com"]
-    : (origin: string | undefined, c: any) => {
-        if (!origin) return "http://localhost:5173";
-        try {
-            const url = new URL(origin);
-            if (url.hostname === "localhost" || url.hostname === "127.0.0.1") {
-                return origin;
-            }
-        } catch (_) {}
-        return "http://localhost:5173";
-    };
+    : ["http://localhost:5173", "http://localhost:3000"];
 
 app.use("/*", cors({
     origin: allowedOrigins,
@@ -81,14 +72,16 @@ async function startServer() {
             collectionsDir: path.resolve(__dirname, "../../shared/collections"),
             server,
             app,
-            driver: {
-                connection: db,
-                schema: { tables, enums, relations },
-                adminConnectionString: process.env.ADMIN_CONNECTION_STRING || process.env.DATABASE_URL,
-                // Pass connectionString to enable cross-instance realtime via
-                // Postgres LISTEN/NOTIFY. Omit to run in single-instance mode.
-                connectionString
-            },
+            bootstrappers: [
+                createPostgresBootstrapper({
+                    connection: db,
+                    schema: { tables, enums, relations },
+                    adminConnectionString: process.env.ADMIN_CONNECTION_STRING || process.env.DATABASE_URL,
+                    // Pass connectionString to enable cross-instance realtime via
+                    // Postgres LISTEN/NOTIFY. Omit to run in single-instance mode.
+                    connectionString
+                })
+            ],
             auth: {
                 jwtSecret,
                 accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1h",
@@ -118,13 +111,14 @@ async function startServer() {
                 type: "local",
                 basePath: path.resolve(__dirname, "../../uploads")
             },
+            history: true,
         });
 
         // ─── GraphQL (optional) ──────────────────────────────────────
         // Uncomment to expose a GraphQL API alongside the REST API.
         // Requires: pnpm add @hono/graphql-server graphql
         //
-        // import { GraphQLSchemaGenerator } from "@rebasepro/backend";
+        // import { GraphQLSchemaGenerator } from "@rebasepro/server-core";
         // import { graphqlServer } from "@hono/graphql-server";
         //
         // const collections = backend.collectionRegistry.getCollections();

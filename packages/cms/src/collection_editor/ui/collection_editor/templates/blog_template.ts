@@ -2,7 +2,7 @@ import { EntityCollection } from "@rebasepro/types";
 
 export const blogCollectionTemplate = {
     slug: "blog",
-    dbPath: "blog",
+    table: "blog",
     name: "Blog",
     singularName: "Blog entry",
     icon: "article",

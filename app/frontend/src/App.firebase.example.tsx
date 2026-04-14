@@ -10,13 +10,13 @@
 import React from "react";
 import { initializeApp } from "@firebase/app";
 import { Rebase } from "@rebasepro/core";
-import { RebaseAuth } from "@rebasepro/auth-rebase";
+import { RebaseAuth } from "@rebasepro/auth";
 import { RebaseCMS, RebaseShell } from "@rebasepro/cms";
 import {
     useFirebaseAuthController,
     useFirestoreDriver,
     useFirebaseStorageSource
-} from "@rebasepro/firebase";
+} from "@rebasepro/client-firebase";
 import { collections } from "virtual:rebase-collections";
 
 // Your Firebase project configuration

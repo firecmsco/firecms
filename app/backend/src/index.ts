@@ -8,8 +8,8 @@ import {
     initializeRebaseBackend,
     serveSPA,
     HonoEnv
-} from "@rebasepro/backend";
-import { createPostgresDatabaseConnection, createPostgresBootstrapper } from "@rebasepro/postgresql-backend";
+} from "@rebasepro/server-core";
+import { createPostgresDatabaseConnection, createPostgresBootstrapper } from "@rebasepro/server-postgresql";
 
 import { enums, relations, tables } from "./schema.generated";
 
@@ -93,7 +93,7 @@ async function startServer() {
         // Uncomment to expose a GraphQL API alongside the REST API.
         // Requires: pnpm add @hono/graphql-server graphql
         //
-        // import { GraphQLSchemaGenerator } from "@rebasepro/backend";
+        // import { GraphQLSchemaGenerator } from "@rebasepro/server-core";
         // import { graphqlServer } from "@hono/graphql-server";
         //
         // const collections = backend.collectionRegistry.getCollections();

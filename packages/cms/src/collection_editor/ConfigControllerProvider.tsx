@@ -81,7 +81,7 @@ export const ConfigControllerProvider = React.memo(
 
         useEffect(() => {
             if (!databaseAdmin?.fetchUnmappedTables || authController.initialLoading || !authController.user) return;
-            const existingPaths = (collectionConfigController.collections ?? []).map(c => c.dbPath ?? c.slug ?? "").filter(Boolean);
+            const existingPaths = (collectionConfigController.collections ?? []).map(c => (c as any).table ?? c.slug ?? "").filter(Boolean);
             databaseAdmin.fetchUnmappedTables(existingPaths)
                 .then((tables: string[]) => setUnmappedTables(tables))
                 .catch((e: unknown) => console.warn("Could not fetch unmapped tables:", e));

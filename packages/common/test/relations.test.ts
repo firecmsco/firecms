@@ -12,7 +12,7 @@ function makeCollection(overrides: Partial<EntityCollection> = {}): EntityCollec
     return {
         name: "Source",
         slug: "source",
-        dbPath: "source",
+        table: "source",
         properties: {},
         ...overrides,
     };
@@ -22,7 +22,7 @@ function makeTargetCollection(overrides: Partial<EntityCollection> = {}): Entity
     return {
         name: "Target",
         slug: "target",
-        dbPath: "target",
+        table: "target",
         properties: {},
         ...overrides,
     };
@@ -32,12 +32,12 @@ function makeTargetCollection(overrides: Partial<EntityCollection> = {}): Entity
 // getTableName / getTableVarName / getEnumVarName / getColumnName
 // ─────────────────────────────────────────────────────────────
 describe("table/column naming utilities", () => {
-    it("getTableName returns dbPath first", () => {
-        expect(getTableName(makeCollection({ dbPath: "my_table", slug: "mySlug", name: "My Name" }))).toBe("my_table");
+    it("getTableName returns table first", () => {
+        expect(getTableName(makeCollection({ table: "my_table", slug: "mySlug", name: "My Name" }))).toBe("my_table");
     });
 
-    it("getTableName falls back to slug", () => {
-        expect(getTableName(makeCollection({ dbPath: undefined as any, slug: "mySlug" }))).toBe("my_slug");
+    it("getTableName always returns the table property", () => {
+        expect(getTableName(makeCollection({ table: "my_slug", slug: "mySlug" }))).toBe("my_slug");
     });
 
     it("getTableVarName converts snake_case to camelCase", () => {
@@ -123,8 +123,8 @@ describe("sanitizeRelation", () => {
     });
 
     it("generates junction table for owning many-to-many", () => {
-        const target = makeTargetCollection({ slug: "tags", dbPath: "tags" });
-        const source = makeCollection({ slug: "posts", name: "Posts", dbPath: "posts" });
+        const target = makeTargetCollection({ slug: "tags", table: "tags" });
+        const source = makeCollection({ slug: "posts", name: "Posts", table: "posts" });
         const result = sanitizeRelation(
             { target: () => target, cardinality: "many", direction: "owning" } as Partial<Relation>,
             source
@@ -136,8 +136,8 @@ describe("sanitizeRelation", () => {
     });
 
     it("creates sorted junction table name", () => {
-        const target = makeTargetCollection({ slug: "tags", dbPath: "tags" });
-        const source = makeCollection({ slug: "posts", name: "Posts", dbPath: "posts" });
+        const target = makeTargetCollection({ slug: "tags", table: "tags" });
+        const source = makeCollection({ slug: "posts", name: "Posts", table: "posts" });
         const result = sanitizeRelation(
             { target: () => target, cardinality: "many", direction: "owning" } as Partial<Relation>,
             source

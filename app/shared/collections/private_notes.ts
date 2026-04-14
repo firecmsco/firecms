@@ -4,7 +4,7 @@ const privateNotesCollection: EntityCollection = {
     name: "Private Notes",
     singularName: "Private Note",
     slug: "private_notes",
-    dbPath: "private_notes",
+    table: "private_notes",
     icon: "Lock",
     history: true,
     description: "Demonstrates Supabase-style RLS policies. Users can only access their own notes. Admins can read all. Locked notes cannot be updated.",

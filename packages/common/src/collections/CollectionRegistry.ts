@@ -13,19 +13,19 @@ import {
 } from "@rebasepro/types";
 import { deepEqual } from "fast-equals";
 
-import { enumToObjectEntries, getSubcollections, resolveCollectionRelations } from "../util";
+import { enumToObjectEntries, getSubcollections, getTableName, resolveCollectionRelations } from "../util";
 import cloneDeep from "lodash/cloneDeep.js";
 import { removeFunctions } from "@rebasepro/utils";
 
 export class CollectionRegistry {
 
     // Normalized runtime layer (used by Data Grid / UI)
-    private collectionsByDbPath = new Map<string, EntityCollection>();
+    private collectionsByTableName = new Map<string, EntityCollection>();
     private collectionsBySlug = new Map<string, EntityCollection>();
     private rootCollections: EntityCollection[] = [];
 
     // Raw configuration layer (used by Collection Editor AST generator)
-    private rawCollectionsByDbPath = new Map<string, EntityCollection>();
+    private rawCollectionsByTableName = new Map<string, EntityCollection>();
     private rawCollectionsBySlug = new Map<string, EntityCollection>();
     private rawRootCollections: EntityCollection[] = [];
 
@@ -40,11 +40,11 @@ export class CollectionRegistry {
     }
 
     reset() {
-        this.collectionsByDbPath.clear();
+        this.collectionsByTableName.clear();
         this.collectionsBySlug.clear();
         this.rootCollections = [];
 
-        this.rawCollectionsByDbPath.clear();
+        this.rawCollectionsByTableName.clear();
         this.rawCollectionsBySlug.clear();
         this.rawRootCollections = [];
     }
@@ -82,8 +82,8 @@ export class CollectionRegistry {
             this.rawRootCollections.push(raw);
 
             const normalized = this.normalizeCollection(c);
-            this.collectionsByDbPath.set(normalized.dbPath, normalized);
-            this.rawCollectionsByDbPath.set(raw.dbPath, raw);
+            this.collectionsByTableName.set(getTableName(normalized), normalized);
+            this.rawCollectionsByTableName.set(getTableName(raw), raw);
             if (normalized.slug) {
                 this.collectionsBySlug.set(normalized.slug, normalized);
             }
@@ -119,13 +119,13 @@ export class CollectionRegistry {
     }
 
     private _registerRecursively(collection: EntityCollection, rawCollection: EntityCollection) {
-        if (this.collectionsByDbPath.has(collection.dbPath)) {
+        if (this.collectionsByTableName.has(getTableName(collection))) {
             return;
         }
 
         const normalizedCollection = this.normalizeCollection(collection);
-        this.collectionsByDbPath.set(normalizedCollection.dbPath, normalizedCollection);
-        this.rawCollectionsByDbPath.set(rawCollection.dbPath, rawCollection);
+        this.collectionsByTableName.set(getTableName(normalizedCollection), normalizedCollection);
+        this.rawCollectionsByTableName.set(getTableName(rawCollection), rawCollection);
 
         if (normalizedCollection.slug) {
             this.collectionsBySlug.set(normalizedCollection.slug, normalizedCollection);
@@ -201,8 +201,8 @@ export class CollectionRegistry {
         const bySlug = this.collectionsBySlug.get(path);
         if (bySlug) return bySlug;
 
-        // Fallback to dbPath lookup
-        return this.collectionsByDbPath.get(path);
+        // Fallback to table name lookup
+        return this.collectionsByTableName.get(path);
     }
 
     /**
@@ -212,7 +212,7 @@ export class CollectionRegistry {
     getRaw(path: string): EntityCollection | undefined {
         const bySlug = this.rawCollectionsBySlug.get(path);
         if (bySlug) return bySlug;
-        return this.rawCollectionsByDbPath.get(path);
+        return this.rawCollectionsByTableName.get(path);
     }
 
     /**
@@ -246,13 +246,13 @@ export class CollectionRegistry {
 
             // Get relations for current collection
             if (!isPostgresCollection(currentCollection)) {
-                throw new Error(`Relation path navigation requires a PostgreSQL collection, but '${currentCollection.slug || currentCollection.dbPath}' uses driver '${currentCollection.driver}'`);
+                throw new Error(`Relation path navigation requires a PostgreSQL collection, but '${currentCollection.slug}' uses driver '${currentCollection.driver}'`);
             }
             const resolvedRelations = resolveCollectionRelations(currentCollection);
             const relation = resolvedRelations[relationKey];
 
             if (!relation) {
-                throw new Error(`Relation '${relationKey}' not found in collection '${currentCollection.slug || currentCollection.dbPath}'`);
+                throw new Error(`Relation '${relationKey}' not found in collection '${currentCollection.slug}'`);
             }
 
             // Move to the target collection
@@ -268,11 +268,11 @@ export class CollectionRegistry {
     }
 
     getCollections(): EntityCollection[] {
-        return Array.from(this.collectionsByDbPath.values());
+        return Array.from(this.collectionsByTableName.values());
     }
 
     getRawCollections(): EntityCollection[] {
-        return Array.from(this.rawCollectionsByDbPath.values());
+        return Array.from(this.rawCollectionsByTableName.values());
     }
 
     /**
@@ -315,12 +315,12 @@ export class CollectionRegistry {
                 const subcollectionSlug = pathSegments[i + 1];
                 const subcollections: EntityCollection[] | undefined = isFirebaseCollection(currentCollection) ? currentCollection.subcollections?.() : undefined;
                 if (!subcollections) {
-                    throw new Error(`No subcollections found for ${currentCollection.slug || currentCollection.dbPath} in path: ${path}`);
+                    throw new Error(`No subcollections found for ${currentCollection.slug} in path: ${path}`);
                 }
 
                 const subcollection: EntityCollection | undefined = subcollections.find(c => c.slug === subcollectionSlug);
                 if (!subcollection) {
-                    throw new Error(`Subcollection '${subcollectionSlug}' not found in ${currentCollection.slug || currentCollection.dbPath}`);
+                    throw new Error(`Subcollection '${subcollectionSlug}' not found in ${currentCollection.slug}`);
                 }
                 currentCollection = subcollection;
                 collections.push(currentCollection);

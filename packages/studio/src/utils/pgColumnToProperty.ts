@@ -265,7 +265,7 @@ export function buildCollectionFromTableMetadata(
     return {
         name: prettifiedName,
         slug: tableName,
-        dbPath: tableName,
+        table: tableName,
         properties,
         propertiesOrder,
         ...(relations.length > 0 ? { relations } : {}),

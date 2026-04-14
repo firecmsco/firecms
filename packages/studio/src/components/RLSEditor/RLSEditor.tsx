@@ -212,10 +212,10 @@ export const RLSEditor = ({ apiUrl = "" }: { apiUrl?: string }) => {
 
     const activeCollection = useMemo(() => {
         if (!activeTableData) return null;
-        return collectionRegistry.collections?.find((c: { id?: string, path?: string, dbPath?: string, slug?: string, collectionId?: string }) =>
+        return collectionRegistry.collections?.find((c: { id?: string, path?: string, table?: string, slug?: string, collectionId?: string }) =>
             c.id === activeTableData.tableName ||
             c.path === activeTableData.tableName ||
-            c.dbPath === activeTableData.tableName ||
+            c.table === activeTableData.tableName ||
             c.slug === activeTableData.tableName ||
             c.collectionId === activeTableData.tableName
         ) || null;

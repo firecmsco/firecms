@@ -40,12 +40,26 @@ Please adhere to these principles when working with Rebase, as they ensure relia
 5. **Use Rebase MCP Server tools when available:** For data operations, user management, and collection browsing, prefer the MCP tools (`list_documents`, `get_document`, `create_document`, etc.) over writing manual API calls.
 
 6. **Respect the monorepo structure:** Rebase is organized as a modular monorepo with key packages:
-   - `packages/backend` — Express server, PostgreSQL data source, API generation
+   - `packages/server-core` — Hono server coordinator, API generation, auth, storage
+   - `packages/server-postgresql` — PostgreSQL bootstrapper and data driver (Drizzle ORM)
+   - `packages/server-mongodb` — MongoDB bootstrapper and data driver
    - `packages/core` — Core framework, types, hooks, and components
    - `packages/types` — Shared TypeScript type definitions
-   - `packages/ui` — Standalone component library (Tailwind + Radix)
+   - `packages/ui` — Standalone component library (Tailwind CSS v4 + Radix)
+   - `packages/cms` — CMS frontend application
    - `packages/studio` — Admin panel, collection editor, visual schema editor
    - `packages/auth` — Authentication module
+   - `packages/client` — Client SDK
+   - `packages/client-firebase` — Firebase client adapter
+   - `packages/client-postgresql` — PostgreSQL client adapter
+   - `packages/common` — Shared utilities
+   - `packages/formex` — Form engine
+   - `packages/mcp-server` — AI agent MCP tools
+   - `packages/sdk-generator` — Typed SDK generation
+   - `packages/schema-inference` — Auto-infer schema from data
+   - `packages/plugin-data-enhancement` — AI-powered data autofill
+   - `packages/cli` — CLI tool
+   - `packages/utils` — Utility functions
    - `app/` — Developer-facing example application (frontend + backend + shared)
 
 7. **Never deploy to production:** Agents should never run `firebase deploy`, `gcloud deploy`, or any command that pushes code to live infrastructure. Provide the exact command and let the user run it themselves.
@@ -56,21 +70,30 @@ Please adhere to these principles when working with Rebase, as they ensure relia
 rebase/
 ├── app/                      # Developer example app
 │   ├── frontend/             # React frontend (Vite)
-│   ├── backend/              # Express backend
+│   ├── backend/              # Hono backend server
 │   └── shared/               # Shared collection definitions
 │       └── collections/      # TypeScript collection files
 ├── packages/
-│   ├── backend/              # @rebasepro/backend — server, APIs, auth, storage
+│   ├── server-core/          # @rebasepro/server-core — Hono server, APIs, auth, storage
+│   ├── server-postgresql/    # @rebasepro/server-postgresql — PostgreSQL bootstrapper & driver
+│   ├── server-mongodb/       # @rebasepro/server-mongodb — MongoDB bootstrapper & driver
 │   ├── core/                 # @rebasepro/core — framework core
 │   ├── types/                # @rebasepro/types — shared types
 │   ├── ui/                   # @rebasepro/ui — component library
+│   ├── cms/                  # @rebasepro/cms — CMS frontend
 │   ├── studio/               # @rebasepro/studio — admin panel
 │   ├── auth/                 # @rebasepro/auth — authentication
 │   ├── cli/                  # @rebasepro/cli — CLI tool
-│   ├── editor/               # @rebasepro/editor — rich text editor
-│   ├── firebase/             # @rebasepro/firebase — Firebase data source
-│   ├── postgresql/           # @rebasepro/postgresql — PostgreSQL data source
-│   └── ...                   # Additional plugins (data_import, data_export, etc.)
+│   ├── client/               # @rebasepro/client — client SDK
+│   ├── client-firebase/      # @rebasepro/client-firebase — Firebase client adapter
+│   ├── client-postgresql/    # @rebasepro/client-postgresql — PostgreSQL client adapter
+│   ├── common/               # @rebasepro/common — shared utilities
+│   ├── formex/               # @rebasepro/formex — form engine
+│   ├── mcp-server/           # @rebasepro/mcp-server — AI agent MCP tools
+│   ├── sdk-generator/        # @rebasepro/sdk-generator — typed SDK generation
+│   ├── schema-inference/     # @rebasepro/schema-inference — auto-infer schema
+│   ├── plugin-data-enhancement/ # @rebasepro/plugin-data-enhancement — AI autofill
+│   └── utils/                # @rebasepro/utils — utility functions
 ├── pnpm-workspace.yaml
 ├── lerna.json
 └── package.json

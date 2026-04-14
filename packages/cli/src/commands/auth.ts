@@ -77,10 +77,10 @@ async function resetPassword(rawArgs: string[]): Promise<void> {
     }
 
     const scriptContent = `
-import { createPostgresDatabaseConnection } from "@rebasepro/backend";
-import { hashPassword } from "@rebasepro/backend/src/auth/password";
+import { createPostgresDatabaseConnection } from "@rebasepro/server-core";
+import { hashPassword } from "@rebasepro/server-core/src/auth/password";
 import { eq } from "drizzle-orm";
-import { users } from "@rebasepro/backend/src/db/auth-schema";
+import { users } from "@rebasepro/server-core/src/db/auth-schema";
 import * as dotenv from "dotenv";
 import path from "path";
 
