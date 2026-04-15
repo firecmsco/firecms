@@ -8,6 +8,7 @@
         "@rebasepro/core": "0.0.1",
         "@rebasepro/plugin-data-enhancement": "0.0.1",
         "@rebasepro/client": "0.0.1",
+        "@rebasepro/cms": "0.0.1",
         "@rebasepro/studio": "0.0.1",
         "@rebasepro/types": "0.0.1",
         "@rebasepro/ui": "0.0.1",

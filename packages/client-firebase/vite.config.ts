@@ -22,7 +22,7 @@ export default defineConfig(() => ({
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
             name: "Rebase Firebase",
-            fileName: (format) => `index.${format}.js`
+            fileName: (format: string) => `index.${format}.js`
         },
         target: "ESNEXT",
         sourcemap: true,
@@ -50,7 +50,7 @@ export default defineConfig(() => ({
         }
     },
     plugins: [
-        react({
+        ...react({
             babel: {
                 plugins: [
                     ["babel-plugin-react-compiler", ReactCompilerConfig],
@@ -58,4 +58,4 @@ export default defineConfig(() => ({
             }
         })
     ]
-}));
+} as any));

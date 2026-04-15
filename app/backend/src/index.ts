@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
-import { bodyLimit } from "hono/body-limit";
 import { getRequestListener } from "@hono/node-server";
 import { createServer } from "http";
 import path from "path";
@@ -12,183 +11,80 @@ import {
     HonoEnv
 } from "@rebasepro/server-core";
 import { createPostgresDatabaseConnection, createPostgresBootstrapper } from "@rebasepro/server-postgresql";
-
 import { enums, relations, tables } from "./schema.generated";
-
 import * as dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load environment from project root
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
-// ─── Hono app ────────────────────────────────────────────────────────
-// This is a standard Hono app. You own it — add middleware, routes,
-// or anything else you need. Rebase mounts its routes onto this app.
+// ─── App ─────────────────────────────────────────────────────────────
 const app = new Hono<HonoEnv>();
 
-// ─── CORS ────────────────────────────────────────────────────────────
-// Configure allowed origins for your deployment.
-// In development: allow your Vite dev server.
-// In production: replace with your actual domain(s).
-const allowedOrigins = process.env.NODE_ENV === "production"
-    ? [process.env.FRONTEND_URL || "https://yourdomain.com"]
-    : ["http://localhost:5173", "http://localhost:3000"];
-
 app.use("/*", cors({
-    origin: allowedOrigins,
+    origin: process.env.NODE_ENV === "production"
+        ? [process.env.FRONTEND_URL || "https://yourdomain.com"]
+        : ["http://localhost:5173", "http://localhost:3000"],
     credentials: true
 }));
 
-// ─── Security headers ────────────────────────────────────────────────
-app.use("/*", secureHeaders({
-    crossOriginEmbedderPolicy: false,
-    contentSecurityPolicy: process.env.NODE_ENV === "production" ? {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-        fontSrc: ["'self'", "https://fonts.gstatic.com"],
-        imgSrc: ["'self'", "data:", "blob:", "https:"],
-        connectSrc: ["'self'", "ws:", "wss:"],
-    } : undefined,
-    strictTransportSecurity: process.env.NODE_ENV === "production"
-        ? "max-age=63072000; includeSubDomains; preload"
-        : false,
-    xFrameOptions: "DENY",
-}));
-
-// ─── Request body size limit ─────────────────────────────────────────
-app.use("/*", bodyLimit({
-    maxSize: 1024 * 1024, // 1 MB
-    onError: (c) => {
-        return c.json({ error: { message: "Request body too large", code: "PAYLOAD_TOO_LARGE" } }, 413);
-    }
-}));
+app.use("/*", secureHeaders());
 
 // ─── Database ────────────────────────────────────────────────────────
 const databaseUrl = process.env.DATABASE_URL;
-if (!databaseUrl) {
-    throw new Error("DATABASE_URL environment variable is not set");
-}
+if (!databaseUrl) throw new Error("DATABASE_URL is not set");
+
 const { db, connectionString } = createPostgresDatabaseConnection(databaseUrl);
 
 // ─── Start ───────────────────────────────────────────────────────────
 async function startServer() {
     const jwtSecret = process.env.JWT_SECRET;
-    if (!jwtSecret) {
-        throw new Error("JWT_SECRET environment variable is not set");
-    }
+    if (!jwtSecret) throw new Error("JWT_SECRET is not set");
 
     const PORT = parseInt(process.env.PORT || "3001", 10);
-
-    // Create an http.Server so WebSocket can share the same port.
     const server = createServer(getRequestListener(app.fetch));
 
-    try {
-        // ─── Initialize Rebase Backend ───────────────────────────────
-        const backend = await initializeRebaseBackend({
-            collectionsDir: path.resolve(__dirname, "../../shared/collections"),
-            server,
-            app,
-            bootstrappers: [
-                createPostgresBootstrapper({
-                    connection: db,
-                    schema: { tables, enums, relations },
-                    adminConnectionString: process.env.ADMIN_CONNECTION_STRING || process.env.DATABASE_URL,
-                    connectionString
-                })
-            ],
-            auth: {
-                jwtSecret,
-                accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1h",
-                refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "30d",
-                google: process.env.GOOGLE_CLIENT_ID
-                    ? { clientId: process.env.GOOGLE_CLIENT_ID }
-                    : undefined,
-                seedDefaultRoles: true,
-                allowRegistration: process.env.ALLOW_REGISTRATION === "true"
-            },
-            storage: {
-                type: "local",
-                basePath: path.resolve(__dirname, "../../uploads")
-            },
-            history: true,
-        });
+    const backend = await initializeRebaseBackend({
+        collectionsDir: path.resolve(__dirname, "../../shared/collections"),
+        server,
+        app,
+        bootstrappers: [
+            createPostgresBootstrapper({
+                connection: db,
+                schema: { tables, enums, relations },
+                adminConnectionString: process.env.ADMIN_CONNECTION_STRING || databaseUrl,
+                connectionString
+            })
+        ],
+        auth: {
+            jwtSecret,
+            accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1h",
+            refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "30d",
+            google: process.env.GOOGLE_CLIENT_ID
+                ? { clientId: process.env.GOOGLE_CLIENT_ID }
+                : undefined,
+            seedDefaultRoles: true,
+            allowRegistration: process.env.ALLOW_REGISTRATION === "true"
+        },
+        storage: {
+            type: "local",
+            basePath: path.resolve(__dirname, "../../uploads")
+        },
+        history: true,
+    });
 
-        // ─── GraphQL (optional) ──────────────────────────────────────
-        // Uncomment to expose a GraphQL API alongside the REST API.
-        // Requires: pnpm add @hono/graphql-server graphql
-        //
-        // import { GraphQLSchemaGenerator } from "@rebasepro/server-core";
-        // import { graphqlServer } from "@hono/graphql-server";
-        //
-        // const collections = backend.collectionRegistry.getCollections();
-        // const gqlSchema = new GraphQLSchemaGenerator(collections, backend.driver).generateSchema();
-        // app.use("/api/data/graphql", graphqlServer({ schema: gqlSchema }));
+    // ─── Your routes ─────────────────────────────────────────────
+    app.get("/health", (c) => c.json({ status: "ok" }));
 
-        // ─── Your custom routes ──────────────────────────────────────
-        // Add any custom endpoints here. This is a plain Hono app,
-        // so you have full control.
-        //
-        // Example:
-        //   app.get("/api/custom", (c) => c.json({ hello: "world" }));
-
-        app.get("/health", (c) => {
-            return c.json({
-                status: "ok",
-                timestamp: new Date().toISOString(),
-                environment: process.env.NODE_ENV
-            });
-        });
-
-        // ─── Serve frontend in production ────────────────────────────
-        if (process.env.NODE_ENV === "production") {
-            serveSPA(app, {
-                frontendPath: path.join(__dirname, "../../frontend/dist"),
-                excludePaths: ["/health"]
-            });
-        }
-
-        // ─── Error handling ──────────────────────────────────────────
-        app.onError((err, c) => {
-            console.error("Unhandled error:", err);
-            const isProduction = process.env.NODE_ENV === "production";
-            return c.json({
-                error: {
-                    message: isProduction ? "Internal server error" : err.message,
-                    code: "INTERNAL_ERROR"
-                }
-            }, 500);
-        });
-
-        // ─── Listen ─────────────────────────────────────────────────
-        server.listen(PORT, () => {
-            console.log(`🚀 Server running at http://localhost:${PORT}`);
-            console.log(`   • API Base:     http://localhost:${PORT}/api`);
-            console.log(`   • Health:       http://localhost:${PORT}/health`);
-        });
-
-        // ─── Graceful shutdown ───────────────────────────────────────
-        const shutdown = (signal: string) => {
-            console.log(`\n${signal} received — starting graceful shutdown...`);
-            // Stop accepting new connections
-            server.close(() => {
-                console.log("✅ HTTP server closed, all connections drained.");
-                process.exit(0);
-            });
-            // Force exit if draining takes too long
-            setTimeout(() => {
-                console.error("⚠️ Could not drain connections in time, forcing exit.");
-                process.exit(1);
-            }, 10_000).unref();
-        };
-        process.on("SIGTERM", () => shutdown("SIGTERM"));
-        process.on("SIGINT", () => shutdown("SIGINT"));
-    } catch (err) {
-        console.error("Failed to initialize backend:", err);
-        process.exit(1);
+    // Serve the frontend in production
+    if (process.env.NODE_ENV === "production") {
+        serveSPA(app, { frontendPath: path.join(__dirname, "../../frontend/dist") });
     }
+
+    server.listen(PORT, () => {
+        console.log(`🚀 Server running at http://localhost:${PORT}`);
+    });
 }
 
 startServer().catch(err => {

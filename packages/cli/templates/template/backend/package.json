@@ -12,6 +12,7 @@
     "dependencies": {
         "{{PROJECT_NAME}}-shared": "0.0.1",
         "@rebasepro/server-core": "0.0.1",
+        "@rebasepro/server-postgresql": "0.0.1",
         "drizzle-orm": "^0.44.4",
         "hono": "^4.2.0",
         "@hono/node-server": "^1.11.0",
