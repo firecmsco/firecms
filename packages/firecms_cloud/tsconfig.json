@@ -67,6 +67,9 @@
       ],
       "@firecms/formex": [
         "../formex/src"
+      ],
+      "@firecms/firebase_admin": [
+        "../firebase_admin/src"
       ]
     }
   },

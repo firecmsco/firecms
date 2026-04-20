@@ -54,10 +54,11 @@ export function CloudErrorView({
             </Typography>
             <Typography>
                 Make sure the user exists in the client project and try again.
-                If the problem persists, reach us at <a href="mailto:hello@firecms.co?subject=FireCMS%20login%20error"
+                If the problem persists, reach us at <a className="text-primary dark:text-primary-light underline" href="mailto:hello@firecms.co?subject=FireCMS%20login%20error"
                                                         rel="noopener noreferrer"
                                                         target="_blank">
                 hello@firecms.co </a>, or in our <a
+                className="text-primary dark:text-primary-light underline"
                 rel="noopener noreferrer"
                 target="_blank"
                 href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
@@ -72,7 +73,7 @@ export function CloudErrorView({
                 {message}
             </Typography>
 
-            {error.data && Object.keys(error.data).length > 0 && <pre className="text-xs text-gray-500 p-4">
+            {error.data && Object.keys(error.data).length > 0 && <pre className="text-xs text-gray-500 dark:text-gray-400 p-4 bg-gray-50 dark:bg-surface-800 rounded-lg">
                 {JSON.stringify(error.data, null, 2)}
             </pre>}
 
@@ -178,6 +179,7 @@ function CloudNeedsToAcceptTermsErrorView({
         <Typography color={"error"}>
             You can do so by visiting the following link:
             <a
+                className="text-primary dark:text-primary-light underline"
                 rel="noopener noreferrer"
                 target="_blank"
                 href={"https://console.cloud.google.com/welcome?project=" + projectId}>
@@ -213,6 +215,7 @@ function CloudNoPreviousFirebaseProjectsErrorView({
         <Typography color={"error"}>
             You can do so by visiting the following link:
             <a
+                className="text-primary dark:text-primary-light underline"
                 rel="noopener noreferrer"
                 target="_blank"
                 href={"https://console.firebase.google.com/"}>

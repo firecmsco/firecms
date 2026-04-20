@@ -437,6 +437,8 @@ export const fr: FireCMSTranslations = {
     cms_users: "Utilisateurs du CMS",
     roles_menu: "Rôles",
     project_settings: "Paramètres du projet",
+    firestore_explorer: "Explorateur Firestore",
+    explore_your_firestore_data: "Explorez vos données Firestore",
 
     // ─── FireCMS Cloud Login ──────────────────────────────────────
     build_admin_panel_in_minutes: "Créez votre panneau d'administration Firebase en quelques minutes",

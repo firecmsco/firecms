@@ -47,6 +47,7 @@ export function useDelegatedLogin({
                 }
 
                 if (!delegatedToken) {
+                    setDelegatedLoginLoading(false);
                     return;
                 }
 

@@ -113,21 +113,31 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         inputShallow.value = "x";
         const singleRowHeight = sizeReferenceElement.scrollHeight;
 
+        // scrollHeight includes padding, so extract the pure line height
+        // to avoid multiplying padding by the number of rows.
+        const lineHeight = singleRowHeight - padding;
+
         // The height of the outer content
         let outerHeight = innerHeight;
 
         if (minRows) {
-            outerHeight = Math.max(Number(minRows) * singleRowHeight, outerHeight);
+            outerHeight = Math.max(Number(minRows) * lineHeight + padding, outerHeight);
         }
+
+        // Track height before maxRows clamping to detect overflow
+        const unclampedHeight = outerHeight;
+
         if (maxRows) {
-            outerHeight = Math.min(Number(maxRows) * singleRowHeight, outerHeight);
+            outerHeight = Math.min(Number(maxRows) * lineHeight + padding, outerHeight);
         }
         outerHeight = Math.max(outerHeight, singleRowHeight, minHeight);
 
         // Take the box sizing into account for applying this value as a style.
-        const outerHeightStyle = outerHeight + (!ignoreBoxSizing && boxSizing === "border-box" ? padding + border : 0);
+        const outerHeightStyle = Math.ceil(outerHeight + (!ignoreBoxSizing && boxSizing === "border-box" ? padding + border : 0));
 
-        const overflow = Math.abs(outerHeight - innerHeight) <= 1;
+        // overflow=true means content fits → hide scrollbar.
+        // overflow=false means content was clamped by maxRows → show scrollbar.
+        const overflow = Math.abs(unclampedHeight - outerHeight) <= 1;
 
         return {
             outerHeightStyle,
@@ -266,10 +276,12 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
                 // Apply the rows prop to get a "correct" first SSR paint
                 rows={minRows as number}
                 style={{
-                    height: state.outerHeightStyle,
-                    // Need a large enough difference to allow scrolling.
-                    // This prevents infinite rendering loop.
-                    overflow: state.overflow ? "hidden" : undefined,
+                    // Only apply computed height once measurement has succeeded;
+                    // before that, let the `rows` attribute size the textarea.
+                    ...(state.outerHeightStyle > 0 ? { height: state.outerHeightStyle } : {}),
+                    // When content fits (overflow=true), hide scrollbar.
+                    // When clamped by maxRows (overflow=false), allow scrolling.
+                    overflow: state.overflow ? "hidden" : "auto",
                     ...style,
                 }}
                 onScroll={onScroll}
@@ -282,7 +294,6 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
                 ref={shadowRef}
                 tabIndex={-1}
                 style={{
-                    padding: 0,
                     ...styles.shadow,
                     ...style,
                 }}

@@ -16,7 +16,7 @@ export const ADMIN_VIEWS_CONFIG = [
             name: "project_settings",
             group: "Admin",
             icon: "settings"
-        }
+        },
     ] satisfies {
         path: string;
         name: string;

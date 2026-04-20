@@ -146,34 +146,34 @@ export function UserDetailsForm({
                         height: "100%"
                     }}>
 
-                    <DialogTitle variant={"h4"} gutterBottom={false}>{t("user")}</DialogTitle>
+                    <DialogTitle variant={"h4"} gutterBottom={false}>
+                        <div className="flex items-center justify-between">
+                            <div>{t("user")}</div>
+                            {!isNewUser && userProp?.uid && (
+                                <div className="flex items-center gap-2">
+                                    <span className={"text-xs font-mono text-surface-accent-500 dark:text-surface-accent-400 font-normal"}>
+                                        {userProp.uid}
+                                    </span>
+                                    <Tooltip title={t("copy")}>
+                                        <IconButton
+                                            size={"smallest"}
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(userProp.uid!);
+                                                snackbarController.open({
+                                                    type: "success",
+                                                    message: t("copied")
+                                                });
+                                            }}>
+                                            <CopyIcon size={"smallest"}/>
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
+                            )}
+                        </div>
+                    </DialogTitle>
                     <DialogContent className="h-full flex-grow">
 
                         <div className={"grid grid-cols-12 gap-4"}>
-
-                            {!isNewUser && userProp?.uid && (
-                                <div className={"col-span-12"}>
-                                    <div className={"flex items-center gap-2"}>
-                                        <span className={"text-sm text-surface-accent-600 dark:text-surface-accent-400"}>{t("user_id")}</span>
-                                        <Chip size={"small"}>
-                                            {userProp.uid}
-                                        </Chip>
-                                        <Tooltip title={t("copy")}>
-                                            <IconButton
-                                                size={"small"}
-                                                onClick={() => {
-                                                    navigator.clipboard.writeText(userProp.uid);
-                                                    snackbarController.open({
-                                                        type: "success",
-                                                        message: t("copied")
-                                                    });
-                                                }}>
-                                                <CopyIcon size={"small"}/>
-                                            </IconButton>
-                                        </Tooltip>
-                                    </div>
-                                </div>
-                            )}
 
                             <div className={"col-span-12"}>
                                 <TextField

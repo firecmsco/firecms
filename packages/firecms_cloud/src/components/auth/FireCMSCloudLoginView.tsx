@@ -128,7 +128,7 @@ export function FireCMSCloudLoginView({
 
     // Normal login mode - full view with marketing section
     return (
-        <div className="fixed inset-0 flex flex-col lg:flex-row m-0 p-0 overflow-y-auto" style={fadeStyle}>
+        <div className="fixed inset-0 flex flex-col lg:flex-row m-0 p-0 overflow-y-auto bg-white dark:bg-surface-900" style={fadeStyle}>
             {/* Marketing Section - Left Side (Desktop only) */}
             <div
                 className="hidden lg:flex lg:w-1/2 bg-primary text-white flex-col justify-center items-center p-12 m-0">
@@ -168,7 +168,7 @@ export function FireCMSCloudLoginView({
 
             {/* Login Content - Right Side */}
             <div
-                className="flex flex-col items-center justify-center w-full lg:w-1/2 h-full min-h-screen lg:min-h-0 p-8 m-0 relative">
+                className="flex flex-col items-center justify-center w-full lg:w-1/2 h-full min-h-screen lg:min-h-0 p-8 m-0 relative bg-white dark:bg-surface-900">
                 
                 <div className="absolute top-4 right-4 flex gap-2">
                     <LanguageToggle />

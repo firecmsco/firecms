@@ -42,6 +42,7 @@
     "@firecms/datatalk": "^3.1.0",
     "@firecms/entity_history": "^3.1.0",
     "@firecms/firebase": "^3.1.0",
+    "@firecms/firebase_admin": "^3.1.0",
     "@firecms/formex": "^3.1.0",
     "@firecms/schema_inference": "^3.1.0",
     "@firecms/user_management": "^3.1.0",

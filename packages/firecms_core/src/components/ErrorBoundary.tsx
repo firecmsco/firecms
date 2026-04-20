@@ -35,10 +35,10 @@ export class ErrorBoundary extends React.Component<PropsWithChildren<Record<stri
 function FallbackView({ message }: { message?: string }) {
     const { t } = useTranslation();
     return (
-        <div className="h-full w-full bg-slate-100 flex items-center justify-center p-4">
+        <div className="h-full w-full bg-slate-100 dark:bg-surface-900 flex items-center justify-center p-4">
             <div
-                className="flex flex-col items-center justify-center m-4 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                <div className="flex items-center mb-4 text-red-500">
+                className="flex flex-col items-center justify-center m-4 bg-white dark:bg-surface-800 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-surface-700">
+                <div className="flex items-center mb-4 text-red-500 dark:text-red-400">
                     <ErrorIcon/>
                     <div className="ml-4">{t("error")}</div>
                 </div>

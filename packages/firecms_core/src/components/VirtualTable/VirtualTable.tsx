@@ -211,7 +211,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [tableRef]);
 
         const [measureRef, bounds] = useMeasure({
-            debounce: 50,
+            debounce: 0,
             polyfill: ResizeObserver,
             scroll: true,
             // This is important for handling zooming in react-flow

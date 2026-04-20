@@ -43,7 +43,8 @@ import {
     useBuildCloudUserManagement,
     useBuildFireCMSBackend,
     useBuildProjectConfig,
-    useDelegatedLogin
+    useDelegatedLogin,
+    useFirestoreExplorerMode
 } from "./hooks";
 
 import { FireCMSCloudAppProps } from "./FireCMSCloudAppProps";
@@ -75,6 +76,7 @@ import {
 import { DataTalkRoutes, useDataTalkPlugin } from "@firecms/datatalk";
 import { useEntityHistoryPlugin } from "@firecms/entity_history";
 import { useRootCollectionSuggestions } from "./hooks/useRootCollectionSuggestions";
+import { useFirebaseAdminPlugin, FirestoreExplorer, AdminApiProvider, buildAdminApi } from "@firecms/firebase_admin";
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services
@@ -246,9 +248,10 @@ function ErrorDelegatingLoginView({
             <Typography>
                 This error may be caused when a user has been deleted from the client project.
                 Make sure a user exists in the client project with the same email as the one trying to log in.
-                If the problem persists, reach us at <a href="mailto:hello@firecms.co?subject=FireCMS%20login%20error"
+                If the problem persists, reach us at <a className="text-primary dark:text-primary-light underline" href="mailto:hello@firecms.co?subject=FireCMS%20login%20error"
                     rel="noopener noreferrer"
                     target="_blank"> hello@firecms.co </a>, or in our <a
+                        className="text-primary dark:text-primary-light underline"
                         rel="noopener noreferrer"
                         target="_blank"
                         href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
@@ -264,7 +267,7 @@ function ErrorDelegatingLoginView({
             {errorBody}
         </div>
         <div>
-            If you are experiencing issues logging in, feel free to reach us at <a href="mailto:hello@firecms.co"
+            If you are experiencing issues logging in, feel free to reach us at <a className="text-primary dark:text-primary-light underline" href="mailto:hello@firecms.co"
                 rel="noopener noreferrer"
                 target="_blank">
                 hello@firecms.co</a>
@@ -541,11 +544,14 @@ function FireCMSAppAuthenticated({
 
     const includeDataTalk = userManagement.isAdmin ?? false;
 
+    const includeAdmin = userManagement.isAdmin ?? false;
+
     const adminRoutes = useMemo(() => buildAdminRoutes(
         includeDataTalk,
+        includeAdmin,
         fireCMSBackend,
         projectConfig,
-        onAnalyticsEvent), [includeDataTalk, onAnalyticsEvent]);
+        onAnalyticsEvent), [includeDataTalk, includeAdmin, onAnalyticsEvent]);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
         user,
@@ -670,6 +676,13 @@ function FireCMSAppAuthenticated({
         })
     });
 
+    const firebaseAdminPlugin = useFirebaseAdminPlugin({
+        isAdmin: userManagement.isAdmin ?? false,
+        projectId: projectConfig.projectId,
+        backendApiHost: fireCMSBackend.backendApiHost,
+        getBackendAuthToken: fireCMSBackend.getBackendAuthToken,
+    });
+
     const plugins: FireCMSPlugin<any, any, any>[] = [
         saasPlugin,
         exportPlugin,
@@ -677,7 +690,8 @@ function FireCMSAppAuthenticated({
         collectionEditorPlugin,
         dataEnhancementPlugin,
         historyPlugin,
-        datatalkPlugin
+        datatalkPlugin,
+        firebaseAdminPlugin
     ];
 
     const navigationController = useBuildNavigationController({
@@ -733,27 +747,13 @@ function FireCMSAppAuthenticated({
                                         </Scaffold>;
                                 } else {
                                     component = (
-                                        <Scaffold
-                                            logo={projectConfig.logo ?? logo}
-                                            key={"project_scaffold_" + projectConfig.projectId}
-                                            autoOpenDrawer={appConfig?.autoOpenDrawer}>
-                                            <AppBar>
-                                                {FireCMSAppBarComponent &&
-                                                    <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
-                                                        {...appConfig?.fireCMSAppBarComponentProps} />}
-                                            </AppBar>
-                                            <Drawer>
-                                                <FireCMSCloudDrawer />
-                                            </Drawer>
-                                            <NavigationRoutes
-                                                homePage={appConfig?.HomePage
-                                                    ? <appConfig.HomePage />
-                                                    : <FireCMSCloudHomePage />}
-                                            >
-                                                {adminRoutes}
-                                            </NavigationRoutes>
-                                            <SideDialogs />
-                                        </Scaffold>
+                                        <FireCMSScaffoldBody
+                                            projectConfig={projectConfig}
+                                            logo={logo}
+                                            appConfig={appConfig}
+                                            FireCMSAppBarComponent={FireCMSAppBarComponent}
+                                            adminRoutes={adminRoutes}
+                                        />
                                     );
                                 }
 
@@ -768,7 +768,48 @@ function FireCMSAppAuthenticated({
 
 }
 
+function FireCMSScaffoldBody({
+    projectConfig,
+    logo,
+    appConfig,
+    FireCMSAppBarComponent,
+    adminRoutes,
+}: {
+    projectConfig: ProjectConfig;
+    logo?: string;
+    appConfig?: FireCMSAppConfig;
+    FireCMSAppBarComponent?: React.ComponentType<DefaultAppBarProps<any>>;
+    adminRoutes: React.ReactNode;
+}) {
+    const firestoreExplorerMode = useFirestoreExplorerMode();
+
+    return (
+        <Scaffold
+            logo={projectConfig.logo ?? logo}
+            key={"project_scaffold_" + projectConfig.projectId}
+            autoOpenDrawer={appConfig?.autoOpenDrawer}>
+            <AppBar>
+                {FireCMSAppBarComponent &&
+                    <FireCMSAppBarComponent title={projectConfig.projectName ?? ""}
+                        {...appConfig?.fireCMSAppBarComponentProps} />}
+            </AppBar>
+            {!firestoreExplorerMode && <Drawer>
+                <FireCMSCloudDrawer />
+            </Drawer>}
+            <NavigationRoutes
+                homePage={appConfig?.HomePage
+                    ? <appConfig.HomePage />
+                    : <FireCMSCloudHomePage />}
+            >
+                {adminRoutes}
+            </NavigationRoutes>
+            <SideDialogs />
+        </Scaffold>
+    );
+}
+
 function buildAdminRoutes(includeDataTalk: boolean,
+    includeAdmin: boolean,
     fireCMSBackend: FireCMSBackend,
     projectConfig: ProjectConfig,
     onAnalyticsEvent?: (event: string, data?: object) => void) {
@@ -799,6 +840,17 @@ function buildAdminRoutes(includeDataTalk: boolean,
             view: <ProjectSettings />
         }
     ];
+
+    if (includeAdmin) {
+        views.push({
+            path: "firestore",
+            name: "Firestore Explorer",
+            group: "Admin",
+            icon: "manage_search",
+            hideFromNavigation: true,
+            view: <FirestoreExplorer projectId={projectConfig.projectId} />
+        });
+    }
 
     if (includeDataTalk) {
         views.push({

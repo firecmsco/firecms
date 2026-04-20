@@ -44,6 +44,8 @@ export default defineConfig(() => ({
             "@firecms/data_export": path.resolve(__dirname, "../data_export/src"),
             "@firecms/data_import_export": path.resolve(__dirname, "../data_import_export/src"),
             "@firecms/datatalk": path.resolve(__dirname, "../datatalk/src"),
+            "@firecms/firebase_admin": path.resolve(__dirname, "../firebase_admin/src"),
+            "@firecms/entity_history": path.resolve(__dirname, "../entity_history/src"),
         }
     },
     plugins: [react({

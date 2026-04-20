@@ -64,7 +64,7 @@ export function LastEditedByIndicator({
     const uid = metadata?.updated_by;
     const editedOn = metadata?.updated_on;
 
-    if (!uid && !editedOn) return null;
+    const hasData = Boolean(uid || editedOn);
 
     const user: User | null | undefined = uid ? getUser?.(uid) : undefined;
     const date = editedOn instanceof Date ? editedOn : (editedOn?.toDate ? editedOn.toDate() : null);
@@ -74,21 +74,23 @@ export function LastEditedByIndicator({
     const photoURL = user?.photoURL;
 
     return (
-        <div className="flex items-center gap-2 text-xs text-text-secondary dark:text-text-secondary-dark">
-            {photoURL ? (
-                <img
-                    src={photoURL}
-                    alt={displayName ?? "User"}
-                    className="rounded-full object-cover w-6 h-6"
-                />
-            ) : (
-                <div className="rounded-full bg-primary/10 dark:bg-primary-dark/20 flex items-center justify-center text-primary dark:text-primary-dark font-medium w-6 h-6 text-xs">
-                    {(displayName ?? "?").charAt(0).toUpperCase()}
-                </div>
-            )}
-            <span>
-                {displayName}{timeString ? ` · ${timeString}` : ""}
-            </span>
+        <div className="flex items-center gap-2 text-xs text-text-secondary dark:text-text-secondary-dark min-h-6">
+            {hasData && <>
+                {photoURL ? (
+                    <img
+                        src={photoURL}
+                        alt={displayName ?? "User"}
+                        className="rounded-full object-cover w-6 h-6"
+                    />
+                ) : (
+                    <div className="rounded-full bg-primary/10 dark:bg-primary-dark/20 flex items-center justify-center text-primary dark:text-primary-dark font-medium w-6 h-6 text-xs">
+                        {(displayName ?? "?").charAt(0).toUpperCase()}
+                    </div>
+                )}
+                <span>
+                    {displayName}{timeString ? ` · ${timeString}` : ""}
+                </span>
+            </>}
         </div>
     );
 }

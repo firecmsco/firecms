@@ -437,6 +437,8 @@ export const hi: FireCMSTranslations = {
     cms_users: "CMS उपयोगकर्ता",
     roles_menu: "भूमिकाएँ",
     project_settings: "परियोजना सेटिंग",
+    firestore_explorer: "Firestore एक्सप्लोरर",
+    explore_your_firestore_data: "अपने Firestore डेटा का अन्वेषण करें",
 
     // ─── FireCMS Cloud Login ──────────────────────────────────────
     build_admin_panel_in_minutes: "मिनटों में अपना Firebase एडमिन पैनल बनाएं",

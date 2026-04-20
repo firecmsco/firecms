@@ -89,7 +89,16 @@ export function UsersTable({ onUserClicked }: {
                                             : (user.email ? user.email[0].toUpperCase() : "U")}
                                     </Avatar>
                                 </TableCell>
-                                <TableCell>{user.email}</TableCell>
+                                <TableCell>
+                                    <div className="flex flex-col">
+                                        <div>{user.email}</div>
+                                        {user.uid && (
+                                            <div className="text-xs text-surface-accent-500 dark:text-surface-accent-400 font-mono mt-1">
+                                                {user.uid}
+                                            </div>
+                                        )}
+                                    </div>
+                                </TableCell>
                                 <TableCell className={"font-medium align-left"}>{user.displayName}</TableCell>
                                 <TableCell className="align-left">
                                     {userRoles

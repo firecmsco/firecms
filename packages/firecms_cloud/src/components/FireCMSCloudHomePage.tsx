@@ -10,7 +10,7 @@ import {
 import { Paywall, SubscriptionPlanWidget } from "./subscriptions";
 import { ADMIN_VIEWS_CONFIG } from "../utils";
 import { useProjectConfig } from "../hooks";
-import { CenteredView } from "@firecms/ui";
+import { CenteredView, ManageSearchIcon } from "@firecms/ui";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -42,17 +42,28 @@ export function FireCMSCloudHomePage() {
             ? <SubscriptionPlanWidget />
             : undefined}
         additionalChildrenEnd={
-            <NavigationGroup group={"ADMIN"}>
-                <div className={"grid grid-cols-12 gap-2"}>
-                    {ADMIN_VIEWS_CONFIG.map((view) => <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
-                        key={`nav_${view.path}`}>
-                        <SmallNavigationCard
-                            name={t(view.name as any)}
-                            url={view.path}
-                            icon={<IconForView collectionOrView={view}
-                                className={"text-surface-400 dark:text-surface-600"} />} />
-                    </div>)}
-                </div>
-            </NavigationGroup>
+            <>
+                <NavigationGroup group={"ADMIN"}>
+                    <div className={"grid grid-cols-12 gap-2"}>
+                        <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
+                            key={"nav_firestore"}>
+                            <SmallNavigationCard
+                                name={t("firestore_explorer" as any)}
+                                url={"firestore"}
+                                icon={<ManageSearchIcon
+                                    className={"text-surface-400 dark:text-surface-600"} />} />
+                        </div>
+                        {ADMIN_VIEWS_CONFIG.map((view) => <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
+                            key={`nav_${view.path}`}>
+                            <SmallNavigationCard
+                                name={t(view.name as any)}
+                                url={view.path}
+                                icon={<IconForView collectionOrView={view}
+                                    className={"text-surface-400 dark:text-surface-600"} />} />
+                        </div>)}
+                    </div>
+                </NavigationGroup>
+            </>
         } />;
 }
+

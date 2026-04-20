@@ -467,6 +467,8 @@ export interface FireCMSTranslations {
     cms_users: string;
     roles_menu: string;
     project_settings: string;
+    firestore_explorer: string;
+    explore_your_firestore_data: string;
 
     // ─── FireCMS Cloud Login ──────────────────────────────────────
     build_admin_panel_in_minutes: string;
