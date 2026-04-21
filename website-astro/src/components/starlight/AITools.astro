@@ -2,27 +2,21 @@
 ---
 
 <div class="ai-tools mb-6">
-	<h2>AI TOOLS</h2>
-	<ul class="ai-tools-list">
-		<li>
-			<button id="btn-copy-md" class="ai-tool-btn">
-				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-				<span class="btn-text">Copy as Markdown</span>
-			</button>
-		</li>
-		<li>
-			<button id="btn-ask-chatgpt" class="ai-tool-btn">
-				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12z"/><path d="M12 2a10 10 0 1 1-10 10h10z"/><circle cx="12" cy="12" r="3"/></svg>
-				<span class="btn-text">Ask ChatGPT</span>
-			</button>
-		</li>
-		<li>
-			<button id="btn-ask-claude" class="ai-tool-btn">
-				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/></svg>
-				<span class="btn-text">Ask Claude</span>
-			</button>
-		</li>
-	</ul>
+	<h2>AI tools</h2>
+	<div class="ai-tools-list">
+		<button id="btn-copy-md" class="ai-tool-btn">
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+			<span class="btn-text">Copy as Markdown</span>
+		</button>
+		<button id="btn-ask-chatgpt" class="ai-tool-btn">
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12z"/><path d="M12 2a10 10 0 1 1-10 10h10z"/><circle cx="12" cy="12" r="3"/></svg>
+			<span class="btn-text">Ask ChatGPT</span>
+		</button>
+		<button id="btn-ask-claude" class="ai-tool-btn">
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/></svg>
+			<span class="btn-text">Ask Claude</span>
+		</button>
+	</div>
 </div>
 
 <style>
@@ -35,13 +29,8 @@
 		font-weight: 600;
 		line-height: var(--sl-line-height-headings);
 		margin-bottom: 0.5rem;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
 	}
 	.ai-tools-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
 		display: flex;
 		flex-direction: column;
 		gap: 0.25rem;
