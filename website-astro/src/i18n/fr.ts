@@ -1,7 +1,7 @@
 export const fr = {
   'hero.title.1': 'Le CMS Headless',
   'hero.title.2': 'Framework pour',
-  'hero.subtitle.1': 'Créez des applications back-office puissantes en quelques minutes.',
+  'hero.subtitle.1': 'Créez des panneaux d\'administration et des applications back-office puissantes en quelques minutes.',
   'hero.subtitle.2': 'Lancez-vous instantanément avec notre',
   'hero.subtitle.3': 'CMS Headless Cloud hébergé',
   'hero.subtitle.4': 'ou hébergez vous-même notre',
@@ -87,9 +87,9 @@ export const fr = {
   'cta.cloud': 'Essayer FireCMS Cloud',
   'cta.docs': 'Voir la documentation',
   
-  'seo.title': 'CMS Firebase & CMS Firestore | FireCMS',
-  'seo.description': 'FireCMS est un framework CMS Firebase et CMS Firestore pour créer des panneaux d\'administration et des applications back-office en quelques minutes. Lancez-vous instantanément avec notre Cloud géré, ou hébergez vous-même notre framework open source.',
-  'seo.keywords': 'CMS headless, CMS Firebase, CMS Firestore, panneau d\'administration React, backend sans code, CMS propulsé par IA, constructeur de schéma visuel, gestion des données, application back-office, système de gestion de contenu, admin Firestore, back office Firebase, interface de base de données',
+  'seo.title': 'Firebase Admin Panel & CMS Firestore | FireCMS',
+  'seo.description': 'FireCMS est un Firebase Admin Panel et framework CMS Firestore pour créer des panneaux d\'administration et des applications back-office en quelques minutes. Lancez-vous instantanément avec notre Cloud géré, ou hébergez vous-même notre framework open source.',
+  'seo.keywords': 'Firebase Admin Panel, Firestore admin panel, CMS headless, CMS Firebase, CMS Firestore, panneau d\'administration React, backend sans code, CMS propulsé par IA, constructeur de schéma visuel, gestion des données, application back-office, système de gestion de contenu, admin Firestore, back office Firebase, interface de base de données',
 
   'pricing.title': 'Des tarifs flexibles pour tous les besoins',
   'pricing.subtitle': 'Commencez gratuitement avec notre version Community open source, essayez le Cloud géré ou passez à la version PRO pour des fonctionnalités auto-hébergées avancées.',

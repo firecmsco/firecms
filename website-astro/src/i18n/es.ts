@@ -1,7 +1,7 @@
 export const es = {
   'hero.title.1': 'El Framework de CMS Headless',
   'hero.title.2': 'para',
-  'hero.subtitle.1': 'Construye potentes aplicaciones de back-office en minutos.',
+  'hero.subtitle.1': 'Construye potentes paneles de administración y aplicaciones de back-office en minutos.',
   'hero.subtitle.2': 'Lanza tu aplicación al instante con nuestro',
   'hero.subtitle.3': 'CMS Headless Cloud',
   'hero.subtitle.4': 'o autoaloja nuestro',
@@ -87,9 +87,9 @@ export const es = {
   'cta.cloud': 'Probar FireCMS Cloud',
   'cta.docs': 'Ver Documentación',
   
-  'seo.title': 'Firebase CMS & Firestore CMS | FireCMS',
-  'seo.description': 'FireCMS es un CMS para Firebase y Firestore ideal para crear paneles de administración en minutos. Lanza tu aplicación al instante con nuestro Cloud gestionado, o autoaloja nuestro framework open-source.',
-  'seo.keywords': 'CMS headless, CMS Firebase, CMS Firestore, panel de administración React, backend sin código, CMS con IA, constructor visual de esquemas, gestión de datos, aplicación back-office, sistema de gestión de contenidos, administrador Firestore, back office Firebase, interfaz de base de datos',
+  'seo.title': 'Firebase Admin Panel & Firestore CMS | FireCMS',
+  'seo.description': 'FireCMS es un Firebase Admin Panel y CMS para Firestore ideal para crear paneles de administración en minutos. Lanza tu aplicación al instante con nuestro Cloud gestionado, o autoaloja nuestro framework open-source.',
+  'seo.keywords': 'Firebase Admin Panel, Firestore admin panel, CMS headless, CMS Firebase, CMS Firestore, panel de administración React, backend sin código, CMS con IA, constructor visual de esquemas, gestión de datos, aplicación back-office, sistema de gestión de contenidos, administrador Firestore, back office Firebase, interfaz de base de datos',
 
   'pricing.title': 'Precios flexibles para cada necesidad',
   'pricing.subtitle': 'Empieza gratis con nuestra versión Community de código abierto, prueba Cloud gestionado o elige PRO para funcionalidades avanzadas autoalojables.',

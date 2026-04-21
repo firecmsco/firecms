@@ -1,0 +1,146 @@
+---
+---
+
+<div class="ai-tools mb-6">
+	<h2>AI TOOLS</h2>
+	<ul class="ai-tools-list">
+		<li>
+			<button id="btn-copy-md" class="ai-tool-btn">
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+				<span class="btn-text">Copy as Markdown</span>
+			</button>
+		</li>
+		<li>
+			<button id="btn-ask-chatgpt" class="ai-tool-btn">
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12z"/><path d="M12 2a10 10 0 1 1-10 10h10z"/><circle cx="12" cy="12" r="3"/></svg>
+				<span class="btn-text">Ask ChatGPT</span>
+			</button>
+		</li>
+		<li>
+			<button id="btn-ask-claude" class="ai-tool-btn">
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07"/></svg>
+				<span class="btn-text">Ask Claude</span>
+			</button>
+		</li>
+	</ul>
+</div>
+
+<style>
+	.ai-tools {
+		margin-bottom: 2rem;
+	}
+	.ai-tools h2 {
+		color: var(--sl-color-white);
+		font-size: var(--sl-text-h5);
+		font-weight: 600;
+		line-height: var(--sl-line-height-headings);
+		margin-bottom: 0.5rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+	.ai-tools-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+	.ai-tool-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+		padding: 0.25rem 0;
+		background: none;
+		border: none;
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-sm);
+		cursor: pointer;
+		text-align: left;
+		font-family: inherit;
+		transition: color 0.15s ease-in-out;
+	}
+	.ai-tool-btn:hover {
+		color: var(--sl-color-white);
+	}
+	.ai-tool-btn svg {
+		flex-shrink: 0;
+		opacity: 0.8;
+	}
+	.ai-tool-btn:hover svg {
+		opacity: 1;
+	}
+</style>
+
+<script is:inline type="module">
+	import TurndownService from 'https://cdn.jsdelivr.net/npm/turndown@7.1.3/+esm';
+
+	function setupAITools() {
+		// Only setup once
+		if (window._aiToolsSetup) return;
+		window._aiToolsSetup = true;
+
+		const getMarkdown = () => {
+			const content = document.querySelector('.sl-markdown-content');
+			if (!content) return '';
+			
+			const cloned = content.cloneNode(true);
+			
+			// Remove interactive elements not needed for LLMs
+			const copyButtons = cloned.querySelectorAll('.copy, button');
+			copyButtons.forEach(btn => btn.remove());
+			
+			const turndownService = new TurndownService({
+				headingStyle: 'atx',
+				codeBlockStyle: 'fenced'
+			});
+			return turndownService.turndown(cloned);
+		};
+
+		const copyBtn = document.getElementById('btn-copy-md');
+		if (copyBtn) {
+			copyBtn.addEventListener('click', async () => {
+				const md = getMarkdown();
+				try {
+					await navigator.clipboard.writeText(md);
+					const textSpan = copyBtn.querySelector('.btn-text');
+					const originalText = textSpan.innerText;
+					textSpan.innerText = 'Copied!';
+					setTimeout(() => {
+						textSpan.innerText = originalText;
+					}, 2000);
+				} catch (err) {
+					console.error('Failed to copy', err);
+				}
+			});
+		}
+
+		const gptBtn = document.getElementById('btn-ask-chatgpt');
+		if (gptBtn) {
+			gptBtn.addEventListener('click', () => {
+				const mdUrl = window.location.href.split('?')[0].replace(/\/$/, '') + '.md';
+				const prompt = "Please help me understand this FireCMS documentation page:\n" + mdUrl;
+				window.open('https://chatgpt.com/?q=' + encodeURIComponent(prompt), '_blank');
+			});
+		}
+
+		const claudeBtn = document.getElementById('btn-ask-claude');
+		if (claudeBtn) {
+			claudeBtn.addEventListener('click', () => {
+				const mdUrl = window.location.href.split('?')[0].replace(/\/$/, '') + '.md';
+				const prompt = "Please help me understand this FireCMS documentation page:\n" + mdUrl;
+				window.open('https://claude.ai/new?q=' + encodeURIComponent(prompt), '_blank');
+			});
+		}
+	}
+
+	// Run on initial load and after Astro View Transitions
+	document.addEventListener('DOMContentLoaded', setupAITools);
+	document.addEventListener('astro:page-load', setupAITools);
+	
+	// Just in case it's loaded late
+	if (document.readyState === 'interactive' || document.readyState === 'complete') {
+		setupAITools();
+	}
+</script>

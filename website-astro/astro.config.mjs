@@ -646,6 +646,7 @@ export default defineConfig({
                 Header: "./src/components/starlight/Header.astro",
                 SiteTitle: "./src/components/starlight/SiteTitle.astro",
                 Head: "./src/components/starlight/Head.astro",
+                PageSidebar: "./src/components/starlight/PageSidebar.astro",
             },
         }),
         mdx(),

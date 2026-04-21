@@ -1,7 +1,7 @@
 export const de = {
   'hero.title.1': 'Das Headless CMS',
   'hero.title.2': 'Framework für',
-  'hero.subtitle.1': 'Erstellen Sie leistungsstarke Back-Office-Apps in Minuten.',
+  'hero.subtitle.1': 'Erstellen Sie leistungsstarke Admin-Panels und Back-Office-Apps in Minuten.',
   'hero.subtitle.2': 'Starten Sie sofort mit unserem',
   'hero.subtitle.3': 'Gehosteten Headless CMS Cloud',
   'hero.subtitle.4': 'oder hosten Sie unser',
@@ -87,9 +87,9 @@ export const de = {
   'cta.cloud': 'FireCMS Cloud testen',
   'cta.docs': 'Dokumentation ansehen',
 
-  'seo.title': 'Firebase CMS & Firestore CMS | FireCMS',
-  'seo.description': 'FireCMS ist ein Firebase CMS und Firestore CMS Framework zum schnellen Erstellen von Admin-Panels und Back-Office-Apps. Starten Sie sofort mit unserem verwalteten Cloud oder hosten Sie unser Open-Source-Framework selbst.',
-  'seo.keywords': 'Headless CMS, Firebase CMS, Firestore CMS, React Admin-Panel, No-Code Backend, KI-gestütztes CMS, visueller Schema-Builder, Datenverwaltung, Back-Office-Anwendung, Content-Management-System, Firestore-Admin, Firebase Back Office, Datenbank-UI',
+  'seo.title': 'Firebase Admin Panel & Firestore CMS | FireCMS',
+  'seo.description': 'FireCMS ist ein Firebase Admin Panel und Firestore CMS Framework zum schnellen Erstellen von Admin-Panels und Back-Office-Apps. Starten Sie sofort mit unserem verwalteten Cloud oder hosten Sie unser Open-Source-Framework selbst.',
+  'seo.keywords': 'Firebase Admin Panel, Firestore admin panel, Headless CMS, Firebase CMS, Firestore CMS, React Admin-Panel, No-Code Backend, KI-gestütztes CMS, visueller Schema-Builder, Datenverwaltung, Back-Office-Anwendung, Content-Management-System, Firestore-Admin, Firebase Back Office, Datenbank-UI',
 
   'pricing.title': 'Flexible Preise für jeden Bedarf',
   'pricing.subtitle': 'Starten Sie kostenlos mit unserer Open-Source-Community-Version, probieren Sie die verwaltete Cloud oder wählen Sie PRO für erweiterte Self-Hosted-Funktionen.',

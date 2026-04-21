@@ -231,6 +231,16 @@ async function buildSlugMap(directoryPath, slugMap) {
                     const contentToAppend = `# ${title}\n${resolvedMdx}\n`;
                     // Append the resolved content to the output file
                     result += contentToAppend;
+                    
+                    // Write the individual .md file for direct access
+                    const individualMdPath = path.join("./public", `${slug}.md`);
+                    fs.mkdirSync(path.dirname(individualMdPath), { recursive: true });
+                    // Process relative links for the individual file to be absolute
+                    let individualContent = contentToAppend;
+                    individualContent = individualContent.replaceAll("](./", "](https://firecms.co/docs/");
+                    individualContent = individualContent.replaceAll("../", "https://firecms.co/docs/");
+                    fs.writeFileSync(individualMdPath, individualContent, "utf-8");
+                    
                     processedCount++;
                 } catch (error) {
                     console.error(`Error resolving MDX code blocks in ${mdxFilePath}:`, error.message);

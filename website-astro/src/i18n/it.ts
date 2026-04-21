@@ -1,7 +1,7 @@
 export const it = {
   'hero.title.1': 'Il Framework CMS Headless',
   'hero.title.2': 'per',
-  'hero.subtitle.1': 'Crea potenti applicazioni back-office in pochi minuti.',
+  'hero.subtitle.1': 'Crea potenti pannelli admin e applicazioni back-office in pochi minuti.',
   'hero.subtitle.2': 'Lancia subito con il nostro',
   'hero.subtitle.3': 'CMS Headless Cloud gestito',
   'hero.subtitle.4': 'oppure ospita il nostro',
@@ -87,9 +87,9 @@ export const it = {
   'cta.cloud': 'Prova FireCMS Cloud',
   'cta.docs': 'Vedi la Documentazione',
 
-  'seo.title': 'Firebase CMS & Firestore CMS | FireCMS',
-  'seo.description': 'FireCMS è un framework CMS per Firebase e Firestore per creare rapidamente pannelli admin e app back-office. Lancia subito con il nostro Cloud gestito o ospita il nostro framework open-source.',
-  'seo.keywords': 'CMS headless, CMS Firebase, CMS Firestore, pannello admin React, backend senza codice, CMS con intelligenza artificiale, costruttore visuale di schemi, gestione dati, applicazione back-office, sistema di gestione dei contenuti, admin Firestore, back office Firebase, interfaccia database',
+  'seo.title': 'Firebase Admin Panel & Firestore CMS | FireCMS',
+  'seo.description': 'FireCMS è un Firebase Admin Panel e framework CMS per Firestore per creare rapidamente pannelli admin e app back-office. Lancia subito con il nostro Cloud gestito o ospita il nostro framework open-source.',
+  'seo.keywords': 'Firebase Admin Panel, Firestore admin panel, CMS headless, CMS Firebase, CMS Firestore, pannello admin React, backend senza codice, CMS con intelligenza artificiale, costruttore visuale di schemi, gestione dati, applicazione back-office, sistema di gestione dei contenuti, admin Firestore, back office Firebase, interfaccia database',
 
   'pricing.title': 'Prezzi flessibili per ogni esigenza',
   'pricing.subtitle': 'Inizia gratis con la nostra versione Community open-source, prova il Cloud gestito o scegli PRO per funzionalità avanzate self-hosted.',

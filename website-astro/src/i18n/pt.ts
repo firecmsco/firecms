@@ -1,7 +1,7 @@
 export const pt = {
   'hero.title.1': 'O Framework CMS Headless',
   'hero.title.2': 'para',
-  'hero.subtitle.1': 'Crie aplicações de back-office poderosas em minutos.',
+  'hero.subtitle.1': 'Crie painéis de administração e aplicações de back-office poderosas em minutos.',
   'hero.subtitle.2': 'Entre no ar instantaneamente com nosso',
   'hero.subtitle.3': 'CMS Headless Cloud',
   'hero.subtitle.4': 'ou hospede o nosso',
@@ -77,9 +77,9 @@ export const pt = {
   'cta.title': 'Pronto para começar?',
   'cta.cloud': 'Experimentar FireCMS Cloud',
   'cta.docs': 'Ver Documentação',
-  'seo.title': 'Firebase CMS & Firestore CMS | FireCMS',
-  'seo.description': 'O FireCMS é um framework CMS para Firebase e Firestore para criar painéis de administração e apps de back-office em minutos. Entre no ar instantaneamente com nosso Cloud gerenciado ou hospede nosso framework de código aberto.',
-  'seo.keywords': 'CMS headless, CMS Firebase, CMS Firestore, painel de administração React, backend sem código, CMS com IA, construtor visual de esquemas, gestão de dados, aplicação back-office, sistema de gestão de conteúdos, admin Firestore, back office Firebase, interface de banco de dados',
+  'seo.title': 'Firebase Admin Panel & Firestore CMS | FireCMS',
+  'seo.description': 'O FireCMS é um Firebase Admin Panel e framework CMS para Firebase e Firestore para criar painéis de administração e apps de back-office em minutos. Entre no ar instantaneamente com nosso Cloud gerenciado ou hospede nosso framework de código aberto.',
+  'seo.keywords': 'Firebase Admin Panel, Firestore admin panel, CMS headless, CMS Firebase, CMS Firestore, painel de administração React, backend sem código, CMS com IA, construtor visual de esquemas, gestão de dados, aplicação back-office, sistema de gestão de conteúdos, admin Firestore, back office Firebase, interface de banco de dados',
 
   'pricing.title': 'Preços Flexíveis para Cada Necessidade',
   'pricing.subtitle': 'Comece gratuitamente com nossa versão Community de código aberto, experimente o Cloud gerenciado ou vá para o PRO para recursos avançados self-hosted.',
