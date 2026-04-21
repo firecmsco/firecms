@@ -137,6 +137,23 @@ export function FirestoreExplorer({
         setSelectedPath(subPath);
     }, [setSelectedPath]);
 
+    const handleNavigateToDocument = useCallback((collectionPath: string, docId: string) => {
+        adminApi
+            .getDocument(projectId, collectionPath, docId, databaseId)
+            .then(doc => {
+                setSelectedDocument(doc);
+                setSearchParams(prev => {
+                    const next = new URLSearchParams(prev);
+                    next.set("path", collectionPath);
+                    next.set("doc", doc.id);
+                    return next;
+                });
+            })
+            .catch(() => {
+                console.error("Could not load document", docId);
+            });
+    }, [projectId, databaseId, adminApi, setSearchParams]);
+
     // Panel sizes persisted in localStorage
     const [sidebarSize, setSidebarSizeState] = useState(() => readStoredSize(LS_SIDEBAR_SIZE, 18));
     const [detailSize, setDetailSizeState] = useState(() => readStoredSize(LS_DETAIL_SIZE, 35));
@@ -157,11 +174,15 @@ export function FirestoreExplorer({
     );
 
     const handleBreadcrumbClick = useCallback((index: number) => {
-        const newPath = breadcrumbParts.slice(0, index + 1).join("/");
         if (index % 2 === 0) {
+            const newPath = breadcrumbParts.slice(0, index + 1).join("/");
             setSelectedPath(newPath);
+        } else {
+            const collectionPath = breadcrumbParts.slice(0, index).join("/");
+            const docId = breadcrumbParts[index];
+            handleNavigateToDocument(collectionPath, docId);
         }
-    }, [breadcrumbParts, setSelectedPath]);
+    }, [breadcrumbParts, setSelectedPath, handleNavigateToDocument]);
 
     // ─── Keyboard shortcuts ─────────────────────────────────────────────────
     useEffect(() => {
@@ -216,14 +237,16 @@ export function FirestoreExplorer({
                         projectId={projectId}
                         databaseId={databaseId}
                         selectedPath={selectedPath}
+                        selectedDocId={selectedDocId}
                         onSelectCollection={setSelectedPath}
+                        onSelectDocument={handleNavigateToDocument}
                     />
                 ) : (
                     <div className="space-y-1 p-2">
                         {SIDEBAR_SKELETON_WIDTHS.map((w, i) => (
                             <div key={i} className="flex items-center gap-2 py-1.5 px-3">
                                 <Skeleton className="h-4 w-4 rounded flex-shrink-0" />
-                                <Skeleton className="h-4" style={{ width: `${w}%` }} />
+                                <div style={{ width: `${w}%` }}><Skeleton className="h-4 w-full" /></div>
                             </div>
                         ))}
                     </div>

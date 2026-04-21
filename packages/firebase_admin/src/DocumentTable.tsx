@@ -121,8 +121,22 @@ function renderCellValue(value: any): string {
         const date = value._seconds ? new Date(value._seconds * 1000) : value;
         return date.toLocaleString();
     }
-    if (Array.isArray(value)) return `[${value.length} items]`;
-    if (typeof value === "object") return `{${Object.keys(value).length} fields}`;
+    if (Array.isArray(value)) {
+        try {
+            const str = JSON.stringify(value);
+            return str.length > 120 ? str.substring(0, 120) + "…" : str;
+        } catch (e) {
+            return `[${value.length} items]`;
+        }
+    }
+    if (typeof value === "object") {
+        try {
+            const str = JSON.stringify(value);
+            return str.length > 120 ? str.substring(0, 120) + "…" : str;
+        } catch (e) {
+            return `{${Object.keys(value).length} fields}`;
+        }
+    }
     return String(value);
 }
 

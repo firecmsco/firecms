@@ -4,6 +4,7 @@ import {
     Typography,
     Skeleton,
     FolderIcon,
+    DescriptionIcon,
 } from "@firecms/ui";
 import { useAdminApi } from "./api/AdminApiProvider";
 
@@ -11,28 +12,31 @@ import { useAdminApi } from "./api/AdminApiProvider";
 const SKELETON_WIDTHS = [65, 82, 55, 74, 90, 48];
 
 /**
- * Flat list of root-level Firestore collections.
+ * Tree list of Firestore collections.
  *
- * Subcollections are NOT shown here — they are accessed
- * from the document detail panel after opening a specific document,
- * because subcollections live under documents, not under collections.
+ * Root collections are shown always.
+ * Subcollections are fetched and shown ONLY for documents that are in the
+ * current navigation path (effective path).
  */
 export function CollectionTree({
     projectId,
     databaseId,
     selectedPath,
+    selectedDocId,
     onSelectCollection,
+    onSelectDocument,
 }: {
     projectId: string;
     databaseId?: string;
     selectedPath: string | null;
+    selectedDocId: string | null;
     onSelectCollection: (path: string) => void;
+    onSelectDocument?: (path: string, docId: string) => void;
 }) {
     const adminApi = useAdminApi();
     const [rootCollections, setRootCollections] = useState<string[]>([]);
     const [loading, setLoading] = useState(true); // start true so skeletons show from frame 0
     const [error, setError] = useState<string | null>(null);
-
 
     useEffect(() => {
         setRootCollections([]);
@@ -46,7 +50,6 @@ export function CollectionTree({
                         .filter(name => !["__FIRECMS", "**", "*"].includes(name))
                         .sort()
                 );
-
             })
             .catch(e => setError(e.message))
             .finally(() => {
@@ -54,13 +57,22 @@ export function CollectionTree({
             });
     }, [projectId, databaseId]);
 
+    const effectivePathParts = React.useMemo(() => {
+        if (!selectedPath) return [];
+        const parts = selectedPath.split("/").filter(Boolean);
+        if (selectedDocId) {
+            parts.push(selectedDocId);
+        }
+        return parts;
+    }, [selectedPath, selectedDocId]);
+
     if (loading && rootCollections.length === 0) {
         return (
             <div className="space-y-1 p-2">
                 {SKELETON_WIDTHS.map((w, i) => (
                     <div key={i} className="flex items-center gap-2 py-1.5 px-3">
                         <Skeleton className="h-4 w-4 rounded flex-shrink-0" />
-                        <Skeleton className="h-4" style={{ width: `${w}%` }} />
+                        <div style={{ width: `${w}%` }}><Skeleton className="h-4 w-full" /></div>
                     </div>
                 ))}
             </div>
@@ -89,39 +101,177 @@ export function CollectionTree({
 
     return (
         <div className="flex flex-col">
-            {rootCollections.map(collectionId => {
-                const isSelected = selectedPath === collectionId
-                    || (selectedPath != null && selectedPath.startsWith(collectionId + "/"));
+            {rootCollections.map(collectionId => (
+                <CollectionNode
+                    key={collectionId}
+                    collectionId={collectionId}
+                    parentPath={null}
+                    effectivePathParts={effectivePathParts}
+                    partIndex={0}
+                    selectedPath={selectedPath}
+                    onSelectCollection={onSelectCollection}
+                    onSelectDocument={onSelectDocument}
+                    projectId={projectId}
+                    databaseId={databaseId}
+                />
+            ))}
+        </div>
+    );
+}
 
-                return (
-                    <div
-                        key={collectionId}
-                        className={cls(
-                            "flex items-center gap-2 py-1.5 px-3 rounded-md cursor-pointer transition-colors",
-                            "hover:bg-surface-200 dark:hover:bg-surface-800",
-                            isSelected && "bg-primary-bg dark:bg-primary/10"
-                        )}
-                        onClick={() => onSelectCollection(collectionId)}
-                    >
-                        <FolderIcon
-                            size="smallest"
-                            className={cls(
-                                "flex-shrink-0",
-                                isSelected ? "text-primary" : "text-amber-500 dark:text-amber-400"
-                            )}
-                        />
-                        <Typography
-                            variant="body2"
-                            className={cls(
-                                "flex-grow truncate text-sm",
-                                isSelected && "text-primary font-medium"
-                            )}
-                        >
-                            {collectionId}
-                        </Typography>
-                    </div>
+function CollectionNode({
+    collectionId,
+    parentPath,
+    effectivePathParts,
+    partIndex,
+    selectedPath,
+    onSelectCollection,
+    onSelectDocument,
+    projectId,
+    databaseId,
+}: {
+    collectionId: string;
+    parentPath: string | null;
+    effectivePathParts: string[];
+    partIndex: number;
+    selectedPath: string | null;
+    onSelectCollection: (path: string) => void;
+    onSelectDocument?: (path: string, docId: string) => void;
+    projectId: string;
+    databaseId?: string;
+}) {
+    const fullPath = parentPath ? `${parentPath}/${collectionId}` : collectionId;
+    const isSelected = selectedPath === fullPath;
+
+    // Is this collection in the navigation path?
+    const inNavigationPath = effectivePathParts[partIndex] === collectionId;
+    const docIdInPath = inNavigationPath && effectivePathParts.length > partIndex + 1 ? effectivePathParts[partIndex + 1] : null;
+
+    return (
+        <div className="flex flex-col">
+            <div
+                className={cls(
+                    "flex items-center gap-2 py-1.5 px-3 rounded-md cursor-pointer transition-colors",
+                    "hover:bg-surface-200 dark:hover:bg-surface-800",
+                    isSelected && "bg-primary-bg dark:bg-primary/10"
+                )}
+                onClick={() => onSelectCollection(fullPath)}
+            >
+                <FolderIcon
+                    size="smallest"
+                    className={cls(
+                        "flex-shrink-0",
+                        isSelected || inNavigationPath ? "text-primary" : "text-amber-500 dark:text-amber-400"
+                    )}
+                />
+                <Typography
+                    variant="body2"
+                    className={cls(
+                        "flex-grow truncate text-sm",
+                        (isSelected || inNavigationPath) && "text-primary font-medium"
+                    )}
+                >
+                    {collectionId}
+                </Typography>
+            </div>
+
+            {docIdInPath && (
+                <div className="ml-4 pl-2 border-l border-surface-200 dark:border-surface-800 my-1">
+                    <DocumentNode
+                        docId={docIdInPath}
+                        parentPath={fullPath}
+                        effectivePathParts={effectivePathParts}
+                        partIndex={partIndex + 1}
+                        selectedPath={selectedPath}
+                        onSelectCollection={onSelectCollection}
+                        onSelectDocument={onSelectDocument}
+                        projectId={projectId}
+                        databaseId={databaseId}
+                    />
+                </div>
+            )}
+        </div>
+    );
+}
+
+function DocumentNode({
+    docId,
+    parentPath,
+    effectivePathParts,
+    partIndex,
+    selectedPath,
+    onSelectCollection,
+    onSelectDocument,
+    projectId,
+    databaseId,
+}: {
+    docId: string;
+    parentPath: string;
+    effectivePathParts: string[];
+    partIndex: number;
+    selectedPath: string | null;
+    onSelectCollection: (path: string) => void;
+    onSelectDocument?: (path: string, docId: string) => void;
+    projectId: string;
+    databaseId?: string;
+}) {
+    const adminApi = useAdminApi();
+    const [subcollections, setSubcollections] = useState<string[]>([]);
+    const [loading, setLoading] = useState(true);
+    const docPath = `${parentPath}/${docId}`;
+
+    useEffect(() => {
+        setLoading(true);
+        adminApi
+            .listCollections(projectId, docPath, databaseId)
+            .then(({ collections }) => {
+                setSubcollections(
+                    collections
+                        .filter(name => !["__FIRECMS", "**", "*"].includes(name))
+                        .sort()
                 );
-            })}
+            })
+            .catch(console.error)
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [projectId, docPath, databaseId]);
+
+    const isSelected = docId === effectivePathParts[effectivePathParts.length - 1];
+
+    return (
+        <div className="flex flex-col">
+            <div
+                className="flex items-center gap-2 py-1 px-3 mb-1 text-surface-500 cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800 rounded-md transition-colors"
+                onClick={() => onSelectDocument?.(parentPath, docId)}
+            >
+                <DescriptionIcon size="smallest" className={isSelected ? "text-primary" : "text-surface-400"} />
+                <Typography variant="caption" className={cls("font-mono text-xs truncate", isSelected && "text-primary font-medium")}>
+                    {docId}
+                </Typography>
+            </div>
+
+            <div className="ml-2">
+                {loading && (
+                    <div className="py-1 px-3 flex items-center">
+                        <Skeleton className="h-3 w-16" />
+                    </div>
+                )}
+                {!loading && subcollections.map(subId => (
+                    <CollectionNode
+                        key={subId}
+                        collectionId={subId}
+                        parentPath={docPath}
+                        effectivePathParts={effectivePathParts}
+                        partIndex={partIndex + 1}
+                        selectedPath={selectedPath}
+                        onSelectCollection={onSelectCollection}
+                        onSelectDocument={onSelectDocument}
+                        projectId={projectId}
+                        databaseId={databaseId}
+                    />
+                ))}
+            </div>
         </div>
     );
 }

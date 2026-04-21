@@ -25,6 +25,7 @@
     "packages/user_management",
     "packages/formex",
     "packages/media_manager",
+    "packages/firebase_admin",
     "examples/example_cloud",
     "examples/example",
     "examples/example_astro",

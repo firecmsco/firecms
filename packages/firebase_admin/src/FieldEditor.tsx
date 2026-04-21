@@ -605,13 +605,26 @@ export function EditableFieldsView({
         : Object.entries(values).sort(([a], [b]) => a.localeCompare(b));
 
     // DnD setup for array mode
+    // We need stable IDs for dnd-kit to animate correctly, as array indices cause issues when mutating order.
+    const arrayIdsRef = React.useRef<string[]>([]);
+    if (isArray) {
+        if (arrayIdsRef.current.length !== entries.length) {
+            if (arrayIdsRef.current.length < entries.length) {
+                const newIds = Array.from({ length: entries.length - arrayIdsRef.current.length }, () => Math.random().toString(36).substring(2, 10));
+                arrayIdsRef.current = [...arrayIdsRef.current, ...newIds];
+            } else {
+                arrayIdsRef.current = arrayIdsRef.current.slice(0, entries.length);
+            }
+        }
+    }
+
     const pointerSensor = useSensor(PointerSensor, {
         activationConstraint: { distance: 5 },
     });
     const keyboardSensor = useSensor(KeyboardSensor, {});
     const sensors = useSensors(pointerSensor, keyboardSensor);
 
-    const sortableIds = entries.map(([key]) => `sortable-${key}`);
+    const sortableIds = isArray ? arrayIdsRef.current : entries.map(([key]) => `sortable-${key}`);
 
     const handleDragEnd = useCallback((event: DragEndEvent) => {
         const { active, over } = event;
@@ -620,17 +633,32 @@ export function EditableFieldsView({
         const oldIndex = sortableIds.indexOf(active.id as string);
         const newIndex = sortableIds.indexOf(over.id as string);
         if (oldIndex === -1 || newIndex === -1) return;
+        
+        // Swap IDs so dnd-kit sees the item follow its target position
+        const nextIds = [...arrayIdsRef.current];
+        const [movedId] = nextIds.splice(oldIndex, 1);
+        nextIds.splice(newIndex, 0, movedId);
+        arrayIdsRef.current = nextIds;
+
         onReorder(oldIndex, newIndex);
     }, [sortableIds, onReorder]);
 
     const handleMoveUp = useCallback((index: number) => {
         if (index > 0 && onReorder) {
+            const nextIds = [...arrayIdsRef.current];
+            const [movedId] = nextIds.splice(index, 1);
+            nextIds.splice(index - 1, 0, movedId);
+            arrayIdsRef.current = nextIds;
             onReorder(index, index - 1);
         }
     }, [onReorder]);
 
     const handleMoveDown = useCallback((index: number) => {
         if (index < entries.length - 1 && onReorder) {
+            const nextIds = [...arrayIdsRef.current];
+            const [movedId] = nextIds.splice(index, 1);
+            nextIds.splice(index + 1, 0, movedId);
+            arrayIdsRef.current = nextIds;
             onReorder(index, index + 1);
         }
     }, [onReorder, entries.length]);
@@ -723,8 +751,8 @@ export function EditableFieldsView({
                     <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
                         {entries.map(([key, value], index) => (
                             <SortableArrayItem
-                                key={`sortable-${key}`}
-                                id={`sortable-${key}`}
+                                key={sortableIds[index]}
+                                id={sortableIds[index]}
                                 index={index}
                                 totalCount={entries.length}
                                 fieldKey={String(index)}
