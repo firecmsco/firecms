@@ -35,9 +35,7 @@ import {
 // ─────────────────────────────────────────────────────────────────────────────
 // Types & Constants
 // ─────────────────────────────────────────────────────────────────────────────
-
-export type FieldType = "string" | "number" | "boolean" | "null" | "map" | "array" | "timestamp";
-
+export type FieldType = "string" | "number" | "boolean" | "null" | "map" | "array" | "timestamp" | "geopoint" | "reference";
 export const FIELD_TYPE_OPTIONS: { value: FieldType; label: string }[] = [
     { value: "string", label: "String" },
     { value: "number", label: "Number" },
@@ -46,6 +44,8 @@ export const FIELD_TYPE_OPTIONS: { value: FieldType; label: string }[] = [
     { value: "map", label: "Map" },
     { value: "array", label: "Array" },
     { value: "timestamp", label: "Timestamp" },
+    { value: "geopoint", label: "Geopoint" },
+    { value: "reference", label: "Reference" },
 ];
 
 export function defaultValueForType(type: FieldType): any {
@@ -57,6 +57,8 @@ export function defaultValueForType(type: FieldType): any {
         case "map": return {};
         case "array": return [];
         case "timestamp": return { _seconds: Math.floor(Date.now() / 1000), _nanoseconds: 0 };
+        case "geopoint": return { _lat: 0, _long: 0 };
+        case "reference": return { _path: "" };
     }
 }
 
@@ -88,6 +90,8 @@ export function getTypeColorScheme(value: any): any {
     if (typeof value === "string") return "blueLighter";
     if (Array.isArray(value)) return "orangeLighter";
     if (isTimestamp(value)) return "tealLighter";
+    if (value && value._lat !== undefined && value._long !== undefined) return "pinkLighter";
+    if (value && value._path !== undefined) return "indigoLighter";
     return "grayLighter";
 }
 
@@ -98,6 +102,8 @@ export function fieldTypeFromValue(value: any): FieldType {
     if (typeof value === "string") return "string";
     if (Array.isArray(value)) return "array";
     if (isTimestamp(value)) return "timestamp";
+    if (value && value._lat !== undefined && value._long !== undefined) return "geopoint";
+    if (value && value._path !== undefined) return "reference";
     if (typeof value === "object") return "map";
     return "string";
 }
@@ -135,6 +141,13 @@ export function convertValue(currentValue: any, targetType: FieldType): any {
         case "timestamp":
             if (isTimestamp(currentValue)) return currentValue;
             return { _seconds: Math.floor(Date.now() / 1000), _nanoseconds: 0 };
+        case "geopoint":
+            if (currentValue && currentValue._lat !== undefined && currentValue._long !== undefined) return currentValue;
+            return { _lat: 0, _long: 0 };
+        case "reference":
+            if (currentValue && currentValue._path !== undefined) return currentValue;
+            if (typeof currentValue === "string") return { _path: currentValue };
+            return { _path: "" };
         default:
             return defaultValueForType(targetType);
     }
@@ -145,13 +158,22 @@ export function convertValue(currentValue: any, targetType: FieldType): any {
 // Inline Value Editor
 // ─────────────────────────────────────────────────────────────────────────────
 
-function InlineValueEditor({
+export const InlineValueEditor = React.memo(function InlineValueEditor({
     value,
     onChange,
+    autoFocus = false,
 }: {
     value: any;
     onChange: (v: any) => void;
+    autoFocus?: boolean;
 }) {
+    const inputRef = React.useRef<any>(null);
+    React.useEffect(() => {
+        if (autoFocus && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [autoFocus, value]);
+
     if (value === null || value === undefined) {
         return (
             <Select
@@ -197,6 +219,8 @@ function InlineValueEditor({
                     onChange(isNaN(num) ? 0 : num);
                 }}
                 className="max-w-[160px]"
+                inputRef={inputRef}
+                invisible
             />
         );
     }
@@ -204,18 +228,17 @@ function InlineValueEditor({
     if (typeof value === "string") {
         return (
             <TextareaAutosize
-                value={value}
+                value={String(value)}
                 onChange={(e) => onChange(e.target.value)}
-                minRows={1}
-                maxRows={8}
-                ignoreBoxSizing
                 className={cls(
-                    "w-full outline-none text-sm leading-normal px-3 py-0.5 min-h-[28px] rounded-md resize-none",
-                    "border",
-                    defaultBorderMixin,
-                    "bg-surface-50 dark:bg-surface-900",
-                    "focus:ring-2 focus:ring-primary focus:border-primary",
+                    "w-full outline-none bg-transparent leading-normal px-3 py-0.5 rounded-md resize-none block min-h-[28px]",
+                    "bg-opacity-0 bg-surface-accent-100 dark:bg-surface-800 dark:bg-opacity-0 bg-surface-accent-200/0 dark:bg-surface-800/0",
+                    "hover:bg-opacity-70 dark:hover:bg-surface-700 dark:hover:bg-opacity-40 hover:bg-surface-accent-200/70 hover:dark:bg-surface-700/40",
+                    "focus:bg-opacity-70 focus:bg-surface-accent-100 focus:dark:bg-surface-800 focus:dark:bg-opacity-60 focus:bg-surface-accent-100/70 dark:focus:bg-surface-800/60"
                 )}
+                ref={inputRef}
+                autoFocus={autoFocus}
+                minRows={1}
             />
         );
     }
@@ -235,7 +258,55 @@ function InlineValueEditor({
                     }
                 }}
                 className="max-w-[220px]"
+                inputRef={inputRef}
+                invisible
             />
+        );
+    }
+
+    if (value && typeof value === "object" && value._path !== undefined) {
+        return (
+            <TextField
+                size="smallest"
+                value={value._path}
+                onChange={(e) => onChange({ ...value, _path: e.target.value })}
+                className="w-full"
+                autoFocus={autoFocus}
+                invisible
+                placeholder="Document path (e.g., users/123)"
+            />
+        );
+    }
+
+    if (value && typeof value === "object" && value._lat !== undefined && value._long !== undefined) {
+        return (
+            <div className="flex items-center gap-1">
+                <TextField
+                    size="smallest"
+                    type="number"
+                    value={value._lat}
+                    onChange={(e) => {
+                        const num = parseFloat(e.target.value);
+                        onChange({ ...value, _lat: isNaN(num) ? 0 : num });
+                    }}
+                    placeholder="Lat"
+                    className="max-w-[80px]"
+                    invisible
+                />
+                <span className="text-surface-400">,</span>
+                <TextField
+                    size="smallest"
+                    type="number"
+                    value={value._long}
+                    onChange={(e) => {
+                        const num = parseFloat(e.target.value);
+                        onChange({ ...value, _long: isNaN(num) ? 0 : num });
+                    }}
+                    placeholder="Lng"
+                    className="max-w-[80px]"
+                    invisible
+                />
+            </div>
         );
     }
 
@@ -245,13 +316,13 @@ function InlineValueEditor({
             {JSON.stringify(value)}
         </Typography>
     );
-}
+});
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Sortable Array Item
 // ─────────────────────────────────────────────────────────────────────────────
 
-function SortableArrayItem({
+const SortableArrayItem = React.memo(function SortableArrayItem({
     id,
     index,
     totalCount,
@@ -264,6 +335,7 @@ function SortableArrayItem({
     onAdd,
     onMoveUp,
     onMoveDown,
+    autoFocusPath,
 }: {
     id: string;
     index: number;
@@ -277,6 +349,7 @@ function SortableArrayItem({
     onAdd: (parentPath: string[], key: string, type: FieldType) => void;
     onMoveUp: (index: number) => void;
     onMoveDown: (index: number) => void;
+    autoFocusPath?: string | null;
 }) {
     const {
         attributes,
@@ -359,7 +432,11 @@ function SortableArrayItem({
                     {/* Inline value editor */}
                     {!isExpandable && (
                         <div className="flex-grow min-w-0">
-                            <InlineValueEditor value={value} onChange={(v) => onChange(path, v)} />
+                            <InlineValueEditor 
+                                value={value} 
+                                onChange={(v) => onChange(path, v)} 
+                                autoFocus={autoFocusPath === path.join(".")}
+                            />
                         </div>
                     )}
 
@@ -408,7 +485,7 @@ function SortableArrayItem({
                     <div className={cls("ml-2 border-l pl-1", defaultBorderMixin)}>
                         {Array.isArray(value) ? (
                             <EditableFieldsView
-                                values={Object.fromEntries(value.map((v, i) => [String(i), v]))}
+                                values={Object.fromEntries(value.map((v: any, i: number) => [String(i), v]))}
                                 path={path}
                                 depth={depth + 1}
                                 onChange={onChange}
@@ -421,6 +498,7 @@ function SortableArrayItem({
                                     newArr.splice(toIndex, 0, moved);
                                     onChange(path, newArr);
                                 }}
+                                autoFocusPath={autoFocusPath}
                             />
                         ) : (
                             <EditableFieldsView
@@ -430,6 +508,7 @@ function SortableArrayItem({
                                 onChange={onChange}
                                 onDelete={onDelete}
                                 onAdd={onAdd}
+                                autoFocusPath={autoFocusPath}
                             />
                         )}
                     </div>
@@ -437,13 +516,13 @@ function SortableArrayItem({
             </div>
         </div>
     );
-}
+});
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Editable Field Row (for map entries - no drag handle)
 // ─────────────────────────────────────────────────────────────────────────────
 
-function EditableFieldRow({
+const EditableFieldRow = React.memo(function EditableFieldRow({
     fieldKey,
     value,
     path,
@@ -451,6 +530,7 @@ function EditableFieldRow({
     onChange,
     onDelete,
     onAdd,
+    autoFocusPath,
 }: {
     fieldKey: string;
     value: any;
@@ -459,6 +539,7 @@ function EditableFieldRow({
     onChange: (path: string[], value: any) => void;
     onDelete: (path: string[]) => void;
     onAdd: (parentPath: string[], key: string, type: FieldType) => void;
+    autoFocusPath?: string | null;
 }) {
     const [expanded, setExpanded] = useState(depth < 2);
     const typeName = getTypeName(value);
@@ -512,7 +593,11 @@ function EditableFieldRow({
                 {/* Inline value editor */}
                 {!isExpandable && (
                     <div className="flex-grow min-w-0">
-                        <InlineValueEditor value={value} onChange={(v) => onChange(path, v)} />
+                        <InlineValueEditor 
+                            value={value} 
+                            onChange={(v) => onChange(path, v)} 
+                            autoFocus={autoFocusPath === path.join(".")}
+                        />
                     </div>
                 )}
 
@@ -539,7 +624,7 @@ function EditableFieldRow({
                 <div className={cls("ml-2 border-l pl-1", defaultBorderMixin)}>
                     {Array.isArray(value) ? (
                         <EditableFieldsView
-                            values={Object.fromEntries(value.map((v, i) => [String(i), v]))}
+                            values={Object.fromEntries(value.map((v: any, i: number) => [String(i), v]))}
                             path={path}
                             depth={depth + 1}
                             onChange={onChange}
@@ -552,6 +637,7 @@ function EditableFieldRow({
                                 newArr.splice(toIndex, 0, moved);
                                 onChange(path, newArr);
                             }}
+                            autoFocusPath={autoFocusPath}
                         />
                     ) : (
                         <EditableFieldsView
@@ -561,13 +647,14 @@ function EditableFieldRow({
                             onChange={onChange}
                             onDelete={onDelete}
                             onAdd={onAdd}
+                            autoFocusPath={autoFocusPath}
                         />
                     )}
                 </div>
             )}
         </div>
     );
-}
+});
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Editable Fields View (main export)
@@ -582,6 +669,7 @@ export function EditableFieldsView({
     depth = 0,
     isArray = false,
     onReorder,
+    autoFocusPath,
 }: {
     values: Record<string, any>;
     path: string[];
@@ -591,6 +679,7 @@ export function EditableFieldsView({
     depth?: number;
     isArray?: boolean;
     onReorder?: (fromIndex: number, toIndex: number) => void;
+    autoFocusPath?: string | null;
 }) {
     const [addingField, setAddingField] = useState(false);
     const [newFieldName, setNewFieldName] = useState("");
@@ -764,6 +853,7 @@ export function EditableFieldsView({
                                 onAdd={onAdd}
                                 onMoveUp={handleMoveUp}
                                 onMoveDown={handleMoveDown}
+                                autoFocusPath={autoFocusPath}
                             />
                         ))}
                     </SortableContext>
@@ -787,6 +877,7 @@ export function EditableFieldsView({
                     onChange={onChange}
                     onDelete={onDelete}
                     onAdd={onAdd}
+                    autoFocusPath={autoFocusPath}
                 />
             ))}
 

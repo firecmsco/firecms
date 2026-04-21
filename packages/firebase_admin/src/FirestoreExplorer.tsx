@@ -50,6 +50,7 @@ export function FirestoreExplorer({
     const largeLayout = useLargeLayout();
     const [searchParams, setSearchParams] = useSearchParams();
     const [selectedDocument, setSelectedDocument] = useState<AdminDocument | null>(null);
+    const [selectedField, setSelectedField] = useState<string | null>(null);
     const [databaseId, setDatabaseId] = useState<string | undefined>(undefined);
     const [databases, setDatabases] = useState<string[]>([]);
     const [databasesLoading, setDatabasesLoading] = useState(true);
@@ -90,14 +91,15 @@ export function FirestoreExplorer({
             .catch(() => {
                 // Document not found or error, just ignore
             });
-    }, [selectedPath, selectedDocId]);
+    }, [selectedPath, selectedDocId, projectId, databaseId, adminApi]);
 
     // Sync selectedDocument when URL changes (e.g. browser back button)
     useEffect(() => {
         if (!selectedDocId && selectedDocument) {
             setSelectedDocument(null);
+            setSelectedField(null);
         }
-    }, [selectedDocId]);
+    }, [selectedDocId, selectedDocument]);
 
     const setSelectedPath = useCallback((path: string | null) => {
         setSearchParams(prev => {
@@ -111,10 +113,12 @@ export function FirestoreExplorer({
             return next;
         }, { replace: true });
         setSelectedDocument(null);
+        setSelectedField(null);
     }, [setSearchParams]);
 
-    const handleDocumentSelect = useCallback((doc: AdminDocument) => {
+    const handleDocumentSelect = useCallback((doc: AdminDocument, field?: string) => {
         setSelectedDocument(doc);
+        setSelectedField(field || null);
         // Push a new history entry so back button closes the doc
         setSearchParams(prev => {
             const next = new URLSearchParams(prev);
@@ -125,6 +129,7 @@ export function FirestoreExplorer({
 
     const handleDocumentClose = useCallback(() => {
         setSelectedDocument(null);
+        setSelectedField(null);
         // Replace current entry to remove doc param
         setSearchParams(prev => {
             const next = new URLSearchParams(prev);
@@ -294,6 +299,7 @@ export function FirestoreExplorer({
         <div className={cls("h-full border-l", defaultBorderMixin)}>
             {selectedDocument ? (
                 <DocumentPanel
+                    key={selectedDocument.id}
                     projectId={projectId}
                     document={selectedDocument}
                     databaseId={databaseId}
@@ -301,6 +307,7 @@ export function FirestoreExplorer({
                     onDocumentUpdated={(doc) => setSelectedDocument(doc)}
                     onDocumentDeleted={handleDocumentClose}
                     onNavigateToSubcollection={handleNavigateToSubcollection}
+                    initialFocusField={selectedField}
                 />
             ) : (
                 <div className="flex items-center justify-center h-full">
@@ -310,7 +317,7 @@ export function FirestoreExplorer({
                 </div>
             )}
         </div>
-    ), [selectedDocument, projectId, databaseId, handleDocumentClose, handleNavigateToSubcollection]);
+    ), [selectedDocument, selectedField, projectId, databaseId, handleDocumentClose, handleNavigateToSubcollection]);
 
     // ─── Layout ─────────────────────────────────────────────────────────────
     // Always render ResizablePanels for the inner content so that toggling

@@ -265,7 +265,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
     };
 
     return (
-        <div style={{ position: "relative", width: "100%" }}>
+        <React.Fragment>
             <textarea
                 value={value}
                 onChange={handleChange}
@@ -299,7 +299,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
                     ...style,
                 }}
             />
-        </div>
+        </React.Fragment>
     );
 }) as React.FC<TextareaAutosizeProps & { ref?: React.ForwardedRef<Element> }>;
 

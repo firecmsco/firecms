@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id="row" style="padding: 20px; background: red;">
+  ROW
+  <div id="cell" style="padding: 20px; background: blue;">CELL</div>
+</div>
+<script>
+document.getElementById('row').addEventListener('click', (e) => {
+  console.log('Row click, detail:', e.detail);
+});
+document.getElementById('cell').addEventListener('click', (e) => {
+  console.log('Cell click, detail:', e.detail);
+  if (e.detail === 2) e.stopPropagation();
+});
+document.getElementById('cell').addEventListener('dblclick', (e) => {
+  console.log('Cell dblclick');
+});
+</script>
+</body>
+</html>

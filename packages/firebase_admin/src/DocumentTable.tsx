@@ -22,6 +22,7 @@ import {
     FilterListIcon,
     CloseIcon,
     ChevronRightIcon,
+    Popover,
 } from "@firecms/ui";
 import {
     useNavigationController,
@@ -38,6 +39,7 @@ import { useAdminApi } from "./api/AdminApiProvider";
 import { AdminDocument } from "./api/admin_api";
 import { AddDocumentDialog } from "./AddDocumentDialog";
 import { ExportButton } from "./ExportButton";
+import { PopoverCellEditor } from "./PopoverCellEditor";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -92,7 +94,6 @@ function storeColumnConfig(path: string, config: ColumnConfig) {
 
 const ID_COL_WIDTH = 220;
 const DEFAULT_COL_WIDTH = 200;
-const CMS_COL_WIDTH = 44;
 
 // Pre-computed skeleton widths: [idWidth, ...dataColumnWidths]
 // Fixed values avoid Math.random() during render (which causes hydration/re-render issues)
@@ -127,20 +128,10 @@ function renderCellValue(value: any): string {
         return date.toLocaleString();
     }
     if (Array.isArray(value)) {
-        try {
-            const str = JSON.stringify(value, jsonStringifyReplacer);
-            return str.length > 1000 ? str.substring(0, 1000) + "…" : str;
-        } catch (e) {
-            return `[${value.length} items]`;
-        }
+        return `[${value.length} items]`;
     }
     if (typeof value === "object") {
-        try {
-            const str = JSON.stringify(value, jsonStringifyReplacer);
-            return str.length > 1000 ? str.substring(0, 1000) + "…" : str;
-        } catch (e) {
-            return `{${Object.keys(value).length} fields}`;
-        }
+        return `{${Object.keys(value).length} fields}`;
     }
     return String(value);
 }
@@ -160,7 +151,7 @@ export function DocumentTable({
     projectId: string;
     path: string;
     databaseId?: string;
-    onDocumentSelect: (doc: AdminDocument) => void;
+    onDocumentSelect: (doc: AdminDocument, field?: string) => void;
     onNavigateToSubcollection: (subPath: string) => void;
     breadcrumbParts: string[];
     onBreadcrumbClick: (index: number) => void;
@@ -177,6 +168,7 @@ export function DocumentTable({
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [editingCell, setEditingCell] = useState<{ id: string; key: string } | null>(null);
 
     // Refs for volatile state read by cellRenderer so the function stays stable
     const selectedIdsRef = useRef(selectedIds);
@@ -246,26 +238,12 @@ export function DocumentTable({
             key: "__id",
             title: "ID",
             width: savedWidths["__id"] ?? ID_COL_WIDTH,
-            frozen: true,
+            frozen: false,
             sortable: false,
             resizable: true,
             align: "left",
             headerAlign: "left",
         };
-
-        // CMS column (if applicable)
-        const cmsCols: VirtualTableColumn[] = cmsCollection
-            ? [{
-                key: "__cms",
-                title: "",
-                width: CMS_COL_WIDTH,
-                frozen: false,
-                sortable: false,
-                resizable: false,
-                align: "center",
-                headerAlign: "center",
-            }]
-            : [];
 
         // Determine field column ordering
         let orderedFields: string[];
@@ -288,7 +266,7 @@ export function DocumentTable({
             headerAlign: "left" as const,
         }));
 
-        return [idCol, ...cmsCols, ...fieldCols];
+        return [idCol, ...fieldCols];
     }, [fieldKeys, columnConfig, cmsCollection]);
 
     // ─── Persist column changes ─────────────────────────────────────────────
@@ -306,7 +284,7 @@ export function DocumentTable({
 
     const handleColumnsOrderChange = useCallback((newColumns: VirtualTableColumn[]) => {
         const fieldOrder = newColumns
-            .filter(c => c.key !== "__id" && c.key !== "__cms")
+            .filter(c => c.key !== "__id")
             .map(c => c.key);
         setColumnConfig(prev => {
             const next: ColumnConfig = {
@@ -385,6 +363,7 @@ export function DocumentTable({
             setOrderDirection("asc");
             setFilters([]);
             setShowFilterBar(false);
+            setEditingCell(null);
             prevSortFilterKey.current = `undefined|asc|[]|${pageSize}`;
         }
         fetchRef.current();
@@ -574,17 +553,32 @@ export function DocumentTable({
             return (
                 <div
                     className={cls(
-                        "flex items-center gap-1 h-full px-3",
-                        "text-text-primary dark:text-text-primary-dark"
+                        "flex items-center gap-1 h-full w-full px-3",
+                        "text-text-primary dark:text-text-primary-dark",
+                        "cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors"
                     )}
+                    onClick={(e) => {
+                        if (e.detail === 1) {
+                            onDocumentSelect(doc);
+                        }
+                    }}
                 >
-                    <Checkbox
-                        checked={selectedIdsRef.current.has(doc.id)}
-                        onCheckedChange={(checked) => handleSelectRow(doc.id, checked as boolean)}
-                        size="small"
-                    />
+                    <div className="flex-shrink-0 flex items-center" onClick={(e) => e.stopPropagation()}>
+                        <Checkbox
+                            checked={selectedIdsRef.current.has(doc.id)}
+                            onCheckedChange={(checked) => handleSelectRow(doc.id, checked as boolean)}
+                            size="small"
+                        />
+                    </div>
                     <span className="font-mono text-xs truncate flex-grow">{doc.id}</span>
                     <div className="flex items-center gap-0.5 flex-shrink-0">
+                        {cmsCollection && (
+                            <Tooltip title={`Open in ${cmsCollection.name ?? "CMS"}`}>
+                                <IconButton size="smallest" onClick={(e) => { e.stopPropagation(); handleCmsOpen(doc); }}>
+                                    <span style={{ fontSize: "9px" }} className="font-bold leading-none tracking-tighter">CMS</span>
+                                </IconButton>
+                            </Tooltip>
+                        )}
                         <Tooltip title={copiedIdRef.current === doc.id ? "Copied!" : "Copy ID"}>
                             <IconButton size="smallest" onClick={(e) => { e.stopPropagation(); handleCopyId(doc.id); }}>
                                 <ContentCopyIcon size="smallest" />
@@ -600,41 +594,64 @@ export function DocumentTable({
             );
         }
 
-        // CMS column
-        if (column.key === "__cms") {
-            return (
-                <div className="flex items-center justify-center h-full"
-                     onClick={(e) => { e.stopPropagation(); handleCmsOpen(doc); }}>
-                    <Tooltip title={`Open in ${cmsCollection?.name ?? "CMS"}`}>
-                        <IconButton size="smallest">
-                            <KeyboardTabIcon size="smallest" />
-                        </IconButton>
-                    </Tooltip>
-                </div>
-            );
-        }
-
         // Data columns
         const value = doc.values?.[column.key];
+        const isEditing = editingCell?.id === doc.id && editingCell?.key === column.key;
         const isEmpty = value === null || value === undefined;
+
         return (
-            <div className={cls(
-                "flex items-center h-full px-3 text-sm truncate",
-                isEmpty && "text-surface-400 dark:text-surface-500",
-                !isEmpty && "text-text-primary dark:text-text-primary-dark"
-            )}>
-                {renderCellValue(value)}
-            </div>
+            <Popover
+                open={isEditing}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setEditingCell(null);
+                    }
+                }}
+                enabled={isEditing}
+                side="bottom"
+                align="start"
+                sideOffset={-48}
+                trigger={
+                    <div className={cls(
+                        "flex items-center h-full px-3 text-sm truncate",
+                        isEmpty && "text-surface-400 dark:text-surface-500",
+                        !isEmpty && "text-text-primary dark:text-text-primary-dark",
+                        "cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors outline-none"
+                    )}
+                    onClick={(e) => {
+                        if (e.detail === 2) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setEditingCell({ id: doc.id, key: column.key });
+                        } else if (e.detail === 1) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onDocumentSelect(doc, column.key);
+                        }
+                    }}>
+                        {renderCellValue(value)}
+                    </div>
+                }
+            >
+                {isEditing && (
+                    <PopoverCellEditor
+                        columnKey={column.key}
+                        initialValue={value} 
+                        onSave={async (newVal) => {
+                            try {
+                                await adminApi.updateDocument(projectId, path, doc.id, { [column.key]: newVal }, databaseId);
+                                setDocuments(prev => prev.map(d => d.id === doc.id ? { ...d, values: { ...d.values, [column.key]: newVal } } : d));
+                                setEditingCell(null);
+                            } catch (e: any) {
+                                snackbar.open({ type: "error", message: e.message });
+                            }
+                        }}
+                        onCancel={() => setEditingCell(null)}
+                    />
+                )}
+            </Popover>
         );
-    }, [cmsCollection, handleSelectRow, handleCopyId, handleDuplicate, handleCmsOpen]);
-
-    // ─── Row click handler ──────────────────────────────────────────────────
-
-    const handleRowClick = useCallback(({ rowData: row }: { rowData: AdminRow, rowIndex: number, event: React.SyntheticEvent }) => {
-        if (row?._doc) {
-            onDocumentSelect(row._doc);
-        }
-    }, [onDocumentSelect]);
+    }, [cmsCollection, handleSelectRow, handleCopyId, handleDuplicate, handleCmsOpen, editingCell, adminApi, projectId, path, databaseId, snackbar]);
 
     // ─── State flags ────────────────────────────────────────────────────────
 
@@ -664,7 +681,7 @@ export function DocumentTable({
     // Use skeleton columns when we don't have real data yet
     const activeColumns = showSkeletons && vtColumns.length <= 1 ? skeletonColumns : vtColumns;
     // Stable rowClassName — memoized to avoid reference changes
-    const rowClassName = useCallback(() => "group/row cursor-pointer", []);
+    const rowClassName = useCallback(() => "group/row hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors", []);
 
     // ─── Empty component ────────────────────────────────────────────────────
 
@@ -785,7 +802,7 @@ export function DocumentTable({
                     </Tooltip>
 
                     <Tooltip title="Refresh">
-                        <IconButton size="small" onClick={handleRefresh}>
+                        <IconButton size="small" onClick={handleRefresh} className={loading && !showSkeletons ? "animate-spin" : ""}>
                             <RefreshIcon size="small" />
                         </IconButton>
                     </Tooltip>
@@ -854,7 +871,6 @@ export function DocumentTable({
                         data={rowData}
                         columns={activeColumns}
                         cellRenderer={cellRenderer}
-                        onRowClick={showSkeletons ? undefined : handleRowClick}
                         onColumnResize={showSkeletons ? undefined : handleColumnResize}
                         onColumnsOrderChange={showSkeletons ? undefined : handleColumnsOrderChange}
                         sortBy={showSkeletons ? undefined : sortBy}

@@ -76,7 +76,11 @@ export function ResizablePanels({
 
             // Directly update the DOM for performance while dragging
             if (firstPanelRef.current) {
-                firstPanelRef.current.style.flexBasis = `${newSize}px`;
+                if (isHorizontal) {
+                    firstPanelRef.current.style.width = `${newSize}px`;
+                } else {
+                    firstPanelRef.current.style.height = `${newSize}px`;
+                }
             }
         };
 
@@ -127,11 +131,11 @@ export function ResizablePanels({
                 ref={firstPanelRef}
                 className={cls(
                     "relative flex-shrink-0 flex flex-col overflow-hidden",
-                    !isResizing && "transition-[flex-basis] duration-300 ease-in-out",
                     !showFirstPanel && "hidden"
                 )}
                 style={{
-                    flexBasis: appliedBasis,
+                    width: isHorizontal ? appliedBasis : "100%",
+                    height: !isHorizontal ? appliedBasis : "100%",
                     minWidth: isHorizontal && showFirstPanel && showSecondPanel ? `${minPanelSizePx}px` : undefined,
                     minHeight: !isHorizontal && showFirstPanel && showSecondPanel ? `${minPanelSizePx}px` : undefined,
                     maxWidth: showSecondPanel ? undefined : "100%",

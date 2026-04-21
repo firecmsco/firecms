@@ -14,18 +14,61 @@ import {
     CloseIcon,
     DeleteIcon,
     SaveIcon,
-    KeyboardTabIcon,
+    FolderIcon,
     LoadingButton,
     AddIcon,
     ContentCopyIcon,
     OpenInNewIcon,
 } from "@firecms/ui";
-import { ConfirmationDialog, jsonStringifyReplacer } from "@firecms/core";
+import { ConfirmationDialog, jsonStringifyReplacer, useModeController } from "@firecms/core";
+import { Formex, useCreateFormex } from "@firecms/formex";
+import { Highlight, themes } from "prism-react-renderer";
 import { useAdminApi } from "./api/AdminApiProvider";
 import { AdminDocument } from "./api/admin_api";
 import { EditableFieldsView, defaultValueForType, isTimestamp, FieldType } from "./FieldEditor";
 
 
+
+const setIn = (obj: any, path: string[], value: any): any => {
+    if (path.length === 0) return value;
+    const [head, ...tail] = path;
+    const clone = Array.isArray(obj) ? [...obj] : { ...obj };
+    clone[head as any] = setIn(obj[head as any], tail, value);
+    return clone;
+};
+
+const deleteIn = (obj: any, path: string[]): any => {
+    if (path.length === 0) return obj;
+    const [head, ...tail] = path;
+    if (tail.length === 0) {
+        if (Array.isArray(obj)) {
+            const clone = [...obj];
+            clone.splice(Number(head), 1);
+            return clone;
+        } else {
+            const clone = { ...obj };
+            delete clone[head];
+            return clone;
+        }
+    }
+    const clone = Array.isArray(obj) ? [...obj] : { ...obj };
+    clone[head as any] = deleteIn(obj[head as any], tail);
+    return clone;
+};
+
+const addIn = (obj: any, path: string[], key: string, type: FieldType): any => {
+    if (path.length === 0) {
+        if (Array.isArray(obj)) {
+            return [...obj, defaultValueForType(type)];
+        } else {
+            return { ...obj, [key]: defaultValueForType(type) };
+        }
+    }
+    const [head, ...tail] = path;
+    const clone = Array.isArray(obj) ? [...obj] : { ...obj };
+    clone[head as any] = addIn(obj[head as any], tail, key, type);
+    return clone;
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Main Component
@@ -39,6 +82,7 @@ export function DocumentPanel({
     onDocumentUpdated,
     onNavigateToSubcollection,
     onDocumentDeleted,
+    initialFocusField,
 }: {
     projectId: string;
     document: AdminDocument;
@@ -47,8 +91,10 @@ export function DocumentPanel({
     onDocumentUpdated: (doc: AdminDocument) => void;
     onNavigateToSubcollection: (subPath: string) => void;
     onDocumentDeleted?: () => void;
+    initialFocusField?: string | null;
 }) {
     const adminApi = useAdminApi();
+    const { mode } = useModeController();
     const [activeTab, setActiveTab] = useState("fields");
     const [jsonValue, setJsonValue] = useState("");
     const [jsonError, setJsonError] = useState<string | null>(null);
@@ -58,16 +104,21 @@ export function DocumentPanel({
     const [subcollections, setSubcollections] = useState<string[]>([]);
     const [subcollectionsLoading, setSubcollectionsLoading] = useState(true);
 
-    // Editable working copy
-    const [editedValues, setEditedValues] = useState<Record<string, any>>({});
     const [copiedPath, setCopiedPath] = useState(false);
+
+    const formex = useCreateFormex({
+        initialValues: document.values ?? {},
+        onSubmit: () => {}
+    });
+    
+    const { values: editedValues, dirty: isDirty, setValues, resetForm } = formex;
 
     // Sync when document changes
     useEffect(() => {
-        setEditedValues(structuredClone(document.values ?? {}));
-        setJsonValue(JSON.stringify(document.values, jsonStringifyReplacer, 2));
+        resetForm({ values: document.values ?? {} });
+        setJsonValue(JSON.stringify(document.values ?? {}, jsonStringifyReplacer, 2));
         setJsonError(null);
-    }, [document]);
+    }, [document, resetForm]);
 
     // Load subcollections
     useEffect(() => {
@@ -79,61 +130,24 @@ export function DocumentPanel({
             .finally(() => setSubcollectionsLoading(false));
     }, [document.path, projectId, databaseId]);
 
-    // Dirty detection
-    const isDirty = useMemo(() => {
-        return JSON.stringify(editedValues, jsonStringifyReplacer) !== JSON.stringify(document.values ?? {}, jsonStringifyReplacer);
-    }, [editedValues, document.values]);
-
     // Sync JSON tab when switching to it
     useEffect(() => {
         if (activeTab === "json") {
             setJsonValue(JSON.stringify(editedValues, jsonStringifyReplacer, 2));
         }
-    }, [activeTab]);
+    }, [activeTab, editedValues]);
 
     const handleFieldChange = useCallback((path: string[], value: any) => {
-        setEditedValues(prev => {
-            const next = structuredClone(prev);
-            let target = next;
-            for (let i = 0; i < path.length - 1; i++) {
-                target = target[path[i]];
-            }
-            target[path[path.length - 1]] = value;
-            return next;
-        });
-    }, []);
+        setValues(setIn(editedValues, path, value));
+    }, [editedValues, setValues]);
 
     const handleFieldDelete = useCallback((path: string[]) => {
-        setEditedValues(prev => {
-            const next = structuredClone(prev);
-            let target = next;
-            for (let i = 0; i < path.length - 1; i++) {
-                target = target[path[i]];
-            }
-            if (Array.isArray(target)) {
-                target.splice(Number(path[path.length - 1]), 1);
-            } else {
-                delete target[path[path.length - 1]];
-            }
-            return next;
-        });
-    }, []);
+        setValues(deleteIn(editedValues, path));
+    }, [editedValues, setValues]);
 
     const handleFieldAdd = useCallback((parentPath: string[], key: string, type: FieldType) => {
-        setEditedValues(prev => {
-            const next = structuredClone(prev);
-            let target = next;
-            for (const p of parentPath) {
-                target = target[p];
-            }
-            if (Array.isArray(target)) {
-                target.push(defaultValueForType(type));
-            } else {
-                target[key] = defaultValueForType(type);
-            }
-            return next;
-        });
-    }, []);
+        setValues(addIn(editedValues, parentPath, key, type));
+    }, [editedValues, setValues]);
 
     const handleSaveFields = useCallback(async () => {
         setSaving(true);
@@ -148,17 +162,18 @@ export function DocumentPanel({
                 databaseId
             );
             onDocumentUpdated(updated);
+            resetForm({ values: updated.values });
         } catch (e: any) {
             setJsonError(e.message);
         } finally {
             setSaving(false);
         }
-    }, [editedValues, document, projectId, databaseId]);
+    }, [editedValues, document, projectId, databaseId, onDocumentUpdated, resetForm]);
 
     const handleSaveJson = useCallback(async () => {
         try {
             const parsed = JSON.parse(jsonValue);
-            setEditedValues(parsed);
+            setValues(parsed);
             setSaving(true);
             setJsonError(null);
             const parentPath = document.path.substring(0, document.path.lastIndexOf("/"));
@@ -170,6 +185,7 @@ export function DocumentPanel({
                 databaseId
             );
             onDocumentUpdated(updated);
+            resetForm({ values: updated.values });
         } catch (e: any) {
             if (e instanceof SyntaxError) {
                 setJsonError("Invalid JSON: " + e.message);
@@ -179,13 +195,13 @@ export function DocumentPanel({
         } finally {
             setSaving(false);
         }
-    }, [jsonValue, document, projectId, databaseId]);
+    }, [jsonValue, document, projectId, databaseId, onDocumentUpdated, resetForm, setValues]);
 
     const handleDiscard = useCallback(() => {
-        setEditedValues(structuredClone(document.values ?? {}));
-        setJsonValue(JSON.stringify(document.values, jsonStringifyReplacer, 2));
+        resetForm({ values: document.values ?? {} });
+        setJsonValue(JSON.stringify(document.values ?? {}, jsonStringifyReplacer, 2));
         setJsonError(null);
-    }, [document]);
+    }, [document, resetForm]);
 
     const handleDelete = useCallback(async () => {
         setDeleting(true);
@@ -289,7 +305,7 @@ export function DocumentPanel({
                                 key={sub}
                                 size="small"
                                 variant="text"
-                                startIcon={<KeyboardTabIcon size="smallest" />}
+                                startIcon={<FolderIcon size="smallest" className="text-amber-500 dark:text-amber-400" />}
                                 onClick={() => onNavigateToSubcollection(`${document.path}/${sub}`)}
                                 className="text-xs"
                             >
@@ -321,26 +337,70 @@ export function DocumentPanel({
                             onChange={handleFieldChange}
                             onDelete={handleFieldDelete}
                             onAdd={handleFieldAdd}
+                            autoFocusPath={initialFocusField}
                         />
                     </div>
                 ) : (
                     <div className="flex flex-col gap-2 p-3 h-full">
-                        <textarea
-                            value={jsonValue}
-                            onChange={e => {
-                                setJsonValue(e.target.value);
-                                setJsonError(null);
-                            }}
-                            className={cls(
-                                "flex-grow font-mono text-sm p-3 rounded-md resize-none min-h-[200px]",
-                                "bg-surface-50 dark:bg-surface-900",
-                                "border",
-                                defaultBorderMixin,
-                                "focus:outline-none focus:ring-2 focus:ring-primary",
-                                "text-surface-800 dark:text-surface-100"
-                            )}
-                            spellCheck={false}
-                        />
+                        <div className="relative flex-grow min-h-[200px] rounded-md overflow-hidden border" style={{ border: undefined }}>
+                            {/* Syntax-highlighted background */}
+                            <Highlight
+                                theme={mode === "dark" ? themes.vsDark : themes.github}
+                                code={jsonValue}
+                                language="json"
+                            >
+                                {({ style, tokens, getLineProps, getTokenProps }) => (
+                                    <pre
+                                        aria-hidden="true"
+                                        style={{
+                                            ...style,
+                                            backgroundColor: "transparent",
+                                            margin: 0,
+                                            padding: "0.75rem",
+                                            fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                                            fontSize: "0.875rem",
+                                            lineHeight: "1.5",
+                                            whiteSpace: "pre-wrap",
+                                            wordBreak: "break-word",
+                                            pointerEvents: "none",
+                                        }}
+                                    >
+                                        {tokens.map((line, i) => (
+                                            <div key={i} {...getLineProps({ line })}>
+                                                {line.map((token, key) => (
+                                                    <span key={key} {...getTokenProps({ token })} />
+                                                ))}
+                                            </div>
+                                        ))}
+                                    </pre>
+                                )}
+                            </Highlight>
+                            {/* Transparent editable textarea on top */}
+                            <textarea
+                                value={jsonValue}
+                                onChange={e => {
+                                    setJsonValue(e.target.value);
+                                    setJsonError(null);
+                                }}
+                                className={cls(
+                                    "absolute inset-0 w-full h-full resize-none",
+                                    "bg-transparent caret-current",
+                                    "focus:outline-none focus:ring-2 focus:ring-primary",
+                                    "rounded-md",
+                                )}
+                                style={{
+                                    color: "transparent",
+                                    caretColor: mode === "dark" ? "#e2e8f0" : "#1e293b",
+                                    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                                    fontSize: "0.875rem",
+                                    lineHeight: "1.5",
+                                    padding: "0.75rem",
+                                    whiteSpace: "pre-wrap",
+                                    wordBreak: "break-word",
+                                }}
+                                spellCheck={false}
+                            />
+                        </div>
                     </div>
                 )}
             </div>

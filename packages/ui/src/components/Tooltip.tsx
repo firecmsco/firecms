@@ -22,9 +22,9 @@ export type TooltipProps = {
     className?: string,
     container?: HTMLElement,
     style?: React.CSSProperties;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
-export const Tooltip = ({
+export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
                             open,
                             defaultOpen,
                             side = "bottom",
@@ -39,8 +39,9 @@ export const Tooltip = ({
                             asChild = false,
                             container,
                             className,
-                            style
-                        }: TooltipProps) => {
+                            style,
+                            ...props
+                        }, ref) => {
 
     useInjectStyles("Tooltip", styles);
 
@@ -54,11 +55,11 @@ export const Tooltip = ({
         return <>{children}</>;
 
     const trigger = asChild
-        ? <TooltipPrimitive.Trigger asChild={true}>
+        ? <TooltipPrimitive.Trigger asChild={true} {...props}>
             {children}
         </TooltipPrimitive.Trigger>
-        : <TooltipPrimitive.Trigger asChild={true}>
-            <div style={style} className={className}>
+        : <TooltipPrimitive.Trigger asChild={true} {...props}>
+            <div style={style} className={className} ref={ref}>
                 {children}
             </div>
         </TooltipPrimitive.Trigger>;
@@ -83,7 +84,7 @@ export const Tooltip = ({
             </TooltipPrimitive.Root>
         </TooltipPrimitive.Provider>
     );
-};
+});
 
 const styles = `
 
