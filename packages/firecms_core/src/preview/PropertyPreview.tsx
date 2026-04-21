@@ -11,6 +11,7 @@ import {
 } from "../types";
 
 import { resolveProperty } from "../util";
+import { jsonStringifyReplacer } from "../util/objects";
 
 import { PropertyPreviewProps } from "./PropertyPreviewProps";
 import { useAuthController, useCustomizationController } from "../hooks";
@@ -234,7 +235,7 @@ export const PropertyPreview = React.memo(function PropertyPreview<T extends CMS
             content = buildWrongValueType(propertyKey, property.dataType, value);
         }
     } else {
-        content = JSON.stringify(value);
+        content = JSON.stringify(value, jsonStringifyReplacer);
     }
 
     return content === undefined || content === null || (Array.isArray(content) && content.length === 0)
@@ -246,6 +247,6 @@ function buildWrongValueType(name: string | undefined, dataType: string, value: 
     console.warn(`Unexpected value for property ${name}, of type ${dataType}`, value);
     return (
         <ErrorView title={"Unexpected value"}
-            error={`${JSON.stringify(value)}`} />
+            error={`${JSON.stringify(value, jsonStringifyReplacer)}`} />
     );
 }

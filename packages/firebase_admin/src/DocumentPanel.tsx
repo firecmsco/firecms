@@ -20,7 +20,7 @@ import {
     ContentCopyIcon,
     OpenInNewIcon,
 } from "@firecms/ui";
-import { ConfirmationDialog } from "@firecms/core";
+import { ConfirmationDialog, jsonStringifyReplacer } from "@firecms/core";
 import { useAdminApi } from "./api/AdminApiProvider";
 import { AdminDocument } from "./api/admin_api";
 import { EditableFieldsView, defaultValueForType, isTimestamp, FieldType } from "./FieldEditor";
@@ -65,7 +65,7 @@ export function DocumentPanel({
     // Sync when document changes
     useEffect(() => {
         setEditedValues(structuredClone(document.values ?? {}));
-        setJsonValue(JSON.stringify(document.values, null, 2));
+        setJsonValue(JSON.stringify(document.values, jsonStringifyReplacer, 2));
         setJsonError(null);
     }, [document]);
 
@@ -81,13 +81,13 @@ export function DocumentPanel({
 
     // Dirty detection
     const isDirty = useMemo(() => {
-        return JSON.stringify(editedValues) !== JSON.stringify(document.values ?? {});
+        return JSON.stringify(editedValues, jsonStringifyReplacer) !== JSON.stringify(document.values ?? {}, jsonStringifyReplacer);
     }, [editedValues, document.values]);
 
     // Sync JSON tab when switching to it
     useEffect(() => {
         if (activeTab === "json") {
-            setJsonValue(JSON.stringify(editedValues, null, 2));
+            setJsonValue(JSON.stringify(editedValues, jsonStringifyReplacer, 2));
         }
     }, [activeTab]);
 
@@ -183,7 +183,7 @@ export function DocumentPanel({
 
     const handleDiscard = useCallback(() => {
         setEditedValues(structuredClone(document.values ?? {}));
-        setJsonValue(JSON.stringify(document.values, null, 2));
+        setJsonValue(JSON.stringify(document.values, jsonStringifyReplacer, 2));
         setJsonError(null);
     }, [document]);
 
@@ -273,7 +273,7 @@ export function DocumentPanel({
 
             {/* Subcollections */}
             <div className={cls(
-                "flex items-center gap-2 px-4 py-2 min-h-[40px]",
+                "flex items-center gap-2 px-4 py-2 min-h-[44px]",
                 "border-b",
                 defaultBorderMixin
             )}>
@@ -281,7 +281,7 @@ export function DocumentPanel({
                     Subcollections:
                 </Typography>
                 {subcollectionsLoading ? (
-                    <Skeleton className="h-6 w-24 rounded" />
+                    <Skeleton width={64} height={16} className="rounded" />
                 ) : subcollections.length > 0 ? (
                     <div className="flex gap-1 flex-wrap">
                         {subcollections.map(sub => (

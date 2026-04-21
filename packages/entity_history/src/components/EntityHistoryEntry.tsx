@@ -26,7 +26,8 @@ import {
     useCustomizationController,
     useNavigationController,
     useSideEntityController,
-    useTranslation
+    useTranslation,
+    jsonStringifyReplacer
 } from "@firecms/core";
 import { useHistoryController } from "../HistoryControllerProvider";
 import { UserChip } from "./UserChip";
@@ -189,7 +190,7 @@ export function EntityHistoryEntry({
                                 property={childProperty as ResolvedProperty}
                                 size={"small"}/>) :
                         <Typography variant={"body2"}>
-                            {typeof valueInPath === "string" ? valueInPath : JSON.stringify(valueInPath)}
+                            {typeof valueInPath === "string" ? valueInPath : JSON.stringify(valueInPath, jsonStringifyReplacer)}
                         </Typography>;
                     return (
                         <div key={"ref_prev_" + key}

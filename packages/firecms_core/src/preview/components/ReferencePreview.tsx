@@ -6,6 +6,7 @@ import { PreviewSize } from "../PropertyPreviewProps";
 import { Skeleton } from "@firecms/ui";
 import { ErrorBoundary, ErrorView } from "../../components";
 import { EntityPreview, EntityPreviewContainer } from "../../components/EntityPreview";
+import { jsonStringifyReplacer } from "../../util/objects";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -29,7 +30,7 @@ export const ReferencePreview = function ReferencePreview(props: ReferencePrevie
             onClick={props.onClick}
             size={props.size ?? "medium"}>
             <ErrorView error={"Unexpected value. Click to edit"}
-                       tooltip={JSON.stringify(reference)}/>
+                       tooltip={JSON.stringify(reference, jsonStringifyReplacer)}/>
         </EntityPreviewContainer>;
     }
     return <ErrorBoundary>

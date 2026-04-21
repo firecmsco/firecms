@@ -265,7 +265,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
     };
 
     return (
-        <React.Fragment>
+        <div style={{ position: "relative", width: "100%" }}>
             <textarea
                 value={value}
                 onChange={handleChange}
@@ -279,9 +279,10 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
                     // Only apply computed height once measurement has succeeded;
                     // before that, let the `rows` attribute size the textarea.
                     ...(state.outerHeightStyle > 0 ? { height: state.outerHeightStyle } : {}),
-                    // When content fits (overflow=true), hide scrollbar.
-                    // When clamped by maxRows (overflow=false), allow scrolling.
-                    overflow: state.overflow ? "hidden" : "auto",
+                    // Only control vertical overflow based on height clamping.
+                    // Horizontal overflow must always remain scrollable for long lines.
+                    overflowY: state.overflow ? "hidden" : "auto",
+                    overflowX: "auto",
                     ...style,
                 }}
                 onScroll={onScroll}
@@ -298,7 +299,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
                     ...style,
                 }}
             />
-        </React.Fragment>
+        </div>
     );
 }) as React.FC<TextareaAutosizeProps & { ref?: React.ForwardedRef<Element> }>;
 

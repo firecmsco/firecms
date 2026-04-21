@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 import { useModeController } from "../hooks";
+import { jsonStringifyReplacer } from "../util/objects";
 
 export function EntityJsonPreview({ values }: { values: object }) {
-    const code = JSON.stringify(values, null, "\t");
+    const code = JSON.stringify(values, jsonStringifyReplacer, "\t");
     const { mode } = useModeController();
     const preRef = useRef<HTMLPreElement>(null);
 

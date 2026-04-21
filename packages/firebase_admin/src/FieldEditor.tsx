@@ -173,10 +173,10 @@ function InlineValueEditor({
 
     if (typeof value === "boolean") {
         return (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 min-h-[28px]">
                 <BooleanSwitch
                     value={value}
-                    size="small"
+                    size="smallest"
                     onValueChange={onChange}
                 />
                 <Typography variant="body2" className="text-sm text-surface-600 dark:text-surface-300">
@@ -303,7 +303,7 @@ function SortableArrayItem({
             <div style={{ paddingLeft: `${depth * 12}px` }}>
                 <div
                     className={cls(
-                        "flex items-start gap-2 py-1.5 px-2 rounded-md group",
+                        "flex items-start gap-1 py-1.5 px-2 rounded-md group",
                         "hover:bg-surface-100 dark:hover:bg-surface-800",
                         isDragging && "bg-surface-100 dark:bg-surface-800 shadow-md",
                     )}
@@ -336,7 +336,7 @@ function SortableArrayItem({
 
                     {/* Array index */}
                     <Typography variant="body2"
-                        className="font-medium flex-shrink-0 min-w-[40px] max-w-[60px] truncate text-sm pt-0.5 text-surface-500 dark:text-surface-400 font-mono">
+                        className="font-medium flex-shrink-0 min-w-[20px] max-w-[40px] truncate text-sm pt-1 text-surface-500 dark:text-surface-400 font-mono">
                         {fieldKey}
                     </Typography>
 
@@ -489,7 +489,7 @@ function EditableFieldRow({
 
                 {/* Field name */}
                 <Typography variant="body2"
-                    className="font-medium flex-shrink-0 min-w-[80px] max-w-[140px] truncate text-sm pt-0.5">
+                    className="font-medium flex-shrink-0 min-w-[80px] max-w-[140px] truncate text-sm pt-1">
                     {fieldKey}
                 </Typography>
 

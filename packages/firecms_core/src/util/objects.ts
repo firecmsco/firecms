@@ -279,3 +279,18 @@ export function removePropsIfExisting(source: any, comparison: any) {
 
     return res;
 }
+
+export function jsonStringifyReplacer(key: string, value: any) {
+    if (value && typeof value === "object") {
+        if (value instanceof Date) {
+            return value.toISOString();
+        }
+        if ("_seconds" in value && "_nanoseconds" in value && typeof value._seconds === "number" && typeof value._nanoseconds === "number") {
+            return new Date(value._seconds * 1000 + value._nanoseconds / 1000000).toISOString();
+        }
+        if ("seconds" in value && "nanoseconds" in value && typeof value.seconds === "number" && typeof value.nanoseconds === "number") {
+            return new Date(value.seconds * 1000 + value.nanoseconds / 1000000).toISOString();
+        }
+    }
+    return value;
+}

@@ -32,6 +32,7 @@ import {
     CellRendererParams,
     OnVirtualTableColumnResizeParams,
     ConfirmationDialog,
+    jsonStringifyReplacer,
 } from "@firecms/core";
 import { useAdminApi } from "./api/AdminApiProvider";
 import { AdminDocument } from "./api/admin_api";
@@ -116,23 +117,27 @@ function renderCellValue(value: any): string {
     if (value === null || value === undefined) return "—";
     if (typeof value === "boolean") return value ? "true" : "false";
     if (typeof value === "number") return String(value);
-    if (typeof value === "string") return value.length > 120 ? value.substring(0, 120) + "…" : value;
+    
+    // We use a high safe limit (1000) so CSS `text-truncate` can handle dynamic sizing 
+    // based on column width without crashing the browser on multi-megabyte string payloads.
+    if (typeof value === "string") return value.length > 1000 ? value.substring(0, 1000) + "…" : value;
+    
     if (value instanceof Date || (value && value._seconds !== undefined)) {
         const date = value._seconds ? new Date(value._seconds * 1000) : value;
         return date.toLocaleString();
     }
     if (Array.isArray(value)) {
         try {
-            const str = JSON.stringify(value);
-            return str.length > 120 ? str.substring(0, 120) + "…" : str;
+            const str = JSON.stringify(value, jsonStringifyReplacer);
+            return str.length > 1000 ? str.substring(0, 1000) + "…" : str;
         } catch (e) {
             return `[${value.length} items]`;
         }
     }
     if (typeof value === "object") {
         try {
-            const str = JSON.stringify(value);
-            return str.length > 120 ? str.substring(0, 120) + "…" : str;
+            const str = JSON.stringify(value, jsonStringifyReplacer);
+            return str.length > 1000 ? str.substring(0, 1000) + "…" : str;
         } catch (e) {
             return `{${Object.keys(value).length} fields}`;
         }

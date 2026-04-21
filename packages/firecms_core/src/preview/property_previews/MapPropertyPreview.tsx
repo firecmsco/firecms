@@ -6,6 +6,7 @@ import { PropertyPreview } from "../PropertyPreview";
 import { cls, defaultBorderMixin, Typography } from "@firecms/ui";
 import { ErrorBoundary } from "../../components";
 import { EmptyValue } from "../components/EmptyValue";
+import { DatePreview } from "../components/DatePreview";
 
 /**
  * @group Preview components
@@ -111,37 +112,58 @@ export function KeyValuePreview({ value }: { value: any }) {
     return <div
         className="flex flex-col gap-1 w-full">
         {
-            Object.entries(value).map(([key, childValue]: [string, any]) => (
-                <div
-                    key={`map_preview_table_${key}}`}
-                    className={cls(defaultBorderMixin, "last:border-b-0 border-b")}>
+            Object.entries(value).map(([key, childValue]: [string, any]) => {
+                const isTimestampObj = childValue && typeof childValue === "object" && (
+                    childValue instanceof Date ||
+                    ("_seconds" in childValue && "_nanoseconds" in childValue && typeof childValue._seconds === "number" && typeof childValue._nanoseconds === "number") ||
+                    ("seconds" in childValue && "nanoseconds" in childValue && typeof childValue.seconds === "number" && typeof childValue.nanoseconds === "number")
+                );
+
+                const isScalar = childValue && (typeof childValue !== "object" || isTimestampObj);
+
+                return (
                     <div
-                        className={"flex flex-row pt-0.5 pb-0.5 gap-2"}>
+                        key={`map_preview_table_${key}}`}
+                        className={cls(defaultBorderMixin, "last:border-b-0 border-b")}>
                         <div
-                            key={`table-cell-title-${key}-${key}`}
-                            className="min-w-[140px] w-[25%] py-1">
-                            <Typography variant={"caption"}
-                                        className={"font-semibold break-words"}
-                                        color={"secondary"}>
-                                {key}
-                            </Typography>
+                            className={"flex flex-row pt-0.5 pb-0.5 gap-2"}>
+                            <div
+                                key={`table-cell-title-${key}-${key}`}
+                                className="min-w-[140px] w-[25%] py-1">
+                                <Typography variant={"caption"}
+                                            className={"font-semibold break-words"}
+                                            color={"secondary"}>
+                                    {key}
+                                </Typography>
+                            </div>
+                            <div
+                                className="flex-grow max-w-[75%]">
+                                {isScalar && (isTimestampObj ? (
+                                    <ErrorBoundary>
+                                        <DatePreview date={
+                                            childValue instanceof Date ? childValue :
+                                            typeof childValue.toDate === "function" ? childValue.toDate() :
+                                            "_seconds" in childValue ? new Date(childValue._seconds * 1000 + childValue._nanoseconds / 1000000) :
+                                            new Date(childValue.seconds * 1000 + childValue.nanoseconds / 1000000)
+                                        } />
+                                    </ErrorBoundary>
+                                ) : (
+                                    <Typography>
+                                        <ErrorBoundary>
+                                            {childValue.toString()}
+                                        </ErrorBoundary>
+                                    </Typography>
+                                ))}
+                            </div>
                         </div>
-                        <div
-                            className="flex-grow max-w-[75%]">
-                            {childValue && typeof childValue !== "object" && <Typography>
-                                <ErrorBoundary>
-                                    {childValue.toString()}
-                                </ErrorBoundary>
-                            </Typography>}
-                        </div>
+                        {typeof childValue === "object" && !isTimestampObj &&
+                            <div className={cls(defaultBorderMixin, "border-l pl-4")}>
+                                <KeyValuePreview value={childValue}/>
+                            </div>
+                        }
                     </div>
-                    {typeof childValue === "object" &&
-                        <div className={cls(defaultBorderMixin, "border-l pl-4")}>
-                            <KeyValuePreview value={childValue}/>
-                        </div>
-                    }
-                </div>
-            ))
+                );
+            })
         }
     </div>;
 }
