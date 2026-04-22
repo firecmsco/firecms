@@ -51,6 +51,8 @@ export function FirestoreExplorer({
     const [searchParams, setSearchParams] = useSearchParams();
     const [selectedDocument, setSelectedDocument] = useState<AdminDocument | null>(null);
     const [selectedField, setSelectedField] = useState<string | null>(null);
+    const [panelUpdatedDocument, setPanelUpdatedDocument] = useState<AdminDocument | null>(null);
+    const [deletedDocumentId, setDeletedDocumentId] = useState<string | null>(null);
     const [databaseId, setDatabaseId] = useState<string | undefined>(undefined);
     const [databases, setDatabases] = useState<string[]>([]);
     const [databasesLoading, setDatabasesLoading] = useState(true);
@@ -137,6 +139,13 @@ export function FirestoreExplorer({
             return next;
         }, { replace: true });
     }, [setSearchParams]);
+
+    const handleDocumentDeleted = useCallback(() => {
+        if (selectedDocument) {
+            setDeletedDocumentId(selectedDocument.id);
+        }
+        handleDocumentClose();
+    }, [selectedDocument, handleDocumentClose]);
 
     const handleNavigateToSubcollection = useCallback((subPath: string) => {
         setSelectedPath(subPath);
@@ -275,6 +284,8 @@ export function FirestoreExplorer({
                     breadcrumbParts={breadcrumbParts}
                     onBreadcrumbClick={handleBreadcrumbClick}
                     onRootClick={() => setSelectedPath(null)}
+                    updatedDocument={panelUpdatedDocument}
+                    deletedDocumentId={deletedDocumentId}
                 />
             ) : (
                 <div className="flex-grow flex items-center justify-center">
@@ -293,7 +304,7 @@ export function FirestoreExplorer({
                 </div>
             )}
         </div>
-    ), [selectedPath, projectId, databaseId, breadcrumbParts, handleBreadcrumbClick, handleDocumentSelect, handleDocumentClose, handleNavigateToSubcollection, setSelectedPath]);
+    ), [selectedPath, projectId, databaseId, breadcrumbParts, handleBreadcrumbClick, handleDocumentSelect, handleDocumentClose, handleNavigateToSubcollection, setSelectedPath, panelUpdatedDocument, deletedDocumentId]);
 
     // ─── Document detail panel (always rendered, visibility toggled) ─────────
     const detailPanel = useMemo(() => (
@@ -305,8 +316,11 @@ export function FirestoreExplorer({
                     document={selectedDocument}
                     databaseId={databaseId}
                     onClose={handleDocumentClose}
-                    onDocumentUpdated={(doc) => setSelectedDocument(doc)}
-                    onDocumentDeleted={handleDocumentClose}
+                    onDocumentUpdated={(doc) => {
+                        setSelectedDocument(doc);
+                        setPanelUpdatedDocument(doc);
+                    }}
+                    onDocumentDeleted={handleDocumentDeleted}
                     onNavigateToSubcollection={handleNavigateToSubcollection}
                     initialFocusField={selectedField}
                 />
@@ -318,7 +332,7 @@ export function FirestoreExplorer({
                 </div>
             )}
         </div>
-    ), [selectedDocument, selectedField, projectId, databaseId, handleDocumentClose, handleNavigateToSubcollection]);
+    ), [selectedDocument, selectedField, projectId, databaseId, handleDocumentClose, handleDocumentDeleted, handleNavigateToSubcollection]);
 
     // ─── Layout ─────────────────────────────────────────────────────────────
     // Always render ResizablePanels for the inner content so that toggling

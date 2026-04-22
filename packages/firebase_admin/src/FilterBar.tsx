@@ -23,6 +23,10 @@ interface FilterBarProps {
     filters: FilterDef[];
     onFiltersChange: (filters: FilterDef[]) => void;
     path: string;
+    /** Index of the filter whose value input should be auto-focused */
+    focusValueIndex?: number;
+    /** Called when the filter bar should be hidden */
+    onClose?: () => void;
 }
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -33,6 +37,8 @@ export function FilterBar({
     filters,
     onFiltersChange,
     path,
+    focusValueIndex,
+    onClose,
 }: FilterBarProps) {
     const justAddedRef = useRef(false);
 
@@ -79,7 +85,8 @@ export function FilterBar({
     const handleClearAll = useCallback(() => {
         onFiltersChange([]);
         persistFilters(path, []);
-    }, [onFiltersChange, path]);
+        onClose?.();
+    }, [onFiltersChange, path, onClose]);
 
     // ─── Render ─────────────────────────────────────────────────────────────
 
@@ -100,7 +107,7 @@ export function FilterBar({
                     fieldTypes={fieldTypes}
                     onChange={handleChange}
                     onRemove={handleRemove}
-                    autoFocusField={justAddedRef.current && i === filters.length - 1}
+                    autoFocusValue={focusValueIndex === i}
                 />
             ))}
 

@@ -126,6 +126,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         AddColumnComponent,
         initialScroll = 0,
         onColumnsOrderChange,
+        headerIconSize,
     }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
@@ -369,8 +370,9 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                 setColumns(newColumns);
                 onColumnsOrderChange(newColumns);
             } : undefined,
-            draggingColumnId
-        }), [data, rowHeight, cellRenderer, columns, currentSort, onRowClick, customView, onColumnResizeInternal, onColumnResizeEndInternal, filterInput, onColumnSort, onFilterUpdateInternal, sortByProperty, hoverRow, createFilterField, rowClassName, endAdornment, AddColumnComponent, onColumnsOrderChange, draggingColumnId]);
+            draggingColumnId,
+            headerIconSize,
+        }), [data, rowHeight, cellRenderer, columns, currentSort, onRowClick, customView, onColumnResizeInternal, onColumnResizeEndInternal, filterInput, onColumnSort, onFilterUpdateInternal, sortByProperty, hoverRow, createFilterField, rowClassName, endAdornment, AddColumnComponent, onColumnsOrderChange, draggingColumnId, headerIconSize]);
 
         // Get sortable column keys (excluding frozen columns)
         const sortableColumnKeys = columns

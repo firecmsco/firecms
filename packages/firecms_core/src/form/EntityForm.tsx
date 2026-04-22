@@ -251,7 +251,7 @@ export function EntityForm<M extends Record<string, any>>({
     const context = useFireCMSContext();
     const analyticsController = useAnalyticsController();
 
-    const [underlyingChanges] = useState<Partial<EntityValues<M>>>({});
+    const [underlyingChanges, setUnderlyingChanges] = useState<Partial<EntityValues<M>>>({});
 
     const [customIdLoading, setCustomIdLoading] = useState<boolean>(false);
 
@@ -665,6 +665,27 @@ export function EntityForm<M extends Record<string, any>>({
         [entityId, resolvedCollection.properties, uniqueFieldValidator]);
 
     useOnAutoSave(autoSave, formex, lastSavedValues, save);
+
+    // Detect external changes to the entity (e.g. from onSnapshot after Admin SDK writes)
+    const prevEntityValuesRef = useRef<EntityValues<M> | undefined>(entity?.values);
+    useEffect(() => {
+        if (!entity?.values || status !== "existing") return;
+        const prev = prevEntityValuesRef.current;
+        prevEntityValuesRef.current = entity.values;
+        if (prev && !equal(prev, entity.values)) {
+            // Compute the diff between the old and new entity values
+            const changes: Partial<EntityValues<M>> = {};
+            const allKeys = new Set([...Object.keys(prev), ...Object.keys(entity.values)]);
+            for (const key of allKeys) {
+                if (!equal((prev as any)[key], (entity.values as any)[key])) {
+                    (changes as any)[key] = (entity.values as any)[key];
+                }
+            }
+            if (Object.keys(changes).length > 0) {
+                setUnderlyingChanges(changes);
+            }
+        }
+    }, [entity?.values, status]);
 
     useEffect(() => {
         if (!autoSave && !formex.isSubmitting && underlyingChanges && entity) {

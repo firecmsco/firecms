@@ -351,7 +351,7 @@ export function DocumentPanel({
             </Tabs>
 
             {/* Tab content */}
-            <div className="flex-grow overflow-y-auto">
+            <div className="flex-grow overflow-y-auto min-h-0">
                 {activeTab === "fields" ? (
                     <div className="p-3">
                         <EditableFieldsView
@@ -364,8 +364,8 @@ export function DocumentPanel({
                         />
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-2 p-3 h-full">
-                        <div className="relative flex-grow min-h-[200px] rounded-md overflow-hidden border" style={{ border: undefined }}>
+                    <div className="flex flex-col gap-2 p-3 h-full min-h-0">
+                        <div className="relative flex-grow rounded-md overflow-auto min-h-0">
                             {/* Syntax-highlighted background */}
                             <Highlight
                                 theme={mode === "dark" ? themes.vsDark : themes.github}
@@ -386,6 +386,7 @@ export function DocumentPanel({
                                             whiteSpace: "pre-wrap",
                                             wordBreak: "break-word",
                                             pointerEvents: "none",
+                                            minHeight: "100%",
                                         }}
                                     >
                                         {tokens.map((line, i) => (
@@ -398,7 +399,7 @@ export function DocumentPanel({
                                     </pre>
                                 )}
                             </Highlight>
-                            {/* Transparent editable textarea on top */}
+                            {/* Transparent editable textarea on top — matches pre dimensions */}
                             <textarea
                                 value={jsonValue}
                                 onChange={e => {
@@ -406,7 +407,7 @@ export function DocumentPanel({
                                     setJsonError(null);
                                 }}
                                 className={cls(
-                                    "absolute inset-0 w-full h-full resize-none",
+                                    "absolute top-0 left-0 w-full resize-none",
                                     "bg-transparent caret-current",
                                     "focus:outline-none focus:ring-2 focus:ring-primary",
                                     "rounded-md",
@@ -420,6 +421,9 @@ export function DocumentPanel({
                                     padding: "0.75rem",
                                     whiteSpace: "pre-wrap",
                                     wordBreak: "break-word",
+                                    height: "100%",
+                                    minHeight: "100%",
+                                    overflow: "hidden",
                                 }}
                                 spellCheck={false}
                             />

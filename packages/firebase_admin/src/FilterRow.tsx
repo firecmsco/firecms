@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
     cls,
     Select,
@@ -31,8 +31,7 @@ interface FilterRowProps {
     fieldTypes: Record<string, FieldType>;
     onChange: (index: number, filter: FilterDef) => void;
     onRemove: (index: number) => void;
-
-    autoFocusField?: boolean;
+    autoFocusValue?: boolean;
 }
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -44,8 +43,7 @@ export function FilterRow({
     fieldTypes,
     onChange,
     onRemove,
-
-    autoFocusField,
+    autoFocusValue,
 }: FilterRowProps) {
     // The inferred type from documents (for the field selector badge)
     const inferredType = filter.field ? (fieldTypes[filter.field] ?? "unknown") : "unknown";
@@ -119,6 +117,18 @@ export function FilterRow({
     const isNull = filter.op === "is-null";
     const isMulti = isMultiValueOp(filter.op);
 
+    // Auto-focus the value input when added from a column header
+    const valueContainerRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (!autoFocusValue || !valueContainerRef.current) return;
+        // Small delay to let Select/TextField mount
+        const timer = setTimeout(() => {
+            const input = valueContainerRef.current?.querySelector("input, textarea, select") as HTMLElement;
+            input?.focus();
+        }, 50);
+        return () => clearTimeout(timer);
+    }, [autoFocusValue]);
+
     return (
         <div className="flex items-center gap-1.5">
                 {/* Field selector — supports custom field names via search + suggestions */}
@@ -129,7 +139,6 @@ export function FilterRow({
                     placeholder="Field..."
                     className="w-[160px] flex-shrink-0"
                     allowCustomValues
-                    autoFocus={!filter.field}
                     renderValue={(v) => (
                         <span className="flex items-center gap-1.5 text-xs">
                             <span className={cls("font-mono text-[10px]", TYPE_BADGES[fieldTypes[v] ?? "unknown"]?.color)}>
@@ -183,7 +192,7 @@ export function FilterRow({
                 </Select>
 
                 {/* Value input */}
-                <div className="flex-grow min-w-[120px]">
+                <div ref={valueContainerRef} className="flex-grow min-w-[120px]">
                     {isNull ? (
                         <div className="flex items-center h-7 px-2 text-xs text-surface-400 dark:text-surface-500 italic">
                             null

@@ -168,9 +168,28 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
     autoFocus?: boolean;
 }) {
     const inputRef = React.useRef<any>(null);
+
+    // All hooks must be called unconditionally (Rules of Hooks)
+    const textareaRef = React.useCallback((el: Element | null) => {
+        (inputRef as any).current = el;
+        if (autoFocus && el && el instanceof HTMLTextAreaElement) {
+            requestAnimationFrame(() => {
+                el.focus();
+                const len = el.value.length;
+                el.setSelectionRange(len, len);
+            });
+        }
+    }, [autoFocus]);
+
     React.useEffect(() => {
         if (autoFocus && inputRef.current) {
-            inputRef.current.focus();
+            const el = inputRef.current;
+            el.focus();
+            // Place cursor at the end for text inputs
+            if (typeof el.setSelectionRange === "function" && typeof el.value === "string") {
+                const len = el.value.length;
+                el.setSelectionRange(len, len);
+            }
         }
     }, [autoFocus, value]);
 
@@ -220,7 +239,7 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                 }}
                 className="max-w-[160px]"
                 inputRef={inputRef}
-                invisible
+
             />
         );
     }
@@ -231,13 +250,12 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                 value={String(value)}
                 onChange={(e) => onChange(e.target.value)}
                 className={cls(
-                    "w-full outline-none bg-transparent leading-normal px-3 py-0.5 rounded-md resize-none block min-h-[28px]",
-                    "bg-opacity-0 bg-surface-accent-100 dark:bg-surface-800 dark:bg-opacity-0 bg-surface-accent-200/0 dark:bg-surface-800/0",
+                    "w-full outline-none leading-normal px-3 py-0.5 rounded-md resize-none block min-h-[28px] break-all",
+                    "bg-opacity-50 bg-surface-accent-200 bg-surface-accent-200/50 dark:bg-surface-800 dark:bg-opacity-60 dark:bg-surface-800/60",
                     "hover:bg-opacity-70 dark:hover:bg-surface-700 dark:hover:bg-opacity-40 hover:bg-surface-accent-200/70 hover:dark:bg-surface-700/40",
                     "focus:bg-opacity-70 focus:bg-surface-accent-100 focus:dark:bg-surface-800 focus:dark:bg-opacity-60 focus:bg-surface-accent-100/70 dark:focus:bg-surface-800/60"
                 )}
-                ref={inputRef}
-                autoFocus={autoFocus}
+                ref={textareaRef}
                 minRows={1}
             />
         );
@@ -259,7 +277,7 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                 }}
                 className="max-w-[220px]"
                 inputRef={inputRef}
-                invisible
+
             />
         );
     }
@@ -272,7 +290,7 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                 onChange={(e) => onChange({ ...value, _path: e.target.value })}
                 className="w-full"
                 autoFocus={autoFocus}
-                invisible
+
                 placeholder="Document path (e.g., users/123)"
             />
         );
@@ -291,7 +309,7 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                     }}
                     placeholder="Lat"
                     className="max-w-[80px]"
-                    invisible
+    
                 />
                 <span className="text-surface-400">,</span>
                 <TextField
@@ -304,7 +322,7 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                     }}
                     placeholder="Lng"
                     className="max-w-[80px]"
-                    invisible
+    
                 />
             </div>
         );
@@ -376,7 +394,7 @@ const SortableArrayItem = React.memo(function SortableArrayItem({
             <div style={{ paddingLeft: `${depth * 12}px` }}>
                 <div
                     className={cls(
-                        "flex items-start gap-1 py-1.5 px-2 rounded-md group",
+                        "flex items-start gap-2 py-1.5 px-2 rounded-md group",
                         "hover:bg-surface-100 dark:hover:bg-surface-800",
                         isDragging && "bg-surface-100 dark:bg-surface-800 shadow-md",
                     )}
@@ -384,7 +402,7 @@ const SortableArrayItem = React.memo(function SortableArrayItem({
                     {/* Drag handle */}
                     <Tooltip title="Drag to reorder">
                         <span
-                            className="w-5 h-5 flex items-center justify-center flex-shrink-0 cursor-grab active:cursor-grabbing text-surface-400 hover:text-surface-600 dark:hover:text-surface-300"
+                            className="w-4 h-5 flex items-center justify-center flex-shrink-0 cursor-grab active:cursor-grabbing text-surface-400 hover:text-surface-600 dark:hover:text-surface-300 pt-0.5"
                             {...listeners}
                             {...attributes}
                         >
@@ -393,9 +411,9 @@ const SortableArrayItem = React.memo(function SortableArrayItem({
                     </Tooltip>
 
                     {/* Expand/collapse for maps/arrays */}
-                    {isExpandable ? (
+                    {isExpandable && (
                         <span
-                            className="w-5 h-5 flex items-center justify-center flex-shrink-0 cursor-pointer"
+                            className="w-4 h-5 flex items-center justify-center flex-shrink-0 cursor-pointer"
                             onClick={() => setExpanded(!expanded)}
                         >
                             {expanded
@@ -403,8 +421,6 @@ const SortableArrayItem = React.memo(function SortableArrayItem({
                                 : <ChevronRightIcon size="smallest" className="text-surface-400" />
                             }
                         </span>
-                    ) : (
-                        <span className="w-5 flex-shrink-0" />
                     )}
 
                     {/* Array index */}
@@ -544,9 +560,25 @@ const EditableFieldRow = React.memo(function EditableFieldRow({
     const [expanded, setExpanded] = useState(depth < 2);
     const typeName = getTypeName(value);
     const isExpandable = typeof value === "object" && value !== null && !isTimestamp(value);
+    const isAutoFocusTarget = autoFocusPath === path.join(".");
+    const rowRef = React.useRef<HTMLDivElement>(null);
+
+    // Scroll the row into view and briefly highlight it when it's the target
+    React.useEffect(() => {
+        if (isAutoFocusTarget && rowRef.current) {
+            rowRef.current.scrollIntoView({ behavior: "smooth", block: isExpandable ? "start" : "center" });
+            // Add a brief highlight
+            rowRef.current.classList.add("ring-2", "ring-primary", "ring-opacity-60");
+            const timer = setTimeout(() => {
+                rowRef.current?.classList.remove("ring-2", "ring-primary", "ring-opacity-60");
+            }, 1500);
+            return () => { clearTimeout(timer); };
+        }
+        return undefined;
+    }, [isAutoFocusTarget]);
 
     return (
-        <div style={{ paddingLeft: `${depth * 12}px` }}>
+        <div ref={rowRef} style={{ paddingLeft: `${depth * 12}px` }} className="transition-shadow duration-300 rounded-md">
             <div
                 className={cls(
                     "flex items-start gap-2 py-1.5 px-2 rounded-md group",
@@ -596,7 +628,7 @@ const EditableFieldRow = React.memo(function EditableFieldRow({
                         <InlineValueEditor 
                             value={value} 
                             onChange={(v) => onChange(path, v)} 
-                            autoFocus={autoFocusPath === path.join(".")}
+                            autoFocus={isAutoFocusTarget}
                         />
                     </div>
                 )}
@@ -685,27 +717,8 @@ export function EditableFieldsView({
     const [newFieldName, setNewFieldName] = useState("");
     const [newFieldType, setNewFieldType] = useState<FieldType>("string");
 
-    if (!values || typeof values !== "object") {
-        return <Typography variant="body2" color="secondary">No data</Typography>;
-    }
-
-    const entries = isArray
-        ? Object.entries(values).sort(([a], [b]) => Number(a) - Number(b))
-        : Object.entries(values).sort(([a], [b]) => a.localeCompare(b));
-
-    // DnD setup for array mode
-    // We need stable IDs for dnd-kit to animate correctly, as array indices cause issues when mutating order.
+    // All hooks must be called unconditionally (Rules of Hooks)
     const arrayIdsRef = React.useRef<string[]>([]);
-    if (isArray) {
-        if (arrayIdsRef.current.length !== entries.length) {
-            if (arrayIdsRef.current.length < entries.length) {
-                const newIds = Array.from({ length: entries.length - arrayIdsRef.current.length }, () => Math.random().toString(36).substring(2, 10));
-                arrayIdsRef.current = [...arrayIdsRef.current, ...newIds];
-            } else {
-                arrayIdsRef.current = arrayIdsRef.current.slice(0, entries.length);
-            }
-        }
-    }
 
     const pointerSensor = useSensor(PointerSensor, {
         activationConstraint: { distance: 5 },
@@ -713,12 +726,11 @@ export function EditableFieldsView({
     const keyboardSensor = useSensor(KeyboardSensor, {});
     const sensors = useSensors(pointerSensor, keyboardSensor);
 
-    const sortableIds = isArray ? arrayIdsRef.current : entries.map(([key]) => `sortable-${key}`);
-
     const handleDragEnd = useCallback((event: DragEndEvent) => {
         const { active, over } = event;
         if (!over || active.id === over.id || !onReorder) return;
 
+        const sortableIds = arrayIdsRef.current;
         const oldIndex = sortableIds.indexOf(active.id as string);
         const newIndex = sortableIds.indexOf(over.id as string);
         if (oldIndex === -1 || newIndex === -1) return;
@@ -730,7 +742,7 @@ export function EditableFieldsView({
         arrayIdsRef.current = nextIds;
 
         onReorder(oldIndex, newIndex);
-    }, [sortableIds, onReorder]);
+    }, [onReorder]);
 
     const handleMoveUp = useCallback((index: number) => {
         if (index > 0 && onReorder) {
@@ -743,14 +755,37 @@ export function EditableFieldsView({
     }, [onReorder]);
 
     const handleMoveDown = useCallback((index: number) => {
-        if (index < entries.length - 1 && onReorder) {
+        if (index < (values ? Object.keys(values).length : 0) - 1 && onReorder) {
             const nextIds = [...arrayIdsRef.current];
             const [movedId] = nextIds.splice(index, 1);
             nextIds.splice(index + 1, 0, movedId);
             arrayIdsRef.current = nextIds;
             onReorder(index, index + 1);
         }
-    }, [onReorder, entries.length]);
+    }, [onReorder, values]);
+
+    if (!values || typeof values !== "object") {
+        return <Typography variant="body2" color="secondary">No data</Typography>;
+    }
+
+    const entries = isArray
+        ? Object.entries(values).sort(([a], [b]) => Number(a) - Number(b))
+        : Object.entries(values).sort(([a], [b]) => a.localeCompare(b));
+
+    // DnD setup for array mode
+    // We need stable IDs for dnd-kit to animate correctly, as array indices cause issues when mutating order.
+    if (isArray) {
+        if (arrayIdsRef.current.length !== entries.length) {
+            if (arrayIdsRef.current.length < entries.length) {
+                const newIds = Array.from({ length: entries.length - arrayIdsRef.current.length }, () => Math.random().toString(36).substring(2, 10));
+                arrayIdsRef.current = [...arrayIdsRef.current, ...newIds];
+            } else {
+                arrayIdsRef.current = arrayIdsRef.current.slice(0, entries.length);
+            }
+        }
+    }
+
+    const sortableIds = isArray ? arrayIdsRef.current : entries.map(([key]) => `sortable-${key}`);
 
     const renderAddRow = () => (
         <>

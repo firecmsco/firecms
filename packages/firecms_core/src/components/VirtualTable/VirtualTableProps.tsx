@@ -168,6 +168,12 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      */
     onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
 
+    /**
+     * Size of icons in column headers (sort, filter).
+     * @default "small"
+     */
+    headerIconSize?: "small" | "smallest";
+
 }
 
 export type CellRendererParams<T = any> = {
@@ -206,7 +212,7 @@ export interface VirtualTableColumn<CustomProps = any> {
     /**
      * Label displayed in the header
      */
-    title?: string;
+    title?: React.ReactNode;
 
     /**
      * This column is frozen to the left

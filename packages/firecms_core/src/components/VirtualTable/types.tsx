@@ -42,4 +42,5 @@ export type VirtualTableContextProps<T extends any> = {
     AddColumnComponent?: React.ComponentType;
     onColumnsOrderChange?: (columns: VirtualTableColumn[]) => void;
     draggingColumnId?: string | null;
+    headerIconSize?: "small" | "smallest";
 };

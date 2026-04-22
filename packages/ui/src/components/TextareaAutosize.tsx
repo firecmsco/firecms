@@ -1,8 +1,7 @@
 "use client";
 import * as React from "react";
 import { useLayoutEffect } from "react";
-import * as ReactDOM from "react-dom";
-import { cls, debounce } from "../util";
+import { debounce } from "../util";
 
 type State = {
     outerHeightStyle: number;
@@ -11,33 +10,6 @@ type State = {
 
 function getStyleValue(value: string) {
     return parseInt(value, 10) || 0;
-}
-
-const styles: {
-    shadow: React.CSSProperties;
-} = {
-    shadow: {
-        // Visibility needed to hide the extra text area on iPads
-        visibility: "hidden",
-        // Remove from the content flow
-        position: "absolute",
-        // Ignore the scrollbar width
-        overflow: "hidden",
-        height: 0,
-        top: 0,
-        left: 0,
-        // Create a new layer, increase the isolation of the computed values
-        transform: "translateZ(0)"
-    }
-};
-
-function isEmpty(obj: State) {
-    return (
-        obj === undefined ||
-        obj === null ||
-        Object.keys(obj).length === 0 ||
-        (obj.outerHeightStyle === 0 && !obj.overflow)
-    );
 }
 
 export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
@@ -60,176 +32,96 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
     } = props;
 
     const { current: isControlled } = React.useRef(value != null);
-    const inputRef = React.useRef<HTMLInputElement>(null);
+    const inputRef = React.useRef<HTMLTextAreaElement>(null);
     const handleRef = useForkRef(ref, inputRef);
-    const shadowRef = React.useRef<HTMLTextAreaElement>(null);
-    const renders = React.useRef(0);
-    const [state, setState] = React.useState<State>({
-        outerHeightStyle: 0
-    });
-
-    const getUpdatedState = React.useCallback(() => {
-
-        const input = inputRef.current!;
-        if (typeof window === "undefined") {
-            return {
-                outerHeightStyle: 0
-            };
-        }
-
-        const containerWindow = window;
-        const computedStyle = containerWindow.getComputedStyle(input);
-
-        // If input's width is shrunk and it's not visible, don't sync height.
-        if (computedStyle.width === "0px") {
-            return {
-                outerHeightStyle: 0
-            };
-        }
-
-        const sizeReferenceElement = sizeRef?.current ?? shadowRef.current!;
-        const inputShallow = shadowRef.current!;
-
-        sizeReferenceElement.style.width = computedStyle.width;
-        inputShallow.value = input.value || props.placeholder || "x";
-        if (inputShallow.value.slice(-1) === "\n") {
-            // Certain fonts which overflow the line height will cause the textarea
-            // to report a different scrollHeight depending on whether the last line
-            // is empty. Make it non-empty to avoid this issue.
-            inputShallow.value += " ";
-        }
-
-        const boxSizing = computedStyle.boxSizing;
-        const padding =
-            getStyleValue(computedStyle.paddingBottom) + getStyleValue(computedStyle.paddingTop);
-        const border =
-            getStyleValue(computedStyle.borderBottomWidth) + getStyleValue(computedStyle.borderTopWidth);
-        const minHeight = getStyleValue(computedStyle.minHeight);
-
-        // The height of the inner content
-        const innerHeight = sizeReferenceElement.scrollHeight;
-
-        // Measure height of a textarea with a single row
-        inputShallow.value = "x";
-        const singleRowHeight = sizeReferenceElement.scrollHeight;
-
-        // scrollHeight includes padding, so extract the pure line height
-        // to avoid multiplying padding by the number of rows.
-        const lineHeight = singleRowHeight - padding;
-
-        // The height of the outer content
-        let outerHeight = innerHeight;
-
-        if (minRows) {
-            outerHeight = Math.max(Number(minRows) * lineHeight + padding, outerHeight);
-        }
-
-        // Track height before maxRows clamping to detect overflow
-        const unclampedHeight = outerHeight;
-
-        if (maxRows) {
-            outerHeight = Math.min(Number(maxRows) * lineHeight + padding, outerHeight);
-        }
-        outerHeight = Math.max(outerHeight, singleRowHeight, minHeight);
-
-        // Take the box sizing into account for applying this value as a style.
-        const outerHeightStyle = Math.ceil(outerHeight + (!ignoreBoxSizing && boxSizing === "border-box" ? padding + border : 0));
-
-        // overflow=true means content fits → hide scrollbar.
-        // overflow=false means content was clamped by maxRows → show scrollbar.
-        const overflow = Math.abs(unclampedHeight - outerHeight) <= 1;
-
-        return {
-            outerHeightStyle,
-            overflow
-        };
-    }, [maxRows, minRows, props.placeholder]);
-
-    const updateState = React.useCallback((prevState: State, newState: State) => {
-        const {
-            outerHeightStyle,
-            overflow
-        } = newState;
-        // Need a large enough difference to update the height.
-        // This prevents infinite rendering loop.
-        if (
-            renders.current < 20 &&
-            ((outerHeightStyle > 0 &&
-                    Math.abs((prevState.outerHeightStyle || 0) - outerHeightStyle) > 1) ||
-                prevState.overflow !== overflow)
-        ) {
-            renders.current += 1;
-            return {
-                overflow,
-                outerHeightStyle
-            };
-        }
-        if (process.env.NODE_ENV !== "production") {
-            if (renders.current === 20) {
-                console.error(
-                    [
-                        "MUI: Too many re-renders. The layout is unstable.",
-                        "TextareaAutosize limits the number of renders to prevent an infinite loop."
-                    ].join("\n")
-                );
-            }
-        }
-        return prevState;
-    }, []);
 
     const syncHeight = React.useCallback(() => {
-        const newState = getUpdatedState();
+        const el = inputRef.current;
+        if (!el || typeof window === "undefined") return;
+        if (el.offsetWidth === 0) return;
 
-        if (isEmpty(newState)) {
-            return;
+        const cs = window.getComputedStyle(el);
+        const paddingY =
+            getStyleValue(cs.paddingTop) + getStyleValue(cs.paddingBottom);
+        const borderY =
+            getStyleValue(cs.borderTopWidth) + getStyleValue(cs.borderBottomWidth);
+        const boxSizing = cs.boxSizing;
+
+        // ── measure by temporarily collapsing the real element ──
+        const prevHeight = el.style.height;
+        const prevOverflow = el.style.overflowY;
+        el.style.overflowY = "hidden";
+        el.style.height = "0px";
+
+        // scrollHeight = content + padding (always, regardless of box-sizing)
+        const scrollH = el.scrollHeight;
+
+        // Measure single-row height for minRows / maxRows
+        const prevValue = el.value;
+        el.value = "x";
+        const singleRowScrollH = el.scrollHeight;
+        el.value = prevValue;
+
+        // Restore immediately — all of this happens before paint (useLayoutEffect)
+        el.style.height = prevHeight;
+        el.style.overflowY = prevOverflow;
+
+        const lineHeight = singleRowScrollH - paddingY;
+
+        let targetHeight = scrollH; // includes padding
+
+        if (minRows) {
+            targetHeight = Math.max(
+                Number(minRows) * lineHeight + paddingY,
+                targetHeight
+            );
         }
+
+        const unclampedHeight = targetHeight;
+
+        if (maxRows) {
+            targetHeight = Math.min(
+                Number(maxRows) * lineHeight + paddingY,
+                targetHeight
+            );
+        }
+
+        // For border-box, height CSS prop = content + padding + border.
+        // scrollHeight already includes padding, so only add border.
+        const extra =
+            !ignoreBoxSizing && boxSizing === "border-box" ? borderY : 0;
+        const finalHeight = Math.ceil(targetHeight + extra);
+
+        const shouldScroll =
+            Math.abs(unclampedHeight - targetHeight) > 1;
+
+        el.style.height = `${finalHeight}px`;
+        el.style.overflowY = shouldScroll ? "auto" : "hidden";
+
         if (onResize) {
-            onResize(newState);
+            onResize({ outerHeightStyle: finalHeight, overflow: !shouldScroll });
         }
+    }, [maxRows, minRows, ignoreBoxSizing, onResize]);
 
-        setState((prevState) => {
-            return updateState(prevState, newState);
-        });
-    }, [getUpdatedState, onResize, updateState]);
+    // ── sync on every layout ──
+    useLayoutEffect(() => {
+        syncHeight();
+    });
 
-    const syncHeightWithFlushSync = React.useCallback(() => {
-        const newState = getUpdatedState();
-
-        if (isEmpty(newState)) {
-            return;
-        }
-
-        // In React 18, state updates in a ResizeObserver's callback are happening after the paint which causes flickering
-        // when doing some visual updates in it. Using flushSync ensures that the dom will be painted after the states updates happen
-        // Related issue - https://github.com/facebook/react/issues/24331
-        ReactDOM.flushSync(() => {
-            setState((prevState) => {
-                return updateState(prevState, newState);
-            });
-        });
-    }, [getUpdatedState, updateState]);
-
+    // ── sync on window resize / element resize ──
     React.useEffect(() => {
         const handleResize = debounce(() => {
-            renders.current = 0;
-
-            // If the TextareaAutosize component is replaced by Suspense with a fallback, the last
-            // ResizeObserver's handler that runs because of the change in the layout is trying to
-            // access a dom node that is no longer there (as the fallback component is being shown instead).
             if (inputRef.current) {
-                syncHeightWithFlushSync();
+                syncHeight();
             }
         });
-        let resizeObserver: ResizeObserver;
 
         const input = inputRef.current!;
-        const containerWindow = window;
-        if (typeof window === "undefined") {
-            return;
-        }
+        if (typeof window === "undefined") return;
 
-        containerWindow.addEventListener("resize", handleResize);
+        window.addEventListener("resize", handleResize);
 
+        let resizeObserver: ResizeObserver | undefined;
         if (typeof ResizeObserver !== "undefined") {
             resizeObserver = new ResizeObserver(handleResize);
             resizeObserver.observe(input);
@@ -237,69 +129,35 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
 
         return () => {
             handleResize.clear();
-            containerWindow.removeEventListener("resize", handleResize);
-            if (resizeObserver) {
-                resizeObserver.disconnect();
-            }
+            window.removeEventListener("resize", handleResize);
+            resizeObserver?.disconnect();
         };
-    }, [syncHeightWithFlushSync]);
-
-    useLayoutEffect(() => {
-        syncHeight();
-    });
-
-    React.useEffect(() => {
-        renders.current = 0;
-    }, [value]);
+    }, [syncHeight]);
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        renders.current = 0;
-
         if (!isControlled) {
             syncHeight();
         }
-
         if (onChange) {
             onChange(event);
         }
     };
 
     return (
-        <React.Fragment>
-            <textarea
-                value={value}
-                onChange={handleChange}
-                className={props.className}
-                ref={handleRef}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                // Apply the rows prop to get a "correct" first SSR paint
-                rows={minRows as number}
-                style={{
-                    // Only apply computed height once measurement has succeeded;
-                    // before that, let the `rows` attribute size the textarea.
-                    ...(state.outerHeightStyle > 0 ? { height: state.outerHeightStyle } : {}),
-                    // Only control vertical overflow based on height clamping.
-                    // Horizontal overflow must always remain scrollable for long lines.
-                    overflowY: state.overflow ? "hidden" : "auto",
-                    overflowX: "auto",
-                    ...style,
-                }}
-                onScroll={onScroll}
-                {...other}
-            />
-            <textarea
-                aria-hidden
-                className={cls(props.className, props.shadowClassName)}
-                readOnly
-                ref={shadowRef}
-                tabIndex={-1}
-                style={{
-                    ...styles.shadow,
-                    ...style,
-                }}
-            />
-        </React.Fragment>
+        <textarea
+            value={value}
+            onChange={handleChange}
+            className={props.className}
+            ref={handleRef}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            rows={minRows as number}
+            style={{
+                ...style,
+            }}
+            onScroll={onScroll}
+            {...other}
+        />
     );
 }) as React.FC<TextareaAutosizeProps & { ref?: React.ForwardedRef<Element> }>;
 
@@ -349,11 +207,6 @@ export type TextareaAutosizeProps = Omit<React.InputHTMLAttributes<HTMLTextAreaE
 function useForkRef<Instance>(
     ...refs: Array<React.Ref<Instance> | undefined>
 ): React.RefCallback<Instance> | null {
-    /**
-     * This will create a new function if the refs passed to this hook change and are all defined.
-     * This means react will call the old forkRef with `null` and the new forkRef
-     * with the ref. Cleanup naturally emerges from this behavior.
-     */
     return React.useMemo(() => {
         if (refs.every((ref) => ref == null)) {
             return null;

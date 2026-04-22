@@ -41,10 +41,13 @@ import { PopoverCellEditor } from "./PopoverCellEditor";
 import { FilterBar } from "./FilterBar";
 import {
     FilterDef,
+    FieldType,
     inferFieldTypes,
     parseFilterValueForApi,
     readPersistedFilters,
     persistFilters,
+    getOperatorsForType,
+    FILTERABLE_VALUE_TYPES,
 } from "./filter_utils";
 
 // Row shape fed to VirtualTable: the document values plus _doc metadata
@@ -137,6 +140,8 @@ export function DocumentTable({
     breadcrumbParts,
     onBreadcrumbClick,
     onRootClick,
+    updatedDocument,
+    deletedDocumentId,
 }: {
     projectId: string;
     path: string;
@@ -147,6 +152,10 @@ export function DocumentTable({
     breadcrumbParts: string[];
     onBreadcrumbClick: (index: number) => void;
     onRootClick: () => void;
+    /** When set, the table patches this document in its local state (used by DocumentPanel save). */
+    updatedDocument?: AdminDocument | null;
+    /** When set, the table removes this document from its local state (used by DocumentPanel delete). */
+    deletedDocumentId?: string | null;
 }) {
     const adminApi = useAdminApi();
     const [documents, setDocuments] = useState<AdminDocument[]>([]);
@@ -208,6 +217,28 @@ export function DocumentTable({
         }
     }, [path, navigationController]);
 
+    // Patch internal documents when a document is updated externally (e.g. from DocumentPanel)
+    useEffect(() => {
+        if (updatedDocument) {
+            setDocuments(prev => prev.map(d =>
+                d.id === updatedDocument.id ? updatedDocument : d
+            ));
+        }
+    }, [updatedDocument]);
+
+    // Remove document from local state when it is deleted externally (e.g. from DocumentPanel)
+    useEffect(() => {
+        if (deletedDocumentId) {
+            setDocuments(prev => prev.filter(d => d.id !== deletedDocumentId));
+            setSelectedIds(prev => {
+                const next = new Set(prev);
+                next.delete(deletedDocumentId);
+                return next;
+            });
+            setCount(prev => (prev !== undefined && prev > 0) ? prev - 1 : prev);
+        }
+    }, [deletedDocumentId]);
+
     // ─── Column config (persisted) ──────────────────────────────────────────
     const [columnConfig, setColumnConfig] = useState<ColumnConfig | null>(null);
 
@@ -216,21 +247,75 @@ export function DocumentTable({
         setColumnConfig(readColumnConfig(path));
     }, [path]);
 
-    // Derive field keys from document data
+    // Derive field keys from document data, ordered by CMS properties when available
     const fieldKeys: string[] = useMemo(() => {
+        // Collect all field keys present in the actual document data
         const fieldSet = new Set<string>();
         for (const doc of documents) {
             if (doc.values) {
                 Object.keys(doc.values).forEach(k => fieldSet.add(k));
             }
         }
-        return Array.from(fieldSet).sort();
-    }, [documents]);
+        const documentFields = Array.from(fieldSet);
+
+        // If a CMS collection is available, use its property ordering as the base
+        if (cmsCollection) {
+            const cmsOrder: string[] = cmsCollection.propertiesOrder
+                ?? Object.keys(cmsCollection.properties ?? {});
+            // Filter CMS order to only fields present in documents, then append extra document fields
+            const cmsSet = new Set(cmsOrder);
+            const orderedFromCms = cmsOrder.filter(k => fieldSet.has(k));
+            const extraFields = documentFields.filter(k => !cmsSet.has(k)).sort();
+            return [...orderedFromCms, ...extraFields];
+        }
+
+        return documentFields.sort();
+    }, [documents, cmsCollection]);
+
+    // ─── Filter handlers (must be before vtColumns so AdditionalHeaderWidget can reference) ──
+
+    // Track which filter row's value input should be auto-focused
+    const [focusValueIndex, setFocusValueIndex] = useState<number | undefined>(undefined);
+
+    const handleFiltersChange = useCallback((newFilters: FilterDef[]) => {
+        setFilters(newFilters);
+        // Clear focus index when filters change from user interaction
+        setFocusValueIndex(undefined);
+    }, []);
+
+    /** Add a filter for a specific field (triggered from column header icon) */
+    const handleAddFilterForField = useCallback((fieldKey: string) => {
+        const inferredType = fieldTypes[fieldKey] ?? "unknown";
+        const valueType = FILTERABLE_VALUE_TYPES.includes(inferredType) ? inferredType : "string";
+        const ops = getOperatorsForType(valueType);
+        const newFilter: FilterDef = {
+            field: fieldKey,
+            op: ops[0],
+            value: valueType === "boolean" ? true : "",
+            valueType,
+        };
+        setFilters(prev => {
+            const newFilters = [...prev, newFilter];
+            setFocusValueIndex(newFilters.length - 1);
+            return newFilters;
+        });
+        setShowFilterBar(true);
+    }, [fieldTypes]);
 
     // Build VirtualTable columns
     const vtColumns: VirtualTableColumn[] = useMemo(() => {
         const savedOrder = columnConfig?.order;
         const savedWidths = columnConfig?.widths ?? {};
+
+        // Build a map of CMS property names for column header tooltips
+        const cmsPropertyNames: Record<string, string> = {};
+        if (cmsCollection?.properties) {
+            for (const [key, prop] of Object.entries(cmsCollection.properties)) {
+                if (prop && typeof prop === "object" && "name" in prop && prop.name) {
+                    cmsPropertyNames[key] = prop.name as string;
+                }
+            }
+        }
 
         // ID column (frozen)
         const idCol: VirtualTableColumn = {
@@ -255,18 +340,36 @@ export function DocumentTable({
             orderedFields = fieldKeys;
         }
 
-        const fieldCols: VirtualTableColumn[] = orderedFields.map(key => ({
-            key,
-            title: key,
-            width: savedWidths[key] ?? DEFAULT_COL_WIDTH,
-            sortable: true,
-            resizable: true,
-            align: "left" as const,
-            headerAlign: "left" as const,
-        }));
+        const fieldCols: VirtualTableColumn[] = orderedFields.map(key => {
+            const cmsName = cmsPropertyNames[key];
+            return {
+                key,
+                title: cmsName
+                    ? <Tooltip title={cmsName} side="bottom"><span className="inline-flex items-center cursor-default">{key}<span className="ml-1 text-surface-400 dark:text-surface-500 font-normal normal-case">·</span></span></Tooltip>
+                    : key,
+                width: savedWidths[key] ?? DEFAULT_COL_WIDTH,
+                sortable: true,
+                resizable: true,
+                align: "left" as const,
+                headerAlign: "left" as const,
+                AdditionalHeaderWidget: ({ onHover }: { onHover: boolean }) => onHover ? (
+                    <Tooltip title={`Filter by ${key}`}>
+                        <IconButton
+                            size="smallest"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleAddFilterForField(key);
+                            }}
+                        >
+                            <FilterListIcon size="smallest" />
+                        </IconButton>
+                    </Tooltip>
+                ) : null,
+            };
+        });
 
         return [idCol, ...fieldCols];
-    }, [fieldKeys, columnConfig, cmsCollection]);
+    }, [fieldKeys, columnConfig, cmsCollection, handleAddFilterForField]);
 
     // ─── Persist column changes ─────────────────────────────────────────────
 
@@ -309,9 +412,6 @@ export function DocumentTable({
 
     // ─── Data fetching ──────────────────────────────────────────────────────
 
-    const countRef = useRef(count);
-    countRef.current = count;
-
     // Helper to scroll the VirtualTable to top
     const scrollTableToTop = useCallback(() => {
         if (tableWrapperRef.current) {
@@ -345,9 +445,11 @@ export function DocumentTable({
                     orderDirection,
                     filters: apiFilters,
                 }),
-                startAfter
-                    ? Promise.resolve(countRef.current !== undefined ? { count: countRef.current } : null)
-                    : adminApi.countDocuments(projectId, path, databaseId),
+                adminApi.countDocuments(projectId, path, databaseId, {
+                    filters: apiFilters,
+                    orderBy,
+                    orderDirection,
+                }),
             ]);
             setDocuments(docsResult.documents);
             setHasMore(docsResult.hasMore ?? false);
@@ -374,6 +476,7 @@ export function DocumentTable({
 
     useEffect(() => {
         const pathKey = `${projectId}|${path}|${databaseId}`;
+        let hasRestoredFilters = false;
         if (prevPathRef.current !== pathKey) {
             prevPathRef.current = pathKey;
             setDocuments([]);
@@ -387,6 +490,7 @@ export function DocumentTable({
             if (persisted && persisted.length > 0) {
                 setFilters(persisted);
                 setShowFilterBar(true);
+                hasRestoredFilters = true;
             } else {
                 setFilters([]);
                 setShowFilterBar(false);
@@ -394,7 +498,12 @@ export function DocumentTable({
             setEditingCell(null);
             prevSortFilterKey.current = `undefined|asc|[]|${pageSize}`;
         }
-        fetchRef.current();
+        // When persisted filters are restored, skip fetching here — the
+        // sortFilterKey effect will pick up the new filters after React
+        // flushes the state update and fetch with the correct filters.
+        if (!hasRestoredFilters) {
+            fetchRef.current();
+        }
     }, [projectId, path, databaseId]);
 
     const completeFilters = useMemo(() => filters.filter(isFilterComplete), [filters, isFilterComplete]);
@@ -446,11 +555,7 @@ export function DocumentTable({
         }
     }, []);
 
-    // ─── Filter handlers ────────────────────────────────────────────────────
 
-    const handleFiltersChange = useCallback((newFilters: FilterDef[]) => {
-        setFilters(newFilters);
-    }, []);
 
     // ─── Selection handlers ─────────────────────────────────────────────────
 
@@ -474,9 +579,16 @@ export function DocumentTable({
 
     const handleCmsOpen = useCallback((doc: AdminDocument) => {
         if (cmsCollection) {
-            sideEntityController.open({ path, entityId: doc.id, updateUrl: true });
+            sideEntityController.open({
+                path,
+                entityId: doc.id,
+                updateUrl: true,
+                onUpdate: () => {
+                    handleRefresh();
+                },
+            });
         }
-    }, [cmsCollection, path, sideEntityController]);
+    }, [cmsCollection, path, sideEntityController, handleRefresh]);
 
     const handleCopyId = useCallback((id: string) => {
         navigator.clipboard.writeText(id);
@@ -838,6 +950,8 @@ export function DocumentTable({
                     filters={filters}
                     onFiltersChange={handleFiltersChange}
                     path={path}
+                    focusValueIndex={focusValueIndex}
+                    onClose={() => setShowFilterBar(false)}
                 />
             )}
 
@@ -864,6 +978,7 @@ export function DocumentTable({
                         hoverRow={!showSkeletons}
                         rowHeight={48}
                         rowClassName={showSkeletons ? undefined : rowClassName}
+                        headerIconSize="smallest"
                     />
             </div>
 

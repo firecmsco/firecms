@@ -154,13 +154,24 @@ export function buildAdminApi(host: string, getBackendAuthToken: () => Promise<s
     async function countDocuments(
         projectId: string,
         path: string,
-        databaseId?: string
+        databaseId?: string,
+        options?: {
+            filters?: Array<{ field: string; op: string; value: any }>;
+            orderBy?: string;
+            orderDirection?: "asc" | "desc";
+        }
     ): Promise<{ count: number }> {
         const token = await getBackendAuthToken();
         return fetch(`${host}/projects/${projectId}/documents/count`, {
             method: "POST",
             headers: buildHeaders(token),
-            body: JSON.stringify({ path, databaseId }),
+            body: JSON.stringify({
+                path,
+                databaseId,
+                filters: options?.filters,
+                orderBy: options?.orderBy,
+                orderDirection: options?.orderDirection,
+            }),
         }).then(res => handleResponse(res));
     }
 

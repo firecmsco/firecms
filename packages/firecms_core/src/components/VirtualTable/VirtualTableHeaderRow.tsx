@@ -22,7 +22,8 @@ const SortableColumnHeader = ({
     onClickResizeColumn,
     createFilterField,
     isDragging,
-    isDraggable
+    isDraggable,
+    headerIconSize
 }: {
     column: VirtualTableColumn;
     columnIndex: number;
@@ -37,6 +38,7 @@ const SortableColumnHeader = ({
     createFilterField: any;
     isDragging: boolean;
     isDraggable: boolean;
+    headerIconSize?: "small" | "smallest";
 }) => {
     const [isPressing, setIsPressing] = useState(false);
 
@@ -103,7 +105,8 @@ const SortableColumnHeader = ({
                 createFilterField={createFilterField}
                 AdditionalHeaderWidget={column.AdditionalHeaderWidget}
                 isDragging={isDragging || isPressing}
-                isDraggable={isDraggable} />
+                isDraggable={isDraggable}
+                headerIconSize={headerIconSize} />
         </div>
     );
 };
@@ -123,7 +126,8 @@ export const VirtualTableHeaderRow = ({
     data,
     cellRenderer: CellRenderer,
     rowHeight = 54,
-    draggingColumnId
+    draggingColumnId,
+    headerIconSize,
 }: VirtualTableContextProps<any>) => {
 
     const columnRefs = useMemo(() => columns.map(() => createRef<HTMLDivElement>()), [columns.length]);
@@ -234,6 +238,7 @@ export const VirtualTableHeaderRow = ({
                                 createFilterField={createFilterField}
                                 isDragging={isDragging}
                                 isDraggable={isDraggable}
+                                headerIconSize={headerIconSize}
                             />
                         </ErrorBoundary>
                     );

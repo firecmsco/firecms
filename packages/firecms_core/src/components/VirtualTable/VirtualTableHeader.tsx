@@ -48,6 +48,7 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
     AdditionalHeaderWidget?: (props: { onHover: boolean }) => React.ReactNode;
     isDragging?: boolean;
     isDraggable?: boolean;
+    headerIconSize?: "small" | "smallest";
 };
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
@@ -64,7 +65,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
         createFilterField,
         AdditionalHeaderWidget,
         isDragging,
-        isDraggable
+        isDraggable,
+        headerIconSize = "small",
     }: VirtualTableHeaderProps<M>) {
 
         const [onHover, setOnHover] = useState(false);
@@ -136,18 +138,18 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                             <Badge color="secondary"
                                 invisible={!sort}>
                                 <IconButton
-                                    size={"small"}
+                                    size={headerIconSize}
                                     className={onHover || openFilter ? "bg-white dark:bg-surface-950" : undefined}
                                     onClick={() => {
                                         onColumnSort(column.key as Extract<keyof M, string>);
                                     }}
                                 >
                                     {!sort &&
-                                        <ArrowUpwardIcon />}
+                                        <ArrowUpwardIcon size={headerIconSize} />}
                                     {sort === "asc" &&
-                                        <ArrowUpwardIcon />}
+                                        <ArrowUpwardIcon size={headerIconSize} />}
                                     {sort === "desc" &&
-                                        <ArrowUpwardIcon className={"rotate-180"} />}
+                                        <ArrowUpwardIcon size={headerIconSize} className={"rotate-180"} />}
                                 </IconButton>
                             </Badge>
                         }
