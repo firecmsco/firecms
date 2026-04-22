@@ -264,12 +264,13 @@ export function FirestoreExplorer({
     const mainContent = useMemo(() => (
         <div className="flex flex-col flex-grow min-w-0 overflow-hidden h-full">
             {/* Content area */}
-            {selectedPath ? (
+        {selectedPath && databaseId ? (
                 <DocumentTable
                     projectId={projectId}
                     path={selectedPath}
                     databaseId={databaseId}
                     onDocumentSelect={handleDocumentSelect}
+                    onDocumentDeselect={handleDocumentClose}
                     onNavigateToSubcollection={handleNavigateToSubcollection}
                     breadcrumbParts={breadcrumbParts}
                     onBreadcrumbClick={handleBreadcrumbClick}
@@ -292,7 +293,7 @@ export function FirestoreExplorer({
                 </div>
             )}
         </div>
-    ), [selectedPath, projectId, databaseId, breadcrumbParts, handleBreadcrumbClick, handleDocumentSelect, handleNavigateToSubcollection, setSelectedPath]);
+    ), [selectedPath, projectId, databaseId, breadcrumbParts, handleBreadcrumbClick, handleDocumentSelect, handleDocumentClose, handleNavigateToSubcollection, setSelectedPath]);
 
     // ─── Document detail panel (always rendered, visibility toggled) ─────────
     const detailPanel = useMemo(() => (

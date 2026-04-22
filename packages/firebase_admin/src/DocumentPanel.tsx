@@ -27,6 +27,12 @@ import { useAdminApi } from "./api/AdminApiProvider";
 import { AdminDocument } from "./api/admin_api";
 import { EditableFieldsView, defaultValueForType, isTimestamp, FieldType } from "./FieldEditor";
 
+/**
+ * Sentinel value sent to the backend to signal that a field should be deleted.
+ * The backend converts this to FieldValue.delete().
+ */
+const FIRECMS_DELETE_FIELD = "__FIRECMS_DELETE_FIELD__";
+
 
 
 const setIn = (obj: any, path: string[], value: any): any => {
@@ -154,11 +160,20 @@ export function DocumentPanel({
         setJsonError(null);
         try {
             const parentPath = document.path.substring(0, document.path.lastIndexOf("/"));
+            // Mark deleted top-level fields with the sentinel so the backend
+            // can convert them to FieldValue.delete()
+            const payload = { ...editedValues };
+            const originalKeys = Object.keys(document.values ?? {});
+            for (const key of originalKeys) {
+                if (!(key in payload)) {
+                    payload[key] = FIRECMS_DELETE_FIELD;
+                }
+            }
             const updated = await adminApi.updateDocument(
                 projectId,
                 parentPath,
                 document.id,
-                editedValues,
+                payload,
                 databaseId
             );
             onDocumentUpdated(updated);
@@ -177,11 +192,19 @@ export function DocumentPanel({
             setSaving(true);
             setJsonError(null);
             const parentPath = document.path.substring(0, document.path.lastIndexOf("/"));
+            // Mark deleted top-level fields with the sentinel
+            const payload = { ...parsed };
+            const originalKeys = Object.keys(document.values ?? {});
+            for (const key of originalKeys) {
+                if (!(key in payload)) {
+                    payload[key] = FIRECMS_DELETE_FIELD;
+                }
+            }
             const updated = await adminApi.updateDocument(
                 projectId,
                 parentPath,
                 document.id,
-                parsed,
+                payload,
                 databaseId
             );
             onDocumentUpdated(updated);

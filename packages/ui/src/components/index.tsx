@@ -32,6 +32,7 @@ export * from "./Paper";
 export * from "./RadioGroup";
 export * from "./ResizablePanels";
 export * from "./SearchBar";
+export * from "./SearchableSelect";
 export * from "./Select";
 export * from "./Separator";
 export * from "./Slider";

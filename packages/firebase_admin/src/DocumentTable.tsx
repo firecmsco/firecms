@@ -10,7 +10,6 @@ import {
     Button,
     Select,
     SelectItem,
-    TextField,
     defaultBorderMixin,
     DeleteIcon,
     RefreshIcon,
@@ -20,7 +19,6 @@ import {
     ArrowBackIcon,
     ArrowForwardIcon,
     FilterListIcon,
-    CloseIcon,
     ChevronRightIcon,
     Popover,
 } from "@firecms/ui";
@@ -40,14 +38,14 @@ import { AdminDocument } from "./api/admin_api";
 import { AddDocumentDialog } from "./AddDocumentDialog";
 import { ExportButton } from "./ExportButton";
 import { PopoverCellEditor } from "./PopoverCellEditor";
-
-// ─── Types ──────────────────────────────────────────────────────────────────
-
-type FilterDef = {
-    field: string;
-    op: string;
-    value: string;
-};
+import { FilterBar } from "./FilterBar";
+import {
+    FilterDef,
+    inferFieldTypes,
+    parseFilterValueForApi,
+    readPersistedFilters,
+    persistFilters,
+} from "./filter_utils";
 
 // Row shape fed to VirtualTable: the document values plus _doc metadata
 type AdminRow = Record<string, any> & {
@@ -57,15 +55,6 @@ type AdminRow = Record<string, any> & {
 };
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100, 200];
-const FILTER_OPS = [
-    { value: "==", label: "==" },
-    { value: "!=", label: "!=" },
-    { value: "<", label: "<" },
-    { value: "<=", label: "<=" },
-    { value: ">", label: ">" },
-    { value: ">=", label: ">=" },
-    { value: "array-contains", label: "contains" },
-];
 
 // ─── LocalStorage helpers for column config ─────────────────────────────────
 
@@ -143,6 +132,7 @@ export function DocumentTable({
     path,
     databaseId,
     onDocumentSelect,
+    onDocumentDeselect,
     onNavigateToSubcollection,
     breadcrumbParts,
     onBreadcrumbClick,
@@ -152,6 +142,7 @@ export function DocumentTable({
     path: string;
     databaseId?: string;
     onDocumentSelect: (doc: AdminDocument, field?: string) => void;
+    onDocumentDeselect: () => void;
     onNavigateToSubcollection: (subPath: string) => void;
     breadcrumbParts: string[];
     onBreadcrumbClick: (index: number) => void;
@@ -168,6 +159,14 @@ export function DocumentTable({
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [deleting, setDeleting] = useState(false);
+
+    // Track whether we're loading a new page (to show skeletons)
+    const [pageLoading, setPageLoading] = useState(false);
+
+    // Ref to the VirtualTable wrapper for scroll control
+    const tableWrapperRef = useRef<HTMLDivElement>(null);
+
+    // Inline editing state
     const [editingCell, setEditingCell] = useState<{ id: string; key: string } | null>(null);
 
     // Refs for volatile state read by cellRenderer so the function stays stable
@@ -189,9 +188,9 @@ export function DocumentTable({
     // Filtering
     const [filters, setFilters] = useState<FilterDef[]>([]);
     const [showFilterBar, setShowFilterBar] = useState(false);
-    const [newFilterField, setNewFilterField] = useState("");
-    const [newFilterOp, setNewFilterOp] = useState("==");
-    const [newFilterValue, setNewFilterValue] = useState("");
+
+    // Infer field types from loaded documents
+    const fieldTypes = useMemo(() => inferFieldTypes(documents), [documents]);
 
     // Track loaded path for smart loading
     const loadedPathRef = useRef<string | null>(null);
@@ -296,28 +295,45 @@ export function DocumentTable({
         });
     }, [path]);
 
-    // ─── Convert filter value strings to proper types ───────────────────────
+    // ─── Convert filters to API format ────────────────────────────────────────
 
-    function parseFilterValue(val: string): any {
-        if (val === "true") return true;
-        if (val === "false") return false;
-        if (val === "null") return null;
-        const num = Number(val);
-        if (!isNaN(num) && val.trim() !== "") return num;
-        return val;
-    }
+    // A filter is "complete" if it has a field and either is-null or has a meaningful value.
+    const isFilterComplete = useCallback((f: FilterDef): boolean => {
+        if (!f.field) return false;
+        if (f.op === "is-null") return true;
+        if (Array.isArray(f.value)) return f.value.length > 0;
+        if (f.value === null || f.value === undefined) return false;
+        if (typeof f.value === "string" && f.value.trim() === "") return false;
+        return true;
+    }, []);
 
     // ─── Data fetching ──────────────────────────────────────────────────────
 
     const countRef = useRef(count);
     countRef.current = count;
 
-    const fetchDocuments = useCallback(async (startAfter?: string) => {
+    // Helper to scroll the VirtualTable to top
+    const scrollTableToTop = useCallback(() => {
+        if (tableWrapperRef.current) {
+            const scrollContainer = tableWrapperRef.current.querySelector('[style*="overflow"]') as HTMLElement
+                ?? tableWrapperRef.current.firstElementChild as HTMLElement;
+            if (scrollContainer) {
+                scrollContainer.scrollTo({ top: 0 });
+            }
+        }
+    }, []);
+
+    const fetchDocuments = useCallback(async (startAfter?: string, isPageChange?: boolean) => {
         setLoading(true);
         setError(null);
+        if (isPageChange) {
+            setPageLoading(true);
+        }
         try {
-            const apiFilters = filters.length > 0
-                ? filters.map(f => ({ field: f.field, op: f.op, value: parseFilterValue(f.value) }))
+            // Only include complete filters (field set + value present or is-null)
+            const validFilters = filters.filter(isFilterComplete);
+            const apiFilters = validFilters.length > 0
+                ? validFilters.map(f => parseFilterValueForApi(f))
                 : undefined;
 
             const [docsResult, countResult] = await Promise.all([
@@ -339,12 +355,17 @@ export function DocumentTable({
                 setCount(countResult.count);
             }
             loadedPathRef.current = path;
+            // Scroll to top after page data loads
+            if (isPageChange) {
+                scrollTableToTop();
+            }
         } catch (e: any) {
             setError(e.message);
         } finally {
             setLoading(false);
+            setPageLoading(false);
         }
-    }, [projectId, path, databaseId, pageSize, orderBy, orderDirection, filters]);
+    }, [projectId, path, databaseId, pageSize, orderBy, orderDirection, filters, scrollTableToTop]);
 
     const fetchRef = useRef(fetchDocuments);
     fetchRef.current = fetchDocuments;
@@ -361,15 +382,23 @@ export function DocumentTable({
             setCount(undefined);
             setOrderBy(undefined);
             setOrderDirection("asc");
-            setFilters([]);
-            setShowFilterBar(false);
+            // Restore persisted filters for the new path
+            const persisted = readPersistedFilters(path);
+            if (persisted && persisted.length > 0) {
+                setFilters(persisted);
+                setShowFilterBar(true);
+            } else {
+                setFilters([]);
+                setShowFilterBar(false);
+            }
             setEditingCell(null);
             prevSortFilterKey.current = `undefined|asc|[]|${pageSize}`;
         }
         fetchRef.current();
     }, [projectId, path, databaseId]);
 
-    const sortFilterKey = `${orderBy}|${orderDirection}|${JSON.stringify(filters)}|${pageSize}`;
+    const completeFilters = useMemo(() => filters.filter(isFilterComplete), [filters, isFilterComplete]);
+    const sortFilterKey = `${orderBy}|${orderDirection}|${JSON.stringify(completeFilters)}|${pageSize}`;
     const prevSortFilterKey = useRef(sortFilterKey);
     useEffect(() => {
         if (prevSortFilterKey.current !== sortFilterKey) {
@@ -385,7 +414,7 @@ export function DocumentTable({
         if (documents.length === 0 || !hasMore) return;
         const lastDocId = documents[documents.length - 1].id;
         setCursorStack(prev => [...prev, lastDocId]);
-        fetchDocuments(lastDocId);
+        fetchDocuments(lastDocId, true);
     }, [documents, hasMore, fetchDocuments]);
 
     const handlePrevPage = useCallback(() => {
@@ -393,7 +422,7 @@ export function DocumentTable({
         const newStack = cursorStack.slice(0, -1);
         setCursorStack(newStack);
         const cursor = newStack.length > 0 ? newStack[newStack.length - 1] : undefined;
-        fetchDocuments(cursor);
+        fetchDocuments(cursor, true);
     }, [cursorStack, fetchDocuments]);
 
     const handleRefresh = useCallback(() => {
@@ -419,19 +448,8 @@ export function DocumentTable({
 
     // ─── Filter handlers ────────────────────────────────────────────────────
 
-    const handleAddFilter = useCallback(() => {
-        if (!newFilterField.trim()) return;
-        setFilters(prev => [...prev, {
-            field: newFilterField.trim(),
-            op: newFilterOp,
-            value: newFilterValue,
-        }]);
-        setNewFilterField("");
-        setNewFilterValue("");
-    }, [newFilterField, newFilterOp, newFilterValue]);
-
-    const handleRemoveFilter = useCallback((index: number) => {
-        setFilters(prev => prev.filter((_, i) => i !== index));
+    const handleFiltersChange = useCallback((newFilters: FilterDef[]) => {
+        setFilters(newFilters);
     }, []);
 
     // ─── Selection handlers ─────────────────────────────────────────────────
@@ -496,8 +514,8 @@ export function DocumentTable({
 
     // ─── State flags (computed early, needed by rowData) ────────────────────
 
-    const showSkeletons = loading && loadedPathRef.current !== path && documents.length === 0;
-    const showLoadingBar = loading && !showSkeletons;
+    const showSkeletons = (loading && loadedPathRef.current !== path && documents.length === 0) || pageLoading;
+    const showLoadingBar = loading && !showSkeletons && !pageLoading;
 
     // ─── Build row data for VirtualTable ────────────────────────────────────
 
@@ -619,15 +637,15 @@ export function DocumentTable({
                         "cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors outline-none"
                     )}
                     onClick={(e) => {
-                        if (e.detail === 2) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setEditingCell({ id: doc.id, key: column.key });
-                        } else if (e.detail === 1) {
-                            e.preventDefault();
-                            e.stopPropagation();
+                        if (e.detail === 1) {
                             onDocumentSelect(doc, column.key);
                         }
+                    }}
+                    onDoubleClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onDocumentDeselect();
+                        setEditingCell({ id: doc.id, key: column.key });
                     }}>
                         {renderCellValue(value)}
                     </div>
@@ -651,7 +669,7 @@ export function DocumentTable({
                 )}
             </Popover>
         );
-    }, [cmsCollection, handleSelectRow, handleCopyId, handleDuplicate, handleCmsOpen, editingCell, adminApi, projectId, path, databaseId, snackbar]);
+    }, [cmsCollection, handleSelectRow, handleCopyId, handleDuplicate, handleCmsOpen, editingCell, adminApi, projectId, path, databaseId, snackbar, selectedIds, copiedId]);
 
     // ─── State flags ────────────────────────────────────────────────────────
 
@@ -688,13 +706,16 @@ export function DocumentTable({
     const emptyComponent = useMemo(() => (
         <div className="text-center space-y-3">
             <Typography color="secondary" variant="body2">
-                {filters.length > 0
+                {completeFilters.length > 0
                     ? "No documents match the current filters"
                     : "No documents in this collection"
                 }
             </Typography>
-            {filters.length > 0 ? (
-                <Button size="small" variant="text" onClick={() => setFilters([])}>
+            {completeFilters.length > 0 ? (
+                <Button size="small" variant="text" onClick={() => {
+                    setFilters([]);
+                    persistFilters(path, []);
+                }}>
                     Clear filters
                 </Button>
             ) : (
@@ -704,7 +725,7 @@ export function DocumentTable({
                 </Button>
             )}
         </div>
-    ), [filters]);
+    ), [completeFilters, path]);
 
     // ─── Render ─────────────────────────────────────────────────────────────
 
@@ -771,7 +792,7 @@ export function DocumentTable({
                         <IconButton
                             size="small"
                             onClick={() => setShowFilterBar(!showFilterBar)}
-                            className={filters.length > 0 ? "text-primary" : ""}
+                            className={completeFilters.length > 0 ? "text-primary" : ""}
                         >
                             <FilterListIcon size="small" />
                         </IconButton>
@@ -783,8 +804,8 @@ export function DocumentTable({
                         databaseId={databaseId}
                         documents={documents}
                         count={count}
-                        filters={filters.length > 0
-                            ? filters.map(f => ({ field: f.field, op: f.op, value: parseFilterValue(f.value) }))
+                        filters={completeFilters.length > 0
+                            ? completeFilters.map(f => parseFilterValueForApi(f))
                             : undefined}
                         orderBy={orderBy}
                         orderDirection={orderDirection}
@@ -811,51 +832,13 @@ export function DocumentTable({
 
             {/* Filter bar */}
             {showFilterBar && (
-                <div className={cls(
-                    "flex flex-col gap-2 px-4 py-2",
-                    "border-b",
-                    defaultBorderMixin,
-                    "bg-surface-50 dark:bg-surface-900"
-                )}>
-                    {filters.length > 0 && (
-                        <div className="flex items-center gap-1 flex-wrap">
-                            {filters.map((f, i) => (
-                                <Chip key={i} size="small" colorScheme="blueLighter" onClick={() => handleRemoveFilter(i)}>
-                                    {f.field} {f.op} {f.value}
-                                    <CloseIcon size="smallest" className="ml-1" />
-                                </Chip>
-                            ))}
-                            <Button size="small" variant="text" onClick={() => setFilters([])} className="text-xs">
-                                Clear all
-                            </Button>
-                        </div>
-                    )}
-                    <div className="flex items-center gap-2">
-                        <TextField
-                            size="smallest"
-                            placeholder="Field name"
-                            value={newFilterField}
-                            onChange={(e) => setNewFilterField(e.target.value)}
-                            className="w-36"
-                        />
-                        <Select size="smallest" value={newFilterOp} onValueChange={setNewFilterOp} className="w-28">
-                            {FILTER_OPS.map(o => (
-                                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                            ))}
-                        </Select>
-                        <TextField
-                            size="smallest"
-                            placeholder="Value"
-                            value={newFilterValue}
-                            onChange={(e) => setNewFilterValue(e.target.value)}
-                            className="w-36"
-                            onKeyDown={(e) => { if (e.key === "Enter") handleAddFilter(); }}
-                        />
-                        <Button size="small" variant="outlined" onClick={handleAddFilter} disabled={!newFilterField.trim()}>
-                            Add filter
-                        </Button>
-                    </div>
-                </div>
+                <FilterBar
+                    fieldKeys={fieldKeys}
+                    fieldTypes={fieldTypes}
+                    filters={filters}
+                    onFiltersChange={handleFiltersChange}
+                    path={path}
+                />
             )}
 
             {/* Loading bar */}
@@ -866,7 +849,7 @@ export function DocumentTable({
             )}
 
             {/* VirtualTable — always mounted, fed skeleton rows when loading */}
-            <div className="flex-grow overflow-hidden relative">
+            <div ref={tableWrapperRef} className="flex-grow overflow-hidden relative">
                     <VirtualTable
                         data={rowData}
                         columns={activeColumns}
