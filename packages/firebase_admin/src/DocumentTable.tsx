@@ -20,6 +20,7 @@ import {
     ArrowForwardIcon,
     FilterListIcon,
     ChevronRightIcon,
+    MenuIcon,
     Popover,
 } from "@firecms/ui";
 import {
@@ -106,6 +107,20 @@ const SKELETON_ROW_WIDTHS: number[][] = [
 
 // ─── Cell value rendering ───────────────────────────────────────────────────
 
+function compactPreview(val: any): string {
+    if (val === null || val === undefined) return "null";
+    if (typeof val === "boolean") return String(val);
+    if (typeof val === "number") return String(val);
+    if (typeof val === "string") return val.length > 32 ? `"${val.substring(0, 32)}…"` : `"${val}"`;
+    if (val instanceof Date || (val && val._seconds !== undefined)) {
+        const d = val._seconds ? new Date(val._seconds * 1000) : val;
+        return d.toLocaleDateString();
+    }
+    if (Array.isArray(val)) return `[${val.length}]`;
+    if (typeof val === "object") return `{${Object.keys(val).length}}`;
+    return String(val);
+}
+
 function renderCellValue(value: any): string {
     if (value === null || value === undefined) return "—";
     if (typeof value === "boolean") return value ? "true" : "false";
@@ -120,10 +135,25 @@ function renderCellValue(value: any): string {
         return date.toLocaleString();
     }
     if (Array.isArray(value)) {
-        return `[${value.length} items]`;
+        const parts: string[] = [];
+        for (const item of value) {
+            parts.push(compactPreview(item));
+            if (parts.join(", ").length > 120) break;
+        }
+        const inner = parts.join(", ");
+        const suffix = parts.length < value.length ? ", …" : "";
+        return `[${inner}${suffix}]`;
     }
     if (typeof value === "object") {
-        return `{${Object.keys(value).length} fields}`;
+        const entries = Object.entries(value);
+        const parts: string[] = [];
+        for (const [k, v] of entries) {
+            parts.push(`${k}: ${compactPreview(v)}`);
+            if (parts.join(", ").length > 120) break;
+        }
+        const inner = parts.join(", ");
+        const suffix = parts.length < entries.length ? ", …" : "";
+        return `{${inner}${suffix}}`;
     }
     return String(value);
 }
@@ -142,6 +172,7 @@ export function DocumentTable({
     onRootClick,
     updatedDocument,
     deletedDocumentId,
+    onOpenCollectionDrawer,
 }: {
     projectId: string;
     path: string;
@@ -156,6 +187,8 @@ export function DocumentTable({
     updatedDocument?: AdminDocument | null;
     /** When set, the table removes this document from its local state (used by DocumentPanel delete). */
     deletedDocumentId?: string | null;
+    /** When provided, renders a menu button to open the mobile collection drawer. */
+    onOpenCollectionDrawer?: () => void;
 }) {
     const adminApi = useAdminApi();
     const [documents, setDocuments] = useState<AdminDocument[]>([]);
@@ -177,6 +210,11 @@ export function DocumentTable({
 
     // Inline editing state
     const [editingCell, setEditingCell] = useState<{ id: string; key: string } | null>(null);
+
+    // Timer ref to distinguish single-click from double-click.
+    // On click we delay the single-click action; if a dblclick fires before the
+    // timer expires we cancel the single-click and run the double-click action.
+    const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Refs for volatile state read by cellRenderer so the function stays stable
     const selectedIdsRef = useRef(selectedIds);
@@ -216,6 +254,13 @@ export function DocumentTable({
             return undefined;
         }
     }, [path, navigationController]);
+
+    // Clean up click timer on unmount
+    useEffect(() => {
+        return () => {
+            if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+        };
+    }, []);
 
     // Patch internal documents when a document is updated externally (e.g. from DocumentPanel)
     useEffect(() => {
@@ -323,7 +368,7 @@ export function DocumentTable({
             title: "ID",
             width: savedWidths["__id"] ?? ID_COL_WIDTH,
             frozen: false,
-            sortable: false,
+            sortable: true,
             resizable: true,
             align: "left",
             headerAlign: "left",
@@ -536,18 +581,22 @@ export function DocumentTable({
 
     const handleRefresh = useCallback(() => {
         const cursor = cursorStack.length > 0 ? cursorStack[cursorStack.length - 1] : undefined;
-        fetchDocuments(cursor);
+        setDocuments([]);
+        fetchDocuments(cursor, true);
     }, [cursorStack, fetchDocuments]);
 
     // ─── Sort handler (via VirtualTable) ────────────────────────────────────
 
+    // Map between VirtualTable column key (__id) and Firestore field (__name__)
     const sortBy: [string, "asc" | "desc"] | undefined = orderBy
-        ? [orderBy, orderDirection]
+        ? [orderBy === "__name__" ? "__id" : orderBy, orderDirection]
         : undefined;
 
     const handleSortByUpdate = useCallback((newSortBy?: [string, "asc" | "desc"]) => {
         if (newSortBy) {
-            setOrderBy(newSortBy[0]);
+            // __id is the column key; Firestore uses __name__ to sort by document ID
+            const field = newSortBy[0] === "__id" ? "__name__" : newSortBy[0];
+            setOrderBy(field);
             setOrderDirection(newSortBy[1]);
         } else {
             setOrderBy(undefined);
@@ -741,6 +790,7 @@ export function DocumentTable({
                 side="bottom"
                 align="start"
                 sideOffset={-48}
+                avoidCollisions={true}
                 trigger={
                     <div className={cls(
                         "flex items-center h-full px-3 text-sm truncate",
@@ -750,12 +800,25 @@ export function DocumentTable({
                     )}
                     onClick={(e) => {
                         if (e.detail === 1) {
-                            onDocumentSelect(doc, column.key);
+                            // Delay single-click action so a quick second click
+                            // (double-click) can cancel it before it fires.
+                            if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+                            const docSnapshot = doc;
+                            const colKey = column.key;
+                            clickTimerRef.current = setTimeout(() => {
+                                clickTimerRef.current = null;
+                                onDocumentSelect(docSnapshot, colKey);
+                            }, 250);
                         }
                     }}
                     onDoubleClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
+                        // Cancel the pending single-click action
+                        if (clickTimerRef.current) {
+                            clearTimeout(clickTimerRef.current);
+                            clickTimerRef.current = null;
+                        }
                         onDocumentDeselect();
                         setEditingCell({ id: doc.id, key: column.key });
                     }}>
@@ -852,6 +915,15 @@ export function DocumentTable({
             )}>
                 {/* Breadcrumbs */}
                 <div className="flex items-center gap-1 min-w-0 overflow-x-auto no-scrollbar flex-shrink">
+                    {onOpenCollectionDrawer && (
+                        <IconButton
+                            size="small"
+                            onClick={onOpenCollectionDrawer}
+                            className="flex-shrink-0 mr-1"
+                        >
+                            <MenuIcon size="small" />
+                        </IconButton>
+                    )}
                     <Chip size="small" onClick={onRootClick} className="cursor-pointer flex-shrink-0">/</Chip>
                     {breadcrumbParts.map((part, index) => (
                         <React.Fragment key={index}>
@@ -923,6 +995,12 @@ export function DocumentTable({
                         orderDirection={orderDirection}
                     />
 
+                    <Tooltip title="Refresh">
+                        <IconButton size="small" onClick={handleRefresh} className={loading && !showSkeletons ? "animate-spin" : ""}>
+                            <RefreshIcon size="small" />
+                        </IconButton>
+                    </Tooltip>
+
                     <Tooltip title="Add document">
                         <Button
                             size="small"
@@ -932,12 +1010,6 @@ export function DocumentTable({
                         >
                             Add
                         </Button>
-                    </Tooltip>
-
-                    <Tooltip title="Refresh">
-                        <IconButton size="small" onClick={handleRefresh} className={loading && !showSkeletons ? "animate-spin" : ""}>
-                            <RefreshIcon size="small" />
-                        </IconButton>
                     </Tooltip>
                 </div>
             </div>

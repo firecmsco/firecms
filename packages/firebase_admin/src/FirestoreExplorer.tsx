@@ -11,6 +11,12 @@ import {
     Select,
     SelectItem,
     Skeleton,
+    Sheet,
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
 } from "@firecms/ui";
 import { useLargeLayout } from "@firecms/core";
 import { CollectionTree } from "./CollectionTree";
@@ -56,7 +62,43 @@ export function FirestoreExplorer({
     const [databaseId, setDatabaseId] = useState<string | undefined>(undefined);
     const [databases, setDatabases] = useState<string[]>([]);
     const [databasesLoading, setDatabasesLoading] = useState(true);
+    const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
     const adminApi = useAdminApi();
+
+    // ─── Unsaved changes guard ──────────────────────────────────────────────
+    const [panelDirty, setPanelDirty] = useState(false);
+    const [unsavedDialogOpen, setUnsavedDialogOpen] = useState(false);
+    const pendingActionRef = useRef<(() => void) | null>(null);
+
+    const handleDirtyChange = useCallback((dirty: boolean) => {
+        setPanelDirty(dirty);
+    }, []);
+
+    /**
+     * If the panel has unsaved changes, show a confirmation dialog and stash
+     * the action. Otherwise execute the action immediately.
+     */
+    const guardUnsavedChanges = useCallback((action: () => void) => {
+        if (panelDirty) {
+            pendingActionRef.current = action;
+            setUnsavedDialogOpen(true);
+        } else {
+            action();
+        }
+    }, [panelDirty]);
+
+    const handleUnsavedDiscard = useCallback(() => {
+        setUnsavedDialogOpen(false);
+        setPanelDirty(false);
+        const action = pendingActionRef.current;
+        pendingActionRef.current = null;
+        action?.();
+    }, []);
+
+    const handleUnsavedCancel = useCallback(() => {
+        setUnsavedDialogOpen(false);
+        pendingActionRef.current = null;
+    }, []);
 
     // Fetch available databases, then pick the first one
     useEffect(() => {
@@ -103,7 +145,7 @@ export function FirestoreExplorer({
         }
     }, [selectedDocId, selectedDocument]);
 
-    const setSelectedPath = useCallback((path: string | null) => {
+    const doSetSelectedPath = useCallback((path: string | null) => {
         setSearchParams(prev => {
             const next = new URLSearchParams(prev);
             if (path) {
@@ -116,9 +158,17 @@ export function FirestoreExplorer({
         }, { replace: true });
         setSelectedDocument(null);
         setSelectedField(null);
-    }, [setSearchParams]);
+        // Auto-close the mobile drawer when a path is selected
+        if (!largeLayout) {
+            setMobileDrawerOpen(false);
+        }
+    }, [setSearchParams, largeLayout]);
 
-    const handleDocumentSelect = useCallback((doc: AdminDocument, field?: string) => {
+    const setSelectedPath = useCallback((path: string | null) => {
+        guardUnsavedChanges(() => doSetSelectedPath(path));
+    }, [guardUnsavedChanges, doSetSelectedPath]);
+
+    const doDocumentSelect = useCallback((doc: AdminDocument, field?: string) => {
         setSelectedDocument(doc);
         setSelectedField(field || null);
         // Push a new history entry so back button closes the doc
@@ -129,7 +179,16 @@ export function FirestoreExplorer({
         }); // no { replace: true } → pushes new entry
     }, [setSearchParams]);
 
-    const handleDocumentClose = useCallback(() => {
+    const handleDocumentSelect = useCallback((doc: AdminDocument, field?: string) => {
+        // Don't re-guard if selecting the same document
+        if (selectedDocument?.id === doc.id) {
+            doDocumentSelect(doc, field);
+            return;
+        }
+        guardUnsavedChanges(() => doDocumentSelect(doc, field));
+    }, [selectedDocument, guardUnsavedChanges, doDocumentSelect]);
+
+    const doDocumentClose = useCallback(() => {
         setSelectedDocument(null);
         setSelectedField(null);
         // Replace current entry to remove doc param
@@ -140,12 +199,17 @@ export function FirestoreExplorer({
         }, { replace: true });
     }, [setSearchParams]);
 
+    const handleDocumentClose = useCallback(() => {
+        guardUnsavedChanges(() => doDocumentClose());
+    }, [guardUnsavedChanges, doDocumentClose]);
+
     const handleDocumentDeleted = useCallback(() => {
         if (selectedDocument) {
             setDeletedDocumentId(selectedDocument.id);
         }
-        handleDocumentClose();
-    }, [selectedDocument, handleDocumentClose]);
+        // Bypass the unsaved-changes guard — the document is gone
+        doDocumentClose();
+    }, [selectedDocument, doDocumentClose]);
 
     const handleNavigateToSubcollection = useCallback((subPath: string) => {
         setSelectedPath(subPath);
@@ -162,11 +226,15 @@ export function FirestoreExplorer({
                     next.set("doc", doc.id);
                     return next;
                 });
+                // Close mobile drawer after navigation
+                if (!largeLayout) {
+                    setMobileDrawerOpen(false);
+                }
             })
             .catch(() => {
                 console.error("Could not load document", docId);
             });
-    }, [projectId, databaseId, adminApi, setSearchParams]);
+    }, [projectId, databaseId, adminApi, setSearchParams, largeLayout]);
 
     // Panel sizes persisted in localStorage
     const [sidebarSize, setSidebarSizeState] = useState(() => readStoredSize(LS_SIDEBAR_SIZE, 18));
@@ -202,12 +270,14 @@ export function FirestoreExplorer({
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
             if (e.key === "Escape" && selectedDocument) {
+                // If the unsaved dialog is open, don't close the doc
+                if (unsavedDialogOpen) return;
                 handleDocumentClose();
             }
         };
         window.addEventListener("keydown", handler);
         return () => window.removeEventListener("keydown", handler);
-    }, [selectedDocument, handleDocumentClose]);
+    }, [selectedDocument, handleDocumentClose, unsavedDialogOpen]);
 
     // ─── Sidebar panel ──────────────────────────────────────────────────────
     // Deterministic skeleton widths for sidebar loading state
@@ -269,6 +339,11 @@ export function FirestoreExplorer({
         </div>
     ), [projectId, databaseId, databases, databasesLoading, selectedPath, setSelectedPath, SIDEBAR_SKELETON_WIDTHS]);
 
+    // ─── Mobile drawer toggle ────────────────────────────────────────────────
+    const handleOpenMobileDrawer = useCallback(() => {
+        setMobileDrawerOpen(true);
+    }, []);
+
     // ─── Main content (breadcrumbs + table) ─────────────────────────────────
     const mainContent = useMemo(() => (
         <div className="flex flex-col flex-grow min-w-0 overflow-hidden h-full">
@@ -286,10 +361,11 @@ export function FirestoreExplorer({
                     onRootClick={() => setSelectedPath(null)}
                     updatedDocument={panelUpdatedDocument}
                     deletedDocumentId={deletedDocumentId}
+                    onOpenCollectionDrawer={!largeLayout ? handleOpenMobileDrawer : undefined}
                 />
             ) : (
                 <div className="flex-grow flex items-center justify-center">
-                    <div className="text-center space-y-3">
+                    <div className="text-center space-y-4">
                         <FolderIcon
                             size="large"
                             className="text-surface-300 dark:text-surface-600 mx-auto"
@@ -298,13 +374,22 @@ export function FirestoreExplorer({
                             Select a collection
                         </Typography>
                         <Typography variant="body2" color="disabled" className="text-sm">
-                            Choose a collection from the sidebar to browse documents
+                            Choose a collection to browse documents
                         </Typography>
+                        {!largeLayout && (
+                            <Button
+                                variant="outlined"
+                                startIcon={<FolderIcon size="small" />}
+                                onClick={handleOpenMobileDrawer}
+                            >
+                                Browse collections
+                            </Button>
+                        )}
                     </div>
                 </div>
             )}
         </div>
-    ), [selectedPath, projectId, databaseId, breadcrumbParts, handleBreadcrumbClick, handleDocumentSelect, handleDocumentClose, handleNavigateToSubcollection, setSelectedPath, panelUpdatedDocument, deletedDocumentId]);
+    ), [selectedPath, projectId, databaseId, breadcrumbParts, handleBreadcrumbClick, handleDocumentSelect, handleDocumentClose, handleNavigateToSubcollection, setSelectedPath, panelUpdatedDocument, deletedDocumentId, largeLayout, handleOpenMobileDrawer]);
 
     // ─── Document detail panel (always rendered, visibility toggled) ─────────
     const detailPanel = useMemo(() => (
@@ -323,6 +408,7 @@ export function FirestoreExplorer({
                     onDocumentDeleted={handleDocumentDeleted}
                     onNavigateToSubcollection={handleNavigateToSubcollection}
                     initialFocusField={selectedField}
+                    onDirtyChange={handleDirtyChange}
                 />
             ) : (
                 <div className="flex items-center justify-center h-full">
@@ -353,6 +439,20 @@ export function FirestoreExplorer({
         <div className={cls(
             "flex h-full w-full bg-white dark:bg-surface-950"
         )}>
+            {/* Mobile sidebar drawer */}
+            {!largeLayout && (
+                <Sheet
+                    open={mobileDrawerOpen}
+                    onOpenChange={setMobileDrawerOpen}
+                    side="left"
+                    title="Collections"
+                >
+                    <div className="w-[280px] h-full">
+                        {sidebar}
+                    </div>
+                </Sheet>
+            )}
+
             <ResizablePanels
                 firstPanel={sidebar}
                 secondPanel={innerContent}
@@ -362,6 +462,31 @@ export function FirestoreExplorer({
                 minPanelSizePx={180}
                 orientation="horizontal"
             />
+
+            {/* Unsaved changes confirmation dialog */}
+            <Dialog
+                open={unsavedDialogOpen}
+                onOpenChange={(open) => { if (!open) handleUnsavedCancel(); }}
+            >
+                <DialogTitle variant="h6">Unsaved changes</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        You have unsaved changes in this document. Do you want to discard them?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button variant="text" onClick={handleUnsavedCancel} autoFocus>
+                        Keep editing
+                    </Button>
+                    <Button
+                        variant="filled"
+                        color="primary"
+                        onClick={handleUnsavedDiscard}
+                    >
+                        Discard
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

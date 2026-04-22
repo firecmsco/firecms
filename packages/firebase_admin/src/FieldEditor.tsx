@@ -185,10 +185,14 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
         if (autoFocus && inputRef.current) {
             const el = inputRef.current;
             el.focus();
-            // Place cursor at the end for text inputs
+            // Place cursor at the end for text inputs (number, date, etc. don't support setSelectionRange)
             if (typeof el.setSelectionRange === "function" && typeof el.value === "string") {
-                const len = el.value.length;
-                el.setSelectionRange(len, len);
+                const inputType = el instanceof HTMLInputElement ? el.type : "";
+                const unsupportedTypes = ["number", "date", "datetime-local", "month", "time", "week", "range", "color"];
+                if (!unsupportedTypes.includes(inputType)) {
+                    const len = el.value.length;
+                    el.setSelectionRange(len, len);
+                }
             }
         }
     }, [autoFocus, value]);

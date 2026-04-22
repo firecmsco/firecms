@@ -72,10 +72,12 @@ export function PopoverCellEditor({
     const isExpandable = type === "map" || type === "array";
 
     return (
-        <div className={cls("flex flex-col w-[360px] sm:w-[420px] bg-surface-50 dark:bg-surface-950 rounded-md shadow-xl text-text-primary dark:text-white overflow-hidden", defaultBorderMixin)} onClick={e => e.stopPropagation()}>
+        <div className={cls("flex flex-col bg-surface-50 dark:bg-surface-950 rounded-md shadow-xl text-text-primary dark:text-white overflow-hidden", defaultBorderMixin)}
+             style={{ width: 400, maxWidth: '90vw', maxHeight: 'var(--radix-popover-content-available-height, 60vh)' }}
+             onClick={e => e.stopPropagation()}>
             
             {/* Header - Fixed height 44px */}
-            <div className="flex items-center gap-2 px-3 h-[44px] border-b border-surface-200 dark:border-surface-800 bg-surface-100 dark:bg-surface-900">
+            <div className="flex items-center gap-2 px-3 h-[44px] flex-shrink-0 border-b border-surface-200 dark:border-surface-800 bg-surface-100 dark:bg-surface-900">
                 <Typography variant="subtitle2" className="flex-grow min-w-0 truncate font-mono text-sm">
                     {columnKey}
                 </Typography>
@@ -94,7 +96,7 @@ export function PopoverCellEditor({
             </div>
             
             {/* Body */}
-            <div className="w-full bg-white dark:bg-surface-950 overflow-y-auto max-h-[60vh] flex flex-col p-1">
+            <div className="w-full bg-white dark:bg-surface-950 overflow-y-auto flex-grow min-h-0 flex flex-col p-1">
                 {isExpandable ? (
                     <EditableFieldsView 
                         values={editedValue} 
@@ -118,7 +120,7 @@ export function PopoverCellEditor({
             </div>
             
             {/* Footer */}
-            <div className="flex items-center justify-end gap-2 p-2 border-t border-surface-200 dark:border-surface-800 bg-surface-100 dark:bg-surface-900">
+            <div className="flex items-center justify-end gap-2 p-2 flex-shrink-0 border-t border-surface-200 dark:border-surface-800 bg-surface-100 dark:bg-surface-900">
                 <Button size="small" variant="text" onClick={onCancel}>Cancel</Button>
                 <Button size="small" variant="filled" loading={saving} onClick={async () => {
                     setSaving(true);

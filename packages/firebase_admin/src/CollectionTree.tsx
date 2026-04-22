@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     cls,
     Typography,
     Skeleton,
     FolderIcon,
     DescriptionIcon,
+    AddIcon,
+    IconButton,
+    Tooltip,
+    CloseIcon,
 } from "@firecms/ui";
 import { useAdminApi } from "./api/AdminApiProvider";
 
@@ -217,25 +221,47 @@ function DocumentNode({
 }) {
     const adminApi = useAdminApi();
     const [subcollections, setSubcollections] = useState<string[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true);
     const docPath = `${parentPath}/${docId}`;
 
+    // Only depend on the subcollection expected at this level, not the entire
+    // effectivePathParts array (which changes on every navigation).
+    const navSubcol = effectivePathParts[partIndex + 1] ?? null;
+
     useEffect(() => {
-        setLoading(true);
+        // Only show skeleton on the very first load — subsequent re-fetches
+        // keep existing items visible to avoid UI flashing.
+        let cancelled = false;
         adminApi
             .listCollections(projectId, docPath, databaseId)
             .then(({ collections }) => {
-                setSubcollections(
-                    collections
-                        .filter(name => !["__FIRECMS", "**", "*"].includes(name))
-                        .sort()
-                );
+                if (cancelled) return;
+                const filtered = collections
+                    .filter(name => !["__FIRECMS", "**", "*"].includes(name));
+                // If the navigation path expects a subcollection under this doc
+                // that wasn't returned by the API (e.g. newly created, still empty),
+                // include it so the tree can display it.
+                if (navSubcol && !filtered.includes(navSubcol)) {
+                    filtered.push(navSubcol);
+                }
+                setSubcollections(filtered.sort());
             })
             .catch(console.error)
             .finally(() => {
-                setLoading(false);
+                if (!cancelled) setInitialLoading(false);
             });
-    }, [projectId, docPath, databaseId]);
+        return () => { cancelled = true; };
+    }, [projectId, docPath, databaseId, navSubcol]);
+
+    // If navSubcol changed and isn't in the list yet, add it immediately
+    // so the tree shows it without waiting for the refetch.
+    useEffect(() => {
+        if (navSubcol && !subcollections.includes(navSubcol)) {
+            setSubcollections(prev =>
+                prev.includes(navSubcol) ? prev : [...prev, navSubcol].sort()
+            );
+        }
+    }, [navSubcol, subcollections]);
 
     const isSelected = docId === effectivePathParts[effectivePathParts.length - 1];
 
@@ -245,19 +271,19 @@ function DocumentNode({
                 className="flex items-center gap-2 py-1 px-3 mb-1 text-surface-500 cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800 rounded-md transition-colors"
                 onClick={() => onSelectDocument?.(parentPath, docId)}
             >
-                <DescriptionIcon size="smallest" className={isSelected ? "text-primary" : "text-surface-400"} />
-                <Typography variant="caption" className={cls("font-mono text-xs truncate", isSelected && "text-primary font-medium")}>
+                <DescriptionIcon size="smallest" className="text-primary" />
+                <Typography variant="caption" className={cls("font-mono text-xs truncate text-primary font-medium")}>
                     {docId}
                 </Typography>
             </div>
 
             <div className="ml-2">
-                {loading && (
+                {initialLoading && subcollections.length === 0 && (
                     <div className="py-1 px-3 flex items-center">
                         <Skeleton className="h-3 w-16" />
                     </div>
                 )}
-                {!loading && subcollections.map(subId => (
+                {subcollections.map(subId => (
                     <CollectionNode
                         key={subId}
                         collectionId={subId}
@@ -271,7 +297,84 @@ function DocumentNode({
                         databaseId={databaseId}
                     />
                 ))}
+                {!initialLoading && (
+                    <AddSubcollectionRow
+                        docPath={docPath}
+                        onSelectCollection={onSelectCollection}
+                        onCreated={(name) => {
+                            setSubcollections(prev => [...prev, name].sort());
+                        }}
+                    />
+                )}
             </div>
         </div>
+    );
+}
+
+function AddSubcollectionRow({
+    docPath,
+    onSelectCollection,
+    onCreated,
+}: {
+    docPath: string;
+    onSelectCollection: (path: string) => void;
+    onCreated: (name: string) => void;
+}) {
+    const [editing, setEditing] = useState(false);
+    const [name, setName] = useState("");
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (editing) {
+            inputRef.current?.focus();
+        }
+    }, [editing]);
+
+    const handleSubmit = () => {
+        const trimmed = name.trim();
+        if (!trimmed) {
+            setEditing(false);
+            setName("");
+            return;
+        }
+        onCreated(trimmed);
+        onSelectCollection(`${docPath}/${trimmed}`);
+        setEditing(false);
+        setName("");
+    };
+
+    if (editing) {
+        return (
+            <div className="flex items-center gap-1 py-0.5 px-3">
+                <FolderIcon size="smallest" className="text-surface-400 flex-shrink-0" />
+                <input
+                    ref={inputRef}
+                    type="text"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    onKeyDown={e => {
+                        if (e.key === "Enter") handleSubmit();
+                        if (e.key === "Escape") { setEditing(false); setName(""); }
+                    }}
+                    onBlur={handleSubmit}
+                    placeholder="collection name"
+                    className="flex-grow min-w-0 bg-transparent border-b border-surface-300 dark:border-surface-600 text-sm text-text-primary dark:text-white outline-none py-0.5 font-mono"
+                />
+            </div>
+        );
+    }
+
+    return (
+        <Tooltip title="Add subcollection" side="right">
+            <div
+                className="flex items-center gap-2 py-1 px-3 cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800 rounded-md transition-colors text-surface-400 hover:text-surface-600 dark:hover:text-surface-300"
+                onClick={() => setEditing(true)}
+            >
+                <AddIcon size="smallest" />
+                <Typography variant="caption" className="text-xs" color="secondary">
+                    Add subcollection
+                </Typography>
+            </div>
+        </Tooltip>
     );
 }

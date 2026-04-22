@@ -10,7 +10,7 @@ import {
 import { Paywall, SubscriptionPlanWidget } from "./subscriptions";
 import { ADMIN_VIEWS_CONFIG } from "../utils";
 import { useProjectConfig } from "../hooks";
-import { CenteredView, ManageSearchIcon } from "@firecms/ui";
+import { CenteredView, FirestoreIcon } from "@firecms/ui";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -50,7 +50,7 @@ export function FireCMSCloudHomePage() {
                             <SmallNavigationCard
                                 name={t("firestore_explorer" as any)}
                                 url={"firestore"}
-                                icon={<ManageSearchIcon
+                                icon={<FirestoreIcon
                                     className={"text-surface-400 dark:text-surface-600"} />} />
                         </div>
                         {ADMIN_VIEWS_CONFIG.map((view) => <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}

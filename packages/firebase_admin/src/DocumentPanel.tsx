@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
     cls,
     Typography,
@@ -7,22 +7,19 @@ import {
     Tooltip,
     Tabs,
     Tab,
-    Chip,
     defaultBorderMixin,
     Skeleton,
-    TextField,
     CloseIcon,
     DeleteIcon,
     SaveIcon,
     FolderIcon,
     LoadingButton,
-    AddIcon,
     ContentCopyIcon,
     OpenInNewIcon,
+    AddIcon,
 } from "@firecms/ui";
-import { ConfirmationDialog, jsonStringifyReplacer, useModeController } from "@firecms/core";
-import { Formex, useCreateFormex } from "@firecms/formex";
-import { Highlight, themes } from "prism-react-renderer";
+import { ConfirmationDialog, jsonStringifyReplacer } from "@firecms/core";
+import { useCreateFormex } from "@firecms/formex";
 import { useAdminApi } from "./api/AdminApiProvider";
 import { AdminDocument } from "./api/admin_api";
 import { EditableFieldsView, defaultValueForType, isTimestamp, FieldType } from "./FieldEditor";
@@ -89,6 +86,7 @@ export function DocumentPanel({
     onNavigateToSubcollection,
     onDocumentDeleted,
     initialFocusField,
+    onDirtyChange,
 }: {
     projectId: string;
     document: AdminDocument;
@@ -98,9 +96,10 @@ export function DocumentPanel({
     onNavigateToSubcollection: (subPath: string) => void;
     onDocumentDeleted?: () => void;
     initialFocusField?: string | null;
+    onDirtyChange?: (dirty: boolean) => void;
 }) {
     const adminApi = useAdminApi();
-    const { mode } = useModeController();
+
     const [activeTab, setActiveTab] = useState("fields");
     const [jsonValue, setJsonValue] = useState("");
     const [jsonError, setJsonError] = useState<string | null>(null);
@@ -109,6 +108,9 @@ export function DocumentPanel({
     const [deleting, setDeleting] = useState(false);
     const [subcollections, setSubcollections] = useState<string[]>([]);
     const [subcollectionsLoading, setSubcollectionsLoading] = useState(true);
+    const [addingSubcollection, setAddingSubcollection] = useState(false);
+    const [newSubcollectionName, setNewSubcollectionName] = useState("");
+    const subcollectionInputRef = useRef<HTMLInputElement>(null);
 
     const [copiedPath, setCopiedPath] = useState(false);
 
@@ -118,6 +120,11 @@ export function DocumentPanel({
     });
     
     const { values: editedValues, dirty: isDirty, setValues, resetForm } = formex;
+
+    // Report dirty state changes to parent
+    useEffect(() => {
+        onDirtyChange?.(isDirty);
+    }, [isDirty, onDirtyChange]);
 
     // Sync when document changes
     useEffect(() => {
@@ -272,7 +279,7 @@ export function DocumentPanel({
                             <IconButton
                                 size="smallest"
                                 component="a"
-                                href={`https://console.firebase.google.com/project/${projectId}/firestore/databases/${databaseId || "(default)"}/data/~2F${document.path.replace(/\//g, "~2F")}`}
+                                href={`https://console.firebase.google.com/project/${projectId}/firestore/databases/${(databaseId || "(default)").replace("(default)", "-default-")}/data/~2F${document.path.replace(/\//g, "~2F")}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
@@ -321,8 +328,8 @@ export function DocumentPanel({
                 </Typography>
                 {subcollectionsLoading ? (
                     <Skeleton width={64} height={16} className="rounded" />
-                ) : subcollections.length > 0 ? (
-                    <div className="flex gap-1 flex-wrap">
+                ) : (
+                    <div className="flex gap-1 flex-wrap items-center">
                         {subcollections.map(sub => (
                             <Button
                                 key={sub}
@@ -335,11 +342,51 @@ export function DocumentPanel({
                                 {sub}
                             </Button>
                         ))}
+                        {addingSubcollection ? (
+                            <input
+                                ref={subcollectionInputRef}
+                                type="text"
+                                value={newSubcollectionName}
+                                onChange={e => setNewSubcollectionName(e.target.value)}
+                                onKeyDown={e => {
+                                    if (e.key === "Enter") {
+                                        const trimmed = newSubcollectionName.trim();
+                                        if (trimmed) {
+                                            setSubcollections(prev => [...prev, trimmed].sort());
+                                            onNavigateToSubcollection(`${document.path}/${trimmed}`);
+                                        }
+                                        setAddingSubcollection(false);
+                                        setNewSubcollectionName("");
+                                    }
+                                    if (e.key === "Escape") {
+                                        setAddingSubcollection(false);
+                                        setNewSubcollectionName("");
+                                    }
+                                }}
+                                onBlur={() => {
+                                    const trimmed = newSubcollectionName.trim();
+                                    if (trimmed) {
+                                        setSubcollections(prev => [...prev, trimmed].sort());
+                                        onNavigateToSubcollection(`${document.path}/${trimmed}`);
+                                    }
+                                    setAddingSubcollection(false);
+                                    setNewSubcollectionName("");
+                                }}
+                                placeholder="name"
+                                className="bg-transparent border-b border-surface-300 dark:border-surface-600 text-sm text-text-primary dark:text-white outline-none py-0.5 font-mono w-28"
+                                autoFocus
+                            />
+                        ) : (
+                            <Tooltip title="Add subcollection">
+                                <IconButton
+                                    size="smallest"
+                                    onClick={() => setAddingSubcollection(true)}
+                                >
+                                    <AddIcon size="smallest" />
+                                </IconButton>
+                            </Tooltip>
+                        )}
                     </div>
-                ) : (
-                    <Typography variant="caption" color="disabled" className="italic">
-                        None
-                    </Typography>
                 )}
             </div>
 
@@ -364,70 +411,28 @@ export function DocumentPanel({
                         />
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-2 p-3 h-full min-h-0">
-                        <div className="relative flex-grow rounded-md overflow-auto min-h-0">
-                            {/* Syntax-highlighted background */}
-                            <Highlight
-                                theme={mode === "dark" ? themes.vsDark : themes.github}
-                                code={jsonValue}
-                                language="json"
-                            >
-                                {({ style, tokens, getLineProps, getTokenProps }) => (
-                                    <pre
-                                        aria-hidden="true"
-                                        style={{
-                                            ...style,
-                                            backgroundColor: "transparent",
-                                            margin: 0,
-                                            padding: "0.75rem",
-                                            fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-                                            fontSize: "0.875rem",
-                                            lineHeight: "1.5",
-                                            whiteSpace: "pre-wrap",
-                                            wordBreak: "break-word",
-                                            pointerEvents: "none",
-                                            minHeight: "100%",
-                                        }}
-                                    >
-                                        {tokens.map((line, i) => (
-                                            <div key={i} {...getLineProps({ line })}>
-                                                {line.map((token, key) => (
-                                                    <span key={key} {...getTokenProps({ token })} />
-                                                ))}
-                                            </div>
-                                        ))}
-                                    </pre>
-                                )}
-                            </Highlight>
-                            {/* Transparent editable textarea on top — matches pre dimensions */}
-                            <textarea
-                                value={jsonValue}
-                                onChange={e => {
-                                    setJsonValue(e.target.value);
-                                    setJsonError(null);
-                                }}
-                                className={cls(
-                                    "absolute top-0 left-0 w-full resize-none",
-                                    "bg-transparent caret-current",
-                                    "focus:outline-none focus:ring-2 focus:ring-primary",
-                                    "rounded-md",
-                                )}
-                                style={{
-                                    color: "transparent",
-                                    caretColor: mode === "dark" ? "#e2e8f0" : "#1e293b",
-                                    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-                                    fontSize: "0.875rem",
-                                    lineHeight: "1.5",
-                                    padding: "0.75rem",
-                                    whiteSpace: "pre-wrap",
-                                    wordBreak: "break-word",
-                                    height: "100%",
-                                    minHeight: "100%",
-                                    overflow: "hidden",
-                                }}
-                                spellCheck={false}
-                            />
-                        </div>
+                    <div className="flex flex-col h-full min-h-0">
+                        <textarea
+                            value={jsonValue}
+                            onChange={e => {
+                                setJsonValue(e.target.value);
+                                setJsonError(null);
+                            }}
+                            className={cls(
+                                "flex-grow w-full resize-none p-3",
+                                "bg-surface-50 dark:bg-surface-900",
+                                "text-text-primary dark:text-text-primary-dark",
+                                "focus:outline-none",
+                                "rounded-md",
+                            )}
+                            style={{
+                                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                                fontSize: "0.875rem",
+                                lineHeight: "1.5",
+                                tabSize: 2,
+                            }}
+                            spellCheck={false}
+                        />
                     </div>
                 )}
             </div>
