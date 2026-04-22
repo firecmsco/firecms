@@ -119,6 +119,14 @@ export function CollectionTree({
                     databaseId={databaseId}
                 />
             ))}
+            <AddSubcollectionRow
+                docPath=""
+                onSelectCollection={onSelectCollection}
+                onCreated={(name) => {
+                    setRootCollections(prev => [...prev, name].sort());
+                }}
+                label="Add collection"
+            />
         </div>
     );
 }
@@ -315,10 +323,12 @@ function AddSubcollectionRow({
     docPath,
     onSelectCollection,
     onCreated,
+    label,
 }: {
     docPath: string;
     onSelectCollection: (path: string) => void;
     onCreated: (name: string) => void;
+    label?: string;
 }) {
     const [editing, setEditing] = useState(false);
     const [name, setName] = useState("");
@@ -338,7 +348,7 @@ function AddSubcollectionRow({
             return;
         }
         onCreated(trimmed);
-        onSelectCollection(`${docPath}/${trimmed}`);
+        onSelectCollection(docPath ? `${docPath}/${trimmed}` : trimmed);
         setEditing(false);
         setName("");
     };
@@ -365,14 +375,14 @@ function AddSubcollectionRow({
     }
 
     return (
-        <Tooltip title="Add subcollection" side="right">
+        <Tooltip title={label ?? "Add subcollection"} side="right">
             <div
                 className="flex items-center gap-2 py-1 px-3 cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-800 rounded-md transition-colors text-surface-400 hover:text-surface-600 dark:hover:text-surface-300"
                 onClick={() => setEditing(true)}
             >
                 <AddIcon size="smallest" />
                 <Typography variant="caption" className="text-xs" color="secondary">
-                    Add subcollection
+                    {label ?? "Add subcollection"}
                 </Typography>
             </div>
         </Tooltip>

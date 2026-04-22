@@ -365,22 +365,21 @@ export function FirestoreExplorer({
                 />
             ) : (
                 <div className="flex-grow flex items-center justify-center">
-                    <div className="text-center space-y-4">
+                    <div className="flex flex-col items-center justify-center gap-2">
                         <FolderIcon
                             size="large"
-                            className="text-surface-300 dark:text-surface-600 mx-auto"
+                            className="text-surface-300 dark:text-surface-600"
                         />
-                        <Typography variant="subtitle1" color="secondary">
+                        <Typography variant="subtitle2" color="secondary">
                             Select a collection
-                        </Typography>
-                        <Typography variant="body2" color="disabled" className="text-sm">
-                            Choose a collection to browse documents
                         </Typography>
                         {!largeLayout && (
                             <Button
                                 variant="outlined"
+                                size="small"
                                 startIcon={<FolderIcon size="small" />}
                                 onClick={handleOpenMobileDrawer}
+                                className="mt-2"
                             >
                                 Browse collections
                             </Button>
