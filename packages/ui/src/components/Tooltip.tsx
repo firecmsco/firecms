@@ -22,7 +22,7 @@ export type TooltipProps = {
     className?: string,
     container?: HTMLElement,
     style?: React.CSSProperties;
-} & React.HTMLAttributes<HTMLDivElement>;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "title">;
 
 export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
                             open,
@@ -55,11 +55,11 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(({
         return <>{children}</>;
 
     const trigger = asChild
-        ? <TooltipPrimitive.Trigger asChild={true} {...props}>
+        ? <TooltipPrimitive.Trigger asChild={true}>
             {children}
         </TooltipPrimitive.Trigger>
-        : <TooltipPrimitive.Trigger asChild={true} {...props}>
-            <div style={style} className={className} ref={ref}>
+        : <TooltipPrimitive.Trigger asChild={true}>
+            <div style={style} className={className} ref={ref} {...props}>
                 {children}
             </div>
         </TooltipPrimitive.Trigger>;
