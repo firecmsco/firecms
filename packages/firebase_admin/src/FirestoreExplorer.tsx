@@ -17,6 +17,7 @@ import {
     DialogContent,
     DialogActions,
     CloseIcon,
+    AddIcon,
     Tooltip,
 } from "@firecms/ui";
 import { useLargeLayout } from "@firecms/core";
@@ -79,8 +80,9 @@ function readStoredTabs(projectId: string): ExplorerTab[] {
 
 function storeTabs(projectId: string, tabs: ExplorerTab[]) {
     try {
+        const persistable = tabs.filter(t => t.path);
         localStorage.setItem(LS_TABS_PREFIX + projectId,
-            JSON.stringify(tabs.map(t => ({ path: t.path, docId: t.docId }))));
+            JSON.stringify(persistable.map(t => ({ path: t.path, docId: t.docId }))));
     } catch { /* ignore */ }
 }
 
@@ -242,32 +244,41 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
 
     /** Open a collection: create a new tab or activate an existing tab with that path */
     const openCollectionTab = useCallback((path: string) => {
-        const existing = tabs.find(t => t.path === path);
-        if (existing) {
-            setActiveTabId(existing.id);
-            // Restore the document if the tab had one
-            if (existing.docId) {
-                syncUrl(existing.path, existing.docId);
-                adminApi.getDocument(projectId, existing.path, existing.docId, databaseId)
-                    .then(doc => setSelectedDocument(doc))
-                    .catch(() => {
-                        setTabs(prev => prev.map(t => t.id === existing.id ? { ...t, docId: null } : t));
-                        setSelectedDocument(null);
-                    });
-            } else {
-                setSelectedDocument(null);
-                syncUrl(existing.path, null);
-            }
-        } else {
-            const tab = createTab(path);
-            setTabs(prev => [...prev, tab]);
-            setActiveTabId(tab.id);
+        // If the active tab is a blank "New tab", always reuse it (even if another tab has the same path)
+        const activeBlank = activeTabId ? tabs.find(t => t.id === activeTabId && !t.path) : null;
+        if (activeBlank) {
+            setTabs(prev => prev.map(t => t.id === activeBlank.id ? { ...t, path, docId: null } : t));
             setSelectedDocument(null);
             syncUrl(path, null);
+        } else {
+            // Otherwise, check if the path is already open in a tab and switch to it
+            const existing = tabs.find(t => t.path === path);
+            if (existing) {
+                setActiveTabId(existing.id);
+                // Restore the document if the tab had one
+                if (existing.docId) {
+                    syncUrl(existing.path, existing.docId);
+                    adminApi.getDocument(projectId, existing.path, existing.docId, databaseId)
+                        .then(doc => setSelectedDocument(doc))
+                        .catch(() => {
+                            setTabs(prev => prev.map(t => t.id === existing.id ? { ...t, docId: null } : t));
+                            setSelectedDocument(null);
+                        });
+                } else {
+                    setSelectedDocument(null);
+                    syncUrl(existing.path, null);
+                }
+            } else {
+                const tab = createTab(path);
+                setTabs(prev => [...prev, tab]);
+                setActiveTabId(tab.id);
+                setSelectedDocument(null);
+                syncUrl(path, null);
+            }
         }
         setSelectedField(null);
         if (!largeLayout) setMobileDrawerOpen(false);
-    }, [tabs, syncUrl, largeLayout, adminApi, projectId, databaseId]);
+    }, [tabs, activeTabId, syncUrl, largeLayout, adminApi, projectId, databaseId]);
 
     /** Navigate the ACTIVE tab to a new collection path (subcollection / breadcrumb) */
     const navigateActiveTab = useCallback((newPath: string) => {
@@ -338,6 +349,16 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
             doClose();
         }
     }, [activeTabId, guardUnsavedChanges, syncUrl]);
+
+    /** Create a new blank tab (no collection selected) */
+    const addNewTab = useCallback(() => {
+        const tab = createTab("");
+        setTabs(prev => [...prev, tab]);
+        setActiveTabId(tab.id);
+        setSelectedDocument(null);
+        setSelectedField(null);
+        syncUrl(null, null);
+    }, [syncUrl]);
 
     // ─── Wrapper used by sidebar and database change ────────────────────────
     /** Called by sidebar: opens or activates a tab */
@@ -530,7 +551,6 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
 
     // ─── Tab bar ────────────────────────────────────────────────────────────
     const tabBar = useMemo(() => {
-        if (tabs.length === 0) return null;
         return (
             <div className={cls(
                 "flex items-center overflow-x-auto no-scrollbar",
@@ -540,9 +560,9 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
             )} style={{ scrollbarWidth: "none" }}>
                 {tabs.map(tab => {
                     const isActive = tab.id === activeTabId;
-                    const segments = formatTabSegments(tab.path, tab.docId);
+                    const segments = tab.path ? formatTabSegments(tab.path, tab.docId) : [{ text: "New tab", isDoc: false }];
                     const lastIsDoc = segments.length > 0 && segments[segments.length - 1].isDoc;
-                    const fullPath = tab.docId ? `${tab.path}/${tab.docId}` : tab.path;
+                    const fullPath = tab.path ? (tab.docId ? `${tab.path}/${tab.docId}` : tab.path) : "New tab";
                     return (
                         <Tooltip key={tab.id} title={fullPath} side="bottom">
                             <div
@@ -597,9 +617,23 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                         </Tooltip>
                     );
                 })}
+                <Tooltip title="New tab" side="bottom">
+                    <button
+                        onClick={addNewTab}
+                        className={cls(
+                            "flex items-center justify-center w-7 h-7 flex-shrink-0 mx-0.5",
+                            "rounded-sm transition-colors",
+                            "text-surface-400 dark:text-surface-500",
+                            "hover:text-surface-700 dark:hover:text-surface-300",
+                            "hover:bg-surface-100 dark:hover:bg-surface-800",
+                        )}
+                    >
+                        <AddIcon size="smallest" />
+                    </button>
+                </Tooltip>
             </div>
         );
-    }, [tabs, activeTabId, switchToTab, closeTab]);
+    }, [tabs, activeTabId, switchToTab, closeTab, addNewTab]);
 
     // ─── Main content ───────────────────────────────────────────────────────
     const mainContent = useMemo(() => (

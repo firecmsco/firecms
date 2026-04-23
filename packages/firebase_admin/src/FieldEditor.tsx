@@ -139,6 +139,20 @@ export function fieldTypeFromValue(value: any): FieldType {
     return "string";
 }
 
+/** Returns a hex color for the type indicator dot. */
+export function getTypeDotColor(value: any): string {
+    if (value === null || value === undefined) return "#a0a0a9";
+    if (typeof value === "boolean") return "#a855f7";
+    if (typeof value === "number") return "#2563eb";
+    if (typeof value === "string") return "#0ea5e9";
+    if (Array.isArray(value)) return "#ea580c";
+    if (isTimestamp(value)) return "#0d9488";
+    if (value && value._lat !== undefined && value._long !== undefined) return "#ec4899";
+    if (isReference(value)) return "#6366f1";
+    if (typeof value === "object") return "#7c3aed";
+    return "#a0a0a9";
+}
+
 export function convertValue(currentValue: any, targetType: FieldType): any {
     switch (targetType) {
         case "string":
@@ -462,7 +476,8 @@ const SortableArrayItem = React.memo(function SortableArrayItem({
                         {fieldKey}
                     </Typography>
 
-                    {/* Type selector */}
+                    {/* Type indicator dot + selector */}
+                    <span className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ backgroundColor: getTypeDotColor(value) }} />
                     <Select
                         size="smallest"
                         value={fieldTypeFromValue(value)}
@@ -639,7 +654,8 @@ const EditableFieldRow = React.memo(function EditableFieldRow({
                     {fieldKey}
                 </Typography>
 
-                {/* Type selector */}
+                {/* Type indicator dot + selector */}
+                <span className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ backgroundColor: getTypeDotColor(value) }} />
                 <Select
                     size="smallest"
                     value={fieldTypeFromValue(value)}

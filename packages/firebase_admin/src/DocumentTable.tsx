@@ -131,9 +131,23 @@ function compactPreview(val: any): string {
 }
 
 function renderCellValue(value: any): React.ReactNode {
-    if (value === null || value === undefined) return "—";
-    if (typeof value === "boolean") return value ? "true" : "false";
-    if (typeof value === "number") return String(value);
+    if (value === null || value === undefined) {
+        return <span className="text-surface-400 dark:text-surface-500 italic">null</span>;
+    }
+    if (typeof value === "boolean") {
+        return (
+            <Chip size="small" colorScheme={value ? "greenLighter" : "grayLighter"}>
+                {String(value)}
+            </Chip>
+        );
+    }
+    if (typeof value === "number") {
+        return (
+            <span style={{ color: "#2563eb", fontFamily: "var(--font-mono, monospace)" }}>
+                {String(value)}
+            </span>
+        );
+    }
     
     // We use a high safe limit (1000) so CSS `text-truncate` can handle dynamic sizing 
     // based on column width without crashing the browser on multi-megabyte string payloads.
@@ -141,7 +155,11 @@ function renderCellValue(value: any): React.ReactNode {
     
     if (value instanceof Date || (value && value._seconds !== undefined)) {
         const date = value._seconds ? new Date(value._seconds * 1000) : value;
-        return date.toLocaleString();
+        return (
+            <span style={{ color: "#0d9488" }}>
+                {date.toLocaleString()}
+            </span>
+        );
     }
     // Reference: show rich preview with collection + document ID
     if (isReference(value)) {
@@ -155,7 +173,13 @@ function renderCellValue(value: any): React.ReactNode {
         }
         const inner = parts.join(", ");
         const suffix = parts.length < value.length ? ", …" : "";
-        return `[${inner}${suffix}]`;
+        return (
+            <span>
+                <span style={{ color: "#ea580c", fontWeight: 600 }}>[</span>
+                <span className="text-surface-600 dark:text-surface-300">{inner}{suffix}</span>
+                <span style={{ color: "#ea580c", fontWeight: 600 }}>]</span>
+            </span>
+        );
     }
     if (typeof value === "object") {
         const entries = Object.entries(value);
@@ -166,7 +190,13 @@ function renderCellValue(value: any): React.ReactNode {
         }
         const inner = parts.join(", ");
         const suffix = parts.length < entries.length ? ", …" : "";
-        return `{${inner}${suffix}}`;
+        return (
+            <span>
+                <span style={{ color: "#7c3aed", fontWeight: 600 }}>{"{"}</span>
+                <span className="text-surface-600 dark:text-surface-300">{inner}{suffix}</span>
+                <span style={{ color: "#7c3aed", fontWeight: 600 }}>{"}"}</span>
+            </span>
+        );
     }
     return String(value);
 }
