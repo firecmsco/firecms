@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Popover, Button, Typography, Select, SelectItem, defaultBorderMixin, cls, IconButton, CloseIcon } from "@firecms/ui";
-import { FieldType, fieldTypeFromValue, convertValue, InlineValueEditor, EditableFieldsView, defaultValueForType } from "./FieldEditor";
+import { FieldType, fieldTypeFromValue, convertValue, InlineValueEditor, EditableFieldsView, defaultValueForType, isReference, normalizeReference } from "./FieldEditor";
+import { ReferenceEditor } from "./ReferenceEditor";
 
 export function PopoverCellEditor({
     columnKey,
@@ -113,6 +114,12 @@ export function PopoverCellEditor({
                                 return next;
                             });
                         }}
+                    />
+                ) : type === "reference" && isReference(editedValue) ? (
+                    <ReferenceEditor
+                        value={normalizeReference(editedValue)}
+                        onChange={setEditedValue}
+                        autoFocus={true}
                     />
                 ) : (
                     <InlineValueEditor value={editedValue} onChange={setEditedValue} autoFocus={true} />

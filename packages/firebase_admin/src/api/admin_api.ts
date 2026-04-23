@@ -233,6 +233,25 @@ export function buildAdminApi(host: string, getBackendAuthToken: () => Promise<s
         });
     }
 
+    async function listDocumentsAtTime(
+        projectId: string,
+        path: string,
+        readTime: string,
+        options?: {
+            limit?: number;
+            orderBy?: string;
+            orderDirection?: "asc" | "desc";
+            databaseId?: string;
+        }
+    ): Promise<{ documents: AdminDocument[]; hasMore: boolean }> {
+        const token = await getBackendAuthToken();
+        return fetch(`${host}/projects/${projectId}/admin/documents/list_at_time`, {
+            method: "POST",
+            headers: buildHeaders(token),
+            body: JSON.stringify({ path, readTime, ...options }),
+        }).then(res => handleResponse(res));
+    }
+
     // ─── Auth management ────────────────────────────────────────
 
     async function listAuthUsers(
@@ -331,6 +350,7 @@ export function buildAdminApi(host: string, getBackendAuthToken: () => Promise<s
         queryDocuments,
         batchWrite,
         readDocumentAtTime,
+        listDocumentsAtTime,
         // Auth
         listAuthUsers,
         getAuthUser,

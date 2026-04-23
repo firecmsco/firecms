@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     cls,
     Typography,
@@ -17,12 +17,17 @@ import {
     ContentCopyIcon,
     OpenInNewIcon,
     AddIcon,
+    CodeIcon,
+    HistoryIcon,
+    InfoIcon,
+    TextFieldsIcon,
 } from "@firecms/ui";
 import { ConfirmationDialog, jsonStringifyReplacer } from "@firecms/core";
 import { useCreateFormex } from "@firecms/formex";
 import { useAdminApi } from "./api/AdminApiProvider";
 import { AdminDocument } from "./api/admin_api";
-import { EditableFieldsView, defaultValueForType, isTimestamp, FieldType } from "./FieldEditor";
+import { EditableFieldsView, defaultValueForType, FieldType } from "./FieldEditor";
+import { PITRDocumentView } from "./PITRPanel";
 
 /**
  * Sentinel value sent to the backend to signal that a field should be deleted.
@@ -254,6 +259,12 @@ export function DocumentPanel({
         setTimeout(() => setCopiedPath(false), 1500);
     }, [document.path]);
 
+    // Count fields for badge
+    const fieldCount = Object.keys(editedValues ?? {}).length;
+
+    // Whether the active tab is an editing tab (shows save/discard footer)
+    const isEditingTab = activeTab === "fields" || activeTab === "json";
+
     return (
         <div className={cls(
             "flex flex-col h-full overflow-hidden",
@@ -296,25 +307,6 @@ export function DocumentPanel({
                         <CloseIcon size="small" />
                     </IconButton>
                 </Tooltip>
-            </div>
-
-            {/* Metadata */}
-            <div className={cls(
-                "flex items-center gap-3 px-4 py-2 text-xs",
-                "border-b",
-                defaultBorderMixin,
-                "bg-surface-50 dark:bg-surface-900"
-            )}>
-                {document.createTime && (
-                    <span className="text-surface-500 dark:text-surface-400">
-                        Created: {new Date(document.createTime).toLocaleString()}
-                    </span>
-                )}
-                {document.updateTime && (
-                    <span className="text-surface-500 dark:text-surface-400">
-                        Updated: {new Date(document.updateTime).toLocaleString()}
-                    </span>
-                )}
             </div>
 
             {/* Subcollections */}
@@ -393,13 +385,40 @@ export function DocumentPanel({
             {/* Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab}
                 className="px-4 pt-2">
-                <Tab value="fields">Fields</Tab>
-                <Tab value="json">JSON</Tab>
+                <Tab value="fields">
+                    <span className="flex items-center gap-1.5">
+                        <TextFieldsIcon size="smallest" />
+                        Fields
+                        {fieldCount > 0 && (
+                            <span className="text-[10px] font-normal bg-surface-200 dark:bg-surface-700 text-surface-500 dark:text-surface-400 rounded-full px-1.5 py-0 leading-tight">
+                                {fieldCount}
+                            </span>
+                        )}
+                    </span>
+                </Tab>
+                <Tab value="json">
+                    <span className="flex items-center gap-1.5">
+                        <CodeIcon size="smallest" />
+                        JSON
+                    </span>
+                </Tab>
+                <Tab value="history">
+                    <span className="flex items-center gap-1.5">
+                        <HistoryIcon size="smallest" />
+                        History
+                    </span>
+                </Tab>
+                <Tab value="info">
+                    <span className="flex items-center gap-1.5">
+                        <InfoIcon size="smallest" />
+                        Info
+                    </span>
+                </Tab>
             </Tabs>
 
             {/* Tab content */}
             <div className="flex-grow overflow-y-auto min-h-0">
-                {activeTab === "fields" ? (
+                {activeTab === "fields" && (
                     <div className="p-3">
                         <EditableFieldsView
                             values={editedValues}
@@ -410,7 +429,9 @@ export function DocumentPanel({
                             autoFocusPath={initialFocusField}
                         />
                     </div>
-                ) : (
+                )}
+
+                {activeTab === "json" && (
                     <div className="flex flex-col h-full min-h-0">
                         <textarea
                             value={jsonValue}
@@ -435,6 +456,57 @@ export function DocumentPanel({
                         />
                     </div>
                 )}
+
+                {activeTab === "history" && (
+                    <div className="h-full">
+                        <PITRDocumentView
+                            projectId={projectId}
+                            document={document}
+                            databaseId={databaseId}
+                        />
+                    </div>
+                )}
+
+                {activeTab === "info" && (
+                    <div className="p-4 space-y-5">
+                        {/* Document metadata */}
+                        <div className="space-y-3">
+                            <Typography variant="label"
+                                className="text-surface-500 dark:text-surface-400 uppercase text-xs tracking-wider">
+                                Document Metadata
+                            </Typography>
+                            <div className={cls(
+                                "rounded-lg border",
+                                defaultBorderMixin,
+                            )}>
+                                <div className={cls("flex items-center justify-between px-4 py-2.5 border-b", defaultBorderMixin)}>
+                                    <Typography variant="caption" color="secondary">Document ID</Typography>
+                                    <Typography variant="caption" className="font-mono font-medium">{document.id}</Typography>
+                                </div>
+                                <div className={cls("flex items-center justify-between px-4 py-2.5 border-b", defaultBorderMixin)}>
+                                    <Typography variant="caption" color="secondary">Full Path</Typography>
+                                    <Typography variant="caption" className="font-mono font-medium truncate max-w-[200px]">{document.path}</Typography>
+                                </div>
+                                {document.createTime && (
+                                    <div className={cls("flex items-center justify-between px-4 py-2.5 border-b", defaultBorderMixin)}>
+                                        <Typography variant="caption" color="secondary">Created</Typography>
+                                        <Typography variant="caption" className="font-medium">{new Date(document.createTime).toLocaleString()}</Typography>
+                                    </div>
+                                )}
+                                {document.updateTime && (
+                                    <div className={cls("flex items-center justify-between px-4 py-2.5 border-b", defaultBorderMixin)}>
+                                        <Typography variant="caption" color="secondary">Updated</Typography>
+                                        <Typography variant="caption" className="font-medium">{new Date(document.updateTime).toLocaleString()}</Typography>
+                                    </div>
+                                )}
+                                <div className="flex items-center justify-between px-4 py-2.5">
+                                    <Typography variant="caption" color="secondary">Fields</Typography>
+                                    <Typography variant="caption" className="font-medium">{fieldCount}</Typography>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Error */}
@@ -446,43 +518,64 @@ export function DocumentPanel({
                 </div>
             )}
 
-            {/* Actions */}
-            <div className={cls(
-                "flex items-center gap-2 px-4 py-3",
-                "border-t",
-                defaultBorderMixin
-            )}>
-                <Tooltip title="Delete document">
-                    <IconButton
+            {/* Actions — only shown for editing tabs */}
+            {isEditingTab && (
+                <div className={cls(
+                    "flex items-center gap-2 px-4 py-3",
+                    "border-t",
+                    defaultBorderMixin
+                )}>
+                    <Tooltip title="Delete document">
+                        <IconButton
+                            size="small"
+                            onClick={() => setDeleteOpen(true)}
+                            className="text-surface-500 hover:text-red-500"
+                        >
+                            <DeleteIcon size="small" />
+                        </IconButton>
+                    </Tooltip>
+                    <div className="flex-grow" />
+                    {isDirty && (
+                        <Button
+                            variant="text"
+                            size="small"
+                            onClick={handleDiscard}
+                        >
+                            Discard
+                        </Button>
+                    )}
+                    <LoadingButton
                         size="small"
-                        onClick={() => setDeleteOpen(true)}
-                        className="text-surface-500 hover:text-red-500"
+                        variant="filled"
+                        color="primary"
+                        loading={saving}
+                        disabled={!isDirty && activeTab === "fields"}
+                        startIcon={<SaveIcon size="small" />}
+                        onClick={activeTab === "json" ? handleSaveJson : handleSaveFields}
                     >
-                        <DeleteIcon size="small" />
-                    </IconButton>
-                </Tooltip>
-                <div className="flex-grow" />
-                {isDirty && (
-                    <Button
-                        variant="text"
-                        size="small"
-                        onClick={handleDiscard}
-                    >
-                        Discard
-                    </Button>
-                )}
-                <LoadingButton
-                    size="small"
-                    variant="filled"
-                    color="primary"
-                    loading={saving}
-                    disabled={!isDirty && activeTab === "fields"}
-                    startIcon={<SaveIcon size="small" />}
-                    onClick={activeTab === "json" ? handleSaveJson : handleSaveFields}
-                >
-                    Save
-                </LoadingButton>
-            </div>
+                        Save
+                    </LoadingButton>
+                </div>
+            )}
+
+            {/* Delete footer for non-editing tabs */}
+            {!isEditingTab && (
+                <div className={cls(
+                    "flex items-center gap-2 px-4 py-3",
+                    "border-t",
+                    defaultBorderMixin
+                )}>
+                    <Tooltip title="Delete document">
+                        <IconButton
+                            size="small"
+                            onClick={() => setDeleteOpen(true)}
+                            className="text-surface-500 hover:text-red-500"
+                        >
+                            <DeleteIcon size="small" />
+                        </IconButton>
+                    </Tooltip>
+                </div>
+            )}
 
             {/* Delete confirmation */}
             <ConfirmationDialog

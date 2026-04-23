@@ -28,6 +28,7 @@ const ButtonInner = React.memo(React.forwardRef<
        fullWidth = false,
        component: Component,
        color = "neutral",
+       loading,
        ...props
    }: ButtonProps<any>, ref) => {
 

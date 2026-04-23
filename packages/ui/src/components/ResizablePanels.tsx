@@ -149,7 +149,7 @@ export function ResizablePanels({
             {showFirstPanel && showSecondPanel && (
                 <div
                     className={cls(
-                        "relative z-10 flex flex-shrink-0 items-center justify-center bg-surface-200 dark:bg-surface-800",
+                        "relative z-10 flex flex-shrink-0 items-center justify-center",
                         isHorizontal ? "w-px h-full cursor-col-resize" : "h-px w-full cursor-row-resize"
                     )}
                     onMouseDown={handleResizeStart}

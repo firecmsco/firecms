@@ -1,4 +1,5 @@
 import { AdminDocument } from "./api/admin_api";
+import { getRefPath } from "./FieldEditor";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -42,7 +43,12 @@ function isGeoPointLike(v: any): boolean {
 }
 
 function isReferenceLike(v: any): boolean {
-    return v && typeof v === "object" && "_path" in v;
+    if (!v || typeof v !== "object") return false;
+    // New clean format
+    if ("_ref" in v) return true;
+    // Old raw Firestore SDK format
+    if ("_converter" in v && "_firestore" in v && "_path" in v) return true;
+    return false;
 }
 
 /**
@@ -63,7 +69,7 @@ function serializeCsvValue(value: any): string {
         return `${value._lat},${value._long}`;
     }
     if (isReferenceLike(value)) {
-        return value._path;
+        return getRefPath(value);
     }
     // Arrays & remaining objects → JSON
     return JSON.stringify(value);
@@ -150,7 +156,7 @@ function processValueForJson(value: any): any {
         return { lat: value._lat, lng: value._long };
     }
     if (isReferenceLike(value)) {
-        return value._path;
+        return getRefPath(value);
     }
     if (Array.isArray(value)) {
         return value.map(processValueForJson);

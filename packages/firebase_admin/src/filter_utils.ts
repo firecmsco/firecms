@@ -67,8 +67,10 @@ function detectValueType(value: any): FieldType {
     if (typeof value === "object") {
         // Geopoint: has latitude + longitude
         if ("latitude" in value && "longitude" in value && Object.keys(value).length === 2) return "geopoint";
-        // Reference: has _path or referenceValue
-        if ("_path" in value || "referenceValue" in value || "path" in value) return "reference";
+        // Reference: new clean format from backend
+        if ("_ref" in value) return "reference";
+        // Reference: old raw Firestore SDK format
+        if ("_converter" in value && "_firestore" in value && "_path" in value) return "reference";
         return "map";
     }
 

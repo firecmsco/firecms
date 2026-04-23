@@ -31,6 +31,7 @@ import {
     ArrowUpwardIcon,
     ArrowDownwardIcon,
 } from "@firecms/ui";
+import { ReferenceEditor } from "./ReferenceEditor";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types & Constants
@@ -58,7 +59,7 @@ export function defaultValueForType(type: FieldType): any {
         case "array": return [];
         case "timestamp": return { _seconds: Math.floor(Date.now() / 1000), _nanoseconds: 0 };
         case "geopoint": return { _lat: 0, _long: 0 };
-        case "reference": return { _path: "" };
+        case "reference": return { _ref: "" };
     }
 }
 
@@ -70,6 +71,36 @@ export function isTimestamp(value: any): boolean {
     return value && typeof value === "object" && ("_seconds" in value || value instanceof Date);
 }
 
+export function isReference(value: any): boolean {
+    if (!value || typeof value !== "object") return false;
+    // New clean format from updated backend
+    if ("_ref" in value) return true;
+    // Old raw Firestore SDK format (before backend redeployment)
+    if ("_converter" in value && "_firestore" in value && "_path" in value) return true;
+    return false;
+}
+
+/**
+ * Extract a clean document path string from either reference format.
+ * - New: { _ref: "collection/docId" } → "collection/docId"
+ * - Old: { _path: { segments: ["collection", "docId"] } } → "collection/docId"
+ */
+export function getRefPath(value: any): string {
+    if (!value || typeof value !== "object") return "";
+    if ("_ref" in value) return value._ref ?? "";
+    if ("_path" in value && value._path?.segments) {
+        return (value._path.segments as string[]).join("/");
+    }
+    return "";
+}
+
+/**
+ * Normalize any reference shape to the clean { _ref: "path" } format.
+ */
+export function normalizeReference(value: any): { _ref: string } {
+    return { _ref: getRefPath(value) };
+}
+
 export function getTypeName(value: any): string {
     if (value === null || value === undefined) return "null";
     if (typeof value === "boolean") return "bool";
@@ -78,7 +109,7 @@ export function getTypeName(value: any): string {
     if (Array.isArray(value)) return "array";
     if (isTimestamp(value)) return "timestamp";
     if (value._lat !== undefined && value._long !== undefined) return "geopoint";
-    if (value._path !== undefined) return "reference";
+    if (isReference(value)) return "reference";
     if (typeof value === "object") return "map";
     return typeof value;
 }
@@ -91,7 +122,7 @@ export function getTypeColorScheme(value: any): any {
     if (Array.isArray(value)) return "orangeLighter";
     if (isTimestamp(value)) return "tealLighter";
     if (value && value._lat !== undefined && value._long !== undefined) return "pinkLighter";
-    if (value && value._path !== undefined) return "indigoLighter";
+    if (isReference(value)) return "indigoLighter";
     return "grayLighter";
 }
 
@@ -103,7 +134,7 @@ export function fieldTypeFromValue(value: any): FieldType {
     if (Array.isArray(value)) return "array";
     if (isTimestamp(value)) return "timestamp";
     if (value && value._lat !== undefined && value._long !== undefined) return "geopoint";
-    if (value && value._path !== undefined) return "reference";
+    if (isReference(value)) return "reference";
     if (typeof value === "object") return "map";
     return "string";
 }
@@ -145,9 +176,9 @@ export function convertValue(currentValue: any, targetType: FieldType): any {
             if (currentValue && currentValue._lat !== undefined && currentValue._long !== undefined) return currentValue;
             return { _lat: 0, _long: 0 };
         case "reference":
-            if (currentValue && currentValue._path !== undefined) return currentValue;
-            if (typeof currentValue === "string") return { _path: currentValue };
-            return { _path: "" };
+            if (isReference(currentValue)) return normalizeReference(currentValue);
+            if (typeof currentValue === "string") return { _ref: currentValue };
+            return { _ref: "" };
         default:
             return defaultValueForType(targetType);
     }
@@ -286,16 +317,14 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
         );
     }
 
-    if (value && typeof value === "object" && value._path !== undefined) {
+    if (value && typeof value === "object" && isReference(value)) {
+        const normalized = normalizeReference(value);
         return (
-            <TextField
-                size="smallest"
-                value={value._path}
-                onChange={(e) => onChange({ ...value, _path: e.target.value })}
-                className="w-full"
+            <ReferenceEditor
+                value={normalized}
+                onChange={onChange}
                 autoFocus={autoFocus}
-
-                placeholder="Document path (e.g., users/123)"
+                compact={true}
             />
         );
     }
@@ -391,7 +420,7 @@ const SortableArrayItem = React.memo(function SortableArrayItem({
 
     const [expanded, setExpanded] = useState(depth < 2);
     const typeName = getTypeName(value);
-    const isExpandable = typeof value === "object" && value !== null && !isTimestamp(value);
+    const isExpandable = typeof value === "object" && value !== null && !isTimestamp(value) && !isReference(value);
 
     return (
         <div ref={setNodeRef} style={style}>
@@ -563,7 +592,7 @@ const EditableFieldRow = React.memo(function EditableFieldRow({
 }) {
     const [expanded, setExpanded] = useState(depth < 2);
     const typeName = getTypeName(value);
-    const isExpandable = typeof value === "object" && value !== null && !isTimestamp(value);
+    const isExpandable = typeof value === "object" && value !== null && !isTimestamp(value) && !isReference(value);
     const isAutoFocusTarget = autoFocusPath === path.join(".");
     const rowRef = React.useRef<HTMLDivElement>(null);
 

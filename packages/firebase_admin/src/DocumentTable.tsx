@@ -21,6 +21,8 @@ import {
     FilterListIcon,
     ChevronRightIcon,
     MenuIcon,
+    EditIcon,
+    HistoryIcon,
     Popover,
 } from "@firecms/ui";
 import {
@@ -40,6 +42,7 @@ import { AddDocumentDialog } from "./AddDocumentDialog";
 import { ExportButton } from "./ExportButton";
 import { PopoverCellEditor } from "./PopoverCellEditor";
 import { FilterBar } from "./FilterBar";
+import { PITRToolbar } from "./PITRPanel";
 import {
     FilterDef,
     FieldType,
@@ -50,6 +53,8 @@ import {
     getOperatorsForType,
     FILTERABLE_VALUE_TYPES,
 } from "./filter_utils";
+import { ReferencePreview } from "./ReferenceEditor";
+import { isReference, getRefPath } from "./FieldEditor";
 
 // Row shape fed to VirtualTable: the document values plus _doc metadata
 type AdminRow = Record<string, any> & {
@@ -116,12 +121,16 @@ function compactPreview(val: any): string {
         const d = val._seconds ? new Date(val._seconds * 1000) : val;
         return d.toLocaleDateString();
     }
+    if (isReference(val)) {
+        const p = getRefPath(val);
+        return p ? `ref› ${p}` : "ref› (empty)";
+    }
     if (Array.isArray(val)) return `[${val.length}]`;
     if (typeof val === "object") return `{${Object.keys(val).length}}`;
     return String(val);
 }
 
-function renderCellValue(value: any): string {
+function renderCellValue(value: any): React.ReactNode {
     if (value === null || value === undefined) return "—";
     if (typeof value === "boolean") return value ? "true" : "false";
     if (typeof value === "number") return String(value);
@@ -133,6 +142,10 @@ function renderCellValue(value: any): string {
     if (value instanceof Date || (value && value._seconds !== undefined)) {
         const date = value._seconds ? new Date(value._seconds * 1000) : value;
         return date.toLocaleString();
+    }
+    // Reference: show rich preview with collection + document ID
+    if (isReference(value)) {
+        return <ReferencePreview path={getRefPath(value)} />;
     }
     if (Array.isArray(value)) {
         const parts: string[] = [];
@@ -173,6 +186,11 @@ export function DocumentTable({
     updatedDocument,
     deletedDocumentId,
     onOpenCollectionDrawer,
+    pitrActive,
+    pitrReadTime,
+    onPitrActivate,
+    onPitrDeactivate,
+    onPitrTimeChange,
 }: {
     projectId: string;
     path: string;
@@ -189,6 +207,16 @@ export function DocumentTable({
     deletedDocumentId?: string | null;
     /** When provided, renders a menu button to open the mobile collection drawer. */
     onOpenCollectionDrawer?: () => void;
+    /** PITR: whether time-travel mode is active */
+    pitrActive?: boolean;
+    /** PITR: the read time for time-travel mode */
+    pitrReadTime?: Date | null;
+    /** PITR: activate time-travel mode */
+    onPitrActivate?: () => void;
+    /** PITR: deactivate time-travel mode */
+    onPitrDeactivate?: () => void;
+    /** PITR: change the read time */
+    onPitrTimeChange?: (time: Date) => void;
 }) {
     const adminApi = useAdminApi();
     const [documents, setDocuments] = useState<AdminDocument[]>([]);
@@ -201,6 +229,7 @@ export function DocumentTable({
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [deleting, setDeleting] = useState(false);
+    const [pitrError, setPitrError] = useState<string | null>(null);
 
     // Track whether we're loading a new page (to show skeletons)
     const [pageLoading, setPageLoading] = useState(false);
@@ -481,30 +510,53 @@ export function DocumentTable({
                 ? validFilters.map(f => parseFilterValueForApi(f))
                 : undefined;
 
-            const [docsResult, countResult] = await Promise.all([
-                adminApi.listDocuments(projectId, path, {
-                    limit: pageSize,
-                    databaseId,
-                    startAfter,
-                    orderBy,
-                    orderDirection,
-                    filters: apiFilters,
-                }),
-                adminApi.countDocuments(projectId, path, databaseId, {
-                    filters: apiFilters,
-                    orderBy,
-                    orderDirection,
-                }),
-            ]);
-            setDocuments(docsResult.documents);
-            setHasMore(docsResult.hasMore ?? false);
-            if (countResult) {
-                setCount(countResult.count);
-            }
-            loadedPathRef.current = path;
-            // Scroll to top after page data loads
-            if (isPageChange) {
-                scrollTableToTop();
+            // PITR mode: use listDocumentsAtTime instead
+            if (pitrActive && pitrReadTime) {
+                setPitrError(null);
+                try {
+                    const pitrResult = await adminApi.listDocumentsAtTime(projectId, path, pitrReadTime.toISOString(), {
+                        limit: pageSize,
+                        databaseId,
+                        orderBy,
+                        orderDirection,
+                    });
+                    setDocuments(pitrResult.documents);
+                    setHasMore(pitrResult.hasMore ?? false);
+                    setCount(pitrResult.documents.length);
+                    loadedPathRef.current = path;
+                    if (isPageChange) {
+                        scrollTableToTop();
+                    }
+                } catch (pitrErr: any) {
+                    // PITR error — don't wipe the existing table data
+                    setPitrError(pitrErr.message || "Time travel failed. The endpoint may not be deployed.");
+                }
+            } else {
+                const [docsResult, countResult] = await Promise.all([
+                    adminApi.listDocuments(projectId, path, {
+                        limit: pageSize,
+                        databaseId,
+                        startAfter,
+                        orderBy,
+                        orderDirection,
+                        filters: apiFilters,
+                    }),
+                    adminApi.countDocuments(projectId, path, databaseId, {
+                        filters: apiFilters,
+                        orderBy,
+                        orderDirection,
+                    }),
+                ]);
+                setDocuments(docsResult.documents);
+                setHasMore(docsResult.hasMore ?? false);
+                if (countResult) {
+                    setCount(countResult.count);
+                }
+                loadedPathRef.current = path;
+                // Scroll to top after page data loads
+                if (isPageChange) {
+                    scrollTableToTop();
+                }
             }
         } catch (e: any) {
             setError(e.message);
@@ -512,7 +564,7 @@ export function DocumentTable({
             setLoading(false);
             setPageLoading(false);
         }
-    }, [projectId, path, databaseId, pageSize, orderBy, orderDirection, filters, scrollTableToTop]);
+    }, [projectId, path, databaseId, pageSize, orderBy, orderDirection, filters, scrollTableToTop, pitrActive, pitrReadTime]);
 
     const fetchRef = useRef(fetchDocuments);
     fetchRef.current = fetchDocuments;
@@ -561,6 +613,17 @@ export function DocumentTable({
             fetchRef.current();
         }
     }, [sortFilterKey]);
+
+    // Re-fetch when PITR readTime changes
+    const prevPitrKey = useRef(`${pitrActive}|${pitrReadTime?.toISOString()}`);
+    useEffect(() => {
+        const pitrKey = `${pitrActive}|${pitrReadTime?.toISOString()}`;
+        if (prevPitrKey.current !== pitrKey) {
+            prevPitrKey.current = pitrKey;
+            setCursorStack([]);
+            fetchRef.current();
+        }
+    }, [pitrActive, pitrReadTime]);
 
     // ─── Pagination handlers ────────────────────────────────────────────────
 
@@ -793,7 +856,7 @@ export function DocumentTable({
                 avoidCollisions={true}
                 trigger={
                     <div className={cls(
-                        "flex items-center h-full px-3 text-sm truncate",
+                        "group relative flex items-center h-full px-3 text-sm truncate",
                         isEmpty && "text-surface-400 dark:text-surface-500",
                         !isEmpty && "text-text-primary dark:text-text-primary-dark",
                         "cursor-pointer hover:bg-surface-100 dark:hover:bg-surface-700 transition-colors outline-none"
@@ -820,9 +883,32 @@ export function DocumentTable({
                             clickTimerRef.current = null;
                         }
                         onDocumentDeselect();
-                        setEditingCell({ id: doc.id, key: column.key });
+                        if (!pitrActive) {
+                            setEditingCell({ id: doc.id, key: column.key });
+                        }
                     }}>
                         {renderCellValue(value)}
+                        {!pitrActive && (
+                            <div
+                                className="absolute top-0.5 right-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    if (clickTimerRef.current) {
+                                        clearTimeout(clickTimerRef.current);
+                                        clickTimerRef.current = null;
+                                    }
+                                    onDocumentDeselect();
+                                    setEditingCell({ id: doc.id, key: column.key });
+                                }}
+                            >
+                                <Tooltip title="Edit">
+                                    <IconButton size="smallest">
+                                        <EditIcon size="smallest" />
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
+                        )}
                     </div>
                 }
             >
@@ -844,7 +930,7 @@ export function DocumentTable({
                 )}
             </Popover>
         );
-    }, [cmsCollection, handleSelectRow, handleCopyId, handleDuplicate, handleCmsOpen, editingCell, adminApi, projectId, path, databaseId, snackbar, selectedIds, copiedId]);
+    }, [cmsCollection, handleSelectRow, handleCopyId, handleDuplicate, handleCmsOpen, editingCell, adminApi, projectId, path, databaseId, snackbar, selectedIds, copiedId, pitrActive]);
 
     // ─── State flags ────────────────────────────────────────────────────────
 
@@ -954,7 +1040,7 @@ export function DocumentTable({
                         </Chip>
                     )}
 
-                    {!showSkeletons && selectedIds.size > 0 && (
+                    {!pitrActive && !showSkeletons && selectedIds.size > 0 && (
                         <>
                             <Checkbox
                                 checked={selectedIds.size === documents.length && documents.length > 0}
@@ -977,6 +1063,7 @@ export function DocumentTable({
                             size="small"
                             onClick={() => setShowFilterBar(!showFilterBar)}
                             className={completeFilters.length > 0 ? "text-primary" : ""}
+                            disabled={pitrActive}
                         >
                             <FilterListIcon size="small" />
                         </IconButton>
@@ -995,24 +1082,51 @@ export function DocumentTable({
                         orderDirection={orderDirection}
                     />
 
+                    {onPitrActivate && !pitrActive && (
+                        <Tooltip title="Time travel (PITR)">
+                            <IconButton
+                                size="small"
+                                onClick={onPitrActivate}
+                            >
+                                <HistoryIcon size="small" />
+                            </IconButton>
+                        </Tooltip>
+                    )}
+
                     <Tooltip title="Refresh">
                         <IconButton size="small" onClick={handleRefresh} className={loading && !showSkeletons ? "animate-spin" : ""}>
                             <RefreshIcon size="small" />
                         </IconButton>
                     </Tooltip>
 
-                    <Tooltip title="Add document">
-                        <Button
-                            size="small"
-                            variant="outlined"
-                            startIcon={<AddIcon size="small" />}
-                            onClick={() => setAddDialogOpen(true)}
-                        >
-                            Add
-                        </Button>
-                    </Tooltip>
+                    {!pitrActive && (
+                        <Tooltip title="Add document">
+                            <Button
+                                size="small"
+                                variant="outlined"
+                                startIcon={<AddIcon size="small" />}
+                                onClick={() => setAddDialogOpen(true)}
+                            >
+                                Add
+                            </Button>
+                        </Tooltip>
+                    )}
                 </div>
             </div>
+
+            {/* PITR toolbar — only visible when active */}
+            <PITRToolbar
+                active={pitrActive ?? false}
+                readTime={pitrReadTime ?? null}
+                onActivate={onPitrActivate ?? (() => {})}
+                onDeactivate={() => {
+                    setPitrError(null);
+                    onPitrDeactivate?.();
+                }}
+                onTimeChange={onPitrTimeChange ?? (() => {})}
+                loading={pitrActive && loading}
+                error={pitrError}
+            />
 
             {/* Filter bar */}
             {showFilterBar && (
