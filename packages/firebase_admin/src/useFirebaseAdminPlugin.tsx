@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useMemo } from "react";
 import { FireCMSContext, FireCMSPlugin } from "@firecms/core";
+import { FirebaseApp } from "@firebase/app";
 import { buildAdminApi } from "./api/admin_api";
 import { AdminApiProvider } from "./api/AdminApiProvider";
 
@@ -20,14 +21,20 @@ export type UseFirebaseAdminPluginProps = {
      * Function to get the backend auth token for API calls.
      */
     getBackendAuthToken: () => Promise<string>;
+    /**
+     * The backend Firebase app, used for real-time onSnapshot listeners
+     * on admin job documents.
+     */
+    backendFirebaseApp?: FirebaseApp;
 };
 
 function AdminProviderComponent({
     children,
     adminApi,
-}: PropsWithChildren<{ context: FireCMSContext; adminApi: ReturnType<typeof buildAdminApi> }>) {
+    backendFirebaseApp,
+}: PropsWithChildren<{ context: FireCMSContext; adminApi: ReturnType<typeof buildAdminApi>; backendFirebaseApp?: FirebaseApp }>) {
     return (
-        <AdminApiProvider adminApi={adminApi}>
+        <AdminApiProvider adminApi={adminApi} backendFirebaseApp={backendFirebaseApp}>
             {children}
         </AdminApiProvider>
     );
@@ -43,6 +50,7 @@ export function useFirebaseAdminPlugin({
     projectId,
     backendApiHost,
     getBackendAuthToken,
+    backendFirebaseApp,
 }: UseFirebaseAdminPluginProps): FireCMSPlugin {
     const adminApi = useMemo(
         () => buildAdminApi(backendApiHost, getBackendAuthToken),
@@ -55,10 +63,10 @@ export function useFirebaseAdminPlugin({
             provider: isAdmin
                 ? {
                       Component: AdminProviderComponent,
-                      props: { adminApi },
+                      props: { adminApi, backendFirebaseApp },
                   }
                 : undefined,
         }),
-        [isAdmin, adminApi]
+        [isAdmin, adminApi, backendFirebaseApp]
     );
 }

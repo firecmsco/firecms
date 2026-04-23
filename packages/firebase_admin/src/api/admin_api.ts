@@ -31,6 +31,8 @@ export type QueryParams = {
     databaseId?: string;
 };
 
+export type AdminJobType = "delete_collection";
+
 export type AuthUser = {
     uid: string;
     email?: string;
@@ -325,8 +327,6 @@ export function buildAdminApi(host: string, getBackendAuthToken: () => Promise<s
         }).then(res => handleResponse(res));
     }
 
-    // ─── Firestore: List databases ──────────────────────────────
-
     async function listDatabases(
         projectId: string,
     ): Promise<{ databases: string[] }> {
@@ -334,6 +334,22 @@ export function buildAdminApi(host: string, getBackendAuthToken: () => Promise<s
         return fetch(`${host}/projects/${projectId}/documents/databases`, {
             method: "POST",
             headers: buildHeaders(token),
+        }).then(res => handleResponse(res));
+    }
+
+    // ─── Admin Jobs ─────────────────────────────────────────────
+
+    async function createJob(
+        projectId: string,
+        type: AdminJobType,
+        params: Record<string, any>,
+        databaseId?: string
+    ): Promise<{ jobId: string }> {
+        const token = await getBackendAuthToken();
+        return fetch(`${host}/projects/${projectId}/admin/jobs`, {
+            method: "POST",
+            headers: buildHeaders(token),
+            body: JSON.stringify({ type, params, databaseId }),
         }).then(res => handleResponse(res));
     }
 
@@ -357,5 +373,7 @@ export function buildAdminApi(host: string, getBackendAuthToken: () => Promise<s
         updateAuthUser,
         setCustomClaims,
         deleteAuthUser,
+        // Admin Jobs
+        createJob,
     };
 }

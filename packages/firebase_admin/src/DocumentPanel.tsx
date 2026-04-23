@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import {
     cls,
     Typography,
@@ -22,7 +22,7 @@ import {
     InfoIcon,
     TextFieldsIcon,
 } from "@firecms/ui";
-import { ConfirmationDialog, jsonStringifyReplacer } from "@firecms/core";
+import { ConfirmationDialog, jsonStringifyReplacer, useNavigationController } from "@firecms/core";
 import { useCreateFormex } from "@firecms/formex";
 import { useAdminApi } from "./api/AdminApiProvider";
 import { AdminDocument } from "./api/admin_api";
@@ -104,6 +104,20 @@ export function DocumentPanel({
     onDirtyChange?: (dirty: boolean) => void;
 }) {
     const adminApi = useAdminApi();
+    const navigationController = useNavigationController();
+
+    const propertyOrder = useMemo(() => {
+        try {
+            const parentPath = document.path.substring(0, document.path.lastIndexOf("/"));
+            const cmsCollection = navigationController.getCollection(parentPath);
+            if (cmsCollection) {
+                return cmsCollection.propertiesOrder ?? Object.keys(cmsCollection.properties ?? {});
+            }
+        } catch {
+            return undefined;
+        }
+        return undefined;
+    }, [document.path, navigationController]);
 
     const [activeTab, setActiveTab] = useState("fields");
     const [jsonValue, setJsonValue] = useState("");
@@ -259,6 +273,19 @@ export function DocumentPanel({
         setTimeout(() => setCopiedPath(false), 1500);
     }, [document.path]);
 
+    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+            e.preventDefault();
+            e.stopPropagation();
+            if (saving) return;
+            if (activeTab === "json") {
+                handleSaveJson();
+            } else if (activeTab === "fields" && isDirty) {
+                handleSaveFields();
+            }
+        }
+    }, [activeTab, handleSaveJson, handleSaveFields, isDirty, saving]);
+
     // Count fields for badge
     const fieldCount = Object.keys(editedValues ?? {}).length;
 
@@ -266,10 +293,13 @@ export function DocumentPanel({
     const isEditingTab = activeTab === "fields" || activeTab === "json";
 
     return (
-        <div className={cls(
-            "flex flex-col h-full overflow-hidden",
-            "bg-white dark:bg-surface-950"
-        )}>
+        <div 
+            className={cls(
+                "flex flex-col h-full overflow-hidden",
+                "bg-white dark:bg-surface-950"
+            )}
+            onKeyDown={handleKeyDown}
+        >
             {/* Header */}
             <div className={cls(
                 "flex items-center gap-2 px-4 py-3",
@@ -384,7 +414,8 @@ export function DocumentPanel({
 
             {/* Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab}
-                className="px-4 pt-2">
+                mode="secondary"
+                className={cls("px-4", "border-b", defaultBorderMixin)}>
                 <Tab value="fields">
                     <span className="flex items-center gap-1.5">
                         <TextFieldsIcon size="smallest" />
@@ -427,6 +458,7 @@ export function DocumentPanel({
                             onDelete={handleFieldDelete}
                             onAdd={handleFieldAdd}
                             autoFocusPath={initialFocusField}
+                            propertyOrder={propertyOrder}
                         />
                     </div>
                 )}

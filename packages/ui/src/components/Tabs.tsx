@@ -1,16 +1,24 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { createContext, useContext, useRef, useState, useEffect } from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { cls } from "../util";
 import { defaultBorderMixin } from "../styles";
 import { IconButton } from "./IconButton";
 import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
 
+type TabsMode = "primary" | "secondary";
+const TabsModeContext = createContext<TabsMode>("primary");
+
 export type TabsProps = {
     value: string,
     children: React.ReactNode,
     innerClassName?: string,
     className?: string,
-    onValueChange: (value: string) => void
+    onValueChange: (value: string) => void,
+    /**
+     * "primary" renders the default pill-style tabs.
+     * "secondary" renders underline-style tabs suitable for inner/nested panels.
+     */
+    mode?: TabsMode
 };
 
 export function Tabs({
@@ -18,7 +26,8 @@ export function Tabs({
     onValueChange,
     className,
     innerClassName,
-    children
+    children,
+    mode = "primary"
 }: TabsProps) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [showLeftScroll, setShowLeftScroll] = useState(false);
@@ -67,7 +76,8 @@ export function Tabs({
         }
     };
 
-    return <TabsPrimitive.Root value={value} onValueChange={onValueChange} className={cls("flex flex-row items-center min-w-0", className)}>
+    return <TabsModeContext.Provider value={mode}>
+        <TabsPrimitive.Root value={value} onValueChange={onValueChange} className={cls("flex flex-row items-center min-w-0", className)}>
         {isScrollable && (
             <button
                 type="button"
@@ -78,7 +88,9 @@ export function Tabs({
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-400",
                     "disabled:pointer-events-none disabled:opacity-0",
                     "text-surface-600 dark:text-surface-400 hover:bg-surface-200 dark:hover:bg-surface-800",
-                    "mr-1 bg-surface-50 dark:bg-surface-900 border", defaultBorderMixin
+                    mode === "primary" && "mr-1 bg-surface-50 dark:bg-surface-900 border",
+                    mode === "primary" && defaultBorderMixin,
+                    mode === "secondary" && "mr-1"
                 )}
             >
                 <ChevronLeftIcon size="small" />
@@ -91,10 +103,10 @@ export function Tabs({
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
             <TabsPrimitive.List className={cls(
-                "border",
-                defaultBorderMixin,
-                "gap-2",
-                "inline-flex h-10 items-center justify-center rounded-md bg-surface-50 p-1 text-surface-600 dark:bg-surface-900 dark:text-surface-400",
+                mode === "primary" && "border",
+                mode === "primary" && defaultBorderMixin,
+                mode === "primary" && "gap-2 inline-flex h-10 items-center justify-center rounded-md bg-surface-50 p-1 text-surface-600 dark:bg-surface-900 dark:text-surface-400",
+                mode === "secondary" && "gap-1 inline-flex h-9 items-center text-surface-500 dark:text-surface-400",
                 innerClassName)
             }>
                 {children}
@@ -110,13 +122,16 @@ export function Tabs({
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-400",
                     "disabled:pointer-events-none disabled:opacity-0",
                     "text-surface-600 dark:text-surface-400 hover:bg-surface-200 dark:hover:bg-surface-800",
-                    "ml-1 bg-surface-50 dark:bg-surface-900 border", defaultBorderMixin
+                    mode === "primary" && "ml-1 bg-surface-50 dark:bg-surface-900 border",
+                    mode === "primary" && defaultBorderMixin,
+                    mode === "secondary" && "ml-1"
                 )}
             >
                 <ChevronRightIcon size="small" />
             </button>
         )}
     </TabsPrimitive.Root>
+    </TabsModeContext.Provider>
 }
 
 export type TabProps = {
@@ -134,15 +149,28 @@ export function Tab({
     children,
     disabled
 }: TabProps) {
+    const mode = useContext(TabsModeContext);
+
+    const primaryClasses = cls(
+        "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-white transition-all",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-400 focus-visible:ring-offset-2",
+        "disabled:pointer-events-none disabled:opacity-50",
+        "data-[state=active]:bg-white data-[state=active]:text-surface-900 dark:data-[state=active]:bg-surface-950 dark:data-[state=active]:text-surface-50",
+    );
+
+    const secondaryClasses = cls(
+        "inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-medium transition-all",
+        "border-b-2 border-transparent -mb-px",
+        "focus-visible:outline-none",
+        "disabled:pointer-events-none disabled:opacity-50",
+        "hover:text-surface-700 dark:hover:text-surface-300",
+        "data-[state=active]:border-b-primary data-[state=active]:text-primary dark:data-[state=active]:border-b-primary dark:data-[state=active]:text-primary-dark",
+    );
+
     return <TabsPrimitive.Trigger value={value}
         disabled={disabled}
         className={cls(
-            "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-white transition-all",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-400 focus-visible:ring-offset-2",
-            "disabled:pointer-events-none disabled:opacity-50",
-            "data-[state=active]:bg-white data-[state=active]:text-surface-900 dark:data-[state=active]:bg-surface-950 dark:data-[state=active]:text-surface-50",
-            // "data-[state=active]:border",
-            // defaultBorderMixin,
+            mode === "secondary" ? secondaryClasses : primaryClasses,
             className,
             innerClassName)}>
         {children}

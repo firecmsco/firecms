@@ -73,12 +73,12 @@ export function ReferencePreview({ path }: { path: string }) {
 
     return (
         <span className="inline-flex items-center gap-1 max-w-full">
-            <LinkIcon size="smallest" className="text-rose-400 flex-shrink-0" />
+            <LinkIcon size="smallest" className="text-indigo-400 flex-shrink-0" />
             <span className="text-surface-500 dark:text-surface-400 text-xs truncate">
                 {collection}
             </span>
             <span className="text-surface-300 dark:text-surface-600">/</span>
-            <span className="font-medium truncate">{docId}</span>
+            <span className="font-medium truncate" style={{ color: "#6366f1" }}>{docId}</span>
         </span>
     );
 }

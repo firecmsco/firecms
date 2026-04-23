@@ -9,6 +9,7 @@ import {
     IconButton,
     Tooltip,
     CloseIcon,
+    DeleteIcon,
 } from "@firecms/ui";
 import { useAdminApi } from "./api/AdminApiProvider";
 
@@ -29,6 +30,7 @@ export function CollectionTree({
     selectedDocId,
     onSelectCollection,
     onSelectDocument,
+    onDeleteCollection,
 }: {
     projectId: string;
     databaseId?: string;
@@ -36,6 +38,7 @@ export function CollectionTree({
     selectedDocId: string | null;
     onSelectCollection: (path: string) => void;
     onSelectDocument?: (path: string, docId: string) => void;
+    onDeleteCollection?: (path: string) => void;
 }) {
     const adminApi = useAdminApi();
     const [rootCollections, setRootCollections] = useState<string[]>([]);
@@ -115,6 +118,7 @@ export function CollectionTree({
                     selectedPath={selectedPath}
                     onSelectCollection={onSelectCollection}
                     onSelectDocument={onSelectDocument}
+                    onDeleteCollection={onDeleteCollection}
                     projectId={projectId}
                     databaseId={databaseId}
                 />
@@ -139,6 +143,7 @@ function CollectionNode({
     selectedPath,
     onSelectCollection,
     onSelectDocument,
+    onDeleteCollection,
     projectId,
     databaseId,
 }: {
@@ -149,6 +154,7 @@ function CollectionNode({
     selectedPath: string | null;
     onSelectCollection: (path: string) => void;
     onSelectDocument?: (path: string, docId: string) => void;
+    onDeleteCollection?: (path: string) => void;
     projectId: string;
     databaseId?: string;
 }) {
@@ -163,7 +169,7 @@ function CollectionNode({
         <div className="flex flex-col">
             <div
                 className={cls(
-                    "flex items-center gap-2 py-1.5 px-3 rounded-md cursor-pointer transition-colors",
+                    "group flex items-center gap-2 py-1.5 px-3 rounded-md cursor-pointer transition-colors",
                     "hover:bg-surface-200 dark:hover:bg-surface-800",
                     isSelected && "bg-primary-bg dark:bg-primary/10"
                 )}
@@ -185,6 +191,20 @@ function CollectionNode({
                 >
                     {collectionId}
                 </Typography>
+                {onDeleteCollection && (
+                    <Tooltip title="Delete collection">
+                        <IconButton
+                            size="smallest"
+                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 transition-opacity"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDeleteCollection(fullPath);
+                            }}
+                        >
+                            <DeleteIcon size="smallest" />
+                        </IconButton>
+                    </Tooltip>
+                )}
             </div>
 
             {docIdInPath && (

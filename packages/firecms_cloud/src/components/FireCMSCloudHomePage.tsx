@@ -11,6 +11,7 @@ import { Paywall, SubscriptionPlanWidget } from "./subscriptions";
 import { ADMIN_VIEWS_CONFIG } from "../utils";
 import { useProjectConfig } from "../hooks";
 import { CenteredView, FirestoreIcon } from "@firecms/ui";
+import { useUserManagement } from "@firecms/user_management";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -27,6 +28,7 @@ export function FireCMSCloudHomePage() {
     } = useProjectConfig();
 
     const { t } = useTranslation();
+    const { isAdmin } = useUserManagement();
 
     const showSubscriptionWidget = (navigation.collections ?? []).length > 0;
 
@@ -45,14 +47,16 @@ export function FireCMSCloudHomePage() {
             <>
                 <NavigationGroup group={"ADMIN"}>
                     <div className={"grid grid-cols-12 gap-2"}>
-                        <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
-                            key={"nav_firestore"}>
-                            <SmallNavigationCard
-                                name={t("firestore_explorer" as any)}
-                                url={"firestore"}
-                                icon={<FirestoreIcon
-                                    className={"text-surface-400 dark:text-surface-600"} />} />
-                        </div>
+                        {isAdmin && (
+                            <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
+                                key={"nav_firestore"}>
+                                <SmallNavigationCard
+                                    name={t("firestore_explorer" as any)}
+                                    url={"firestore"}
+                                    icon={<FirestoreIcon
+                                        className={"text-surface-400 dark:text-surface-600"} />} />
+                            </div>
+                        )}
                         {ADMIN_VIEWS_CONFIG.map((view) => <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
                             key={`nav_${view.path}`}>
                             <SmallNavigationCard

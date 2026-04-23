@@ -681,6 +681,7 @@ function FireCMSAppAuthenticated({
         projectId: projectConfig.projectId,
         backendApiHost: fireCMSBackend.backendApiHost,
         getBackendAuthToken: fireCMSBackend.getBackendAuthToken,
+        backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
     });
 
     const plugins: FireCMSPlugin<any, any, any>[] = [

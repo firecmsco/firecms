@@ -26,6 +26,8 @@ import { DocumentTable } from "./DocumentTable";
 import { DocumentPanel } from "./DocumentPanel";
 import { AdminDocument } from "./api/admin_api";
 import { useAdminApi } from "./api/AdminApiProvider";
+import { DeleteCollectionDialog } from "./DeleteCollectionDialog";
+import { AdminJobsPanel } from "./AdminJobsPanel";
 
 // ─── LocalStorage helpers ───────────────────────────────────────────────────
 const LS_SIDEBAR_SIZE = "firecms_explorer_sidebar_size";
@@ -126,10 +128,6 @@ function formatTabSegments(path: string, docId?: string | null): TabSegment[] {
 export function FirestoreExplorer({ projectId }: { projectId: string }) {
     const largeLayout = useLargeLayout();
     const [searchParams, setSearchParams] = useSearchParams();
-    const [selectedDocument, setSelectedDocument] = useState<AdminDocument | null>(null);
-    const [selectedField, setSelectedField] = useState<string | null>(null);
-    const [panelUpdatedDocument, setPanelUpdatedDocument] = useState<AdminDocument | null>(null);
-    const [deletedDocumentId, setDeletedDocumentId] = useState<string | null>(null);
     const [databaseId, setDatabaseId] = useState<string | undefined>(undefined);
     const [databases, setDatabases] = useState<string[]>([]);
     const [databasesLoading, setDatabasesLoading] = useState(true);
@@ -146,6 +144,73 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
     const activeTab = useMemo(() => tabs.find(t => t.id === activeTabId) ?? null, [tabs, activeTabId]);
     const selectedPath = activeTab?.path ?? null;
 
+    // Per-tab document state: each tab independently tracks its selected document & field
+    const [tabDocuments, setTabDocuments] = useState<Map<string, AdminDocument | null>>(new Map());
+    const [tabFields, setTabFields] = useState<Map<string, string | null>>(new Map());
+    const [panelUpdatedDocument, setPanelUpdatedDocument] = useState<AdminDocument | null>(null);
+    const [deletedDocumentId, setDeletedDocumentId] = useState<string | null>(null);
+
+    // Derived: current tab's selected document & field
+    const selectedDocument = activeTabId ? (tabDocuments.get(activeTabId) ?? null) : null;
+    const selectedField = activeTabId ? (tabFields.get(activeTabId) ?? null) : null;
+
+    // Ref to read current activeTabId without creating callback deps
+    const activeTabIdRef = useRef(activeTabId);
+    activeTabIdRef.current = activeTabId;
+
+    // Stable helpers — read activeTabId from ref so they never change identity
+    const setSelectedDocument = useCallback((doc: AdminDocument | null) => {
+        const tabId = activeTabIdRef.current;
+        if (!tabId) return;
+        setTabDocuments(prev => {
+            const next = new Map(prev);
+            next.set(tabId, doc);
+            return next;
+        });
+    }, []);
+
+    const setSelectedField = useCallback((field: string | null) => {
+        const tabId = activeTabIdRef.current;
+        if (!tabId) return;
+        setTabFields(prev => {
+            const next = new Map(prev);
+            next.set(tabId, field);
+            return next;
+        });
+    }, []);
+
+    // Set document for a specific tab (used during tab switch)
+    const setTabDocument = useCallback((tabId: string, doc: AdminDocument | null) => {
+        setTabDocuments(prev => {
+            const next = new Map(prev);
+            next.set(tabId, doc);
+            return next;
+        });
+    }, []);
+
+    const setTabField = useCallback((tabId: string, field: string | null) => {
+        setTabFields(prev => {
+            const next = new Map(prev);
+            next.set(tabId, field);
+            return next;
+        });
+    }, []);
+
+    // ─── Per-tab table data cache ───────────────────────────────────────────
+    // Stores the fetched AdminDocument[] for each tab so switching back is instant.
+    const tabDataCacheRef = useRef<Map<string, AdminDocument[]>>(new Map());
+
+    // Stable callback: DocumentTable notifies us whenever its documents change
+    const handleDocumentsChange = useCallback((docs: AdminDocument[]) => {
+        const tabId = activeTabIdRef.current;
+        if (tabId) {
+            tabDataCacheRef.current.set(tabId, docs);
+        }
+    }, []);
+
+    // Get cached docs for the active tab (passed as initialDocuments to DocumentTable)
+    const cachedDocsForActiveTab = activeTabId ? tabDataCacheRef.current.get(activeTabId) : undefined;
+
     // Persist tabs to localStorage
     useEffect(() => { storeTabs(projectId, tabs); }, [projectId, tabs]);
 
@@ -155,25 +220,104 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
         if (initializedRef.current) return;
         initializedRef.current = true;
         const urlPath = searchParams.get("path");
+        const urlDoc = searchParams.get("doc");
         if (urlPath) {
             let tab = tabs.find(t => t.path === urlPath);
             if (!tab) {
                 tab = createTab(urlPath);
+                if (urlDoc) tab.docId = urlDoc;
                 setTabs(prev => [...prev, tab!]);
+            } else if (urlDoc && tab.docId !== urlDoc) {
+                tab = { ...tab, docId: urlDoc };
+                setTabs(prev => prev.map(t => t.id === tab!.id ? tab! : t));
             }
             setActiveTabId(tab.id);
         }
     }, []); // runs once
 
+    // ─── Fetch missing documents for active tab ─────────────────────────────
+    const lastFetchedDocRef = useRef<{ tabId: string, docId: string } | null>(null);
+
+    useEffect(() => {
+        if (!activeTabId || !databaseId) return;
+        const tab = tabs.find(t => t.id === activeTabId);
+        if (!tab || !tab.docId || !tab.path) return;
+        
+        const currentDoc = tabDocuments.get(activeTabId);
+        
+        // Prevent infinite fetch loops if doc.id doesn't perfectly match tab.docId
+        if (lastFetchedDocRef.current?.tabId === activeTabId && lastFetchedDocRef.current?.docId === tab.docId) {
+            return;
+        }
+
+        if (!currentDoc || currentDoc.id !== tab.docId) {
+            lastFetchedDocRef.current = { tabId: activeTabId, docId: tab.docId };
+            adminApi.getDocument(projectId, tab.path, tab.docId, databaseId)
+                .then(doc => {
+                    setTabDocuments(prev => {
+                        const next = new Map(prev);
+                        next.set(activeTabId, doc);
+                        return next;
+                    });
+                })
+                .catch(() => {
+                    // Document not found or error, clear docId from tab
+                    setTabs(prev => prev.map(t => t.id === activeTabId ? { ...t, docId: null } : t));
+                });
+        }
+    }, [activeTabId, tabs, tabDocuments, adminApi, projectId, databaseId]);
+
     // ─── Sync URL from tab state ────────────────────────────────────────────
     const syncUrl = useCallback((path: string | null, docId: string | null, replace = true) => {
-        setSearchParams(prev => {
-            const next = new URLSearchParams(prev);
-            if (path) next.set("path", path); else next.delete("path");
-            if (docId) next.set("doc", docId); else next.delete("doc");
-            return next;
-        }, { replace });
+        queueMicrotask(() => {
+            setSearchParams(prev => {
+                const next = new URLSearchParams(prev);
+                if (path) next.set("path", path); else next.delete("path");
+                if (docId) next.set("doc", docId); else next.delete("doc");
+                return next;
+            }, { replace });
+        });
     }, [setSearchParams]);
+
+    // ─── Delete collection state ────────────────────────────────────────────
+    const [deleteCollectionPath, setDeleteCollectionPath] = useState<string | null>(null);
+
+    const handleDeleteCollection = useCallback((path: string) => {
+        setDeleteCollectionPath(path);
+    }, []);
+
+    const handleCollectionDeleted = useCallback((deletedPath: string) => {
+        // Close any tabs that point to the deleted collection or a sub-path
+        setTabs(prev => {
+            const removed = prev.filter(t => t.path.startsWith(deletedPath));
+            const remaining = prev.filter(t => !t.path.startsWith(deletedPath));
+            // Clean up per-tab state for removed tabs
+            if (removed.length > 0) {
+                setTabDocuments(prev => {
+                    const next = new Map(prev);
+                    removed.forEach(t => next.delete(t.id));
+                    return next;
+                });
+                setTabFields(prev => {
+                    const next = new Map(prev);
+                    removed.forEach(t => next.delete(t.id));
+                    return next;
+                });
+            }
+            if (activeTabId && !remaining.find(t => t.id === activeTabId)) {
+                // Active tab was closed — switch to the first remaining tab or clear
+                if (remaining.length > 0) {
+                    setActiveTabId(remaining[0].id);
+                    syncUrl(remaining[0].path, null);
+                } else {
+                    setActiveTabId(null);
+                    syncUrl(null, null);
+                }
+            }
+            return remaining;
+        });
+        setDeleteCollectionPath(null);
+    }, [activeTabId, syncUrl]);
 
     // ─── Unsaved changes guard ──────────────────────────────────────────────
     const [panelDirty, setPanelDirty] = useState(false);
@@ -232,13 +376,29 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
             .catch(() => {});
     }, [selectedPath, selectedDocId, projectId, databaseId, adminApi]);
 
-    // Sync selectedDocument when URL doc param disappears (browser back)
+    // ─── Browser Back Detection ───────────────────────────────────────────────
+    // If the URL doc param is removed (e.g., user clicks browser Back button),
+    // we need to close the document panel.
+    const prevDocIdRef = useRef(selectedDocId);
     useEffect(() => {
-        if (!selectedDocId && selectedDocument) {
-            setSelectedDocument(null);
-            setSelectedField(null);
+        if (prevDocIdRef.current !== null && selectedDocId === null) {
+            const tabId = activeTabIdRef.current;
+            if (tabId) {
+                setTabDocuments(prev => {
+                    const next = new Map(prev);
+                    next.set(tabId, null);
+                    return next;
+                });
+                setTabFields(prev => {
+                    const next = new Map(prev);
+                    next.set(tabId, null);
+                    return next;
+                });
+                setTabs(prev => prev.map(t => t.id === tabId ? { ...t, docId: null } : t));
+            }
         }
-    }, [selectedDocId, selectedDocument]);
+        prevDocIdRef.current = selectedDocId;
+    }, [selectedDocId]);
 
     // ─── Tab operations ─────────────────────────────────────────────────────
 
@@ -255,19 +415,9 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
             const existing = tabs.find(t => t.path === path);
             if (existing) {
                 setActiveTabId(existing.id);
-                // Restore the document if the tab had one
-                if (existing.docId) {
-                    syncUrl(existing.path, existing.docId);
-                    adminApi.getDocument(projectId, existing.path, existing.docId, databaseId)
-                        .then(doc => setSelectedDocument(doc))
-                        .catch(() => {
-                            setTabs(prev => prev.map(t => t.id === existing.id ? { ...t, docId: null } : t));
-                            setSelectedDocument(null);
-                        });
-                } else {
-                    setSelectedDocument(null);
-                    syncUrl(existing.path, null);
-                }
+                // Per-tab state is already in memory — just sync the URL
+                const existingDoc = tabDocuments.get(existing.id);
+                syncUrl(existing.path, existingDoc?.id ?? existing.docId);
             } else {
                 const tab = createTab(path);
                 setTabs(prev => [...prev, tab]);
@@ -278,7 +428,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
         }
         setSelectedField(null);
         if (!largeLayout) setMobileDrawerOpen(false);
-    }, [tabs, activeTabId, syncUrl, largeLayout, adminApi, projectId, databaseId]);
+    }, [tabs, activeTabId, syncUrl, largeLayout, tabDocuments]);
 
     /** Navigate the ACTIVE tab to a new collection path (subcollection / breadcrumb) */
     const navigateActiveTab = useCallback((newPath: string) => {
@@ -293,38 +443,26 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
         if (!largeLayout) setMobileDrawerOpen(false);
     }, [activeTabId, syncUrl, largeLayout, openCollectionTab]);
 
-    /** Switch to a tab by ID */
+    /** Switch to a tab by ID — instant, no API calls. */
     const switchToTab = useCallback((tabId: string) => {
         if (tabId === activeTabId) return;
         const tab = tabs.find(t => t.id === tabId);
         if (!tab) return;
         guardUnsavedChanges(() => {
-            // Save current doc to current tab before switching
-            if (activeTabId && selectedDocument) {
-                setTabs(prev => prev.map(t =>
-                    t.id === activeTabId ? { ...t, docId: selectedDocument.id } : t
-                ));
-            }
             setActiveTabId(tabId);
-            setSelectedField(null);
-            syncUrl(tab.path, tab.docId);
-            // Restore the target tab's document
-            if (tab.docId) {
-                adminApi.getDocument(projectId, tab.path, tab.docId, databaseId)
-                    .then(doc => setSelectedDocument(doc))
-                    .catch(() => {
-                        setTabs(prev => prev.map(t => t.id === tabId ? { ...t, docId: null } : t));
-                        setSelectedDocument(null);
-                    });
-            } else {
-                setSelectedDocument(null);
-            }
+            // Sync URL to the target tab's state
+            const targetDoc = tabDocuments.get(tabId);
+            syncUrl(tab.path, targetDoc?.id ?? tab.docId);
         });
-    }, [activeTabId, tabs, guardUnsavedChanges, syncUrl, selectedDocument, adminApi, projectId, databaseId]);
+    }, [activeTabId, tabs, guardUnsavedChanges, syncUrl, tabDocuments]);
 
     /** Close a tab by ID */
     const closeTab = useCallback((tabId: string) => {
         const doClose = () => {
+            // Clean up per-tab state
+            setTabDocuments(prev => { const next = new Map(prev); next.delete(tabId); return next; });
+            setTabFields(prev => { const next = new Map(prev); next.delete(tabId); return next; });
+            tabDataCacheRef.current.delete(tabId);
             setTabs(prev => {
                 const idx = prev.findIndex(t => t.id === tabId);
                 const next = prev.filter(t => t.id !== tabId);
@@ -337,8 +475,6 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                         setActiveTabId(null);
                         syncUrl(null, null);
                     }
-                    setSelectedDocument(null);
-                    setSelectedField(null);
                 }
                 return next;
             });
@@ -438,12 +574,13 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                     setTabs(prev => [...prev, tab!]);
                     setActiveTabId(tab.id);
                 }
-                setSelectedDocument(doc);
+                setTabDocument(tab.id, doc);
                 syncUrl(collectionPath, doc.id, false);
                 if (!largeLayout) setMobileDrawerOpen(false);
             })
             .catch(() => console.error("Could not load document", docId));
-    }, [projectId, databaseId, adminApi, tabs, syncUrl, largeLayout]);
+    }, [projectId, databaseId, adminApi, tabs, syncUrl, largeLayout, setTabDocument]);
+
 
     // ─── Panel sizes ────────────────────────────────────────────────────────
     const [sidebarSize, setSidebarSizeState] = useState(() => readStoredSize(LS_SIDEBAR_SIZE, 18));
@@ -481,6 +618,8 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
             });
         }
     }, [breadcrumbParts, guardUnsavedChanges, navigateActiveTab, activeTabId, adminApi, projectId, databaseId, syncUrl]);
+
+
 
     // ─── Keyboard shortcuts ─────────────────────────────────────────────────
     useEffect(() => {
@@ -531,6 +670,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                         selectedDocId={selectedDocId}
                         onSelectCollection={setSelectedPath}
                         onSelectDocument={handleNavigateToDocument}
+                        onDeleteCollection={handleDeleteCollection}
                     />
                 ) : (
                     <div className="space-y-1 p-2">
@@ -553,7 +693,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
     const tabBar = useMemo(() => {
         return (
             <div className={cls(
-                "flex items-center overflow-x-auto no-scrollbar",
+                "flex items-stretch overflow-x-auto no-scrollbar",
                 "border-b", defaultBorderMixin,
                 "bg-surface-50 dark:bg-surface-900",
                 "min-h-[34px]",
@@ -572,8 +712,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                                     defaultBorderMixin,
                                     isActive
                                         ? "bg-white dark:bg-surface-950 text-text-primary dark:text-text-primary-dark"
-                                        : "text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800",
-                                    isActive && "border-b-2 border-b-primary"
+                                        : "text-surface-500 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800"
                                 )}
                                 onClick={() => switchToTab(tab.id)}
                                 onAuxClick={(e) => { if (e.button === 1) { e.preventDefault(); closeTab(tab.id); } }}
@@ -621,7 +760,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                     <button
                         onClick={addNewTab}
                         className={cls(
-                            "flex items-center justify-center w-7 h-7 flex-shrink-0 mx-0.5",
+                            "flex items-center justify-center w-7 h-7 flex-shrink-0 mx-0.5 self-center",
                             "rounded-sm transition-colors",
                             "text-surface-400 dark:text-surface-500",
                             "hover:text-surface-700 dark:hover:text-surface-300",
@@ -631,17 +770,22 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                         <AddIcon size="smallest" />
                     </button>
                 </Tooltip>
+                <div className="flex-grow" />
+                <div className="flex items-center pr-2">
+                    <AdminJobsPanel projectId={projectId} />
+                </div>
             </div>
         );
-    }, [tabs, activeTabId, switchToTab, closeTab, addNewTab]);
+    }, [tabs, activeTabId, switchToTab, closeTab, addNewTab, projectId]);
 
     // ─── Main content ───────────────────────────────────────────────────────
+    // Single DocumentTable — no key prop so it handles path changes internally.
+    // Cached data is passed via initialDocuments to avoid re-fetching on tab switch.
     const mainContent = useMemo(() => (
         <div className="flex flex-col flex-grow min-w-0 overflow-hidden h-full">
             {tabBar}
             {selectedPath && databaseId ? (
                 <DocumentTable
-                    key={`${activeTabId}_${selectedPath}`}
                     projectId={projectId}
                     path={selectedPath}
                     databaseId={databaseId}
@@ -664,6 +808,8 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                     }}
                     onPitrDeactivate={() => { setPitrActive(false); setPitrReadTime(null); }}
                     onPitrTimeChange={setPitrReadTime}
+                    initialDocuments={cachedDocsForActiveTab}
+                    onDocumentsChange={handleDocumentsChange}
                 />
             ) : (
                 <div className="flex-grow flex items-center justify-center">
@@ -684,7 +830,8 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
     ), [tabBar, selectedPath, projectId, databaseId, breadcrumbParts, handleBreadcrumbClick,
         handleDocumentSelect, handleDocumentClose, handleNavigateToSubcollection,
         setSelectedPath, panelUpdatedDocument, deletedDocumentId, largeLayout,
-        handleOpenMobileDrawer, pitrActive, pitrReadTime]);
+        handleOpenMobileDrawer, pitrActive, pitrReadTime, cachedDocsForActiveTab,
+        handleDocumentsChange]);
 
     // ─── Detail panel ───────────────────────────────────────────────────────
     const detailPanel = useMemo(() => (
@@ -750,6 +897,16 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                     <Button variant="filled" color="primary" onClick={handleUnsavedDiscard}>Discard</Button>
                 </DialogActions>
             </Dialog>
+            {deleteCollectionPath && (
+                <DeleteCollectionDialog
+                    open={!!deleteCollectionPath}
+                    collectionPath={deleteCollectionPath}
+                    projectId={projectId}
+                    databaseId={databaseId}
+                    onClose={() => setDeleteCollectionPath(null)}
+                    onDeleted={handleCollectionDeleted}
+                />
+            )}
         </div>
     );
 }

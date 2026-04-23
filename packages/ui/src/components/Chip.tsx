@@ -29,7 +29,7 @@ const sizeClassNames = {
 /**
  * @group Preview components
  */
-export function Chip({
+export const Chip = React.forwardRef<HTMLDivElement, ChipProps>(function Chip({
                          children,
                          colorScheme,
                          error,
@@ -39,11 +39,12 @@ export function Chip({
                          size = "large",
                          className,
                          style
-                     }: ChipProps) {
+                     }: ChipProps, ref) {
 
     const usedColorScheme = typeof colorScheme === "string" ? getColorSchemeForKey(colorScheme) : colorScheme;
     return (
         <div
+            ref={ref}
             className={cls("rounded-lg max-w-full w-max h-fit font-regular inline-flex gap-1",
                 "text-ellipsis",
                 "items-center",
@@ -67,4 +68,4 @@ export function Chip({
             {icon}
         </div>
     );
-}
+});

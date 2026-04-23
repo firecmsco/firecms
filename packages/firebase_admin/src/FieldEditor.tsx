@@ -207,10 +207,12 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
     value,
     onChange,
     autoFocus = false,
+    fullWidth = false,
 }: {
     value: any;
     onChange: (v: any) => void;
     autoFocus?: boolean;
+    fullWidth?: boolean;
 }) {
     const inputRef = React.useRef<any>(null);
 
@@ -286,7 +288,7 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                     const num = parseFloat(e.target.value);
                     onChange(isNaN(num) ? 0 : num);
                 }}
-                className="max-w-[160px]"
+                className={fullWidth ? "w-full" : "max-w-[160px]"}
                 inputRef={inputRef}
 
             />
@@ -324,7 +326,7 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                         onChange({ _seconds: Math.floor(newDate.getTime() / 1000), _nanoseconds: 0 });
                     }
                 }}
-                className="max-w-[220px]"
+                className={fullWidth ? "w-full" : "max-w-[220px]"}
                 inputRef={inputRef}
 
             />
@@ -751,6 +753,7 @@ export function EditableFieldsView({
     isArray = false,
     onReorder,
     autoFocusPath,
+    propertyOrder,
 }: {
     values: Record<string, any>;
     path: string[];
@@ -761,6 +764,7 @@ export function EditableFieldsView({
     isArray?: boolean;
     onReorder?: (fromIndex: number, toIndex: number) => void;
     autoFocusPath?: string | null;
+    propertyOrder?: string[];
 }) {
     const [addingField, setAddingField] = useState(false);
     const [newFieldName, setNewFieldName] = useState("");
@@ -819,7 +823,16 @@ export function EditableFieldsView({
 
     const entries = isArray
         ? Object.entries(values).sort(([a], [b]) => Number(a) - Number(b))
-        : Object.entries(values).sort(([a], [b]) => a.localeCompare(b));
+        : Object.entries(values).sort(([a], [b]) => {
+            if (propertyOrder && propertyOrder.length > 0) {
+                const idxA = propertyOrder.indexOf(a);
+                const idxB = propertyOrder.indexOf(b);
+                if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                if (idxA !== -1) return -1;
+                if (idxB !== -1) return 1;
+            }
+            return a.localeCompare(b);
+        });
 
     // DnD setup for array mode
     // We need stable IDs for dnd-kit to animate correctly, as array indices cause issues when mutating order.

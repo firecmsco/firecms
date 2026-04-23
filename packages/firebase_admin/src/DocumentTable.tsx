@@ -61,6 +61,7 @@ type AdminRow = Record<string, any> & {
     _doc: AdminDocument;
     _skeleton?: boolean;
     _skeletonWidths?: number[];
+    _selected?: boolean;
 };
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100, 200];
@@ -110,6 +111,14 @@ const SKELETON_ROW_WIDTHS: number[][] = [
     [130, 130, 90, 100, 140, 110, 100],
 ];
 
+// ─── Type colors ────────────────────────────────────────────────────────────
+
+const TYPE_COLOR_NUMBER = "#0891b2";
+const TYPE_COLOR_DATE = "#0d9488";
+const TYPE_COLOR_ARRAY = "#c2724a";
+const TYPE_COLOR_MAP = "#7c3aed";
+const TYPE_COLOR_REF = "#6366f1";
+
 // ─── Cell value rendering ───────────────────────────────────────────────────
 
 function compactPreview(val: any): string {
@@ -130,6 +139,37 @@ function compactPreview(val: any): string {
     return String(val);
 }
 
+/**
+ * Returns a colored React node for a value inside an array or map preview.
+ * `parentColor` is applied to plain text (strings, nulls); typed values
+ * (numbers, dates, refs) get their own specific color.
+ */
+function coloredCompactPreview(val: any, parentColor: string, key?: number): React.ReactNode {
+    if (val === null || val === undefined)
+        return <span key={key} style={{ color: parentColor, opacity: 0.6, fontStyle: "italic" }}>null</span>;
+    if (typeof val === "boolean")
+        return <span key={key} style={{ color: parentColor }}>{String(val)}</span>;
+    if (typeof val === "number")
+        return <span key={key} style={{ color: TYPE_COLOR_NUMBER, fontFamily: "var(--font-mono, monospace)" }}>{String(val)}</span>;
+    if (typeof val === "string") {
+        const display = val.length > 32 ? `"${val.substring(0, 32)}…"` : `"${val}"`;
+        return <span key={key} className="text-slate-500 dark:text-slate-400">{display}</span>;
+    }
+    if (val instanceof Date || (val && val._seconds !== undefined)) {
+        const d = val._seconds ? new Date(val._seconds * 1000) : val;
+        return <span key={key} style={{ color: TYPE_COLOR_DATE }}>{d.toLocaleDateString()}</span>;
+    }
+    if (isReference(val)) {
+        const p = getRefPath(val);
+        return <span key={key} style={{ color: TYPE_COLOR_REF }}>{p ? `ref› ${p}` : "ref› (empty)"}</span>;
+    }
+    if (Array.isArray(val))
+        return <span key={key} style={{ color: TYPE_COLOR_ARRAY }}>[{val.length}]</span>;
+    if (typeof val === "object")
+        return <span key={key} style={{ color: TYPE_COLOR_MAP }}>{`{${Object.keys(val).length}}`}</span>;
+    return <span key={key} style={{ color: parentColor }}>{String(val)}</span>;
+}
+
 function renderCellValue(value: any): React.ReactNode {
     if (value === null || value === undefined) {
         return <span className="text-surface-400 dark:text-surface-500 italic">null</span>;
@@ -143,7 +183,7 @@ function renderCellValue(value: any): React.ReactNode {
     }
     if (typeof value === "number") {
         return (
-            <span style={{ color: "#2563eb", fontFamily: "var(--font-mono, monospace)" }}>
+            <span style={{ color: TYPE_COLOR_NUMBER, fontFamily: "var(--font-mono, monospace)" }}>
                 {String(value)}
             </span>
         );
@@ -151,7 +191,11 @@ function renderCellValue(value: any): React.ReactNode {
     
     // We use a high safe limit (1000) so CSS `text-truncate` can handle dynamic sizing 
     // based on column width without crashing the browser on multi-megabyte string payloads.
-    if (typeof value === "string") return value.length > 1000 ? value.substring(0, 1000) + "…" : value;
+    if (typeof value === "string") return (
+        <span className="text-slate-500 dark:text-slate-400">
+            {value.length > 1000 ? value.substring(0, 1000) + "…" : value}
+        </span>
+    );
     
     if (value instanceof Date || (value && value._seconds !== undefined)) {
         const date = value._seconds ? new Date(value._seconds * 1000) : value;
@@ -166,35 +210,53 @@ function renderCellValue(value: any): React.ReactNode {
         return <ReferencePreview path={getRefPath(value)} />;
     }
     if (Array.isArray(value)) {
-        const parts: string[] = [];
-        for (const item of value) {
-            parts.push(compactPreview(item));
-            if (parts.join(", ").length > 120) break;
+        // Build colored React nodes for each array item
+        const nodes: React.ReactNode[] = [];
+        let charLen = 0;
+        let itemCount = 0;
+        for (let i = 0; i < value.length; i++) {
+            const preview = compactPreview(value[i]);
+            charLen += preview.length + 2;
+            if (charLen > 120 && nodes.length > 0) break;
+            if (nodes.length > 0) nodes.push(<span key={`sep-${i}`} style={{ color: TYPE_COLOR_ARRAY, opacity: 0.5 }}>, </span>);
+            nodes.push(coloredCompactPreview(value[i], TYPE_COLOR_ARRAY, i));
+            itemCount++;
         }
-        const inner = parts.join(", ");
-        const suffix = parts.length < value.length ? ", …" : "";
+        const truncated = itemCount < value.length;
         return (
             <span>
-                <span style={{ color: "#ea580c", fontWeight: 600 }}>[</span>
-                <span className="text-surface-600 dark:text-surface-300">{inner}{suffix}</span>
-                <span style={{ color: "#ea580c", fontWeight: 600 }}>]</span>
+                <span style={{ color: TYPE_COLOR_ARRAY, fontWeight: 600 }}>[</span>
+                {nodes}{truncated && <span style={{ color: TYPE_COLOR_ARRAY, opacity: 0.5 }}>, …</span>}
+                <span style={{ color: TYPE_COLOR_ARRAY, fontWeight: 600 }}>]</span>
             </span>
         );
     }
     if (typeof value === "object") {
         const entries = Object.entries(value);
-        const parts: string[] = [];
-        for (const [k, v] of entries) {
-            parts.push(`${k}: ${compactPreview(v)}`);
-            if (parts.join(", ").length > 120) break;
+        // Build colored React nodes for each map entry
+        const nodes: React.ReactNode[] = [];
+        let charLen = 0;
+        let entryCount = 0;
+        for (let i = 0; i < entries.length; i++) {
+            const [k, v] = entries[i];
+            const preview = `${k}: ${compactPreview(v)}`;
+            charLen += preview.length + 2;
+            if (charLen > 120 && nodes.length > 0) break;
+            if (nodes.length > 0) nodes.push(<span key={`sep-${i}`} style={{ color: TYPE_COLOR_MAP, opacity: 0.5 }}>, </span>);
+            nodes.push(
+                <span key={i}>
+                    <span style={{ color: TYPE_COLOR_MAP }}>{k}: </span>
+                    {coloredCompactPreview(v, TYPE_COLOR_MAP)}
+                </span>
+            );
+            entryCount++;
         }
-        const inner = parts.join(", ");
-        const suffix = parts.length < entries.length ? ", …" : "";
+        const truncated = entryCount < entries.length;
         return (
             <span>
-                <span style={{ color: "#7c3aed", fontWeight: 600 }}>{"{"}</span>
-                <span className="text-surface-600 dark:text-surface-300">{inner}{suffix}</span>
-                <span style={{ color: "#7c3aed", fontWeight: 600 }}>{"}"}</span>
+                <span style={{ color: TYPE_COLOR_MAP, fontWeight: 600 }}>{"{"}</span>
+                {nodes}{truncated && <span style={{ color: TYPE_COLOR_MAP, opacity: 0.5 }}>, …</span>}
+                <span style={{ color: TYPE_COLOR_MAP, fontWeight: 600 }}>{"}"}</span>
             </span>
         );
     }
@@ -221,6 +283,8 @@ export function DocumentTable({
     onPitrActivate,
     onPitrDeactivate,
     onPitrTimeChange,
+    initialDocuments,
+    onDocumentsChange,
 }: {
     projectId: string;
     path: string;
@@ -247,9 +311,26 @@ export function DocumentTable({
     onPitrDeactivate?: () => void;
     /** PITR: change the read time */
     onPitrTimeChange?: (time: Date) => void;
+    /** Pre-cached documents to use instead of fetching on mount */
+    initialDocuments?: AdminDocument[];
+    /** Called whenever the documents array changes (for external caching) */
+    onDocumentsChange?: (docs: AdminDocument[]) => void;
 }) {
     const adminApi = useAdminApi();
-    const [documents, setDocuments] = useState<AdminDocument[]>([]);
+    const [documents, setDocumentsRaw] = useState<AdminDocument[]>(initialDocuments ?? []);
+    const onDocumentsChangeRef = useRef(onDocumentsChange);
+    onDocumentsChangeRef.current = onDocumentsChange;
+    // Wrapper that notifies parent whenever docs change
+    const setDocuments = useCallback((update: AdminDocument[] | ((prev: AdminDocument[]) => AdminDocument[])) => {
+        setDocumentsRaw(prev => {
+            const next = typeof update === "function" ? update(prev) : update;
+            // Notify parent asynchronously to avoid setState-during-render
+            if (onDocumentsChangeRef.current) {
+                queueMicrotask(() => onDocumentsChangeRef.current?.(next));
+            }
+            return next;
+        });
+    }, []);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -280,6 +361,12 @@ export function DocumentTable({
     selectedIdsRef.current = selectedIds;
     const copiedIdRef = useRef(copiedId);
     copiedIdRef.current = copiedId;
+    const editingCellRef = useRef(editingCell);
+    editingCellRef.current = editingCell;
+    const onDocumentSelectRef = useRef(onDocumentSelect);
+    onDocumentSelectRef.current = onDocumentSelect;
+    const onDocumentDeselectRef = useRef(onDocumentDeselect);
+    onDocumentDeselectRef.current = onDocumentDeselect;
 
     // Pagination
     const [pageSize, setPageSize] = useState(50);
@@ -406,6 +493,10 @@ export function DocumentTable({
         setShowFilterBar(true);
     }, [fieldTypes]);
 
+    // Ref to break cascading deps: vtColumns → handleAddFilterForField → fieldTypes → documents
+    const handleAddFilterForFieldRef = useRef(handleAddFilterForField);
+    handleAddFilterForFieldRef.current = handleAddFilterForField;
+
     // Build VirtualTable columns
     const vtColumns: VirtualTableColumn[] = useMemo(() => {
         const savedOrder = columnConfig?.order;
@@ -462,7 +553,7 @@ export function DocumentTable({
                             size="smallest"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                handleAddFilterForField(key);
+                                handleAddFilterForFieldRef.current(key);
                             }}
                         >
                             <FilterListIcon size="smallest" />
@@ -473,7 +564,7 @@ export function DocumentTable({
         });
 
         return [idCol, ...fieldCols];
-    }, [fieldKeys, columnConfig, cmsCollection, handleAddFilterForField]);
+    }, [fieldKeys, columnConfig, cmsCollection]);
 
     // ─── Persist column changes ─────────────────────────────────────────────
 
@@ -600,13 +691,32 @@ export function DocumentTable({
     fetchRef.current = fetchDocuments;
 
     const prevPathRef = useRef(`${projectId}|${path}|${databaseId}`);
+    const initialDocsRef = useRef(initialDocuments);
+    initialDocsRef.current = initialDocuments;
 
     useEffect(() => {
         const pathKey = `${projectId}|${path}|${databaseId}`;
         let hasRestoredFilters = false;
-        if (prevPathRef.current !== pathKey) {
+        const isPathChange = prevPathRef.current !== pathKey;
+        if (isPathChange) {
             prevPathRef.current = pathKey;
-            setDocuments([]);
+
+            if (clickTimerRef.current) {
+                clearTimeout(clickTimerRef.current);
+                clickTimerRef.current = null;
+            }
+
+            // If we have cached docs for this path, use them instead of clearing
+            if (initialDocsRef.current && initialDocsRef.current.length > 0) {
+                setDocumentsRaw(initialDocsRef.current);
+                // Notify parent of restored cache
+                if (onDocumentsChangeRef.current) {
+                    const docs = initialDocsRef.current;
+                    queueMicrotask(() => onDocumentsChangeRef.current?.(docs));
+                }
+            } else {
+                setDocuments([]);
+            }
             setCursorStack([]);
             setSelectedIds(new Set());
             setCount(undefined);
@@ -625,6 +735,12 @@ export function DocumentTable({
             setEditingCell(null);
             prevSortFilterKey.current = `undefined|asc|[]|${pageSize}`;
         }
+        // Skip fetch if we have cached docs for this path change
+        if (initialDocsRef.current && initialDocsRef.current.length > 0 && isPathChange) {
+            initialDocsRef.current = undefined; // consume the cache, future fetches are normal
+            return;
+        }
+        initialDocsRef.current = undefined; // consume after first use
         // When persisted filters are restored, skip fetching here — the
         // sortFilterKey effect will pick up the new filters after React
         // flushes the state update and fetch with the correct filters.
@@ -719,6 +835,10 @@ export function DocumentTable({
 
     // ─── Action handlers ────────────────────────────────────────────────────
 
+    // Ref to break cascade: handleCmsOpen → handleRefresh → fetchDocuments → filters/sort/page
+    const handleRefreshRef = useRef(handleRefresh);
+    handleRefreshRef.current = handleRefresh;
+
     const handleCmsOpen = useCallback((doc: AdminDocument) => {
         if (cmsCollection) {
             sideEntityController.open({
@@ -726,11 +846,11 @@ export function DocumentTable({
                 entityId: doc.id,
                 updateUrl: true,
                 onUpdate: () => {
-                    handleRefresh();
+                    handleRefreshRef.current();
                 },
             });
         }
-    }, [cmsCollection, path, sideEntityController, handleRefresh]);
+    }, [cmsCollection, path, sideEntityController]);
 
     const handleCopyId = useCallback((id: string) => {
         navigator.clipboard.writeText(id);
@@ -785,8 +905,9 @@ export function DocumentTable({
         return documents.map(doc => ({
             ...doc.values,
             _doc: doc,
+            _selected: selectedIds.has(doc.id),
         }));
-    }, [documents, showSkeletons]);
+    }, [documents, showSkeletons, selectedIds]);
 
     // ─── Cell renderer ──────────────────────────────────────────────────────
 
@@ -831,13 +952,13 @@ export function DocumentTable({
                     )}
                     onClick={(e) => {
                         if (e.detail === 1) {
-                            onDocumentSelect(doc);
+                            onDocumentSelectRef.current(doc);
                         }
                     }}
                 >
                     <div className="flex-shrink-0 flex items-center" onClick={(e) => e.stopPropagation()}>
                         <Checkbox
-                            checked={selectedIdsRef.current.has(doc.id)}
+                            checked={row._selected ?? false}
                             onCheckedChange={(checked) => handleSelectRow(doc.id, checked as boolean)}
                             size="small"
                         />
@@ -868,7 +989,7 @@ export function DocumentTable({
 
         // Data columns
         const value = doc.values?.[column.key];
-        const isEditing = editingCell?.id === doc.id && editingCell?.key === column.key;
+        const isEditing = editingCellRef.current?.id === doc.id && editingCellRef.current?.key === column.key;
         const isEmpty = value === null || value === undefined;
 
         return (
@@ -900,8 +1021,8 @@ export function DocumentTable({
                             const colKey = column.key;
                             clickTimerRef.current = setTimeout(() => {
                                 clickTimerRef.current = null;
-                                onDocumentSelect(docSnapshot, colKey);
-                            }, 250);
+                                onDocumentSelectRef.current(docSnapshot, colKey);
+                            }, 150);
                         }
                     }}
                     onDoubleClick={(e) => {
@@ -912,7 +1033,7 @@ export function DocumentTable({
                             clearTimeout(clickTimerRef.current);
                             clickTimerRef.current = null;
                         }
-                        onDocumentDeselect();
+                        onDocumentDeselectRef.current();
                         if (!pitrActive) {
                             setEditingCell({ id: doc.id, key: column.key });
                         }
@@ -928,7 +1049,7 @@ export function DocumentTable({
                                         clearTimeout(clickTimerRef.current);
                                         clickTimerRef.current = null;
                                     }
-                                    onDocumentDeselect();
+                                    onDocumentDeselectRef.current();
                                     setEditingCell({ id: doc.id, key: column.key });
                                 }}
                             >
@@ -960,7 +1081,7 @@ export function DocumentTable({
                 )}
             </Popover>
         );
-    }, [cmsCollection, handleSelectRow, handleCopyId, handleDuplicate, handleCmsOpen, editingCell, adminApi, projectId, path, databaseId, snackbar, selectedIds, copiedId, pitrActive]);
+    }, [cmsCollection, handleSelectRow, handleCopyId, handleDuplicate, handleCmsOpen, editingCell, adminApi, projectId, path, databaseId, snackbar, pitrActive]);
 
     // ─── State flags ────────────────────────────────────────────────────────
 
