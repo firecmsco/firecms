@@ -26,7 +26,7 @@ import { DocumentTable } from "./DocumentTable";
 import { DocumentPanel } from "./DocumentPanel";
 import { AdminDocument } from "./api/admin_api";
 import { useAdminApi } from "./api/AdminApiProvider";
-import { DeleteCollectionDialog } from "./DeleteCollectionDialog";
+import { DeleteCollectionDialog, AdminJobSnackbarTracker } from "./DeleteCollectionDialog";
 import { AdminJobsPanel } from "./AdminJobsPanel";
 
 // ─── LocalStorage helpers ───────────────────────────────────────────────────
@@ -281,6 +281,8 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
 
     // ─── Delete collection state ────────────────────────────────────────────
     const [deleteCollectionPath, setDeleteCollectionPath] = useState<string | null>(null);
+    const [trackedDeleteJobs, setTrackedDeleteJobs] = useState<{jobId: string, path: string}[]>([]);
+    const [collectionTreeRefreshKey, setCollectionTreeRefreshKey] = useState(0);
 
     const handleDeleteCollection = useCallback((path: string) => {
         setDeleteCollectionPath(path);
@@ -317,6 +319,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
             return remaining;
         });
         setDeleteCollectionPath(null);
+        setCollectionTreeRefreshKey(k => k + 1);
     }, [activeTabId, syncUrl]);
 
     // ─── Unsaved changes guard ──────────────────────────────────────────────
@@ -663,11 +666,11 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
             <div className="flex-grow overflow-y-auto no-scrollbar px-2 pb-4">
                 {databaseId ? (
                     <CollectionTree
-                        key={databaseId}
+                        key={`${databaseId}_${collectionTreeRefreshKey}`}
                         projectId={projectId}
                         databaseId={databaseId}
                         selectedPath={selectedPath}
-                        selectedDocId={selectedDocId}
+                        selectedDocId={activeTab?.docId ?? null}
                         onSelectCollection={setSelectedPath}
                         onSelectDocument={handleNavigateToDocument}
                         onDeleteCollection={handleDeleteCollection}
@@ -704,7 +707,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                     const lastIsDoc = segments.length > 0 && segments[segments.length - 1].isDoc;
                     const fullPath = tab.path ? (tab.docId ? `${tab.path}/${tab.docId}` : tab.path) : "New tab";
                     return (
-                        <Tooltip key={tab.id} title={fullPath} side="bottom">
+                        <Tooltip key={tab.id} title={fullPath} side="bottom" asChild>
                             <div
                                 className={cls(
                                     "group flex items-center gap-1 pl-3 pr-1 py-1 cursor-pointer",
@@ -756,7 +759,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                         </Tooltip>
                     );
                 })}
-                <Tooltip title="New tab" side="bottom">
+                <Tooltip title="New tab" side="bottom" asChild>
                     <button
                         onClick={addNewTab}
                         className={cls(
@@ -904,9 +907,21 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                     projectId={projectId}
                     databaseId={databaseId}
                     onClose={() => setDeleteCollectionPath(null)}
-                    onDeleted={handleCollectionDeleted}
+                    onJobCreated={(jobId, path) => setTrackedDeleteJobs(prev => [...prev, { jobId, path }])}
                 />
             )}
+            {trackedDeleteJobs.map(job => (
+                <AdminJobSnackbarTracker
+                    key={job.jobId}
+                    jobId={job.jobId}
+                    projectId={projectId}
+                    collectionPath={job.path}
+                    onFinished={(jobId) => {
+                        setTrackedDeleteJobs(prev => prev.filter(j => j.jobId !== jobId));
+                        handleCollectionDeleted(job.path);
+                    }}
+                />
+            ))}
         </div>
     );
 }

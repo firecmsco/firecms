@@ -14,6 +14,7 @@ import { CSS } from "@dnd-kit/utilities";
 import {
     cls,
     Typography,
+    Chip,
     Button,
     IconButton,
     Tooltip,
@@ -139,18 +140,17 @@ export function fieldTypeFromValue(value: any): FieldType {
     return "string";
 }
 
-/** Returns a hex color for the type indicator dot. */
-export function getTypeDotColor(value: any): string {
-    if (value === null || value === undefined) return "#a0a0a9";
-    if (typeof value === "boolean") return "#a855f7";
-    if (typeof value === "number") return "#2563eb";
-    if (typeof value === "string") return "#0ea5e9";
-    if (Array.isArray(value)) return "#ea580c";
+export function getTypeDotColor(value: any): string | undefined {
+    if (value === null || value === undefined) return undefined;
+    if (typeof value === "boolean") return undefined;
+    if (typeof value === "number") return "#0891b2";
+    if (typeof value === "string") return undefined;
+    if (Array.isArray(value)) return "#c2724a";
     if (isTimestamp(value)) return "#0d9488";
-    if (value && value._lat !== undefined && value._long !== undefined) return "#ec4899";
+    if (value && value._lat !== undefined && value._long !== undefined) return undefined;
     if (isReference(value)) return "#6366f1";
     if (typeof value === "object") return "#7c3aed";
-    return "#a0a0a9";
+    return undefined;
 }
 
 export function convertValue(currentValue: any, targetType: FieldType): any {
@@ -252,7 +252,7 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                 onValueChange={(v) => {
                     onChange(defaultValueForType(v as FieldType));
                 }}
-                className="w-28"
+                className="w-28 text-surface-400 dark:text-surface-500 italic"
                 placeholder="null"
             >
                 <SelectItem value="null">null</SelectItem>
@@ -271,9 +271,9 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                     size="smallest"
                     onValueChange={onChange}
                 />
-                <Typography variant="body2" className="text-sm text-surface-600 dark:text-surface-300">
+                <Chip size="small" colorScheme={value ? "greenLighter" : "grayLighter"}>
                     {String(value)}
-                </Typography>
+                </Chip>
             </div>
         );
     }
@@ -288,7 +288,8 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                     const num = parseFloat(e.target.value);
                     onChange(isNaN(num) ? 0 : num);
                 }}
-                className={fullWidth ? "w-full" : "max-w-[160px]"}
+                className={cls("bg-transparent border border-surface-200 dark:border-surface-700", fullWidth ? "w-full" : "max-w-[160px]")}
+                inputStyle={getTypeDotColor(value) ? { color: getTypeDotColor(value), fontFamily: "var(--font-mono, monospace)" } : undefined}
                 inputRef={inputRef}
 
             />
@@ -301,11 +302,11 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                 value={String(value)}
                 onChange={(e) => onChange(e.target.value)}
                 className={cls(
-                    "w-full outline-none leading-normal px-3 py-0.5 rounded-md resize-none block min-h-[28px] break-all",
-                    "bg-opacity-50 bg-surface-accent-200 bg-surface-accent-200/50 dark:bg-surface-800 dark:bg-opacity-60 dark:bg-surface-800/60",
-                    "hover:bg-opacity-70 dark:hover:bg-surface-700 dark:hover:bg-opacity-40 hover:bg-surface-accent-200/70 hover:dark:bg-surface-700/40",
-                    "focus:bg-opacity-70 focus:bg-surface-accent-100 focus:dark:bg-surface-800 focus:dark:bg-opacity-60 focus:bg-surface-accent-100/70 dark:focus:bg-surface-800/60"
+                    "text-slate-500 dark:text-slate-400 w-full outline-none leading-normal px-3 py-0.5 rounded-md resize-none block min-h-[28px] break-all",
+                    "bg-transparent border border-surface-200 dark:border-surface-700",
+                    "focus:border-primary dark:focus:border-primary"
                 )}
+                style={getTypeDotColor(value) ? { color: getTypeDotColor(value) } : undefined}
                 ref={textareaRef}
                 minRows={1}
             />
@@ -326,7 +327,8 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                         onChange({ _seconds: Math.floor(newDate.getTime() / 1000), _nanoseconds: 0 });
                     }
                 }}
-                className={fullWidth ? "w-full" : "max-w-[220px]"}
+                className={cls("bg-transparent border border-surface-200 dark:border-surface-700", fullWidth ? "w-full" : "max-w-[220px]")}
+                inputStyle={getTypeDotColor(value) ? { color: getTypeDotColor(value) } : undefined}
                 inputRef={inputRef}
 
             />
@@ -357,8 +359,8 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                         onChange({ ...value, _lat: isNaN(num) ? 0 : num });
                     }}
                     placeholder="Lat"
-                    className="max-w-[80px]"
-    
+                    className="max-w-[80px] bg-transparent border border-surface-200 dark:border-surface-700"
+                    inputStyle={getTypeDotColor(value) ? { color: getTypeDotColor(value) } : undefined}
                 />
                 <span className="text-surface-400">,</span>
                 <TextField
@@ -370,8 +372,8 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
                         onChange({ ...value, _long: isNaN(num) ? 0 : num });
                     }}
                     placeholder="Lng"
-                    className="max-w-[80px]"
-    
+                    className="max-w-[80px] bg-transparent border border-surface-200 dark:border-surface-700"
+                    inputStyle={getTypeDotColor(value) ? { color: getTypeDotColor(value) } : undefined}
                 />
             </div>
         );
@@ -379,7 +381,7 @@ export const InlineValueEditor = React.memo(function InlineValueEditor({
 
     // Fallback: show as text
     return (
-        <Typography variant="body2" className="truncate text-surface-600 dark:text-surface-300 text-sm">
+        <Typography variant="body2" className={cls("truncate text-sm", !getTypeDotColor(value) && "text-surface-600 dark:text-surface-300")} style={getTypeDotColor(value) ? { color: getTypeDotColor(value) } : undefined}>
             {JSON.stringify(value)}
         </Typography>
     );
@@ -478,8 +480,7 @@ const SortableArrayItem = React.memo(function SortableArrayItem({
                         {fieldKey}
                     </Typography>
 
-                    {/* Type indicator dot + selector */}
-                    <span className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ backgroundColor: getTypeDotColor(value) }} />
+                    {/* Type indicator selector */}
                     <Select
                         size="smallest"
                         value={fieldTypeFromValue(value)}
@@ -656,8 +657,7 @@ const EditableFieldRow = React.memo(function EditableFieldRow({
                     {fieldKey}
                 </Typography>
 
-                {/* Type indicator dot + selector */}
-                <span className="w-2 h-2 rounded-full flex-shrink-0 mt-2" style={{ backgroundColor: getTypeDotColor(value) }} />
+                {/* Type indicator selector */}
                 <Select
                     size="smallest"
                     value={fieldTypeFromValue(value)}
@@ -769,6 +769,7 @@ export function EditableFieldsView({
     const [addingField, setAddingField] = useState(false);
     const [newFieldName, setNewFieldName] = useState("");
     const [newFieldType, setNewFieldType] = useState<FieldType>("string");
+    const [displayLimit, setDisplayLimit] = useState(50);
 
     // All hooks must be called unconditionally (Rules of Hooks)
     const arrayIdsRef = React.useRef<string[]>([]);
@@ -821,6 +822,8 @@ export function EditableFieldsView({
         return <Typography variant="body2" color="secondary">No data</Typography>;
     }
 
+    console.log(`[EditableFieldsView] Preparing to sort ${Object.keys(values).length} values for path [${path.join("/")}]`);
+
     const entries = isArray
         ? Object.entries(values).sort(([a], [b]) => Number(a) - Number(b))
         : Object.entries(values).sort(([a], [b]) => {
@@ -833,6 +836,8 @@ export function EditableFieldsView({
             }
             return a.localeCompare(b);
         });
+
+    console.log(`[EditableFieldsView] Sorted ${entries.length} entries for path [${path.join("/")}]`);
 
     // DnD setup for array mode
     // We need stable IDs for dnd-kit to animate correctly, as array indices cause issues when mutating order.
@@ -847,7 +852,11 @@ export function EditableFieldsView({
         }
     }
 
-    const sortableIds = isArray ? arrayIdsRef.current : entries.map(([key]) => `sortable-${key}`);
+    const displayedEntries = entries.slice(0, displayLimit);
+    const hasMore = entries.length > displayLimit;
+    const loadMore = () => setDisplayLimit(prev => prev + 50);
+
+    const sortableIds = isArray ? arrayIdsRef.current.slice(0, displayLimit) : displayedEntries.map(([key]) => `sortable-${key}`);
 
     const renderAddRow = () => (
         <>
@@ -935,7 +944,7 @@ export function EditableFieldsView({
                     onDragEnd={handleDragEnd}
                 >
                     <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
-                        {entries.map(([key, value], index) => (
+                        {displayedEntries.map(([key, value], index) => (
                             <SortableArrayItem
                                 key={sortableIds[index]}
                                 id={sortableIds[index]}
@@ -956,6 +965,13 @@ export function EditableFieldsView({
                     </SortableContext>
                 </DndContext>
 
+                {hasMore && (
+                    <div className="flex justify-center py-2" style={{ marginLeft: `${depth * 12}px` }}>
+                        <Button variant="outlined" onClick={loadMore} size="small">
+                            Load more ({entries.length - displayLimit} remaining)
+                        </Button>
+                    </div>
+                )}
                 {renderAddRow()}
             </div>
         );
@@ -964,7 +980,7 @@ export function EditableFieldsView({
     // Map mode: render without DnD
     return (
         <div className="space-y-0.5">
-            {entries.map(([key, value]) => (
+            {displayedEntries.map(([key, value]) => (
                 <EditableFieldRow
                     key={key}
                     fieldKey={key}
@@ -978,6 +994,13 @@ export function EditableFieldsView({
                 />
             ))}
 
+            {hasMore && (
+                <div className="flex justify-center py-2" style={{ marginLeft: `${depth * 12}px` }}>
+                    <Button variant="outlined" onClick={loadMore} size="small">
+                        Load more ({entries.length - displayLimit} remaining)
+                    </Button>
+                </div>
+            )}
             {renderAddRow()}
         </div>
     );

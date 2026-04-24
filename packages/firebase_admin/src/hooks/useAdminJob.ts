@@ -8,7 +8,6 @@ export interface AdminJobState {
     progress: {
         processed: number;
         total?: number;
-        message?: string;
     };
     params: Record<string, any>;
     error?: string;

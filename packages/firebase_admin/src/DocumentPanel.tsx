@@ -147,6 +147,7 @@ export function DocumentPanel({
 
     // Sync when document changes
     useEffect(() => {
+        console.log("[DocumentPanel] Syncing document", document.path, "with", Object.keys(document.values ?? {}).length, "root fields");
         resetForm({ values: document.values ?? {} });
         setJsonValue(JSON.stringify(document.values ?? {}, jsonStringifyReplacer, 2));
         setJsonError(null);

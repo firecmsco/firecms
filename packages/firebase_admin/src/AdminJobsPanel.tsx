@@ -31,6 +31,8 @@ function getJobLabel(job: AdminJobState): string {
     }
 }
 
+type RetainedJobState = AdminJobState & { _disappearedAt?: number; _lastActive?: number };
+
 /**
  * A small indicator that appears in the Firestore Explorer toolbar when
  * admin jobs are running. Shows a count chip and expands to a popover
@@ -40,20 +42,79 @@ export function AdminJobsPanel({ projectId }: AdminJobsPanelProps) {
     const firestore = useBackendFirestore();
     const activeJobs = useActiveAdminJobs(firestore, projectId);
 
-    if (activeJobs.length === 0) {
+    const [retainedJobs, setRetainedJobs] = React.useState<RetainedJobState[]>([]);
+
+    React.useEffect(() => {
+        setRetainedJobs(prev => {
+            const next = [...prev];
+            const now = Date.now();
+
+            for (const active of activeJobs) {
+                const index = next.findIndex(j => j.id === active.id);
+                if (index >= 0) {
+                    next[index] = { ...active, _lastActive: now, _disappearedAt: undefined };
+                } else {
+                    next.push({ ...active, _lastActive: now });
+                }
+            }
+
+            return next.map(j => {
+                if (!activeJobs.find(a => a.id === j.id)) {
+                    if (j.status === "running") {
+                        return {
+                            ...j,
+                            status: "completed",
+                            progress: {
+                                ...j.progress,
+                                processed: Math.max(j.progress.processed, j.progress.total || j.progress.processed),
+                                message: "Completed",
+                            },
+                            _disappearedAt: j._disappearedAt || now,
+                        };
+                    }
+                }
+                return j;
+            });
+        });
+    }, [activeJobs]);
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            setRetainedJobs(prev => prev.filter(j => {
+                if (j._disappearedAt && Date.now() - j._disappearedAt > 5000) {
+                    return false;
+                }
+                return true;
+            }));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const jobsToDisplay = retainedJobs;
+
+    if (jobsToDisplay.length === 0) {
         return null;
     }
+
+    const runningCount = jobsToDisplay.filter(j => j.status === "running").length;
+    const completedCount = jobsToDisplay.length - runningCount;
 
     const triggerContent = (
         <Chip
             size="small"
-            colorScheme="primaryLighter"
-            className="cursor-pointer animate-pulse"
+            colorScheme={runningCount > 0 ? "primaryLighter" : "grayLighter"}
+            className="cursor-pointer transition-colors"
         >
             <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                {runningCount > 0 ? (
+                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                ) : (
+                    <span className="w-2 h-2 rounded-full bg-green-500" />
+                )}
                 <Typography variant="caption">
-                    {activeJobs.length} job{activeJobs.length !== 1 ? "s" : ""} running
+                    {runningCount > 0
+                        ? `${runningCount} job${runningCount !== 1 ? "s" : ""} running`
+                        : `${completedCount} job${completedCount !== 1 ? "s" : ""} completed`}
                 </Typography>
             </span>
         </Chip>
@@ -68,7 +129,7 @@ export function AdminJobsPanel({ projectId }: AdminJobsPanelProps) {
                     Active Jobs
                 </Typography>
 
-                {activeJobs.map((job) => (
+                {jobsToDisplay.map((job) => (
                     <div key={job.id} className="flex flex-col gap-1.5 p-2 bg-surface-50 dark:bg-surface-800 rounded">
                         <div className="flex items-center gap-2">
                             {getJobIcon(job.type)}
@@ -82,16 +143,27 @@ export function AdminJobsPanel({ projectId }: AdminJobsPanelProps) {
                             <div
                                 className="bg-primary h-1.5 rounded-full transition-all duration-300"
                                 style={{
-                                    width: job.progress.total
+                                    width: job.progress.total && job.progress.total > 0
                                         ? `${Math.min(100, (job.progress.processed / job.progress.total) * 100)}%`
-                                        : undefined,
+                                        : "15%",
+                                    ...(!job.progress.total && {
+                                        animation: "pulse 2s ease-in-out infinite",
+                                    }),
                                     minWidth: job.progress.processed > 0 ? "6px" : undefined,
                                 }}
                             />
                         </div>
 
                         <Typography variant="caption" color="secondary">
-                            {job.progress.message ?? `${job.progress.processed} processed`}
+                            {(() => {
+                                if (job.status === "completed") return "Completed";
+                                if (job.status === "failed") return "Failed";
+                                if (job.progress.total) {
+                                    const pct = Math.min(100, Math.round((job.progress.processed / job.progress.total) * 100));
+                                    return `Deleted ${job.progress.processed} of ~${job.progress.total} documents (${pct}%)`;
+                                }
+                                return `Deleted ${job.progress.processed} documents...`;
+                            })()}
                         </Typography>
                     </div>
                 ))}

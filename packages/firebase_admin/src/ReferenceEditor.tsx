@@ -120,17 +120,18 @@ export function ReferenceEditor({
         setEditPath(value._ref ?? "");
     }, [value._ref]);
 
-    const handleCommit = useCallback(() => {
-        const trimmed = editPath.trim().replace(/^\/|\/$/g, "");
+    const handleCommit = useCallback((val?: string) => {
+        const valToCommit = val !== undefined ? val : editPath;
+        const trimmed = valToCommit.trim().replace(/^\/|\/$/g, "");
         onChange({ _ref: trimmed });
         setEditing(false);
     }, [editPath, onChange]);
 
     const handleKeyDown = useCallback(
-        (e: React.KeyboardEvent) => {
+        (e: React.KeyboardEvent<HTMLInputElement>) => {
             if (e.key === "Enter") {
                 e.preventDefault();
-                handleCommit();
+                handleCommit(e.currentTarget.value);
             }
             if (e.key === "Escape") {
                 setEditPath(value._ref ?? "");
@@ -156,7 +157,7 @@ export function ReferenceEditor({
                             setEditPath(e.target.value);
                             onChange({ _ref: e.target.value });
                         }}
-                        onBlur={handleCommit}
+                        onBlur={(e) => handleCommit(e.target.value)}
                         onKeyDown={handleKeyDown}
                         autoFocus={autoFocus}
                         placeholder="collection/documentId"
