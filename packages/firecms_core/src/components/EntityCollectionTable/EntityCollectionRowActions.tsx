@@ -5,6 +5,7 @@ import { Badge, Checkbox, cls, IconButton, Menu, MenuItem, MoreVertIcon, Skeleto
 import { useFireCMSContext, useLargeLayout } from "../../hooks";
 import { getEntityFromCache } from "../../util/entity_cache";
 import { getLocalChangesBackup } from "../../util";
+import { getChanges } from "../../form/EntityForm";
 
 /**
  *
@@ -81,7 +82,12 @@ export const EntityCollectionRowActions = function EntityCollectionRowActions({
     const collapsedActions = actions.filter(a => a.collapsed || a.collapsed === undefined);
     const uncollapsedActions = actions.filter(a => a.collapsed === false);
     const enableLocalChangesBackup = collection ? getLocalChangesBackup(collection) : false;
-    const hasDraft = enableLocalChangesBackup ? getEntityFromCache(fullPath + "/" + entity.id) : false;
+    const cachedData = enableLocalChangesBackup ? getEntityFromCache(fullPath + "/" + entity.id) : undefined;
+    const hasDraft = (() => {
+        if (!cachedData || typeof cachedData !== "object" || Object.keys(cachedData).length === 0) return false;
+        const realChanges = getChanges(cachedData as any, (entity?.values ?? {}) as any);
+        return Object.keys(realChanges).length > 0;
+    })();
     const iconSize = largeLayout && (size === "m" || size === "l" || size == "xl") ? "medium" : "small";
 
     const content = (

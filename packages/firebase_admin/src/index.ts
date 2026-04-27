@@ -1,4 +1,5 @@
 export { FirestoreExplorer } from "./FirestoreExplorer";
+export type { FirestoreExplorerAnalyticsEvent } from "./FirestoreExplorer";
 export { CollectionTree } from "./CollectionTree";
 export { DocumentTable } from "./DocumentTable";
 export { DocumentPanel } from "./DocumentPanel";

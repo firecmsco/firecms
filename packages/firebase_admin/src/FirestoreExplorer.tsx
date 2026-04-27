@@ -125,7 +125,15 @@ function formatTabSegments(path: string, docId?: string | null): TabSegment[] {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-export function FirestoreExplorer({ projectId }: { projectId: string }) {
+export type FirestoreExplorerAnalyticsEvent = (
+    eventName: string,
+    params?: Record<string, any>
+) => void;
+
+export function FirestoreExplorer({ projectId, onAnalyticsEvent }: {
+    projectId: string;
+    onAnalyticsEvent?: FirestoreExplorerAnalyticsEvent;
+}) {
     const largeLayout = useLargeLayout();
     const [searchParams, setSearchParams] = useSearchParams();
     const [databaseId, setDatabaseId] = useState<string | undefined>(undefined);
@@ -286,7 +294,8 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
 
     const handleDeleteCollection = useCallback((path: string) => {
         setDeleteCollectionPath(path);
-    }, []);
+        onAnalyticsEvent?.("collection_deleted", { projectId, collectionPath: path });
+    }, [onAnalyticsEvent, projectId]);
 
     const handleCollectionDeleted = useCallback((deletedPath: string) => {
         // Close any tabs that point to the deleted collection or a sub-path
@@ -427,11 +436,13 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                 setActiveTabId(tab.id);
                 setSelectedDocument(null);
                 syncUrl(path, null);
+                onAnalyticsEvent?.("tab_opened", { projectId, collectionPath: path });
             }
         }
         setSelectedField(null);
         if (!largeLayout) setMobileDrawerOpen(false);
-    }, [tabs, activeTabId, syncUrl, largeLayout, tabDocuments]);
+        onAnalyticsEvent?.("collection_opened", { projectId, collectionPath: path });
+    }, [tabs, activeTabId, syncUrl, largeLayout, tabDocuments, onAnalyticsEvent, projectId]);
 
     /** Navigate the ACTIVE tab to a new collection path (subcollection / breadcrumb) */
     const navigateActiveTab = useCallback((newPath: string) => {
@@ -489,7 +500,6 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
         }
     }, [activeTabId, guardUnsavedChanges, syncUrl]);
 
-    /** Create a new blank tab (no collection selected) */
     const addNewTab = useCallback(() => {
         const tab = createTab("");
         setTabs(prev => [...prev, tab]);
@@ -497,7 +507,8 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
         setSelectedDocument(null);
         setSelectedField(null);
         syncUrl(null, null);
-    }, [syncUrl]);
+        onAnalyticsEvent?.("tab_opened", { projectId, collectionPath: "" });
+    }, [syncUrl, onAnalyticsEvent, projectId]);
 
     // ─── Wrapper used by sidebar and database change ────────────────────────
     /** Called by sidebar: opens or activates a tab */
@@ -517,7 +528,8 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
     /** Called by breadcrumbs / subcollection navigation: navigates within active tab */
     const handleNavigateToSubcollection = useCallback((subPath: string) => {
         guardUnsavedChanges(() => navigateActiveTab(subPath));
-    }, [guardUnsavedChanges, navigateActiveTab]);
+        onAnalyticsEvent?.("subcollection_navigated", { projectId, subcollectionPath: subPath });
+    }, [guardUnsavedChanges, navigateActiveTab, onAnalyticsEvent, projectId]);
 
     // ─── Document selection ─────────────────────────────────────────────────
     const doDocumentSelect = useCallback((doc: AdminDocument, field?: string) => {
@@ -530,7 +542,8 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
             ));
         }
         syncUrl(selectedPath, doc.id, false);
-    }, [syncUrl, selectedPath, activeTabId]);
+        onAnalyticsEvent?.("document_selected", { projectId, collectionPath: selectedPath, documentId: doc.id });
+    }, [syncUrl, selectedPath, activeTabId, onAnalyticsEvent, projectId]);
 
     const handleDocumentSelect = useCallback((doc: AdminDocument, field?: string) => {
         if (selectedDocument?.id === doc.id) {
@@ -557,9 +570,13 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
     }, [guardUnsavedChanges, doDocumentClose]);
 
     const handleDocumentDeleted = useCallback(() => {
-        if (selectedDocument) setDeletedDocumentId(selectedDocument.id);
+        if (selectedDocument) {
+            setDeletedDocumentId(selectedDocument.id);
+            const parentPath = selectedDocument.path?.substring(0, selectedDocument.path.lastIndexOf("/"));
+            onAnalyticsEvent?.("document_deleted", { projectId, collectionPath: parentPath, documentId: selectedDocument.id });
+        }
         doDocumentClose();
-    }, [selectedDocument, doDocumentClose]);
+    }, [selectedDocument, doDocumentClose, onAnalyticsEvent, projectId]);
 
     /** Called from sidebar: find/create a tab for the collection and select the document */
     const handleNavigateToDocument = useCallback((collectionPath: string, docId: string) => {
@@ -652,7 +669,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
             {!databasesLoading && databases.length > 1 && (
                 <div className={cls("px-3 pt-3 pb-2 border-b", defaultBorderMixin)}>
                     <Select size="smallest" value={databaseId ?? ""}
-                        onValueChange={(v) => { setDatabaseId(v); setTabs([]); setActiveTabId(null); syncUrl(null, null); }}
+                        onValueChange={(v) => { setDatabaseId(v); setTabs([]); setActiveTabId(null); syncUrl(null, null); onAnalyticsEvent?.("database_switched", { projectId, databaseId: v }); }}
                         className="w-full">
                         {databases.map(db => (<SelectItem key={db} value={db}>{db}</SelectItem>))}
                     </Select>
@@ -813,6 +830,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                     onPitrTimeChange={setPitrReadTime}
                     initialDocuments={cachedDocsForActiveTab}
                     onDocumentsChange={handleDocumentsChange}
+                    onAnalyticsEvent={onAnalyticsEvent}
                 />
             ) : (
                 <div className="flex-grow flex items-center justify-center">
@@ -851,6 +869,7 @@ export function FirestoreExplorer({ projectId }: { projectId: string }) {
                     onNavigateToSubcollection={handleNavigateToSubcollection}
                     initialFocusField={selectedField}
                     onDirtyChange={handleDirtyChange}
+                    onAnalyticsEvent={onAnalyticsEvent}
                 />
             ) : (
                 <div className="flex items-center justify-center h-full">

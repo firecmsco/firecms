@@ -285,6 +285,7 @@ export function DocumentTable({
     onPitrTimeChange,
     initialDocuments,
     onDocumentsChange,
+    onAnalyticsEvent,
 }: {
     projectId: string;
     path: string;
@@ -315,6 +316,8 @@ export function DocumentTable({
     initialDocuments?: AdminDocument[];
     /** Called whenever the documents array changes (for external caching) */
     onDocumentsChange?: (docs: AdminDocument[]) => void;
+    /** Analytics event callback */
+    onAnalyticsEvent?: (eventName: string, params?: Record<string, any>) => void;
 }) {
     const adminApi = useAdminApi();
     const [documents, setDocumentsRaw] = useState<AdminDocument[]>(initialDocuments ?? []);
@@ -1377,6 +1380,7 @@ export function DocumentTable({
                 }}
                 onDocumentCreated={handleRefresh}
                 initialData={duplicateData}
+                onAnalyticsEvent={onAnalyticsEvent}
             />
 
             <ConfirmationDialog

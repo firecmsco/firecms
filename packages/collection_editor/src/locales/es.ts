@@ -74,6 +74,8 @@ export const collectionEditorTranslationsEs = {
     hide_from_collection_tooltip: "Ocultar este campo de la vista de colección. Seguirá visible en la vista de formulario",
     read_only: "Solo lectura",
     read_only_tooltip: "Es un campo de solo lectura. Mostrar solo como vista previa",
+    nullable: "Nullable",
+    nullable_tooltip: "Permitir que este campo se establezca explícitamente como null. Se mostrará un botón de borrar al usuario",
     tab_general: "General",
     tab_display: "Visualización",
     tab_properties: "Propiedades",

@@ -74,6 +74,8 @@ export const collectionEditorTranslationsHi = {
     hide_from_collection_tooltip: "इस फ़ील्ड को संग्रह दृश्य से छिपाएँ। यह फ़ॉर्म दृश्य में अभी भी दिखाई देगा",
     read_only: "केवल पढ़ने के लिए",
     read_only_tooltip: "क्या यह फ़ील्ड केवल पढ़ने के लिए है। केवल पूर्वावलोकन के रूप में प्रदर्शित करें",
+    nullable: "Nullable",
+    nullable_tooltip: "इस फ़ील्ड को स्पष्ट रूप से null पर सेट करने की अनुमति दें। उपयोगकर्ता को एक क्लियर बटन दिखाया जाएगा",
     tab_general: "सामान्य",
     tab_display: "प्रदर्शन",
     tab_properties: "प्रॉपर्टीज़",

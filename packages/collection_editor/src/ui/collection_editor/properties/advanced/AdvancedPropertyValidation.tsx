@@ -13,6 +13,7 @@ export function AdvancedPropertyValidation({ disabled }: {
     const columnWidth = "columnWidth";
     const hideFromCollection = "hideFromCollection";
     const readOnly = "readOnly";
+    const nullable = "nullable";
 
     return (
 
@@ -40,6 +41,21 @@ export function AdvancedPropertyValidation({ disabled }: {
                             size={"medium"}
                             disabled={disabled}
                             tooltip={t("read_only_tooltip")}
+                            form={form}
+                            field={field}/>
+                    }}
+                </Field>
+            </div>
+
+            <div className={"col-span-12"}>
+                <Field name={nullable}
+                       type="checkbox">
+                    {({ field, form }: FormexFieldProps) => {
+                        return <SwitchControl
+                            label={t("nullable")}
+                            size={"medium"}
+                            disabled={disabled}
+                            tooltip={t("nullable_tooltip")}
                             form={form}
                             field={field}/>
                     }}

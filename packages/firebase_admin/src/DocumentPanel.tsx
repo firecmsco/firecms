@@ -92,6 +92,7 @@ export function DocumentPanel({
     onDocumentDeleted,
     initialFocusField,
     onDirtyChange,
+    onAnalyticsEvent,
 }: {
     projectId: string;
     document: AdminDocument;
@@ -102,6 +103,7 @@ export function DocumentPanel({
     onDocumentDeleted?: () => void;
     initialFocusField?: string | null;
     onDirtyChange?: (dirty: boolean) => void;
+    onAnalyticsEvent?: (eventName: string, params?: Record<string, any>) => void;
 }) {
     const adminApi = useAdminApi();
     const navigationController = useNavigationController();
@@ -172,15 +174,25 @@ export function DocumentPanel({
 
     const handleFieldChange = useCallback((path: string[], value: any) => {
         setValues(setIn(editedValues, path, value));
-    }, [editedValues, setValues]);
+        // Track only root-level field edits to avoid noise from nested map/array changes
+        if (path.length === 1) {
+            onAnalyticsEvent?.("field_edited", { projectId, documentPath: document.path, fieldKey: path[0] });
+        }
+    }, [editedValues, setValues, onAnalyticsEvent, projectId, document.path]);
 
     const handleFieldDelete = useCallback((path: string[]) => {
         setValues(deleteIn(editedValues, path));
-    }, [editedValues, setValues]);
+        if (path.length === 1) {
+            onAnalyticsEvent?.("field_deleted", { projectId, documentPath: document.path, fieldKey: path[0] });
+        }
+    }, [editedValues, setValues, onAnalyticsEvent, projectId, document.path]);
 
     const handleFieldAdd = useCallback((parentPath: string[], key: string, type: FieldType) => {
         setValues(addIn(editedValues, parentPath, key, type));
-    }, [editedValues, setValues]);
+        if (parentPath.length === 0) {
+            onAnalyticsEvent?.("field_added", { projectId, documentPath: document.path, fieldKey: key, fieldType: type });
+        }
+    }, [editedValues, setValues, onAnalyticsEvent, projectId, document.path]);
 
     const handleSaveFields = useCallback(async () => {
         setSaving(true);
@@ -205,12 +217,13 @@ export function DocumentPanel({
             );
             onDocumentUpdated(updated);
             resetForm({ values: updated.values });
+            onAnalyticsEvent?.("document_saved", { projectId, collectionPath: parentPath, documentId: document.id });
         } catch (e: any) {
             setJsonError(e.message);
         } finally {
             setSaving(false);
         }
-    }, [editedValues, document, projectId, databaseId, onDocumentUpdated, resetForm]);
+    }, [editedValues, document, projectId, databaseId, onDocumentUpdated, resetForm, onAnalyticsEvent]);
 
     const handleSaveJson = useCallback(async () => {
         try {
@@ -236,6 +249,8 @@ export function DocumentPanel({
             );
             onDocumentUpdated(updated);
             resetForm({ values: updated.values });
+            const savePath = document.path.substring(0, document.path.lastIndexOf("/"));
+            onAnalyticsEvent?.("document_saved", { projectId, collectionPath: savePath, documentId: document.id });
         } catch (e: any) {
             if (e instanceof SyntaxError) {
                 setJsonError("Invalid JSON: " + e.message);
@@ -245,7 +260,7 @@ export function DocumentPanel({
         } finally {
             setSaving(false);
         }
-    }, [jsonValue, document, projectId, databaseId, onDocumentUpdated, resetForm, setValues]);
+    }, [jsonValue, document, projectId, databaseId, onDocumentUpdated, resetForm, setValues, onAnalyticsEvent]);
 
     const handleDiscard = useCallback(() => {
         resetForm({ values: document.values ?? {} });
@@ -259,6 +274,7 @@ export function DocumentPanel({
             const parentPath = document.path.substring(0, document.path.lastIndexOf("/"));
             await adminApi.deleteDocument(projectId, parentPath, document.id, databaseId);
             setDeleteOpen(false);
+            onAnalyticsEvent?.("document_deleted", { projectId, collectionPath: parentPath, documentId: document.id });
             onDocumentDeleted?.();
             onClose();
         } catch (e: any) {

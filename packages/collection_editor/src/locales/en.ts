@@ -91,6 +91,8 @@ export const collectionEditorTranslationsEn = {
     hide_from_collection_tooltip: "Hide this field from the collection view. It will still be visible in the form view",
     read_only: "Read only",
     read_only_tooltip: "Is this a read only field. Display only as a preview",
+    nullable: "Nullable",
+    nullable_tooltip: "Allow this field to be explicitly set to null. A clear button will be shown to the user",
 
     // Dialog & Tabs
     tab_general: "General",

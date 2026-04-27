@@ -74,6 +74,8 @@ export const collectionEditorTranslationsFr = {
     hide_from_collection_tooltip: "Masquer ce champ de la vue collection. Il restera visible dans la vue formulaire",
     read_only: "Lecture seule",
     read_only_tooltip: "Ce champ est en lecture seule. Affichage en aperçu uniquement",
+    nullable: "Nullable",
+    nullable_tooltip: "Permettre de définir explicitement ce champ comme null. Un bouton d'effacement sera affiché à l'utilisateur",
     tab_general: "Général",
     tab_display: "Affichage",
     tab_properties: "Propriétés",

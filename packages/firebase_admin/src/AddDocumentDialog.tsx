@@ -22,6 +22,7 @@ export function AddDocumentDialog({
     onDocumentCreated,
     initialData,
     initialId,
+    onAnalyticsEvent,
 }: {
     open: boolean;
     projectId: string;
@@ -31,6 +32,7 @@ export function AddDocumentDialog({
     onDocumentCreated: () => void;
     initialData?: Record<string, any>;
     initialId?: string;
+    onAnalyticsEvent?: (eventName: string, params?: Record<string, any>) => void;
 }) {
     const adminApi = useAdminApi();
     const [documentId, setDocumentId] = useState(initialId ?? "");
@@ -111,6 +113,7 @@ export function AddDocumentDialog({
             );
             setDocumentId("");
             setValues({});
+            onAnalyticsEvent?.("document_created", { projectId, collectionPath, documentId: documentId.trim() || "(auto)" });
             onDocumentCreated();
             onClose();
         } catch (e: any) {
@@ -118,7 +121,7 @@ export function AddDocumentDialog({
         } finally {
             setSaving(false);
         }
-    }, [values, documentId, projectId, collectionPath, databaseId]);
+    }, [values, documentId, projectId, collectionPath, databaseId, onAnalyticsEvent]);
 
     return (
         <Dialog

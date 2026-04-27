@@ -125,6 +125,35 @@ export function extractTouchedValues(values: any, touched: Record<string, boolea
     return acc;
 }
 
+/**
+ * Recursively removes empty plain objects `{}` and empty arrays `[]` from a value tree.
+ * This prevents ghost containers created by `setIn` intermediate path construction
+ * (e.g. `{ address: {} }` when only `address.city` was touched but value is undefined)
+ * from falsely triggering the unsaved local changes indicator.
+ */
+function removeEmptyContainers(obj: any): any {
+    if (Array.isArray(obj)) {
+        const cleaned = obj.map(removeEmptyContainers);
+        // Keep arrays even if they contain only nulls/undefined — that's intentional data
+        return cleaned;
+    }
+    if (obj && typeof obj === "object" && Object.getPrototypeOf(obj) === Object.prototype) {
+        const result: Record<string, any> = {};
+        for (const key of Object.keys(obj)) {
+            const cleaned = removeEmptyContainers(obj[key]);
+            // Skip empty plain objects
+            if (cleaned && typeof cleaned === "object" && !Array.isArray(cleaned)
+                && Object.getPrototypeOf(cleaned) === Object.prototype
+                && Object.keys(cleaned).length === 0) {
+                continue;
+            }
+            result[key] = cleaned;
+        }
+        return result;
+    }
+    return obj;
+}
+
 export function getChanges<T extends object>(source: Partial<T>, comparison: Partial<T>): Partial<T> {
     const changes: Partial<T> = {};
 
@@ -332,7 +361,15 @@ export function EntityForm<M extends Record<string, any>>({
         return [initialValues, initialDirty];
     }, [autoApplyLocalChanges, localChangesDataRaw, baseInitialValues, initialDirtyValues]);
 
-    const hasLocalChanges = !localChangesCleared && localChangesDataRaw && Object.keys(localChangesDataRaw).length > 0;
+    const hasLocalChanges = useMemo(() => {
+        if (localChangesCleared || !localChangesDataRaw || Object.keys(localChangesDataRaw).length === 0) {
+            return false;
+        }
+        // Compare cached values against entity values to check for real differences
+        const entityValues = entity?.values ?? {};
+        const realChanges = getChanges(localChangesDataRaw as Partial<M>, entityValues as Partial<M>);
+        return Object.keys(realChanges).length > 0;
+    }, [localChangesCleared, localChangesDataRaw, entity?.values]);
 
     const formex: FormexController<M> = formexProp ?? useCreateFormex<M>({
         initialValues: initialValues as M,
@@ -352,8 +389,10 @@ export function EntityForm<M extends Record<string, any>>({
         onValuesChangeDeferred: (values: M, controller: FormexController<M>) => {
             const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
             if (controller.dirty) {
-                const touchedValues = extractTouchedValues(values, controller.touched);
-                saveEntityToCache(key, touchedValues);
+                const touchedValues = removeEmptyContainers(extractTouchedValues(values, controller.touched));
+                if (touchedValues && Object.keys(touchedValues).length > 0) {
+                    saveEntityToCache(key, touchedValues);
+                }
             }
         },
         validation: (values) => {

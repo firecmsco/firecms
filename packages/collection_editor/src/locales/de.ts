@@ -74,6 +74,8 @@ export const collectionEditorTranslationsDe = {
     hide_from_collection_tooltip: "Dieses Feld aus der Sammlungsansicht ausblenden. Es wird weiterhin in der Formularansicht sichtbar sein",
     read_only: "Nur lesen",
     read_only_tooltip: "Ist dieses Feld schreibgeschützt. Nur als Vorschau anzeigen",
+    nullable: "Nullable",
+    nullable_tooltip: "Erlaubt es, dieses Feld explizit auf null zu setzen. Dem Benutzer wird eine Löschen-Schaltfläche angezeigt",
     tab_general: "Allgemein",
     tab_display: "Anzeige",
     tab_properties: "Eigenschaften",
