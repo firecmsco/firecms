@@ -210,4 +210,44 @@ const blogCollection = buildCollection({
 });
 ```
 
+### Grouping views and subcollections
+
+When an entity has multiple subcollections and custom views, the tab bar can become
+crowded. You can use `viewGroups` to organize related tabs into dropdown menus.
+
+Views listed in a group are removed from the top-level tabs and displayed under a
+single dropdown button instead.
+
+```tsx
+
+const productsCollection = buildCollection({
+    id: "products",
+    path: "products",
+    name: "Products",
+    properties: {
+        // ... your product properties here
+    },
+    subcollections: [localesCollection, reviewsCollection],
+    entityViews: [
+        {
+            key: "preview",
+            name: "Product preview",
+            Builder: ProductPreview
+        }
+    ],
+    viewGroups: [
+        {
+            name: "Related data",
+            views: ["locales", "reviews", "preview"]
+        }
+    ]
+});
+```
+
+In this example, the "locales" and "reviews" subcollection tabs and the "preview" custom view tab
+will be grouped into a single "Related data" dropdown in the entity view tab bar.
+
+The `views` array accepts:
+- **Subcollection ids or paths** — the `id` (or `path` if no `id`) of a subcollection.
+- **Custom view keys** — the `key` of an `EntityCustomView`.
 

@@ -398,4 +398,16 @@ kanban: {
 - **`orderProperty`**: Property key to use for ordering items. Must reference a number property.
   When items are reordered, this property will be updated to reflect the new order using fractional indexing.
   Used by Kanban view for ordering within columns.
+- **`viewGroups`**: Group subcollections and custom views into dropdown menus in the entity view tabs.
+  Views listed in a group are removed from the top-level tabs and shown under a single dropdown instead.
+  [More information](https://firecms.co/docs/entity_views#grouping-views-and-subcollections).
+
+```tsx
+viewGroups: [
+    {
+        name: "Related data",
+        views: ["locales", "reviews", "preview"]
+    }
+]
+```
 

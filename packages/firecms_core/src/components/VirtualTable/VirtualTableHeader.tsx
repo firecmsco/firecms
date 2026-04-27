@@ -144,12 +144,11 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                         onColumnSort(column.key as Extract<keyof M, string>);
                                     }}
                                 >
-                                    {!sort &&
-                                        <ArrowUpwardIcon size={headerIconSize} />}
-                                    {sort === "asc" &&
-                                        <ArrowUpwardIcon size={headerIconSize} />}
-                                    {sort === "desc" &&
-                                        <ArrowUpwardIcon size={headerIconSize} className={"rotate-180"} />}
+                                    <ArrowUpwardIcon size={headerIconSize}
+                                                     className={cls(
+                                                         "transition-transform duration-200",
+                                                         sort === "desc" ? "rotate-180" : "rotate-0"
+                                                     )} />
                                 </IconButton>
                             </Badge>
                         }
