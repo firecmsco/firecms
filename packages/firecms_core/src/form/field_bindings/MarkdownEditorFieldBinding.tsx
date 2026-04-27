@@ -55,7 +55,7 @@ export function MarkdownEditorFieldBinding({
     const internalValue = useRef<string | null>(value);
 
     const onContentChange = useCallback((content: string) => {
-        if (content === value || (value === null && content === "")) {
+        if (content === value || ((value === null || value === undefined) && content === "")) {
             return;
         }
         internalValue.current = content;
