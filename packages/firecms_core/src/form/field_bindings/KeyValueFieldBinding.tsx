@@ -13,6 +13,7 @@ import {
     defaultBorderMixin,
     ExpandablePanel,
     IconButton,
+    CloseIcon,
     Menu,
     MenuItem,
     RemoveIcon,
@@ -64,12 +65,28 @@ export function KeyValueFieldBinding({
                                      initialValue={initialValues}
                                      fieldName={property.name ?? propertyKey}/>;
 
-    const title = <LabelWithIconAndTooltip
-        propertyKey={propertyKey}
-        icon={getIconForProperty(property, "small")}
-        required={property.validation?.required}
-        title={property.name}
-        className={"text-text-secondary dark:text-text-secondary-dark"}/>;
+    const title = (
+        <div className="flex items-center w-full">
+            <LabelWithIconAndTooltip
+                propertyKey={propertyKey}
+                icon={getIconForProperty(property, "small")}
+                required={property.validation?.required}
+                title={property.name}
+                className={"text-text-secondary dark:text-text-secondary-dark flex-grow"}/>
+            {(property.nullable || property.clearable) && !disabled && (
+                <IconButton
+                    size="small"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setValue(null);
+                    }}
+                >
+                    <CloseIcon size={"small"}/>
+                </IconButton>
+            )}
+        </div>
+    );
 
     return (
         <>

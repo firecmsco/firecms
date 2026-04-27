@@ -78,7 +78,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         return navigationController.getParentCollectionIds(path);
     }, [navigationController, path]);
 
-    const collection = navigationController.getCollection(fullIdPath ?? path) ?? props.collection;
+    const collection = props.collection ?? navigationController.getCollection(fullIdPath ?? path);
 
     useEffect(() => {
         function beforeunload(e: any) {
@@ -112,6 +112,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     return (
         <>
             <ErrorBoundary>
+
                 <EntityEditView
                     {...props}
                     fullIdPath={fullIdPath}

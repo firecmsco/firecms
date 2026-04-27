@@ -164,6 +164,31 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     subcollections?: EntityCollection<any, any>[];
 
     /**
+     * You can group subcollections and custom views into dropdown menus
+     * in the entity view tabs. Views listed in a group will be removed
+     * from the top-level tabs and shown under a single dropdown instead.
+     *
+     * @example
+     * ```tsx
+     * const productsCollection = buildCollection({
+     *     id: "products",
+     *     path: "products",
+     *     name: "Products",
+     *     properties: { ... },
+     *     subcollections: [localesCollection, reviewsCollection],
+     *     entityViews: [sampleView],
+     *     viewGroups: [
+     *         {
+     *             name: "Related data",
+     *             views: ["locales", "reviews", "sample_view"]
+     *         }
+     *     ]
+     * });
+     * ```
+     */
+    viewGroups?: ViewGroup[];
+
+    /**
      * This interface defines all the callbacks that can be used when an entity
      * is being created, updated or deleted.
      * Useful for adding your own logic or blocking the execution of the operation.
@@ -411,6 +436,21 @@ export interface KanbanConfig<M extends Record<string, any> = any> {
      * The column order is determined by the order of enumValues in the property.
      */
     columnProperty: Extract<keyof M, string>;
+}
+
+/**
+ * You can group subcollections and custom views into dropdown menus in the entity view tabs.
+ * @group Collections
+ */
+export interface ViewGroup {
+    /**
+     * Name of the group
+     */
+    name: string;
+    /**
+     * Array of subcollection paths/ids or custom view keys
+     */
+    views: string[];
 }
 
 /**

@@ -4,7 +4,7 @@ import { EnumType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../util";
-import { CloseIcon, MultiSelect, MultiSelectItem } from "@firecms/ui";
+import { CloseIcon, MultiSelect, MultiSelectItem, IconButton } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 /**
@@ -93,6 +93,20 @@ export function MultiSelectFieldBinding({
                     required={property.validation?.required}
                     title={property.name}
                     className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
+                endAdornment={
+                    (property.nullable || property.clearable) && !disabled && value !== null && value !== undefined ? (
+                        <IconButton
+                            size="small"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                setValue(null);
+                            }}
+                        >
+                            <CloseIcon size={"small"}/>
+                        </IconButton>
+                    ) : undefined
+                }
                 onValueChange={(updatedValue: string[]) => {
                     let newValue: EnumType[] | null;
                     if (of && (of as ResolvedProperty)?.dataType === "number") {

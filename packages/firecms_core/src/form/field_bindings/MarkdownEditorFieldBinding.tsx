@@ -11,7 +11,7 @@ import {
     useAuthController,
     useStorageSource
 } from "../../index";
-import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
+import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, IconButton, CloseIcon } from "@firecms/ui";
 import type { FireCMSEditorProps } from "../../editor";
 import { resolveProperty, resolveStorageFilenameString, resolveStoragePathString } from "../../util";
 import { isImageFile, resizeImage } from "../../util/useStorageUploadController";
@@ -164,12 +164,27 @@ export function MarkdownEditorFieldBinding({
 
     return (
         <>
-            <LabelWithIconAndTooltip
-                propertyKey={propertyKey}
-                icon={getIconForProperty(property, "small")}
-                required={property.validation?.required}
-                title={property.name}
-                className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"} />
+            <div className="flex items-center w-full">
+                <LabelWithIconAndTooltip
+                    propertyKey={propertyKey}
+                    icon={getIconForProperty(property, "small")}
+                    required={property.validation?.required}
+                    title={property.name}
+                    className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"} />
+                <div className="flex-grow"/>
+                {(property.nullable || property.clearable) && !disabled && (
+                    <IconButton
+                        size="small"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setValue(null);
+                        }}
+                    >
+                        <CloseIcon size={"small"}/>
+                    </IconButton>
+                )}
+            </div>
             <div
                 className={cls("rounded-md", fieldBackgroundMixin, disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin)}>
                 {editor}

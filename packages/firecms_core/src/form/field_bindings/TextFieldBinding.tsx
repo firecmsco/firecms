@@ -100,10 +100,10 @@ export function TextFieldBinding<T extends string | number>({
                             showError && error ? "text-red-500 dark:text-red-600" : ""
                         )}
                     />
-                    {property.clearable && (
+                    {(property.nullable || property.clearable) && value !== null && value !== undefined && (
                         <div className="flex flex-row justify-center items-center absolute h-full right-0 top-0 mr-4">
-                            <IconButton onClick={handleClearClick}>
-                                <CloseIcon />
+                            <IconButton size="small" onClick={handleClearClick}>
+                                <CloseIcon size="small" />
                             </IconButton>
                         </div>
                     )}
@@ -119,10 +119,13 @@ export function TextFieldBinding<T extends string | number>({
                     type={inputType}
                     disabled={disabled}
                     endAdornment={
-                        property.clearable && <IconButton
-                            onClick={handleClearClick}>
-                            <CloseIcon />
-                        </IconButton>
+                        (property.nullable || property.clearable) && value !== null && value !== undefined ? (
+                            <IconButton
+                                size="small"
+                                onClick={handleClearClick}>
+                                <CloseIcon size="small" />
+                            </IconButton>
+                        ) : undefined
                     }
                     error={showError ? error : undefined}
                     inputClassName={error ? "text-red-500 dark:text-red-600" : ""} />

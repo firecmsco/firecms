@@ -38,7 +38,9 @@ import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
-    Typography
+    Typography,
+    IconButton,
+    CloseIcon
 } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { useTranslation } from "../../hooks/useTranslation";
@@ -110,12 +112,27 @@ export function StorageUploadFieldBinding({
         <>
 
             {!minimalistView &&
-                <LabelWithIconAndTooltip
-                    propertyKey={propertyKey}
-                    icon={getIconForProperty(property, "small")}
-                    required={property.validation?.required}
-                    title={property.name}
-                    className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"} />}
+                <div className="flex items-center w-full">
+                    <LabelWithIconAndTooltip
+                        propertyKey={propertyKey}
+                        icon={getIconForProperty(property, "small")}
+                        required={property.validation?.required}
+                        title={property.name}
+                        className={"h-8 text-text-secondary dark:text-text-secondary-dark ml-3.5"} />
+                    <div className="flex-grow"/>
+                    {(property.nullable || property.clearable) && !disabled && (
+                        <IconButton
+                            size="small"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                setValue(null);
+                            }}
+                        >
+                            <CloseIcon size={"small"}/>
+                        </IconButton>
+                    )}
+                </div>}
 
             <StorageUpload
                 value={internalValue}

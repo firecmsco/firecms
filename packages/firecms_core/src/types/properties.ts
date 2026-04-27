@@ -180,6 +180,17 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * @see https://jsonlogic.com/ for JSON Logic syntax
      */
     conditions?: PropertyConditions;
+
+    /**
+     * Set this property to true to provide the UX to explicitly set the value to `null`.
+     * Defaults to `false`.
+     */
+    nullable?: boolean;
+
+    /**
+     * @deprecated Use `nullable` instead.
+     */
+    clearable?: boolean;
 }
 
 /**
@@ -620,11 +631,6 @@ export interface NumberProperty extends BaseProperty<number> {
      * Rules for validating this property
      */
     validation?: NumberPropertyValidationSchema,
-
-    /**
-     * Add an icon to clear the value and set it to `null`. Defaults to `false`
-     */
-    clearable?: boolean;
 }
 
 /**
@@ -734,11 +740,6 @@ export interface StringProperty extends BaseProperty<string> {
      * Rules for validating this property
      */
     validation?: StringPropertyValidationSchema;
-
-    /**
-     * Add an icon to clear the value and set it to `null`. Defaults to `false`
-     */
-    clearable?: boolean;
 
     /**
      * You can use this property (a string) to behave as a reference to another

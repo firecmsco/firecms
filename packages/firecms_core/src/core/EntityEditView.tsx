@@ -26,7 +26,7 @@ import {
     useFireCMSContext,
     useLargeLayout
 } from "../hooks";
-import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography } from "@firecms/ui";
+import { CircularProgress, cls, CodeIcon, defaultBorderMixin, Tab, Tabs, Typography, Menu, MenuItem, ExpandMoreIcon } from "@firecms/ui";
 import { getEntityFromMemoryCache } from "../util/entity_cache";
 import { EntityForm, EntityFormProps } from "../form";
 import { EntityEditViewFormActions } from "./EntityEditViewFormActions";
@@ -230,6 +230,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
     const includeJsonView = collection.includeJsonView === undefined ? true : collection.includeJsonView;
     const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0 || includeJsonView;
 
+    const groupedViews = useMemo(() => {
+        return (collection.viewGroups ?? []).flatMap(g => g.views);
+    }, [collection.viewGroups]);
+
     const {
         resolvedEntityViews,
         selectedEntityView,
@@ -419,16 +423,18 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         Builder={selectedSecondaryForm?.Builder}
     />;
 
-    const subcollectionTabs = subcollections && subcollections.map((subcollection) =>
+    const subcollectionTabs = subcollections && subcollections
+        .filter(sub => !groupedViews.includes(sub.id ?? sub.path))
+        .map((subcollection) =>
         <Tab
             className="text-sm min-w-[120px]"
-            value={subcollection.id}
+            value={subcollection.id ?? subcollection.path}
             key={`entity_detail_collection_tab_${subcollection.name}`}>
             {subcollection.name}
         </Tab>
     );
 
-    const customViewTabsStart = resolvedEntityViews.filter(view => view.position === "start")
+    const customViewTabsStart = resolvedEntityViews.filter(view => view.position === "start" && !groupedViews.includes(view.key))
         .map((view) =>
             <Tab
                 className={!view.tabComponent ? "text-sm min-w-[120px]" : undefined}
@@ -437,7 +443,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 {view.tabComponent ?? view.name}
             </Tab>
         );
-    const customViewTabsEnd = resolvedEntityViews.filter(view => !view.position || view.position === "end")
+    const customViewTabsEnd = resolvedEntityViews.filter(view => (!view.position || view.position === "end") && !groupedViews.includes(view.key))
         .map((view) =>
             <Tab
                 className={!view.tabComponent ? "text-sm min-w-[120px]" : undefined}
@@ -446,6 +452,43 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 {view.tabComponent ?? view.name}
             </Tab>
         );
+
+    const viewGroupMenus = collection.viewGroups?.map(group => {
+        const isActive = group.views.includes(selectedTab);
+        return (
+            <Menu
+                key={`view_group_${group.name}`}
+                trigger={
+                    <button
+                        type="button"
+                        className={cls(
+                            "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-white transition-all",
+                            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-400 focus-visible:ring-offset-2",
+                            "disabled:pointer-events-none disabled:opacity-50",
+                            isActive ? "bg-white text-surface-900 dark:bg-surface-950 dark:text-surface-50" : "text-surface-600 dark:text-surface-400 hover:bg-surface-200 dark:hover:bg-surface-800"
+                        )}
+                    >
+                        {group.name}
+                        <ExpandMoreIcon className="ml-1 -mr-1" size="small" />
+                    </button>
+                }>
+                {group.views.map(viewId => {
+                    const subcollection = subcollections.find(s => (s.id ?? s.path) === viewId);
+                    const customView = resolvedEntityViews.find(v => v.key === viewId);
+                    const name = subcollection?.name ?? customView?.name ?? viewId;
+                    return (
+                        <MenuItem 
+                            key={`view_group_${group.name}_${viewId}`} 
+                            onClick={() => onSideTabClick(viewId)}
+                            className={selectedTab === viewId ? "bg-surface-accent-100 dark:bg-surface-accent-900" : ""}
+                        >
+                            {name}
+                        </MenuItem>
+                    );
+                })}
+            </Menu>
+        );
+    });
 
     const shouldShowTopBar = Boolean(barActions) || hasAdditionalViews;
 
@@ -493,6 +536,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
 
                 {customViewTabsEnd}
+
+                {viewGroupMenus}
 
                 {subcollectionTabs}
             </Tabs>}

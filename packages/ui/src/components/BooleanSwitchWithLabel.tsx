@@ -18,6 +18,7 @@ export type BooleanSwitchWithLabelProps = BooleanSwitchProps & {
     fullWidth?: boolean,
     className?: string,
     inputClassName?: string,
+    switchAdornment?: React.ReactNode,
 };
 
 /**
@@ -37,6 +38,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                                                                           className,
                                                                           fullWidth = true,
                                                                           inputClassName,
+                                                                          switchAdornment,
                                                                           ...props
                                                                       }: BooleanSwitchWithLabelProps) {
 
@@ -99,6 +101,8 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 disabled={disabled}
                 {...props}
             />
+
+            {switchAdornment}
 
             <div className={cls(
                 "flex-grow",

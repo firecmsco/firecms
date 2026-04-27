@@ -48,7 +48,7 @@ export function DateTimeFieldBinding({
                     onChange={(dateValue) => setValue(dateValue)}
                     size={"large"}
                     mode={property.mode}
-                    clearable={property.clearable}
+                    clearable={property.nullable || property.clearable}
                     locale={locale}
                     timezone={property.timezone}
                     error={showError}

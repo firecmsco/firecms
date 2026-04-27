@@ -3,7 +3,7 @@ import React from "react";
 import { FieldProps } from "../../types";
 import { getIconForProperty } from "../../util";
 import { FieldHelperText, LabelWithIcon } from "../components";
-import { BooleanSwitchWithLabel } from "@firecms/ui";
+import { BooleanSwitchWithLabel, IconButton, CloseIcon } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { PropertyIdCopyTooltip } from "../../components";
 
@@ -39,19 +39,36 @@ export const SwitchFieldBinding = function SwitchFieldBinding({
         <>
 
             <PropertyIdCopyTooltip propertyKey={propertyKey}>
-                <BooleanSwitchWithLabel
-                    value={value}
-                    onValueChange={(v) => setValue(v)}
-                    error={showError}
-                    className={property.widthPercentage !== undefined ? "mt-8" : undefined}
-                    label={<LabelWithIcon
-                        icon={getIconForProperty(property, "small")}
-                        required={property.validation?.required}
-                        title={property.name}/>}
-                    disabled={disabled}
-                    autoFocus={autoFocus}
-                    size={size}
-                />
+                <div className="flex items-center">
+                    <BooleanSwitchWithLabel
+                        value={value}
+                        onValueChange={(v) => setValue(v)}
+                        error={showError}
+                        className={property.widthPercentage !== undefined ? "mt-8" : undefined}
+                        label={<LabelWithIcon
+                            icon={getIconForProperty(property, "small")}
+                            required={property.validation?.required}
+                            title={property.name}/>}
+                        disabled={disabled}
+                        autoFocus={autoFocus}
+                        size={size}
+                        switchAdornment={
+                            (property.nullable || property.clearable) && !disabled && value !== null && (
+                                <IconButton
+                                    size="small"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                        setValue(null);
+                                    }}
+                                    className="mr-2"
+                                >
+                                    <CloseIcon size={"small"}/>
+                                </IconButton>
+                            )
+                        }
+                    />
+                </div>
             </PropertyIdCopyTooltip>
 
             <FieldHelperText includeDescription={includeDescription}

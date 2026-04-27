@@ -43,7 +43,7 @@ function getSimplifiedProperty(property: PropertyOrBuilder, path: string, value?
     if (isPropertyBuilder(property)) return {};
     if (property.dataType === "array") {
 
-        if (property.of && !isPropertyBuilder(property.of as PropertyOrBuilder)) {
+        if (property.of && !isPropertyBuilder(property.of as PropertyOrBuilder) && !Array.isArray(property.of)) {
             const arrayParentProperty: InputProperty = {
                 name: property.name,
                 description: property.description,

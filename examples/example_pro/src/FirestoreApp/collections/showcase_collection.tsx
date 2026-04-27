@@ -64,6 +64,122 @@ export const showcaseCollection = buildCollection({
                 // ...
             }
         }),
+
+        // --- Nullable Showcase Fields ---
+        nullable_string: buildProperty({
+            dataType: "string",
+            name: "Nullable String",
+            nullable: true
+        }),
+        nullable_number: buildProperty({
+            dataType: "number",
+            name: "Nullable Number",
+            nullable: true
+        }),
+        nullable_boolean: buildProperty({
+            dataType: "boolean",
+            name: "Nullable Boolean",
+            nullable: true
+        }),
+        nullable_date: buildProperty({
+            dataType: "date",
+            name: "Nullable Date",
+            nullable: true
+        }),
+        nullable_map: buildProperty({
+            dataType: "map",
+            name: "Nullable Map",
+            nullable: true,
+            properties: {
+                child: { dataType: "string", name: "Child" }
+            }
+        }),
+        nullable_array: buildProperty({
+            dataType: "array",
+            name: "Nullable Array",
+            nullable: true,
+            of: {
+                dataType: "string"
+            }
+        }),
+        nullable_reference: buildProperty({
+            dataType: "reference",
+            name: "Nullable Reference",
+            path: "products",
+            nullable: true
+        }),
+        nullable_markdown: buildProperty({
+            dataType: "string",
+            name: "Nullable Markdown",
+            markdown: true,
+            nullable: true
+        }),
+        nullable_storage: buildProperty({
+            dataType: "string",
+            name: "Nullable Storage",
+            storage: {
+                storagePath: "images",
+                acceptedFiles: ["image/*"]
+            },
+            nullable: true
+        }),
+        nullable_select: buildProperty({
+            dataType: "string",
+            name: "Nullable Select",
+            enumValues: {
+                a: "Option A",
+                b: "Option B"
+            },
+            nullable: true
+        }),
+        nullable_multiselect: buildProperty({
+            dataType: "array",
+            name: "Nullable MultiSelect",
+            of: {
+                dataType: "string",
+                enumValues: {
+                    a: "Option A",
+                    b: "Option B"
+                }
+            },
+            nullable: true
+        }),
+        nullable_array_of_references: buildProperty({
+            dataType: "array",
+            name: "Nullable Array of Refs",
+            of: {
+                dataType: "reference",
+                path: "products"
+            },
+            nullable: true
+        }),
+        nullable_block: buildProperty({
+            dataType: "array",
+            name: "Nullable Block",
+            oneOf: {
+                typeField: "type",
+                valueField: "value",
+                properties: {
+                    text: { dataType: "string", name: "Text" }
+                }
+            },
+            nullable: true
+        }),
+        nullable_key_value: buildProperty({
+            dataType: "map",
+            name: "Nullable Key-Value",
+            keyValue: true,
+            nullable: true
+        }),
+        nullable_custom_array: buildProperty({
+            dataType: "array",
+            name: "Nullable Custom Array",
+            nullable: true,
+            of: [
+                { dataType: "string", name: "Text" },
+                { dataType: "number", name: "Number" }
+            ]
+        }),
         // amazon_link: buildProperty({
         //     dataType: "string",
         //     name: "Amazon link",

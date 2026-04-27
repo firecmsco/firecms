@@ -6,7 +6,7 @@ import { getIconForProperty, isHidden, isReadOnly, pick } from "../../util";
 import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { FormEntry } from "../components/FormEntry";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { cls, ExpandablePanel, InputLabel, Select, SelectItem } from "@firecms/ui";
+import { cls, ExpandablePanel, InputLabel, Select, SelectItem, IconButton, CloseIcon } from "@firecms/ui";
 import { useTranslation } from "../../hooks";
 
 /**
@@ -28,7 +28,8 @@ export function MapFieldBinding({
     includeDescription,
     autoFocus,
     context,
-    onPropertyChange
+    onPropertyChange,
+    setValue
 }: FieldProps<Record<string, any>>) {
 
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
@@ -108,12 +109,26 @@ export function MapFieldBinding({
                 }}
                 className={property.widthPercentage !== undefined ? "mt-8" : undefined}
                 innerClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2 bg-white dark:bg-surface-900"}
-                title={<LabelWithIconAndTooltip
-                    propertyKey={propertyKey}
-                    icon={getIconForProperty(property, "small")}
-                    required={property.validation?.required}
-                    title={property.name}
-                    className={"text-text-secondary dark:text-text-secondary-dark"} />}>
+                title={<div className="flex items-center w-full">
+                    <LabelWithIconAndTooltip
+                        propertyKey={propertyKey}
+                        icon={getIconForProperty(property, "small")}
+                        required={property.validation?.required}
+                        title={property.name}
+                        className={"text-text-secondary dark:text-text-secondary-dark flex-grow"} />
+                    {(property.nullable || property.clearable) && !disabled && (
+                        <IconButton
+                            size="small"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                setValue(null);
+                            }}
+                        >
+                            <CloseIcon size={"small"}/>
+                        </IconButton>
+                    )}
+                </div>}>
                 {mapFormView}
             </ExpandablePanel>}
 

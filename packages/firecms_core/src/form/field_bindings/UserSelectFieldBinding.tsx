@@ -59,11 +59,13 @@ export function UserSelectFieldBinding({
                         />
                     </PropertyIdCopyTooltip>}
                 endAdornment={
-                    property.clearable && !disabled && value && <IconButton
-                        size="small"
-                        onClick={handleClearClick}>
-                        <CloseIcon size={"small"}/>
-                    </IconButton>
+                    (property.nullable || property.clearable) && !disabled && value !== null && value !== undefined ? (
+                        <IconButton
+                            size="small"
+                            onClick={handleClearClick}>
+                            <CloseIcon size={"small"}/>
+                        </IconButton>
+                    ) : undefined
                 }
                 onValueChange={(updatedValue: string) => {
                     const newValue = updatedValue || null;

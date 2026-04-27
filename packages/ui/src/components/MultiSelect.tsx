@@ -90,6 +90,7 @@ export const MultiSelect = React.forwardRef<
             open,
             onOpenChange,
             portalContainer,
+            endAdornment,
         },
         ref
     ) => {
@@ -269,7 +270,7 @@ export const MultiSelect = React.forwardRef<
                                         })}
                                     </div>
                                     <div className="flex items-center justify-between">
-                                        {includeClear && <CloseIcon
+                                        {includeClear && !endAdornment && <CloseIcon
                                             className={"ml-4"}
                                             size={"small"}
                                             onClick={(event) => {
@@ -277,6 +278,14 @@ export const MultiSelect = React.forwardRef<
                                                 handleClear();
                                             }}
                                         />}
+                                        {endAdornment && (
+                                            <div className="ml-4 flex items-center" onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                            }}>
+                                                {endAdornment}
+                                            </div>
+                                        )}
                                         <div className={cls("px-2 h-full flex items-center")}>
                                             <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
                                                 className={cls("transition", isPopoverOpen ? "rotate-180" : "")} />
@@ -288,9 +297,19 @@ export const MultiSelect = React.forwardRef<
                                     <span className="text-sm">
                                         {placeholder}
                                     </span>
-                                    <div className={cls("px-2 h-full flex items-center")}>
-                                        <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
-                                            className={cls("transition", isPopoverOpen ? "rotate-180" : "")} />
+                                    <div className="flex items-center justify-between">
+                                        {endAdornment && (
+                                            <div className="ml-4 flex items-center" onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                            }}>
+                                                {endAdornment}
+                                            </div>
+                                        )}
+                                        <div className={cls("px-2 h-full flex items-center")}>
+                                            <KeyboardArrowDownIcon size={size === "large" ? "medium" : "small"}
+                                                className={cls("transition", isPopoverOpen ? "rotate-180" : "")} />
+                                        </div>
                                     </div>
                                 </div>
                             )}

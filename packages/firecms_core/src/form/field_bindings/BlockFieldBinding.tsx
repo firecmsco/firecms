@@ -8,7 +8,7 @@ import { EnumValuesChip } from "../../preview";
 import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types";
 import { getDefaultValueFor, getIconForProperty, mergeDeep, } from "../../util";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
-import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography } from "@firecms/ui";
+import { cls, ExpandablePanel, paperMixin, Select, SelectItem, Typography, IconButton, CloseIcon } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { ArrayContainer, ArrayEntryParams } from "../../components";
 import { useTranslation } from "../../hooks/useTranslation";
@@ -74,12 +74,26 @@ export function BlockFieldBinding<T extends Array<any>>({
     };
 
     const title = (
-        <LabelWithIconAndTooltip
-            propertyKey={propertyKey}
-            icon={getIconForProperty(property, "small")}
-            required={property.validation?.required}
-            title={property.name}
-            className={"text-text-secondary dark:text-text-secondary-dark"}/>
+        <div className="flex items-center w-full">
+            <LabelWithIconAndTooltip
+                propertyKey={propertyKey}
+                icon={getIconForProperty(property, "small")}
+                required={property.validation?.required}
+                title={property.name}
+                className={"text-text-secondary dark:text-text-secondary-dark flex-grow"}/>
+            {(property.nullable || property.clearable) && !disabled && (
+                <IconButton
+                    size="small"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setValue(null);
+                    }}
+                >
+                    <CloseIcon size={"small"}/>
+                </IconButton>
+            )}
+        </div>
     );
 
     const firstOneOfKey = Object.keys(property.oneOf.properties)[0];

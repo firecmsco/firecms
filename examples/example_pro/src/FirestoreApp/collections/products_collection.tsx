@@ -143,6 +143,12 @@ export const productsCollection = buildCollection<Product>({
             Builder: ProductsSecondaryForm
         }
     ],
+    viewGroups: [
+        {
+            name: "Custom views",
+            views: ["sample_custom_view", "sec"]
+        }
+    ],
     entityActions: [{
         key: "sync_price",
         name: "Sync price",

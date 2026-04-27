@@ -5,7 +5,7 @@ import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorView } from "../../components";
 import { getIconForProperty, getReferenceFrom } from "../../util";
 import { useNavigationController, useReferenceDialog, useTranslation } from "../../hooks";
-import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography } from "@firecms/ui";
+import { Button, cls, EditIcon, ExpandablePanel, fieldBackgroundMixin, Typography, IconButton, CloseIcon } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -100,15 +100,28 @@ export function ArrayOfReferencesFieldBinding({
         );
     }, [ofProperty.path, ofProperty.previewProperties, value]);
 
-    const title = (<>
+    const title = (<div className="flex items-center w-full">
         <LabelWithIconAndTooltip
             propertyKey={propertyKey}
             icon={getIconForProperty(property, "small")}
             required={property.validation?.required}
             title={property.name}
-            className={"h-8 flex flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
-        {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
-    </>);
+            className={"text-text-secondary dark:text-text-secondary-dark"}/>
+        {Array.isArray(value) && <span className={"text-sm text-text-secondary dark:text-text-secondary-dark ml-1"}>({value.length})</span>}
+        <div className="flex-grow"/>
+        {(property.nullable || property.clearable) && !disabled && (
+            <IconButton
+                size="small"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setValue(null);
+                }}
+            >
+                <CloseIcon size={"small"}/>
+            </IconButton>
+        )}
+    </div>);
 
     const body = <>
         {!collection && <ErrorView

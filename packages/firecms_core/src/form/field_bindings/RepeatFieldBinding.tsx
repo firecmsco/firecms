@@ -4,7 +4,7 @@ import { FieldHelperText, LabelWithIconAndTooltip } from "../components";
 import { ArrayContainer, ArrayEntryParams, ErrorBoundary } from "../../components";
 import { getArrayResolvedProperties, getDefaultValueFor, getIconForProperty, mergeDeep } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { ExpandablePanel, Typography } from "@firecms/ui";
+import { ExpandablePanel, Typography, IconButton, CloseIcon } from "@firecms/ui";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { useAuthController } from "../../hooks";
 import { useTranslation } from "../../hooks/useTranslation";
@@ -101,15 +101,28 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                            className={property.widthPercentage !== undefined ? "mt-8" : undefined}
     />;
 
-    const title = (<>
+    const title = (<div className="flex items-center w-full">
         <LabelWithIconAndTooltip
             propertyKey={propertyKey}
             icon={getIconForProperty(property, "small")}
             required={property.validation?.required}
             title={property.name}
-            className={"h-8 flex flex-grow text-text-secondary dark:text-text-secondary-dark"}/>
-        {Array.isArray(value) && <Typography variant={"caption"} className={"px-4"}>({value.length})</Typography>}
-    </>);
+            className={"text-text-secondary dark:text-text-secondary-dark"}/>
+        {Array.isArray(value) && <span className={"text-sm text-text-secondary dark:text-text-secondary-dark ml-1"}>({value.length})</span>}
+        <div className="flex-grow"/>
+        {(property.nullable || property.clearable) && !disabled && (
+            <IconButton
+                size="small"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setValue(null);
+                }}
+            >
+                <CloseIcon size={"small"}/>
+            </IconButton>
+        )}
+    </div>);
 
     return (
 

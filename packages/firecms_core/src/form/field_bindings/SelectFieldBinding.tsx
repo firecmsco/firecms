@@ -66,11 +66,13 @@ export function SelectFieldBinding<T extends EnumType>({
                         />
                     </PropertyIdCopyTooltip>}
                 endAdornment={
-                    property.clearable && !disabled && <IconButton
-                        size="small"
-                        onClick={handleClearClick}>
-                        <CloseIcon size={"small"}/>
-                    </IconButton>
+                    (property.nullable || property.clearable) && !disabled && value !== null && value !== undefined ? (
+                        <IconButton
+                            size="small"
+                            onClick={handleClearClick}>
+                            <CloseIcon size={"small"}/>
+                        </IconButton>
+                    ) : undefined
                 }
                 onValueChange={(updatedValue: string) => {
                     const newValue = updatedValue

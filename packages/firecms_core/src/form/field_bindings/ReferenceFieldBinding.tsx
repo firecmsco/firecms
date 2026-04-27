@@ -9,7 +9,7 @@ import { EmptyValue, ReferencePreview } from "../../preview";
 import { getIconForProperty, getReferenceFrom, IconForView } from "../../util";
 import { useClearRestoreValue } from "../useClearRestoreValue";
 import { EntityPreviewContainer } from "../../components/EntityPreview";
-import { cls } from "@firecms/ui";
+import { cls, IconButton, CloseIcon } from "@firecms/ui";
 
 /**
  * Field that opens a reference selection dialog.
@@ -97,16 +97,30 @@ function ReferenceFieldBindingInternal({
 
             {collection && <>
 
-                {value && <ReferencePreview
-                    disabled={!property.path}
-                    previewProperties={property.previewProperties}
-                    hover={!disabled}
-                    size={size}
-                    onClick={disabled || isSubmitting ? undefined : onEntryClick}
-                    reference={value}
-                    includeEntityLink={property.includeEntityLink}
-                    includeId={property.includeId}
-                />}
+                {value && <div className="flex items-center gap-2">
+                    <ReferencePreview
+                        disabled={!property.path}
+                        previewProperties={property.previewProperties}
+                        hover={!disabled}
+                        size={size}
+                        onClick={disabled || isSubmitting ? undefined : onEntryClick}
+                        reference={value}
+                        includeEntityLink={property.includeEntityLink}
+                        includeId={property.includeId}
+                    />
+                    {(property.nullable || property.clearable) && !disabled && (
+                        <IconButton
+                            size="small"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                setValue(null);
+                            }}
+                        >
+                            <CloseIcon size={"small"}/>
+                        </IconButton>
+                    )}
+                </div>}
 
                 {!value && <div className="justify-center text-left">
                     <EntityPreviewContainer className={cls("px-6 h-16 text-sm font-medium flex items-center gap-6",
