@@ -1,7 +1,7 @@
 {
   "name": "@firecms/core",
   "type": "module",
-  "version": "3.1.0",
+  "version": "3.3.0",
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
@@ -54,7 +54,7 @@
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@firecms/formex": "^3.1.0",
-    "@firecms/ui": "^3.1.0",
+    "@firecms/ui": "^3.3.0",
     "@floating-ui/dom": "^1.7.4",
     "@radix-ui/react-portal": "^1.1.10",
     "@radix-ui/react-slot": "^1.2.4",
