@@ -14,7 +14,10 @@ export function GoogleLoginButton({
     const { t } = useTranslation();
     return (
         <Button
-            className={cls("w-full bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100", disabled ? "" : "hover:text-surface-800 hover:dark:text-white")}
+            className={cls(
+                "w-full text-surface-900 dark:text-surface-100",
+                disabled ? "bg-white/70 dark:bg-surface-800/70" : "bg-white dark:bg-surface-800 hover:text-surface-800 hover:dark:text-white"
+            )}
             style={{
                 height: "40px",
                 borderRadius: "4px",

@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
 
-import { Checkbox, Label, MailIcon, Typography } from "@firecms/ui";
-import { ErrorView, FireCMSLogo, LanguageToggle, useTranslation } from "@firecms/core";
+import {
+    BrightnessMediumIcon,
+    Checkbox,
+    DarkModeIcon,
+    IconButton,
+    Label,
+    LightModeIcon,
+    MailIcon,
+    Menu,
+    MenuItem,
+    Typography
+} from "@firecms/ui";
+import { ErrorView, FireCMSLogo, LanguageToggle, useModeController, useTranslation } from "@firecms/core";
 import { GoogleLoginButton } from "./GoogleLoginButton";
 import { FireCMSBackend } from "../../types";
 import { LoginButton } from "@firecms/firebase";
@@ -13,8 +24,10 @@ export interface FireCMSCloudLoginViewProps {
     includeLogo: boolean;
     includeGoogleDisclosure: boolean;
     includeTermsAndNewsLetter: boolean;
+    disableMarketing?: boolean;
     onAnalyticsEvent?: (event: string, params?: object) => void;
-
+    title?: React.ReactNode;
+    subtitle?: React.ReactNode;
 }
 
 /**
@@ -29,9 +42,13 @@ export function FireCMSCloudLoginView({
                                           includeLogo,
                                           includeGoogleDisclosure,
                                           includeTermsAndNewsLetter,
-                                          onAnalyticsEvent
+                                          disableMarketing,
+                                          onAnalyticsEvent,
+                                          title,
+                                          subtitle
                                       }: FireCMSCloudLoginViewProps) {
     const { t } = useTranslation();
+    const { mode, setMode } = useModeController();
 
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(false);
@@ -81,7 +98,25 @@ export function FireCMSCloudLoginView({
     // Permissions required mode - simple centered dialog
     if (includeGoogleAdminScopes) {
         return (
-            <div className="inset-0 flex items-center justify-center p-8 m-0" style={fadeStyle}>
+            <div className="inset-0 flex items-center justify-center p-8 m-0 relative" style={fadeStyle}>
+                
+                <div className="absolute top-4 right-4 flex gap-2">
+                    <Menu
+                        trigger={<IconButton
+                            color="inherit"
+                            aria-label="Toggle mode">
+                            {mode === "dark"
+                                ? <DarkModeIcon size="small" />
+                                : <LightModeIcon size="small" />}
+                        </IconButton>}>
+                        <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"} /> {t("dark_mode")}</MenuItem>
+                        <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"} /> {t("light_mode")}</MenuItem>
+                        <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon
+                            size={"smallest"} />{t("system_mode")}</MenuItem>
+                    </Menu>
+                    <LanguageToggle />
+                </div>
+
                 <div className="w-full max-w-md flex flex-col items-center">
                     {includeLogo && (
                         <div className="m-4" style={{
@@ -95,10 +130,20 @@ export function FireCMSCloudLoginView({
                     {includeLogo && (
                         <Typography variant={"h4"}
                                     color={"primary"}
-                                    className="mb-4">
-                            FireCMS <Typography variant={"h4"}
-                                                component={"span"}
-                                                className={"text-primary"}>CLOUD</Typography>
+                                    className={subtitle ? "mb-2" : "mb-4"}>
+                            {title || (
+                                <>
+                                    FireCMS <Typography variant={"h4"}
+                                                        component={"span"}
+                                                        className={"text-primary"}>CLOUD</Typography>
+                                </>
+                            )}
+                        </Typography>
+                    )}
+
+                    {subtitle && (
+                        <Typography color={"secondary"} className="mb-4 text-center">
+                            {subtitle}
                         </Typography>
                     )}
 
@@ -128,9 +173,9 @@ export function FireCMSCloudLoginView({
 
     // Normal login mode - full view with marketing section
     return (
-        <div className="fixed inset-0 flex flex-col lg:flex-row m-0 p-0 overflow-y-auto bg-white dark:bg-surface-900" style={fadeStyle}>
+        <div className="fixed inset-0 flex flex-col lg:flex-row m-0 p-0 overflow-y-auto bg-gray-100 dark:bg-surface-900" style={fadeStyle}>
             {/* Marketing Section - Left Side (Desktop only) */}
-            <div
+            {!disableMarketing && <div
                 className="hidden lg:flex lg:w-1/2 bg-primary text-white flex-col justify-center items-center p-12 m-0">
                 <div className="max-w-md">
                     <Typography variant="h5" className="font-mono uppercase mb-8 text-white ">
@@ -164,13 +209,26 @@ export function FireCMSCloudLoginView({
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div>}
 
             {/* Login Content - Right Side */}
             <div
-                className="flex flex-col items-center justify-center w-full lg:w-1/2 h-full min-h-screen lg:min-h-0 p-8 m-0 relative bg-white dark:bg-surface-900">
+                className={`flex flex-col items-center justify-center w-full h-full min-h-screen lg:min-h-0 p-8 m-0 relative bg-gray-100 dark:bg-surface-900 ${disableMarketing ? "" : "lg:w-1/2"}`}>
                 
                 <div className="absolute top-4 right-4 flex gap-2">
+                    <Menu
+                        trigger={<IconButton
+                            color="inherit"
+                            aria-label="Toggle mode">
+                            {mode === "dark"
+                                ? <DarkModeIcon size="small" />
+                                : <LightModeIcon size="small" />}
+                        </IconButton>}>
+                        <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"} /> {t("dark_mode")}</MenuItem>
+                        <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"} /> {t("light_mode")}</MenuItem>
+                        <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon
+                            size={"smallest"} />{t("system_mode")}</MenuItem>
+                    </Menu>
                     <LanguageToggle />
                 </div>
 
@@ -186,10 +244,20 @@ export function FireCMSCloudLoginView({
                 {includeLogo && (
                     <Typography variant={"h4"}
                                 color={"primary"}
-                                className="mb-4">
-                        FireCMS <Typography variant={"h4"}
-                                            component={"span"}
-                                            className={"text-primary"}>CLOUD</Typography>
+                                className={subtitle ? "mb-2 text-center" : "mb-4 text-center"}>
+                        {title || (
+                            <>
+                                FireCMS <Typography variant={"h4"}
+                                                    component={"span"}
+                                                    className={"text-primary"}>CLOUD</Typography>
+                            </>
+                        )}
+                    </Typography>
+                )}
+
+                {subtitle && (
+                    <Typography color={"secondary"} className="mb-4 text-center max-w-sm">
+                        {subtitle}
                     </Typography>
                 )}
 

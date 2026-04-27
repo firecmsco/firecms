@@ -34,7 +34,9 @@ description: Deployment rules and restrictions for the FireCMS backend and all s
 
 - **Provide the exact command** they should run themselves
 - **Explain what the command will do** before they run it
-- **Never run it on their behalf** — unless they explicitly ask you to.
+- **NEVER RUN IT ON THEIR BEHALF WITHOUT EXPLICIT PERMISSION.**
+- **NEVER, EVER SET `SafeToAutoRun: true` FOR ANY DEPLOYMENT COMMAND.**
+- **NEVER DEPLOY TO PROD. IF THE USER ASKS TO DEPLOY TO PROD, TELL THEM TO DO IT THEMSELVES.**
 
 ## Summary
 

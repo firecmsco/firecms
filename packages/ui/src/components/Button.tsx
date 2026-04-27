@@ -64,7 +64,7 @@ const ButtonInner = React.memo(React.forwardRef<
         "text-text-disabled dark:text-text-disabled-dark": disabled,
         "border border-transparent opacity-50": variant === "text" && disabled,
         "border border-surface-500 opacity-50": variant === "outlined" && disabled,
-        "border border-transparent bg-surface-300 dark:bg-surface-500 opacity-40 bg-surface-300/40 dark:bg-surface-500/40": variant === "filled" && disabled,
+        "border border-transparent bg-surface-300 dark:bg-surface-500 opacity-70 bg-surface-300/70 dark:bg-surface-500/70": variant === "filled" && disabled,
     });
 
     const sizeClasses = cls(
