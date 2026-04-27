@@ -40,7 +40,7 @@ Canary versions are published **automatically** on every push to the `canary` br
 
 The CI workflow (`.github/workflows/publish-canary.yml`) will:
 1. Build all packages
-2. Generate a version like `3.1.0-canary.<short-git-sha>` (e.g., `3.1.0-canary.a1b2c3d`)
+2. Generate a version like `<base>-canary.<short-git-sha>` (e.g., `3.3.0-canary.a1b2c3d`), where `<base>` is read from `lerna.json`
 3. Publish to npm with the `canary` dist-tag
 
 Install the latest canary with:
