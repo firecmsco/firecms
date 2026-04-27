@@ -196,7 +196,7 @@ export function useSupabaseDelegate({ supabase }: SupabaseDataSourceProps): Supa
             return new Promise<Entity<M>>((resolve, reject) => {
                 supabase
                     .from(path)
-                    .update(values)
+                    .update(values as any)
                     .eq("id", entityId)
                     .then(({
                         data,
