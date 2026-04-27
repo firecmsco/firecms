@@ -20,7 +20,7 @@ import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "../uti
 import { useAuthController, useCustomizationController, useTranslation } from "../hooks";
 import { Typography } from "@firecms/ui";
 import { getFieldConfig, getFieldId } from "../core";
-import { ErrorBoundary } from "../components";
+import { ErrorBoundary, CircularProgressCenter } from "../components";
 
 /**
  * This component renders a form field creating the corresponding configuration
@@ -287,8 +287,9 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
 
     return (
         <ErrorBoundary>
-
-            <UsedComponent {...cmsFieldProps} />
+            <React.Suspense fallback={<CircularProgressCenter />}>
+                <UsedComponent {...cmsFieldProps} />
+            </React.Suspense>
 
             {underlyingValueHasChanged && !isSubmitting &&
                 <Typography variant={"caption"} className={"ml-3.5"}>

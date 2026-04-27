@@ -12,9 +12,13 @@ import {
     useStorageSource
 } from "../../index";
 import { cls, fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "@firecms/ui";
-import { FireCMSEditor, FireCMSEditorProps } from "../../editor";
+import type { FireCMSEditorProps } from "../../editor";
 import { resolveProperty, resolveStorageFilenameString, resolveStoragePathString } from "../../util";
 import { isImageFile, resizeImage } from "../../util/useStorageUploadController";
+import { lazyEager } from "../../util/lazy_eager";
+import { CircularProgressCenter } from "../../components/CircularProgressCenter";
+
+const FireCMSEditor = lazyEager<typeof import("../../editor/editor")["FireCMSEditor"]>(() => import("../../editor/editor"), "FireCMSEditor");
 
 interface MarkdownEditorFieldProps {
     highlight?: { from: number, to: number };
@@ -135,17 +139,21 @@ export function MarkdownEditorFieldBinding({
         return url;
     };
 
-    const editor = <FireCMSEditor
-        key={context.formex.version + fieldVersion}
-        content={value}
-        onMarkdownContentChange={onContentChange}
-        version={context.formex.version + fieldVersion}
-        highlight={highlight}
-        disabled={disabled}
-        markdownConfig={markdownConfig}
-        handleImageUpload={handleImageUpload}
-        {...editorProps}
-    />;
+    const editor = (
+        <React.Suspense fallback={<CircularProgressCenter />}>
+            <FireCMSEditor
+                key={context.formex.version + fieldVersion}
+                content={value}
+                onMarkdownContentChange={onContentChange}
+                version={context.formex.version + fieldVersion}
+                highlight={highlight}
+                disabled={disabled}
+                markdownConfig={markdownConfig}
+                handleImageUpload={handleImageUpload}
+                {...editorProps}
+            />
+        </React.Suspense>
+    );
 
     if (minimalistView)
         return (

@@ -1,7 +1,6 @@
 import { Blocker, useBlocker, useLocation } from "react-router";
-import { EntityEditView } from "../core/EntityEditView";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigationController } from "../hooks";
-import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     getNavigationEntriesFromPath,
@@ -11,7 +10,11 @@ import {
 } from "../util/navigation_from_path";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { toArray } from "../util/arrays";
-import { EntityCollectionView, NotFoundPage } from "../components";
+import { NotFoundPage } from "../components";
+import { lazyEager } from "../util/lazy_eager";
+
+const EntityEditView = lazyEager<typeof import("../core/EntityEditView")["EntityEditView"]>(() => import("../core/EntityEditView"), "EntityEditView");
+const EntityCollectionView = lazyEager<typeof import("../components/EntityCollectionView/EntityCollectionView")["EntityCollectionView"]>(() => import("../components/EntityCollectionView/EntityCollectionView"), "EntityCollectionView");
 import { UnsavedChangesDialog } from "../components/UnsavedChangesDialog";
 import { EntityCollection } from "../types";
 
@@ -88,15 +91,17 @@ export function FireCMSRoute() {
             collection = navigation.getCollection(navigationEntries[0].path);
         if (!collection)
             return null;
-        return <EntityCollectionView
-            key={`collection_view_${collection.id ?? collection.path}`}
-            isSubCollection={false}
-            parentCollectionIds={[]}
-            fullPath={collection.path}
-            fullIdPath={collection.id}
-            updateUrl={true}
-            {...collection}
-            Actions={toArray(collection.Actions)} />
+        return <React.Suspense fallback={null}>
+            <EntityCollectionView
+                key={`collection_view_${collection.id ?? collection.path}`}
+                isSubCollection={false}
+                parentCollectionIds={[]}
+                fullPath={collection.path}
+                fullIdPath={collection.id}
+                updateUrl={true}
+                {...collection}
+                Actions={toArray(collection.Actions)} />
+        </React.Suspense>;
     }
 
     if (isSidePanel) {
@@ -109,15 +114,17 @@ export function FireCMSRoute() {
                 collection = navigation.getCollection(firstEntry.path);
             if (!collection)
                 return null;
-            return <EntityCollectionView
-                key={`collection_view_${collection.id ?? collection.path}`}
-                fullIdPath={collection.id}
-                isSubCollection={false}
-                parentCollectionIds={[]}
-                fullPath={collection.path}
-                updateUrl={true}
-                {...collection}
-                Actions={toArray(collection.Actions)} />;
+            return <React.Suspense fallback={null}>
+                <EntityCollectionView
+                    key={`collection_view_${collection.id ?? collection.path}`}
+                    fullIdPath={collection.id}
+                    isSubCollection={false}
+                    parentCollectionIds={[]}
+                    fullPath={collection.path}
+                    updateUrl={true}
+                    {...collection}
+                    Actions={toArray(collection.Actions)} />
+            </React.Suspense>;
         }
     }
 
@@ -215,39 +222,41 @@ function EntityFullScreenRoute({
     const fullIdPath = isNew ? lastCollectionEntry!.path : lastEntityEntry!.path;
     const collectionPath = navigation.resolveIdsFrom(fullIdPath);
     return <>
-        <EntityEditView
-            key={collection.id + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}
-            entityId={isNew ? undefined : entityId}
-            fullIdPath={fullIdPath}
-            collection={collection}
-            layout={"full_screen"}
-            path={collectionPath}
-            copy={isCopy}
-            selectedTab={selectedTab ?? undefined}
-            onValuesModified={(modified) => blocked.current = modified}
-            onSaved={(params) => {
-                const newSelectedTab = params.selectedTab;
-                const newEntityId = params.entityId;
-                if (newSelectedTab) {
-                    navigate(`${basePath}/${newEntityId}/${newSelectedTab}`, { replace: true });
-                } else {
-                    navigate(`${basePath}/${newEntityId}`, { replace: true });
-                }
-            }}
-            onTabChange={(params) => {
-                setSelectedTab(params.selectedTab);
-                if (isNew) {
-                    return;
-                }
-                const newSelectedTab = params.selectedTab;
-                if (newSelectedTab) {
-                    navigate(`${basePath}/${entityId}/${newSelectedTab}`, { replace: true });
-                } else {
-                    navigate(`${basePath}/${entityId}`, { replace: true });
-                }
-            }}
-            parentCollectionIds={parentCollectionIds}
-        />
+        <React.Suspense fallback={null}>
+            <EntityEditView
+                key={collection.id + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}
+                entityId={isNew ? undefined : entityId}
+                fullIdPath={fullIdPath}
+                collection={collection}
+                layout={"full_screen"}
+                path={collectionPath}
+                copy={isCopy}
+                selectedTab={selectedTab ?? undefined}
+                onValuesModified={(modified) => blocked.current = modified}
+                onSaved={(params) => {
+                    const newSelectedTab = params.selectedTab;
+                    const newEntityId = params.entityId;
+                    if (newSelectedTab) {
+                        navigate(`${basePath}/${newEntityId}/${newSelectedTab}`, { replace: true });
+                    } else {
+                        navigate(`${basePath}/${newEntityId}`, { replace: true });
+                    }
+                }}
+                onTabChange={(params) => {
+                    setSelectedTab(params.selectedTab);
+                    if (isNew) {
+                        return;
+                    }
+                    const newSelectedTab = params.selectedTab;
+                    if (newSelectedTab) {
+                        navigate(`${basePath}/${entityId}/${newSelectedTab}`, { replace: true });
+                    } else {
+                        navigate(`${basePath}/${entityId}`, { replace: true });
+                    }
+                }}
+                parentCollectionIds={parentCollectionIds}
+            />
+        </React.Suspense>
 
         <UnsavedChangesDialog
             open={blocker?.state === "blocked"}

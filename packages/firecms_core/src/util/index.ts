@@ -25,3 +25,4 @@ export * from "./useTraceUpdate";
 export * from "./storage";
 export * from "./callbacks";
 export * from "./conditions";
+export * from "./lazy_eager";

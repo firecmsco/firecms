@@ -8,16 +8,18 @@ import {
     DateTimeFieldBinding,
     KeyValueFieldBinding,
     MapFieldBinding,
-    MarkdownEditorFieldBinding,
     MultiSelectFieldBinding,
     ReferenceAsStringFieldBinding,
     ReferenceFieldBinding,
     RepeatFieldBinding,
     SelectFieldBinding,
-    StorageUploadFieldBinding,
     SwitchFieldBinding,
     TextFieldBinding
 } from "../form";
+import { lazyEager } from "../util/lazy_eager";
+
+const MarkdownEditorFieldBinding = lazyEager<typeof import("../form/field_bindings/MarkdownEditorFieldBinding")["MarkdownEditorFieldBinding"]>(() => import("../form/field_bindings/MarkdownEditorFieldBinding"), "MarkdownEditorFieldBinding");
+const StorageUploadFieldBinding = lazyEager<typeof import("../form/field_bindings/StorageUploadFieldBinding")["StorageUploadFieldBinding"]>(() => import("../form/field_bindings/StorageUploadFieldBinding"), "StorageUploadFieldBinding");
 import { isPropertyBuilder, mergeDeep } from "../util";
 
 import {
