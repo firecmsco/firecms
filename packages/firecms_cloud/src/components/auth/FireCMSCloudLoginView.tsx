@@ -173,11 +173,34 @@ export function FireCMSCloudLoginView({
 
     // Normal login mode - full view with marketing section
     return (
-        <div className="fixed inset-0 flex flex-col lg:flex-row m-0 p-0 overflow-y-auto bg-gray-100 dark:bg-surface-900" style={fadeStyle}>
-            {/* Marketing Section - Left Side (Desktop only) */}
-            {!disableMarketing && <div
-                className="hidden lg:flex lg:w-1/2 bg-primary text-white flex-col justify-center items-center p-12 m-0">
-                <div className="max-w-md">
+        <div className="fixed inset-0 overflow-y-auto bg-gray-100 dark:bg-surface-900" style={fadeStyle}>
+            {/* Split background for desktop */}
+            {!disableMarketing && (
+                <div className="hidden lg:block absolute inset-y-0 left-0 w-1/2 bg-primary pointer-events-none" />
+            )}
+
+            <div className="absolute top-4 right-4 flex gap-2 z-50">
+                <Menu
+                    trigger={<IconButton
+                        color="inherit"
+                        aria-label="Toggle mode">
+                        {mode === "dark"
+                            ? <DarkModeIcon size="small" />
+                            : <LightModeIcon size="small" />}
+                    </IconButton>}>
+                    <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"} /> {t("dark_mode")}</MenuItem>
+                    <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"} /> {t("light_mode")}</MenuItem>
+                    <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon
+                        size={"smallest"} />{t("system_mode")}</MenuItem>
+                </Menu>
+                <LanguageToggle />
+            </div>
+
+            <div className="relative flex flex-col lg:flex-row w-full max-w-[1440px] mx-auto min-h-screen justify-center items-stretch lg:items-center m-0 p-0">
+                {/* Marketing Section - Left Side (Desktop only) */}
+                {!disableMarketing && <div
+                    className="hidden lg:flex lg:w-1/2 text-white flex-col justify-center items-center p-12 m-0">
+                    <div className="max-w-md w-full">
                     <Typography variant="h5" className="font-mono uppercase mb-8 text-white ">
                         {t("build_admin_panel_in_minutes")}
                     </Typography>
@@ -213,24 +236,7 @@ export function FireCMSCloudLoginView({
 
             {/* Login Content - Right Side */}
             <div
-                className={`flex flex-col items-center justify-center w-full h-full min-h-screen lg:min-h-0 p-8 m-0 relative bg-gray-100 dark:bg-surface-900 ${disableMarketing ? "" : "lg:w-1/2"}`}>
-                
-                <div className="absolute top-4 right-4 flex gap-2">
-                    <Menu
-                        trigger={<IconButton
-                            color="inherit"
-                            aria-label="Toggle mode">
-                            {mode === "dark"
-                                ? <DarkModeIcon size="small" />
-                                : <LightModeIcon size="small" />}
-                        </IconButton>}>
-                        <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"} /> {t("dark_mode")}</MenuItem>
-                        <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"} /> {t("light_mode")}</MenuItem>
-                        <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon
-                            size={"smallest"} />{t("system_mode")}</MenuItem>
-                    </Menu>
-                    <LanguageToggle />
-                </div>
+                className={`flex flex-col items-center justify-center w-full p-8 m-0 relative ${disableMarketing ? "mx-auto max-w-md" : "lg:w-1/2"}`}>
 
                 {includeLogo && (
                     <div className="m-4" style={{
@@ -340,6 +346,7 @@ export function FireCMSCloudLoginView({
                         {t("google_api_services_user_data_policy")}</a>, {t("including_the_limited_use_requirements")}
                     </Typography>}
                 </div>
+            </div>
             </div>
         </div>
     );
