@@ -849,7 +849,10 @@ function buildAdminRoutes(includeDataTalk: boolean,
             group: "Admin",
             icon: "manage_search",
             hideFromNavigation: true,
-            view: <FirestoreExplorer projectId={projectConfig.projectId} />
+            view: <FirestoreExplorer projectId={projectConfig.projectId}
+                                          onAnalyticsEvent={(event, params) => {
+                                              onAnalyticsEvent?.("fadmin:" + event, params);
+                                          }} />
         });
     }
 
