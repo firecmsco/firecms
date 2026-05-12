@@ -1,7 +1,7 @@
 export const en = {
-  'hero.title.1': 'The Headless CMS',
+  'hero.title.1': 'The Open-Source GUI',
   'hero.title.2': 'Framework for',
-  'hero.subtitle.1': 'Build powerful admin panels and back-office apps in minutes.',
+  'hero.subtitle.1': 'Your visual GUI to manage Firebase data, build admin panels, and ship back-office apps in minutes.',
   'hero.subtitle.2': 'Go live instantly with our',
   'hero.subtitle.3': 'Hosted Headless CMS Cloud',
   'hero.subtitle.4': 'or self-host our',
@@ -46,13 +46,13 @@ export const en = {
 
   'usecases.title.1': 'One Framework,',
   'usecases.title.2': 'Endless Back-Office Solutions',
-  'usecases.subtitle': 'Use FireCMS as your Firestore CMS to manage content, users, and operations right from Firebase.',
+  'usecases.subtitle': 'Use FireCMS as your Firebase GUI and Firestore CMS to manage content, users, and operations — all from a beautiful interface.',
   'usecases.card1.title': 'Content Management on Firestore',
   'usecases.card1.desc': 'Power blogs and marketing sites with an intuitive, Notion-style editor backed by Firestore.',
   'usecases.card2.title': 'Internal Tools for Firebase',
   'usecases.card2.desc': 'Build robust internal dashboards for support and ops, connected to Firebase and Firestore.',
-  'usecases.card3.title': 'Custom Admin Panels on Firestore',
-  'usecases.card3.desc': 'Create bespoke, data-intensive admin panels with full control to add custom views and business logic.',
+  'usecases.card3.title': 'Custom GUI & Admin Panels on Firestore',
+  'usecases.card3.desc': 'Create bespoke, data-intensive admin panels and database GUIs with full control to add custom views and business logic.',
 
   'tech.title': 'Built with modern technologies',
 
@@ -67,9 +67,9 @@ export const en = {
   'personas.dev.desc': 'Built for developers, with ultimate flexibility and control.',
   'personas.dev.link': 'Learn More',
 
-  'faq.title': 'Firebase CMS & Firestore CMS FAQ',
-  'faq.q1.q': 'Is FireCMS a Firebase CMS or a Firestore CMS?',
-  'faq.q1.a': 'FireCMS works as both: it connects to Firebase and uses Firestore as the database, giving you a Firestore CMS experience for content and admin tooling.',
+  'faq.title': 'Firebase GUI & CMS FAQ',
+  'faq.q1.q': 'Is FireCMS a Firebase GUI, a CMS, or both?',
+  'faq.q1.a': 'FireCMS is both. It provides a powerful Firebase GUI to browse, edit, and manage your Firestore data visually — and a full-featured headless CMS for content management and admin tooling.',
   'faq.q2.q': 'Cloud vs Self‑hosted — which should I choose?',
   'faq.q2.a': 'Choose Cloud for the fastest setup and zero maintenance. Choose Self‑hosted if you need full control, custom workflows, or client delivery. You can start on Cloud and move to self‑host anytime.',
   'faq.q3.q': 'Can I infer a schema from my existing data?',
@@ -87,9 +87,9 @@ export const en = {
   'cta.cloud': 'Try FireCMS Cloud',
   'cta.docs': 'View Documentation',
   
-  'seo.title': 'Firebase Admin Panel & Firestore CMS | FireCMS',
-  'seo.description': 'FireCMS is a Firebase Admin Panel and Firestore CMS framework to build custom back-office apps in minutes. Go live instantly with our managed Cloud, or self-host our open-source framework.',
-  'seo.keywords': 'Firebase Admin Panel, Firestore admin panel, headless CMS, Firebase CMS, Firestore CMS, React admin panel, no-code backend, AI-powered CMS, visual schema builder, data management, back-office application, content management system, Firestore admin, Firebase back office, database UI',
+  'seo.title': 'Firebase GUI & Admin Panel | Firestore CMS | FireCMS',
+  'seo.description': 'FireCMS is an open-source Firebase GUI, admin panel, and Firestore CMS to browse, edit, and manage your database visually. Go live instantly with our managed Cloud, or self-host for full control.',
+  'seo.keywords': 'Firebase GUI, Firestore GUI, Firebase database GUI, Firebase Admin Panel, Firestore admin panel, headless CMS, Firebase CMS, Firestore CMS, React admin panel, no-code backend, AI-powered CMS, visual schema builder, data management, back-office application, content management system, Firestore admin, Firebase back office, database UI',
 
   'pricing.title': 'Flexible Pricing for Every Need',
   'pricing.subtitle': 'Start free with our open-source Community version, try the managed Cloud, or go PRO for advanced self-hosted features.',

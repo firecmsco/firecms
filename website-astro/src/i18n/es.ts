@@ -89,7 +89,7 @@ export const es = {
   
   'seo.title': 'Firebase Admin Panel & Firestore CMS | FireCMS',
   'seo.description': 'FireCMS es un Firebase Admin Panel y CMS para Firestore ideal para crear paneles de administración en minutos. Lanza tu aplicación al instante con nuestro Cloud gestionado, o autoaloja nuestro framework open-source.',
-  'seo.keywords': 'Firebase Admin Panel, Firestore admin panel, CMS headless, CMS Firebase, CMS Firestore, panel de administración React, backend sin código, CMS con IA, constructor visual de esquemas, gestión de datos, aplicación back-office, sistema de gestión de contenidos, administrador Firestore, back office Firebase, interfaz de base de datos',
+  'seo.keywords': 'Firebase GUI, Firestore GUI, interfaz gráfica Firebase, Firebase Admin Panel, Firestore admin panel, CMS headless, CMS Firebase, CMS Firestore, panel de administración React, backend sin código, CMS con IA, constructor visual de esquemas, gestión de datos, aplicación back-office, sistema de gestión de contenidos, administrador Firestore, back office Firebase, interfaz de base de datos',
 
   'pricing.title': 'Precios flexibles para cada necesidad',
   'pricing.subtitle': 'Empieza gratis con nuestra versión Community de código abierto, prueba Cloud gestionado o elige PRO para funcionalidades avanzadas autoalojables.',
