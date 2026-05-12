@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useBrowserTitleAndIcon, useTranslation } from "@firecms/core";
 import { AutoAwesomeIcon, Button, Card, Chip, CircularProgress, cls, Typography, } from "@firecms/ui";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
+import { useProjectSubscriptions } from "../../hooks/useProjectSubscriptions";
 import { UpgradeCloudSubscriptionView } from "./UpgradeCloudSubscriptionView";
 import { formatPrice, getPriceString, getSubscriptionStatusText } from "../settings/common";
 import { Subscription } from "../../types";
@@ -26,21 +27,27 @@ export function ProjectSubscriptionPlans() {
 
     const {
         products,
-        getSubscriptionsForProject
     } = useSubscriptionsForUserController();
 
-    const projectSubscriptions = getSubscriptionsForProject(projectId);
+    // Use project-level subscriptions (projects/{projectId}/subscriptions)
+    // instead of user-level (customers/{userId}/subscriptions) so that
+    // any team member can see the subscription status, not just the user
+    // who originally created the subscription.
+    const {
+        subscriptions: projectSubscriptions,
+        loading: projectSubscriptionsLoading
+    } = useProjectSubscriptions(projectId);
 
-    const loading = projectSubscriptions === undefined || products === undefined;
+    const loading = projectSubscriptionsLoading || products === undefined;
 
     const cloudProducts = (products ?? []).filter(p => p.metadata?.type === "cloud_plus" || p.metadata?.type === "pro");
 
     const plusProduct = cloudProducts.find(p => p.metadata?.type === "cloud_plus");
-    const plusSubscription = projectSubscriptions.find(s => s.product.metadata?.type === "cloud_plus");
+    const plusSubscription = (projectSubscriptions ?? []).find(s => s.product.metadata?.type === "cloud_plus");
 
     const trialIsActive = Boolean(trialValidUntil && trialValidUntil > new Date());
 
-    const activePlusSubscription = projectSubscriptions.find(s => s.product.metadata?.type === "cloud_plus" && s.status === "active");
+    const activePlusSubscription = (projectSubscriptions ?? []).find(s => s.product.metadata?.type === "cloud_plus" && s.status === "active");
     const isSubscribed = Boolean(activePlusSubscription) || isGCPMarketplace;
 
     return (

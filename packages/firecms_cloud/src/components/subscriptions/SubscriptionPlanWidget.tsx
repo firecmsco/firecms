@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { Alert, Button, CircularProgress } from "@firecms/ui";
 import { PaywallDialog } from "./Paywall";
-import { useFireCMSBackend, useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
+import { useFireCMSBackend, useProjectConfig } from "../../hooks";
+import { useProjectSubscriptions } from "../../hooks/useProjectSubscriptions";
 import { Subscription } from "../../types";
 
 export type SubscriptionPlanWidgetProps = {}
@@ -17,14 +18,14 @@ export function SubscriptionPlanWidget({ }: SubscriptionPlanWidgetProps) {
         isGCPMarketplace,
     } = useProjectConfig();
 
-    const subscriptionsController = useSubscriptionsForUserController();
+    const { subscriptions: projectSubscriptions } = useProjectSubscriptions(projectId);
     const [dialogOpen, setDialogOpen] = React.useState(false);
 
     // GCP Marketplace projects don't use Stripe billing — skip all alerts
     if (isGCPMarketplace) return null;
 
     if (subscriptionData?.subscription_status === "past_due") {
-        const pastDueSubscriptions = (subscriptionsController.activeSubscriptions ?? []).filter(s => s.status === "past_due" && s.metadata.projectId === projectId);
+        const pastDueSubscriptions = (projectSubscriptions ?? []).filter(s => s.status === "past_due");
         if (pastDueSubscriptions.length === 0) return null;
 
         return <PastDueAlert subscription={pastDueSubscriptions[0]} />;
