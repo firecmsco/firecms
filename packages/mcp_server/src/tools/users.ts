@@ -4,6 +4,8 @@ import { FireCMSApiClient } from "../api-client.js";
 
 /**
  * Register user management tools.
+ * Read operations are available to all authenticated users.
+ * Write operations (add, update, remove) are admin-only.
  */
 export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
 
@@ -14,6 +16,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
             },
+            annotations: { readOnlyHint: true },
         },
         async ({ projectId }) => {
             try {
@@ -28,7 +31,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "add_user",
         {
-            description: "Invite a new user to a FireCMS project. Sends an invitation email.",
+            description: "Invite a new user to a FireCMS project. Sends an invitation email. Admin-only.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
                 email: z.string().email().describe("Email address of the user to invite"),
@@ -37,6 +40,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
         },
         async ({ projectId, email, roles }) => {
             try {
+                await api.assertAdmin(projectId);
                 const result = await api.createUser(projectId, email, roles);
                 return {
                     content: [{ type: "text" as const, text: `Invited ${email} with roles: ${roles.join(", ")}\n\n${JSON.stringify(result, null, 2)}` }],
@@ -50,7 +54,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "update_user_roles",
         {
-            description: "Update the roles of an existing user in a FireCMS project",
+            description: "Update the roles of an existing user in a FireCMS project. Admin-only.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
                 userId: z.string().describe("The user ID to update"),
@@ -59,6 +63,7 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
         },
         async ({ projectId, userId, roles }) => {
             try {
+                await api.assertAdmin(projectId);
                 const result = await api.updateUser(projectId, userId, roles);
                 return {
                     content: [{ type: "text" as const, text: `Updated user ${userId} roles to: ${roles.join(", ")}\n\n${JSON.stringify(result, null, 2)}` }],
@@ -72,14 +77,16 @@ export function registerUserTools(server: McpServer, api: FireCMSApiClient) {
     server.registerTool(
         "remove_user",
         {
-            description: "Remove a user from a FireCMS project, revoking their access",
+            description: "Remove a user from a FireCMS project, revoking their access. Admin-only.",
             inputSchema: {
                 projectId: z.string().describe("The Firebase project ID"),
                 userId: z.string().describe("The user ID to remove"),
             },
+            annotations: { destructiveHint: true },
         },
         async ({ projectId, userId }) => {
             try {
+                await api.assertAdmin(projectId);
                 const result = await api.deleteUser(projectId, userId);
                 return {
                     content: [{ type: "text" as const, text: `Removed user ${userId}\n\n${JSON.stringify(result, null, 2)}` }],
