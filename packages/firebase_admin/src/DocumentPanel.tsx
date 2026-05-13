@@ -142,6 +142,12 @@ export function DocumentPanel({
     
     const { values: editedValues, dirty: isDirty, setValues, resetForm } = formex;
 
+    // Keep a ref to the latest edited values so callbacks can read them
+    // without closing over a stale snapshot (avoids re-creating callbacks
+    // on every keystroke, which caused cursor-jump bugs in text inputs).
+    const editedValuesRef = useRef(editedValues);
+    editedValuesRef.current = editedValues;
+
     // Report dirty state changes to parent
     useEffect(() => {
         onDirtyChange?.(isDirty);
@@ -173,26 +179,26 @@ export function DocumentPanel({
     }, [activeTab, editedValues]);
 
     const handleFieldChange = useCallback((path: string[], value: any) => {
-        setValues(setIn(editedValues, path, value));
+        setValues(setIn(editedValuesRef.current, path, value));
         // Track only root-level field edits to avoid noise from nested map/array changes
         if (path.length === 1) {
             onAnalyticsEvent?.("field_edited", { projectId, documentPath: document.path, fieldKey: path[0] });
         }
-    }, [editedValues, setValues, onAnalyticsEvent, projectId, document.path]);
+    }, [setValues, onAnalyticsEvent, projectId, document.path]);
 
     const handleFieldDelete = useCallback((path: string[]) => {
-        setValues(deleteIn(editedValues, path));
+        setValues(deleteIn(editedValuesRef.current, path));
         if (path.length === 1) {
             onAnalyticsEvent?.("field_deleted", { projectId, documentPath: document.path, fieldKey: path[0] });
         }
-    }, [editedValues, setValues, onAnalyticsEvent, projectId, document.path]);
+    }, [setValues, onAnalyticsEvent, projectId, document.path]);
 
     const handleFieldAdd = useCallback((parentPath: string[], key: string, type: FieldType) => {
-        setValues(addIn(editedValues, parentPath, key, type));
+        setValues(addIn(editedValuesRef.current, parentPath, key, type));
         if (parentPath.length === 0) {
             onAnalyticsEvent?.("field_added", { projectId, documentPath: document.path, fieldKey: key, fieldType: type });
         }
-    }, [editedValues, setValues, onAnalyticsEvent, projectId, document.path]);
+    }, [setValues, onAnalyticsEvent, projectId, document.path]);
 
     const handleSaveFields = useCallback(async () => {
         setSaving(true);
