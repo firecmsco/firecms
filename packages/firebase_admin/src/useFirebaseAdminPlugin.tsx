@@ -1,8 +1,10 @@
-import React, { PropsWithChildren, useMemo } from "react";
-import { FireCMSContext, FireCMSPlugin } from "@firecms/core";
+import React, { PropsWithChildren, useCallback, useMemo } from "react";
+import { EntityCollection, FireCMSContext, FireCMSPlugin } from "@firecms/core";
 import { FirebaseApp } from "@firebase/app";
+import { FirestoreIcon } from "@firecms/ui";
 import { buildAdminApi } from "./api/admin_api";
 import { AdminApiProvider } from "./api/AdminApiProvider";
+import { RawDataView } from "./RawDataView";
 
 export type UseFirebaseAdminPluginProps = {
     /**
@@ -32,9 +34,10 @@ function AdminProviderComponent({
     children,
     adminApi,
     backendFirebaseApp,
-}: PropsWithChildren<{ context: FireCMSContext; adminApi: ReturnType<typeof buildAdminApi>; backendFirebaseApp?: FirebaseApp }>) {
+    projectId,
+}: PropsWithChildren<{ context: FireCMSContext; adminApi: ReturnType<typeof buildAdminApi>; backendFirebaseApp?: FirebaseApp; projectId?: string }>) {
     return (
-        <AdminApiProvider adminApi={adminApi} backendFirebaseApp={backendFirebaseApp}>
+        <AdminApiProvider adminApi={adminApi} backendFirebaseApp={backendFirebaseApp} projectId={projectId}>
             {children}
         </AdminApiProvider>
     );
@@ -44,6 +47,9 @@ function AdminProviderComponent({
  * Hook that builds a FireCMS plugin for the Firebase Admin panel.
  * Returns a plugin that adds admin views to the navigation.
  * Only active when the user is an admin.
+ *
+ * When admin, also injects a "Raw Data" tab into every entity view,
+ * showing the raw Firestore document fields exactly like the Firebase console.
  */
 export function useFirebaseAdminPlugin({
     isAdmin,
@@ -57,16 +63,38 @@ export function useFirebaseAdminPlugin({
         [backendApiHost, getBackendAuthToken]
     );
 
+    const modifyCollection = useCallback((collection: EntityCollection) => {
+        if (!isAdmin) return collection;
+
+        // Inject the raw data view tab for admin users
+        return {
+            ...collection,
+            entityViews: [
+                ...(collection.entityViews ?? []),
+                {
+                    key: "__raw_data",
+                    name: "Raw Data",
+                    tabComponent: <FirestoreIcon size={"small"} />,
+                    Builder: RawDataView,
+                    position: "start"
+                }
+            ],
+        } satisfies EntityCollection;
+    }, [isAdmin]);
+
     return useMemo(
         () => ({
             key: "firebase_admin",
             provider: isAdmin
                 ? {
                       Component: AdminProviderComponent,
-                      props: { adminApi, backendFirebaseApp },
+                      props: { adminApi, backendFirebaseApp, projectId },
                   }
                 : undefined,
+            collection: isAdmin
+                ? { modifyCollection }
+                : undefined,
         }),
-        [isAdmin, adminApi, backendFirebaseApp]
+        [isAdmin, adminApi, backendFirebaseApp, modifyCollection, projectId]
     );
 }

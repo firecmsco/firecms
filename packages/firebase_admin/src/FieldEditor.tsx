@@ -50,6 +50,23 @@ export const FIELD_TYPE_OPTIONS: { value: FieldType; label: string }[] = [
     { value: "reference", label: "Reference" },
 ];
 
+/** Firebase-console-style background colors for field type badges */
+const FIELD_TYPE_COLORS: Record<FieldType, string> = {
+    string:    "bg-blue-700 text-white dark:bg-blue-600",
+    number:    "bg-red-700 text-white dark:bg-red-600",
+    boolean:   "bg-emerald-700 text-white dark:bg-emerald-600",
+    null:      "bg-gray-600 text-white dark:bg-gray-500",
+    map:       "bg-violet-700 text-white dark:bg-violet-600",
+    array:     "bg-orange-700 text-white dark:bg-orange-600",
+    timestamp: "bg-teal-700 text-white dark:bg-teal-600",
+    geopoint:  "bg-pink-700 text-white dark:bg-pink-600",
+    reference: "bg-amber-700 text-white dark:bg-amber-600",
+};
+
+export function fieldTypeColorClass(type: FieldType): string {
+    return FIELD_TYPE_COLORS[type] ?? "bg-surface-600 text-white";
+}
+
 export function defaultValueForType(type: FieldType): any {
     switch (type) {
         case "string": return "";
@@ -489,7 +506,7 @@ const SortableArrayItem = React.memo(function SortableArrayItem({
                                 onChange(path, convertValue(value, newType as FieldType));
                             }
                         }}
-                        className="w-24 flex-shrink-0"
+                        className={cls("w-24 flex-shrink-0 rounded", fieldTypeColorClass(fieldTypeFromValue(value)))}
                     >
                         {FIELD_TYPE_OPTIONS.map(o => (
                             <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
@@ -666,7 +683,7 @@ const EditableFieldRow = React.memo(function EditableFieldRow({
                             onChange(path, convertValue(value, newType as FieldType));
                         }
                     }}
-                    className="w-24 flex-shrink-0"
+                    className={cls("w-24 flex-shrink-0 rounded", fieldTypeColorClass(fieldTypeFromValue(value)))}
                 >
                     {FIELD_TYPE_OPTIONS.map(o => (
                         <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
@@ -882,7 +899,7 @@ export function EditableFieldsView({
                         size="smallest"
                         value={newFieldType}
                         onValueChange={(v) => setNewFieldType(v as FieldType)}
-                        className="w-28"
+                        className={cls("w-28 rounded", fieldTypeColorClass(newFieldType))}
                     >
                         {FIELD_TYPE_OPTIONS.map(o => (
                             <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>

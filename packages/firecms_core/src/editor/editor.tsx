@@ -148,8 +148,26 @@ export const FireCMSEditor = ({
   });
 
   const doc = state?.doc;
+  const mountedRef = useRef(false);
+
+  // Enable flushing after the initial render cycle completes.
+  // ProseMirror initialization (including trailingNodePlugin and
+  // appendTransaction) runs synchronously during mount, so any doc
+  // change after the first effect cycle is from user interaction.
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      mountedRef.current = true;
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   useEffect(() => {
     if (!state) return;
+    // Skip flush until after mount — the round-trip through
+    // parse → ProseMirror → serialize is not idempotent and would
+    // produce subtly different markdown on init, making the form
+    // dirty without user interaction.
+    if (!mountedRef.current) return;
     const timeout = setTimeout(() => {
       flushChanges(state);
     }, 250);
@@ -160,6 +178,7 @@ export const FireCMSEditor = ({
     if (!view) return;
     const dom = view.dom;
     const handleBlur = () => {
+      if (!mountedRef.current) return;
       flushChanges(view.state);
     };
     dom.addEventListener("blur", handleBlur);
@@ -236,7 +255,7 @@ export const FireCMSEditor = ({
             onChange={handleMarkdownChange as any}
             onBlur={handleMarkdownBlur as any}
             className={cls(
-              "w-full h-full min-h-[300px] p-12 bg-transparent resize-none font-mono focus:ring-0",
+              "w-full min-h-[300px] p-12 bg-transparent resize-none font-mono focus:ring-0 focus:outline-none outline-none",
               proseClass
             )}
             style={{ 

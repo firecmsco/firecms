@@ -57,6 +57,10 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         const scrollH = el.scrollHeight;
 
         // Measure single-row height for minRows / maxRows
+        // Save cursor position — directly setting el.value resets it.
+        const selStart = el.selectionStart;
+        const selEnd = el.selectionEnd;
+
         const prevValue = el.value;
         el.value = "x";
         const singleRowScrollH = el.scrollHeight;
@@ -65,6 +69,12 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         // Restore immediately — all of this happens before paint (useLayoutEffect)
         el.style.height = prevHeight;
         el.style.overflowY = prevOverflow;
+
+        // Restore cursor position after value manipulation
+        if (document.activeElement === el) {
+            el.selectionStart = selStart;
+            el.selectionEnd = selEnd;
+        }
 
         const lineHeight = singleRowScrollH - paddingY;
 

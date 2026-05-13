@@ -6,6 +6,7 @@ import { AdminApi } from "./admin_api";
 interface AdminApiContextValue {
     adminApi: AdminApi;
     firestore?: Firestore;
+    projectId?: string;
 }
 
 const AdminApiContext = React.createContext<AdminApiContextValue | null>(null);
@@ -13,10 +14,12 @@ const AdminApiContext = React.createContext<AdminApiContextValue | null>(null);
 export function AdminApiProvider({
     adminApi,
     backendFirebaseApp,
+    projectId,
     children
 }: {
     adminApi: AdminApi;
     backendFirebaseApp?: FirebaseApp;
+    projectId?: string;
     children: React.ReactNode;
 }) {
     const firestore = useMemo(
@@ -25,8 +28,8 @@ export function AdminApiProvider({
     );
 
     const value = useMemo(
-        () => ({ adminApi, firestore }),
-        [adminApi, firestore]
+        () => ({ adminApi, firestore, projectId }),
+        [adminApi, firestore, projectId]
     );
 
     return (
@@ -42,6 +45,11 @@ export function useAdminApi(): AdminApi {
         throw new Error("useAdminApi must be used within an AdminApiProvider");
     }
     return ctx.adminApi;
+}
+
+export function useAdminProjectId(): string {
+    const ctx = useContext(AdminApiContext);
+    return ctx?.projectId ?? "";
 }
 
 /**

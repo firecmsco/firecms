@@ -49,6 +49,66 @@ const md = markdownIt({ html: false })
     .use(markdownItMark)
     .use(markdownItIns);
 
+// Override the escape rule so that `\` before a newline is kept as literal
+// text instead of being silently consumed as a hardbreak. The default
+// markdown-it behaviour strips the backslash and produces a <br>, which
+// causes users to lose visible `\` characters in their content.
+md.inline.ruler.at("escape", function escapeOverride(state: any, silent: boolean): boolean {
+    let pos = state.pos;
+    const max = state.posMax;
+
+    if (state.src.charCodeAt(pos) !== 0x5C /* \ */) return false;
+    pos++;
+
+    if (pos >= max) return false;
+
+    const ch1 = state.src.charCodeAt(pos);
+
+    // KEY CHANGE: when `\` is followed by a newline, output the backslash as
+    // literal text and let the normal softbreak handling deal with the newline.
+    if (ch1 === 0x0A) {
+        if (!silent) {
+            state.pending += "\\";
+        }
+        state.pos = pos; // leave the newline for softbreak to handle
+        return true;
+    }
+
+    // For escaped ASCII punctuation, output the character without the backslash
+    // (standard markdown escape behaviour: `\*` → `*`).
+    let escapedStr = state.src[pos];
+    // Handle surrogate pairs
+    if (ch1 >= 0xD800 && ch1 <= 0xDBFF && pos + 1 < max) {
+        const ch2 = state.src.charCodeAt(pos + 1);
+        if (ch2 >= 0xDC00 && ch2 <= 0xDFFF) {
+            escapedStr += state.src[pos + 1];
+            pos++;
+        }
+    }
+
+    const origStr = "\\" + escapedStr;
+
+    if (!silent) {
+        // Check if the character is an ASCII punctuation that
+        // markdown-it considers escapable (codes < 256 in its lookup table).
+        const isEscapable = ch1 < 256 && /[\\!"#$%&'()*+,./:;<=>?@[\]^_`{|}~-]/.test(String.fromCharCode(ch1));
+        const token = state.push("text_special", "", 0);
+        if (isEscapable) {
+            token.content = escapedStr;
+        } else {
+            token.content = origStr;
+        }
+        token.markup = origStr;
+        token.info = "escape";
+    }
+    state.pos = pos + 1;
+    return true;
+});
+
+// Also disable the newline rule which redundantly converts `\` + newline
+// to hardbreaks via a separate code path.
+md.inline.ruler.disable(["newline"]);
+
 // Unwrap images from paragraphs so they can be parsed as block nodes by ProseMirror
 md.core.ruler.after("inline", "image-to-block", (state: any) => {
     const tokens = state.tokens;
@@ -145,7 +205,35 @@ export const markdownSerializer = new MarkdownSerializer(
         },
         table_row() {},
         table_cell() {},
-        table_header() {}
+        table_header() {},
+        // Custom text serializer: since our parser override keeps `\` as
+        // literal text (instead of consuming it), we must avoid the default
+        // esc() from double-escaping it. We escape all standard markdown
+        // specials *except* the backslash itself.
+        text(state: any, node: any) {
+            const escaped = node.text.replace(/[`*~\[\]_]/g, (m: string, i: number) => {
+                // Don't escape mid-word underscores (same logic as default esc)
+                if (m === "_" && i > 0 && i + 1 < node.text.length
+                    && /\w/.test(node.text[i - 1]) && /\w/.test(node.text[i + 1])) {
+                    return m;
+                }
+                return "\\" + m;
+            });
+            // Handle start-of-line patterns that could be parsed as block syntax
+            const lines = escaped.split("\n");
+            for (let i = 0; i < lines.length; i++) {
+                state.write();
+                let line = lines[i];
+                if (state.atBlockStart || i > 0) {
+                    line = line
+                        .replace(/^(\+[ ]|[-*>])/, "\\$&")
+                        .replace(/^(\s*)(#{1,6})(\s|$)/, '$1\\$2$3')
+                        .replace(/^(\s*\d+)\.\s/, "$1\\. ");
+                }
+                state.out += line;
+                if (i !== lines.length - 1) state.out += "\n";
+            }
+        }
     },
     {
         ...defaultMarkdownSerializer.marks,
