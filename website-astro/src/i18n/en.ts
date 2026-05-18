@@ -172,14 +172,17 @@ export const en = {
   'showcase.item1.title': 'Data Editing',
   'showcase.item1.desc': 'Manage your collections with an intuitive spreadsheet-like interface. Edit entries inline, sort and filter data in real-time, use collection groups, and create beautiful structured content with our powerful Notion-style editor.',
 
-  'showcase.item2.title': 'DataTalk: AI Search',
-  'showcase.item2.desc': '<b>Search and talk</b> to your data using <b>ChatGPT-style</b> natural language. Instantly filter collections, generate complex queries, or perform batch updates with simple commands.',
+  'showcase.item2.title': 'Firestore Admin View',
+  'showcase.item2.desc': 'Experience the new Firestore document editor, built directly into FireCMS. Select documents to edit their raw data.',
 
-  'showcase.item3.title': 'Schema Builder',
-  'showcase.item3.desc': 'Design your data models visually with our powerful schema editor, or let FireCMS automatically infer schemas from your existing data. Choose from 20+ field types with advanced validation.',
+  'showcase.item3.title': 'DataTalk: AI Search',
+  'showcase.item3.desc': '<b>Search and talk</b> to your data using <b>ChatGPT-style</b> natural language. Instantly filter collections, generate complex queries, or perform batch updates with simple commands.',
 
-  'showcase.item4.title': 'Easy Integration',
-  'showcase.item4.desc': 'Get started in minutes with FireCMS Cloud or self-host our open-source framework with full TypeScript support.',
+  'showcase.item4.title': 'Schema Builder',
+  'showcase.item4.desc': 'Design your data models visually with our powerful schema editor, or let FireCMS automatically infer schemas from your existing data. Choose from 20+ field types with advanced validation.',
+
+  'showcase.item5.title': 'Easy Integration',
+  'showcase.item5.desc': 'Get started in minutes with FireCMS Cloud or self-host our open-source framework with full TypeScript support.',
 
   'showcase.integration.npm.title': 'Simple NPM Install',
   'showcase.integration.npm.desc': 'Add FireCMS to your project with a single command',

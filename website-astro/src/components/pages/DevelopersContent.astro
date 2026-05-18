@@ -3,6 +3,7 @@ import { CodeBlock } from "../CodeBlock";
 import { DataTalkDemo } from "../DataTalkDemo";
 import ClientLogos from "../ClientLogos.astro";
 import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
+import FirestoreAdminDemo from "../FirestoreAdminDemo";
 import ClientUIComponentsTeaser from "../ClientUIComponentsTeaser.tsx";
 
 import { FireCMSEditorDemo } from "../FireCMSEditorDemo";
@@ -187,6 +188,18 @@ validation: {
                     <div class="mt-8 lg:mt-0 self-start lg:col-span-4">
                         <h3 class="text-xl font-semibold text-white">{t('developers.react.title')}</h3>
                         <p class="mt-4 text-lg text-surface-400" set:html={t('developers.react.desc')}></p>
+                    </div>
+                </div>
+
+                <div class="mt-16 sm:mt-36 lg:grid lg:grid-cols-12 gap-12 items-center">
+                    <div class="relative w-full rounded-2xl overflow-hidden ring-1 ring-surface-800 lg:col-span-8">
+                        <FirestoreAdminDemo client:only="react" />
+                    </div>
+                    <div class="mt-8 lg:mt-0 self-start lg:col-span-4">
+                        <h3 class="text-xl font-semibold text-white">Next-Generation Data Grid</h3>
+                        <p class="mt-4 text-lg text-surface-400">
+                            Experience our high-performance admin grid. Designed specifically for developers, it offers spreadsheet-like inline editing, real-time sync, and effortless document management. Built to handle massive collections without breaking a sweat.
+                        </p>
                     </div>
                 </div>
 
