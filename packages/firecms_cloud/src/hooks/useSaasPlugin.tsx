@@ -7,7 +7,7 @@ import { TextSearchInfoDialog } from "../components/subscriptions/TextSearchInfo
 import { FireCMSAppConfig, FireCMSBackend } from "../types";
 import { RootCollectionSuggestions } from "../components/RootCollectionSuggestions";
 import { PermissionErrorView } from "../components/PermissionErrorView";
-import { DataTalkSuggestions } from "../components/DataTalkSuggestions";
+
 import { AutoSetUpCollectionsButton } from "../components/AutoSetUpCollectionsButton";
 import { EnableEntityHistoryView } from "../components/EnableEntityHistoryView";
 import { CollectionsSetupLoadingLabel } from "../components/CollectionsSetupLoadingLabel";
@@ -47,8 +47,6 @@ export function useSaasPlugin({
     </>;
 
     const additionalChildrenEnd = <>
-        <DataTalkSuggestions
-            onAnalyticsEvent={onAnalyticsEvent} />
         <RootCollectionSuggestions introMode={introMode}
             onAnalyticsEvent={onAnalyticsEvent}
             rootPathSuggestions={rootPathSuggestions}

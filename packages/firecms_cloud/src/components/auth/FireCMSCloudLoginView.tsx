@@ -99,23 +99,6 @@ export function FireCMSCloudLoginView({
     if (includeGoogleAdminScopes) {
         return (
             <div className="inset-0 flex items-center justify-center p-8 m-0 relative" style={fadeStyle}>
-                
-                <div className="absolute top-4 right-4 flex gap-2">
-                    <Menu
-                        trigger={<IconButton
-                            color="inherit"
-                            aria-label="Toggle mode">
-                            {mode === "dark"
-                                ? <DarkModeIcon size="small" />
-                                : <LightModeIcon size="small" />}
-                        </IconButton>}>
-                        <MenuItem onClick={() => setMode("dark")}><DarkModeIcon size={"smallest"} /> {t("dark_mode")}</MenuItem>
-                        <MenuItem onClick={() => setMode("light")}><LightModeIcon size={"smallest"} /> {t("light_mode")}</MenuItem>
-                        <MenuItem onClick={() => setMode("system")}> <BrightnessMediumIcon
-                            size={"smallest"} />{t("system_mode")}</MenuItem>
-                    </Menu>
-                    <LanguageToggle />
-                </div>
 
                 <div className="w-full max-w-md flex flex-col items-center">
                     {includeLogo && (
