@@ -2,8 +2,9 @@ import { CMSType, EntityCollection, NavigationGroupMapping, Property } from "@fi
 import { PersistedCollection } from "./persisted_collection";
 
 export interface CollectionsSetupInfo {
-    status: "ongoing" | "complete" | "error";
+    status: "ongoing" | "complete" | "error" | "dismissed";
     error: string | null;
+    updated_at?: { toDate: () => Date } | Date;
 }
 
 /**
@@ -21,6 +22,12 @@ export interface CollectionsConfigController {
      * Stored in the project config document at `collectionsSetup`.
      */
     collectionsSetup?: CollectionsSetupInfo;
+
+    /**
+     * Clear the collectionsSetup status from the project config.
+     * Used to dismiss error messages.
+     */
+    clearCollectionsSetup?: () => Promise<void>;
 
     getCollection: (id: string) => PersistedCollection;
 

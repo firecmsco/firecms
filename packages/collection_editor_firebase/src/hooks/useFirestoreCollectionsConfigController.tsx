@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import { FirebaseApp } from "@firebase/app";
-import { collection, deleteDoc, doc, getFirestore, onSnapshot, runTransaction } from "@firebase/firestore";
+import { collection, deleteDoc, doc, getFirestore, onSnapshot, runTransaction, serverTimestamp } from "@firebase/firestore";
 import {
     CollectionsConfigController,
     CollectionsSetupInfo,
@@ -136,7 +136,7 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
                 setNavigationEntries([]);
             }
 
-            if (data?.collectionsSetup) {
+            if (data?.collectionsSetup && data.collectionsSetup.status !== "dismissed") {
                 setCollectionsSetup(data.collectionsSetup as CollectionsSetupInfo);
             } else {
                 setCollectionsSetup(undefined);
@@ -429,6 +429,24 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         });
     }, [collectionsConfigPath, firebaseApp]);
 
+    const clearCollectionsSetup = useCallback((): Promise<void> => {
+        if (!firebaseApp || !generalConfigPath) {
+            return Promise.resolve();
+        }
+        const firestore = getFirestore(firebaseApp);
+        const ref = doc(firestore, generalConfigPath);
+        return runTransaction(firestore, async (transaction) => {
+            transaction.set(ref, {
+                collectionsSetup: {
+                    status: "dismissed",
+                    dismissed_at: serverTimestamp()
+                }
+            }, { merge: true });
+        }).then(() => {
+            setCollectionsSetup(undefined);
+        });
+    }, [generalConfigPath, firebaseApp]);
+
     return {
         loading: collectionsLoading || configLoading,
         collections,
@@ -442,7 +460,8 @@ export function useFirestoreCollectionsConfigController<EC extends PersistedColl
         updateKanbanColumnsOrder,
         navigationEntries,
         saveNavigationEntries,
-        collectionsSetup
+        collectionsSetup,
+        clearCollectionsSetup
     }
 }
 
