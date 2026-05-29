@@ -3,6 +3,7 @@ import { useSnackbarController } from "@firecms/core";
 import { BuildIcon, Button, LoadingButton, Typography } from "@firecms/ui";
 import { FireCMSBackend } from "../types";
 import { useFireCMSBackend } from "../hooks";
+import { useNavigate } from "react-router-dom";
 
 export type CloudError = {
     code?: string,
@@ -18,13 +19,16 @@ export function CloudErrorView({
                                    error,
                                    fireCMSBackend,
                                    onFixed,
-                                   onRetry
-                               }: {
+                                   onRetry,
+                                   allowServiceAccountBypass = false
+                                }: {
     error: CloudError,
     fireCMSBackend?: FireCMSBackend,
     onFixed?: () => void,
     onRetry?: () => void,
+    allowServiceAccountBypass?: boolean;
 }) {
+    const navigate = useNavigate();
     const {
         code,
         message,
@@ -66,6 +70,49 @@ export function CloudErrorView({
         </div>;
     } else if (code === "service-account-missing-permissions") {
         return <ServiceAccountMissingPermissions missingPermissions={error.data?.missingPermissions}/>;
+    }
+
+
+    const isPermissionError =
+        (code === "permission-denied" ||
+        code === "permission_denied" ||
+        (message && message.toLowerCase().includes("permission")) ||
+        (message && message.toLowerCase().includes("caller does not have"))) && allowServiceAccountBypass;
+    if (isPermissionError) {
+        return (
+            <div className="flex flex-col space-y-4 p-6 border border-surface-200 dark:border-surface-700 rounded-xl bg-surface-50 dark:bg-surface-900">
+                <Typography variant="h6" className="text-red-600 dark:text-red-400">
+                    Google Cloud Permission Error
+                </Typography>
+                <Typography variant="body2" color="secondary">
+                    {message}
+                </Typography>
+                <Typography variant="body2" color="secondary">
+                    This error usually occurs because your Google Cloud account does not have sufficient permissions (like Owner or IAM Admin roles) to enable services or automatically generate a service account.
+                </Typography>
+                <Typography variant="body2" className="font-semibold text-surface-900 dark:text-white">
+                    💡 Recovery Option: You can bypass Google OAuth permissions entirely by using a Firebase Service Account JSON key.
+                </Typography>
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                    <Button
+                        variant="filled"
+                        onClick={() => {
+                            navigate("/new/sa");
+                        }}
+                    >
+                        Connect via Service Account Key
+                    </Button>
+                    {onRetry && (
+                        <Button
+                            variant="text"
+                            onClick={() => onRetry()}
+                        >
+                            Retry Setup
+                        </Button>
+                    )}
+                </div>
+            </div>
+        );
     }
 
     return (<div className="flex flex-col space-y-2">
