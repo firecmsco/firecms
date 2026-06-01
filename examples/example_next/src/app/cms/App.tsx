@@ -11,6 +11,7 @@ import {
     CMSView,
     Drawer,
     FireCMS,
+    FireCMSi18nProvider,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
@@ -207,70 +208,72 @@ export function App() {
     }
 
     return (
-        <SnackbarProvider>
-            <ModeControllerProvider value={modeController}>
+        <FireCMSi18nProvider>
+            <SnackbarProvider>
+                <ModeControllerProvider value={modeController}>
 
-                <FireCMS
-                    navigationController={navigationController}
-                    authController={userManagement}
-                    userConfigPersistence={userConfigPersistence}
-                    dataSourceDelegate={firestoreDelegate}
-                    storageSource={storageSource}
-                    plugins={[
-                        dataEnhancementPlugin,
-                        importPlugin,
-                        exportPlugin,
-                        userManagementPlugin
-                    ]}
-                >
-                    {({
-                          context,
-                          loading
-                      }) => {
+                    <FireCMS
+                        navigationController={navigationController}
+                        authController={userManagement}
+                        userConfigPersistence={userConfigPersistence}
+                        dataSourceDelegate={firestoreDelegate}
+                        storageSource={storageSource}
+                        plugins={[
+                            dataEnhancementPlugin,
+                            importPlugin,
+                            exportPlugin,
+                            userManagementPlugin
+                        ]}
+                    >
+                        {({
+                              context,
+                              loading
+                          }) => {
 
-                        let component;
-                        if (loading || authLoading) {
-                            component = <CircularProgressCenter size={"large"}/>;
-                        } else {
-                            if (!canAccessMainView) {
-                                component = (
-                                    <div
-                                        className={"bg-white dark:bg-surface-900 rounded-2xl max-w-[500px] w-full h-fit"}>
-                                        <CustomLoginView
-                                            logo={logo.src}
-                                            allowSkipLogin={false}
-                                            signInOptions={signInOptions}
-                                            firebaseApp={firebaseApp}
-                                            authController={userManagement}
-                                            notAllowedError={notAllowedError}/>
-                                    </div>
-
-                                );
+                            let component;
+                            if (loading || authLoading) {
+                                component = <CircularProgressCenter size={"large"}/>;
                             } else {
-                                component = (
-                                    <Scaffold
-                                        logo={logo.src}
-                                        autoOpenDrawer={false}>
-                                        <AppBar title={title}
-                                                endAdornment={<Link href={"/products"} target={"_blank"}>
-                                                    <Button variant={"text"}>
-                                                        <OpenInNewIcon/>
-                                                        Go to website
-                                                    </Button>
-                                                </Link>}
-                                        />
-                                        <Drawer/>
-                                        <NavigationRoutes/>
-                                        <SideDialogs/>
-                                    </Scaffold>
-                                );
-                            }
-                        }
+                                if (!canAccessMainView) {
+                                    component = (
+                                        <div
+                                            className={"bg-white dark:bg-surface-900 rounded-2xl max-w-[500px] w-full h-fit"}>
+                                            <CustomLoginView
+                                                logo={logo.src}
+                                                allowSkipLogin={false}
+                                                signInOptions={signInOptions}
+                                                firebaseApp={firebaseApp}
+                                                authController={userManagement}
+                                                notAllowedError={notAllowedError}/>
+                                        </div>
 
-                        return component;
-                    }}
-                </FireCMS>
-            </ModeControllerProvider>
-        </SnackbarProvider>
+                                    );
+                                } else {
+                                    component = (
+                                        <Scaffold
+                                            logo={logo.src}
+                                            autoOpenDrawer={false}>
+                                            <AppBar title={title}
+                                                    endAdornment={<Link href={"/products"} target={"_blank"}>
+                                                        <Button variant={"text"}>
+                                                            <OpenInNewIcon/>
+                                                            Go to website
+                                                        </Button>
+                                                    </Link>}
+                                            />
+                                            <Drawer/>
+                                            <NavigationRoutes/>
+                                            <SideDialogs/>
+                                        </Scaffold>
+                                    );
+                                }
+                            }
+
+                            return component;
+                        }}
+                    </FireCMS>
+                </ModeControllerProvider>
+            </SnackbarProvider>
+        </FireCMSi18nProvider>
     );
 }

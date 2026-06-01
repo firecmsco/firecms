@@ -32,8 +32,11 @@ import {
 import { firebaseConfig } from "./firebase_config";
 import { productsCollection } from "./collections/products";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-import { useEntityHistoryPlugin } from "@firecms/entity_history";
-import { useBuildUserManagement, userManagementAdminViews, useUserManagementPlugin } from "@firecms/user_management";
+import {
+    useBuildUserManagement,
+    userManagementAdminViews,
+    useUserManagementPlugin
+} from "@firecms/user_management";
 import { useImportPlugin } from "@firecms/data_import";
 import { useExportPlugin } from "@firecms/data_export";
 import { ExampleCMSView } from "./views/ExampleCMSView";
@@ -110,10 +113,11 @@ export function App() {
         firebaseApp
     });
 
+
     /**
      * Controller for managing authentication
      */
-    const authController: FirebaseAuthController = useFirebaseAuthController({
+    const firebaseAuthController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions,
     });
@@ -121,8 +125,8 @@ export function App() {
     /**
      * Controller in charge of user management
      */
-    const userManagement = useBuildUserManagement({
-        authController,
+    const userManagementController = useBuildUserManagement({
+        authController: firebaseAuthController,
         dataSourceDelegate: firestoreDelegate
     });
 
@@ -139,11 +143,20 @@ export function App() {
         canAccessMainView,
         notAllowedError
     } = useValidateAuthenticator({
-        authController,
-        disabled: userManagement.loading,
-        authenticator: userManagement.authenticator, // you can define your own authenticator here
+        authController: userManagementController,
+        disabled: userManagementController.loading,
+        authenticator: userManagementController.authenticator, // you can define your own authenticator here
         dataSourceDelegate: firestoreDelegate,
         storageSource
+    });
+
+    const navigationController = useBuildNavigationController({
+        collections: collectionsBuilder,
+        collectionPermissions: userManagementController.collectionPermissions,
+        views,
+        adminViews: userManagementAdminViews,
+        authController: userManagementController,
+        dataSourceDelegate: firestoreDelegate
     });
 
     /**
@@ -158,17 +171,9 @@ export function App() {
     });
 
     /**
-     * Entity history plugin. This plugin allows you to see the history of changes made to an entity.
-     * It is enabled by default for all collections, but you can disable it for specific collections
-     */
-    const entityHistoryPlugin = useEntityHistoryPlugin({
-        defaultEnabled: true,
-    });
-
-    /**
      * User management plugin
      */
-    const userManagementPlugin = useUserManagementPlugin({ userManagement });
+    const userManagementPlugin = useUserManagementPlugin({ userManagement: userManagementController });
 
     /**
      * Allow import and export data plugin
@@ -181,26 +186,6 @@ export function App() {
         collectionInference: buildCollectionInference(firebaseApp),
     });
 
-    const plugins = [
-        dataEnhancementPlugin,
-        entityHistoryPlugin,
-        importPlugin,
-        exportPlugin,
-        userManagementPlugin,
-        collectionEditorPlugin
-    ];
-
-    const navigationController = useBuildNavigationController({
-        disabled: authLoading || collectionConfigController.loading,
-        collections: collectionsBuilder,
-        collectionPermissions: userManagement.collectionPermissions,
-        views,
-        adminViews: userManagementAdminViews,
-        authController,
-        dataSourceDelegate: firestoreDelegate,
-        plugins
-    });
-
     if (firebaseConfigLoading || !firebaseApp) {
         return <CircularProgressCenter/>;
     }
@@ -208,6 +193,7 @@ export function App() {
     if (configError) {
         return <>{configError}</>;
     }
+
 
     return (
         <FireCMSi18nProvider>
@@ -217,10 +203,17 @@ export function App() {
                 <FireCMS
                     apiKey={import.meta.env.VITE_FIRECMS_API_KEY}
                     navigationController={navigationController}
-                    authController={authController}
+                    authController={userManagementController}
                     userConfigPersistence={userConfigPersistence}
                     dataSourceDelegate={firestoreDelegate}
                     storageSource={storageSource}
+                    plugins={[
+                        dataEnhancementPlugin,
+                        importPlugin,
+                        exportPlugin,
+                        userManagementPlugin,
+                        collectionEditorPlugin
+                    ]}
                 >
                     {({
                           context,
@@ -237,7 +230,7 @@ export function App() {
                                         allowSkipLogin={false}
                                         signInOptions={signInOptions}
                                         firebaseApp={firebaseApp}
-                                        authController={authController}
+                                        authController={userManagementController}
                                         notAllowedError={notAllowedError}/>
                                 );
                             } else {

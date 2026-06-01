@@ -9,9 +9,9 @@
 @source "../node_modules/@firecms/**/*.{js,ts,jsx,tsx}";
 
 
-:root {
-    --color-primary: #0070F4;
-    --color-secondary: #FF5B79;
+@theme {
+    --color-primary: #0070f4;
+    --color-secondary: #ff5b79;
 }
 
 body {
@@ -19,5 +19,5 @@ body {
 }
 
 a {
-    @apply text-primary dark:text-primary
+    @apply text-primary dark:text-primary;
 }

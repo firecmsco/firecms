@@ -1,9 +1,2 @@
-// TODO: Replace with your config
-export const firebaseConfig = {
-    apiKey: "",
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: ""
-};
+export const firebaseConfig: Record<string, string> = {
+}
