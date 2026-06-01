@@ -1,7 +1,9 @@
 ---
 import SectionBackgroundAccents from "../SectionBackgroundAccents.astro";
+import { useTranslatedPath } from "../../i18n/utils";
 
 const { lang, t } = Astro.props;
+const tp = useTranslatedPath(lang as any);
 ---
 <main>
         {/* Hero Section */}
@@ -117,7 +119,7 @@ const { lang, t } = Astro.props;
                             <div class="bg-surface-900 rounded-lg p-3 font-mono text-sm text-surface-300 ring-1 ring-surface-700/50 mb-4">
                                 npx create-firecms-app
                             </div>
-                            <a href="/developers" aria-describedby="tier-community"
+                            <a href={tp("/developers")} aria-describedby="tier-community"
                                class="block rounded-md border border-surface-700 bg-transparent px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-surface-800 focus-visible:outline-surface-700 transition-colors duration-200">
                                 {t('pricing.community.cta')}
                             </a>
@@ -291,7 +293,7 @@ const { lang, t } = Astro.props;
                                 {t('pricing.pro.f8')}
                             </li>
                         </ul>
-                        <a href="/pro" aria-describedby="tier-pro"
+                        <a href={tp("/docs/pro/licensing")} aria-describedby="tier-pro"
                            data-track
                            id="pricing-pro-license"
                            class="mt-8 block rounded-md bg-white/10 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline-white transition-colors duration-200 flex-grow flex flex-col justify-end"> {/* Use flex-grow and justify-end */}
@@ -308,7 +310,7 @@ const { lang, t } = Astro.props;
                             <h3 class="text-2xl font-semibold leading-7 text-white">{t('pricing.enterprise.title')}</h3>
                             <p class="mt-2 text-base leading-7 text-surface-300">{t('pricing.enterprise.desc')}</p>
                         </div>
-                        <a href="/contact"
+                        <a href={tp("/contact")}
                            data-track
                            id="pricing-contact-sales"
                            class="flex-shrink-0 rounded-md border border-surface-700 bg-surface-900/50 px-6 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-surface-800 focus-visible:outline-surface-700 transition-colors duration-200">
@@ -318,7 +320,7 @@ const { lang, t } = Astro.props;
                 </div>
 
                 <div class="mt-16 text-center">
-                    <a href="/compare"
+                    <a href={tp("/compare")}
                        class="text-base font-semibold leading-6 text-primary-light hover:text-primary transition-colors">
                         {t('pricing.compare')}
                     </a>
@@ -345,7 +347,7 @@ const { lang, t } = Astro.props;
                     </figure>
                 </div>
                 <div class="mt-16 text-center">
-                    <a href="/why-firecms"
+                    <a href={tp("/why-firecms")}
                        class="text-base font-semibold leading-6 text-primary-light hover:text-primary transition-colors">
                         {t('pricing.why')} <span aria-hidden="true">→</span>
                     </a>
