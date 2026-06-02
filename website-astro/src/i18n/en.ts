@@ -698,4 +698,12 @@ export const en = {
   'cookie.desc.2': 'our use of cookies.',
   'cookie.decline': 'Decline',
   'cookie.accept': 'Accept',
+
+  'seo.pro.title': 'FireCMS PRO - Premium Self-Hosted Firestore CMS & Admin Panel',
+  'seo.pro.description': 'Unlock premium self-hosted features: Collection Editor, user management, advanced import/export, Next.js integration, and full control over your infrastructure with FireCMS PRO.',
+  'pro.hero.badge': 'Enterprise-grade self-hosted CMS',
+  'pro.hero.title': 'Unlock the Full Power of FireCMS Self-Hosted',
+  'pro.hero.subtitle': 'Deploy a white-labeled, premium visual editor and administration panel directly in your own infrastructure. Ultimate speed, absolute data ownership.',
+  'pro.hero.cta.buy': 'Buy License Now',
+  'pro.hero.cta.docs': 'Read PRO Docs',
 };

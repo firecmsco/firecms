@@ -20,5 +20,10 @@ export function Header() {
             <HeaderLink href="/products">Products</HeaderLink>
             <HeaderLink href="/blog">Blog</HeaderLink>
         </div>
+        <div className={"flex flex-row items-center pr-4"}>
+            <Link href="/cms" className="bg-primary hover:bg-primary/90 text-white text-xs font-semibold px-4 py-2 rounded transition duration-200 uppercase">
+                Go to CMS
+            </Link>
+        </div>
     </header>
 }

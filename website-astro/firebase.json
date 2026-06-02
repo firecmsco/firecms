@@ -9,11 +9,6 @@
     ],
     "redirects": [
       {
-        "source": "/pro",
-        "destination": "/pricing",
-        "type": 301
-      },
-      {
         "source": "/f/backend_extension",
         "destination": "/features",
         "type": 301

@@ -1,0 +1,35 @@
+#!/usr/bin/expect -f
+
+set folder [lindex $argv 0]
+set flag [lindex $argv 1]
+
+set timeout 60
+
+spawn firecms init $folder $flag --projectId=firecms-demo-27150
+
+expect {
+    "Do you want to log in?" {
+        send "n\r"
+        expect "Please enter your Firebase project ID"
+        send "firecms-demo-27150\r"
+    }
+    "Select your project" {
+        send "\r"
+        expect "Please enter your Firebase project ID"
+        send "firecms-demo-27150\r"
+    }
+}
+
+expect "Please choose which folder to create the project in"
+send "$folder\r"
+
+set timeout 5
+expect {
+    "Initialize a git repository?" {
+        send "n\r"
+    }
+    timeout {}
+}
+
+set timeout 60
+expect eof

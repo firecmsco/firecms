@@ -1,7 +1,7 @@
 {
   "name": "@firecms/formex",
   "type": "module",
-  "version": "3.1.0",
+  "version": "3.3.0",
   "publishConfig": {
     "access": "public"
   },
@@ -75,5 +75,10 @@
       "node"
     ]
   },
-  "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae"
+  "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FireCMSco/firecms.git",
+    "directory": "packages/formex"
+  }
 }

@@ -3,6 +3,9 @@ import { deploy } from "./commands/deploy";
 import { getCurrentUser, login, logout } from "./commands/auth";
 import arg from "arg";
 import { createFireCMSApp } from "./commands/init";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 export async function entry(args) {
 
@@ -21,11 +24,25 @@ export async function entry(args) {
         await logoutArgs(args);
     } else if (command === "deploy") {
         await deployArgs(args);
+    } else if (command === "version" || command === "-v" || command === "--version") {
+        printVersion();
     } else {
         if (command)
             console.log("Unknown command", command)
         printHelp();
         return;
+    }
+}
+
+function printVersion() {
+    try {
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        const packageJsonPath = path.resolve(__dirname, "../package.json");
+        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+        console.log(packageJson.version);
+    } catch (e) {
+        console.error("Error reading version", e);
     }
 }
 
@@ -116,6 +133,7 @@ ${chalk.blue.bold("login")} - Login to FireCMS
 ${chalk.blue.bold("logout")} - Sign out
 ${chalk.blue.bold("init")} - Create a new CMS project
 ${chalk.blue.bold("deploy")} - Deploy an existing CMS project
+${chalk.blue.bold("version")} - Show version info
 `);
     const currentCredentials = await getCurrentUser(env, debug);
     if (currentCredentials) {

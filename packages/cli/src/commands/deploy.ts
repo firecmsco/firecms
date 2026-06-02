@@ -4,7 +4,7 @@ import * as path from "path";
 import fs from "fs";
 import axios from "axios";
 import { exec } from "child_process";
-import zipFolder from "zip-folder";
+import archiver from "archiver";
 import { getCurrentUser, getTokens, refreshCredentials } from "./auth";
 import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import ora from "ora";
@@ -38,14 +38,15 @@ export async function createZipFromBuild(): Promise<string> {
     return new Promise((resolve, reject) => {
         const tmpdir = os.tmpdir();
         const destFile = path.join(tmpdir, `firecms_build.zip`);
-        // const destFile = path.join(tmpdir, `${crypto.randomUUID()}.zip`);
-        zipFolder("./dist/assets", destFile, function (err) {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(destFile);
-            }
-        });
+        const output = fs.createWriteStream(destFile);
+        const archive = archiver("zip", { zlib: { level: 6 } });
+
+        output.on("close", () => resolve(destFile));
+        archive.on("error", (err) => reject(err));
+        archive.pipe(output);
+
+        archive.directory("./dist/assets", false);
+        archive.finalize();
     })
 }
 
@@ -74,15 +75,6 @@ const SOURCE_ZIP_EXCLUDES = new Set([
 export async function createSourceZip(): Promise<string | null> {
     const projectRoot = process.cwd();
     const destFile = path.join(os.tmpdir(), "firecms_source.zip");
-
-    // Use dynamic import for the zip-folder's underlying archiver
-    // We'll build a zip manually using Node streams + the 'archiver' pattern
-    // from zip-folder, but with exclusion support.
-    const archiver = await importArchiver();
-    if (!archiver) {
-        // Fallback: skip source zip if archiver not available
-        return null;
-    }
 
     return new Promise<string>((resolve, reject) => {
         const output = createWriteStream(destFile);
@@ -115,15 +107,6 @@ function addDirectoryToArchive(archive: any, basePath: string, relativePath: str
         } else if (entry.isFile()) {
             archive.file(path.join(basePath, entryRelative), { name: entryRelative });
         }
-    }
-}
-
-async function importArchiver(): Promise<any> {
-    try {
-        const mod = await import("archiver");
-        return mod.default ?? mod;
-    } catch {
-        return null;
     }
 }
 

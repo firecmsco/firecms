@@ -1,3 +1,10 @@
+## [3.3.0] - 2026-06-02
+
+- **MongoDB Package Decommissioning**:
+  - Removed the `@firecms/mongodb` package and references due to MongoDB's deprecation of the Atlas Device SDK / App Services / `realm-web` platform.
+- **Dependency Cleanups**:
+  - Removed the deprecated `@types/eslint__js` stub type dependency.
+
 ## [3.2.0] - 2026-03-31
 
 - **Editor Rewrite**:

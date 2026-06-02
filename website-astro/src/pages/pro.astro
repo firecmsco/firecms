@@ -1,0 +1,23 @@
+---
+// src/pages/pro.astro
+import Layout from "../layouts/Layout.astro";
+import ProContent from "../components/pages/ProContent.astro";
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const breadcrumbs = [
+    { name: "Home", url: "https://firecms.co" },
+    { name: "PRO", url: "https://firecms.co/pro" }
+];
+---
+
+<Layout
+        title={t('seo.pro.title')}
+        description={t('seo.pro.description')}
+        breadcrumbs={breadcrumbs}
+        lang={lang}
+>
+    <ProContent lang={lang} t={t} />
+</Layout>

@@ -5,7 +5,7 @@
   "author": "FireCMS",
   "repository": {
     "type": "git",
-    "url": "https://github.com/firecmsco/firecms.git"
+    "url": "https://github.com/FireCMSco/firecms.git"
   },
   "homepage": "https://firecms.co",
   "workspaces": [
@@ -17,7 +17,6 @@
     "packages/ui",
     "packages/datatalk",
     "packages/create_firecms_app",
-    "packages/mongodb",
     "packages/firebase_firecms",
     "packages/collection_editor",
     "packages/collection_editor_firebase",
@@ -62,7 +61,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
-    "@types/eslint__js": "^9.14.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.44.0",
@@ -83,6 +81,5 @@
   "dependencies": {
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
-  },
-  "packageManager": "yarn@3.8.0+sha512.e1261f49ba7bb7f2f33aae452e5234e4a95c738f2aece917152019950ef64e52b542f3e503ffa0f0b3cf41b3d185ac1d7721dc501908e7c6cfa67ba06a082745"
+  }
 }

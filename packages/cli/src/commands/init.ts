@@ -375,6 +375,7 @@ export async function createProject(options: InitOptions) {
         "./templates/" + templateFolder
     );
     options.templateDirectory = templateDir;
+    console.log("DEBUG - templateDir resolved to:", templateDir);
 
     try {
         await access(templateDir, fs.constants.R_OK);

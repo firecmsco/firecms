@@ -23,13 +23,13 @@ export function getTablePropertyColumnWidth(property: ResolvedProperty): number 
     if (property.dataType === "string") {
         if (property.url) {
             return 280;
+        } else if (property.markdown) {
+            return 300;
         } else if (property.storage) {
             return 160;
         } else if (property.enumValues) {
             return 200;
         } else if (property.multiline) {
-            return 300;
-        } else if (property.markdown) {
             return 300;
         } else if (property.email) {
             return 200;

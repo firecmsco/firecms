@@ -56,5 +56,10 @@
     "dist",
     "src"
   ],
-  "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae"
+  "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FireCMSco/firecms.git",
+    "directory": "packages/collection_editor_firebase"
+  }
 }

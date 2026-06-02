@@ -38,9 +38,6 @@
       "@firecms/datatalk": [
         "../../packages/datatalk/src"
       ],
-      "@firecms/mongodb": [
-        "../../packages/mongodb/src"
-      ],
       "@firecms/data_enhancement": [
         "../../packages/data_enhancement/src"
       ],
@@ -64,13 +61,14 @@
       ]
     },
     "baseUrl": ".",
-    "jsx": "preserve"
+    "jsx": "react-jsx"
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
