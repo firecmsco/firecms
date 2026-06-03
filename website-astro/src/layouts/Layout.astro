@@ -191,6 +191,29 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
     <!-- DNS Prefetch -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+    <!-- Warm connection to the SaaS app so it loads faster when users click through -->
+    <link rel="dns-prefetch" href="//app.firecms.co">
+    <link rel="preconnect" href="https://app.firecms.co" crossorigin>
+
+    <!-- Speculation Rules: prerender the SaaS app in the background (Chromium 121+).
+         Because app.firecms.co is cross-origin same-site, the SaaS must serve
+         the header Supports-Loading-Mode: credentialed-prerender.
+         Older browsers silently ignore this script type. -->
+    <script type="speculationrules">
+    {
+        "prerender": [{
+            "source": "list",
+            "urls": ["https://app.firecms.co/"],
+            "eagerness": "moderate"
+        }],
+        "prefetch": [{
+            "source": "list",
+            "urls": ["https://app.firecms.co/"],
+            "eagerness": "immediate"
+        }]
+    }
+    </script>
 <!-- Google tag (gtag.js) - Load the library -->
     <script async is:inline src="https://www.googletagmanager.com/gtag/js?id=G-NL75PPNYXD"/>
 

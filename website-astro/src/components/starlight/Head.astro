@@ -109,6 +109,26 @@ const breadcrumbSchema = {
 
 </script>
 
+<!-- Warm connection to the SaaS app so it loads faster when users click through -->
+<link rel="dns-prefetch" href="//app.firecms.co">
+<link rel="preconnect" href="https://app.firecms.co" crossorigin>
+
+<!-- Speculation Rules: prerender the SaaS app in the background (Chromium 121+) -->
+<script type="speculationrules">
+{
+    "prerender": [{
+        "source": "list",
+        "urls": ["https://app.firecms.co/"],
+        "eagerness": "moderate"
+    }],
+    "prefetch": [{
+        "source": "list",
+        "urls": ["https://app.firecms.co/"],
+        "eagerness": "immediate"
+    }]
+}
+</script>
+
 <!-- Breadcrumb Schema for SEO -->
 <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
 
