@@ -845,7 +845,7 @@ function buildAdminRoutes(includeDataTalk: boolean,
     if (includeAdmin) {
         views.push({
             path: "firestore",
-            name: "Firestore Explorer",
+            name: "Firestore Manager",
             group: "Admin",
             icon: "manage_search",
             hideFromNavigation: true,

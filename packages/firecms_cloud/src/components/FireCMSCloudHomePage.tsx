@@ -51,7 +51,7 @@ export function FireCMSCloudHomePage() {
                             <div className={"col-span-12 sm:col-span-6 lg:col-span-4"}
                                 key={"nav_firestore"}>
                                 <SmallNavigationCard
-                                    name={t("firestore_explorer" as any)}
+                                    name={t("firestore_manager")}
                                     url={"firestore"}
                                     icon={<FirestoreIcon
                                         className={"text-surface-400 dark:text-surface-600"} />} />
