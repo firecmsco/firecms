@@ -91,7 +91,7 @@ export function ProjectSubscriptionPlans() {
 
 
                     {!isGCPMarketplace && isSubscribed && plusSubscription &&
-                        <CurrentCloudSubscriptionView subscription={plusSubscription} />}
+                        <CurrentCloudSubscriptionView subscription={plusSubscription} projectId={projectId} />}
 
                     {!isGCPMarketplace && <StripeDisclaimer />}
 
@@ -186,10 +186,12 @@ function GCPMarketplaceSubscriptionView() {
 
 interface CurrentSubscriptionViewProps {
     subscription: Subscription;
+    projectId: string;
 }
 
 function CurrentCloudSubscriptionView({
     subscription,
+    projectId,
 }: CurrentSubscriptionViewProps) {
 
     const {
@@ -204,7 +206,7 @@ function CurrentCloudSubscriptionView({
 
     useEffect(() => {
         if (!cancelLinkUrl && !subscription.canceled_at) {
-            projectsApi.getStripeCancelLinkForSubscription(subscription.id)
+            projectsApi.getStripeCancelLinkForSubscription(subscription.id, projectId)
                 .then(setCancelLinkUrl);
         }
     }, [subscription.canceled_at]);
@@ -213,7 +215,7 @@ function CurrentCloudSubscriptionView({
 
     useEffect(() => {
         if (subscription.id) {
-            projectsApi.getStripeUpdateLinkForPaymentMethod(subscription.id)
+            projectsApi.getStripeUpdateLinkForPaymentMethod(subscription.id, projectId)
                 .then(setStripeUpdatePaymentUrl);
         }
     }, []);

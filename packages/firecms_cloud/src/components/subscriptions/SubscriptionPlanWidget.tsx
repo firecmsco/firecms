@@ -28,7 +28,7 @@ export function SubscriptionPlanWidget({ }: SubscriptionPlanWidgetProps) {
         const pastDueSubscriptions = (projectSubscriptions ?? []).filter(s => s.status === "past_due");
         if (pastDueSubscriptions.length === 0) return null;
 
-        return <PastDueAlert subscription={pastDueSubscriptions[0]} />;
+        return <PastDueAlert subscription={pastDueSubscriptions[0]} projectId={projectId} />;
     }
 
     const weAreOnTheLastTwoWeeks = trialValidUntil && trialValidUntil.getTime() - Date.now() < 14 * 24 * 60 * 60 * 1000;
@@ -56,13 +56,13 @@ export function SubscriptionPlanWidget({ }: SubscriptionPlanWidgetProps) {
     </div>;
 }
 
-function PastDueAlert({ subscription }: { subscription: Subscription }) {
+function PastDueAlert({ subscription, projectId }: { subscription: Subscription, projectId: string }) {
 
     const projectsApi = useFireCMSBackend().projectsApi;
 
     const [url, setUrl] = React.useState<string | null>(null);
     useEffect(() => {
-        projectsApi.getStripeUpdateLinkForPaymentMethod(subscription.id)
+        projectsApi.getStripeUpdateLinkForPaymentMethod(subscription.id, projectId)
             .then(setUrl)
             .catch(console.error);
     }, []);

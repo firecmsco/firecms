@@ -272,9 +272,9 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
-    async function getStripeCancelLinkForSubscription(subscriptionId: string): Promise<string> {
+    async function getStripeCancelLinkForSubscription(subscriptionId: string, projectId: string): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(`${host}/customer/stripe_portal_link/cancel_subscription?return_url=${encodeURIComponent(window.location.href)}&subscription_id=${subscriptionId}`,
+        return fetch(`${host}/customer/stripe_portal_link/cancel_subscription?return_url=${encodeURIComponent(window.location.href)}&subscription_id=${subscriptionId}&project_id=${projectId}`,
             {
                 method: "GET",
                 headers: buildHeaders({ firebaseAccessToken }),
@@ -285,9 +285,9 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
-    async function getStripeUpdateLinkForSubscription(subscriptionId: string): Promise<string> {
+    async function getStripeUpdateLinkForSubscription(subscriptionId: string, projectId: string): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(`${host}/customer/stripe_portal_link/update_subscription?return_url=${encodeURIComponent(window.location.href)}&subscription_id=${subscriptionId}`,
+        return fetch(`${host}/customer/stripe_portal_link/update_subscription?return_url=${encodeURIComponent(window.location.href)}&subscription_id=${subscriptionId}&project_id=${projectId}`,
             {
                 method: "GET",
                 headers: buildHeaders({ firebaseAccessToken }),
@@ -298,9 +298,9 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
-    async function getStripeUpdateLinkForPaymentMethod(subscriptionId: string): Promise<string> {
+    async function getStripeUpdateLinkForPaymentMethod(subscriptionId: string, projectId: string): Promise<string> {
         const firebaseAccessToken = await getBackendAuthToken();
-        return fetch(`${host}/customer/stripe_portal_link/update_payment_method?return_url=${encodeURIComponent(window.location.href)}&subscription_id=${subscriptionId}`,
+        return fetch(`${host}/customer/stripe_portal_link/update_payment_method?return_url=${encodeURIComponent(window.location.href)}&subscription_id=${subscriptionId}&project_id=${projectId}`,
             {
                 method: "GET",
                 headers: buildHeaders({ firebaseAccessToken }),
