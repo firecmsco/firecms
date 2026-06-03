@@ -15,7 +15,7 @@ import {
     signOut,
     User as FirebaseUser
 } from "@firebase/auth";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { buildProjectsApi } from "../api/projects";
 import { clearDelegatedLoginTokensCache } from "../utils";
 
@@ -211,7 +211,7 @@ export function useBuildFireCMSBackend({
             });
     }, []);
 
-    const projectsApi = buildProjectsApi(backendApiHost, getBackendAuthToken);
+    const projectsApi = useMemo(() => buildProjectsApi(backendApiHost, getBackendAuthToken), [backendApiHost, getBackendAuthToken]);
 
     return {
         backendApiHost,
