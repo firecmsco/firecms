@@ -128,7 +128,7 @@ export function DefaultDrawer({
                             }}
                             key={entry.id}>
                             {<IconForView collectionOrView={entry.view} />}
-                            {t(entry.name as any)}
+                            {t(entry.name)}
                         </MenuItem>)}
 
                 </Menu>}

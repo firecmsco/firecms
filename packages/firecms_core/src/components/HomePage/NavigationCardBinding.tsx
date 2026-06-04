@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import { useCustomizationController, useFireCMSContext } from "../../hooks";
+import { useCustomizationController, useFireCMSContext, useTranslation } from "../../hooks";
 import { NavigationEntry, PluginHomePageActionsProps } from "../../types";
 import { IconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../hooks/useUserConfigurationPersistence";
@@ -38,6 +38,7 @@ export function NavigationCardBinding({
 }) {
 
     const userConfigurationPersistence = useUserConfigurationPersistence();
+    const { t } = useTranslation();
     const collectionIcon = <IconForView collectionOrView={collection ?? view}/>;
 
     const navigate = useNavigate();
@@ -92,15 +93,17 @@ export function NavigationCardBinding({
         {actionsArray}
     </>
 
+    const translatedName = t(name);
+
     if (type === "admin") {
         return <SmallNavigationCard icon={collectionIcon}
-                                    name={name}
+                                    name={translatedName}
                                     url={url}/>;
     }
 
     return <NavigationCard
         icon={collectionIcon}
-        name={name}
+        name={translatedName}
         description={description}
         actions={actions}
         onClick={() => {
