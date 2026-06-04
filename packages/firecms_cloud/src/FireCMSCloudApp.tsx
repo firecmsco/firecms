@@ -722,7 +722,7 @@ function FireCMSAppAuthenticated({
                             userConfigPersistence={userConfigPersistence}
                             dataSourceDelegate={firestoreDelegate}
                             storageSource={storageSource}
-                            entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                            entityLinkBuilder={({ entity }) => `${basePath ?? ""}/firestore?path=${encodeURIComponent(entity.path)}&doc=${encodeURIComponent(entity.id)}`}
                             onAnalyticsEvent={onAnalyticsEvent}
                             components={{
                                 missingReference: MissingReferenceWidget

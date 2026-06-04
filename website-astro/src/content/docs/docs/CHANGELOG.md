@@ -2,6 +2,38 @@
 slug: docs/changelog
 title: Changelog
 ---
+## [3.3.0] - 2026-06-02
+
+- **Firestore Explorer & Firebase Admin**:
+  - Integrated the new `@firecms/firebase_admin` package.
+  - Added a complete **Firestore Explorer plugin** into FireCMS Cloud, enabling recursive Firestore collection tree navigation, subcollection support, and root collection creation.
+  - Exposed dirty state changes and allowed adding subcollections in the DocumentPanel.
+  - Improved reference handling, typed value rendering, and field type indicators.
+  - Enhanced DocumentTable cell value rendering with type-based styling.
+  - Added PITR (Point-in-Time Recovery) history, info panels, and recovery endpoints.
+  - Implemented an admin job tracking system.
+- **Google Cloud Marketplace Integration**:
+  - Added support for Google Cloud Marketplace billing and project linking.
+- **Login View Revamp**:
+  - Restructured `FireCMSCloudLoginView` layout to center content and added theme/language controls to the header.
+  - Added customizable branding, theme toggle, and improved button visual feedback for disabled states.
+- **Collection & Form Enhancements**:
+  - Added nullable property configurations and support for clearing nullable fields.
+  - Improved local changes tracking with analytics support.
+  - Introduced view grouping for entity tabs.
+  - Introduced lazy/eager utility for field bindings.
+  - Added `PopoverCellEditor` for structured data editing.
+  - Standardized JSON serialization with a custom replacer.
+  - Enhanced `VirtualTable` column headers with configurable icon sizes.
+  - Improved JSON editor layout and filter row autofocusing behavior.
+  - Modularized filtering logic into reusable components and utilities with persistent state support.
+  - Fixed issues where the markdown editor triggered redundant updates when the value was undefined.
+  - Improved `TextareaAutosize` scrolling.
+- **MongoDB Package Decommissioning**:
+  - Removed the `@firecms/mongodb` package and references due to MongoDB's deprecation of Atlas Device SDK / App Services / `realm-web` platform.
+- **Dependency Cleanups & Refactoring**:
+  - Removed the deprecated `@types/eslint__js` stub type dependency.
+
 ## [3.2.0] - 2026-03-31
 
 - **Editor Rewrite**:
