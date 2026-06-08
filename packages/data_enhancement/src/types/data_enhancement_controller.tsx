@@ -22,6 +22,7 @@ export type DataEnhancementController = {
     getSamplePrompts: (entityName: string, input?: string) => Promise<SamplePromptsResult>;
     loadingSuggestions: string[],
     editorAIController?: EditorAIController;
+    onAnalyticsEvent?: (event: string, params?: any) => void;
 }
 
 export type EnhancedDataResult = {

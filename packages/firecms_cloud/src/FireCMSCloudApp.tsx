@@ -587,6 +587,7 @@ function FireCMSAppAuthenticated({
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
         host: fireCMSBackend.backendApiHost,
+        onAnalyticsEvent
     });
 
     /**

@@ -51,7 +51,8 @@ export function FormEnhanceAction({
 
     const {
         suggestions,
-        getSamplePrompts
+        getSamplePrompts,
+        onAnalyticsEvent
     } = dataEnhancementController;
 
     const loadingPrompts = useRef(false);
@@ -92,6 +93,17 @@ export function FormEnhanceAction({
                 prompt,
                 type: "recent"
             }, ...(samplePrompts ?? []).slice(0, 5)]);
+            onAnalyticsEvent?.("de:autofill_with_prompt", {
+                path,
+                entityName: collection.singularName ?? collection.name,
+                status
+            });
+        } else {
+            onAnalyticsEvent?.("de:autofill_click", {
+                path,
+                entityName: collection.singularName ?? collection.name,
+                status
+            });
         }
         return dataEnhancementController.enhance({
             entityId,
@@ -146,6 +158,11 @@ export function FormEnhanceAction({
                 return <MenuItem
                     key={index + "_" + samplePrompt.prompt}
                     onClick={() => {
+                        onAnalyticsEvent?.("de:sample_prompt_click", {
+                            path,
+                            entityName: collection.singularName ?? collection.name,
+                            promptType: samplePrompt.type
+                        });
                         setInstructions(samplePrompt.prompt);
                         enhance(samplePrompt.prompt);
                     }}

@@ -38,6 +38,8 @@ export type DataEnhancementControllerProviderProps = {
     }) => boolean;
 
     host?: string;
+
+    onAnalyticsEvent?: (event: string, params?: any) => void;
 }
 
 export const useDataEnhancementController = (): DataEnhancementController => useContext(DataEnhancementControllerContext);
@@ -65,6 +67,7 @@ export function DataEnhancementControllerProvider({
                                                       path,
                                                       collection,
                                                       formContext,
+                                                      onAnalyticsEvent,
                                                   }: PropsWithChildren<DataEnhancementControllerProviderProps & PluginFormActionProps<any>>) {
 
     const [enabled, setEnabled] = useState(false);
@@ -253,6 +256,11 @@ export function DataEnhancementControllerProvider({
                 } else {
                     console.error("Enhance error", e);
                 }
+                onAnalyticsEvent?.("de:autofill_error", {
+                    path: resolvedPath,
+                    entityName: collection.singularName ?? collection.name,
+                    errorCode: e.code
+                });
                 reject(e);
                 enhancingInProgress.current = false;
             }
@@ -287,12 +295,25 @@ export function DataEnhancementControllerProvider({
                                 })
                             });
                         }
-                        if (Object.keys(result.suggestions).length === 0) {
+                        const suggestionsCount = Object.keys(result.suggestions).length;
+                        if (suggestionsCount === 0) {
                             snackbarController.open({
                                 type: "info",
                                 autoHideDuration: 1800,
                                 message: t("no_fields_updated")
-                            })
+                            });
+                            onAnalyticsEvent?.("de:autofill_no_results", {
+                                path: resolvedPath,
+                                entityName: collection.singularName ?? collection.name
+                            });
+                        } else {
+                            onAnalyticsEvent?.("de:autofill_success", {
+                                path: resolvedPath,
+                                entityName: collection.singularName ?? collection.name,
+                                fieldsUpdated: suggestionsCount,
+                                promptTokens: result.usage?.promptTokens,
+                                completionTokens: result.usage?.completionTokens
+                            });
                         }
                         setLoadingSuggestions([]);
                         resolve(result);
@@ -329,7 +350,8 @@ export function DataEnhancementControllerProvider({
         clearAllSuggestions,
         getSamplePrompts,
         loadingSuggestions,
-        editorAIController
+        editorAIController,
+        onAnalyticsEvent
     };
 
     return (

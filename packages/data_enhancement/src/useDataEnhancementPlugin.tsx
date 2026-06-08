@@ -39,6 +39,11 @@ export interface DataEnhancementPluginProps {
      * This prop is only use in development mode.
      */
     host?: string;
+
+    /**
+     * Callback for analytics events.
+     */
+    onAnalyticsEvent?: (event: string, params?: any) => void;
 }
 
 /**
@@ -71,7 +76,8 @@ export function useDataEnhancementPlugin(props?: DataEnhancementPluginProps): Fi
                 props: {
                     apiKey,
                     getConfigForPath,
-                    host: props?.host
+                    host: props?.host,
+                    onAnalyticsEvent: props?.onAnalyticsEvent
                 }
             },
             fieldBuilder,
