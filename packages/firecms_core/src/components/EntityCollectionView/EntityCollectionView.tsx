@@ -178,7 +178,9 @@ export const EntityCollectionView = React.memo(
 
         const collection = useMemo(() => {
             const userOverride = userConfigPersistence?.getCollectionConfig<M>(fullPath);
-            return (userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp) as EntityCollection<M>;
+            if (!userOverride) return collectionProp;
+            const { properties, ...rest } = userOverride;
+            return mergeDeep(collectionProp, rest) as EntityCollection<M>;
         }, [collectionProp, fullPath, userConfigPersistence?.getCollectionConfig]);
 
         const openEntityMode = collection?.openEntityMode ?? DEFAULT_ENTITY_OPEN_MODE;
@@ -507,7 +509,8 @@ export const EntityCollectionView = React.memo(
             path: fullPath,
             propertyConfigs: customizationController.propertyConfigs,
             authController,
-        }), [collection, fullPath]);
+            userConfigPersistence,
+        }), [collection, fullPath, userConfigPersistence]);
 
         // Check if Kanban view is possible (collection has at least one string enum property)
         const hasEnumProperty = useMemo(() => {

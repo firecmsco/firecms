@@ -118,4 +118,47 @@ describe("resolutions", () => {
         // expect(getValueInPath(obj, "nope.nope.nope.nope")).toEqual(undefined);
 
     });
+
+    test("resolveCollection merges user overrides including properties overrides into resolved collection and properties", () => {
+        const myCollection = buildCollection({
+            id: "my_collection",
+            path: "my_collection",
+            name: "My collection",
+            properties: {
+                callbackProp: buildProperty(({ values }) => ({
+                    name: "Callback property",
+                    dataType: "string"
+                }))
+            }
+        });
+
+        const mockUserConfigPersistence = {
+            getCollectionConfig: () => ({
+                properties: {
+                    callbackProp: {
+                        columnWidth: 250
+                    }
+                },
+                defaultSize: "s"
+            }),
+            onCollectionModified: () => {}
+        } as any;
+
+        const resolved = resolveCollection({
+            collection: myCollection,
+            path: "my_collection",
+            userConfigPersistence: mockUserConfigPersistence,
+            authController: {} as any
+        });
+
+        expect(resolved.properties.callbackProp).toEqual({
+            name: "Callback property",
+            dataType: "string",
+            columnWidth: 250,
+            resolved: true,
+            fromBuilder: true
+        });
+
+        expect(resolved.defaultSize).toBe("s");
+    });
 });

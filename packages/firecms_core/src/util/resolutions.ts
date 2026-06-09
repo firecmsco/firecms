@@ -90,8 +90,11 @@ export const resolveCollection = <M extends Record<string, any>,>
         .map(([id, property]) => ({ [id]: property }))
         .reduce((a, b) => ({ ...a, ...b }), {});
 
+    const { properties: overrideProps, ...restOverrides } = collectionOverride ?? {};
+
     return {
         ...collection,
+        ...restOverrides,
         properties: cleanedProperties,
         originalCollection: collection
     } as ResolvedEntityCollection<M>;

@@ -414,7 +414,11 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         const baseCollection = getCollectionByPathOrId(removeInitialAndTrailingSlashes(idOrPath), collections);
 
         const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(idOrPath) : undefined;
-        const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride ?? {}) : undefined;
+        let overriddenCollection = baseCollection;
+        if (baseCollection && userOverride) {
+            const { properties, ...rest } = userOverride;
+            overriddenCollection = mergeDeep(baseCollection, rest);
+        }
 
         let result: Partial<EntityCollection> | undefined = overriddenCollection;
 
