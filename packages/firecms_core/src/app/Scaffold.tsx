@@ -70,7 +70,13 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const includeDrawer = drawerChildren.length > 0;
         const largeLayout = useLargeLayout();
 
-        const [drawerOpen, setDrawerOpen] = React.useState(false);
+        const [drawerOpen, setDrawerOpen] = React.useState(() => {
+            try {
+                return localStorage.getItem("firecms_drawer_open") === "true";
+            } catch {
+                return false;
+            }
+        });
         const [onHover, setOnHover] = React.useState(false);
 
         const setOnHoverTrue = useCallback(() => setOnHover(true), []);
@@ -78,10 +84,16 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         const handleDrawerOpen = useCallback(() => {
             setDrawerOpen(true);
+            try {
+                localStorage.setItem("firecms_drawer_open", "true");
+            } catch { /* ignore */ }
         }, []);
 
         const handleDrawerClose = useCallback(() => {
             setDrawerOpen(false);
+            try {
+                localStorage.setItem("firecms_drawer_open", "false");
+            } catch { /* ignore */ }
         }, []);
 
         const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
