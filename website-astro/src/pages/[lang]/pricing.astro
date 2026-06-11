@@ -12,10 +12,9 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const t = useTranslations(lang as keyof typeof languages);
 
-// TODO: translate SEO breadcrumbs
 const breadcrumbs = [
-    { name: "Home", url: "https://firecms.co" },
-    { name: "Pricing", url: "https://firecms.co/pricing" }
+    { name: t('nav.home' as any) || "Home", url: `https://firecms.co/${lang}` },
+    { name: t('nav.pricing' as any) || "Pricing", url: `https://firecms.co/${lang}/pricing` }
 ];
 
 const faqItems = [

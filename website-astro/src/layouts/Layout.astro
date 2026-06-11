@@ -16,6 +16,8 @@ export interface Props {
     breadcrumbs?: BreadcrumbItem[];
     faqItems?: FaqItem[];
     lang?: string;
+    ogImage?: string;
+    ogType?: string;
 }
 
 import { ViewTransitions } from "astro:transitions";
@@ -32,8 +34,13 @@ const {
     keywords = "Firebase GUI, Firestore GUI, Firebase database GUI, headless CMS, Firebase CMS, Firestore CMS, React admin panel, no-code backend, AI-powered CMS, visual schema builder, data management, back-office application, content management system, Firestore admin, Firebase back office, database UI",
     breadcrumbs,
     faqItems,
-    lang = "en"
+    lang = "en",
+    ogImage,
+    ogType = "website"
 } = Astro.props;
+
+const resolvedOgImage = ogImage ?? "https://firecms.co/img/teaser.png";
+const resolvedTwitterImage = ogImage ?? "https://firecms.co/img/twitter_teaser.png";
 
 const canonicalBase = "https://firecms.co";
 const path = Astro.url.pathname;
@@ -89,6 +96,7 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
     <meta charset="UTF-8">
     <title>{title}</title>
     <link rel="shortcut icon" href="/favicon.svg" type="image/x-icon">
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="canonical" href={canonical}>
     <!-- Preload primary body font to reduce LCP font-swap delay -->
     <link rel="preload" as="font" type="font/woff2" crossorigin
@@ -110,9 +118,9 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content={title}>
     <meta property="og:description" content={description}>
-    <meta property="og:type" content="website">
+    <meta property="og:type" content={ogType}>
     <meta property="og:url" content={canonical}>
-    <meta property="og:image" content="https://firecms.co/img/teaser.png">
+    <meta property="og:image" content={resolvedOgImage}>
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
@@ -122,7 +130,7 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
     <meta name="twitter:image:type" content="image/png">
     <meta name="twitter:image:width" content="1200">
     <meta name="twitter:image:height" content="630">
-    <meta name="twitter:image" content="https://firecms.co/img/twitter_teaser.png">
+    <meta name="twitter:image" content={resolvedTwitterImage}>
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -273,6 +281,16 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
     <script is:inline>
         (function () {
             try {
+                // Skip language redirect when the user arrives from a search engine.
+                // This preserves hreflang integrity: Google indexes /es/pricing and
+                // shows it to Spanish-speaking users — we must not redirect them away.
+                var ref = document.referrer || '';
+                var searchEngines = ['google.', 'bing.com', 'yahoo.', 'duckduckgo.', 'baidu.', 'yandex.'];
+                var fromSearch = false;
+                for (var s = 0; s < searchEngines.length; s++) {
+                    if (ref.indexOf(searchEngines[s]) !== -1) { fromSearch = true; break; }
+                }
+
                 var knownLangs = ['es', 'de', 'fr', 'it', 'pt'];
                 var pathname = window.location.pathname;
                 var segments = pathname.split('/').filter(Boolean);
@@ -292,6 +310,10 @@ const faqSchema = faqItems && faqItems.length > 0 ? {
                     // User has an explicit preference — respect it
                     targetLang = stored;
                 } else {
+                    // If the user came from a search engine, don't auto-redirect —
+                    // respect the hreflang the search engine chose.
+                    if (fromSearch) return;
+
                     // First visit: detect from browser language
                     var browserLangs = (navigator.languages || [navigator.language || 'en']);
                     targetLang = 'en';

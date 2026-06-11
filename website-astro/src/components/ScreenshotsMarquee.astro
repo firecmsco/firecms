@@ -8,21 +8,21 @@ const mmDark = "/img/mm_dark.png";
 const oikosAviationDemo = "/img/oikos_aviation_demo.png";
 
 const images = [
-    MMApp,
-    overlay,
-    primeUm,
-    mmDark,
-    oikosAviationDemo
+    { src: MMApp, alt: "FireCMS media manager application interface" },
+    { src: overlay, alt: "FireCMS overlay editor for inline content editing" },
+    { src: primeUm, alt: "FireCMS user management dashboard" },
+    { src: mmDark, alt: "FireCMS media manager in dark theme" },
+    { src: oikosAviationDemo, alt: "FireCMS aviation demo with data collection view" },
 ];
 ---
 
 <div class="marquee">
     <div class="marquee-content">
-        {images.map((image) => (
-            <img src={image} alt="Screenshot" class="mx-4 rounded-xl w-auto h-full max-h-72 object-cover inline-block"/>
+        {images.map(({ src, alt }) => (
+            <img src={src} alt={alt} class="mx-4 rounded-xl w-auto h-full max-h-72 object-cover inline-block"/>
         ))}
-         {images.map((image) => (
-            <img src={image} alt="Screenshot" class="mx-4 rounded-xl w-auto h-full max-h-72 object-cover inline-block"/>
+         {images.map(({ src, alt }) => (
+            <img src={src} alt={alt} class="mx-4 rounded-xl w-auto h-full max-h-72 object-cover inline-block"/>
         ))}
     </div>
 </div>

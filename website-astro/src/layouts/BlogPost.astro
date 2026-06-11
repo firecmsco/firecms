@@ -7,7 +7,7 @@ import { getAuthor } from '../utils/authors';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage, authors } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, authors, image } = Astro.props;
 const author = authors ? getAuthor(authors) : null;
 
 // Generate breadcrumbs for blog posts
@@ -16,9 +16,60 @@ const breadcrumbs = [
 	{ name: "Blog", url: "https://firecms.co/blog" },
 	{ name: title, url: `https://firecms.co${Astro.url.pathname}` }
 ];
+
+// Resolve the OG image: prefer the string `image` field (social-sized),
+// fall back to the processed heroImage src, then fall back to the global teaser.
+const ogImageUrl = image
+	? `https://firecms.co${image}`
+	: heroImage
+		? `https://firecms.co${heroImage.src}`
+		: undefined;
+
+// BlogPosting structured data for rich snippets
+const articleSchema = {
+	"@context": "https://schema.org",
+	"@type": "BlogPosting",
+	"headline": title,
+	"description": description,
+	"datePublished": pubDate?.toISOString(),
+	...(updatedDate && { "dateModified": updatedDate.toISOString() }),
+	...(ogImageUrl && { "image": ogImageUrl }),
+	"url": `https://firecms.co${Astro.url.pathname}`,
+	"author": author ? {
+		"@type": "Person",
+		"name": author.name,
+		...(author.image_url && { "image": author.image_url }),
+		...(author.url && { "url": author.url })
+	} : { "@type": "Organization", "name": "FireCMS" },
+	"publisher": {
+		"@type": "Organization",
+		"name": "FireCMS",
+		"logo": {
+			"@type": "ImageObject",
+			"url": "https://firecms.co/img/logo_small.png"
+		}
+	},
+	"mainEntityOfPage": {
+		"@type": "WebPage",
+		"@id": `https://firecms.co${Astro.url.pathname}`
+	}
+};
 ---
 
-<Layout title={title} description={description} breadcrumbs={breadcrumbs}>
+<Layout
+	title={title}
+	description={description}
+	breadcrumbs={breadcrumbs}
+	ogImage={ogImageUrl}
+	ogType="article"
+>
+	<Fragment slot="head">
+		<meta property="article:published_time" content={pubDate?.toISOString()} />
+		{updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
+		{author && <meta property="article:author" content={author.name} />}
+		<script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+	</Fragment>
+
 	<main class="min-h-screen py-24">
 		<article class="max-w-4xl mx-auto px-6">
 			{heroImage && (
