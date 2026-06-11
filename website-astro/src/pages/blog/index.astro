@@ -4,20 +4,24 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import { getAuthor } from '../../utils/authors';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
 const breadcrumbs = [
-	{ name: "Home", url: "https://firecms.co" },
-	{ name: "Blog", url: "https://firecms.co/blog" }
+	{ name: t('nav.home' as any) || "Home", url: "https://firecms.co" },
+	{ name: t('nav.blog' as any) || "Blog", url: "https://firecms.co/blog" }
 ];
 ---
 
 <Layout
-	title="Blog - FireCMS"
-	description="Latest updates, tutorials, and insights about FireCMS"
+	title={t('seo.blog.title' as any) || "FireCMS Blog — Firebase Tutorials, CMS Guides & Product Updates"}
+	description={t('seo.blog.description' as any) || "Learn how to build Firebase admin panels, manage Firestore data, and get the most out of FireCMS."}
 	breadcrumbs={breadcrumbs}
 >
 	<main class="min-h-screen py-24">

@@ -236,10 +236,10 @@ export const de = {
   'usage_examples.f1': 'Passen Sie jeden Aspekt der CMS-UI an',
   'usage_examples.f2': 'Erstellen Sie benutzerdefinierte Felder und Editoren mit React',
 
-  'seo.features.title': 'FireCMS Funktionen – Eine leistungsstarke, intuitive Erfahrung für Ihr Team',
-  'seo.features.description': 'Von Endbenutzern bis zu Entwicklern – FireCMS ist darauf ausgelegt, das Erstellen und Verwalten von Back-Office-Anwendungen nahtlos zu gestalten.',
-  'seo.developers.title': 'FireCMS für Entwickler – Das ultimative Back-Office-Framework',
-  'seo.developers.description': 'Erstellen Sie leistungsstarke interne Tools, CRUD-Interfaces und benutzerdefinierte Admin-Panels ohne Frontend-Aufwand. Mit React und TypeScript für maximale Flexibilität.',
+  'seo.features.title': 'FireCMS Features — Visueller Schema-Builder, KI-Autofill, Import/Export & Mehr',
+  'seo.features.description': 'Entdecken Sie die FireCMS-Funktionen: visueller Schema-Editor, KI-Content-Generierung, Datenimport/-export, rollenbasierte Berechtigungen, Echtzeit-Updates und 20+ Feldtypen für Ihr Firebase Admin-Panel.',
+  'seo.developers.title': 'FireCMS für Entwickler — Open-Source React-Framework für Firebase Admin-Panels',
+  'seo.developers.description': 'Erstellen Sie leistungsstarke Firebase Admin-Panels und interne Tools mit React und TypeScript. Schema-as-Code, benutzerdefinierte Ansichten, Geschäftslogik-Callbacks und 20+ vorgefertigte Feldtypen.',
 
   'developers.hero.title': 'Das Back-Office-Framework,<br/> das Entwickler wirklich mögen',
   'developers.hero.subtitle': "FireCMS ist das entwicklerzentrierte Framework, das Sie lieben werden. Erstellen Sie leistungsstarke, schnelle und flexible interne Tools mit React und TypeScript.",
@@ -300,8 +300,8 @@ export const de = {
   'developers.ready.docs.desc': 'Tauchen Sie in das Open-Source-Framework ein. Perfekt für Agenturen, Custom Builds und vollständige Kontrolle.',
   'developers.ready.docs.cta': 'Dokumentation lesen',
 
-  'seo.startups.title': "FireCMS für Startups – Schnell bewegen, klug skalieren",
-  'seo.startups.description': "Bringen Sie das Admin-Panel Ihres Startups in Minuten, nicht Wochen, von der Datenbank in die Produktion.",
+  'seo.startups.title': 'FireCMS für Startups — Ihr Firebase Admin-Panel in Minuten starten',
+  'seo.startups.description': 'Bringen Sie das Firebase Admin-Panel Ihres Startups in Minuten von der Datenbank in die Produktion. Schemas automatisch ableiten, nicht-technische Teams stärken und von Cloud zu Self-Hosted skalieren.',
 
   'startups.hero.title': "Schnell bewegen, klug skalieren",
   'startups.hero.subtitle': "Bringen Sie das Admin-Panel Ihres Startups in <b>Minuten</b> von der Datenbank in die Produktion. Verschwenden Sie keine Zeit mit Boilerplate-CRUD.",
@@ -362,8 +362,8 @@ export const de = {
   'startups.cta.trial': "Kostenlose Testphase starten",
   'startups.cta.sales': "Vertrieb kontaktieren",
 
-  'seo.agencies.title': "FireCMS für Agenturen: Schneller liefern, Kunden beeindrucken",
-  'seo.agencies.description': "Erstellen Sie effizient benutzerdefinierte Admin-Panels & CMS für Ihre Kunden. Reduzieren Sie die Entwicklungszeit und steigern Sie die Kundenzufriedenheit.",
+  'seo.agencies.title': 'FireCMS für Agenturen — White-Label Firebase CMS für Kundenprojekte',
+  'seo.agencies.description': 'Erstellen und liefern Sie White-Label Firebase Admin-Panels für Ihre Kunden in Tagen statt Wochen. Wiederverwendbare Komponenten, individuelles Branding und flexibles Cloud- oder Self-Hosted-Deployment.',
 
   'agencies.hero.title': "Außergewöhnliche Kundenprojekte schneller liefern",
   'agencies.hero.subtitle': "Befähigen Sie Ihre Agentur, robuste, benutzerdefinierte Admin-Panels und CMS-Lösungen <b>effizient</b> zu erstellen. Begeistern Sie Kunden und steigern Sie die Rentabilität.",
@@ -431,8 +431,8 @@ export const de = {
   'agencies.cta.primary': "FireCMS Cloud testen",
   'agencies.cta.secondary': "Dokumentation ansehen",
 
-  'seo.about.title': "Über FireCMS – Unsere Mission, Entwickler zu stärken",
-  'seo.about.description': "FireCMS entstand aus einer einfachen, wiederkehrenden Frustration: Interne Tools und Admin-Panels zu bauen ist eine langsame, repetitive und undankbare Aufgabe.",
+  'seo.about.title': 'Über FireCMS — Das Open-Source Firebase CMS & Admin-Panel Team',
+  'seo.about.description': 'Lernen Sie das Team hinter FireCMS kennen. Vom Entwickler-Nebenprojekt zur Plattform, der Microsoft und IKEA bei der Verwaltung von Firebase- und Firestore-Daten vertrauen.',
 
   'about.hero.title': "Unsere Mission",
   'about.hero.subtitle': "FireCMS entstand aus einer einfachen, wiederkehrenden Frustration: Interne Tools und Admin-Panels zu bauen ist eine <b>langsame, repetitive und undankbare Aufgabe</b>. Wir glauben, dass Entwickler sich auf Kerninnovationen konzentrieren sollten.",
@@ -463,8 +463,8 @@ export const de = {
   'about.join.github': "Auf GitHub beitragen",
   'about.join.discord': "Unserem Discord beitreten",
 
-  'seo.compare.title': "FireCMS Funktionsvergleich",
-  'seo.compare.description': "Vergleichen Sie Funktionen zwischen FireCMS Community (Kostenlos Self-Hosted), PRO (Self-Hosted) und Cloud-Plänen.",
+  'seo.compare.title': 'FireCMS Pläne im Vergleich — Community vs PRO vs Cloud',
+  'seo.compare.description': 'Direkter Vergleich der FireCMS Community (kostenlos, Self-Hosted), PRO (Premium Self-Hosted) und Cloud (verwaltet) Pläne. Finden Sie das richtige Firebase CMS für Ihr Team.',
 
   'compare.hero.badge': "Community vs PRO vs Cloud",
   'compare.hero.title': "Funktionsvergleich",
@@ -529,8 +529,8 @@ export const de = {
   'compare.table.footer.buyLicense': "Lizenz kaufen",
   'compare.table.footer.startTrial': "Kostenlose Testphase starten",
 
-  'seo.contact.title': "FireCMS kontaktieren – In Kontakt treten",
-  'seo.contact.description': "Wir sind hier, um zu helfen. Unser Team ist bereit, alle Ihre Fragen zu beantworten.",
+  'seo.contact.title': 'FireCMS Kontakt — Demo buchen oder mit unserem Team sprechen',
+  'seo.contact.description': 'Nehmen Sie Kontakt mit dem FireCMS-Team auf. Demo buchen, Preise anfragen, Enterprise-Funktionen besprechen oder unserer Discord-Community beitreten.',
 
   'contact.hero.title': "Wir sind offen!",
   'contact.hero.subtitle': "Planen Sie einen Anruf mit unserem Team, um Ihr Projekt zu besprechen, eine Demo zu erhalten oder einfach Hallo zu sagen.",
@@ -552,8 +552,8 @@ export const de = {
 
   'contact.social.title': "Folgen Sie uns in den sozialen Medien",
 
-  'seo.security.title': "FireCMS Sicherheit – Sicherheit und Datensouveränität durch Design",
-  'seo.security.description': "FireCMS wurde von Grund auf entwickelt, um absolute Dateneigentümerschaft, Datenschutz und Sicherheit zu gewährleisten.",
+  'seo.security.title': 'FireCMS Sicherheit — Kein Datenzugriff, Volle Datensouveränität',
+  'seo.security.description': 'FireCMS speichert oder greift niemals auf Ihre Daten zu. Ihre Inhalte bleiben in Ihrem eigenen Firebase- oder MongoDB-Projekt – mit Enterprise-Grade-Sicherheit, DSGVO-Bereitschaft und ohne Vendor Lock-in.',
 
   'security.hero.title': "Vertrauen durch Transparenz",
   'security.hero.subtitle': "Ihre Daten gehören <b>Ihnen</b>. FireCMS wurde von Grund auf entwickelt, um absolute Datensouveränität, Datenschutz und Sicherheit durch transparente Architektur zu gewährleisten.",
@@ -623,14 +623,14 @@ export const de = {
   'security.cta.demo': "Demo ausprobieren",
   'security.cta.register': "Für FireCMS Cloud registrieren",
 
-  'seo.ui.title': "FireCMS UI-Komponenten – Schöne, zugängliche React-Komponenten",
-  'seo.ui.description': "Erkunden Sie die FireCMS UI-Komponentenbibliothek – eine umfassende Sammlung schöner, zugänglicher React-Komponenten.",
+  'seo.ui.title': '@firecms/ui — Kostenlose Open-Source React-Komponentenbibliothek für Admin-Panels',
+  'seo.ui.description': 'Entdecken Sie die @firecms/ui-Komponentenbibliothek: Buttons, Dialoge, Tabellen, Formulare und mehr. Schöne, zugängliche React-Komponenten mit Tailwind CSS für Admin-Panels und interne Tools.',
   'ui.hero.title': "Schön bauen, schnell bauen",
   'ui.hero.subtitle': "Eine umfassende Sammlung von <b>schönen, zugänglichen React-Komponenten</b> für moderne Web-Anwendungen.",
   'ui.loading': "UI-Komponenten werden geladen...",
 
-  'seo.why.title': "Warum FireCMS wählen? – Geschwindigkeit, Flexibilität und Eigentümerschaft",
-  'seo.why.description': "Entdecken Sie, warum Entwickler und Unternehmen FireCMS gegenüber Alternativen wählen.",
+  'seo.why.title': 'Warum FireCMS? — Firebase Admin-Panel mit voller Datenhoheit',
+  'seo.why.description': 'Erfahren Sie, warum Entwickler und Teams FireCMS gegenüber Retool, Strapi und der Firebase Console bevorzugen. Open Source, React-erweiterbar – und Ihre Daten verlassen nie Ihre Infrastruktur.',
 
   'why.hero.badge': "Geschwindigkeit, Flexibilität und Dateneigentümerschaft",
   'why.hero.title': "Warum Teams FireCMS wählen",
@@ -691,4 +691,11 @@ export const de = {
   'why.cta.title': "Bereit, FireCMS auszuprobieren?",
   'why.cta.start': "Kostenlos starten",
   'why.cta.explore': "Self-Hosted erkunden",
+
+  'seo.pro.title': 'FireCMS PRO — Selbst-gehostetes Firebase CMS mit Schema-Editor & Benutzerverwaltung',
+  'seo.pro.description': 'Deployen Sie ein Premium Self-Hosted Firestore CMS und Admin-Panel. Visueller Schema-Editor, Datenimport/-export, Benutzerverwaltung, individuelles Branding und Priority-Support.',
+
+  'nav.home': 'Startseite',
+  'seo.blog.title': 'FireCMS Blog — Firebase-Tutorials, CMS-Anleitungen & Produkt-Updates',
+  'seo.blog.description': 'Erfahren Sie, wie Sie Firebase Admin-Panels erstellen, Firestore-Daten verwalten und das Beste aus FireCMS herausholen. Tutorials, Anleitungen, Vergleiche und technische Artikel.',
 };

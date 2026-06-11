@@ -1,0 +1,16 @@
+{
+  "name": "FireCMS",
+  "short_name": "FireCMS",
+  "description": "The Headless CMS for Firebase and MongoDB. Build powerful back-office applications with AI-powered features and a beautiful data management interface.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#000000",
+  "theme_color": "#0070f4",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
