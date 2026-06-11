@@ -68,7 +68,46 @@ export function CloudErrorView({
                 href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>.
             </Typography>
         </div>;
-    } else if (code === "service-account-missing-permissions") {
+    } else if ((code === "service-account-missing-permissions" || code === "user-missing-permissions") && allowServiceAccountBypass) {
+        return (
+            <div className="flex flex-col space-y-4 p-6 border border-surface-200 dark:border-surface-700 rounded-xl bg-surface-50 dark:bg-surface-900">
+                <Typography variant="h6" className="text-red-600 dark:text-red-400">
+                    Missing Permissions
+                </Typography>
+                {error.data?.missingPermissions && <>
+                    <Typography variant={"body2"} color={"secondary"}>
+                        Your Google Cloud account is missing the following permissions on this project:
+                    </Typography>
+                    <Typography variant={"caption"} component={"ul"}>
+                        {error.data.missingPermissions.map((permission) => <li key={permission}>
+                            <code>{permission}</code>
+                        </li>)}
+                    </Typography>
+                </>}
+                <Typography variant="body2" className="font-semibold text-surface-900 dark:text-white">
+                    💡 Recovery Option: You can bypass Google OAuth permissions entirely by using a Firebase Service Account JSON key.
+                </Typography>
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                    <Button
+                        variant="filled"
+                        onClick={() => {
+                            navigate("/new/sa");
+                        }}
+                    >
+                        Connect via Service Account Key
+                    </Button>
+                    {onRetry && (
+                        <Button
+                            variant="text"
+                            onClick={() => onRetry()}
+                        >
+                            Retry Setup
+                        </Button>
+                    )}
+                </div>
+            </div>
+        );
+    } else if (code === "service-account-missing-permissions" || code === "user-missing-permissions") {
         return <ServiceAccountMissingPermissions missingPermissions={error.data?.missingPermissions}/>;
     }
 
