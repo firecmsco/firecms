@@ -40,6 +40,7 @@ export const fr = {
   'footer.solutions': 'Solutions',
   'footer.product': 'Produit',
   'footer.legal': 'Légal',
+  'footer.family': 'Famille FireCMS',
   
   'social.trusted': 'Approuvé par les développeurs des meilleures entreprises',
   'social.more': "et des milliers d'autres",

@@ -57,6 +57,13 @@ const footerNavs = [
             { label: t("nav.cookies") || "Cookie Policy", url: "/policy/cookies_policy" },
         ],
     },
+    {
+        title: t("footer.family") || "FireCMS Family",
+        links: [
+            { label: "rebase.pro", url: "https://rebase.pro", external: true },
+            { label: "dataki.ai", url: "https://dataki.ai", external: true },
+        ],
+    },
 ];
 ---
 
@@ -73,7 +80,7 @@ const footerNavs = [
                     The Headless CMS Framework for Firebase
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-8 sm:gap-6 lg:grid-cols-5">
+            <div class="grid grid-cols-2 gap-8 sm:gap-6 lg:grid-cols-6">
                 {footerNavs.map((nav) => (
                     <div>
                         <p class="mb-6 text-sm font-semibold uppercase text-white">{nav.title}</p>

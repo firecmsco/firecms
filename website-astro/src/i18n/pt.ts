@@ -39,6 +39,7 @@ export const pt = {
   'footer.solutions': 'Soluções',
   'footer.product': 'Produto',
   'footer.legal': 'Legal',
+  'footer.family': 'Família FireCMS',
   'social.trusted': 'Confiado por desenvolvedores em empresas líderes',
   'social.more': 'e milhares mais',
   'usecases.title.1': 'Um Framework,',
