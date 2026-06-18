@@ -1,15 +1,17 @@
 import React from "react";
 import { AIIcon, ConfirmationDialog, useSnackbarController } from "@firecms/core";
 import { LoadingButton, Typography } from "@firecms/ui";
-import { ProjectsApi } from "../api/projects";
+import { ProjectsApi, RootCollectionInfo } from "../api/projects";
 import { useCollectionsConfigController } from "@firecms/collection_editor";
 import { useTranslation } from "@firecms/core";
+import { CollectionSetupSelectionDialog } from "./CollectionSetupSelectionDialog";
 
 export function AutoSetUpCollectionsButton({
     projectsApi,
     projectId,
     askConfirmation,
     small,
+    suggestions,
     onClick,
     onSuccess,
     onNoCollections,
@@ -25,6 +27,7 @@ export function AutoSetUpCollectionsButton({
     onError?: () => void;
     askConfirmation?: boolean;
     small?: boolean;
+    suggestions?: RootCollectionInfo[];
     color?: "primary" | "secondary" | "text" | "error" | "neutral";
     disabled?: boolean;
 }) {
@@ -37,6 +40,9 @@ export function AutoSetUpCollectionsButton({
     const snackbarController = useSnackbarController();
     const [loadingAutomaticallyCreate, setLoadingAutomaticallyCreate] = React.useState(false);
     const { t } = useTranslation();
+
+    // Use the selection dialog when suggestions are provided (CTA in RootCollectionSuggestions)
+    const useSelectionDialog = askConfirmation && suggestions && suggestions.length > 0;
 
     const doCollectionSetup = () => {
         onClick?.();
@@ -81,7 +87,10 @@ export function AutoSetUpCollectionsButton({
             className={small ? "px-2 py-0.5 rounded-lg" : undefined}
             size={small ? "small" : undefined}
             onClick={() => {
-                if (askConfirmation) {
+                if (useSelectionDialog) {
+                    onClick?.();
+                    setSetupRequested(true);
+                } else if (askConfirmation) {
                     setSetupRequested(true);
                 } else {
                     doCollectionSetup()
@@ -91,19 +100,35 @@ export function AutoSetUpCollectionsButton({
             {t("auto_setup_collections_button")}
         </LoadingButton>
 
-        <ConfirmationDialog
-            open={setUpRequested}
-            onAccept={() => {
-                setSetupRequested(false);
-                doCollectionSetup();
-            }}
-            onCancel={() => setSetupRequested(false)}
-            title={<>{t("auto_setup_collections_title")}</>}
-            body={<Typography variant="body2">{t("auto_setup_collections_desc").split("NOT").map((part: string, i: number, arr: string[]) => (
-                <React.Fragment key={i}>
-                    {part}
-                    {i < arr.length - 1 && <b>NOT</b>}
-                </React.Fragment>
-            ))}</Typography>} />
+        {useSelectionDialog
+            ? <CollectionSetupSelectionDialog
+                open={setUpRequested}
+                onClose={() => setSetupRequested(false)}
+                suggestions={suggestions}
+                projectsApi={projectsApi}
+                projectId={projectId}
+                onSuccess={() => {
+                    onSuccess?.();
+                    setSetupRequested(false);
+                }}
+                onError={() => {
+                    onError?.();
+                }}
+            />
+            : <ConfirmationDialog
+                open={setUpRequested}
+                onAccept={() => {
+                    setSetupRequested(false);
+                    doCollectionSetup();
+                }}
+                onCancel={() => setSetupRequested(false)}
+                title={<>{t("auto_setup_collections_title")}</>}
+                body={<Typography variant="body2">{t("auto_setup_collections_desc").split("NOT").map((part: string, i: number, arr: string[]) => (
+                    <React.Fragment key={i}>
+                        {part}
+                        {i < arr.length - 1 && <b>NOT</b>}
+                    </React.Fragment>
+                ))}</Typography>} />
+        }
     </>;
 }

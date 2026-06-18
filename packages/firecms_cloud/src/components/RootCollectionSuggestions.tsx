@@ -1,5 +1,5 @@
 import React from "react";
-import { prettifyIdentifier, useAuthController, useNavigationController, useTranslation } from "@firecms/core";
+import { prettifyIdentifier, useAuthController, useNavigationController, useSnackbarController, useTranslation } from "@firecms/core";
 import { AddIcon, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
@@ -20,6 +20,7 @@ export function RootCollectionSuggestions({
     const authController = useAuthController();
     const fireCMSBackend = useFireCMSBackend();
     const projectConfig = useProjectConfig();
+    const snackbarController = useSnackbarController();
     const { t } = useTranslation();
 
     const collectionEditorController = useCollectionEditorController();
@@ -31,6 +32,47 @@ export function RootCollectionSuggestions({
 
     const existingPaths = (navigationController.collections ?? []).map(c => c.path);
     const filteredSuggestions = (rootPathSuggestions ?? []).filter((info) => !existingPaths.includes(info.path));
+
+    // Track which paths are currently being set up
+    const [settingUpPaths, setSettingUpPaths] = React.useState<Set<string>>(new Set());
+
+    const setupSingleCollection = async (info: RootCollectionInfo) => {
+        setSettingUpPaths(prev => new Set(prev).add(info.path));
+        onAnalyticsEvent?.("suggestion_chip_setup_click", { path: info.path });
+
+        try {
+            const collections = await fireCMSBackend.projectsApi.setupCollections(
+                projectConfig.projectId,
+                [{ path: info.path, databaseId: info.databaseId }]
+            );
+            if (collections && collections.length > 0) {
+                snackbarController.open({
+                    message: t("collection_setup_success", { name: prettifyIdentifier(info.path) }),
+                    type: "success"
+                });
+                navigationController.refreshNavigation();
+                onAnalyticsEvent?.("suggestion_chip_setup_success", { path: info.path });
+            } else {
+                snackbarController.open({
+                    message: t("no_collections_found_to_setup"),
+                    type: "info"
+                });
+            }
+        } catch (error) {
+            console.error("Error setting up collection", info.path, error);
+            snackbarController.open({
+                message: t("error_setting_up_collections"),
+                type: "error"
+            });
+            onAnalyticsEvent?.("suggestion_chip_setup_error", { path: info.path });
+        } finally {
+            setSettingUpPaths(prev => {
+                const next = new Set(prev);
+                next.delete(info.path);
+                return next;
+            });
+        }
+    };
 
     const loading = filteredSuggestions === undefined;
     const showSuggestions = (filteredSuggestions ?? []).length > 0;
@@ -52,6 +94,7 @@ export function RootCollectionSuggestions({
                     projectId={projectConfig.projectId}
                     askConfirmation={true}
                     small={true}
+                    suggestions={filteredSuggestions}
                     disabled={!canCreateCollections}
                     onClick={() => onAnalyticsEvent?.("suggestions_cols_setup_click")}
                     onSuccess={() => onAnalyticsEvent?.("suggestions_cols_setup_success")}
@@ -62,22 +105,16 @@ export function RootCollectionSuggestions({
                 {loading && <CircularProgress size={"smallest"} />}
 
                 {!loading && (filteredSuggestions ?? []).map((info) => {
+                    const isSettingUp = settingUpPaths.has(info.path);
                     return (
                         <div key={info.path} className={"flex-shrink-0"}>
                             <Chip
-                                icon={<AddIcon size={"small"} />}
+                                icon={isSettingUp
+                                    ? <CircularProgress size={"smallest"} />
+                                    : <AddIcon size={"small"} />}
                                 colorScheme={"cyanLighter"}
-                                onClick={collectionEditorController && canCreateCollections
-                                    ? () => collectionEditorController.createCollection({
-                                        initialValues: {
-                                            path: info.path,
-                                            name: prettifyIdentifier(info.path),
-                                            databaseId: info.databaseId
-                                        },
-                                        parentCollectionIds: [],
-                                        redirect: true,
-                                        sourceClick: "root_collection_suggestion"
-                                    })
+                                onClick={canCreateCollections && !isSettingUp
+                                    ? () => setupSingleCollection(info)
                                     : undefined}
                                 size="small">
                                 {info.path}
@@ -92,4 +129,3 @@ export function RootCollectionSuggestions({
         </div>
     </Collapse>
 }
-

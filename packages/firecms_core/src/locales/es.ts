@@ -526,6 +526,12 @@ export const es: FireCMSTranslations = {
     no_collections_found_to_setup: "No se encontraron colecciones para configurar",
     collections_have_been_setup: "¡Tus colecciones han sido configuradas!",
     error_setting_up_collections: "Error al configurar colecciones",
+    setup_collections_title: "Set up collections",
+    setup_collections_select_desc: "Select which collections to automatically set up:",
+    select_all: "Select all",
+    deselect_all: "Deselect all",
+    setup_collections_confirm: "Set up ({{count}})",
+    collection_setup_success: "{{name}} has been set up",
 
     // --- Home Suggestions ---
     add_your: "Añade tus",
