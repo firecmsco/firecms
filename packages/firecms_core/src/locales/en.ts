@@ -522,7 +522,8 @@ export const en: FireCMSTranslations = {
     auto_setup_collections_button: "Automatically set up collections",
     auto_setup_collections_title: "Automatically set up collections?",
     auto_setup_collections_desc: "This will automatically create collection configs for collections that are <b>NOT</b> already mapped",
-    this_can_take_a_minute: "This can take a minute or two",
+    setting_up_collections: "Setting up collections",
+    setting_up_collection: "Setting up {{name}}",
     no_collections_found_to_setup: "No collections found to setup.",
     collections_have_been_setup: "Collections have been automatically setup.",
     error_setting_up_collections: "Error automatically setting up collections",
@@ -532,6 +533,7 @@ export const en: FireCMSTranslations = {
     deselect_all: "Deselect all",
     setup_collections_confirm: "Set up ({{count}})",
     collection_setup_success: "{{name}} has been set up",
+    go_to_collection: "Go to collection",
 
     // --- Home Suggestions ---
     add_your: "Add your",

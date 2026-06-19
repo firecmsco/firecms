@@ -1,10 +1,11 @@
 import React from "react";
 import { prettifyIdentifier, useAuthController, useNavigationController, useSnackbarController, useTranslation } from "@firecms/core";
-import { AddIcon, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
-import { useCollectionEditorController } from "@firecms/collection_editor";
+import { AddIcon, Button, Chip, CircularProgress, Collapse, StorageIcon, Typography, } from "@firecms/ui";
+import { useCollectionEditorController, useCollectionsConfigController } from "@firecms/collection_editor";
 import { AutoSetUpCollectionsButton } from "./AutoSetUpCollectionsButton";
 import { useFireCMSBackend, useProjectConfig } from "../hooks";
 import { RootCollectionInfo } from "../api/projects";
+import { useNavigate } from "react-router";
 
 export function RootCollectionSuggestions({
     introMode,
@@ -21,9 +22,13 @@ export function RootCollectionSuggestions({
     const fireCMSBackend = useFireCMSBackend();
     const projectConfig = useProjectConfig();
     const snackbarController = useSnackbarController();
+    const navigate = useNavigate();
     const { t } = useTranslation();
 
     const collectionEditorController = useCollectionEditorController();
+    const configController = useCollectionsConfigController();
+    const collectionsSetupStatus = configController.collectionsSetup?.status;
+    const setupLoading = collectionsSetupStatus === "ongoing";
     const canCreateCollections = collectionEditorController.configPermissions
         ? collectionEditorController.configPermissions({
             user: authController.user
@@ -40,14 +45,31 @@ export function RootCollectionSuggestions({
         setSettingUpPaths(prev => new Set(prev).add(info.path));
         onAnalyticsEvent?.("suggestion_chip_setup_click", { path: info.path });
 
+        snackbarController.open({
+            message: t("setting_up_collection", { name: prettifyIdentifier(info.path) }),
+            type: "info"
+        });
+
         try {
             const collections = await fireCMSBackend.projectsApi.setupCollections(
                 projectConfig.projectId,
                 [{ path: info.path, databaseId: info.databaseId }]
             );
             if (collections && collections.length > 0) {
+                const collectionPath = navigationController.buildUrlCollectionPath(info.path);
                 snackbarController.open({
-                    message: t("collection_setup_success", { name: prettifyIdentifier(info.path) }),
+                    message: <div className={"flex flex-row items-center gap-4"}>
+                        <span>{t("collection_setup_success", { name: prettifyIdentifier(info.path) })}</span>
+                        <Button
+                            variant={"text"}
+                            size={"small"}
+                            onClick={() => {
+                                navigate(collectionPath);
+                                snackbarController.close();
+                            }}>
+                            {t("go_to_collection")}
+                        </Button>
+                    </div>,
                     type: "success"
                 });
                 navigationController.refreshNavigation();
@@ -110,10 +132,10 @@ export function RootCollectionSuggestions({
                         <div key={info.path} className={"flex-shrink-0"}>
                             <Chip
                                 icon={isSettingUp
-                                    ? <CircularProgress size={"smallest"} />
+                                    ? <CircularProgress size={"smallest"} className={"!w-3 !h-3 !border-[2px]"} />
                                     : <AddIcon size={"small"} />}
                                 colorScheme={"cyanLighter"}
-                                onClick={canCreateCollections && !isSettingUp
+                                onClick={canCreateCollections && !isSettingUp && !setupLoading
                                     ? () => setupSingleCollection(info)
                                     : undefined}
                                 size="small">

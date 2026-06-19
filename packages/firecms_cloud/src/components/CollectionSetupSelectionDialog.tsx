@@ -74,7 +74,7 @@ export function CollectionSetupSelectionDialog({
 
         setLoading(true);
         snackbarController.open({
-            message: t("this_can_take_a_minute"),
+            message: t("setting_up_collections"),
             type: "info"
         });
 
@@ -109,7 +109,7 @@ export function CollectionSetupSelectionDialog({
     return (
         <Dialog
             open={open}
-            onOpenChange={(open) => !open ? onClose() : undefined}
+            onOpenChange={(open) => !open && !loading ? onClose() : undefined}
             maxWidth={"lg"}
         >
             <DialogTitle variant={"h6"} className={"mb-2"}>
