@@ -19,7 +19,7 @@
     "@google-cloud/secret-manager": "^5.0.0",
     "googleapis": "^134.0.0",
     "typesense": "^1.8.0",
-    "http-proxy-middleware": "^3.0.0",
+    "http-proxy-middleware": "^3.0.7",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
