@@ -14,10 +14,10 @@
     "genAPI": "typedoc && node scripts/add_api_frontmatter.js"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.9",
+    "@astrojs/mdx": "^6.0.3",
     "@astrojs/react": "^4.4.0",
     "@astrojs/sitemap": "^3.6.0",
-    "@astrojs/starlight": "^0.36.1",
+    "@astrojs/starlight": "^0.40.0",
     "@astrojs/starlight-tailwind": "^4.0.1",
     "@firebase/analytics": "^0.10.18",
     "@firebase/app-check": "^0.11.0",
@@ -33,7 +33,7 @@
     "@tailwindcss/vite": "^4.1.14",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
-    "astro": "^5.18.1",
+    "astro": "^6.4.8",
     "astro-expressive-code": "^0.41.3",
     "date-fns": "^3.6.0",
     "gray-matter": "^4.0.3",
