@@ -62,7 +62,7 @@ export function FiltersDialog({
 
     // Get list of editable filter properties
     const editableFilterProperties = useMemo(() => {
-        return Object.entries(properties).filter(([key, property]) => {
+        return Object.entries(properties).filter(([key]) => {
             const isFilterAllowed = allowedFilters.includes(key);
 
             const isFilterForced = Boolean(forceFilter && Object.keys(forceFilter).includes(key));
