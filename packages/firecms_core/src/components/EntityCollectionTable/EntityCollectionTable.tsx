@@ -246,6 +246,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
             properties,
             sortable,
             forceFilter,
+            allowedFilters: tableController.allowedFilters,
             AdditionalHeaderWidget
         });
 

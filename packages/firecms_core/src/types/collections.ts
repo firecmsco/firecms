@@ -262,6 +262,22 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     initialFilter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining collections by code
 
     /**
+     * Array of property keys that are allowed for filtering. Allowed filters will be displayed in the collection view, table row headers 
+     * and will be used to filter data.
+     * 
+     * If not specified, all properties that are filterable will be allowed.
+     * 
+     * If you specify this prop, the filters will be displayed in the collection view if they are filterable.
+     * 
+     * If you set it as an empty array, no filters will be displayed.
+     * 
+     * e.g. `allowedFilters: ["name", "category"]`
+     * 
+     * e.g. `allowedFilters: []`
+     */
+    allowedFilters?: (keyof M)[];
+
+    /**
      * Default sort applied to this collection.
      * When setting this prop, entities will have a default order
      * applied in the collection.
@@ -725,6 +741,8 @@ export type EntityTableController<M extends Record<string, any> = any> = {
     dataLoadingError?: Error;
     filterValues?: FilterValues<Extract<keyof M, string>>;
     setFilterValues?: (filterValues: FilterValues<Extract<keyof M, string>>) => void;
+    allowedFilters: (keyof M)[];
+    isFilterAvailableForProperty: (propertyKey: keyof M) => boolean;
     sortBy?: [Extract<keyof M, string>, "asc" | "desc"];
     setSortBy?: (sortBy?: [Extract<keyof M, string>, "asc" | "desc"]) => void;
     searchString?: string;

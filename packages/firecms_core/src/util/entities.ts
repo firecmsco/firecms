@@ -196,3 +196,11 @@ export function traverseValueProperty(inputValue: any,
 
     return value;
 }
+
+export function isDataTypeFilterable(dataType: DataType, isPartOfArray = false) {
+    if (isPartOfArray) {
+        return ["string", "number", "date", "reference"].includes(dataType);
+    }
+    
+    return ["string", "number", "boolean", "date", "reference", "array"].includes(dataType);
+}

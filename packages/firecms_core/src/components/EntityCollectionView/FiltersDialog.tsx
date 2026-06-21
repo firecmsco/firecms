@@ -12,7 +12,6 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    FilterListIcon,
     Typography
 } from "@firecms/ui";
 import { useTranslation } from "../../hooks/useTranslation";
@@ -30,6 +29,7 @@ export interface FiltersDialogProps {
     filterValues: FilterValues<any> | undefined;
     setFilterValues: (filterValues?: FilterValues<any>) => void;
     forceFilter?: FilterValues<any>;
+    allowedFilters: string[];
 }
 
 /**
@@ -42,7 +42,8 @@ export function FiltersDialog({
     properties,
     filterValues,
     setFilterValues,
-    forceFilter
+    forceFilter,
+    allowedFilters
 }: FiltersDialogProps) {
     const { t } = useTranslation();
     
@@ -62,15 +63,11 @@ export function FiltersDialog({
     // Get list of filterable properties
     const filterableProperties = useMemo(() => {
         return Object.entries(properties).filter(([key, property]) => {
-            if (!property) return false;
-            // Force filter properties should not be editable
-            if (forceFilter && key in forceFilter) return false;
-            // Check if property type is filterable
-            const baseProperty = property.dataType === "array" ? property.of : property;
-            if (!baseProperty) return false;
-            return ["string", "number", "boolean", "date", "reference"].includes(baseProperty.dataType);
+            return allowedFilters.includes(key);
         });
-    }, [properties, forceFilter]);
+    }, [properties, allowedFilters]);
+
+    const hasNoFilterableProperties = filterableProperties
 
     const handleFilterChange = useCallback((propertyKey: string, value?: [VirtualTableWhereFilterOp, any]) => {
         setLocalFilters(prev => {
@@ -234,18 +231,22 @@ export function FiltersDialog({
                     {t("clear")}
                 </Button>
                 <div className="flex-grow" />
-                <Button
-                    variant="text"
-                    onClick={() => onOpenChange(false)}
-                >
-                    {t("cancel")}
-                </Button>
-                <Button
-                    variant="filled"
-                    onClick={handleApply}
-                >
-                    {t("apply_filters")}
-                </Button>
+                {hasNoFilterableProperties && (
+                    <>
+                        <Button
+                            variant="text"
+                            onClick={() => onOpenChange(false)}
+                        >
+                            {t("cancel")}
+                        </Button>
+                        <Button
+                            variant="filled"
+                            onClick={handleApply}
+                        >
+                            {t("apply_filters")}
+                        </Button>
+                    </>
+                )}
             </DialogActions>
         </Dialog>
     );

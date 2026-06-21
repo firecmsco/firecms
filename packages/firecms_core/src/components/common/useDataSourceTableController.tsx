@@ -16,6 +16,7 @@ import {
 } from "../../types";
 import { useDebouncedData } from "./useDebouncedData";
 import { ScrollRestorationController } from "./useScrollRestoration";
+import { isDataTypeFilterable } from "../../util";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -136,7 +137,29 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         sortBy: initialSortUrl,
     } = parseFilterAndSort(location.search);
 
-    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? initialFilterUrl : undefined) ?? initialFilter ?? undefined);
+    const isFilterAvailableForProperty = (propertyKey: keyof M) => {
+        return allowedFilterKeys.includes(propertyKey);
+    }
+    
+    const availableFilterKeys = collection.allowedFilters ?? Object.keys(collection.properties);
+    const allowedFilterKeys = availableFilterKeys.filter((key) => {
+        const property = collection.properties[key] as any;
+
+        if(!property) return false;
+
+        const filterable = property.dataType === 'array' ? isDataTypeFilterable(property.of?.dataType, true) : isDataTypeFilterable(property.dataType);
+        return filterable
+    });
+
+    const removeUnallowedFilters = (filters?: FilterValues<Extract<keyof M, string>>) => {
+        if (!filters) return;
+
+        return Object.fromEntries(Object.entries(filters).filter(([key]) => allowedFilterKeys.includes(key as keyof M)))  as FilterValues<Extract<keyof M, string>>;
+    }
+
+    const initFilters = forceFilter ?? (updateUrl ? initialFilterUrl : undefined) ?? initialFilter ?? undefined
+
+    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(removeUnallowedFilters(initFilters));
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>((updateUrl ? initialSortUrl : undefined) ?? initialSortInternal);
 
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
@@ -168,7 +191,9 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
     const [noMoreToLoad, setNoMoreToLoad] = useState<boolean>(false);
 
-    const clearFilter = useCallback(() => setFilterValues(forceFilter ?? undefined), [forceFilter]);
+
+
+    const clearFilter = useCallback(() => setFilterValues(removeUnallowedFilters(forceFilter)), [forceFilter]);
 
     const updateFilterValues = useCallback((updatedFilter: FilterValues<Extract<keyof M, string>> | undefined) => {
         if (forceFilter) {
@@ -178,7 +203,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         if (updatedFilter && Object.keys(updatedFilter).length === 0) {
             setFilterValues(undefined);
         } else {
-            setFilterValues(updatedFilter);
+            setFilterValues(removeUnallowedFilters(updatedFilter));
         }
     }, [forceFilter]);
 
@@ -268,6 +293,8 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         dataLoadingError,
         filterValues,
         setFilterValues: updateFilterValues,
+        allowedFilters: allowedFilterKeys,
+        isFilterAvailableForProperty,
         sortBy,
         setSortBy,
         searchString,
