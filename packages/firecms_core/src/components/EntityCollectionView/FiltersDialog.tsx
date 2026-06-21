@@ -67,7 +67,7 @@ export function FiltersDialog({
         });
     }, [properties, allowedFilters]);
 
-    const hasNoFilterableProperties = filterableProperties.length === 0;
+    const hasFilterableProperties = filterableProperties.length > 0;
 
     const handleFilterChange = useCallback((propertyKey: string, value?: [VirtualTableWhereFilterOp, any]) => {
         setLocalFilters(prev => {
@@ -182,7 +182,7 @@ export function FiltersDialog({
             </DialogTitle>
 
             <DialogContent >
-                {filterableProperties.length === 0 ? (
+                {!hasFilterableProperties ? (
                     <Typography color="secondary" className="py-8 text-center">
                         {t("no_filterable_properties")}
                     </Typography>
@@ -231,7 +231,7 @@ export function FiltersDialog({
                     {t("clear")}
                 </Button>
                 <div className="flex-grow" />
-                {hasNoFilterableProperties && (
+                {hasFilterableProperties && (
                     <>
                         <Button
                             variant="text"
