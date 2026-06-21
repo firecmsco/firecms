@@ -67,7 +67,7 @@ export function FiltersDialog({
         });
     }, [properties, allowedFilters]);
 
-    const hasNoFilterableProperties = filterableProperties
+    const hasNoFilterableProperties = filterableProperties.length === 0;
 
     const handleFilterChange = useCallback((propertyKey: string, value?: [VirtualTableWhereFilterOp, any]) => {
         setLocalFilters(prev => {
