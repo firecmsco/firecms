@@ -136,26 +136,32 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         filterValues: initialFilterUrl,
         sortBy: initialSortUrl,
     } = parseFilterAndSort(location.search);
-
-    const isFilterAvailableForProperty = (propertyKey: keyof M) => {
-        return allowedFilterKeys.includes(propertyKey);
-    }
     
     const availableFilterKeys = collection.allowedFilters ?? Object.keys(collection.properties);
-    const allowedFilterKeys = availableFilterKeys.filter((key) => {
-        const property = collection.properties[key] as any;
+    const forcedFilterKeys = collection.forceFilter ? Object.keys(collection.forceFilter) : [];
 
-        if (!property) return false;
+    const allowedFilterKeys = useMemo(() => {
+        const availableKeys = availableFilterKeys.filter((key) => {
+            const property = collection.properties[key] as any;
 
-        const filterable = property.dataType === 'array' ? isDataTypeFilterable(property.of?.dataType, true) : isDataTypeFilterable(property.dataType);
-        return filterable
-    });
+            if (!property) return false;
 
-    const removeUnallowedFilters = (filters?: FilterValues<Extract<keyof M, string>>) => {
+            const filterable = property.dataType === 'array' ? isDataTypeFilterable(property.of?.dataType, true) : isDataTypeFilterable(property.dataType);
+
+            return filterable
+        })
+
+        const forcedKeys = forcedFilterKeys.filter((key) => !availableKeys.includes(key));
+
+        return [...availableKeys, ...forcedKeys];
+
+    }, [collection.properties, availableFilterKeys]);
+
+    const removeUnallowedFilters = useCallback((filters?: FilterValues<Extract<keyof M, string>>) => {
         if (!filters) return;
 
         return Object.fromEntries(Object.entries(filters).filter(([key]) => allowedFilterKeys.includes(key as keyof M)))  as FilterValues<Extract<keyof M, string>>;
-    }
+    }, [allowedFilterKeys]);
 
     const initFilters = forceFilter ?? (updateUrl ? initialFilterUrl : undefined) ?? initialFilter ?? undefined
 
@@ -191,9 +197,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
     const [noMoreToLoad, setNoMoreToLoad] = useState<boolean>(false);
 
-
-
-    const clearFilter = useCallback(() => setFilterValues(removeUnallowedFilters(forceFilter)), [forceFilter]);
+    const clearFilter = useCallback(() => setFilterValues(removeUnallowedFilters(forceFilter)), [forceFilter, removeUnallowedFilters]);
 
     const updateFilterValues = useCallback((updatedFilter: FilterValues<Extract<keyof M, string>> | undefined) => {
         if (forceFilter) {
@@ -205,7 +209,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         } else {
             setFilterValues(removeUnallowedFilters(updatedFilter));
         }
-    }, [forceFilter]);
+    }, [forceFilter, removeUnallowedFilters]);
 
     useEffect(() => {
 
@@ -294,7 +298,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         filterValues,
         setFilterValues: updateFilterValues,
         allowedFilters: allowedFilterKeys,
-        isFilterAvailableForProperty,
+        forcedFilters: forcedFilterKeys,
         sortBy,
         setSortBy,
         searchString,

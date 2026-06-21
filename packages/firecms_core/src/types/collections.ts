@@ -742,7 +742,7 @@ export type EntityTableController<M extends Record<string, any> = any> = {
     filterValues?: FilterValues<Extract<keyof M, string>>;
     setFilterValues?: (filterValues: FilterValues<Extract<keyof M, string>>) => void;
     allowedFilters: (keyof M)[];
-    isFilterAvailableForProperty: (propertyKey: keyof M) => boolean;
+    forcedFilters: (keyof M)[];
     sortBy?: [Extract<keyof M, string>, "asc" | "desc"];
     setSortBy?: (sortBy?: [Extract<keyof M, string>, "asc" | "desc"]) => void;
     searchString?: string;

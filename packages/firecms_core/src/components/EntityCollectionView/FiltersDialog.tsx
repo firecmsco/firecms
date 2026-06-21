@@ -60,18 +60,18 @@ export function FiltersDialog({
         }
     }, [open, filterValues]);
 
-    // Get list of filterable properties
-    const filterableProperties = useMemo(() => {
+    // Get list of editable filter properties
+    const editableFilterProperties = useMemo(() => {
         return Object.entries(properties).filter(([key, property]) => {
-            const isAllowedFilter = allowedFilters.includes(key);
+            const isFilterAllowed = allowedFilters.includes(key);
 
-            const isForcedFilter = Boolean(forceFilter && Object.keys(forceFilter).includes(key));
+            const isFilterForced = Boolean(forceFilter && Object.keys(forceFilter).includes(key));
 
-            return isAllowedFilter && !isForcedFilter;
+            return isFilterAllowed && !isFilterForced;
         });
     }, [properties, allowedFilters, forceFilter]);
 
-    const hasFilterableProperties = filterableProperties.length > 0;
+    const hasEditableFilterProperties = editableFilterProperties.length > 0;
 
     const handleFilterChange = useCallback((propertyKey: string, value?: [VirtualTableWhereFilterOp, any]) => {
         setLocalFilters(prev => {
@@ -104,7 +104,13 @@ export function FiltersDialog({
 
     // Check if any reference field's dialog is currently open (should hide this dialog)
     const isAnyFieldHidden = Object.values(hiddenFields).some(hidden => hidden);
-    const activeFilterCount = Object.keys(localFilters).length;
+
+    const getActiveFilterCount = () => {
+        const editableLocalFilters = Object.keys(localFilters).filter((key) => !forceFilter || !(key in forceFilter));
+        return editableLocalFilters.length;
+    }
+
+    const activeFilterCount = getActiveFilterCount();
 
     const renderFilterField = useCallback((propertyKey: string, property: ResolvedProperty) => {
         const isArray = property.dataType === "array";
@@ -186,14 +192,14 @@ export function FiltersDialog({
             </DialogTitle>
 
             <DialogContent >
-                {!hasFilterableProperties ? (
+                {!hasEditableFilterProperties ? (
                     <Typography color="secondary" className="py-8 text-center">
                         {t("no_filterable_properties")}
                     </Typography>
                 ) : (
                     <table className="w-full border-collapse">
                         <tbody>
-                            {filterableProperties.map(([propertyKey, property], index) => {
+                            {editableFilterProperties.map(([propertyKey, property], index) => {
                                 const hasFilter = propertyKey in localFilters;
 
                                 return (
@@ -235,7 +241,7 @@ export function FiltersDialog({
                     {t("clear")}
                 </Button>
                 <div className="flex-grow" />
-                {hasFilterableProperties && (
+                {hasEditableFilterProperties && (
                     <>
                         <Button
                             variant="text"

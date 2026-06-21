@@ -245,7 +245,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
         const columnsResult: VirtualTableColumn[] = propertiesToColumns({
             properties,
             sortable,
-            forceFilter,
+            forceFilters: tableController.forcedFilters,
             allowedFilters: tableController.allowedFilters,
             AdditionalHeaderWidget
         });
