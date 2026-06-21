@@ -63,9 +63,13 @@ export function FiltersDialog({
     // Get list of filterable properties
     const filterableProperties = useMemo(() => {
         return Object.entries(properties).filter(([key, property]) => {
-            return allowedFilters.includes(key);
+            const isAllowedFilter = allowedFilters.includes(key);
+
+            const isForcedFilter = Boolean(forceFilter && Object.keys(forceFilter).includes(key));
+
+            return isAllowedFilter && !isForcedFilter;
         });
-    }, [properties, allowedFilters]);
+    }, [properties, allowedFilters, forceFilter]);
 
     const hasFilterableProperties = filterableProperties.length > 0;
 

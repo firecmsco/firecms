@@ -145,7 +145,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const allowedFilterKeys = availableFilterKeys.filter((key) => {
         const property = collection.properties[key] as any;
 
-        if(!property) return false;
+        if (!property) return false;
 
         const filterable = property.dataType === 'array' ? isDataTypeFilterable(property.of?.dataType, true) : isDataTypeFilterable(property.dataType);
         return filterable
