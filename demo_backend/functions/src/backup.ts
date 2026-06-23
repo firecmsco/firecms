@@ -1,5 +1,6 @@
 // @ts-ignore
-import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
+import type { CollectionReference } from "firebase-admin/firestore";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const firestore = require("@google-cloud/firestore");
 
@@ -71,7 +72,7 @@ const collectionsToKeep = ["blog", "products", "users", "crypto", "books", "show
 
 async function cleanupDocumentIds() {
     
-    const firestore = admin.firestore();
+    const firestore = getFirestore();
     await firestore.collection("/blog")
         .get()
         .then((snapshot: any) =>
@@ -100,7 +101,7 @@ async function cleanupDocumentIds() {
 }
 
 async function deleteNonRestoredCollections() {
-    const firestore = admin.firestore();
+    const firestore = getFirestore();
     const collections = await firestore.listCollections();
 
     for (const collection of collections) {
@@ -111,7 +112,7 @@ async function deleteNonRestoredCollections() {
     }
 }
 
-async function deleteCollection(collectionRef: admin.firestore.CollectionReference) {
+async function deleteCollection(collectionRef: CollectionReference) {
     const snapshot = await collectionRef.get();
 
     const deletionPromises = snapshot.docs.map(async (doc: any) => {

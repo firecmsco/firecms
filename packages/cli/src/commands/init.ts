@@ -5,18 +5,17 @@ import path from "path";
 import fs from "fs";
 
 import { promisify } from "util";
-import execa from "execa";
-import Listr from "listr";
+import { execa } from "execa";
+import { Listr } from "listr2";
 import axios from "axios";
 import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import { getCurrentUser, getTokens, login, refreshCredentials } from "./auth";
 import ora from "ora";
 
-import ncp from "ncp";
+import fsExtra from "fs-extra";
 import { fileURLToPath } from "url";
 
 const access = promisify(fs.access);
-const copy = promisify(ncp);
 
 // Function to find a specific parent directory by name
 function findSpecificParentDir(currentDir: string, targetDirName: string) {
@@ -482,9 +481,8 @@ async function createWebApp(options: InitOptions) {
 }
 
 async function copyTemplateFiles(options: InitOptions) {
-    return copy(options.templateDirectory, options.targetDirectory, {
-        clobber: false,
-        dot: true
+    return fsExtra.copy(options.templateDirectory, options.targetDirectory, {
+        overwrite: false,
     }).then(async _ => {
         if (options.template === "pro" || options.template === "community") {
             return replaceProjectIdInTemplateFiles(options, [
