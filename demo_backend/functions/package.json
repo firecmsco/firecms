@@ -25,7 +25,7 @@
         "firebase-functions": "^6.6.0",
         "firebase-tools": "^15.9.1",
         "md5": "^2.3.0",
-        "meilisearch": "^0.32.5",
+        "meilisearch": "^0.58.0",
         "node-fetch": "^2.6.1",
         "typesense": "^1.7.2"
     },
