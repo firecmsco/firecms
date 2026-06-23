@@ -113,11 +113,11 @@ export function ReferenceFilterField({
     }, [path]);
 
     const onSingleEntitySelected = (entity: Entity<any>) => {
-        updateFilter(operation, getReferenceFrom(entity));
+        if (entity) updateFilter(operation, getReferenceFrom(entity));
     };
 
     const onMultipleEntitiesSelected = (entities: Entity<any>[]) => {
-        updateFilter(operation, entities.map(e => getReferenceFrom(e)));
+        updateFilter(operation, entities.filter(Boolean).map(e => getReferenceFrom(e)));
     };
 
     const multiple = multipleSelectOperations.includes(operation);

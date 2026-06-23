@@ -32,9 +32,16 @@ export async function streamDataTalkCommand(firebaseAccessToken: string,
             });
 
             if (!response.ok) {
-                const data = await response.json();
+                let data: any;
+                try {
+                    data = await response.json();
+                } catch (_) {
+                    reject(new DataTalkApiError(`API error (HTTP ${response.status})`, String(response.status)));
+                    return;
+                }
                 console.error("Error streaming data talk command", data);
-                reject(new DataTalkApiError(data.message, data.code));
+                const message = data?.message || data?.error || `API error (HTTP ${response.status})`;
+                reject(new DataTalkApiError(message, data?.code ?? String(response.status)));
                 return;
             }
 
@@ -114,9 +121,12 @@ export function getDataTalkSamplePrompts(firebaseAccessToken: string,
     })
         .then(response => {
             if (!response.ok) {
-                return response.json().then(data => {
-                    throw new DataTalkApiError(data.message, data.code);
-                });
+                return response.json()
+                    .catch(() => ({ message: undefined, code: undefined }))
+                    .then(data => {
+                        const message = data?.message || data?.error || `API error (HTTP ${response.status})`;
+                        throw new DataTalkApiError(message, data?.code ?? String(response.status));
+                    });
             }
             return response.json();
         })

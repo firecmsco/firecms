@@ -67,8 +67,14 @@ export async function enhanceDataAPIStream<M extends object>(props: {
         })
         .then(async (res) => {
             if (!res.ok) {
-                console.error("enhanceDataAPIStream error", res)
-                throw await res.json();
+                console.error("enhanceDataAPIStream error", res);
+                let errorData: any;
+                try {
+                    errorData = await res.json();
+                } catch (_) {
+                    throw new Error(`Data enhancement API error (HTTP ${res.status})`);
+                }
+                throw new Error(errorData?.error?.message || errorData?.message || `Data enhancement API error (HTTP ${res.status})`);
             }
             const reader = res.body?.getReader();
             if (!reader) {
@@ -175,8 +181,14 @@ export async function autocompleteStream(props: {
         })
         .then(async (res) => {
             if (!res.ok) {
-                console.error("enhanceDataAPIStream error", res)
-                throw await res.json();
+                console.error("enhanceDataAPIStream error", res);
+                let errorData: any;
+                try {
+                    errorData = await res.json();
+                } catch (_) {
+                    throw new Error(`Data enhancement API error (HTTP ${res.status})`);
+                }
+                throw new Error(errorData?.error?.message || errorData?.message || `Data enhancement API error (HTTP ${res.status})`);
             }
             const reader = res.body?.getReader();
             if (!reader) {
