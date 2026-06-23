@@ -158,6 +158,7 @@ export function useFirestoreTableController<M extends Record<string, any> = any,
         };
 
         const databaseId = collection?.databaseId;
+        if (!firebaseApp && databaseId) throw Error("useFirestoreTableController: firebaseApp is required when using a named database");
         const firestore = firebaseApp
             ? (databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp))
             : getFirestore();

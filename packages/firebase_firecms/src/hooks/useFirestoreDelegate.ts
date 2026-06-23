@@ -556,9 +556,10 @@ export function useFirestoreDelegate({
 
         }, [firebaseApp]),
 
-        generateEntityId: useCallback((path: string): string => {
+        generateEntityId: useCallback((path: string, collection?: EntityCollection): string => {
             if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
-            const firestore = getFirestore(firebaseApp);
+            const databaseId = collection?.databaseId;
+            const firestore = databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp);
             return doc(collectionClause(firestore, path)).id;
         }, [firebaseApp]),
 
