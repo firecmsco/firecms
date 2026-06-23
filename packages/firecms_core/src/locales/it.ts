@@ -146,8 +146,8 @@ export const it: FireCMSTranslations = {
     // ─── Error states ─────────────────────────────────────────────
     error: "Errore",
     error_uploading_file: "Errore durante il caricamento del file",
-    error_deleting: "Errore durante l'eliminazione",
-    error_before_delete: "Errore prima dell'eliminazione",
+    error_deleting: "Errore durante l'eliminazione: {{message}}",
+    error_before_delete: "Errore prima dell'eliminazione: {{message}}",
     error_updating_asset: "Errore durante l'aggiornamento dell'asset",
     error_deleting_asset: "Errore durante l'eliminazione dell'asset",
     error_firestore_index: "Per questa query è richiesto un indice Firestore.",

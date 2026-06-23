@@ -146,8 +146,8 @@ export const de: FireCMSTranslations = {
     // ─── Error states ─────────────────────────────────────────────
     error: "Fehler",
     error_uploading_file: "Fehler beim Hochladen der Datei",
-    error_deleting: "Fehler beim Löschen",
-    error_before_delete: "Fehler vor dem Löschen",
+    error_deleting: "Fehler beim Löschen: {{message}}",
+    error_before_delete: "Fehler vor dem Löschen: {{message}}",
     error_updating_asset: "Fehler beim Aktualisieren des Assets",
     error_deleting_asset: "Fehler beim Löschen des Assets",
     error_firestore_index: "Für diese Abfrage ist ein Firestore-Index erforderlich.",

@@ -146,8 +146,8 @@ export const hi: FireCMSTranslations = {
     // ─── Error states ─────────────────────────────────────────────
     error: "त्रुटि",
     error_uploading_file: "फ़ाइल अपलोड करने में त्रुटि",
-    error_deleting: "हटाने में त्रुटि",
-    error_before_delete: "हटाने से पहले त्रुटि",
+    error_deleting: "हटाने में त्रुटि: {{message}}",
+    error_before_delete: "हटाने से पहले त्रुटि: {{message}}",
     error_updating_asset: "एसेट अपडेट करने में त्रुटि",
     error_deleting_asset: "एसेट हटाने में त्रुटि",
     error_firestore_index: "इस क्वेरी के लिए Firestore इंडेक्स आवश्यक है।",
