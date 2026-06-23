@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "deploy": "yarn run build && firebase deploy --project <your_project_id>"
+    "deploy": "npm run build && firebase deploy --project <your_project_id>"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",

@@ -2,30 +2,36 @@
 FROM node:22-slim AS builder
 WORKDIR /app
 
-# Copy root monorepo package files to install workspaces correctly
-COPY package.json package-lock.json ./
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@10.12.1 --activate
+
+# Copy root monorepo files needed for workspace install
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
 COPY discord-bot/package.json ./discord-bot/package.json
 
 # Install dependencies (both dev and prod dependencies needed for build)
-RUN npm ci --workspace=discord-bot
+RUN pnpm install --filter discord-bot --frozen-lockfile
 
 # Copy package configuration and source files
 COPY discord-bot/tsconfig.json ./discord-bot/
 COPY discord-bot/src ./discord-bot/src
 
 # Compile TypeScript to JavaScript
-RUN npm run build --workspace=discord-bot
+RUN pnpm --filter discord-bot run build
 
 # Runner stage
 FROM node:22-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copy package.json for npm install
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@10.12.1 --activate
+
+# Copy package.json for pnpm install
 COPY discord-bot/package.json ./
 
 # Install only production dependencies
-RUN npm install --omit=dev
+RUN pnpm install --prod
 
 # Copy compiled files from the builder stage
 COPY --from=builder /app/discord-bot/dist ./dist

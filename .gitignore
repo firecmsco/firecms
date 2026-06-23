@@ -25,7 +25,6 @@ firebase-debug.log*
 
 .idea
 
-.npmrc
 .eslintcache
 
 report.**.json
@@ -34,14 +33,5 @@ report.**.json
 /saas_backend
 /typesense_firestore_extension
 
-.pnp.*
-.yarn/*
-.yarn/install-state.gz
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-/.yarn/install-state.gz
 /website-astro-v2/.firebase/hosting.ZGlzdA.cache
 
