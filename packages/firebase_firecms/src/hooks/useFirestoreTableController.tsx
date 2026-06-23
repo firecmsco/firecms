@@ -157,7 +157,10 @@ export function useFirestoreTableController<M extends Record<string, any> = any,
             setDataLoadingError(error);
         };
 
-        const firestore = firebaseApp ? getFirestore(firebaseApp) : getFirestore();
+        const databaseId = collection?.databaseId;
+        const firestore = firebaseApp
+            ? (databaseId ? getFirestore(firebaseApp, databaseId) : getFirestore(firebaseApp))
+            : getFirestore();
         const collectionReference: Query = collectionClause(firestore, fullPath);
 
         const queryParams: QueryConstraint[] = [];
