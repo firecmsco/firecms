@@ -38,7 +38,7 @@
     "date-fns": "^3.6.0",
     "gray-matter": "^4.0.3",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react-dom": "^19.2.7",
     "react-responsive-masonry": "^2.7.1",
     "react-router-dom": "^6.28.0",
     "react-syntax-highlighter": "^16.1.0",
