@@ -36,7 +36,8 @@
     "examples/example",
     "examples/example_astro",
     "examples/example_next",
-    "examples/example_pro"
+    "examples/example_pro",
+    "discord-bot"
   ],
   "scripts": {
     "dev": "cd examples/example && run-s dev",
@@ -46,6 +47,8 @@
     "saas:staging": "cd saas && run-s dev:staging",
     "saas": "cd saas && run-s dev:prod",
     "datatalk": "cd saas_datatalk && run-s dev",
+    "discord-bot": "cd discord-bot && yarn run start",
+    "discord-bot:dev": "cd discord-bot && yarn run dev",
     "deploy:demo": "cd examples/example_pro && run-s deploy",
     "preview": "cd examples/example_pro && run-s preview",
     "deploy:staging": "lerna run build && cd saas && run-s deploy:staging",
