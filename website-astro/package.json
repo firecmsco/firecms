@@ -28,7 +28,7 @@
     "@firecms/ui": "file:../packages/ui",
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@material-design-icons/font": "^0.14.15",
-    "@rollup/plugin-yaml": "^4.1.2",
+    "@rollup/plugin-yaml": "^5.0.0",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.14",
     "@types/react": "^19.2.2",
