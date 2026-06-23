@@ -51,7 +51,7 @@
   "devDependencies": {
     "@google/genai": "^1.46.0",
     "@types/react-syntax-highlighter": "^15.5.13",
-    "typedoc": "^0.28.14",
+    "typedoc": "^0.28.19",
     "typedoc-plugin-markdown": "^4.9.0"
   }
 }
