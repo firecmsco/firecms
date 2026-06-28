@@ -19,7 +19,7 @@
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/starlight": "^0.40.0",
     "@astrojs/starlight-tailwind": "^4.0.1",
-    "@firebase/analytics": "^0.10.18",
+    "@firebase/analytics": "^0.10.22",
     "@firebase/app-check": "^0.11.0",
     "@firecms/core": "file:../packages/firecms_core",
     "@firecms/data_enhancement": "file:../packages/data_enhancement",
