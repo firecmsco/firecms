@@ -15,7 +15,7 @@
     "dependencies": {
         "@elastic/elasticsearch": "^8.13.0",
         "@google-cloud/firestore": "^7.11.0",
-        "algoliasearch": "^4.23.2",
+        "algoliasearch": "^5.55.1",
         "axios": "^1.18.1",
         "cors": "^2.8.5",
         "dotenv": "^16.4.5",
