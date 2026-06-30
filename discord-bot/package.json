@@ -18,7 +18,7 @@
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
+    "@types/node": "^26.0.1",
     "nodemon": "^3.1.0",
     "typescript": "^5.7.0"
   },

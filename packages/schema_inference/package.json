@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "devDependencies": {
-    "@types/node": "^20.19.17",
+    "@types/node": "^26.0.1",
     "typescript": "^5.9.3",
     "vite": "^7.2.4"
   },

@@ -50,7 +50,7 @@
     "ws": "^8.18.3"
   },
   "devDependencies": {
-    "@types/node": "^20.19.17",
+    "@types/node": "^26.0.1",
     "npm-run-all2": "^6.2.6",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.6",

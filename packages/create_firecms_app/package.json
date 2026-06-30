@@ -28,7 +28,7 @@
     "@firecms/cli": "^3.1.0"
   },
   "devDependencies": {
-    "@types/node": "^20.19.17",
+    "@types/node": "^26.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
