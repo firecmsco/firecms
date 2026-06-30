@@ -39,7 +39,7 @@
     "execa": "^9.6.0",
     "form-data": "^4.0.5",
     "fs-extra": "^11.3.0",
-    "googleapis": "^166.0.0",
+    "googleapis": "^173.0.0",
     "inquirer": "12.11.1",
     "json5": "^2.2.3",
     "listr2": "^8.3.3",
