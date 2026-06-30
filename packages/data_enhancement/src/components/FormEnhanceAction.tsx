@@ -172,7 +172,7 @@ export function FormEnhanceAction({
                     </div>
 
                     {samplePrompt.type === "recent" && <IconButton
-                        onClick={(e) => {
+                        onClick={(e: React.MouseEvent) => {
                             e.preventDefault();
                             e.stopPropagation();
                             removeRecentPrompt(storageKey, samplePrompt.prompt);
@@ -198,11 +198,11 @@ export function FormEnhanceAction({
                     value={instructions}
                     autoFocus={status === "new"}
                     disabled={loading || noIdSet}
-                    onFocus={(event) => {
+                    onFocus={(event: React.FocusEvent) => {
                         event.stopPropagation();
                     }}
                     placeholder={noIdSet ? t("set_id_first") : t("provide_instructions")}
-                    onKeyDown={(e) => {
+                    onKeyDown={(e: React.KeyboardEvent) => {
                         e.stopPropagation();
                         if (e.key === "Enter" && !e.shiftKey) {
                             e.preventDefault();
@@ -210,7 +210,7 @@ export function FormEnhanceAction({
                         }
 
                     }}
-                    onChange={(e) => {
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                         if (noIdSet) return;
                         setInstructions(e.target.value);
                     }}

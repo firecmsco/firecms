@@ -120,7 +120,7 @@ export function prepareCollectionForPersistence<M extends {
 function cleanPropertyConfigs(properties: PropertiesOrBuilders<any>, propertyConfigs: Record<string, PropertyConfig>) {
     const res: Record<string, Property> = {};
     Object.entries(properties).forEach(([key, property]) => {
-        if (typeof property === "object") {
+        if (property !== null && typeof property === "object") {
 
             const config = property.propertyConfig ? propertyConfigs[property.propertyConfig] : undefined;
 

@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useDataSource, useFireCMSContext, useNavigationController } from "../../hooks";
 import { useDataOrder } from "../../hooks/data/useDataOrder";
 import {
+    DataType,
     Entity,
     EntityCollection,
     EntityReference,
@@ -142,20 +143,25 @@ export function useDataSourceTableController<M extends Record<string, any> = any
 
     const allowedFilterKeys = useMemo(() => {
         const availableKeys = availableFilterKeys.filter((key) => {
-            const property = collection.properties[key] as any;
+            const property = collection.properties[key];
 
             if (!property) return false;
 
-            const filterable = property.dataType === 'array' ? isDataTypeFilterable(property.of?.dataType, true) : isDataTypeFilterable(property.dataType);
+            if (typeof property === "function") return false;
 
-            return filterable
-        })
+            const dataType = property.dataType;
+            const filterable = dataType === "array"
+                ? isDataTypeFilterable((property as { of?: { dataType: DataType } }).of?.dataType as DataType, true)
+                : isDataTypeFilterable(dataType);
+
+            return filterable;
+        });
 
         const forcedKeys = forcedFilterKeys.filter((key) => !availableKeys.includes(key));
 
         return [...availableKeys, ...forcedKeys];
 
-    }, [collection.properties, availableFilterKeys]);
+    }, [collection.properties, availableFilterKeys, forcedFilterKeys]);
 
     const removeUnallowedFilters = useCallback((filters?: FilterValues<Extract<keyof M, string>>) => {
         if (!filters) return;

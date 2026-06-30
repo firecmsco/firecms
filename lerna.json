@@ -29,5 +29,5 @@
     "examples/example_next",
     "examples/example_pro"
   ],
-  "npmClient": "npm"
+  "npmClient": "pnpm"
 }

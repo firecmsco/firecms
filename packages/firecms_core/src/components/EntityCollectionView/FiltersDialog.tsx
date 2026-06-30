@@ -29,7 +29,7 @@ export interface FiltersDialogProps {
     filterValues: FilterValues<any> | undefined;
     setFilterValues: (filterValues?: FilterValues<any>) => void;
     forceFilter?: FilterValues<any>;
-    allowedFilters: string[];
+    allowedFilters?: string[];
 }
 
 /**
@@ -63,7 +63,7 @@ export function FiltersDialog({
     // Get list of editable filter properties
     const editableFilterProperties = useMemo(() => {
         return Object.entries(properties).filter(([key]) => {
-            const isFilterAllowed = allowedFilters.includes(key);
+            const isFilterAllowed = !allowedFilters || allowedFilters.includes(key);
 
             const isFilterForced = Boolean(forceFilter && Object.keys(forceFilter).includes(key));
 

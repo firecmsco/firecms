@@ -217,13 +217,13 @@ const FieldInner = React.memo(function FieldInner<T extends CMSType = CMSType, M
                             size={"small"}
                             className={"w-[400px] max-w-full text-text-primary dark:text-text-primary-dark"}
                             value={propertyInstructions ?? ""}
-                            onKeyDown={(e) => {
+                            onKeyDown={(e: React.KeyboardEvent) => {
                                 if (e.key === "Enter") {
                                     enhanceData(propertyInstructions);
                                 }
                             }}
                             placeholder={t("instructions")}
-                            onChange={(e) => setPropertyInstructions(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setPropertyInstructions(e.target.value)}
                             endAdornment={<IconButton
                                 size={"small"}
                                 onClick={() => enhanceData(propertyInstructions)}

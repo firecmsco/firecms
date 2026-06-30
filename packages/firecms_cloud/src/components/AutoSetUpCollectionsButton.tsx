@@ -1,9 +1,8 @@
 import React from "react";
-import { AIIcon, ConfirmationDialog, useSnackbarController } from "@firecms/core";
+import { AIIcon, ConfirmationDialog, useSnackbarController, useTranslation } from "@firecms/core";
 import { LoadingButton, Typography } from "@firecms/ui";
 import { ProjectsApi, RootCollectionInfo } from "../api/projects";
 import { useCollectionsConfigController } from "@firecms/collection_editor";
-import { useTranslation } from "@firecms/core";
 import { CollectionSetupSelectionDialog } from "./CollectionSetupSelectionDialog";
 
 export function AutoSetUpCollectionsButton({
@@ -48,7 +47,7 @@ export function AutoSetUpCollectionsButton({
         onClick?.();
         setLoadingAutomaticallyCreate(true);
         snackbarController.open({
-            message: t("this_can_take_a_minute"),
+            message: t("setting_up_collections"),
             type: "info"
         });
         projectsApi.initialCollectionsSetup(projectId)

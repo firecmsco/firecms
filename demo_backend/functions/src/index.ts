@@ -1,7 +1,7 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
+import * as functions from "firebase-functions/v1";
+import { initializeApp } from "firebase-admin/app";
 
-admin.initializeApp();
+initializeApp();
 
 import { Change } from "firebase-functions/v1";
 import { DocumentSnapshot } from "firebase-functions/v1/firestore";

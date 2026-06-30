@@ -73,7 +73,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
         if (disabled)
             return;
         if (onMultipleReferenceSelected) {
-            const references = entities ? entities.map(e => getReferenceFrom(e)) : null;
+            const references = entities ? entities.filter(Boolean).map(e => getReferenceFrom(e)) : null;
             onMultipleReferenceSelected({
                 references,
                 entities

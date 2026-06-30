@@ -7,6 +7,7 @@
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
+    "@firecms/core": "^3.3.0",
     "@firecms/data_export": "^3.3.0",
     "@firecms/data_import": "^3.3.0",
     "@firecms/data_import_export": "^3.3.0",

@@ -741,8 +741,8 @@ export type EntityTableController<M extends Record<string, any> = any> = {
     dataLoadingError?: Error;
     filterValues?: FilterValues<Extract<keyof M, string>>;
     setFilterValues?: (filterValues: FilterValues<Extract<keyof M, string>>) => void;
-    allowedFilters: (keyof M)[];
-    forcedFilters: (keyof M)[];
+    allowedFilters?: (keyof M)[];
+    forcedFilters?: (keyof M)[];
     sortBy?: [Extract<keyof M, string>, "asc" | "desc"];
     setSortBy?: (sortBy?: [Extract<keyof M, string>, "asc" | "desc"]) => void;
     searchString?: string;

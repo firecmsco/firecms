@@ -15,7 +15,8 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/core": "^3.3.0"
+    "@firecms/core": "^3.3.0",
+    "@firecms/ui": "^3.3.0"
   },
   "peerDependencies": {
     "firebase": "^10.12.2 || ^11.0.0 || ^12.0.0",

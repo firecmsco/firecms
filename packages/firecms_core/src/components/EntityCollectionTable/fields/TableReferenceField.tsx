@@ -70,7 +70,7 @@ export const TableReferenceFieldInternal = React.memo(
         }, [updateValue]);
 
         const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
-            updateValue(entities.map((e) => getReferenceFrom(e)));
+            updateValue(entities.filter(Boolean).map((e) => getReferenceFrom(e)));
         }, [updateValue]);
 
         const selectedEntityIds = internalValue

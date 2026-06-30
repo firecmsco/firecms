@@ -267,6 +267,10 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 headers: buildHeaders({ firebaseAccessToken }),
             })
             .then(async (res) => {
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data?.message || data?.error || `Error fetching Stripe portal link (HTTP ${res.status})`);
+                }
                 const data = await res.json();
                 return data.url as string;
             });
@@ -282,6 +286,10 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 headers: buildHeaders({ firebaseAccessToken }),
             })
             .then(async (res) => {
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data?.message || data?.error || `Error fetching Stripe cancel link (HTTP ${res.status})`);
+                }
                 const data = await res.json();
                 return data.url as string;
             });
@@ -297,6 +305,10 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 headers: buildHeaders({ firebaseAccessToken }),
             })
             .then(async (res) => {
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data?.message || data?.error || `Error fetching Stripe update link (HTTP ${res.status})`);
+                }
                 const data = await res.json();
                 return data.url as string;
             });
@@ -312,6 +324,10 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 headers: buildHeaders({ firebaseAccessToken }),
             })
             .then(async (res) => {
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data?.message || data?.error || `Error fetching Stripe payment link (HTTP ${res.status})`);
+                }
                 const data = await res.json();
                 return data.url as string;
             });

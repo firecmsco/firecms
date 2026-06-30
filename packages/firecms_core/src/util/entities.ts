@@ -137,6 +137,9 @@ export function sanitizeData<M extends Record<string, any>>
 }
 
 export function getReferenceFrom<M extends Record<string, any>>(entity: Entity<M>): EntityReference {
+    if (!entity) {
+        throw new Error("getReferenceFrom: entity is null or undefined");
+    }
     return new EntityReference(entity.id, entity.path, entity.databaseId);
 }
 

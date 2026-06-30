@@ -1,6 +1,5 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
-import DocumentReference = admin.firestore.DocumentReference;
+import * as functions from "firebase-functions/v1";
+import { getFirestore, DocumentReference } from "firebase-admin/firestore";
 
 /**
  * When a locale is updated, we check update the 'available_locales' field in the product
@@ -41,6 +40,6 @@ export const onDeleteSubcollections = functions
     .firestore
     .document('/products/{productId}')
     .onDelete((snapshot, context) => {
-        const firestore = admin.firestore();
+        const firestore = getFirestore();
         return firestore.recursiveDelete(snapshot.ref);
     });

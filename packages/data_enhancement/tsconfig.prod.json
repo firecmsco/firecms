@@ -1,7 +1,10 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
-    "paths": {}
+    "paths": {
+      "@firecms/core": ["../firecms_core/dist"],
+      "@firecms/ui": ["../ui/dist"]
+    }
   },
   "exclude": [
     "node_modules",

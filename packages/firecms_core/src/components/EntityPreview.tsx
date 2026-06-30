@@ -200,43 +200,44 @@ export type EntityPreviewContainerProps = {
     onClick?: (e: React.SyntheticEvent) => void;
 };
 
-export const EntityPreviewContainer = React.forwardRef<HTMLDivElement, EntityPreviewContainerProps>(({
-                                                                                                         children,
-                                                                                                         hover,
-                                                                                                         onClick,
-                                                                                                         size = "medium",
-                                                                                                         style,
-                                                                                                         className,
-                                                                                                         fullwidth = true,
-                                                                                                         ...props
-                                                                                                     }, ref) => {
-    return <div
-        ref={ref}
-        style={{
-            ...style,
-            // @ts-ignore
-            tabindex: 0
-        }}
-        className={cls(
-            "bg-white dark:bg-surface-900",
-            "min-h-[44px]",
-            fullwidth ? "w-full" : "",
-            "items-center",
-            hover ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800" : "",
-            size === "small" ? "p-1" : "px-2 py-1",
-            "flex border rounded-lg",
-            onClick ? "cursor-pointer" : "",
-            defaultBorderMixin,
-            className)}
-        onClick={(event) => {
-            if (onClick) {
-                event.preventDefault();
-                onClick(event);
-            }
-        }}
-        {...props}>
-        {children}
-    </div>;
-});
+export function EntityPreviewContainer({
+                                            children,
+                                            hover,
+                                            onClick,
+                                            size = "medium",
+                                            style,
+                                            className,
+                                            fullwidth = true,
+                                            ref
+                                        }: EntityPreviewContainerProps & { ref?: React.Ref<HTMLDivElement> }) {
+    const divClassName = cls(
+        "bg-white dark:bg-surface-900",
+        "min-h-[44px]",
+        fullwidth ? "w-full" : "",
+        "items-center",
+        hover ? "hover:bg-surface-accent-50 dark:hover:bg-surface-800 group-hover:bg-surface-accent-50 dark:group-hover:bg-surface-800" : "",
+        size === "small" ? "p-1" : "px-2 py-1",
+        "flex border rounded-lg",
+        onClick ? "cursor-pointer" : "",
+        defaultBorderMixin,
+        className
+    );
 
-EntityPreviewContainer.displayName = "EntityPreviewContainer";
+    const handleClick = onClick
+        ? (event: React.MouseEvent<HTMLDivElement>) => {
+            event.preventDefault();
+            onClick(event);
+        }
+        : undefined;
+
+    const divProps: React.HTMLAttributes<HTMLDivElement> & { ref?: React.Ref<HTMLDivElement> } = {
+        ref,
+        tabIndex: 0,
+        style,
+        className: divClassName,
+        onClick: handleClick,
+    };
+
+    return <div {...divProps}>{children}</div>;
+}
+

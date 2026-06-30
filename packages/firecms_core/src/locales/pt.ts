@@ -151,8 +151,8 @@ export const pt: FireCMSTranslations = {
     // ─── Error states ─────────────────────────────────────────────
     error: "Erro",
     error_uploading_file: "Erro ao carregar ficheiro",
-    error_deleting: "Erro ao eliminar",
-    error_before_delete: "Erro antes de eliminar",
+    error_deleting: "Erro ao eliminar: {{message}}",
+    error_before_delete: "Erro antes de eliminar: {{message}}",
     error_updating_asset: "Erro ao atualizar recurso",
     error_deleting_asset: "Erro ao eliminar recurso",
     error_firestore_index: "É necessário um índice Firestore para esta consulta.",
@@ -519,7 +519,8 @@ export const pt: FireCMSTranslations = {
     auto_setup_collections_button: "Configurar coleções automaticamente",
     auto_setup_collections_title: "Configurar coleções automaticamente?",
     auto_setup_collections_desc: "Isto criará automaticamente configurações de coleção para coleções que <b>NÃO</b> estão já mapeadas",
-    this_can_take_a_minute: "Isto pode demorar um ou dois minutos",
+    setting_up_collections: "Configurando coleções",
+    setting_up_collection: "Configurando {{name}}",
     no_collections_found_to_setup: "Nenhuma coleção encontrada para configurar.",
     collections_have_been_setup: "As coleções foram configuradas automaticamente.",
     error_setting_up_collections: "Erro ao configurar coleções automaticamente",
@@ -529,6 +530,7 @@ export const pt: FireCMSTranslations = {
     deselect_all: "Deselect all",
     setup_collections_confirm: "Set up ({{count}})",
     collection_setup_success: "{{name}} has been set up",
+    go_to_collection: "Go to collection",
 
     // --- Home Suggestions ---
     add_your: "Adicione as suas",

@@ -66,7 +66,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
         collectionEntitiesCount
     };
 
-    const hasAnyAllowedFilters = tableController.allowedFilters.length > 0;
+    const hasAnyAllowedFilters = !tableController.allowedFilters || tableController.allowedFilters.length > 0;
 
     // Filters button
     const filtersButton = resolvedProperties && tableController.setFilterValues && hasAnyAllowedFilters && (
@@ -133,7 +133,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
                     filterValues={tableController.filterValues}
                     setFilterValues={(filterValues) => tableController.setFilterValues?.(filterValues ?? {})}
                     forceFilter={collection.forceFilter}
-                    allowedFilters={tableController.allowedFilters.map(key => key.toString())}
+                    allowedFilters={tableController.allowedFilters?.map(key => key.toString())}
                 />
             )}
         </>

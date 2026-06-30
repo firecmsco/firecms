@@ -20,8 +20,8 @@ export function buildIdColumn(largeLayout?: boolean): VirtualTableColumn {
 export interface PropertiesToColumnsParams<M extends Record<string, any>> {
     properties: ResolvedProperties<M>;
     sortable?: boolean;
-    forcedFilters: (keyof M)[];
-    allowedFilters: (keyof M)[];
+    forcedFilters?: (keyof M)[];
+    allowedFilters?: (keyof M)[];
     AdditionalHeaderWidget?: React.ComponentType<{
         property: ResolvedProperty,
         propertyKey: string,
@@ -41,8 +41,8 @@ export function propertiesToColumns<M extends Record<string, any>>({ properties,
                 throw Error("Internal error: no property found in path " + key);
 
             const filterable = property.dataType === 'array' ? isDataTypeFilterable(property.of?.dataType, true) : isDataTypeFilterable(property.dataType);
-            const isFilterForced = forcedFilters.includes(key);
-            const isFilterAllowed = allowedFilters.includes(key);
+            const isFilterForced = forcedFilters?.includes(key) ?? false;
+            const isFilterAllowed = allowedFilters ? allowedFilters.includes(key) : filterable;
 
             const filterEnabled = filterable && isFilterAllowed && !isFilterForced;
             return {

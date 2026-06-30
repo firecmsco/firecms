@@ -544,7 +544,8 @@ export interface FireCMSTranslations {
     auto_setup_collections_button: string;
     auto_setup_collections_title: string;
     auto_setup_collections_desc: string;
-    this_can_take_a_minute: string;
+    setting_up_collections: string;
+    setting_up_collection: string;
     no_collections_found_to_setup: string;
     collections_have_been_setup: string;
     error_setting_up_collections: string;
@@ -554,6 +555,7 @@ export interface FireCMSTranslations {
     deselect_all: string;
     setup_collections_confirm: string;
     collection_setup_success: string;
+    go_to_collection: string;
     
     // --- Home Suggestions ---
     add_your: string;

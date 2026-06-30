@@ -58,7 +58,7 @@ export function ArrayOfReferencesFieldBinding({
     }
 
     const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
-        setValue(entities.map(e => getReferenceFrom(e)));
+        setValue(entities.filter(Boolean).map(e => getReferenceFrom(e)));
     }, [setValue]);
 
     const referenceDialogController = useReferenceDialog({

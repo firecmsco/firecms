@@ -5,7 +5,7 @@ If you would like to make changes to the source, feel free to submit a PR!
 
 ## Getting Started
 
-This project is a monorepo managed with [Yarn workspaces](https://classic.yarnpkg.com/en/docs/workspaces/).
+This project is a monorepo managed with [pnpm workspaces](https://pnpm.io/workspaces).
 
 You can find all the FireCMS packages in the `packages` folder.
 The code that simulates a final project implemented by a user can be found in the `examples` folder.
@@ -15,32 +15,18 @@ All dependencies are linked automatically and just running the following command
 After pulling the code you just need to run:
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
-
-or
-
-```bash
-yarn
-yarn dev
-``` 
 
 to start the demo project.
 
 You can also run:
 
 ```bash
-npm install
-npm run pro
+pnpm install
+pnpm pro
 ```
-
-or
-
-```bash
-yarn
-yarn pro
-``` 
 
 to use the example project with the Pro version of FireCMS.
 

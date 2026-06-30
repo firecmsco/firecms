@@ -1,8 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-
-    "paths": {}
+    "paths": {
+      "@firecms/data_import": ["../data_import/dist"],
+      "@firecms/data_export": ["../data_export/dist"],
+      "@firecms/core": ["../firecms_core/dist"],
+      "@firecms/schema_inference": ["../schema_inference/dist"],
+      "@firecms/ui": ["../ui/dist"],
+      "@firecms/formex": ["../formex/dist"]
+    }
   },
   "exclude": [
     "node_modules",
@@ -10,6 +16,6 @@
     "src/test",
     "../firecms_core/src",
     "../schema_inference/src",
-    "../ui/src",
+    "../ui/src"
   ]
 }

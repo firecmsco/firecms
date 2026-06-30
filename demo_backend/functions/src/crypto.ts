@@ -1,5 +1,5 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
+import * as functions from "firebase-functions/v1";
+import { getFirestore, FieldValue, WriteResult } from "firebase-admin/firestore";
 // @ts-ignore
 import fetch from "node-fetch";
 
@@ -38,8 +38,8 @@ async function fetchMultipleSymbolsData(ids: string[]): Promise<Record<string, S
  * Updates Firestore with multiple cryptocurrency prices
  * @param symbols - Array of objects containing symbol, name, and id
  */
-function updateFirestoreSymbols(symbols: { name: string; id: string; }[]): Promise<FirebaseFirestore.WriteResult[]> {
-    const firestore = admin.firestore();
+function updateFirestoreSymbols(symbols: { name: string; id: string; }[]): Promise<WriteResult[]> {
+    const firestore = getFirestore();
     const ids = symbols.map(s => s.id);
 
     console.log("Updating crypto demo symbols:", ids);
@@ -55,7 +55,7 @@ function updateFirestoreSymbols(symbols: { name: string; id: string; }[]): Promi
                 const docRef = firestore.collection("crypto").doc(id);
                 batch.set(docRef, {
                     name,
-                    updated_on: admin.firestore.FieldValue.serverTimestamp(),
+                    updated_on: FieldValue.serverTimestamp(),
                     ...data[id]
                 }, { merge: true });
             }
