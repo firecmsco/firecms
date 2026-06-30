@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useDataSource, useFireCMSContext, useNavigationController } from "../../hooks";
 import { useDataOrder } from "../../hooks/data/useDataOrder";
 import {
+    DataType,
     Entity,
     EntityCollection,
     EntityReference,
@@ -16,6 +17,7 @@ import {
 } from "../../types";
 import { useDebouncedData } from "./useDebouncedData";
 import { ScrollRestorationController } from "./useScrollRestoration";
+import { isDataTypeFilterable } from "../../util";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -135,8 +137,41 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         filterValues: initialFilterUrl,
         sortBy: initialSortUrl,
     } = parseFilterAndSort(location.search);
+    
+    const availableFilterKeys = collection.allowedFilters ?? Object.keys(collection.properties);
+    const forcedFilterKeys = collection.forceFilter ? Object.keys(collection.forceFilter) : [];
 
-    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? (updateUrl ? initialFilterUrl : undefined) ?? initialFilter ?? undefined);
+    const allowedFilterKeys = useMemo(() => {
+        const availableKeys = availableFilterKeys.filter((key) => {
+            const property = collection.properties[key];
+
+            if (!property) return false;
+
+            if (typeof property === "function") return false;
+
+            const dataType = property.dataType;
+            const filterable = dataType === "array"
+                ? isDataTypeFilterable((property as { of?: { dataType: DataType } }).of?.dataType as DataType, true)
+                : isDataTypeFilterable(dataType);
+
+            return filterable;
+        });
+
+        const forcedKeys = forcedFilterKeys.filter((key) => !availableKeys.includes(key));
+
+        return [...availableKeys, ...forcedKeys];
+
+    }, [collection.properties, availableFilterKeys, forcedFilterKeys]);
+
+    const removeUnallowedFilters = useCallback((filters?: FilterValues<Extract<keyof M, string>>) => {
+        if (!filters) return;
+
+        return Object.fromEntries(Object.entries(filters).filter(([key]) => allowedFilterKeys.includes(key as keyof M)))  as FilterValues<Extract<keyof M, string>>;
+    }, [allowedFilterKeys]);
+
+    const initFilters = forceFilter ?? (updateUrl ? initialFilterUrl : undefined) ?? initialFilter ?? undefined
+
+    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(removeUnallowedFilters(initFilters));
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>((updateUrl ? initialSortUrl : undefined) ?? initialSortInternal);
 
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
@@ -168,7 +203,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
     const [noMoreToLoad, setNoMoreToLoad] = useState<boolean>(false);
 
-    const clearFilter = useCallback(() => setFilterValues(forceFilter ?? undefined), [forceFilter]);
+    const clearFilter = useCallback(() => setFilterValues(removeUnallowedFilters(forceFilter)), [forceFilter, removeUnallowedFilters]);
 
     const updateFilterValues = useCallback((updatedFilter: FilterValues<Extract<keyof M, string>> | undefined) => {
         if (forceFilter) {
@@ -178,9 +213,9 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         if (updatedFilter && Object.keys(updatedFilter).length === 0) {
             setFilterValues(undefined);
         } else {
-            setFilterValues(updatedFilter);
+            setFilterValues(removeUnallowedFilters(updatedFilter));
         }
-    }, [forceFilter]);
+    }, [forceFilter, removeUnallowedFilters]);
 
     useEffect(() => {
 
@@ -268,6 +303,8 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         dataLoadingError,
         filterValues,
         setFilterValues: updateFilterValues,
+        allowedFilters: allowedFilterKeys,
+        forcedFilters: forcedFilterKeys,
         sortBy,
         setSortBy,
         searchString,

@@ -66,8 +66,10 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
         collectionEntitiesCount
     };
 
+    const hasAnyAllowedFilters = !tableController.allowedFilters || tableController.allowedFilters.length > 0;
+
     // Filters button
-    const filtersButton = resolvedProperties && tableController.setFilterValues && (
+    const filtersButton = resolvedProperties && tableController.setFilterValues && hasAnyAllowedFilters && (
         <Tooltip title={t("filters")}
             key={"filters_tooltip"}>
             <Badge
@@ -131,6 +133,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
                     filterValues={tableController.filterValues}
                     setFilterValues={(filterValues) => tableController.setFilterValues?.(filterValues ?? {})}
                     forceFilter={collection.forceFilter}
+                    allowedFilters={tableController.allowedFilters?.map(key => key.toString())}
                 />
             )}
         </>

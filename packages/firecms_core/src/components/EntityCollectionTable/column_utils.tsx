@@ -2,7 +2,7 @@ import React from "react";
 import { getTableCellAlignment, getTablePropertyColumnWidth } from "./internal/common";
 import { FilterValues, ResolvedProperties, ResolvedProperty } from "../../types";
 import { VirtualTableColumn } from "../VirtualTable";
-import { getIconForProperty, getResolvedPropertyInPath } from "../../util";
+import { getIconForProperty, getResolvedPropertyInPath, isDataTypeFilterable } from "../../util";
 import { getColumnKeysForProperty } from "../common/useColumnsIds";
 
 export function buildIdColumn(largeLayout?: boolean): VirtualTableColumn {
@@ -20,7 +20,8 @@ export function buildIdColumn(largeLayout?: boolean): VirtualTableColumn {
 export interface PropertiesToColumnsParams<M extends Record<string, any>> {
     properties: ResolvedProperties<M>;
     sortable?: boolean;
-    forceFilter?: FilterValues<keyof M extends string ? keyof M : never>;
+    forcedFilters?: (keyof M)[];
+    allowedFilters?: (keyof M)[];
     AdditionalHeaderWidget?: React.ComponentType<{
         property: ResolvedProperty,
         propertyKey: string,
@@ -28,8 +29,7 @@ export interface PropertiesToColumnsParams<M extends Record<string, any>> {
     }>;
 }
 
-export function propertiesToColumns<M extends Record<string, any>>({ properties, sortable, forceFilter, AdditionalHeaderWidget }: PropertiesToColumnsParams<M>): VirtualTableColumn[] {
-    const disabledFilter = Boolean(forceFilter);
+export function propertiesToColumns<M extends Record<string, any>>({ properties, sortable, forcedFilters, AdditionalHeaderWidget, allowedFilters }: PropertiesToColumnsParams<M>): VirtualTableColumn[] {
     return Object.entries<ResolvedProperty>(properties)
         .flatMap(([key, property]) => getColumnKeysForProperty(property, key))
         .map(({
@@ -39,14 +39,19 @@ export function propertiesToColumns<M extends Record<string, any>>({ properties,
             const property = getResolvedPropertyInPath(properties, key);
             if (!property)
                 throw Error("Internal error: no property found in path " + key);
-            const filterable = filterableProperty(property);
+
+            const filterable = property.dataType === 'array' ? isDataTypeFilterable(property.of?.dataType, true) : isDataTypeFilterable(property.dataType);
+            const isFilterForced = forcedFilters?.includes(key) ?? false;
+            const isFilterAllowed = allowedFilters ? allowedFilters.includes(key) : filterable;
+
+            const filterEnabled = filterable && isFilterAllowed && !isFilterForced;
             return {
                 key: key as string,
                 align: getTableCellAlignment(property),
                 icon: getIconForProperty(property, "small"),
                 title: property.name ?? key as string,
                 sortable: sortable,
-                filter: !disabledFilter && filterable,
+                filter: filterEnabled,
                 width: getTablePropertyColumnWidth(property),
                 resizable: true,
                 custom: {
@@ -58,17 +63,4 @@ export function propertiesToColumns<M extends Record<string, any>>({ properties,
                     : undefined
             } satisfies VirtualTableColumn;
         });
-}
-
-function filterableProperty(property: ResolvedProperty, partOfArray = false): boolean {
-    if (partOfArray) {
-        return ["string", "number", "date", "reference"].includes(property.dataType);
-    }
-    if (property.dataType === "array") {
-        if (property.of)
-            return filterableProperty(property.of, true);
-        else
-            return false;
-    }
-    return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
 }
