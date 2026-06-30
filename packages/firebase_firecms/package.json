@@ -19,7 +19,7 @@
     "@firecms/data_import_export": "^3.3.0",
     "@firecms/schema_inference": "^3.3.0",
     "@firecms/ui": "^3.3.0",
-    "react-router": "^6.30.2",
+    "react-router": "^8.1.0",
     "react-router-dom": "^6.30.2"
   },
   "peerDependencies": {

@@ -46,7 +46,7 @@
     "@firecms/formex": "^3.3.0",
     "@firecms/schema_inference": "^3.3.0",
     "@firecms/user_management": "^3.3.0",
-    "react-router": "^6.30.2",
+    "react-router": "^8.1.0",
     "react-router-dom": "^6.30.2"
   },
   "peerDependencies": {
