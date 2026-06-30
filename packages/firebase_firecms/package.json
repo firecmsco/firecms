@@ -42,7 +42,7 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "@types/node": "^20.19.17",
+    "@types/node": "^26.0.1",
     "@types/react": "^19.2.3",
     "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",

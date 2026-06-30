@@ -39,7 +39,7 @@
   "devDependencies": {
     "@jest/globals": "^30.2.0",
     "@types/jest": "^29.5.14",
-    "@types/node": "^20.19.17",
+    "@types/node": "^26.0.1",
     "@types/react": "^19.2.3",
     "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
