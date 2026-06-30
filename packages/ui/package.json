@@ -104,7 +104,7 @@
     "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
     "tsd": "^0.31.2",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vite": "^7.2.4",
     "vite-plugin-static-copy": "^3.1.4"
   },

@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "nodemon": "^3.1.0",
-    "typescript": "^5.7.0"
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22"
