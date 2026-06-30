@@ -2,12 +2,15 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "sourceMap": true,
-    "paths": {}
+    "paths": {
+      "@firecms/ui": ["../ui/dist"],
+      "@firecms/formex": ["../formex/dist"]
+    }
   },
   "exclude": [
     "node_modules",
     "dist",
     "../ui/src",
-    "../formex/src",
-  ],
+    "../formex/src"
+  ]
 }
