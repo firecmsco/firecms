@@ -57,7 +57,7 @@
     "babel-plugin-react-compiler": "^19.0.0-beta-af1b7da-20250417",
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "jest": "^29.7.0",
-    "react-router": "^6.30.2",
+    "react-router": "^8.1.0",
     "react-router-dom": "^6.30.2",
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3",
