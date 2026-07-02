@@ -135,7 +135,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const [columns, setColumns] = useState(columnsProp);
 
         const tableRef = useRef<HTMLDivElement>(null);
-        const endReachCallbackThreshold = useRef<number>(0);
+        const lastEndReachedDataLength = useRef<number | undefined>(undefined);
 
         const debouncedScroll = useDebounceCallback(onScrollProp, 200);
 
@@ -242,7 +242,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [filterInput]);
 
         const scrollToTop = useCallback(() => {
-            endReachCallbackThreshold.current = 0;
+            lastEndReachedDataLength.current = undefined;
             if (tableRef.current) {
                 tableRef.current.scrollTo(tableRef.current?.scrollLeft, 0);
             }
@@ -278,12 +278,23 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const maxScroll = Math.max((data?.length ?? 0) * rowHeight - bounds.height, 0);
 
-        const onEndReachedInternal = useCallback((scrollOffset: number) => {
-            if (onEndReached && (data?.length ?? 0) > 0 && scrollOffset > endReachCallbackThreshold.current + endOffset) {
-                endReachCallbackThreshold.current = scrollOffset;
+        const onEndReachedInternal = useCallback(() => {
+            const dataLength = data?.length ?? 0;
+
+            if (onEndReached && dataLength > 0 && lastEndReachedDataLength.current !== dataLength) {
+                lastEndReachedDataLength.current = dataLength;
                 onEndReached();
             }
         }, [data?.length, onEndReached]);
+
+        useEffect(() => {
+            if (!onEndReached || loading || !data?.length || !bounds.height || !tableRef.current) {
+                return;
+            }
+            if (tableRef.current.scrollHeight <= tableRef.current.clientHeight) {
+                onEndReachedInternal();
+            }
+        }, [bounds.height, data?.length, loading, onEndReached, onEndReachedInternal]);
 
         const onScroll = useCallback(({
             scrollDirection,
@@ -302,12 +313,12 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                 })
             }
             if (!scrollUpdateWasRequested && (scrollOffset >= maxScroll - endOffset))
-                onEndReachedInternal(scrollOffset);
-        }, [maxScroll, onEndReachedInternal]);
+                onEndReachedInternal();
+        }, [endOffset, maxScroll, onEndReachedInternal]);
 
         const onFilterUpdateInternal = useCallback((column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => {
 
-            endReachCallbackThreshold.current = 0;
+            lastEndReachedDataLength.current = undefined;
             const filter = filterRef.current;
             let newFilterValue: VirtualTableFilterValues<any> = filter ? { ...filter } : {};
 
