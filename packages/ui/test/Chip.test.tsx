@@ -48,8 +48,17 @@ describe("Chip", () => {
         expect(screen.getByText("Tiny").className).toContain("text-[10px]");
     });
 
-    it("applies error styling", () => {
+    it("applies error styling via inline color", () => {
         render(<Chip error>Err</Chip>);
-        expect(screen.getByText("Err").className).toContain("text-red-500");
+        // Error color is applied as an inline style (light mode: #dc2626).
+        const el = screen.getByText("Err") as HTMLElement;
+        expect(el.style.color).toBe("rgb(220, 38, 38)");
+    });
+
+    it("renders a color scheme background from a color key", () => {
+        render(<Chip colorScheme="blueLighter">Tag</Chip>);
+        const el = screen.getByText("Tag") as HTMLElement;
+        // Palette key must still resolve (no palette-key rename): blueLighter = #cfdfff.
+        expect(el.style.backgroundColor).toBe("rgb(207, 223, 255)");
     });
 });
