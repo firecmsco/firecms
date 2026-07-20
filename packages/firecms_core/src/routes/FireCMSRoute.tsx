@@ -10,6 +10,7 @@ import {
 } from "../util/navigation_from_path";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { toArray } from "../util/arrays";
+import { shouldBlockEntityNavigation } from "../util/navigation_blocking";
 import { NotFoundPage } from "../components";
 import { lazyEager } from "../util/lazy_eager";
 
@@ -198,12 +199,15 @@ function EntityFullScreenRoute({
     let blocker: Blocker | undefined = undefined;
     try {
         blocker = useBlocker(({
+            currentLocation,
             nextLocation
-        }) => {
-            if (nextLocation.pathname.startsWith(entityPath))
-                return false;
-            return blocked.current;
-        });
+        }) => shouldBlockEntityNavigation({
+            currentLocation,
+            nextLocation,
+            entityPath,
+            basePath,
+            blocked: blocked.current
+        }));
     } catch (e) {
         // console.warn("Blocker not available, navigation will not be blocked");
     }
