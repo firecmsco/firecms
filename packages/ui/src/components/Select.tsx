@@ -36,7 +36,7 @@ export type SelectProps<T extends SelectValue = string> = {
     error?: boolean,
     position?: "item-aligned" | "popper",
     endAdornment?: React.ReactNode,
-    inputRef?: React.RefObject<HTMLButtonElement | null>,
+    inputRef?: React.Ref<HTMLButtonElement>,
     padding?: boolean,
     invisible?: boolean,
     children?: React.ReactNode;
@@ -136,7 +136,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             {...props}>
             {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
             <div className={cls(
-                "select-none rounded-md text-sm",
+                "select-none rounded-lg text-sm",
                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 "relative flex items-center",
@@ -155,6 +155,8 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                     id={id}
                     asChild={false}
                     type="button"
+                    aria-label={typeof label === "string" ? label : (typeof renderValue === "string" ? renderValue : "Select an option")}
+                    aria-invalid={error || undefined}
                     className={cls(
                         "h-full",
                         padding ? {
@@ -164,7 +166,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
                         } : "",
                         "outline-hidden focus:outline-hidden",
                         "outline-none focus:outline-none",
-                        "select-none rounded-md text-sm",
+                        "select-none rounded-lg text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
                         error ? "border border-red-500 dark:border-red-600" : "",
                         disabled ? "text-surface-accent-600 dark:text-surface-accent-400" : "text-surface-accent-800 dark:text-white",
@@ -232,7 +234,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(({
             {/* Pass the calculated finalContainer */}
             <SelectPrimitive.Portal container={finalContainer}>
                 <SelectPrimitive.Content position={position}
-                    className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-surface-900 p-2 rounded-lg", defaultBorderMixin)}>
+                    className={cls(focusedDisabled, "z-50 relative overflow-hidden border bg-white dark:bg-surface-800 p-2 rounded-lg shadow-lg", defaultBorderMixin)}>
                     <SelectPrimitive.Viewport className={cls("p-1", viewportClassName)}
                         style={{ maxHeight: "var(--radix-select-content-available-height)" }}>
                         {children}
@@ -270,8 +272,8 @@ export const SelectItem = React.memo(function SelectItem<T extends SelectValue =
             "w-full",
             "relative flex items-center p-2 rounded-md text-sm text-surface-accent-700 dark:text-surface-accent-300",
             "focus:z-10",
-            "data-[state=checked]:bg-surface-accent-100 data-[state=checked]:dark:bg-surface-accent-800 focus:bg-surface-accent-100 dark:focus:bg-surface-950",
-            "data-[state=checked]:focus:bg-surface-accent-200 data-[state=checked]:dark:focus:bg-surface-950",
+            "data-[state=checked]:bg-surface-accent-100 data-[state=checked]:dark:bg-surface-accent-800 focus:bg-surface-accent-100 dark:focus:bg-surface-900",
+            "data-[state=checked]:focus:bg-surface-accent-200 data-[state=checked]:dark:focus:bg-surface-900",
             disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
             "[&>*]:w-full",
             "overflow-visible",
