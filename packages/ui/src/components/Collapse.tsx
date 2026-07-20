@@ -62,3 +62,5 @@ export const Collapse = React.memo(({
         </Collapsible.Root>
     )
 });
+
+Collapse.displayName = "Collapse";
