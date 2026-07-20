@@ -40,6 +40,46 @@ All 123 UI tests pass and `packages/ui` typechecks clean. `firecms_core`
 typechecks clean and the new navigation-blocking tests pass (pre-existing
 unrelated test failures in that package are untouched).
 
+## UI-kit visual restyle (approved: "Full UI-kit restyle")
+
+Ported Rebase's visual layer while keeping every public API identical
+(exports + prop types locked by the api-surface test). Deployed to canary.
+
+Restyled: **design tokens** (neutral/darker surface palette, opaque text
+colors, `color-scheme` fix), **typography scale** (tighter, semibold
+headers), and components **Chip, Button, Alert, Avatar, Card, Separator,
+Menu, IconButton, Checkbox, TextField, Dialog, CenteredView, InfoLabel,
+Label, LoadingButton, RadioGroup, InputLabel, Collapse, ToggleButtonGroup,
+BooleanSwitch, Popover, ExpandablePanel, Select, Skeleton**. Many also
+gained additive a11y (roles/aria-*) and displayNames.
+
+Deliberately NOT changed from Rebase, and why (each would break API or
+behaviour, or needs runtime verification):
+
+- **CHIP_COLORS palette** — Rebase renamed the 40 keys to 10; that breaks
+  every enum-color reference. Kept FireCMS's keys; added optional
+  darkColor/darkText so dark overrides are possible without a rename.
+- **Dialog z-index** — Rebase bumped the layering; kept FireCMS's to avoid
+  side-panel stacking regressions.
+- **Tooltip** — Rebase drops forwardRef + attribute passthrough; FireCMS's
+  is better. Skipped.
+- **SearchBar** (`large` prop removed), **BooleanSwitchWithLabel**
+  (`switchAdornment` removed) — prop removals = breaking. Skipped (would
+  take only their additive bits, e.g. SearchBar `initialValue`).
+- **Markdown** — swaps react-fast-compare -> fast-equals (dep not present)
+  and disables raw HTML (`html:true`->`false`, a rendering behaviour
+  change). Skipped.
+- **Tabs** — FireCMS already has the scroll feature; Rebase's diff is an
+  additive `variant` ("standard"/"boxy"/"pill") feature + restructuring of
+  heavily-used tab nav. Deferred (feature, not restyle; needs verification).
+- **Icons** — Rebase moved several components to `lucide-react`, which the
+  FireCMS UI kit does not depend on. Everywhere this came up (Checkbox,
+  ExpandablePanel, Select, SearchBar, Tabs, Table) FireCMS's generated
+  `../icons` equivalents were kept.
+- **Not yet ported** (larger rewrites / lower visibility, safe to do later
+  with the app runnable): Table, Sheet, ColorPicker, MultiSelect,
+  TextareaAutosize, DateTimeField, DebouncedTextField, FileUpload.
+
 ## Key blocker for deeper ports (discovered while porting)
 
 Rebase **renamed the property model**: `property.dataType` → `property.type`
