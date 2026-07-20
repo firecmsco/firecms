@@ -35,10 +35,10 @@
     --color-surface-400: #a3a3a3;
     --color-surface-500: #737373;
     --color-surface-600: #404040;
-    --color-surface-700: #262626;
-    --color-surface-800: #111111;
-    --color-surface-900: #0a0a0a;
-    --color-surface-950: #000000;
+    --color-surface-700: #2e2e33;
+    --color-surface-800: #1f1f23;
+    --color-surface-900: #131316;
+    --color-surface-950: #0d0d0f;
 
     /* Surface Accent Colors */
     --color-surface-accent-50: #f8fafc;
