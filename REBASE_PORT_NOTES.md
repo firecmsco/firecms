@@ -11,12 +11,13 @@ cherry-pick (paths + packages were renamed: `@firecms/*` → `@rebasepro/*`,
 `firecms_core` split into `packages/app` + `packages/common` + `packages/forms`,
 `collection_editor`/`entity_history` folded into `packages/admin`).
 
-## Done on this branch (safe, additive, tested)
+## Done on this branch (safe, additive/behaviour-preserving, tested)
 
-1. **UI test harness** — jest + jsdom + testing-library for `@firecms/ui`
-   (the jest config already referenced a `styleMock` that didn't exist), plus an
-   **API-surface test** (`packages/ui/test/api-surface.test.ts`) that locks the
-   public export contract so accidental removals fail CI.
+UI kit (`@firecms/ui`):
+1. **UI test harness** — jest + jsdom + testing-library (the jest config already
+   referenced a `styleMock` that didn't exist), plus an **API-surface test**
+   (`packages/ui/test/api-surface.test.ts`) that locks the public export contract
+   so accidental removals fail CI.
 2. **`FilterChip`** — new toggle chip for filter presets (net-new component).
 3. **`useDebounceCallback`** — new hook that debounces a *function call*
    (complements the existing value-debounce `useDebounceValue`), hardened with a
@@ -24,7 +25,34 @@ cherry-pick (paths + packages were renamed: `@firecms/*` → `@rebasepro/*`,
 4. **`Chip` `smallest` size** — new optional enum value; existing sizes/default
    locked by regression test.
 
-All 123 UI tests pass; `packages/ui` typechecks clean.
+App runtime (`@firecms/core`):
+5. **EntityEditView lazy tab mounting** — custom-view and JSON tabs mount only
+   once visited (then stay mounted); read-only fallback FormContext memoized.
+   Behaviour-preserving for visible output. Verified by clean typecheck (no
+   render-test harness in this package).
+6. **Side-panel navigation-blocking fix** — the unsaved-changes blocker no longer
+   blocks opening/closing entity side panels (`#side` / `#new_side`). Blocking
+   predicate extracted to an internal, unit-tested helper
+   (`util/navigation_blocking.ts`, 7 tests) — not re-exported, so public API is
+   unchanged.
+
+All 123 UI tests pass and `packages/ui` typechecks clean. `firecms_core`
+typechecks clean and the new navigation-blocking tests pass (pre-existing
+unrelated test failures in that package are untouched).
+
+## Key blocker for deeper ports (discovered while porting)
+
+Rebase **renamed the property model**: `property.dataType` → `property.type`
+(and reshaped related types). Any Rebase frontend code that *inspects properties*
+(status-field inference, list-view complexity checks, preview-slot resolution,
+filter-field bindings, …) therefore cannot be dropped in — it must be translated
+back to FireCMS's `dataType` model file-by-file. Combined with the package
+rename/split, this is why the app layer is a reimplementation job, not a port.
+
+Also note: several apparent "Rebase improvements" **already exist in FireCMS**
+from its own 225 post-fork commits — e.g. search/filter/sort → URL sync
+(`useDataSourceTableController.useUpdateUrl`), Kanban/Card/Table view modes, and
+read-only entity display. Verify presence in FireCMS before porting anything.
 
 ## Evaluated and deliberately NOT ported
 
