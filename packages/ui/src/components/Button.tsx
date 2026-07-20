@@ -33,39 +33,43 @@ const ButtonInner = React.memo(React.forwardRef<
    }: ButtonProps<any>, ref) => {
 
     const baseClasses =
-        "typography-button h-fit rounded-md whitespace-nowrap inline-flex items-center justify-center p-2 px-4 focus:outline-none transition ease-in-out duration-150 gap-2";
+        "typography-button h-fit rounded-lg whitespace-nowrap inline-flex items-center justify-center p-2 px-4 focus:outline-none transition-colors ease-in-out duration-150 gap-2";
 
     const buttonClasses = cls({
         "w-full": fullWidth,
         "w-fit": !fullWidth,
 
         // Filled Variants
-        "border border-primary bg-primary focus:ring-primary shadow hover:ring-1 hover:ring-primary text-white hover:text-white": variant === "filled" && color === "primary" && !disabled,
-        "border border-secondary bg-secondary focus:ring-secondary shadow hover:ring-1 hover:ring-secondary text-white hover:text-white": variant === "filled" && color === "secondary" && !disabled,
-        "border border-red-500 bg-red-500 hover:bg-red-500 focus:ring-red-500 shadow hover:ring-1 hover:ring-red-600 text-white hover:text-white": variant === "filled" && color === "error" && !disabled,
-        "border border-surface-accent-200 bg-surface-accent-200 hover:bg-surface-accent-300 focus:ring-surface-accent-400 shadow hover:ring-1 hover:ring-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "text" && !disabled,
-        "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-text-primary dark:bg-surface-800 dark:hover:bg-surface-accent-700 dark:text-text-primary-dark hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "neutral" && !disabled,
+        "border border-primary bg-primary focus:ring-primary text-white hover:text-white hover:brightness-105": variant === "filled" && color === "primary" && !disabled,
+        "border border-secondary bg-secondary focus:ring-secondary text-white hover:text-white hover:brightness-105": variant === "filled" && color === "secondary" && !disabled,
+        "border border-red-500 bg-red-500 hover:bg-red-600 focus:ring-red-500 text-white hover:text-white": variant === "filled" && color === "error" && !disabled,
+        "border border-surface-accent-200 bg-surface-accent-200 hover:bg-surface-accent-300 focus:ring-surface-accent-400 text-text-primary hover:text-text-primary dark:border-surface-accent-700 dark:bg-surface-accent-700 dark:hover:bg-surface-accent-600 dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "text" && !disabled,
+        "border border-transparent bg-surface-100 hover:bg-surface-accent-200 text-text-primary dark:bg-surface-700 dark:hover:bg-surface-accent-700 dark:text-text-primary-dark hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark": variant === "filled" && color === "neutral" && !disabled,
 
         // Text Variants
         "border border-transparent text-primary hover:text-primary hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800": variant === "text" && color === "primary" && !disabled,
         "border border-transparent text-secondary hover:text-secondary hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800": variant === "text" && color === "secondary" && !disabled,
         "border border-transparent text-red-500 hover:text-red-500 hover:bg-red-500 hover:bg-opacity-10 hover:bg-red-500/10": variant === "text" && color === "error" && !disabled,
-        "border border-transparent text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark hover:bg-surface-accent-200 hover:dark:bg-surface-700": variant === "text" && color === "text" && !disabled,
-        "border border-transparent text-text-primary hover:text-text-primary hover:bg-surface-accent-200 dark:text-text-primary-dark dark:hover:text-text-primary-dark dark:hover:bg-surface-accent-700": variant === "text" && color === "neutral" && !disabled,
+        "border border-transparent text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:dark:text-text-primary-dark hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800": variant === "text" && color === "text" && !disabled,
+        "border border-transparent text-text-primary hover:text-text-primary hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:text-text-primary-dark dark:hover:text-text-primary-dark dark:hover:bg-surface-accent-800": variant === "text" && color === "neutral" && !disabled,
 
         // Outlined Variants
         "border border-primary text-primary hover:text-primary hover:bg-primary-bg hover:bg-primary/10": variant === "outlined" && color === "primary" && !disabled,
         "border border-secondary text-secondary hover:text-secondary hover:bg-secondary-bg": variant === "outlined" && color === "secondary" && !disabled,
         "border border-red-500 text-red-500 hover:text-red-500 hover:bg-red-500 hover:text-white": variant === "outlined" && color === "error" && !disabled,
-        "border border-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark hover:bg-surface-accent-200": variant === "outlined" && color === "text" && !disabled,
-        "border border-surface-300 text-text-primary hover:bg-surface-accent-200 dark:border-surface-600 dark:text-text-primary-dark dark:hover:bg-surface-accent-700": variant === "outlined" && color === "neutral" && !disabled,
+        "border border-surface-accent-400 text-text-primary hover:text-text-primary dark:text-text-primary-dark dark:border-surface-accent-600 hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:hover:bg-surface-accent-800": variant === "outlined" && color === "text" && !disabled,
+        "border border-surface-300 text-text-primary hover:bg-surface-accent-200 hover:bg-opacity-75 hover:bg-surface-accent-200/75 dark:border-surface-600 dark:text-text-primary-dark dark:hover:bg-surface-accent-800": variant === "outlined" && color === "neutral" && !disabled,
 
         // Disabled states for all variants
         "text-text-disabled dark:text-text-disabled-dark": disabled,
         "border border-transparent opacity-50": variant === "text" && disabled,
         "border border-surface-500 opacity-50": variant === "outlined" && disabled,
-        "border border-transparent bg-surface-300 dark:bg-surface-500 opacity-70 bg-surface-300/70 dark:bg-surface-500/70": variant === "filled" && disabled,
+        "border border-transparent bg-surface-300 dark:bg-surface-500 opacity-40 bg-surface-300/40 dark:bg-surface-500/40": variant === "filled" && disabled,
     });
+
+    const iconColorClass = (color === "neutral" || color === "text") && !disabled
+        ? "[&>svg]:text-surface-accent-500 dark:[&>svg]:text-surface-accent-300"
+        : "";
 
     const sizeClasses = cls(
         {
@@ -82,7 +86,7 @@ const ButtonInner = React.memo(React.forwardRef<
             <Component
                 ref={ref}
                 onClick={props.onClick}
-                className={cls(startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
+                className={cls(startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, iconColorClass, className)}
                 {...props}>
                 {startIcon}
                 {children}
@@ -94,7 +98,7 @@ const ButtonInner = React.memo(React.forwardRef<
         <button ref={ref as any}
                 type={props.type ?? "button"}
                 onClick={props.onClick}
-                className={cls(startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
+                className={cls(startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, iconColorClass, className)}
                 disabled={disabled}
                 data-variant={variant}
                 data-size={size}
