@@ -19,26 +19,26 @@
     --color-field-disabled: rgb(224 224 226);
     --color-field-disabled-dark: rgb(35 35 37);
 
-    /* Text Colors */
-    --color-text-primary: rgba(0, 0, 0, 0.87);
-    --color-text-secondary: rgba(0, 0, 0, 0.52);
-    --color-text-disabled: rgba(0, 0, 0, 0.38);
+    /* Text Colors — using opaque values so icon strokes render solidly */
+    --color-text-primary: #212121;
+    --color-text-secondary: #757575;
+    --color-text-disabled: #9e9e9e;
     --color-text-primary-dark: #ffffff;
-    --color-text-secondary-dark: rgba(255, 255, 255, 0.6);
-    --color-text-disabled-dark: rgba(255, 255, 255, 0.48);
+    --color-text-secondary-dark: #a0a0a9;
+    --color-text-disabled-dark: #757580;
 
     /* Surface Colors */
-    --color-surface-50: #f8f8fc;
-    --color-surface-100: #e7e7eb;
-    --color-surface-200: #cfcfd6;
-    --color-surface-300: #b7b7bf;
-    --color-surface-400: #a0a0a9;
-    --color-surface-500: #87878f;
-    --color-surface-600: #6b6b74;
-    --color-surface-700: #454552;
-    --color-surface-800: #292934;
-    --color-surface-900: #18181c;
-    --color-surface-950: #101013;
+    --color-surface-50: #fafafa;
+    --color-surface-100: #f5f5f5;
+    --color-surface-200: #e5e5e5;
+    --color-surface-300: #d4d4d4;
+    --color-surface-400: #a3a3a3;
+    --color-surface-500: #737373;
+    --color-surface-600: #404040;
+    --color-surface-700: #262626;
+    --color-surface-800: #111111;
+    --color-surface-900: #0a0a0a;
+    --color-surface-950: #000000;
 
     /* Surface Accent Colors */
     --color-surface-accent-50: #f8fafc;
@@ -50,8 +50,18 @@
     --color-surface-accent-600: #475569;
     --color-surface-accent-700: #334155;
     --color-surface-accent-800: #1e293b;
-    --color-surface-accent-900: #0f172a;
-    --color-surface-accent-950: #020617;
+    --color-surface-accent-900: #172033;
+    --color-surface-accent-950: #0f172a;
+}
+
+/* Native UI (scrollbars, form controls) must follow the active theme,
+   otherwise Chrome renders light scrollbars in dark mode */
+html {
+    color-scheme: light;
+}
+
+html.dark {
+    color-scheme: dark;
 }
 
 /* Chrome, Safari and Opera */
