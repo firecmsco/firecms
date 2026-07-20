@@ -26,6 +26,7 @@ export type DialogProps = {
      */
     disableInitialFocus?: boolean;
     portalContainer?: HTMLElement | null;
+    "aria-describedby"?: string;
 };
 
 const widthClasses = {
@@ -60,7 +61,8 @@ export const Dialog = ({
                            onPointerDownOutside,
                            onInteractOutside,
                            disableInitialFocus = true,
-                           portalContainer
+                           portalContainer,
+                           "aria-describedby": ariaDescribedby
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
 
@@ -92,7 +94,7 @@ export const Dialog = ({
                 <div className={cls("fixed inset-0 z-30", containerClassName)}>
 
                     <DialogPrimitive.Overlay
-                        className={cls("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black dark:bg-opacity-60 dark:bg-black/60 bg-opacity-50 bg-black/50 dark: bg-black/60  backdrop-blur-sm ",
+                        className={cls("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black/50 dark:bg-black/60 backdrop-blur-sm",
                             displayed && open ? "opacity-100" : "opacity-0",
                             "z-20 fixed top-0 left-0 w-full h-full flex justify-center items-center"
                         )}
@@ -111,7 +113,8 @@ export const Dialog = ({
                         }}
                         onPointerDownOutside={onPointerDownOutside}
                         onInteractOutside={onInteractOutside}
-                        className={cls("h-full outline-none flex justify-center items-center z-40 opacity-100 transition-all duration-200 ease-in-out")}
+                        aria-describedby={ariaDescribedby}
+                        className={cls("relative h-full outline-none flex justify-center items-center z-40 opacity-100 transition-all duration-200 ease-in-out")}
                     >
                         <div
                             className={cls(paperMixin,
@@ -124,10 +127,10 @@ export const Dialog = ({
                                 fullHeight && !fullScreen ? "h-full" : undefined,
                                 "text-surface-accent-900 dark:text-white",
                                 "justify-center items-center",
-                                fullScreen ? "h-screen w-screen" : "max-h-[90vh] shadow-xl",
+                                fullScreen ? "h-screen w-screen" : "max-h-[90vh] shadow-lg",
                                 "ease-in-out duration-200",
                                 scrollable && "overflow-y-auto",
-                                displayed && open ? "opacity-100" : "opacity-0",
+                                displayed && open ? "opacity-100 scale-100" : "opacity-0 scale-[0.97]",
                                 maxWidth && !fullScreen ? widthClasses[maxWidth] : undefined,
                                 className
                             )}>

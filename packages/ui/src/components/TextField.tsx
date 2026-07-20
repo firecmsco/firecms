@@ -1,12 +1,12 @@
 "use client";
-import React, { ForwardedRef, forwardRef, useEffect, useRef } from "react";
+import React, { ForwardedRef, forwardRef, useEffect, useId, useRef } from "react";
 
 import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundInvisibleMixin,
     fieldBackgroundMixin,
-    focusedInvisibleMixin,
+    focusedInvisibleMixin
 } from "../styles";
 import { InputLabel } from "./InputLabel";
 import { cls } from "../util";
@@ -53,7 +53,7 @@ export type TextFieldProps<T extends string | number> = {
      * @default 1
      */
     minRows?: number | string;
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "value">;
 
 export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | number>>(
     <T extends string | number>(
@@ -82,14 +82,18 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
         ref: ForwardedRef<HTMLDivElement>
     ) => {
 
-        const inputRef = inputRefProp ?? useRef(null);
+        const fallbackRef = useRef(null);
+        const inputRef = inputRefProp ?? fallbackRef;
+        const autoId = useId();
+        const inputId = inputProps.id ?? autoId;
+        const labelId = `${inputId}-label`;
 
         const [focused, setFocused] = React.useState(false);
         const hasValue = value !== undefined && value !== null && value !== "";
 
         useEffect(() => {
-            // @ts-ignore
-            if (inputRef.current && document.activeElement === inputRef.current) {
+            const element = inputRef && "current" in inputRef ? inputRef.current : null;
+            if (element && document.activeElement === element) {
                 setFocused(true);
             }
         }, []);
@@ -111,8 +115,12 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
 
         const input = multiline ? (
             <textarea
-                {...(inputProps as any)}
+                {...(inputProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
                 ref={inputRef}
+                id={inputId}
+                aria-labelledby={label ? labelId : undefined}
+                aria-invalid={error || undefined}
+                aria-disabled={disabled || undefined}
                 placeholder={focused || hasValue || !label ? placeholder : undefined}
                 autoFocus={autoFocus}
                 rows={typeof minRows === "string" ? parseInt(minRows) : (minRows ?? 3)}
@@ -123,7 +131,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                 style={inputStyle}
                 className={cls(
                     invisible ? focusedInvisibleMixin : "",
-                    "rounded-md resize-none w-full outline-none text-base bg-transparent min-h-[64px] px-3",
+                    "rounded-lg resize-none w-full outline-none text-base bg-transparent min-h-[64px] px-3",
                     label ? "pt-8 pb-2" : "py-2",
                     disabled && "outline-none opacity-50 text-surface-accent-600 dark:text-surface-accent-500",
                     inputClassName
@@ -133,11 +141,15 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
             <input
                 {...inputProps}
                 ref={inputRef}
+                id={inputId}
+                aria-labelledby={label ? labelId : undefined}
+                aria-invalid={error || undefined}
+                aria-disabled={disabled || undefined}
                 disabled={disabled}
                 style={inputStyle}
                 className={cls(
                     "w-full outline-none bg-transparent leading-normal px-3",
-                    "rounded-md",
+                    "rounded-lg",
                     "focused:text-text-primary focused:dark:text-text-primary-dark",
                     invisible ? focusedInvisibleMixin : "",
                     disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
@@ -145,7 +157,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                         "min-h-[28px]": size === "smallest",
                         "min-h-[32px]": size === "small",
                         "min-h-[44px]": size === "medium",
-                        "min-h-[64px]": size === "large",
+                        "min-h-[64px]": size === "large"
                     },
                     label
                         ? size === "large"
@@ -175,7 +187,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
             <div
                 ref={ref}
                 className={cls(
-                    "rounded-md relative max-w-full",
+                    "rounded-lg relative max-w-full",
                     invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                     disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                     error ? "border border-red-500 dark:border-red-600" : "",
@@ -183,7 +195,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                         "min-h-[28px]": size === "smallest",
                         "min-h-[32px]": size === "small",
                         "min-h-[44px]": size === "medium",
-                        "min-h-[64px]": size === "large",
+                        "min-h-[64px]": size === "large"
                     },
                     className
                 )}
@@ -191,6 +203,8 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
             >
                 {label && (
                     <InputLabel
+                        id={labelId}
+                        htmlFor={inputId}
                         className={cls(
                             "pointer-events-none absolute",
                             size === "large" ? "top-1" : "top-[-1px]",
@@ -216,7 +230,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps<string | numb
                             {
                                 "mr-4": size === "large",
                                 "mr-3": size === "medium",
-                                "mr-2": size === "small" || size === "smallest",
+                                "mr-2": size === "small" || size === "smallest"
                             }
                         )}
                     >
