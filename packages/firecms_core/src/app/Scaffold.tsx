@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useCallback } from "react";
-import { ChevronLeftIcon, cls, defaultBorderMixin, IconButton, MenuIcon, Sheet, Tooltip } from "@firecms/ui";
+import { cls, defaultBorderMixin, IconButton, MenuIcon, Sheet } from "@firecms/ui";
 import equal from "react-fast-compare"
 import { useLargeLayout } from "../hooks";
 import { ErrorBoundary } from "../components";
@@ -80,7 +80,11 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const [onHover, setOnHover] = React.useState(false);
 
         const setOnHoverTrue = useCallback(() => setOnHover(true), []);
-        const setOnHoverFalse = useCallback(() => setOnHover(false), []);
+        const setOnHoverFalse = useCallback(() => {
+            // Don't collapse the drawer while a popover/dropdown is open
+            if (typeof document !== "undefined" && document.querySelector("[data-radix-popper-content-wrapper]")) return;
+            setOnHover(false);
+        }, []);
 
         const handleDrawerOpen = useCallback(() => {
             setDrawerOpen(true);
@@ -96,17 +100,21 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             } catch { /* ignore */ }
         }, []);
 
-        const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
+        // Pinned-open state only; hover is tracked separately so it can *float*
+        // over the content instead of pushing it.
+        const computedDrawerOpen: boolean = drawerOpen;
+        const computedDrawerHovered: boolean = Boolean(largeLayout && onHover);
 
         const hasAppBar = Boolean(appBarChildren.length > 0);
         return (
             <AppContext.Provider value={{
                 logo,
                 hasDrawer: includeDrawer,
-                drawerHovered: onHover,
+                drawerHovered: computedDrawerHovered,
                 drawerOpen: computedDrawerOpen,
                 closeDrawer: handleDrawerClose,
                 openDrawer: handleDrawerOpen,
+                closeHover: setOnHoverFalse,
                 autoOpenDrawer
             }}>
                 <div
@@ -128,7 +136,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         onMouseMove={setOnHoverTrue}
                         onMouseLeave={setOnHoverFalse}
                         open={computedDrawerOpen}
-                        hovered={onHover}
+                        hovered={computedDrawerHovered}
                         setDrawerOpen={setDrawerOpen}>
                         {includeDrawer && drawerChildren}
                     </DrawerWrapper>
@@ -177,49 +185,30 @@ function DrawerWrapper(props: {
 }) {
 
     const { t } = useTranslation();
-    const width = !props.displayed ? 0 : (props.open ? DRAWER_WIDTH : 72);
+
+    // Layout width is the space the drawer occupies in the flex row; the visual
+    // width is how wide the drawer actually renders. When hovered (but not
+    // pinned open) the layout width stays collapsed while the visual width
+    // expands, so the drawer *floats* over the content instead of pushing it.
+    const layoutWidth = !props.displayed ? 0 : (props.open ? DRAWER_WIDTH : 72);
+    const visualWidth = !props.displayed ? 0 : ((props.open || props.hovered) ? DRAWER_WIDTH : 72);
+    const isFloating = props.hovered && !props.open;
+
+    const transition = "left 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 75ms cubic-bezier(0.4, 0, 0.6, 1) 0ms";
+
     const innerDrawer = <div
-        className={"relative h-full no-scrollbar overflow-y-auto overflow-x-hidden"}
+        className={cls("h-full overflow-hidden", defaultBorderMixin,
+            isFloating
+                ? "absolute top-0 left-0 bottom-0 z-30 bg-surface-50 dark:bg-surface-900 shadow-lg border-r"
+                : "relative bg-surface-50 dark:bg-surface-900")}
         style={{
-            width,
-            transition: "left 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
+            width: visualWidth,
+            transition
         }}
     >
-
-        {!props.open && props.displayed && (
-            <Tooltip title={t("open_menu")}
-                side="right"
-                sideOffset={12}
-                asChild={true}>
-                <div
-                    className="ml-2 fixed top-1 left-2 sm:top-2 sm:left-2 !bg-surface-50 dark:!bg-surface-900 rounded-full w-fit z-20">
-                    <IconButton
-                        color="inherit"
-                        aria-label={t("open_menu")}
-                        onClick={() => props.setDrawerOpen(true)}
-                        size="large"
-                    >
-                        <MenuIcon size="small" />
-                    </IconButton>
-                </div>
-            </Tooltip>
-        )}
-
-        <div
-            className={`z-20 absolute right-0 top-4 ${props.open ? "opacity-100" : "opacity-0 invisible"
-                } transition-opacity duration-200 ease-in-out`}>
-            <IconButton
-                aria-label={t("close_drawer")}
-                onClick={() => props.setDrawerOpen(false)}
-            >
-                <ChevronLeftIcon />
-            </IconButton>
-        </div>
-
         <div className={"flex flex-col h-full"}>
             {props.children}
         </div>
-
     </div>;
 
     const largeLayout = useLargeLayout();
@@ -250,13 +239,14 @@ function DrawerWrapper(props: {
 
     return (
         <div
-            className="z-20 relative"
+            className="z-20 relative flex-shrink-0 overflow-visible"
             onMouseEnter={props.onMouseEnter}
             onMouseMove={props.onMouseMove}
             onMouseLeave={props.onMouseLeave}
             style={{
-                width,
-                transition: "left 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
+                width: layoutWidth,
+                minWidth: layoutWidth,
+                transition
             }}>
 
             {innerDrawer}

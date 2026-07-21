@@ -97,7 +97,7 @@ export function DefaultDrawer({
             <div
                 ref={scrollRef}
                 onScroll={handleScroll}
-                className={"mt-2 flex-grow min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar px-2"}
+                className={"flex-grow min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar px-2"}
                 style={{
                     maskImage: scrolled
                         ? "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)"
@@ -123,7 +123,7 @@ export function DefaultDrawer({
 
             </div>
 
-            {adminViews.length > 0 && <div className={"shrink-0 px-2"}>
+            {adminViews.length > 0 && <div className={"shrink-0 px-4"}>
                 <Menu
                     side={"right"}
                     open={adminMenuOpen}
@@ -194,7 +194,7 @@ function DrawerToggle({
     const showFullContent = isExpanded || isHovered;
 
     return (
-        <div className="shrink-0 mt-auto px-2 pt-0.5 pb-2">
+        <div className="shrink-0 mt-auto px-4 pt-0.5 pb-2">
             <Tooltip
                 title={isExpanded ? "Collapse" : "Expand"}
                 side="right"
