@@ -40,7 +40,6 @@ export function DefaultDrawer({
     const {
         drawerHovered,
         drawerOpen,
-        openDrawer,
         closeDrawer,
         logo
     } = useApp();
@@ -164,31 +163,25 @@ export function DefaultDrawer({
                 </Menu>
             </div>}
 
-            <DrawerToggle
-                drawerOpen={drawerOpen}
-                drawerHovered={drawerHovered}
-                openDrawer={openDrawer}
-                closeDrawer={closeDrawer}
-            />
+            <DrawerToggle />
         </div>
     );
 }
 
 /**
  * Collapse/expand toggle rendered at the bottom of the drawer.
- * Uses double-chevron icons to indicate direction.
+ * Uses double-chevron icons to indicate direction. Reads the drawer state
+ * from {@link useApp} so it can be dropped into any drawer.
+ *
+ * @group Core
  */
-function DrawerToggle({
-    drawerOpen,
-    drawerHovered,
-    openDrawer,
-    closeDrawer
-}: {
-    drawerOpen: boolean;
-    drawerHovered: boolean;
-    openDrawer: () => void;
-    closeDrawer: () => void;
-}) {
+export function DrawerToggle() {
+    const {
+        drawerOpen,
+        drawerHovered,
+        openDrawer,
+        closeDrawer
+    } = useApp();
     const isExpanded = drawerOpen;
     const isHovered = drawerHovered && !drawerOpen;
     const showFullContent = isExpanded || isHovered;
