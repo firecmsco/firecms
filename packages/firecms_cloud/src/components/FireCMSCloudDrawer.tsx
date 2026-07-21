@@ -9,7 +9,7 @@ import {
     useCollapsedGroups,
     useNavigationController
 } from "@firecms/core";
-import { AddIcon, Button, Tooltip } from "@firecms/ui";
+import { AddIcon, IconButton, Tooltip } from "@firecms/ui";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { RESERVED_GROUPS } from "../utils";
 import { AdminDrawerMenu } from "./AdminDrawerMenu";
@@ -65,9 +65,8 @@ export function FireCMSCloudDrawer() {
             <Tooltip
                 asChild={true}
                 title={group ? `Create new collection in ${group}` : "Create new collection"}>
-                <Button
-                    size={"small"}
-                    variant={"text"}
+                <IconButton
+                    size={"smallest"}
                     onClick={(e) => {
                         e.stopPropagation();
                         collectionEditorController?.createCollection({
@@ -79,8 +78,8 @@ export function FireCMSCloudDrawer() {
                             sourceClick: "drawer_new_collection"
                         });
                     }}>
-                    <AddIcon size={"small"} />
-                </Button>
+                    <AddIcon size={"smallest"} />
+                </IconButton>
             </Tooltip>
         );
     };
