@@ -136,7 +136,7 @@ export function DefaultDrawer({
                             <div
                                 className={"shrink-0 flex items-center justify-center w-[44px] h-[30px] text-surface-500 dark:text-surface-400"}>
                                 <Tooltip title={"Admin"}
-                                         open={tooltipsOpen}
+                                         open={drawerVisuallyOpen || adminMenuOpen ? false : tooltipsOpen}
                                          side={"right"} sideOffset={28}>
                                     <MoreVertIcon size={"small"} />
                                 </Tooltip>
