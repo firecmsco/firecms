@@ -503,7 +503,7 @@ export function CollectionPropertiesEditorForm({
                             !isPropertyBuilder(selectedProperty) &&
                             <PropertyForm
                                 inArray={false}
-                                key={`edit_view_${selectedPropertyIndex}_${generationCounter}`}
+                                key={`edit_view_${selectedPropertyFullId}_${generationCounter}`}
                                 existingProperty={!isNewCollection}
                                 autoUpdateId={false}
                                 allowDataInference={!isNewCollection}
@@ -547,7 +547,7 @@ export function CollectionPropertiesEditorForm({
             {asDialog && <PropertyFormDialog
                 inArray={false}
                 open={selectedPropertyIndex !== undefined}
-                key={`edit_view_${selectedPropertyIndex}_${generationCounter}`}
+                key={`edit_view_${selectedPropertyFullId}_${generationCounter}`}
                 autoUpdateId={!selectedProperty}
                 allowDataInference={!isNewCollection}
                 existingProperty={true}
