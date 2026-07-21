@@ -10,7 +10,16 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { CMSAnalyticsEvent, NavigationEntry, NavigationResult } from "../types";
 import { IconForView } from "../util";
-import { cls, IconButton, Menu, MenuItem, MoreVertIcon, Tooltip } from "@firecms/ui";
+import {
+    cls,
+    KeyboardDoubleArrowLeftIcon,
+    KeyboardDoubleArrowRightIcon,
+    Menu,
+    MenuItem,
+    MoreVertIcon,
+    Tooltip,
+    Typography
+} from "@firecms/ui";
 import { useAnalyticsController } from "../hooks/useAnalyticsController";
 import { DrawerNavigationGroup } from "./DrawerNavigationGroup";
 import { FireCMSLogo } from "../components";
@@ -31,11 +40,20 @@ export function DefaultDrawer({
     const {
         drawerHovered,
         drawerOpen,
+        openDrawer,
         closeDrawer,
         logo
     } = useApp();
 
     const [adminMenuOpen, setAdminMenuOpen] = React.useState(false);
+
+    const scrollRef = React.useRef<HTMLDivElement>(null);
+    const [scrolled, setScrolled] = React.useState(false);
+    const handleScroll = () => {
+        if (scrollRef.current) {
+            setScrolled(scrollRef.current.scrollTop > 0);
+        }
+    };
 
     const analyticsController = useAnalyticsController();
     const navigation = useNavigationController();
@@ -59,6 +77,8 @@ export function DefaultDrawer({
     // Collapsible groups state - using "drawer" namespace for independent state from home page
     const { isGroupCollapsed, toggleGroupCollapsed } = useCollapsedGroups(groupsWithoutAdmin, "drawer");
 
+    const drawerVisuallyOpen = drawerOpen || drawerHovered;
+
     const onItemClick = (view: NavigationEntry) => {
         const eventName: CMSAnalyticsEvent = view.type === "collection"
             ? "drawer_navigate_to_collection"
@@ -69,56 +89,66 @@ export function DefaultDrawer({
     };
 
     return (
-        <>
-            <div className={cls("flex flex-col h-full relative flex-grow w-full", className)} style={style}>
+        <div role="navigation" aria-label="Main navigation"
+             className={cls("flex flex-col h-full relative grow w-full", className)} style={style}>
 
-                <DrawerLogo logo={logo} />
+            <DrawerLogo logo={logo} />
 
-                <div className={"mt-4 flex-grow overflow-scroll no-scrollbar"}
-                    style={{
-                        maskImage: "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)",
-                    }}>
+            <div
+                ref={scrollRef}
+                onScroll={handleScroll}
+                className={"mt-2 flex-grow min-h-0 overflow-y-auto overflow-x-hidden no-scrollbar px-2"}
+                style={{
+                    maskImage: scrolled
+                        ? "linear-gradient(to bottom, transparent 0, black 20px, black calc(100% - 20px), transparent 100%)"
+                        : "linear-gradient(to bottom, black 0, black calc(100% - 20px), transparent 100%)"
+                }}>
 
-                    {groupsWithoutAdmin.map((group) => {
-                        const entriesInGroup = Object.values(navigationEntries).filter(e => e.group === group);
-                        return (
-                            <DrawerNavigationGroup
-                                key={`drawer_group_${group}`}
-                                group={group}
-                                entries={entriesInGroup}
-                                collapsed={isGroupCollapsed(group)}
-                                onToggleCollapsed={() => toggleGroupCollapsed(group)}
-                                drawerOpen={drawerOpen}
-                                tooltipsOpen={tooltipsOpen}
-                                adminMenuOpen={adminMenuOpen}
-                                onItemClick={onItemClick}
-                            />
-                        );
-                    })}
+                {groupsWithoutAdmin.map((group) => {
+                    const entriesInGroup = Object.values(navigationEntries).filter(e => e.group === group);
+                    return (
+                        <DrawerNavigationGroup
+                            key={`drawer_group_${group}`}
+                            group={group}
+                            entries={entriesInGroup}
+                            collapsed={isGroupCollapsed(group)}
+                            onToggleCollapsed={() => toggleGroupCollapsed(group)}
+                            drawerOpen={drawerVisuallyOpen}
+                            tooltipsOpen={tooltipsOpen}
+                            adminMenuOpen={adminMenuOpen}
+                            onItemClick={onItemClick}
+                        />
+                    );
+                })}
 
-                </div>
+            </div>
 
-                {adminViews.length > 0 && <Menu
+            {adminViews.length > 0 && <div className={"shrink-0 px-2"}>
+                <Menu
                     side={"right"}
                     open={adminMenuOpen}
                     onOpenChange={setAdminMenuOpen}
                     trigger={
-                        <IconButton
-                            shape={"square"}
-                            className={"m-4 text-surface-900 dark:text-white w-fit"}>
-                            <Tooltip title={"Admin"}
-                                open={tooltipsOpen}
-                                side={"right"} sideOffset={28}>
-                                <MoreVertIcon />
-                            </Tooltip>
-                            {drawerOpen && <div
+                        <div
+                            className={cls(
+                                "flex flex-row items-center rounded-lg cursor-pointer w-full",
+                                "hover:bg-surface-accent-100 dark:hover:bg-surface-800 transition-colors duration-150 h-[30px]"
+                            )}>
+                            <div
+                                className={"shrink-0 flex items-center justify-center w-[44px] h-[30px] text-surface-500 dark:text-surface-400"}>
+                                <Tooltip title={"Admin"}
+                                         open={tooltipsOpen}
+                                         side={"right"} sideOffset={28}>
+                                    <MoreVertIcon size={"small"} />
+                                </Tooltip>
+                            </div>
+                            {drawerVisuallyOpen && <div
                                 className={cls(
-                                    drawerOpen ? "opacity-100" : "opacity-0 hidden",
-                                    "mx-4 font-inherit text-inherit"
+                                    "font-semibold text-[11px] uppercase tracking-wider text-surface-400"
                                 )}>
-                                ADMIN
+                                {t("admin")}
                             </div>}
-                        </IconButton>}
+                        </div>}
                 >
                     {adminViews.map((entry) =>
                         <MenuItem
@@ -131,46 +161,109 @@ export function DefaultDrawer({
                             {t(entry.name)}
                         </MenuItem>)}
 
-                </Menu>}
-            </div>
+                </Menu>
+            </div>}
 
-        </>
+            <DrawerToggle
+                drawerOpen={drawerOpen}
+                drawerHovered={drawerHovered}
+                openDrawer={openDrawer}
+                closeDrawer={closeDrawer}
+            />
+        </div>
     );
 }
 
 /**
- * This is the logo displayed in the drawer
- * It expands when the drawer is open.
+ * Collapse/expand toggle rendered at the bottom of the drawer.
+ * Uses double-chevron icons to indicate direction.
+ */
+function DrawerToggle({
+    drawerOpen,
+    drawerHovered,
+    openDrawer,
+    closeDrawer
+}: {
+    drawerOpen: boolean;
+    drawerHovered: boolean;
+    openDrawer: () => void;
+    closeDrawer: () => void;
+}) {
+    const isExpanded = drawerOpen;
+    const isHovered = drawerHovered && !drawerOpen;
+    const showFullContent = isExpanded || isHovered;
+
+    return (
+        <div className="shrink-0 mt-auto px-2 pt-0.5 pb-2">
+            <Tooltip
+                title={isExpanded ? "Collapse" : "Expand"}
+                side="right"
+                sideOffset={12}
+                open={isHovered ? false : undefined}
+            >
+                <div
+                    className={cls(
+                        "flex flex-row items-center rounded-lg cursor-pointer",
+                        "hover:bg-surface-accent-100 dark:hover:bg-surface-800",
+                        "transition-colors duration-150 h-[30px]"
+                    )}
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={isExpanded}
+                    aria-label={isExpanded ? "Collapse" : "Expand"}
+                    onClick={() => isExpanded ? closeDrawer() : openDrawer()}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            isExpanded ? closeDrawer() : openDrawer();
+                        }
+                    }}
+                >
+                    <div className="shrink-0 flex items-center justify-center w-[44px] h-[30px] text-surface-500 dark:text-surface-400">
+                        {isExpanded
+                            ? <KeyboardDoubleArrowLeftIcon size={"small"} />
+                            : <KeyboardDoubleArrowRightIcon size={"small"} />}
+                    </div>
+                    <div className={cls(
+                        "overflow-hidden transition-all duration-200 ease-in-out",
+                        showFullContent ? "opacity-100 w-auto" : "opacity-0 w-0"
+                    )}>
+                        <Typography
+                            variant="body2"
+                            className="text-surface-500 dark:text-surface-400 select-none whitespace-nowrap"
+                        >
+                            {isExpanded ? "Collapse" : "Expand"}
+                        </Typography>
+                    </div>
+                </div>
+            </Tooltip>
+        </div>
+    );
+}
+
+/**
+ * This is the logo displayed in the drawer.
+ * A compact logo aligned to the left of the drawer header.
  *
  * @param logo
-
  */
 export function DrawerLogo({ logo }: {
     logo?: string;
 }) {
 
     const navigation = useNavigationController();
-    const { drawerOpen } = useApp();
-    return <div
-        style={{
-            transition: "padding 100ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
-            padding: drawerOpen ? "32px 144px 0px 24px" : "72px 12px 0px 12px"
-        }}
-        className={cls("cursor-pointer rounded ml-3 mr-1")}>
-
+    return <div className="flex flex-row items-center shrink-0 pt-4 pb-0 px-2">
         <Tooltip title={"Home"}
-            sideOffset={20}
-            side="right">
+                 sideOffset={20}
+                 side="right">
             <Link
-                className={"block"}
+                className={"shrink-0 flex items-center justify-center w-[56px] h-[40px]"}
                 to={navigation.basePath}>
                 {logo
                     ? <img src={logo}
-                        alt="Logo"
-                        className={cls("max-w-full max-h-full transition-all object-contain",
-                            drawerOpen ? "w-[96px] h-[96px]" : "w-[32px] h-[32px]")} />
-                    : <FireCMSLogo />}
-
+                           alt="Logo"
+                           className={"w-[28px] h-[28px] object-contain"} />
+                    : <FireCMSLogo width={"28px"} height={"28px"} />}
             </Link>
         </Tooltip>
     </div>;
