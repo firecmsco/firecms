@@ -75,6 +75,8 @@ export function getDefaultValueForDataType(dataType: DataType) {
         return [];
     } else if (dataType === "map") {
         return {};
+    } else if (dataType === "geopoint") {
+        return null;
     } else {
         return null;
     }

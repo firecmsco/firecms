@@ -12,6 +12,7 @@ export * from "./useDebouncedCallback";
 export * from "./property_utils";
 export * from "./resolutions";
 export * from "./permissions";
+export * from "./geopoint";
 export * from "./icon_list";
 export * from "./icon_synonyms";
 export * from "./icons";

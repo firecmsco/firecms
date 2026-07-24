@@ -6,6 +6,7 @@ import {
     ArrayOfReferencesFieldBinding,
     BlockFieldBinding,
     DateTimeFieldBinding,
+    GeopointFieldBinding,
     KeyValueFieldBinding,
     MapFieldBinding,
     MultiSelectFieldBinding,
@@ -34,6 +35,7 @@ import {
     ListAltIcon,
     ListIcon,
     MailIcon,
+    LocationOnIcon,
     NumbersIcon, PersonIcon,
     RepeatIcon,
     ScheduleIcon,
@@ -273,6 +275,17 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
             Field: DateTimeFieldBinding
         }
     },
+    geopoint: {
+        key: "geopoint",
+        name: "Geopoint",
+        description: "Latitude and longitude pair",
+        Icon: LocationOnIcon,
+        color: "#0ea5e9",
+        property: {
+            dataType: "geopoint",
+            Field: GeopointFieldBinding
+        }
+    },
     group: {
         key: "group",
         name: "Group",
@@ -419,6 +432,8 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
         return "switch";
     } else if (property.dataType === "date") {
         return "date_time";
+    } else if (property.dataType === "geopoint") {
+        return "geopoint";
     } else if (property.dataType === "reference") {
         return "reference";
     }

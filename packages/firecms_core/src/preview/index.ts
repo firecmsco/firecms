@@ -7,6 +7,7 @@ export * from "./property_previews/ArrayOfStringsPreview";
 export * from "./property_previews/ArrayPropertyEnumPreview";
 export * from "./property_previews/ArrayOfMapsPreview";
 export * from "./property_previews/NumberPropertyPreview";
+export * from "./property_previews/GeopointPropertyPreview";
 export * from "./property_previews/StringPropertyPreview";
 export * from "./property_previews/ArrayOfStorageComponentsPreview";
 export * from "./property_previews/ArrayOfReferencesPreview";
