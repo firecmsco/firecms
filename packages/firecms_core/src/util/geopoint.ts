@@ -45,9 +45,13 @@ export function formatGeoPoint(value: GeoPointLike, options?: { maximumFractionD
     if (!coordinates) return "";
 
     const maximumFractionDigits = options?.maximumFractionDigits ?? 6;
-    const formatter = new Intl.NumberFormat(undefined, {
+    // Coordinates are always formatted with a dot as decimal separator, independently of the
+    // user locale. Locale-aware formatting would use a comma in locales such as de or fr,
+    // making the "lat, lng" output ambiguous and impossible to parse back.
+    const formatter = new Intl.NumberFormat("en-US", {
         maximumFractionDigits,
-        minimumFractionDigits: Math.min(2, maximumFractionDigits)
+        minimumFractionDigits: Math.min(2, maximumFractionDigits),
+        useGrouping: false
     });
 
     return `${formatter.format(coordinates.latitude)}, ${formatter.format(coordinates.longitude)}`;
