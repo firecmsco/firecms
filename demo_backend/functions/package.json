@@ -18,7 +18,7 @@
         "algoliasearch": "^4.23.2",
         "axios": "^1.18.1",
         "cors": "^2.8.5",
-        "dotenv": "^16.4.5",
+        "dotenv": "^17.4.2",
         "express": "^4.22.2",
         "fast-csv": "^4.3.6",
         "firebase-admin": "^13.0.0",
