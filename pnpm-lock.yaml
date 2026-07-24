@@ -223,7 +223,7 @@ importers:
         version: file:packages/collection_editor_firebase(@firebase/app@0.15.0)(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typesense@1.8.2(@babel/runtime@7.29.7))(vite@6.4.3(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/core':
         specifier: file:../../packages/firecms_core
-        version: file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(vite@6.4.3(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
+        version: file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(vite@6.4.3(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
       '@firecms/data_enhancement':
         specifier: file:../../packages/data_enhancement
         version: file:packages/data_enhancement(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(vite@6.4.3(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))
@@ -1452,8 +1452,8 @@ importers:
         specifier: ^5.3.0
         version: 5.3.0
       i18next:
-        specifier: ^23.16.4
-        version: 23.16.8
+        specifier: ^26.3.3
+        version: 26.3.3(typescript@5.9.3)
       json-logic-js:
         specifier: ^2.0.5
         version: 2.0.5
@@ -1537,7 +1537,7 @@ importers:
         version: 3.2.2
       react-i18next:
         specifier: ^14.1.3
-        version: 14.1.3(i18next@23.16.8)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 14.1.3(i18next@26.3.3(typescript@5.9.3))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react-image-crop:
         specifier: ^11.0.10
         version: 11.1.2(react@19.2.7)
@@ -7652,6 +7652,14 @@ packages:
   i18next@23.16.8:
     resolution: {integrity: sha512-06r/TitrM88Mg5FdUXAKL96dJMzgqLE5dv3ryBAra4KCwD9mJ4ndOTS95ZuymIGoE+2hzfdaMak2X11/es7ZWg==}
 
+  i18next@26.3.3:
+    resolution: {integrity: sha512-aYVegyBdXSO93CMMihvr47jI7GHSOcIahMpJX+qzUXDzW4xDJf2uenIA+45vDU+YhiVdcfsql70AC9RVdMNrHg==}
+    peerDependencies:
+      typescript: ^5 || ^6
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
   iceberg-js@0.8.1:
     resolution: {integrity: sha512-1dhVQZXhcHje7798IVM+xoo/1ZdVfzOMIc8/rgVSijRK38EDqOJoGula9N/8ZI5RD8QTxNQtK/Gozpr+qUqRRA==}
     engines: {node: '>=20.0.0'}
@@ -13104,7 +13112,7 @@ snapshots:
       - supports-color
       - vite
 
-  '@firecms/core@file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(vite@6.4.3(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
+  '@firecms/core@file:packages/firecms_core(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(typescript@5.9.3)(vite@6.4.3(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
     dependencies:
       '@dnd-kit/core': 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@dnd-kit/modifiers': 9.0.0(@dnd-kit/core@6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
@@ -13119,7 +13127,7 @@ snapshots:
       date-fns: 3.6.0
       fuse.js: 7.4.2
       history: 5.3.0
-      i18next: 23.16.8
+      i18next: 26.3.3(typescript@5.9.3)
       json-logic-js: 2.0.5
       markdown-it: 14.2.0
       markdown-it-ins: 4.0.0
@@ -13147,7 +13155,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       react-dropzone: 14.4.1(react@18.3.1)
       react-fast-compare: 3.2.2
-      react-i18next: 14.1.3(i18next@23.16.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-i18next: 14.1.3(i18next@26.3.3(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-image-crop: 11.1.2(react@18.3.1)
       react-markdown: 9.1.0(@types/react@18.3.31)(react@18.3.1)
       react-moveable: 0.56.0
@@ -13164,6 +13172,7 @@ snapshots:
       - csstype
       - react-native
       - supports-color
+      - typescript
       - vite
 
   '@firecms/data_enhancement@3.3.0(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(firebase@12.15.0)(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@6.30.4(react@18.3.1))(react@18.3.1)(vite@6.4.3(@types/node@22.20.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)(yaml@2.9.0))':
@@ -19605,6 +19614,10 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.29.7
 
+  i18next@26.3.3(typescript@5.9.3):
+    optionalDependencies:
+      typescript: 5.9.3
+
   iceberg-js@0.8.1: {}
 
   iconv-lite@0.6.3:
@@ -22624,6 +22637,24 @@ snapshots:
       '@babel/runtime': 7.29.7
       html-parse-stringify: 3.0.1
       i18next: 23.16.8
+      react: 19.2.7
+    optionalDependencies:
+      react-dom: 19.2.7(react@19.2.7)
+
+  react-i18next@14.1.3(i18next@26.3.3(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@babel/runtime': 7.29.7
+      html-parse-stringify: 3.0.1
+      i18next: 26.3.3(typescript@5.9.3)
+      react: 18.3.1
+    optionalDependencies:
+      react-dom: 18.3.1(react@18.3.1)
+
+  react-i18next@14.1.3(i18next@26.3.3(typescript@5.9.3))(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+    dependencies:
+      '@babel/runtime': 7.29.7
+      html-parse-stringify: 3.0.1
+      i18next: 26.3.3(typescript@5.9.3)
       react: 19.2.7
     optionalDependencies:
       react-dom: 19.2.7(react@19.2.7)
