@@ -8,6 +8,7 @@ import { fr } from "../locales/fr";
 import { it } from "../locales/it";
 import { hi } from "../locales/hi";
 import { pt } from "../locales/pt";
+import { pl } from "../locales/pl";
 import { FireCMSTranslations } from "../types/translations";
 
 const FIRECMS_NS = "firecms_core";
@@ -139,6 +140,7 @@ function buildResources(
         it: { [FIRECMS_NS]: { ...it } },
         hi: { [FIRECMS_NS]: { ...hi } },
         pt: { [FIRECMS_NS]: { ...pt } },
+        pl: { [FIRECMS_NS]: { ...pl } },
     };
 
     if (!translations) return resources;
