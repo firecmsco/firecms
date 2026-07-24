@@ -29,7 +29,7 @@
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@material-design-icons/font": "^0.14.15",
     "@rollup/plugin-yaml": "^4.1.2",
-    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.1.14",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
