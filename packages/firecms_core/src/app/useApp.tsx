@@ -10,6 +10,7 @@ export type AppState = {
     drawerOpen: boolean,
     openDrawer: () => void,
     closeDrawer: () => void,
+    closeHover?: () => void,
     autoOpenDrawer?: boolean,
     logo?: string
 }

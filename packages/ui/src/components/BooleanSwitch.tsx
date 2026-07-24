@@ -27,6 +27,9 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
         return <button
             type="button"
             ref={ref}
+            role="switch"
+            aria-checked={allowIndeterminate && (value === null || value === undefined) ? "mixed" : !!value}
+            aria-disabled={disabled || undefined}
             tabIndex={disabled ? -1 : undefined}
             onClick={disabled
                 ? (e) => e.preventDefault()
@@ -53,7 +56,7 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
             {allowIndeterminate && (value === null || value === undefined) && <div
                 key={"knob"}
                 className={cls(
-                    "block rounded-full transition-transform duration-100 transform will-change-auto",
+                    "block rounded-full transition-transform duration-100 ease-out transform will-change-auto shadow-sm",
                     disabled ? "bg-surface-accent-400 dark:bg-surface-accent-600" : "bg-surface-accent-400 dark:bg-surface-accent-600",
                     {
                         "w-[21px] h-[10px]": size === "medium" || size === "large",
@@ -69,8 +72,8 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
             {!(allowIndeterminate && (value === null || value === undefined)) && <div
                 key={"knob"}
                 className={cls(
-                    "block rounded-full transition-transform duration-100 transform will-change-auto",
-                    disabled ? "bg-surface-accent-300 dark:bg-surface-accent-700" : (value ? "bg-white" : "bg-surface-accent-600 dark:bg-surface-accent-400"),
+                    "block rounded-full transition-transform duration-100 ease-out transform will-change-auto shadow-sm",
+                    disabled ? "bg-surface-accent-300 dark:bg-surface-700" : (value ? "bg-white shadow" : "bg-surface-accent-600 dark:bg-surface-accent-400"),
                     {
                         "w-[21px] h-[21px]": size === "medium" || size === "large",
                         "w-[19px] h-[19px]": size === "small",

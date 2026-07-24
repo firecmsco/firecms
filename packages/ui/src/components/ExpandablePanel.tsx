@@ -81,7 +81,7 @@ export function ExpandablePanel({
             <Collapsible.Root
                 className={cls(
                     !invisible && defaultBorderMixin + " border",
-                    "rounded-md",
+                    "rounded-lg",
                     "w-full",
                     className
                 )}
@@ -95,7 +95,7 @@ export function ExpandablePanel({
                     <div
                         className={cls(
                             "rounded-t flex items-center justify-between w-full min-h-[52px]",
-                            "hover:bg-surface-accent-200 hover:bg-opacity-40 hover:bg-surface-accent-200/40 dark:hover:bg-surface-800 dark:hover:bg-opacity-40 dark:hover:bg-surface-800/40",
+                            "hover:bg-surface-accent-200 hover:bg-opacity-40 hover:bg-surface-accent-200/40 dark:hover:bg-surface-800 dark:hover:bg-opacity-40 dark:hover:bg-surface-800/40 active:bg-surface-accent-300/50 dark:active:bg-surface-700/50",
                             invisible ? "border-b px-2" : "p-4",
                             open ? "py-6" : "py-4",
                             "transition-all duration-200",
@@ -106,6 +106,7 @@ export function ExpandablePanel({
                         )}
                         role="button"
                         tabIndex={0}
+                        aria-expanded={open}
                     >
                         {title}
                         <KeyboardArrowDownIcon className={cls("transition", open ? "rotate-180" : "")}/>

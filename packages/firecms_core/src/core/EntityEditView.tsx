@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
     Entity,
     EntityCollection,
@@ -246,6 +246,47 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const authController = useAuthController();
 
+    // Track which tabs have been visited so we keep them mounted (preserving
+    // their state) without eagerly mounting tabs that were never opened.
+    const mountedTabsRef = useRef<Set<string>>(new Set());
+    if (selectedTab) {
+        mountedTabsRef.current.add(selectedTab);
+    }
+
+    // Memoize the read-only fallback form context so it is not recreated on
+    // every render when there is no real formContext (read-only entity views).
+    const readOnlyFormContext = useMemo<FormContext | undefined>(() => {
+        if (formContext) return undefined; // real formContext takes precedence
+        if (!entityId) return undefined;
+        const formexStub = createFormexStub<M>(usedEntity?.values ?? {} as M);
+        return {
+            entityId,
+            disabled: false,
+            openEntityMode: layout,
+            status: status,
+            values: usedEntity?.values ?? {},
+            setFieldValue: (key: string, value: any) => {
+                throw new Error("You can't update values in read only mode");
+            },
+            save: () => {
+                throw new Error("You can't save in read only mode");
+            },
+            collection: resolveCollection<M>({
+                collection,
+                path,
+                entityId,
+                values: usedEntity?.values ?? {},
+                previousValues: usedEntity?.values ?? {},
+                propertyConfigs: customizationController.propertyConfigs,
+                authController
+            }),
+            path,
+            entity: usedEntity,
+            savingError: undefined,
+            formex: formexStub
+        };
+    }, [formContext, entityId, layout, status, usedEntity, collection, path, customizationController.propertyConfigs, authController]);
+
     const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
         .filter(e => !e.includeActions)
         .map((customView) => {
@@ -262,38 +303,18 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                 return null;
             }
 
-            const formexStub = createFormexStub<M>(usedEntity?.values ?? {} as M);
-            const usedFormContext: FormContext = formContext ?? {
-                entityId,
-                disabled: false,
-                openEntityMode: layout,
-                status: status,
-                values: usedEntity?.values ?? {},
-                setFieldValue: (key: string, value: any) => {
-                    throw new Error("You can't update values in read only mode");
-                },
-                save: () => {
-                    throw new Error("You can't save in read only mode");
-                },
-                collection: resolveCollection<M>({
-                    collection,
-                    path,
-                    entityId,
-                    values: usedEntity?.values ?? {},
-                    previousValues: usedEntity?.values ?? {},
-                    propertyConfigs: customizationController.propertyConfigs,
-                    authController
-                }),
-                path,
-                entity: usedEntity,
-                savingError: undefined,
-                formex: formexStub
-            };
+            // Only mount tabs that are active or have been visited before.
+            const isActive = selectedTab === customView.key;
+            if (!isActive && !mountedTabsRef.current.has(customView.key)) {
+                return null;
+            }
+
+            const usedFormContext: FormContext = formContext ?? readOnlyFormContext!;
 
             return <div
                 className={cls(defaultBorderMixin,
                     "relative flex-1 w-full h-full overflow-auto",
-                    { "hidden": selectedTab !== customView.key }
+                    { "hidden": !isActive }
                 )}
                 key={`custom_view_${customView.key}`}
                 role="tabpanel">
@@ -311,7 +332,8 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const globalLoading = dataLoading && !usedEntity;
 
-    const jsonView = <div
+    // Only mount the JSON view once its tab has been selected at least once.
+    const jsonView = (selectedTab === JSON_TAB_VALUE || mountedTabsRef.current.has(JSON_TAB_VALUE)) ? <div
         className={cls("relative flex-1 h-full overflow-auto w-full",
             { "hidden": selectedTab !== JSON_TAB_VALUE })}
         key={"json_view"}
@@ -320,7 +342,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             <EntityJsonPreview
                 values={formContext?.values ?? entity?.values ?? {}} />
         </ErrorBoundary>
-    </div>;
+    </div> : null;
 
     const subCollectionsViews = subcollections && subcollections.map((subcollection) => {
         const subcollectionId = subcollection.id ?? subcollection.path;

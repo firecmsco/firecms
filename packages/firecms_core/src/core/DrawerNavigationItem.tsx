@@ -22,7 +22,7 @@ export function DrawerNavigationItem({
 }) {
 
     const iconWrap = <div
-        className={"text-text-secondary dark:text-text-secondary-dark"}>
+        className={"shrink-0 flex items-center justify-center w-[44px] h-[30px] text-surface-500 dark:text-text-secondary-dark group-hover/nav:text-primary transition-colors duration-150"}>
         {icon}
     </div>;
 
@@ -33,14 +33,12 @@ export function DrawerNavigationItem({
                 width: "100%",
                 transition: drawerOpen ? "width 150ms ease-in" : undefined
             }}
-            className={({ isActive }: any) => cls("rounded-lg truncate",
-                "hover:bg-surface-accent-300 hover:bg-opacity-75 hover:bg-surface-accent-300/75 dark:hover:bg-surface-accent-800 dark:hover:bg-opacity-75 dark:hover:bg-surface-accent-800/75 text-text-primary dark:text-surface-200 hover:text-surface-900 hover:dark:text-white hover:bg-surface-accent-300/75 dark:hover:bg-surface-accent-800/75",
-                "flex flex-row items-center mr-8",
-                // "transition-all ease-in-out delay-100 duration-300",
-                // drawerOpen ? "w-full" : "w-18",
-                drawerOpen ? "pl-4 h-10" : "pl-4 h-9",
-                "font-semibold text-xs",
-                isActive ? "bg-surface-accent-200 bg-opacity-60 dark:bg-surface-800 dark:bg-opacity-50 bg-surface-accent-200/60 dark:bg-surface-800/50" : ""
+            className={({ isActive }: { isActive: boolean }) => cls("rounded-lg truncate group/nav",
+                "hover:bg-primary/5 dark:hover:bg-primary/5 text-surface-700 dark:text-surface-300 hover:text-surface-900 dark:hover:text-white",
+                "flex flex-row items-center",
+                drawerOpen ? "pr-4 h-[30px]" : "h-[30px]",
+                "font-medium text-[13px]",
+                isActive ? "bg-primary/8 dark:bg-primary/10 text-primary dark:text-primary [&_div]:text-primary" : ""
             )}
             to={url}
         >
@@ -49,11 +47,11 @@ export function DrawerNavigationItem({
 
             <div
                 className={cls(
-                    "text-text-primary dark:text-surface-200",
+                    "text-surface-700 dark:text-surface-300",
                     drawerOpen ? "opacity-100" : "opacity-0 hidden",
-                    "ml-4 font-inherit"
+                    "font-inherit truncate space-x-2"
                 )}>
-                {name.toUpperCase()}
+                {name}
             </div>
         </NavLink>
     </div>;

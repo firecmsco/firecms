@@ -1,5 +1,6 @@
 import React from "react";
 import { cls } from "../util";
+import { useInjectStyles } from "../hooks";
 
 export type SkeletonProps = {
     width?: number;
@@ -7,24 +8,40 @@ export type SkeletonProps = {
     className?: string;
 }
 
+const styles = `
+@keyframes shimmer {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+`;
+
 export function Skeleton({
                              width,
                              height,
                              className
                          }: SkeletonProps) {
+
+    useInjectStyles("Skeleton", styles);
+
     return <span
         style={{
-            width: width !== undefined ? `${width}px` : undefined,
-            height: height !== undefined ? `${height}px` : undefined
+            width: width ? `${width}px` : "100%",
+            height: height ? `${height}px` : "12px"
         }}
         className={
         cls(
-            "block",
-            "bg-surface-accent-200 dark:bg-surface-accent-800 rounded-md",
-            "animate-pulse",
+            "block relative overflow-hidden",
+            "bg-surface-accent-50 dark:bg-surface-accent-800 rounded-md",
             "max-w-full max-h-full",
-            width === undefined ? "w-full" : "",
-            height === undefined ? "h-3" : "",
             className)
-    }/>;
+    }>
+        <span
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 dark:via-white/8 to-transparent"
+            style={{ animation: "shimmer 1.8s ease-in-out infinite" }}
+        />
+    </span>;
 }

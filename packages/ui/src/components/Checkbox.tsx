@@ -13,6 +13,7 @@ export interface CheckboxProps {
     padding?: boolean;
     size?: "smallest" | "small" | "medium" | "large";
     color?: "primary" | "secondary";
+    "aria-label"?: string;
 }
 
 const sizeClasses = {
@@ -26,13 +27,13 @@ const outerSizeClasses = {
     medium: "w-10 h-10",
     small: "w-8 h-8",
     large: "w-12 h-12 ",
-    smallest: "w-6 h-6"
+    smallest: "w-8 h-8"
 }
 const paddingClasses = {
     medium: "p-2",
     small: "p-2",
     large: "p-2",
-    smallest: ""
+    smallest: "p-2"
 }
 
 const colorClasses = {
@@ -48,7 +49,8 @@ export const Checkbox = React.memo(({
                              disabled,
                              size = "medium",
                              onCheckedChange,
-                             color = "primary"
+                             color = "primary",
+                             "aria-label": ariaLabel
                          }: CheckboxProps) => {
 
     const isChecked = indeterminate ? false : checked;
@@ -65,6 +67,8 @@ export const Checkbox = React.memo(({
             id={id}
             checked={indeterminate || isChecked}
             disabled={disabled}
+            aria-label={ariaLabel}
+            aria-checked={indeterminate ? "mixed" : isChecked}
             onCheckedChange={disabled ? undefined : onCheckedChange}>
 
             <div className={cls(
@@ -84,7 +88,7 @@ export const Checkbox = React.memo(({
                         (indeterminate || isChecked) ? "text-surface-accent-100 dark:text-surface-accent-900" : "",
                         disabled
                             ? "border-transparent"
-                            : (indeterminate || isChecked ? "border-transparent" : "border-surface-accent-800 dark:border-surface-accent-200")
+                            : (indeterminate || isChecked ? "border-transparent" : "border-surface-accent-800 dark:border-surface-accent-500")
                     )}>
                     <CheckboxPrimitive.Indicator asChild>
                         {indeterminate
@@ -100,3 +104,5 @@ export const Checkbox = React.memo(({
         </CheckboxPrimitive.Root>
     );
 });
+
+Checkbox.displayName = "Checkbox";

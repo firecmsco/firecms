@@ -102,3 +102,5 @@ export const MenuItem = React.memo(({
         </DropdownMenu.Item>
     );
 });
+
+MenuItem.displayName = "MenuItem";

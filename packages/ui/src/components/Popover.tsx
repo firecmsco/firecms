@@ -27,6 +27,8 @@ export interface PopoverProps {
     modal?: boolean;
     className?: string;
     portalContainer?: HTMLElement | null;
+    onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+    onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 export function Popover({
@@ -45,7 +47,9 @@ export function Popover({
                             enabled = true,
                             modal = false,
                             portalContainer,
-                            className
+                            className,
+                            onMouseEnter,
+                            onMouseLeave
                         }: PopoverProps) {
 
     useInjectStyles("Popover", popoverStyles);
@@ -78,10 +82,12 @@ export function Popover({
                 arrowPadding={arrowPadding}
                 sticky={sticky}
                 hideWhenDetached={hideWhenDetached}
-                avoidCollisions={avoidCollisions}>
+                avoidCollisions={avoidCollisions}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}>
 
                 {children}
-                <PopoverPrimitive.Arrow className="fill-white dark:fill-surface-accent-950"/>
+                <PopoverPrimitive.Arrow className="fill-white dark:fill-surface-800"/>
             </PopoverPrimitive.Content>
         </PopoverPrimitive.Portal>
     </PopoverPrimitive.Root>;

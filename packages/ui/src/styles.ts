@@ -1,7 +1,7 @@
 export const focusedDisabled = "focus-visible:ring-0 focus-visible:ring-offset-0";
 export const focusedInvisibleMixin = "focus:bg-opacity-70 focus:bg-surface-accent-100 focus:dark:bg-surface-800 focus:dark:bg-opacity-60 focus:bg-surface-accent-100/70 dark:focus:bg-surface-800/60";
 export const focusedClasses = "z-30 outline-hidden outline-none ring-2 ring-primary ring-opacity-75 ring-primary/75 ring-offset-2 ring-offset-transparent ";
-export const fieldBackgroundMixin = "bg-opacity-50 bg-surface-accent-200 bg-surface-accent-200/50 dark:bg-surface-800 dark:bg-opacity-60 dark:bg-surface-800/60";
+export const fieldBackgroundMixin = "bg-opacity-50 bg-surface-accent-200 bg-surface-accent-200/50 dark:bg-surface-800 dark:bg-opacity-90 dark:bg-surface-800/90";
 export const fieldBackgroundInvisibleMixin = "bg-opacity-0 bg-surface-accent-100 dark:bg-surface-800 dark:bg-opacity-0 bg-surface-accent-200/0 dark:bg-surface-800/0";
 export const fieldBackgroundDisabledMixin = "dark:bg-surface-800 bg-opacity-50 dark:bg-opacity-90 bg-surface-accent-200/50 dark:bg-surface-800/90";
 export const fieldBackgroundHoverMixin = "hover:bg-opacity-70 dark:hover:bg-surface-700 dark:hover:bg-opacity-40 hover:bg-surface-accent-200/70 hover:dark:bg-surface-700/40";

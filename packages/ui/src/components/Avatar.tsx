@@ -39,7 +39,7 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
             className={cls(
                 "rounded-full flex items-center justify-center overflow-hidden",
                 "p-1 w-12 h-12 min-w-12 min-h-12",
-                hover && "hover:bg-surface-accent-200 hover:dark:bg-surface-accent-700",
+                hover && "hover:bg-surface-accent-200 dark:hover:bg-surface-accent-700",
                 outerClassName
             )}
         >

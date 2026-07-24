@@ -26,16 +26,16 @@ const getSizeClasses = (size: "small" | "medium" | "large") => {
 const getColorClasses = (severity: string) => {
     switch (severity) {
         case "error":
-            return "bg-red-50 dark:bg-red-800 dark:text-red-100 text-red-900";
+            return "bg-red-50 dark:bg-red-800 dark:text-red-100 text-red-900 border-l-[3px] border-l-red-500";
         case "warning":
-            return "bg-amber-50 dark:bg-amber-800 dark:text-amber-100 text-amber-900";
+            return "bg-amber-50 dark:bg-amber-800 dark:text-amber-100 text-amber-900 border-l-[3px] border-l-amber-500";
         case "info":
-            return "bg-blue-100 dark:bg-blue-800 dark:text-blue-100 text-blue-900";
+            return "bg-blue-100 dark:bg-blue-800 dark:text-blue-100 text-blue-900 border-l-[3px] border-l-blue-500";
         case "success":
-            return "bg-emerald-50 dark:bg-emerald-800 dark:text-emerald-100 text-emerald-900";
+            return "bg-emerald-50 dark:bg-emerald-800 dark:text-emerald-100 text-emerald-900 border-l-[3px] border-l-emerald-500";
         case "base":
         default:
-            return "bg-surface-accent-50 dark:bg-surface-accent-800 dark:text-white text-surface-accent-900";
+            return "bg-surface-accent-50 dark:bg-surface-accent-800 dark:text-white text-surface-accent-900 border-l-[3px] border-l-surface-accent-400";
     }
 };
 
@@ -58,10 +58,10 @@ export const Alert: React.FC<AlertProps> = ({
                 getSizeClasses(size),
                 "w-full",
                 "font-medium",
-                "rounded-md flex items-center gap-2",
+                "rounded-lg flex items-center gap-2",
                 classes,
                 outerClassName)}>
-            <div className={cls("flex-grow", className)}>{children}</div>
+            <div className={cls("grow", className)}>{children}</div>
             {onDismiss && (
                 <button
                     className="text-surface-accent-400 hover:text-surface-accent-600 dark:text-surface-accent-500 dark:hover:text-surface-accent-400"

@@ -379,7 +379,13 @@ function encodeFilterAndSort(filterValues?: FilterValues<string>, sortBy?: [stri
                 }
                 if (encodedValue !== undefined) {
                     entries[encodeURIComponent(`${key}_op`)] = encodeURIComponent(op);
-                    entries[encodeURIComponent(`${key}_value`)] = encodedValue ? encodeURIComponent(encodedValue.toString()) : "null";
+                    // Note: check for null/undefined explicitly instead of truthiness,
+                    // otherwise falsy-but-valid values (boolean `false`, number `0`)
+                    // would be serialized as "null" and round-trip back as `null`,
+                    // breaking filters like `archived == false`.
+                    entries[encodeURIComponent(`${key}_value`)] = encodedValue !== null && encodedValue !== undefined
+                        ? encodeURIComponent(encodedValue.toString())
+                        : "null";
                 }
             }
         });
