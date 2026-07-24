@@ -118,7 +118,7 @@ export function FireCMSCloudDrawer() {
 
             </div>
 
-            <div className={"shrink-0 px-4"}>
+            <div className={"shrink-0 px-4 pb-2"}>
                 <AdminDrawerMenu
                     menuOpen={adminMenuOpen}
                     setMenuOpen={setAdminMenuOpen} />
