@@ -34,7 +34,7 @@
   "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae",
   "dependencies": {
     "axios": "^1.16.1",
-    "vite-plugin-static-copy": "3.1.4"
+    "vite-plugin-static-copy": "4.1.1"
   },
   "repository": {
     "type": "git",
