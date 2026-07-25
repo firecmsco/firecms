@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Card, CircularProgress, Container, Markdown, Typography } from "@firecms/ui";
 import {
-    Entity,
-    EntityCustomViewParams,
+    type Entity,
+    type EntityCustomViewParams,
     EntityReference,
-    EntityValues,
+    type EntityValues,
     ErrorView,
     useDataSource,
     useStorageSource
 } from "@firecms/core";
 import { productsCollection } from "./products_collection";
-import { BlogEntry, Product } from "./types";
+import { type BlogEntry, type Product } from "./types";
 
 /**
  * This is a sample view used to render the content of a blog entry.

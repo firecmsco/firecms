@@ -2,9 +2,9 @@ import { useCallback } from "react";
 import {
     buildCollection,
     buildProperties,
-    CollectionActionsProps,
-    Entity,
-    EntityCollection,
+    type CollectionActionsProps,
+    type Entity,
+    type EntityCollection,
     useDataSource,
     useReferenceDialog,
     useSnackbarController

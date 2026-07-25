@@ -1,5 +1,5 @@
 import { buildCollection } from "@firecms/core";
-import { Product } from "./types";
+import { type Product } from "./types";
 
 export const productsCollection = buildCollection<Product>({
     id: "ppp",

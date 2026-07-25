@@ -1,4 +1,4 @@
-import { EntityCallbacks, slugify } from "@firecms/core";
+import { type EntityCallbacks, slugify } from "@firecms/core";
 
 const callbacks: EntityCallbacks = {
     onPreSave: ({

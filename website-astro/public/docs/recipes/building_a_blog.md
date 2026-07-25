@@ -338,7 +338,7 @@ we get the following code for the blog collection:
 ```tsx
 import { buildCollection, buildProperty } from "@firecms/core";
 import { BlogEntryPreview } from "./BlogEntryPreview";
-import { BlogEntry } from "./types";
+import { type BlogEntry } from "./types";
 
 export const blogCollection = buildCollection<BlogEntry>({
     name: "Blog entry",

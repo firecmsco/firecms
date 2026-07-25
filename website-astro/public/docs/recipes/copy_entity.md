@@ -69,7 +69,7 @@ custom component.
 
 ```tsx
 import { useCallback } from "react";
-import { Entity, EntityCollection, useDataSource, useReferenceDialog, useSnackbarController } from "@firecms/core";
+import { type Entity, type EntityCollection, useDataSource, useReferenceDialog, useSnackbarController } from "@firecms/core";
 import { Button } from "@firecms/ui";
 
 export type CopyEntityButtonProps = {
@@ -133,9 +133,9 @@ export function CopyEntityButton({
 After your component is ready, you can plug it into your collections `Actions`:
 
 ```tsx
-import { buildCollection, CollectionActionsProps } from "@firecms/core";
+import { buildCollection, type CollectionActionsProps } from "@firecms/core";
 import { CopyEntityButton } from "./copy_button";
-import { Product, productsCollection, properties } from "./simple_product_collection";
+import { type Product, productsCollection, properties } from "./simple_product_collection";
 
 export const productsCollectionCopy = buildCollection<Product>({
     id: "products_copied",
@@ -160,9 +160,9 @@ import { useCallback } from "react";
 import {
     buildCollection,
     buildProperties,
-    CollectionActionsProps,
-    Entity,
-    EntityCollection,
+    type CollectionActionsProps,
+    type Entity,
+    type EntityCollection,
     useDataSource,
     useReferenceDialog,
     useSnackbarController

@@ -2,7 +2,7 @@ import React from "react";
 
 import {
     buildCollection,
-    Entity,
+    type Entity,
     EntityCollectionView,
     useAuthController,
     useReferenceDialog,

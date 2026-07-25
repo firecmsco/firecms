@@ -93,9 +93,9 @@ use a callback or add them directly to the `views` property. The callback includ
 use it to conditionally show or hide views based on the user role.
 
 ```tsx
-import { buildCollection, CMSView } from "@firecms/core";
+import { buildCollection, type CMSView } from "@firecms/core";
 import { ExampleCMSView } from "./ExampleCMSView";
-import { FireCMSAppConfig, FireCMSCloudApp } from "@firecms/cloud";
+import { type FireCMSAppConfig, FireCMSCloudApp } from "@firecms/cloud";
 
 const projectId = "YOUR_PROJECT_ID";
 
@@ -148,7 +148,7 @@ import React from "react";
 
 import {
     buildCollection,
-    Entity,
+    type Entity,
     EntityCollectionView,
     useAuthController,
     useReferenceDialog,

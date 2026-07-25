@@ -49,7 +49,7 @@ This callback will be executed before saving the document, allowing you to modif
 it is written to the database.
 
 ```tsx
-import { EntityCallbacks, slugify } from "@firecms/core";
+import { type EntityCallbacks, slugify } from "@firecms/core";
 
 const callbacks: EntityCallbacks = {
     onPreSave: ({

@@ -78,8 +78,8 @@ FireCMS allows you to pass a function that returns a list of collections to the
 `collections` prop of the `FireCMSApp` component.
 
 ```tsx
-import { buildCollection, EntityCollectionsBuilder } from "@firecms/core";
-import { Unit, unitsCollection } from "./unit_collection";
+import { buildCollection, type EntityCollectionsBuilder } from "@firecms/core";
+import { type Unit, unitsCollection } from "./unit_collection";
 
 const collectionBuilder: EntityCollectionsBuilder = async ({
                                                                dataSource,
@@ -128,7 +128,7 @@ and lessons and navigate between them:
 
 ```tsx
 import { buildCollection } from "@firecms/core";
-import { FireCMSAppConfig } from "@firecms/cloud";
+import { type FireCMSAppConfig } from "@firecms/cloud";
 
 type Unit = {
     name: string;

@@ -1,5 +1,5 @@
-import { buildCollection, EntityCollectionsBuilder } from "@firecms/core";
-import { Unit, unitsCollection } from "./unit_collection";
+import { buildCollection, type EntityCollectionsBuilder } from "@firecms/core";
+import { type Unit, unitsCollection } from "./unit_collection";
 
 const collectionBuilder: EntityCollectionsBuilder = async ({
                                                                dataSource,

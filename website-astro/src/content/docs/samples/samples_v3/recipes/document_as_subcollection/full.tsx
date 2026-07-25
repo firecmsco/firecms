@@ -1,5 +1,5 @@
 import { buildCollection } from "@firecms/core";
-import { FireCMSAppConfig } from "@firecms/cloud";
+import { type FireCMSAppConfig } from "@firecms/cloud";
 
 type Unit = {
     name: string;
