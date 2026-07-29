@@ -7,18 +7,16 @@ import {
     DataType,
     Entity,
     EntityCollection,
-    EntityReference,
     EntityTableController,
     FilterValues,
     FireCMSContext,
     SelectedCellProps,
-    User,
-    WhereFilterOp
+    User
 } from "../../types";
 import { useDebouncedData } from "./useDebouncedData";
 import { ScrollRestorationController } from "./useScrollRestoration";
 import { isDataTypeFilterable } from "../../util";
-import { decodeEntityId, encodeEntityId } from "../../util/navigation_utils";
+import { encodeFilterAndSort, parseFilterAndSort } from "./table_url_params";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -95,8 +93,6 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
     const pageSize = typeof collection.pagination === "number" ? collection.pagination : DEFAULT_PAGE_SIZE;
 
-    const [searchString, setSearchString] = React.useState<string | undefined>();
-
     const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
         sortBy?: [string, "asc" | "desc"]) => {
         if (!dataSource.isFilterCombinationValid)
@@ -137,8 +133,9 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const {
         filterValues: initialFilterUrl,
         sortBy: initialSortUrl,
+        searchString: initialSearchUrl
     } = parseFilterAndSort(location.search);
-    
+
     const availableFilterKeys = collection.allowedFilters ?? Object.keys(collection.properties);
     const forcedFilterKeys = collection.forceFilter ? Object.keys(collection.forceFilter) : [];
 
@@ -174,6 +171,11 @@ export function useDataSourceTableController<M extends Record<string, any> = any
 
     const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(removeUnallowedFilters(initFilters));
     const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>((updateUrl ? initialSortUrl : undefined) ?? initialSortInternal);
+    // Like the filters and the sort, the text search term is only restored from the URL when
+    // this controller owns the URL. Controllers rendered inside a dialog (e.g. a reference
+    // selection dialog) get `updateUrl: false` and must not inherit the state of the
+    // collection behind them. See https://github.com/firecmsco/firecms/issues/702
+    const [searchString, setSearchString] = React.useState<string | undefined>(updateUrl ? initialSearchUrl : undefined);
 
     useUpdateUrl(filterValues, sortBy, searchString, updateUrl);
 
@@ -253,32 +255,43 @@ export function useDataSourceTableController<M extends Record<string, any> = any
             setDataLoadingError(error);
         };
 
-        if (dataSource.listenCollection) {
-            return dataSource.listenCollection<M>({
-                path: resolvedPath,
-                collection,
-                onUpdate: onEntitiesUpdate,
-                onError,
-                searchString,
-                filter: filterValues,
-                limit: itemCount,
-                startAfter: undefined,
-                orderBy: sortByProperty,
-                order: currentSort
-            });
-        } else {
-            dataSource.fetchCollection<M>({
-                path: resolvedPath,
-                collection,
-                searchString,
-                filter: filterValues,
-                limit: itemCount,
-                startAfter: undefined,
-                orderBy: sortByProperty,
-                order: currentSort
-            })
-                .then(onEntitiesUpdate)
-                .catch(onError);
+        // Data sources may throw synchronously, e.g. when a text search is requested before
+        // the text search backend of the collection has been initialised. That can happen
+        // when the search term is restored from the URL instead of typed in the search bar,
+        // so it is reported as a data loading error rather than being left to blow up the
+        // whole view from inside this effect.
+        try {
+            if (dataSource.listenCollection) {
+                return dataSource.listenCollection<M>({
+                    path: resolvedPath,
+                    collection,
+                    onUpdate: onEntitiesUpdate,
+                    onError,
+                    searchString,
+                    filter: filterValues,
+                    limit: itemCount,
+                    startAfter: undefined,
+                    orderBy: sortByProperty,
+                    order: currentSort
+                });
+            } else {
+                dataSource.fetchCollection<M>({
+                    path: resolvedPath,
+                    collection,
+                    searchString,
+                    filter: filterValues,
+                    limit: itemCount,
+                    startAfter: undefined,
+                    orderBy: sortByProperty,
+                    order: currentSort
+                })
+                    .then(onEntitiesUpdate)
+                    .catch(onError);
+                return () => {
+                };
+            }
+        } catch (e: any) {
+            onError(e instanceof Error ? e : new Error(String(e)));
             return () => {
             };
         }
@@ -332,9 +345,7 @@ function useUpdateUrl<M extends Record<string, any> = any>(
 
     useEffect(() => {
         if (updateUrl) {
-            const newUrl = encodeFilterAndSort(filterValues, sortBy);
-            const search = searchString ? `&search=${encodeURIComponent(searchString)}` : "";
-            const state = `${newUrl}${search}`;
+            const state = encodeFilterAndSort(filterValues, sortBy, searchString);
             const hash = window.location.hash;
             if (state === "")
                 window.history.replaceState({}, "", `${window.location.pathname}${hash}`);
@@ -342,143 +353,4 @@ function useUpdateUrl<M extends Record<string, any> = any>(
                 window.history.replaceState({}, "", `?${state}${hash}`);
         }
     }, [filterValues, sortBy, searchString, updateUrl]);
-}
-
-function encodeFilterAndSort(filterValues?: FilterValues<string>, sortBy?: [string, "asc" | "desc"] | undefined) {
-    const entries: Record<string, string> = {};
-    if (sortBy) {
-        entries["__sort"] = encodeURIComponent(sortBy[0]);
-        entries["__sort_order"] = encodeURIComponent(sortBy[1]);
-    }
-    if (filterValues) {
-        Object.entries(filterValues).forEach(([key, value]) => {
-            if (value) {
-                const [op, val] = value;
-                let encodedValue: any = val;
-                try {
-                    if (typeof val === "object") {
-                        if (val instanceof Date) {
-                            encodedValue = val.toISOString();
-                        } else if (Array.isArray(val)) {
-                            encodedValue = JSON.stringify(val, (key, value) => {
-                                if (value instanceof EntityReference) {
-                                    return encodeRef(value);
-                                }
-                                return value;
-                            });
-                        } else if (val instanceof EntityReference) {
-                            encodedValue = encodeRef(val);
-                        }
-                    } else if (typeof val === "string") {
-                        // JSON.stringify wraps the string in quotes (e.g. "4" → '"4"')
-                        // so that decodeString's JSON.parse restores the string type,
-                        // not a number. Without this, "4" round-trips as the number 4.
-                        encodedValue = JSON.stringify(val);
-                    }
-                } catch (e) {
-                    encodedValue = val;
-                }
-                if (encodedValue !== undefined) {
-                    entries[encodeURIComponent(`${key}_op`)] = encodeURIComponent(op);
-                    // Note: check for null/undefined explicitly instead of truthiness,
-                    // otherwise falsy-but-valid values (boolean `false`, number `0`)
-                    // would be serialized as "null" and round-trip back as `null`,
-                    // breaking filters like `archived == false`.
-                    entries[encodeURIComponent(`${key}_value`)] = encodedValue !== null && encodedValue !== undefined
-                        ? encodeURIComponent(encodedValue.toString())
-                        : "null";
-                }
-            }
-        });
-    }
-    if (!Object.keys(entries).length) {
-        return "";
-    }
-    return Object.entries(entries).map(([key, value]) => `${key}=${value}`).join("&");
-}
-
-function parseFilterAndSort<M>(search: string): {
-    filterValues: FilterValues<string> | undefined,
-    sortBy?: [Extract<keyof M, string>, "asc" | "desc"]
-} {
-    const entries = new URLSearchParams(search);
-    const filterValues: FilterValues<string> = {};
-    let sortBy: [string, "asc" | "desc"] | undefined = undefined;
-    entries.forEach((value, key) => {
-        if (key === "__sort") {
-            sortBy = [decodeURIComponent(value), entries.get("__sort_order") as "asc" | "desc"];
-        } else if (key.endsWith("_op")) {
-            const field = key.replace("_op", "");
-            const filterOp = decodeURIComponent(value) as WhereFilterOp;
-            const filterValStr = entries.get(`${field}_value`);
-            if (filterValStr !== null) {
-                filterValues[field] = [filterOp, decodeString(filterValStr)];
-            }
-        }
-    });
-
-    return {
-        filterValues: Object.keys(filterValues).length ? filterValues : undefined,
-        sortBy
-    }
-}
-
-function isDate(dateString: string): boolean {
-    // Define a regex pattern that matches the exact date format: 2025-01-07T23:00:00.000Z
-    const regexPattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
-
-    // Test the dateString against the regex pattern
-    if (!regexPattern.test(dateString)) {
-        return false;
-    }
-
-    // If the regex matches, further validate if it is a valid UTC date
-    const date = new Date(dateString);
-    return date.toISOString() === dateString;
-}
-
-function encodeRef(val: EntityReference) {
-    return `ref::${val.path}/${encodeEntityId(val.id)}`;
-}
-
-/**
- * Split a "path/id" reference on its LAST separator: the path may itself be a
- * subcollection path with several segments, and the id is escaped so it is always exactly
- * one segment.
- */
-function decodeRef(encoded: string): EntityReference {
-    const separatorIndex = encoded.lastIndexOf("/");
-    if (separatorIndex < 0) return new EntityReference(encoded, "");
-    return new EntityReference(
-        decodeEntityId(encoded.substring(separatorIndex + 1)),
-        encoded.substring(0, separatorIndex)
-    );
-}
-
-function decodeString(val: string): EntityReference | Date | string {
-    let parsedFilterVal: any = val;
-    if (isDate(val)) {
-        try {
-            parsedFilterVal = new Date(val);
-        } catch (e) {
-            // ignore
-        }
-    }
-    if (typeof parsedFilterVal === "string") {
-        try {
-            parsedFilterVal = JSON.parse(parsedFilterVal, (key, value) => {
-                if (typeof value === "string" && value.startsWith("ref::")) {
-                    return decodeRef(value.substring(5));
-                }
-                return value;
-            });
-        } catch (e) {
-            // ignore
-        }
-    }
-
-    if (typeof parsedFilterVal === "string" && parsedFilterVal.startsWith("ref::")) {
-        return decodeRef(parsedFilterVal.substring(5));
-    }
-    return parsedFilterVal;
 }

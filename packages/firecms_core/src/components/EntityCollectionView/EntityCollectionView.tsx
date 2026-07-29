@@ -831,7 +831,11 @@ export const EntityCollectionView = React.memo(
         } = useTableSearchHelper({
             collection,
             fullPath: resolvedFullPath,
-            parentCollectionIds
+            parentCollectionIds,
+            // When the search term comes from the URL instead of the search bar, text search
+            // has never been initialised for this collection. Initialise it so the search bar
+            // is usable (editable and clearable) right away.
+            initialSearchString: tableController.searchString
         });
 
         // Popover open state managed at parent level to prevent closing when view changes
@@ -881,6 +885,7 @@ export const EntityCollectionView = React.memo(
                     loading={tableController.dataLoading}
                     onTextSearch={textSearchEnabled && textSearchInitialised ? tableController.setSearchString : undefined}
                     onTextSearchClick={textSearchEnabled && !textSearchInitialised ? onTextSearchClick : undefined}
+                    initialSearchString={tableController.searchString}
                     textSearchLoading={textSearchLoading}
                     viewModeToggle={viewModeToggleElement}
                     actionsStart={<EntityCollectionViewStartActions
