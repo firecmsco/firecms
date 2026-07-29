@@ -11,6 +11,7 @@ import {
     TextField
 } from "@firecms/ui";
 import { EnumValueConfig } from "../../../types";
+import { filterValueToText, parseFilterTextInput } from "./filter_text_input";
 
 interface StringNumberFilterFieldProps {
     name: string,
@@ -60,8 +61,15 @@ export function StringNumberFilterField({
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
     const [operation, setOperation] = useState<VirtualTableWhereFilterOp | "is-null">(fieldOperation === "==" && fieldValue === null ? "is-null" : fieldOperation);
     const [internalValue, setInternalValue] = useState<string | number | string[] | number[] | null | undefined>(fieldValue);
+    // Raw text of the text input, kept apart from `internalValue` so that intermediate
+    // inputs like "-", "0." or ".0" are not destroyed while the user is typing.
+    const [inputText, setInputText] = useState<string>(filterValueToText(fieldValue));
+    // Value the current `inputText` was built from, used to tell updates coming from
+    // outside apart from the ones triggered by the user typing.
+    const syncedValueRef = React.useRef(fieldValue);
 
     React.useEffect(() => {
+        const newValue = value ? value[1] : undefined;
         if (value) {
             const [op, val] = value;
             setOperation(op === "==" && val === null ? "is-null" : op);
@@ -70,15 +78,25 @@ export function StringNumberFilterField({
             setOperation(possibleOperations[0]);
             setInternalValue(undefined);
         }
+        // only reset the text when the value was changed somewhere else, so we don't
+        // interfere with what the user is currently typing
+        if (syncedValueRef.current !== newValue) {
+            syncedValueRef.current = newValue;
+            setInputText(filterValueToText(newValue));
+        }
     }, [value, possibleOperations[0]]);
 
     const isNullOperation = operation === "is-null";
 
-    function updateFilter(op: VirtualTableWhereFilterOp | "is-null", val: string | number | string[] | number[] | null | undefined) {
+    // `keepInputText` is used when the update originates from the text input, where the
+    // text typed by the user is authoritative and must not be overwritten with `val`
+    function updateFilter(op: VirtualTableWhereFilterOp | "is-null", val: string | number | string[] | number[] | null | undefined, keepInputText = false) {
         // Handle "is null" operation
         if (op === "is-null") {
             setOperation(op);
             setInternalValue(null);
+            syncedValueRef.current = null;
+            setInputText("");
             setValue(["==", null]);
             return;
         }
@@ -96,6 +114,9 @@ export function StringNumberFilterField({
 
         setOperation(op);
         setInternalValue(newValue);
+        syncedValueRef.current = newValue;
+        if (!keepInputText)
+            setInputText(filterValueToText(newValue));
 
         const hasNewValue = newValue !== null && Array.isArray(newValue)
             ? newValue.length > 0
@@ -109,6 +130,14 @@ export function StringNumberFilterField({
                 undefined
             );
         }
+    }
+
+    function updateFilterFromText(text: string) {
+        setInputText(text);
+        const { updateValue, value: parsedValue } = parseFilterTextInput(text, dataType);
+        // intermediate inputs like "-" or "0." keep the filter as it is
+        if (updateValue)
+            updateFilter(operation, parsedValue, true);
     }
 
     const multiple = multipleSelectOperations.includes(operation);
@@ -138,16 +167,13 @@ export function StringNumberFilterField({
                 {!enumValues && <TextField
                     size={"medium"}
                     type={dataType === "number" ? "number" : undefined}
-                    value={internalValue !== undefined && internalValue != null ? String(internalValue) : ""}
+                    value={inputText}
                     disabled={isNullOperation}
                     placeholder={isNullOperation ? "null" : undefined}
                     onChange={(evt) => {
-                        const val = dataType === "number"
-                            ? parseFloat(evt.target.value)
-                            : evt.target.value;
-                        updateFilter(operation, val);
+                        updateFilterFromText(evt.target.value);
                     }}
-                    endAdornment={internalValue !== undefined && internalValue != null && <IconButton
+                    endAdornment={inputText !== "" && <IconButton
                         onClick={(e) => updateFilter(operation, undefined)}>
                         <CloseIcon />
                     </IconButton>}
