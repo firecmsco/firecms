@@ -102,6 +102,14 @@ export interface EntityCollection<M extends Record<string, any> = any, USER exte
     titleProperty?: keyof M;
 
     /**
+     * Property used as the image thumbnail in Cards and Kanban view modes.
+     * Must reference a storage/image property (or an array of them), or a
+     * string property with `url: "image"`.
+     * If not specified, the first matching image property will be used.
+     */
+    imageProperty?: keyof M;
+
+    /**
      * When editing an entity, you can choose to open the entity in a side dialog
      * or in a full screen dialog. Defaults to `full_screen`.
      */

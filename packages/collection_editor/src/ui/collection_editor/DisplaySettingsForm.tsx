@@ -72,6 +72,34 @@ export function DisplaySettingsForm({
         return result;
     }, [resolvedCollection.properties]);
 
+    // Get image properties (for imageProperty), used as the thumbnail in Cards/Kanban views
+    const imageProperties = useMemo(() => {
+        const result: { key: string; label: string; property: Property; }[] = [];
+        if (!resolvedCollection.properties) return result;
+
+        const isImageProperty = (prop: any): boolean => {
+            if (!prop || !("dataType" in prop)) return false;
+            if (prop.dataType === "string") {
+                return Boolean(prop.storage?.acceptedFiles?.includes("image/*")) || prop.url === "image";
+            }
+            if (prop.dataType === "array" && prop.of) {
+                return isImageProperty(prop.of);
+            }
+            return false;
+        };
+
+        Object.entries(resolvedCollection.properties).forEach(([key, prop]) => {
+            if (isImageProperty(prop)) {
+                result.push({
+                    key,
+                    label: (prop as Property).name || key,
+                    property: prop as Property
+                });
+            }
+        });
+        return result;
+    }, [resolvedCollection.properties]);
+
     const showErrors = submitCount > 0;
 
     // Document ID generation value
@@ -241,6 +269,83 @@ export function DisplaySettingsForm({
                                             setOrderPropertyDialogOpen(false);
                                         }}
                                     />
+                                </>
+                            );
+                        })()}
+                    </div>
+
+                    {/* Image Property (used as thumbnail in Cards/Kanban views) */}
+                    <div className={"col-span-12 mt-4"}>
+                        {(() => {
+                            const imagePropertyMissing = Boolean(values.imageProperty) &&
+                                !imageProperties.some(p => p.key === values.imageProperty);
+
+                            return (
+                                <>
+                                    <Typography variant={"label"} color={"secondary"} className={"ml-3.5"}>{t("image_property")}</Typography>
+                                    <Select
+                                        key={`image-select-${imageProperties.length}`}
+                                        name="imageProperty"
+                                        size={"large"}
+                                        fullWidth={true}
+                                        position={"item-aligned"}
+                                        disabled={imageProperties.length === 0}
+                                        error={imagePropertyMissing}
+                                        value={(values.imageProperty as string) ?? ""}
+                                        onValueChange={(v) => {
+                                            setFieldValue("imageProperty", v || undefined);
+                                        }}
+                                        renderValue={(value) => {
+                                            if (imagePropertyMissing) {
+                                                return <span className="text-red-500">{value} ({t("not_found_suffix")})</span>;
+                                            }
+                                            const prop = imageProperties.find(p => p.key === value);
+                                            if (!prop) return t("select_a_property");
+                                            const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
+                                            return (
+                                                <div className="flex items-center gap-2">
+                                                    <PropertyConfigBadge propertyConfig={fieldConfig} />
+                                                    <span>{prop.label}</span>
+                                                </div>
+                                            );
+                                        }}
+                                        endAdornment={values.imageProperty ? (
+                                            <IconButton
+                                                size="small"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFieldValue("imageProperty", undefined);
+                                                }}
+                                            >
+                                                <CloseIcon size="small" />
+                                            </IconButton>
+                                        ) : undefined}
+                                    >
+                                        {imageProperties.map((prop) => {
+                                            const fieldConfig = getFieldConfig(prop.property, customizationController.propertyConfigs);
+                                            return (
+                                                <SelectItem key={prop.key} value={prop.key}>
+                                                    <div className="flex items-center gap-3">
+                                                        <PropertyConfigBadge propertyConfig={fieldConfig} />
+                                                        <div>
+                                                            <div>{prop.label}</div>
+                                                            <Typography variant="caption" color="secondary">
+                                                                {fieldConfig?.name || prop.label}
+                                                            </Typography>
+                                                        </div>
+                                                    </div>
+                                                </SelectItem>
+                                            );
+                                        })}
+                                    </Select>
+                                    <FieldCaption error={imagePropertyMissing}>
+                                        {imagePropertyMissing
+                                            ? t("image_property_not_found", { property: values.imageProperty as string ?? "" })
+                                            : imageProperties.length === 0
+                                                ? t("no_image_properties")
+                                                : t("image_property_description")
+                                        }
+                                    </FieldCaption>
                                 </>
                             );
                         })()}

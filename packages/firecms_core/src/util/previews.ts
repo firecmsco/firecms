@@ -1,4 +1,4 @@
-import { AuthController, EntityCollection, Property, PropertyConfig, ResolvedEntityCollection } from "../types";
+import { AuthController, EntityCollection, Property, PropertyConfig, ResolvedEntityCollection, ResolvedProperties } from "../types";
 import { isReferenceProperty } from "./property_utils";
 import { isPropertyBuilder } from "./entities";
 import { getFieldConfig } from "../core";
@@ -43,6 +43,13 @@ export function getEntityTitlePropertyKey<M extends Record<string, any>>(collect
 }
 
 export function getEntityImagePreviewPropertyKey<M extends object>(collection: ResolvedEntityCollection<M>): string | undefined {
+
+    if (collection.imageProperty) {
+        const imagePropertyKey = collection.imageProperty as keyof ResolvedProperties<M>;
+        if (collection.properties[imagePropertyKey]) {
+            return collection.imageProperty as string;
+        }
+    }
 
     // find first storage property of type image
     for (const key in collection.properties) {
