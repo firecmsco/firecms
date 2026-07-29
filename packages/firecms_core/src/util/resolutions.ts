@@ -305,7 +305,15 @@ export function resolveArrayProperty<T extends any[], M>({
                 ignoreMissingFields,
                 ...props
             });
+            // `of` describes the shape of any element of the array, not one
+            // specific element, so there is no index to qualify the key with.
+            // We pass the array's own key, mirroring what the `oneOf` branch
+            // below does for `oneOf.properties`. Without this, a property
+            // builder used as `of` (or nested inside it) would be invoked with
+            // `propertyKey: undefined`, while the per-index resolutions above
+            // receive `${propertyKey}.${index}`.
             const ofProperty = resolveProperty({
+                propertyKey,
                 propertyOrBuilder: of,
                 ignoreMissingFields,
                 ...props
