@@ -10,6 +10,8 @@ import {
 } from "@firebase/storage";
 import { DownloadConfig, DownloadMetadata, StorageListResult, StorageSource, UploadFileProps } from "@firecms/core";
 
+const ABSOLUTE_HTTP_URL_REGEX = /^https?:\/\//i;
+
 /**
  * @group Firebase
  */
@@ -179,6 +181,18 @@ export function useFirebaseStorageSource({
                     url: null,
                     fileNotFound: true
                 };
+                // `ref` throws `storage/invalid-url` for absolute URLs that it cannot
+                // parse as a Firebase Storage location: files hosted outside of Firebase,
+                // or download URLs of a bucket/host this app is not pointing at (which
+                // happens routinely when running against the storage emulator).
+                // Those values are already usable URLs, so they are returned as they are.
+                // Firebase download URLs are still resolved through `ref` above, so their
+                // real content type keeps being reported by `getMetadata`.
+                if (e?.code === "storage/invalid-url" && ABSOLUTE_HTTP_URL_REGEX.test(storagePathOrUrl)) {
+                    const result: DownloadConfig = { url: storagePathOrUrl };
+                    urlsCache[storagePathOrUrl] = result;
+                    return result;
+                }
                 throw e;
             }
         },

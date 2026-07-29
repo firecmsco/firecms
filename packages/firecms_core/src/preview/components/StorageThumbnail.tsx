@@ -6,6 +6,7 @@ import { useStorageSource } from "../../hooks";
 import { DownloadConfig, FileType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { ErrorView } from "../../components";
+import { getPreviewTypeFromUrl, isAbsoluteHttpUrl } from "../../util/urls";
 
 type StorageThumbnailProps = {
     storagePathOrDownloadUrl: string;
@@ -41,10 +42,20 @@ export function StorageThumbnailInternal({
     const [error, setError] = React.useState<Error | undefined>(undefined);
     const storage = useStorageSource();
 
+    /**
+     * The saved value may already be a resolved download URL instead of a
+     * storage path: either because the property is configured with
+     * `storeUrl: true`, or because the value was written directly in the
+     * datasource pointing to an externally hosted file. Such values can be
+     * previewed as they are, and must not be handed over to the storage source,
+     * which can only resolve paths of its own bucket.
+     */
+    const valueIsUrl = storeUrl || isAbsoluteHttpUrl(storagePathOrDownloadUrl);
+
     const [downloadConfig, setDownloadConfig] = React.useState<DownloadConfig>(URL_CACHE[storagePathOrDownloadUrl]);
 
     useEffect(() => {
-        if (!storagePathOrDownloadUrl)
+        if (!storagePathOrDownloadUrl || valueIsUrl)
             return;
         let unmounted = false;
         storage.getDownloadURL(storagePathOrDownloadUrl)
@@ -57,9 +68,20 @@ export function StorageThumbnailInternal({
         return () => {
             unmounted = true;
         };
-    }, [storagePathOrDownloadUrl]);
+    }, [storagePathOrDownloadUrl, valueIsUrl]);
 
     if (!storagePathOrDownloadUrl) return null;
+
+    if (valueIsUrl) {
+        // There is no storage metadata for a value that is already a URL, so the
+        // preview type is inferred from its file extension when possible.
+        return <UrlComponentPreview previewType={getPreviewTypeFromUrl(storagePathOrDownloadUrl) ?? "file"}
+            url={storagePathOrDownloadUrl}
+            interactive={interactive}
+            size={size}
+            fill={fill}
+            hint={storagePathOrDownloadUrl} />;
+    }
 
     const filetype = downloadConfig?.metadata ? getFiletype(downloadConfig?.metadata.contentType) : undefined;
     const previewType = filetype?.startsWith("image")
