@@ -25,6 +25,7 @@
     "packages/firebase_admin",
     "examples/example_cloud",
     "examples/example",
+    "examples/example_graph",
     "examples/example_astro",
     "examples/example_next",
     "examples/example_pro"
