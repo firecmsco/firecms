@@ -1144,24 +1144,51 @@ describe("getYupEntitySchema", () => {
 // ERROR HANDLING TESTS
 // ============================================================================
 
+/**
+ * `mapPropertyToYup` used to throw on these two cases. It deliberately no longer does —
+ * a misconfigured property should surface as a failing field rather than crash the whole
+ * form — so it logs the diagnostic and returns a schema that never validates.
+ */
 describe("Error Handling", () => {
 
-    it("should throw for unsupported data types", () => {
-        const property = { dataType: "unsupported" } as any;
+    let consoleError: jest.SpiedFunction<typeof console.error>;
 
-        expect(() => mapPropertyToYup({
-            property,
-            entityId: "test-entity"
-        })).toThrow("Unsupported data type in yup mapping");
+    beforeEach(() => {
+        consoleError = jest.spyOn(console, "error").mockImplementation(() => undefined);
     });
 
-    it("should throw for property builders (unresolved properties)", () => {
+    afterEach(() => {
+        consoleError.mockRestore();
+    });
+
+    it("returns an always-failing schema for unsupported data types", () => {
+        const property = { dataType: "unsupported" } as any;
+
+        const schema = mapPropertyToYup({
+            property,
+            entityId: "test-entity"
+        });
+
+        expect(schema.isValidSync("anything")).toBe(false);
+        expect(() => schema.validateSync("anything")).toThrow("Unsupported data type: unsupported");
+        expect(consoleError).toHaveBeenCalledWith(
+            "Unsupported data type in yup mapping",
+            property
+        );
+    });
+
+    it("returns an always-failing schema for property builders (unresolved properties)", () => {
         const propertyBuilder = () => ({ dataType: "string" });
 
-        expect(() => mapPropertyToYup({
+        const schema = mapPropertyToYup({
             property: propertyBuilder as any,
             entityId: "test-entity"
-        })).toThrow("Trying to create a yup mapping from a property builder");
+        });
+
+        expect(schema.isValidSync("anything")).toBe(false);
+        expect(() => schema.validateSync("anything"))
+            .toThrow("Invalid property configuration: property builder should be resolved");
+        expect(consoleError).toHaveBeenCalled();
     });
 });
 

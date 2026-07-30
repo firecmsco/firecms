@@ -123,7 +123,10 @@ describe("Date-to-String Conversion Bug", () => {
             const result = mergeDeep(baseValues, updates);
 
             expect(result.updated_on).toBeInstanceOf(Date);
-            expect(result.updated_on).toBe(now); // Should be the exact same object
+            // mergeDeep defensively clones Dates (`new Date(sourceValue.getTime())`), so
+            // this is an equal value, deliberately NOT the same instance.
+            expect(result.updated_on).toStrictEqual(now);
+            expect(result.updated_on).not.toBe(now);
         });
     });
 

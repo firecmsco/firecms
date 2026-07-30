@@ -1,52 +1,12 @@
-jest.mock("@tiptap/extension-placeholder", () => ({
-    configure: jest.fn(() => ({}))
-}));
-jest.mock("@tiptap/extension-horizontal-rule", () => ({
-    configure: jest.fn(() => ({})),
-    extend: jest.fn(() => ({ configure: jest.fn(() => ({})) }))
-}));
-jest.mock("@tiptap/extension-link", () => ({
-    configure: jest.fn(() => ({})),
-    extend: jest.fn(() => ({}))
-}));
-
-jest.mock("@tiptap/starter-kit", () => ({
-    configure: jest.fn(() => ({}))
-}));
-
-jest.mock("@tiptap/extension-ordered-list", () => ({
-    configure: jest.fn(() => ({}))
-}));
-
-jest.mock("@tiptap/extension-bullet-list", () => ({
-    configure: jest.fn(() => ({}))
-}));
-
-jest.mock("@tiptap/extension-list-item", () => ({
-    configure: jest.fn(() => ({}))
-}));
-
-jest.mock("@tiptap/extension-code-block", () => ({
-    configure: jest.fn(() => ({}))
-}));
-
-jest.mock("@tiptap/extension-blockquote", () => ({
-    configure: jest.fn(() => ({}))
-}));
-
-jest.mock("@tiptap/extension-code", () => ({
-    configure: jest.fn(() => ({}))
-}));
-
-jest.mock("@tiptap/extension-document", () => ({
-    extend: jest.fn(() => ({}))
-}));
-
 import { expect, it } from "@jest/globals";
 import { siteConfig } from "./test_site_config";
 import { EntityCollection } from "../src/types";
 import { buildCollection, buildProperty, getCollectionByPathOrId, resolveCollectionPathIds } from "../src";
-import { getNavigationEntriesFromPath } from "../src/util/navigation_from_path";
+import {
+    getNavigationEntriesFromPath,
+    NavigationViewEntityCustomInternal,
+    NavigationViewEntityInternal
+} from "../src/util/navigation_from_path";
 
 const collections = siteConfig.collections as EntityCollection[];
 
@@ -96,10 +56,10 @@ describe("Resolving paths test", () => {
             path: "products/pid",
             collections: collections
         });
-        console.log(navigationEntries);
-        // expect(
-        //     navigationEntries.map((collection) => collection.relativePath)
-        // ).toEqual(["products", "locales"]);
+
+        expect(navigationEntries.map(e => e.type)).toEqual(["collection", "entity"]);
+        expect(navigationEntries.map(e => e.fullPath)).toEqual(["products", "products/pid"]);
+        expect((navigationEntries[1] as NavigationViewEntityInternal<any>).entityId).toEqual("pid");
     });
 
     it("Custom view internal", () => {
@@ -108,8 +68,16 @@ describe("Resolving paths test", () => {
             path: "products/pid/custom_view",
             collections: collections
         });
-        console.log(navigationEntries);
+
         expect(navigationEntries.length).toEqual(3);
+        expect(navigationEntries.map(e => e.type)).toEqual(["collection", "entity", "custom_view"]);
+        expect(navigationEntries.map(e => e.fullPath)).toEqual([
+            "products",
+            "products/pid",
+            "products/pid/custom_view"
+        ]);
+        expect((navigationEntries[2] as NavigationViewEntityCustomInternal<any>).view.key).toEqual("custom_view");
+        expect((navigationEntries[2] as NavigationViewEntityCustomInternal<any>).entityId).toEqual("pid");
     });
 
     it("build entity collection array 2", () => {
@@ -118,8 +86,18 @@ describe("Resolving paths test", () => {
             path: "products/pid/locales/yep",
             collections: collections
         });
-        console.log(navigationEntries);
+
         expect(navigationEntries.length).toEqual(4);
+        expect(navigationEntries.map(e => e.type)).toEqual(["collection", "entity", "collection", "entity"]);
+        expect(navigationEntries.map(e => e.fullPath)).toEqual([
+            "products",
+            "products/pid",
+            "products/pid/locales",
+            "products/pid/locales/yep"
+        ]);
+        expect(navigationEntries
+            .filter(e => e.type === "entity")
+            .map(e => (e as NavigationViewEntityInternal<any>).entityId)).toEqual(["pid", "yep"]);
     });
 
     it("Test aliases", () => {

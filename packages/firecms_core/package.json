@@ -163,6 +163,10 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -172,6 +176,9 @@
       "node"
     ],
     "testEnvironment": "node",
+    "setupFiles": [
+      "<rootDir>/test/setup_jsdom.js"
+    ],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     }
