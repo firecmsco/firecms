@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useCallback, useMemo } from "react";
 import { EntityCollection, FireCMSContext, FireCMSPlugin } from "@firecms/core";
-import { FirebaseApp } from "@firebase/app";
+import { FirebaseApp } from "firebase/app";
 import { FirestoreIcon } from "@firecms/ui";
 import { buildAdminApi } from "./api/admin_api";
 import { AdminApiProvider } from "./api/AdminApiProvider";

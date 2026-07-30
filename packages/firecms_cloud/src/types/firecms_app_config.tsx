@@ -10,7 +10,7 @@ import {
     ModifyCollectionProps,
     PropertyConfig, EntityAction
 } from "@firecms/core";
-import { FirebaseApp } from "@firebase/app";
+import { FirebaseApp } from "firebase/app";
 import { AppCheckOptions, FirestoreIndexesBuilder, FirestoreTextSearchControllerBuilder } from "@firecms/firebase";
 
 export type FireCMSAppConfig = {

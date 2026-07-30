@@ -1,4 +1,4 @@
-import { collection, Firestore, getFirestore, onSnapshot, query, where } from "@firebase/firestore";
+import { collection, Firestore, getFirestore, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { Subscription } from "../types/subscriptions";
 import { useFireCMSBackend } from "./useFireCMSBackend";

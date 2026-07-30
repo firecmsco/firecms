@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { doc, onSnapshot, Firestore } from "@firebase/firestore";
+import { doc, onSnapshot, Firestore } from "firebase/firestore";
 
 export interface AdminJobState {
     id: string;

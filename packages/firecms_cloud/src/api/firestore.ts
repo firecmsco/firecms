@@ -1,4 +1,4 @@
-import { DocumentReference, getDoc, QueryDocumentSnapshot } from "@firebase/firestore";
+import { DocumentReference, getDoc, QueryDocumentSnapshot } from "firebase/firestore";
 import { Product, ProductPrice, Subscription } from "../types/subscriptions";
 
 export async function convertDocToSubscription(doc: QueryDocumentSnapshot) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import * as firestoreLibrary from "@firebase/firestore";
+import * as firestoreLibrary from "firebase/firestore";
 import { CircularProgressCenter, EntityCollection } from "@firecms/core";
 import { Button, cls, Paper, useDebounceValue } from "@firecms/ui";
 import { AutoHeightEditor } from "./AutoHeightEditor";

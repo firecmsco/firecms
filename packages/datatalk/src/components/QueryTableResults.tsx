@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { doc, DocumentReference, getFirestore, QuerySnapshot, setDoc } from "@firebase/firestore";
+import { doc, DocumentReference, getFirestore, QuerySnapshot, setDoc } from "firebase/firestore";
 import {
     CollectionSize,
     copyEntityAction,

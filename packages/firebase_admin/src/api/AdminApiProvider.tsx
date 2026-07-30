@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from "react";
-import { FirebaseApp } from "@firebase/app";
-import { getFirestore, Firestore } from "@firebase/firestore";
+import { FirebaseApp } from "firebase/app";
+import { getFirestore, Firestore } from "firebase/firestore";
 import { AdminApi } from "./admin_api";
 
 interface AdminApiContextValue {

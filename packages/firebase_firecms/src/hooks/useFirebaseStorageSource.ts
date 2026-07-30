@@ -1,4 +1,4 @@
-import { FirebaseApp } from "@firebase/app";
+import { FirebaseApp } from "firebase/app";
 import {
     deleteObject,
     getDownloadURL,
@@ -7,7 +7,7 @@ import {
     list,
     ref,
     uploadBytesResumable
-} from "@firebase/storage";
+} from "firebase/storage";
 import { DownloadConfig, DownloadMetadata, StorageListResult, StorageSource, UploadFileProps } from "@firecms/core";
 
 /**

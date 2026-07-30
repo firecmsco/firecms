@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { doc, getFirestore, onSnapshot, setDoc } from "@firebase/firestore";
-import { ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "@firebase/app-check";
+import { doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import { ReCaptchaEnterpriseProvider, ReCaptchaV3Provider } from "firebase/app-check";
 
-import { FirebaseApp } from "@firebase/app";
+import { FirebaseApp } from "firebase/app";
 import { ProjectSubscriptionData, ProjectSubscriptionPlan } from "../types";
 import { UploadFileProps } from "@firecms/core";
-import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "@firebase/storage";
+import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
 import { darkenColor, hexToRgbaWithOpacity } from "../utils";
 import { AppCheckOptions } from "@firecms/firebase";
 

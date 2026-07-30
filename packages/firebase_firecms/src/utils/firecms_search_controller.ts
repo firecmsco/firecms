@@ -1,6 +1,6 @@
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
-import { FirebaseApp } from "@firebase/app";
-import { getFunctions, httpsCallable } from "@firebase/functions";
+import { FirebaseApp } from "firebase/app";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
 /**

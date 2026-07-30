@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, onSnapshot, query, where, orderBy, Firestore } from "@firebase/firestore";
+import { collection, onSnapshot, query, where, orderBy, Firestore } from "firebase/firestore";
 import { AdminJobState } from "./useAdminJob";
 
 /**

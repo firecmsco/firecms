@@ -8,7 +8,7 @@ import { datatalkTranslationsFr } from "./locales/fr";
 import { datatalkTranslationsIt } from "./locales/it";
 import { datatalkTranslationsHi } from "./locales/hi";
 import { datatalkTranslationsPt } from "./locales/pt";
-import { FirebaseApp } from "@firebase/app";
+import { FirebaseApp } from "firebase/app";
 import { SchemaContext } from "./utils/schemaContext";
 
 export interface DataTalkPluginProps {

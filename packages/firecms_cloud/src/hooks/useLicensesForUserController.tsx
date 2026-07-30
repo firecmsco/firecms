@@ -10,7 +10,7 @@ import {
     query,
     updateDoc,
     where
-} from "@firebase/firestore";
+} from "firebase/firestore";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useFireCMSBackend } from "./useFireCMSBackend";
 import { ProLicense, Subscription } from "../types";

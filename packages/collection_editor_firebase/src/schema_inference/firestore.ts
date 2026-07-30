@@ -10,7 +10,7 @@ import {
     QueryConstraint,
     where,
     WhereFilterOp
-} from "@firebase/firestore";
+} from "firebase/firestore";
 import { FilterValues } from "@firecms/core";
 
 export async function getDocuments(

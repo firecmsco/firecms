@@ -9,8 +9,8 @@ import {
     query,
     setDoc,
     Timestamp
-} from "@firebase/firestore";
-import { FirebaseApp } from "@firebase/app";
+} from "firebase/firestore";
+import { FirebaseApp } from "firebase/app";
 import { Session } from "./types";
 import { getDataTalkSamplePrompts } from "./api";
 import { SchemaContext } from "./utils/schemaContext";

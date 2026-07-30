@@ -10,7 +10,6 @@
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firebase/auth": "*",
     "@firecms/collection_editor": "^3.3.0",
     "@firecms/core": "^3.3.0",
     "@firecms/data_enhancement": "^3.3.0",

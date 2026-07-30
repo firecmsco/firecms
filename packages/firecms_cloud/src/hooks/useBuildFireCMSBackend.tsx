@@ -1,7 +1,7 @@
-import { doc, Firestore, getDoc, getFirestore, onSnapshot } from "@firebase/firestore";
+import { doc, Firestore, getDoc, getFirestore, onSnapshot } from "firebase/firestore";
 
 import { FireCMSBackend, FireCMSProject } from "../types";
-import { FirebaseApp } from "@firebase/app";
+import { FirebaseApp } from "firebase/app";
 import {
     createUserWithEmailAndPassword as createUserWithEmailAndPasswordFirebase,
     fetchSignInMethodsForEmail,
@@ -14,7 +14,7 @@ import {
     signInWithPopup,
     signOut,
     User as FirebaseUser
-} from "@firebase/auth";
+} from "firebase/auth";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { buildProjectsApi } from "../api/projects";
 import { clearDelegatedLoginTokensCache } from "../utils";

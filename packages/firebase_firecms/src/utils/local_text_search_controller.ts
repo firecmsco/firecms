@@ -1,8 +1,8 @@
-import { collection, getFirestore, onSnapshot, query } from "@firebase/firestore";
+import { collection, getFirestore, onSnapshot, query } from "firebase/firestore";
 import { FirestoreTextSearchController, FirestoreTextSearchControllerBuilder } from "../types";
 import Fuse from "fuse.js"
 
-import { FirebaseApp } from "@firebase/app";
+import { FirebaseApp } from "firebase/app";
 import { EntityCollection, ResolvedEntityCollection } from "@firecms/core";
 
 const MAX_SEARCH_RESULTS = 80;
