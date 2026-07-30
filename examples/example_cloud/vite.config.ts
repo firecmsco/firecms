@@ -62,6 +62,8 @@ export default defineConfig(({ command }) => {
             cssCodeSplit: false,
         },
         resolve: {
+            // Firebase must resolve to a single copy — see the note in example_pro's config.
+            dedupe: ["firebase", "@firebase/app", "@firebase/auth", "@firebase/component", "@firebase/util", "@firebase/firestore", "@firebase/storage"],
             alias: {
                 "@firecms/cloud": path.resolve(__dirname, "../../packages/firecms_cloud/src"),
                 "@firecms/formex": path.resolve(__dirname, "../../packages/formex/src"),

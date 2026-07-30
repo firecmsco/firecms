@@ -24,6 +24,12 @@ export default defineConfig({
         react({})
     ],
     resolve: {
+        // Firebase must resolve to a single copy. @firecms/firebase imports the scoped
+        // @firebase/* packages directly while apps install the `firebase` umbrella, which
+        // let two copies of @firebase/component into the bundle: the auth component
+        // registered into one container and getAuth() looked in the other, throwing
+        // "Component auth has not been registered yet" and rendering a blank page.
+        dedupe: ["firebase", "@firebase/app", "@firebase/auth", "@firebase/component", "@firebase/util", "@firebase/firestore", "@firebase/storage"],
         alias: {
             "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
             "@firecms/ui": path.resolve(__dirname, "../../packages/ui/src"),

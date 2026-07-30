@@ -22,6 +22,12 @@ export default defineConfig({
         tailwindcss(),
     ],
     resolve: {
+        // Firebase must resolve to a single copy. @firecms/firebase imports the scoped
+        // @firebase/* packages while apps install the `firebase` umbrella, which can
+        // bundle two copies of @firebase/component — the auth component then registers
+        // into one container and getAuth() looks in the other, throwing
+        // "Component auth has not been registered yet".
+        dedupe: ["firebase", "@firebase/app", "@firebase/auth", "@firebase/component", "@firebase/util", "@firebase/firestore", "@firebase/storage"],
         alias: {
             "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
             "@firecms/ui": path.resolve(__dirname, "../../packages/ui/src"),
