@@ -10,6 +10,7 @@ import {
 } from "../util/navigation_from_path";
 import { useBreadcrumbsController } from "../hooks/useBreadcrumbsController";
 import { toArray } from "../util/arrays";
+import { addInitialSlash, encodeEntityId } from "../util/navigation_utils";
 import { shouldBlockEntityNavigation } from "../util/navigation_blocking";
 import { NotFoundPage } from "../components";
 import { lazyEager } from "../util/lazy_eager";
@@ -190,11 +191,34 @@ function EntityFullScreenRoute({
         }
     }, [urlTab]);
 
-    const basePath = !entityId || isNew
-        ? pathname
-        : pathname.substring(0, pathname.lastIndexOf(`/${entityId}`));
+    const lastCollectionEntry = navigationEntries.findLast((entry) => entry.type === "collection");
 
-    const entityPath = basePath + `/${entityId}`;
+    // The entity id reaches the URL escaped AND percent-encoded, so it cannot be located by
+    // searching `pathname` for the raw id — that misses for any id needing encoding (a "/",
+    // but equally a space or a non-ASCII character). Rebuild the URLs from the navigation
+    // entries instead, which already carry the escaped chain in `fullPath`.
+    const entityEntryIndex = lastEntityEntry ? navigationEntries.indexOf(lastEntityEntry) : -1;
+    const parentCollectionEntry = entityEntryIndex > 0
+        ? navigationEntries[entityEntryIndex - 1] as NavigationViewCollectionInternal<any>
+        : undefined;
+
+    const buildUrl = (escapedPath: string) => addInitialSlash(navigation.buildUrlCollectionPath(escapedPath));
+
+    const basePath = !entityId || isNew || !parentCollectionEntry
+        ? pathname
+        : buildUrl(parentCollectionEntry.fullPath);
+
+    const entityPath = lastEntityEntry ? buildUrl(lastEntityEntry.fullPath) : basePath;
+
+    /**
+     * Build the URL of an entity in the current collection. `id` is raw, so it is escaped
+     * before being joined; `buildUrlCollectionPath` then percent-encodes the whole path.
+     */
+    const buildEntityUrl = (id: string, tab?: string) => {
+        const parentPath = parentCollectionEntry?.fullPath ?? lastCollectionEntry?.fullPath;
+        if (!parentPath) return pathname;
+        return buildUrl(`${parentPath}/${encodeEntityId(id)}${tab ? "/" + tab : ""}`);
+    };
 
     let blocker: Blocker | undefined = undefined;
     try {
@@ -212,8 +236,6 @@ function EntityFullScreenRoute({
         // console.warn("Blocker not available, navigation will not be blocked");
     }
 
-    const lastCollectionEntry = navigationEntries.findLast((entry) => entry.type === "collection");
-
     if (isNew && !lastCollectionEntry) {
         throw new Error("INTERNAL: No collection found in the navigation");
     }
@@ -223,8 +245,10 @@ function EntityFullScreenRoute({
     }
 
     const collection = isNew ? lastCollectionEntry!.collection : lastEntityEntry!.parentCollection;
-    const fullIdPath = isNew ? lastCollectionEntry!.path : lastEntityEntry!.path;
-    const collectionPath = navigation.resolveIdsFrom(fullIdPath);
+    // `fullIdPath` is used downstream to build URLs, so it carries the escaped chain;
+    // `collectionPath` addresses the datasource, so it is resolved from the raw one.
+    const fullIdPath = isNew ? lastCollectionEntry!.fullPath : (parentCollectionEntry?.fullPath ?? lastEntityEntry!.fullPath);
+    const collectionPath = navigation.resolveIdsFrom(isNew ? lastCollectionEntry!.path : lastEntityEntry!.path);
     return <>
         <React.Suspense fallback={null}>
             <EntityEditView
@@ -238,25 +262,16 @@ function EntityFullScreenRoute({
                 selectedTab={selectedTab ?? undefined}
                 onValuesModified={(modified) => blocked.current = modified}
                 onSaved={(params) => {
-                    const newSelectedTab = params.selectedTab;
                     const newEntityId = params.entityId;
-                    if (newSelectedTab) {
-                        navigate(`${basePath}/${newEntityId}/${newSelectedTab}`, { replace: true });
-                    } else {
-                        navigate(`${basePath}/${newEntityId}`, { replace: true });
-                    }
+                    if (!newEntityId) return;
+                    navigate(buildEntityUrl(newEntityId, params.selectedTab), { replace: true });
                 }}
                 onTabChange={(params) => {
                     setSelectedTab(params.selectedTab);
-                    if (isNew) {
+                    if (isNew || !entityId) {
                         return;
                     }
-                    const newSelectedTab = params.selectedTab;
-                    if (newSelectedTab) {
-                        navigate(`${basePath}/${entityId}/${newSelectedTab}`, { replace: true });
-                    } else {
-                        navigate(`${basePath}/${entityId}`, { replace: true });
-                    }
+                    navigate(buildEntityUrl(entityId, params.selectedTab), { replace: true });
                 }}
                 parentCollectionIds={parentCollectionIds}
             />

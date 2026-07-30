@@ -18,6 +18,7 @@ import {
 import { useDebouncedData } from "./useDebouncedData";
 import { ScrollRestorationController } from "./useScrollRestoration";
 import { isDataTypeFilterable } from "../../util";
+import { decodeEntityId, encodeEntityId } from "../../util/navigation_utils";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -437,7 +438,21 @@ function isDate(dateString: string): boolean {
 }
 
 function encodeRef(val: EntityReference) {
-    return `ref::${val.path}/${val.id}`;
+    return `ref::${val.path}/${encodeEntityId(val.id)}`;
+}
+
+/**
+ * Split a "path/id" reference on its LAST separator: the path may itself be a
+ * subcollection path with several segments, and the id is escaped so it is always exactly
+ * one segment.
+ */
+function decodeRef(encoded: string): EntityReference {
+    const separatorIndex = encoded.lastIndexOf("/");
+    if (separatorIndex < 0) return new EntityReference(encoded, "");
+    return new EntityReference(
+        decodeEntityId(encoded.substring(separatorIndex + 1)),
+        encoded.substring(0, separatorIndex)
+    );
 }
 
 function decodeString(val: string): EntityReference | Date | string {
@@ -453,8 +468,7 @@ function decodeString(val: string): EntityReference | Date | string {
         try {
             parsedFilterVal = JSON.parse(parsedFilterVal, (key, value) => {
                 if (typeof value === "string" && value.startsWith("ref::")) {
-                    const [path, id] = value.substring(5).split("/");
-                    return new EntityReference(id, path);
+                    return decodeRef(value.substring(5));
                 }
                 return value;
             });
@@ -464,8 +478,7 @@ function decodeString(val: string): EntityReference | Date | string {
     }
 
     if (typeof parsedFilterVal === "string" && parsedFilterVal.startsWith("ref::")) {
-        const [path, id] = parsedFilterVal.substring(5).split("/");
-        return new EntityReference(id, path);
+        return decodeRef(parsedFilterVal.substring(5));
     }
     return parsedFilterVal;
 }

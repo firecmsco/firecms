@@ -13,6 +13,7 @@ import {
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
 import {
     canEditEntity,
+    encodeEntityId,
     removeInitialAndTrailingSlashes,
     resolveCollection,
     resolveDefaultSelectedView,
@@ -346,8 +347,10 @@ export function EntityEditViewInner<M extends Record<string, any>>({
 
     const subCollectionsViews = subcollections && subcollections.map((subcollection) => {
         const subcollectionId = subcollection.id ?? subcollection.path;
+        // `newFullPath` addresses the datasource, so the parent id stays raw.
         const newFullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
-        const newFullIdPath = fullIdPath ? `${fullIdPath}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
+        // `newFullIdPath` is fed to buildUrlCollectionPath downstream, so it stays escaped.
+        const newFullIdPath = fullIdPath && usedEntity ? `${fullIdPath}/${encodeEntityId(usedEntity.id)}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
 
         if (selectedTab !== subcollectionId) return null;
         return (

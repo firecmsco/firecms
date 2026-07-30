@@ -1,5 +1,5 @@
 import { EntityCollection, EntityReference } from "../types";
-import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
+import { decodeEntityId, getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
 
 export function getParentReferencesFromPath(props: {
     path: string,
@@ -31,7 +31,9 @@ export function getParentReferencesFromPath(props: {
             const restOfThePath = removeInitialAndTrailingSlashes(removeInitialAndTrailingSlashes(path).replace(subpathCombination, ""));
             const nextSegments = restOfThePath.length > 0 ? restOfThePath.split("/") : [];
             if (nextSegments.length > 0) {
-                const entityId = nextSegments[0];
+                // `path` comes from the URL, so the id segment is escaped. References are
+                // datasource-facing, so they carry the raw id.
+                const entityId = decodeEntityId(nextSegments[0]);
                 const fullPath = collectionPath + "/" + entityId;
                 result.push(new EntityReference(entityId, collectionPath));
                 if (nextSegments.length > 1) {

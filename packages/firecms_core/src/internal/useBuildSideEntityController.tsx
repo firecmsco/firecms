@@ -13,6 +13,7 @@ import {
 import { getNavigationEntriesFromPath, NavigationViewInternal } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
 import {
+    encodeEntityId,
     removeInitialAndTrailingSlashes,
     resolveCollection,
     resolveDefaultSelectedView,
@@ -277,7 +278,7 @@ const propsToSidePanel = (props: EntitySidePanelProps,
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
 
     const urlPath = props.entityId
-        ? buildUrlCollectionPath(`${collectionPath}/${props.entityId}${props.selectedTab ? "/" + props.selectedTab : ""}${locationSearch}#${SIDE_URL_HASH}`)
+        ? buildUrlCollectionPath(`${collectionPath}/${encodeEntityId(props.entityId)}${props.selectedTab ? "/" + props.selectedTab : ""}${locationSearch}#${SIDE_URL_HASH}`)
         : buildUrlCollectionPath(`${collectionPath}${locationSearch}#${NEW_URL_HASH}`);
 
     const resolvedPanelProps: EntitySidePanelProps<any> = {

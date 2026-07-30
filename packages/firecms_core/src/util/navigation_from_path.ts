@@ -1,5 +1,5 @@
 import { EntityCollection, EntityCustomView } from "../types";
-import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
+import { decodeEntityId, getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
 import { resolveEntityView } from "./resolutions";
 
 export type NavigationViewInternal<M extends Record<string, any> = any> =
@@ -34,11 +34,21 @@ export interface NavigationViewEntityCustomInternal<M extends Record<string, any
     view: EntityCustomView<M>;
 }
 
+/**
+ * Note on encoding: `path` arrives from the URL, so any entity id in it is escaped (see
+ * `encodeEntityId`). Two chains are threaded through the recursion:
+ *
+ *  - `currentFullPath` carries RAW ids and feeds the `path` / `fullPath` used to address
+ *    the datasource.
+ *  - `currentFullUrlPath` carries ESCAPED ids and feeds `fullPath`, which is handed back
+ *    to `buildUrlCollectionPath` for breadcrumbs and links.
+ */
 export function getNavigationEntriesFromPath(props: {
     path: string,
     collections: EntityCollection[] | undefined,
     currentFullPath?: string,
     currentFullIdPath?: string,
+    currentFullUrlPath?: string,
     contextEntityViews?: EntityCustomView<any>[]
 }): NavigationViewInternal [] {
 
@@ -46,7 +56,8 @@ export function getNavigationEntriesFromPath(props: {
         path,
         collections = [],
         currentFullPath,
-        currentFullIdPath
+        currentFullIdPath,
+        currentFullUrlPath
     } = props;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -66,6 +77,9 @@ export function getNavigationEntriesFromPath(props: {
             const collectionPath = currentFullPath && currentFullPath.length > 0
                 ? (currentFullPath + "/" + collection.path)
                 : collection.path;
+            const collectionUrlPath = currentFullUrlPath && currentFullUrlPath.length > 0
+                ? (currentFullUrlPath + "/" + collection.path)
+                : collection.path;
             const fullIdPath = currentFullIdPath && currentFullIdPath.length > 0
                 ? (currentFullIdPath + "/" + collection.id)
                 : collection.id;
@@ -73,21 +87,23 @@ export function getNavigationEntriesFromPath(props: {
                 type: "collection",
                 id: collection.id,
                 path: collectionPath,
-                fullPath: collectionPath,
+                fullPath: collectionUrlPath,
                 fullIdPath,
                 collection
             });
             const restOfThePath = removeInitialAndTrailingSlashes(removeInitialAndTrailingSlashes(path).replace(subpathCombination, ""));
             const nextSegments = restOfThePath.length > 0 ? restOfThePath.split("/") : [];
             if (nextSegments.length > 0) {
-                const entityId = nextSegments[0];
+                const encodedEntityId = nextSegments[0];
+                const entityId = decodeEntityId(encodedEntityId);
                 const fullPath = collectionPath + "/" + entityId;
+                const fullUrlPath = collectionUrlPath + "/" + encodedEntityId;
                 result.push({
                     type: "entity",
                     entityId,
                     path: collectionPath,
                     fullIdPath,
-                    fullPath: fullPath,
+                    fullPath: fullUrlPath,
                     parentCollection: collection
                 });
                 if (nextSegments.length > 1) {
@@ -106,7 +122,7 @@ export function getNavigationEntriesFromPath(props: {
                             path: collectionPath,
                             entityId: entityId,
                             fullIdPath,
-                            fullPath: fullPath + "/" + customView.key,
+                            fullPath: fullUrlPath + "/" + customView.key,
                             view: customView
                         });
                     } else if (collection.subcollections) {
@@ -115,6 +131,7 @@ export function getNavigationEntriesFromPath(props: {
                             collections: collection.subcollections,
                             currentFullPath: fullPath,
                             currentFullIdPath: fullIdPath,
+                            currentFullUrlPath: fullUrlPath,
                             contextEntityViews: props.contextEntityViews
                         }));
                     }

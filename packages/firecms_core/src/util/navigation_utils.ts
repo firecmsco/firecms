@@ -22,6 +22,40 @@ export function addInitialSlash(s: string) {
     else return `/${s}`;
 }
 
+/**
+ * Characters that would otherwise be read as structure once an entity id is joined into a
+ * path: "/" separates segments, "?" and "#" start the query and hash in a URL, and "%"
+ * has to be escaped first so that no escape sequence we introduce can be misread as one
+ * that was already part of the id.
+ *
+ * Entity ids are escaped ONLY inside URL-facing strings — anything handed to
+ * `buildUrlCollectionPath` or `navigate`. Every other path string (the `path` field of a
+ * navigation entry, datasource paths, `EntityReference.path`) carries raw ids.
+ *
+ * @group Hooks and utilities
+ */
+export function encodeEntityId(entityId: string): string {
+    return entityId
+        .replaceAll("%", "%25")
+        .replaceAll("/", "%2F")
+        .replaceAll("#", "%23")
+        .replaceAll("?", "%3F");
+}
+
+/**
+ * Inverse of {@link encodeEntityId}. "%25" is undone last, mirroring the encoder, so an id
+ * that legitimately contains the text "%2F" survives the round trip.
+ *
+ * @group Hooks and utilities
+ */
+export function decodeEntityId(encodedEntityId: string): string {
+    return encodedEntityId
+        .replaceAll("%2F", "/")
+        .replaceAll("%23", "#")
+        .replaceAll("%3F", "?")
+        .replaceAll("%25", "%");
+}
+
 export function getLastSegment(path: string) {
     const cleanPath = removeInitialAndTrailingSlashes(path);
     if (cleanPath.includes("/")) {
@@ -160,7 +194,7 @@ export function getCollectionByPathOrId(pathOrId: string, collections: EntityCol
  * @param subpaths
  */
 export function getCollectionPathsCombinations(subpaths: string[]): string[] {
-    const entries = subpaths.length > 0 && subpaths.length % 2 === 0 ? subpaths.splice(0, subpaths.length - 1) : subpaths;
+    const entries = subpaths.length > 0 && subpaths.length % 2 === 0 ? subpaths.slice(0, subpaths.length - 1) : subpaths;
 
     const length = entries.length;
     const result: string[] = [];
@@ -211,7 +245,7 @@ export function navigateToEntity({
         });
 
     } else {
-        let to = navigation.buildUrlCollectionPath(entityId ? `${fullIdPath ?? path}/${entityId}` : fullIdPath ?? path);
+        let to = navigation.buildUrlCollectionPath(entityId ? `${fullIdPath ?? path}/${encodeEntityId(entityId)}` : fullIdPath ?? path);
         if (entityId && selectedTab) {
             to += `/${selectedTab}`;
         }
