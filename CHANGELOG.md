@@ -1,3 +1,23 @@
+## [Unreleased]
+
+- **Entity IDs containing slashes**:
+  - Entity IDs may now contain `/`, as well as `?`, `#` and `%`. Previously an ID with a slash was accepted without validation and then silently truncated at the first slash, shifting every following path segment.
+  - Added `encodeEntityId` / `decodeEntityId`. IDs are escaped only inside URL-facing paths; navigation entry `path` fields, datasource paths and `EntityReference.path` continue to carry raw IDs, so the `DataSource` contract is unchanged.
+  - Firestore is unaffected: it forbids `/` in document IDs, and the escaping is the identity function for any ID without `/ ? # %`.
+  - Note for consumers: an ID containing a literal `%` now produces a different URL than before, and an existing link whose ID contains the literal text `%2F` will resolve differently. The exported `getNavigationEntriesFromPath`, `getParentReferencesFromPath` and `resolveNavigationFrom` now expect escaped IDs in their `path` argument.
+  - Known limitation: a slash-bearing ID in a *parent* position of a subcollection path remains ambiguous once flattened into the datasource path. Leaf entities are unaffected.
+- **Firebase module resolution**:
+  - Fixed `Component auth has not been registered yet`, which threw on first render and left a blank page. `@firecms/firebase` depended on `@firebase/auth` directly at `*` while `firebase` was only a peer, giving auth its own resolution root: it registered its component into one `@firebase/app` instance while the app used another.
+  - All Firebase imports across `@firecms/firebase`, `@firecms/cloud`, `@firecms/collection_editor_firebase`, `@firecms/datatalk` and `@firecms/firebase_admin` now use the `firebase` umbrella (`firebase/app`, `firebase/auth`, …) instead of the scoped `@firebase/*` packages.
+  - `@firecms/datatalk` and `@firecms/firebase_admin` imported Firebase while declaring no dependency on it, relying on hoisting; both now declare it as a peer.
+- **Navigation fixes**:
+  - Fixed entity URLs breaking for IDs needing percent-encoding (a space or any non-ASCII character), which collapsed the base path and broke the unsaved-changes guard and subsequent navigation.
+  - Fixed reference filters in the URL being parsed incorrectly for subcollection paths.
+  - `getCollectionPathsCombinations` no longer mutates the array passed to it.
+- **Testing**:
+  - Repaired the workspace test target: several suites could not run at all, and three had never passed since being committed. `lerna run test` now completes across all packages.
+  - Added a `example_graph` example: FireCMS against an in-memory graph-style datasource with slash-containing IDs, requiring no Firebase or configuration. Run with `pnpm graph`.
+
 ## [3.3.0] - 2026-06-02
 
 - **Firestore Explorer & Firebase Admin**:
