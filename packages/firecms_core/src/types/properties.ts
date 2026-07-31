@@ -563,6 +563,22 @@ export type PropertyBuilderProps<M extends Record<string, any> = any> =
          */
         propertyValue?: any;
         /**
+         * Path of this property within the entity, in dot notation, e.g.
+         * `my_map.my_field` or `my_array.0.my_field`.
+         * Useful to look up sibling values in `values` with `getValueInPath`.
+         *
+         * When a property builder is used as the `of` prop of an array property,
+         * it is resolved twice: once per existing element, with an index
+         * qualified key (`my_array.0`), and once as the template for the element
+         * shape, with the array's own key (`my_array`). In the latter case
+         * `propertyValue` is the whole array, since the template is not bound to
+         * any element.
+         *
+         * It may be undefined if the property is resolved outside the context of
+         * an entity.
+         */
+        propertyKey?: string;
+        /**
          * Index of this property (only for arrays)
          */
         index?: number;
@@ -592,6 +608,7 @@ export type PropertyBuilder<T extends CMSType = any, M extends Record<string, an
         values,
         previousValues,
         propertyValue,
+        propertyKey,
         index,
         path,
         entityId,
