@@ -44,8 +44,19 @@ jobs:
           echo "CANARY_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
           echo "Publishing canary version: $CANARY_VERSION"
 
-          # Update all package versions without creating git tags or commits
-          npx lerna version "$CANARY_VERSION" --no-git-tag-version --no-push --yes
+          # Update all package versions without creating git tags or commits.
+          #
+          # --exact is required. Without it lerna writes caret ranges between our own
+          # packages, e.g. "@firecms/core": "^3.4.0-canary.abc1234". That range also
+          # matches the stable 3.4.0, and npm installs the HIGHEST match — so a canary
+          # install silently pulled stable transitive packages, which in turn required
+          # "@firecms/core": "^3.4.0" that the canary core does not satisfy, and npm
+          # nested a second copy of core. Two copies of core means two React contexts, so
+          # plugins read an empty navigation controller and every method on it is
+          # undefined ("resolveIdsFrom is not a function").
+          #
+          # Pinning exactly keeps a canary install internally consistent.
+          npx lerna version "$CANARY_VERSION" --no-git-tag-version --no-push --yes --exact
 
           # Commit version changes locally so lerna publish doesn't complain
           # (this commit is never pushed back)

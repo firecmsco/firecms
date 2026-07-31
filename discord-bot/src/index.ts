@@ -80,6 +80,16 @@ MODES OF OPERATION:
   - Do not provide any explanation when ignoring, just output the exact string "IGNORE".
 `;
 
+// Cheap relevance check used before the expensive answer call. The instruction above
+// embeds the entire documentation (~500 KB), so running it on every message in every
+// channel would burn tokens on ordinary chatter. This one carries no docs and returns
+// a single word, so unsolicited messages are filtered out at a fraction of the cost.
+const triageInstruction = `You triage messages for a Discord bot that supports FireCMS and Firebase.
+Reply with exactly one word and nothing else.
+Reply "ANSWER" only if the message is a clear question asking for help with FireCMS or Firebase — for example "how do I configure X?", "why does Y fail?", "does FireCMS support Z?".
+Reply "IGNORE" for everything else: statements, explanations, replies aimed at someone else, code snippets or configuration without a question, bug reports that ask nothing, greetings, casual conversation, and any subject other than FireCMS or Firebase.
+When uncertain, reply "IGNORE".`;
+
 // Initialize Discord Client
 const client = new Client({
     intents: [
@@ -183,12 +193,14 @@ client.on("messageCreate", async (message: Message) => {
         }
     }
 
-    const isGeneralChannel = "name" in message.channel && typeof message.channel.name === "string" && message.channel.name.toLowerCase() === "general";
-    const shouldRespond = isDM || (isInAllowedChannel && (isMentioned || isReplyToBot || isGeneralChannel));
+    // Eavesdrop in every allowed channel rather than only in #general: a FireCMS
+    // question deserves an answer wherever it is asked. Whether a message is worth
+    // answering is decided by the triage call below, not by which channel it is in.
+    const shouldRespond = isDM || isInAllowedChannel;
 
     if (!shouldRespond) return;
 
-    const isEavesdropping = isGeneralChannel && !isMentioned && !isReplyToBot;
+    const isEavesdropping = !isDM && !isMentioned && !isReplyToBot;
 
     try {
         const cleanedCurrentContent = message.content.replace(new RegExp(`<@!?${client.user!.id}>`, "g"), "").trim();
@@ -196,14 +208,34 @@ client.on("messageCreate", async (message: Message) => {
 
         console.log(`Processing message from ${message.author.tag} in ${isDM ? "DM" : "guild channel"} (eavesdropping=${isEavesdropping})`);
 
+        // Nobody addressed the bot, so decide whether this is worth answering before
+        // paying for a call that carries the full documentation.
+        if (isEavesdropping) {
+            const triage = await ai.models.generateContent({
+                model: GEMINI_MODEL,
+                contents: [{ role: "user", parts: [{ text: cleanedCurrentContent }] }],
+                config: {
+                    systemInstruction: triageInstruction,
+                    temperature: 0
+                }
+            });
+            const verdict = (triage.text || "").trim().replace(/[.\s]/g, "").toUpperCase();
+            if (verdict !== "ANSWER") {
+                console.log(`Eavesdropping: Ignored message from ${message.author.tag} ("${cleanedCurrentContent}")`);
+                return;
+            }
+            console.log(`Eavesdropping: Answering message from ${message.author.tag} ("${cleanedCurrentContent}")`);
+        }
+
         // Build contents for Gemini API
         const contents: Content[] = [];
 
         if (isEavesdropping) {
-            // In eavesdropping mode, only process the single current message without history to avoid confusion
+            // Triage already judged this relevant, so ask for a real answer. Sent without
+            // channel history: the bot was not part of the conversation that preceded it.
             contents.push({
                 role: "user",
-                parts: [{ text: `[Eavesdropping Mode - Answer only if this is a clear question about FireCMS or Firebase, otherwise respond with IGNORE]: ${cleanedCurrentContent}` }]
+                parts: [{ text: `[Direct Mode - Always respond]: ${cleanedCurrentContent}` }]
             });
         } else {
             // Show typing indicator
