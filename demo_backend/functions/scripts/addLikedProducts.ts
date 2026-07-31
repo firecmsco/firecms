@@ -1,9 +1,9 @@
-import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import { initServiceAccountFirestore } from "./util";
 
 initServiceAccountFirestore(true);
 
-const firestore = admin.firestore();
+const firestore = getFirestore();
 
 function getRandomInt(max: number) {
     return Math.floor(Math.random() * max);

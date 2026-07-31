@@ -1,4 +1,4 @@
-import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -7,7 +7,7 @@ import { indexInElasticSearch } from "../src/indexing/elasticsearch";
 
 initServiceAccountFirestore(true);
 
-const firestore = admin.firestore();
+const firestore = getFirestore();
 // firestore.collection("/blog")
 //     .get()
 //     .then(async (snapshot) => {

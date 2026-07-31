@@ -1,11 +1,11 @@
-import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import axios from "axios";
 import { initServiceAccountFirestore } from "./util";
 const fs = require("fs");
 
 initServiceAccountFirestore(true);
 
-const firestore = admin.firestore();
+const firestore = getFirestore();
 
 const categories = new Set<string>();
 const catMap: Record<string, any> = {};
