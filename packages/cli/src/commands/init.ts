@@ -519,11 +519,19 @@ async function copyWebAppConfig(options: InitOptions, firebaseConfig: object) {
     }
 
     const fullFileName = path.resolve(options.targetDirectory, internalTargetDirectory);
-    fs.writeFile(fullFileName, "export const firebaseConfig = " + JSON.stringify(firebaseConfig, null, 4), err => {
-        if (err) {
-            console.error("Failed to write file:", err);
-        }
-    });
+    // Keep the `Record<string, string>` annotation the templates ship with. Without it
+    // TypeScript infers the literal type of whatever we write, so an empty config makes
+    // `firebaseConfig.projectId` a compile error and the generated project fails `tsc`:
+    //     src/App.tsx: error TS2339: Property 'projectId' does not exist on type '{}'
+    // An empty config is a legitimate state — App.tsx checks for it and throws a helpful
+    // message at runtime — so it must still type-check.
+    const contents = "export const firebaseConfig: Record<string, string> = "
+        + JSON.stringify(firebaseConfig, null, 4) + "\n";
+    try {
+        await fs.promises.writeFile(fullFileName, contents, "utf8");
+    } catch (err) {
+        console.error("Failed to write file:", err);
+    }
 }
 
 async function replaceProjectIdInTemplateFiles(options: InitOptions, files: string[] = []) {

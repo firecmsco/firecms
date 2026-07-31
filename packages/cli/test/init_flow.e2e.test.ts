@@ -223,6 +223,35 @@ describe("firecms init — every template", () => {
 
 });
 
+describe("firecms init — generated project type-checks", () => {
+
+    it.each(TEMPLATES.map(t => [t.name, t] as const))(
+        "%s: the firebase config keeps its type annotation",
+        async (_name, t) => {
+            const { project } = await scaffold(t.flag);
+
+            // `copyWebAppConfig` rewrites this file when the developer is logged in, and
+            // used to drop the `Record<string, string>` annotation the templates ship.
+            // TypeScript then infers the literal type, so an empty config makes
+            // `firebaseConfig.projectId` a compile error and `npm run build` fails with
+            //   src/App.tsx: error TS2339: Property 'projectId' does not exist on type '{}'
+            // An empty config is legitimate — App.tsx checks for it and throws a helpful
+            // message at runtime — so it has to keep type-checking.
+            const configs = ["src/firebase_config.ts", "src/common/firebase_config.ts", "src/app/common/firebase_config.ts"]
+                .map(f => path.join(project, f))
+                .filter(f => fs.existsSync(f));
+
+            for (const f of configs) {
+                const contents = fs.readFileSync(f, "utf8");
+                expect({ file: path.relative(project, f), typed: contents.includes("Record<string, string>") })
+                    .toEqual({ file: path.relative(project, f), typed: true });
+            }
+        },
+        300_000
+    );
+
+});
+
 describe("firecms init — argument handling", () => {
 
     it("scaffolds into the directory named on the command line", async () => {
