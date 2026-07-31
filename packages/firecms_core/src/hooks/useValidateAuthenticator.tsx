@@ -74,6 +74,10 @@ export function useValidateAuthenticator<USER extends User = any>
 
         if (authenticator instanceof Function && delegateUser && !equal(checkedUserRef.current?.uid, delegateUser.uid)) {
             setAuthLoading(true);
+            // Reset the error of any previous authentication attempt. Otherwise, a
+            // rejected user would keep `canAccessMainView` to false for every user
+            // logging in afterwards, locking them out of the CMS until a page reload.
+            setNotAllowedError(false);
             try {
                 const allowed = await authenticator({
                     user: delegateUser,
