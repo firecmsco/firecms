@@ -10,6 +10,10 @@
   - Canary publishes now pin our own packages exactly, so a canary install is internally consistent. Verified: installing `@firecms/core`, `@firecms/ui`, `@firecms/firebase` and `@firecms/data_export` at the same canary version previously produced five copies of `@firecms/core` (one canary, four stable); it now produces one.
   - Stable releases were never affected, and no package manifests changed — **nothing to do when upgrading beyond changing the version numbers**, as before.
   - As always, keep every `@firecms/*` package on the same version.
+- **i18n**:
+  - Upgraded `react-i18next` from 14 to 17. `i18next` had moved to 26 while the React binding stayed on a major built for i18next 23; the versions installed without complaint because react-i18next 14 declares an open-ended peer (`>= 23.2.3`), so the mismatch was invisible. react-i18next 17 declares `i18next >= 26.2.0`, which is the matching pair.
+  - Added tests for translations, which had none. They render real strings through `FireCMSi18nProvider` and `useTranslation` across every bundled locale (en, es, de, fr, it, pt, hi) and cover interpolation, English fallback, and unknown keys.
+  - No API change: FireCMS uses only `I18nextProvider`, `initReactI18next` and `useTranslation`, all unchanged across those majors.
 - **CLI templates**:
   - **Removed the `--v2` template.** FireCMS 2 is no longer maintained, and the template had been broken for some time: it pinned `firebase: ^9` while `firecms@2.2.1` requires peer `firebase@^10.4.0`, so a freshly scaffolded project failed `npm install` with `ERESOLVE` before anything else could happen. `firecms init --v2` now exits with an explanation pointing at the current templates rather than an unhandled argument error.
   - `firebase-tools` is now a devDependency of the templates whose `deploy` script calls `firebase` (`template`, `template_pro`), so `npm run deploy` no longer depends on the CLI being installed globally.
