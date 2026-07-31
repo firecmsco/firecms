@@ -17,7 +17,12 @@ export async function entry(args) {
     const command = args[2];
 
     if (command === "init") {
-        await createFireCMSApp(args);
+        // Drop the "init" subcommand before handing over. `createFireCMSApp` is also the
+        // entrypoint of `create-firecms-app`, which calls it with a bare `process.argv`,
+        // so `parseArgumentsIntoOptions` does `rawArgs.slice(2)` and reads the target
+        // directory from `args._[0]`. Passing the subcommand through made that "init",
+        // so `firecms init my-app` scaffolded into a folder called "init".
+        await createFireCMSApp([...args.slice(0, 2), ...args.slice(3)]);
     } else if (command === "login") {
         await loginArgs(args);
     } else if (command === "logout") {
