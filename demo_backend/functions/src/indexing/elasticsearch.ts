@@ -12,7 +12,7 @@ export function indexInElasticSearch(indexName: string, data: any, id: string) {
     return client.index({
         index: indexName,
         id,
-        body: data
+        document: data
     })
 }
 
@@ -26,11 +26,9 @@ export function deleteInElasticSearch(indexName: string, id: string) {
 export function searchInElasticSearch(indexName: string, query: any) {
     return client.search({
         index: indexName,
-        body: {
-            query: {
-                query_string: {
-                    query
-                }
+        query: {
+            query_string: {
+                query
             }
         }
     })

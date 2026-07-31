@@ -1,10 +1,10 @@
-import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import axios from "axios";
 import { initServiceAccountFirestore } from "./util";
 
 initServiceAccountFirestore(true);
 
-const firestore = admin.firestore();
+const firestore = getFirestore();
 
 const generateUsers = async () => {
     const url = `https://randomuser.me/api/?results=500`;

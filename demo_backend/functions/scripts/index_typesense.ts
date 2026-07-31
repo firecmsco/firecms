@@ -1,4 +1,4 @@
-import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -8,7 +8,7 @@ import { createSchemaInTypesense, indexInTypesense } from "../src/indexing/types
 
 initServiceAccountFirestore(true);
 
-const firestore = admin.firestore();
+const firestore = getFirestore();
 createSchemaInTypesense("products");
 
 firestore.collection("products")

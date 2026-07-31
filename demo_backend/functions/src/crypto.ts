@@ -1,7 +1,5 @@
 import * as functions from "firebase-functions/v1";
 import { getFirestore, FieldValue, WriteResult } from "firebase-admin/firestore";
-// @ts-ignore
-import fetch from "node-fetch";
 
 type SymbolData = {
     usd: number;
@@ -17,8 +15,7 @@ async function fetchMultipleSymbolsData(ids: string[]): Promise<Record<string, S
         throw new Error(`Error fetching data from CoinGecko: ${response.statusText}`);
     }
 
-    // @ts-ignore
-    const data: MultipleCryptoPriceResponse = await response.json();
+    const data = await response.json() as MultipleCryptoPriceResponse;
     const result: Record<string, SymbolData> = {};
 
     ids.forEach(id => {

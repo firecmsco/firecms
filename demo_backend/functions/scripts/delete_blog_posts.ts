@@ -1,10 +1,10 @@
-import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 
 import { initServiceAccountFirestore } from "./util";
 
 initServiceAccountFirestore(true);
 
-const firestore = admin.firestore();
+const firestore = getFirestore();
 firestore.collection("/blog")
     .where("status", "==", "draft")
     .get()

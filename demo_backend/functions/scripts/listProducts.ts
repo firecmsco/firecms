@@ -1,9 +1,9 @@
-import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import { initServiceAccountFirestore } from "./util";
 
 initServiceAccountFirestore(true);
 
-const firestore = admin.firestore();
+const firestore = getFirestore();
 
 const listProducts = async () => {
     if (process.env.NODE_ENV === "production") return;
