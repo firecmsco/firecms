@@ -136,7 +136,12 @@ export function useFirebaseStorageSource({
                 const url = await getDownloadURL(fileRef);
                 const response = await fetch(url);
                 const blob = await response.blob();
-                return new File([blob], path);
+                // `blob.type` is the `Content-Type` served by Firebase Storage, i.e. the
+                // `contentType` metadata of the stored object. It must be passed explicitly,
+                // otherwise the resulting `File` would have an empty `type`.
+                // `fileRef.name` is the last component of the path: a `File` name should be a
+                // file name, not a full storage path.
+                return new File([blob], fileRef.name, { type: blob.type });
             } catch (e: any) {
                 if (e?.code === "storage/object-not-found") return null;
                 throw e;
