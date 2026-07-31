@@ -117,7 +117,7 @@ export const applyPermissionsFunctionIfEmpty = (collections: EntityCollection[],
 }
 
 export function getLocalChangesBackup(collection: EntityCollection) {
-    if (!collection.localChangesBackup) {
+    if (collection.localChangesBackup === undefined) {
         return "manual_apply";
     }
 

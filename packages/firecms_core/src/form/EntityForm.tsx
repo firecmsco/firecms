@@ -388,7 +388,7 @@ export function EntityForm<M extends Record<string, any>>({
         },
         onValuesChangeDeferred: (values: M, controller: FormexController<M>) => {
             const key = (status === "new" || status === "copy") ? path + "#new" : path + "/" + entityId;
-            if (controller.dirty) {
+            if (controller.dirty && localChangesBackup !== false) {
                 const touchedValues = removeEmptyContainers(extractTouchedValues(values, controller.touched));
                 if (touchedValues && Object.keys(touchedValues).length > 0) {
                     saveEntityToCache(key, touchedValues);
