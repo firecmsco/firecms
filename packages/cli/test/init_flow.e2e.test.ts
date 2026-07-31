@@ -16,8 +16,7 @@ import path from "path";
  * prompt default), so the harness feeds newlines to accept defaults until the process
  * exits. No network or login is needed: logged out, the project picker falls back to
  * "Enter project id manually".
- *
- * `v2` is intentionally excluded — it scaffolds a legacy FireCMS 2 project.
+
  */
 
 const CLI_ROOT = path.resolve(__dirname, "..");

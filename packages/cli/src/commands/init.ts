@@ -43,7 +43,7 @@ const __dirname = path.dirname(__filename);
 
 const targetDirPath = findSpecificParentDir(__dirname, "cli");
 
-export type Template = "cloud" | "v2" | "next-pro" | "pro" | "community" | "astro";
+export type Template = "cloud" | "next-pro" | "pro" | "community" | "astro";
 export type InitOptions = Partial<{
     // skipPrompts: boolean;
     git: boolean;
@@ -116,25 +116,42 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
 }
 
 function parseArgumentsIntoOptions(rawArgs): InitOptions {
-    const args = arg(
-        {
-            "--git": Boolean,
-            "--yes": Boolean,
-            "--skipInstall": Boolean,
-            "--projectId": String,
-            "--v2": Boolean,
-            "--cloud": Boolean,
-            "--pro": Boolean,
-            "--next-pro": Boolean,
-            "--community": Boolean,
-            "--astro": Boolean,
-            "--debug": Boolean,
-            "--env": String
-        },
-        {
-            argv: rawArgs.slice(2)
+    let args;
+    try {
+        args = arg(
+            {
+                "--git": Boolean,
+                "--yes": Boolean,
+                "--skipInstall": Boolean,
+                "--projectId": String,
+                "--cloud": Boolean,
+                "--pro": Boolean,
+                "--next-pro": Boolean,
+                "--community": Boolean,
+                "--astro": Boolean,
+                "--debug": Boolean,
+                "--env": String
+            },
+            {
+                argv: rawArgs.slice(2)
+            }
+        );
+    } catch (e: any) {
+        // Without this an unknown flag surfaces as an uncaught ARG_UNKNOWN_OPTION with a
+        // raw Node stack trace. `--v2` in particular used to be valid, so anyone with it
+        // in a script deserves to be told what happened.
+        if (e?.code === "ARG_UNKNOWN_OPTION") {
+            console.log("%s %s", chalk.red.bold("ERROR"), e.message);
+            if (rawArgs.includes("--v2")) {
+                console.log("");
+                console.log(`The ${chalk.cyan.bold("--v2")} template has been removed. FireCMS 2 is no longer maintained.`);
+                console.log(`Use ${chalk.cyan.bold("--pro")}, ${chalk.cyan.bold("--community")}, ${chalk.cyan.bold("--cloud")}, ${chalk.cyan.bold("--next-pro")} or ${chalk.cyan.bold("--astro")} instead.`);
+            }
+            console.log("");
+            process.exit(1);
         }
-    );
+        throw e;
+    }
     const env = args["--env"] || "prod";
     if (env !== "prod" && env !== "dev") {
         console.log("Please specify a valid environment: dev or prod");
@@ -143,9 +160,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
     }
 
     let template: Template;
-    if (args["--v2"]) {
-        template = "v2";
-    } else if (args["--cloud"]) {
+    if (args["--cloud"]) {
         template = "cloud";
     } else if (args["--next-pro"]) {
         template = "next-pro";
@@ -213,95 +228,93 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         options.template = template;
     }
 
-    if (template !== "v2") {
+    const currentUser = await getCurrentUser(options.env, options.debug);
+    let shouldAskForProjectManually = false;
 
-        const currentUser = await getCurrentUser(options.env, options.debug);
-        let shouldAskForProjectManually = false;
+    if (currentUser) {
+        const spinner = ora("Loading your projects").start();
 
-        if (currentUser) {
-            const spinner = ora("Loading your projects").start();
+        let cloudProjects: any;
+        let gcpProjects: any;
 
-            let cloudProjects: any;
-            let gcpProjects: any;
-
-            if (template === "cloud") {
-                cloudProjects = await getCloudProjects(options.env,
-                    options.debug,
-                    onErr => {
-                        spinner.fail("Error loading projects");
-                    })
-                    .then((res) => {
-                        if (!res) {
-                            if (spinner.isSpinning)
-                                spinner.fail("Error loading projects");
-                            process.exit(1);
-                        }
-                        spinner.succeed();
-                        return res;
-                    })
-                    .catch((e) => {
+        if (template === "cloud") {
+            cloudProjects = await getCloudProjects(options.env,
+                options.debug,
+                onErr => {
+                    spinner.fail("Error loading projects");
+                })
+                .then((res) => {
+                    if (!res) {
                         if (spinner.isSpinning)
                             spinner.fail("Error loading projects");
-                    });
-                if (cloudProjects.length === 0) {
-                    console.log("Please create a FireCMS Cloud project first. Head to https://app.firecms.co to get started and then run this command again!");
-                }
-            } else {
-                gcpProjects = await getGcpProjects(options.env,
-                    options.debug,
-                    onErr => {
+                        process.exit(1);
+                    }
+                    spinner.succeed();
+                    return res;
+                })
+                .catch((e) => {
+                    if (spinner.isSpinning)
                         spinner.fail("Error loading projects");
-                    })
-                    .then((res) => {
-                        if (!res) {
-                            if (spinner.isSpinning)
-                                spinner.fail("Error loading projects");
-                            process.exit(1);
-                        }
-                        spinner.succeed();
-                        return res;
-                    })
-                    .catch((e) => {
-                        if (spinner.isSpinning)
-                            spinner.fail("Error loading projects");
-                    });
-            }
-
-            if (template === "cloud" && cloudProjects.length === 0) {
-                shouldAskForProjectManually = true;
-            } else {
-                const choices = [
-                    {
-                        name: chalk.gray("Enter project id manually"),
-                        value: "!_-manual"
-                    },
-                    ...(cloudProjects ?? [])
-                        .filter(project => project?.id)
-                        .map(project => ({
-                            name: project.id,
-                            value: project.id
-                        })),
-                    ...(gcpProjects ?? []).map(project => ({
-                        name: project.projectId,
-                        value: project.projectId
-                    }))
-                ];
-                questions.push({
-                    type: "list",
-                    name: "firebaseProjectId",
-                    message: "Select your project",
-                    choices: choices
                 });
+            if (cloudProjects.length === 0) {
+                console.log("Please create a FireCMS Cloud project first. Head to https://app.firecms.co to get started and then run this command again!");
             }
+        } else {
+            gcpProjects = await getGcpProjects(options.env,
+                options.debug,
+                onErr => {
+                    spinner.fail("Error loading projects");
+                })
+                .then((res) => {
+                    if (!res) {
+                        if (spinner.isSpinning)
+                            spinner.fail("Error loading projects");
+                        process.exit(1);
+                    }
+                    spinner.succeed();
+                    return res;
+                })
+                .catch((e) => {
+                    if (spinner.isSpinning)
+                        spinner.fail("Error loading projects");
+                });
         }
-        questions.push({
-            type: "input",
-            name: "firebaseProjectIdManual",
-            message: "Please enter your Firebase project ID",
-            when: (answers) => shouldAskForProjectManually || !answers.firebaseProjectId || answers.firebaseProjectId === "!_-manual",
-            default: options.firebaseProjectId
-        });
+
+        if (template === "cloud" && cloudProjects.length === 0) {
+            shouldAskForProjectManually = true;
+        } else {
+            const choices = [
+                {
+                    name: chalk.gray("Enter project id manually"),
+                    value: "!_-manual"
+                },
+                ...(cloudProjects ?? [])
+                    .filter(project => project?.id)
+                    .map(project => ({
+                        name: project.id,
+                        value: project.id
+                    })),
+                ...(gcpProjects ?? []).map(project => ({
+                    name: project.projectId,
+                    value: project.projectId
+                }))
+            ];
+            questions.push({
+                type: "list",
+                name: "firebaseProjectId",
+                message: "Select your project",
+                choices: choices
+            });
+        }
     }
+    questions.push({
+        type: "input",
+        name: "firebaseProjectIdManual",
+        message: "Please enter your Firebase project ID",
+        when: (answers) => shouldAskForProjectManually || !answers.firebaseProjectId || answers.firebaseProjectId === "!_-manual",
+        default: options.firebaseProjectId
+    });
+
 
     questions.push({
         type: "input",
@@ -353,9 +366,7 @@ export async function createProject(options: InitOptions) {
     };
 
     let templateFolder: string;
-    if (options.template === "v2") {
-        templateFolder = "template_v2";
-    } else if (options.template === "pro") {
+    if (options.template === "pro") {
         templateFolder = "template_pro";
     } else if (options.template === "next-pro") {
         templateFolder = "template_next_pro";
@@ -407,16 +418,7 @@ export async function createProject(options: InitOptions) {
     console.log("%s Your project is ready!", chalk.green.bold("DONE"));
     console.log("");
 
-    if (options.template === "v2") {
-        console.log("First update your firebase config in");
-        console.log(chalk.bgYellow.black.bold("src/firebase_config.ts"));
-        console.log("");
-        console.log("Then run:");
-        console.log(chalk.cyan.bold("cd " + options.dir_name));
-        console.log(chalk.cyan.bold("npm install"));
-        console.log(chalk.cyan.bold("npm run dev"));
-        console.log("");
-    } else if (options.template === "pro" || options.template === "community") {
+    if (options.template === "pro" || options.template === "community") {
         console.log("Make sure you have a valid Firebase config in ");
         console.log(chalk.cyan.bold("src/firebase_config.ts"));
         if (options.template === "pro") {
