@@ -10,6 +10,10 @@
   - Canary publishes now pin our own packages exactly, so a canary install is internally consistent. Verified: installing `@firecms/core`, `@firecms/ui`, `@firecms/firebase` and `@firecms/data_export` at the same canary version previously produced five copies of `@firecms/core` (one canary, four stable); it now produces one.
   - Stable releases were never affected, and no package manifests changed — **nothing to do when upgrading beyond changing the version numbers**, as before.
   - As always, keep every `@firecms/*` package on the same version.
+- **CLI templates**:
+  - Fixed `npm install` failing outright in a project scaffolded with `--v2`. The template pinned `firebase: ^9`, but `firecms@2.2.1` requires peer `firebase@^10.4.0`, so a fresh install ended in `ERESOLVE`. Now pinned to `^10.4.0`.
+  - `firebase-tools` is now a devDependency of the templates whose `deploy` script calls `firebase` (`template`, `template_pro`, `template_v2`), so `npm run deploy` no longer depends on the CLI being installed globally.
+  - All six templates verified end to end — scaffolded through the CLI, then `npm install` and `npm run build`. Note that the Next.js template prerenders pages at build time, so unlike the single-page templates it needs a real Firebase config before `npm run build` will succeed; this is called out in its README.
 - **CLI (`firecms init`)**:
   - Fixed `firecms init my-app` scaffolding into a directory called `init` and ignoring the name given. The `init` subcommand was being passed through to the argument parser, so the positional directory name was read one position too early. `create-firecms-app` was unaffected.
   - Fixed the Firebase project id sometimes not being substituted into a new project, leaving the raw `[REPLACE_WITH_PROJECT_ID]` placeholder in the generated files. The substitution used callback-style `fs` calls inside an `await`, so the writes were fire-and-forget and the CLI could exit before they landed — non-deterministically, which is why it went unnoticed.
