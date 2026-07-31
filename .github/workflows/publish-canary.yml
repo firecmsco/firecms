@@ -40,7 +40,9 @@ jobs:
         run: |
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
           BASE_VERSION=$(node -p "require('./lerna.json').version")
-          CANARY_VERSION="${BASE_VERSION}-canary.${SHORT_SHA}"
+          # Exported: the node script below reads it from the environment, and a plain
+          # shell assignment is not visible to child processes.
+          export CANARY_VERSION="${BASE_VERSION}-canary.${SHORT_SHA}"
           echo "CANARY_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
           echo "Publishing canary version: $CANARY_VERSION"
 
