@@ -6,6 +6,7 @@ export * from "./enums";
 export * from "./objects";
 export * from "./paths";
 export * from "./regexp";
+export * from "./urls";
 export * from "./navigation_utils";
 export * from "./entity_actions";
 export * from "./useDebouncedCallback";
