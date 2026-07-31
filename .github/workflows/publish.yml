@@ -6,6 +6,10 @@ on:
       - 'v*' # Triggers on version tags like v3.0.1, v3.0.1-pre.0, etc.
   workflow_dispatch:
     inputs:
+      version:
+        description: 'Version to publish, e.g. 3.4.0. Required for manual runs — tag pushes take it from the tag.'
+        required: true
+        type: string
       dist_tag:
         description: 'npm dist-tag to publish under (latest, pre, next, canary, beta, alpha)'
         required: false
@@ -75,7 +79,14 @@ jobs:
           # installs the highest match, which silently mixes versions and ends up with two
           # copies of @firecms/core (two React contexts, and plugins reading an empty
           # navigation controller). Same reasoning as the canary workflow.
-          export RELEASE_VERSION="${GITHUB_REF#refs/tags/v}"
+          # Tag push: take it from the tag. Manual run: from the `version` input —
+          # GITHUB_REF is a branch ref there, so the tag expression would yield
+          # "refs/heads/main" and the guard below would (correctly) refuse.
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            export RELEASE_VERSION="${{ inputs.version }}"
+          else
+            export RELEASE_VERSION="${GITHUB_REF#refs/tags/v}"
+          fi
           echo "Publishing version: $RELEASE_VERSION"
           node -e "
             const fs = require('fs');
