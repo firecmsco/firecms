@@ -44,19 +44,39 @@ jobs:
           echo "CANARY_VERSION=$CANARY_VERSION" >> $GITHUB_ENV
           echo "Publishing canary version: $CANARY_VERSION"
 
-          # Update all package versions without creating git tags or commits.
+          # Set versions directly rather than via `lerna version`.
           #
-          # --exact is required. Without it lerna writes caret ranges between our own
-          # packages, e.g. "@firecms/core": "^3.4.0-canary.abc1234". That range also
-          # matches the stable 3.4.0, and npm installs the HIGHEST match — so a canary
-          # install silently pulled stable transitive packages, which in turn required
-          # "@firecms/core": "^3.4.0" that the canary core does not satisfy, and npm
-          # nested a second copy of core. Two copies of core means two React contexts, so
-          # plugins read an empty navigation controller and every method on it is
-          # undefined ("resolveIdsFrom is not a function").
+          # Our own cross-package references MUST be pinned exactly. Lerna writes caret
+          # ranges, e.g. "@firecms/core": "^3.4.0-canary.abc1234" — but that range also
+          # matches the stable 3.4.0, and npm installs the HIGHEST match. A canary install
+          # therefore pulled *stable* transitive packages, which in turn require
+          # "@firecms/core": "^3.4.0" that the canary core does not satisfy, so npm nested
+          # a second copy of core inside them. Two copies of core is two React context
+          # objects: the app's <FireCMS> fills one, plugins read the other and get an empty
+          # navigation controller ("resolveIdsFrom is not a function").
           #
-          # Pinning exactly keeps a canary install internally consistent.
-          npx lerna version "$CANARY_VERSION" --no-git-tag-version --no-push --yes --exact
+          # `lerna version --exact` pins correctly but then runs
+          # `pnpm install --lockfile-only`, which fails: pnpm does not link workspace
+          # packages here, so it tries to fetch the not-yet-published exact version from
+          # the registry. Install and build have already run by this point, so the lockfile
+          # does not matter — set the versions directly and skip it.
+          node -e "
+            const fs = require('fs');
+            const V = process.env.CANARY_VERSION;
+            const dirs = fs.readdirSync('packages').filter(d => fs.existsSync('packages/' + d + '/package.json'));
+            const ours = new Set(dirs.map(d => JSON.parse(fs.readFileSync('packages/' + d + '/package.json', 'utf8')).name));
+            for (const d of dirs) {
+              const f = 'packages/' + d + '/package.json';
+              const p = JSON.parse(fs.readFileSync(f, 'utf8'));
+              p.version = V;
+              for (const field of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
+                if (!p[field]) continue;
+                for (const dep of Object.keys(p[field])) if (ours.has(dep)) p[field][dep] = V;
+              }
+              fs.writeFileSync(f, JSON.stringify(p, null, 2) + '\n');
+            }
+            console.log('Set ' + dirs.length + ' packages to ' + V + ' with exact internal pins');
+          "
 
           # Commit version changes locally so lerna publish doesn't complain
           # (this commit is never pushed back)
