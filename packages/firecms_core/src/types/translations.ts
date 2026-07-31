@@ -622,6 +622,10 @@ export interface FireCMSTranslations {
     order_property_not_found: string;
     no_number_properties: string;
     order_property_description: string;
+    image_property: string;
+    image_property_not_found: string;
+    no_image_properties: string;
+    image_property_description: string;
     display_settings: string;
     default_row_size: string;
     side_dialog_width: string;
