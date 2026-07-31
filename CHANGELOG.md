@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+- **Snackbars rendering under dialogs**:
+  - Fixed snackbars being painted below a side dialog or a modal dialog instead of above them. Notistack only portals its snackbar container when it is given a `domRoot`; without one it renders the container inline, wherever `<SnackbarProvider>` happens to sit in the tree. Dialogs and side dialogs are portalled to `document.body`, so any ancestor of the provider that creates a stacking context (a `transform`, a `filter`, an `isolate`, a positioned element with a `z-index`) trapped the snackbars beneath them and their `z-index` could never win.
+  - `SnackbarProvider` now passes `domRoot={document.body}`, so the container is a direct child of the body and shares a stacking context with the dialogs. The element is resolved in an effect, so server rendering is unaffected.
+  - Nothing to do when upgrading; host apps that mount `<SnackbarProvider>` themselves get the fix with no code change.
 - **Fixed duplicate `@firecms/core` in prerelease installs**:
   - Fixes `navigationController.resolveIdsFrom is not a function`, and the companion `react-i18next:: You will need to pass in an i18next instance` warning, when using a `canary` build.
   - Canary releases pinned the dependencies between our own packages with a caret, e.g. `"@firecms/core": "^3.4.0-canary.abc1234"`. That range also matches the stable `3.4.0`, and npm installs the highest match — so a canary install quietly pulled **stable** transitive packages. Those in turn require `"@firecms/core": "^3.4.0"`, which the canary core does not satisfy, so npm nested a second copy of `@firecms/core` inside them. Two copies means two React context objects: the app's `<FireCMS>` provider fills one, the plugin reads the other and gets an empty controller.
