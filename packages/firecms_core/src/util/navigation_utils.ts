@@ -212,6 +212,7 @@ export function navigateToEntity({
                                      copy,
                                      path,
                                      fullIdPath,
+                                     pathSegments,
                                      selectedTab,
                                      sideEntityController,
                                      onClose,
@@ -226,6 +227,8 @@ export function navigateToEntity({
                                      copy?: boolean;
                                      path: string;
                                      fullIdPath?: string;
+                                     /** `path` split at its real segment boundaries. */
+                                     pathSegments?: string[];
                                      sideEntityController: SideEntityController;
                                      onClose?: () => void;
                                      navigation: NavigationController
@@ -237,6 +240,7 @@ export function navigateToEntity({
             entityId,
             path,
             fullIdPath,
+            pathSegments,
             copy,
             selectedTab,
             collection,

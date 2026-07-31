@@ -43,6 +43,7 @@ export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
 export async function saveEntityWithCallbacks<M extends Record<string, any>, USER extends User>({
                                                                                                     collection,
                                                                                                     path,
+                                                                                                    pathSegments,
                                                                                                     entityId,
                                                                                                     values,
                                                                                                     previousValues,
@@ -103,6 +104,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
     return dataSource.saveEntity({
         collection,
         path: resolvedPath,
+        pathSegments: pathSegments ?? resolvedPath.split("/"),
         entityId,
         values: updatedValues,
         previousValues,

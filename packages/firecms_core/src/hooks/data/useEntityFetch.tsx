@@ -9,6 +9,11 @@ import { useFireCMSContext } from "../useFireCMSContext";
  */
 export interface EntityFetchProps<M extends Record<string, any>, USER extends User = User> {
     path: string;
+    /**
+     * `path` split at its real segment boundaries. Forwarded to the datasource so a parent
+     * entity id containing "/" stays unambiguous. Defaults to splitting the resolved path.
+     */
+    pathSegments?: string[];
     entityId?: string;
     databaseId?: string;
     collection: EntityCollection<M, USER>;
@@ -39,6 +44,7 @@ const CACHE: Record<string, Entity<any> | undefined> = {};
 export function useEntityFetch<M extends Record<string, any>, USER extends User>(
     {
         path: inputPath,
+        pathSegments: inputPathSegments,
         entityId,
         collection,
         databaseId,
@@ -49,6 +55,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
     const navigationController = useNavigationController();
 
     const path = navigationController.resolveIdsFrom(inputPath);
+    const pathSegments = inputPathSegments ?? path.split("/");
 
     const context: FireCMSContext<USER> = useFireCMSContext();
 
@@ -97,6 +104,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
             if (dataSource.listenEntity) {
                 return dataSource.listenEntity<M>({
                     path,
+                    pathSegments,
                     entityId,
                     databaseId,
                     collection,
@@ -106,6 +114,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
             } else {
                 dataSource.fetchEntity<M>({
                     path,
+                    pathSegments,
                     entityId,
                     databaseId,
                     collection

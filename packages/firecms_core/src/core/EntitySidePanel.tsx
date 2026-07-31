@@ -25,6 +25,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         path,
         entityId,
         fullIdPath,
+        pathSegments,
         formProps,
     } = props;
 
@@ -116,6 +117,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                 <EntityEditView
                     {...props}
                     fullIdPath={fullIdPath}
+                    pathSegments={pathSegments}
                     layout={"side_panel"}
                     collection={collection as EntityCollection}
                     parentCollectionIds={parentCollectionIds}

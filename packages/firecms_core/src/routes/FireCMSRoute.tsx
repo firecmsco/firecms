@@ -99,6 +99,7 @@ export function FireCMSRoute() {
                 isSubCollection={false}
                 parentCollectionIds={[]}
                 fullPath={collection.path}
+                pathSegments={navigationEntries[0].pathSegments}
                 fullIdPath={collection.id}
                 updateUrl={true}
                 {...collection}
@@ -123,6 +124,7 @@ export function FireCMSRoute() {
                     isSubCollection={false}
                     parentCollectionIds={[]}
                     fullPath={collection.path}
+                    pathSegments={firstEntry.pathSegments}
                     updateUrl={true}
                     {...collection}
                     Actions={toArray(collection.Actions)} />
@@ -255,6 +257,7 @@ function EntityFullScreenRoute({
                 key={collection.id + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}
                 entityId={isNew ? undefined : entityId}
                 fullIdPath={fullIdPath}
+                pathSegments={isNew ? lastCollectionEntry!.pathSegments : lastEntityEntry!.pathSegments}
                 collection={collection}
                 layout={"full_screen"}
                 path={collectionPath}

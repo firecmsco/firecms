@@ -1,3 +1,4 @@
+import { buildEntityHistoryPath } from "../history_path";
 import React, { useEffect, useState } from "react";
 import { Entity, useDataSource, User, useTranslation } from "@firecms/core";
 import { useHistoryController } from "../HistoryControllerProvider";
@@ -38,7 +39,7 @@ export function LastEditedByIndicator({
     useEffect(() => {
         if (!path || !entityId) return;
 
-        const historyPath = `${path}/${entityId}/__history`;
+        const historyPath = buildEntityHistoryPath(path, entityId);
         const unsubscribe = dataSource.listenCollection?.({
             path: historyPath,
             collection,

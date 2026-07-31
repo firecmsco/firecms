@@ -13,6 +13,8 @@ export interface NavigationViewEntityInternal<M extends Record<string, any>> {
     path: string;
     fullIdPath: string;
     fullPath: string;
+    /** `path` split at its real boundaries — see `pathSegments` on the datasource props. */
+    pathSegments: string[];
     parentCollection: EntityCollection<M>;
 }
 
@@ -22,6 +24,8 @@ export interface NavigationViewCollectionInternal<M extends Record<string, any>>
     path: string;
     fullIdPath: string;
     fullPath: string;
+    /** `path` split at its real boundaries — see `pathSegments` on the datasource props. */
+    pathSegments: string[];
     collection: EntityCollection<M>;
 }
 
@@ -30,6 +34,8 @@ export interface NavigationViewEntityCustomInternal<M extends Record<string, any
     path: string;
     fullIdPath: string;
     fullPath: string;
+    /** `path` split at its real boundaries — see `pathSegments` on the datasource props. */
+    pathSegments: string[];
     entityId: string;
     view: EntityCustomView<M>;
 }
@@ -49,6 +55,7 @@ export function getNavigationEntriesFromPath(props: {
     currentFullPath?: string,
     currentFullIdPath?: string,
     currentFullUrlPath?: string,
+    currentPathSegments?: string[],
     contextEntityViews?: EntityCustomView<any>[]
 }): NavigationViewInternal [] {
 
@@ -57,7 +64,8 @@ export function getNavigationEntriesFromPath(props: {
         collections = [],
         currentFullPath,
         currentFullIdPath,
-        currentFullUrlPath
+        currentFullUrlPath,
+        currentPathSegments = []
     } = props;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -83,12 +91,16 @@ export function getNavigationEntriesFromPath(props: {
             const fullIdPath = currentFullIdPath && currentFullIdPath.length > 0
                 ? (currentFullIdPath + "/" + collection.id)
                 : collection.id;
+            // A collection `path` may itself span several segments (e.g. "users/uid/experiences"),
+            // and those are unambiguous, so they are spread rather than kept whole.
+            const collectionSegments = [...currentPathSegments, ...collection.path.split("/")];
             result.push({
                 type: "collection",
                 id: collection.id,
                 path: collectionPath,
                 fullPath: collectionUrlPath,
                 fullIdPath,
+                pathSegments: collectionSegments,
                 collection
             });
             const restOfThePath = removeInitialAndTrailingSlashes(removeInitialAndTrailingSlashes(path).replace(subpathCombination, ""));
@@ -98,12 +110,16 @@ export function getNavigationEntriesFromPath(props: {
                 const entityId = decodeEntityId(encodedEntityId);
                 const fullPath = collectionPath + "/" + entityId;
                 const fullUrlPath = collectionUrlPath + "/" + encodedEntityId;
+                // The id is ONE segment however many slashes it contains — that is the
+                // whole point of this array.
+                const entitySegments = [...collectionSegments, entityId];
                 result.push({
                     type: "entity",
                     entityId,
                     path: collectionPath,
                     fullIdPath,
                     fullPath: fullUrlPath,
+                    pathSegments: collectionSegments,
                     parentCollection: collection
                 });
                 if (nextSegments.length > 1) {
@@ -123,6 +139,7 @@ export function getNavigationEntriesFromPath(props: {
                             entityId: entityId,
                             fullIdPath,
                             fullPath: fullUrlPath + "/" + customView.key,
+                            pathSegments: collectionSegments,
                             view: customView
                         });
                     } else if (collection.subcollections) {
@@ -132,6 +149,7 @@ export function getNavigationEntriesFromPath(props: {
                             currentFullPath: fullPath,
                             currentFullIdPath: fullIdPath,
                             currentFullUrlPath: fullUrlPath,
+                            currentPathSegments: entitySegments,
                             contextEntityViews: props.contextEntityViews
                         }));
                     }

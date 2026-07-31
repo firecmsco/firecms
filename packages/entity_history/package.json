@@ -72,8 +72,13 @@
       "node"
     ],
     "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
-    }
+      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
+      "^@firecms/core$": "<rootDir>/../firecms_core/src"
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ]
   },
   "files": [
     "dist",

@@ -1,3 +1,4 @@
+import { buildEntityHistoryPath } from "../history_path";
 import { useEffect, useRef, useState } from "react";
 import {
     ConfirmationDialog,
@@ -25,7 +26,7 @@ export function EntityHistoryView({
     const dirty = formContext?.formex.dirty;
 
     const dataSource = useDataSource();
-    const pathAndId = entity ? entity?.path + "/" + entity?.id : undefined;
+    const historyPath = entity ? buildEntityHistoryPath(entity.path, entity.id) : undefined;
 
     const [revertVersionDialog, setRevertVersionDialog] = useState<Entity | undefined>(undefined);
     const [revisions, setRevisions] = useState<Entity[]>([]);
@@ -41,11 +42,11 @@ export function EntityHistoryView({
 
     // Load revisions with the current limit
     useEffect(() => {
-        if (!pathAndId) return;
+        if (!historyPath) return;
 
         setIsLoading(true); // Set loading true when fetching starts
         const listener = dataSource.listenCollection?.({
-            path: pathAndId + "/__history",
+            path: historyPath,
             collection: collection,
             order: "desc",
             orderBy: "__metadata.updated_on",
@@ -67,7 +68,7 @@ export function EntityHistoryView({
                 listener();
             }
         };
-    }, [pathAndId, limit, dataSource]);
+    }, [historyPath, limit, dataSource]);
 
     // Setup intersection observer for infinite scroll
     useEffect(() => {

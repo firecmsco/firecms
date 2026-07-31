@@ -224,12 +224,14 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
     let sidePanel: EntitySidePanelProps<any> | undefined = undefined;
     let lastCollectionPath = "";
     let lastCollectionId: string | undefined = undefined;
+    let lastCollectionSegments: string[] | undefined = undefined;
     for (let i = 0; i < navigationViewsForPath.length; i++) {
         const navigationEntry = navigationViewsForPath[i];
 
         if (navigationEntry.type === "collection") {
             lastCollectionPath = navigationEntry.path;
             lastCollectionId = navigationEntry.collection.id;
+            lastCollectionSegments = navigationEntry.pathSegments;
         }
 
         const previousEntry = navigationViewsForPath[i - 1];
@@ -237,6 +239,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
             sidePanel = {
                 path: navigationEntry.path,
                 fullIdPath: navigationEntry.fullIdPath,
+                pathSegments: navigationEntry.pathSegments,
                 entityId: navigationEntry.entityId,
                 copy: false,
                 width: navigationEntry.parentCollection?.sideDialogWidth
@@ -259,6 +262,9 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
         sidePanel = {
             path: lastCollectionPath,
             fullIdPath: lastCollectionId,
+            // A new entity still needs unambiguous segments: it may be created inside a
+            // subcollection whose parent id contains "/".
+            pathSegments: lastCollectionSegments,
             copy: false
         }
     }

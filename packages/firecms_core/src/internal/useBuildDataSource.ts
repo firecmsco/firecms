@@ -55,6 +55,7 @@ export function useBuildDataSource({
          */
         fetchCollection: useCallback(<M extends Record<string, any>>({
             path,
+            pathSegments,
             collection,
             filter,
             limit,
@@ -67,6 +68,7 @@ export function useBuildDataSource({
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
             return usedDelegate.fetchCollection<M>({
                 path,
+                pathSegments,
                 filter,
                 limit,
                 startAfter,
@@ -97,6 +99,7 @@ export function useBuildDataSource({
             ? useCallback(<M extends Record<string, any>>(
                 {
                     path,
+                    pathSegments,
                     collection: collectionProp,
                     filter,
                     limit,
@@ -117,6 +120,7 @@ export function useBuildDataSource({
 
                 return usedDelegate.listenCollection<M>({
                     path,
+                    pathSegments,
                     filter,
                     limit,
                     startAfter,
@@ -139,6 +143,7 @@ export function useBuildDataSource({
          */
         fetchEntity: useCallback(<M extends Record<string, any>>({
             path,
+            pathSegments,
             entityId,
             collection
         }: FetchEntityProps<M>
@@ -146,6 +151,7 @@ export function useBuildDataSource({
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
             return usedDelegate.fetchEntity({
                 path,
+                pathSegments,
                 entityId,
                 collection
             });
@@ -165,6 +171,7 @@ export function useBuildDataSource({
             ? useCallback(<M extends Record<string, any>>(
                 {
                     path,
+                    pathSegments,
                     entityId,
                     collection,
                     onUpdate,
@@ -177,6 +184,7 @@ export function useBuildDataSource({
 
                 return usedDelegate.listenEntity<M>({
                     path,
+                    pathSegments,
                     entityId,
                     onUpdate,
                     onError,
@@ -198,6 +206,7 @@ export function useBuildDataSource({
         saveEntity: useCallback(async <M extends Record<string, any>>(
             {
                 path,
+                pathSegments,
                 entityId,
                 values,
                 collection: collectionProp,
@@ -244,6 +253,7 @@ export function useBuildDataSource({
                         try {
                             const entities = await usedDelegate.fetchCollection({
                                 path,
+                                pathSegments,
                                 orderBy: orderProperty,
                                 order: "asc",
                                 limit: 1,
@@ -270,6 +280,7 @@ export function useBuildDataSource({
 
             return usedDelegate.saveEntity({
                 path,
+                pathSegments,
                 collection,
                 entityId,
                 values: finalValues,

@@ -8,6 +8,20 @@ import { FireCMSContext } from "./firecms_context";
  */
 export interface FetchEntityProps<M extends Record<string, any> = any> {
     path: string;
+    /**
+     * The path split at its real segment boundaries, e.g.
+     * `["nodes", "node/42", "edges"]`.
+     *
+     * `path` is a single flattened string, so a parent entity id containing "/" cannot be
+     * recovered from it — `"nodes/node/42/edges"` is indistinguishable from a three-level
+     * nesting. This is the unambiguous form: one array element per segment, entity ids
+     * kept whole however many slashes they contain.
+     *
+     * For any backend whose ids cannot contain "/" this is exactly `path.split("/")`, so
+     * delegates that do not care can keep using `path`. Delegates that do should prefer
+     * `pathSegments ?? path.split("/")`.
+     */
+    pathSegments?: string[];
     entityId: string;
     databaseId?: string;
     collection?: EntityCollection<M, any>
@@ -28,6 +42,20 @@ export type ListenEntityProps<M extends Record<string, any> = any> =
  */
 export interface FetchCollectionProps<M extends Record<string, any> = any> {
     path: string;
+    /**
+     * The path split at its real segment boundaries, e.g.
+     * `["nodes", "node/42", "edges"]`.
+     *
+     * `path` is a single flattened string, so a parent entity id containing "/" cannot be
+     * recovered from it — `"nodes/node/42/edges"` is indistinguishable from a three-level
+     * nesting. This is the unambiguous form: one array element per segment, entity ids
+     * kept whole however many slashes they contain.
+     *
+     * For any backend whose ids cannot contain "/" this is exactly `path.split("/")`, so
+     * delegates that do not care can keep using `path`. Delegates that do should prefer
+     * `pathSegments ?? path.split("/")`.
+     */
+    pathSegments?: string[];
     collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
     filter?: FilterValues<Extract<keyof M, string>>,
     limit?: number;
@@ -52,6 +80,20 @@ export type ListenCollectionProps<M extends Record<string, any> = any> =
  */
 export interface SaveEntityProps<M extends Record<string, any> = any> {
     path: string;
+    /**
+     * The path split at its real segment boundaries, e.g.
+     * `["nodes", "node/42", "edges"]`.
+     *
+     * `path` is a single flattened string, so a parent entity id containing "/" cannot be
+     * recovered from it — `"nodes/node/42/edges"` is indistinguishable from a three-level
+     * nesting. This is the unambiguous form: one array element per segment, entity ids
+     * kept whole however many slashes they contain.
+     *
+     * For any backend whose ids cannot contain "/" this is exactly `path.split("/")`, so
+     * delegates that do not care can keep using `path`. Delegates that do should prefer
+     * `pathSegments ?? path.split("/")`.
+     */
+    pathSegments?: string[];
     values: Partial<EntityValues<M>>;
     entityId?: string; // can be empty for new entities
     previousValues?: Partial<EntityValues<M>>;

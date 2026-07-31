@@ -111,6 +111,7 @@ describe("entity ids without slashes (regression net — must not change)", () =
 
         expect(panels).toEqual([{
             path: "products",
+            pathSegments: ["products"],
             fullIdPath: "products",
             entityId: id,
             copy: false,
@@ -191,6 +192,32 @@ describe("escaping is what separates an id from a path segment", () => {
         expect(inner.path).toEqual("products/a/b/locales");
         // ...while `fullPath` is fed back to buildUrlCollectionPath, so they stay escaped.
         expect(inner.fullPath).toEqual("products/a%2Fb/locales/c%2Fd");
+    });
+
+    it("exposes unambiguous pathSegments for the datasource", () => {
+        const entries = getNavigationEntriesFromPath({
+            path: "products/a%2Fb/locales/c%2Fd",
+            collections
+        });
+
+        // `path` on the inner entries is the flattened "products/a/b/locales", which cannot
+        // be re-split correctly. `pathSegments` keeps the parent id whole.
+        expect((entries[3] as NavigationViewEntityInternal<any>).path).toEqual("products/a/b/locales");
+        expect((entries[3] as NavigationViewEntityInternal<any>).pathSegments)
+            .toEqual(["products", "a/b", "locales"]);
+        expect((entries[3] as NavigationViewEntityInternal<any>).entityId).toEqual("c/d");
+    });
+
+    it("pathSegments equals path.split for ids without slashes", () => {
+        // The compatibility guarantee: for any backend whose ids cannot contain "/",
+        // pathSegments carries no new information.
+        for (const p of ["products/pid", "products/pid/locales/lid", "users/uid123/experiences/x"]) {
+            const entries = getNavigationEntriesFromPath({ path: p, collections });
+            for (const e of entries) {
+                expect({ path: e.path, segments: e.pathSegments })
+                    .toEqual({ path: e.path, segments: e.path.split("/") });
+            }
+        }
     });
 
     it("an escaped id keeps segment parity, so the odd-segment guard is not tripped", () => {

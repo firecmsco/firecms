@@ -26,6 +26,12 @@ export type DataSourceTableControllerProps<M extends Record<string, any> = any> 
      */
     fullPath: string;
     /**
+     * `fullPath` split at its real segment boundaries. Passed through to the datasource so
+     * a parent entity id containing "/" stays unambiguous. Defaults to splitting
+     * `fullPath`, which is correct for any backend whose ids cannot contain "/".
+     */
+    pathSegments?: string[];
+    /**
      * The collection that is represented by this config.
      */
     collection: EntityCollection<M>;
@@ -69,6 +75,7 @@ export type DataSourceTableControllerProps<M extends Record<string, any> = any> 
 export function useDataSourceTableController<M extends Record<string, any> = any, USER extends User = User>(
     {
         fullPath,
+        pathSegments,
         collection,
         scrollRestoration,
         entitiesDisplayedFirst,
@@ -88,6 +95,8 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const navigation = useNavigationController();
     const dataSource = useDataSource(collection);
     const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
+    const resolvedPathSegments = useMemo(() => pathSegments ?? resolvedPath.split("/"),
+        [pathSegments, resolvedPath]);
 
     const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
@@ -264,6 +273,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
             if (dataSource.listenCollection) {
                 return dataSource.listenCollection<M>({
                     path: resolvedPath,
+                    pathSegments: resolvedPathSegments,
                     collection,
                     onUpdate: onEntitiesUpdate,
                     onError,
@@ -277,6 +287,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
             } else {
                 dataSource.fetchCollection<M>({
                     path: resolvedPath,
+                    pathSegments: resolvedPathSegments,
                     collection,
                     searchString,
                     filter: filterValues,

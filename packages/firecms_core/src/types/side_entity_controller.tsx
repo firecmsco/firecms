@@ -19,6 +19,12 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any> {
      * Full CMS path of the entity, including the collection and sub-collections.
      */
     fullIdPath?: string;
+    /**
+     * `path` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
+     * Optional: when omitted the panel falls back to splitting `path`, which is correct for
+     * any backend whose entity ids cannot contain "/".
+     */
+    pathSegments?: string[];
 
     /**
      * ID of the entity, if not set, it means we are creating a new entity

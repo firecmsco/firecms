@@ -113,6 +113,7 @@ describe("SPEC: entity ids containing slashes", () => {
 
         expect(panels).toEqual([{
             path: "products",
+            pathSegments: ["products"],
             fullIdPath: "products",
             entityId: "a/b",
             copy: false,

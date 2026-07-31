@@ -41,6 +41,7 @@ describe("buildSidePanelsFromUrl", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
+                pathSegments: ["products"],
                 fullIdPath: "products",
                 entityId: "entityA",
                 copy: false,
@@ -55,6 +56,7 @@ describe("buildSidePanelsFromUrl", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
+                pathSegments: ["products"],
                 fullIdPath: "products",
                 entityId: "entityA",
                 copy: false,
@@ -70,6 +72,7 @@ describe("buildSidePanelsFromUrl", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
+                pathSegments: ["products"],
                 fullIdPath: "products",
                 copy: false,
             }
@@ -82,6 +85,7 @@ describe("buildSidePanelsFromUrl", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "products",
+                pathSegments: ["products"],
                 fullIdPath: "products",
                 entityId: "entityA",
                 copy: false,
@@ -97,6 +101,7 @@ describe("buildSidePanelsFromUrl", () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
                 path: "users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences",
+                pathSegments: ["users", "J4WyZHd3DhgcWRdJaBodSkSAVuN2", "experiences"],
                 fullIdPath: "experiences",
                 entityId: "pUAGjOQALls5wTwKq0sF",
                 copy: false,

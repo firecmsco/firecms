@@ -71,6 +71,12 @@ export interface EntityEditViewProps<M extends Record<string, any>> {
      * The navigation path to the entity.
      */
     fullIdPath?: string;
+    /**
+     * `path` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
+     * Forwarded to the datasource, and extended for any subcollection rendered inside this
+     * view, so a parent entity id containing "/" stays unambiguous.
+     */
+    pathSegments?: string[];
     collection: EntityCollection<M>;
     entityId?: string;
     databaseId?: string;
@@ -101,6 +107,7 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         dataLoadingError
     } = useEntityFetch<M, USER>({
         path: props.path,
+        pathSegments: props.pathSegments,
         entityId: entityId,
         collection: props.collection,
         databaseId: props.databaseId,
@@ -146,6 +153,7 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
 export function EntityEditViewInner<M extends Record<string, any>>({
     path,
     fullIdPath,
+    pathSegments,
     entityId,
     selectedTab: selectedTabProp,
     collection,
@@ -351,6 +359,15 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         const newFullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
         // `newFullIdPath` is fed to buildUrlCollectionPath downstream, so it stays escaped.
         const newFullIdPath = fullIdPath && usedEntity ? `${fullIdPath}/${encodeEntityId(usedEntity.id)}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
+        // The subcollection sits under this entity, so its segments are ours plus this
+        // entity's id (kept whole, slashes and all) plus the subcollection's own path.
+        const newPathSegments = usedEntity
+            ? [
+                ...(pathSegments ?? path.split("/")),
+                usedEntity.id,
+                ...removeInitialAndTrailingSlashes(subcollection.path).split("/")
+            ]
+            : undefined;
 
         if (selectedTab !== subcollectionId) return null;
         return (
@@ -365,6 +382,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
                     (usedEntity && newFullPath
                         ? <EntityCollectionView
                             fullPath={newFullPath}
+                            pathSegments={newPathSegments}
                             fullIdPath={newFullIdPath}
                             parentCollectionIds={[...parentCollectionIds, collection.id]}
                             isSubCollection={true}

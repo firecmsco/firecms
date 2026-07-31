@@ -107,6 +107,13 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
      */
     fullIdPath?: string;
     /**
+     * `fullPath` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
+     * Forwarded to the datasource so a parent entity id containing "/" stays unambiguous.
+     * Defaults to splitting `fullPath`, which is correct for any backend whose ids cannot
+     * contain "/".
+     */
+    pathSegments?: string[];
+    /**
      * If this is a subcollection, specify the parent collection ids.
      */
     parentCollectionIds?: string[];
@@ -152,6 +159,7 @@ export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
         fullPath: fullPathProp,
         fullIdPath,
+        pathSegments,
         parentCollectionIds,
         isSubCollection,
         className,
@@ -317,6 +325,7 @@ export const EntityCollectionView = React.memo(
 
         const tableController = useDataSourceTableController<M>({
             fullPath,
+            pathSegments,
             collection,
             lastDeleteTimestamp,
             scrollRestoration,
@@ -365,6 +374,7 @@ export const EntityCollectionView = React.memo(
                 collection,
                 entityId: undefined,
                 path: fullPath,
+                pathSegments,
                 fullIdPath,
                 sideEntityController,
                 navigation,
@@ -440,6 +450,7 @@ export const EntityCollectionView = React.memo(
         const onViewModeChange = useCallback((mode: ViewMode) => {
             analyticsController.onAnalyticsEvent?.("view_mode_changed", {
                 path: fullPath,
+                pathSegments,
                 from: viewMode,
                 to: mode
             });
@@ -581,6 +592,7 @@ export const EntityCollectionView = React.memo(
         const onKanbanPropertyChange = useCallback((property: string) => {
             analyticsController.onAnalyticsEvent?.("kanban_property_changed", {
                 path: fullPath,
+                pathSegments,
                 property
             });
             setSelectedKanbanProperty(property);
@@ -645,6 +657,7 @@ export const EntityCollectionView = React.memo(
                                     entityId: entity.id,
                                     selectedTab: subcollection.id ?? subcollection.path,
                                     path: fullPath,
+                                    pathSegments,
                                     fullIdPath,
                                     navigation,
                                     sideEntityController

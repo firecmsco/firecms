@@ -1,3 +1,4 @@
+import { buildEntityHistoryPath } from "./history_path";
 import { EntityCallbacks, FireCMSContext, User } from "@firecms/core";
 import equal from "react-fast-compare"
 import { HistoryEntry, NewHistoryEntryParams } from "./types";
@@ -27,7 +28,7 @@ export function createHistoryEntry<T = any>({
         }
     };
     dataSource.saveEntity({
-        path: path + "/" + entityId + "/__history",
+        path: buildEntityHistoryPath(path, entityId),
         values: entry,
         status: "new",
         collection
