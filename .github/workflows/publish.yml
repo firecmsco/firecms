@@ -56,6 +56,49 @@ jobs:
           # so restore those.
           pnpm rebuild
 
+      - name: Set version from tag
+        run: |
+          # The published version comes from the git tag, not from the committed
+          # package.json files.
+          #
+          # Bumping versions in the repo (`lerna version`) cannot work here: it rewrites
+          # the internal @firecms/* ranges to the new version, and pnpm 10 does not link
+          # workspace packages without the `workspace:` protocol, so it tries to fetch the
+          # not-yet-published version from npm and the lockfile can never be regenerated:
+          #     ERR_PNPM_NO_MATCHING_VERSION  No matching version found for
+          #     @firecms/core@^3.4.0
+          # Leaving the repo on the previous version keeps the lockfile valid, so
+          # `--frozen-lockfile` above succeeds.
+          #
+          # Internal references are pinned EXACTLY. A caret range like "^3.4.0" would also
+          # match a later 3.x, and for prereleases it matches the stable release too — npm
+          # installs the highest match, which silently mixes versions and ends up with two
+          # copies of @firecms/core (two React contexts, and plugins reading an empty
+          # navigation controller). Same reasoning as the canary workflow.
+          export RELEASE_VERSION="${GITHUB_REF#refs/tags/v}"
+          echo "Publishing version: $RELEASE_VERSION"
+          node -e "
+            const fs = require('fs');
+            const V = process.env.RELEASE_VERSION;
+            if (!/^[0-9]+\.[0-9]+\.[0-9]+/.test(V)) {
+              console.error('Refusing to publish: tag does not look like a version: ' + V);
+              process.exit(1);
+            }
+            const dirs = fs.readdirSync('packages').filter(d => fs.existsSync('packages/' + d + '/package.json'));
+            const ours = new Set(dirs.map(d => JSON.parse(fs.readFileSync('packages/' + d + '/package.json', 'utf8')).name));
+            for (const d of dirs) {
+              const f = 'packages/' + d + '/package.json';
+              const p = JSON.parse(fs.readFileSync(f, 'utf8'));
+              p.version = V;
+              for (const field of ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies']) {
+                if (!p[field]) continue;
+                for (const dep of Object.keys(p[field])) if (ours.has(dep)) p[field][dep] = V;
+              }
+              fs.writeFileSync(f, JSON.stringify(p, null, 2) + '\n');
+            }
+            console.log('Set ' + dirs.length + ' packages to ' + V + ' with exact internal pins');
+          "
+
       - name: Build packages
         run: pnpm run build
 
