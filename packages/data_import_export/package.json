@@ -8,11 +8,11 @@
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
   "dependencies": {
-    "@firecms/core": "^3.3.0",
     "@firecms/data_export": "^3.3.0",
     "@firecms/data_import": "^3.3.0"
   },
   "peerDependencies": {
+    "@firecms/core": "^3.3.0",
     "react": ">=18.3.1 || >=19.0.0",
     "react-dom": ">=18.3.1 || >=19.0.0",
     "react-router": "^6.28.0",
@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@firecms/core": "^3.3.0",
     "@jest/globals": "^30.2.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^29.5.14",

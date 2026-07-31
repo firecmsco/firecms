@@ -527,20 +527,23 @@ async function copyWebAppConfig(options: InitOptions, firebaseConfig: object) {
 }
 
 async function replaceProjectIdInTemplateFiles(options: InitOptions, files: string[] = []) {
+    // Note: this used to call the callback forms of fs.readFile/fs.writeFile inside an
+    // `await`, which awaits nothing — the writes were fire-and-forget, so the CLI could
+    // finish (and exit) before they landed and scaffold a project with the raw
+    // [REPLACE_WITH_PROJECT_ID] placeholder still in it. Non-deterministically, which is
+    // why it went unnoticed.
     for (const file of files) {
         const fullFileName = path.resolve(options.targetDirectory, file);
-        await fs.readFile(fullFileName, "utf8", function (err, data) {
-            if (err) {
-                return console.log(err);
-            }
+        try {
+            const data = await fs.promises.readFile(fullFileName, "utf8");
             const result = data.replace(/\[REPLACE_WITH_PROJECT_ID]/g, options.firebaseProjectId);
-
-            fs.writeFile(fullFileName, result, "utf8", function (err) {
-                if (err) return console.log(err);
-            });
-        });
+            if (result !== data) {
+                await fs.promises.writeFile(fullFileName, result, "utf8");
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
-
 }
 
 async function initGit(options: InitOptions) {

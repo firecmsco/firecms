@@ -1,5 +1,19 @@
 ## [Unreleased]
 
+- **`@firecms/core`, `@firecms/ui` and `@firecms/formex` are now peer dependencies of every plugin package**:
+  - Fixes `navigationController.resolveIdsFrom is not a function`, and the companion `react-i18next:: You will need to pass in an i18next instance` warning.
+  - These three packages hold React context (`@firecms/core` alone has 18 context objects). They were declared as regular `dependencies` of the plugin packages, which lets a package manager install a second, private copy inside a plugin whenever its version differs from the one in your app. Two copies means two distinct context objects: your `<FireCMS>` provider fills one, the plugin reads the other, gets the empty default, and every method on it is `undefined`.
+  - This is easiest to hit when mixing versions — for example an app on a `canary` build with a plugin still resolving `^3.3.0`, since a prerelease does not satisfy a stable range. Measured directly: with the old declaration, `npm install @firecms/core@canary @firecms/data_export@3.3.0` produced **two** copies of `@firecms/core`; as a peer dependency it produces **one**.
+  - Affects `collection_editor`, `collection_editor_firebase`, `data_enhancement`, `data_export`, `data_import`, `data_import_export`, `datatalk`, `entity_history`, `firebase`, `firebase_admin`, `cloud`, `media_manager` and `user_management`.
+  - **No action needed for most projects.** Any app already installs `@firecms/core` directly, which satisfies the peer. npm and pnpm resolve peers automatically. If you use a package manager that does not, or you had relied on a plugin pulling core in for you, add it explicitly: `npm i @firecms/core@<same version as your other @firecms packages>`.
+  - Keep all `@firecms/*` packages on the same version. A mismatch is now a visible peer warning at install time instead of a silently broken app.
+  - `@firecms/schema_inference` holds no context and remains a regular dependency.
+- **CLI (`firecms init`)**:
+  - Fixed `firecms init my-app` scaffolding into a directory called `init` and ignoring the name given. The `init` subcommand was being passed through to the argument parser, so the positional directory name was read one position too early. `create-firecms-app` was unaffected.
+  - Fixed the Firebase project id sometimes not being substituted into a new project, leaving the raw `[REPLACE_WITH_PROJECT_ID]` placeholder in the generated files. The substitution used callback-style `fs` calls inside an `await`, so the writes were fire-and-forget and the CLI could exit before they landed — non-deterministically, which is why it went unnoticed.
+  - Added an end-to-end test suite that drives the real CLI as a subprocess across the `pro`, `community`, `cloud`, `next-pro` and `astro` templates, covering the target directory, project id substitution, leftover placeholders, template build artefacts leaking into new projects, and refusing to overwrite a non-empty directory.
+- **`@firecms/ui` stylesheet**:
+  - Fixed `@firecms/ui/index.css` failing to resolve. The build was emitting the stylesheet to `dist/src/index.css` while the package `exports` map publishes it as `dist/index.css`, so the import failed and apps rendered unstyled. Caused by a `vite-plugin-static-copy` 3 → 4 upgrade changing how a source path resolves against its destination; the file is now copied directly so it cannot move with a dependency bump.
 - **Entity IDs containing slashes**:
   - Entity IDs may now contain `/`, as well as `?`, `#` and `%`. Previously an ID with a slash was accepted without validation and then silently truncated at the first slash, shifting every following path segment.
   - Added `encodeEntityId` / `decodeEntityId`. IDs are escaped only inside URL-facing paths; navigation entry `path` fields, datasource paths and `EntityReference.path` continue to carry raw IDs, so the `DataSource` contract is unchanged.

@@ -7,12 +7,11 @@
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "source": "src/index.ts",
-  "dependencies": {
+  "dependencies": {},
+  "peerDependencies": {
     "@firecms/core": "^3.3.0",
     "@firecms/formex": "^3.3.0",
-    "@firecms/ui": "^3.3.0"
-  },
-  "peerDependencies": {
+    "@firecms/ui": "^3.3.0",
     "react": ">=18.3.1 || >=19.0.0",
     "react-dom": ">=18.3.1 || >=19.0.0"
   },
@@ -44,6 +43,9 @@
     ]
   },
   "devDependencies": {
+    "@firecms/core": "^3.3.0",
+    "@firecms/formex": "^3.3.0",
+    "@firecms/ui": "^3.3.0",
     "@jest/globals": "^30.2.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^29.5.14",
