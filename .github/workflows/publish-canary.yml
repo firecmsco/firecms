@@ -31,7 +31,20 @@ jobs:
         uses: pnpm/action-setup@v6
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          # --ignore-scripts is deliberate. Workspace packages are linked as `file:`
+          # dependencies, so pnpm runs each one's `prepublishOnly` — a full build — during
+          # install, in an order that does not respect the dependency graph.
+          # @firecms/core then builds before @firecms/ui has emitted its .d.ts, TypeScript
+          # falls back to the published @firecms/ui types, and the install fails with
+          # errors about props that exist only in the newer source:
+          #     CollectionTableToolbar.tsx: Property 'initialValue' does not exist on
+          #     type 'IntrinsicAttributes & SearchBarProps'
+          # The explicit build step below does this properly, in lerna's topological order.
+          pnpm install --frozen-lockfile --ignore-scripts
+          # --ignore-scripts also skips genuine postinstalls (esbuild's binary download),
+          # so restore those.
+          pnpm rebuild
 
       - name: Build packages
         run: pnpm run build
