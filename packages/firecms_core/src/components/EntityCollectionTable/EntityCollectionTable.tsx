@@ -354,6 +354,7 @@ export const EntityCollectionTable = function EntityCollectionTable<M extends Re
                 onTextSearch={textSearchEnabled ? onTextSearch : undefined}
                 textSearchLoading={textSearchLoading}
                 onTextSearchClick={textSearchEnabled ? onTextSearchClick : undefined}
+                initialSearchString={tableController.searchString}
                 title={title}
                 actionsStart={actionsStart}
                 actions={actions}

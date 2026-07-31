@@ -20,6 +20,11 @@ interface CollectionTableToolbarProps {
     onTextSearchClick?: () => void;
     onTextSearch?: (searchString?: string) => void;
     textSearchLoading?: boolean;
+    /**
+     * Search term the search bar should start with, typically the one restored from the
+     * URL query params by the table controller.
+     */
+    initialSearchString?: string;
 }
 
 export function CollectionTableToolbar({
@@ -29,6 +34,7 @@ export function CollectionTableToolbar({
     onTextSearch,
     onTextSearchClick,
     textSearchLoading,
+    initialSearchString,
     title,
     viewModeToggle
 }: CollectionTableToolbarProps) {
@@ -79,6 +85,7 @@ export function CollectionTableToolbar({
                         disabled={Boolean(onTextSearchClick)}
                         onClick={onTextSearchClick}
                         onTextSearch={onTextSearchClick ? undefined : onTextSearch}
+                        initialValue={initialSearchString}
                         placeholder={t("search")}
                         expandable={true} />}
 

@@ -11,6 +11,13 @@ interface SearchBarProps {
     onClick?: () => void;
     onTextSearch?: (searchString?: string) => void;
     placeholder?: string;
+    /**
+     * Text the input is initialised with. Use it when the search term is restored from
+     * somewhere else, e.g. a URL query parameter, so that the input reflects the search
+     * that is actually being applied. Only read when the component mounts; the search bar
+     * owns the text from then on.
+     */
+    initialValue?: string;
     expandable?: boolean;
     /**
      * Size of the search bar.
@@ -35,6 +42,7 @@ export function SearchBar({
     onClick,
     onTextSearch,
     placeholder = "Search",
+    initialValue,
     expandable = false,
     size = "medium",
     large,
@@ -46,7 +54,7 @@ export function SearchBar({
     inputRef
 }: SearchBarProps) {
 
-    const [searchText, setSearchText] = useState<string>("");
+    const [searchText, setSearchText] = useState<string>(initialValue ?? "");
     const [active, setActive] = useState<boolean>(false);
 
     const deferredValues = useDebounceValue(searchText, 200);

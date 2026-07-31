@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { EntityCollection } from "../../types";
 import { useCustomizationController, useDataSource, useFireCMSContext } from "../../hooks";
@@ -7,12 +7,19 @@ export interface UseTableSearchHelperParams<M extends Record<string, any>> {
     collection: EntityCollection<M>;
     fullPath: string;
     parentCollectionIds?: string[];
+    /**
+     * Search term that is already being applied without the user having gone through the
+     * search bar, e.g. one restored from the URL query params. When set, text search is
+     * initialised automatically instead of waiting for a click on the search bar.
+     */
+    initialSearchString?: string;
 }
 
 export function useTableSearchHelper<M extends Record<string, any>>({
                                                                         collection,
                                                                         fullPath,
-                                                                        parentCollectionIds
+                                                                        parentCollectionIds,
+                                                                        initialSearchString
                                                                     }: UseTableSearchHelperParams<M>) {
 
     const context = useFireCMSContext();
@@ -21,6 +28,7 @@ export function useTableSearchHelper<M extends Record<string, any>>({
 
     const [textSearchLoading, setTextSearchLoading] = useState<boolean>(false);
     const [textSearchInitialised, setTextSearchInitialised] = useState<boolean>(false);
+    const autoInitialisedRef = useRef<boolean>(false);
 
     let onTextSearchClick: (() => void) | undefined;
     let textSearchEnabled = Boolean(collection.textSearchEnabled);
@@ -79,6 +87,17 @@ export function useTableSearchHelper<M extends Record<string, any>>({
                 }
         })
     }
+
+    // Only ever runs once, and only when a search term was restored from outside the search
+    // bar: otherwise the search bar would show a term the user can neither edit nor clear,
+    // because it stays read only until text search is initialised.
+    const shouldAutoInitialise = Boolean(initialSearchString) && textSearchEnabled && !textSearchInitialised && Boolean(onTextSearchClick);
+    useEffect(() => {
+        if (autoInitialisedRef.current || !shouldAutoInitialise) return;
+        autoInitialisedRef.current = true;
+        onTextSearchClick?.();
+    }, [shouldAutoInitialise]);
+
     return {
         textSearchLoading,
         textSearchInitialised,
