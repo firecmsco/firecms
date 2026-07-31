@@ -419,6 +419,8 @@ export interface FireCMSTranslations {
     download: string;
     large_number_of_documents: string;
     include_undefined_values: string;
+    /** Toggle in the export dialog, only shown when a filter or sort is active */
+    export_apply_filter_sort: string;
     submit: string;
 
     no_filterable_properties: string;

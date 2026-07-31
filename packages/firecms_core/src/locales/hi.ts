@@ -389,6 +389,7 @@ export const hi: FireCMSTranslations = {
     download: "डाउनलोड",
     large_number_of_documents: "इस संग्रह में बड़ी संख्या में दस्तावेज़ हैं ({{count}})।",
     include_undefined_values: "अपरिभाषित (undefined) मान शामिल करें",
+    export_apply_filter_sort: "केवल वर्तमान फ़िल्टर/सॉर्ट से मेल खाने वाले परिणाम निर्यात करें",
     submit: "सबमिट करें",
 
     no_filterable_properties: "कोई फ़िल्टर करने योग्य गुण उपलब्ध नहीं हैं",

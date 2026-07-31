@@ -394,6 +394,7 @@ export const pt: FireCMSTranslations = {
     download: "Descarregar",
     large_number_of_documents: "Esta coleção tem um grande número de documentos ({{count}}).",
     include_undefined_values: "Incluir valores indefinidos",
+    export_apply_filter_sort: "Exportar apenas os resultados que correspondem ao filtro/ordenação atual",
     submit: "Submeter",
 
     no_filterable_properties: "Não há propriedades filtráveis disponíveis",

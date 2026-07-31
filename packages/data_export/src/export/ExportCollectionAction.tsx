@@ -5,6 +5,7 @@ import {
     Entity,
     EntityCollection,
     ExportConfig,
+    FilterValues,
     getDefaultValuesFor,
     resolveCollection,
     ResolvedEntityCollection,
@@ -34,10 +35,63 @@ import { downloadEntitiesExport } from "./export";
 
 const DOCS_LIMIT = 500;
 
+type ExportFilterAndSortParams<M extends Record<string, any>> = {
+    filterValues?: FilterValues<Extract<keyof M, string>>;
+    sortBy?: [Extract<keyof M, string>, "asc" | "desc"];
+    forceFilter?: FilterValues<Extract<keyof M, string>>;
+};
+
+/**
+ * A filter forced by the collection config always applies to the data the user
+ * is allowed to see, so it is not something they can opt out of when exporting.
+ * The toggle is therefore only worth showing when there is a filter the user
+ * applied themselves, or an active sort.
+ */
+function hasUserFilterOrSort<M extends Record<string, any>>({
+    filterValues,
+    sortBy,
+    forceFilter
+}: ExportFilterAndSortParams<M>): boolean {
+    if (sortBy) return true;
+    if (!filterValues) return false;
+    const forcedKeys = forceFilter ? Object.keys(forceFilter) : [];
+    return Object.keys(filterValues).some((key) => !forcedKeys.includes(key));
+}
+
+/**
+ * Build the `filter`, `orderBy` and `order` params passed to `fetchCollection`
+ * when exporting.
+ *
+ * `forceFilter` is a data scoping constraint rather than a user preference, so it
+ * is always applied, and it takes precedence over the filter values coming from
+ * the table controller (same precedence used by the filters dialog).
+ */
+function resolveExportFilterAndSort<M extends Record<string, any>>({
+    applyFilterAndSort,
+    filterValues,
+    sortBy,
+    forceFilter
+}: ExportFilterAndSortParams<M> & { applyFilterAndSort: boolean }): {
+    filter?: FilterValues<Extract<keyof M, string>>;
+    orderBy?: string;
+    order?: "asc" | "desc";
+} {
+    const filter = {
+        ...(applyFilterAndSort ? filterValues : undefined),
+        ...forceFilter
+    } as FilterValues<Extract<keyof M, string>>;
+    return {
+        filter: Object.keys(filter).length > 0 ? filter : undefined,
+        orderBy: applyFilterAndSort ? sortBy?.[0] : undefined,
+        order: applyFilterAndSort ? sortBy?.[1] : undefined
+    };
+}
+
 export function ExportCollectionAction<M extends Record<string, any>, USER extends User>({
     collection: inputCollection,
     path: inputPath,
     collectionEntitiesCount,
+    tableController,
     onAnalyticsEvent,
     exportAllowed,
     notAllowedView
@@ -57,6 +111,18 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const [flattenArrays, setFlattenArrays] = React.useState<boolean>(true);
     const [exportType, setExportType] = React.useState<"csv" | "json">("csv");
     const [dateExportType, setDateExportType] = React.useState<"timestamp" | "string">("string");
+    const [applyFilterAndSort, setApplyFilterAndSort] = React.useState<boolean>(true);
+
+    // the filter and sort currently applied in the collection view
+    const filterValues = tableController?.filterValues;
+    const sortBy = tableController?.sortBy;
+    const forceFilter = inputCollection.forceFilter;
+
+    const filterOrSortActive = React.useMemo(() => hasUserFilterOrSort<M>({
+        filterValues,
+        sortBy,
+        forceFilter
+    }), [filterValues, sortBy, forceFilter]);
 
     const authController = useAuthController();
     const { t } = useTranslation();
@@ -135,9 +201,24 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
             collection: collection.path
         });
         setDataLoading(true);
+
+        const {
+            filter,
+            orderBy,
+            order
+        } = resolveExportFilterAndSort<M>({
+            applyFilterAndSort: filterOrSortActive && applyFilterAndSort,
+            filterValues,
+            sortBy,
+            forceFilter
+        });
+
         dataSource.fetchCollection<M>({
             path,
-            collection
+            collection,
+            filter,
+            orderBy,
+            order
         })
             .then(async (data) => {
                 setDataLoadingError(undefined);
@@ -177,7 +258,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
             })
             .finally(() => setDataLoading(false));
 
-    }, [onAnalyticsEvent, dataSource, path, fetchAdditionalFields, includeUndefinedValues, flattenArrays, exportType, dateExportType]);
+    }, [onAnalyticsEvent, dataSource, path, fetchAdditionalFields, includeUndefinedValues, flattenArrays, exportType, dateExportType, filterOrSortActive, applyFilterAndSort, filterValues, sortBy, forceFilter]);
 
     const onOkClicked = useCallback(() => {
         doDownload(collection, exportConfig);
@@ -253,6 +334,12 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
                         </div>
                     </div>
                 </div>
+
+                {filterOrSortActive && <BooleanSwitchWithLabel
+                    size={"small"}
+                    value={applyFilterAndSort}
+                    onValueChange={setApplyFilterAndSort}
+                    label={t("export_apply_filter_sort")} />}
 
                 <BooleanSwitchWithLabel
                     size={"small"}
