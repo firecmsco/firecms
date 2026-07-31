@@ -23,12 +23,27 @@
   - If you override these CSS variables in your own app, your overrides still win — but check any colour you picked to match the old palette.
 - **`@firecms/ui` stylesheet**:
   - Fixed `@firecms/ui/index.css` failing to resolve. The build was emitting the stylesheet to `dist/src/index.css` while the package `exports` map publishes it as `dist/index.css`, so the import failed and apps rendered unstyled. Caused by a `vite-plugin-static-copy` 3 → 4 upgrade changing how a source path resolves against its destination; the file is now copied directly so it cannot move with a dependency bump.
+- **`pathSegments` on the datasource callbacks**:
+  - `fetchEntity`, `fetchCollection` and `saveEntity` (and their `listen` variants) now receive an optional `pathSegments?: string[]` alongside `path`.
+  - `path` is a single flattened string, so a **parent** entity id containing "/" could not be recovered from it: `"nodes/node/42/edges"` is indistinguishable from a three-level nesting. Leaf entities were always fine, because `entityId` is a separate field; the collection they live in was not. `pathSegments` is the unambiguous form — one element per real segment, entity ids kept whole however many slashes they contain:
+
+    ```
+    path:         "nodes/node/42/edges"
+    pathSegments: ["nodes", "node/42", "edges"]
+    ```
+
+  - **Nothing to do when upgrading.** The field is optional and additive; `path` keeps its exact meaning. For any backend whose ids cannot contain "/", `pathSegments` is exactly `path.split("/")` — pinned by a test — so Firestore is unaffected. Delegates that need it should prefer `pathSegments ?? path.split("/")`.
+  - Segments are produced where the collection/entity boundaries are actually known (the navigation entries) and threaded down, rather than re-derived from the flattened string. Subcollections rendered inside an entity extend them, so nesting stays correct at any depth.
+  - This removes the "slash-bearing parent id" limitation noted below.
+- **Entity history with slash-containing ids**:
+  - Fixed entity history breaking for ids containing "/". History is stored as a subcollection *under* the entity, so the id becomes a path segment: with an id like `edge/7` the path resolved somewhere else entirely, and on Firestore it flipped to an even segment count, which is rejected outright.
+  - The save callback, the history view and the last-edited indicator now share a single `buildEntityHistoryPath` helper that escapes the id. It is a no-op for any id without "/", "?", "#" or "%", so **existing histories do not move**.
 - **Entity IDs containing slashes**:
   - Entity IDs may now contain `/`, as well as `?`, `#` and `%`. Previously an ID with a slash was accepted without validation and then silently truncated at the first slash, shifting every following path segment.
   - Added `encodeEntityId` / `decodeEntityId`. IDs are escaped only inside URL-facing paths; navigation entry `path` fields, datasource paths and `EntityReference.path` continue to carry raw IDs, so the `DataSource` contract is unchanged.
   - Firestore is unaffected: it forbids `/` in document IDs, and the escaping is the identity function for any ID without `/ ? # %`.
   - Note for consumers: an ID containing a literal `%` now produces a different URL than before, and an existing link whose ID contains the literal text `%2F` will resolve differently. The exported `getNavigationEntriesFromPath`, `getParentReferencesFromPath` and `resolveNavigationFrom` now expect escaped IDs in their `path` argument.
-  - Known limitation: a slash-bearing ID in a *parent* position of a subcollection path remains ambiguous once flattened into the datasource path. Leaf entities are unaffected.
+  - A slash-bearing ID in a *parent* position of a subcollection path is resolved by `pathSegments` above; `path` alone remains ambiguous for it.
 - **Firebase module resolution**:
   - Fixed `Component auth has not been registered yet`, which threw on first render and left a blank page. `@firecms/firebase` depended on `@firebase/auth` directly at `*` while `firebase` was only a peer, giving auth its own resolution root: it registered its component into one `@firebase/app` instance while the app used another.
   - All Firebase imports across `@firecms/firebase`, `@firecms/cloud`, `@firecms/collection_editor_firebase`, `@firecms/datatalk` and `@firecms/firebase_admin` now use the `firebase` umbrella (`firebase/app`, `firebase/auth`, …) instead of the scoped `@firebase/*` packages.
