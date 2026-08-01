@@ -45,6 +45,8 @@ export interface BoardDataController<M extends Record<string, any> = any, COLUMN
 export interface UseBoardDataControllerProps<M extends Record<string, any> = any> {
     /** Full path to the collection */
     fullPath: string;
+    /** `fullPath` split at its real segment boundaries; forwarded to the datasource. */
+    pathSegments?: string[];
     /** The entity collection configuration */
     collection: EntityCollection<M>;
     /** Property key used for column assignment */
@@ -67,6 +69,7 @@ export interface UseBoardDataControllerProps<M extends Record<string, any> = any
  */
 export function useBoardDataController<M extends Record<string, any> = any, COLUMN extends string = string>({
     fullPath,
+    pathSegments,
     collection,
     columnProperty,
     columns,
@@ -80,6 +83,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     const dataSource = useDataSource(collection);
     const navigation = useNavigationController();
     const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
+    const resolvedPathSegments = useMemo(() => pathSegments ?? resolvedPath.split("/"), [pathSegments, resolvedPath]);
 
     // Stable refs for objects that shouldn't trigger re-subscriptions
     const dataSourceRef = useRef(dataSource);
@@ -95,11 +99,13 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     const orderPropertyRef = useRef(orderProperty);
     const searchStringRef = useRef(searchString);
     const resolvedPathRef = useRef(resolvedPath);
+    const resolvedPathSegmentsRef = useRef(resolvedPathSegments);
     filterValuesRef.current = filterValues;
     columnPropertyRef.current = columnProperty;
     orderPropertyRef.current = orderProperty;
     searchStringRef.current = searchString;
     resolvedPathRef.current = resolvedPath;
+    resolvedPathSegmentsRef.current = resolvedPathSegments;
 
     // Track item count per column for pagination
     const [columnItemCounts, setColumnItemCounts] = useState<Record<string, number>>(() => {
@@ -168,6 +174,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         const currentOrderProperty = orderPropertyRef.current;
         const currentSearchString = searchStringRef.current;
         const currentResolvedPath = resolvedPathRef.current;
+        const currentPathSegments = resolvedPathSegmentsRef.current;
 
         // Build filter for this column
         const columnFilter: FilterValues<string> = {
@@ -248,6 +255,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         if (currentDataSource.listenCollection) {
             const unsubscribe = currentDataSource.listenCollection<M>({
                 path: currentResolvedPath,
+                pathSegments: currentPathSegments,
                 collection: currentCollection,
                 onUpdate,
                 onError,
@@ -262,6 +270,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         } else {
             currentDataSource.fetchCollection<M>({
                 path: currentResolvedPath,
+                pathSegments: currentPathSegments,
                 collection: currentCollection,
                 searchString: currentSearchString,
                 filter: columnFilter,
@@ -297,6 +306,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
         const currentColumnProperty = columnPropertyRef.current;
         const currentSearchString = searchStringRef.current;
         const currentResolvedPath = resolvedPathRef.current;
+        const currentPathSegments = resolvedPathSegmentsRef.current;
         const currentColumns = columns;
         const currentColumnItemCounts = columnItemCounts;
 
@@ -316,6 +326,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                     };
                     currentDataSource.countEntities({
                         path: currentResolvedPath,
+                        pathSegments: currentPathSegments,
                         collection: currentCollection,
                         filter: columnFilter,
                         searchString: currentSearchString

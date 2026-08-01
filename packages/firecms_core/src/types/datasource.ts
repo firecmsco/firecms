@@ -279,6 +279,8 @@ export interface DataSource {
 }
 
 export type FilterCombinationValidProps = {
+    /** `path` split at its real segment boundaries — see `pathSegments` on FetchCollectionProps. */
+    pathSegments?: string[];
     path: string;
     collection: EntityCollection<any>;
     filterValues: FilterValues<any>;

@@ -789,6 +789,7 @@ export const EntityCollectionView = React.memo(
         // EntitiesCount fetches count and updates breadcrumb - no visual rendering needed here
         const countFetcher = <EntitiesCount
             fullPath={fullPath}
+            pathSegments={pathSegments}
             collection={collection}
             filter={tableController.filterValues}
             sortBy={tableController.sortBy}
@@ -933,6 +934,7 @@ export const EntityCollectionView = React.memo(
                         collection={collection}
                         tableController={tableController}
                         fullPath={fullPath}
+                        pathSegments={pathSegments}
                         parentCollectionIds={parentCollectionIds}
                         columnProperty={selectedKanbanProperty}
                         onEntityClick={onEntityClick}
@@ -1118,13 +1120,16 @@ function EntitiesCount({
     collection,
     filter,
     sortBy,
-    onCountChange
+    onCountChange,
+    pathSegments
 }: {
     fullPath: string,
     collection: EntityCollection,
     filter?: FilterValues<any>,
     sortBy?: [string, "asc" | "desc"],
     onCountChange?: (count: number) => void,
+    /** `fullPath` split at its real segment boundaries; forwarded to countEntities. */
+    pathSegments?: string[],
 }) {
 
     const dataSource = useDataSource(collection);
@@ -1135,17 +1140,19 @@ function EntitiesCount({
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
     const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
+    const resolvedPathSegments = useMemo(() => pathSegments ?? resolvedPath.split("/"), [pathSegments, resolvedPath]);
 
     useEffect(() => {
         if (dataSource.countEntities)
             dataSource.countEntities({
                 path: resolvedPath,
+                pathSegments: resolvedPathSegments,
                 collection,
                 filter,
                 orderBy: sortByProperty,
                 order: currentSort
             }).then(setCount).catch(setError);
-    }, [fullPath, dataSource.countEntities, resolvedPath, collection, filter, sortByProperty, currentSort]);
+    }, [fullPath, dataSource.countEntities, resolvedPath, resolvedPathSegments, collection, filter, sortByProperty, currentSort]);
 
     useEffect(() => {
         if (onCountChange && count !== undefined) {

@@ -108,6 +108,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
             return true;
         return dataSource.isFilterCombinationValid({
             path: resolvedPath,
+            pathSegments: resolvedPathSegments,
             collection,
             filterValues,
             sortBy

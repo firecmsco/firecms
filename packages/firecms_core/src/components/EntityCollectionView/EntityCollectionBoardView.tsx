@@ -42,6 +42,8 @@ export type EntityCollectionBoardViewProps<M extends Record<string, any> = any> 
     collection: EntityCollection<M>;
     tableController: EntityTableController<M>;
     fullPath: string;
+    /** `fullPath` split at its real segment boundaries; forwarded to the datasource. */
+    pathSegments?: string[];
     parentCollectionIds?: string[];
     columnProperty: string;
     onEntityClick?: (entity: Entity<M>) => void;
@@ -60,6 +62,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     collection,
     tableController,
     fullPath,
+    pathSegments,
     parentCollectionIds = [],
     columnProperty,
     onEntityClick,
@@ -169,6 +172,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
     // Use the new per-column data controller
     const boardDataController = useBoardDataController<M>({
         fullPath,
+        pathSegments,
         collection,
         columnProperty,
         columns,

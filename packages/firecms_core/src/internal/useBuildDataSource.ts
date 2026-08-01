@@ -341,12 +341,14 @@ export function useBuildDataSource({
 
         countEntities: delegate.countEntities ? async ({
             path,
+            pathSegments,
             collection,
             filter,
             order,
             orderBy
         }: {
             path: string,
+            pathSegments?: string[],
             collection: EntityCollection<any>,
             filter?: FilterValues<Extract<keyof any, string>>,
             orderBy?: string,
@@ -355,6 +357,7 @@ export function useBuildDataSource({
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
             return usedDelegate.countEntities!({
                 path,
+                pathSegments,
                 filter,
                 orderBy,
                 order,
@@ -364,11 +367,13 @@ export function useBuildDataSource({
 
         isFilterCombinationValid: useCallback(({
             path,
+            pathSegments,
             databaseId,
             filterValues,
             sortBy
         }: {
             path: string,
+            pathSegments?: string[],
             databaseId?: string,
             filterValues: FilterValues<any>,
             sortBy?: [string, "asc" | "desc"]
@@ -378,6 +383,7 @@ export function useBuildDataSource({
             return delegate.isFilterCombinationValid(
                 {
                     path,
+                    pathSegments,
                     databaseId,
                     filterValues,
                     sortBy
