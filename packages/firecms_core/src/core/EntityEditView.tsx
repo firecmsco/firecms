@@ -434,6 +434,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         fullIdPath={fullIdPath}
         collection={collection}
         path={path}
+        pathSegments={pathSegments}
         entityId={entityId ?? usedEntity?.id}
         onValuesModified={onValuesModified}
         entity={entity}

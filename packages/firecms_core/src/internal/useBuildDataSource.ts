@@ -331,15 +331,16 @@ export function useBuildDataSource({
             name: string,
             value: any,
             entityId?: string,
-            collection?: EntityCollection
+            collection?: EntityCollection,
+            pathSegments?: string[]
         ): Promise<boolean> => {
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
-            return usedDelegate.checkUniqueField(path, name, value, entityId, collection);
+            return usedDelegate.checkUniqueField(path, name, value, entityId, collection, pathSegments);
         }, [delegate.checkUniqueField]),
 
-        generateEntityId: useCallback((path: string, collection: EntityCollection): string => {
+        generateEntityId: useCallback((path: string, collection: EntityCollection, pathSegments?: string[]): string => {
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
-            return usedDelegate.generateEntityId(path, collection);
+            return usedDelegate.generateEntityId(path, collection, pathSegments);
         }, [delegate.generateEntityId]),
 
         countEntities: delegate.countEntities ? async ({

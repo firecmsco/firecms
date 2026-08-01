@@ -71,6 +71,11 @@ export type OnUpdateParams = {
 
 export type EntityFormProps<M extends Record<string, any>> = {
     path: string;
+    /**
+     * `path` split at its real segment boundaries; forwarded to the datasource for
+     * generateEntityId and checkUniqueField. Never derived from `path`.
+     */
+    pathSegments?: string[];
     fullIdPath?: string;
     collection: EntityCollection<M>;
     entityId?: string;
@@ -214,6 +219,7 @@ export function getChanges<T extends object>(source: Partial<T>, comparison: Par
 
 export function EntityForm<M extends Record<string, any>>({
     path,
+    pathSegments,
     fullIdPath,
     entityId: entityIdProp,
     collection,
@@ -292,7 +298,7 @@ export function EntityForm<M extends Record<string, any>>({
             if (mustSetCustomId) {
                 return undefined;
             } else {
-                return dataSource.generateEntityId(path, collection);
+                return dataSource.generateEntityId(path, collection, pathSegments);
             }
         } else {
             return entityIdProp;
@@ -692,7 +698,7 @@ export function EntityForm<M extends Record<string, any>>({
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
         name,
         value
-    }) => dataSource.checkUniqueField(path, name, value, entityId, collection),
+    }) => dataSource.checkUniqueField(path, name, value, entityId, collection, pathSegments),
         [dataSource, path, entityId]);
 
     const validationSchema = useMemo(() => entityId

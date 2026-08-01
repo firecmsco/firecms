@@ -141,3 +141,69 @@ describe("pathSegments correctness", () => {
     });
 
 });
+
+describe("positional signatures stay backwards compatible", () => {
+
+    it("forwards pathSegments to checkUniqueField and generateEntityId", async () => {
+        const { calls, dataSource } = build();
+
+        await dataSource.checkUniqueField("nodes", "slug", "x", "edge/99", collection, SEGMENTS);
+        dataSource.generateEntityId("nodes", collection, SEGMENTS);
+
+        // Appended last, so it arrives as the trailing argument.
+        expect(calls.checkUniqueField[0][5]).toEqual(SEGMENTS);
+        expect(calls.generateEntityId[0][2]).toEqual(SEGMENTS);
+    });
+
+    it("a delegate written against the OLD signature still works", async () => {
+        // The compatibility guarantee. This delegate predates pathSegments: it declares
+        // only the original parameters and knows nothing about the new one. TypeScript
+        // keeps it assignable because a function with fewer parameters is assignable to
+        // one with more, and at runtime the extra argument is simply ignored.
+        const seen: any[] = [];
+        const legacyDelegate = {
+            key: "legacy",
+            initialised: true,
+            fetchCollection: async () => [],
+            fetchEntity: async () => undefined,
+            saveEntity: async (p: any) => ({ id: "x", path: p.path, values: {} }),
+            deleteEntity: async () => undefined,
+            checkUniqueField: async (path: string, name: string, value: any, entityId?: string) => {
+                seen.push({ path, name, value, entityId });
+                return true;
+            },
+            generateEntityId: (path: string) => {
+                seen.push({ path });
+                return "legacy-id";
+            },
+            delegateToCMSModel: (d: any) => d,
+            cmsToDelegateModel: (d: any) => d
+        } as any;
+
+        const { result } = renderHook(() => useBuildDataSource({
+            delegate: legacyDelegate,
+            navigationController: { resolveIdsFrom: (p: string) => p } as any,
+            authController: { user: null } as any
+        }));
+
+        const unique = await result.current.checkUniqueField("nodes", "slug", "x", "edge/99", collection, SEGMENTS);
+        const id = result.current.generateEntityId("nodes", collection, SEGMENTS);
+
+        expect(unique).toBe(true);
+        expect(id).toEqual("legacy-id");
+        expect(seen[0]).toEqual({ path: "nodes", name: "slug", value: "x", entityId: "edge/99" });
+        expect(seen[1]).toEqual({ path: "nodes" });
+    });
+
+    it("callers that omit pathSegments still work", async () => {
+        // Existing call sites pass the original argument list and must be unaffected.
+        const { calls, dataSource } = build();
+
+        await dataSource.checkUniqueField("nodes", "slug", "x");
+        dataSource.generateEntityId("nodes", collection);
+
+        expect(calls.checkUniqueField[0][5]).toBeUndefined();
+        expect(calls.generateEntityId[0][2]).toBeUndefined();
+    });
+
+});

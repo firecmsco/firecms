@@ -250,13 +250,19 @@ export interface DataSource {
         name: string,
         value: any,
         entityId?: string,
-        collection?: EntityCollection
+        collection?: EntityCollection,
+        /**
+         * Appended last, and optional, so existing implementations and callers keep
+         * working unchanged — a function declaring fewer parameters stays assignable.
+         * See `pathSegments` on FetchCollectionProps.
+         */
+        pathSegments?: string[]
     ): Promise<boolean>;
 
     /**
      * Generate an id for a new entity
      */
-    generateEntityId(path: string, collection: EntityCollection): string;
+    generateEntityId(path: string, collection: EntityCollection, pathSegments?: string[]): string;
 
     /**
      * Count the number of entities in a collection
@@ -415,12 +421,12 @@ export interface DataSourceDelegate {
      * @param collection
      * @return `true` if there are no other fields besides the given entity
      */
-    checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection): Promise<boolean>;
+    checkUniqueField(path: string, name: string, value: any, entityId?: string, collection?: EntityCollection, pathSegments?: string[]): Promise<boolean>;
 
     /**
      * Generate an id for a new entity
      */
-    generateEntityId(path: string, collection?: EntityCollection): string;
+    generateEntityId(path: string, collection?: EntityCollection, pathSegments?: string[]): string;
 
     /**
      * Count the number of entities in a collection
