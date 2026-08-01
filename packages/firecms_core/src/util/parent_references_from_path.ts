@@ -5,12 +5,14 @@ export function getParentReferencesFromPath(props: {
     path: string,
     collections: EntityCollection[] | undefined,
     currentFullPath?: string,
+    currentPathSegments?: string[],
 }): EntityReference [] {
 
     const {
         path,
         collections = [],
         currentFullPath,
+        currentPathSegments = [],
     } = props;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -27,6 +29,9 @@ export function getParentReferencesFromPath(props: {
             const collectionPath = currentFullPath && currentFullPath.length > 0
                 ? (currentFullPath + "/" + collection.path)
                 : collection.path;
+            // A collection's own path may span several segments, and those are
+            // unambiguous, so they are spread rather than kept whole.
+            const collectionSegments = [...currentPathSegments, ...collection.path.split("/")];
 
             const restOfThePath = removeInitialAndTrailingSlashes(removeInitialAndTrailingSlashes(path).replace(subpathCombination, ""));
             const nextSegments = restOfThePath.length > 0 ? restOfThePath.split("/") : [];
@@ -35,7 +40,9 @@ export function getParentReferencesFromPath(props: {
                 // datasource-facing, so they carry the raw id.
                 const entityId = decodeEntityId(nextSegments[0]);
                 const fullPath = collectionPath + "/" + entityId;
-                result.push(new EntityReference(entityId, collectionPath));
+                // The id is ONE segment however many slashes it contains.
+                const entitySegments = [...collectionSegments, entityId];
+                result.push(new EntityReference(entityId, collectionPath, undefined, collectionSegments));
                 if (nextSegments.length > 1) {
                     const newPath = nextSegments.slice(1).join("/");
                     if (!collection) {
@@ -45,7 +52,8 @@ export function getParentReferencesFromPath(props: {
                         result.push(...getParentReferencesFromPath({
                             path: newPath,
                             collections: collection.subcollections,
-                            currentFullPath: fullPath
+                            currentFullPath: fullPath,
+                            currentPathSegments: entitySegments
                         }));
                     }
                 }

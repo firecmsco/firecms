@@ -55,7 +55,10 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
     const navigationController = useNavigationController();
 
     const path = navigationController.resolveIdsFrom(inputPath);
-    const pathSegments = inputPathSegments ?? path.split("/");
+    // Never fabricate segments. If the caller did not thread them, pass undefined so a
+    // delegate can tell "not provided" from a real answer — splitting `path` here would
+    // produce a confidently wrong array for any id containing "/".
+    const pathSegments = inputPathSegments;
 
     const context: FireCMSContext<USER> = useFireCMSContext();
 
@@ -68,6 +71,12 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
         setDataLoading(true);
 
         const onEntityUpdate = async (updatedEntity: Entity<M> | undefined) => {
+            // Attach the segments this entity was loaded with, so anything derived from it
+            // later — a reference, a delete — stays resolvable without re-deriving them
+            // from the flattened path. Delegates are not required to set this themselves.
+            if (updatedEntity && pathSegments && !updatedEntity.pathSegments) {
+                updatedEntity = { ...updatedEntity, pathSegments };
+            }
             if (collection.callbacks?.onFetch && updatedEntity) {
                 try {
                     updatedEntity = await collection.callbacks.onFetch({

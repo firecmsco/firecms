@@ -142,7 +142,9 @@ export function getReferenceFrom<M extends Record<string, any>>(entity: Entity<M
     if (!entity) {
         throw new Error("getReferenceFrom: entity is null or undefined");
     }
-    return new EntityReference(entity.id, entity.path, entity.databaseId);
+    // Carry the segments the entity was loaded with, so a reference to an entity under a
+    // slash-bearing parent stays resolvable. Undefined when the entity does not have them.
+    return new EntityReference(entity.id, entity.path, entity.databaseId, entity.pathSegments);
 }
 
 export function traverseValuesProperties<M extends Record<string, any>>(

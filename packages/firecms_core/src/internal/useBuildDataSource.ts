@@ -303,12 +303,15 @@ export function useBuildDataSource({
         deleteEntity: useCallback(<M extends Record<string, any>>(
             {
                 entity,
+                pathSegments,
                 collection
             }: DeleteEntityProps<M>
         ): Promise<void> => {
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
             return usedDelegate.deleteEntity({
                 entity,
+                // Falls back to what the entity carries from the fetch that produced it.
+                pathSegments: pathSegments ?? entity.pathSegments,
                 collection
             });
         }, [delegate.deleteEntity]),

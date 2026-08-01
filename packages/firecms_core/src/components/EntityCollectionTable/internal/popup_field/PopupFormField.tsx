@@ -26,6 +26,8 @@ import { OnCellValueChangeParams } from "../../../common";
 interface PopupFormFieldProps<M extends Record<string, any>> {
     customFieldValidator?: CustomFieldValidator;
     path: string;
+    /** `path` split at its real segment boundaries; forwarded to the datasource. */
+    pathSegments?: string[];
     entityId: string;
     tableKey: string;
     propertyKey?: Extract<keyof M, string>;
@@ -54,6 +56,7 @@ export function PopupFormFieldLoading<M extends Record<string, any>>({
                                                                          propertyKey,
                                                                          collection: inputCollection,
                                                                          path,
+                                                                         pathSegments,
                                                                          cellRect,
                                                                          open,
                                                                          onClose,
@@ -66,11 +69,12 @@ export function PopupFormFieldLoading<M extends Record<string, any>>({
         if (entityId && inputCollection) {
             dataSource.fetchEntity({
                 path,
+                pathSegments,
                 entityId,
                 collection: inputCollection
             }).then(setEntity);
         }
-    }, [entityId, inputCollection, dataSource, path]);
+    }, [entityId, inputCollection, dataSource, path, pathSegments]);
 
     if (!entity) return null;
     return <PopupFormFieldInternal {...{

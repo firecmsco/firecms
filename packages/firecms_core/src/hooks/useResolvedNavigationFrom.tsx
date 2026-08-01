@@ -86,6 +86,8 @@ export function resolveNavigationFrom<M extends Record<string, any>, USER extend
                 }
                 return dataSource.fetchEntity({
                     path: entry.path,
+                    // The navigation entry already knows the real segment boundaries.
+                    pathSegments: entry.pathSegments,
                     entityId: entry.entityId,
                     collection
                 })

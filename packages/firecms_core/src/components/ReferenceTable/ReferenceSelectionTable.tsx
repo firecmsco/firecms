@@ -44,6 +44,15 @@ export interface ReferenceSelectionInnerProps<M extends Record<string, any>> {
      * dynamic. If not set, the dialog won't open.
      */
     path: string;
+    /**
+     * `path` split at its real segment boundaries, when the caller knows them.
+     *
+     * Left undefined by default and deliberately NOT derived from `path`: a reference
+     * path comes from a property's configuration, so there is no entity chain to recover
+     * the boundaries from. Splitting it would silently produce the wrong segments for a
+     * subcollection under a slash-bearing parent id, which is worse than not answering.
+     */
+    pathSegments?: string[];
 
     /**
      * If you are opening the dialog for the first time, you can select some
@@ -96,6 +105,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         multiselect,
         collection,
         path: pathInput,
+        pathSegments,
         selectedEntityIds: selectedEntityIdsProp,
         description,
         forceFilter,
@@ -153,6 +163,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                 selectedEntityIds.map((entityId) =>
                     dataSource.fetchEntity({
                         path: fullPath,
+                        pathSegments,
                         entityId,
                         collection
                     })))

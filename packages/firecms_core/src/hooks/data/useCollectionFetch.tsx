@@ -13,6 +13,12 @@ export interface CollectionFetchProps<M extends Record<string, any>> {
      * Absolute collection path
      */
     path: string;
+    /**
+     * `path` split at its real segment boundaries. Forwarded to the datasource so a parent
+     * entity id containing "/" stays unambiguous. Never derived from `path` — see
+     * `pathSegments` on the datasource props.
+     */
+    pathSegments?: string[];
 
     /**
      * collection of the entity displayed by this collection
@@ -63,6 +69,7 @@ export interface CollectionFetchResult<M extends Record<string, any>> {
 export function useCollectionFetch<M extends Record<string, any>, USER extends User>(
     {
         path: inputPath,
+        pathSegments,
         collection,
         filterValues,
         sortBy,
@@ -91,6 +98,10 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
         setDataLoading(true);
 
         const onEntitiesUpdate = async (entities: Entity<M>[]) => {
+            // See useEntityFetch: entities carry the segments they were loaded with.
+            if (pathSegments) {
+                entities = entities.map(e => e.pathSegments ? e : { ...e, pathSegments });
+            }
             if (collection.callbacks?.onFetch) {
                 try {
                     entities = await Promise.all(
@@ -124,6 +135,7 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
         if (dataSource.listenCollection) {
             return dataSource.listenCollection<M>({
                 path,
+                pathSegments,
                 collection,
                 onUpdate: onEntitiesUpdate,
                 onError,
@@ -137,6 +149,7 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
         } else {
             dataSource.fetchCollection<M>({
                 path,
+                pathSegments,
                 collection,
                 searchString,
                 filter: filterValues,

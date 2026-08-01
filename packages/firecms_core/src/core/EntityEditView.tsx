@@ -361,9 +361,11 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         const newFullIdPath = fullIdPath && usedEntity ? `${fullIdPath}/${encodeEntityId(usedEntity.id)}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
         // The subcollection sits under this entity, so its segments are ours plus this
         // entity's id (kept whole, slashes and all) plus the subcollection's own path.
-        const newPathSegments = usedEntity
+        // Only extendable when we were given real segments — deriving the parent chain
+        // from the flattened `path` would drop the boundary of a slash-bearing parent id.
+        const newPathSegments = usedEntity && pathSegments
             ? [
-                ...(pathSegments ?? path.split("/")),
+                ...pathSegments,
                 usedEntity.id,
                 ...removeInitialAndTrailingSlashes(subcollection.path).split("/")
             ]

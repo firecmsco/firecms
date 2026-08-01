@@ -1065,6 +1065,7 @@ export const EntityCollectionView = React.memo(
 
                 {popupCell && <PopupFormField
                     key={`popup_form_${popupCell?.propertyKey}_${popupCell?.entityId}`}
+                    pathSegments={pathSegments}
                     open={Boolean(popupCell)}
                     onClose={onPopupClose}
                     cellRect={popupCell?.cellRect}
@@ -1140,7 +1141,7 @@ function EntitiesCount({
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
     const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
-    const resolvedPathSegments = useMemo(() => pathSegments ?? resolvedPath.split("/"), [pathSegments, resolvedPath]);
+    const resolvedPathSegments = pathSegments;
 
     useEffect(() => {
         if (dataSource.countEntities)

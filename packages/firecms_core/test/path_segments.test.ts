@@ -5,6 +5,9 @@ import {
     NavigationViewEntityInternal
 } from "../src/util/navigation_from_path";
 import { buildSidePanelsFromUrl } from "../src/internal/useBuildSideEntityController";
+import { getParentReferencesFromPath } from "../src/util/parent_references_from_path";
+import { getReferenceFrom } from "../src/util/entities";
+import { EntityReference } from "../src/types";
 
 /**
  * `pathSegments` is the unambiguous form of `path`.
@@ -134,6 +137,53 @@ describe("pathSegments — side panels", () => {
         const last = panels.at(-1)!;
         expect(last.entityId).toEqual("c/d");
         expect(last.pathSegments).toEqual(["products", "a/b", "locales"]);
+    });
+
+});
+
+describe("pathSegments — references and entities", () => {
+
+    it("parent references carry unambiguous segments", () => {
+        const refs = getParentReferencesFromPath({
+            path: "products/a%2Fb/locales/c%2Fd",
+            collections
+        });
+
+        expect(refs.map(r => r.id)).toEqual(["a/b", "c/d"]);
+        // The outer reference lives directly in "products"...
+        expect(refs[0].pathSegments).toEqual(["products"]);
+        // ...the inner one under the slash-bearing parent, which `path` alone cannot express.
+        expect(refs[1].path).toEqual("products/a/b/locales");
+        expect(refs[1].pathSegments).toEqual(["products", "a/b", "locales"]);
+    });
+
+    it("a reference built from an entity carries the entity's segments", () => {
+        const entity = {
+            id: "c/d",
+            path: "products/a/b/locales",
+            pathSegments: ["products", "a/b", "locales"],
+            values: {}
+        };
+
+        const ref = getReferenceFrom(entity as any);
+
+        expect(ref.id).toEqual("c/d");
+        expect(ref.pathSegments).toEqual(["products", "a/b", "locales"]);
+    });
+
+    it("a reference from an entity without segments has none — it does not invent them", () => {
+        const entity = { id: "c/d", path: "products/a/b/locales", values: {} };
+
+        expect(getReferenceFrom(entity as any).pathSegments).toBeUndefined();
+    });
+
+    it("EntityReference keeps segments distinct from the flattened path", () => {
+        const ref = new EntityReference("c/d", "products/a/b/locales", undefined, ["products", "a/b", "locales"]);
+
+        expect(ref.pathWithId).toEqual("products/a/b/locales/c/d");
+        // The flattened form is lossy; the segments are not.
+        expect(ref.pathSegments).toHaveLength(3);
+        expect(ref.path.split("/")).toHaveLength(4);
     });
 
 });

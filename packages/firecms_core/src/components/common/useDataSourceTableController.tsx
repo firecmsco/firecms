@@ -95,8 +95,8 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const navigation = useNavigationController();
     const dataSource = useDataSource(collection);
     const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
-    const resolvedPathSegments = useMemo(() => pathSegments ?? resolvedPath.split("/"),
-        [pathSegments, resolvedPath]);
+    // Passed through as-is; never derived from `resolvedPath` (see useEntityFetch).
+    const resolvedPathSegments = pathSegments;
 
     const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
@@ -235,6 +235,11 @@ export function useDataSourceTableController<M extends Record<string, any> = any
         setDataLoading(true);
 
         const onEntitiesUpdate = async (entities: Entity<M>[]) => {
+            // See useEntityFetch: entities carry the segments they were loaded with, so a
+            // reference or a delete derived from a table row stays resolvable.
+            if (resolvedPathSegments) {
+                entities = entities.map(e => e.pathSegments ? e : { ...e, pathSegments: resolvedPathSegments });
+            }
             if (collection.callbacks?.onFetch) {
                 try {
                     entities = await Promise.all(

@@ -104,7 +104,7 @@ export async function saveEntityWithCallbacks<M extends Record<string, any>, USE
     return dataSource.saveEntity({
         collection,
         path: resolvedPath,
-        pathSegments: pathSegments ?? resolvedPath.split("/"),
+        pathSegments,
         entityId,
         values: updatedValues,
         previousValues,

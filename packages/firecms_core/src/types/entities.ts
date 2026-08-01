@@ -22,6 +22,17 @@ export interface Entity<M extends object = any> {
     path: string;
 
     /**
+     * `path` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
+     *
+     * `path` is a single flattened string, so a parent entity id containing "/" cannot be
+     * recovered from it. This keeps each segment whole.
+     *
+     * Optional, and never derived by splitting `path` — a guess would be wrong in exactly
+     * the case the field exists for. Absent means "not known here", not "no slashes".
+     */
+    pathSegments?: string[];
+
+    /**
      * Current values
      */
     values: EntityValues<M>;
@@ -55,10 +66,22 @@ export class EntityReference {
      */
     readonly databaseId?: string;
 
-    constructor(id: string, path: string, databaseId?: string) {
+    /**
+     * `path` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
+     *
+     * `path` is a single flattened string, so a parent entity id containing "/" cannot be
+     * recovered from it. This keeps each segment whole.
+     *
+     * Optional, and never derived by splitting `path` — a guess would be wrong in exactly
+     * the case the field exists for. Absent means "not known here", not "no slashes".
+     */
+    readonly pathSegments?: string[];
+
+    constructor(id: string, path: string, databaseId?: string, pathSegments?: string[]) {
         this.id = id;
         this.path = path;
         this.databaseId = databaseId;
+        this.pathSegments = pathSegments;
     }
 
     get pathWithId() {

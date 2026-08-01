@@ -81,6 +81,8 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
         }
     }
     return dataSource.deleteEntity({
+        // Carried by the entity from the fetch that produced it; undefined if unknown.
+        pathSegments: entity.pathSegments,
         entity,
         collection
     }).then(() => {

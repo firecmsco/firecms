@@ -106,6 +106,11 @@ export interface SaveEntityProps<M extends Record<string, any> = any> {
  */
 export interface DeleteEntityProps<M extends Record<string, any> = any> {
     entity: Entity<M>;
+    /**
+     * `entity.path` split at its real segment boundaries, when the caller knows them.
+     * Never derived from `entity.path` — see `pathSegments` on FetchCollectionProps.
+     */
+    pathSegments?: string[];
     collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
 }
 

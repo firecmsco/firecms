@@ -83,7 +83,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     const dataSource = useDataSource(collection);
     const navigation = useNavigationController();
     const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
-    const resolvedPathSegments = useMemo(() => pathSegments ?? resolvedPath.split("/"), [pathSegments, resolvedPath]);
+    const resolvedPathSegments = pathSegments;
 
     // Stable refs for objects that shouldn't trigger re-subscriptions
     const dataSourceRef = useRef(dataSource);
