@@ -23,7 +23,7 @@
         "fast-csv": "^4.3.6",
         "firebase-admin": "^14.2.0",
         "firebase-functions": "^7.3.2",
-        "firebase-tools": "^15.22.0",
+        "firebase-tools": "^15.25.0",
         "md5": "^2.3.0",
         "meilisearch": "^0.32.5",
         "typesense": "^1.7.2"
