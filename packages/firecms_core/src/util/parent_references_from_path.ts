@@ -1,11 +1,26 @@
 import { EntityCollection, EntityReference } from "../types";
-import { decodeEntityId, getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
+import {
+    decodeEntityId,
+    getCollectionPathsCombinations,
+    removeInitialAndTrailingSlashes,
+    walkPathSegments
+} from "./navigation_utils";
 
+/**
+ * References to every parent entity in a path.
+ *
+ * NOTE on encoding: `path` is expected ESCAPED, because it comes from the URL — the entity
+ * ids in it are decoded on the way out. Pass `pathSegments` instead whenever the path at
+ * hand is a raw datasource path (`entity.path`), which is not escaped and whose ids may
+ * therefore contain a bare "/": splitting that would silently produce the wrong references.
+ */
 export function getParentReferencesFromPath(props: {
     path: string,
     collections: EntityCollection[] | undefined,
     currentFullPath?: string,
     currentPathSegments?: string[],
+    /** `path` split at its real segment boundaries, with RAW ids. Takes precedence. */
+    pathSegments?: string[],
 }): EntityReference [] {
 
     const {
@@ -13,7 +28,12 @@ export function getParentReferencesFromPath(props: {
         collections = [],
         currentFullPath,
         currentPathSegments = [],
+        pathSegments,
     } = props;
+
+    if (pathSegments) {
+        return getParentReferencesFromPathSegments(pathSegments, collections);
+    }
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
@@ -63,4 +83,15 @@ export function getParentReferencesFromPath(props: {
 
     }
     return result;
+}
+
+/**
+ * The segment-wise counterpart: the boundaries are given, so an entity id keeps its
+ * slashes and nothing has to be decoded.
+ */
+export function getParentReferencesFromPathSegments(pathSegments: string[],
+                                                    collections: EntityCollection[]): EntityReference[] {
+    return walkPathSegments(pathSegments, collections).steps
+        .filter(step => step.entityId !== undefined)
+        .map(step => new EntityReference(step.entityId!, step.collectionPath, undefined, step.collectionSegments));
 }

@@ -685,7 +685,9 @@ export const EntityCollectionView = React.memo(
                     width: 260,
                     dependencies: [],
                     Builder: ({ entity }) => {
-                        const collectionsWithPath = navigation.getParentReferencesFromPath(entity.path);
+                        // `entity.path` is a RAW datasource path, so its segments are passed:
+                        // splitting it would mis-read any parent id containing "/".
+                        const collectionsWithPath = navigation.getParentReferencesFromPath(entity.path, entity.pathSegments);
                         return (
                             <div className={"flex flex-col gap-2 w-full"}>
                                 {collectionsWithPath.map((reference) => {

@@ -178,3 +178,73 @@ describe("useDataSourceTableController", () => {
     });
 
 });
+
+/**
+ * `onFetch` is the read-side collection callback. It receives a `path` and, until now, no
+ * way to learn the segments describing it — so a callback that wanted to address the
+ * datasource itself had to re-derive them, wrongly, from the flattened path.
+ */
+describe("onFetch callbacks", () => {
+
+    const collectionWithOnFetch = (onFetch: (props: any) => any) => ({
+        ...collection,
+        callbacks: { onFetch }
+    }) as any;
+
+    it("useEntityFetch passes the segments to onFetch", async () => {
+        let seen: any;
+        renderHook(() => useEntityFetch({
+            path: PATH,
+            pathSegments: SEGMENTS,
+            entityId: "edge/99",
+            collection: collectionWithOnFetch(p => { seen = p; return p.entity; })
+        }));
+
+        await waitFor(() => expect(seen).toBeDefined());
+        expect(seen.pathSegments).toEqual(SEGMENTS);
+        // Three segments, not the four that splitting `path` would produce.
+        expect(seen.pathSegments).toHaveLength(3);
+        // The entity handed to the callback is already stamped with them.
+        expect(seen.entity.pathSegments).toEqual(SEGMENTS);
+    });
+
+    it("useCollectionFetch passes the segments to onFetch", async () => {
+        let seen: any;
+        renderHook(() => useCollectionFetch({
+            path: PATH,
+            pathSegments: SEGMENTS,
+            collection: collectionWithOnFetch(p => { seen = p; return p.entity; }),
+            itemCount: 10
+        }));
+
+        await waitFor(() => expect(seen).toBeDefined());
+        expect(seen.pathSegments).toEqual(SEGMENTS);
+        expect(seen.entity.pathSegments).toEqual(SEGMENTS);
+    });
+
+    it("does not invent them when the caller threaded none", async () => {
+        let seen: any;
+        renderHook(() => useEntityFetch({
+            path: PATH,
+            entityId: "edge/99",
+            collection: collectionWithOnFetch(p => { seen = p; return p.entity; })
+        }));
+
+        await waitFor(() => expect(seen).toBeDefined());
+        expect(seen.pathSegments).toBeUndefined();
+    });
+
+    it("useDataSourceTableController passes them to onFetch", async () => {
+        let seen: any;
+        const { useDataSourceTableController } = require("../src/components/common/useDataSourceTableController");
+        renderHook(() => useDataSourceTableController({
+            fullPath: PATH,
+            pathSegments: SEGMENTS,
+            collection: collectionWithOnFetch(p => { seen = p; return p.entity; })
+        }), { wrapper: Router });
+
+        await waitFor(() => expect(seen).toBeDefined(), { timeout: 15000 });
+        expect(seen.pathSegments).toEqual(SEGMENTS);
+    }, 30000);
+
+});

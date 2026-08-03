@@ -519,10 +519,11 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         return resolveCollectionPathSegments(pathSegments, collections);
     }, []);
 
-    const getAllParentReferencesForPath = useCallback((path: string): EntityReference[] => {
+    const getAllParentReferencesForPath = useCallback((path: string, pathSegments?: string[]): EntityReference[] => {
         const collections = collectionsRef.current ?? [];
         return getParentReferencesFromPath({
             path,
+            pathSegments,
             collections
         });
     }, []);

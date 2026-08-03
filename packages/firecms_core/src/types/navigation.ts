@@ -153,10 +153,15 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
     refreshNavigation: () => void;
 
     /**
-     * Retrieve all the related parent references for a given path
+     * Retrieve all the related parent references for a given path.
+     *
+     * `path` is expected escaped, as it comes from the URL. Pass `pathSegments` when the
+     * path at hand is a raw datasource path, whose ids may contain a bare "/".
+     *
      * @param path
+     * @param pathSegments `path` split at its real segment boundaries, with raw ids
      */
-    getParentReferencesFromPath: (path: string) => EntityReference[];
+    getParentReferencesFromPath: (path: string, pathSegments?: string[]) => EntityReference[];
 
     /**
      * Retrieve all the related parent collection ids for a given path

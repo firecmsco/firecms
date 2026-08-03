@@ -93,11 +93,23 @@ export function getLastSegment(path: string) {
  * The outcome of walking a segment chain against a collection tree.
  * @group Hooks and utilities
  */
+export type PathSegmentsWalkStep = {
+    collection: EntityCollection;
+    /** Resolved path of this collection, e.g. `"products/pid/locales"`. */
+    collectionPath: string;
+    /** `collectionPath` split at its real segment boundaries. */
+    collectionSegments: string[];
+    /** The entity addressed inside it, when the chain continues past the collection. */
+    entityId?: string;
+};
+
 export type PathSegmentsWalk = {
     /** Segments with every collection id replaced by the collection's real `path`. */
     resolved: string[];
     /** The collection the chain ends in, if the whole chain matched. */
     collection?: EntityCollection;
+    /** One entry per collection level traversed, outermost first. */
+    steps: PathSegmentsWalkStep[];
     /** The first segment that could not be matched, if the walk stopped early. */
     unmatched?: string;
 };
@@ -117,6 +129,7 @@ export type PathSegmentsWalk = {
 export function walkPathSegments(pathSegments: string[], allCollections: EntityCollection[]): PathSegmentsWalk {
 
     const resolved: string[] = [];
+    const steps: PathSegmentsWalkStep[] = [];
     let currentCollections: EntityCollection[] | undefined = allCollections;
     let index = 0;
 
@@ -128,6 +141,7 @@ export function walkPathSegments(pathSegments: string[], allCollections: EntityC
             resolved.push(...remaining);
             return {
                 resolved,
+                steps,
                 unmatched: remaining[0]
             };
         }
@@ -149,6 +163,7 @@ export function walkPathSegments(pathSegments: string[], allCollections: EntityC
             resolved.push(...remaining);
             return {
                 resolved,
+                steps,
                 unmatched: remaining[0]
             };
         }
@@ -156,15 +171,24 @@ export function walkPathSegments(pathSegments: string[], allCollections: EntityC
         resolved.push(...removeInitialAndTrailingSlashes(match.collection.path).split("/"));
         index += match.length;
 
+        const step: PathSegmentsWalkStep = {
+            collection: match.collection,
+            collectionPath: resolved.join("/"),
+            collectionSegments: [...resolved]
+        };
+        steps.push(step);
+
         // The chain ends on a collection, which is the one being addressed.
         if (index >= pathSegments.length) {
             return {
                 resolved,
+                steps,
                 collection: match.collection
             };
         }
 
         // Exactly one segment is the entity id, however many slashes it contains.
+        step.entityId = pathSegments[index];
         resolved.push(pathSegments[index]);
         index += 1;
 
@@ -172,6 +196,7 @@ export function walkPathSegments(pathSegments: string[], allCollections: EntityC
         if (index >= pathSegments.length) {
             return {
                 resolved,
+                steps,
                 collection: match.collection
             };
         }
@@ -179,7 +204,7 @@ export function walkPathSegments(pathSegments: string[], allCollections: EntityC
         currentCollections = match.collection.subcollections;
     }
 
-    return { resolved };
+    return { resolved, steps };
 }
 
 /**
