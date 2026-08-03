@@ -146,6 +146,8 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
         blockSearch?: (props: {
             context: FireCMSContext,
             path: string,
+            /** `path` split at its real segment boundaries, when known. */
+            pathSegments?: string[],
             collection: EC,
             parentCollectionIds?: string[]
         }) => boolean;
@@ -153,6 +155,8 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
         showTextSearchBar?: (props: {
             context: FireCMSContext,
             path: string,
+            /** `path` split at its real segment boundaries, when known. */
+            pathSegments?: string[],
             collection: EC,
             parentCollectionIds?: string[]
         }) => boolean;
@@ -160,6 +164,8 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
         onTextSearchClick?: (props: {
             context: FireCMSContext,
             path: string,
+            /** `path` split at its real segment boundaries, when known. */
+            pathSegments?: string[],
             collection: EC,
             parentCollectionIds?: string[]
         }) => Promise<boolean>;

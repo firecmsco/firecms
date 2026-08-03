@@ -6,6 +6,8 @@ import { useCustomizationController, useDataSource, useFireCMSContext } from "..
 export interface UseTableSearchHelperParams<M extends Record<string, any>> {
     collection: EntityCollection<M>;
     fullPath: string;
+    /** `fullPath` split at its real segment boundaries, when known. Never derived from it. */
+    pathSegments?: string[];
     parentCollectionIds?: string[];
     /**
      * Search term that is already being applied without the user having gone through the
@@ -18,6 +20,7 @@ export interface UseTableSearchHelperParams<M extends Record<string, any>> {
 export function useTableSearchHelper<M extends Record<string, any>>({
                                                                         collection,
                                                                         fullPath,
+                                                                        pathSegments,
                                                                         parentCollectionIds,
                                                                         initialSearchString
                                                                     }: UseTableSearchHelperParams<M>) {
@@ -36,6 +39,7 @@ export function useTableSearchHelper<M extends Record<string, any>>({
     const props = {
         context,
         path: fullPath,
+        pathSegments,
         databaseId: collection.databaseId,
         collection,
         parentCollectionIds
@@ -62,6 +66,7 @@ export function useTableSearchHelper<M extends Record<string, any>>({
                             promises.push(p.collectionView.onTextSearchClick({
                                 context,
                                 path: fullPath,
+                                pathSegments,
                                 collection,
                                 parentCollectionIds
                             }));

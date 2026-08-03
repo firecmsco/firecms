@@ -289,6 +289,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         textSearchEnabled
     } =
         useTableSearchHelper({
+            pathSegments,
             collection,
             fullPath,
         });

@@ -183,6 +183,38 @@ describe("pathSegments is never dropped at a call site", () => {
         expect(found).toEqual(withoutSegments);
     });
 
+    /**
+     * The components that carry the chain down to the datasource. `countEntities` is issued
+     * by `EntitiesCount`, which is fed by `EntityCollectionView`, which for a subcollection
+     * is rendered by `EntityEditView` — if any link in that JSX chain omits the prop, the
+     * count call at the bottom silently loses its segments, which is what was reported.
+     */
+    it.each(["EntityCollectionView", "EntityEditView", "EntitiesCount", "EntityCollectionBoardView"])(
+        "<%s> is always given pathSegments", (component) => {
+            const open = new RegExp(`<${component}\\b`, "g");
+            const offenders: string[] = [];
+
+            for (const file of files) {
+                const code = stripComments(fs.readFileSync(file, "utf8"));
+                for (const m of code.matchAll(open)) {
+                    // Read to the end of the opening tag, tolerating nested {...} expressions.
+                    let depth = 0;
+                    let end = m.index;
+                    for (let i = m.index; i < code.length; i++) {
+                        if (code[i] === "{") depth++;
+                        else if (code[i] === "}") depth--;
+                        else if (code[i] === ">" && depth === 0) { end = i; break; }
+                    }
+                    const tag = code.slice(m.index, end + 1);
+                    if (!/pathSegments/.test(tag)) {
+                        offenders.push(`${path.relative(PACKAGES, file)}:${code.slice(0, m.index).split("\n").length}`);
+                    }
+                }
+            }
+
+            expect(offenders).toEqual([]);
+        });
+
     it("every call carrying a path also carries its segments", () => {
         // There is deliberately no allowlist: a site that genuinely has no segments says so
         // at the call, as `pathSegments: undefined` with the reason next to it, where a

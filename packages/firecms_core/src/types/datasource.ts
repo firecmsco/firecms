@@ -283,6 +283,10 @@ export interface DataSource {
     initTextSearch?: (props: {
         context: FireCMSContext,
         path: string,
+    /**
+     * `path` split at its real segment boundaries, when known. Never derived from `path`.
+     */
+    pathSegments?: string[],
         collection: EntityCollection,
         parentCollectionIds?: string[]
     }) => Promise<boolean>;
@@ -453,6 +457,10 @@ export interface DataSourceDelegate {
     initTextSearch?: (props: {
         context: FireCMSContext,
         path: string,
+    /**
+     * `path` split at its real segment boundaries, when known. Never derived from `path`.
+     */
+    pathSegments?: string[],
         databaseId?: string,
         collection: EntityCollection,
         parentCollectionIds?: string[]

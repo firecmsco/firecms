@@ -854,6 +854,7 @@ export const EntityCollectionView = React.memo(
             onTextSearchClick,
             textSearchEnabled
         } = useTableSearchHelper({
+            pathSegments,
             collection,
             fullPath: resolvedFullPath,
             parentCollectionIds,
