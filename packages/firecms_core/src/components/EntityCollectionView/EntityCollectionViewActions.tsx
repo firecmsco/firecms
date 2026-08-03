@@ -59,7 +59,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
 
     const selectedEntities = selectionController.selectedEntities;
 
-    const addButton = canCreateEntity(collection, authController, path, null) &&
+    const addButton = canCreateEntity(collection, authController, path, null, pathSegments) &&
         onNewClick && (largeLayout
             ? <Button
                 id={`add_entity_${path}`}
@@ -78,7 +78,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 <AddIcon size={"small"} />
             </Button>);
 
-    const multipleDeleteEnabled = canDeleteEntity(collection, authController, path, null);
+    const multipleDeleteEnabled = canDeleteEntity(collection, authController, path, null, pathSegments);
 
     let multipleDeleteButton: React.ReactNode | undefined;
     if (selectionEnabled) {

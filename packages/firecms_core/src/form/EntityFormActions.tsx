@@ -26,6 +26,8 @@ export interface EntityFormActionsProps {
     fullIdPath?: string;
     collection: ResolvedEntityCollection;
     path: string;
+    /** `path` split at its real segment boundaries, when known. Never derived from `path`. */
+    pathSegments?: string[];
     entity?: Entity;
     layout: "bottom" | "side";
     savingError?: Error;

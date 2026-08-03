@@ -641,7 +641,7 @@ export function EntityForm<M extends Record<string, any>>({
     const plugins = customizationController.plugins;
 
     const actionsDisabled = disabled || formex.isSubmitting || (status === "existing" && !formex.dirty) || Boolean(disabledProp);
-    const parentCollectionIds = navigationController.getParentCollectionIds(path);
+    const parentCollectionIds = navigationController.getParentCollectionIds(path, pathSegments);
 
     if (plugins && collection) {
         const actionProps: PluginFormActionProps = {
@@ -909,6 +909,7 @@ export function EntityForm<M extends Record<string, any>>({
     const dialogActions = <EntityFormActionsComponent
         collection={resolvedCollection}
         path={path}
+        pathSegments={pathSegments}
         fullPath={path}
         fullIdPath={fullIdPath}
         entity={entity}

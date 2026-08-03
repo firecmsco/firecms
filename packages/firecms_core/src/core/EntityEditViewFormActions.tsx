@@ -39,6 +39,7 @@ import { ErrorTooltip } from "../components/ErrorTooltip";
 export function EntityEditViewFormActions({
                                               collection,
                                               path,
+                                              pathSegments,
                                               entity,
                                               layout,
                                               savingError,
@@ -63,8 +64,8 @@ export function EntityEditViewFormActions({
         const customEntityActions = (collection.entityActions ?? [])
             .map(action => resolveEntityAction(action, customizationController.entityActions))
             .filter(Boolean) as EntityAction[];
-        const createEnabled = canCreateEntity(collection, authController, path, null);
-        const deleteEnabled = entity ? canDeleteEntity(collection, authController, path, entity) : false;
+        const createEnabled = canCreateEntity(collection, authController, path, null, pathSegments);
+        const deleteEnabled = entity ? canDeleteEntity(collection, authController, path, entity, entity.pathSegments ?? pathSegments) : false;
         const actions: EntityAction[] = [];
         if (createEnabled)
             actions.push(copyEntityAction);

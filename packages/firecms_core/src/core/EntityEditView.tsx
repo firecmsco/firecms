@@ -130,7 +130,7 @@ export function EntityEditView<M extends Record<string, any>, USER extends User>
         if (status === "new" || status === "copy") {
             return true;
         } else {
-            return entity ? canEditEntity(props.collection, authController, props.path, entity ?? null) : undefined;
+            return entity ? canEditEntity(props.collection, authController, props.path, entity ?? null, props.pathSegments) : undefined;
         }
     }, [authController, entity, status]);
 

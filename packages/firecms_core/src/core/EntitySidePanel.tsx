@@ -77,10 +77,10 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }
 
     const parentCollectionIds = useMemo(() => {
-        return navigationController.getParentCollectionIds(path);
+        return navigationController.getParentCollectionIds(path, pathSegments);
     }, [navigationController, path]);
 
-    const collection = props.collection ?? navigationController.getCollection(fullIdPath ?? path);
+    const collection = props.collection ?? navigationController.getCollection(fullIdPath ?? path, false, pathSegments);
 
     useEffect(() => {
         function beforeunload(e: any) {

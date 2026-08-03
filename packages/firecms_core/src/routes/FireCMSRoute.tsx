@@ -90,7 +90,7 @@ export function FireCMSRoute() {
         let collection: EntityCollection<any> | undefined;
         collection = navigation.getCollectionById(navigationEntries[0].id);
         if (!collection)
-            collection = navigation.getCollection(navigationEntries[0].path);
+            collection = navigation.getCollection(navigationEntries[0].path, false, navigationEntries[0].pathSegments);
         if (!collection)
             return null;
         return <React.Suspense fallback={null}>
@@ -114,7 +114,7 @@ export function FireCMSRoute() {
             const firstEntry = navigationEntries[0] as NavigationViewCollectionInternal<any>;
             collection = navigation.getCollectionById(firstEntry.id);
             if (!collection)
-                collection = navigation.getCollection(firstEntry.path);
+                collection = navigation.getCollection(firstEntry.path, false, firstEntry.pathSegments);
             if (!collection)
                 return null;
             return <React.Suspense fallback={null}>
@@ -186,6 +186,8 @@ function EntityFullScreenRoute({
     const urlTab = getSelectedTabFromUrl(isNew, lastCustomView);
     const [selectedTab, setSelectedTab] = useState<string | undefined>(urlTab);
 
+    // `navigationPath` comes from the URL, where entity ids are still escaped (see
+    // encodeEntityId), so splitting it on "/" inside is correct and no segments are needed.
     const parentCollectionIds = navigation.getParentCollectionIds(navigationPath);
     useEffect(() => {
         if (urlTab !== selectedTab) {

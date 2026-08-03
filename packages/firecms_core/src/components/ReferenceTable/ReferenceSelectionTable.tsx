@@ -327,6 +327,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
                         actions={<ReferenceDialogActions
                             collection={collection}
                             path={fullPath}
+                            pathSegments={pathSegments}
                             onNewClick={onNewClick}
                             onClear={onClear}/>
                         }
@@ -353,11 +354,14 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
 function ReferenceDialogActions({
                                     collection,
                                     path,
+                                    pathSegments,
                                     onClear,
                                     onNewClick
                                 }: {
     collection: EntityCollection<any>,
     path: string,
+    /** `path` split at its real segment boundaries, when known. Never derived from `path`. */
+    pathSegments?: string[],
     onClear: () => void,
     onNewClick: () => void
 }) {
@@ -372,7 +376,7 @@ function ReferenceDialogActions({
             onNewClick();
         }
         : undefined;
-    const addButton = canCreateEntity(collection, authController, path, null) &&
+    const addButton = canCreateEntity(collection, authController, path, null, pathSegments) &&
         onClick && (largeLayout
             ? <Button
                 onClick={onClick}

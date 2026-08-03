@@ -63,7 +63,7 @@ export function EntityPreview({
 
     const navigationController = useNavigationController();
 
-    const collection = collectionProp ?? navigationController.getCollection(entity.path);
+    const collection = collectionProp ?? navigationController.getCollection(entity.path, false, entity.pathSegments);
 
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${entity.path}`);

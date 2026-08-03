@@ -53,7 +53,7 @@ function ReferencePreviewInternal({
 
     const navigationController = useNavigationController();
 
-    const collection = navigationController.getCollection(reference.path);
+    const collection = navigationController.getCollection(reference.path, false, reference.pathSegments);
     if (!collection) {
         if (customizationController.components?.missingReference) {
             return <customizationController.components.missingReference path={reference.path}/>;

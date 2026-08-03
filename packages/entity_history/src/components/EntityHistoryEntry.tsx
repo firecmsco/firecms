@@ -102,7 +102,7 @@ export function EntityHistoryEntry({
     const sideEntityController = useSideEntityController();
     const { t } = useTranslation();
 
-    const collection = collectionProp ?? navigationController.getCollection(entity.path);
+    const collection = collectionProp ?? navigationController.getCollection(entity.path, false, entity.pathSegments);
     const updatedOn = entity.values?.["__metadata"]?.["updated_on"];
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${entity.path}`);

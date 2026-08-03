@@ -112,7 +112,7 @@ export function useBuildDataSource({
                 }: ListenCollectionProps<M>
             ): () => void => {
 
-                const collection = collectionProp ?? navigationController.getCollection(path);
+                const collection = collectionProp ?? navigationController.getCollection(path, false, pathSegments);
                 const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
 
                 if (!usedDelegate.listenCollection)
@@ -213,7 +213,7 @@ export function useBuildDataSource({
                 status
             }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
-            const collection = collectionProp ?? navigationController.getCollection(path);
+            const collection = collectionProp ?? navigationController.getCollection(path, false, pathSegments);
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
 
             const resolvedCollection = collection

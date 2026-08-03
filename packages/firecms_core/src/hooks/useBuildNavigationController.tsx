@@ -22,6 +22,8 @@ import {
 } from "../types";
 import {
     applyPermissionsFunctionIfEmpty,
+    collectionSegmentsFrom,
+    fullPathToCollectionSegments,
     getCollectionByPathOrId,
     mergeDeep,
     removeFunctions,
@@ -406,13 +408,14 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
 
     const getCollection = useCallback((
         idOrPath: string,
-        includeUserOverride = false
+        includeUserOverride = false,
+        pathSegments?: string[]
     ): EC | undefined => {
         const collections = collectionsRef.current;
         if (!collections)
             return undefined;
 
-        const baseCollection = getCollectionByPathOrId(removeInitialAndTrailingSlashes(idOrPath), collections);
+        const baseCollection = getCollectionByPathOrId(removeInitialAndTrailingSlashes(idOrPath), collections, pathSegments);
 
         const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(idOrPath) : undefined;
         let overriddenCollection = baseCollection;
@@ -524,10 +527,14 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         });
     }, []);
 
-    const getParentCollectionIds = useCallback((path: string): string[] => {
+    const getParentCollectionIds = useCallback((path: string, pathSegments?: string[]): string[] => {
 
-        const strings = path.split("/");
-        const oddPathSegments = strings.filter((_, i) => i % 2 === 0);
+        // Positional filtering only picks out the collection segments while no entity id
+        // contains "/"; with one, every following segment shifts. Given the real boundaries
+        // the same rule applies correctly; without them this is the historical reading.
+        const oddPathSegments = pathSegments
+            ? collectionSegmentsFrom(pathSegments)
+            : fullPathToCollectionSegments(path);
         oddPathSegments.pop();
 
         const result: string[][] = [];

@@ -199,7 +199,7 @@ export const EntityCollectionView = React.memo(
             collectionRef.current = collection;
         }, [collection]);
 
-        const canCreateEntities = canCreateEntity(collection, authController, fullPath, null);
+        const canCreateEntities = canCreateEntity(collection, authController, fullPath, null, pathSegments);
         const [highlightedEntity, setHighlightedEntity] = useState<Entity<M> | undefined>(undefined);
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
@@ -229,7 +229,7 @@ export const EntityCollectionView = React.memo(
 
         const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
             const collection = collectionRef.current;
-            if (!canEditEntity(collection, authController, fullPath, entity ?? null)) {
+            if (!canEditEntity(collection, authController, fullPath, entity ?? null, pathSegments)) {
                 return false;
             }
             return collection.inlineEditing === undefined || collection.inlineEditing;
@@ -468,7 +468,7 @@ export const EntityCollectionView = React.memo(
             }
         }, [setViewMode, userConfigPersistence, onCollectionModifiedForUser, fullPath, analyticsController, viewMode]);
 
-        const createEnabled = canCreateEntity(collection, authController, fullPath, null);
+        const createEnabled = canCreateEntity(collection, authController, fullPath, null, pathSegments);
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
             ({
@@ -722,7 +722,7 @@ export const EntityCollectionView = React.memo(
             entity?: Entity<M>,
             customEntityActions?: EntityAction[]
         }): EntityAction[] => {
-            const deleteEnabled = entity ? canDeleteEntity(collection, authController, fullPath, entity) : true;
+            const deleteEnabled = entity ? canDeleteEntity(collection, authController, fullPath, entity, entity.pathSegments ?? pathSegments) : true;
             const actions: EntityAction[] = [
                 { ...editEntityAction, name: t("edit") }
             ];

@@ -57,8 +57,12 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
     /**
      * Get the collection configuration for a given path.
      * The collection is resolved from the given path or alias.
+     *
+     * Pass `pathSegments` when you have them: without them the path is split on "/" and
+     * asserted to have an odd number of parts, which a chain containing a slash-bearing
+     * entity id fails — it throws instead of resolving.
      */
-    getCollection: (pathOrId: string, includeUserOverride?: boolean) => EC | undefined;
+    getCollection: (pathOrId: string, includeUserOverride?: boolean, pathSegments?: string[]) => EC | undefined;
 
     /**
      * Get the top level collection configuration for a given id
@@ -158,7 +162,7 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
      * Retrieve all the related parent collection ids for a given path
      * @param path
      */
-    getParentCollectionIds: (path: string) => string[];
+    getParentCollectionIds: (path: string, pathSegments?: string[]) => string[];
 
     /**
      * Resolve paths from a list of ids

@@ -57,6 +57,37 @@ function callPattern(name: string): RegExp {
     return new RegExp(`${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*(?:<[^<>()]*>)?\\s*\\(\\s*\\{`, "g");
 }
 
+/**
+ * The path-resolution helpers that take segments as a trailing *positional* argument.
+ *
+ * These are policed differently from the props objects above. A path built from a
+ * property's configuration genuinely has no entity chain behind it, and a path taken from
+ * a URL keeps its ids escaped — for both, splitting inside is correct and segments would be
+ * meaningless. So this is a budget rather than a ban: it pins how many call sites currently
+ * pass nothing, so that adding one is a visible, deliberate change rather than a silent
+ * regression back to guessing.
+ */
+const POSITIONAL = [
+    // Both in the collection editor, on paths typed into its own configuration form.
+    { call: ".resolveIdsFrom", withoutSegments: 2 },
+    // Seven reference fields resolving a `property.path` (a collection path from the
+    // property's configuration, with no entity chain behind it), the reference dialog, and
+    // two Firestore admin explorer views handed a raw Firestore path.
+    { call: ".getCollection", withoutSegments: 10 },
+    // The collection editor's missing-reference widget, and `FireCMSRoute`, whose path
+    // comes from the URL where ids are still escaped — splitting it there is correct.
+    { call: ".getParentCollectionIds", withoutSegments: 2 },
+    // Every permission check now receives them.
+    { call: "canEditEntity", withoutSegments: 0 },
+    { call: "canCreateEntity", withoutSegments: 0 },
+    { call: "canDeleteEntity", withoutSegments: 0 },
+];
+
+/** Strip block and line comments so commented-out code does not count as a call site. */
+function stripComments(src: string): string {
+    return src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+}
+
 function sourceFiles(dir: string): string[] {
     const out: string[] = [];
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -121,6 +152,35 @@ describe("pathSegments is never dropped at a call site", () => {
     it("finds the call sites it is meant to police", () => {
         // A refactor that renames these calls must not silently disarm the guard.
         expect(sites.length).toBeGreaterThan(30);
+    });
+
+    it.each(POSITIONAL)("$call is only called without segments where it has none", ({ call, withoutSegments }) => {
+        // Count the calls whose argument list does not mention `pathSegments`. The list is
+        // read to the matching ")", so nested calls and object arguments are included.
+        const pattern = new RegExp(`${call.replace(/[.*+?^${}()|[\]\]\\]/g, "\\$&")}\\s*\\(`, "g");
+        let found = 0;
+
+        for (const file of files) {
+            const code = stripComments(fs.readFileSync(file, "utf8"));
+            for (const m of code.matchAll(pattern)) {
+                const open = m.index + m[0].length - 1;
+                let depth = 0;
+                let end = open;
+                for (let i = open; i < code.length; i++) {
+                    if (code[i] === "(") depth++;
+                    else if (code[i] === ")") {
+                        depth--;
+                        if (depth === 0) { end = i; break; }
+                    }
+                }
+                const args = code.slice(open, end + 1);
+                // Case-insensitive substring: the argument is often a renamed local such
+                // as `inputPathSegments` or `resolvedPathSegments`.
+                if (!/segments/i.test(args)) found++;
+            }
+        }
+
+        expect(found).toEqual(withoutSegments);
     });
 
     it("every call carrying a path also carries its segments", () => {
