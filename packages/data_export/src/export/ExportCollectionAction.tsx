@@ -90,6 +90,7 @@ function resolveExportFilterAndSort<M extends Record<string, any>>({
 export function ExportCollectionAction<M extends Record<string, any>, USER extends User>({
     collection: inputCollection,
     path: inputPath,
+    pathSegments: inputPathSegments,
     collectionEntitiesCount,
     tableController,
     onAnalyticsEvent,
@@ -130,7 +131,11 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
     const dataSource = useDataSource();
     const navigationController = useNavigationController();
 
-    const path = navigationController.resolveIdsFrom(inputPath);
+    // Resolved together so the two representations describe the same chain (see useEntityFetch).
+    const pathSegments = inputPathSegments
+        ? (navigationController.resolveSegmentsFrom?.(inputPathSegments) ?? inputPathSegments)
+        : undefined;
+    const path = navigationController.resolveIdsFrom(inputPath, inputPathSegments);
 
     const canExport = !exportAllowed || exportAllowed({
         collectionEntitiesCount: collectionEntitiesCount ?? 0,
@@ -215,6 +220,7 @@ export function ExportCollectionAction<M extends Record<string, any>, USER exten
 
         dataSource.fetchCollection<M>({
             path,
+            pathSegments,
             collection,
             filter,
             orderBy,

@@ -523,7 +523,7 @@ export const EntityCollectionView = React.memo(
 
         };
 
-        const resolvedFullPath = navigation.resolveIdsFrom(fullPath);
+        const resolvedFullPath = navigation.resolveIdsFrom(fullPath, pathSegments);
         const resolvedCollection = useMemo(() => resolveCollection<M>({
             collection,
             path: fullPath,
@@ -1152,10 +1152,12 @@ function EntitiesCount({
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
-    const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
-    // Deliberately a pass-through and not the segment-wise analogue of `resolveIdsFrom`:
-    // segments are never derived from a path (see useEntityFetch).
-    const resolvedPathSegments = pathSegments;
+    // Resolved together so the two representations always describe the same chain.
+    // Segments are resolved, never derived (see useEntityFetch).
+    const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath, pathSegments), [fullPath, pathSegments, navigation.resolveIdsFrom]);
+    const resolvedPathSegments = useMemo(() => pathSegments
+        ? (navigation.resolveSegmentsFrom?.(pathSegments) ?? pathSegments)
+        : undefined, [pathSegments, navigation.resolveSegmentsFrom]);
 
     useEffect(() => {
         if (dataSource.countEntities)

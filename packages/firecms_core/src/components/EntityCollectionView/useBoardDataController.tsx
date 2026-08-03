@@ -82,10 +82,12 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     const context = useFireCMSContext();
     const dataSource = useDataSource(collection);
     const navigation = useNavigationController();
-    const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
-    // Deliberately a pass-through and not the segment-wise analogue of `resolveIdsFrom`:
-    // segments are never derived from a path (see useEntityFetch).
-    const resolvedPathSegments = pathSegments;
+    // Resolved together so the two representations always describe the same chain.
+    // Segments are resolved, never derived (see useEntityFetch).
+    const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath, pathSegments), [fullPath, pathSegments, navigation.resolveIdsFrom]);
+    const resolvedPathSegments = useMemo(() => pathSegments
+        ? (navigation.resolveSegmentsFrom?.(pathSegments) ?? pathSegments)
+        : undefined, [pathSegments, navigation.resolveSegmentsFrom]);
 
     // Stable refs for objects that shouldn't trigger re-subscriptions
     const dataSourceRef = useRef(dataSource);

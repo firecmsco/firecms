@@ -250,14 +250,17 @@ function EntityFullScreenRoute({
     // `fullIdPath` is used downstream to build URLs, so it carries the escaped chain;
     // `collectionPath` addresses the datasource, so it is resolved from the raw one.
     const fullIdPath = isNew ? lastCollectionEntry!.fullPath : (parentCollectionEntry?.fullPath ?? lastEntityEntry!.fullPath);
-    const collectionPath = navigation.resolveIdsFrom(isNew ? lastCollectionEntry!.path : lastEntityEntry!.path);
+    // The navigation entries know the real segment boundaries, so the path is resolved
+    // from them rather than re-parsed out of the flattened string.
+    const pathSegments = isNew ? lastCollectionEntry!.pathSegments : lastEntityEntry!.pathSegments;
+    const collectionPath = navigation.resolveIdsFrom(isNew ? lastCollectionEntry!.path : lastEntityEntry!.path, pathSegments);
     return <>
         <React.Suspense fallback={null}>
             <EntityEditView
                 key={collection.id + "_" + (isNew ? "new" : (isCopy ? entityId + "_copy" : entityId))}
                 entityId={isNew ? undefined : entityId}
                 fullIdPath={fullIdPath}
-                pathSegments={isNew ? lastCollectionEntry!.pathSegments : lastEntityEntry!.pathSegments}
+                pathSegments={pathSegments}
                 collection={collection}
                 layout={"full_screen"}
                 path={collectionPath}

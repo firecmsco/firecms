@@ -57,11 +57,19 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
     const dataSource = useDataSource(collection);
     const navigationController = useNavigationController();
 
-    const path = navigationController.resolveIdsFrom(inputPath);
     // Never fabricate segments. If the caller did not thread them, pass undefined so a
     // delegate can tell "not provided" from a real answer — splitting `path` here would
     // produce a confidently wrong array for any id containing "/".
-    const pathSegments = inputPathSegments;
+    //
+    // When they were threaded, both representations are resolved from them together, so
+    // `path` cannot end up describing a different chain than `pathSegments`.
+    // `resolveSegmentsFrom` is optional on the controller: a host app may be supplying one
+    // built against an earlier version. Falling back to the segments as given is what
+    // happened before it existed — they are used unresolved, never invented.
+    const pathSegments = inputPathSegments
+        ? (navigationController.resolveSegmentsFrom?.(inputPathSegments) ?? inputPathSegments)
+        : undefined;
+    const path = navigationController.resolveIdsFrom(inputPath, inputPathSegments);
 
     const context: FireCMSContext<USER> = useFireCMSContext();
 

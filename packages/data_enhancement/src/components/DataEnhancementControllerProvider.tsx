@@ -65,6 +65,7 @@ export function DataEnhancementControllerProvider({
                                                       children,
                                                       host,
                                                       path,
+                                                      pathSegments,
                                                       collection,
                                                       formContext,
                                                       onAnalyticsEvent,
@@ -233,7 +234,7 @@ export function DataEnhancementControllerProvider({
             return Promise.reject(new Error("Not logged in"));
         }
 
-        const resolvedPath = navigationController.resolveIdsFrom(path);
+        const resolvedPath = navigationController.resolveIdsFrom(path, pathSegments);
         const firebaseToken = await authController.getAuthToken();
 
         if (props.propertyKey) {

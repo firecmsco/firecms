@@ -32,20 +32,30 @@ const SCANNED = fs.readdirSync(PACKAGES, { withFileTypes: true })
     .filter(e => e.isDirectory() && fs.existsSync(path.join(PACKAGES, e.name, "src")))
     .map(e => path.join(PACKAGES, e.name, "src"));
 
-/** Calls whose props object pairs a `path` with the segments describing it. */
-const MARKERS = [
-    "navigateToEntity({",
-    "sideEntityController.open({",
-    "sideEntityController.replace({",
-    "saveEntityWithCallbacks({",
-    ".countEntities({",
-    ".fetchCollection({",
-    ".fetchEntity({",
-    ".listenCollection({",
-    ".listenEntity({",
-    ".saveEntity({",
-    ".deleteEntity({",
+/**
+ * Calls whose props object pairs a `path` with the segments describing it.
+ *
+ * Matched with an optional generic argument — `dataSource.fetchCollection<M>({…})` is the
+ * same call as `dataSource.fetchCollection({…})`, and a plain-substring marker misses it.
+ */
+const CALLS = [
+    "navigateToEntity",
+    "sideEntityController.open",
+    "sideEntityController.replace",
+    "saveEntityWithCallbacks",
+    ".countEntities",
+    ".fetchCollection",
+    ".fetchEntity",
+    ".listenCollection",
+    ".listenEntity",
+    ".saveEntity",
+    ".deleteEntity",
 ];
+
+/** `name` followed by an optional `<...>` generic, then `({`. */
+function callPattern(name: string): RegExp {
+    return new RegExp(`${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*(?:<[^<>()]*>)?\\s*\\(\\s*\\{`, "g");
+}
 
 function sourceFiles(dir: string): string[] {
     const out: string[] = [];
@@ -95,38 +105,31 @@ describe("pathSegments is never dropped at a call site", () => {
         expect(files.length).toBeGreaterThan(100);
     });
 
+    /** Every matched call in the tree, as `{ site, call, literal, code }`. */
+    const sites = files.flatMap(file => {
+        const code = fs.readFileSync(file, "utf8");
+        const relative = path.relative(PACKAGES, file);
+        return CALLS.flatMap(call =>
+            [...code.matchAll(callPattern(call))].map(m => ({
+                site: `${relative}:${code.slice(0, m.index).split("\n").length}`,
+                call,
+                literal: literalAt(code, m.index + m[0].length - 1),
+                code
+            })));
+    });
+
     it("finds the call sites it is meant to police", () => {
         // A refactor that renames these calls must not silently disarm the guard.
-        const total = files
-            .map(f => fs.readFileSync(f, "utf8"))
-            .reduce((n, code) => n + MARKERS.reduce((m, marker) => m + code.split(marker).length - 1, 0), 0);
-        expect(total).toBeGreaterThan(15);
+        expect(sites.length).toBeGreaterThan(30);
     });
 
     it("every call carrying a path also carries its segments", () => {
-        const offenders: string[] = [];
-
-        for (const file of files) {
-            const code = fs.readFileSync(file, "utf8");
-            const relative = path.relative(PACKAGES, file);
-
-            for (const marker of MARKERS) {
-                let idx = 0;
-                while ((idx = code.indexOf(marker, idx)) !== -1) {
-                    const literal = literalAt(code, code.indexOf("{", idx + marker.length - 1));
-                    const line = code.slice(0, idx).split("\n").length;
-                    const site = `${relative}:${line}`;
-
-                    // There is deliberately no allowlist: a site that genuinely has no
-                    // segments says so at the call, as `pathSegments: undefined` with the
-                    // reason next to it, where a reviewer will actually see it.
-                    if (literal && !mentionsPathSegments(literal, code)) {
-                        offenders.push(`${site} — ${marker}`);
-                    }
-                    idx += marker.length;
-                }
-            }
-        }
+        // There is deliberately no allowlist: a site that genuinely has no segments says so
+        // at the call, as `pathSegments: undefined` with the reason next to it, where a
+        // reviewer will actually see it.
+        const offenders = sites
+            .filter(({ literal, code }) => literal && !mentionsPathSegments(literal, code))
+            .map(({ site, call }) => `${site} — ${call}`);
 
         expect(offenders).toEqual([]);
     });

@@ -27,6 +27,7 @@ import {
     removeFunctions,
     removeInitialAndTrailingSlashes,
     resolveCollectionPathIds,
+    resolveCollectionPathSegments,
     resolvePermissions
 } from "../util";
 import { getParentReferencesFromPath } from "../util/parent_references_from_path";
@@ -505,9 +506,14 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         throw Error("Expected path starting with " + fullCollectionPath);
     }, [fullCollectionPath]);
 
-    const resolveIdsFrom = useCallback((path: string): string => {
+    const resolveIdsFrom = useCallback((path: string, pathSegments?: string[]): string => {
         const collections = collectionsRef.current ?? [];
-        return resolveCollectionPathIds(path, collections);
+        return resolveCollectionPathIds(path, collections, pathSegments);
+    }, []);
+
+    const resolveSegmentsFrom = useCallback((pathSegments: string[]): string[] => {
+        const collections = collectionsRef.current ?? [];
+        return resolveCollectionPathSegments(pathSegments, collections);
     }, []);
 
     const getAllParentReferencesForPath = useCallback((path: string): EntityReference[] => {
@@ -567,6 +573,7 @@ export function useBuildNavigationController<EC extends EntityCollection, USER e
         urlPathToDataPath,
         buildUrlCollectionPath,
         resolveIdsFrom,
+        resolveSegmentsFrom,
         topLevelNavigation,
         refreshNavigation,
         getParentReferencesFromPath: getAllParentReferencesForPath,

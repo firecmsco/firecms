@@ -89,7 +89,82 @@ export function getLastSegment(path: string) {
     return cleanPath;
 }
 
-export function resolveCollectionPathIds(path: string, allCollections: EntityCollection[]): string {
+/**
+ * Resolve collection aliases in a segment array: every collection id is replaced by the
+ * collection's real `path`, and every entity id is carried through untouched.
+ *
+ * This is the segment-wise counterpart of {@link resolveCollectionPathIds}, and the reason
+ * it exists: that one works on the flattened string, so it has to *guess* where an entity
+ * id ends — it reads up to the next "/". For an id containing "/" the guess is wrong, the
+ * rest of the chain shifts by a segment, and resolution fails with
+ * "Collection definition not found for segment starting with …". Here the boundaries are
+ * given rather than guessed, so an id keeps its slashes.
+ *
+ * Matching accepts either a collection's `path` or its `id`, so already-resolved segments
+ * pass through unchanged — the function is idempotent.
+ *
+ * Mirrors the string version when a chain cannot be matched: it warns and carries the
+ * remainder through unresolved, rather than throwing.
+ *
+ * @group Hooks and utilities
+ */
+export function resolveCollectionPathSegments(pathSegments: string[], allCollections: EntityCollection[]): string[] {
+
+    const resolved: string[] = [];
+    let currentCollections: EntityCollection[] | undefined = allCollections;
+    let index = 0;
+
+    while (index < pathSegments.length) {
+
+        const remaining = pathSegments.slice(index);
+
+        if (!currentCollections || currentCollections.length === 0) {
+            console.warn(`resolveCollectionPathSegments: Path structure implies subcollections, but none found before segment "${remaining[0]}" in [${pathSegments.join(", ")}]. Carrying the remaining segments through unresolved.`);
+            resolved.push(...remaining);
+            return resolved;
+        }
+
+        // A collection's own `path` may span several segments ("users/uid/experiences"), so
+        // candidates are matched segment by segment and the longest match wins.
+        let match: { collection: EntityCollection, length: number } | undefined;
+        for (const collection of currentCollections) {
+            for (const candidate of [collection.path, collection.id]) {
+                if (!candidate) continue;
+                const parts = removeInitialAndTrailingSlashes(candidate).split("/");
+                if (parts.length > remaining.length) continue;
+                if (parts.some((part, i) => part !== remaining[i])) continue;
+                if (!match || parts.length > match.length) match = { collection, length: parts.length };
+            }
+        }
+
+        if (!match) {
+            console.warn(`resolveCollectionPathSegments: Collection definition not found for segment "${remaining[0]}" in [${pathSegments.join(", ")}]. Carrying the remaining segments through unresolved.`);
+            resolved.push(...remaining);
+            return resolved;
+        }
+
+        resolved.push(...removeInitialAndTrailingSlashes(match.collection.path).split("/"));
+        index += match.length;
+
+        if (index >= pathSegments.length) return resolved;
+
+        // Exactly one segment is the entity id, however many slashes it contains.
+        resolved.push(pathSegments[index]);
+        index += 1;
+        currentCollections = match.collection.subcollections;
+    }
+
+    return resolved;
+}
+
+export function resolveCollectionPathIds(path: string, allCollections: EntityCollection[], pathSegments?: string[]): string {
+
+    // When the caller knows the real segment boundaries there is nothing to parse: the
+    // ambiguity the string walk below has to guess its way through simply is not present.
+    if (pathSegments) {
+        return resolveCollectionPathSegments(pathSegments, allCollections).join("/");
+    }
+
     let remainingPath = removeInitialAndTrailingSlashes(path);
     if (!remainingPath) {
         return "";

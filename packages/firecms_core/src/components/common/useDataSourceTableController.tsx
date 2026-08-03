@@ -96,9 +96,12 @@ export function useDataSourceTableController<M extends Record<string, any> = any
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
     const navigation = useNavigationController();
     const dataSource = useDataSource(collection);
-    const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
-    // Passed through as-is; never derived from `resolvedPath` (see useEntityFetch).
-    const resolvedPathSegments = pathSegments;
+    // Resolved together so the two representations always describe the same chain.
+    // Segments are resolved, never derived (see useEntityFetch).
+    const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath, pathSegments), [fullPath, pathSegments, navigation.resolveIdsFrom]);
+    const resolvedPathSegments = useMemo(() => pathSegments
+        ? (navigation.resolveSegmentsFrom?.(pathSegments) ?? pathSegments)
+        : undefined, [pathSegments, navigation.resolveSegmentsFrom]);
 
     const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);

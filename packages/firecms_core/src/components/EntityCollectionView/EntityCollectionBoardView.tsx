@@ -480,6 +480,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
             console.log("Fetching all documents from collection...");
             const allDocs = await dataSource.fetchCollection<M>({
                 path: fullPath,
+                pathSegments,
                 collection,
                 limit: 10000 // Fetch all
             });

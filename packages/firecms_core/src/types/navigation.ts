@@ -118,9 +118,30 @@ export type NavigationController<EC extends EntityCollection = EntityCollection<
     /**
      * Turn a path with collection ids into a resolved path.
      * The ids (typically used in urls) will be replaced with relative paths (typically used in database paths)
+     *
+     * Pass `pathSegments` whenever you have them. Without them this has to find the entity
+     * ids inside the flattened string by reading up to the next "/", which is wrong for any
+     * id that contains one — the chain then shifts by a segment and resolution fails.
+     *
      * @param pathWithAliases
+     * @param pathSegments `pathWithAliases` split at its real segment boundaries, if known
      */
-    resolveIdsFrom: (pathWithAliases: string) => string;
+    resolveIdsFrom: (pathWithAliases: string, pathSegments?: string[]) => string;
+
+    /**
+     * The segment-wise counterpart of {@link resolveIdsFrom}: replaces collection ids with
+     * their real paths while carrying every entity id through whole, slashes included.
+     *
+     * Idempotent — segments that are already resolved pass through unchanged.
+     *
+     * Optional so that a `navigationController` built against an earlier version keeps
+     * working: callers fall back to using the segments as given, which is what happened
+     * before this method existed. Controllers built by `useBuildNavigationController`
+     * always provide it.
+     *
+     * @param pathSegments
+     */
+    resolveSegmentsFrom?: (pathSegments: string[]) => string[];
 
     /**
      * Call this method to recalculate the navigation

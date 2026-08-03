@@ -69,7 +69,7 @@ export interface CollectionFetchResult<M extends Record<string, any>> {
 export function useCollectionFetch<M extends Record<string, any>, USER extends User>(
     {
         path: inputPath,
-        pathSegments,
+        pathSegments: inputPathSegments,
         collection,
         filterValues,
         sortBy,
@@ -80,7 +80,13 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
     const dataSource = useDataSource(collection);
     const navigationController = useNavigationController();
 
-    const path = navigationController.resolveIdsFrom(inputPath);
+    // Resolved together so the two representations always describe the same chain.
+    // Segments are resolved, never derived: only collection ids are swapped for their
+    // real paths, and entity ids are carried through whole (see useEntityFetch).
+    const pathSegments = inputPathSegments
+        ? (navigationController.resolveSegmentsFrom?.(inputPathSegments) ?? inputPathSegments)
+        : undefined;
+    const path = navigationController.resolveIdsFrom(inputPath, inputPathSegments);
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;

@@ -28,6 +28,11 @@ const dataSource = {
 jest.mock("../src/hooks/data/useDataSource", () => ({ useDataSource: () => dataSource }));
 jest.mock("../src/hooks/useNavigationController", () => ({
     // Identity: these tests are about segments, not id-to-path resolution.
+    //
+    // Deliberately WITHOUT `resolveSegmentsFrom`, so this doubles as the back-compat case:
+    // a `navigationController` built against an earlier version is a plain object a host
+    // app supplies to <FireCMS>, and adding a method it does not have must not break it.
+    // Segments must still reach the datasource, just unresolved.
     useNavigationController: () => ({ resolveIdsFrom: (p: string) => p })
 }));
 jest.mock("../src/hooks/useFireCMSContext", () => ({ useFireCMSContext: () => ({}) }));
