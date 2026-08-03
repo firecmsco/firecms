@@ -96,6 +96,8 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
         deleteEntityWithCallbacks({
             dataSource,
             entity,
+            // The entity is the authority on where it lives; stated rather than left implicit.
+            pathSegments: entity.pathSegments,
             collection: resolvedCollection,
             callbacks,
             onDeleteSuccess,

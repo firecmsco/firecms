@@ -46,6 +46,7 @@ export type DeleteEntityWithCallbacksProps<M extends Record<string, any>, USER e
 export async function deleteEntityWithCallbacks<M extends Record<string, any>, USER extends User>({
                                                                                                           dataSource,
                                                                                                           entity,
+                                                                                                          pathSegments,
                                                                                                           collection,
                                                                                                           callbacks,
                                                                                                           onDeleteSuccess,
@@ -62,13 +63,17 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
 
     console.debug("Deleting entity", entity.path, entity.id);
 
+    // An explicit `pathSegments` wins, then the ones the entity was loaded with. The prop
+    // used to be accepted and silently ignored, which is the same class of bug this field
+    // exists to prevent.
+    const resolvedPathSegments = pathSegments ?? entity.pathSegments;
+
     const entityDeleteProps: EntityOnDeleteProps<M, any> = {
         entity,
         collection,
         entityId: entity.id,
         path: entity.path,
-        // Paired with `entity.path`: carried by the entity from the fetch that produced it.
-        pathSegments: entity.pathSegments,
+        pathSegments: resolvedPathSegments,
         context
     };
 
@@ -83,8 +88,7 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
         }
     }
     return dataSource.deleteEntity({
-        // Carried by the entity from the fetch that produced it; undefined if unknown.
-        pathSegments: entity.pathSegments,
+        pathSegments: resolvedPathSegments,
         entity,
         collection
     }).then(() => {

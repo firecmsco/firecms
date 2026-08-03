@@ -214,3 +214,49 @@ describe("delete callbacks receive pathSegments", () => {
     });
 
 });
+
+/**
+ * Found by temporarily making `pathSegments` non-optional: `deleteEntityWithCallbacks`
+ * declared the prop (it extends `DeleteEntityProps`) but never destructured it, so a caller
+ * that passed segments had them silently discarded — the exact failure mode the field
+ * exists to prevent, hiding inside the fix for it.
+ */
+describe("deleteEntityWithCallbacks honours an explicit pathSegments", () => {
+
+    const OVERRIDE = ["test", "test/test", "other"];
+
+    it("prefers the explicit segments over the entity's", async () => {
+        const { calls, dataSource } = build();
+        let seen: any;
+        const collection = {
+            id: "accommodation", path: "accommodation", name: "A", properties: {},
+            callbacks: { onPreDelete: (props: any) => { seen = props; } }
+        } as any;
+
+        await deleteEntityWithCallbacks({
+            dataSource,
+            entity: { id: "room-1", path: PATH, pathSegments: SEGMENTS, values: {} } as any,
+            pathSegments: OVERRIDE,
+            collection,
+            callbacks: collection.callbacks,
+            context
+        });
+
+        expect(calls.deleteEntity[0].pathSegments).toEqual(OVERRIDE);
+        expect(seen.pathSegments).toEqual(OVERRIDE);
+    });
+
+    it("falls back to the entity's when none is passed", async () => {
+        const { calls, dataSource } = build();
+
+        await deleteEntityWithCallbacks({
+            dataSource,
+            entity: { id: "room-1", path: PATH, pathSegments: SEGMENTS, values: {} } as any,
+            collection: { id: "a", path: "a", name: "A", properties: {} } as any,
+            context
+        });
+
+        expect(calls.deleteEntity[0].pathSegments).toEqual(SEGMENTS);
+    });
+
+});

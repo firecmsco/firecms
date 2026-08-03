@@ -349,6 +349,8 @@ export function useBuildDataSource({
             return usedDelegate.generateEntityId(path, collection, pathSegments);
         }, [delegate.generateEntityId]),
 
+        // Typed with the declared props rather than an inline duplicate: the duplicate is
+        // free to drift from the interface, and a field it forgets is dropped in silence.
         countEntities: delegate.countEntities ? async ({
             path,
             pathSegments,
@@ -356,14 +358,7 @@ export function useBuildDataSource({
             filter,
             order,
             orderBy
-        }: {
-            path: string,
-            pathSegments?: string[],
-            collection: EntityCollection<any>,
-            filter?: FilterValues<Extract<keyof any, string>>,
-            orderBy?: string,
-            order?: "desc" | "asc",
-        }): Promise<number> => {
+        }: FetchCollectionProps<any>): Promise<number> => {
             const usedDelegate = collection?.overrides?.dataSourceDelegate ?? delegate;
             return usedDelegate.countEntities!({
                 path,

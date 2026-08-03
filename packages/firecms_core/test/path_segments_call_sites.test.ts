@@ -17,6 +17,10 @@ import path from "path";
  * is asserted here instead: every call that carries a path must mention `pathSegments`,
  * even if only to pass `undefined` deliberately.
  *
+ * `deleteEntityWithCallbacks` is in the list because making the field temporarily
+ * non-optional surfaced it: it was the one wrapper this guard did not know about, and it
+ * had been *accepting* `pathSegments` and silently ignoring them.
+ *
  * This is a *syntactic* check. It cannot tell whether the value is correct — only that the
  * author considered it. Correctness is covered by path_segments_hooks.test.tsx.
  */
@@ -43,6 +47,7 @@ const CALLS = [
     "sideEntityController.open",
     "sideEntityController.replace",
     "saveEntityWithCallbacks",
+    "deleteEntityWithCallbacks",
     ".countEntities",
     ".fetchCollection",
     ".fetchEntity",
