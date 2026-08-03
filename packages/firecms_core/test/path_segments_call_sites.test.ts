@@ -72,20 +72,49 @@ function callPattern(name: string): RegExp {
  * pass nothing, so that adding one is a visible, deliberate change rather than a silent
  * regression back to guessing.
  */
-const POSITIONAL = [
-    // Both in the collection editor, on paths typed into its own configuration form.
-    { call: ".resolveIdsFrom", withoutSegments: 2 },
-    // Seven reference fields resolving a `property.path` (a collection path from the
-    // property's configuration, with no entity chain behind it), the reference dialog, and
-    // two Firestore admin explorer views handed a raw Firestore path.
-    { call: ".getCollection", withoutSegments: 10 },
-    // The collection editor's missing-reference widget, and `FireCMSRoute`, whose path
-    // comes from the URL where ids are still escaped — splitting it there is correct.
-    { call: ".getParentCollectionIds", withoutSegments: 2 },
+const POSITIONAL: { call: string, withoutSegments: string[] }[] = [
+    {
+        // `resolveCollectionPathIds` under another name: the function whose guessing at
+        // entity-id boundaries produced the reported warnings. Every caller in the data path
+        // passes segments; the two that do not are the collection editor resolving paths
+        // typed into its own configuration form, where there is no entity chain to describe.
+        call: ".resolveIdsFrom",
+        withoutSegments: [
+            "collection_editor/src/ConfigControllerProvider.tsx",
+            "collection_editor/src/ui/collection_editor/CollectionEditorDialog.tsx"
+        ]
+    },
+    {
+        // Seven reference fields resolving a `property.path` — a collection path from the
+        // property's configuration, with no entity chain behind it — the reference dialog,
+        // and two Firestore admin explorer views handed a raw Firestore path.
+        call: ".getCollection",
+        withoutSegments: [
+            "datatalk/src/components/QueryTableResults.tsx",
+            "firebase_admin/src/DocumentPanel.tsx",
+            "firebase_admin/src/DocumentTable.tsx",
+            "firecms_core/src/components/EntityCollectionTable/fields/TableReferenceField.tsx",
+            "firecms_core/src/components/ReferenceWidget.tsx",
+            "firecms_core/src/components/SelectableTable/filters/ReferenceFilterField.tsx",
+            "firecms_core/src/form/field_bindings/ArrayOfReferencesFieldBinding.tsx",
+            "firecms_core/src/form/field_bindings/ReferenceAsStringFieldBinding.tsx",
+            "firecms_core/src/form/field_bindings/ReferenceFieldBinding.tsx",
+            "firecms_core/src/hooks/useReferenceDialog.tsx"
+        ]
+    },
+    {
+        // The collection editor's missing-reference widget, and `FireCMSRoute`, whose path
+        // comes from the URL where ids are still escaped — splitting it there is correct.
+        call: ".getParentCollectionIds",
+        withoutSegments: [
+            "collection_editor/src/ui/MissingReferenceWidget.tsx",
+            "firecms_core/src/routes/FireCMSRoute.tsx"
+        ]
+    },
     // Every permission check now receives them.
-    { call: "canEditEntity", withoutSegments: 0 },
-    { call: "canCreateEntity", withoutSegments: 0 },
-    { call: "canDeleteEntity", withoutSegments: 0 },
+    { call: "canEditEntity", withoutSegments: [] },
+    { call: "canCreateEntity", withoutSegments: [] },
+    { call: "canDeleteEntity", withoutSegments: [] },
 ];
 
 /** Strip block and line comments so commented-out code does not count as a call site. */
@@ -160,10 +189,10 @@ describe("pathSegments is never dropped at a call site", () => {
     });
 
     it.each(POSITIONAL)("$call is only called without segments where it has none", ({ call, withoutSegments }) => {
-        // Count the calls whose argument list does not mention `pathSegments`. The list is
-        // read to the matching ")", so nested calls and object arguments are included.
+        // The files whose argument list does not mention segments, named rather than counted,
+        // so a new offender shows up in the diff instead of as an off-by-one.
         const pattern = new RegExp(`${call.replace(/[.*+?^${}()|[\]\]\\]/g, "\\$&")}\\s*\\(`, "g");
-        let found = 0;
+        const found: string[] = [];
 
         for (const file of files) {
             const code = stripComments(fs.readFileSync(file, "utf8"));
@@ -181,11 +210,11 @@ describe("pathSegments is never dropped at a call site", () => {
                 const args = code.slice(open, end + 1);
                 // Case-insensitive substring: the argument is often a renamed local such
                 // as `inputPathSegments` or `resolvedPathSegments`.
-                if (!/segments/i.test(args)) found++;
+                if (!/segments/i.test(args)) found.push(path.relative(PACKAGES, file));
             }
         }
 
-        expect(found).toEqual(withoutSegments);
+        expect([...new Set(found)].sort()).toEqual(withoutSegments);
     });
 
     /**
