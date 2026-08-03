@@ -1,4 +1,4 @@
-import { buildEntityHistoryPath } from "../history_path";
+import { buildEntityHistoryPath, buildEntityHistoryPathSegments } from "../history_path";
 import React, { useEffect, useState } from "react";
 import { Entity, useDataSource, User, useTranslation } from "@firecms/core";
 import { useHistoryController } from "../HistoryControllerProvider";
@@ -24,10 +24,13 @@ function getRelativeTimeString(date: Date, t: any): string {
  */
 export function LastEditedByIndicator({
     path,
+    pathSegments,
     entityId,
     collection
 }: {
     path: string;
+    /** `path` split at its real segment boundaries, when known. Never derived from `path`. */
+    pathSegments?: string[];
     entityId: string;
     collection: any;
 }) {
@@ -42,6 +45,7 @@ export function LastEditedByIndicator({
         const historyPath = buildEntityHistoryPath(path, entityId);
         const unsubscribe = dataSource.listenCollection?.({
             path: historyPath,
+            pathSegments: buildEntityHistoryPathSegments(pathSegments, entityId),
             collection,
             orderBy: "__metadata.updated_on",
             order: "desc",

@@ -12,6 +12,7 @@ import {
 
 import { CircularProgressCenter, EntityCollectionView, EntityView, ErrorBoundary } from "../components";
 import {
+    buildSubcollectionPathSegments,
     canEditEntity,
     encodeEntityId,
     removeInitialAndTrailingSlashes,
@@ -42,6 +43,8 @@ export type OnUpdateParams = {
     entity: Entity<any>,
     status: EntityStatus,
     path: string,
+    /** `path` split at its real segment boundaries, when known. Never derived from `path`. */
+    pathSegments?: string[],
     entityId?: string;
     selectedTab?: string;
     collection: EntityCollection<any>
@@ -202,6 +205,7 @@ export function EntityEditViewInner<M extends Record<string, any>>({
             entityId,
             parentCollectionIds,
             path,
+            pathSegments,
             status,
             collection,
             context,
@@ -359,17 +363,9 @@ export function EntityEditViewInner<M extends Record<string, any>>({
         const newFullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
         // `newFullIdPath` is fed to buildUrlCollectionPath downstream, so it stays escaped.
         const newFullIdPath = fullIdPath && usedEntity ? `${fullIdPath}/${encodeEntityId(usedEntity.id)}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
-        // The subcollection sits under this entity, so its segments are ours plus this
-        // entity's id (kept whole, slashes and all) plus the subcollection's own path.
         // Only extendable when we were given real segments — deriving the parent chain
         // from the flattened `path` would drop the boundary of a slash-bearing parent id.
-        const newPathSegments = usedEntity && pathSegments
-            ? [
-                ...pathSegments,
-                usedEntity.id,
-                ...removeInitialAndTrailingSlashes(subcollection.path).split("/")
-            ]
-            : undefined;
+        const newPathSegments = buildSubcollectionPathSegments(pathSegments, usedEntity?.id, subcollection.path);
 
         if (selectedTab !== subcollectionId) return null;
         return (

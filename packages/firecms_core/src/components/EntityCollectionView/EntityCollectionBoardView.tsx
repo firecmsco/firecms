@@ -274,6 +274,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
         currentDataSource.countEntities({
             path: fullPath,
+            pathSegments,
             collection: currentCollection
         }).then(count => {
             totalCount = count;
@@ -285,6 +286,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
         currentDataSource.countEntities({
             path: fullPath,
+            pathSegments,
             collection: currentCollection,
             filter: { [orderProperty]: ["!=", null] } as FilterValues<string>
         }).then(count => {
@@ -436,6 +438,8 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
         const saveProps: SaveEntityProps = {
             path: entity.path,
+            // Paired with `entity.path`: the segments the entity was loaded with.
+            pathSegments: entity.pathSegments,
             entityId: entity.id,
             values: updatedValues as M,
             previousValues: entity.values,
@@ -496,6 +500,8 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
 
                 const saveProps: SaveEntityProps = {
                     path: entity.path,
+                    // Paired with `entity.path`: the segments the entity was loaded with.
+                    pathSegments: entity.pathSegments,
                     entityId: entity.id,
                     values: updatedValues as M,
                     previousValues: entity.values,
@@ -667,6 +673,7 @@ export function EntityCollectionBoardView<M extends Record<string, any> = any>({
                         });
                         sideEntityController.open({
                             path: fullPath,
+                            pathSegments,
                             collection,
                             entityId: undefined,
                             updateUrl: true,

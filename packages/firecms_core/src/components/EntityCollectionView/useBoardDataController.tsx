@@ -83,6 +83,8 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
     const dataSource = useDataSource(collection);
     const navigation = useNavigationController();
     const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
+    // Deliberately a pass-through and not the segment-wise analogue of `resolveIdsFrom`:
+    // segments are never derived from a path (see useEntityFetch).
     const resolvedPathSegments = pathSegments;
 
     // Stable refs for objects that shouldn't trigger re-subscriptions
@@ -212,6 +214,7 @@ export function useBoardDataController<M extends Record<string, any> = any, COLU
                             currentCollection.callbacks!.onFetch!({
                                 collection: currentCollection,
                                 path: currentResolvedPath,
+                                pathSegments: currentPathSegments,
                                 entity,
                                 context: currentContext
                             })

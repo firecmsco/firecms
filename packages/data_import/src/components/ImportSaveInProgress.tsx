@@ -6,12 +6,15 @@ import { ImportConfig } from "../types";
 export function ImportSaveInProgress<C extends EntityCollection>
 ({
      path,
+     pathSegments,
      importConfig,
      collection,
      onImportSuccess
  }:
  {
      path: string,
+     /** `path` split at its real segment boundaries, when known. Never derived from `path`. */
+     pathSegments?: string[],
      importConfig: ImportConfig,
      collection: C,
      onImportSuccess: (collection: C) => void
@@ -35,6 +38,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
             dataSource,
             collection,
             path,
+            pathSegments,
             importConfig.entities,
             0,
             25,
@@ -95,6 +99,7 @@ export function ImportSaveInProgress<C extends EntityCollection>
 function saveDataBatch(dataSource: DataSource,
                        collection: EntityCollection,
                        path: string,
+                       pathSegments: string[] | undefined,
                        data: Partial<Entity<any>>[],
                        offset = 0,
                        batchSize = 25,
@@ -106,6 +111,7 @@ function saveDataBatch(dataSource: DataSource,
     return Promise.all(batch.map(d =>
         dataSource.saveEntity({
             path,
+            pathSegments,
             values: d.values,
             entityId: d.id,
             collection,
@@ -114,7 +120,7 @@ function saveDataBatch(dataSource: DataSource,
         .then(() => {
             if (offset + batchSize < data.length) {
                 onProgressUpdate(offset + batchSize);
-                return saveDataBatch(dataSource, collection, path, data, offset + batchSize, batchSize, onProgressUpdate);
+                return saveDataBatch(dataSource, collection, path, pathSegments, data, offset + batchSize, batchSize, onProgressUpdate);
             }
             onProgressUpdate(data.length);
             return Promise.resolve();

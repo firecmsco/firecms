@@ -308,6 +308,13 @@ export interface PluginHomePageActionsProps<EP extends object = object, M extend
 export interface PluginFormActionProps<USER extends User = User, EC extends EntityCollection = EntityCollection> {
     entityId?: string;
     path: string;
+    /**
+     * `path` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
+     *
+     * Optional, and never derived by splitting `path` — a parent entity id may itself
+     * contain "/". Absent means "not known here", not "no slashes".
+     */
+    pathSegments?: string[];
     parentCollectionIds: string[];
     status: EntityStatus;
     collection: EC;

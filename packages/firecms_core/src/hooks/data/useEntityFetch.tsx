@@ -11,7 +11,10 @@ export interface EntityFetchProps<M extends Record<string, any>, USER extends Us
     path: string;
     /**
      * `path` split at its real segment boundaries. Forwarded to the datasource so a parent
-     * entity id containing "/" stays unambiguous. Defaults to splitting the resolved path.
+     * entity id containing "/" stays unambiguous.
+     *
+     * Optional, and never derived by splitting `path` — a guess would be wrong in exactly
+     * the case the field exists for. Absent means "not known here", not "no slashes".
      */
     pathSegments?: string[];
     entityId?: string;
@@ -82,6 +85,7 @@ export function useEntityFetch<M extends Record<string, any>, USER extends User>
                     updatedEntity = await collection.callbacks.onFetch({
                         collection,
                         path,
+                        pathSegments,
                         entity: updatedEntity,
                         context
                     });

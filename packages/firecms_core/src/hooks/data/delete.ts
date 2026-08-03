@@ -67,6 +67,8 @@ export async function deleteEntityWithCallbacks<M extends Record<string, any>, U
         collection,
         entityId: entity.id,
         path: entity.path,
+        // Paired with `entity.path`: carried by the entity from the fetch that produced it.
+        pathSegments: entity.pathSegments,
         context
     };
 

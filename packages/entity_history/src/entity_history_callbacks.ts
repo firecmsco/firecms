@@ -1,4 +1,4 @@
-import { buildEntityHistoryPath } from "./history_path";
+import { buildEntityHistoryPath, buildEntityHistoryPathSegments } from "./history_path";
 import { EntityCallbacks, FireCMSContext, User } from "@firecms/core";
 import equal from "react-fast-compare"
 import { HistoryEntry, NewHistoryEntryParams } from "./types";
@@ -10,6 +10,7 @@ export function createHistoryEntry<T = any>({
     previousValues,
     values,
     path,
+    pathSegments,
     entityId,
     collection
 }: NewHistoryEntryParams<T>) {
@@ -29,6 +30,7 @@ export function createHistoryEntry<T = any>({
     };
     dataSource.saveEntity({
         path: buildEntityHistoryPath(path, entityId),
+        pathSegments: buildEntityHistoryPathSegments(pathSegments, entityId),
         values: entry,
         status: "new",
         collection
@@ -43,6 +45,7 @@ export const entityHistoryCallbacks: EntityCallbacks = {
         const values = props.values;
         const previousValues = props.previousValues;
         const path = props.path;
+        const pathSegments = props.pathSegments;
         const entityId = props.entityId;
         const context = props.context;
         const collection = props.collection;
@@ -51,6 +54,7 @@ export const entityHistoryCallbacks: EntityCallbacks = {
             previousValues: previousValues,
             values: values,
             path: path,
+            pathSegments: pathSegments,
             entityId: entityId,
             collection: collection
         });

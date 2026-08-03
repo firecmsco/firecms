@@ -18,6 +18,7 @@ export const editEntityAction: EntityAction = {
                 entity,
                 collection,
                 fullPath,
+                pathSegments,
                 fullIdPath,
                 context,
                 highlightEntity,
@@ -41,6 +42,12 @@ export const editEntityAction: EntityAction = {
         }
 
         const path = collection?.collectionGroup ? entity.path : (fullPath ?? collection?.path ?? entity.path);
+        // In a collection group `path` is the entity's own, so the entity's segments describe
+        // it. Otherwise the caller's segments win, falling back to the ones the entity was
+        // loaded with — both describe the same collection. Never derived from `path`.
+        const resolvedPathSegments = collection?.collectionGroup
+            ? entity.pathSegments
+            : (pathSegments ?? entity.pathSegments);
         const newFullIdPath = collection?.collectionGroup ? collection.id : (fullIdPath ?? collection?.id ?? entity.path);
         const defaultSelectedView = resolveDefaultSelectedView(
             collection ? collection.defaultSelectedView : undefined,
@@ -54,6 +61,7 @@ export const editEntityAction: EntityAction = {
             collection,
             entityId: entity.id,
             path,
+            pathSegments: resolvedPathSegments,
             fullIdPath: newFullIdPath,
             sideEntityController: context.sideEntityController,
             onClose: () => unhighlightEntity?.(entity),
@@ -75,6 +83,7 @@ export const copyEntityAction: EntityAction = {
                 collection,
                 context,
                 fullPath,
+                pathSegments,
                 highlightEntity,
                 unhighlightEntity,
                 openEntityMode
@@ -89,12 +98,19 @@ export const copyEntityAction: EntityAction = {
         });
 
         const path = collection?.collectionGroup ? collection.path : (fullPath ?? collection?.path ?? entity.path);
+        // In a collection group `path` is the group's own root, which the entity's segments
+        // (its real nested location) do not describe — so they are deliberately not reused,
+        // and no substitute is invented.
+        const resolvedPathSegments = collection?.collectionGroup
+            ? undefined
+            : (pathSegments ?? entity.pathSegments);
         const fullIdPath = collection?.collectionGroup ? collection.id : (fullPath ?? collection?.id ?? entity.path);
         navigateToEntity({
             openEntityMode,
             collection,
             entityId: entity.id,
             path,
+            pathSegments: resolvedPathSegments,
             fullIdPath,
             copy: true,
             sideEntityController: context.sideEntityController,

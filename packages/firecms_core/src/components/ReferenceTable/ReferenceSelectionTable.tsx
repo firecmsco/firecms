@@ -215,6 +215,7 @@ export function ReferenceSelectionTable<M extends Record<string, any>>(
         });
         sideEntityController.open({
             path: fullPath,
+            pathSegments,
             collection,
             updateUrl: true,
             onUpdate: ({ entity }) => {

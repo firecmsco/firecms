@@ -99,6 +99,9 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({
         dataLoadingError
     } = useEntityFetch({
         path: reference.path,
+        // References carry the segments of the collection they point at, when the code that
+        // built them knew them (see getReferenceFrom).
+        pathSegments: reference.pathSegments,
         entityId: reference.id,
         collection,
         useCache: true

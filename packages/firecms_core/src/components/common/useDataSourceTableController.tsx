@@ -27,8 +27,10 @@ export type DataSourceTableControllerProps<M extends Record<string, any> = any> 
     fullPath: string;
     /**
      * `fullPath` split at its real segment boundaries. Passed through to the datasource so
-     * a parent entity id containing "/" stays unambiguous. Defaults to splitting
-     * `fullPath`, which is correct for any backend whose ids cannot contain "/".
+     * a parent entity id containing "/" stays unambiguous.
+     *
+     * Optional, and never derived by splitting `fullPath` — a guess would be wrong in
+     * exactly the case the field exists for. Absent means "not known here", not "no slashes".
      */
     pathSegments?: string[];
     /**
@@ -247,6 +249,7 @@ export function useDataSourceTableController<M extends Record<string, any> = any
                             collection.callbacks!.onFetch!({
                                 collection,
                                 path: resolvedPath,
+                                pathSegments: resolvedPathSegments,
                                 entity,
                                 context
                             })));

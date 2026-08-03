@@ -1,4 +1,4 @@
-import { buildEntityHistoryPath } from "../history_path";
+import { buildEntityHistoryPath, buildEntityHistoryPathSegments } from "../history_path";
 import { useEffect, useRef, useState } from "react";
 import {
     ConfirmationDialog,
@@ -27,6 +27,8 @@ export function EntityHistoryView({
 
     const dataSource = useDataSource();
     const historyPath = entity ? buildEntityHistoryPath(entity.path, entity.id) : undefined;
+    // Paired with `historyPath`; undefined when the entity was loaded without segments.
+    const historyPathSegments = entity ? buildEntityHistoryPathSegments(entity.pathSegments, entity.id) : undefined;
 
     const [revertVersionDialog, setRevertVersionDialog] = useState<Entity | undefined>(undefined);
     const [revisions, setRevisions] = useState<Entity[]>([]);
@@ -47,6 +49,7 @@ export function EntityHistoryView({
         setIsLoading(true); // Set loading true when fetching starts
         const listener = dataSource.listenCollection?.({
             path: historyPath,
+            pathSegments: historyPathSegments,
             collection: collection,
             order: "desc",
             orderBy: "__metadata.updated_on",
@@ -136,6 +139,7 @@ export function EntityHistoryView({
         };
         const saveReverted = dataSource.saveEntity({
             path: entity.path,
+            pathSegments: entity.pathSegments,
             entityId: entity.id,
             values: revertValues,
             collection,
@@ -143,6 +147,7 @@ export function EntityHistoryView({
         });
         const saveRevertedHistory = dataSource.saveEntity({
             path: revertVersion.path,
+            pathSegments: revertVersion.pathSegments,
             entityId: revertVersion.id,
             values: revertValues,
             collection,

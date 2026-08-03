@@ -177,6 +177,9 @@ export function EntityPreview({
                         sideEntityController.open({
                             entityId: entity.id,
                             path: entity.path,
+                            // Paired with `entity.path` above; undefined if the entity was
+                            // loaded without them.
+                            pathSegments: entity.pathSegments,
                             collection,
                             updateUrl: true
                         });

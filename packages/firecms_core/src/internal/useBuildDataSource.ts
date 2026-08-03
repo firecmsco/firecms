@@ -286,9 +286,15 @@ export function useBuildDataSource({
                 values: finalValues,
                 status
             }).then((res) => {
+                // Keep everything the delegate resolved — `databaseId`, and `pathSegments` in
+                // particular — so a just-saved entity is as resolvable as a fetched one.
+                // Only the values are re-mapped back to the CMS model.
                 return {
-                    id: res.id,
-                    path: res.path,
+                    ...res,
+                    // A delegate that predates `pathSegments` returns none; the segments we
+                    // just saved with describe exactly this entity's collection, so they are
+                    // the authoritative answer rather than a guess.
+                    pathSegments: res.pathSegments ?? pathSegments,
                     values: usedDelegate.delegateToCMSModel(finalValues)
                 } as Entity<M>;
             });

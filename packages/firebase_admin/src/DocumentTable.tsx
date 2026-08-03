@@ -846,6 +846,9 @@ export function DocumentTable({
         if (cmsCollection) {
             sideEntityController.open({
                 path,
+                // The admin explorer is handed a raw Firestore path and no segments; left
+                // undefined rather than split, which would be a guess.
+                pathSegments: undefined,
                 entityId: doc.id,
                 updateUrl: true,
                 onUpdate: () => {

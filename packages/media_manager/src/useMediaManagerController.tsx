@@ -264,7 +264,11 @@ export function useMediaManagerController({
                 id: assetId,
                 path: collectionPath,
                 values: asset
-            }
+            },
+            // `collectionPath` is a configurable path string this hook never parses. Segments
+            // are left undefined rather than split out of it: absent means "not known here",
+            // and a split would be wrong for any configured id containing "/".
+            pathSegments: undefined
         });
 
         setAssets(prev => prev.filter(a => a.id !== assetId));
@@ -296,6 +300,10 @@ export function useMediaManagerController({
 
         await dataSourceDelegate.saveEntity({
             path: collectionPath,
+            // `collectionPath` is a configurable path string this hook never parses. Segments
+            // are left undefined rather than split out of it: absent means "not known here",
+            // and a split would be wrong for any configured id containing "/".
+            pathSegments: undefined,
             entityId: assetId,
             values: cleanData,
             previousValues: asset,

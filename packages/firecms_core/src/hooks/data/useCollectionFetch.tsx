@@ -109,6 +109,7 @@ export function useCollectionFetch<M extends Record<string, any>, USER extends U
                             collection.callbacks!.onFetch!({
                                 collection,
                                 path,
+                                pathSegments,
                                 entity,
                                 context
                             })));

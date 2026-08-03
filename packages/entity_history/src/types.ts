@@ -16,6 +16,8 @@ export interface NewHistoryEntryParams<T = any> {
     previousValues?: Partial<T>;
     values: Partial<T>;
     path: string;
+    /** `path` split at its real segment boundaries, when known. Never derived from `path`. */
+    pathSegments?: string[];
     entityId: string;
     collection?: EntityCollection;
 }

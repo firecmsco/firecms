@@ -65,6 +65,12 @@ export type EntityActionClickProps<M extends object, USER extends User = User> =
     context: FireCMSContext<USER>;
 
     fullPath?: string;
+    /**
+     * `fullPath` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`,
+     * when the caller knows them. Absent means "not known here" — never derived from
+     * `fullPath`, since a parent id may itself contain "/".
+     */
+    pathSegments?: string[];
     fullIdPath?: string;
     collection?: EntityCollection<M>;
 

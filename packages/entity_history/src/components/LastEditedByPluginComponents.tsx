@@ -9,6 +9,7 @@ import { LastEditedByIndicator } from "./LastEditedByIndicator";
 export function LastEditedByFormAction({
     entityId,
     path,
+    pathSegments,
     status,
     collection,
 }: PluginFormActionProps) {
@@ -17,6 +18,7 @@ export function LastEditedByFormAction({
 
     return <LastEditedByIndicator
         path={path}
+        pathSegments={pathSegments}
         entityId={entityId}
         collection={collection}
     />;

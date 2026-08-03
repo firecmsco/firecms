@@ -364,9 +364,10 @@ export function DataEnhancementControllerProvider({
 
 const ENTITIES_COUNT = 1;
 
-async function getOtherEntities(collection: EntityCollection, dataSource: DataSource, path: string, entityId: string): Promise<Entity<any>[]> {
+async function getOtherEntities(collection: EntityCollection, dataSource: DataSource, path: string, pathSegments: string[] | undefined, entityId: string): Promise<Entity<any>[]> {
     const fetchedDocs = await dataSource.fetchCollection({
         path,
+        pathSegments,
         collection,
         filter: { __name__: [">", entityId] },
         orderBy: "__name__",
@@ -376,6 +377,7 @@ async function getOtherEntities(collection: EntityCollection, dataSource: DataSo
     if (fetchedDocs.length < ENTITIES_COUNT) {
         fetchedDocs.push(...await dataSource.fetchCollection({
             path,
+            pathSegments,
             collection,
             filter: { __name__: ["<", entityId] },
             orderBy: "__name__",

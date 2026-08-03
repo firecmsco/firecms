@@ -498,6 +498,14 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, USE
     path: string;
 
     /**
+     * `path` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
+     *
+     * Optional, and never derived by splitting `path` — a parent entity id may itself
+     * contain "/". Absent means "not known here", not "no slashes".
+     */
+    pathSegments?: string[];
+
+    /**
      * Path of the last collection, like `addresses`
      */
     relativePath: string;

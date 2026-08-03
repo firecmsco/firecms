@@ -109,8 +109,9 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
     /**
      * `fullPath` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
      * Forwarded to the datasource so a parent entity id containing "/" stays unambiguous.
-     * Defaults to splitting `fullPath`, which is correct for any backend whose ids cannot
-     * contain "/".
+     *
+     * Optional, and never derived by splitting `fullPath` — a guess would be wrong in
+     * exactly the case the field exists for. Absent means "not known here", not "no slashes".
      */
     pathSegments?: string[];
     /**
@@ -351,10 +352,16 @@ export const EntityCollectionView = React.memo(
                 addRecentId(collection.id, clickedEntity.id);
             }
 
-            const path = collection?.collectionGroup ? clickedEntity.path : (fullPath ?? clickedEntity.path);
+            // In a collection group the row's own path is the real one, so the row's segments
+            // are the matching ones; otherwise both come from this view. `path` and
+            // `pathSegments` are picked from the same source so they cannot describe
+            // different chains.
+            const isCollectionGroup = Boolean(collection?.collectionGroup);
+            const path = isCollectionGroup ? clickedEntity.path : (fullPath ?? clickedEntity.path);
             navigateToEntity({
                 navigation,
                 path,
+                pathSegments: isCollectionGroup ? clickedEntity.pathSegments : (pathSegments ?? clickedEntity.pathSegments),
                 fullIdPath,
                 sideEntityController,
                 openEntityMode,
@@ -469,8 +476,8 @@ export const EntityCollectionView = React.memo(
                 value,
                 property,
                 entityId
-            }) => dataSource.checkUniqueField(fullPath, name, value, entityId, collection),
-            [fullPath]);
+            }) => dataSource.checkUniqueField(fullPath, name, value, entityId, collection, pathSegments),
+            [fullPath, pathSegments]);
 
         const onValueChange: OnCellValueChange<any, any> = ({
             value,
@@ -484,6 +491,8 @@ export const EntityCollectionView = React.memo(
 
             const saveProps: SaveEntityProps = {
                 path: entity.path ?? fullPath,
+                // Paired with the `path` above: the row's segments describe the row's path.
+                pathSegments: entity.path ? entity.pathSegments : pathSegments,
                 entityId: entity.id,
                 values: updatedValues,
                 previousValues: entity.values,
@@ -907,6 +916,7 @@ export const EntityCollectionView = React.memo(
                         collection={collection}
                         tableController={tableController}
                         path={fullPath}
+                        pathSegments={pathSegments}
                         relativePath={collection.path}
                         selectionController={usedSelectionController}
                         collectionEntitiesCount={docsCount}
@@ -918,6 +928,7 @@ export const EntityCollectionView = React.memo(
                         onMultipleDeleteClick={onMultipleDeleteClick}
                         onNewClick={onNewClick}
                         path={fullPath}
+                        pathSegments={pathSegments}
                         relativePath={collection.path}
                         selectionController={usedSelectionController}
                         selectionEnabled={selectionEnabled}
@@ -1026,6 +1037,7 @@ export const EntityCollectionView = React.memo(
                         getIdColumnWidth={getIdColumnWidth}
                         additionalIDHeaderWidget={<EntityIdHeaderWidget
                             path={fullPath}
+                            pathSegments={pathSegments}
                             fullIdPath={fullIdPath ?? fullPath}
                             collection={collection} />}
                         openEntityMode={openEntityMode}
@@ -1141,6 +1153,8 @@ function EntitiesCount({
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
     const resolvedPath = useMemo(() => navigation.resolveIdsFrom(fullPath), [fullPath, navigation.resolveIdsFrom]);
+    // Deliberately a pass-through and not the segment-wise analogue of `resolveIdsFrom`:
+    // segments are never derived from a path (see useEntityFetch).
     const resolvedPathSegments = pathSegments;
 
     useEffect(() => {
@@ -1182,10 +1196,13 @@ function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityC
 function EntityIdHeaderWidget({
     collection,
     path,
+    pathSegments,
     fullIdPath
 }: {
     collection: EntityCollection,
     path: string,
+    /** `path` split at its real segment boundaries, when the caller knows them. */
+    pathSegments?: string[],
     fullIdPath: string
 }) {
 
@@ -1225,6 +1242,7 @@ function EntityIdHeaderWidget({
                                 collection,
                                 entityId,
                                 path,
+                                pathSegments,
                                 fullIdPath,
                                 sideEntityController,
                                 navigation
@@ -1250,7 +1268,7 @@ function EntityIdHeaderWidget({
                     </form>
                     {recentIds && recentIds.length > 0 && <div className="flex flex-col gap-2 p-2">
                         {recentIds.map(id => (
-                            <ReferencePreview reference={new EntityReference(id, path)}
+                            <ReferencePreview reference={new EntityReference(id, path, undefined, pathSegments)}
                                 key={id}
                                 hover={true}
                                 onClick={() => {
@@ -1260,6 +1278,7 @@ function EntityIdHeaderWidget({
                                         collection,
                                         entityId: id,
                                         path,
+                                        pathSegments,
                                         fullIdPath,
                                         sideEntityController,
                                         navigation

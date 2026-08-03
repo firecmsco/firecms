@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
-import { buildEntityHistoryPath, HISTORY_COLLECTION_NAME } from "../src/history_path";
+import { buildEntityHistoryPath, buildEntityHistoryPathSegments, HISTORY_COLLECTION_NAME } from "../src/history_path";
 
 /**
  * History is stored as a subcollection *under* the entity, so the entity id becomes a path
@@ -55,6 +55,48 @@ describe("buildEntityHistoryPath", () => {
         for (const id of ["plain", "edge/7", "50%"]) {
             expect(buildEntityHistoryPath("nodes", id).endsWith("/" + HISTORY_COLLECTION_NAME))
                 .toEqual(true);
+        }
+    });
+
+});
+
+/**
+ * The segment-wise counterpart. Where the flattened path has to *escape* a slash-bearing id
+ * to survive, the segment form simply keeps it whole — that is the whole point of the field.
+ */
+describe("buildEntityHistoryPathSegments", () => {
+
+    it("keeps a slash-bearing id whole instead of escaping it", () => {
+        expect(buildEntityHistoryPathSegments(["nodes"], "edge/7"))
+            .toEqual(["nodes", "edge/7", HISTORY_COLLECTION_NAME]);
+        // The flattened form escapes the same id; the two must not be confused.
+        expect(buildEntityHistoryPath("nodes", "edge/7")).toEqual("nodes/edge%2F7/__history");
+    });
+
+    it("is the plain nesting for ordinary ids", () => {
+        expect(buildEntityHistoryPathSegments(["nodes"], "plain"))
+            .toEqual(["nodes", "plain", HISTORY_COLLECTION_NAME]);
+    });
+
+    it("extends a parent chain that already contains a slash-bearing id", () => {
+        expect(buildEntityHistoryPathSegments(["test", "test/test", "accommodation"], "room/7"))
+            .toEqual(["test", "test/test", "accommodation", "room/7", HISTORY_COLLECTION_NAME]);
+    });
+
+    it("returns undefined rather than guessing when the parent segments are unknown", () => {
+        // The caller was not given segments; splitting the path would be confidently wrong.
+        expect(buildEntityHistoryPathSegments(undefined, "edge/7")).toBeUndefined();
+    });
+
+    it("keeps a literal %2F distinct from a real slash", () => {
+        expect(buildEntityHistoryPathSegments(["nodes"], "a/b"))
+            .not.toEqual(buildEntityHistoryPathSegments(["nodes"], "a%2Fb"));
+    });
+
+    it("always ends in the history collection name", () => {
+        for (const id of ["plain", "edge/7", "50%"]) {
+            const segments = buildEntityHistoryPathSegments(["nodes"], id)!;
+            expect(segments[segments.length - 1]).toEqual(HISTORY_COLLECTION_NAME);
         }
     });
 

@@ -56,6 +56,30 @@ export function decodeEntityId(encodedEntityId: string): string {
         .replaceAll("%25", "%");
 }
 
+/**
+ * Segments of a subcollection sitting under the entity `entityId` of `parentPathSegments`.
+ *
+ * The parent entity id is kept whole however many slashes it contains, while the
+ * subcollection's own configured path is spread — a collection path never contains an
+ * entity id, so splitting that one is unambiguous.
+ *
+ * So `["test"] + "test/test" + "accommodation"` yields three segments,
+ * `["test", "test/test", "accommodation"]`, where splitting the flattened path
+ * `"test/test/test/accommodation"` would wrongly yield four.
+ *
+ * Returns undefined when the parent segments are unknown: the parent chain cannot be
+ * recovered from a flattened path, so there is nothing honest to build on.
+ *
+ * @group Hooks and utilities
+ */
+export function buildSubcollectionPathSegments(parentPathSegments: string[] | undefined,
+                                               entityId: string | undefined,
+                                               subcollectionPath: string): string[] | undefined {
+    if (!parentPathSegments || !entityId) return undefined;
+    const ownSegments = removeInitialAndTrailingSlashes(subcollectionPath).split("/");
+    return [...parentPathSegments, entityId, ...ownSegments];
+}
+
 export function getLastSegment(path: string) {
     const cleanPath = removeInitialAndTrailingSlashes(path);
     if (cleanPath.includes("/")) {

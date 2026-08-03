@@ -87,6 +87,14 @@ export interface EntityOnFetchProps<M extends Record<string, any> = any, USER ex
     path: string;
 
     /**
+     * `path` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
+     *
+     * Optional, and never derived by splitting `path` — a parent entity id may itself
+     * contain "/". Absent means "not known here", not "no slashes".
+     */
+    pathSegments?: string[];
+
+    /**
      * Fetched entity
      */
     entity: Entity<M>
@@ -134,6 +142,14 @@ export interface EntityOnSaveProps<M extends Record<string, any> = any, USER ext
     path: string;
 
     /**
+     * `path` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
+     *
+     * Optional, and never derived by splitting `path` — a parent entity id may itself
+     * contain "/". Absent means "not known here", not "no slashes".
+     */
+    pathSegments?: string[];
+
+    /**
      * Full path where this entity is being saved, with alias resolved
      */
     resolvedPath: string;
@@ -179,6 +195,14 @@ export interface EntityOnDeleteProps<M extends Record<string, any> = any, USER e
      * Path of the parent collection
      */
     path: string;
+
+    /**
+     * `path` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
+     *
+     * Optional, and never derived by splitting `path` — a parent entity id may itself
+     * contain "/". Absent means "not known here", not "no slashes".
+     */
+    pathSegments?: string[];
 
     /**
      * Deleted entity id

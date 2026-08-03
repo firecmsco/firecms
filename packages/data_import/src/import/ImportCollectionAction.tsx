@@ -45,6 +45,7 @@ type ImportState = "initial" | "mapping" | "preview" | "import_data_saving";
 export function ImportCollectionAction<M extends Record<string, any>, USER extends User>({
                                                                                              collection,
                                                                                              path,
+                                                                                             pathSegments,
                                                                                              onAnalyticsEvent
                                                                                          }: CollectionActionsProps<M, USER> & {
                                                                                              onAnalyticsEvent?: (event: string, params?: any) => void;
@@ -194,6 +195,7 @@ export function ImportCollectionAction<M extends Record<string, any>, USER exten
 
                 {step === "import_data_saving" && importConfig &&
                     <ImportSaveInProgress importConfig={importConfig}
+                                          pathSegments={pathSegments}
                                           collection={collection}
                                           path={path}
                                           onImportSuccess={(importedCollection) => {

@@ -153,6 +153,7 @@ export function EntityHistoryEntry({
                             sideEntityController.open({
                                 entityId: entity.id,
                                 path: entity.path,
+                                pathSegments: entity.pathSegments,
                                 allowFullScreen: false,
                                 collection: {
                                     ...collection,

@@ -64,6 +64,8 @@ export type OnUpdateParams = {
     entity: Entity<any>,
     status: EntityStatus,
     path: string,
+    /** `path` split at its real segment boundaries, when known. Never derived from `path`. */
+    pathSegments?: string[],
     entityId?: string;
     selectedTab?: string;
     collection: EntityCollection<any>
@@ -276,6 +278,7 @@ export function EntityForm<M extends Record<string, any>>({
                 entityId: entityIdProp,
                 collection,
                 path,
+                pathSegments,
                 values: valuesToBeSaved
             });
     }, false, 2000);
@@ -497,6 +500,7 @@ export function EntityForm<M extends Record<string, any>>({
                 entity: updatedEntity,
                 status,
                 path,
+                pathSegments,
                 entityId: updatedEntity.id,
                 collection
             });
@@ -517,16 +521,20 @@ export function EntityForm<M extends Record<string, any>>({
         previousValues,
         entityId,
         collection,
-        path
+        path,
+        pathSegments
     }: {
         collection: EntityCollection<M>,
         path: string,
+        /** `path` split at its real segment boundaries, travelling with the `path` above. */
+        pathSegments?: string[],
         entityId: string | undefined,
         values: M,
         previousValues?: M,
     }) => {
         return saveEntityWithCallbacks({
             path,
+            pathSegments,
             entityId,
             values,
             previousValues,
@@ -544,6 +552,7 @@ export function EntityForm<M extends Record<string, any>>({
     type EntityFormSaveParams<M extends Record<string, any>> = {
         collection: ResolvedEntityCollection<M>,
         path: string,
+        pathSegments?: string[],
         entityId: string | undefined,
         values: EntityValues<M>,
         previousValues?: EntityValues<M>,
@@ -553,6 +562,7 @@ export function EntityForm<M extends Record<string, any>>({
     const onSaveEntityRequest = async ({
         collection,
         path,
+        pathSegments,
         entityId,
         values,
         previousValues,
@@ -566,6 +576,7 @@ export function EntityForm<M extends Record<string, any>>({
             return saveEntity({
                 collection,
                 path,
+                pathSegments,
                 entityId,
                 values,
                 previousValues
@@ -579,6 +590,7 @@ export function EntityForm<M extends Record<string, any>>({
         return onSaveEntityRequest({
             collection: resolvedCollection,
             path,
+            pathSegments,
             entityId,
             values,
             previousValues: entity?.values,
@@ -636,6 +648,7 @@ export function EntityForm<M extends Record<string, any>>({
             entityId,
             parentCollectionIds,
             path,
+            pathSegments,
             status,
             collection,
             context,

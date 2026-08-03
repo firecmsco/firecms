@@ -60,6 +60,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         if (params.status !== "existing") {
             sideEntityController.replace({
                 path: params.path,
+                pathSegments: params.pathSegments ?? pathSegments,
                 entityId: params.entityId,
                 fullIdPath: props.fullIdPath,
                 selectedTab: params.selectedTab,
@@ -154,6 +155,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                     }) => {
                         sideEntityController.replace({
                             path,
+                            pathSegments,
                             entityId,
                             fullIdPath: props.fullIdPath,
                             selectedTab,

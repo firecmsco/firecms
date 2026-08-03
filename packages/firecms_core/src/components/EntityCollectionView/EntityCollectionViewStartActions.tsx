@@ -17,6 +17,8 @@ import { useTranslation } from "../../hooks/useTranslation";
 export type EntityCollectionViewStartActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
     path: string;
+    /** `path` split at its real segment boundaries, when known. Never derived from `path`. */
+    pathSegments?: string[];
     relativePath: string;
     parentCollectionIds: string[];
     selectionController: SelectionController<M>;
@@ -33,6 +35,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
     relativePath,
     parentCollectionIds,
     path,
+    pathSegments,
     selectionController,
     tableController,
     collectionEntitiesCount,
@@ -57,6 +60,7 @@ export function EntityCollectionViewStartActions<M extends Record<string, any>>(
 
     const actionProps: CollectionActionsProps = {
         path,
+        pathSegments,
         relativePath,
         parentCollectionIds,
         collection,

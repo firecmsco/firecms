@@ -200,7 +200,7 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
                 path: usersPath,
                 id: userExists.uid
             }
-            await dataSourceDelegate.deleteEntity({ entity })
+            await dataSourceDelegate.deleteEntity({ entity, pathSegments: undefined })
                 .then(() => {
                     console.debug("Deleted previous user", userExists);
                 })
@@ -213,6 +213,10 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
         return dataSourceDelegate.saveEntity({
             status: "existing",
             path: usersPath,
+            // `usersPath` / `rolesPath` are configurable path strings this hook never parses.
+            // Segments are left undefined rather than split out of one: absent means "not known
+            // here", and a split would be wrong for any configured id containing "/".
+            pathSegments: undefined,
             entityId: email,
             values: removeUndefined(data)
         }).then(() => user);
@@ -229,6 +233,10 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
         return dataSourceDelegate.saveEntity({
             status: "existing",
             path: rolesPath,
+            // `usersPath` / `rolesPath` are configurable path strings this hook never parses.
+            // Segments are left undefined rather than split out of one: absent means "not known
+            // here", and a split would be wrong for any configured id containing "/".
+            pathSegments: undefined,
             entityId: id,
             values: removeUndefined(roleData)
         }).then(() => {
@@ -246,7 +254,7 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
             id: uid,
             values: {}
         };
-        await dataSourceDelegate.deleteEntity({ entity })
+        await dataSourceDelegate.deleteEntity({ entity, pathSegments: undefined })
     }, [usersPath, dataSourceDelegate?.initialised]);
 
     const deleteRole = useCallback(async (role: Role): Promise<void> => {
@@ -259,7 +267,7 @@ export function useBuildUserManagement<CONTROLLER extends AuthController<any> = 
             id: id,
             values: {}
         };
-        await dataSourceDelegate.deleteEntity({ entity })
+        await dataSourceDelegate.deleteEntity({ entity, pathSegments: undefined })
     }, [rolesPath, dataSourceDelegate?.initialised]);
 
     const collectionPermissions: PermissionsBuilder = useCallback(({

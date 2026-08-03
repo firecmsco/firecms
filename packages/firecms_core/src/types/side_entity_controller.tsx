@@ -21,8 +21,9 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any> {
     fullIdPath?: string;
     /**
      * `path` split at its real segment boundaries, e.g. `["nodes", "node/42", "edges"]`.
-     * Optional: when omitted the panel falls back to splitting `path`, which is correct for
-     * any backend whose entity ids cannot contain "/".
+     *
+     * Optional, and never derived by splitting `path` — a guess would be wrong in exactly
+     * the case the field exists for. Absent means "not known here", not "no slashes".
      */
     pathSegments?: string[];
 
