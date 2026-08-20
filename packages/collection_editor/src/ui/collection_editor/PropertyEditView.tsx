@@ -498,13 +498,11 @@ function PropertyEditFormFields({
             showErrors={showErrors} />;
     } else if (selectedFieldConfigId === "file_upload") {
         childComponent =
-            <StoragePropertyField existing={existing}
-                multiple={false}
+            <StoragePropertyField multiple={false}
                 disabled={disabled} />;
     } else if (selectedFieldConfigId === "multi_file_upload") {
         childComponent =
-            <StoragePropertyField existing={existing}
-                multiple={true}
+            <StoragePropertyField multiple={true}
                 disabled={disabled} />;
     } else if (selectedFieldConfigId === "switch") {
         childComponent = <BooleanPropertyField disabled={disabled} />;

@@ -20,11 +20,9 @@ import { useTranslation } from "@firecms/core";
 
 export function StoragePropertyField({
                                          multiple,
-                                         existing,
                                          disabled
                                      }: {
     multiple: boolean;
-    existing: boolean;
     disabled: boolean;
 }) {
 
@@ -179,7 +177,7 @@ export function StoragePropertyField({
                                   }: FormexFieldProps) => {
                                     return <SwitchControl
                                         label={t("include_bucket_url")}
-                                        disabled={existing || disabled}
+                                        disabled={disabled}
                                         form={form}
                                         field={field}/>;
                                 }}
@@ -197,7 +195,7 @@ export function StoragePropertyField({
                                   }: FormexFieldProps) => {
                                     return <SwitchControl
                                         label={t("save_url_instead_of_path")}
-                                        disabled={existing || disabled}
+                                        disabled={disabled}
                                         form={form}
                                         field={field}/>;
                                 }}
