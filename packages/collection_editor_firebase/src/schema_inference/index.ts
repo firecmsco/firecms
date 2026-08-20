@@ -1,11 +1,10 @@
-import { buildEntityPropertiesFromData, buildPropertiesOrder } from "@firecms/schema_inference";
+import { buildEntityPropertiesFromData, buildInferredCollectionFromData } from "@firecms/schema_inference";
 import { DocumentReference, Firestore, Timestamp } from "firebase/firestore";
 import {
     DataType,
     EntityCollection,
     FilterValues,
     GeoPoint,
-    prettifyIdentifier,
     removeInitialAndTrailingSlashes
 } from "@firecms/core";
 import { getDocuments } from "./firestore";
@@ -35,16 +34,10 @@ export async function getInferredEntityCollection(
 }
 
 export async function getInferredEntityCollectionFromData(collectionPath: string, data: object[]): Promise<Partial<EntityCollection>> {
-    const cleanPath = removeInitialAndTrailingSlashes(collectionPath);
-    const properties = await buildEntityPropertiesFromData(data, getType);
-    const propertiesOrder = buildPropertiesOrder(properties);
-    const lastPathSegment = cleanPath.includes("/") ? cleanPath.split("/").slice(-1)[0] : cleanPath;
-    return {
-        path: cleanPath,
-        name: prettifyIdentifier(lastPathSegment),
-        properties,
-        propertiesOrder
-    };
+    // The composition lives in @firecms/schema_inference so that the web client, the
+    // backend and the MCP server all infer collections the same way; only `getType`
+    // differs, because each reads its documents from a different source.
+    return buildInferredCollectionFromData(collectionPath, data, getType) as Promise<Partial<EntityCollection>>;
 }
 
 export async function getPropertiesFromData(data: object[]) {
