@@ -5,6 +5,7 @@ import {
     loginFlow,
     logoutFlow,
 } from "../auth.js";
+import { clearBackendTokenCache } from "../backend-auth.js";
 
 /**
  * Register login/logout tools — same flow as `firecms login` CLI.
@@ -66,6 +67,9 @@ export function registerAuthTools(server: McpServer) {
             const email = getCurrentUserEmail();
             try {
                 await logoutFlow();
+                // Drop the exchanged FireCMS backend token too, or the session would
+                // survive the logout until it expired on its own.
+                clearBackendTokenCache();
                 return {
                     content: [{
                         type: "text" as const,

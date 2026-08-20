@@ -4,6 +4,9 @@
  * Delegates to the CLI package (@firecms/cli) — same OAuth flow,
  * same token storage at ~/.firecms/tokens.json.
  */
+import fs from "fs";
+import path from "path";
+import os from "os";
 import {
     login,
     logout,
@@ -45,10 +48,11 @@ export async function getValidTokens(): Promise<StoredTokens | null> {
 export function getCurrentUserEmail(): string | null {
     // getTokens is async, but for a quick sync check we read the file directly.
     // The CLI stores tokens at ~/.firecms/tokens.json.
+    //
+    // This must use ESM imports: the package is `"type": "module"`, so `require`
+    // is not defined here and every call would fall into the catch and report
+    // "not logged in".
     try {
-        const fs = require("fs");
-        const path = require("path");
-        const os = require("os");
         const filePath = path.join(os.homedir(), ".firecms", "tokens.json");
         if (!fs.existsSync(filePath)) return null;
         const tokens = JSON.parse(fs.readFileSync(filePath, "utf-8"));

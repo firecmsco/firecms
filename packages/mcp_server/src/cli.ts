@@ -23,6 +23,28 @@ import { getCurrentUserEmail } from "./auth.js";
  *     }
  *   }
  */
+/**
+ * Route every console channel to stderr.
+ *
+ * On a stdio transport, stdout carries the JSON-RPC stream — a single stray
+ * `console.log` anywhere in the process corrupts it and kills the session. Our own
+ * code is careful, but dependencies are not: `@firecms/schema_inference` logs while
+ * inferring properties, and `@firecms/cli` logs during the login flow. Redirecting
+ * the console keeps those messages visible for debugging without putting them on the
+ * wire. The transport writes to `process.stdout` directly, so it is unaffected.
+ */
+function redirectConsoleToStderr() {
+    const toStderr = (...args: any[]) => {
+        process.stderr.write(args.map(a =>
+            typeof a === "string" ? a : JSON.stringify(a)
+        ).join(" ") + "\n");
+    };
+    console.log = toStderr;
+    console.info = toStderr;
+    console.debug = toStderr;
+    console.warn = toStderr;
+}
+
 async function main() {
     const args = process.argv.slice(2);
 
@@ -49,6 +71,9 @@ Claude Desktop config (claude_desktop_config.json):
 `);
         process.exit(0);
     }
+
+    // Must happen before anything else can log.
+    redirectConsoleToStderr();
 
     const server = createFireCMSMcpServer();
     const transport = new StdioServerTransport();
