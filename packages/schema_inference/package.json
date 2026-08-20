@@ -32,10 +32,6 @@
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },
   "gitHead": "9ecf37abf793bd2f2daaaed6f517ee5ee19b01ae",
-  "dependencies": {
-    "axios": "^1.16.1",
-    "vite-plugin-static-copy": "4.1.1"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/FireCMSco/firecms.git",
