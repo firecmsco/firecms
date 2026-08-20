@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
+    "rootDir": "src",
     "paths": {
       "@firecms/core": ["../firecms_core/dist"],
       "@firecms/ui": ["../ui/dist"]

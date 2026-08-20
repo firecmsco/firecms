@@ -30,15 +30,15 @@
     "react-dom": ">=18.3.1 || >=19.0.0"
   },
   "dependencies": {
-    "@firecms/collection_editor_firebase": "^3.3.0",
-    "@firecms/core": "^3.3.0",
-    "@firecms/data_export": "^3.3.0",
-    "@firecms/data_import": "^3.3.0",
-    "@firecms/data_import_export": "^3.3.0",
-    "@firecms/firebase": "^3.3.0",
-    "@firecms/formex": "^3.3.0",
-    "@firecms/schema_inference": "^3.3.0",
-    "@firecms/ui": "^3.3.0",
+    "@firecms/collection_editor_firebase": "workspace:^3.3.0",
+    "@firecms/core": "workspace:^3.3.0",
+    "@firecms/data_export": "workspace:^3.3.0",
+    "@firecms/data_import": "workspace:^3.3.0",
+    "@firecms/data_import_export": "workspace:^3.3.0",
+    "@firecms/firebase": "workspace:^3.3.0",
+    "@firecms/formex": "workspace:^3.3.0",
+    "@firecms/schema_inference": "workspace:^3.3.0",
+    "@firecms/ui": "workspace:^3.3.0",
     "@monaco-editor/react": "^4.7.0"
   },
   "devDependencies": {

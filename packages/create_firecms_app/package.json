@@ -25,7 +25,7 @@
   "author": "firecms.co",
   "license": "MIT",
   "dependencies": {
-    "@firecms/cli": "^3.1.0"
+    "@firecms/cli": "workspace:^3.1.0"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
