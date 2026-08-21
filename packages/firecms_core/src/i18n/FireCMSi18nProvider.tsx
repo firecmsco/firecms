@@ -53,24 +53,45 @@ export function FireCMSi18nProvider({
 
     // A FireCMS i18next instance already in context means this provider is nested —
     // e.g. FireCMSCloudApp mounts one inside the one the host app already mounted.
-    // Creating a second, isolated instance here would shadow the parent's and silently
-    // drop every translation the host registered, so the host's own strings would
-    // render as raw keys. Adopt the parent instance instead and contribute to it.
+    // A second instance built only from the defaults would shadow the parent's and
+    // silently drop every translation the host registered, leaving the host's own
+    // strings to render as raw keys.
+    //
+    // So the nested instance is *seeded* from the parent's resources rather than
+    // sharing them. Sharing one mutable instance was the obvious alternative and is
+    // wrong: bundles added by one provider outlive it, so opening one project's app
+    // and then switching to another left the first project's translations answering
+    // for keys the second never defined. Copying keeps each provider's strings to
+    // itself, which is also how this behaved before nesting was handled at all.
     const parentI18n = useContext(I18nContext)?.i18n;
-    const inheritedInstance = parentI18n?.hasResourceBundle?.("en", FIRECMS_NS)
+    const parentInstance = parentI18n?.hasResourceBundle?.("en", FIRECMS_NS)
         ? parentI18n
         : undefined;
 
     const i18nRef = useRef<i18n | null>(null);
     const [ready, setReady] = React.useState(false);
 
-    if (!inheritedInstance && !i18nRef.current) {
+    if (!i18nRef.current) {
         const instance = i18next.createInstance();
 
-        // Build the initial resources: English baseline + any consumer overrides
+        // English baseline + this provider's overrides, with anything the parent
+        // already resolved layered in underneath the overrides.
         const resources = buildResources(translations);
+        if (parentInstance) {
+            const inherited: Record<string, any> = parentInstance.services?.resourceStore?.data ?? {};
+            for (const [lang, namespaces] of Object.entries(inherited)) {
+                const bundle = (namespaces as any)?.[FIRECMS_NS];
+                if (!bundle) continue;
+                resources[lang] = {
+                    [FIRECMS_NS]: {
+                        ...bundle,
+                        ...(translations?.[lang] ?? {})
+                    }
+                };
+            }
+        }
 
-        let initialLocale = locale;
+        let initialLocale = parentInstance?.language ?? locale;
         if (typeof window !== "undefined") {
             const stored = localStorage.getItem(FIRECMS_LOCALE_STORAGE_KEY);
             if (stored) initialLocale = stored;
@@ -101,34 +122,31 @@ export function FireCMSi18nProvider({
         i18nRef.current = instance;
     }
 
-    // Contribute this provider's translations to the inherited instance. Done during
-    // render rather than in an effect so the very first paint already resolves them,
-    // instead of flashing raw keys. `addResourceBundle` is idempotent.
-    useMemo(() => {
-        if (!inheritedInstance || !translations) return;
-        for (const [lang, overrides] of Object.entries(translations)) {
-            if (!overrides) continue;
-            // Only the overrides — never the English baseline, which would clobber
-            // any override the parent had registered for the same key.
-            inheritedInstance.addResourceBundle(lang, FIRECMS_NS, overrides, true, true);
-        }
-    }, [inheritedInstance, translations]);
+    // Follow the parent's language, so a switch made outside this provider is not
+    // stranded on the other side of the boundary.
+    useEffect(() => {
+        if (!parentInstance || !i18nRef.current) return;
+        const instance = i18nRef.current;
+        const follow = (lng: string) => {
+            if (instance.language !== lng) instance.changeLanguage(lng);
+        };
+        parentInstance.on("languageChanged", follow);
+        return () => { parentInstance.off("languageChanged", follow); };
+    }, [parentInstance]);
 
     // When `locale` prop changes, switch language on the existing instance
     // ONLY if the user hasn't explicitly set a preference
     useEffect(() => {
-        if (inheritedInstance) return; // the outermost provider owns the language
         if (i18nRef.current && i18nRef.current.language !== locale) {
             const hasUserPreference = typeof window !== "undefined" && Boolean(localStorage.getItem(FIRECMS_LOCALE_STORAGE_KEY));
             if (!hasUserPreference) {
                 i18nRef.current.changeLanguage(locale);
             }
         }
-    }, [locale, inheritedInstance]);
+    }, [locale]);
 
     // When consumer translations prop changes, update the resource bundles
     useEffect(() => {
-        if (inheritedInstance) return; // handled above, against the parent instance
         if (!i18nRef.current) return;
         const resources = buildResources(translations);
         for (const [lang, bundle] of Object.entries(resources)) {
@@ -140,10 +158,7 @@ export function FireCMSi18nProvider({
                 true   // overwrite existing keys
             );
         }
-    }, [translations, inheritedInstance]);
-
-    // Nested: the parent already provides the context, and we have merged into it.
-    if (inheritedInstance) return <>{children}</>;
+    }, [translations]);
 
     if (!ready || !i18nRef.current) return null;
 

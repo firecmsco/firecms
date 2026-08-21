@@ -37,7 +37,17 @@ export function toFirestoreValue(value: any): any {
         return { booleanValue: value };
     }
     if (typeof value === "number") {
-        return Number.isInteger(value)
+        // Firestore has no integer representation for NaN or the infinities, but
+        // proto3's JSON mapping does: they travel as these exact strings. Left as
+        // raw numbers they serialise to `null` and Firestore rejects the write.
+        if (!Number.isFinite(value)) {
+            return { doubleValue: Number.isNaN(value) ? "NaN" : (value > 0 ? "Infinity" : "-Infinity") };
+        }
+        // `integerValue` must be a decimal string. `Number.isInteger` is true for
+        // 1e21, whose `String()` form is "1e+21", which Firestore rejects — and for
+        // anything past the safe range the value is not really an integer any more.
+        // Both belong in a double.
+        return Number.isSafeInteger(value)
             ? { integerValue: String(value) }
             : { doubleValue: value };
     }
