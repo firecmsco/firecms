@@ -21,8 +21,8 @@
  */
 import axios from "axios";
 import { getValidTokens } from "./auth.js";
+import { resolveApiUrl } from "./config.js";
 
-const API_URL = "https://api.firecms.co";
 const IDENTITY_TOOLKIT_URL = "https://identitytoolkit.googleapis.com/v1";
 const SECURE_TOKEN_URL = "https://securetoken.googleapis.com/v1/token";
 
@@ -56,7 +56,7 @@ let pendingExchange: Promise<CachedBackendToken> | null = null;
  */
 export async function getBackendFirebaseConfig(): Promise<BackendFirebaseConfig> {
     if (configCache) return configCache;
-    const response = await axios.get<BackendFirebaseConfig>(`${API_URL}/config`, {
+    const response = await axios.get<BackendFirebaseConfig>(`${resolveApiUrl()}/config`, {
         timeout: 30_000,
     });
     configCache = response.data;

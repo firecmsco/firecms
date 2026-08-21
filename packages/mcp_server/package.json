@@ -15,6 +15,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/cli.js",
+    "test": "npm run build && node --test test/*.test.mjs",
     "clean": "rm -rf dist"
   },
   "dependencies": {

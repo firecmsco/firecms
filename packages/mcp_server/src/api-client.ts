@@ -2,8 +2,8 @@ import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { getValidTokens, getCurrentUserEmail } from "./auth.js";
 import { getBackendIdToken } from "./backend-auth.js";
 import { BackendFirestoreClient } from "./backend-firestore.js";
+import { resolveApiUrl } from "./config.js";
 
-const API_URL = "https://api.firecms.co";
 
 /**
  * Typed HTTP client for the FireCMS Cloud backend REST API.
@@ -39,7 +39,7 @@ export class FireCMSApiClient {
 
     constructor() {
         this.client = axios.create({
-            baseURL: API_URL,
+            baseURL: resolveApiUrl(),
             timeout: 60_000,
             headers: { "Content-Type": "application/json" },
         });
@@ -155,10 +155,10 @@ export class FireCMSApiClient {
      * Returns an empty list when the backend answers 204, which it does when the
      * project has no delegated service account set up yet.
      *
-     * NOTE: this endpoint caches its answer for 5 minutes per project (see
-     * `getRootCollections` in the SaaS backend), so it can report collections that
-     * no longer exist, and — more importantly — miss ones just created. Prefer
-     * `listRootCollectionsLive` for anything that drives a decision.
+     * NOTE: this endpoint caches its answer briefly per backend process (see
+     * `getRootCollections` in the SaaS backend), so it can lag a change made
+     * moments ago. `listRootCollectionsLive` reads through and is preferred for
+     * anything that drives a decision.
      */
     async getRootCollections(projectId: string): Promise<any> {
         const response: any = await this.request({
