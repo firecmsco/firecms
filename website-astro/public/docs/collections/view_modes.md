@@ -67,7 +67,7 @@ The default view mode. Displays entities in a spreadsheet-like grid with support
 ## Cards View
 
 Transforms your collection into a responsive grid of cards. Each card displays:
-- Image thumbnails (automatically detected from image properties)
+- Image thumbnails (automatically detected from image properties, or explicitly set with `imageProperty`)
 - Title and key metadata
 - Quick actions
 
@@ -92,6 +92,36 @@ const productsCollection = buildCollection({
 ```
 
 **Best for:** Product catalogs, blog posts, media libraries, team directories, portfolios — any collection with images.
+
+### Choosing the Image Property
+
+By default, FireCMS automatically picks the first image-like property it finds (a storage property that accepts images, or a string/array property with `url: "image"`). If your collection has several image properties and you want to control which one is used as the card thumbnail (also used in the Kanban view), set `imageProperty`:
+
+```typescript
+const productsCollection = buildCollection({
+    path: "products",
+    name: "Products",
+    defaultViewMode: "cards",
+    imageProperty: "coverPhoto", // Explicitly use this property as the thumbnail
+    properties: {
+        name: buildProperty({ dataType: "string", name: "Name" }),
+        coverPhoto: buildProperty({
+            dataType: "string",
+            storage: { mediaType: "image", storagePath: "products" }
+        }),
+        gallery: buildProperty({
+            dataType: "array",
+            of: buildProperty({
+                dataType: "string",
+                storage: { mediaType: "image", storagePath: "products" }
+            })
+        }),
+        price: buildProperty({ dataType: "number", name: "Price" })
+    }
+});
+```
+
+If `imageProperty` is not set, or references a property that doesn't exist, FireCMS falls back to auto-detection.
 
 ---
 
@@ -173,7 +203,8 @@ If you're using FireCMS Cloud, you can configure view modes through the UI witho
 1. Open your collection settings
 2. Go to the **Display** tab
 3. Select your **Default collection view** (Table, Cards, or Kanban)
-4. For Kanban, choose the **Kanban Column Property** and optionally an **Order Property**
+4. Optionally choose an **Image Property** to control the thumbnail used in Cards and Kanban views
+5. For Kanban, choose the **Kanban Column Property** and optionally an **Order Property**
 
 ![Kanban Settings in FireCMS Cloud](/img/blog/kanban_settings.png)
 
